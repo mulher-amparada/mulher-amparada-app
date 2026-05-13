@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sobre Mim</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Quicksand', sans-serif;
+    }
+
+    body {
+        background: #0a0a0a;
+        color: #fff;
+        overflow-x: hidden;
+    }
+
+    header {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background: radial-gradient(circle at top, #1a1a1a, #000);
+        padding: 20px;
+    }
+
+    header h1 {
+        font-size: 52px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        letter-spacing: 1px;
+    }
+
+    header p {
+        font-size: 18px;
+        opacity: 0.8;
+    }
+
+    .btn {
+        margin-top: 25px;
+        padding: 12px 26px;
+        background: transparent;
+        color: #fff;
+        border: 1px solid rgba(255,255,255,0.3);
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+
+    .btn:hover {
+        transform: translateY(-3px);
+        border-color: #fff;
+        box-shadow: 0 10px 25px rgba(255,255,255,0.08);
+    }
+
+    section {
+        padding: 80px 20px;
+        max-width: 900px;
+        margin: auto;
+    }
+
+    .card {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.08);
+        padding: 22px;
+        border-radius: 16px;
+        margin-bottom: 20px;
+        transition: 0.3s ease;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(255,255,255,0.2);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+    }
+
+    .card h2 {
+        margin-bottom: 10px;
+        font-size: 22px;
+    }
+
+    .card p {
+        opacity: 0.85;
+        line-height: 1.6;
+    }
+
+    footer {
+        text-align: center;
+        padding: 40px;
+        opacity: 0.5;
+        font-size: 14px;
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Olá, eu sou o samuca 👋</h1>
+    <p>Bem-vindo ao meu projeto!</p>
+
+    <button class="btn" onclick="document.getElementById('sobre').scrollIntoView({behavior:'smooth'})">
+        Explorar
+    </button>
+</header>
+
+<section id="sobre">
+
+    <div class="card">
+        <h2>Sobre o projeto</h2>
+        <p>
+            "Fiz tudo sozinho! Não fiz curso nem nada, apenas usei uma IA e minha força de vontade.
+            A divulgação foi feita pela Escola Estadual Dom Pedro I, que me ajudou muito. Obrigado!"
+        </p>
+    </div>
+
+   
+
+</section>
+
+<footer>
+    Feito por samuca • 2026
+</footer>
+
+</body>
+</html>

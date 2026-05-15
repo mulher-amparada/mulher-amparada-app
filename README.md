@@ -19,3 +19,5 @@ O projeto Mulher Amparada nasce com a proposta de utilizar a tecnologia como ali
 Com o avanço da tecnologia, soluções digitais como o Mulher Amparada se tornam cada vez mais relevantes. A possibilidade de integrar comunicação, localização e acesso a serviços essenciais em um único lugar torna o aplicativo uma ferramenta poderosa no apoio à segurança. O objetivo é continuar evoluindo, adicionando novas funcionalidades e melhorando a experiência para atender cada vez melhor as necessidades das usuárias.
 
 O Mulher Amparada não é apenas um aplicativo, mas uma iniciativa que busca fazer a diferença na vida das mulheres, oferecendo suporte, segurança e praticidade. Ao unir tecnologia, acessibilidade e propósito, o projeto se posiciona como uma solução importante para quem busca mais proteção no dia a dia.
+
+https://mulher-amparada.github.io/mulher-amparada-app/

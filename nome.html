@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Mulher Amparada</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Quicksand',sans-serif;
+}
+
+body{
+    background:#000;
+    color:#fff;
+    overflow-x:hidden;
+    min-height:100vh;
+    opacity:0;
+    animation:fadeBody 1.2s ease forwards;
+}
+
+/* HERO */
+
+.hero{
+    width:100%;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:80px 25px;
+    position:relative;
+    overflow:hidden;
+}
+
+/* CONTAINER */
+
+.container{
+    width:100%;
+    max-width:1000px;
+    position:relative;
+    z-index:2;
+    text-align:center;
+}
+
+/* LOGO */
+
+.logo{
+    width:95px;
+    height:95px;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid #ff4f9a;
+    margin-bottom:30px;
+    box-shadow:0 0 35px rgba(255,79,154,.45);
+}
+
+/* TAG */
+
+.tag{
+    color:#ff4f9a;
+    letter-spacing:5px;
+    text-transform:uppercase;
+    font-size:14px;
+    margin-bottom:35px;
+    font-weight:700;
+}
+
+/* TITULO */
+
+.title-line{
+    display:block;
+    font-size:88px;
+    line-height:1;
+    font-weight:700;
+    letter-spacing:-4px;
+}
+
+.pink{
+    color:#ff4f9a;
+    text-shadow:0 0 20px rgba(255,79,154,.45);
+}
+
+/* TEXTO */
+
+.text{
+    margin-top:45px;
+}
+
+.text-line{
+    display:block;
+    font-size:23px;
+    color:#c8c8c8;
+    line-height:2;
+}
+
+/* MISSÃO */
+
+.mission{
+    margin-top:70px;
+}
+
+.mission h2{
+    font-size:34px;
+    color:#ff4f9a;
+    margin-bottom:25px;
+}
+
+.mission p{
+    font-size:20px;
+    line-height:2;
+    color:#bdbdbd;
+    max-width:800px;
+    margin:auto;
+}
+
+/* FOOTER */
+
+footer{
+    text-align:center;
+    padding:25px;
+    color:#666;
+    font-size:14px;
+    border:1px solid rgba(255,255,255,.05);
+    background:#020202;
+    width:90%;
+    position:relative;
+    left:5%;
+    margin-bottom:5%;
+    border-radius:200px;
+}
+
+/* ANIMAÇÃO */
+
+@keyframes fadeBody{
+
+    from{
+        opacity:0;
+    }
+
+    to{
+        opacity:1;
+    }
+
+}
+
+/* RESPONSIVO */
+
+@media(max-width:800px){
+
+    .title-line{
+        font-size:56px;
+        letter-spacing:-2px;
+    }
+
+    .text-line{
+        font-size:18px;
+        line-height:1.9;
+    }
+
+    .mission h2{
+        font-size:28px;
+    }
+
+    .mission p{
+        font-size:17px;
+    }
+
+}
+
+@media(max-width:500px){
+
+    .title-line{
+        font-size:42px;
+    }
+
+    .tag{
+        font-size:12px;
+        letter-spacing:3px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+
+    <div class="blur"></div>
+
+    <div class="container">
+
+        <img src="user1.png" class="logo">
+
+        <div class="tag">
+            Liberdade Feminina
+        </div>
+
+        <h1>
+
+            <span class="title-line">
+                Muitos chamam de...
+            </span>
+
+<br><br>
+
+            <span class="title-line pink">
+                Mulher Amparada
+            </span>
+
+        </h1>
+
+        <div class="text">
+
+            <span class="text-line">
+                Porém, esse não é o verdadeiro nome.
+            </span>
+
+            <span class="text-line">
+                O nome real deste projeto é:
+            </span>
+
+            <span class="text-line pink">
+                Mulher Amparada Da Liberdade Feminina
+            </span>
+
+            <span class="text-line">
+                Um espaço criado para representar acolhimento,
+                respeito, força, união e liberdade entre mulheres.
+            </span>
+
+        </div>
+
+        <div class="mission">
+
+            <h2>
+                Nossa Missão
+            </h2>
+
+            <p>
+                Inspirar mulheres a fortalecerem suas vozes,
+                acreditarem em si mesmas e construírem
+                um ambiente de apoio, respeito e liberdade.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<footer>
+    © 2026 Mulher Amparada Da Liberdade Feminina
+</footer>
+
+</body>
+</html>

@@ -3,248 +3,246 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hub</title>
 
-<title>Sobre Mim</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Quicksand', sans-serif;
-    }
 
-    html {
-        scroll-behavior: smooth;
-    }
-
-    body {
-        min-height: 100vh;
-        color: #fff;
-        background: black;
-        background-size: 400% 400%;
-        animation: bgMove 10s ease infinite;
-        overflow-x: hidden;
-    }
-
-    @keyframes bgMove {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-
-    header {
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        padding: 20px;
-    }
-
-    header h1 {
-        font-size: 42px;
-        font-weight: 700;
-        letter-spacing: 1px;
-        margin-bottom: 12px;
-    }
-
-    header p {
-        font-size: 18px;
-        opacity: 0.8;
-        max-width: 500px;
-    }
-
-    .btn {
-        margin-top: 25px;
-        padding: 14px 30px;
-        background: rgba(255, 192, 203, 0.15);
-        color: #fff;
-        border: 1px solid rgba(255,255,255,0.2);
-        border-radius: 14px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: 0.3s ease;
-        backdrop-filter: blur(12px);
-    }
-
-    .btn:hover {
-        transform: translateY(-4px) scale(1.02);
-        border-color: #fff;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-    }
-
-    section {
-        padding: 80px 20px;
-        max-width: 900px;
-        margin: auto;
-    }
-
-    .card {
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255,255,255,0.1);
-        padding: 26px;
-        border-radius: 18px;
-        margin-bottom: 20px;
-        transition: 0.3s ease;
-        backdrop-filter: blur(12px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    }
-
-    .card:hover {
-        transform: translateY(-6px);
-        border-color: rgba(255,255,255,0.25);
-        box-shadow: 0 20px 45px rgba(0,0,0,0.6);
-    }
-
-    .card h2 {
-        margin-bottom: 10px;
-        font-size: 24px;
-        color: #ffb6c1;
-    }
-
-    .card p {
-        opacity: 0.85;
-        line-height: 1.7;
-    }
-
-    footer {
-        text-align: center;
-        padding: 40px;
-        opacity: 0.5;
-        font-size: 14px;
-    }
-
-.hub-buttons{
-    width:100%;
-    max-width:500px;
-    display:flex;
-    flex-direction:column;
-    gap:20px;
-background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255,255,255,0.1);
-        padding: 26px;
-        border-radius: 18px;
-        margin-bottom: 20px;
-        transition: 0.3s ease;
-        backdrop-filter: blur(12px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-}
-
-    .hub-buttons:hover {
-        transform: translateY(-6px);
-        border-color: rgba(255,255,255,0.25);
-        box-shadow: 0 20px 45px rgba(0,0,0,0.6);
-    }
-
-   .hub-buttons h2 {
-        margin-bottom: 10px;
-        font-size: 24px;
-        color: #ffb6c1;
-    }
-
-.hub-btn{
-    width:100%;
-    padding:22px;
-    border-radius:202px;
-    text-decoration:none;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
     font-family:'Quicksand',sans-serif;
-    font-size:1.1rem;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+button,
+a,
+div,
+img{
+    outline:none;
+}
+
+body{
+    background:#000;
+    color:#fff;
+    min-height:100vh;
+    padding:28px 20px 40px;
+}
+
+/* topo */
+
+.top{
+    display:flex;
+    justify-content:flex-end;
+    gap:20px;
+    margin-bottom:40px;
+}
+
+.top svg{
+    width:25px;
+    height:25px;
+    stroke:#fff;
+}
+
+/* título */
+
+.section-title{
+    font-size:28px;
     font-weight:700;
-    text-align:center;
-    color:white;
-
-    background: rgba(255, 192, 203, 0.15);
-
-    
-border: 1px solid rgba(255,255,255,0.2);
-    transition:
-    transform .25s ease,
-    box-shadow .25s ease,
-    opacity .25s ease;
+    margin-bottom:20px;
 }
 
-.hub-btn:hover{
-        transform: translateY(-4px) scale(1.02);
-        border-color: #fff;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+/* botão eu */
 
-    
+.eu-btn{
+    width:100%;
+    height:56px;
+    border:none;
+    border-radius:18px;
+    background:#111;
+    color:#fff;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.25s;
+    margin-bottom:30px;
+    border:1px solid rgba(255,255,255,.08);
 }
 
-.hub-btn:active{
-    transform:scale(.98);
-    opacity:.9;
+.eu-btn:hover{
+    background:#1a1a1a;
+}
+
+/* grid */
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+}
+
+/* cards */
+
+.card{
+    position:relative;
+    overflow:hidden;
+    background:none;
+    aspect-ratio:1/1;
+    cursor:pointer;
+}
+
+.card img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition:.25s;
+}
+
+.card:hover img{
+    transform:scale(1.03);
+}
+
+.card p{
+    position:absolute;
+    bottom:10px;
+    left:10px;
+    font-size:14px;
+    font-weight:600;
+    background:rgba(0,0,0,.5);
+    padding:6px 10px;
+    border-radius:10px;
+}
+
+/* responsivo */
+
+@media(max-width:500px){
+
+    .section-title{
+        font-size:24px;
+    }
+
+}
+
+p {
+color: pink;
+}
+
+svg {
+width: 28px;
+height: 28px;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-    <h1>Olá, eu sou usuário:
-<br><br>
- "Mulher-Amparada" 👋</h1>
-    <p>Um projeto criado com dedicação, propósito e tecnologia para ajudar e proteger.</p>
+<!-- topo -->
 
-    <button class="btn" onclick="document.getElementById('sobre').scrollIntoView({behavior:'smooth'})">
-        Explorar
-    </button>
-</header>
+<div class="top">
 
-<section id="sobre">
+    <!-- nuvem -->
 
-    <div class="card">
-        <h2>Sobre o projeto</h2>
-        <p>
-            Desenvolvi este projeto de forma independente, utilizando ferramentas de IA e muita dedicação pessoal.
-            O objetivo é criar uma solução útil, acessível e com impacto real.
-            A divulgação contou com apoio da Escola Estadual Dom Pedro I, que foi essencial nesse processo.
-        </p>
-        
-<p>Aliás: ele tem um recurso que, quando a usuária fica sem internet, ele carrega a fonte Quicksand por arquivos da propria pasta assets do app.</p>
-        <br><br>
-    </div>
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 21V11M12 11L9 14M12 11L15 14M7 16.8184C4.69636 16.2074 3 14.1246 3 11.6493C3 9.20008 4.8 6.9375 7.5 6.5C8.34694 4.48637 10.3514 3 12.6893 3C15.684 3 18.1317 5.32251 18.3 8.25C19.8893 8.94488 21 10.6503 21 12.4969C21 14.8148 19.25 16.7236 17 16.9725" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
 
-<div class="hub-buttons">
+    <!-- pesquisa -->
 
-<h2>Hub de páginas explicativas:</h2>
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M18.5 18.5L22 22" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"></path> <path d="M6.75 3.27093C8.14732 2.46262 9.76964 2 11.5 2C16.7467 2 21 6.25329 21 11.5C21 16.7467 16.7467 21 11.5 21C6.25329 21 2 16.7467 2 11.5C2 9.76964 2.46262 8.14732 3.27093 6.75" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
 
-    <a href="a.html" target="_blank" class="hub-btn">
-        Sobre o Mulher Amparada
-    </a>
+    <!-- menu -->
 
-    <a href="print.html" target="_blank" class="hub-btn">
-        Screenshots do App
-    </a>
-
-    <a href="final.html" target="_blank" class="hub-btn">
-        Dia Oficial da Versão Final
-    </a>
-
-<a href="nome.html" target="_blank" class="hub-btn">
-        Confissão: verdadeiro nome do projeto...
-    </a>
-
-<a href="codigo.html" target="_blank" class="hub-btn">
-        Código usado para fazer o app!
-    </a>
-
-<a href="funcao.html" target="_blank" class="hub-btn">
-        Todas as funções do app!
-    </a>
-
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M4 6H20M4 12H20M4 18H20" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
 
 </div>
 
-</section>
+<!-- título -->
 
-<footer>
-    © 2026 - Mulher Amparada
-</footer>
+<div class="section-title">
+    Hub de páginas.
+</div>
+
+<!-- botão -->
+
+<button class="eu-btn"
+onclick="window.location.href='eu1.html'">
+    Ir para a pagina: Sobre mim.
+</button>
+
+<!-- grid -->
+
+<div class="grid">
+
+    <!-- 1 -->
+
+    <div class="card"
+    onclick="window.location.href='a.html'">
+
+        <img src="icon1.svg">
+
+        <p>Sobre o projeto</p>
+
+    </div>
+
+    <!-- 2 -->
+
+    <div class="card"
+    onclick="window.location.href='print.html'">
+
+        <img src="icon2.svg">
+
+<p>Prints do app</p>
+
+    </div>
+
+    <!-- 3 -->
+
+    <div class="card"
+    onclick="window.location.href='final.html'">
+
+        <img src="icon3.svg">
+
+<p>Dia oficial da versão final do app</p>
+
+    </div>
+
+    <!-- 4 -->
+
+    <div class="card"
+    onclick="window.location.href='nome.html'">
+
+        <img src="icon4.svg">
+
+<p>Nome verdadeiro do projeto</p>
+
+    </div>
+
+    <!-- 5 -->
+
+    <div class="card"
+    onclick="window.location.href='codigo.html'">
+
+        <img src="icon5.svg">
+
+<p>Código usado para fazer o app</p>
+    </div>
+
+    <!-- 6 -->
+
+    <div class="card"
+    onclick="window.location.href='final.html'">
+
+        <img src="icon6.svg">
+
+<p>Todas as funções do app!</p>
+
+    </div>
+
+</div>
 
 </body>
 </html>

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="description" content="Interface moderna IntelliCore com design avançado e recursos personalizados">
+<meta name="keywords" content="IntelliCore, interface moderna, , design web">
+<meta name="author" content="Seu nome">
+<title>Termos e Privacidade</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;700&display=swap" rel="stylesheet"> 
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Quicksand',sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background: black;
+    
+    color:#f5f5f5;
+    
+    padding:20px;
+    
+    min-height:100vh;
+}
+
+/* CONTAINER */
+
+.container{
+    max-width:950px;
+    margin:auto;
+}
+
+/* HEADER */
+
+.header{
+    text-align:center;
+    margin-bottom:35px;
+    padding-top:20px;
+}
+
+.logo{
+    width:85px;
+    height:85px;
+    
+    border-radius:30px;
+    
+    background:
+    linear-gradient(
+    135deg,
+    #ff4d6d,
+    #ff8fab
+    );
+    
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    
+    margin:auto;
+    margin-bottom:20px;
+    
+    font-size:38px;
+    
+    box-shadow:
+    0 10px 40px rgba(255,77,109,.35);
+}
+
+.header h1{
+    font-size:32px;
+    font-weight:700;
+    
+    margin-bottom:10px;
+    
+    background:linear-gradient(
+    90deg,
+    #fff,
+    #ffb3c6
+    );
+    
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.header p{
+    color:#b8b8b8;
+    
+    font-size:15px;
+    
+    line-height:1.6;
+}
+
+/* CARDS */
+
+.card{
+    position:relative;
+    
+    background:
+    rgba(255,255,255,.06);
+    
+    border:
+    1px solid rgba(255,255,255,.08);
+    
+    border-radius:28px;
+    
+    padding:28px;
+    
+    margin-bottom:22px;
+    
+    backdrop-filter:blur(18px);
+    
+    box-shadow:
+    0 15px 45px rgba(0,0,0,.35);
+    
+    overflow:hidden;
+    
+    transition:.25s;
+}
+
+.card:hover{
+    transform:translateY(-3px);
+    
+    border-color:
+    rgba(255,143,171,.4);
+}
+
+/* brilho */
+
+.card::before{
+    content:"";
+    
+    position:absolute;
+    
+    top:-80px;
+    right:-80px;
+    
+    width:180px;
+    height:180px;
+    
+    background:
+    radial-gradient(
+    circle,
+    rgba(255,77,109,.18),
+    transparent 70%
+    );
+}
+
+/* TITULO */
+
+.card h2{
+    color:#ff8fab;
+    
+    font-size:21px;
+    
+    margin-bottom:18px;
+    
+    display:flex;
+    align-items:center;
+    
+    gap:10px;
+}
+
+/* CLAUSULAS */
+
+.clausula{
+    margin-bottom:16px;
+    
+    padding:16px;
+    
+    border-radius:18px;
+    
+    background:
+    rgba(255,255,255,.04);
+    
+    border-left:
+    4px solid #ff4d6d;
+}
+
+.clausula h3{
+    color:#fff;
+    
+    font-size:16px;
+    
+    margin-bottom:10px;
+}
+
+.clausula p{
+    color:#d6d6d6;
+    
+    line-height:1.8;
+    
+    font-size:15px;
+}
+
+/* LISTAS */
+
+ul{
+    margin-top:12px;
+    padding-left:20px;
+}
+
+li{
+    margin-bottom:10px;
+    
+    color:#e5e5e5;
+    
+    line-height:1.7;
+}
+
+/* BOTAO */
+
+.botao{
+    width: 80%;
+    max-width: 420px;
+
+    padding: 18px;
+
+    border: none;
+    border-radius: 100px;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    cursor: pointer;
+    color: white;
+
+    background: linear-gradient(135deg, #ff4d6d, #ff0066);
+
+    box-shadow: 0 12px 35px rgba(255,77,109,.35);
+
+    transition: .2s;
+
+    position: fixed;
+    bottom: 20px;
+    left: 10%;
+}
+
+.botao:hover{
+    transform:translateY(-2px);
+}
+
+.botao:active{
+    transform:scale(.97);
+}
+
+/* FOOTER */
+
+.footer{
+    margin-top:40px;
+    
+    text-align:center;
+    
+    color:#8f8f8f;
+    
+    font-size:13px;
+    
+    line-height:1.8;
+    
+    padding-bottom:30px;
+}
+
+/* TAG */
+
+.tag{
+    display:inline-block;
+    
+    padding:8px 14px;
+    
+    border-radius:100px;
+    
+    background:
+    rgba(255,77,109,.14);
+    
+    border:
+    1px solid rgba(255,77,109,.35);
+    
+    color:#ffb3c6;
+    
+    font-size:13px;
+    
+    margin-bottom:18px;
+}
+
+/* SCROLLBAR */
+
+::-webkit-scrollbar{
+    width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#ff4d6d;
+    border-radius:20px;
+}
+
+::-webkit-scrollbar-track{
+    background:#111;
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+    body{
+        padding:14px;
+    }
+
+    .card{
+        padding:22px;
+    }
+
+    .header h1{
+        font-size:26px;
+    }
+
+    .card h2{
+        font-size:19px;
+    }
+
+    .clausula p,
+    li{
+        font-size:14px;
+    }
+
+    .logo{
+        width:72px;
+        height:72px;
+        font-size:32px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>1. Função de calculadora e minhas tarefas</h2>
+
+<p><strong>Cláusula 1.1:</strong> Este aplicativo tem como objetivo principal auxiliar na organização de tarefas pessoais, estudos e trabalho, oferecendo um sistema de planejamento simples, rápido e eficiente.</p>
+
+<p><strong>Cláusula 1.2:</strong> O usuário é totalmente responsável pelas informações inseridas, incluindo tarefas, categorias, prioridades e qualquer dado armazenado localmente no dispositivo.</p>
+
+<p><strong>Cláusula 1.3:</strong> Este sistema utiliza armazenamento local (localStorage) para salvar tarefas e preferências, não enviando nenhum dado para servidores externos.</p>
+
+<p><strong>Cláusula 1.4:</strong> O aplicativo não substitui ferramentas profissionais de gestão de projetos, sendo destinado apenas para uso pessoal, educacional e organizacional básico.</p>
+
+<p><strong>Cláusula 1.5:</strong> A funcionalidade de cálculo presente no sistema tem caráter apenas auxiliar, não devendo ser utilizada para decisões críticas, financeiras ou profissionais de alta precisão.</p>
+
+<p><strong>Cláusula 1.6:</strong> O modo Pomodoro é uma ferramenta de apoio à produtividade, e seus tempos e alertas podem variar conforme o dispositivo ou navegador utilizado.</p>
+
+<p><strong>Cláusula 1.7:</strong> O sistema não garante armazenamento permanente dos dados, podendo ocorrer perda de informações em caso de limpeza de cache ou dados do navegador.</p>
+
+<p><strong>Cláusula 1.8:</strong> O usuário pode personalizar cores e preferências visuais, sendo estas alterações aplicadas apenas localmente no dispositivo.</p>
+
+<p><strong>Cláusula 1.9:</strong> O desenvolvedor não se responsabiliza por uso inadequado, interpretação incorreta ou dependência excessiva da ferramenta para organização pessoal.</p>
+
+<p><strong>Cláusula 1.10:</strong> Este aplicativo pode ser atualizado, modificado ou aprimorado a qualquer momento, sem necessidade de aviso prévio ao usuário.</p>
+
+<p><strong>Cláusula 1.11:</strong> O uso contínuo do sistema implica aceitação integral destes termos e condições de uso.</p>
+</div>
+
+<button onclick="aceitar()" class="botao">
+    Li e Concordo com os Termos
+</button>
+
+<div class="footer">
+
+    <p>
+        Mulher Amparada 💜
+    </p>
+
+    <p>
+        Este aplicativo opera com foco em privacidade, transparência,
+        segurança e controle da própria usuária.
+    </p>
+
+    <p>
+        Nenhuma funcionalidade sensível é executada sem permissões
+        concedidas pelo Android.
+    </p>
+
+    <p>
+        O aplicativo não realiza monitoramento oculto,
+        espionagem, rastreamento contínuo ou ações secretas
+        em segundo plano.
+    </p>
+
+    <p>
+        Algumas funcionalidades podem depender de internet,
+        permissões do Android, disponibilidade do aparelho,
+        sensores internos, operadora móvel e aplicativos externos.
+    </p>
+
+    <p>
+        O recurso de proteção por movimento depende do acelerômetro
+        disponível no dispositivo Android.
+    </p>
+
+    <p>
+        O aplicativo não substitui serviços oficiais de emergência,
+        autoridades públicas, atendimento médico ou proteção policial.
+    </p>
+
+    <p>
+        Em situações reais de risco imediato,
+        procure imediatamente ajuda especializada e serviços oficiais.
+    </p>
+<p>
+O uso contínuo do microfone em segundo plano pode aumentar o consumo de bateria.
+</p>
+
+<p style="color: red;">Aviso: quando eu digo que o app não quebra quando nega permissoes, estou dizendo que não quebra NA HORA QUANDO NEGA, mas se por ventura vier a utilizar algum recurso que precisa de permissão, ele PODE SIM QUEBRAR!!!</p>
+
+    <p class="copy">
+        © 2026 Mulher Amparada — Todos os direitos reservados.
+    </p>
+    
+    <br><br>
+
+</div>
+
+<script>
+function aceitar() {
+  localStorage.setItem("termosAceitos", "sim");
+  window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>

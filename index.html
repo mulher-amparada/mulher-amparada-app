@@ -199,63 +199,6 @@ body {
 }
 
 /* TOGGLE */
-.toggle{
-  width:min(420px,88%);
-  height:68px;
-
-  position:fixed;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%);
-
-  border-radius:999px;
-  padding:6px;
-
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.08);
-
-  backdrop-filter:blur(14px);
-
-  overflow:hidden;
-  z-index:999;
-}
-
-.alavanca{
-
-  width:50%;
-  height:100%;
-
-  border-radius:999px;
-
-  background:
-  linear-gradient(
-    135deg,
-    #ff4fa3,
-    #a855f7
-  );
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  position:relative;
-
-  z-index:2;
-
-  transition:
-  transform .35s cubic-bezier(.22,.61,.36,1);
-}
-
-
-
-.icon2 { display: none; }
-
-.hidden {
-  opacity: 0 !important;
-  pointer-events: none;
-}
-
-/* SECTION FINAL */
 
 
 svg {
@@ -371,10 +314,238 @@ margin-top: 0;
   transform:scale(1.05);
   background:rgba(255,255,255,0.12);
 }
+
+@keyframes floatingPill{
+  0%{
+    transform:translateY(0px);
+  }
+  50%{
+    transform:translateY(-10px);
+  }
+  100%{
+    transform:translateY(0px);
+  }
+}
+
+.pirula{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:14px;
+
+  padding:12px 18px 12px 74px;
+
+  border-radius:40px;
+
+  color:pink;
+  font-weight:600;
+  letter-spacing:1px;
+
+  background:#444;
+
+  border:1px solid rgba(255,255,255,0.15);
+
+  overflow:hidden;
+
+transition:
+  opacity .35s ease,
+  transform .35s ease;
+
+  will-change:transform;
+
+  
+
+  animation:floatingPill 4s ease-in-out infinite;
+
+  position:fixed;
+  z-index:999999;
+
+  top:5%;
+  left:5%;
+
+  width:30%;
+  height:68px;
+}
+
+.pirula:hover{
+  box-shadow:
+    0 18px 40px rgba(0,0,0,0.5),
+    0 0 25px rgba(255,192,203,0.25);
+}
+
+.pirula.active{
+  width:90%;
+  height:90vh;
+
+  border-radius:40px;
+
+  animation:none;
+
+  background:#2c2c2c;
+
+  top:5%;
+  left:5%;
+
+  padding:24px;
+
+  overflow:auto;
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.6),
+    0 0 35px rgba(255,192,203,0.08);
+}
+
+.pirula .icon{
+  width:52px;
+  height:52px;
+
+  border-radius:50%;
+
+  background:url("user1.png") center/cover no-repeat;
+
+  flex-shrink:0;
+
+  border:2px solid rgba(255,255,255,0.18);
+
+  box-shadow:
+    0 4px 15px rgba(0,0,0,0.35),
+    0 0 18px rgba(255,192,203,0.15);
+
+  position:absolute;
+
+  left:8px;
+  top:8px;
+
+  transition:
+    width .35s ease,
+    height .35s ease,
+    top .35s ease,
+    left .35s ease;
+}
+
+.pirula.active .icon{
+  width:70px;
+  height:70px;
+
+  top:24px;
+  left:24px;
+}
+
+.menu{
+  width:100%;
+
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+
+  margin-top:90px;
+
+  opacity:0;
+  pointer-events:none;
+
+  transform:translateY(20px);
+
+  transition:
+    opacity .35s ease,
+    transform .35s ease;
+}
+
+.pirula.active .menu{
+  opacity:1;
+  pointer-events:auto;
+
+  transform:translateY(0);
+}
+
+.menu button{
+  width:100%;
+
+  padding:16px 18px;
+
+  border:none;
+  outline:none;
+
+  border-radius:22px;
+
+  background:rgba(255,255,255,0.08);
+
+  color:#fff;
+
+  font-size:15px;
+  font-weight:700;
+
+  text-align:left;
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  
+
+  box-shadow:
+    0 6px 20px rgba(0,0,0,.25),
+    inset 0 1px 0 rgba(255,255,255,.04);
+
+  cursor:pointer;
+
+  transition:
+    transform .25s ease,
+    background .25s ease,
+    box-shadow .25s ease;
+}
+
+.menu button:hover{
+  transform:translateX(6px);
+
+  background:rgba(255,255,255,0.14);
+
+  box-shadow:
+    0 10px 24px rgba(0,0,0,.35),
+    0 0 18px rgba(255,192,203,.15);
+}
+
+.menu button:active{
+  transform:scale(.98);
+}
 </style>
 </head>
 
 <body>
+
+<div class="pirula">
+
+  <div class="topo">
+    <div class="icon"></div>
+  </div>
+
+  <div class="menu">
+<button onclick="window.location.href='index1.html'">
+  Downloads
+</button>
+<button onclick="window.location.href='eu1.html'">
+  Sobre 
+</button>
+<button onclick="window.location.href='a.html'">
+  Explicação do projeto
+</button>
+<button onclick="window.location.href='print.html'">
+  Prints do app
+</button>
+<button onclick="window.location.href='final.html'">
+  Dia da conclusão do app
+</button>
+<button onclick="window.location.href='nome.html'">
+  Nome verdadeiro do app
+</button>
+<button onclick="window.location.href='codigo.html'">
+  Código usado para fazer o app
+</button>
+<button onclick="window.location.href='data.html'">
+  Repositório oficial do app (sobre o projeto)
+</button>
+   
+    
+  </div>
+
+</div>
 
 <section class="section seo-section">
   <div class="shape circle"></div>
@@ -395,7 +566,7 @@ margin-top: 0;
     </div>
 </div>
 
-  <h1>Ele é um aplicativo de Segurança Feminina com Botão SOS e Localização em Tempo Real, (“Mulher Amparada É uma marca e não qualquer app genérico)</h1>
+  <h1>Ele é um aplicativo de Segurança Feminina!</h1>
 
   <p>
     O <strong>Mulher Amparada</strong> é um aplicativo de segurança feminina desenvolvido para oferecer proteção pessoal em situações de risco, como violência doméstica, assédio, perseguição e emergências urbanas.
@@ -499,66 +670,10 @@ margin-top: 0;
     <div class="shape triangle"></div>
     <div>
         <h1>Uma versão novinha ✨</h1>
-        <p>O Mulher Amparada foi todo repaginado pra ficar mais fácil, mais fluido e mais gostosinho de usar 💖</p>
+        <p>O Mulher Amparada foi todo repaginado pra ficar mais fácil, mais fluido e mais fácil de usar 💖</p>
         <p>Tudo agora tá mais organizado, sem bagunça e sem te deixar perdida.</p>
         <p>É só abrir e usar, bem leve mesmo 🌸</p>
-    </div>
-</div>
-
-<div class="section">
-    <div class="shape circle"></div>
-    <div>
-        <h1>📅 Seu ciclo com carinho</h1>
-        <p>Agora você consegue acompanhar seu ciclo menstrual de um jeitinho simples e organizado 💗</p>
-        <p>Vai ficando tudo mais claro sobre seus dias, sem estresse e sem complicação.</p>
-        <p>É só registrar e deixar o app te ajudar 🌷</p>
-    </div>
-</div>
-
-<div class="section">
-    <div class="shape line"></div>
-    <div>
-        <h1>📓 Diário + pontuação</h1>
-        <p>Um espacinho só seu pra escrever como você tá se sentindo 💕</p>
-        <p>E ainda tem um sistema de pontuação pra acompanhar sua evolução de forma leve e interativa.</p>
-        <p>Tipo um cantinho pessoal mesmo ✨</p>
-    </div>
-</div>
-
-<div class="section">
-    <div class="shape circle"></div>
-    <div>
-        <h1>🔐 Seu acesso protegido</h1>
-        <p>Você pode proteger tudo com senha, padrão, digital ou rosto (se seu celular tiver isso) 💅</p>
-        <p>Assim só você entra e fica tudo bem seguro do seu jeitinho.</p>
-    </div>
-</div>
-
-<div class="section">
-    <div class="shape triangle"></div>
-    <div>
-        <h1>🚨 Ajuda rápida quando precisar</h1>
-        <p>Com um toque você pode acessar números importantes como:</p>
-        <p><strong>190</strong>, <strong>192</strong>, <strong>180</strong> e <strong>191</strong> 💗</p>
-        <p>Pra quando precisar de ajuda rapidinho, sem perder tempo.</p>
-    </div>
-</div>
-
-<div class="section">
-    <div class="shape line"></div>
-    <div>
-        <h1>📍 Sua localização em momentos importantes</h1>
-        <p>Se precisar, você consegue compartilhar sua localização com contatos de confiança 🌸</p>
-        <p>É uma forma rápida de pedir ajuda quando for necessário.</p>
-    </div>
-</div>
-
-<div class="section">
-    <div class="shape circle"></div>
-    <div>
-        <h1>👏 Ativação por palmas</h1>
-        <p>Sim, miga… você pode ativar funções só com palmas ou sons mais altos 💅</p>
-        <p>Bem simples e pensado pra situações em que você não consegue mexer no celular.</p>
+        <p>Juro, que app incrível!</p>
     </div>
 </div>
 
@@ -575,7 +690,7 @@ margin-top: 0;
 <div class="section">
     <div class="shape circle"></div>
     <div>
-        <h1>💖 Totalmente grátis</h1>
+        <h1>💖 Totalmente grátis e livre de anúncios (no app)</h1>
         <p>Você pode usar tudo sem pagar nada ✨</p>
         <p>Sem assinatura, sem pegadinha e sem anúncios incomodando.</p>
         <p>Do jeitinho leve que deveria ser 💅</p>
@@ -590,8 +705,12 @@ margin-top: 0;
         <p>1. Toque no botão inferior pra acessar o download 💗</p>
 
         <p>2. Baixe o arquivo APK normalmente no seu celular.</p>
+        
+<p>2.1. Se aparecer o aviso “Para instalar este aplicativo, é preciso ativar fontes desconhecidas”, permita a instalação apenas se você confiar totalmente no aplicativo baixado. Esse aviso é comum em aplicativos instalados fora da loja oficial.</p>
 
-        <p>3. Se aparecer aviso de “fonte desconhecida”, fica tranquila… isso é normal para apps instalados fora da loja oficial 🌸</p>
+<p>2.2. O recurso de “Bloqueador Automático” pode impedir a instalação de aplicativos externos por questões de segurança. Caso necessário, desative temporariamente essa proteção nas configurações do aparelho para concluir a instalação e, após finalizar, ative novamente o recurso.</p>
+                    
+        <p>3. Se aparecer aviso do "Google Play Protect”, fica tranquila… isso é normal para apps instalados fora da loja oficial 🌸</p>
 
         <p>4. Basta permitir a instalação nas configurações do seu celular.</p>
 
@@ -599,10 +718,10 @@ margin-top: 0;
 
         <p>6. Na primeira vez pode pedir permissões como:</p>
 
-        <p><strong>Telefone:</strong> pra chamadas de emergência</p>
-        <p><strong>Localização:</strong> pra situações de SOS</p>
-        <p><strong>Contatos:</strong> pra contatos de confiança</p>
-<p><strong>Microfone:</strong> para o serviço de proteção por barulho</p>
+        <p><strong>Telefone</strong></p>
+        <p><strong>Localização</strong></p>
+        <p><strong>Contatos</strong></p>
+<p><strong>Microfone</strong></p>
 
         <p>Você pode aceitar ou negar tudo, e mudar depois quando quiser 💕</p>
 
@@ -623,6 +742,8 @@ margin-top: 0;
         Algumas funções dependem de serviços externos.<br>
         O app não garante segurança imediata.
       </p>
+      
+      <p>Para ir até a página de downloads, clique nessa pírula flutuante no site, depois em "downloads"</p>
     </div>
 </div>
 
@@ -630,16 +751,6 @@ margin-top: 0;
 <br><br>
 
 <!-- BARRA INFERIOR ONE UI -->
-<div class="toggle" id="puxador">
-  <div class="alavanca" id="puxar">
-
-<svg class="icon1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 7C12.8284 7 13.5 6.32843 13.5 5.5C13.5 4.67157 12.8284 4 12 4C11.1716 4 10.5 4.67157 10.5 5.5C10.5 6.32843 11.1716 7 12 7ZM11 9C10.4477 9 10 9.44772 10 10C10 10.5523 10.4477 11 11 11V19C11 19.5523 11.4477 20 12 20C12.5523 20 13 19.5523 13 19V10C13 9.44772 12.5523 9 12 9H11Z" fill="#ffffff"></path> </g></svg>
-
-<svg class="icon2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 3V16M12 16L16 11.625M12 16L8 11.625" stroke="#00ffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M15 21H9C6.17157 21 4.75736 21 3.87868 20.1213C3 19.2426 3 17.8284 3 15M21 15C21 17.8284 21 19.2426 20.1213 20.1213C19.8215 20.4211 19.4594 20.6186 19 20.7487" stroke="#00ffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-
-
-  </div>
-</div>
 
 <div id="popup-termos" class="popup">
   <div class="popup-box">
@@ -734,6 +845,43 @@ window.addEventListener("load", () => {
 function irParaTermos() {
   window.location.href = "termos.html";
 }
+</script>
+
+<script>
+const pirula = document.querySelector(".pirula");
+
+pirula.addEventListener("click", () => {
+  pirula.classList.toggle("active");
+});
+</script>
+
+<script>
+// força aceleração da GPU
+document.querySelectorAll(".pirula, .menu, .menu button").forEach(el => {
+  el.style.transform = "translateZ(0)";
+  el.style.backfaceVisibility = "hidden";
+  el.style.webkitBackfaceVisibility = "hidden";
+  el.style.perspective = "1000px";
+});
+
+// otimiza durante animação
+const pirula = document.querySelector(".pirula");
+
+pirula.addEventListener("click", () => {
+
+  pirula.style.willChange =
+  "width,height,transform,opacity";
+
+  requestAnimationFrame(() => {
+    pirula.classList.toggle("active");
+  });
+
+  // limpa depois da animação
+  setTimeout(() => {
+    pirula.style.willChange = "auto";
+  }, 500);
+
+});
 </script>
 
 </body>

@@ -345,7 +345,7 @@ margin-top: 0;
 
   border:1px solid rgba(255,255,255,0.15);
 
-  overflow:hidden;
+ 
 
 transition:
   opacity .35s ease,
@@ -353,7 +353,7 @@ transition:
 
   will-change:transform;
 
-  
+
 
   animation:floatingPill 4s ease-in-out infinite;
 
@@ -394,18 +394,19 @@ transition:
     0 20px 60px rgba(0,0,0,0.6),
     0 0 35px rgba(255,192,203,0.08);
 }
-
-.pirula .icon{
+ .icon{
   width:52px;
   height:52px;
 
   border-radius:50%;
-
-  background:url("user1.png") center/cover no-repeat;
-background-color:#555;
-background-size:cover;
-background-position:center;
-background-repeat:no-repeat;
+  
+transform:translateZ(0);
+backface-visibility:hidden;
+-webkit-backface-visibility:hidden;
+  
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
   flex-shrink:0;
 
@@ -433,6 +434,12 @@ background-repeat:no-repeat;
 
   top:24px;
   left:24px;
+  
+overflow:hidden;
+transform:translateZ(0);
+backface-visibility:hidden;
+-webkit-backface-visibility:hidden;
+  
 }
 
 .menu{
@@ -517,32 +524,39 @@ background-repeat:no-repeat;
 <div class="pirula">
 
   <div class="topo">
-    <div class="icon"></div>
+    <img class="icon" src="user1.png">
   </div>
 
   <div class="menu">
-<button onclick="window.location.href='index1.html'">
+<button onclick="setTimeout(() => window.location.href='index1.html', 500)">
   Downloads
 </button>
-<button onclick="window.location.href='eu1.html'">
+
+<button onclick="setTimeout(() => window.location.href='eu1.html', 500)">
   Sobre 
 </button>
-<button onclick="window.location.href='a.html'">
+
+<button onclick="setTimeout(() => window.location.href='a.html', 500)">
   Explicação do projeto
 </button>
-<button onclick="window.location.href='print.html'">
+
+<button onclick="setTimeout(() => window.location.href='print.html', 500)">
   Prints do app
 </button>
-<button onclick="window.location.href='final.html'">
+
+<button onclick="setTimeout(() => window.location.href='final.html', 500)">
   Dia da conclusão do app
 </button>
-<button onclick="window.location.href='nome.html'">
+
+<button onclick="setTimeout(() => window.location.href='nome.html', 500)">
   Nome verdadeiro do app
 </button>
-<button onclick="window.location.href='codigo.html'">
+
+<button onclick="setTimeout(() => window.location.href='codigo.html', 500)">
   Código usado para fazer o app
 </button>
-<button onclick="window.location.href='data.html'">
+
+<button onclick="setTimeout(() => window.location.href='data.html', 500)">
   Repositório oficial do app (sobre o projeto)
 </button>
    
@@ -787,52 +801,7 @@ window.addEventListener('scroll', mostrar);
 window.addEventListener('load', mostrar);
 
 
-// ================= TOGGLE (PÁGINAS) =================
-const toggle = document.getElementById("puxador");
-const alavanca = document.getElementById("puxar");
-const icon1 = document.querySelector(".icon1");
-const icon2 = document.querySelector(".icon2");
 
-let paginaAtual = window.location.pathname.split("/").pop();
-
-// 🔥 FORÇA começar na opção 1
-let ligado = false;
-
-// aplica estado visual
-function aplicarEstado() {
-  if (ligado) {
-    alavanca.style.transform = "translateX(100%)";
-    icon1.style.display = "none";
-    icon2.style.display = "block";
-  } else {
-    alavanca.style.transform = "translateX(0)";
-    icon1.style.display = "block";
-    icon2.style.display = "none";
-  }
-}
-
-// aplica ao carregar
-aplicarEstado();
-
-// clique
-toggle.onclick = () => {
-  ligado = !ligado;
-
-  aplicarEstado();
-
-  document.body.style.transition = "opacity 0.3s ease";
-  sections.forEach(sec => {
-  sec.style.opacity = "0";
-});
-
-  setTimeout(() => {
-    if (paginaAtual === "index.html" || paginaAtual === "") {
-      window.location.href = "index1.html";
-    } else {
-      window.location.href = "index.html";
-    }
-  }, 300);
-};
 </script>
 
 <script>
@@ -878,39 +847,11 @@ pirula.addEventListener("click", () => {
   }, 500);
 
 });
+
+
 </script>
 
-<script>
-const pirula = document.querySelector(".pirula");
 
-// GPU
-document.querySelectorAll(".pirula, .menu, .menu button, .icon").forEach(el => {
-  el.style.transform = "translateZ(0)";
-  el.style.backfaceVisibility = "hidden";
-  el.style.webkitBackfaceVisibility = "hidden";
-});
-
-// abrir e fechar
-pirula.addEventListener("click", (e) => {
-
-  // impede fechar quando clicar nos botões
-  if(e.target.closest("button")) return;
-
-  pirula.style.willChange =
-  "width,height,opacity,transform";
-
-  requestAnimationFrame(() => {
-    pirula.classList.toggle("active");
-  });
-
-  clearTimeout(window.pirulaTimer);
-
-  window.pirulaTimer = setTimeout(() => {
-    pirula.style.willChange = "auto";
-  }, 450);
-
-});
-</script>
 
 </body>
 </html>

@@ -2,6 +2,8 @@
 
 ## um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!
 
+## E saibam que o projeto é: Source-Available
+
 O **Mulher Amparada** é um aplicativo de segurança e proteção desenvolvido especialmente para mulheres que desejam se sentir mais seguras em situações do dia a dia. O objetivo principal do aplicativo é oferecer suporte rápido, eficiente e acessível em momentos de risco, permitindo que a usuária consiga pedir ajuda de forma simples e imediata. Em um cenário onde muitas mulheres enfrentam situações de vulnerabilidade, ter uma ferramenta confiável pode fazer toda a diferença, e é exatamente isso que o Mulher Amparada busca proporcionar.
 
 O aplicativo foi pensado para funcionar como um apoio digital em momentos críticos, permitindo acesso rápido a serviços essenciais como**Polícia (190)**,**SAMU (192)**e**Central de Atendimento à Mulher (180)**. Com apenas alguns toques, a usuária pode realizar ligações de emergência, reduzindo o tempo de reação em situações onde cada segundo é importante. Essa agilidade pode ser decisiva para evitar agravamentos e garantir assistência o mais rápido possível.
@@ -28,7 +30,8 @@ no repositório tem um yml que ativa todos os dias, procura no codigo fonte dos 
 
 e todas as activitys tem o android exported="false", menos a MainActivity porque a partir das versões mais recentes do android, a tela inicial do app tem que estar obrigatoriamente com android exported="true"
 
-E nao faz sentido usar proguard8 porque o app tem o código-fonte publico, ou seja ele é open-source, então não faz sentido esconder o código-fonte 
+E nao faz sentido usar proguard8 
+pois o app tem o código-fonte publico, 
 
 E ele tem uma chave que assina os apps, usando essas 4 informações:
 

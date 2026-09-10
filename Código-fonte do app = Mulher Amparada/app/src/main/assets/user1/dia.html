@@ -1945,7 +1945,6 @@ margin-top: 5%;
 <script>
 /* =========================================================
    CLASSE CRIPTO
-   Responsável por salvar, carregar e apagar o progresso
 ========================================================= */
 
 class cripto {
@@ -1985,9 +1984,7 @@ class cripto {
                 return null;
             }
 
-            return JSON.parse(
-                salvo
-            );
+            return JSON.parse(salvo);
 
         } catch (erro) {
 
@@ -2283,21 +2280,12 @@ const upgrades = [
 
 
 /* =========================================================
-   ESTADO DO JOGO
+   ESTADO
 ========================================================= */
 
 let game = {
 
     points: 0,
-
-    /*
-     * LEGADO É PERMANENTE.
-     *
-     * Quando ocorre um prestígio,
-     * os upgrades abaixo são resetados,
-     * mas o legado continua.
-     */
-
     legacy: 0,
 
     clickLevel: 0,
@@ -2318,89 +2306,70 @@ let game = {
 ========================================================= */
 
 const score =
-    document.getElementById(
-        "score"
-    );
+    document.getElementById("score");
 
 const perClick =
-    document.getElementById(
-        "perClick"
-    );
+    document.getElementById("perClick");
 
 const perSecond =
-    document.getElementById(
-        "perSecond"
-    );
+    document.getElementById("perSecond");
 
 const multiplier =
-    document.getElementById(
-        "multiplier"
-    );
+    document.getElementById("multiplier");
 
 const comboElement =
-    document.getElementById(
-        "combo"
-    );
+    document.getElementById("combo");
 
 const comboText =
-    document.getElementById(
-        "comboText"
-    );
+    document.getElementById("comboText");
 
 const legacy =
-    document.getElementById(
-        "legacy"
-    );
+    document.getElementById("legacy");
 
 const progressBar =
-    document.getElementById(
-        "progressBar"
-    );
+    document.getElementById("progressBar");
 
 const phaseNumber =
-    document.getElementById(
-        "phaseNumber"
-    );
+    document.getElementById("phaseNumber");
 
 const phaseTitle =
-    document.getElementById(
-        "phaseTitle"
-    );
+    document.getElementById("phaseTitle");
 
 const phaseDescription =
-    document.getElementById(
-        "phaseDescription"
-    );
+    document.getElementById("phaseDescription");
 
 const stories =
-    document.getElementById(
-        "stories"
-    );
+    document.getElementById("stories");
 
 const upgradesContainer =
-    document.getElementById(
-        "upgrades"
-    );
+    document.getElementById("upgrades");
 
 const prestigeButton =
-    document.getElementById(
-        "prestigeButton"
-    );
+    document.getElementById("prestigeButton");
 
 const prestigeDescription =
-    document.getElementById(
-        "prestigeDescription"
-    );
+    document.getElementById("prestigeDescription");
 
 const clickButton =
-    document.getElementById(
-        "clickButton"
-    );
+    document.getElementById("clickButton");
 
 const effectLayer =
-    document.getElementById(
-        "effectLayer"
-    );
+    document.getElementById("effectLayer");
+
+
+/* =========================================================
+   CONTROLE DE PERFORMANCE
+========================================================= */
+
+let updateScheduled = false;
+let saveTimer = null;
+
+let lastRenderedPhase = -1;
+let lastUpgradeLevels = "";
+
+let floatingCount = 0;
+
+const MAX_FLOATING_NUMBERS = 18;
 
 
 /* =========================================================
@@ -2409,29 +2378,17 @@ const effectLayer =
 
 function formatNumber(number) {
 
-    if (
-        !Number.isFinite(number)
-    ) {
-
+    if (!Number.isFinite(number)) {
         return "0";
+    }
+
+    if (number < 1000) {
+
+        return Math.floor(number);
 
     }
 
-
-    if (
-        number < 1000
-    ) {
-
-        return Math.floor(
-            number
-        );
-
-    }
-
-
-    if (
-        number < 1000000
-    ) {
+    if (number < 1000000) {
 
         return (
             number / 1000
@@ -2442,10 +2399,7 @@ function formatNumber(number) {
 
     }
 
-
-    if (
-        number < 1000000000
-    ) {
+    if (number < 1000000000) {
 
         return (
             number / 1000000
@@ -2456,10 +2410,7 @@ function formatNumber(number) {
 
     }
 
-
-    if (
-        number < 1000000000000
-    ) {
+    if (number < 1000000000000) {
 
         return (
             number / 1000000000
@@ -2469,7 +2420,6 @@ function formatNumber(number) {
         + " bi";
 
     }
-
 
     return (
         number / 1000000000000
@@ -2489,36 +2439,17 @@ function getMultiplier() {
 
     let value = 1;
 
-
-    /*
-     * Educação
-     */
-
     value +=
         game.educationLevel *
         0.10;
-
-
-    /*
-     * Memória histórica
-     */
 
     value +=
         game.memoryLevel *
         0.25;
 
-
-    /*
-     * LEGADO PERMANENTE
-     *
-     * Cada legado:
-     * +10% em todos os ganhos.
-     */
-
     value +=
         game.legacy *
         0.10;
-
 
     return value;
 
@@ -2526,30 +2457,19 @@ function getMultiplier() {
 
 
 /* =========================================================
-   VALOR DO CLIQUE
+   CLIQUE
 ========================================================= */
 
 function getPerClick() {
 
     let value = 1;
 
-
-    /*
-     * Voz coletiva
-     */
-
     value +=
         game.clickLevel;
-
-
-    /*
-     * Imprensa
-     */
 
     value +=
         game.pressLevel *
         5;
-
 
     return value;
 
@@ -2557,7 +2477,7 @@ function getPerClick() {
 
 
 /* =========================================================
-   PRODUÇÃO AUTOMÁTICA
+   PRODUÇÃO
 ========================================================= */
 
 function getPerSecond() {
@@ -2565,14 +2485,12 @@ function getPerSecond() {
     const base =
         game.cpsLevel;
 
-
     const organization =
         1 +
         (
             game.organizationLevel *
             0.15
         );
-
 
     return (
         base *
@@ -2584,37 +2502,10 @@ function getPerSecond() {
 
 
 /* =========================================================
-   PREÇO
+   NÍVEL
 ========================================================= */
 
-function getUpgradePrice(
-    upgrade
-) {
-
-    const level =
-        getUpgradeLevel(
-            upgrade.id
-        );
-
-
-    return Math.floor(
-        upgrade.baseCost *
-        Math.pow(
-            upgrade.growth,
-            level
-        )
-    );
-
-}
-
-
-/* =========================================================
-   NÍVEL DO UPGRADE
-========================================================= */
-
-function getUpgradeLevel(
-    id
-) {
+function getUpgradeLevel(id) {
 
     switch (id) {
 
@@ -2645,23 +2536,32 @@ function getUpgradeLevel(
 
 
 /* =========================================================
+   PREÇO
+========================================================= */
+
+function getUpgradePrice(upgrade) {
+
+    const level =
+        getUpgradeLevel(
+            upgrade.id
+        );
+
+    return Math.floor(
+        upgrade.baseCost *
+        Math.pow(
+            upgrade.growth,
+            level
+        )
+    );
+
+}
+
+
+/* =========================================================
    PRESTÍGIO
 ========================================================= */
 
 function getPrestigeRequirement() {
-
-    /*
-     * 1º prestígio:
-     * 100.000
-     *
-     * 2º:
-     * 200.000
-     *
-     * 3º:
-     * 400.000
-     *
-     * etc.
-     */
 
     return (
         100000 *
@@ -2673,10 +2573,6 @@ function getPrestigeRequirement() {
 
 }
 
-
-/* =========================================================
-   RECOMPENSA DO PRESTÍGIO
-========================================================= */
 
 function getPrestigeReward() {
 
@@ -2699,13 +2595,12 @@ function getPrestigeReward() {
 
 
 /* =========================================================
-   FASE ATUAL
+   FASE
 ========================================================= */
 
 function getCurrentPhase() {
 
     let current = 0;
-
 
     for (
         let i = 0;
@@ -2724,8 +2619,49 @@ function getCurrentPhase() {
 
     }
 
-
     return current;
+
+}
+
+
+/* =========================================================
+   AGENDAR UPDATE
+========================================================= */
+
+function scheduleUpdate() {
+
+    if (updateScheduled) {
+        return;
+    }
+
+    updateScheduled = true;
+
+    requestAnimationFrame(() => {
+
+        updateScheduled = false;
+
+        updateUI();
+
+    });
+
+}
+
+
+/* =========================================================
+   SAVE OTIMIZADO
+========================================================= */
+
+function scheduleSave() {
+
+    clearTimeout(
+        saveTimer
+    );
+
+    saveTimer = setTimeout(() => {
+
+        cripto.salvar(game);
+
+    }, 300);
 
 }
 
@@ -2734,7 +2670,45 @@ function getCurrentPhase() {
    RENDERIZAR UPGRADES
 ========================================================= */
 
-function renderUpgrades() {
+function renderUpgrades(force = false) {
+
+    const levelsKey =
+        upgrades
+            .map(
+                upgrade =>
+                    getUpgradeLevel(
+                        upgrade.id
+                    )
+            )
+            .join(",");
+
+
+    /*
+     * Se nenhum nível mudou,
+     * não recria os elementos.
+     */
+
+    if (
+        !force &&
+        levelsKey ===
+        lastUpgradeLevels
+    ) {
+
+        /*
+         * Apenas atualiza
+         * preços/bloqueios.
+         */
+
+        updateUpgradeStates();
+
+        return;
+
+    }
+
+
+    lastUpgradeLevels =
+        levelsKey;
+
 
     upgradesContainer.innerHTML =
         "";
@@ -2743,39 +2717,16 @@ function renderUpgrades() {
     upgrades.forEach(
         upgrade => {
 
-            const price =
-                getUpgradePrice(
-                    upgrade
-                );
-
-
-            const level =
-                getUpgradeLevel(
-                    upgrade.id
-                );
-
-
             const element =
                 document.createElement(
                     "div"
                 );
 
-
             element.className =
                 "upgrade";
 
-
-            if (
-                game.points <
-                price
-            ) {
-
-                element.classList.add(
-                    "disabled"
-                );
-
-            }
-
+            element.dataset.id =
+                upgrade.id;
 
             element.innerHTML = `
 
@@ -2795,11 +2746,22 @@ function renderUpgrades() {
 
                     <span class="price">
                         Custo:
-                        ${formatNumber(price)}
+                        <span class="upgrade-price">
+                            ${formatNumber(
+                                getUpgradePrice(
+                                    upgrade
+                                )
+                            )}
+                        </span>
                     </span>
 
                     <span class="level">
-                        Nv. ${level}
+                        Nv.
+                        <span class="upgrade-level">
+                            ${getUpgradeLevel(
+                                upgrade.id
+                            )}
+                        </span>
                     </span>
 
                 </div>
@@ -2826,6 +2788,90 @@ function renderUpgrades() {
         }
     );
 
+
+    updateUpgradeStates();
+
+}
+
+
+/* =========================================================
+   ATUALIZAR ESTADO DOS UPGRADES
+========================================================= */
+
+function updateUpgradeStates() {
+
+    const elements =
+        upgradesContainer.querySelectorAll(
+            ".upgrade"
+        );
+
+
+    elements.forEach(
+        element => {
+
+            const id =
+                element.dataset.id;
+
+            const upgrade =
+                upgrades.find(
+                    item =>
+                        item.id === id
+                );
+
+
+            if (!upgrade) {
+                return;
+            }
+
+
+            const price =
+                getUpgradePrice(
+                    upgrade
+                );
+
+
+            const level =
+                getUpgradeLevel(
+                    id
+                );
+
+
+            element.classList.toggle(
+                "disabled",
+                game.points < price
+            );
+
+
+            const priceElement =
+                element.querySelector(
+                    ".upgrade-price"
+                );
+
+
+            const levelElement =
+                element.querySelector(
+                    ".upgrade-level"
+                );
+
+
+            if (priceElement) {
+
+                priceElement.textContent =
+                    formatNumber(price);
+
+            }
+
+
+            if (levelElement) {
+
+                levelElement.textContent =
+                    level;
+
+            }
+
+        }
+    );
+
 }
 
 
@@ -2833,9 +2879,7 @@ function renderUpgrades() {
    COMPRAR UPGRADE
 ========================================================= */
 
-function buyUpgrade(
-    upgrade
-) {
+function buyUpgrade(upgrade) {
 
     const price =
         getUpgradePrice(
@@ -2862,44 +2906,27 @@ function buyUpgrade(
     ) {
 
         case "click":
-
             game.clickLevel++;
-
             break;
-
 
         case "cps":
-
             game.cpsLevel++;
-
             break;
-
 
         case "education":
-
             game.educationLevel++;
-
             break;
-
 
         case "organization":
-
             game.organizationLevel++;
-
             break;
-
 
         case "press":
-
             game.pressLevel++;
-
             break;
 
-
         case "memory":
-
             game.memoryLevel++;
-
             break;
 
     }
@@ -2907,13 +2934,15 @@ function buyUpgrade(
 
     createUpgradeEffect();
 
-    updateUI();
+    scheduleUpdate();
+
+    scheduleSave();
 
 }
 
 
 /* =========================================================
-   EFEITO DO UPGRADE
+   EFEITO DE UPGRADE
 ========================================================= */
 
 function createUpgradeEffect() {
@@ -2923,18 +2952,14 @@ function createUpgradeEffect() {
             "div"
         );
 
-
     element.className =
         "floating-number";
-
 
     element.textContent =
         "UPGRADE!";
 
-
     element.style.top =
         "35%";
-
 
     effectLayer.appendChild(
         element
@@ -2954,12 +2979,29 @@ function createUpgradeEffect() {
 
 
 /* =========================================================
-   NÚMERO FLUTUANTE DO CLIQUE
+   +PONTOS
 ========================================================= */
 
-function showFloatingNumber(
-    amount
-) {
+function showFloatingNumber(amount) {
+
+    /*
+     * Evita criar centenas/milhares
+     * de elementos se o usuário
+     * clicar absurdamente rápido.
+     */
+
+    if (
+        floatingCount >=
+        MAX_FLOATING_NUMBERS
+    ) {
+
+        return;
+
+    }
+
+
+    floatingCount++;
+
 
     const element =
         document.createElement(
@@ -2984,12 +3026,6 @@ function showFloatingNumber(
         );
 
 
-    /*
-     * Pequena variação horizontal
-     * para não aparecer sempre no
-     * mesmo lugar.
-     */
-
     const randomX =
         (
             Math.random() *
@@ -3012,9 +3048,77 @@ function showFloatingNumber(
 
             element.remove();
 
+            floatingCount--;
+
         },
         800
     );
+
+}
+
+
+/* =========================================================
+   ANIMAÇÃO DO BOTÃO
+========================================================= */
+
+let buttonAnimationFrame = false;
+
+function animateClickButton() {
+
+    if (buttonAnimationFrame) {
+        return;
+    }
+
+    buttonAnimationFrame = true;
+
+
+    clickButton.classList.remove(
+        "clicked"
+    );
+
+
+    requestAnimationFrame(() => {
+
+        clickButton.classList.add(
+            "clicked"
+        );
+
+        buttonAnimationFrame = false;
+
+    });
+
+}
+
+
+/* =========================================================
+   ANIMAÇÃO DO SCORE
+========================================================= */
+
+let scoreAnimationFrame = false;
+
+function animateScore() {
+
+    if (scoreAnimationFrame) {
+        return;
+    }
+
+    scoreAnimationFrame = true;
+
+
+    score.classList.remove(
+        "pulse"
+    );
+
+
+    requestAnimationFrame(() => {
+
+        score.classList.add(
+            "pulse"
+        );
+
+        scoreAnimationFrame = false;
+
+    });
 
 }
 
@@ -3045,8 +3149,7 @@ clickButton.addEventListener(
 
         } else {
 
-            game.combo =
-                1;
+            game.combo = 1;
 
         }
 
@@ -3056,7 +3159,7 @@ clickButton.addEventListener(
 
 
         /*
-         * BÔNUS DO COMBO
+         * MULTIPLICADOR DO COMBO
          */
 
         const comboMultiplier =
@@ -3074,7 +3177,7 @@ clickButton.addEventListener(
 
 
         /*
-         * GANHO FINAL
+         * GANHO
          */
 
         const amount =
@@ -3083,12 +3186,18 @@ clickButton.addEventListener(
             comboMultiplier;
 
 
+        /*
+         * O PONTO É PROCESSADO
+         * IMEDIATAMENTE.
+         */
+
         game.points +=
             amount;
 
 
         /*
-         * +N NA TELA
+         * EFEITOS VISUAIS
+         * SÃO LIMITADOS.
          */
 
         showFloatingNumber(
@@ -3096,42 +3205,13 @@ clickButton.addEventListener(
         );
 
 
-        /*
-         * ANIMAÇÃO DO BOTÃO
-         */
+        animateClickButton();
 
-        clickButton.classList.remove(
-            "clicked"
-        );
-
-
-        void clickButton.offsetWidth;
-
-
-        clickButton.classList.add(
-            "clicked"
-        );
+        animateScore();
 
 
         /*
-         * ANIMAÇÃO DO PLACAR
-         */
-
-        score.classList.remove(
-            "pulse"
-        );
-
-
-        void score.offsetWidth;
-
-
-        score.classList.add(
-            "pulse"
-        );
-
-
-        /*
-         * COMBO VISÍVEL
+         * COMBO
          */
 
         if (
@@ -3143,14 +3223,6 @@ clickButton.addEventListener(
                 game.combo;
 
 
-            comboText.classList.remove(
-                "active"
-            );
-
-
-            void comboText.offsetWidth;
-
-
             comboText.classList.add(
                 "active"
             );
@@ -3158,7 +3230,22 @@ clickButton.addEventListener(
         }
 
 
-        updateUI();
+        /*
+         * NÃO atualiza o DOM
+         * milhares de vezes por segundo.
+         *
+         * O update será feito no
+         * próximo frame disponível.
+         */
+
+        scheduleUpdate();
+
+
+        /*
+         * Salva depois.
+         */
+
+        scheduleSave();
 
     }
 );
@@ -3218,62 +3305,42 @@ prestigeButton.addEventListener(
             );
 
 
-        if (
-            !confirmed
-        ) {
-
+        if (!confirmed) {
             return;
-
         }
 
-
-        /*
-         * EFEITO
-         */
 
         createPrestigeEffect();
 
 
-        /*
-         * RESETA SOMENTE
-         * O PROGRESSO NORMAL.
-         */
+        game.points = 0;
 
-        game.points =
-            0;
+        game.clickLevel = 0;
+        game.cpsLevel = 0;
+        game.educationLevel = 0;
+        game.organizationLevel = 0;
+        game.pressLevel = 0;
+        game.memoryLevel = 0;
 
-        game.clickLevel =
-            0;
+        game.combo = 0;
 
-        game.cpsLevel =
-            0;
-
-        game.educationLevel =
-            0;
-
-        game.organizationLevel =
-            0;
-
-        game.pressLevel =
-            0;
-
-        game.memoryLevel =
-            0;
-
-        game.combo =
-            0;
-
-
-        /*
-         * LEGADO É PRESERVADO
-         * E AUMENTADO.
-         */
 
         game.legacy +=
             reward;
 
 
-        updateUI();
+        /*
+         * Força a reconstrução
+         * dos upgrades porque os
+         * níveis foram resetados.
+         */
+
+        lastUpgradeLevels = "";
+
+
+        scheduleUpdate();
+
+        scheduleSave();
 
     }
 );
@@ -3285,34 +3352,23 @@ prestigeButton.addEventListener(
 
 function createPrestigeEffect() {
 
-    /*
-     * Flash central
-     */
-
     const flash =
         document.createElement(
             "div"
         );
 
-
     flash.className =
         "prestige-flash";
-
 
     effectLayer.appendChild(
         flash
     );
 
 
-    /*
-     * Texto
-     */
-
     const text =
         document.createElement(
             "div"
         );
-
 
     text.className =
         "prestige-text";
@@ -3333,10 +3389,6 @@ function createPrestigeEffect() {
         text
     );
 
-
-    /*
-     * Partículas
-     */
 
     for (
         let i = 0;
@@ -3425,10 +3477,34 @@ function createPrestigeEffect() {
 
 
 /* =========================================================
-   RENDERIZAR HISTÓRIAS
+   HISTÓRIAS
 ========================================================= */
 
-function renderStories() {
+function renderStories(force = false) {
+
+    const currentPhase =
+        getCurrentPhase();
+
+
+    /*
+     * Não recria as histórias
+     * a cada clique.
+     */
+
+    if (
+        !force &&
+        currentPhase ===
+        lastRenderedPhase
+    ) {
+
+        return;
+
+    }
+
+
+    lastRenderedPhase =
+        currentPhase;
+
 
     stories.innerHTML =
         "";
@@ -3452,9 +3528,7 @@ function renderStories() {
                 "story";
 
 
-            if (
-                !unlocked
-            ) {
+            if (!unlocked) {
 
                 article.classList.add(
                     "locked"
@@ -3481,15 +3555,16 @@ function renderStories() {
                     </p>
 
                     <div class="highlight">
+
                         Necessário:
                         ${formatNumber(
                             phase.unlock
                         )}
                         pontos.
+
                     </div>
 
                 `;
-
 
             } else {
 
@@ -3520,32 +3595,26 @@ function renderStories() {
 
                         ${
                             phase.timeline
-                            .map(
-                                item => `
+                                .map(
+                                    item => `
 
-                                    <div
-                                        class="timeline-item"
-                                    >
+                                        <div class="timeline-item">
 
-                                        <div
-                                            class="timeline-dot"
-                                        ></div>
+                                            <div class="timeline-dot"></div>
 
-                                        <div
-                                            class="timeline-year"
-                                        >
-                                            ${item[0]}
+                                            <div class="timeline-year">
+                                                ${item[0]}
+                                            </div>
+
+                                            <p>
+                                                ${item[1]}
+                                            </p>
+
                                         </div>
 
-                                        <p>
-                                            ${item[1]}
-                                        </p>
-
-                                    </div>
-
-                                `
-                            )
-                            .join("")
+                                    `
+                                )
+                                .join("")
                         }
 
                     </div>
@@ -3583,6 +3652,10 @@ function updateUI() {
     const cps =
         getPerSecond();
 
+
+    /*
+     * PLACAR
+     */
 
     score.textContent =
         formatNumber(
@@ -3683,7 +3756,6 @@ function updateUI() {
             ) +
             "%";
 
-
     } else {
 
         progressBar.style.width =
@@ -3715,9 +3787,7 @@ function updateUI() {
     );
 
 
-    if (
-        canPrestige
-    ) {
+    if (canPrestige) {
 
         prestigeButton.textContent =
             "Prestigiar";
@@ -3744,11 +3814,18 @@ function updateUI() {
     }
 
 
+    /*
+     * UPGRADES
+     */
+
     renderUpgrades();
 
-    renderStories();
 
-    saveGame();
+    /*
+     * HISTÓRIAS
+     */
+
+    renderStories();
 
 }
 
@@ -3758,13 +3835,6 @@ function updateUI() {
 ========================================================= */
 
 function saveGame() {
-
-    /*
-     * O jogo NÃO acessa localStorage
-     * diretamente.
-     *
-     * Tudo passa pela classe cripto.
-     */
 
     cripto.salvar(
         game
@@ -3783,20 +3853,10 @@ function loadGame() {
         cripto.carregar();
 
 
-    if (
-        !data
-    ) {
-
+    if (!data) {
         return;
-
     }
 
-
-    /*
-     * Mantém os valores padrão
-     * caso algum campo não exista
-     * em um save antigo.
-     */
 
     game = {
 
@@ -3820,12 +3880,8 @@ setInterval(
             getPerSecond();
 
 
-        if (
-            cps <= 0
-        ) {
-
+        if (cps <= 0) {
             return;
-
         }
 
 
@@ -3833,7 +3889,9 @@ setInterval(
             cps;
 
 
-        updateUI();
+        scheduleUpdate();
+
+        scheduleSave();
 
     },
     1000
@@ -3854,8 +3912,7 @@ setInterval(
             1200
         ) {
 
-            game.combo =
-                0;
+            game.combo = 0;
 
 
             comboText.classList.remove(
@@ -3863,7 +3920,9 @@ setInterval(
             );
 
 
-            updateUI();
+            scheduleUpdate();
+
+            scheduleSave();
 
         }
 
@@ -3873,7 +3932,7 @@ setInterval(
 
 
 /* =========================================================
-   RESET COMPLETO
+   RESET
 ========================================================= */
 
 document
@@ -3904,18 +3963,10 @@ document
                 );
 
 
-            if (
-                !confirmed
-            ) {
-
+            if (!confirmed) {
                 return;
-
             }
 
-
-            /*
-             * Efeito visual
-             */
 
             const flash =
                 document.createElement(
@@ -3932,17 +3983,8 @@ document
             );
 
 
-            /*
-             * APAGA O SAVE ATRAVÉS
-             * DA CLASSE CRIPTO.
-             */
-
             cripto.apagar();
 
-
-            /*
-             * NOVO ESTADO
-             */
 
             game = {
 
@@ -3951,22 +3993,32 @@ document
                 legacy: 0,
 
                 clickLevel: 0,
-
                 cpsLevel: 0,
-
                 educationLevel: 0,
-
                 organizationLevel: 0,
-
                 pressLevel: 0,
-
                 memoryLevel: 0,
 
                 combo: 0,
-
                 lastClick: 0
 
             };
+
+
+            /*
+             * Força reconstrução.
+             */
+
+            lastRenderedPhase = -1;
+            lastUpgradeLevels = "";
+
+
+            /*
+             * Aqui salva imediatamente
+             * o novo estado zerado.
+             */
+
+            saveGame();
 
 
             updateUI();
@@ -3991,6 +4043,11 @@ document
 ========================================================= */
 
 loadGame();
+
+
+lastRenderedPhase = -1;
+lastUpgradeLevels = "";
+
 
 updateUI();
 

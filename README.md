@@ -543,4 +543,61 @@ porque os serviços de acessibilidade para os ativar precisa ir para a tela de a
 
 e bem verdade que ele está ficando deprecated, mas também é verdade que a parte de bloquear a tela não esta deprecated, o resto sim (alterar a senha e etc)
 
+E o webview do app está assim!:
+
+        val settings =  
+            webView.settings  
+
+            webView.overScrollMode = View.OVER_SCROLL_NEVER  
+
+  webView.isVerticalScrollBarEnabled =
+    false
+
+webView.isFocusable = true
+webView.isFocusableInTouchMode = true
+webView.setOnFocusChangeListener { _, _ -> }
+
+webView.isHorizontalScrollBarEnabled =
+    false
+
+webView.scrollBarStyle =
+    View.SCROLLBARS_INSIDE_OVERLAY
+
+settings.javaScriptEnabled =
+    true
+
+settings.mediaPlaybackRequiresUserGesture =
+    false
+
+settings.domStorageEnabled =
+    true
+
+settings.setGeolocationEnabled(
+    true
+)
+
+// Necessário para o seu uso com android_asset
+settings.allowFileAccess =
+    true
+
+// Não é necessário para as páginas locais
+settings.allowContentAccess =
+    false
+
+// Evita que páginas file:// acessem outros file://
+settings.allowFileAccessFromFileURLs =
+    false
+
+// Evita que páginas file:// acessem outras origens
+settings.allowUniversalAccessFromFileURLs =
+    false
+
+// Reduz abertura automática de novas janelas
+settings.javaScriptCanOpenWindowsAutomatically =
+    false
+
+settings.setSupportMultipleWindows(
+    false
+)
+
 ----

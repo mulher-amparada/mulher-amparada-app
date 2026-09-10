@@ -513,7 +513,94 @@ e no application do AndroidManifest do app tem allowBackup="false"
 
 O aplicativo possui um navegador interno. A navegação para o Google é feita diretamente pelo código usando window location replace(), sem disponibilizar o endereço como um link na interface. O aplicativo também não implementa um sistema próprio de registro de histórico de navegação, (ou pelo ou menos eu não coloquei na página)
 
-E temos um recurso na área protegida que é um especial de dia das mulheree: consiste em um jogo clicker que ao ganhar pontos (1 => 2) ou 1 ponto por segundo, você avança na história delas entre cada era da humanidade (antiguidade, idade média, e etc!)
+E temos um recurso na área protegida que é:
+
+História das Mulheres
+
+A página “História das Mulheres” é uma experiência interativa que combina conteúdo histórico com um sistema de progressão. O usuário acumula Pontos de História, desbloqueia cinco períodos históricos, compra melhorias para aumentar sua produção e pode realizar prestígios para obter Legado Permanente.
+
+Pontos de História
+
+Os Pontos de História são o recurso principal da página. O usuário pode obtê-los clicando no botão “+ HISTÓRIA” ou por meio da produção automática.
+
+Cada clique começa concedendo 1 ponto, mas esse valor pode aumentar com as melhorias. O sistema também possui um combo: quando vários cliques são realizados em sequência, o ganho recebe um bônus adicional, limitado a 2x.
+
+Melhorias
+
+A página possui seis melhorias, cada uma com uma função diferente:
+
+✊ Voz coletiva
+Aumenta diretamente a quantidade de pontos recebidos por clique. Cada nível acrescenta +1 ao valor base de cada clique. Quanto maior o nível, mais pontos o usuário recebe manualmente.
+
+⚡ Movimento
+Cria produção automática de Pontos de História. Cada nível aumenta a quantidade de pontos produzidos por segundo. Assim, o usuário não precisa clicar continuamente para continuar acumulando pontos.
+
+📚 Educação
+Aumenta todos os ganhos em 10% por nível. Esse bônus funciona como um multiplicador geral, afetando tanto os pontos obtidos por clique quanto a produção automática.
+
+💼 Organização
+Aumenta especificamente a produção automática. Cada nível acrescenta 15% à quantidade de pontos produzidos por segundo pelo “Movimento”.
+
+📰 Imprensa
+Aumenta o valor base dos cliques. Cada nível acrescenta +5 pontos ao valor de cada clique antes da aplicação dos multiplicadores.
+
+💎 Memória histórica
+Aumenta todos os ganhos em 25% por nível. Assim como “Educação”, funciona como um multiplicador geral e fortalece tanto os cliques quanto a produção automática.
+
+As melhorias possuem preços que aumentam a cada compra. Isso faz com que os primeiros níveis sejam mais acessíveis e os níveis seguintes exijam cada vez mais Pontos de História.
+
+As cinco fases
+
+A página apresenta cinco grandes períodos históricos:
+
+Fase 1 — Antiguidade
+Apresenta a participação das mulheres nas sociedades antigas, incluindo suas funções econômicas, familiares, religiosas e culturais.
+
+Fase 2 — Idade Média
+Aborda a participação feminina na agricultura, comércio, artesanato, religião, administração de propriedades e outras atividades.
+
+Fase 3 — Idade Moderna
+Mostra transformações entre os séculos XV e XVIII, incluindo a expansão da imprensa, da educação e das discussões sobre a capacidade e os direitos das mulheres.
+
+Fase 4 — Revolução Industrial
+Apresenta as mudanças provocadas pela industrialização, incluindo o crescimento do trabalho feminino assalariado e dos movimentos por direitos trabalhistas, educação e participação política.
+
+Fase 5 — Século XX e XXI
+Mostra transformações relacionadas ao direito ao voto, educação, profissões, ciência, política, movimentos sociais e debates contemporâneos sobre igualdade e direitos.
+
+Cada fase possui uma história própria, um destaque e uma linha do tempo com informações relacionadas ao período.
+
+Legado Permanente
+
+O Legado Permanente é o sistema de progressão que permanece depois de um prestígio.
+
+Para realizar um prestígio, é necessário atingir uma quantidade específica de Pontos de História. O primeiro requisito é de 100 mil pontos. Depois de cada prestígio, o requisito para o próximo aumenta.
+
+Ao realizar o prestígio, os pontos e as melhorias normais são reiniciados, mas o usuário recebe Legado.
+
+Cada ponto de Legado acrescenta 10% ao multiplicador geral dos ganhos. Portanto, o Legado funciona como um bônus permanente que torna as próximas progressões mais eficientes.
+
+Prestígio
+
+O prestígio permite trocar parte do progresso atual por uma vantagem permanente.
+
+Quando o jogador alcança o requisito, a página informa quantos pontos de Legado serão recebidos. Depois da confirmação, os níveis das melhorias normais são zerados e os Pontos de História voltam para zero.
+
+O Legado, entretanto, deve permanecer caso a intenção seja que ele seja realmente permanente.
+
+Salvamento
+
+O progresso é armazenado pelo navegador usando "localStorage". A classe "cripto" é responsável por salvar, carregar e apagar os dados da página.
+
+Dessa maneira, os pontos, melhorias, Legado e outras informações do jogo podem permanecer salvos quando a página é fechada e aberta novamente.
+
+Interface e efeitos
+
+A página possui animações para os cliques, números de pontos que aparecem na tela, combos, desbloqueios, melhorias e prestígio. O prestígio possui ainda um efeito especial com brilho, texto e partículas.
+
+O sistema também utiliza mecanismos para evitar atualizações desnecessárias da interface e limitar a quantidade de elementos visuais criados simultaneamente, ajudando a manter a página mais fluida.
+
+Em conjunto, a página transforma o aprendizado sobre a história das mulheres em uma experiência de progressão: o usuário acumula Pontos de História, melhora sua produção, desbloqueia novos períodos históricos e utiliza o sistema de prestígio para construir um Legado Permanente.
 
 e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, onde nem tinha os recursos, ja programei ele num app de A-IDE, num A05, e eu ja perdi vários projetos porque o celular nao aguentava, matava o projeto porque matou o processo de compilação!, e uma vez eu fiz o projeto do mulher amparada e eu mesmo fiz o app do mulher amparada (primeiro eu refiz, depois na 2 vez que perdi portei tudo do apk compilado para descompilado, e depois perdi denovo mas ai eu ja tinha o código-fonte!)
 

@@ -672,11 +672,340 @@ A falta de percepção imediata também não constitui reconhecimento de que a v
 
 Esta cláusula não pretende alterar prazos legais de prescrição, decadência ou outros prazos estabelecidos obrigatoriamente pela legislação aplicável, nem criar responsabilidade ou indenização automática.
 
+18. PROTEÇÃO DAS USUÁRIAS CONTRA RETALIAÇÃO
+
+O acesso, download, instalação ou utilização deste projeto por uma usuária não constitui autorização para qualquer terceiro praticar violência, ameaça, perseguição, constrangimento, intimidação, controle, dano ou qualquer outra conduta ilícita contra ela.
+
+Caso uma pessoa pratique ou tente praticar violência contra uma usuária em razão de ela ter conhecido, baixado, instalado, utilizado, recomendado ou apoiado o projeto, essa circunstância não será considerada uma consequência autorizada pelo projeto nem poderá ser utilizada para atribuir à usuária responsabilidade pela violência sofrida.
+
+A responsabilidade por eventual conduta ilícita será analisada de acordo com os fatos concretamente praticados, a participação de cada envolvido, o nexo causal e a legislação aplicável.
+
+O projeto não autoriza qualquer forma de retaliação contra suas usuárias e não poderá ser interpretado como justificativa para violência ou violação de direitos.
+
+Esta disposição não cria responsabilidade automática do desenvolvedor por atos praticados autonomamente por terceiros, nem impede a apuração de eventual responsabilidade civil, criminal ou de outra natureza quando preenchidos os requisitos previstos em lei.
+
+19. PROTEÇÃO CONTRA EXPLORAÇÃO INDEVIDA DE CARACTERÍSTICAS PESSOAIS DO DESENVOLVEDOR
+
+É vedada a utilização de características pessoais, histórico de vida, neurodivergência, idade, condição pessoal, trajetória, experiências, informações biográficas ou quaisquer outros elementos relacionados à pessoa do desenvolvedor como instrumento de intimidação, humilhação, perseguição, constrangimento, descredibilização maliciosa, manipulação ou tentativa de prejudicar indevidamente o desenvolvedor ou o projeto.
+
+A utilização deliberada dessas características com a finalidade de atacar a capacidade intelectual, competência, autoria, legitimidade ou credibilidade do desenvolvedor, especialmente quando acompanhada de informações falsas, distorcidas, depreciativas ou utilizadas fora de contexto, poderá ser considerada conduta incompatível com esta licença quando também configurar violação de direitos ou ilícito nos termos da legislação aplicável.
+
+A neurodivergência do desenvolvedor não poderá ser utilizada como argumento para presumir incapacidade, incompetência, ausência de autoria, falta de discernimento ou inexistência de validade de suas decisões sem fundamento concreto e juridicamente pertinente.
+
+O histórico pessoal do desenvolvedor também não constitui autorização para terceiros exporem, manipularem, distorcerem ou utilizarem informações pessoais para tentar provocar o abandono do projeto, obter controle sobre ele, induzir a transferência de direitos ou dificultar seu desenvolvimento.
+
+Esta proteção abrange condutas praticadas diretamente ou por intermédio de terceiros, organizações, perfis, empresas, representantes ou outras estruturas utilizadas para alcançar os mesmos objetivos.
+
+A presente disposição não impede referências legítimas, verificáveis e relevantes à trajetória do desenvolvedor, críticas fundamentadas, jornalismo responsável, investigação de interesse público, exercício regular de direitos ou outras manifestações protegidas pela legislação.
+
+A caracterização de eventual abuso, ilícito, dano ou violação de direitos dependerá das circunstâncias concretas e da legislação aplicável, não sendo criada por esta licença qualquer responsabilidade ou indenização automática.
+
+20. PROTEÇÃO CONTRA DESCRÉDITO INDIRETO E APROPRIAÇÃO INSTITUCIONAL
+
+20.1. Descredibilização indireta
+
+Não constitui meio legítimo de contestação do projeto a utilização deliberada de terceiros, perfis anônimos, perfis de fofoca, páginas de influência, intermediários ou outras pessoas para disseminar insinuações, informações falsas, distorcidas ou apresentadas de maneira deliberadamente enganosa com a finalidade de gerar descrédito contra o desenvolvedor ou contra o projeto.
+
+Questionamentos legítimos sobre segurança, capacidade técnica, manutenção, privacidade, responsabilidade ou funcionamento do projeto são permitidos quando apresentados de maneira honesta, fundamentada e de boa-fé.
+
+A mera formulação de uma pergunta, preocupação ou crítica não será considerada ilícita por si só. A análise deverá considerar o contexto, a veracidade das informações, a finalidade da comunicação e eventual dano ou violação de direitos.
+
+20.2. Uso da idade ou condição pessoal como instrumento de descrédito
+
+A idade, neurodivergência ou qualquer outra característica pessoal do desenvolvedor não poderá ser utilizada, isoladamente, como fundamento para presumir incompetência, incapacidade, ausência de autoria ou insegurança do projeto.
+
+A avaliação técnica deverá ser realizada com base em características efetivamente verificáveis do software, de sua arquitetura, funcionamento, segurança, documentação e demais elementos pertinentes.
+
+20.3. Reimplementação por terceiros
+
+O desenvolvimento independente de outro aplicativo com funções semelhantes não será proibido por esta licença quando realizado de maneira legítima e sem utilização indevida de material protegido pertencente ao projeto.
+
+Entretanto, a alteração da linguagem de programação, framework, arquitetura, identidade visual, nome, empresa contratada ou plataforma não transforma automaticamente material protegido copiado em desenvolvimento independente.
+
+Quando houver reprodução não autorizada de código, textos, imagens, elementos gráficos ou outros elementos protegidos, a conduta poderá ser analisada conforme a legislação aplicável.
+
+20.4. Contratação de terceiros por instituições
+
+A contratação de empresas de tecnologia, fundações, organizações, consultorias, desenvolvedores independentes ou outros terceiros não constitui, por si só, autorização para copiar ou explorar material protegido pelo projeto.
+
+A utilização de terceiros como intermediários também não elimina a necessidade de observar os direitos autorais e demais direitos aplicáveis.
+
+20.5. Apresentação institucional e origem do projeto
+
+Nenhuma instituição, empresa, órgão público ou agente político deverá apresentar como criação própria material que tenha sido efetivamente criado pelo desenvolvedor ou retirado do projeto sem a devida autorização.
+
+A apresentação pública de uma solução institucional como "oficial", "homologada" ou equivalente não constitui, por si só, prova de que ela seja a criadora ou originadora de soluções anteriormente desenvolvidas por terceiros.
+
+Da mesma forma, eventual homologação, certificação ou reconhecimento estatal de outro aplicativo não transfere automaticamente a autoria ou os direitos sobre o projeto original.
+
+20.6. Confusão deliberada sobre autoria ou origem
+
+Quando houver utilização de elementos protegidos do projeto de maneira capaz de criar confusão deliberada quanto à autoria, origem ou relação entre os projetos, poderão ser adotadas as medidas juridicamente cabíveis, conforme os fatos concretamente demonstrados e a legislação aplicável.
+
+20.7. Independência entre projetos
+
+A existência de outro aplicativo com funcionalidades semelhantes não será considerada, isoladamente, prova de cópia ou violação desta licença.
+
+A proteção desta seção recai sobre a utilização indevida de elementos juridicamente protegidos, falsa atribuição, confusão deliberada ou outras condutas efetivamente ilícitas, e não sobre a simples existência de ideias ou funcionalidades semelhantes.
+
+20.8. Abrangência antievasão
+
+As disposições desta seção também se aplicam quando as condutas forem realizadas de forma direta ou indireta, inclusive mediante terceiros, empresas contratadas, organizações parceiras, estruturas institucionais, campanhas de comunicação ou outros intermediários.
+
+A enumeração das condutas nesta seção é exemplificativa e não exaustiva, sem impedir desenvolvimento independente, concorrência legítima, crítica, pesquisa, auditoria ou exercício regular de direitos.
+
+20.9. Consequências jurídicas
+
+Quando uma conduta preencher os requisitos de uma violação de direitos ou de um ilícito, poderão ser buscadas as medidas de cessação, correção, atribuição, reparação, indenização ou demais providências previstas na legislação aplicável.
+
+Nenhuma consequência financeira ou responsabilidade será considerada automática apenas pela existência de uma crítica, projeto semelhante, contratação de terceiros ou manifestação institucional.
+
+21. LIMITAÇÃO DE RESPONSABILIDADE POR SERVIÇOS EXTERNOS E FALHAS TÉCNICAS
+
+O projeto disponibiliza ferramentas destinadas a auxiliar suas usuárias, não constituindo garantia de disponibilidade, funcionamento ininterrupto ou resultado determinado.
+
+Serviços externos utilizados pelo aplicativo, incluindo serviços de telefonia, internet, operadoras, serviços de emergência, APIs, sistemas operacionais, dispositivos, servidores, plataformas de terceiros e demais infraestruturas que não estejam sob controle direto do desenvolvedor podem apresentar indisponibilidade, atraso, falha, incompatibilidade, alteração ou interrupção independentemente da atuação do desenvolvedor.
+
+A eventual falha, indisponibilidade ou atraso de um serviço externo, incluindo os números de emergência ou atendimento acessados pelo aplicativo, não será automaticamente atribuída ao desenvolvedor.
+
+O desenvolvedor não garante que uma chamada, mensagem, gravação, localização, conexão, notificação ou qualquer outra função será concluída com sucesso em todas as circunstâncias.
+
+A usuária não deverá considerar o aplicativo como substituto exclusivo dos serviços oficiais de emergência, atendimento médico, segurança pública ou outros serviços essenciais, devendo utilizar os meios oficiais disponíveis quando necessário.
+
+A existência de uma falha técnica também não constitui, por si só, reconhecimento de negligência, defeito jurídico ou responsabilidade do desenvolvedor. Eventual responsabilidade será determinada conforme os fatos concretos, a conduta efetivamente praticada, os danos comprovados, o nexo causal e a legislação aplicável.
+
+Esta cláusula não exclui nem limita responsabilidades que a legislação determine como irrenunciáveis e não impede a apuração de eventual responsabilidade quando seus requisitos legais estiverem efetivamente presentes.
+
+22. PROTEÇÃO CONTRA CÓPIA, SUPRESSÃO INDEVIDA E ABUSO INSTITUCIONAL
+
+22.1. Cópia e reprodução não autorizadas
+
+É proibida a reprodução, distribuição, disponibilização, adaptação, modificação, incorporação ou exploração de elementos protegidos deste projeto sem a autorização exigida pela legislação aplicável ou sem autorização expressa do titular dos direitos, quando esta for necessária.
+
+A alteração do nome, identidade visual, linguagem de programação, framework, arquitetura, plataforma, empresa responsável ou canal de distribuição não constitui, por si só, autorização para reproduzir material protegido.
+
+Esta disposição não impede as utilizações permitidas pela legislação, incluindo limitações e exceções aos direitos autorais.
+
+22.2. Supressão ou restrição artificial de alcance
+
+É proibida a utilização deliberada de meios ilícitos ou abusivos destinados a ocultar, suprimir, restringir artificialmente ou prejudicar a distribuição e a visibilidade do projeto, inclusive mediante terceiros ou intermediários.
+
+Incluem-se, quando praticadas de forma ilícita, práticas destinadas a provocar remoções indevidas, denúncias fraudulentas, manipulação artificial de mecanismos de distribuição, fornecimento de informações falsas a plataformas ou outras medidas destinadas deliberadamente a impedir o acesso legítimo ao projeto.
+
+O simples funcionamento normal de algoritmos, políticas de moderação, mecanismos de segurança ou critérios legítimos de plataformas não constitui, por si só, violação desta cláusula.
+
+22.3. Pressão institucional indevida
+
+É proibida a utilização de estruturas institucionais, econômicas, administrativas ou tecnológicas como instrumento de intimidação, constrangimento ou perseguição do desenvolvedor quando a finalidade ou o efeito pretendido for, mediante meios ilícitos ou abusivos, forçar o abandono do projeto, a renúncia a direitos ou a transferência não autorizada de seu controle.
+
+A existência de fiscalização, auditoria, investigação, procedimento administrativo, exigência legal ou processo judicial legítimo não será considerada, por si só, uma violação desta licença.
+
+22.4. Uso abusivo de procedimentos
+
+A utilização deliberada de procedimentos, notificações, reclamações, denúncias ou mecanismos institucionais com informações falsas, fraude, má-fé ou finalidade manifestamente ilícita poderá ser contestada pelos meios jurídicos cabíveis.
+
+O desenvolvedor não renuncia ao direito de se defender, apresentar provas, solicitar esclarecimentos ou questionar atos que considere ilegais ou abusivos.
+
+22.5. Esgotamento deliberado do desenvolvedor
+
+Nenhuma pessoa ou entidade poderá utilizar mecanismos ilícitos ou abusivos com a finalidade de provocar deliberadamente o esgotamento pessoal do desenvolvedor, induzi-lo a abandonar o projeto ou obter dele uma decisão que não tomaria livremente.
+
+Quando tais condutas também configurarem ameaça, perseguição, constrangimento, fraude, abuso de autoridade, dano ou outro ilícito previsto em lei, poderão ser adotadas as medidas jurídicas correspondentes.
+
+22.6. Não criação automática de crime
+
+Esta licença não cria novos crimes, penas ou sanções estatais.
+
+Quando uma conduta descrita nesta seção também preencher os requisitos de um crime ou de outro ilícito previsto na legislação brasileira, sua responsabilização será determinada pelas autoridades competentes conforme a legislação aplicável.
+
+Entre as normas potencialmente relevantes, conforme a conduta concreta, encontram-se a legislação de direitos autorais, o Código Penal, a legislação civil e, quando presentes seus requisitos específicos, a legislação sobre abuso de autoridade.
+
+22.7. Responsabilização
+
+A violação desta seção poderá ensejar, conforme o caso e a legislação aplicável, pedido de cessação da conduta, remoção ou correção do conteúdo, preservação de provas, reconhecimento de autoria, reparação de danos materiais ou morais quando cabível e demais medidas judiciais ou extrajudiciais disponíveis.
+
+A existência de uma violação e suas consequências não serão presumidas exclusivamente pela alegação do desenvolvedor, devendo ser analisadas conforme os fatos, as provas e o direito aplicável.
+
+22. PROTEÇÃO CONTRA CÓPIA, SUPRESSÃO INDEVIDA E ABUSO INSTITUCIONAL
+
+22.1. Cópia e reprodução não autorizadas
+
+É proibida a reprodução, distribuição, disponibilização, adaptação, modificação, incorporação ou exploração de elementos protegidos deste projeto sem a autorização exigida pela legislação aplicável ou sem autorização expressa do titular dos direitos, quando esta for necessária.
+
+A alteração do nome, identidade visual, linguagem de programação, framework, arquitetura, plataforma, empresa responsável ou canal de distribuição não constitui, por si só, autorização para reproduzir material protegido.
+
+Esta disposição não impede as utilizações permitidas pela legislação, incluindo limitações e exceções aos direitos autorais.
+
+22.2. Supressão ou restrição artificial de alcance
+
+É proibida a utilização deliberada de meios ilícitos ou abusivos destinados a ocultar, suprimir, restringir artificialmente ou prejudicar a distribuição e a visibilidade do projeto, inclusive mediante terceiros ou intermediários.
+
+Incluem-se, quando praticadas de forma ilícita, práticas destinadas a provocar remoções indevidas, denúncias fraudulentas, manipulação artificial de mecanismos de distribuição, fornecimento de informações falsas a plataformas ou outras medidas destinadas deliberadamente a impedir o acesso legítimo ao projeto.
+
+O simples funcionamento normal de algoritmos, políticas de moderação, mecanismos de segurança ou critérios legítimos de plataformas não constitui, por si só, violação desta cláusula.
+
+22.3. Pressão institucional indevida
+
+É proibida a utilização de estruturas institucionais, econômicas, administrativas ou tecnológicas como instrumento de intimidação, constrangimento ou perseguição do desenvolvedor quando a finalidade ou o efeito pretendido for, mediante meios ilícitos ou abusivos, forçar o abandono do projeto, a renúncia a direitos ou a transferência não autorizada de seu controle.
+
+A existência de fiscalização, auditoria, investigação, procedimento administrativo, exigência legal ou processo judicial legítimo não será considerada, por si só, uma violação desta licença.
+
+22.4. Uso abusivo de procedimentos
+
+A utilização deliberada de procedimentos, notificações, reclamações, denúncias ou mecanismos institucionais com informações falsas, fraude, má-fé ou finalidade manifestamente ilícita poderá ser contestada pelos meios jurídicos cabíveis.
+
+O desenvolvedor não renuncia ao direito de se defender, apresentar provas, solicitar esclarecimentos ou questionar atos que considere ilegais ou abusivos.
+
+22.5. Esgotamento deliberado do desenvolvedor
+
+Nenhuma pessoa ou entidade poderá utilizar mecanismos ilícitos ou abusivos com a finalidade de provocar deliberadamente o esgotamento pessoal do desenvolvedor, induzi-lo a abandonar o projeto ou obter dele uma decisão que não tomaria livremente.
+
+Quando tais condutas também configurarem ameaça, perseguição, constrangimento, fraude, abuso de autoridade, dano ou outro ilícito previsto em lei, poderão ser adotadas as medidas jurídicas correspondentes.
+
+22.6. Não criação automática de crime
+
+Esta licença não cria novos crimes, penas ou sanções estatais.
+
+Quando uma conduta descrita nesta seção também preencher os requisitos de um crime ou de outro ilícito previsto na legislação brasileira, sua responsabilização será determinada pelas autoridades competentes conforme a legislação aplicável.
+
+Entre as normas potencialmente relevantes, conforme a conduta concreta, encontram-se a legislação de direitos autorais, o Código Penal, a legislação civil e, quando presentes seus requisitos específicos, a legislação sobre abuso de autoridade.
+
+22.7. Responsabilização
+
+A violação desta seção poderá ensejar, conforme o caso e a legislação aplicável, pedido de cessação da conduta, remoção ou correção do conteúdo, preservação de provas, reconhecimento de autoria, reparação de danos materiais ou morais quando cabível e demais medidas judiciais ou extrajudiciais disponíveis.
+
+A existência de uma violação e suas consequências não serão presumidas exclusivamente pela alegação do desenvolvedor, devendo ser analisadas conforme os fatos, as provas e o direito aplicável.
+
+23. RESPONSÁVEL LEGAL E AUTORIZAÇÕES
+
+O desenvolvedor conta com pessoa responsável legal, cuja identidade não é divulgada publicamente por razões de privacidade e segurança.
+
+A existência dessa pessoa responsável e sua concordância com a participação do desenvolvedor na criação, manutenção e desenvolvimento do projeto poderão ser demonstradas por documentação ou outros meios de prova juridicamente admissíveis.
+
+Entre os elementos eventualmente preservados para essa finalidade encontra-se registro de áudio relacionado à manifestação de concordância da responsável legal.
+
+A identidade da responsável legal não integra esta licença e não deverá ser divulgada publicamente sem fundamento legítimo ou autorização adequada.
+
+A existência de responsável legal não transfere automaticamente a autoria do projeto, os direitos autorais ou o controle do desenvolvimento para essa pessoa. Eventuais atos de representação, assistência ou autorização serão interpretados de acordo com a legislação aplicável e com os instrumentos efetivamente existentes.
+
+Esta disposição tem finalidade documental e de preservação de direitos, não constituindo declaração antecipada sobre a validade ou o resultado de eventual procedimento judicial ou administrativo.
+
+24. TRANSIÇÃO DA RESPONSABILIDADE DO PROJETO APÓS A MAIORIDADE DO DESENVOLVEDOR
+
+24.1. Responsabilidade durante a menoridade
+Enquanto o desenvolvedor principal for menor de 18 (dezoito) anos, a participação de seu responsável legal observará a representação ou assistência exigida pela legislação aplicável, conforme a natureza de cada ato.
+
+24.2. Transição após a maioridade
+A partir do momento em que o desenvolvedor principal atingir a maioridade civil, sua intenção é assumir diretamente a responsabilidade pela administração, direção, manutenção e representação do projeto, observadas as formalidades jurídicas eventualmente necessárias.
+
+24.3. Alteração da função do responsável legal
+Com a aquisição da maioridade pelo desenvolvedor, a pessoa que anteriormente exercia a função de responsável legal poderá passar a atuar exclusivamente como colaboradora do projeto, salvo se houver instrumento posterior estabelecendo função diferente.
+
+24.4. Preservação da autoria
+A transição da responsabilidade não constitui transferência de autoria nem alteração da titularidade dos direitos autorais do projeto. A pessoa que colaborou durante a fase anterior continuará sendo reconhecida de acordo com sua efetiva participação.
+
+24.5. Colaboração voluntária
+A permanência da antiga responsável legal como colaboradora dependerá de sua concordância e não implicará, por si só, poder de administração, representação ou controle sobre o projeto.
+
+24.6. Administração pelo desenvolvedor maior
+Após atingir a maioridade, o desenvolvedor principal poderá assumir diretamente as decisões relativas ao desenvolvimento, manutenção, distribuição, documentação, licenciamento, organização e continuidade do projeto, respeitados os direitos eventualmente pertencentes a terceiros.
+
+24.7. Formalização
+Quando necessário, a mudança de função poderá ser registrada por documento escrito, atualização de registros, contratos, procurações, termos de colaboração ou outros instrumentos juridicamente adequados.
+
+24.8. Ausência de retroatividade
+A aquisição da maioridade não apaga atos regularmente praticados durante a menoridade nem modifica automaticamente direitos ou obrigações já constituídos.
+
+24.9. Regra de continuidade
+A transição deverá preservar a continuidade do projeto, sua documentação, seu histórico de desenvolvimento, seus registros de autoria e os direitos de seus colaboradores.
+
+24.10. Limitação jurídica
+Esta cláusula expressa a organização pretendida pelo projeto e não substitui os atos formais que a legislação eventualmente exigir para produzir efeitos perante terceiros.
+
+25. USO PÚBLICO DO NOME “MULHER AMPARADA OFICIAL, OU QUALQUER OUTRO NOME PARECIDO”
+
+25.1. Necessidade de autorização para uso público do nome
+Nenhuma pessoa física, pessoa jurídica, entidade, organização, instituição ou terceiro poderá publicar, distribuir, disponibilizar ou apresentar ao público um aplicativo, site ou produto digital utilizando a denominação “Mulher Amparada Oficial”, ou expressão suficientemente semelhante capaz de induzir o público a acreditar que se trata do projeto oficial, sem autorização prévia do responsável pelo projeto.
+
+25.2. Aplicação exclusivamente ao uso público
+A exigência prevista nesta seção aplica-se especificamente à publicação, distribuição ou disponibilização pública do projeto sob a denominação protegida.
+
+A presente cláusula não pretende impedir estudos privados, testes internos, pesquisas, desenvolvimento independente ou projetos que não sejam apresentados publicamente como sendo o “Mulher Amparada Oficial”.
+
+25.3. Proibição de falsa oficialidade
+É vedado apresentar como oficial, autorizado, homologado, mantido ou administrado pelo projeto um aplicativo ou serviço que não possua autorização para utilizar essa condição.
+
+25.4. Ausência de autorização automática
+O fato de uma pessoa reproduzir determinadas funcionalidades, desenvolver uma aplicação semelhante ou utilizar tecnologias semelhantes não constitui, por si só, autorização para utilizar o nome “Mulher Amparada Oficial”.
+
+25.5. Confusão quanto à origem
+Também será considerada utilização indevida a apresentação pública de um aplicativo com nome, identidade ou descrição deliberadamente elaborados para fazer o público acreditar que o produto pertence, é mantido ou foi autorizado pelo projeto original, quando isso não corresponder à realidade.
+
+25.6. Autorização expressa
+A autorização para utilização pública da denominação deverá ser concedida pelo titular ou responsável que possua legitimidade para autorizá-la, preferencialmente por meio de registro escrito que permita comprovar seu conteúdo e alcance.
+
+25.7. Projetos independentes
+Esta seção não impede terceiros de desenvolverem aplicativos próprios, inclusive com funcionalidades semelhantes, desde que não utilizem indevidamente elementos protegidos, não pratiquem falsa atribuição ou associação e não apresentem o produto como sendo o “Mulher Amparada Oficial” sem autorização.
+
+25.8. Limitação legal
+Esta cláusula não substitui eventual proteção decorrente de registro de marca ou outros direitos previstos em lei. A aplicação concreta da proteção dependerá da natureza do uso, dos direitos efetivamente existentes e da legislação aplicável.
+
+26. PROTEÇÃO CONTRA MANIPULAÇÃO DO GITHUB, DESCRÉDITO E CONTATOS INDEVIDOS
+
+26.1. Proteção da integridade do projeto
+É proibida qualquer utilização deliberada de mecanismos técnicos, administrativos ou automatizados para manipular, adulterar, prejudicar, descredibilizar ou comprometer a integridade, disponibilidade, histórico, autoria ou reputação do projeto Mulher Amparada ou de seus repositórios.
+
+26.2. Condutas técnicas indevidas
+Incluem-se, quando realizadas de maneira ilícita ou abusiva, tentativas de obter acesso não autorizado, alterar ou apagar conteúdo, comprometer contas, manipular registros, provocar indisponibilidade, inserir informações falsas ou utilizar terceiros para produzir tais efeitos.
+
+26.3. Falsa atribuição e descrédito
+É vedada a utilização deliberada do GitHub ou de outros meios relacionados ao projeto para atribuir falsamente autoria, apresentar informações fraudulentas, fabricar evidências, induzir terceiros a erro ou associar o projeto a fatos que não correspondam à realidade.
+
+26.4. Uso de terceiros
+A utilização de terceiros, organizações, empresas, contas alternativas, ferramentas automatizadas ou intermediários não elimina a responsabilidade por uma conduta que, conforme a legislação aplicável, seja ilícita.
+
+26.5. Contato após recusa
+Quando o responsável pelo projeto declarar expressamente que não deseja receber determinado contato ou proposta, essa manifestação deverá ser respeitada.
+
+A repetição insistente, intimidação, ameaça, perseguição, invasão de privacidade ou utilização de contatos sucessivos para pressionar o responsável poderá ser submetida às medidas cabíveis quando preencher os requisitos previstos na legislação aplicável.
+
+26.6. Limitação da regra sobre contato
+Esta cláusula não transforma, por si só, uma simples mensagem privada em crime. Comunicações legítimas, notificações jurídicas, exercício regular de direitos e contatos necessários para questões legalmente justificadas continuam sujeitos à legislação aplicável.
+
+26.7. Proteção contra abuso
+Caso uma comunicação seja utilizada como instrumento de ameaça, perseguição, fraude, intimidação ou outra conduta ilícita, poderão ser adotadas as medidas legais correspondentes.
+
+26.8. Preservação de provas
+Registros de comunicações, alterações, commits, eventos, notificações e demais elementos relacionados a possíveis violações poderão ser preservados para fins de comprovação e eventual adoção das medidas cabíveis.
+
+26.9. Aplicação da legislação
+Nada nesta licença cria crimes ou penas por si só. As consequências jurídicas de cada conduta serão determinadas conforme a legislação aplicável e os requisitos legais do caso concreto.
+
+O Código Civil brasileiro prevê responsabilidade por ato ilícito e abuso de direito quando presentes seus requisitos, inclusive com possibilidade de reparação de danos.
+
+
 ----
 
 Copyright © 2026
+
+----
+
+❤️ Mulher Amparada ❤️
+
+Um projeto gratuito e livre de anúncios, desenvolvido por um adolescente de 15 anos, com apoio do ChatGPT e sem formação profissional na área de programação.
+
+O Mulher Amparada foi criado com o objetivo de oferecer recursos de proteção, segurança e organização em um único aplicativo.
+
+🔗 Projeto oficial no GitHub:
+https://github.com/mulher-amparada/mulher-amparada-app
+
+🌐 Site oficial:
+https://mulher-amparada.github.io/mulher-amparada-app/
+
+----
 
 Autor: mulheramparada@gmail.com
 Projeto: Mulher Amparada
 
 Todos os direitos reservados, exceto aqueles expressamente concedidos por esta licença.
+

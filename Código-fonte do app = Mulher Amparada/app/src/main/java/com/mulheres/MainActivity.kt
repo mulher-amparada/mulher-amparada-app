@@ -429,6 +429,10 @@ class MainActivity : AppCompatActivity() {
   webView.isVerticalScrollBarEnabled =
     false
 
+webView.isFocusable = true
+webView.isFocusableInTouchMode = true
+webView.setOnFocusChangeListener { _, _ -> }
+
 webView.isHorizontalScrollBarEnabled =
     false
 

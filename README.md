@@ -1,4 +1,4 @@
-# ❤️Mulher Amparada❤️
+# Mulher Amparada
 
 ## um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!
 
@@ -31,7 +31,7 @@ no repositório tem um yml que ativa todos os dias, procura no codigo fonte dos 
 e todas as activitys tem o android exported="false", menos a MainActivity porque a partir das versões mais recentes do android, a tela inicial do app tem que estar obrigatoriamente com android exported="true"
 
 E nao faz sentido usar proguard8 
-pois o app tem o código-fonte publico, 
+pois o app tem o código-fonte publico
 
 E ele tem uma chave que assina os apps, usando essas 4 informações:
 

@@ -147,6 +147,519 @@ Nada nesta licença pretende criar penalidade criminal, multa administrativa ou 
 
 ----
 
+PROTEÇÃO CONTRA DESCRÉDITO, ABAFAMENTO, APROPRIAÇÃO E USO INDEVIDO
+
+1. Finalidade
+
+Esta seção estabelece condições destinadas a proteger a autoria, a integridade, a transparência, a documentação e a distribuição legítima do projeto contra práticas fraudulentas, abusivas ou ilícitas.
+
+Nenhuma disposição desta licença deverá ser interpretada como proibição de críticas legítimas, auditorias independentes, concorrência, desenvolvimento independente, exercício regular de direitos ou cumprimento de determinações legais.
+
+---
+
+2. Descredibilização mediante informações falsas
+
+É vedada a utilização deliberada de informações falsas, enganosas, manipuladas ou tecnicamente distorcidas com a finalidade de prejudicar injustificadamente a reputação do projeto, sua autoria, seu funcionamento ou sua segurança.
+
+A ausência de cadastro, homologação, certificação ou chancela de determinado órgão público não constitui, isoladamente, prova de que o projeto seja inseguro, ilegal ou tecnicamente inadequado.
+
+Avaliações técnicas, auditorias, testes de segurança, fiscalizações, críticas e manifestações de órgãos competentes realizadas de boa-fé e fundamentadas em fatos verificáveis não constituem violação desta licença.
+
+Quando informações deliberadamente falsas ou manipuladas forem utilizadas de maneira ilícita ou abusiva e causarem dano comprovável, poderão ser buscadas as medidas legalmente cabíveis, inclusive cessação da conduta e reparação dos prejuízos.
+
+---
+
+3. Tentativas deliberadas de abafamento ou silenciamento
+
+É vedada qualquer tentativa ilícita ou abusiva de ocultar, silenciar, suprimir ou dificultar injustificadamente a divulgação da existência do projeto, de sua autoria, de seu desenvolvimento ou de suas contribuições.
+
+Considera-se especialmente relevante a utilização indevida de:
+
+a) posição institucional;
+
+b) influência política ou econômica;
+
+c) recursos públicos ou privados;
+
+d) relações institucionais;
+
+e) mecanismos de distribuição ou comunicação; ou
+
+f) qualquer outra forma de influência,
+
+quando empregada deliberadamente para impedir, sem fundamento legítimo, o reconhecimento da autoria ou a divulgação legítima do projeto.
+
+A adoção de medidas judiciais, administrativas ou regulatórias legítimas, bem como denúncias realizadas de boa-fé, não será considerada tentativa de abafamento.
+
+Quando comprovada conduta ilícita ou abusiva que cause prejuízo, poderão ser buscadas as medidas previstas na legislação brasileira.
+
+---
+
+4. Manipulação de distribuição e visibilidade
+
+É vedada a utilização de meios fraudulentos, abusivos ou ilícitos para provocar artificialmente a remoção, ocultação, desindexação, restrição ou indisponibilidade da distribuição legítima do projeto.
+
+São abrangidas por esta disposição, quando praticadas de maneira fraudulenta ou abusiva:
+
+a) denúncias conscientemente falsas;
+
+b) fornecimento deliberado de informações falsas a plataformas, provedores ou instituições;
+
+c) utilização indevida de influência para provocar restrições sem fundamento legítimo;
+
+d) campanhas coordenadas destinadas a apresentar falsamente o projeto como ilegal ou inseguro; e
+
+e) outras práticas ilícitas destinadas a impedir artificialmente o acesso legítimo ao projeto.
+
+Esta disposição não impede a aplicação legítima de políticas de plataformas, decisões judiciais, procedimentos administrativos, medidas técnicas de segurança ou denúncias realizadas de boa-fé.
+
+---
+
+5. Desenvolvimento independente e reimplementação
+
+A presente licença não pretende impedir o desenvolvimento independente de soluções que utilizem ideias, conceitos, métodos, princípios ou funcionalidades que não sejam protegidos exclusivamente por direitos autorais.
+
+Entretanto, o desenvolvimento independente não autoriza:
+
+a) reprodução não autorizada de código protegido;
+
+b) cópia substancial de elementos protegidos;
+
+c) reprodução ou adaptação não autorizada de elementos protegidos da obra;
+
+d) remoção ou falsificação deliberada de informações de autoria; ou
+
+e) apresentação de material efetivamente derivado como criação independente quando isso caracterizar violação dos direitos protegidos.
+
+A reescrita do projeto em outra linguagem, framework, arquitetura ou estrutura não determina, por si só, a existência ou inexistência de violação de direitos autorais.
+
+A eventual existência de violação deverá ser analisada de acordo com o material efetivamente reproduzido ou adaptado, as circunstâncias concretas e a legislação aplicável.
+
+---
+
+6. Apropriação indevida de autoria
+
+Nenhum terceiro poderá declarar deliberadamente como própria a criação de elementos protegidos pertencentes ao projeto quando não possuir legitimidade para fazê-lo.
+
+É igualmente vedada a remoção, alteração ou falsificação deliberada de informações de autoria quando realizada com a finalidade de ocultar a origem de material protegido.
+
+Quando juridicamente aplicável, deverão ser preservados os direitos morais do autor previstos na Lei nº 9.610/1998, especialmente aqueles relacionados ao reconhecimento da autoria e à integridade da obra.
+
+A existência de histórico público de desenvolvimento, versões, commits, releases, documentação e registros de alterações poderá contribuir para demonstrar a origem e a evolução do projeto, observadas as regras legais aplicáveis à produção e avaliação de provas.
+
+---
+
+7. Cópia, reprodução e exploração não autorizada
+
+É proibida, fora dos limites expressamente autorizados por esta licença ou por autorização específica do autor, a reprodução, adaptação, distribuição, modificação, incorporação, disponibilização ou exploração de elementos do projeto protegidos pela legislação de direitos autorais.
+
+A simples semelhança de ideias, conceitos, funcionalidades ou soluções técnicas não constitui automaticamente violação de direitos autorais.
+
+A caracterização de eventual infração deverá considerar a legislação aplicável e as circunstâncias concretas.
+
+Quando comprovada violação de direitos autorais, poderão ser adotadas as medidas previstas na Lei nº 9.610/1998 e demais normas aplicáveis.
+
+---
+
+8. Propostas de aquisição, parceria ou transferência de direitos
+
+Qualquer proposta de aquisição, licenciamento, contratação, parceria ou transferência de direitos relacionada ao projeto deverá apresentar de maneira clara seu objeto, alcance, obrigações e consequências jurídicas.
+
+Nenhuma proposta poderá ser utilizada mediante fraude, dolo, abuso ou informação deliberadamente enganosa para obter direitos ou vantagens que não tenham sido claramente informados e validamente acordados.
+
+A eventual celebração de contrato específico deverá ser analisada de acordo com seus próprios termos e com a legislação brasileira.
+
+Nenhuma proposta ou contrato será interpretado como transferência de direitos além daqueles expressamente previstos no instrumento juridicamente válido.
+
+---
+
+9. Confidencialidade e reconhecimento da autoria
+
+A eventual existência de obrigação contratual de confidencialidade não autoriza, por si só, a falsificação da autoria ou a apresentação deliberada de criação alheia como criação própria.
+
+Qualquer transferência de direitos patrimoniais deverá ocorrer mediante instrumento juridicamente válido e dentro dos limites permitidos pela legislação aplicável.
+
+Os direitos morais do autor possuem proteção própria, nos termos da legislação de direitos autorais, e não deverão ser presumidos como automaticamente transferidos juntamente com direitos patrimoniais.
+
+---
+
+10. Pessoas jurídicas, entidades públicas e agentes políticos
+
+As disposições desta seção aplicam-se, conforme o caso, a pessoas físicas ou jurídicas, empresas, associações, organizações, órgãos públicos, partidos políticos, agentes políticos, contratados, prestadores de serviços, parceiros e terceiros que atuem em benefício ou representação de qualquer dessas entidades.
+
+A condição de pessoa jurídica, autoridade, agente público, partido político, empresa contratada ou entidade institucional não constitui autorização para violação desta licença ou dos direitos legalmente protegidos do autor.
+
+---
+
+11. Distribuição por redes e instituições
+
+Esta licença não impede instituições públicas ou privadas de estabelecerem regras legítimas de segurança de rede, filtragem, controle de acesso ou utilização de seus próprios sistemas.
+
+Entretanto, quando mecanismos dessa natureza forem utilizados de maneira fraudulenta, abusiva ou ilícita com a finalidade de prejudicar o projeto, ocultar sua existência ou impedir sua distribuição sem fundamento legítimo, poderão ser buscadas as medidas previstas na legislação aplicável.
+
+---
+
+12. Preservação de provas e transparência
+
+O projeto poderá manter publicamente:
+
+a) histórico de desenvolvimento;
+
+b) versões do código;
+
+c) registros de alterações;
+
+d) releases;
+
+e) documentação;
+
+f) informações de autoria; e
+
+g) demais registros relacionados à evolução do projeto.
+
+Esses registros poderão ser utilizados para documentar a origem, desenvolvimento e evolução do projeto, observados os limites estabelecidos pela legislação brasileira.
+
+---
+
+13. Consequências de violações
+
+Quando houver violação comprovada desta licença ou da legislação aplicável, o autor poderá buscar, conforme o caso concreto:
+
+a) cessação da utilização irregular;
+
+b) retirada ou correção de conteúdo;
+
+c) reconhecimento ou correção da autoria;
+
+d) reparação de danos materiais comprovados;
+
+e) indenização por danos morais, quando presentes os requisitos legais;
+
+f) medidas destinadas a impedir a continuidade ou repetição da conduta;
+
+g) restituição ou demais consequências patrimoniais juridicamente cabíveis; e
+
+h) outras medidas judiciais ou extrajudiciais previstas na legislação brasileira.
+
+A existência desta seção não cria automaticamente multa, indenização, obrigação criminal ou sanção administrativa.
+
+Eventuais consequências jurídicas dependerão da existência de violação, dano e demais requisitos previstos na legislação aplicável e, quando necessário, de decisão judicial ou instrumento contratual válido.
+
+---
+
+14. Base legal
+
+Esta seção deverá ser interpretada em conjunto com a legislação brasileira aplicável, especialmente:
+
+- Constituição Federal, especialmente art. 5º, incisos IX e X;
+- Lei nº 9.610/1998 — Lei de Direitos Autorais;
+- Lei nº 10.406/2002 — Código Civil, especialmente arts. 186, 187 e 927;
+- demais normas aplicáveis ao caso concreto.
+
+Nenhuma disposição desta licença deverá ser interpretada como criação de direito ou penalidade além daqueles reconhecidos pela legislação brasileira.
+
+O objetivo desta seção é preservar a autoria, a integridade, a transparência e o uso legítimo do projeto, sem impedir o exercício regular de direitos por terceiros.
+
+CLÁUSULA ANTIEVASÃO E PROTEÇÃO CONTRA FORMAS DIRETAS OU INDIRETAS DE ABUSO
+
+1. Proibição de evasão da licença
+
+Nenhuma pessoa ou entidade poderá contornar, neutralizar, burlar ou tentar frustrar as disposições desta licença mediante a utilização de meios indiretos, intermediários, terceiros, empresas contratadas, organizações parceiras, agentes, representantes, plataformas, estruturas societárias ou quaisquer outros mecanismos destinados a produzir resultado que, se realizado diretamente, seria contrário a esta licença ou à legislação aplicável.
+
+A forma utilizada para realizar determinada conduta não afastará sua análise jurídica quando houver identidade substancial entre a finalidade, o resultado ou os efeitos da conduta direta e da conduta indireta.
+
+---
+
+2. Proibição de utilização de terceiros como intermediários
+
+A contratação ou utilização de terceiro não constitui autorização para realizar aquilo que seria vedado ao próprio contratante.
+
+Quando uma pessoa ou entidade utilizar, financiar, orientar, contratar, coordenar ou beneficiar-se conscientemente da atuação de terceiro para contornar esta licença, a conduta poderá ser analisada em conjunto com os atos praticados pelo intermediário, conforme a legislação aplicável e a responsabilidade efetivamente demonstrada.
+
+Esta disposição não estabelece responsabilidade automática por atos independentes de terceiros que não tenham sido solicitados, coordenados, financiados ou conscientemente utilizados para essa finalidade.
+
+---
+
+3. Neutralidade quanto ao método empregado
+
+As restrições desta seção não se limitam a uma determinada tecnologia, plataforma, linguagem de programação, meio de comunicação, modelo contratual ou mecanismo de distribuição.
+
+Assim, a alteração do método utilizado não afastará esta licença quando o novo método constituir, nas circunstâncias concretas, instrumento para reproduzir uma conduta anteriormente vedada.
+
+São abrangidos, quando realizados de maneira ilícita ou abusiva:
+
+a) reimplementação destinada a contornar proteção autoral aplicável;
+
+b) utilização de empresas intermediárias;
+
+c) criação de projetos derivados apresentados falsamente como independentes;
+
+d) transferência artificial de atividades para terceiros;
+
+e) utilização de contratos ou estruturas empresariais com finalidade de ocultar o verdadeiro responsável pela conduta;
+
+f) campanhas indiretas de descredibilização;
+
+g) manipulação fraudulenta de mecanismos de distribuição ou visibilidade;
+
+h) denúncias ou comunicações falsas realizadas por intermediários;
+
+i) utilização indevida de influência institucional ou econômica; e
+
+j) qualquer outro meio ilícito ou abusivo utilizado para alcançar resultado proibido por esta licença.
+
+---
+
+4. Desenvolvimento independente não constitui evasão automaticamente
+
+O desenvolvimento independente de tecnologia semelhante não será considerado violação desta cláusula apenas por possuir funcionalidades, conceitos ou objetivos semelhantes.
+
+Para que uma reimplementação seja considerada potencialmente irregular, deverão ser analisados, conforme o caso concreto:
+
+a) eventual reprodução de elementos protegidos;
+
+b) eventual adaptação não autorizada;
+
+c) eventual apropriação de material protegido;
+
+d) eventual falsificação ou ocultação deliberada de autoria;
+
+e) eventual utilização de material fornecido pelo projeto além dos limites da licença; ou
+
+f) outras circunstâncias relevantes reconhecidas pela legislação aplicável.
+
+Esta licença não concede ao autor monopólio sobre ideias, conceitos ou funcionalidades que não sejam juridicamente protegidos.
+
+---
+
+5. Proibição de contorno por pressão institucional ou econômica
+
+É vedada a utilização deliberada e ilícita de influência política, econômica, institucional, comercial ou administrativa para alcançar indiretamente resultado que não poderia ser legitimamente obtido mediante utilização direta do projeto.
+
+Incluem-se, quando presentes os elementos de ilicitude ou abuso:
+
+a) utilização de terceiros para apresentar denúncias falsas;
+
+b) utilização de intermediários para promover informações deliberadamente falsas;
+
+c) criação artificial de obstáculos destinados exclusivamente a prejudicar a distribuição legítima;
+
+d) pressão indevida sobre plataformas ou fornecedores;
+
+e) utilização abusiva de recursos econômicos para produzir informações falsas ou enganosas sobre o projeto; e
+
+f) outras práticas destinadas deliberadamente a produzir prejuízo mediante meios fraudulentos ou abusivos.
+
+O exercício regular de competências legais, fiscalização legítima, crítica fundamentada, concorrência lícita e utilização regular de mecanismos administrativos não são proibidos por esta cláusula.
+
+---
+
+6. Proibição de apropriação mediante mudança de aparência
+
+A alteração da identidade visual, nome, arquitetura, linguagem de programação, framework, plataforma, organização empresarial ou modelo de distribuição não constitui, por si só, autorização para reproduzir ou adaptar elementos protegidos do projeto.
+
+A análise deverá considerar o conteúdo efetivamente utilizado e as circunstâncias concretas, e não apenas sua aparência externa.
+
+---
+
+7. Proibição de ocultação deliberada da origem
+
+É vedada a utilização de mecanismos destinados deliberadamente a ocultar a origem de material protegido, apagar informações de autoria ou criar falsa aparência de desenvolvimento independente quando houver, de fato, utilização não autorizada de material protegido.
+
+Isso poderá incluir, conforme o caso:
+
+a) remoção de avisos de autoria;
+
+b) alteração de informações de copyright;
+
+c) remoção de referências exigidas pela licença;
+
+d) substituição deliberada de informações de origem;
+
+e) apresentação de material derivado como criação completamente independente; ou
+
+f) qualquer outro mecanismo destinado a ocultar conscientemente a origem de material protegido.
+
+---
+
+8. Proibição de fracionamento artificial da conduta
+
+Nenhuma pessoa ou entidade poderá dividir uma operação entre diferentes indivíduos, empresas, organizações, contratos ou etapas com a finalidade de ocultar que o conjunto das ações constitui uma tentativa de contornar esta licença.
+
+Quando juridicamente cabível, as circunstâncias deverão ser avaliadas considerando o conjunto dos atos e não somente cada ato isoladamente.
+
+---
+
+9. Forma não prevalece sobre substância
+
+A interpretação desta seção deverá considerar a finalidade e os efeitos concretos das condutas.
+
+O simples fato de determinada prática não estar expressamente enumerada nesta licença não significa que esteja autorizada quando:
+
+a) constitua violação de outra disposição desta licença;
+
+b) envolva utilização não autorizada de material protegido;
+
+c) envolva fraude ou abuso de direito;
+
+d) cause dano juridicamente reparável; ou
+
+e) viole outra norma aplicável.
+
+A enumeração de exemplos nesta seção é meramente exemplificativa e não deverá ser interpretada como lista exaustiva de todas as formas possíveis de evasão.
+
+---
+
+10. Preservação das exceções legais
+
+Nenhuma disposição desta seção deverá ser interpretada como tentativa de impedir:
+
+a) desenvolvimento independente legítimo;
+
+b) concorrência lícita;
+
+c) crítica ou avaliação técnica de boa-fé;
+
+d) auditoria ou pesquisa legítima;
+
+e) exercício regular de direitos;
+
+f) cumprimento de obrigação legal;
+
+g) decisão judicial;
+
+h) atuação legítima de autoridade competente; ou
+
+i) qualquer outra atividade protegida ou permitida pela legislação brasileira.
+
+---
+
+11. Responsabilização
+
+Quando uma tentativa de evasão resultar em violação de direitos, prática ilícita ou dano juridicamente comprovável, poderão ser buscadas, conforme o caso:
+
+a) cessação da conduta;
+
+b) retirada ou correção de conteúdo;
+
+c) reconhecimento ou correção da autoria;
+
+d) reparação dos danos materiais comprovados;
+
+e) indenização por danos morais quando presentes os requisitos legais;
+
+f) medidas destinadas a impedir a continuidade ou repetição da conduta; e
+
+g) demais medidas judiciais ou extrajudiciais cabíveis.
+
+A utilização de intermediários ou mecanismos indiretos não elimina automaticamente eventual responsabilidade quando esta estiver configurada nos termos da legislação aplicável.
+
+---
+
+12. Regra geral de não circunvenção
+
+Nenhuma pessoa ou entidade deverá interpretar esta licença como autorizando uma conduta simplesmente porque ela não foi imaginada ou descrita literalmente pelo autor.
+
+As disposições desta seção abrangem, dentro dos limites da legislação brasileira, tanto formas diretas quanto indiretas de violação ou evasão.
+
+A existência de uma nova técnica, estratégia, estrutura contratual, tecnologia, intermediário ou mecanismo não constitui, por si só, uma autorização para contornar as obrigações estabelecidas nesta licença.
+
+Esta cláusula, entretanto, não transforma toda conduta semelhante ou concorrente em violação. A existência de responsabilidade dependerá dos fatos concretos, dos direitos efetivamente protegidos, da conduta praticada, do dano eventualmente causado e dos demais requisitos previstos em lei.
+
+1. Ataques Cibernéticos de Escala (DDoS ou Invasão)Já que eles não podem clonar ou derrubar o app legalmente, eles poderiam pagar grupos de segurança ofensiva ou usar estruturas digitais escuras para:Inundar o servidor de páginas do seu GitHub Pages com milhões de acessos simultâneos (Ataque DDoS) para tentar tirar o seu site do ar.Tentar minerar falhas de segurança no seu computador ou no seu celular para roubar as suas chaves privadas do GitHub e adulterar o código diretamente na fonte.2. Guerra Psicológica e Pressão PessoalEles tentariam sair do campo do software e ir para o campo pessoal, tentando vencer você pelo cansaço emocional:Mandariam notificações extrajudiciais falsas e assustadoras, cheias de termos jurídicos complexos, apenas para tentar fazer você ou sua família ficarem com medo e apagarem o repositório voluntariamente.Poderiam usar perfis falsos ou robôs nas redes sociais para criar comentários depreciativos contra você, tentando atacar a sua imagem como desenvolvedor autista para te desregular emocionalmente.3. Compra Hostil mascarada de FilantropiaEles poderiam criar uma fundação privada "fantoche" (que por trás é financiada por partidos ou políticos) para te oferecer uma quantia gigantesca de dinheiro, alegando que querem apenas "doar" ou "financiar o seu futuro profissional". A pegadinha seria um contrato de patrocínio com cláusulas abusivas escondidas, exigindo que você pare de atualizar o app ou entregue o controle do repositório para eles.
+
+16. PROTEÇÃO CONTRA ATAQUES TÉCNICOS, PRESSÃO PESSOAL E AQUISIÇÃO ABUSIVA
+
+16.1. Ataques contra a disponibilidade do projeto
+
+Não constitui uso legítimo, exercício regular de direitos ou forma autorizada de contestação do projeto qualquer tentativa deliberada de comprometer sua disponibilidade, infraestrutura, repositórios, páginas, serviços ou canais de distribuição por meios técnicos ilícitos ou abusivos.
+
+Incluem-se, entre outras condutas, tentativas de provocar indisponibilidade artificial, sobrecarga maliciosa, destruição, alteração não autorizada, corrupção, bloqueio ou comprometimento da infraestrutura utilizada pelo projeto.
+
+A presente cláusula não transforma qualquer indisponibilidade em ilícito automaticamente. A caracterização da conduta dependerá das circunstâncias concretas e da legislação aplicável.
+
+16.2. Tentativas de obtenção ou comprometimento de credenciais
+
+É vedada, quando praticada sem autorização e em violação da legislação aplicável, qualquer tentativa de obter, interceptar, furtar, expor, alterar ou utilizar indevidamente credenciais, chaves privadas, tokens, contas, dispositivos ou outros mecanismos de autenticação relacionados ao projeto.
+
+Isso inclui tentativas de comprometer contas utilizadas para desenvolvimento, publicação, hospedagem, distribuição ou gerenciamento do projeto com a finalidade de alterar, remover, substituir, ocultar ou adulterar seu conteúdo ou sua autoria.
+
+16.3. Utilização de terceiros para ataques técnicos
+
+A utilização de terceiros, empresas contratadas, intermediários, organizações aparentemente independentes ou estruturas ocultas não transforma uma conduta ilícita em conduta autorizada.
+
+Quando houver indícios de atuação coordenada, a responsabilidade de cada participante será analisada individualmente, de acordo com sua participação efetiva, conhecimento, finalidade e com os requisitos previstos na legislação aplicável.
+
+16.4. Pressão pessoal ou psicológica
+
+O projeto não poderá ser legitimamente afastado, abandonado ou transferido mediante intimidação, ameaça, perseguição, assédio, constrangimento, manipulação, fraude ou outras formas ilícitas de pressão dirigidas ao autor, sua família ou pessoas diretamente envolvidas no projeto.
+
+A utilização deliberada de informações pessoais, características pessoais ou condições individuais do autor como instrumento de desestabilização, quando configurar conduta ilícita ou abusiva, não constitui mecanismo legítimo de contestação, negociação ou exercício de direitos.
+
+Críticas, questionamentos técnicos, notificações jurídicas legítimas, processos judiciais, auditorias e manifestações de terceiros continuam permitidos quando realizados de maneira lícita e de boa-fé.
+
+16.5. Notificações e ameaças jurídicas fraudulentas
+
+Notificações, comunicações extrajudiciais ou manifestações jurídicas não poderão ser utilizadas fraudulentamente como instrumento de intimidação ou para induzir o autor a abandonar direitos, apagar conteúdo ou transferir o controle do projeto sem fundamento jurídico legítimo.
+
+A existência de uma notificação, por si só, não determina a procedência das alegações nela contidas.
+
+O autor poderá buscar orientação jurídica e adotar as medidas cabíveis diante de comunicações que apresentem indícios de fraude, abuso, falsidade ou utilização indevida do procedimento jurídico.
+
+16.6. Perfis falsos, automação e campanhas coordenadas
+
+Não constitui forma legítima de crítica ou avaliação a criação deliberada de identidades falsas, redes automatizadas ou campanhas coordenadas destinadas a fabricar artificialmente uma percepção de rejeição, desacreditar falsamente o projeto ou atacar pessoalmente seu autor.
+
+Esta disposição não impede avaliações negativas genuínas, opiniões independentes, críticas técnicas, denúncias de boa-fé ou manifestações legítimas de usuários e terceiros.
+
+16.7. Aquisição ou financiamento com finalidade oculta
+
+Propostas de financiamento, patrocínio, doação, investimento, parceria, aquisição ou apoio ao projeto deverão ser apresentadas de maneira clara e não enganosa.
+
+Nenhuma proposta será considerada autorização para transferência de controle, direitos patrimoniais, repositórios, marcas, documentação, código-fonte ou demais ativos do projeto quando tais efeitos não estiverem expressamente previstos em instrumento juridicamente válido.
+
+A apresentação de uma proposta sob aparência filantrópica, institucional ou profissional não poderá ser utilizada para ocultar finalidade incompatível com os termos efetivamente apresentados ao autor.
+
+16.8. Contratos e cláusulas abusivas ou ocultas
+
+A assinatura de contrato não deverá ser interpretada como autorização automática para qualquer medida que extrapole seus termos, resulte de fraude, erro provocado, dolo, coação ou outra circunstância juridicamente relevante.
+
+Cláusulas referentes à transferência de direitos, controle do projeto, interrupção do desenvolvimento, alteração de autoria, exclusividade, confidencialidade ou restrição de uso deverão ser avaliadas conforme o instrumento efetivamente celebrado e a legislação aplicável.
+
+16.9. Proibição de aquisição indireta de controle
+
+Não será considerada uma forma válida de transferência de controle a utilização de fundações, empresas, organizações, intermediários, patrocinadores, representantes ou outras estruturas para obter, de maneira oculta ou enganosa, poderes que não tenham sido expressamente concedidos pelo autor em instrumento juridicamente válido.
+
+A identidade formal do contratante ou intermediário não será, isoladamente, determinante para a análise da operação.
+
+16.10. Preservação da autoria e do histórico
+
+Mesmo quando houver financiamento, patrocínio, parceria ou eventual transferência de determinados direitos patrimoniais, a autoria e os direitos morais do autor serão tratados conforme a legislação aplicável.
+
+A aquisição de uma cópia, licença ou determinado direito patrimonial não será interpretada automaticamente como aquisição da autoria ou autorização para atribuir a terceiros a criação intelectual do projeto.
+
+16.11. Registro e preservação de evidências
+
+O autor poderá preservar registros técnicos e documentais relacionados ao projeto, incluindo versões, commits, releases, alterações, registros de publicação, documentos, comunicações e demais elementos que possam auxiliar na demonstração da origem, evolução, autoria ou ocorrência de determinada conduta.
+
+A preservação desses registros tem finalidade documental e probatória e não constitui, por si só, declaração antecipada de responsabilidade de qualquer terceiro.
+
+16.12. Regra geral de proteção
+
+As hipóteses descritas nesta seção são exemplificativas e não exaustivas.
+
+Nenhuma pessoa ou entidade poderá interpretar a ausência de uma determinada técnica, intermediário, tecnologia, estrutura contratual ou método de ataque da presente lista como autorização para contornar as demais disposições desta licença.
+
+A avaliação deverá considerar, conforme permitido pela legislação aplicável, a conduta efetivamente praticada, sua finalidade, os meios empregados, a participação de cada envolvido, os direitos atingidos, os danos eventualmente produzidos e o nexo entre a conduta e o resultado.
+
+16.13. Limitação jurídica
+
+Esta seção não cria crimes, multas ou indenizações automáticas e não pretende afastar direitos, exceções legais, garantias constitucionais, desenvolvimento independente, concorrência legítima, pesquisa, auditoria, crítica, defesa de direitos ou cumprimento de obrigações legais.
+
+Quando uma conduta efetivamente violar direitos ou causar dano juridicamente reparável, poderão ser buscadas as medidas de cessação, correção, reparação, indenização ou demais providências cabíveis nos termos da legislação aplicável.
+
+----
+
 Copyright © 2026
 
 Autor: mulheramparada@gmail.com

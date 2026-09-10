@@ -676,6 +676,37 @@ settings.setSupportMultipleWindows(
                         url  
                     )  
   
+  view?.evaluateJavascript(
+    """
+    (function() {
+        let style = document.getElementById('androidTouchFix');
+
+        if (!style) {
+            style = document.createElement('style');
+            style.id = 'androidTouchFix';
+            document.head.appendChild(style);
+        }
+
+        style.textContent = `
+            *,
+            *::before,
+            *::after {
+                -webkit-tap-highlight-color: transparent !important;
+                -webkit-touch-callout: none !important;
+            }
+
+            *:focus,
+            *:focus-visible,
+            *:active {
+                outline: none !important;
+                -webkit-tap-highlight-color: transparent !important;
+            }
+        `;
+    })();
+    """.trimIndent(),
+    null
+)
+
                     view?.evaluateJavascript(  
                         """  
                         if (typeof mostrarConteudo === 'function') {  

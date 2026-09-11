@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.documentfile.provider.DocumentFile
 import androidx.recyclerview.widget.RecyclerView
 import java.io.File
 import java.text.SimpleDateFormat
@@ -13,10 +14,21 @@ import java.util.Date
 import java.util.Locale
 
 class FolderAdapter(
-    private val onClick: (File) -> Unit
+    private val onClick: (StorageItem) -> Unit
 ) : RecyclerView.Adapter<FolderAdapter.VH>() {
 
-    private var list: List<File> = emptyList()
+    private var list: List<StorageItem> = emptyList()
+
+    sealed class StorageItem {
+
+        data class Local(
+            val file: File
+        ) : StorageItem()
+
+        data class Document(
+            val document: DocumentFile
+        ) : StorageItem()
+    }
 
     class VH(view: View) : RecyclerView.ViewHolder(view) {
 
@@ -38,13 +50,14 @@ class FolderAdapter(
         viewType: Int
     ): VH {
 
-        val view = LayoutInflater
-            .from(parent.context)
-            .inflate(
-                R.layout.item_folder,
-                parent,
-                false
-            )
+        val view =
+            LayoutInflater
+                .from(parent.context)
+                .inflate(
+                    R.layout.item_folder,
+                    parent,
+                    false
+                )
 
         return VH(view)
     }
@@ -54,94 +67,148 @@ class FolderAdapter(
         position: Int
     ) {
 
-        val file = list[position]
+        val item =
+            list[position]
 
-        // =====================================================
-        // FONTE
-        // =====================================================
-
-        val fonte = try {
-
-            Typeface.createFromAsset(
-                holder.itemView.context.assets,
-                "font.ttf"
-            )
-
-        } catch (e: Exception) {
-
-            Typeface.DEFAULT
-        }
+        val fonte =
+            try {
+                Typeface.createFromAsset(
+                    holder.itemView.context.assets,
+                    "font.ttf"
+                )
+            } catch (e: Exception) {
+                Typeface.DEFAULT
+            }
 
         holder.name.typeface = fonte
         holder.date.typeface = fonte
         holder.count.typeface = fonte
 
+        when (item) {
 
-        // =====================================================
-        // NOME
-        // =====================================================
+            is StorageItem.Local -> {
 
-        holder.name.text =
-            file.name.ifEmpty {
-                "Sem nome"
-            }
+                val file =
+                    item.file
 
+                holder.name.text =
+                    file.name.ifEmpty {
+                        "Sem nome"
+                    }
 
-        // =====================================================
-        // DATA
-        // =====================================================
+                if (file.lastModified() > 0L) {
 
-        holder.date.text =
-            SimpleDateFormat(
-                "dd/MM/yyyy HH:mm",
-                Locale.getDefault()
-            ).format(
-                Date(file.lastModified())
-            )
+                    holder.date.text =
+                        SimpleDateFormat(
+                            "dd/MM/yyyy HH:mm",
+                            Locale.getDefault()
+                        ).format(
+                            Date(
+                                file.lastModified()
+                            )
+                        )
 
-
-        // =====================================================
-        // DIFERENÇA ENTRE PASTA E ARQUIVO
-        // =====================================================
-
-        if (file.isDirectory) {
-
-            // PASTA
-
-            holder.icon.setImageResource(
-                R.drawable.ic_folder
-            )
-
-            val quantidade =
-                file.listFiles()?.size ?: 0
-
-            holder.count.text =
-                if (quantidade == 1) {
-                    "1 item"
                 } else {
-                    "$quantidade itens"
+
+                    holder.date.text =
+                        "Não há informações de data"
                 }
 
-        } else {
+                if (file.isDirectory) {
 
-            // ARQUIVO
+                    holder.icon.setImageResource(
+                        R.drawable.ic_folder
+                    )
 
-            holder.icon.setImageResource(
-                R.drawable.ic_document
-            )
+                    val quantidade =
+                        try {
+                            file.listFiles()
+                                ?.size ?: 0
+                        } catch (e: Exception) {
+                            0
+                        }
 
-            holder.count.text =
-                "Arquivo"
+                    holder.count.text =
+                        when (quantidade) {
+                            1 -> "1 item"
+                            else -> "$quantidade itens"
+                        }
+
+                } else {
+
+                    holder.icon.setImageResource(
+                        R.drawable.ic_document
+                    )
+
+                    holder.count.text =
+                        "Arquivo"
+                }
+            }
+
+            is StorageItem.Document -> {
+
+                val document =
+                    item.document
+
+                holder.name.text =
+                    document.name
+                        ?.ifEmpty {
+                            "Sem nome"
+                        }
+                        ?: "Sem nome"
+
+                val data =
+                    document.lastModified()
+
+                if (data > 0L) {
+
+                    holder.date.text =
+                        SimpleDateFormat(
+                            "dd/MM/yyyy HH:mm",
+                            Locale.getDefault()
+                        ).format(
+                            Date(data)
+                        )
+
+                } else {
+
+                    holder.date.text =
+                        "Não há informações de data"
+                }
+
+                if (document.isDirectory) {
+
+                    holder.icon.setImageResource(
+                        R.drawable.ic_folder
+                    )
+
+                    val quantidade =
+                        try {
+                            document.listFiles().size
+                        } catch (e: Exception) {
+                            0
+                        }
+
+                    holder.count.text =
+                        when (quantidade) {
+                            1 -> "1 item"
+                            else -> "$quantidade itens"
+                        }
+
+                } else {
+
+                    holder.icon.setImageResource(
+                        R.drawable.ic_document
+                    )
+
+                    holder.count.text =
+                        "Arquivo"
+                }
+            }
         }
 
-
-        // =====================================================
-        // CLIQUE
-        // =====================================================
-
         holder.itemView.setOnClickListener {
-
-            onClick(file)
+            onClick(item)
         }
     }
 
@@ -149,7 +216,9 @@ class FolderAdapter(
         return list.size
     }
 
-    fun update(newList: List<File>) {
+    fun update(
+        newList: List<StorageItem>
+    ) {
 
         list = newList
 

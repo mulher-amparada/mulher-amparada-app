@@ -18,11 +18,9 @@ on:
 permissions:
   contents: write
 
-
 concurrency:
-  group: atualizar-main
-  cancel-in-progress: false
-
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'workflow_dispatch' }}
 
 jobs:
 

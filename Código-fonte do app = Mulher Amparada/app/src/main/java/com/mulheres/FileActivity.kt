@@ -1,6 +1,5 @@
 package com.mulheres
 
-import android.provider.Settings
 import android.content.ClipData
 import android.content.Intent
 import android.graphics.Color
@@ -10,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.storage.StorageManager
+import android.provider.Settings
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -22,6 +22,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.documentfile.provider.DocumentFile
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.io.File
@@ -31,8 +32,17 @@ import java.util.Locale
 class FileActivity : AppCompatActivity() {
 
     companion object {
+
         const val MANAGE_STORAGE_CODE = 101
         const val PERMISSION_CODE = 100
+
+        private const val USB_PICKER_CODE = 300
+
+        private const val PREFS =
+            "mulheres_storage"
+
+        private const val USB_URI =
+            "usb_uri"
     }
 
     private enum class TipoArmazenamento {
@@ -47,26 +57,46 @@ class FileActivity : AppCompatActivity() {
     private lateinit var itemCount: TextView
     private lateinit var storageButton: ImageButton
 
-    private val internalHistory = ArrayList<File>()
+    private val internalHistory =
+        ArrayList<File>()
+
     private val externalHistories =
         HashMap<String, ArrayList<File>>()
 
     private val externalIndexes =
         HashMap<String, Int>()
 
-    private var usandoArmazenamentoExterno = false
+    private var internalIndex =
+        -1
+
+    private var usandoArmazenamentoExterno =
+        false
 
     private var volumesExternos =
         ArrayList<File>()
 
-    private var internalIndex = -1
+    /*
+     * 0 = interno
+     * 1 = SD
+     * 2 = USB
+     */
+    private var modoArmazenamento =
+        0
 
     /*
-     * 0 = armazenamento interno
-     * 1 = cartão SD
-     * 2 = USB OTG
+     * Histórico específico do USB.
+     *
+     * Diferente do SD, o USB pode ser acessado
+     * através do Storage Access Framework.
      */
-    private var modoArmazenamento = 0
+    private val usbHistory =
+        ArrayList<DocumentFile>()
+
+    private var usbIndex =
+        -1
+
+    private var usbRoot:
+        DocumentFile? = null
 
     // =========================================================
     // ON CREATE
@@ -75,7 +105,10 @@ class FileActivity : AppCompatActivity() {
     override fun onCreate(
         savedInstanceState: Bundle?
     ) {
-        super.onCreate(savedInstanceState)
+
+        super.onCreate(
+            savedInstanceState
+        )
 
         window.addFlags(
             WindowManager.LayoutParams.FLAG_SECURE
@@ -88,28 +121,41 @@ class FileActivity : AppCompatActivity() {
         )
 
         aplicarFonte(
-            findViewById(android.R.id.content)
+            findViewById(
+                android.R.id.content
+            )
         )
 
         recycler =
-            findViewById(R.id.recycler)
+            findViewById(
+                R.id.recycler
+            )
 
         pathText =
-            findViewById(R.id.pathText)
+            findViewById(
+                R.id.pathText
+            )
 
         itemCount =
-            findViewById(R.id.itemCount)
+            findViewById(
+                R.id.itemCount
+            )
 
         storageButton =
-            findViewById(R.id.storageButton)
+            findViewById(
+                R.id.storageButton
+            )
 
         configurarRecycler()
         configurarBack()
         configurarArmazenamento()
 
         if (!temPermissao()) {
+
             pedirPermissao()
+
         } else {
+
             iniciar()
         }
     }
@@ -135,6 +181,7 @@ class FileActivity : AppCompatActivity() {
             Build.VERSION.SDK_INT >=
             Build.VERSION_CODES.Q
         ) {
+
             window.isNavigationBarContrastEnforced =
                 false
         }
@@ -153,7 +200,7 @@ class FileActivity : AppCompatActivity() {
     }
 
     // =========================================================
-    // BOTÃO DE ARMAZENAMENTO
+    // ARMAZENAMENTO
     // =========================================================
 
     private fun configurarArmazenamento() {
@@ -165,291 +212,6 @@ class FileActivity : AppCompatActivity() {
 
         atualizarBotaoArmazenamento()
     }
-
-    // =========================================================
-    // ATUALIZAR VOLUMES
-    // =========================================================
-
-    private fun atualizarVolumesExternos() {
-
-        val encontrados =
-            LinkedHashMap<String, File>()
-
-        if (
-            Build.VERSION.SDK_INT >=
-            Build.VERSION_CODES.R
-        ) {
-
-            try {
-
-                val storageManager =
-                    getSystemService(
-                        StorageManager::class.java
-                    )
-
-                for (
-                    volume in
-                    storageManager.storageVolumes
-                ) {
-
-                    val directory =
-                        volume.directory
-                            ?: continue
-
-                    if (
-                        !directory.exists() ||
-                        !directory.isDirectory
-                    ) {
-                        continue
-                    }
-
-                    val caminho =
-                        obterCaminhoSeguro(
-                            directory
-                        )
-
-                    /*
-                     * Ignora armazenamento interno.
-                     */
-                    if (
-                        caminho.contains(
-                            "/emulated/",
-                            ignoreCase = true
-                        ) ||
-                        caminho.equals(
-                            "/storage/emulated",
-                            ignoreCase = true
-                        )
-                    ) {
-                        continue
-                    }
-
-                    /*
-                     * Só adiciona volumes que o Android
-                     * realmente expôs através de StorageVolume.
-                     *
-                     * Isso evita tratar diretórios aleatórios
-                     * de /storage como USB ou SD.
-                     */
-                    encontrados[caminho] =
-                        directory
-                }
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
-        /*
-         * Não fazemos mais fallback cego em /storage.
-         *
-         * Um diretório encontrado em /storage sozinho
-         * não significa que exista um SD ou USB reconhecido.
-         */
-        volumesExternos =
-            ArrayList(
-                encontrados.values
-                    .filter {
-                        it.exists() &&
-                        it.isDirectory
-                    }
-                    .sortedBy {
-                        it.absolutePath
-                    }
-            )
-    }
-
-    // =========================================================
-    // IDENTIFICAR VOLUME
-    // =========================================================
-
-    private fun identificarTipoArmazenamento(
-        root: File
-    ): TipoArmazenamento {
-
-        if (
-            Build.VERSION.SDK_INT >=
-            Build.VERSION_CODES.R
-        ) {
-
-            try {
-
-                val storageManager =
-                    getSystemService(
-                        StorageManager::class.java
-                    )
-
-                val caminhoRoot =
-                    obterCaminhoSeguro(root)
-
-                val volume =
-                    storageManager.storageVolumes
-                        .firstOrNull {
-
-                            val directory =
-                                it.directory
-
-                            directory != null &&
-                            obterCaminhoSeguro(
-                                directory
-                            ) == caminhoRoot
-                        }
-
-                if (volume != null) {
-
-                    val descricao =
-                        volume
-                            .getDescription(this)
-                            ?.lowercase(
-                                Locale.ROOT
-                            )
-                            ?: ""
-
-                    /*
-                     * Primeiro USB.
-                     */
-                    if (
-                        descricao.contains("usb") ||
-                        descricao.contains("pendrive") ||
-                        descricao.contains("pen drive") ||
-                        descricao.contains("flash drive") ||
-                        descricao.contains("usb drive") ||
-                        descricao.contains("otg")
-                    ) {
-
-                        return TipoArmazenamento.USB
-                    }
-
-                    /*
-                     * Depois SD.
-                     */
-                    if (
-                        descricao.contains("sd") ||
-                        descricao.contains("cartão") ||
-                        descricao.contains("cartao") ||
-                        descricao.contains("memory card") ||
-                        descricao.contains("card")
-                    ) {
-
-                        return TipoArmazenamento.SD
-                    }
-                }
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
-        /*
-         * Fallback apenas para nomes claramente indicativos
-         * de USB/OTG.
-         *
-         * Não transforma qualquer volume desconhecido em SD.
-         */
-        val caminho =
-            obterCaminhoSeguro(root)
-                .lowercase(Locale.ROOT)
-
-        val nome =
-            root.name.lowercase(Locale.ROOT)
-
-        if (
-            caminho.contains("usb") ||
-            caminho.contains("otg") ||
-            caminho.contains("pendrive") ||
-            nome.contains("usb") ||
-            nome.contains("otg") ||
-            nome.contains("pendrive")
-        ) {
-
-            return TipoArmazenamento.USB
-        }
-
-        /*
-         * Volume desconhecido NÃO é considerado SD.
-         *
-         * Isso é importante para não mostrar falsos volumes.
-         */
-        return TipoArmazenamento.INTERNO
-    }
-
-    // =========================================================
-    // CAMINHO SEGURO
-    // =========================================================
-
-    private fun obterCaminhoSeguro(
-        file: File
-    ): String {
-
-        return try {
-
-            file.canonicalPath
-
-        } catch (e: Exception) {
-
-            file.absolutePath
-        }
-    }
-
-    // =========================================================
-    // NOME DO VOLUME
-    // =========================================================
-
-    private fun obterNomeVolume(
-        root: File
-    ): String {
-
-        if (
-            Build.VERSION.SDK_INT >=
-            Build.VERSION_CODES.R
-        ) {
-
-            try {
-
-                val storageManager =
-                    getSystemService(
-                        StorageManager::class.java
-                    )
-
-                val caminhoRoot =
-                    obterCaminhoSeguro(root)
-
-                val volume =
-                    storageManager.storageVolumes
-                        .firstOrNull {
-
-                            val directory =
-                                it.directory
-
-                            directory != null &&
-                            obterCaminhoSeguro(
-                                directory
-                            ) == caminhoRoot
-                        }
-
-                val descricao =
-                    volume?.getDescription(this)
-
-                if (
-                    !descricao.isNullOrBlank()
-                ) {
-
-                    return descricao
-                }
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
-        return root.name.ifBlank {
-            "Armazenamento externo"
-        }
-    }
-
-    // =========================================================
-    // BOTÃO
-    // =========================================================
 
     private fun atualizarBotaoArmazenamento() {
 
@@ -486,10 +248,6 @@ class FileActivity : AppCompatActivity() {
             }
         }
     }
-
-    // =========================================================
-    // ALTERNAR ARMAZENAMENTO
-    // =========================================================
 
     private fun alternarArmazenamento() {
 
@@ -530,10 +288,188 @@ class FileActivity : AppCompatActivity() {
     }
 
     // =========================================================
-    // ENCONTRAR SD
+    // VOLUMES NORMAIS
     // =========================================================
 
-    private fun encontrarVolumeSD(): File? {
+    private fun atualizarVolumesExternos() {
+
+        val encontrados =
+            LinkedHashMap<String, File>()
+
+        if (
+            Build.VERSION.SDK_INT >=
+            Build.VERSION_CODES.R
+        ) {
+
+            try {
+
+                val storageManager =
+                    getSystemService(
+                        StorageManager::class.java
+                    )
+
+                for (
+                    volume in
+                    storageManager.storageVolumes
+                ) {
+
+                    val directory =
+                        volume.directory
+                            ?: continue
+
+                    if (
+                        !directory.exists() ||
+                        !directory.isDirectory
+                    ) {
+                        continue
+                    }
+
+                    val caminho =
+                        obterCaminhoSeguro(
+                            directory
+                        )
+
+                    if (
+                        caminho.contains(
+                            "/emulated/",
+                            ignoreCase = true
+                        ) ||
+                        caminho.equals(
+                            "/storage/emulated",
+                            ignoreCase = true
+                        )
+                    ) {
+                        continue
+                    }
+
+                    encontrados[caminho] =
+                        directory
+                }
+
+            } catch (e: Exception) {
+
+                e.printStackTrace()
+            }
+        }
+
+        volumesExternos =
+            ArrayList(
+                encontrados.values
+                    .filter {
+                        it.exists() &&
+                        it.isDirectory
+                    }
+                    .sortedBy {
+                        it.absolutePath
+                    }
+            )
+    }
+
+    // =========================================================
+    // IDENTIFICAR VOLUME
+    // =========================================================
+
+    private fun identificarTipoArmazenamento(
+        root: File
+    ): TipoArmazenamento {
+
+        if (
+            Build.VERSION.SDK_INT >=
+            Build.VERSION_CODES.R
+        ) {
+
+            try {
+
+                val storageManager =
+                    getSystemService(
+                        StorageManager::class.java
+                    )
+
+                val caminhoRoot =
+                    obterCaminhoSeguro(root)
+
+                val volume =
+                    storageManager
+                        .storageVolumes
+                        .firstOrNull {
+
+                            val directory =
+                                it.directory
+
+                            directory != null &&
+                            obterCaminhoSeguro(
+                                directory
+                            ) == caminhoRoot
+                        }
+
+                if (volume != null) {
+
+                    val descricao =
+                        volume
+                            .getDescription(this)
+                            ?.lowercase(
+                                Locale.ROOT
+                            )
+                            ?: ""
+
+                    if (
+                        descricao.contains("usb") ||
+                        descricao.contains("pendrive") ||
+                        descricao.contains("pen drive") ||
+                        descricao.contains("flash drive") ||
+                        descricao.contains("usb drive") ||
+                        descricao.contains("otg")
+                    ) {
+
+                        return TipoArmazenamento.USB
+                    }
+
+                    if (
+                        descricao.contains("sd") ||
+                        descricao.contains("cartão") ||
+                        descricao.contains("cartao") ||
+                        descricao.contains("memory card") ||
+                        descricao.contains("card")
+                    ) {
+
+                        return TipoArmazenamento.SD
+                    }
+                }
+
+            } catch (e: Exception) {
+
+                e.printStackTrace()
+            }
+        }
+
+        val caminho =
+            obterCaminhoSeguro(root)
+                .lowercase(Locale.ROOT)
+
+        val nome =
+            root.name.lowercase(Locale.ROOT)
+
+        if (
+            caminho.contains("usb") ||
+            caminho.contains("otg") ||
+            caminho.contains("pendrive") ||
+            nome.contains("usb") ||
+            nome.contains("otg") ||
+            nome.contains("pendrive")
+        ) {
+
+            return TipoArmazenamento.USB
+        }
+
+        return TipoArmazenamento.INTERNO
+    }
+
+    // =========================================================
+    // SD
+    // =========================================================
+
+    private fun encontrarVolumeSD():
+        File? {
 
         atualizarVolumesExternos()
 
@@ -545,10 +481,11 @@ class FileActivity : AppCompatActivity() {
     }
 
     // =========================================================
-    // ENCONTRAR USB
+    // USB FILE
     // =========================================================
 
-    private fun encontrarVolumeUSB(): File? {
+    private fun encontrarVolumeUSB():
+        File? {
 
         atualizarVolumesExternos()
 
@@ -560,29 +497,349 @@ class FileActivity : AppCompatActivity() {
     }
 
     // =========================================================
-    // LISTA VAZIA
+    // USB SAF
     // =========================================================
 
-    private fun mostrarListaVazia() {
+    private fun obterUsbUriSalvo():
+        Uri? {
 
-        adapter.update(
-            emptyList()
+        val texto =
+            getSharedPreferences(
+                PREFS,
+                MODE_PRIVATE
+            ).getString(
+                USB_URI,
+                null
+            )
+
+        if (texto.isNullOrBlank()) {
+            return null
+        }
+
+        return try {
+            Uri.parse(texto)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    private fun obterUsbRootSalvo():
+        DocumentFile? {
+
+        val uri =
+            obterUsbUriSalvo()
+                ?: return null
+
+        return try {
+
+            DocumentFile
+                .fromTreeUri(
+                    this,
+                    uri
+                )
+
+        } catch (e: Exception) {
+
+            e.printStackTrace()
+
+            null
+        }
+    }
+
+    private fun salvarUsbUri(
+        uri: Uri
+    ) {
+
+        try {
+
+            contentResolver.takePersistableUriPermission(
+                uri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            )
+
+        } catch (e: Exception) {
+
+            /*
+             * Alguns dispositivos não permitem
+             * persistência daquela URI. Ainda podemos
+             * utilizá-la durante esta sessão.
+             */
+            e.printStackTrace()
+        }
+
+        getSharedPreferences(
+            PREFS,
+            MODE_PRIVATE
         )
+            .edit()
+            .putString(
+                USB_URI,
+                uri.toString()
+            )
+            .apply()
+    }
 
-        recycler.scrollToPosition(0)
-
-        itemCount.text = ""
+    private fun abrirUSBAtual() {
 
         /*
-         * Não colocamos mensagem de erro em pathText.
-         *
-         * O modo simplesmente fica vazio.
+         * Primeiro tenta o USB já autorizado pelo SAF.
          */
-        pathText.text = ""
+        val salvo =
+            obterUsbRootSalvo()
+
+        if (
+            salvo != null &&
+            salvo.exists() &&
+            salvo.isDirectory
+        ) {
+
+            usbRoot = salvo
+
+            if (usbHistory.isEmpty()) {
+
+                usbHistory.add(salvo)
+                usbIndex = 0
+
+            } else if (
+                usbIndex < 0 ||
+                usbIndex >= usbHistory.size
+            ) {
+
+                usbHistory.clear()
+                usbHistory.add(salvo)
+                usbIndex = 0
+            }
+
+            atualizarListaUSB(
+                usbHistory[usbIndex]
+            )
+
+            return
+        }
+
+        /*
+         * Se o StorageVolume fornecer um File USB,
+         * também aceitamos esse caminho.
+         */
+        val fileUsb =
+            encontrarVolumeUSB()
+
+        if (fileUsb != null) {
+
+            abrirVolumeExterno(
+                fileUsb
+            )
+
+            return
+        }
+
+        /*
+         * Nenhum USB conhecido.
+         *
+         * Mostramos vazio, conforme solicitado,
+         * mas oferecemos o seletor quando o usuário
+         * estiver tentando acessar o USB.
+         */
+        mostrarListaVazia()
+
+        abrirSeletorUSB()
+    }
+
+    private fun abrirSeletorUSB() {
+
+        try {
+
+            val intent =
+                Intent(
+                    Intent.ACTION_OPEN_DOCUMENT_TREE
+                ).apply {
+
+                    addFlags(
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                            Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
+                            Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or
+                            Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
+                    )
+                }
+
+            startActivityForResult(
+                intent,
+                USB_PICKER_CODE
+            )
+
+        } catch (e: Exception) {
+
+            e.printStackTrace()
+        }
     }
 
     // =========================================================
-    // ABRIR SD
+    // LISTA USB
+    // =========================================================
+
+    private fun atualizarListaUSB(
+        directory: DocumentFile
+    ) {
+
+        if (
+            !directory.exists() ||
+            !directory.isDirectory
+        ) {
+
+            usbRoot = null
+            usbHistory.clear()
+            usbIndex = -1
+
+            mostrarListaVazia()
+
+            return
+        }
+
+        val documentos =
+            try {
+
+                directory
+                    .listFiles()
+                    .filter {
+                        it.exists()
+                    }
+
+            } catch (e: Exception) {
+
+                emptyList()
+            }
+
+        val collator =
+            Collator.getInstance(
+                Locale("pt", "BR")
+            )
+
+        val sorted =
+            documentos.sortedWith(
+                Comparator { a, b ->
+
+                    if (
+                        a.isDirectory &&
+                        !b.isDirectory
+                    ) {
+                        return@Comparator -1
+                    }
+
+                    if (
+                        !a.isDirectory &&
+                        b.isDirectory
+                    ) {
+                        return@Comparator 1
+                    }
+
+                    collator.compare(
+                        a.name ?: "",
+                        b.name ?: ""
+                    )
+                }
+            )
+
+        val lista =
+            sorted.map {
+                FolderAdapter.StorageItem.Document(
+                    it
+                )
+            }
+
+        adapter.update(lista)
+
+        atualizarCaminhoUSB(
+            directory
+        )
+
+        atualizarContador(
+            lista.size
+        )
+    }
+
+    // =========================================================
+    // CAMINHO USB
+    // =========================================================
+
+    private fun atualizarCaminhoUSB(
+        directory: DocumentFile
+    ) {
+
+        val raiz =
+            usbRoot
+
+        if (raiz == null) {
+
+            pathText.text = ""
+
+            return
+        }
+
+        val nomeRaiz =
+            raiz.name
+                ?.ifBlank {
+                    "Pendrive USB"
+                }
+                ?: "Pendrive USB"
+
+        if (
+            directory.uri == raiz.uri
+        ) {
+
+            pathText.text =
+                nomeRaiz
+
+            return
+        }
+
+        /*
+         * Para SAF não dependemos de caminhos físicos.
+         * Reconstruímos o caminho usando os históricos.
+         */
+        val partes =
+            ArrayList<String>()
+
+        val limite =
+            minOf(
+                usbIndex,
+                usbHistory.lastIndex
+            )
+
+        if (limite >= 0) {
+
+            for (i in 0..limite) {
+
+                val nome =
+                    usbHistory[i]
+                        .name
+                        ?.takeIf {
+                            it.isNotBlank()
+                        }
+
+                if (
+                    nome != null &&
+                    i > 0
+                ) {
+
+                    partes.add(nome)
+                }
+            }
+        }
+
+        pathText.text =
+            if (partes.isEmpty()) {
+
+                nomeRaiz
+
+            } else {
+
+                "$nomeRaiz / ${partes.joinToString(" / ")}"
+            }
+    }
+
+    // =========================================================
+    // SD
     // =========================================================
 
     private fun abrirSDAtual() {
@@ -592,74 +849,24 @@ class FileActivity : AppCompatActivity() {
 
         if (root == null) {
 
-            limparHistoricoExternoAtual()
-
             mostrarListaVazia()
 
             return
         }
 
-        abrirVolumeExterno(root)
+        abrirVolumeExterno(
+            root
+        )
     }
 
     // =========================================================
-    // ABRIR USB
-    // =========================================================
-
-    private fun abrirUSBAtual() {
-
-        val root =
-            encontrarVolumeUSB()
-
-        if (root == null) {
-
-            limparHistoricoExternoAtual()
-
-            mostrarListaVazia()
-
-            return
-        }
-
-        abrirVolumeExterno(root)
-    }
-
-    // =========================================================
-    // LIMPAR HISTÓRICO EXTERNO
-    // =========================================================
-
-    private fun limparHistoricoExternoAtual() {
-
-        val root =
-            when (modoArmazenamento) {
-
-                1 -> encontrarVolumeSD()
-
-                2 -> encontrarVolumeUSB()
-
-                else -> null
-            }
-
-        if (root != null) {
-
-            val chave =
-                obterCaminhoSeguro(root)
-
-            externalHistories.remove(chave)
-            externalIndexes.remove(chave)
-        }
-    }
-
-    // =========================================================
-    // ABRIR VOLUME EXTERNO
+    // VOLUME EXTERNO FILE
     // =========================================================
 
     private fun abrirVolumeExterno(
         root: File
     ) {
 
-        /*
-         * Verificação final.
-         */
         if (
             !root.exists() ||
             !root.isDirectory
@@ -671,12 +878,10 @@ class FileActivity : AppCompatActivity() {
         }
 
         val tipo =
-            identificarTipoArmazenamento(root)
+            identificarTipoArmazenamento(
+                root
+            )
 
-        /*
-         * Um volume desconhecido jamais deve ser
-         * tratado como armazenamento válido.
-         */
         if (
             tipo != TipoArmazenamento.SD &&
             tipo != TipoArmazenamento.USB
@@ -698,7 +903,8 @@ class FileActivity : AppCompatActivity() {
             }
 
         var index =
-            externalIndexes[chave] ?: -1
+            externalIndexes[chave]
+                ?: -1
 
         if (history.isEmpty()) {
 
@@ -721,28 +927,31 @@ class FileActivity : AppCompatActivity() {
         val atual =
             history[index]
 
-        /*
-         * Se o pendrive/SD foi removido,
-         * limpa imediatamente a tela.
-         */
         if (
             !atual.exists() ||
             !atual.isDirectory
         ) {
 
-            externalHistories.remove(chave)
-            externalIndexes.remove(chave)
+            externalHistories.remove(
+                chave
+            )
+
+            externalIndexes.remove(
+                chave
+            )
 
             mostrarListaVazia()
 
             return
         }
 
-        atualizarLista(atual)
+        atualizarLista(
+            atual
+        )
     }
 
     // =========================================================
-    // HISTÓRICO ATUAL
+    // HISTÓRICO
     // =========================================================
 
     private fun obterHistoricoAtual():
@@ -752,19 +961,13 @@ class FileActivity : AppCompatActivity() {
             return internalHistory
         }
 
-        val root =
-            when (modoArmazenamento) {
-
-                1 -> encontrarVolumeSD()
-
-                2 -> encontrarVolumeUSB()
-
-                else -> null
-            }
-
-        if (root == null) {
+        if (modoArmazenamento == 2) {
             return ArrayList()
         }
+
+        val root =
+            encontrarVolumeSD()
+                ?: return ArrayList()
 
         return externalHistories.getOrPut(
             obterCaminhoSeguro(root)
@@ -773,21 +976,20 @@ class FileActivity : AppCompatActivity() {
         }
     }
 
-    private fun obterIndiceAtual(): Int {
+    private fun obterIndiceAtual():
+        Int {
 
         if (!usandoArmazenamentoExterno) {
             return internalIndex
         }
 
+        if (modoArmazenamento == 2) {
+            return usbIndex
+        }
+
         val root =
-            when (modoArmazenamento) {
-
-                1 -> encontrarVolumeSD()
-
-                2 -> encontrarVolumeUSB()
-
-                else -> null
-            } ?: return -1
+            encontrarVolumeSD()
+                ?: return -1
 
         return externalIndexes[
             obterCaminhoSeguro(root)
@@ -805,15 +1007,16 @@ class FileActivity : AppCompatActivity() {
             return
         }
 
+        if (modoArmazenamento == 2) {
+
+            usbIndex = index
+
+            return
+        }
+
         val root =
-            when (modoArmazenamento) {
-
-                1 -> encontrarVolumeSD()
-
-                2 -> encontrarVolumeUSB()
-
-                else -> null
-            } ?: return
+            encontrarVolumeSD()
+                ?: return
 
         externalIndexes[
             obterCaminhoSeguro(root)
@@ -830,9 +1033,11 @@ class FileActivity : AppCompatActivity() {
             LinearLayoutManager(this)
 
         adapter =
-            FolderAdapter { file ->
+            FolderAdapter { item ->
 
-                abrirArquivoOuPasta(file)
+                abrirItem(
+                    item
+                )
             }
 
         recycler.adapter =
@@ -840,7 +1045,7 @@ class FileActivity : AppCompatActivity() {
     }
 
     // =========================================================
-    // VOLTAR
+    // BACK
     // =========================================================
 
     private fun configurarBack() {
@@ -879,7 +1084,14 @@ class FileActivity : AppCompatActivity() {
             false
 
         internalHistory.clear()
+
         internalIndex = -1
+
+        usbHistory.clear()
+
+        usbIndex = -1
+
+        usbRoot = null
 
         atualizarBotaoArmazenamento()
 
@@ -923,63 +1135,136 @@ class FileActivity : AppCompatActivity() {
         }
 
         val atual =
-            internalHistory[internalIndex]
+            internalHistory[
+                internalIndex
+            ]
 
         if (
             atual.exists() &&
             atual.isDirectory
         ) {
 
-            atualizarLista(atual)
+            atualizarLista(
+                atual
+            )
 
         } else {
 
-            internalHistory.clear()
-            internalHistory.add(root)
-            internalIndex = 0
-
-            atualizarLista(root)
+            mostrarListaVazia()
         }
     }
 
     // =========================================================
-    // ARQUIVO OU PASTA
+    // ITEM
     // =========================================================
 
-    private fun abrirArquivoOuPasta(
-        file: File
+    private fun abrirItem(
+        item: FolderAdapter.StorageItem
     ) {
 
-        /*
-         * Se o armazenamento externo desapareceu,
-         * não tenta abrir o arquivo.
-         */
-        if (
-            usandoArmazenamentoExterno &&
-            (
-                !file.exists() ||
-                !file.isFile &&
-                !file.isDirectory
-            )
-        ) {
+        when (item) {
 
-            mostrarListaVazia()
+            is FolderAdapter.StorageItem.Local -> {
+
+                val file =
+                    item.file
+
+                if (
+                    !file.exists()
+                ) {
+
+                    mostrarListaVazia()
+
+                    return
+                }
+
+                if (file.isDirectory) {
+
+                    abrirDiretorio(
+                        file
+                    )
+
+                } else {
+
+                    abrirExterno(
+                        file
+                    )
+                }
+            }
+
+            is FolderAdapter.StorageItem.Document -> {
+
+                val document =
+                    item.document
+
+                if (
+                    !document.exists()
+                ) {
+
+                    mostrarListaVazia()
+
+                    return
+                }
+
+                if (
+                    document.isDirectory
+                ) {
+
+                    abrirDiretorioUSB(
+                        document
+                    )
+
+                } else {
+
+                    abrirExternoUSB(
+                        document
+                    )
+                }
+            }
+        }
+    }
+
+    // =========================================================
+    // DIRETÓRIO USB
+    // =========================================================
+
+    private fun abrirDiretorioUSB(
+        directory: DocumentFile
+    ) {
+
+        if (
+            !directory.exists() ||
+            !directory.isDirectory
+        ) {
 
             return
         }
 
-        if (file.isDirectory) {
+        if (
+            usbIndex <
+            usbHistory.lastIndex
+        ) {
 
-            abrirDiretorio(file)
-
-        } else {
-
-            abrirExterno(file)
+            usbHistory.subList(
+                usbIndex + 1,
+                usbHistory.size
+            ).clear()
         }
+
+        usbHistory.add(
+            directory
+        )
+
+        usbIndex =
+            usbHistory.lastIndex
+
+        atualizarListaUSB(
+            directory
+        )
     }
 
     // =========================================================
-    // DIRETÓRIO
+    // DIRETÓRIO FILE
     // =========================================================
 
     private fun abrirDiretorio(
@@ -1020,14 +1305,17 @@ class FileActivity : AppCompatActivity() {
             }
 
             if (
-                currentIndex < history.size &&
+                currentIndex <
+                history.size &&
                 obterCaminhoSeguro(
                     history[currentIndex]
                 ) ==
                 obterCaminhoSeguro(file)
             ) {
 
-                atualizarLista(file)
+                atualizarLista(
+                    file
+                )
 
                 return
             }
@@ -1042,11 +1330,13 @@ class FileActivity : AppCompatActivity() {
             currentIndex
         )
 
-        atualizarLista(file)
+        atualizarLista(
+            file
+        )
     }
 
     // =========================================================
-    // LISTA
+    // LISTA FILE
     // =========================================================
 
     private fun atualizarLista(
@@ -1109,13 +1399,44 @@ class FileActivity : AppCompatActivity() {
                 }
             )
 
-        adapter.update(sorted)
+        val lista =
+            sorted.map {
 
-        atualizarCaminho(directory)
+                FolderAdapter.StorageItem.Local(
+                    it
+                )
+            }
+
+        adapter.update(
+            lista
+        )
+
+        atualizarCaminho(
+            directory
+        )
 
         atualizarContador(
-            sorted.size
+            lista.size
         )
+    }
+
+    // =========================================================
+    // VAZIO
+    // =========================================================
+
+    private fun mostrarListaVazia() {
+
+        adapter.update(
+            emptyList()
+        )
+
+        recycler.scrollToPosition(
+            0
+        )
+
+        itemCount.text = ""
+
+        pathText.text = ""
     }
 
     // =========================================================
@@ -1139,7 +1460,7 @@ class FileActivity : AppCompatActivity() {
     }
 
     // =========================================================
-    // CAMINHO
+    // CAMINHO FILE
     // =========================================================
 
     private fun atualizarCaminho(
@@ -1147,7 +1468,9 @@ class FileActivity : AppCompatActivity() {
     ) {
 
         pathText.text =
-            obterCaminhoBonito(directory)
+            obterCaminhoBonito(
+                directory
+            )
     }
 
     private fun obterCaminhoBonito(
@@ -1161,12 +1484,20 @@ class FileActivity : AppCompatActivity() {
                     .getExternalStorageDirectory()
 
             val currentPath =
-                obterCaminhoSeguro(directory)
+                obterCaminhoSeguro(
+                    directory
+                )
 
             val rootPath =
-                obterCaminhoSeguro(root)
+                obterCaminhoSeguro(
+                    root
+                )
 
-            if (currentPath == rootPath) {
+            if (
+                currentPath ==
+                rootPath
+            ) {
+
                 return "Armazenamento interno"
             }
 
@@ -1178,7 +1509,9 @@ class FileActivity : AppCompatActivity() {
 
                 val relativo =
                     currentPath
-                        .removePrefix(rootPath)
+                        .removePrefix(
+                            rootPath
+                        )
                         .trim('/')
 
                 "Armazenamento interno / $relativo"
@@ -1190,19 +1523,8 @@ class FileActivity : AppCompatActivity() {
         }
 
         val root =
-            when (modoArmazenamento) {
+            encontrarVolumeSD()
 
-                1 -> encontrarVolumeSD()
-
-                2 -> encontrarVolumeUSB()
-
-                else -> null
-            }
-
-        /*
-         * Sem volume reconhecido:
-         * a tela deve ficar vazia.
-         */
         if (root == null) {
             return ""
         }
@@ -1215,15 +1537,25 @@ class FileActivity : AppCompatActivity() {
         }
 
         val rootPath =
-            obterCaminhoSeguro(root)
+            obterCaminhoSeguro(
+                root
+            )
 
         val currentPath =
-            obterCaminhoSeguro(directory)
+            obterCaminhoSeguro(
+                directory
+            )
 
         val nome =
-            obterNomeVolume(root)
+            obterNomeVolume(
+                root
+            )
 
-        if (currentPath == rootPath) {
+        if (
+            currentPath ==
+            rootPath
+        ) {
+
             return nome
         }
 
@@ -1235,7 +1567,9 @@ class FileActivity : AppCompatActivity() {
 
             val relativo =
                 currentPath
-                    .removePrefix(rootPath)
+                    .removePrefix(
+                        rootPath
+                    )
                     .trim('/')
 
             "$nome / $relativo"
@@ -1247,10 +1581,118 @@ class FileActivity : AppCompatActivity() {
     }
 
     // =========================================================
+    // VOLTAR
+    // =========================================================
+
+    private fun voltarDiretorio() {
+
+        if (
+            usandoArmazenamentoExterno &&
+            modoArmazenamento == 2
+        ) {
+
+            if (usbIndex <= 0) {
+                return
+            }
+
+            usbIndex--
+
+            val directory =
+                usbHistory[
+                    usbIndex
+                ]
+
+            if (
+                directory.exists() &&
+                directory.isDirectory
+            ) {
+
+                atualizarListaUSB(
+                    directory
+                )
+
+            } else {
+
+                mostrarListaVazia()
+            }
+
+            return
+        }
+
+        var currentIndex =
+            obterIndiceAtual()
+
+        if (currentIndex <= 0) {
+            return
+        }
+
+        currentIndex--
+
+        definirIndiceAtual(
+            currentIndex
+        )
+
+        val history =
+            obterHistoricoAtual()
+
+        if (
+            currentIndex >=
+            history.size
+        ) {
+
+            mostrarListaVazia()
+
+            return
+        }
+
+        val directory =
+            history[
+                currentIndex
+            ]
+
+        if (
+            directory.exists() &&
+            directory.isDirectory
+        ) {
+
+            atualizarLista(
+                directory
+            )
+
+        } else {
+
+            mostrarListaVazia()
+        }
+    }
+
+    // =========================================================
     // AVANÇAR
     // =========================================================
 
     private fun avancarDiretorio() {
+
+        if (
+            usandoArmazenamentoExterno &&
+            modoArmazenamento == 2
+        ) {
+
+            if (
+                usbIndex >=
+                usbHistory.lastIndex
+            ) {
+                return
+            }
+
+            usbIndex++
+
+            atualizarListaUSB(
+                usbHistory[
+                    usbIndex
+                ]
+            )
+
+            return
+        }
 
         val history =
             obterHistoricoAtual()
@@ -1272,14 +1714,18 @@ class FileActivity : AppCompatActivity() {
         )
 
         val directory =
-            history[currentIndex]
+            history[
+                currentIndex
+            ]
 
         if (
             directory.exists() &&
             directory.isDirectory
         ) {
 
-            atualizarLista(directory)
+            atualizarLista(
+                directory
+            )
 
         } else {
 
@@ -1288,52 +1734,7 @@ class FileActivity : AppCompatActivity() {
     }
 
     // =========================================================
-    // VOLTAR DIRETÓRIO
-    // =========================================================
-
-    private fun voltarDiretorio() {
-
-        var currentIndex =
-            obterIndiceAtual()
-
-        if (currentIndex <= 0) {
-            return
-        }
-
-        currentIndex--
-
-        definirIndiceAtual(
-            currentIndex
-        )
-
-        val history =
-            obterHistoricoAtual()
-
-        if (
-            currentIndex >= history.size
-        ) {
-            mostrarListaVazia()
-            return
-        }
-
-        val directory =
-            history[currentIndex]
-
-        if (
-            directory.exists() &&
-            directory.isDirectory
-        ) {
-
-            atualizarLista(directory)
-
-        } else {
-
-            mostrarListaVazia()
-        }
-    }
-
-    // =========================================================
-    // ABRIR ARQUIVO
+    // ABRIR ARQUIVO FILE
     // =========================================================
 
     private fun abrirExterno(
@@ -1344,7 +1745,6 @@ class FileActivity : AppCompatActivity() {
             !file.exists() ||
             !file.isFile
         ) {
-
             return
         }
 
@@ -1352,11 +1752,8 @@ class FileActivity : AppCompatActivity() {
 
             val arquivoReal =
                 try {
-
                     file.canonicalFile
-
                 } catch (e: Exception) {
-
                     file.absoluteFile
                 }
 
@@ -1369,7 +1766,9 @@ class FileActivity : AppCompatActivity() {
 
             val extensao =
                 arquivoReal.extension
-                    .lowercase(Locale.ROOT)
+                    .lowercase(
+                        Locale.ROOT
+                    )
 
             val mime =
                 MimeTypeMap
@@ -1380,10 +1779,11 @@ class FileActivity : AppCompatActivity() {
                     ?: "application/octet-stream"
 
             val uri =
-                SdFileProvider.getUriForFile(
-                    "$packageName.provider",
-                    arquivoReal
-                )
+                SdFileProvider
+                    .getUriForFile(
+                        "$packageName.provider",
+                        arquivoReal
+                    )
 
             val intent =
                 Intent(
@@ -1406,7 +1806,9 @@ class FileActivity : AppCompatActivity() {
                         )
                 }
 
-            startActivity(intent)
+            startActivity(
+                intent
+            )
 
         } catch (
             e: android.content.ActivityNotFoundException
@@ -1434,12 +1836,168 @@ class FileActivity : AppCompatActivity() {
     }
 
     // =========================================================
+    // ABRIR ARQUIVO USB
+    // =========================================================
+
+    private fun abrirExternoUSB(
+        document: DocumentFile
+    ) {
+
+        if (
+            !document.exists() ||
+            !document.isFile
+        ) {
+            return
+        }
+
+        try {
+
+            val uri =
+                document.uri
+
+            val mime =
+                document.type
+                    ?: "application/octet-stream"
+
+            val intent =
+                Intent(
+                    Intent.ACTION_VIEW
+                ).apply {
+
+                    setDataAndType(
+                        uri,
+                        mime
+                    )
+
+                    addFlags(
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+
+                    clipData =
+                        ClipData.newRawUri(
+                            document.name ?: "arquivo",
+                            uri
+                        )
+                }
+
+            startActivity(
+                intent
+            )
+
+        } catch (
+            e: android.content.ActivityNotFoundException
+        ) {
+
+            pathText.text =
+                "Nenhum aplicativo pode abrir este arquivo"
+
+        } catch (
+            e: SecurityException
+        ) {
+
+            e.printStackTrace()
+
+            pathText.text =
+                "O Android não permitiu abrir este arquivo"
+
+        } catch (e: Exception) {
+
+            e.printStackTrace()
+
+            pathText.text =
+                "Não foi possível abrir o arquivo"
+        }
+    }
+
+    // =========================================================
+    // NOME DO VOLUME
+    // =========================================================
+
+    private fun obterNomeVolume(
+        root: File
+    ): String {
+
+        if (
+            Build.VERSION.SDK_INT >=
+            Build.VERSION_CODES.R
+        ) {
+
+            try {
+
+                val storageManager =
+                    getSystemService(
+                        StorageManager::class.java
+                    )
+
+                val caminhoRoot =
+                    obterCaminhoSeguro(
+                        root
+                    )
+
+                val volume =
+                    storageManager
+                        .storageVolumes
+                        .firstOrNull {
+
+                            val directory =
+                                it.directory
+
+                            directory != null &&
+                            obterCaminhoSeguro(
+                                directory
+                            ) == caminhoRoot
+                        }
+
+                val descricao =
+                    volume?.getDescription(
+                        this
+                    )
+
+                if (
+                    !descricao.isNullOrBlank()
+                ) {
+
+                    return descricao
+                }
+
+            } catch (e: Exception) {
+
+                e.printStackTrace()
+            }
+        }
+
+        return root.name.ifBlank {
+            "Armazenamento externo"
+        }
+    }
+
+    // =========================================================
+    // CAMINHO SEGURO
+    // =========================================================
+
+    private fun obterCaminhoSeguro(
+        file: File
+    ): String {
+
+        return try {
+
+            file.canonicalPath
+
+        } catch (e: Exception) {
+
+            file.absolutePath
+        }
+    }
+
+    // =========================================================
     // PERMISSÕES
     // =========================================================
 
     private fun pedirPermissao() {
 
-        if (Build.VERSION.SDK_INT >= 30) {
+        if (
+            Build.VERSION.SDK_INT >= 30
+        ) {
 
             if (
                 !Environment
@@ -1478,7 +2036,8 @@ class FileActivity : AppCompatActivity() {
         }
     }
 
-    private fun temPermissao(): Boolean {
+    private fun temPermissao():
+        Boolean {
 
         return if (
             Build.VERSION.SDK_INT >= 30
@@ -1500,7 +2059,7 @@ class FileActivity : AppCompatActivity() {
     }
 
     // =========================================================
-    // RESULTADO PERMISSÃO
+    // RESULTADOS
     // =========================================================
 
     @Deprecated(
@@ -1518,13 +2077,64 @@ class FileActivity : AppCompatActivity() {
             data
         )
 
-        if (
-            requestCode ==
-            MANAGE_STORAGE_CODE &&
-            temPermissao()
-        ) {
+        when (requestCode) {
 
-            iniciar()
+            MANAGE_STORAGE_CODE -> {
+
+                if (temPermissao()) {
+                    iniciar()
+                }
+            }
+
+            USB_PICKER_CODE -> {
+
+                if (
+                    resultCode ==
+                    RESULT_OK &&
+                    data?.data != null
+                ) {
+
+                    val uri =
+                        data.data!!
+
+                    salvarUsbUri(
+                        uri
+                    )
+
+                    val root =
+                        DocumentFile
+                            .fromTreeUri(
+                                this,
+                                uri
+                            )
+
+                    if (
+                        root != null &&
+                        root.exists() &&
+                        root.isDirectory
+                    ) {
+
+                        usbRoot =
+                            root
+
+                        usbHistory.clear()
+
+                        usbHistory.add(
+                            root
+                        )
+
+                        usbIndex = 0
+
+                        atualizarListaUSB(
+                            root
+                        )
+
+                    } else {
+
+                        mostrarListaVazia()
+                    }
+                }
+            }
         }
     }
 

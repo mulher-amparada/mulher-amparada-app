@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Memória interna -->
+    <!--
+        Armazenamento externo principal.
+
+        O SdFileProvider não depende deste caminho
+        para o cartão SD. Ele possui suporte próprio
+        para volumes externos.
+    -->
     <external-path
         name="external_storage"
         path="." />
 
-    <!-- Android/data -->
+    <!-- Arquivos externos do aplicativo -->
     <external-files-path
         name="external_files"
         path="." />
@@ -16,12 +23,12 @@
         name="external_cache"
         path="." />
 
-    <!-- Armazenamento interno do app -->
+    <!-- Arquivos internos do aplicativo -->
     <files-path
         name="files"
         path="." />
 
-    <!-- Cache interno do app -->
+    <!-- Cache interno -->
     <cache-path
         name="cache"
         path="." />

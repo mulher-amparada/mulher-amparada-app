@@ -82,7 +82,7 @@ E para todas: ELAS PRECISAM SER CONSIDERADAS COMO PESSOAS, NÃO SÓ MAIS UMA EST
 
 ----
 
-# Às Meretíssimas Juízas, Desembargadoras, Advogadas e outras profissionais do Direito
+# Às Meretíssimas Juízas, Advogadas e outras profissionais do Direito
 
 Olha, os homens costumam humilhar vocês e tentar, sabe?, intimidar e desvalorizar seu trabalho só por vocês serem mulheres.
 

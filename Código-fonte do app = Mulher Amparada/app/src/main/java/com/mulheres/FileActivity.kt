@@ -1,5 +1,6 @@
 package com.mulheres
 
+import android.content.ClipData
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -42,12 +43,14 @@ class FileActivity : AppCompatActivity() {
     /*
      * Histórico do armazenamento interno.
      */
-    private val internalHistory = ArrayList<File>()
+    private val internalHistory =
+        ArrayList<File>()
 
     /*
      * Histórico do cartão SD.
      */
-    private val sdHistory = ArrayList<File>()
+    private val sdHistory =
+        ArrayList<File>()
 
     private var internalIndex = -1
     private var sdIndex = -1
@@ -62,7 +65,9 @@ class FileActivity : AppCompatActivity() {
     // ON CREATE
     // =========================================================
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(
+        savedInstanceState: Bundle?
+    ) {
         super.onCreate(savedInstanceState)
 
         window.addFlags(
@@ -71,27 +76,33 @@ class FileActivity : AppCompatActivity() {
 
         configurarSistema()
 
-        setContentView(R.layout.activity_file)
-
-        val raiz = findViewById<View>(
-            android.R.id.content
+        setContentView(
+            R.layout.activity_file
         )
+
+        val raiz =
+            findViewById<View>(
+                android.R.id.content
+            )
 
         aplicarFonte(raiz)
 
-        recycler = findViewById(R.id.recycler)
-        pathText = findViewById(R.id.pathText)
-        itemCount = findViewById(R.id.itemCount)
-        storageButton = findViewById(R.id.storageButton)
+        recycler =
+            findViewById(R.id.recycler)
+
+        pathText =
+            findViewById(R.id.pathText)
+
+        itemCount =
+            findViewById(R.id.itemCount)
+
+        storageButton =
+            findViewById(R.id.storageButton)
 
         configurarRecycler()
         configurarBack()
         configurarArmazenamento()
 
-        /*
-         * Estado inicial:
-         * armazenamento interno.
-         */
         atualizarBotaoArmazenamento()
 
         if (!temPermissao()) {
@@ -112,11 +123,19 @@ class FileActivity : AppCompatActivity() {
             false
         )
 
-        window.statusBarColor = Color.TRANSPARENT
-        window.navigationBarColor = Color.TRANSPARENT
+        window.statusBarColor =
+            Color.TRANSPARENT
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            window.isNavigationBarContrastEnforced = false
+        window.navigationBarColor =
+            Color.TRANSPARENT
+
+        if (
+            Build.VERSION.SDK_INT >=
+            Build.VERSION_CODES.Q
+        ) {
+
+            window.isNavigationBarContrastEnforced =
+                false
         }
 
         val controller =
@@ -125,35 +144,31 @@ class FileActivity : AppCompatActivity() {
                 window.decorView
             )
 
-        controller.isAppearanceLightStatusBars = false
-        controller.isAppearanceLightNavigationBars = false
+        controller.isAppearanceLightStatusBars =
+            false
+
+        controller.isAppearanceLightNavigationBars =
+            false
     }
 
     // =========================================================
-    // BOTÃO DE ARMAZENAMENTO
+    // ARMAZENAMENTO
     // =========================================================
 
     private fun configurarArmazenamento() {
 
         storageButton.setOnClickListener {
-
             alternarArmazenamento()
         }
     }
 
     private fun alternarArmazenamento() {
 
-        /*
-         * Descobre o cartão SD antes de trocar.
-         */
-        val sdRoot = obterRaizCartaoSd()
+        val sdRoot =
+            obterRaizCartaoSd()
 
         if (!usandoCartaoSd) {
 
-            /*
-             * Está no interno.
-             * Tenta mudar para o cartão SD.
-             */
             if (sdRoot == null) {
 
                 pathText.text =
@@ -166,15 +181,10 @@ class FileActivity : AppCompatActivity() {
 
             atualizarBotaoArmazenamento()
 
-            /*
-             * Se já existe histórico do SD,
-             * volta para onde o usuário estava.
-             *
-             * Caso contrário, abre a raiz.
-             */
             if (sdHistory.isEmpty()) {
 
                 sdHistory.add(sdRoot)
+
                 sdIndex = 0
 
                 atualizarLista(sdRoot)
@@ -182,22 +192,38 @@ class FileActivity : AppCompatActivity() {
             } else {
 
                 if (sdIndex < 0) {
+
+                    sdHistory.clear()
+
                     sdHistory.add(sdRoot)
+
                     sdIndex = 0
                 }
 
                 val atual =
                     sdHistory[sdIndex]
 
-                atualizarLista(atual)
+                if (
+                    atual.exists() &&
+                    atual.isDirectory
+                ) {
+
+                    atualizarLista(atual)
+
+                } else {
+
+                    sdHistory.clear()
+
+                    sdHistory.add(sdRoot)
+
+                    sdIndex = 0
+
+                    atualizarLista(sdRoot)
+                }
             }
 
         } else {
 
-            /*
-             * Está no cartão SD.
-             * Volta para o armazenamento interno.
-             */
             usandoCartaoSd = false
 
             atualizarBotaoArmazenamento()
@@ -209,6 +235,7 @@ class FileActivity : AppCompatActivity() {
             if (internalHistory.isEmpty()) {
 
                 internalHistory.add(root)
+
                 internalIndex = 0
 
                 atualizarLista(root)
@@ -216,14 +243,34 @@ class FileActivity : AppCompatActivity() {
             } else {
 
                 if (internalIndex < 0) {
+
+                    internalHistory.clear()
+
                     internalHistory.add(root)
+
                     internalIndex = 0
                 }
 
                 val atual =
                     internalHistory[internalIndex]
 
-                atualizarLista(atual)
+                if (
+                    atual.exists() &&
+                    atual.isDirectory
+                ) {
+
+                    atualizarLista(atual)
+
+                } else {
+
+                    internalHistory.clear()
+
+                    internalHistory.add(root)
+
+                    internalIndex = 0
+
+                    atualizarLista(root)
+                }
             }
         }
     }
@@ -256,15 +303,12 @@ class FileActivity : AppCompatActivity() {
 
     private fun obterRaizCartaoSd(): File? {
 
-        /*
-         * O Android normalmente expõe os volumes externos
-         * através de getExternalFilesDirs().
-         *
-         * Procuramos o volume que não corresponde ao
-         * armazenamento externo principal.
-         */
         val volumes =
             getExternalFilesDirs(null)
+
+        val interno =
+            getExternalFilesDir(null)
+                ?.absolutePath
 
         for (volume in volumes) {
 
@@ -275,26 +319,13 @@ class FileActivity : AppCompatActivity() {
             val caminho =
                 volume.absolutePath
 
-            val caminhoInterno =
-                getExternalFilesDir(null)
-                    ?.absolutePath
-
             if (
-                caminhoInterno != null &&
-                caminho.startsWith(caminhoInterno)
+                interno != null &&
+                caminho.startsWith(interno)
             ) {
                 continue
             }
 
-            /*
-             * Normalmente:
-             *
-             * /storage/XXXX-XXXX/Android/data/com.mulheres/files
-             *
-             * Queremos:
-             *
-             * /storage/XXXX-XXXX
-             */
             val marker =
                 "/Android/"
 
@@ -304,31 +335,32 @@ class FileActivity : AppCompatActivity() {
             if (posicao > 0) {
 
                 val raiz =
-                    caminho.substring(
-                        0,
-                        posicao
+                    File(
+                        caminho.substring(
+                            0,
+                            posicao
+                        )
                     )
 
-                val file =
-                    File(raiz)
-
                 if (
-                    file.exists() &&
-                    file.isDirectory
+                    raiz.exists() &&
+                    raiz.isDirectory &&
+                    raiz.canRead()
                 ) {
-                    return file
+
+                    return raiz
                 }
             }
         }
 
         /*
-         * Segunda tentativa para alguns aparelhos.
+         * Segunda tentativa.
          */
-        val diretorio =
+        val storage =
             File("/storage")
 
         val arquivos =
-            diretorio.listFiles()
+            storage.listFiles()
 
         if (arquivos != null) {
 
@@ -374,9 +406,10 @@ class FileActivity : AppCompatActivity() {
         recycler.layoutManager =
             LinearLayoutManager(this)
 
-        adapter = FolderAdapter { file ->
-            abrirArquivoOuPasta(file)
-        }
+        adapter =
+            FolderAdapter { file ->
+                abrirArquivoOuPasta(file)
+            }
 
         recycler.adapter = adapter
     }
@@ -439,11 +472,13 @@ class FileActivity : AppCompatActivity() {
         if (!usandoCartaoSd) {
 
             internalHistory.clear()
+
             internalIndex = -1
 
         } else {
 
             sdHistory.clear()
+
             sdIndex = -1
         }
 
@@ -451,7 +486,7 @@ class FileActivity : AppCompatActivity() {
     }
 
     // =========================================================
-    // ABRIR PASTA OU ARQUIVO
+    // ABRIR ARQUIVO OU PASTA
     // =========================================================
 
     private fun abrirArquivoOuPasta(
@@ -503,7 +538,10 @@ class FileActivity : AppCompatActivity() {
 
         } else {
 
-            if (currentIndex < history.size - 1) {
+            if (
+                currentIndex <
+                history.size - 1
+            ) {
 
                 history.subList(
                     currentIndex + 1,
@@ -512,7 +550,10 @@ class FileActivity : AppCompatActivity() {
             }
 
             if (
-                history[currentIndex].absolutePath ==
+                currentIndex <
+                history.size &&
+                history[currentIndex]
+                    .absolutePath ==
                 file.absolutePath
             ) {
 
@@ -528,9 +569,14 @@ class FileActivity : AppCompatActivity() {
         }
 
         if (usandoCartaoSd) {
-            sdIndex = currentIndex
+
+            sdIndex =
+                currentIndex
+
         } else {
-            internalIndex = currentIndex
+
+            internalIndex =
+                currentIndex
         }
 
         atualizarLista(file)
@@ -543,6 +589,20 @@ class FileActivity : AppCompatActivity() {
     private fun atualizarLista(
         directory: File
     ) {
+
+        if (
+            !directory.exists() ||
+            !directory.isDirectory
+        ) {
+
+            adapter.update(
+                emptyList()
+            )
+
+            atualizarContador(0)
+
+            return
+        }
 
         val files =
             directory
@@ -584,7 +644,9 @@ class FileActivity : AppCompatActivity() {
 
         atualizarCaminho(directory)
 
-        atualizarContador(sorted.size)
+        atualizarContador(
+            sorted.size
+        )
     }
 
     // =========================================================
@@ -602,7 +664,8 @@ class FileActivity : AppCompatActivity() {
 
                 1 -> "1 item"
 
-                else -> "$quantidade itens"
+                else ->
+                    "$quantidade itens"
             }
     }
 
@@ -615,7 +678,9 @@ class FileActivity : AppCompatActivity() {
     ) {
 
         pathText.text =
-            obterCaminhoBonito(directory)
+            obterCaminhoBonito(
+                directory
+            )
     }
 
     private fun obterCaminhoBonito(
@@ -625,9 +690,6 @@ class FileActivity : AppCompatActivity() {
         val currentPath =
             directory.absolutePath
 
-        /*
-         * CARTÃO SD
-         */
         if (usandoCartaoSd) {
 
             val sdRoot =
@@ -651,14 +713,19 @@ class FileActivity : AppCompatActivity() {
 
                     val relativo =
                         currentPath
-                            .removePrefix(sdPath)
+                            .removePrefix(
+                                sdPath
+                            )
                             .trim('/')
 
                     return if (
                         relativo.isEmpty()
                     ) {
+
                         "Cartão SD"
+
                     } else {
+
                         "Cartão SD / $relativo"
                     }
                 }
@@ -667,9 +734,6 @@ class FileActivity : AppCompatActivity() {
             return directory.name
         }
 
-        /*
-         * ARMAZENAMENTO INTERNO
-         */
         val root =
             Environment
                 .getExternalStorageDirectory()
@@ -678,6 +742,7 @@ class FileActivity : AppCompatActivity() {
             root.absolutePath
 
         if (currentPath == rootPath) {
+
             return "Armazenamento interno"
         }
 
@@ -689,7 +754,9 @@ class FileActivity : AppCompatActivity() {
 
             val relativo =
                 currentPath
-                    .removePrefix(rootPath)
+                    .removePrefix(
+                        rootPath
+                    )
                     .trim('/')
 
             if (relativo.isEmpty()) {
@@ -737,15 +804,21 @@ class FileActivity : AppCompatActivity() {
         currentIndex++
 
         if (usandoCartaoSd) {
-            sdIndex = currentIndex
+
+            sdIndex =
+                currentIndex
+
         } else {
-            internalIndex = currentIndex
+
+            internalIndex =
+                currentIndex
         }
 
         val directory =
             history[currentIndex]
 
         if (directory.isDirectory) {
+
             atualizarLista(directory)
         }
     }
@@ -770,9 +843,14 @@ class FileActivity : AppCompatActivity() {
         currentIndex--
 
         if (usandoCartaoSd) {
-            sdIndex = currentIndex
+
+            sdIndex =
+                currentIndex
+
         } else {
-            internalIndex = currentIndex
+
+            internalIndex =
+                currentIndex
         }
 
         val history =
@@ -786,6 +864,7 @@ class FileActivity : AppCompatActivity() {
             history[currentIndex]
 
         if (directory.isDirectory) {
+
             atualizarLista(directory)
         }
     }
@@ -798,19 +877,27 @@ class FileActivity : AppCompatActivity() {
         file: File
     ) {
 
+        if (
+            !file.exists() ||
+            !file.isFile
+        ) {
+
+            pathText.text =
+                "Arquivo não encontrado"
+
+            return
+        }
+
         try {
 
-            val uri =
-                androidx.core.content.FileProvider
-                    .getUriForFile(
-                        this,
-                        "$packageName.provider",
-                        file
-                    )
-
+            /*
+             * Determina o MIME pelo nome/extensão.
+             */
             val extensao =
                 file.extension
-                    .lowercase(Locale.ROOT)
+                    .lowercase(
+                        Locale.ROOT
+                    )
 
             val mime =
                 MimeTypeMap
@@ -818,7 +905,19 @@ class FileActivity : AppCompatActivity() {
                     .getMimeTypeFromExtension(
                         extensao
                     )
-                    ?: "*/*"
+                    ?: "application/octet-stream"
+
+            /*
+             * Cria um content:// apontando diretamente
+             * para o arquivo original.
+             *
+             * Não copia o arquivo.
+             */
+            val uri =
+                SdFileProvider.getUriForFile(
+                    "$packageName.provider",
+                    file
+                )
 
             val intent =
                 Intent(
@@ -833,7 +932,36 @@ class FileActivity : AppCompatActivity() {
                     addFlags(
                         Intent.FLAG_GRANT_READ_URI_PERMISSION
                     )
+
+                    /*
+                     * Ajuda alguns aplicativos a reconhecerem
+                     * a concessão temporária do URI.
+                     */
+                    clipData =
+                        ClipData.newRawUri(
+                            file.name,
+                            uri
+                        )
                 }
+
+            /*
+             * Verifica se existe algum aplicativo capaz
+             * de receber o arquivo antes de abrir o chooser.
+             */
+            val resolver =
+                packageManager
+
+            if (
+                intent.resolveActivity(
+                    resolver
+                ) == null
+            ) {
+
+                pathText.text =
+                    "Nenhum aplicativo pode abrir este arquivo"
+
+                return
+            }
 
             startActivity(
                 Intent.createChooser(
@@ -845,6 +973,9 @@ class FileActivity : AppCompatActivity() {
         } catch (e: Exception) {
 
             e.printStackTrace()
+
+            pathText.text =
+                "Não foi possível abrir o arquivo"
         }
     }
 
@@ -854,7 +985,9 @@ class FileActivity : AppCompatActivity() {
 
     private fun pedirPermissao() {
 
-        if (Build.VERSION.SDK_INT >= 30) {
+        if (
+            Build.VERSION.SDK_INT >= 30
+        ) {
 
             if (
                 !Environment
@@ -956,7 +1089,8 @@ class FileActivity : AppCompatActivity() {
         )
 
         if (
-            requestCode == PERMISSION_CODE &&
+            requestCode ==
+            PERMISSION_CODE &&
             grantResults.isNotEmpty() &&
             grantResults[0] ==
             android.content.pm.PackageManager
@@ -975,20 +1109,23 @@ class FileActivity : AppCompatActivity() {
         view: View
     ) {
 
-        val fonte = try {
+        val fonte =
+            try {
 
-            Typeface.createFromAsset(
-                assets,
-                "font.ttf"
-            )
+                Typeface.createFromAsset(
+                    assets,
+                    "font.ttf"
+                )
 
-        } catch (e: Exception) {
+            } catch (e: Exception) {
 
-            Typeface.DEFAULT
-        }
+                Typeface.DEFAULT
+            }
 
         if (view is TextView) {
-            view.typeface = fonte
+
+            view.typeface =
+                fonte
         }
 
         if (view is ViewGroup) {

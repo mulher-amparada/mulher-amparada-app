@@ -360,6 +360,14 @@ Dentro do app, ele só visualiza as pastas e ao clicar em um arquivo, abre um se
 
 e ele tem um botão que troca entre armazenamento interno e cartão sd e pendrive
 
+Porém, é assim:
+
+Cartao sd e armazenamento interno (usa a permissão de acesso a todos os arquivos)
+
+Dispositivos externos (um exemplo é o pendrive via cabo otg) usa o "saf" Storage Acess Framework 
+
+E ELE NÃO LÊ OS ARQUIVOS DO GRAVADOR DE VOZ DO APP E NEM QUALQUER OUTRO RECURSO DO APP, APENAS ARQUIVOS JÁ EXISTENTES DO CELULAR DA USUÁRIA!
+
 ----
 
 **Desligar o celular:**

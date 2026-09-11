@@ -11,9 +11,9 @@ on:
 
   workflow_run:
     workflows:
-      - "Compilar o assistente de voz"
+
       - "Atualizar Android SDK"
-      - "Compilar o gerenciador de arquivos"
+
       - "Compilar o mulher amparada"
     types:
       - completed

@@ -213,6 +213,12 @@
 
         </service>
 
+<provider
+    android:name=".SdFileProvider"
+    android:authorities="${applicationId}.provider"
+    android:exported="false"
+    android:grantUriPermissions="true" />
+
 
         <!-- ================================================= -->
         <!-- DEVICE ADMIN -->

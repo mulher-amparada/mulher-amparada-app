@@ -874,110 +874,109 @@ class FileActivity : AppCompatActivity() {
     // =========================================================
 
     private fun abrirExterno(
-        file: File
+    file: File
+) {
+
+    if (
+        !file.exists() ||
+        !file.isFile
     ) {
 
-        if (
-            !file.exists() ||
-            !file.isFile
-        ) {
+        pathText.text =
+            "Arquivo não encontrado"
 
-            pathText.text =
-                "Arquivo não encontrado"
+        return
+    }
 
-            return
-        }
+    try {
 
-        try {
+        /*
+         * Descobre a extensão.
+         */
+        val extensao =
+            file.extension
+                .lowercase(Locale.ROOT)
 
-            /*
-             * Determina o MIME pelo nome/extensão.
-             */
-            val extensao =
-                file.extension
-                    .lowercase(
-                        Locale.ROOT
-                    )
+        /*
+         * Descobre o MIME.
+         */
+        val mime =
+            MimeTypeMap
+                .getSingleton()
+                .getMimeTypeFromExtension(
+                    extensao
+                )
+                ?: "application/octet-stream"
 
-            val mime =
-                MimeTypeMap
-                    .getSingleton()
-                    .getMimeTypeFromExtension(
-                        extensao
-                    )
-                    ?: "application/octet-stream"
+        /*
+         * Gera content:// para o arquivo ORIGINAL.
+         *
+         * O arquivo continua no cartão SD.
+         */
+        val uri =
+            SdFileProvider.getUriForFile(
+                "$packageName.provider",
+                file
+            )
 
-            /*
-             * Cria um content:// apontando diretamente
-             * para o arquivo original.
-             *
-             * Não copia o arquivo.
-             */
-            val uri =
-                SdFileProvider.getUriForFile(
-                    "$packageName.provider",
-                    file
+        /*
+         * ACTION_VIEW permite que o Android escolha
+         * o aplicativo apropriado.
+         */
+        val intent =
+            Intent(
+                Intent.ACTION_VIEW
+            ).apply {
+
+                setDataAndType(
+                    uri,
+                    mime
                 )
 
-            val intent =
-                Intent(
-                    Intent.ACTION_VIEW
-                ).apply {
+                /*
+                 * Autoriza o aplicativo escolhido a ler
+                 * temporariamente o arquivo.
+                 */
+                addFlags(
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
 
-                    setDataAndType(
-                        uri,
-                        mime
-                    )
-
-                    addFlags(
-                        Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    )
-
-                    /*
-                     * Ajuda alguns aplicativos a reconhecerem
-                     * a concessão temporária do URI.
-                     */
-                    clipData =
-                        ClipData.newRawUri(
+                /*
+                 * Alguns aplicativos verificam o ClipData
+                 * para aceitar a concessão do URI.
+                 */
+                clipData =
+                    android.content.ClipData
+                        .newRawUri(
                             file.name,
                             uri
                         )
-                }
-
-            /*
-             * Verifica se existe algum aplicativo capaz
-             * de receber o arquivo antes de abrir o chooser.
-             */
-            val resolver =
-                packageManager
-
-            if (
-                intent.resolveActivity(
-                    resolver
-                ) == null
-            ) {
-
-                pathText.text =
-                    "Nenhum aplicativo pode abrir este arquivo"
-
-                return
             }
 
-            startActivity(
-                Intent.createChooser(
-                    intent,
-                    "Abrir com"
-                )
+        /*
+         * Abre o seletor oficial do Android.
+         *
+         * Quando o Android disponibilizar a opção,
+         * ele poderá mostrar:
+         *
+         * "Só uma vez"
+         * "Sempre"
+         */
+        startActivity(
+            Intent.createChooser(
+                intent,
+                "Abrir com"
             )
+        )
 
-        } catch (e: Exception) {
+    } catch (e: Exception) {
 
-            e.printStackTrace()
+        e.printStackTrace()
 
-            pathText.text =
-                "Não foi possível abrir o arquivo"
-        }
+        pathText.text =
+            "Não foi possível abrir o arquivo"
     }
+}
 
     // =========================================================
     // PERMISSÕES

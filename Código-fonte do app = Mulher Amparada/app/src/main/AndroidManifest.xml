@@ -213,6 +213,10 @@
 
         </service>
 
+<!-- ================================================= -->
+        <!-- SD FILE PROVIDER -->
+        <!-- ================================================= -->
+
 <provider
     android:name=".SdFileProvider"
     android:authorities="${applicationId}.provider"

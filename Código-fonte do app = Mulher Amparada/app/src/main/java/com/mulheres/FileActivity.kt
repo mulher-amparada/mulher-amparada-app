@@ -1,5 +1,6 @@
 package com.mulheres
 
+import android.provider.Settings
 import android.content.ClipData
 import android.content.Intent
 import android.graphics.Color

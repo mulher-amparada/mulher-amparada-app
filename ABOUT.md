@@ -79,3 +79,125 @@ Muita gente nao sabe, mas na epoca de colonização, elas foram violentadas, tem
 Então se vocês homens querem ser homens de verdade, parem de machucar elas, viram cidadãos e lutem ao lado delas, não contra elas
 
 E para todas: ELAS PRECISAM SER CONSIDERADAS COMO PESSOAS, NÃO SÓ MAIS UMA ESTATÍSTICA!
+
+----
+
+# Às Meretíssimas Juízas, Desembargadoras, Advogadas e outras profissionais do Direito
+
+Olha, os homens costumam humilhar vocês e tentar, sabe?, intimidar e desvalorizar seu trabalho só por vocês serem mulheres.
+
+Mas eu, como homem de 15 anos, lhes digo:
+
+> **Vocês têm todo o meu respeito. Eu tiro o meu chapéu para vocês.**
+
+Cara, enfrentar a violência contra a mulher nos tribunais não é fácil.
+
+Pelo lado da lei, é difícil aplicar a lei quando não sabemos o que fazer porque não temos provas concretas.
+
+E tenho certeza que chegam até vocês casos extremamente violentos, né? Casos pesados. Então, para mim, vocês representam uma força emocional extremamente determinada — maior que **10¹⁰⁰**.
+
+Os homens — os covardes, né? Porque homem de verdade não faz isso — tentam humilhar vocês, mas, na verdade, eles têm medo de vocês, da força de vocês.
+
+Vocês não sabem, mas eu tenho **temor de respeito extremo por vocês**.
+
+## Já vou adiantando:
+
+### Vocês **NÃO SÃO**:
+
+- Loucas;
+- Histéricas;
+- Desequilibradas;
+- Ou emocionais demais.
+
+### **VOCÊS SÃO:**
+
+- Fortes;
+- Guerreiras;
+- Determinadas em *level* elevado;
+- E, principalmente, **mulheres!**
+
+Não tenham vergonha de serem mulheres. Vocês carregam um gênero que representa força e determinação — ou o que vocês decidirem que seja!
+
+É difícil mesmo quando um homem corta a sua fala, né?
+
+Mas sabe o que é?
+
+Isso demonstra **o caráter deles, não o de vocês**.
+
+Isso demonstra que vocês são mais inteligentes que eles!
+
+E, sinceramente, juízas, eu posso dizer com tranquilidade que, quando estudei filosofia, eu digo:
+
+> Quem tenta explicar algo óbvio que vocês já sabem, na filosofia, é ignorante — isto é, não sabe — e é o oposto de filósofo.
+
+E outra: temos que reconhecer que não sabemos de nada ainda e que ainda estamos aprendendo.
+
+Eu digo com tranquilidade que vocês **não precisam das explicações deles!**
+
+## E NÃO DUVIDEM DE SI MESMAS
+
+Quando alguém fizer *gaslighting jurídico*, **vocês são mais fortes que isso!**
+
+E lembrem-se:
+
+> **O valor de uma mulher excede o de muitos rubis; o de um homem machista é menos do que a escória da terra.**
+
+----
+
+# Mulheres na Pedagogia
+
+Primeiro, é... saibam que existia aquela ideia de que o homem busca o sustento e a mulher faz o serviço de casa.
+
+Agora, essa ideia está sendo quebrada — porque **a mulher tem que decidir por si mesma o que ela quer!**
+
+Deve ser **beeeeeem difícil** trabalhar. Vamos combinar que é praticamente o dia todo, desde a madrugada até a noite, e isso se repete.
+
+Talvez a escola não seja 6x1, mas, na prática, vocês trabalham em um nível de desgaste muito grande.
+
+Eu entendo vocês. Eu sei como seria um trabalho desgastante. Talvez não seja igual, mas passei muito tempo trabalhando para criar este projeto, horas nas minhas atividades e muitas outras horas em lições de escola — e é nível **modo inferno desbloqueado**, sabe?
+
+E eu sei, sim, que vocês trabalham em uma profissão que é exercida **antes, durante a carga horária e depois dela!**
+
+Mas sabe por que tudo isso?
+
+**Por culpa dos políticos do Brasil!**
+
+Vocês precisam e merecem descanso.
+
+Então, se não puderem descansar fisicamente, descansem na certeza de que esse trabalho está sendo notado por alguém:
+
+**Por mim.**
+
+---
+
+E é verdade: nas escolas tem bituca de cigarro no banheiro, às vezes não tem papel higiênico — mas eu oro a Deus para que tenham absorventes disponíveis nos banheiros das meninas! — e é toda hora banheiro sendo entupido.
+
+Nas escolas já teve goteira na lâmpada e, em muitas delas, existem paredes sujas.
+
+Mas eu tenho que dizer que parte de tudo isso também é causada pelos alunos que não cuidam da escola.
+
+E outra parte gigantesca é o governo querendo voto e deixando de cuidar das vidas das pessoas!
+
+---
+
+E, com certeza, vocês são as primeiras a perceberem violências.
+
+Muitas de vocês são mães, então conseguem perceber determinadas situações rapidamente — até comigo!
+
+E essa é uma das partes mais bonitas da alma de vocês.
+
+É uma parte do coração de Deus: **esse instinto de mãe!**
+
+---
+
+E é verdade: é difícil ensinar sobre cidadania e conduta.
+
+Mas, sinceramente:
+
+**Isso é um peso que vocês não deveriam carregar sozinhas.**
+
+São os pais que deveriam carregar a responsabilidade de ensinar como seus filhos devem se comportar e ter uma boa conduta.
+
+Afinal, **a educação básica também vem de casa.**
+
+----

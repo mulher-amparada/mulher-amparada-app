@@ -358,6 +358,8 @@ O SHA-256 permite verificar se os bytes de um arquivo correspondem ao conteúdo 
 **Meus arquivos:**
 Dentro do app, ele só visualiza as pastas e ao clicar em um arquivo, abre um seletor de apps para executar/visualizar ele
 
+e ele tem um botão que troca entre armazenamento interno e cartão sd e pendrive
+
 ----
 
 **Desligar o celular:**

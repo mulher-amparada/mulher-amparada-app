@@ -22,6 +22,10 @@ Antes de conceder essa permissão, leia atentamente as informações exibidas pe
 
 > ⚠️E também quando for clicar em qualquer botão de apagar no app, ele pode apagar TODOS OS CONTEÚDOS criptografados de TODO O APP, então CUIDADO!
 
+## Sobre o site que está hospedado pelo github pages:
+
+Na primeira página do site, tem 3 botoes que ligam para (180, 190 e 192), e usam o tel: do navegador para abrir o telefone nativo do celular com esses números já discados de acordo com o que você escolheu!
+
 ## Sobre como o aplicativo é compilado:
 
 e os apps são compilados com o workflow, gera o código sha-256 e o zip com o app, envia para a release pela tag correspondente, e atualiza o link das páginas de download, e o tamanho do apk dessas páginas!
@@ -645,59 +649,59 @@ e bem verdade que ele está ficando deprecated, mas também é verdade que a par
 
 E o webview do app está assim!:
 
-        val settings =  
-            webView.settings  
+```kt
 
-            webView.overScrollMode = View.OVER_SCROLL_NEVER  
+val settings = webView.settings  
 
-  webView.isVerticalScrollBarEnabled =
-    false
+webView.overScrollMode = View.OVER_SCROLL_NEVER  
+
+  webView.isVerticalScrollBarEnabled = false
 
 webView.isFocusable = true
 webView.isFocusableInTouchMode = true
 webView.setOnFocusChangeListener { _, _ -> }
 
-webView.isHorizontalScrollBarEnabled =
-    false
+webView.isHorizontalScrollBarEnabled = false
 
-webView.scrollBarStyle =
-    View.SCROLLBARS_INSIDE_OVERLAY
+webView.scrollBarStyle = View.SCROLLBARS_INSIDE_OVERLAY
 
-settings.javaScriptEnabled =
-    true
+settings.javaScriptEnabled = true
 
-settings.mediaPlaybackRequiresUserGesture =
-    false
+settings.mediaPlaybackRequiresUserGesture = false
 
-settings.domStorageEnabled =
-    true
+settings.domStorageEnabled = true
 
-settings.setGeolocationEnabled(
-    true
-)
+settings.setGeolocationEnabled( true )
 
 // Necessário para o seu uso com android_asset
-settings.allowFileAccess =
-    true
+settings.allowFileAccess = true
 
 // Não é necessário para as páginas locais
-settings.allowContentAccess =
-    false
+settings.allowContentAccess = false
 
 // Evita que páginas file:// acessem outros file://
-settings.allowFileAccessFromFileURLs =
-    false
+settings.allowFileAccessFromFileURLs = false
 
 // Evita que páginas file:// acessem outras origens
-settings.allowUniversalAccessFromFileURLs =
-    false
+settings.allowUniversalAccessFromFileURLs = false
 
 // Reduz abertura automática de novas janelas
-settings.javaScriptCanOpenWindowsAutomatically =
-    false
+settings.javaScriptCanOpenWindowsAutomatically = false
 
-settings.setSupportMultipleWindows(
-    false
-)
+settings.setSupportMultipleWindows( false )
+
+Porque na FileActivity, o botão para trocar o tipo de armazenamento é unificado em um só?
+
+Porque a mulher na hora do pânico, pode acabar esquecendo algo, então esse sistema obriga ela a trocar de armazenamento 1, 2, e 3 para chegar no 1 de novo, e acaba fazendo uma vistoria...
+
+```
+
+Porque na FileActivity, o botão para trocar o tipo de armazenamento é unificado em um só?
+
+Porque a mulher na hora do pânico, pode acabar esquecendo algo, então esse sistema obriga ela a trocar de armazenamento 1, 2, e 3 para chegar no 1 de novo, e acaba fazendo uma vistoria...
+
+é tipo assim:
+
+armazenamento interno, para trocar para cartao sd, clica no botão e troca o icone, mas aí para voltar atrás, tem passar pelo cartao sd e pelo pendrive para só então voltar para o armazenamento interno
 
 ----

@@ -1,0 +1,690 @@
+name: Compilar o app do Mulher Amparada
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+  workflow_run:
+    workflows:
+      - "Atualizar Android SDK"
+      - "Deploy Jekyll with GitHub Pages dependencies preinstalled"
+    types:
+      - completed
+
+
+permissions:
+  contents: write
+
+
+concurrency:
+  group: atualizar-main
+  cancel-in-progress: false
+
+
+jobs:
+
+  build:
+
+    name: Compilar APK Kotlin
+
+    runs-on: ubuntu-latest
+
+
+    env:
+      App1_DIR: "Código-fonte do app = Mulher Amparada"
+      RELEASE_TAG: "app"
+      RELEASE_APK_NAME: "app-debug-assinado.apk"
+
+
+    steps:
+
+      # =========================================================
+      # BAIXAR CÓDIGO
+      # =========================================================
+
+      - name: Baixar código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+
+      # =========================================================
+      # VERIFICAR PROJETO
+      # =========================================================
+
+      - name: Verificar projeto
+        run: |
+
+          if [ ! -d "$App1_DIR" ]; then
+            echo "ERRO: pasta não encontrada:"
+            echo "$App1_DIR"
+            exit 1
+          fi
+
+          if [ ! -f "$App1_DIR/gradlew" ]; then
+            echo "ERRO: gradlew não encontrado."
+            exit 1
+          fi
+
+
+      # =========================================================
+      # JAVA
+      # =========================================================
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+
+
+      # =========================================================
+      # PERMISSÃO DO GRADLE
+      # =========================================================
+
+      - name: Dar permissão ao Gradle
+        working-directory: ${{ env.App1_DIR }}
+        run: chmod +x gradlew
+
+
+      # =========================================================
+      # COMPILAR APK
+      # =========================================================
+
+      - name: Compilar APK
+        working-directory: ${{ env.App1_DIR }}
+        run: ./gradlew assembleDebug --stacktrace
+
+
+      # =========================================================
+      # LOCALIZAR APK
+      # =========================================================
+
+      - name: Localizar APK
+        id: apk
+        working-directory: ${{ env.App1_DIR }}
+        run: |
+
+          APK=$(find app/build/outputs/apk/debug \
+            -type f \
+            -name "*.apk" \
+            | head -n 1)
+
+          if [ -z "$APK" ]; then
+            echo "ERRO: APK não encontrado."
+            exit 1
+          fi
+
+          echo "APK encontrado:"
+          echo "$APK"
+
+          echo "apk=$APK" >> "$GITHUB_OUTPUT"
+
+
+      # =========================================================
+      # REUTILIZAR KEYSTORE E ASSINAR APK
+      # =========================================================
+
+      - name: Assinar APK
+        working-directory: ${{ env.App1_DIR }}
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "ERRO: KEYSTORE_BASE64 não configurado."
+            exit 1
+          fi
+
+          if [ -z "$KEYSTORE_PASSWORD" ]; then
+            echo "ERRO: KEYSTORE_PASSWORD não configurado."
+            exit 1
+          fi
+
+          if [ -z "$KEY_ALIAS" ]; then
+            echo "ERRO: KEY_ALIAS não configurado."
+            exit 1
+          fi
+
+          if [ -z "$KEY_PASSWORD" ]; then
+            echo "ERRO: KEY_PASSWORD não configurado."
+            exit 1
+          fi
+
+
+          echo "$KEYSTORE_BASE64" | base64 --decode > mulher-amparada.jks
+
+
+          APK="${{ steps.apk.outputs.apk }}"
+
+
+          if [ ! -f "$APK" ]; then
+            echo "ERRO: APK não encontrado:"
+            echo "$APK"
+            rm -f mulher-amparada.jks
+            exit 1
+          fi
+
+
+          APKSIGNER=$(find "$ANDROID_HOME/build-tools" \
+            -type f \
+            -name "apksigner" \
+            | sort -V \
+            | tail -n 1)
+
+
+          if [ -z "$APKSIGNER" ]; then
+            echo "ERRO: apksigner não encontrado."
+            rm -f mulher-amparada.jks
+            exit 1
+          fi
+
+
+          echo "Assinando APK..."
+
+
+          "$APKSIGNER" sign \
+            --ks mulher-amparada.jks \
+            --ks-key-alias "$KEY_ALIAS" \
+            --ks-pass "pass:$KEYSTORE_PASSWORD" \
+            --key-pass "pass:$KEY_PASSWORD" \
+            --out app-assinado.apk \
+            "$APK"
+
+
+          mv app-assinado.apk "$APK"
+
+
+          echo "Verificando assinatura..."
+
+
+          "$APKSIGNER" verify \
+            --verbose \
+            "$APK"
+
+
+          rm -f mulher-amparada.jks
+
+
+          echo "APK assinado e verificado com sucesso."
+
+
+      # =========================================================
+      # PREPARAR APK DA RELEASE
+      # =========================================================
+
+      - name: Preparar APK da Release
+        working-directory: ${{ env.App1_DIR }}
+        run: |
+
+          APK="${{ steps.apk.outputs.apk }}"
+
+          cp "$APK" "$GITHUB_WORKSPACE/$RELEASE_APK_NAME"
+
+          echo "APK preparado:"
+          echo "$GITHUB_WORKSPACE/$RELEASE_APK_NAME"
+
+
+      # =========================================================
+      # ARTIFACT APK ASSINADO
+      # =========================================================
+
+      - name: Enviar APK como artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: APK-Kotlin-Assinado
+          path: "${{ github.workspace }}/${{ env.RELEASE_APK_NAME }}"
+          if-no-files-found: error
+
+
+      # =========================================================
+      # CALCULAR TAMANHO REAL DO APK
+      #
+      # O cálculo acontece DEPOIS da assinatura.
+      # =========================================================
+
+      - name: Calcular tamanho real do APK
+        id: apk_size
+        run: |
+
+          APK="$GITHUB_WORKSPACE/$RELEASE_APK_NAME"
+
+
+          if [ ! -f "$APK" ]; then
+            echo "ERRO: APK não encontrado."
+            exit 1
+          fi
+
+
+          BYTES=$(stat -c%s "$APK")
+
+
+          SIZE_MB=$(awk "BEGIN {
+            printf \"%.2f\", $BYTES / 1024 / 1024
+          }")
+
+
+          SIZE_FORMATADO="${SIZE_MB} MB"
+
+
+          echo "========================================"
+          echo "TAMANHO REAL DO APK ASSINADO"
+          echo "========================================"
+          echo "Arquivo: $APK"
+          echo "Bytes: $BYTES"
+          echo "MB: $SIZE_FORMATADO"
+          echo "========================================"
+
+
+          echo "bytes=$BYTES" >> "$GITHUB_OUTPUT"
+          echo "size_mb=$SIZE_MB" >> "$GITHUB_OUTPUT"
+          echo "size_formatado=$SIZE_FORMATADO" >> "$GITHUB_OUTPUT"
+
+
+      # =========================================================
+      # SHA-256
+      # =========================================================
+
+      - name: Calcular SHA-256
+        id: sha256
+        run: |
+
+          APK="$GITHUB_WORKSPACE/$RELEASE_APK_NAME"
+
+
+          if [ ! -f "$APK" ]; then
+            echo "ERRO: APK não encontrado."
+            exit 1
+          fi
+
+
+          SHA256=$(sha256sum "$APK" | awk '{print $1}')
+
+
+          echo "SHA-256:"
+          echo "$SHA256"
+
+
+          echo "sha256=$SHA256" >> "$GITHUB_OUTPUT"
+
+
+      # =========================================================
+      # ATUALIZAR APK NO MAIN
+      #
+      # O App1.zip existente não é criado nem alterado.
+      # =========================================================
+
+      - name: Atualizar APK no main
+        run: |
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+
+          TARGET="${App1_DIR}/app-release.apk"
+
+
+          cp "$GITHUB_WORKSPACE/$RELEASE_APK_NAME" "$TARGET"
+
+
+          git fetch origin main
+
+
+          git reset --hard origin/main
+
+
+          cp "$GITHUB_WORKSPACE/$RELEASE_APK_NAME" "$TARGET"
+
+
+          git add "$TARGET"
+
+
+          if git diff --cached --quiet; then
+
+            echo "APK já está atualizado."
+
+          else
+
+            git commit -m "Atualizar APK assinado [skip ci]"
+
+            git push origin main
+
+          fi
+
+
+      # =========================================================
+      # VERIFICAR RELEASE
+      # =========================================================
+
+      - name: Verificar Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+
+          if ! gh release view "$RELEASE_TAG" \
+            --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+
+            echo "ERRO: A Release '$RELEASE_TAG' não existe."
+            exit 1
+          fi
+
+
+          echo "Release encontrada."
+
+
+      # =========================================================
+      # EXCLUIR APK ANTIGO DA RELEASE
+      # =========================================================
+
+      - name: Excluir APK antigo da Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+
+          ASSET_ID=$(gh api \
+            "repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG" \
+            --jq ".assets[] | select(.name == \"$RELEASE_APK_NAME\") | .id" \
+            | head -n 1)
+
+
+          if [ -n "$ASSET_ID" ]; then
+
+            echo "Excluindo APK antigo..."
+
+            gh api \
+              --method DELETE \
+              "repos/$GITHUB_REPOSITORY/releases/assets/$ASSET_ID"
+
+            echo "APK antigo excluído."
+
+          else
+
+            echo "Nenhum APK antigo encontrado."
+
+          fi
+
+
+      # =========================================================
+      # ENVIAR APK PARA RELEASE
+      # =========================================================
+
+      - name: Enviar APK para a Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+
+          gh release upload \
+            "$RELEASE_TAG" \
+            "$GITHUB_WORKSPACE/$RELEASE_APK_NAME" \
+            --repo "$GITHUB_REPOSITORY"
+
+
+          echo "Novo APK enviado para a Release."
+
+
+      # =========================================================
+      # ATUALIZAR SHA-256 DA RELEASE
+      # =========================================================
+
+      - name: Atualizar SHA-256 da Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+
+          SHA256="${{ steps.sha256.outputs.sha256 }}"
+
+
+          gh release view "$RELEASE_TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --json body \
+            --jq '.body' > release-notes.txt
+
+
+          if grep -q "SHA-256 gerado nesta compilação:" release-notes.txt; then
+
+            sed -i \
+              "s/^SHA-256 gerado nesta compilação:.*$/SHA-256 gerado nesta compilação: $SHA256/" \
+              release-notes.txt
+
+          else
+
+            printf '\n\nSHA-256 gerado nesta compilação: %s\n' "$SHA256" \
+              >> release-notes.txt
+
+          fi
+
+
+          gh release edit "$RELEASE_TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --notes-file release-notes.txt
+
+
+          echo "SHA-256 atualizado:"
+          echo "$SHA256"
+
+
+      # =========================================================
+      # ATUALIZAR download.html
+      #
+      # Agora o link aponta DIRETAMENTE para o APK.
+      # =========================================================
+
+      - name: Atualizar link e tamanho do APK no download.html
+        working-directory: ${{ github.workspace }}
+        run: |
+
+          ASSET_URL="https://github.com/$GITHUB_REPOSITORY/releases/download/$RELEASE_TAG/$RELEASE_APK_NAME"
+
+
+          APK_SIZE="${{ steps.apk_size.outputs.size_formatado }}"
+
+
+          echo "Novo link:"
+          echo "$ASSET_URL"
+
+
+          echo "Tamanho REAL do APK:"
+          echo "$APK_SIZE"
+
+
+          python3 - <<PY
+
+          from pathlib import Path
+          import re
+
+
+          arquivo = Path("download.html")
+
+
+          if not arquivo.exists():
+              raise SystemExit(
+                  "ERRO: download.html não encontrado."
+              )
+
+
+          texto = arquivo.read_text(
+              encoding="utf-8"
+          )
+
+
+          novo_url = """$ASSET_URL"""
+          novo_tamanho = """$APK_SIZE"""
+
+
+          # =====================================================
+          # ATUALIZAR LINK
+          # =====================================================
+
+          padrao_url = (
+              r'(<a\s+class="download"\s+href=")'
+              r'[^"]*'
+              r'(")'
+          )
+
+
+          texto, quantidade_url = re.subn(
+              padrao_url,
+              lambda m:
+                  m.group(1)
+                  + novo_url
+                  + m.group(2),
+              texto,
+              count=1
+          )
+
+
+          if quantidade_url == 0:
+              raise SystemExit(
+                  'ERRO: <a class="download" ...> não encontrado.'
+              )
+
+
+          # =====================================================
+          # ATUALIZAR TAMANHO DO RESUMO
+          # =====================================================
+
+          padrao_resumo = (
+              r'(<strong\s+class="summary-value">\s*)'
+              r'(?:[0-9]+(?:[.,][0-9]+)?\s*MB)'
+              r'(\s*</strong>)'
+          )
+
+
+          texto, quantidade_resumo = re.subn(
+              padrao_resumo,
+              lambda m:
+                  m.group(1)
+                  + novo_tamanho
+                  + m.group(2),
+              texto,
+              count=1
+          )
+
+
+          if quantidade_resumo == 0:
+              raise SystemExit(
+                  "ERRO: tamanho no resumo não encontrado."
+              )
+
+
+          # =====================================================
+          # ATUALIZAR TAMANHO DAS INFORMAÇÕES
+          # =====================================================
+
+          padrao_detalhe = (
+              r'(<strong\s+class="detail-value">\s*)'
+              r'≈?\s*[0-9]+(?:[.,][0-9]+)?\s*MB'
+              r'(\s*</strong>)'
+          )
+
+
+          texto, quantidade_detalhe = re.subn(
+              padrao_detalhe,
+              lambda m:
+                  m.group(1)
+                  + "≈ "
+                  + novo_tamanho
+                  + m.group(2),
+              texto,
+              count=1
+          )
+
+
+          if quantidade_detalhe == 0:
+              raise SystemExit(
+                  "ERRO: tamanho nas informações do app não encontrado."
+              )
+
+
+          # =====================================================
+          # SALVAR
+          # =====================================================
+
+          arquivo.write_text(
+              texto,
+              encoding="utf-8"
+          )
+
+
+          print("download.html atualizado.")
+          print("Novo link:", novo_url)
+          print("Novo tamanho REAL do APK:", novo_tamanho)
+
+          PY
+
+
+      # =========================================================
+      # ATUALIZAR download.html NO MAIN
+      # =========================================================
+
+      - name: Enviar download.html atualizado para o main
+        run: |
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+
+          git add download.html
+
+
+          if git diff --cached --quiet; then
+
+            echo "download.html já está atualizado."
+
+          else
+
+            git commit -m "Atualizar link e tamanho do APK [skip ci]"
+
+            git push origin main
+
+          fi
+
+
+      # =========================================================
+      # RESUMO
+      # =========================================================
+
+      - name: Mostrar resumo
+        run: |
+
+          echo "## Compilação concluída" >> "$GITHUB_STEP_SUMMARY"
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          echo "**Release:** $RELEASE_TAG" \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo "**Branch:** main" \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo "**Release recebe:** $RELEASE_APK_NAME" \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          echo "**Tamanho REAL do APK assinado:** ${{ steps.apk_size.outputs.size_formatado }}" \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo "**Tamanho em bytes:** ${{ steps.apk_size.outputs.bytes }}" \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          echo "**SHA-256 do APK:**" \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo '```' \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo "${{ steps.sha256.outputs.sha256 }}" \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo '```' \
+            >> "$GITHUB_STEP_SUMMARY"

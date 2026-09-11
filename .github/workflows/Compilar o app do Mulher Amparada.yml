@@ -1,8 +1,4 @@
-- name: Compilar o app do Mulher Amparada
-  uses: actions/checkout@v4
-  with:
-    fetch-depth: 1
-    fetch-tags: false
+name: Compilar o app do Mulher Amparada
 
 on:
   push:
@@ -36,14 +32,20 @@ jobs:
 
     runs-on: ubuntu-latest
 
-
     env:
       App1_DIR: "Código-fonte do app = Mulher Amparada"
       RELEASE_TAG: "app"
       RELEASE_APK_NAME: "app-debug-assinado.apk"
 
-
     steps:
+
+      - name: Baixar o repositório
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          fetch-tags: false
+
+      # Seus próximos steps continuam aqui...
 
       # =========================================================
       # BAIXAR CÓDIGO

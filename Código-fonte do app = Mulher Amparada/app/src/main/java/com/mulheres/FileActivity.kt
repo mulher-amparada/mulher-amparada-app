@@ -1,14 +1,13 @@
 package com.mulheres
 
 import android.animation.ValueAnimator
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.RectF
-import android.graphics.drawable.Drawable
-import android.view.animation.DecelerateInterpolator
 import android.content.ClipData
 import android.content.Intent
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.Paint
+import android.graphics.PixelFormat
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
@@ -19,6 +18,7 @@ import android.provider.Settings
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.animation.DecelerateInterpolator
 import android.webkit.MimeTypeMap
 import android.widget.ImageButton
 import android.widget.TextView
@@ -35,99 +35,42 @@ import java.io.File
 import java.text.Collator
 import java.util.Locale
 
-private class StorageCircleDrawable : Drawable() {
+private class StorageCircleDrawable(
+    private var color: Int
+) : Drawable() {
 
     private val paint = Paint(
         Paint.ANTI_ALIAS_FLAG
     )
 
-    private val rect =
-        RectF()
+    init {
+        paint.style = Paint.Style.FILL
+    }
 
-    var rotation = 0f
-        set(value) {
-            field = value
-            invalidateSelf()
-        }
+    fun setCircleColor(
+        newColor: Int
+    ) {
+        color = newColor
+        invalidateSelf()
+    }
 
     override fun draw(
         canvas: Canvas
     ) {
+        paint.color = color
 
-        val size =
+        val radius =
             minOf(
                 bounds.width(),
                 bounds.height()
-            ).toFloat()
+            ) / 2f
 
-        val left =
-            bounds.centerX() - size / 2f
-
-        val top =
-            bounds.centerY() - size / 2f
-
-        rect.set(
-            left,
-            top,
-            left + size,
-            top + size
-        )
-
-        val colors =
-            intArrayOf(
-                Color.rgb(124, 77, 255), // Roxo
-                Color.rgb(255, 152, 0),  // Laranja
-                Color.rgb(244, 67, 54)   // Vermelho
-            )
-
-        val sweep =
-            120f
-
-        canvas.save()
-
-        canvas.rotate(
-            rotation,
+        canvas.drawCircle(
             bounds.centerX().toFloat(),
-            bounds.centerY().toFloat()
-        )
-
-        paint.style =
-            Paint.Style.FILL
-
-        paint.color =
-            colors[0]
-
-        canvas.drawArc(
-            rect,
-            -90f,
-            sweep,
-            true,
+            bounds.centerY().toFloat(),
+            radius,
             paint
         )
-
-        paint.color =
-            colors[1]
-
-        canvas.drawArc(
-            rect,
-            30f,
-            sweep,
-            true,
-            paint
-        )
-
-        paint.color =
-            colors[2]
-
-        canvas.drawArc(
-            rect,
-            150f,
-            sweep,
-            true,
-            paint
-        )
-
-        canvas.restore()
     }
 
     override fun setAlpha(
@@ -138,7 +81,7 @@ private class StorageCircleDrawable : Drawable() {
     }
 
     override fun setColorFilter(
-        colorFilter: android.graphics.ColorFilter?
+        colorFilter: ColorFilter?
     ) {
         paint.colorFilter = colorFilter
         invalidateSelf()
@@ -146,7 +89,7 @@ private class StorageCircleDrawable : Drawable() {
 
     @Deprecated("Drawable API")
     override fun getOpacity(): Int =
-        android.graphics.PixelFormat.TRANSLUCENT
+        PixelFormat.TRANSLUCENT
 }
 
 class FileActivity : AppCompatActivity() {
@@ -171,8 +114,7 @@ class FileActivity : AppCompatActivity() {
         USB
     }
     
-    private lateinit var storageCircle:
-    StorageCircleDrawable
+    private lateinit var storageCircle: StorageCircleDrawable
     private lateinit var adapter: FolderAdapter
     private lateinit var recycler: RecyclerView
     private lateinit var pathText: TextView
@@ -339,7 +281,9 @@ pathText.overScrollMode = View.OVER_SCROLL_NEVER
     private fun configurarArmazenamento() {
 
     storageCircle =
-        StorageCircleDrawable()
+        StorageCircleDrawable(
+            Color.rgb(124, 77, 255)
+        )
 
     storageButton.background =
         storageCircle
@@ -362,6 +306,10 @@ pathText.overScrollMode = View.OVER_SCROLL_NEVER
 
         0 -> {
 
+            storageCircle.setCircleColor(
+                Color.rgb(124, 77, 255)
+            )
+
             storageButton.setImageResource(
                 R.drawable.ic_storage_internal
             )
@@ -372,6 +320,10 @@ pathText.overScrollMode = View.OVER_SCROLL_NEVER
 
         1 -> {
 
+            storageCircle.setCircleColor(
+                Color.rgb(255, 152, 0)
+            )
+
             storageButton.setImageResource(
                 R.drawable.ic_sd_card
             )
@@ -381,6 +333,10 @@ pathText.overScrollMode = View.OVER_SCROLL_NEVER
         }
 
         2 -> {
+
+            storageCircle.setCircleColor(
+                Color.rgb(244, 67, 54)
+            )
 
             storageButton.setImageResource(
                 R.drawable.ic_usb
@@ -398,45 +354,30 @@ pathText.overScrollMode = View.OVER_SCROLL_NEVER
 
 private fun animarBotaoArmazenamento() {
 
-    val inicio =
-        storageCircle.rotation
-
-    val fim =
-        inicio + 120f
-
-    val animator =
-        ValueAnimator.ofFloat(
-            inicio,
-            fim
-        )
-
-    animator.duration =
-        360L
-
-    animator.interpolator =
-        DecelerateInterpolator()
-
-    animator.addUpdateListener {
-
-        storageCircle.rotation =
-            it.animatedValue as Float
-    }
+    storageButton.animate()
+        .cancel()
 
     storageButton.animate()
+        .rotationBy(120f)
         .scaleX(0.86f)
         .scaleY(0.86f)
-        .setDuration(100L)
+        .setDuration(180L)
+        .setInterpolator(
+            DecelerateInterpolator()
+        )
         .withEndAction {
 
             storageButton.animate()
+                .rotationBy(60f)
                 .scaleX(1f)
                 .scaleY(1f)
-                .setDuration(220L)
+                .setDuration(180L)
+                .setInterpolator(
+                    DecelerateInterpolator()
+                )
                 .start()
         }
         .start()
-
-    animator.start()
 }
 
     private fun alternarArmazenamento() {

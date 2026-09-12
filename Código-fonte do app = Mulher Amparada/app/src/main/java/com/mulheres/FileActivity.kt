@@ -1,6 +1,7 @@
 package com.mulheres
 
 import android.graphics.drawable.Drawable
+import android.animation.ValueAnimator
 import android.content.ClipData
 import android.content.Intent
 import android.graphics.Canvas
@@ -38,24 +39,54 @@ private class StorageCircleDrawable(
     private var color: Int
 ) : Drawable() {
 
-    private val paint = Paint(
-        Paint.ANTI_ALIAS_FLAG
-    )
+    private val paint =
+        Paint(Paint.ANTI_ALIAS_FLAG)
+
+    private var animation:
+        ValueAnimator? = null
 
     init {
-        paint.style = Paint.Style.FILL
+        paint.style =
+            Paint.Style.FILL
     }
 
-    fun setCircleColor(
-        newColor: Int
+    fun animateToColor(
+        newColor: Int,
+        duration: Long
     ) {
-        color = newColor
-        invalidateSelf()
+
+        animation?.cancel()
+
+        if (color == newColor) {
+            return
+        }
+
+        val oldColor = color
+
+        animation =
+            ValueAnimator.ofArgb(
+                oldColor,
+                newColor
+            ).apply {
+
+                this.duration = duration
+
+                addUpdateListener {
+
+                    color =
+                        it.animatedValue as Int
+
+                    invalidateSelf()
+                }
+
+                start()
+            }
     }
 
     override fun draw(
         canvas: Canvas
     ) {
+
         paint.color = color
 
         val radius =
@@ -276,53 +307,58 @@ pathText.overScrollMode = View.OVER_SCROLL_NEVER
     // =========================================================
     // ARMAZENAMENTO
     // =========================================================
-
 private fun atualizarBotaoArmazenamento() {
+
+    val novaCor: Int
+    val novoIcone: Int
+    val descricao: String
 
     when (modoArmazenamento) {
 
         0 -> {
-
-            storageCircle.setCircleColor(
-                Color.rgb(124, 77, 255)
-            )
-
-            storageButton.setImageResource(
-                R.drawable.ic_storage_internal
-            )
-
-            storageButton.contentDescription =
+            novaCor = Color.rgb(124, 77, 255)
+            novoIcone = R.drawable.ic_storage_internal
+            descricao =
                 "Armazenamento interno. Toque para trocar"
         }
 
         1 -> {
-
-            storageCircle.setCircleColor(
-                Color.rgb(255, 152, 0)
-            )
-
-            storageButton.setImageResource(
-                R.drawable.ic_sd_card
-            )
-
-            storageButton.contentDescription =
+            novaCor = Color.rgb(255, 152, 0)
+            novoIcone = R.drawable.ic_sd_card
+            descricao =
                 "Cartão SD. Toque para trocar"
         }
 
-        2 -> {
-
-            storageCircle.setCircleColor(
-                Color.rgb(244, 67, 54)
-            )
-
-            storageButton.setImageResource(
-                R.drawable.ic_usb
-            )
-
-            storageButton.contentDescription =
+        else -> {
+            novaCor = Color.rgb(244, 67, 54)
+            novoIcone = R.drawable.ic_usb
+            descricao =
                 "Pendrive USB OTG. Toque para trocar"
         }
     }
+
+    // Fade do ícone
+    storageButton.animate()
+        .alpha(0f)
+        .setDuration(120)
+        .withEndAction {
+
+            storageButton.setImageResource(novoIcone)
+
+            storageButton.animate()
+                .alpha(1f)
+                .setDuration(180)
+                .start()
+        }
+        .start()
+
+    // Fade da cor do círculo
+    storageCircle.animateToColor(
+        novaCor,
+        300L
+    )
+
+    storageButton.contentDescription = descricao
 }
 
     private fun configurarArmazenamento() {

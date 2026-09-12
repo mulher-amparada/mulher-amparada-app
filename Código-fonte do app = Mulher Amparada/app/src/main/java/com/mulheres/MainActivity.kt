@@ -1168,10 +1168,7 @@ fun iniciarBiometria() {
                     "Desbloquear a área protegida"
                 )
                 .setDescription(
-                    "🌸 Apenas a usuária cadastrada pode acessar este local\n\n" +
-                    "Use a sua impressão digital\n" +
-                    "Use seu registro facial\n" +
-                    "Use seu PIN, padrão ou senha"
+                    "🌸 Apenas a usuária cadastrada pode acessar este local"
                 )
                 .setAllowedAuthenticators(
                     authenticators

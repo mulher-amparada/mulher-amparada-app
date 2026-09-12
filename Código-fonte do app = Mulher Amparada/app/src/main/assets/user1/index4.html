@@ -697,11 +697,19 @@ white-space:
         #ffffffc7;
 
     background:
-        var(--accent);
+        color-mix(
+            in srgb,
+            var(--accent) 10%,
+            #000000
+        );
 
     border:
         1px solid
-        #ffffff20;
+        color-mix(
+            in srgb,
+            var(--accent) 20%,
+            #ffffff08
+        );
 
     border-radius:
         14px;

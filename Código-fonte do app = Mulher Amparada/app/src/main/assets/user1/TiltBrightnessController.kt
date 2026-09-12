@@ -23,36 +23,30 @@ class TiltBrightnessController(
     private val gravitySensor: Sensor? =
         sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)
 
-fun start(): Boolean {
-
-    if (enabled) return true
-
-    // Verifica se o aparelho possui sensor de gravidade
-    if (gravitySensor == null) {
-        return false
+    fun start(): Boolean {
+    if (enabled) {
+        return true
     }
 
-    // Tenta registrar o sensor
+    val sensor = gravitySensor ?: return false
+
     val registrado = sensorManager.registerListener(
         this,
-        gravitySensor,
+        sensor,
         SensorManager.SENSOR_DELAY_NORMAL
     )
 
-    // Se o sistema não conseguiu registrar, não ativa
     if (!registrado) {
         return false
     }
 
     enabled = true
     isDark = false
-
-    originalBrightness =
-        activity.window.attributes.screenBrightness
+    originalBrightness = activity.window.attributes.screenBrightness
 
     return true
 }
-    
+
     fun setDarkBrightness(value: Float) {
         // Mantido somente para compatibilidade
         // com o JavaScript.

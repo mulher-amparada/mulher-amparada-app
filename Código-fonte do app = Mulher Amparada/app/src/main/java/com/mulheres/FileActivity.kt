@@ -1,7 +1,6 @@
 package com.mulheres
 
-
-
+import android.graphics.drawable.Drawable
 import android.content.ClipData
 import android.content.Intent
 import android.graphics.Canvas
@@ -19,7 +18,6 @@ import android.provider.Settings
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-
 import android.webkit.MimeTypeMap
 import android.widget.ImageButton
 import android.widget.TextView
@@ -279,6 +277,54 @@ pathText.overScrollMode = View.OVER_SCROLL_NEVER
     // ARMAZENAMENTO
     // =========================================================
 
+private fun atualizarBotaoArmazenamento() {
+
+    when (modoArmazenamento) {
+
+        0 -> {
+
+            storageCircle.setCircleColor(
+                Color.rgb(124, 77, 255)
+            )
+
+            storageButton.setImageResource(
+                R.drawable.ic_storage_internal
+            )
+
+            storageButton.contentDescription =
+                "Armazenamento interno. Toque para trocar"
+        }
+
+        1 -> {
+
+            storageCircle.setCircleColor(
+                Color.rgb(255, 152, 0)
+            )
+
+            storageButton.setImageResource(
+                R.drawable.ic_sd_card
+            )
+
+            storageButton.contentDescription =
+                "Cartão SD. Toque para trocar"
+        }
+
+        2 -> {
+
+            storageCircle.setCircleColor(
+                Color.rgb(244, 67, 54)
+            )
+
+            storageButton.setImageResource(
+                R.drawable.ic_usb
+            )
+
+            storageButton.contentDescription =
+                "Pendrive USB OTG. Toque para trocar"
+        }
+    }
+}
+
     private fun configurarArmazenamento() {
 
     storageCircle =
@@ -294,9 +340,7 @@ pathText.overScrollMode = View.OVER_SCROLL_NEVER
         alternarArmazenamento()
     }
 
-    atualizarBotaoArmazenamento(
-        animar = false
-    )
+    atualizarBotaoArmazenamento()
 }
 
 
@@ -1144,9 +1188,7 @@ pathText.overScrollMode = View.OVER_SCROLL_NEVER
 
         usbRoot = null
 
-        atualizarBotaoArmazenamento(
-    animar = false
-)
+        atualizarBotaoArmazenamento()
 
         abrirInternoAtual()
     }

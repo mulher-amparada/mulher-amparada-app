@@ -1,6 +1,7 @@
 package com.mulheres
 
-import android.animation.ValueAnimator
+
+
 import android.content.ClipData
 import android.content.Intent
 import android.graphics.Canvas
@@ -9,7 +10,6 @@ import android.graphics.ColorFilter
 import android.graphics.Paint
 import android.graphics.PixelFormat
 import android.graphics.Typeface
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -19,11 +19,10 @@ import android.provider.Settings
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.view.animation.DecelerateInterpolator
+
 import android.webkit.MimeTypeMap
 import android.widget.ImageButton
 import android.widget.TextView
-
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -33,7 +32,6 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import java.io.File
 import java.text.Collator
 import java.util.Locale
@@ -301,87 +299,6 @@ pathText.overScrollMode = View.OVER_SCROLL_NEVER
     )
 }
 
-    private fun atualizarBotaoArmazenamento(
-    animar: Boolean = true
-) {
-
-    when (modoArmazenamento) {
-
-        0 -> {
-
-            storageCircle.setCircleColor(
-                Color.rgb(124, 77, 255)
-            )
-
-            storageButton.setImageResource(
-                R.drawable.ic_storage_internal
-            )
-
-            storageButton.contentDescription =
-                "Armazenamento interno. Toque para trocar"
-        }
-
-        1 -> {
-
-            storageCircle.setCircleColor(
-                Color.rgb(255, 152, 0)
-            )
-
-            storageButton.setImageResource(
-                R.drawable.ic_sd_card
-            )
-
-            storageButton.contentDescription =
-                "Cartão SD. Toque para trocar"
-        }
-
-        2 -> {
-
-            storageCircle.setCircleColor(
-                Color.rgb(244, 67, 54)
-            )
-
-            storageButton.setImageResource(
-                R.drawable.ic_usb
-            )
-
-            storageButton.contentDescription =
-                "Pendrive USB OTG. Toque para trocar"
-        }
-    }
-
-    if (animar) {
-        animarBotaoArmazenamento()
-    }
-}
-
-private fun animarBotaoArmazenamento() {
-
-    storageButton.animate()
-        .cancel()
-
-    storageButton.animate()
-        .rotationBy(120f)
-        .scaleX(0.86f)
-        .scaleY(0.86f)
-        .setDuration(180L)
-        .setInterpolator(
-            DecelerateInterpolator()
-        )
-        .withEndAction {
-
-            storageButton.animate()
-                .rotationBy(60f)
-                .scaleX(1f)
-                .scaleY(1f)
-                .setDuration(180L)
-                .setInterpolator(
-                    DecelerateInterpolator()
-                )
-                .start()
-        }
-        .start()
-}
 
     private fun alternarArmazenamento() {
 

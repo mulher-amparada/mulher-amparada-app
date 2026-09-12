@@ -1,5 +1,6 @@
 package com.mulheres
 
+import android.widget.Toast
 import android.Manifest
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
@@ -410,14 +411,14 @@ private fun abrirBiometria() {
                 // =================================================
 
                 override fun onAuthenticationFailed() {
+    super.onAuthenticationFailed()
 
-                    super.onAuthenticationFailed()
-Toast.makeText(
-                            this@MainActivity,
-                            "Biometria não reconhecida, abrindo a área protegida.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                }
+    Toast.makeText(
+        this@OrdemActivity,
+        "Biometria não reconhecida, abrindo a área protegida.",
+        Toast.LENGTH_SHORT
+    ).show()
+}
 
 
                 // =================================================

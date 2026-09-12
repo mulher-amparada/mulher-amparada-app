@@ -58,7 +58,22 @@ object Comandos {
 
 texto.contains("baixar registro de chamada") ||
 texto.contains("baixe o registro de chamada") ||
-texto.contains("baixar registro das chamadas") -> {
+texto.contains("baixar registro das chamadas") ||
+texto.contains("baixar histórico de chamadas") ||
+texto.contains("baixe o histórico de chamadas") ||
+texto.contains("baixar histórico das chamadas") ||
+texto.contains("salvar registro de chamada") ||
+texto.contains("salvar histórico de chamadas") ||
+texto.contains("exportar registro de chamada") ||
+texto.contains("exportar histórico de chamadas") ||
+texto.contains("exporte o registro de chamada") ||
+texto.contains("exporte o histórico de chamadas") ||
+texto.contains("gerar registro de chamada") ||
+texto.contains("gerar histórico de chamadas") ||
+texto.contains("gerar arquivo das chamadas") ||
+texto.contains("criar registro de chamadas") ||
+texto.contains("criar arquivo de chamadas") ||
+texto.contains("criar relatório de chamadas") -> {
 
     baixarRegistroChamada(contexto)
 

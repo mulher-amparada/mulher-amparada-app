@@ -114,8 +114,6 @@
             android:ellipsize="none"
 
             android:scrollHorizontally="true"
-            android:horizontalScrollBarEnabled="false"
-            android:verticalScrollBarEnabled="false"
 
             android:overScrollMode="never"
 
@@ -200,7 +198,7 @@
 
 
     <!-- ========================================================= -->
-    <!-- LISTA                                                     -->
+    <!-- LISTA DE ARQUIVOS                                        -->
     <!-- ========================================================= -->
 
     <androidx.recyclerview.widget.RecyclerView

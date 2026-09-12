@@ -136,6 +136,17 @@ class FileActivity : AppCompatActivity() {
                 R.id.pathText
             )
 
+pathText.isSingleLine = true
+pathText.maxLines = 1
+pathText.ellipsize = null
+
+pathText.setHorizontallyScrolling(true)
+
+pathText.isHorizontalScrollBarEnabled = false
+pathText.isVerticalScrollBarEnabled = false
+
+pathText.overScrollMode = View.OVER_SCROLL_NEVER
+
         itemCount =
             findViewById(
                 R.id.itemCount

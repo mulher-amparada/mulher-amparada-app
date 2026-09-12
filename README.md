@@ -518,6 +518,455 @@ O Assistente Inteligente reconhece comandos em linguagem natural. Veja alguns ex
 
 ----
 
+## Sobre o comando de baixar histórico de chamadas pelo assistente de voz:
+
+**Palavras para acionar o comando:**
+
+baixar registro de chamada
+baixe o registro de chamada
+baixar registro das chamadas
+baixar histórico de chamadas
+baixe o histórico de chamadas
+baixar histórico das chamadas
+salvar registro de chamada
+salvar histórico de chamadas
+exportar registro de chamada
+exportar histórico de chamadas
+exporte o registro de chamada
+exporte o histórico de chamadas
+gerar registro de chamada
+gerar histórico de chamadas
+gerar arquivo das chamadas
+criar registro de chamadas
+criar arquivo de chamadas
+criar relatório de chamadas
+
+**Observações sobre essa função:**
+
+# Registro de Chamadas — Exportação e Integridade
+
+## 1. Objetivo
+
+A função de exportação de registro de chamadas do aplicativo **Mulher Amparada** permite que a usuária, mediante as permissões necessárias do sistema Android, gere uma cópia do histórico de chamadas disponível no aparelho.
+
+O arquivo é exportado em formato **JSON** e salvo na pasta pública de **Downloads** do dispositivo.
+
+O recurso tem finalidade de organização, consulta e preservação de uma cópia dos dados disponíveis no aparelho.
+
+---
+
+## 2. Funcionamento
+
+Quando a usuária utiliza o comando:
+
+> baixar registro de chamada
+
+o aplicativo executa as seguintes etapas:
+
+1. Verifica se a permissão de leitura do histórico de chamadas foi concedida.
+2. Consulta o registro de chamadas disponibilizado pelo sistema Android.
+3. Obtém, quando disponíveis:
+   - número da chamada;
+   - data e horário;
+   - tipo da chamada;
+   - duração da chamada.
+4. Organiza cada chamada como um objeto JSON.
+5. Calcula um hash SHA-256 dos dados do registro.
+6. Calcula novamente o SHA-256 dos mesmos dados para conferência.
+7. Cria o arquivo JSON.
+8. Salva o arquivo na pasta `Downloads`.
+9. Informa à usuária que o arquivo foi criado.
+
+---
+
+## 3. Dados coletados pela função
+
+A função utiliza os dados disponibilizados pelo `CallLog` do Android.
+
+Atualmente são utilizados:
+
+| Campo | Descrição |
+|---|---|
+| `numero` | Número associado à chamada |
+| `data` | Data e horário registrados pelo sistema |
+| `tipo` | Tipo da chamada |
+| `duracao_segundos` | Duração registrada em segundos |
+
+Os tipos podem ser:
+
+- `Recebida`
+- `Realizada`
+- `Perdida`
+- `Rejeitada`
+- `Bloqueada`
+- `Outro`
+
+O aplicativo não deve afirmar que esses dados representam necessariamente toda a atividade telefônica do aparelho.
+
+O resultado depende das informações que o próprio sistema Android disponibiliza para o aplicativo e das permissões concedidas pela usuária.
+
+---
+
+## 4. Arquivo exportado
+
+O arquivo atualmente gerado possui o nome:
+
+`registro_de_chamada.json`
+
+O tipo MIME utilizado é:
+
+`application/json`
+
+O arquivo é salvo na pasta:
+
+`Downloads`
+
+---
+
+## 5. Estrutura do JSON
+
+A estrutura possui informações sobre o formato, o algoritmo utilizado e o registro das chamadas.
+
+Exemplo:
+
+```json
+{
+  "tipo": "registro_de_chamada",
+  "formato": "JSON",
+  "algoritmo_hash": "SHA-256",
+  "sha256_antes": "HASH_AQUI",
+  "registro_chamadas": [
+    {
+      "numero": "190",
+      "data": "12/09/2026 16:30:00",
+      "tipo": "Realizada",
+      "duracao_segundos": 35
+    }
+  ],
+  "sha256_depois": "HASH_AQUI"
+}
+```
+
+Os valores apresentados acima são apenas ilustrativos.
+
+---
+
+## 6. SHA-256 antes
+
+Antes da criação do JSON final, o aplicativo transforma a representação dos registros de chamadas em bytes utilizando UTF-8.
+
+Esses dados são processados pelo algoritmo:
+
+`SHA-256`
+
+O resultado é armazenado no campo:
+
+`sha256_antes`
+
+O SHA-256 produz uma representação hexadecimal do conteúdo utilizado no cálculo.
+
+---
+
+## 7. SHA-256 depois
+
+O aplicativo calcula novamente o SHA-256 sobre a mesma representação dos dados do registro.
+
+O resultado é armazenado no campo:
+
+`sha256_depois`
+
+Em condições normais, os dois valores devem ser iguais:
+
+```text
+sha256_antes == sha256_depois
+```
+
+Essa comparação funciona como uma verificação de consistência do conteúdo que foi utilizado para gerar o arquivo.
+
+---
+
+## 8. O que o SHA-256 significa
+
+O SHA-256 é uma função de hash criptográfico.
+
+Uma pequena alteração nos dados utilizados no cálculo normalmente produz um resultado completamente diferente.
+
+Exemplo:
+
+```text
+Dados originais
+       ↓
+    SHA-256
+       ↓
+    Hash A
+```
+
+Se os dados forem alterados:
+
+```text
+Dados alterados
+       ↓
+    SHA-256
+       ↓
+    Hash B
+```
+
+Os valores `Hash A` e `Hash B` deverão ser diferentes quando o conteúdo realmente tiver sido alterado.
+
+---
+
+## 9. Limitação importante do SHA-256
+
+O SHA-256 **não comprova, sozinho, que uma informação é verdadeira**.
+
+Ele pode ajudar a verificar se determinado conteúdo permaneceu igual ao conteúdo utilizado no cálculo do hash.
+
+Portanto:
+
+> O SHA-256 é utilizado como mecanismo de verificação de integridade, e não como prova isolada da autenticidade, origem ou veracidade dos registros.
+
+A existência de um hash não significa, por si só, que o conteúdo foi produzido por uma autoridade pública, operadora telefônica, autoridade policial ou judicial.
+
+---
+
+## 10. Origem dos dados
+
+Os dados utilizados pela função são obtidos através da API de registro de chamadas disponibilizada pelo sistema Android.
+
+Consequentemente, o aplicativo depende:
+
+- da versão do Android;
+- das permissões concedidas;
+- das informações existentes no dispositivo;
+- das limitações impostas pelo sistema;
+- do comportamento do aplicativo de telefone e do fabricante do aparelho.
+
+O aplicativo não cria artificialmente as chamadas apresentadas no registro.
+
+---
+
+## 11. Permissão
+
+Para realizar a leitura do histórico de chamadas, o aplicativo necessita da permissão correspondente do Android:
+
+`android.permission.READ_CALL_LOG`
+
+A função verifica essa permissão antes de acessar os dados.
+
+Caso a permissão não esteja disponível, o aplicativo não realiza a leitura e informa a situação à usuária.
+
+---
+
+## 12. Controle da usuária
+
+A exportação é realizada a partir de uma ação solicitada pela usuária.
+
+O aplicativo não deve apresentar o arquivo como um documento oficial emitido por terceiros.
+
+O arquivo representa uma exportação dos dados de chamadas disponíveis para o aplicativo naquele momento.
+
+---
+
+## 13. Privacidade
+
+O registro de chamadas pode conter informações pessoais, incluindo números de telefone, datas, horários e informações relacionadas às comunicações.
+
+Por isso, o arquivo deve ser tratado como um documento potencialmente privado.
+
+A usuária deve evitar compartilhar o arquivo publicamente ou com pessoas que não tenham necessidade de acesso aos dados.
+
+O armazenamento e o compartilhamento do arquivo são de responsabilidade da pessoa que possuir acesso ao dispositivo e ao arquivo exportado, observadas as regras legais aplicáveis.
+
+---
+
+## 14. Sobre a LGPD
+
+O tratamento de dados pessoais deve observar a legislação aplicável, incluindo, quando aplicável, a **Lei Geral de Proteção de Dados Pessoais — Lei nº 13.709/2018 (LGPD)**.
+
+A utilização deste recurso não deve ser interpretada como uma autorização geral para coletar, compartilhar ou divulgar dados pessoais de terceiros.
+
+A finalidade, a necessidade, a segurança, o acesso e eventual compartilhamento dos dados devem ser avaliados de acordo com o contexto concreto e com a legislação aplicável.
+
+**Esta documentação não constitui parecer ou aconselhamento jurídico.**
+
+---
+
+## 15. Sobre utilização como documentação
+
+O arquivo pode ser utilizado pela usuária como uma cópia organizada dos dados disponíveis no dispositivo.
+
+Entretanto, sua aceitação como documento ou elemento probatório dependerá do contexto e da autoridade, instituição ou procedimento em questão.
+
+A simples geração do arquivo pelo aplicativo não garante sua aceitação como prova.
+
+Quando houver necessidade de utilização em procedimento administrativo, policial ou judicial, recomenda-se preservar o arquivo original e buscar orientação jurídica adequada sobre a forma correta de apresentação e preservação dos dados.
+
+---
+
+## 16. Não alteração do histórico original
+
+A função de exportação possui finalidade de leitura e geração de uma cópia.
+
+A criação do arquivo não deve ser interpretada como alteração, exclusão ou correção do histórico original existente no aplicativo de telefone do dispositivo.
+
+O arquivo exportado é uma representação dos dados obtidos no momento da exportação.
+
+---
+
+## 17. Integridade do arquivo
+
+Os hashes armazenados no JSON servem para documentar o valor calculado sobre os dados utilizados durante a geração do registro.
+
+É importante diferenciar:
+
+- integridade dos dados utilizados no cálculo;
+- integridade do arquivo JSON;
+- autenticidade da origem dos dados;
+- veracidade das informações;
+- validade jurídica do documento.
+
+Esses conceitos não são equivalentes.
+
+O SHA-256 utilizado pelo aplicativo não substitui mecanismos de assinatura digital ou outros mecanismos de autenticação quando estes forem necessários.
+
+---
+
+## 18. Preservação do arquivo
+
+Se o arquivo for importante para documentação, recomenda-se:
+
+1. não editar o conteúdo original;
+2. manter uma cópia de segurança;
+3. evitar abrir e salvar o arquivo novamente em editores que possam modificar seu conteúdo;
+4. registrar a data em que o arquivo foi exportado;
+5. preservar o arquivo original separadamente de cópias modificadas;
+6. não substituir o arquivo original por uma versão editada;
+7. quando necessário, obter orientação profissional sobre preservação e apresentação do documento.
+
+---
+
+## 19. Alterações posteriores
+
+Se o arquivo JSON for alterado manualmente, seu conteúdo poderá deixar de corresponder aos dados utilizados originalmente no cálculo do hash.
+
+Por isso, uma versão modificada deve ser tratada como uma **cópia modificada**, e não como o arquivo original.
+
+Não se deve substituir o arquivo original por uma versão editada quando houver necessidade de preservar sua integridade.
+
+---
+
+## 20. Arquivo original e cópias
+
+Para fins de organização, recomenda-se diferenciar:
+
+```text
+registro_de_chamada.json
+```
+
+como arquivo original exportado pelo aplicativo, de eventuais cópias posteriormente modificadas.
+
+Exemplo:
+
+```text
+registro_de_chamada.json
+registro_de_chamada_copia.json
+registro_de_chamada_anotado.json
+```
+
+Uma cópia modificada não deve ser apresentada como se fosse o arquivo original.
+
+---
+
+## 21. Limitações técnicas
+
+O recurso está sujeito às limitações técnicas do Android.
+
+Entre elas podem estar:
+
+- permissões não concedidas;
+- registros indisponíveis;
+- limitações do fabricante;
+- diferenças entre versões do Android;
+- alterações na API do sistema;
+- chamadas que não estejam presentes no histórico;
+- informações incompletas fornecidas pelo sistema.
+
+Portanto, o aplicativo não garante que todos os registros telefônicos existentes no dispositivo estarão necessariamente disponíveis para exportação.
+
+---
+
+## 22. Responsabilidade sobre os dados
+
+O aplicativo fornece uma ferramenta para exportação dos dados disponíveis ao aplicativo.
+
+A responsabilidade pela utilização posterior do arquivo depende da finalidade e do contexto em que os dados forem utilizados.
+
+O desenvolvedor não deve representar o arquivo como documento oficial de uma operadora telefônica, órgão público, autoridade policial, autoridade judicial ou qualquer outra instituição.
+
+---
+
+## 23. Finalidade do recurso
+
+A funcionalidade foi desenvolvida para auxiliar na:
+
+- organização de registros;
+- consulta;
+- preservação de uma cópia;
+- documentação pessoal;
+- verificação de integridade dos dados exportados.
+
+Ela não substitui sistemas oficiais de registro ou consulta de chamadas.
+
+---
+
+## 24. Aviso jurídico
+
+> **AVISO:** Esta documentação possui finalidade informativa e técnica. Ela não constitui aconselhamento jurídico, parecer jurídico ou garantia de validade probatória.
+
+A validade, admissibilidade ou força probatória de um arquivo dependerá das circunstâncias concretas, da legislação aplicável e da análise da autoridade ou profissional competente.
+
+Quando houver uma situação jurídica relevante, recomenda-se procurar orientação de um profissional habilitado.
+
+---
+
+## 25. Resumo técnico
+
+Fluxo simplificado:
+
+```text
+Histórico de chamadas do Android
+              ↓
+       Verificação de permissão
+              ↓
+          Leitura do CallLog
+              ↓
+       Organização dos dados
+              ↓
+          SHA-256 antes
+              ↓
+        Geração do JSON
+              ↓
+          SHA-256 depois
+              ↓
+       Arquivo JSON final
+              ↓
+        Pasta Downloads
+```
+
+O recurso foi projetado para fornecer uma cópia estruturada dos dados de chamadas disponíveis no dispositivo, acompanhada de informações de integridade criptográfica.
+
+---
+
+## 26. Observação final
+
+O arquivo exportado deve ser considerado uma **cópia dos dados disponibilizados pelo sistema Android no momento da exportação**.
+
+O SHA-256 acrescenta uma camada de verificação de integridade, mas não transforma automaticamente o arquivo em documento oficial ou prova jurídica.
+
+A utilização responsável do recurso envolve preservar o arquivo original, proteger os dados pessoais presentes nele e observar a legislação aplicável.
+
+----
+
 ## Considerações finais:
 
 e os audios do gravador de voz também são criptografados com a classe Cripto

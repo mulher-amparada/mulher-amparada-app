@@ -1,5 +1,11 @@
 package com.mulheres
 
+import android.animation.ValueAnimator
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.RectF
+import android.graphics.drawable.Drawable
+import android.view.animation.DecelerateInterpolator
 import android.content.ClipData
 import android.content.Intent
 import android.graphics.Color
@@ -29,6 +35,120 @@ import java.io.File
 import java.text.Collator
 import java.util.Locale
 
+private class StorageCircleDrawable : Drawable() {
+
+    private val paint = Paint(
+        Paint.ANTI_ALIAS_FLAG
+    )
+
+    private val rect =
+        RectF()
+
+    var rotation = 0f
+        set(value) {
+            field = value
+            invalidateSelf()
+        }
+
+    override fun draw(
+        canvas: Canvas
+    ) {
+
+        val size =
+            minOf(
+                bounds.width(),
+                bounds.height()
+            ).toFloat()
+
+        val left =
+            bounds.centerX() - size / 2f
+
+        val top =
+            bounds.centerY() - size / 2f
+
+        rect.set(
+            left,
+            top,
+            left + size,
+            top + size
+        )
+
+        val colors =
+            intArrayOf(
+                Color.rgb(124, 77, 255), // Roxo
+                Color.rgb(255, 152, 0),  // Laranja
+                Color.rgb(244, 67, 54)   // Vermelho
+            )
+
+        val sweep =
+            120f
+
+        canvas.save()
+
+        canvas.rotate(
+            rotation,
+            bounds.centerX().toFloat(),
+            bounds.centerY().toFloat()
+        )
+
+        paint.style =
+            Paint.Style.FILL
+
+        paint.color =
+            colors[0]
+
+        canvas.drawArc(
+            rect,
+            -90f,
+            sweep,
+            true,
+            paint
+        )
+
+        paint.color =
+            colors[1]
+
+        canvas.drawArc(
+            rect,
+            30f,
+            sweep,
+            true,
+            paint
+        )
+
+        paint.color =
+            colors[2]
+
+        canvas.drawArc(
+            rect,
+            150f,
+            sweep,
+            true,
+            paint
+        )
+
+        canvas.restore()
+    }
+
+    override fun setAlpha(
+        alpha: Int
+    ) {
+        paint.alpha = alpha
+        invalidateSelf()
+    }
+
+    override fun setColorFilter(
+        colorFilter: android.graphics.ColorFilter?
+    ) {
+        paint.colorFilter = colorFilter
+        invalidateSelf()
+    }
+
+    @Deprecated("Drawable API")
+    override fun getOpacity(): Int =
+        android.graphics.PixelFormat.TRANSLUCENT
+}
+
 class FileActivity : AppCompatActivity() {
 
     companion object {
@@ -50,7 +170,9 @@ class FileActivity : AppCompatActivity() {
         SD,
         USB
     }
-
+    
+    private lateinit var storageCircle:
+    StorageCircleDrawable
     private lateinit var adapter: FolderAdapter
     private lateinit var recycler: RecyclerView
     private lateinit var pathText: TextView
@@ -140,7 +262,7 @@ pathText.isSingleLine = true
 pathText.maxLines = 1
 pathText.ellipsize = null
 
-pathText.setHorizontallyScrolling(true)
+
 
 pathText.isHorizontalScrollBarEnabled = false
 pathText.isVerticalScrollBarEnabled = false
@@ -216,49 +338,106 @@ pathText.overScrollMode = View.OVER_SCROLL_NEVER
 
     private fun configurarArmazenamento() {
 
-        storageButton.setOnClickListener {
+    storageCircle =
+        StorageCircleDrawable()
 
-            alternarArmazenamento()
-        }
+    storageButton.background =
+        storageCircle
 
-        atualizarBotaoArmazenamento()
+    storageButton.setOnClickListener {
+
+        alternarArmazenamento()
     }
 
-    private fun atualizarBotaoArmazenamento() {
+    atualizarBotaoArmazenamento(
+        animar = false
+    )
+}
 
-        when (modoArmazenamento) {
+    private fun atualizarBotaoArmazenamento(
+    animar: Boolean = true
+) {
 
-            0 -> {
+    when (modoArmazenamento) {
 
-                storageButton.setImageResource(
-                    R.drawable.ic_storage_internal
-                )
+        0 -> {
 
-                storageButton.contentDescription =
-                    "Armazenamento interno. Toque para trocar"
-            }
+            storageButton.setImageResource(
+                R.drawable.ic_storage_internal
+            )
 
-            1 -> {
+            storageButton.contentDescription =
+                "Armazenamento interno. Toque para trocar"
+        }
 
-                storageButton.setImageResource(
-                    R.drawable.ic_sd_card
-                )
+        1 -> {
 
-                storageButton.contentDescription =
-                    "Cartão SD. Toque para trocar"
-            }
+            storageButton.setImageResource(
+                R.drawable.ic_sd_card
+            )
 
-            2 -> {
+            storageButton.contentDescription =
+                "Cartão SD. Toque para trocar"
+        }
 
-                storageButton.setImageResource(
-                    R.drawable.ic_usb
-                )
+        2 -> {
 
-                storageButton.contentDescription =
-                    "Pendrive USB OTG. Toque para trocar"
-            }
+            storageButton.setImageResource(
+                R.drawable.ic_usb
+            )
+
+            storageButton.contentDescription =
+                "Pendrive USB OTG. Toque para trocar"
         }
     }
+
+    if (animar) {
+        animarBotaoArmazenamento()
+    }
+}
+
+private fun animarBotaoArmazenamento() {
+
+    val inicio =
+        storageCircle.rotation
+
+    val fim =
+        inicio + 120f
+
+    val animator =
+        ValueAnimator.ofFloat(
+            inicio,
+            fim
+        )
+
+    animator.duration =
+        360L
+
+    animator.interpolator =
+        DecelerateInterpolator()
+
+    animator.addUpdateListener {
+
+        storageCircle.rotation =
+            it.animatedValue as Float
+    }
+
+    storageButton.animate()
+        .scaleX(0.86f)
+        .scaleY(0.86f)
+        .setDuration(100L)
+        .withEndAction {
+
+            storageButton.animate()
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(220L)
+                .start()
+        }
+        .start()
+
+    animator.start()
+}
 
     private fun alternarArmazenamento() {
 
@@ -1104,7 +1283,9 @@ pathText.overScrollMode = View.OVER_SCROLL_NEVER
 
         usbRoot = null
 
-        atualizarBotaoArmazenamento()
+        atualizarBotaoArmazenamento(
+    animar = false
+)
 
         abrirInternoAtual()
     }

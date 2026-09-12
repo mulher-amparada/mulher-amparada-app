@@ -893,26 +893,49 @@ body.fade-out {
 }
 
 
-
-
 /* =========================================================
    BOLINHA
-   NÃO SE MOVE
+   APARECE E DEPOIS FICA FLUTUANDO
 ========================================================= */
+
+@keyframes aparecerEFlutuar {
+
+    0% {
+        opacity: 0;
+
+        transform:
+            translateX(-50%)
+            scale(1);
+    }
+
+    50% {
+        opacity: 1;
+
+        transform:
+            translateX(-50%)
+            scale(1.1);
+    }
+
+    100% {
+        opacity: 1;
+
+        transform:
+            translateX(-50%)
+            scale(1);
+    }
+
+}
 
 .toggle {
 
-    position: fixed;
+    position: absolute;
 
     z-index: 10000;
 
-    left: 50%;
+    margin-left: 77.5%;
 
-    bottom:
-        calc(
-            28px +
-            env(safe-area-inset-bottom)
-        );
+    top:
+        7.5%;
 
     width: 62px;
 
@@ -950,8 +973,12 @@ body.fade-out {
 
     overflow: hidden;
 
-}
+    animation:
+        aparecerEFlutuar
+        1.5s
+        ease both;
 
+}
 
 /* =========================================================
    PARTE INTERNA
@@ -974,30 +1001,26 @@ body.fade-out {
     background:
         #222;
 
-    border:
-        1px solid
-        rgba(255,255,255,.07);
+    
 
 }
 
+.toggle-inner img {
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+}
 
 /* =========================================================
    SVG
 ========================================================= */
-
-.toggle svg {
-
-    width: 25px;
-
-    height: 25px;
-
-    flex-shrink: 0;
-
-    display: block;
-
-    fill: #fff;
-
-}
 
 
 /* =========================================================
@@ -1282,6 +1305,9 @@ padding-top: 15px;
 
 margin-top: 1.5%;
 margin-bottom: 1.5%;
+
+gap: 20px;
+
 }
 
 .btn:active {
@@ -1570,7 +1596,7 @@ margin-bottom: 1.5%;
 <header class="hero">
 
     <h1>
-        Mulher Amparada
+        Mulher <br> Amparada
     </h1>
 
     <p>
@@ -1761,23 +1787,11 @@ margin-bottom: 1.5%;
     aria-label="Voltar para o hub"
 >
 
-    <span class="toggle-inner">
+    <div class="toggle-inner">
 
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24px"
-            viewBox="0 -960 960 960"
-            width="24px"
-            fill="#e3e3e3"
-        >
+<img src="user1.png">
 
-            <path
-                d="M240-200h120v-200q0-17 11.5-28.5T400-440h160q17 0 28.5 11.5T600-400v200h120v-360L480-740 240-560v360Zm-80 0v-360q0-19 8.5-36t23.5-28l240-180q21-16 48-16t48 16l240 180q15 11 23.5 28t8.5 36v360q0 33-23.5 56.5T720-120H560q-17 0-28.5-11.5T520-160v-200h-80v200q0 17-11.5 28.5T400-120H240q-33 0-56.5-23.5T160-200Zm320-270Z"
-            />
-
-        </svg>
-
-    </span>
+    </div>
 
 </button>
 
@@ -2115,241 +2129,7 @@ window.addEventListener(
     }
 );
 
-function quebrarTexto(texto, limite) {
 
-    if (
-        typeof texto !== "string" ||
-        texto.trim() === ""
-    ) {
-        return "";
-    }
-
-
-    /*
-     * Garante um limite válido.
-     */
-
-    limite = Number(limite);
-
-    if (
-        !Number.isFinite(limite) ||
-        limite < 1
-    ) {
-        limite = 14;
-    }
-
-
-    /*
-     * Normaliza espaços.
-     */
-
-    texto = texto
-        .replace(/\s+/g, " ")
-        .trim();
-
-
-    /*
-     * Se já estiver dentro do limite,
-     * não precisa quebrar.
-     */
-
-    if (texto.length <= limite) {
-        return texto;
-    }
-
-
-    const palavras = texto.split(" ");
-
-    const linhas = [];
-
-    let linhaAtual = "";
-
-
-    palavras.forEach(function (palavra) {
-
-        /*
-         * Se a palavra for maior que 14 caracteres,
-         * ela será dividida em blocos.
-         */
-
-        if (palavra.length > limite) {
-
-            /*
-             * Primeiro salva a linha atual.
-             */
-
-            if (linhaAtual) {
-
-                linhas.push(linhaAtual);
-
-                linhaAtual = "";
-
-            }
-
-
-            /*
-             * Divide a palavra em blocos de 14.
-             */
-
-            while (palavra.length > limite) {
-
-                linhas.push(
-                    palavra.substring(0, limite)
-                );
-
-                palavra =
-                    palavra.substring(limite);
-
-            }
-
-
-            /*
-             * Guarda o restante para tentar
-             * juntar com a próxima palavra.
-             */
-
-            if (palavra.length > 0) {
-
-                linhaAtual = palavra;
-
-            }
-
-            return;
-
-        }
-
-
-        /*
-         * Tenta colocar a palavra na linha atual.
-         */
-
-        const tentativa = linhaAtual
-            ? linhaAtual + " " + palavra
-            : palavra;
-
-
-        /*
-         * Se couber, mantém na mesma linha.
-         */
-
-        if (tentativa.length <= limite) {
-
-            linhaAtual = tentativa;
-
-        } else {
-
-            /*
-             * Caso não caiba, fecha a linha anterior.
-             */
-
-            if (linhaAtual) {
-
-                linhas.push(linhaAtual);
-
-            }
-
-            /*
-             * Começa uma nova linha.
-             */
-
-            linhaAtual = palavra;
-
-        }
-
-    });
-
-
-    /*
-     * Adiciona a última linha.
-     */
-
-    if (linhaAtual) {
-
-        linhas.push(linhaAtual);
-
-    }
-
-
-    return linhas.join("<br>");
-
-}
-
-
-/* =========================================================
-   APLICAÇÃO DA QUEBRA DE TEXTO
-========================================================= */
-
-function aplicarQuebraDeTexto() {
-
-    const elementos =
-        document.querySelectorAll(
-            ".btn .title, .btn .description"
-        );
-
-
-    elementos.forEach(function (elemento) {
-
-        /*
-         * Pega somente o texto.
-         * Isso evita depender do HTML interno.
-         */
-
-        const texto =
-            elemento.textContent
-                .replace(/\s+/g, " ")
-                .trim();
-
-
-        /*
-         * Ignora elementos vazios.
-         */
-
-        if (!texto) {
-            return;
-        }
-
-
-        /*
-         * Até 14 caracteres:
-         * mantém o texto normal.
-         */
-
-        if (texto.length <= 14) {
-
-            elemento.textContent = texto;
-
-            return;
-
-        }
-
-
-        /*
-         * Mais de 14:
-         * aplica a quebra.
-         */
-
-        elemento.innerHTML =
-            quebrarTexto(texto, 14);
-
-    });
-
-}
-
-
-
-
-/* =========================================================
-   INICIALIZAÇÃO
-========================================================= */
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-        aplicarQuebraDeTexto();
-
-    },
-    false
-);
 
 
 navegando = false;

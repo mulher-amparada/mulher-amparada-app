@@ -1,4 +1,4 @@
-name: Compilar o app do Mulher Amparada
+name: Compilar o app do Mulher Amparada 
 
 on:
   push:

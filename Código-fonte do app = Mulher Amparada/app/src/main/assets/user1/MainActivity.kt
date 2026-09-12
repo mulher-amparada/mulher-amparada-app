@@ -783,100 +783,95 @@ settings.setSupportMultipleWindows(
     // SENSOR / CHACOALHAR  
     // =========================================================  
   
-    private fun iniciarSensor() {  
-  
-        sensorManager =  
-            getSystemService(  
-                Context.SENSOR_SERVICE  
-            ) as SensorManager  
-  
-        acelerometro =  
-            sensorManager.getDefaultSensor(  
-                Sensor.TYPE_ACCELEROMETER  
-            )  
-  
-        shakeListener =  
-            object : SensorEventListener {  
-  
-                override fun onSensorChanged(  
-                    event: SensorEvent  
-                ) {  
-  
-                    if (!protecaoAtiva) {  
-                        return  
-                    }  
-  
-                    val x =  
-                        event.values[0]  
-  
-                    val y =  
-                        event.values[1]  
-  
-                    val z =  
-                        event.values[2]  
-  
-                    val aceleracao =  
-                        sqrt(  
-                            (  
-                                x * x +  
-                                y * y +  
-                                z * z  
-                            ).toDouble()  
-                        )  
-  
-                    if (  
-                        aceleracao > 18.0  
-                    ) {  
-  
-                        val agora =  
-                            System.currentTimeMillis()  
-  
-                        if (  
-                            agora -  
-                            ultimoShake >  
-                            4000  
-                        ) {  
-  
-                            ultimoShake =  
-                                agora  
-  
-                            val intent =  
-                                Intent(  
-                                    Intent.ACTION_DIAL  
-                                ).apply {  
-  
-                                    data =  
-                                        Uri.parse(  
-                                            "tel:180"  
-                                        )  
-                                }  
-  
-                            startActivity(  
-                                intent  
-                            )  
-                        }  
-                    }  
-                }  
-  
-  
-                override fun onAccuracyChanged(  
-                    sensor: Sensor?,  
-                    accuracy: Int  
-                ) {  
-                    // Nada  
-                }  
-            }  
-  
-  
-        acelerometro?.let {  
-  
-            sensorManager.registerListener(  
-                shakeListener,  
-                it,  
-                SensorManager.SENSOR_DELAY_GAME  
-            )  
-        }  
-    }  
+    private fun iniciarSensor(): Boolean {
+
+    sensorManager =
+        getSystemService(
+            Context.SENSOR_SERVICE
+        ) as SensorManager
+
+    acelerometro =
+        sensorManager.getDefaultSensor(
+            Sensor.TYPE_ACCELEROMETER
+        )
+
+    val sensor = acelerometro
+        ?: return false
+
+    shakeListener =
+        object : SensorEventListener {
+
+            override fun onSensorChanged(
+                event: SensorEvent
+            ) {
+
+                if (!protecaoAtiva) {
+                    return
+                }
+
+                val x = event.values[0]
+                val y = event.values[1]
+                val z = event.values[2]
+
+                val aceleracao =
+                    sqrt(
+                        (
+                            x * x +
+                            y * y +
+                            z * z
+                        ).toDouble()
+                    )
+
+                if (aceleracao > 18.0) {
+
+                    val agora =
+                        System.currentTimeMillis()
+
+                    if (
+                        agora -
+                        ultimoShake >
+                        4000
+                    ) {
+
+                        ultimoShake = agora
+
+                        val intent =
+                            Intent(
+                                Intent.ACTION_DIAL
+                            ).apply {
+
+                                data =
+                                    Uri.parse(
+                                        "tel:180"
+                                    )
+                            }
+
+                        startActivity(intent)
+                    }
+                }
+            }
+
+            override fun onAccuracyChanged(
+                sensor: Sensor?,
+                accuracy: Int
+            ) {
+                // Nada
+            }
+        }
+
+    val registrado =
+        sensorManager.registerListener(
+            shakeListener,
+            sensor,
+            SensorManager.SENSOR_DELAY_GAME
+        )
+
+    if (!registrado) {
+        return false
+    }
+
+    return true
+}
   
   
     private fun pararSensor() {  
@@ -949,23 +944,23 @@ settings.setSupportMultipleWindows(
     // =========================================================  
     // PROTEÇÃO POR CHACOALHAR  
     // =========================================================  
-  
-    @JavascriptInterface
+
+@JavascriptInterface
 fun ativarProtecao(): Boolean {
 
-    acelerometro =
-        sensorManager.getDefaultSensor(
-            Sensor.TYPE_ACCELEROMETER
-        )
+    if (protecaoAtiva) {
+        return true
+    }
 
-    if (acelerometro == null) {
+    val sucesso =
+        iniciarSensor()
+
+    if (!sucesso) {
+        protecaoAtiva = false
         return false
     }
 
-    if (!protecaoAtiva) {
-        protecaoAtiva = true
-        iniciarSensor()
-    }
+    protecaoAtiva = true
 
     return true
 }

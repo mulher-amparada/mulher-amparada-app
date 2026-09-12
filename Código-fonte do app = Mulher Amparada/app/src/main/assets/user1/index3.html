@@ -1299,9 +1299,10 @@ function chamarAndroid(
             typeof window.Android[nome] === "function"
         ) {
 
-            return window.Android[nome](
-                ...args
-            );
+            return {
+                sucesso: true,
+                valor: window.Android[nome](...args)
+            };
 
         }
 
@@ -1312,9 +1313,17 @@ function chamarAndroid(
             e
         );
 
+        return {
+            sucesso: false,
+            valor: null
+        };
+
     }
 
-    return null;
+    return {
+        sucesso: false,
+        valor: null
+    };
 
 }
 
@@ -1389,30 +1398,54 @@ palmasSwitch.addEventListener(
     "click",
     function () {
 
-        palmasAtiva =
-            !palmasAtiva;
-
         vibrar(70);
 
 
-        if (palmasAtiva) {
+        if (!palmasAtiva) {
 
-            chamarAndroid(
-                "ativarPalmas"
-            );
+            const resultado =
+                chamarAndroid(
+                    "ativarPalmas"
+                );
+
+
+            if (
+                resultado.sucesso
+            ) {
+
+                atualizarPalmasUI(
+                    true
+                );
+
+            } else {
+
+                atualizarPalmasUI(
+                    false
+                );
+
+                vibrar(150);
+
+            }
 
         } else {
 
-            chamarAndroid(
-                "desativarPalmas"
-            );
+            const resultado =
+                chamarAndroid(
+                    "desativarPalmas"
+                );
+
+
+            if (
+                resultado.sucesso
+            ) {
+
+                atualizarPalmasUI(
+                    false
+                );
+
+            }
 
         }
-
-
-        atualizarPalmasUI(
-            palmasAtiva
-        );
 
     }
 );
@@ -1485,12 +1518,8 @@ function atualizarProtecaoUI() {
             : "DESATIVADO";
 
 
-    if (protecaoAtiva) {
-
-        movimentoDescricao.innerText =
-            movimentoDescricaoOriginal;
-
-    }
+    movimentoDescricao.innerText =
+        movimentoDescricaoOriginal;
 
 }
 
@@ -1508,17 +1537,22 @@ movimentoSwitch.addEventListener(
 
         if (protecaoAtiva) {
 
-            chamarAndroid(
-                "desativarProtecao"
-            );
+            const resultado =
+                chamarAndroid(
+                    "desativarProtecao"
+                );
 
-            protecaoAtiva =
-                false;
 
-            movimentoDescricao.innerText =
-                movimentoDescricaoOriginal;
+            if (
+                resultado.sucesso
+            ) {
 
-            atualizarProtecaoUI();
+                protecaoAtiva =
+                    false;
+
+                atualizarProtecaoUI();
+
+            }
 
             return;
 
@@ -1535,15 +1569,21 @@ movimentoSwitch.addEventListener(
             );
 
 
+        /*
+         * ativarProtecao() no Kotlin atual não retorna Boolean.
+         *
+         * Portanto:
+         *
+         * sucesso = método Android foi encontrado
+         * e conseguiu ser chamado.
+         */
+
         if (
-            resultado === true
+            resultado.sucesso
         ) {
 
             protecaoAtiva =
                 true;
-
-            movimentoDescricao.innerText =
-                movimentoDescricaoOriginal;
 
             atualizarProtecaoUI();
 
@@ -1574,7 +1614,7 @@ movimentoSwitch.addEventListener(
                 "DESATIVADO";
 
             movimentoDescricao.innerText =
-                "Sensor indisponível no seu aparelho";
+                "Erro ao executar essa função";
 
             vibrar(150);
 
@@ -1651,12 +1691,8 @@ function atualizarBrilhoUI() {
             : "DESATIVADO";
 
 
-    if (brilhoAtivo) {
-
-        brilhoDescricao.innerText =
-            brilhoDescricaoOriginal;
-
-    }
+    brilhoDescricao.innerText =
+        brilhoDescricaoOriginal;
 
 }
 
@@ -1673,6 +1709,17 @@ brilhoSwitch.addEventListener(
         ----------------------------------------------------- */
 
         if (brilhoAtivo) {
+
+            const resultado =
+                chamarAndroid(
+                    "TiltBrightness.stopTiltBrightness"
+                );
+
+
+            /*
+             * O método real está em outro objeto.
+             * Por isso usamos chamada direta abaixo.
+             */
 
             try {
 
@@ -1715,9 +1762,6 @@ brilhoSwitch.addEventListener(
             brilhoAtivo =
                 false;
 
-            brilhoDescricao.innerText =
-                brilhoDescricaoOriginal;
-
             atualizarBrilhoUI();
 
             return;
@@ -1729,8 +1773,8 @@ brilhoSwitch.addEventListener(
            ATIVAR
         ----------------------------------------------------- */
 
-        let resultado =
-            null;
+        let sucesso =
+            false;
 
 
         try {
@@ -1741,8 +1785,18 @@ brilhoSwitch.addEventListener(
                     "function"
             ) {
 
-                resultado =
-                    TiltBrightness.startTiltBrightness();
+                /*
+                 * startTiltBrightness() não retorna Boolean
+                 * no Kotlin atual.
+                 *
+                 * Se a função existir e puder ser chamada,
+                 * consideramos a ativação solicitada.
+                 */
+
+                TiltBrightness.startTiltBrightness();
+
+                sucesso =
+                    true;
 
             }
 
@@ -1750,21 +1804,16 @@ brilhoSwitch.addEventListener(
 
             console.warn(e);
 
-            resultado =
+            sucesso =
                 false;
 
         }
 
 
-        if (
-            resultado === true
-        ) {
+        if (sucesso) {
 
             brilhoAtivo =
                 true;
-
-            brilhoDescricao.innerText =
-                brilhoDescricaoOriginal;
 
             atualizarBrilhoUI();
 
@@ -1795,7 +1844,7 @@ brilhoSwitch.addEventListener(
                 "DESATIVADO";
 
             brilhoDescricao.innerText =
-                "Sensor indisponível no seu aparelho";
+                "Erro ao executar essa função";
 
             vibrar(150);
 
@@ -1940,7 +1989,7 @@ proximidadeSwitch.addEventListener(
 
 
         if (
-            resultado === true
+            resultado.sucesso
         ) {
 
             proximidadeAtiva =
@@ -1979,7 +2028,6 @@ atualizarBrilhoUI();
 atualizarProximidadeUI();
 
 </script>
-
 </body>
 
 </html>

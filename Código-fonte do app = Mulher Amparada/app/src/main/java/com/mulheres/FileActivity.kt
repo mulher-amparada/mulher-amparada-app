@@ -1,7 +1,6 @@
 package com.mulheres
 
 import android.animation.ValueAnimator
-import android.graphics.drawable.Drawable
 import android.content.ClipData
 import android.content.Intent
 import android.graphics.Canvas
@@ -10,6 +9,7 @@ import android.graphics.ColorFilter
 import android.graphics.Paint
 import android.graphics.PixelFormat
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -23,6 +23,7 @@ import android.view.animation.DecelerateInterpolator
 import android.webkit.MimeTypeMap
 import android.widget.ImageButton
 import android.widget.TextView
+
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -32,6 +33,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+
 import java.io.File
 import java.text.Collator
 import java.util.Locale

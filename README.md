@@ -22,6 +22,8 @@ Antes de conceder essa permissão, leia atentamente as informações exibidas pe
 
 > ⚠️E também quando for clicar em qualquer botão de apagar no app, ele pode apagar TODOS OS CONTEÚDOS criptografados de TODO O APP, então CUIDADO!
 
+> ⚠️Ao utilizar a função de baixar o histórico de ajuda, o aplicativo gera um único arquivo no formato JSON. Os dados utilizados para gerar esse histórico são obtidos por meio das APIs protegidas do Android, que controlam o acesso ao histórico de chamadas por meio das permissões do sistema. Por isso, o aplicativo não aplica a classe "Cripto" novamente durante a exportação. O arquivo JSON exportado, entretanto, não é um arquivo criptografado. Ele é salvo como um arquivo comum na área de downloads do dispositivo. A proteção de acesso fornecida pelo Android ao histórico de chamadas não significa que o arquivo exportado permaneça criptografado. O arquivo também contém hashes SHA-256, utilizados para verificação de integridade dos dados. SHA-256 não é um mecanismo de criptografia e não substitui a criptografia para proteção do conteúdo.
+
 ## Sobre o site que está hospedado pelo github pages:
 
 Na primeira página do site, tem 3 botoes que ligam para (180, 190 e 192), e usam o tel: do navegador para abrir o telefone nativo do celular com esses números já discados de acordo com o que você escolheu!
@@ -52,7 +54,25 @@ e os contatos de confiança, quando são cadrastados eles também são criptogra
 
 e o bloqueio do celular por barulho é assim: bloqueia, voce desbloqueia e pra ter denovo tem que desativar e ativar denovo!
 
----- 
+## Sobre como foi escrito o texto do biometricPrompt do app:
+
+- MainActivity (tela que contém o webview):
+
+**Título:**
+> Desbloquear a área protegida
+
+**Descrição:**
+> 🌸 Apenas a usuária cadastrada pode acessar este local
+
+- OrdemActivity (tela que contém o assistente de voz):
+ 
+**Título:**
+> Desbloquear o acesso ao assistente de voz
+
+**Descrição:**
+> 🌸 Apenas a usuária cadastrada pode acessar este local
+
+O método de autenticação é definido pelo próprio Android de acordo com os autenticadores disponíveis no dispositivo, utilizando "BIOMETRIC_WEAK" e "DEVICE_CREDENTIAL".
 
 # Direitos que toda mulher tem!
 

@@ -268,6 +268,8 @@ body {
     align-items: center;
 
     padding: 26px;
+    
+    gap: 20px;
 
     border: 1px solid var(--line);
     border-radius: var(--radius);
@@ -389,7 +391,15 @@ margin-bottom: 1.5%;
     line-height: 1.25;
 
 
-    
+    white-space:
+        normal;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        clip;
+        
 }
 
 .description {
@@ -399,6 +409,15 @@ margin-bottom: 1.5%;
     font-weight: 500;
 
     line-height: 1.3;
+    
+    white-space:
+        normal;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        clip;
 
     
 }
@@ -449,6 +468,15 @@ margin-bottom: 1.5%;
 .emergency .title {
 
     color: #ff6679;
+    
+    white-space:
+        normal;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        clip;
 
 }
 
@@ -1186,7 +1214,7 @@ margin-bottom: 1.5%;
         <div class="sectionHeader">
 
             <h2 class="sectionTitle">
-                Especial só para você
+                Links
             </h2>
 
 
@@ -1250,7 +1278,7 @@ margin-bottom: 1.5%;
                     </div>
 
                     <div class="description">
-                        Seja amparada pela lei
+                        seja amparada pela lei
                     </div>
 
                 </div>
@@ -1455,231 +1483,6 @@ function androidCall(metodo) {
 
 }
 
-
-/* =========================================================
-   QUEBRA DE TEXTO
-   LIMITE DE 14 CARACTERES
-========================================================= */
-
-function quebrarTexto(texto, limite) {
-
-    if (
-        typeof texto !== "string" ||
-        texto.trim() === ""
-    ) {
-        return "";
-    }
-
-
-    /*
-     * Garante um limite válido.
-     */
-
-    limite = Number(limite);
-
-    if (
-        !Number.isFinite(limite) ||
-        limite < 1
-    ) {
-        limite = 14;
-    }
-
-
-    /*
-     * Normaliza espaços.
-     */
-
-    texto = texto
-        .replace(/\s+/g, " ")
-        .trim();
-
-
-    /*
-     * Se já estiver dentro do limite,
-     * não precisa quebrar.
-     */
-
-    if (texto.length <= limite) {
-        return texto;
-    }
-
-
-    const palavras = texto.split(" ");
-
-    const linhas = [];
-
-    let linhaAtual = "";
-
-
-    palavras.forEach(function (palavra) {
-
-        /*
-         * Se a palavra for maior que 14 caracteres,
-         * ela será dividida em blocos.
-         */
-
-        if (palavra.length > limite) {
-
-            /*
-             * Primeiro salva a linha atual.
-             */
-
-            if (linhaAtual) {
-
-                linhas.push(linhaAtual);
-
-                linhaAtual = "";
-
-            }
-
-
-            /*
-             * Divide a palavra em blocos de 14.
-             */
-
-            while (palavra.length > limite) {
-
-                linhas.push(
-                    palavra.substring(0, limite)
-                );
-
-                palavra =
-                    palavra.substring(limite);
-
-            }
-
-
-            /*
-             * Guarda o restante para tentar
-             * juntar com a próxima palavra.
-             */
-
-            if (palavra.length > 0) {
-
-                linhaAtual = palavra;
-
-            }
-
-            return;
-
-        }
-
-
-        /*
-         * Tenta colocar a palavra na linha atual.
-         */
-
-        const tentativa = linhaAtual
-            ? linhaAtual + " " + palavra
-            : palavra;
-
-
-        /*
-         * Se couber, mantém na mesma linha.
-         */
-
-        if (tentativa.length <= limite) {
-
-            linhaAtual = tentativa;
-
-        } else {
-
-            /*
-             * Caso não caiba, fecha a linha anterior.
-             */
-
-            if (linhaAtual) {
-
-                linhas.push(linhaAtual);
-
-            }
-
-            /*
-             * Começa uma nova linha.
-             */
-
-            linhaAtual = palavra;
-
-        }
-
-    });
-
-
-    /*
-     * Adiciona a última linha.
-     */
-
-    if (linhaAtual) {
-
-        linhas.push(linhaAtual);
-
-    }
-
-
-    return linhas.join("<br>");
-
-}
-
-
-/* =========================================================
-   APLICAÇÃO DA QUEBRA DE TEXTO
-========================================================= */
-
-function aplicarQuebraDeTexto() {
-
-    const elementos =
-        document.querySelectorAll(
-            ".btn .title, .btn .description"
-        );
-
-
-    elementos.forEach(function (elemento) {
-
-        /*
-         * Pega somente o texto.
-         * Isso evita depender do HTML interno.
-         */
-
-        const texto =
-            elemento.textContent
-                .replace(/\s+/g, " ")
-                .trim();
-
-
-        /*
-         * Ignora elementos vazios.
-         */
-
-        if (!texto) {
-            return;
-        }
-
-
-        /*
-         * Até 14 caracteres:
-         * mantém o texto normal.
-         */
-
-        if (texto.length <= 14) {
-
-            elemento.textContent = texto;
-
-            return;
-
-        }
-
-
-        /*
-         * Mais de 14:
-         * aplica a quebra.
-         */
-
-        elemento.innerHTML =
-            quebrarTexto(texto, 14);
-
-    });
-
-}
 
 
 /* =========================================================

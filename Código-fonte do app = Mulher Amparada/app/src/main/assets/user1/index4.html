@@ -15,8 +15,9 @@
 <title>Controle</title>
 
 <style>
+
 /* =========================================================
-   FADE OUT DA INTERFACE
+   FADE OUT
 ========================================================= */
 
 @keyframes fadeOut {
@@ -39,137 +40,9 @@
 
 }
 
-/* =========================================================
-   BARRAS DE ROLAGEM — TOTALMENTE TRANSPARENTES
-========================================================= */
-
-*::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-    background: transparent;
-}
-
-*::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-*::-webkit-scrollbar-thumb {
-    background: transparent;
-    border: none;
-}
-
-* {
-    scrollbar-width: none;
-    scrollbar-color: transparent transparent;
-}
-
-html,
-body {
-    scrollbar-width: none;
-    scrollbar-color: transparent transparent;
-}
-
-html::-webkit-scrollbar,
-body::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-    background: transparent;
-}
-
 
 /* =========================================================
-   FONTE
-========================================================= */
-
-@font-face {
-    font-family: "Quicksand";
-    src: url("font.ttf") format("truetype");
-    font-weight: 400 800;
-}
-
-
-/* =========================================================
-   VARIÁVEIS
-========================================================= */
-
-:root {
-
-    --bg: #000;
-
-    --surface: #101218;
-    --surface-2: #151720;
-    --surface-3: #1b1e28;
-
-    --white: #fff;
-    --text: #f7f7fa;
-
-    --soft: #969baa;
-    --muted: #626877;
-
-    --pink: #ff3f82;
-    --pink-light: #ff6b9f;
-
-    --red: #ff4054;
-    --red-dark: #d9273d;
-
-    --purple: #8b5cf6;
-    --blue: #4f8cff;
-    --green: #32d477;
-    --orange: #ff9f43;
-    --cyan: #27c9c1;
-
-    --border: rgba(255,255,255,.075);
-    --border-strong: rgba(255,255,255,.13);
-
-    --radius: 24px;
-    --radius-small: 17px;
-}
-
-
-/* =========================================================
-   RESET
-========================================================= */
-
-* {
-    box-sizing: border-box;
-
-    margin: 0;
-    padding: 0;
-
-    font-family: "Quicksand", sans-serif;
-
-    font-weight: 700;
-
-    -webkit-tap-highlight-color: transparent;
-}
-
-html,
-body {
-
-    width: 100%;
-    min-height: 100%;
-
-    background: #000;
-
-    color: var(--text);
-}
-
-body {
-
-    min-height: 100vh;
-
-    overflow-x: hidden;
-
-    padding-top:
-        env(safe-area-inset-top);
-
-    padding-bottom:
-        env(safe-area-inset-bottom);
-}
-
-
-/* =========================================================
-   ANIMAÇÕES
+   ENTRADA
 ========================================================= */
 
 @keyframes pageIn {
@@ -181,19 +54,182 @@ body {
     to {
         opacity: 1;
     }
+
 }
 
 
-@keyframes statusPulse {
+/* =========================================================
+   ROLAGEM
+========================================================= */
 
-    0%,
-    100% {
-        opacity: 1;
-    }
+*::-webkit-scrollbar {
 
-    50% {
-        opacity: .45;
-    }
+    width: 0;
+    height: 0;
+    background: transparent;
+
+}
+
+* {
+
+    scrollbar-width: none;
+
+    -webkit-tap-highlight-color:
+        transparent;
+
+}
+
+
+/* =========================================================
+   FONTE
+========================================================= */
+
+@font-face {
+
+    font-family:
+        "Quicksand";
+
+    src:
+        url("font.ttf")
+        format("truetype");
+
+    font-weight:
+        400 800;
+
+}
+
+
+/* =========================================================
+   VARIÁVEIS
+========================================================= */
+
+:root {
+
+    --bg:
+        #000000;
+
+    --white:
+        #ffffff;
+
+    --text:
+        #f7f7fa;
+
+    --muted:
+        #676c78;
+
+    --pink:
+        #ff3f82;
+
+    --pink-light:
+        #ff6b9f;
+
+    --blue:
+        #4f8cff;
+
+    --blue-light:
+        #8eb4ff;
+
+    --orange:
+        #ff9f43;
+
+    --orange-light:
+        #ffc071;
+
+    --purple:
+        #8b5cf6;
+
+    --purple-light:
+        #b79aff;
+
+    --red:
+        #ff4054;
+
+    --red-light:
+        #ff7180;
+
+    --cyan:
+        #27c9c1;
+
+    --cyan-light:
+        #6ee9e2;
+
+    --border:
+        #ffffff12;
+
+    --radius:
+        26px;
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+
+    box-sizing:
+        border-box;
+
+    margin:
+        0;
+
+    padding:
+        0;
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+    font-weight:
+        700;
+
+}
+
+
+html,
+body {
+
+    width:
+        100%;
+
+    min-height:
+        100%;
+
+    background:
+        #000000;
+
+    color:
+        var(--text);
+
+}
+
+
+html {
+
+    background:
+        #000000;
+
+}
+
+
+body {
+
+    min-height:
+        100vh;
+
+    overflow-x:
+        hidden;
+
+    background:
+        #000000;
+
+    padding-top:
+        env(safe-area-inset-top);
+
+    padding-bottom:
+        env(safe-area-inset-bottom);
+
 }
 
 
@@ -203,996 +239,451 @@ body {
 
 .mainUI {
 
-    width: 100%;
+    width:
+        100%;
 
-    max-width: 680px;
+    max-width:
+        700px;
 
-    margin: 0 auto;
+    margin:
+        0 auto;
 
     padding:
-        28px
-        18px
-        125px;
+        30px 18px 120px;
 
-    display: flex;
+    display:
+        flex;
 
-    flex-direction: column;
+    flex-direction:
+        column;
 
-    gap: 34px;
+    gap:
+        31px;
 
     animation:
-        pageIn .5s ease;
+        pageIn .55s ease;
+
 }
 
 
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+
+    width:
+        100%;
+
+    padding:
+        4px 4px 0;
+
+}
 
 
+.heroTopLine {
+
+    width:
+        43px;
+
+    height:
+        3px;
+
+    margin-bottom:
+        18px;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--pink);
+
+}
 
 
+.heroTitle {
+
+    color:
+        #ffffff;
+
+    font-size:
+        clamp(
+            32px,
+            7vw,
+            48px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        .98;
+
+    letter-spacing:
+        -1.2px;
+
+    white-space:
+        nowrap;
+
+}
+
+
+.heroSubtitle {
+
+    max-width:
+        410px;
+
+    margin-top:
+        14px;
+
+    color:
+        #85858e;
+
+    font-size:
+        11px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.5;
+
+    letter-spacing:
+        .15px;
+
+}
+
+
+/* =========================================================
+   SEÇÃO
+========================================================= */
 
 .section {
 
-    width: 100%;
+    width:
+        100%;
 
-    display: flex;
+    display:
+        flex;
 
-    flex-direction: column;
+    flex-direction:
+        column;
 
-    gap: 11px;
+    gap:
+        11px;
 
-    animation:
-        pageIn .5s ease both;
 }
 
 
+/* =========================================================
+   LABEL
+========================================================= */
+
 .label {
 
-    display: flex;
+    display:
+        flex;
 
-    align-items: center;
+    align-items:
+        center;
 
-    gap: 8px;
+    gap:
+        8px;
 
-    padding-left: 3px;
+    padding-left:
+        3px;
 
-    color: var(--muted);
+    color:
+        var(--muted);
 
-    font-size: 10px;
+    font-size:
+        10px;
 
-    letter-spacing: 1.8px;
+    font-weight:
+        800;
 
-    text-transform: uppercase;
+    letter-spacing:
+        1.8px;
+
+    text-transform:
+        uppercase;
+
 }
 
 
 .label::before {
 
-    content: "";
+    content:
+        "";
 
-    width: 4px;
-    height: 4px;
+    width:
+        5px;
 
-    flex-shrink: 0;
+    height:
+        5px;
 
-    border-radius: 50%;
+    flex-shrink:
+        0;
+
+    border-radius:
+        50%;
 
     background:
         var(--pink);
 
-    box-shadow:
-        0 0 8px rgba(255,63,130,.5);
-}
-
-
-
-/* =========================================================
-   EMERGÊNCIA
-========================================================= */
-
-.btn,
-.local,
-.local99,
-.local999 {
-
-    width: 100%;
-
-    min-height: 62px;
-
-    padding: 16px 20px;
-
-    border: 1px solid rgba(255,255,255,.08);
-
-    border-radius: 20px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    color: #fff;
-
-    font-family:
-        "Quicksand",
-        sans-serif;
-
-    font-size: 14px;
-
-    font-weight: 800;
-
-    letter-spacing: .1px;
-
-    cursor: pointer;
-
-    user-select: none;
-    -webkit-user-select: none;
-
-    touch-action: manipulation;
-
-    position: relative;
-
-    overflow: hidden;
-
-    box-shadow:
-        0 10px 28px rgba(0,0,0,.28),
-        inset 0 1px 0 rgba(255,255,255,.08);
-
-    transition:
-        transform .16s cubic-bezier(.22,1,.36,1),
-        filter .16s ease,
-        box-shadow .2s ease,
-        border-color .2s ease;
 }
 
 
 /* =========================================================
-   BRILHO
+   CARD
 ========================================================= */
 
-.btn::before,
-.local::before,
-.local99::before,
-.local999::before {
+.actionCard {
 
-    content: "";
+    width:
+        100%;
 
-    position: absolute;
+    min-height:
+        88px;
 
-    width: 180px;
-    height: 180px;
+    position:
+        relative;
 
-    top: -125px;
-    right: -60px;
+    overflow:
+        hidden;
 
-    border-radius: 50%;
-
-    background: rgba(255,255,255,.10);
-
-    pointer-events: none;
-}
-
-
-/* =========================================================
-   INTERAÇÃO
-========================================================= */
-
-.btn:active,
-.local:active,
-.local99:active,
-.local999:active {
-
-    transform: scale(.965);
-
-    filter: brightness(1.08);
-
-    box-shadow:
-        0 6px 18px rgba(0,0,0,.30);
-}
-
-
-.btn:hover,
-.local:hover,
-.local99:hover,
-.local999:hover {
-
-    filter: brightness(1.06);
-
-    border-color:
-        rgba(255,255,255,.15);
-
-    box-shadow:
-        0 14px 32px rgba(0,0,0,.35),
-        inset 0 1px 0 rgba(255,255,255,.10);
-}
-
-
-/* =========================================================
-   POLÍCIA
-========================================================= */
-
-.policia {
-
-    background:
-        linear-gradient(
-            135deg,
-            #548fff,
-            #326ed8
-        );
-
-    box-shadow:
-        0 12px 28px rgba(77,140,255,.18),
-        inset 0 1px 0 rgba(255,255,255,.12);
-}
-
-
-/* =========================================================
-   SAMU
-========================================================= */
-
-.samu {
-
-    background:
-        linear-gradient(
-            135deg,
-            #ffad55,
-            #df7d19
-        );
-
-    box-shadow:
-        0 12px 28px rgba(255,169,77,.16),
-        inset 0 1px 0 rgba(255,255,255,.12);
-}
-
-
-/* =========================================================
-   CENTRAL DA MULHER
-========================================================= */
-
-.mulher {
-
-    background:
-        linear-gradient(
-            135deg,
-            #ff5795,
-            #dc2f6d
-        );
-
-    box-shadow:
-        0 12px 28px rgba(255,78,144,.18),
-        inset 0 1px 0 rgba(255,255,255,.12);
-}
-
-
-/* =========================================================
-   WHATSAPP
-========================================================= */
-
-
-
-/* =========================================================
-   LOCALIZAÇÃO
-========================================================= */
-
-.local {
-
-    min-height: 68px;
-
-    border-radius: 22px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #2bd2ca,
-            #14958f
-        );
-
-    border:
-        1px solid rgba(39,201,193,.28);
-
-    box-shadow:
-        0 14px 32px rgba(39,201,193,.16),
-        inset 0 1px 0 rgba(255,255,255,.13);
-
-    font-size: 15px;
-
-    letter-spacing: .2px;
-}
-
-
-/* =========================================================
-   CONTATO
-========================================================= */
-
-.btn.contato {
-
-    min-height: 64px;
-
-    border-radius: 21px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #9368ff,
-            #6f42d8
-        );
-
-    border:
-        1px solid rgba(157,126,255,.30);
-
-    box-shadow:
-        0 14px 32px rgba(139,92,246,.18),
-        inset 0 1px 0 rgba(255,255,255,.13);
-
-    font-size: 15px;
-}
-
-
-/* =========================================================
-   SOS CONTATOS
-========================================================= */
-
-.btn.sos-contatos {
-
-    min-height: 64px;
-
-    border-radius: 21px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #f0445b,
-            #bd253b
-        );
-
-    border:
-        1px solid rgba(255,75,96,.25);
-
-    box-shadow:
-        0 14px 32px rgba(237,61,85,.18),
-        inset 0 1px 0 rgba(255,255,255,.13);
-
-    font-size: 15px;
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 480px) {
-
-    .btn,
-    .local,
-    .local99,
-    .local999 {
-
-        min-height: 60px;
-
-        padding: 15px 17px;
-
-        border-radius: 19px;
-
-        font-size: 13.5px;
-    }
-
-    .local,
-    .btn.contato,
-    .btn.sos-contatos {
-
-        min-height: 63px;
-
-        border-radius: 20px;
-
-        font-size: 14px;
-    }
-
-}
-
-
-
-/* =========================================================
-   BOTÕES DE AÇÃO — BASE
-========================================================= */
-
-.btn,
-.local {
-
-    -webkit-appearance: none;
-    appearance: none;
-
-    position: relative;
-
-    display: grid;
+    display:
+        grid;
 
     grid-template-columns:
-        54px
+        52px
         minmax(0, 1fr)
-        auto
-        24px;
+        40px;
 
-    grid-template-rows:
-        auto
-        auto;
+    column-gap:
+        13px;
 
-    column-gap: 12px;
-    row-gap: 3px;
+    align-items:
+        center;
 
-    align-items: center;
-
-    width: 100%;
-    min-height: 82px;
-
-    padding: 13px 15px;
-
-    box-sizing: border-box;
+    padding:
+        17px;
 
     border:
-        1px solid
-        rgba(255,255,255,.10);
+        1px solid var(--border);
 
-    border-radius: 22px;
+    border-radius:
+        var(--radius);
 
-    outline: none;
+    color:
+        #ffffff;
 
-    color: #fff;
+    cursor:
+        pointer;
 
-    font-family:
-        "Quicksand",
-        sans-serif;
+    text-align:
+        left;
 
-    text-align: left;
+    outline:
+        none;
 
-    cursor: pointer;
+    -webkit-appearance:
+        none;
 
-    overflow: hidden;
+    appearance:
+        none;
 
-    
+    isolation:
+        isolate;
 
     transition:
-        transform .16s cubic-bezier(.22,1,.36,1),
-        filter .16s ease,
-        box-shadow .2s ease;
+        filter .18s ease,
+        border-color .18s ease;
+
 }
+
+
+/* =========================================================
+   BRILHO DO CARD
+========================================================= */
+
+.actionCard::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        190px;
+
+    height:
+        190px;
+
+    top:
+        -135px;
+
+    right:
+        -65px;
+
+    border-radius:
+        50%;
+
+    background:
+        #ffffff0d;
+
+    pointer-events:
+        none;
+
+    z-index:
+        -1;
+
+}
+
+
+
 
 
 /* =========================================================
    ÍCONE
 ========================================================= */
 
-.btn > span:first-child,
-.local > span:first-child {
-
-    grid-column: 1;
-    grid-row: 1 / span 2;
-
-    width: 50px;
-    height: 50px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    flex-shrink: 0;
-
-    border-radius: 16px;
-
-    background:
-        rgba(255,255,255,.14);
-
-
-
-    color: #fff;
-
-    font-size: 24px;
-
-    line-height: 1;
-}
-
-
-/* =========================================================
-   SVG DOS ÍCONES
-========================================================= */
-
-.btn > span:first-child svg,
-.local > span:first-child svg {
-
-    width: 27px;
-    height: 27px;
-
-    display: block;
-
-    fill: currentColor;
-}
-
-
-/* =========================================================
-   TÍTULO
-========================================================= */
-
-.btn > span:nth-child(2),
-.local > span:nth-child(2) {
-
-    grid-column: 2;
-    grid-row: 1;
-
-    min-width: 0;
-
-    color: #fff;
-
-    font-size: 15px;
-
-    font-weight: 800;
-
-    line-height: 1.15;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-}
-
-
-/* =========================================================
-   INFORMAÇÃO / NÚMERO
-========================================================= */
-
-.btn > strong,
-.local > strong {
-
-    grid-column: 3;
-    grid-row: 1;
-
-    padding:
-        6px 8px;
-
-    border-radius: 9px;
-
-    background:
-        rgba(0,0,0,.14);
-
-    border:
-        1px solid
-        rgba(255,255,255,.10);
-
-    color: #fff;
-
-    font-size: 11px;
-
-    font-weight: 900;
-
-    line-height: 1;
-
-    white-space: nowrap;
-}
-
-
-/* =========================================================
-   DESCRIÇÃO
-========================================================= */
-
-.btn > small,
-.local > small {
-
-    grid-column: 2 / span 2;
-    grid-row: 2;
-
-    min-width: 0;
-
-    color:
-        rgba(255,255,255,.76);
-
-    font-size: 10px;
-
-    font-weight: 600;
-
-    line-height: 1.25;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-}
-
-
-/* =========================================================
-   SETA — LIMPA
-========================================================= */
-
-.btn > span:last-child,
-.local > span:last-child {
-
-    grid-column: 4;
-    grid-row: 1 / span 2;
-
-    width: auto;
-    height: auto;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 0;
-
-    background: transparent;
-
-    border: 0;
-
-    box-shadow: none;
-
-    color:
-        rgba(255,255,255,.86);
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 30px;
-
-    font-weight: 300;
-
-    line-height: 1;
-
-    overflow: visible;
-}
-
-
-/* =========================================================
-   REMOVE QUALQUER ESTILO DE EM
-========================================================= */
-
-.btn > em,
-.local > em {
-
-    display: none;
-}
-
-
-/* =========================================================
-   BRILHO SUPERIOR
-========================================================= */
-
-.btn::before,
-.local::before {
-
-    content: "";
-
-    position: absolute;
-
-    width: 180px;
-    height: 180px;
-
-    top: -130px;
-    right: -55px;
-
-    border-radius: 50%;
-
-    background:
-        rgba(255,255,255,.09);
-
-    pointer-events: none;
-
-    z-index: 0;
-}
-
-
-/* =========================================================
-   BARRA LATERAL
-========================================================= */
-
-.btn::after,
-.local::after {
-
-    content: "";
-
-    position: absolute;
-
-    left: 0;
-
-    top: 14px;
-    bottom: 14px;
-
-    width: 3px;
-
-    border-radius:
-        0 5px 5px 0;
-
-    background:
-        rgba(255,255,255,.55);
-
-    pointer-events: none;
-
-    z-index: 1;
-}
-
-
-/* =========================================================
-   GARANTE QUE OS ELEMENTOS FIQUEM ACIMA DOS EFEITOS
-========================================================= */
-
-.btn > span,
-.btn > small,
-.btn > strong,
-.local > span,
-.local > small,
-.local > strong {
-
-    position: relative;
-
-    z-index: 2;
-}
-
-
-/* =========================================================
-   POLÍCIA
-========================================================= */
-
-.btn.policia {
-
-    background:
-        linear-gradient(
-            135deg,
-            #548fff,
-            #326ed8
-        );
-
-    border:
-        1px solid
-        rgba(255,255,255,.10);
-}
-
-
-/* =========================================================
-   SAMU
-========================================================= */
-
-.btn.samu {
-
-    background:
-        linear-gradient(
-            135deg,
-            #ffad55,
-            #df7d19
-        );
-
-    border:
-        1px solid
-        rgba(255,255,255,.10);
-}
-
-
-/* =========================================================
-   CENTRAL DA MULHER
-========================================================= */
-
-.btn.mulher {
-
-    background:
-        linear-gradient(
-            135deg,
-            #ff5795,
-            #dc2f6d
-        );
-
-    border:
-        1px solid
-        rgba(255,255,255,.10);
-}
-
-
-/* =========================================================
-   WHATSAPP
-========================================================= */
-
-
-
-/* =========================================================
-   LOCALIZAÇÃO
-========================================================= */
-
-.local {
-
-    min-height: 88px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #2bd2ca,
-            #14958f
-        );
-
-    border:
-        1px solid
-        rgba(255,255,255,.10);
-}
-
-
-/* =========================================================
-   ADICIONAR CONTATO
-========================================================= */
-
-.btn.contato {
-
-    min-height: 82px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #9368ff,
-            #6f42d8
-        );
-
-    border:
-        1px solid
-        rgba(255,255,255,.10);
-}
-
-
-/* =========================================================
-   SOS CONTATOS
-========================================================= */
-
-.btn.sos-contatos {
-
-    min-height: 82px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #f0445b,
-            #bd253b
-        );
-
-    border:
-        1px solid
-        rgba(255,255,255,.10);
-}
-
-
-/* =========================================================
-   INTERAÇÃO
-========================================================= */
-
-.btn:active,
-.local:active {
-
-    transform:
-        scale(.965);
-
-    filter:
-        brightness(1.08);
-
-    box-shadow:
-        0 7px 20px rgba(0,0,0,.30);
-}
-
-
-/* =========================================================
-   HOVER
-========================================================= */
-
-.btn:hover,
-.local:hover {
-
-    filter:
-        brightness(1.06);
-
-    box-shadow:
-        0 16px 35px rgba(0,0,0,.38),
-        inset 0 1px 0 rgba(255,255,255,.15);
-}
-
-
-/* =========================================================
-   FOCO
-========================================================= */
-
-.btn:focus-visible,
-.local:focus-visible {
-
-    outline:
-        2px solid
-        rgba(255,255,255,.75);
-
-    outline-offset: 3px;
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 480px) {
-
-    .btn,
-    .local {
-
-        min-height: 78px;
-
-        padding:
-            12px 13px;
-
-        grid-template-columns:
-            50px
-            minmax(0,1fr)
-            auto
-            22px;
-
-        column-gap: 10px;
-
-        border-radius: 20px;
-    }
-
-
-    .btn > span:first-child,
-    .local > span:first-child {
-
-        width: 46px;
-        height: 46px;
-
-        border-radius: 14px;
-
-        font-size: 22px;
-    }
-
-
-    .btn > span:nth-child(2),
-    .local > span:nth-child(2) {
-
-        font-size: 14px;
-    }
-
-
-    .btn > small,
-    .local > small {
-
-        font-size: 9.5px;
-    }
-
-
-    .btn > span:last-child,
-    .local > span:last-child {
-
-        font-size: 28px;
-    }
-
-
-    .local {
-
-        min-height: 82px;
-    }
-
-
-    .btn.contato,
-    .btn.sos-contatos {
-
-        min-height: 78px;
-    }
-
-}
-
-.heroTag {
+.actionIcon {
 
     width:
-        80%;
+        52px;
 
-    margin-left:
-        10%;
+    height:
+        52px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        17px;
+
+    background:
+        #ffffff16;
+
+    color:
+        #ffffff;
+
+}
+
+
+.actionIcon svg {
+
+    width:
+        28px;
+
+    height:
+        28px;
+
+    display:
+        block;
+
+    fill:
+        currentColor;
+
+}
+
+
+/* =========================================================
+   CONTEÚDO
+========================================================= */
+
+.actionTitle {
+
+    min-width:
+        0;
+
+    color:
+        #ffffff;
+
+    font-size:
+        15px;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.2;
+
+    white-space:
+        nowrap;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+white-space:
+        normal;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        clip;
+}
+
+
+.actionDescription {
+
+    display:
+        block;
+
+    min-width:
+        0;
+
+    max-width:
+        100%;
 
     margin-top:
-        55px;
+        4px;
 
-    margin-bottom:
-        55px;
+    color:
+        #ffffffb8;
 
-    min-height:
-        70px;
+    font-size:
+        10px;
 
-    padding:
-        13px
-        18px;
+    font-weight:
+        600;
+
+    line-height:
+        1.3;
+
+    white-space:
+        normal;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        clip;
+
+}
+
+/* =========================================================
+   SETA
+========================================================= */
+
+.actionArrow {
+
+    width:
+        40px;
+
+    height:
+        40px;
 
     display:
         flex;
@@ -1204,161 +695,627 @@ body {
         center;
 
     color:
-        #ffffff;
+        #ffffffc7;
 
-    
+    background:
+        #18181d;
+
+    border:
+        1px solid #303038;
 
     border-radius:
-        24px;
+        14px;
 
     font-family:
-        "Quicksand",
+        Arial,
         sans-serif;
 
     font-size:
-        clamp(
-            27px,
-            8vw,
-            42px
-        );
+        27px;
 
     font-weight:
-        800;
+        300;
 
     line-height:
-        1.1;
+        1;
 
-    letter-spacing:
-        -0.8px;
+}
+.actionArrow svg {
 
-    text-align:
-        center;
+    width:
+        19px;
 
-    box-shadow:
-        0 14px 40px
-        rgba(
-            0,
-            0,
-            0,
-            .55
+    height:
+        19px;
+
+}
+
+/* =========================================================
+   CORES
+========================================================= */
+
+.policia {
+
+    --accent:
+        var(--blue);
+
+    background:
+        linear-gradient(
+            145deg,
+            #182744,
+            #0f1829
         );
+
+    border-color:
+        #4f8cff38;
+
+}
+
+
+.policia .actionIcon {
+
+    background:
+        #4f8cff22;
+
+    color:
+        var(--blue-light);
+
+}
+
+
+.samu {
+
+    --accent:
+        var(--orange);
+
+    background:
+        linear-gradient(
+            145deg,
+            #2a2116,
+            #171109
+        );
+
+    border-color:
+        #ff9f4338;
+
+}
+
+
+.samu .actionIcon {
+
+    background:
+        #ff9f4320;
+
+    color:
+        var(--orange-light);
+
+}
+
+
+.mulher {
+
+    --accent:
+        var(--pink);
+
+    background:
+        linear-gradient(
+            145deg,
+            #281521,
+            #170c12
+        );
+
+    border-color:
+        #ff3f8238;
+
+}
+
+
+.mulher .actionIcon {
+
+    background:
+        #ff3f8220;
+
+    color:
+        var(--pink-light);
+
+}
+
+
+.localizacao {
+
+    --accent:
+        var(--cyan);
+
+    min-height:
+        96px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #112b2b,
+            #0b1717
+        );
+
+    border-color:
+        #27c9c138;
+
+}
+
+
+.localizacao .actionIcon {
+
+    background:
+        #27c9c120;
+
+    color:
+        var(--cyan-light);
+
+}
+
+
+.contato {
+
+    --accent:
+        var(--purple);
+
+    background:
+        linear-gradient(
+            145deg,
+            #21183a,
+            #120e20
+        );
+
+    border-color:
+        #8b5cf638;
+
+}
+
+
+.contato .actionIcon {
+
+    background:
+        #8b5cf622;
+
+    color:
+        var(--purple-light);
+
+}
+
+
+.sos {
+
+    --accent:
+        var(--red);
+
+    background:
+        linear-gradient(
+            145deg,
+            #2b171d,
+            #170b0e
+        );
+
+    border-color:
+        #ff405438;
+
+}
+
+
+.sos .actionIcon {
+
+    background:
+        #ff405422;
+
+    color:
+        var(--red-light);
+
+}
+
+
+/* =========================================================
+   INTERAÇÃO
+========================================================= */
+
+.actionCard:active {
+
+    filter:
+        brightness(1.12);
+
+}
+
+
+.actionCard:hover {
+
+    filter:
+        brightness(1.06);
+
+    border-color:
+        #ffffff28;
+
+}
+
+
+.actionCard:focus-visible {
+
+    outline:
+        2px solid #ffffffb8;
+
+    outline-offset:
+        3px;
 
 }
 
 </style>
-
-
 
 </head>
 
 
 <body>
 
-
-<!-- =======================================================
-     INTERFACE
-======================================================== -->
-
 <main class="mainUI">
 
-    <!-- ===================================================
-         TÍTULO
-    ==================================================== -->
 
-    <div class="heroTag">
-        Mulher Amparada
-    </div>
+    <!-- HERO -->
 
-    <!-- ===================================================
-         AJUDA RÁPIDA
-    ==================================================== -->
-<section class="section">
+    <header class="hero">
 
-    <div class="label">
-        Ajuda rápida
-    </div>
+        <div class="heroTopLine"></div>
 
-    <button class="btn policia" type="button" onclick="ligar('190')">
-        <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M467-85q-6-1-12-3-135-45-215-166.5T160-516v-189q0-25 14.5-45t37.5-29l240-90q14-5 28-5t28 5l240 90q23 9 37.5 29t14.5 45v189q0 140-80 261.5T505-88q-6 2-12 3t-13 1q-7 0-13-1Zm13-79q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/></svg></span>
-        <span>Polícia</span>
-        <small>Emergência policial</small>
-        <span aria-hidden="true">›</span>
-    </button>
+        <h1 class="heroTitle">
+            Mulher Amparada
+        </h1>
 
-    <button class="btn samu" type="button" onclick="ligar('192')">
-        <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M440-360v80q0 17 11.5 28.5T480-240q17 0 28.5-11.5T520-280v-80h80q17 0 28.5-11.5T640-400q0-17-11.5-28.5T600-440h-80v-80q0-17-11.5-28.5T480-560q-17 0-28.5 11.5T440-520v80h-80q-17 0-28.5 11.5T320-400q0 17 11.5 28.5T360-360h80ZM160-80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h160v-80q0-33 23.5-56.5T400-880h160q33 0 56.5 23.5T640-800v80h160q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Zm240-560h160v-80H400v80ZM160-160v-480 480Z"/></svg></span>
-        <span>SAMU</span>
-        <small>Atendimento médico de emergência</small>
-        <span aria-hidden="true">›</span>
-    </button>
+        <p class="heroSubtitle">
+            Proteção, assistência e recursos reunidos
+            em um só lugar.
+        </p>
 
-    <button class="btn mulher" type="button" onclick="ligar('180')">
-        <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M440-200h-40q-17 0-28.5-11.5T360-240q0-17 11.5-28.5T400-280h40v-84q-79-14-129.5-75.5T260-582q0-91 64.5-154.5T480-800q91 0 155.5 63.5T700-582q0 81-50.5 142.5T520-364v84h40q17 0 28.5 11.5T600-240q0 17-11.5 28.5T560-200h-40v40q0 17-11.5 28.5T480-120q-17 0-28.5-11.5T440-160v-40Zm139-281q41-41 41-99t-41-99q-41-41-99-41t-99 41q-41 41-41 99t41 99q41 41 99 41t99-41Z"/></svg></span>
-        <span>Central da Mulher</span>
-        <small>Orientação e atendimento</small>
-        <span aria-hidden="true">›</span>
-    </button>
-
-</section>
+    </header>
 
 
-<!-- ===================================================
-     BRILHO
-==================================================== -->
+    <!-- AJUDA RÁPIDA -->
+
+    <section class="section">
+
+        <div class="label">
+            Ajuda rápida
+        </div>
 
 
-<!-- ===================================================
-     LOCALIZAÇÃO
-==================================================== -->
+        <button
+            class="actionCard policia"
+            type="button"
+            onclick="ligar('190')"
+        >
 
-<section class="section">
+            <span class="actionIcon" aria-hidden="true">
 
-    <div class="label">
-        Localização
-    </div>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 -960 960 960"
+                >
 
-    <button class="local" type="button" onclick="enviarLocalizacao()">
-        <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M480-186q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm-28 74q-14-5-25-15-65-60-115-117t-83.5-110.5q-33.5-53.5-51-103T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 45-17.5 94.5t-51 103Q698-301 648-244T533-127q-11 10-25 15t-28 5q-14 0-28-5Zm28-448Zm56.5 56.5Q560-527 560-560t-23.5-56.5Q513-640 480-640t-56.5 23.5Q400-593 400-560t23.5 56.5Q447-480 480-480t56.5-23.5Z"/></svg></span>
-        <span>Enviar localização</span>
-        <small>Compartilhe sua localização atual</small>
-        <span aria-hidden="true">›</span>
-    </button>
+                    <path d="M467-85q-6-1-12-3-135-45-215-166.5T160-516v-189q0-25 14.5-45t37.5-29l240-90q14-5 28-5t28 5l240 90q23 9 37.5 29t14.5 45v189q0 140-80 261.5T505-88q-6 2-12 3t-13 1q-7 0-13-1Zm13-79q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/>
 
-</section>
+                </svg>
+
+            </span>
+
+            <span class="actionContent">
+
+                <span class="actionTitle">
+                    Polícia
+                </span>
+
+                <small class="actionDescription">
+                    Emergência policial
+                </small>
+
+            </span>
+
+            <span class="actionArrow" aria-hidden="true">
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+
+                    <path
+                        d="M9 18L15 12L9 6"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                </svg>
+            </span>
+
+        </button>
 
 
-<!-- ===================================================
-     CONTATOS
-==================================================== -->
+        <button
+            class="actionCard samu"
+            type="button"
+            onclick="ligar('192')"
+        >
 
-<section class="section">
+            <span class="actionIcon" aria-hidden="true">
 
-    <div class="label">
-        Contatos de confiança
-    </div>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 -960 960 960"
+                >
 
-    <button class="btn contato" type="button" onclick="selecionarContato()">
-        <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm146.5-204.5Q340-521 340-580t40.5-99.5Q421-720 480-720t99.5 40.5Q620-639 620-580t-40.5 99.5Q539-440 480-440t-99.5-40.5ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm100-95.5q47-15.5 86-44.5-39-29-86-44.5T480-280q-53 0-100 15.5T294-220q39 29 86 44.5T480-160q53 0 100-15.5ZM523-537q17-17 17-43t-17-43q-17-17-43-17t-43 17q-17 17-17 43t17 43q17 17 43 17t43-17Zm-43-43Zm0 360Z"/></svg></span>
-        <span>Adicionar contato</span>
+                    <path d="M440-360v80q0 17 11.5 28.5T480-240q17 0 28.5-11.5T520-280v-80h80q17 0 28.5-11.5T640-400q0-17-11.5-28.5T600-440h-80v-80q0-17-11.5-28.5T480-560q-17 0-28.5 11.5T440-520v80h-80q-17 0-28.5 11.5T320-400q0 17 11.5 28.5T360-360h80ZM160-80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h160v-80q0-33 23.5-56.5T400-880h160q33 0 56.5 23.5T640-800v80h160q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Zm240-560h160v-80H400v80ZM160-160v-480 480Z"/>
 
-        <small>Escolha uma pessoa de confiança</small>
-        <span aria-hidden="true">›</span>
-    </button>
+                </svg>
 
-    <button class="btn sos-contatos" type="button" onclick="enviarSOSContatos()">
-        <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M240-160q-17 0-28.5-11.5T200-200q0-17 11.5-28.5T240-240h24l79-263q8-26 29.5-41.5T420-560h120q26 0 47.5 15.5T617-503l79 263h24q17 0 28.5 11.5T760-200q0 17-11.5 28.5T720-160H240Zm108-80h264l-72-240H420l-72 240Zm92-440v-120q0-17 11.5-28.5T480-840q17 0 28.5 11.5T520-800v120q0 17-11.5 28.5T480-640q-17 0-28.5-11.5T440-680Zm210 54 85-85q11-11 27.5-11.5T791-711q11 11 11 28t-11 28l-85 86q-12 12-28 12t-28-12q-12-12-12-28.5t12-28.5Zm110 186h120q17 0 28.5 11.5T920-400q0 17-11.5 28.5T880-360H760q-17 0-28.5-11.5T720-400q0-17 11.5-28.5T760-440ZM254-570l-85-85q-11-11-11.5-27.5T169-711q11-11 28-11t28 11l86 85q12 12 12 28t-12 28q-12 12-28.5 12T254-570ZM80-360q-17 0-28.5-11.5T40-400q0-17 11.5-28.5T80-440h120q17 0 28.5 11.5T240-400q0 17-11.5 28.5T200-360H80Zm400 120Z"/></svg></span>
-        <span>SOS contatos</span>
-        <small>Enviar alerta para seus contatos</small>
-        <span aria-hidden="true">›</span>
-    </button>
+            </span>
 
-</section>
+            <span class="actionContent">
+
+                <span class="actionTitle">
+                    SAMU
+                </span>
+
+                <small class="actionDescription">
+                    Atendimento médico de emergência
+                </small>
+
+            </span>
+
+            <span class="actionArrow" aria-hidden="true">
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+
+                    <path
+                        d="M9 18L15 12L9 6"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                </svg>
+            </span>
+
+        </button>
 
 
+        <button
+            class="actionCard mulher"
+            type="button"
+            onclick="ligar('180')"
+        >
+
+            <span class="actionIcon" aria-hidden="true">
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 -960 960 960"
+                >
+
+                    <path d="M440-200h-40q-17 0-28.5-11.5T360-240q0-17 11.5-28.5T400-280h40v-84q-79-14-129.5-75.5T260-582q0-91 64.5-154.5T480-800q91 0 155.5 63.5T700-582q0 81-50.5 142.5T520-364v84h40q17 0 28.5 11.5T600-240q0 17-11.5 28.5T560-200h-40v40q0 17-11.5 28.5T480-120q-17 0-28.5-11.5T440-160v-40Zm139-281q41-41 41-99t-41-99q-41-41-99-41t-99 41q-41 41-41 99t41 99q41 41 99 41t99-41Z"/>
+
+                </svg>
+
+            </span>
+
+            <span class="actionContent">
+
+                <span class="actionTitle">
+                    Central da Mulher
+                </span>
+
+                <small class="actionDescription">
+                    Orientação e atendimento
+                </small>
+
+            </span>
+
+            <span class="actionArrow" aria-hidden="true">
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+
+                    <path
+                        d="M9 18L15 12L9 6"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                </svg>
+            </span>
+
+        </button>
+
+    </section>
+
+
+    <!-- LOCALIZAÇÃO -->
+
+    <section class="section">
+
+        <div class="label">
+            Localização
+        </div>
+
+        <button
+            class="actionCard localizacao"
+            type="button"
+            onclick="enviarLocalizacao()"
+        >
+
+            <span class="actionIcon" aria-hidden="true">
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 -960 960 960"
+                >
+
+                    <path d="M480-186q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm-28 74q-14-5-25-15-65-60-115-117t-83.5-110.5q-33.5-53.5-51-103T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 45-17.5 94.5t-51 103Q698-301 648-244T533-127q-11 10-25 15t-28 5q-14 0-28-5Zm28-448Zm56.5 56.5Q560-527 560-560t-23.5-56.5Q513-640 480-640t-56.5 23.5Q400-593 400-560t23.5 56.5Q447-480 480-480t56.5-23.5Z"/>
+
+                </svg>
+
+            </span>
+
+            <span class="actionContent">
+
+                <span class="actionTitle">
+                    Enviar localização
+                </span>
+
+                <small class="actionDescription">
+                    Compartilhe sua localização atual
+                </small>
+
+            </span>
+
+            <span class="actionArrow" aria-hidden="true">
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+
+                    <path
+                        d="M9 18L15 12L9 6"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                </svg>
+            </span>
+
+        </button>
+
+    </section>
+
+
+    <!-- CONTATOS -->
+
+    <section class="section">
+
+        <div class="label">
+            Contatos de confiança
+        </div>
+
+
+        <button
+            class="actionCard contato"
+            type="button"
+            onclick="selecionarContato()"
+        >
+
+            <span class="actionIcon" aria-hidden="true">
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 -960 960 960"
+                >
+
+                    <path d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm146.5-204.5Q340-521 340-580t40.5-99.5Q421-720 480-720t99.5 40.5Q620-639 620-580t-40.5 99.5Q539-440 480-440t-99.5-40.5ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm100-95.5q47-15.5 86-44.5-39-29-86-44.5T480-280q-53 0-100 15.5T294-220q39 29 86 44.5T480-160q53 0 100-15.5ZM523-537q17-17 17-43t-17-43q-17-17-43-17t-43 17q-17 17-17 43t17 43q17 17 43 17t43-17Zm-43-43Zm0 360Z"/>
+
+                </svg>
+
+            </span>
+
+            <span class="actionContent">
+
+                <span class="actionTitle">
+                    Adicionar contato
+                </span>
+
+                <small class="actionDescription">
+                    Escolha uma pessoa de confiança
+                </small>
+
+            </span>
+
+            <span class="actionArrow" aria-hidden="true">
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+
+                    <path
+                        d="M9 18L15 12L9 6"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                </svg>
+            </span>
+
+        </button>
+
+
+        <button
+            class="actionCard sos"
+            type="button"
+            onclick="enviarSOSContatos()"
+        >
+
+            <span class="actionIcon" aria-hidden="true">
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 -960 960 960"
+                >
+
+                    <path d="M240-160q-17 0-28.5-11.5T200-200q0-17 11.5-28.5T240-240h24l79-263q8-26 29.5-41.5T420-560h120q26 0 47.5 15.5T617-503l79 263h24q17 0 28.5 11.5T760-200q0 17-11.5 28.5T720-160H240Zm108-80h264l-72-240H420l-72 240Zm92-440v-120q0-17 11.5-28.5T480-840q17 0 28.5 11.5T520-800v120q0 17 11.5 28.5T480-640q-17 0-28.5-11.5T440-680Zm210 54 85-85q11-11 27.5-11.5T791-711q11 11 11 28t-11 28l-85 86q-12 12-28 12t-28-12q-12-12-12-28.5t12-28.5Zm110 186h120q17 0 28.5 11.5T920-400q0 17-11.5 28.5T880-360H760q-17 0-28.5-11.5T720-400q0-17 11.5-28.5T760-440ZM254-570l-85-85q-11-11-11.5-27.5T169-711q11-11 28-11t28 11l86 85q12 12 12 28t-12 28q-12 12-28.5 12T254-570ZM80-360q-17 0-28.5-11.5T40-400q0-17 11.5-28.5T80-440h120q17 0 28.5 11.5T240-400q0 17-11.5 28.5T200-360H80Z"/>
+
+                </svg>
+
+            </span>
+
+            <span class="actionContent">
+
+                <span class="actionTitle">
+                    SOS contatos
+                </span>
+
+                <small class="actionDescription">
+                    Enviar alerta para seus contatos
+                </small>
+
+            </span>
+
+            <span class="actionArrow" aria-hidden="true">
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+
+                    <path
+                        d="M9 18L15 12L9 6"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                </svg>
+            </span>
+
+        </button>
+
+    </section>
 
 </main>
-
-
 
 
 <script>
@@ -1371,8 +1328,13 @@ function vibrar(duracao = 100) {
 
     try {
 
-        if (navigator.vibrate) {
+        if (
+            navigator.vibrate &&
+            typeof navigator.vibrate === "function"
+        ) {
+
             navigator.vibrate(duracao);
+
         }
 
     } catch (e) {}
@@ -1403,9 +1365,8 @@ function chamarAndroid(nome, ...args) {
     }
 
     return null;
+
 }
-
-
 
 
 /* =========================================================
@@ -1414,7 +1375,9 @@ function chamarAndroid(nome, ...args) {
 
 function ligar(numero) {
 
-    if (!numero) return;
+    if (!numero) {
+        return;
+    }
 
     vibrar(60);
 
@@ -1433,15 +1396,14 @@ function ligar(numero) {
 
 }
 
+
 /* =========================================================
    LOCALIZAÇÃO
 ========================================================= */
 
 function enviarLocalizacao() {
 
-    if (
-        !navigator.geolocation
-    ) {
+    if (!navigator.geolocation) {
 
         alert(
             "A geolocalização não é suportada neste dispositivo."
@@ -1451,9 +1413,7 @@ function enviarLocalizacao() {
 
     }
 
-
     vibrar(60);
-
 
     navigator.geolocation.getCurrentPosition(
 
@@ -1465,25 +1425,21 @@ function enviarLocalizacao() {
             const longitude =
                 pos.coords.longitude;
 
-
             const link =
                 "https://maps.google.com/?q=" +
                 latitude +
                 "," +
                 longitude;
 
-
             const mensagem =
                 "🚨 SOCORRO! Estou aqui: " +
                 link;
-
 
             const url =
                 "https://wa.me/556196100180?text=" +
                 encodeURIComponent(
                     mensagem
                 );
-
 
             window.location.href =
                 url;
@@ -1505,19 +1461,21 @@ function enviarLocalizacao() {
         },
 
         {
-            enableHighAccuracy: true,
 
-            timeout: 10000,
+            enableHighAccuracy:
+                true,
 
-            maximumAge: 5000
+            timeout:
+                10000,
+
+            maximumAge:
+                5000
+
         }
 
     );
 
 }
-
-
-
 
 
 /* =========================================================
@@ -1545,6 +1503,10 @@ function selecionarContato() {
 }
 
 
+/* =========================================================
+   SOS CONTATOS
+========================================================= */
+
 function enviarSOSContatos() {
 
     vibrar(150);
@@ -1565,28 +1527,8 @@ function enviarSOSContatos() {
 
 }
 
-
-/* =========================================================
-   INICIALIZAÇÃO
-========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function() {
-
-        atualizarPalmasUI(false);
-
-        atualizarProtecaoUI();
-
-        atualizarBrilhoUI();
-
-    }
-);
-
 </script>
 
-
-
-
 </body>
+
 </html>

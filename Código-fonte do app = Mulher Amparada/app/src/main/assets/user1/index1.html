@@ -5,8 +5,10 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
 
 <meta name="theme-color" content="#000000">
 
@@ -14,73 +16,133 @@
 
 <style>
 
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
+/* =========================================================
+   FONTE
+========================================================= */
 
+@font-face{
 
-@font-face {
+    font-family:"Quicksand";
 
-    font-family: "Quicksand";
+    src:url("font.ttf") format("truetype");
 
-    src:
-        url("font.ttf")
-        format("truetype");
+    font-weight:400 800;
 
-    font-weight:
-        400 800;
+    font-style:normal;
 
-    font-style:
-        normal;
-
-    font-display:
-        swap;
+    font-display:swap;
 
 }
 
+
+/* =========================================================
+   RESET
+========================================================= */
+
 *{
+
     box-sizing:border-box;
+
     margin:0;
+
     padding:0;
+
+    font-family:"Quicksand",sans-serif;
+
     -webkit-tap-highlight-color:transparent;
-    font-family:
-        "Quicksand",
-        sans-serif;
+
 }
 
 html,
 body{
+
     width:100%;
+
     min-height:100%;
+
     background:#000;
-}
 
-
-@keyframes Opacity {
-    0% {
-        opacity: 0;
-    }
-
-    
-
-    100% {
-        opacity: 1;
-    }
 }
 
 body{
+
     color:#fff;
-    font-family:"Quicksand",sans-serif;
+
     overflow-x:hidden;
-    animation: Opacity .55s ease both;
+
+    animation:
+        entrada
+        .65s
+        ease
+        both;
+
 }
 
 button{
-    font-family:inherit;
+
+    font:inherit;
+
 }
 
-svg{
+img{
+
     display:block;
+
 }
 
+
+/* =========================================================
+   KEYFRAMES — SOMENTE OPACITY
+========================================================= */
+
+@keyframes entrada{
+
+    from{
+
+        opacity:0;
+
+    }
+
+    to{
+
+        opacity:1;
+
+    }
+
+}
+
+@keyframes surgir{
+
+    from{
+
+        opacity:0;
+
+    }
+
+    to{
+
+        opacity:1;
+
+    }
+
+}
+
+@keyframes respirar{
+
+    0%,
+    100%{
+
+        opacity:.4;
+
+    }
+
+    50%{
+
+        opacity:1;
+
+    }
+
+}
 
 
 /* =========================================================
@@ -88,741 +150,1847 @@ svg{
 ========================================================= */
 
 .app{
-    position:relative;
-    z-index:1;
 
     width:100%;
+
     max-width:760px;
+
+    min-height:100vh;
 
     margin:auto;
 
     padding:
-        calc(20px + env(safe-area-inset-top))
-        18px
-        calc(35px + env(safe-area-inset-bottom));
+
+        calc(25px + env(safe-area-inset-top))
+
+        17px
+
+        calc(45px + env(safe-area-inset-bottom));
+
 }
+
 
 /* =========================================================
-   TOPO
+   CABEÇALHO
 ========================================================= */
 
-.topbar{
+.header{
+
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
 
+    gap:20px;
+
     margin-bottom:28px;
+
+    animation:
+        surgir
+        .65s
+        .05s
+        both;
+
 }
 
-.greeting small{
-    display:block;
+.header-left{
 
-    color:#858585;
+    min-width:0;
 
-    font-size:13px;
-    font-weight:500;
-
-    margin-bottom:5px;
 }
 
-.greeting h1{
-    color:#fff;
+.header-overline{
 
-    font-size:25px;
+    margin-bottom:8px;
+
+    color:#4b4b4b;
+
+    font-size:7px;
+
+    font-weight:700;
+
+    letter-spacing:1.5px;
+
+    text-transform:uppercase;
+
+}
+
+.header-title{
+
+    color:#f5f5f5;
+
+    font-size:24px;
+
     font-weight:700;
 
     line-height:1.05;
-    letter-spacing:-1px;
+
+    letter-spacing:-1.1px;
+
 }
 
-.profile{
-    width:48px;
-    height:48px;
+.header-subtitle{
 
-    border-radius:50%;
+    max-width:300px;
+
+    margin-top:9px;
+
+    color:#4b4b4b;
+
+    font-size:9px;
+
+    line-height:1.55;
+
+}
+
+.secret-button{
+
+    width:42px;
+
+    height:42px;
+
+    flex:none;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
-    background:
-        linear-gradient(
-            145deg,
-            #292929,
-            #111
-        );
+    border:1px solid #1e1e1e;
 
-    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
 
-    box-shadow:
-        inset 0 1px rgba(255,255,255,.08),
-        0 12px 35px rgba(0,0,0,.45);
+    background:#080808;
+
+    cursor:pointer;
+
+    transition:
+
+        background .2s ease,
+
+        border-color .2s ease;
+
 }
 
-.profile svg{
-    width:23px;
-    height:23px;
+.secret-button img{
 
-    fill:none;
-    stroke:#fff;
-    stroke-width:1.7;
+    width:19px;
+
+    height:19px;
+
 }
+
+.secret-button:active{
+
+    background:#101010;
+
+    border-color:#303030;
+
+}
+
 
 /* =========================================================
-   CARTÃO PRINCIPAL
+   CARD PRINCIPAL
 ========================================================= */
 
-.assistant{
+.hero{
+
     position:relative;
+
+    min-height:330px;
 
     overflow:hidden;
 
-    min-height:295px;
-
-    padding:25px;
-
-    border-radius:34px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.105),
-            rgba(255,255,255,.035)
-        );
-
-    border:1px solid rgba(255,255,255,.085);
-
-    box-shadow:
-        inset 0 1px rgba(255,255,255,.08),
-        0 25px 70px rgba(0,0,0,.48);
-
-    backdrop-filter:blur(25px);
-    -webkit-backdrop-filter:blur(25px);
-}
-
-.assistant::before{
-    content:"";
-
-    position:absolute;
-
-    width:230px;
-    height:230px;
-
-    right:-90px;
-    top:-105px;
-
-    border-radius:50%;
-
-    background: #9B7CFF;
-
-    filter:blur(45px);
-
-    pointer-events:none;
-}
-
-.assistant::after{
-    content:"";
-
-    position:absolute;
-
-    width:130px;
-    height:130px;
-
-    left:-70px;
-    bottom:-90px;
-
-    border-radius:50%;
-
-    background:rgba(180,190,255,.07);
-
-    filter:blur(35px);
-
-    pointer-events:none;
-}
-
-.assistant-content{
-    position:relative;
-    z-index:2;
-}
-
-.ai-icon{
-    width:59px;
-    height:59px;
-
-    border-radius:20px;
-
     display:flex;
+
+    flex-direction:column;
+
     align-items:center;
+
     justify-content:center;
 
-    background:
-        #3157B7;
+    padding:42px 24px 30px;
+
+    border:1px solid #1d1d1d;
+
+    border-radius:28px;
+
+    background:#050505;
+
+    animation:
+        surgir
+        .7s
+        .1s
+        both;
+
+}
+
+.hero-top{
+
+    position:absolute;
+
+    top:19px;
+
+    left:21px;
+
+    right:21px;
+
+    z-index:5;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+}
+
+.hero-label{
+
+    color:#494949;
+
+    font-size:7px;
+
+    font-weight:700;
+
+    letter-spacing:1.2px;
+
+}
+
+.live{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    color:#494949;
+
+    font-size:7px;
+
+    font-weight:700;
+
+    letter-spacing:.8px;
+
+}
+
+.live-dot{
+
+    width:5px;
+
+    height:5px;
+
+    border-radius:50%;
+
+    background:#6d7cff;
 
     box-shadow:
-        0 15px 35px #8DB7FF;
+        0 0 8px rgba(109,124,255,.75);
+
+    animation:
+        respirar
+        2s
+        ease-in-out
+        infinite;
+
 }
-
-.ai-icon svg{
-    width:30px;
-    height:30px;
-
-    fill:none;
-    stroke:#000;
-    stroke-width:1.8;
-    stroke-linecap:round;
-    stroke-linejoin:round;
-}
-
-.assistant h2{
-    margin-top:21px;
-
-    font-size:27px;
-    line-height:1.1;
-
-    letter-spacing:-.8px;
-}
-
-.assistant p{
-    max-width:500px;
-
-    margin-top:8px;
-
-    color:#999;
-
-    font-size:14px;
-    line-height:1.5;
-}
-
 
 
 /* =========================================================
-   TÍTULOS
+   CENTRO DO HERO
+========================================================= */
+
+.hero-center{
+
+    position:relative;
+
+    z-index:3;
+
+    width:150px;
+
+    height:150px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:17px;
+
+}
+
+.hero-icon{
+
+    width:62px;
+
+    height:62px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border:1px solid #282b40;
+
+    border-radius:20px;
+
+    background:#0b0d17;
+
+}
+
+.hero-icon img{
+
+    width:30px;
+
+    height:30px;
+
+}
+
+.hero-score{
+
+    display:flex;
+
+    align-items:baseline;
+
+    gap:4px;
+
+}
+
+.hero-score strong{
+
+    color:#fff;
+
+    font-size:30px;
+
+    font-weight:700;
+
+    letter-spacing:-1.2px;
+
+}
+
+.hero-score span{
+
+    color:#454545;
+
+    font-size:8px;
+
+    font-weight:600;
+
+}
+
+.hero-status{
+
+    position:relative;
+
+    z-index:3;
+
+    margin-top:17px;
+
+    text-align:center;
+
+}
+
+.hero-status strong{
+
+    display:block;
+
+    color:#ededed;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    letter-spacing:-.25px;
+
+}
+
+.hero-status span{
+
+    display:block;
+
+    margin-top:6px;
+
+    color:#494949;
+
+    font-size:8px;
+
+}
+
+
+/* =========================================================
+   RESUMO
+========================================================= */
+
+.summary{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,minmax(0,1fr));
+
+    gap:10px;
+
+    margin-top:12px;
+
+    animation:
+        surgir
+        .7s
+        .17s
+        both;
+
+}
+
+.summary-item{
+
+    min-height:79px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    gap:13px;
+
+    padding:13px;
+
+    border:1px solid #181818;
+
+    border-radius:17px;
+
+    background:#050505;
+
+}
+
+.summary-label{
+
+    color:#444;
+
+    font-size:7px;
+
+    font-weight:700;
+
+    letter-spacing:.7px;
+
+    text-transform:uppercase;
+
+}
+
+.summary-value{
+
+    display:flex;
+
+    align-items:baseline;
+
+    gap:4px;
+
+}
+
+.summary-value strong{
+
+    color:#eee;
+
+    font-size:17px;
+
+    font-weight:700;
+
+}
+
+.summary-value span{
+
+    color:#444;
+
+    font-size:7px;
+
+}
+
+
+/* =========================================================
+   CABEÇALHO DAS SEÇÕES
 ========================================================= */
 
 .section{
-    margin-top:30px;
+
+    margin-top:36px;
+
+    animation:
+        surgir
+        .7s
+        .23s
+        both;
+
 }
 
-.section-header{
+.section-heading{
+
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
 
-    margin-bottom:13px;
+    gap:18px;
+
+    margin:0 3px 14px;
+
 }
 
-.section-header h3{
-    font-size:19px;
+.section-heading h2{
+
+    color:#e9e9e9;
+
+    font-size:14px;
+
     font-weight:700;
+
+    letter-spacing:-.25px;
+
 }
 
-.section-header span{
-    color:#777;
-    font-size:12px;
+.section-heading span{
+
+    color:#3e3e3e;
+
+    font-size:7px;
+
+    font-weight:700;
+
+    letter-spacing:.7px;
+
+    text-transform:uppercase;
+
 }
+
 
 /* =========================================================
    INDICADORES
 ========================================================= */
 
-.health-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
+.metrics{
 
-    gap:12px;
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:11px;
+
 }
 
-.health-card{
+.metric{
+
     position:relative;
 
-    min-height:177px;
+    min-height:148px;
 
-    padding:19px;
+    display:flex;
+
+    flex-direction:column;
+
+    padding:16px;
 
     overflow:hidden;
 
-    border-radius:28px;
+    border:1px solid #181818;
 
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.075),
-            rgba(255,255,255,.025)
-        );
+    border-radius:20px;
 
-    border:1px solid rgba(255,255,255,.07);
+    background:#050505;
 
-    box-shadow:
-        inset 0 1px rgba(255,255,255,.045);
+    transition:
+
+        background .2s ease,
+
+        border-color .2s ease;
+
 }
 
-.health-card::after{
-    content:"";
+.metric:active{
+
+    background:#090909;
+
+    border-color:#292929;
+
+}
+
+.metric-top{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+}
+
+.metric-icon{
+
+    width:38px;
+
+    height:38px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border:1px solid #202020;
+
+    border-radius:12px;
+
+    background:#0c0c0c;
+
+}
+
+.metric-icon img{
+
+    width:19px;
+
+    height:19px;
+
+}
+
+.metric-tag{
+
+    color:#383838;
+
+    font-size:7px;
+
+    font-weight:700;
+
+}
+
+.metric-name{
+
+    margin-top:15px;
+
+    color:#666;
+
+    font-size:9px;
+
+    font-weight:600;
+
+}
+
+.metric-bottom{
+
+    display:flex;
+
+    align-items:baseline;
+
+    justify-content:space-between;
+
+    gap:12px;
+
+    margin-top:auto;
+
+    padding-top:15px;
+
+    padding-bottom:8px;
+
+}
+
+.metric-number{
+
+    color:#f5f5f5;
+
+    font-size:22px;
+
+    font-weight:700;
+
+    line-height:1;
+
+    letter-spacing:-.8px;
+
+    transition:
+        opacity .2s ease;
+
+}
+
+.metric-unit{
+
+    color:#444;
+
+    font-size:8px;
+
+    font-weight:600;
+
+}
+
+.metric-line{
 
     position:absolute;
 
-    width:90px;
-    height:90px;
+    right:16px;
 
-    right:-40px;
-    bottom:-45px;
+    bottom:10px;
 
-    border-radius:50%;
+    left:16px;
 
-    background:rgba(255,255,255,.025);
+    height:2px;
 
-    filter:blur(15px);
+    overflow:hidden;
+
+    border-radius:999px;
+
+    background:#111;
+
 }
 
-.health-icon{
-    width:45px;
-    height:45px;
+.metric-line span{
 
-    border-radius:16px;
+    display:block;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    width:60%;
 
-    background:rgba(255,255,255,.07);
+    height:100%;
+
+    border-radius:999px;
+
+    background:#5666ff;
+
+    opacity:.5;
+
+    transition:
+        width .7s ease;
+
 }
 
-.health-icon svg{
-    width:23px;
-    height:23px;
-
-    fill:none;
-    stroke:#fff;
-    stroke-width:1.7;
-    stroke-linecap:round;
-    stroke-linejoin:round;
-}
-
-.health-card h4{
-    margin-top:17px;
-
-    color:#999;
-
-    font-size:12px;
-    font-weight:600;
-}
-
-.value-line{
-    display:flex;
-    align-items:baseline;
-    gap:5px;
-
-    margin-top:2px;
-}
-
-.value{
-    font-size:28px;
-    font-weight:700;
-    letter-spacing:-1px;
-
-    transition:opacity .2s ease;
-}
-
-.unit{
-    color:#777;
-    font-size:12px;
-}
 
 /* =========================================================
    BEM-ESTAR
 ========================================================= */
 
 .wellbeing{
-    margin-top:12px;
 
-    padding:22px;
+    padding:20px;
 
-    border-radius:28px;
+    border:1px solid #1a1a1a;
 
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.075),
-            rgba(255,255,255,.025)
-        );
+    border-radius:22px;
 
-    border:1px solid rgba(255,255,255,.07);
+    background:#050505;
+
 }
 
 .wellbeing-top{
+
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
+
+    gap:20px;
+
 }
 
-.wellbeing-left{
+.wellbeing-title{
+
     display:flex;
+
     align-items:center;
-    gap:13px;
+
+    gap:12px;
+
+    min-width:0;
+
 }
 
 .wellbeing-icon{
-    width:45px;
-    height:45px;
 
-    border-radius:16px;
+    width:40px;
+
+    height:40px;
+
+    flex:none;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
-    background:rgba(255,255,255,.07);
+    border:1px solid #202020;
+
+    border-radius:13px;
+
+    background:#0c0c0c;
+
 }
 
-.wellbeing-icon svg{
-    width:23px;
-    height:23px;
+.wellbeing-icon img{
 
-    fill:none;
-    stroke:#fff;
-    stroke-width:1.7;
-    stroke-linecap:round;
-    stroke-linejoin:round;
+    width:20px;
+
+    height:20px;
+
 }
 
 .wellbeing-title strong{
+
     display:block;
-    font-size:15px;
+
+    color:#ddd;
+
+    font-size:10px;
+
+    font-weight:700;
+
 }
 
 .wellbeing-title span{
+
     display:block;
 
-    margin-top:3px;
+    margin-top:6px;
 
-    color:#777;
+    color:#454545;
 
-    font-size:11px;
+    font-size:7px;
+
 }
 
 .wellbeing-score{
-    font-size:25px;
-    font-weight:700;
+
+    display:flex;
+
+    align-items:baseline;
+
+    gap:3px;
+
+    flex:none;
+
 }
 
-.progress{
-    width:100%;
-    height:7px;
+.wellbeing-score strong{
 
-    margin-top:20px;
+    color:#f3f3f3;
+
+    font-size:27px;
+
+    font-weight:700;
+
+    letter-spacing:-1.2px;
+
+}
+
+.wellbeing-score span{
+
+    color:#444;
+
+    font-size:8px;
+
+}
+
+.wellbeing-info{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    margin-top:25px;
+
+}
+
+.wellbeing-info div{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:5px;
+
+}
+
+.wellbeing-info span{
+
+    color:#3b3b3b;
+
+    font-size:7px;
+
+    font-weight:600;
+
+}
+
+.wellbeing-info strong{
+
+    color:#999;
+
+    font-size:9px;
+
+    font-weight:700;
+
+}
+
+.wellbeing-bar{
+
+    width:100%;
+
+    height:5px;
+
+    margin-top:19px;
 
     overflow:hidden;
 
-    border-radius:20px;
+    border-radius:999px;
 
-    background:#1d1d1d;
+    background:#111;
+
 }
 
-.progress-bar{
+.wellbeing-progress{
+
     width:72%;
+
     height:100%;
 
-    border-radius:20px;
+    border-radius:999px;
 
-    background:
-        #5E8CFF;
+    background:#6070ff;
+
+    box-shadow:
+        0 0 12px rgba(96,112,255,.25);
 
     transition:
-        width 1s ease;
+        width .8s
+        cubic-bezier(.2,.8,.2,1);
+
 }
 
 
+/* =========================================================
+   ATIVIDADE
+========================================================= */
+
+.activity{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:9px;
+
+}
+
+.activity-row{
+
+    min-height:65px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:13px;
+
+    padding:12px 14px;
+
+    border:1px solid #171717;
+
+    border-radius:17px;
+
+    background:#040404;
+
+}
+
+.activity-marker{
+
+    width:7px;
+
+    height:7px;
+
+    flex:none;
+
+    border-radius:50%;
+
+    background:#5262ff;
+
+    box-shadow:
+        0 0 8px rgba(82,98,255,.35);
+
+}
+
+.activity-content{
+
+    min-width:0;
+
+    flex:1;
+
+}
+
+.activity-content strong{
+
+    display:block;
+
+    color:#7f7f7f;
+
+    font-size:9px;
+
+    font-weight:700;
+
+}
+
+.activity-content span{
+
+    display:block;
+
+    margin-top:5px;
+
+    color:#3b3b3b;
+
+    font-size:7px;
+
+    line-height:1.45;
+
+}
+
+.activity-time{
+
+    color:#3b3b3b;
+
+    font-size:7px;
+
+    font-weight:600;
+
+    flex:none;
+
+}
 
 
+/* =========================================================
+   ESPAÇO FINAL
+========================================================= */
+
+.bottom-space{
+
+    height:14px;
+
+}
+
+
+/* =========================================================
+   TELAS PEQUENAS
+========================================================= */
+
+@media(max-width:430px){
+
+    .app{
+
+        padding-left:15px;
+
+        padding-right:15px;
+
+    }
+
+    .header{
+
+        margin-bottom:27px;
+
+    }
+
+    .header-title{
+
+        font-size:23px;
+
+    }
+
+    .hero{
+
+        min-height:315px;
+
+        border-radius:26px;
+
+    }
+
+    .hero-center{
+
+        width:150px;
+
+        height:150px;
+
+    }
+
+}
+
+
+/* =========================================================
+   TELAS MUITO PEQUENAS
+========================================================= */
+
+@media(max-width:360px){
+
+    .summary{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .summary-item{
+
+        min-height:63px;
+
+    }
+
+    .metrics{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .metric{
+
+        min-height:130px;
+
+    }
+
+    .hero{
+
+        min-height:295px;
+
+    }
+
+    .hero-center{
+
+        width:140px;
+
+        height:140px;
+
+    }
+
+}
+
+
+/* =========================================================
+   ACESSIBILIDADE
+========================================================= */
+
+@media(prefers-reduced-motion:reduce){
+
+    *,
+    *::before,
+    *::after{
+
+        animation:none !important;
+
+        transition:none !important;
+
+    }
+
+}
 
 </style>
 
 </head>
 
+
 <body>
 
-<div class="app">
+<main class="app">
 
-    <!-- =====================================================
-         TOPO
-    ====================================================== -->
 
-    <header class="topbar">
+<!-- =====================================================
+     CABEÇALHO
+====================================================== -->
 
-        <div class="greeting">
+<header class="header">
 
-            <small>Seu espaço de cuidado</small>
+    <div class="header-left">
 
-            <h1>Assistente de Saúde</h1>
-
+        <div class="header-overline">
+            Cuidado e acompanhamento
         </div>
 
-        <div class="profile" 
+        <h1 class="header-title">
+            Assistente de Saúde
+        </h1>
+
+        <p class="header-subtitle">
+            Um espaço para acompanhar seu bem-estar.
+        </p>
+
+    </div>
+
+
+    <button
+        class="secret-button"
         onclick="abrirAreaSecreta()"
-        aria-hidden="true"
+        aria-label="Abrir"
+    >
+
+        <img
+            src="8.svg"
+            alt=""
         >
 
-            <img src="8.svg" alt="">
+    </button>
+
+</header>
+
+
+
+<!-- =====================================================
+     CARD PRINCIPAL
+====================================================== -->
+
+<section class="hero">
+
+    <div class="hero-top">
+
+        <span class="hero-label">
+            ESTADO GERAL
+        </span>
+
+        <div class="live">
+
+            <span class="live-dot"></span>
+
+            <span>
+                ATIVO
+            </span>
 
         </div>
 
-    </header>
+    </div>
 
 
-    <!-- =====================================================
-         ASSISTENTE
-    ====================================================== -->
+    <div class="hero-center">
 
-    <section class="assistant">
+        <div class="hero-icon">
 
-        <div class="assistant-content">
-
-            <div class="ai-icon">
-
-                <img src="assistente1.svg" alt="">
-
-            </div>
-
-            <h2>Como posso ajudar?</h2>
-
-            <p>
-                Converse comigo, consulte informações de saúde
-                ou acompanhe seus indicadores .
-            </p>
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         INDICADORES
-    ====================================================== -->
-
-    <section class="section">
-
-        <div class="section-header">
-
-            <h3>Indicadores</h3>
-
-            <span>Atualização automática</span>
+            <img
+                src="assistente1.svg"
+                alt=""
+            >
 
         </div>
 
 
-        <div class="health-grid">
+        <div class="hero-score">
 
+            <strong id="bemEstarHero">
+                72
+            </strong>
 
-            <!-- BATIMENTOS -->
-
-            <div class="health-card">
-
-                <div class="health-icon">
-
-                    <img src="batimentos1.svg" alt="">
-
-                </div>
-
-                <h4>Batimentos</h4>
-
-                <div class="value-line">
-
-                    <span
-                        class="value"
-                        id="batimentos"
-                    >72</span>
-
-                    <span class="unit">bpm</span>
-
-                </div>
-
-            </div>
-
-
-            <!-- RESPIRAÇÃO -->
-
-            <div class="health-card">
-
-                <div class="health-icon">
-
-                    <img src="respiracao1.svg" alt="">
-
-                </div>
-
-                <h4>Respiração</h4>
-
-                <div class="value-line">
-
-                    <span
-                        class="value"
-                        id="respiracao"
-                    >16</span>
-
-                    <span class="unit">rpm</span>
-
-                </div>
-
-            </div>
-
-
-            <!-- TEMPERATURA -->
-
-            <div class="health-card">
-
-                <div class="health-icon">
-
-                    <img src="temperatura1.svg" alt="">
-
-                </div>
-
-                <h4>Temperatura</h4>
-
-                <div class="value-line">
-
-                    <span
-                        class="value"
-                        id="temperatura"
-                    >36.5</span>
-
-                    <span class="unit">°C</span>
-
-                </div>
-
-            </div>
-
-
-            <!-- HIDRATAÇÃO -->
-
-            <div class="health-card">
-
-                <div class="health-icon">
-
-                    <img src="hidratacao1.svg" alt="">
-
-                </div>
-
-                <h4>Hidratação</h4>
-
-                <div class="value-line">
-
-                    <span
-                        class="value"
-                        id="hidratacao"
-                    >68</span>
-
-                    <span class="unit">%</span>
-
-                </div>
-
-            </div>
+            <span>
+                / 100
+            </span>
 
         </div>
 
-    </section>
+    </div>
 
 
-    <!-- =====================================================
-         BEM-ESTAR
-    ====================================================== -->
+    <div class="hero-status">
 
-    <section class="section">
+        <strong>
+            Tudo tranquilo.
+        </strong>
 
-        <div class="section-header">
+        <span>
+            Acompanhamento em andamento
+        </span>
 
-            <h3>Bem-estar</h3>
+    </div>
 
-            <span>Seus índices</span>
+</section>
+
+
+
+<!-- =====================================================
+     RESUMO
+====================================================== -->
+
+<section class="summary">
+
+    <div class="summary-item">
+
+        <span class="summary-label">
+            Batimentos
+        </span>
+
+        <div class="summary-value">
+
+            <strong id="resumoBatimentos">
+                72
+            </strong>
+
+            <span>
+                bpm
+            </span>
 
         </div>
 
-        <div class="wellbeing">
+    </div>
 
-            <div class="wellbeing-top">
 
-                <div class="wellbeing-left">
+    <div class="summary-item">
 
-                    <div class="wellbeing-icon">
+        <span class="summary-label">
+            Respiração
+        </span>
 
-                        <img src="bemestar1.svg" alt="">
+        <div class="summary-value">
 
-                    </div>
+            <strong id="resumoRespiracao">
+                16.0
+            </strong>
 
-                    <div class="wellbeing-title">
+            <span>
+                rpm
+            </span>
 
-                        <strong>Estado geral</strong>
+        </div>
 
-                        <span>Estimativa</span>
+    </div>
 
-                    </div>
+
+    <div class="summary-item">
+
+        <span class="summary-label">
+            Temperatura
+        </span>
+
+        <div class="summary-value">
+
+            <strong id="resumoTemperatura">
+                36.5
+            </strong>
+
+            <span>
+                °C
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     INDICADORES
+====================================================== -->
+
+<section class="section">
+
+    <div class="section-heading">
+
+        <h2>
+            Indicadores
+        </h2>
+
+        <span>
+            Atualização contínua
+        </span>
+
+    </div>
+
+
+    <div class="metrics">
+
+
+        <!-- BATIMENTOS -->
+
+        <div class="metric">
+
+            <div class="metric-top">
+
+                <div class="metric-icon">
+
+                    <img
+                        src="batimentos1.svg"
+                        alt=""
+                    >
 
                 </div>
 
-                <div
-                    class="wellbeing-score"
-                    id="bemEstar"
+                <span class="metric-tag">
+                    01
+                </span>
+
+            </div>
+
+
+            <div class="metric-name">
+                Batimentos
+            </div>
+
+
+            <div class="metric-bottom">
+
+                <span
+                    class="metric-number"
+                    id="batimentos"
                 >
                     72
-                </div>
+                </span>
+
+                <span class="metric-unit">
+                    bpm
+                </span>
 
             </div>
 
-            <div class="progress">
 
-                <div
-                    class="progress-bar"
-                    id="barraBemEstar"
-                ></div>
+            <div class="metric-line">
+
+                <span
+                    id="linhaBatimentos"
+                    style="width:58%;"
+                ></span>
 
             </div>
 
         </div>
 
-    </section>
+
+
+        <!-- RESPIRAÇÃO -->
+
+        <div class="metric">
+
+            <div class="metric-top">
+
+                <div class="metric-icon">
+
+                    <img
+                        src="respiracao1.svg"
+                        alt=""
+                    >
+
+                </div>
+
+                <span class="metric-tag">
+                    02
+                </span>
+
+            </div>
+
+
+            <div class="metric-name">
+                Respiração
+            </div>
+
+
+            <div class="metric-bottom">
+
+                <span
+                    class="metric-number"
+                    id="respiracao"
+                >
+                    16.0
+                </span>
+
+                <span class="metric-unit">
+                    rpm
+                </span>
+
+            </div>
+
+
+            <div class="metric-line">
+
+                <span
+                    id="linhaRespiracao"
+                    style="width:64%;"
+                ></span>
+
+            </div>
+
+        </div>
 
 
 
+        <!-- TEMPERATURA -->
+
+        <div class="metric">
+
+            <div class="metric-top">
+
+                <div class="metric-icon">
+
+                    <img
+                        src="temperatura1.svg"
+                        alt=""
+                    >
+
+                </div>
+
+                <span class="metric-tag">
+                    03
+                </span>
+
+            </div>
+
+
+            <div class="metric-name">
+                Temperatura
+            </div>
+
+
+            <div class="metric-bottom">
+
+                <span
+                    class="metric-number"
+                    id="temperatura"
+                >
+                    36.5
+                </span>
+
+                <span class="metric-unit">
+                    °C
+                </span>
+
+            </div>
+
+
+            <div class="metric-line">
+
+                <span
+                    id="linhaTemperatura"
+                    style="width:70%;"
+                ></span>
+
+            </div>
+
+        </div>
 
 
 
+        <!-- HIDRATAÇÃO -->
+
+        <div class="metric">
+
+            <div class="metric-top">
+
+                <div class="metric-icon">
+
+                    <img
+                        src="hidratacao1.svg"
+                        alt=""
+                    >
+
+                </div>
+
+                <span class="metric-tag">
+                    04
+                </span>
+
+            </div>
+
+
+            <div class="metric-name">
+                Hidratação
+            </div>
+
+
+            <div class="metric-bottom">
+
+                <span
+                    class="metric-number"
+                    id="hidratacao"
+                >
+                    68
+                </span>
+
+                <span class="metric-unit">
+                    %
+                </span>
+
+            </div>
+
+
+            <div class="metric-line">
+
+                <span
+                    id="linhaHidratacao"
+                    style="width:68%;"
+                ></span>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     BEM-ESTAR
+====================================================== -->
+
+<section class="section">
+
+    <div class="section-heading">
+
+        <h2>
+            Bem-estar
+        </h2>
+
+        <span>
+            Índice geral
+        </span>
+
+    </div>
+
+
+    <div class="wellbeing">
+
+        <div class="wellbeing-top">
+
+            <div class="wellbeing-title">
+
+                <div class="wellbeing-icon">
+
+                    <img
+                        src="bemestar1.svg"
+                        alt=""
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Estado geral
+                    </strong>
+
+                    <span>
+                        Estimativa demonstrativa
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="wellbeing-score">
+
+                <strong id="bemEstar">
+                    72
+                </strong>
+
+                <span>
+                    /100
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="wellbeing-info">
+
+            <div>
+
+                <span>
+                    MÍNIMO
+                </span>
+
+                <strong>
+                    60
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    ATUAL
+                </span>
+
+                <strong id="bemEstarAtual">
+                    72
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    MÁXIMO
+                </span>
+
+                <strong>
+                    88
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="wellbeing-bar">
+
+            <div
+                class="wellbeing-progress"
+                id="barraBemEstar"
+            ></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     ATIVIDADE
+====================================================== -->
+
+<section class="section">
+
+    <div class="section-heading">
+
+        <h2>
+            Atividade
+        </h2>
+
+
+
+    </div>
+
+
+    <div class="activity">
+
+
+        <div class="activity-row">
+
+            <span class="activity-marker"></span>
+
+            <div class="activity-content">
+
+                <strong>
+                    Indicadores atualizados
+                </strong>
+
+                <span>
+                    Dados demonstrativos renovados automaticamente
+                </span>
+
+            </div>
+
+            <span class="activity-time">
+                agora
+            </span>
+
+        </div>
+
+
+        <div class="activity-row">
+
+            <span class="activity-marker"></span>
+
+            <div class="activity-content">
+
+                <strong>
+                    Bem-estar recalculado
+                </strong>
+
+                <span>
+                    Índice demonstrativo atualizado
+                </span>
+
+            </div>
+
+            <span class="activity-time">
+                3 min
+            </span>
+
+        </div>
+
+
+        <div class="activity-row">
+
+            <span class="activity-marker"></span>
+
+            <div class="activity-content">
+
+                <strong>
+                    Monitoramento iniciado
+                </strong>
+
+                <span>
+                    Sessão atual do assistente
+                </span>
+
+            </div>
+
+            <span class="activity-time">
+                hoje
+            </span>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<div class="bottom-space"></div>
+
+
+</main>
 
 
 <script>
 
 /* =========================================================
-   DADOS 
+   DADOS DEMONSTRATIVOS
 ========================================================= */
 
 const dados = {
 
-    batimentos: {
+    batimentos:{
         valor:72,
         min:65,
         max:82,
         passo:2
     },
 
-    respiracao: {
+    respiracao:{
         valor:16,
         min:12,
         max:20,
         passo:.5
     },
 
-    temperatura: {
+    temperatura:{
         valor:36.5,
         min:36.1,
         max:36.9,
         passo:.05
     },
 
-    hidratacao: {
+    hidratacao:{
         valor:68,
         min:55,
         max:82,
         passo:1
     },
 
-    bemEstar: {
+    bemEstar:{
         valor:72,
         min:60,
         max:88,
@@ -833,13 +2001,19 @@ const dados = {
 
 
 /* =========================================================
-   VARIAÇÃO SUAVE
+   VARIAÇÃO
 ========================================================= */
 
-function variar(valor,min,max,passo){
+function variar(
+    valor,
+    min,
+    max,
+    passo
+){
 
     const variacao =
-        (Math.random() * 2 - 1) * passo;
+        (Math.random() * 2 - 1)
+        * passo;
 
     return Math.min(
         max,
@@ -853,10 +2027,79 @@ function variar(valor,min,max,passo){
 
 
 /* =========================================================
+   ATUALIZAR ELEMENTO
+   SOMENTE OPACITY
+========================================================= */
+
+function atualizarElemento(
+    id,
+    valor
+){
+
+    const elemento =
+        document.getElementById(id);
+
+    if(!elemento){
+
+        return;
+
+    }
+
+    elemento.style.opacity=".25";
+
+
+    setTimeout(() => {
+
+        elemento.textContent=valor;
+
+        elemento.style.opacity="1";
+
+    },120);
+
+}
+
+
+/* =========================================================
+   ATUALIZAR LINHA
+========================================================= */
+
+function atualizarLinha(
+    id,
+    valor,
+    min,
+    max
+){
+
+    const elemento =
+        document.getElementById(id);
+
+    if(!elemento){
+
+        return;
+
+    }
+
+    const percentual =
+        ((valor-min)/(max-min))*100;
+
+    elemento.style.width =
+        Math.max(
+            8,
+            Math.min(
+                100,
+                percentual
+            )
+        ) + "%";
+
+}
+
+
+/* =========================================================
    ATUALIZAR INDICADORES
 ========================================================= */
 
 function atualizarIndicadores(){
+
 
     dados.batimentos.valor =
         variar(
@@ -903,27 +2146,21 @@ function atualizarIndicadores(){
         );
 
 
-    document.getElementById("batimentos")
-        .textContent =
+    const batimentos =
         Math.round(
             dados.batimentos.valor
         );
 
 
-    document.getElementById("respiracao")
-        .textContent =
-        dados.respiracao.valor
-            .toFixed(1);
+    const respiracao =
+        dados.respiracao.valor.toFixed(1);
 
 
-    document.getElementById("temperatura")
-        .textContent =
-        dados.temperatura.valor
-            .toFixed(1);
+    const temperatura =
+        dados.temperatura.valor.toFixed(1);
 
 
-    document.getElementById("hidratacao")
-        .textContent =
+    const hidratacao =
         Math.round(
             dados.hidratacao.valor
         );
@@ -935,12 +2172,119 @@ function atualizarIndicadores(){
         );
 
 
-    document.getElementById("bemEstar")
-        .textContent = bemEstar;
+    /* =====================================================
+       INDICADORES
+    ====================================================== */
+
+    atualizarElemento(
+        "batimentos",
+        batimentos
+    );
+
+    atualizarElemento(
+        "respiracao",
+        respiracao
+    );
+
+    atualizarElemento(
+        "temperatura",
+        temperatura
+    );
+
+    atualizarElemento(
+        "hidratacao",
+        hidratacao
+    );
 
 
-    document.getElementById("barraBemEstar")
-        .style.width = bemEstar + "%";
+    /* =====================================================
+       RESUMO
+    ====================================================== */
+
+    atualizarElemento(
+        "resumoBatimentos",
+        batimentos
+    );
+
+    atualizarElemento(
+        "resumoRespiracao",
+        respiracao
+    );
+
+    atualizarElemento(
+        "resumoTemperatura",
+        temperatura
+    );
+
+
+    /* =====================================================
+       BEM-ESTAR
+    ====================================================== */
+
+    atualizarElemento(
+        "bemEstar",
+        bemEstar
+    );
+
+    atualizarElemento(
+        "bemEstarAtual",
+        bemEstar
+    );
+
+    atualizarElemento(
+        "bemEstarHero",
+        bemEstar
+    );
+
+
+    /* =====================================================
+       BARRA
+    ====================================================== */
+
+    const barra =
+        document.getElementById(
+            "barraBemEstar"
+        );
+
+    if(barra){
+
+        barra.style.width =
+            bemEstar + "%";
+
+    }
+
+
+    /* =====================================================
+       LINHAS
+    ====================================================== */
+
+    atualizarLinha(
+        "linhaBatimentos",
+        dados.batimentos.valor,
+        dados.batimentos.min,
+        dados.batimentos.max
+    );
+
+    atualizarLinha(
+        "linhaRespiracao",
+        dados.respiracao.valor,
+        dados.respiracao.min,
+        dados.respiracao.max
+    );
+
+    atualizarLinha(
+        "linhaTemperatura",
+        dados.temperatura.valor,
+        dados.temperatura.min,
+        dados.temperatura.max
+    );
+
+    atualizarLinha(
+        "linhaHidratacao",
+        dados.hidratacao.valor,
+        dados.hidratacao.min,
+        dados.hidratacao.max
+    );
 
 }
 
@@ -968,7 +2312,8 @@ setInterval(
 
 function abrirAreaSecreta(){
 
-    window.location.href = "index11.html";
+    window.location.href =
+        "index11.html";
 
 }
 

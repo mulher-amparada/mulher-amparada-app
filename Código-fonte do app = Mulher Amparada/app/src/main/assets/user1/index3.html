@@ -14,9 +14,11 @@
 
 <title>Controle</title>
 
+
 <style>
+
 /* =========================================================
-   FADE OUT DA INTERFACE
+   FADE OUT
 ========================================================= */
 
 @keyframes fadeOut {
@@ -39,137 +41,9 @@
 
 }
 
-/* =========================================================
-   BARRAS DE ROLAGEM — TOTALMENTE TRANSPARENTES
-========================================================= */
-
-*::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-    background: transparent;
-}
-
-*::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-*::-webkit-scrollbar-thumb {
-    background: transparent;
-    border: none;
-}
-
-* {
-    scrollbar-width: none;
-    scrollbar-color: transparent transparent;
-}
-
-html,
-body {
-    scrollbar-width: none;
-    scrollbar-color: transparent transparent;
-}
-
-html::-webkit-scrollbar,
-body::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-    background: transparent;
-}
-
 
 /* =========================================================
-   FONTE
-========================================================= */
-
-@font-face {
-    font-family: "Quicksand";
-    src: url("font.ttf") format("truetype");
-    font-weight: 400 800;
-}
-
-
-/* =========================================================
-   VARIÁVEIS
-========================================================= */
-
-:root {
-
-    --bg: #000;
-
-    --surface: #101218;
-    --surface-2: #151720;
-    --surface-3: #1b1e28;
-
-    --white: #fff;
-    --text: #f7f7fa;
-
-    --soft: #969baa;
-    --muted: #626877;
-
-    --pink: #ff3f82;
-    --pink-light: #ff6b9f;
-
-    --red: #ff4054;
-    --red-dark: #d9273d;
-
-    --purple: #8b5cf6;
-    --blue: #4f8cff;
-    --green: #32d477;
-    --orange: #ff9f43;
-    --cyan: #27c9c1;
-
-    --border: rgba(255,255,255,.075);
-    --border-strong: rgba(255,255,255,.13);
-
-    --radius: 24px;
-    --radius-small: 17px;
-}
-
-
-/* =========================================================
-   RESET
-========================================================= */
-
-* {
-    box-sizing: border-box;
-
-    margin: 0;
-    padding: 0;
-
-    font-family: "Quicksand", sans-serif;
-
-    font-weight: 700;
-
-    -webkit-tap-highlight-color: transparent;
-}
-
-html,
-body {
-
-    width: 100%;
-    min-height: 100%;
-
-    background: #000;
-
-    color: var(--text);
-}
-
-body {
-
-    min-height: 100vh;
-
-    overflow-x: hidden;
-
-    padding-top:
-        env(safe-area-inset-top);
-
-    padding-bottom:
-        env(safe-area-inset-bottom);
-}
-
-
-/* =========================================================
-   ANIMAÇÕES
+   ENTRADA
 ========================================================= */
 
 @keyframes pageIn {
@@ -181,250 +55,661 @@ body {
     to {
         opacity: 1;
     }
-}
 
-
-@keyframes statusPulse {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: .45;
-    }
 }
 
 
 /* =========================================================
-   LAYOUT
+   ROLAGEM
+========================================================= */
+
+*::-webkit-scrollbar {
+
+    width: 0;
+    height: 0;
+
+    background:
+        transparent;
+
+}
+
+* {
+
+    scrollbar-width:
+        none;
+
+    -webkit-tap-highlight-color:
+        transparent;
+
+}
+
+
+/* =========================================================
+   FONTE
+========================================================= */
+
+@font-face {
+
+    font-family:
+        "Quicksand";
+
+    src:
+        url("font.ttf")
+        format("truetype");
+
+    font-weight:
+        400 800;
+
+}
+
+
+/* =========================================================
+   VARIÁVEIS
+========================================================= */
+
+:root {
+
+    --bg:
+        #000000;
+
+    --surface:
+        #101116;
+
+    --surface-2:
+        #15171e;
+
+    --surface-3:
+        #1b1e27;
+
+    --white:
+        #ffffff;
+
+    --text:
+        #f7f7fa;
+
+    --soft:
+        #a0a4b0;
+
+    --muted:
+        #686d79;
+
+    --pink:
+        #ff3f82;
+
+    --pink-light:
+        #ff6b9f;
+
+    --purple:
+        #8b5cf6;
+
+    --purple-light:
+        #b79aff;
+
+    --orange:
+        #ff9f43;
+
+    --orange-light:
+        #ffc071;
+
+    --green:
+        #32d477;
+
+    --cyan:
+        #27c9c1;
+
+    --red:
+        #ff4054;
+
+    --border:
+        #ffffff12;
+
+    --border-strong:
+        #ffffff20;
+
+    --radius:
+        26px;
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+
+    box-sizing:
+        border-box;
+
+    margin:
+        0;
+
+    padding:
+        0;
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+    font-weight:
+        700;
+
+}
+
+
+html,
+body {
+
+    width:
+        100%;
+
+    min-height:
+        100%;
+
+    background:
+        #000000;
+
+    color:
+        var(--text);
+
+}
+
+
+body {
+
+    min-height:
+        100vh;
+
+    overflow-x:
+        hidden;
+
+    padding-top:
+        env(safe-area-inset-top);
+
+    padding-bottom:
+        env(safe-area-inset-bottom);
+
+}
+
+
+/* =========================================================
+   INTERFACE
 ========================================================= */
 
 .mainUI {
 
-    width: 100%;
+    width:
+        100%;
 
-    max-width: 680px;
+    max-width:
+        700px;
 
-    margin: 0 auto;
+    margin:
+        0 auto;
 
     padding:
-        28px
-        18px
-        125px;
+        28px 18px 110px;
 
-    display: flex;
+    display:
+        flex;
 
-    flex-direction: column;
+    flex-direction:
+        column;
 
-    gap: 34px;
-
-    animation:
-        pageIn .5s ease;
-}
-
-
-
-
-
-
-
-.section {
-
-    width: 100%;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 11px;
+    gap:
+        30px;
 
     animation:
-        pageIn .5s ease both;
+        pageIn .55s ease;
+
 }
 
 
-.label {
+/* =========================================================
+   TÍTULO
+========================================================= */
 
-    display: flex;
+.heroTag {
 
-    align-items: center;
+    width:
+        100%;
 
-    gap: 8px;
+    padding:
+        8px 3px 18px;
 
-    padding-left: 3px;
+    color:
+        #ffffff;
 
-    color: var(--muted);
+    font-size:
+        clamp(
+            31px,
+            9vw,
+            46px
+        );
 
-    font-size: 10px;
+    font-weight:
+        800;
 
-    letter-spacing: 1.8px;
+    line-height:
+        1.05;
 
-    text-transform: uppercase;
+    letter-spacing:
+        -1.4px;
+
+    text-align:
+        left;
+
+margin-top: 1%;
+    
+
 }
 
+.heroTopLine {
 
-.label::before {
+    width:
+        43px;
 
-    content: "";
+    height:
+        3px;
 
-    width: 4px;
-    height: 4px;
+    margin-bottom:
+        18px;
 
-    flex-shrink: 0;
-
-    border-radius: 50%;
+    border-radius:
+        999px;
 
     background:
         var(--pink);
 
-    box-shadow:
-        0 0 8px rgba(255,63,130,.5);
+}
+
+.heroTitle {
+
+    color:
+        #ffffff;
+
+    font-size:
+        clamp(
+            32px,
+            9vw,
+            48px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        .98;
+
+    letter-spacing:
+        -1.6px;
+
+}
+
+.heroSubtitle {
+
+    max-width:
+        410px;
+
+    margin-top:
+        14px;
+
+    color:
+        #85858e;
+
+    font-size:
+        11px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.5;
+
+    letter-spacing:
+        .15px;
+
+}
+
+
+/* =========================================================
+   SEÇÕES
+========================================================= */
+
+.section {
+
+    width:
+        100%;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        11px;
+
+
 }
 
 
 
 /* =========================================================
-   CARDS DE PROTEÇÃO
+   LABEL
+========================================================= */
+
+.label {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+        margin-bottom: 4px;
+
+    
+
+    color:
+        var(--muted);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        2px;
+
+    line-height:
+        1;
+
+    text-transform:
+        uppercase;
+
+}
+
+.label::before {
+
+    content:
+        "";
+
+    width:
+        5px;
+
+    height:
+        5px;
+
+    flex:
+        0 0 5px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--pink);
+
+}
+
+
+
+/* =========================================================
+   CARD
 ========================================================= */
 
 .control-card {
 
-    width: 100%;
+    width:
+        100%;
 
-    min-height: 122px;
+    min-height:
+        128px;
 
-    padding: 21px;
+    position:
+        relative;
 
-    position: relative;
+    overflow:
+        hidden;
 
-    overflow: hidden;
+    display:
+        flex;
 
-    display: flex;
+    align-items:
+        center;
 
-    align-items: center;
+    justify-content:
+        space-between;
 
-    justify-content: space-between;
+    gap:
+        20px;
 
-    gap: 18px;
+    padding:
+        21px;
+
+    border:
+        1px solid var(--border);
 
     border-radius:
         var(--radius);
 
     background:
-
         linear-gradient(
             145deg,
-            #161820,
-            #0f1117
+            #171920,
+            #0d0f14
         );
 
-    border:
-        1px solid var(--border);
-
-    box-shadow:
-        0 16px 40px rgba(0,0,0,.25);
+    isolation:
+        isolate;
 
     transition:
         border-color .2s ease,
-        background .2s ease,
-        box-shadow .2s ease;
+        background .2s ease;
+
 }
 
+
+/* =========================================================
+   DECORAÇÃO DO CARD
+========================================================= */
 
 .control-card::before {
 
-    content: "";
+    content:
+        "";
 
-    position: absolute;
+    position:
+        absolute;
 
-    width: 220px;
-    height: 220px;
+    width:
+        210px;
 
-    top: -145px;
-    right: -85px;
+    height:
+        210px;
 
-    border-radius: 50%;
+    top:
+        -150px;
+
+    right:
+        -90px;
+
+    border-radius:
+        50%;
 
     background:
-        rgba(255,63,130,.055);
+        #ffffff05;
 
-    pointer-events: none;
+    pointer-events:
+        none;
+
+    z-index:
+        -1;
+
 }
 
 
+.control-card::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        100px;
+
+    height:
+        100px;
+
+    bottom:
+        -72px;
+
+    left:
+        -35px;
+
+    border-radius:
+        50%;
+
+    background:
+        #ffffff03;
+
+    pointer-events:
+        none;
+
+    z-index:
+        -1;
+
+}
+
+
+/* =========================================================
+   CONTEÚDO
+========================================================= */
+
 .control-card-content {
 
-    min-width: 0;
+    min-width:
+        0;
 
-    position: relative;
+    position:
+        relative;
 
-    z-index: 2;
+    z-index:
+        2;
 
-    display: flex;
+    display:
+        flex;
 
-    flex-direction: column;
+    flex-direction:
+        column;
 
-    gap: 7px;
+    gap:
+        7px;
+
 }
 
 
 .control-card h3 {
 
-    color: white;
+    color:
+        #ffffff;
 
-    font-size: 18px;
+    font-size:
+        clamp(
+            17px,
+            4.5vw,
+            20px
+        );
 
-    line-height: 1.2;
+    font-weight:
+        800;
+
+    line-height:
+        1.2;
+
 }
 
 
 .control-card p {
 
-    color: var(--soft);
+    max-width:
+        480px;
 
-    font-size: 12px;
+    color:
+        var(--soft);
 
-    line-height: 1.55;
+    font-size:
+        11px;
 
-    font-weight: 600;
+    font-weight:
+        600;
+
+    line-height:
+        1.55;
+
 }
 
 
 .control-status {
 
-    margin-top: 3px;
+    margin-top:
+        2px;
 
-    color: #777d8b;
+    color:
+        #686d79;
 
-    font-size: 10px;
+    font-size:
+        9px;
 
-    letter-spacing: 1.2px;
+    font-weight:
+        800;
 
-    text-transform: uppercase;
+    letter-spacing:
+        1.3px;
+
+    text-transform:
+        uppercase;
+
 }
 
 
 /* =========================================================
-   CARD ATIVO
+   CARD ATIVO — ROSA
 ========================================================= */
 
 .control-card.active {
 
     background:
-
         linear-gradient(
             145deg,
-            #211529,
-            #141017
+            #241520,
+            #120d12
         );
 
-    border:
-        1px solid rgba(255,63,130,.34);
+    border-color:
+        #ff3f8255;
 
-    box-shadow:
-        0 16px 40px rgba(255,63,130,.08);
+}
+
+
+.control-card.active::before {
+
+    background:
+        #ff3f8210;
+
+}
+
+
+.control-card.active::after {
+
+    background:
+        #ff3f8208;
+
 }
 
 
@@ -432,56 +717,136 @@ body {
 
     color:
         var(--pink-light);
+
 }
 
+
+/* =========================================================
+   MOVIMENTO — ROXO
+========================================================= */
 
 .control-card.movement.active {
 
     background:
-
         linear-gradient(
             145deg,
-            #211636,
-            #151021
+            #211936,
+            #110d1d
         );
 
-    border:
-        1px solid rgba(139,92,246,.42);
+    border-color:
+        #8b5cf655;
 
-    box-shadow:
-        0 16px 40px rgba(139,92,246,.10);
+}
+
+
+.control-card.movement.active::before {
+
+    background:
+        #8b5cf612;
+
+}
+
+
+.control-card.movement.active::after {
+
+    background:
+        #8b5cf609;
+
 }
 
 
 .control-card.movement.active .control-status {
 
     color:
-        #c9adff;
+        var(--purple-light);
+
 }
 
+
+/* =========================================================
+   BRILHO — LARANJA
+========================================================= */
 
 .control-card.brightness.active {
 
     background:
-
         linear-gradient(
             145deg,
-            #211b0e,
-            #15120c
+            #241b0d,
+            #151008
         );
 
-    border:
-        1px solid rgba(255,159,67,.38);
+    border-color:
+        #ff9f4355;
 
-    box-shadow:
-        0 16px 40px rgba(255,159,67,.08);
+}
+
+
+.control-card.brightness.active::before {
+
+    background:
+        #ff9f4312;
+
+}
+
+
+.control-card.brightness.active::after {
+
+    background:
+        #ff9f4309;
+
 }
 
 
 .control-card.brightness.active .control-status {
 
     color:
-        var(--orange);
+        var(--orange-light);
+
+}
+
+
+/* =========================================================
+   BLOQUEIO — BRANCO
+========================================================= */
+
+.control-card.proximity.active {
+
+    background:
+        linear-gradient(
+            145deg,
+            #1b1c20,
+            #0e0f12
+        );
+
+    border-color:
+        #ffffff40;
+
+}
+
+
+.control-card.proximity.active::before {
+
+    background:
+        #ffffff0b;
+
+}
+
+
+.control-card.proximity.active::after {
+
+    background:
+        #ffffff07;
+
+}
+
+
+.control-card.proximity.active .control-status {
+
+    color:
+        #ffffff;
+
 }
 
 
@@ -491,202 +856,129 @@ body {
 
 .switch {
 
-    width: 58px;
-    height: 34px;
+    width:
+        58px;
 
-    flex-shrink: 0;
+    height:
+        34px;
 
-    position: relative;
+    flex-shrink:
+        0;
 
-    z-index: 5;
+    position:
+        relative;
 
-    border: 0;
+    z-index:
+        5;
 
-    border-radius: 100px;
+    padding:
+        0;
+
+    border:
+        1px solid #ffffff12;
+
+    border-radius:
+        100px;
 
     background:
         #292c35;
 
-    cursor: pointer;
-
-    padding: 0;
+    cursor:
+        pointer;
 
     transition:
         background .22s ease,
-        box-shadow .22s ease;
+        border-color .22s ease;
+
 }
 
 
 .switch::after {
 
-    content: "";
+    content:
+        "";
 
-    width: 26px;
-    height: 26px;
+    width:
+        26px;
 
-    position: absolute;
+    height:
+        26px;
 
-    top: 4px;
-    left: 4px;
+    position:
+        absolute;
 
-    border-radius: 50%;
+    top:
+        3px;
+
+    left:
+        3px;
+
+    border-radius:
+        50%;
 
     background:
-        #8a8f9d;
-
-    box-shadow:
-        0 3px 8px rgba(0,0,0,.35);
+        #9297a3;
 
     transition:
         transform .22s cubic-bezier(.22,1,.36,1),
         background .22s ease;
+
 }
 
+
+/* =========================================================
+   SWITCH ROSA
+========================================================= */
 
 .switch.active {
 
     background:
         var(--pink);
 
-    box-shadow:
-        0 0 0 4px rgba(255,63,130,.08);
+    border-color:
+        var(--pink);
+
 }
 
 
 .switch.active::after {
 
     background:
-        #fff;
+        #ffffff;
 
     transform:
         translateX(24px);
+
 }
 
+
+/* =========================================================
+   SWITCH ROXO
+========================================================= */
 
 .switch.purple.active {
 
     background:
         var(--purple);
 
-    box-shadow:
-        0 0 0 4px rgba(139,92,246,.08);
+    border-color:
+        var(--purple);
+
 }
 
+
+/* =========================================================
+   SWITCH LARANJA
+========================================================= */
 
 .switch.orange.active {
 
     background:
         var(--orange);
 
-    box-shadow:
-        0 0 0 4px rgba(255,159,67,.08);
-}
+    border-color:
+        var(--orange);
 
-
-.switch:active {
-
-    transform:
-        scale(.94);
-}
-
-.heroTag {
-
-    width:
-        80%;
-
-    margin-left:
-        10%;
-
-    margin-top:
-        55px;
-
-    margin-bottom:
-        55px;
-
-    min-height:
-        70px;
-
-    padding:
-        13px
-        18px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    color:
-        #ffffff;
-
-    
-
-    border-radius:
-        24px;
-
-    font-family:
-        "Quicksand",
-        sans-serif;
-
-    font-size:
-        clamp(
-            27px,
-            8vw,
-            42px
-        );
-
-    font-weight:
-        800;
-
-    line-height:
-        1.1;
-
-    letter-spacing:
-        -0.8px;
-
-    text-align:
-        center;
-
-    box-shadow:
-        0 14px 40px
-        rgba(
-            0,
-            0,
-            0,
-            .55
-        );
-
-}
-
-/* =========================================================
-   PROXIMIDADE
-========================================================= */
-
-.control-card.proximity.active {
-
-    background:
-
-        linear-gradient(
-            145deg,
-            #18191d,
-            #101114
-        );
-
-    border:
-        1px solid rgba(255,255,255,.28);
-
-    box-shadow:
-        0 16px 40px rgba(255,255,255,.06);
-}
-
-
-.control-card.proximity.active .control-status {
-
-    color:
-        #ffffff;
 }
 
 
@@ -699,8 +991,9 @@ body {
     background:
         #ffffff;
 
-    box-shadow:
-        0 0 0 4px rgba(255,255,255,.08);
+    border-color:
+        #ffffff;
+
 }
 
 
@@ -711,21 +1004,31 @@ body {
 
     transform:
         translateX(24px);
+
 }
 
+
+/* =========================================================
+   PRESS
+========================================================= */
+
+.switch:active {
+
+    opacity:
+        .72;
+
+}
+
+
+
+
 </style>
-
-
 
 </head>
 
 
 <body>
 
-
-<!-- =======================================================
-     INTERFACE
-======================================================== -->
 
 <main class="mainUI">
 
@@ -735,21 +1038,20 @@ body {
     ==================================================== -->
 
     <div class="heroTag">
-        Mulher Amparada
+        <div class="heroTopLine"></div>
+
+        <h1 class="heroTitle">
+            Mulher Amparada
+        </h1>
+
+        <p class="heroSubtitle">
+            Proteção, assistência e recursos reunidos em um só lugar.
+        </p>
     </div>
 
 
-
-
-
-
     <!-- ===================================================
-         PROTEÇÃO POR BARULHO / PALMAS
-    ==================================================== -->
-
-
-    <!-- ===================================================
-         PROTEÇÃO POR BARULHO / PALMAS
+         BARULHO
     ==================================================== -->
 
     <section class="section">
@@ -757,6 +1059,7 @@ body {
         <div class="label">
             Barulho alto
         </div>
+
 
         <div
             class="control-card"
@@ -783,6 +1086,7 @@ body {
 
             </div>
 
+
             <button
                 class="switch"
                 id="palmasSwitch"
@@ -806,6 +1110,7 @@ body {
         <div class="label">
             Movimento
         </div>
+
 
         <div
             class="control-card movement"
@@ -832,6 +1137,7 @@ body {
 
             </div>
 
+
             <button
                 class="switch purple"
                 id="movimentoSwitch"
@@ -846,11 +1152,16 @@ body {
     </section>
 
 
+    <!-- ===================================================
+         BRILHO
+    ==================================================== -->
+
     <section class="section">
 
         <div class="label">
             Brilho
         </div>
+
 
         <div
             class="control-card brightness"
@@ -877,6 +1188,7 @@ body {
 
             </div>
 
+
             <button
                 class="switch orange"
                 id="brilhoSwitch"
@@ -890,67 +1202,81 @@ body {
 
     </section>
 
-<section class="section">
 
-    <div class="label">
-        Desligar o celular
-    </div>
+    <!-- ===================================================
+         BLOQUEIO
+    ==================================================== -->
 
-    <div
-        class="control-card proximity"
-        id="proximidadeCard"
-    >
+    <section class="section">
 
-        <div class="control-card-content">
+        <div class="label">
+            Desligar o celular
+        </div>
 
-            <h3>
-                Bloqueio por barulho
-            </h3>
 
-            <p>
-                Detecta sons altos e bloqueia
-                o celular automaticamente.
-            </p>
+        <div
+            class="control-card proximity"
+            id="proximidadeCard"
+        >
 
-            <span
-                class="control-status"
-                id="proximidadeStatus"
-            >
-                DESATIVADO
-            </span>
+            <div class="control-card-content">
+
+                <h3>
+                    Bloqueio por barulho
+                </h3>
+
+                <p>
+                    Detecta sons altos e bloqueia
+                    o celular automaticamente.
+                </p>
+
+                <span
+                    class="control-status"
+                    id="proximidadeStatus"
+                >
+                    DESATIVADO
+                </span>
+
+            </div>
+
+
+            <button
+                class="switch white"
+                id="proximidadeSwitch"
+                type="button"
+                role="switch"
+                aria-checked="false"
+                aria-label="Ativar bloqueio por barulho"
+            ></button>
 
         </div>
 
-        <button
-            class="switch white"
-            id="proximidadeSwitch"
-            type="button"
-            role="switch"
-            aria-checked="false"
-            aria-label="Ativar bloqueio por barulho"
-        ></button>
-
-    </div>
-
-</section>
+    </section>
 
 </main>
-
-
 
 
 <script>
 
 /* =========================================================
-   UTILITÁRIOS
+   VIBRAÇÃO
 ========================================================= */
 
-function vibrar(duracao = 100) {
+function vibrar(
+    duracao = 100
+) {
 
     try {
 
-        if (navigator.vibrate) {
-            navigator.vibrate(duracao);
+        if (
+            navigator.vibrate &&
+            typeof navigator.vibrate === "function"
+        ) {
+
+            navigator.vibrate(
+                duracao
+            );
+
         }
 
     } catch (e) {}
@@ -958,7 +1284,14 @@ function vibrar(duracao = 100) {
 }
 
 
-function chamarAndroid(nome, ...args) {
+/* =========================================================
+   ANDROID BRIDGE
+========================================================= */
+
+function chamarAndroid(
+    nome,
+    ...args
+) {
 
     try {
 
@@ -967,7 +1300,9 @@ function chamarAndroid(nome, ...args) {
             typeof window.Android[nome] === "function"
         ) {
 
-            return window.Android[nome](...args);
+            return window.Android[nome](
+                ...args
+            );
 
         }
 
@@ -981,40 +1316,12 @@ function chamarAndroid(nome, ...args) {
     }
 
     return null;
-}
-
-
-
-/* =========================================================
-   LIGAÇÃO
-========================================================= */
-
-function ligar(numero) {
-
-    if (!numero) return;
-
-    vibrar(60);
-
-    try {
-
-        window.location.href =
-            "tel:" + numero;
-
-    } catch (e) {
-
-        alert(
-            "Não foi possível iniciar a ligação."
-        );
-
-    }
 
 }
 
 
-
-
 /* =========================================================
-   PROTEÇÃO POR BARULHO / PALMAS
+   PROTEÇÃO POR BARULHO
 ========================================================= */
 
 const palmasCard =
@@ -1033,21 +1340,25 @@ const palmasStatus =
     );
 
 
-let palmasAtiva = false;
+let palmasAtiva =
+    false;
 
 
-function atualizarPalmasUI(ativa) {
+function atualizarPalmasUI(
+    ativa
+) {
 
-    palmasAtiva = ativa;
+    palmasAtiva =
+        ativa;
 
 
-    palmasSwitch.classList.toggle(
+    palmasCard.classList.toggle(
         "active",
         ativa
     );
 
 
-    palmasCard.classList.toggle(
+    palmasSwitch.classList.toggle(
         "active",
         ativa
     );
@@ -1077,7 +1388,7 @@ function atualizarPalmasUI(ativa) {
 
 palmasSwitch.addEventListener(
     "click",
-    function() {
+    function () {
 
         palmasAtiva =
             !palmasAtiva;
@@ -1109,7 +1420,7 @@ palmasSwitch.addEventListener(
 
 
 /* =========================================================
-   PROTEÇÃO POR MOVIMENTO
+   MOVIMENTO
 ========================================================= */
 
 const movimentoCard =
@@ -1128,18 +1439,19 @@ const movimentoStatus =
     );
 
 
-let protecaoAtiva = false;
+let protecaoAtiva =
+    false;
 
 
 function atualizarProtecaoUI() {
 
-    movimentoSwitch.classList.toggle(
+    movimentoCard.classList.toggle(
         "active",
         protecaoAtiva
     );
 
 
-    movimentoCard.classList.toggle(
+    movimentoSwitch.classList.toggle(
         "active",
         protecaoAtiva
     );
@@ -1169,7 +1481,7 @@ function atualizarProtecaoUI() {
 
 movimentoSwitch.addEventListener(
     "click",
-    function() {
+    function () {
 
         protecaoAtiva =
             !protecaoAtiva;
@@ -1199,7 +1511,7 @@ movimentoSwitch.addEventListener(
 
 
 /* =========================================================
-   BRILHO / ESCURECIMENTO
+   BRILHO
 ========================================================= */
 
 const brilhoCard =
@@ -1218,18 +1530,19 @@ const brilhoStatus =
     );
 
 
-let brilhoAtivo = false;
+let brilhoAtivo =
+    false;
 
 
 function atualizarBrilhoUI() {
 
-    brilhoSwitch.classList.toggle(
+    brilhoCard.classList.toggle(
         "active",
         brilhoAtivo
     );
 
 
-    brilhoCard.classList.toggle(
+    brilhoSwitch.classList.toggle(
         "active",
         brilhoAtivo
     );
@@ -1259,7 +1572,7 @@ function atualizarBrilhoUI() {
 
 brilhoSwitch.addEventListener(
     "click",
-    function() {
+    function () {
 
         brilhoAtivo =
             !brilhoAtivo;
@@ -1269,65 +1582,60 @@ brilhoSwitch.addEventListener(
 
         if (brilhoAtivo) {
 
-            if (
-                window.TiltBrightness &&
-                typeof TiltBrightness.startTiltBrightness ===
-                    "function"
-            ) {
+            try {
 
-                try {
+                if (
+                    window.TiltBrightness &&
+                    typeof TiltBrightness.startTiltBrightness ===
+                        "function"
+                ) {
 
                     TiltBrightness.startTiltBrightness();
 
-                } catch (e) {
-
-                    console.warn(e);
-
                 }
+
+            } catch (e) {
+
+                console.warn(e);
 
             }
 
         } else {
 
-            if (
-                window.TiltBrightness &&
-                typeof TiltBrightness.stopTiltBrightness ===
-                    "function"
-            ) {
+            try {
 
-                try {
+                if (
+                    window.TiltBrightness &&
+                    typeof TiltBrightness.stopTiltBrightness ===
+                        "function"
+                ) {
 
                     TiltBrightness.stopTiltBrightness();
 
-                } catch (e) {
-
-                    console.warn(e);
-
                 }
+
+            } catch (e) {
+
+                console.warn(e);
 
             }
 
 
-            /*
-             * Mostra novamente a Status Bar
-             * e a Navigation Bar.
-             */
+            try {
 
-            if (
-                window.Android &&
-                typeof Android.desativarFullscreen ===
-                    "function"
-            ) {
-
-                try {
+                if (
+                    window.Android &&
+                    typeof Android.desativarFullscreen ===
+                        "function"
+                ) {
 
                     Android.desativarFullscreen();
 
-                } catch (e) {
-
-                    console.warn(e);
-
                 }
+
+            } catch (e) {
+
+                console.warn(e);
 
             }
 
@@ -1346,13 +1654,14 @@ brilhoSwitch.addEventListener(
 
 window.addEventListener(
     "tiltbrightness",
-    function(e) {
+    function (e) {
 
         if (
             e.detail === "dark"
         ) {
 
-            brilhoAtivo = true;
+            brilhoAtivo =
+                true;
 
             atualizarBrilhoUI();
 
@@ -1363,7 +1672,8 @@ window.addEventListener(
             e.detail === "normal"
         ) {
 
-            brilhoAtivo = false;
+            brilhoAtivo =
+                false;
 
             atualizarBrilhoUI();
 
@@ -1372,11 +1682,9 @@ window.addEventListener(
     }
 );
 
-</script>
 
-<script>
 /* =========================================================
-   PROTEÇÃO POR PROXIMIDADE
+   BLOQUEIO POR BARULHO
 ========================================================= */
 
 const proximidadeCard =
@@ -1395,41 +1703,47 @@ const proximidadeStatus =
     );
 
 
-let proximidadeAtiva = false;
+let proximidadeAtiva =
+    false;
 
 
 /* =========================================================
-   ATUALIZAÇÃO DA INTERFACE
+   UI
 ========================================================= */
 
 function atualizarProximidadeUI() {
-
-    proximidadeSwitch.classList.toggle(
-        "active",
-        proximidadeAtiva
-    );
 
     proximidadeCard.classList.toggle(
         "active",
         proximidadeAtiva
     );
 
+
+    proximidadeSwitch.classList.toggle(
+        "active",
+        proximidadeAtiva
+    );
+
+
     proximidadeSwitch.setAttribute(
         "aria-checked",
         String(proximidadeAtiva)
     );
 
+
     proximidadeSwitch.setAttribute(
         "aria-label",
         proximidadeAtiva
-            ? "Desativar bloqueio por proximidade"
-            : "Ativar bloqueio por proximidade"
+            ? "Desativar bloqueio por barulho"
+            : "Ativar bloqueio por barulho"
     );
+
 
     proximidadeStatus.innerText =
         proximidadeAtiva
             ? "ATIVADO"
             : "DESATIVADO";
+
 }
 
 
@@ -1439,32 +1753,28 @@ function atualizarProximidadeUI() {
 
 proximidadeSwitch.addEventListener(
     "click",
-    function() {
+    function () {
 
         vibrar(70);
 
 
-        /* =============================================
-           DESATIVAR
-        ============================================= */
-
-        if (proximidadeAtiva) {
+        if (
+            proximidadeAtiva
+        ) {
 
             chamarAndroid(
                 "pararSensorProximidade"
             );
 
-            proximidadeAtiva = false;
+            proximidadeAtiva =
+                false;
 
             atualizarProximidadeUI();
 
             return;
+
         }
 
-
-        /* =============================================
-           ATIVAR
-        ============================================= */
 
         const resultado =
             chamarAndroid(
@@ -1472,15 +1782,19 @@ proximidadeSwitch.addEventListener(
             );
 
 
-        if (resultado === true) {
+        if (
+            resultado === true
+        ) {
 
-            proximidadeAtiva = true;
+            proximidadeAtiva =
+                true;
 
             atualizarProximidadeUI();
 
         } else {
 
-            proximidadeAtiva = false;
+            proximidadeAtiva =
+                false;
 
             proximidadeStatus.innerText =
                 "NÃO FOI POSSÍVEL ATIVAR";
@@ -1491,7 +1805,25 @@ proximidadeSwitch.addEventListener(
 
     }
 );
+
+
+/* =========================================================
+   ESTADO INICIAL
+========================================================= */
+
+atualizarPalmasUI(
+    false
+);
+
+atualizarProtecaoUI();
+
+atualizarBrilhoUI();
+
+atualizarProximidadeUI();
+
 </script>
 
+
 </body>
+
 </html>

@@ -1256,7 +1256,6 @@ margin-top: 1%;
 </main>
 
 <script>
-
 /* =========================================================
    VIBRAÇÃO
 ========================================================= */
@@ -1410,7 +1409,7 @@ palmasSwitch.addEventListener(
 
 
 /* =========================================================
-   MOVIMENTO
+   BALANÇAR O CELULAR
 ========================================================= */
 
 const movimentoCard =
@@ -1422,43 +1421,7 @@ const movimentoSwitch =
 const movimentoStatus =
     document.getElementById("movimentoStatus");
 
-const movimentoDescricao =
-    movimentoCard.querySelector("p");
-
-const movimentoDescricaoOriginal =
-    movimentoDescricao.innerText;
-
 let protecaoAtiva = false;
-
-
-function mostrarMovimentoIndisponivel() {
-
-    protecaoAtiva = false;
-
-    movimentoCard.classList.remove(
-        "active"
-    );
-
-    movimentoSwitch.classList.remove(
-        "active"
-    );
-
-    movimentoSwitch.setAttribute(
-        "aria-checked",
-        "false"
-    );
-
-    movimentoSwitch.setAttribute(
-        "aria-label",
-        "Ativar proteção por movimento"
-    );
-
-    movimentoStatus.innerText =
-        "DESATIVADO";
-
-    movimentoDescricao.innerText =
-        "Sensor indisponível no seu aparelho";
-}
 
 
 function atualizarProtecaoUI() {
@@ -1489,9 +1452,6 @@ function atualizarProtecaoUI() {
         protecaoAtiva
             ? "ATIVADO"
             : "DESATIVADO";
-
-    movimentoDescricao.innerText =
-        movimentoDescricaoOriginal;
 }
 
 
@@ -1501,67 +1461,39 @@ movimentoSwitch.addEventListener(
 
         vibrar(70);
 
-        /* -----------------------------------------------------
-           DESATIVAR
-        ----------------------------------------------------- */
-
         if (protecaoAtiva) {
 
-            const resultado =
-                chamarAndroid(
-                    "desativarProtecao"
-                );
+            chamarAndroid(
+                "desativarProtecao"
+            );
 
-            if (resultado.sucesso) {
+            protecaoAtiva = false;
 
-                protecaoAtiva = false;
-
-                atualizarProtecaoUI();
-            }
+            atualizarProtecaoUI();
 
             return;
         }
 
 
-        /* -----------------------------------------------------
-           ATIVAR
-        ----------------------------------------------------- */
-
-        const resultado =
-            chamarAndroid(
-                "ativarProtecao"
-            );
-
-
         /*
-         * O Kotlin agora retorna Boolean:
-         *
-         * true  = sensor disponível e registrado
-         * false = sensor indisponível ou falha
+         * Sem verificação de sensor.
+         * Apenas chama o Kotlin.
          */
 
-        if (
-            resultado.sucesso &&
-            resultado.valor === true
-        ) {
+        chamarAndroid(
+            "ativarProtecao"
+        );
 
-            protecaoAtiva = true;
+        protecaoAtiva = true;
 
-            atualizarProtecaoUI();
-
-        } else {
-
-            mostrarMovimentoIndisponivel();
-
-            vibrar(150);
-        }
+        atualizarProtecaoUI();
 
     }
 );
 
 
 /* =========================================================
-   BRILHO
+   ESCURECIMENTO POR INCLINAÇÃO
 ========================================================= */
 
 const brilhoCard =
@@ -1573,43 +1505,7 @@ const brilhoSwitch =
 const brilhoStatus =
     document.getElementById("brilhoStatus");
 
-const brilhoDescricao =
-    brilhoCard.querySelector("p");
-
-const brilhoDescricaoOriginal =
-    brilhoDescricao.innerText;
-
 let brilhoAtivo = false;
-
-
-function mostrarBrilhoIndisponivel() {
-
-    brilhoAtivo = false;
-
-    brilhoCard.classList.remove(
-        "active"
-    );
-
-    brilhoSwitch.classList.remove(
-        "active"
-    );
-
-    brilhoSwitch.setAttribute(
-        "aria-checked",
-        "false"
-    );
-
-    brilhoSwitch.setAttribute(
-        "aria-label",
-        "Ativar escurecimento por inclinação"
-    );
-
-    brilhoStatus.innerText =
-        "DESATIVADO";
-
-    brilhoDescricao.innerText =
-        "Sensor indisponível no seu aparelho";
-}
 
 
 function atualizarBrilhoUI() {
@@ -1640,9 +1536,6 @@ function atualizarBrilhoUI() {
         brilhoAtivo
             ? "ATIVADO"
             : "DESATIVADO";
-
-    brilhoDescricao.innerText =
-        brilhoDescricaoOriginal;
 }
 
 
@@ -1650,11 +1543,7 @@ brilhoSwitch.addEventListener(
     "click",
     function () {
 
-        vibrar(60);
-
-        /* -----------------------------------------------------
-           DESATIVAR
-        ----------------------------------------------------- */
+        vibrar(70);
 
         if (brilhoAtivo) {
 
@@ -1663,7 +1552,7 @@ brilhoSwitch.addEventListener(
                 if (
                     window.TiltBrightness &&
                     typeof TiltBrightness.stopTiltBrightness ===
-                        "function"
+                    "function"
                 ) {
 
                     TiltBrightness.stopTiltBrightness();
@@ -1671,7 +1560,10 @@ brilhoSwitch.addEventListener(
 
             } catch (e) {
 
-                console.warn(e);
+                console.warn(
+                    "Erro ao desativar brilho:",
+                    e
+                );
             }
 
             try {
@@ -1679,7 +1571,7 @@ brilhoSwitch.addEventListener(
                 if (
                     window.Android &&
                     typeof Android.desativarFullscreen ===
-                        "function"
+                    "function"
                 ) {
 
                     Android.desativarFullscreen();
@@ -1687,7 +1579,10 @@ brilhoSwitch.addEventListener(
 
             } catch (e) {
 
-                console.warn(e);
+                console.warn(
+                    "Erro ao restaurar tela:",
+                    e
+                );
             }
 
             brilhoAtivo = false;
@@ -1698,66 +1593,52 @@ brilhoSwitch.addEventListener(
         }
 
 
-        /* -----------------------------------------------------
-           ATIVAR
-        ----------------------------------------------------- */
-
-        let resultado = false;
+        /*
+         * Sem verificação de sensor.
+         * Apenas chama o Kotlin.
+         */
 
         try {
 
             if (
                 window.TiltBrightness &&
                 typeof TiltBrightness.startTiltBrightness ===
-                    "function"
+                "function"
             ) {
 
-                resultado =
-                    TiltBrightness.startTiltBrightness();
+                TiltBrightness.startTiltBrightness();
             }
 
         } catch (e) {
 
             console.warn(
-                "TiltBrightness",
+                "Erro ao ativar escurecimento:",
                 e
             );
-
-            resultado = false;
         }
 
+        brilhoAtivo = true;
 
-        /*
-         * O Kotlin agora retorna Boolean:
-         *
-         * true  = sensor disponível e registrado
-         * false = sensor indisponível ou falha
-         */
-
-        if (resultado === true) {
-
-            brilhoAtivo = true;
-
-            atualizarBrilhoUI();
-
-        } else {
-
-            mostrarBrilhoIndisponivel();
-
-            vibrar(150);
-        }
+        atualizarBrilhoUI();
 
     }
 );
 
 
 /* =========================================================
-   EVENTO DO ANDROID — BRILHO
+   EVENTO DO ANDROID — ESCURECIMENTO
 ========================================================= */
 
 window.addEventListener(
     "tiltbrightness",
     function (e) {
+
+        if (
+            !e ||
+            !e.detail
+        ) {
+            return;
+        }
 
         if (
             e.detail === "dark"
@@ -1768,8 +1649,7 @@ window.addEventListener(
             atualizarBrilhoUI();
         }
 
-
-        if (
+        else if (
             e.detail === "normal"
         ) {
 
@@ -1860,7 +1740,6 @@ proximidadeSwitch.addEventListener(
                 "desligarPorBarulho"
             );
 
-
         if (resultado.sucesso) {
 
             proximidadeAtiva = true;
@@ -1892,7 +1771,6 @@ atualizarProtecaoUI();
 atualizarBrilhoUI();
 
 atualizarProximidadeUI();
-
 </script>
 </body>
 

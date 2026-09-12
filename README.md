@@ -18,7 +18,7 @@ Antes de conceder essa permissão, leia atentamente as informações exibidas pe
 
 > ⚠️Vale lembrar que o projeto não substitui serviços oficiais do governo e também não garante segurança imediata, bem como as funções dependem do estado e hardware de cada aparelho!
 
-> ⚠️Vale lembrar que o Gerenciador De Arquivos Do Mulher Amparada na verdade ele so visualiza, e ele tem esse nome porque isso faz parte do disfarce do app, e ele so visualiza para a seguranca e nao apagar provas, e para não apagar algo importante acidentalmente!
+> ⚠️ Vale lembrar: o Gerenciador de Arquivos do Mulher Amparada funciona principalmente como um visualizador de arquivos. O nome “Gerenciador de Arquivos” também faz parte do disfarce do aplicativo. Ele foi projetado dessa forma por uma questão de segurança: o aplicativo não oferece funções próprias para excluir, mover, copiar ou renomear arquivos, reduzindo o risco de apagar ou alterar acidentalmente algum arquivo importante — inclusive possíveis registros que a usuária queira preservar.
 
 > ⚠️E também quando for clicar em qualquer botão de apagar no app, ele pode apagar TODOS OS CONTEÚDOS criptografados de TODO O APP, então CUIDADO!
 
@@ -30,19 +30,11 @@ Na primeira página do site, tem 3 botoes que ligam para (180, 190 e 192), e usa
 
 e os apps são compilados com o workflow, gera o código sha-256 e o zip com o app, envia para a release pela tag correspondente, e atualiza o link das páginas de download, e o tamanho do apk dessas páginas!
 
-no repositório tem um yml que ativa todos os dias, procura no codigo fonte dos 3 apps o arquivo build do módulo do app, e se ele ver que saiu uma versão android nova, ele atualiza, totalmente sozinho!, garantindo que elas tenham os apps mais recentes possíveis!
+no repositório tem um yml que ativa todos os dias, procura no codigo fonte dos 3 apps o arquivo build do módulo do app, e se ele ver que saiu uma versão android nova, ele atualiza, totalmente sozinho!, mantendo os APKs sincronizados com as versões do código-fonte detectadas pelo workflow.
 
-e todas as activitys tem o android exported="false", menos a MainActivity porque a partir das versões mais recentes do android, a tela inicial do app tem que estar obrigatoriamente com android exported="true"
+e todas as activitys tem o android exported="false", menos a MainActivity porque a partir das versões mais recentes do android, a tela inicial do app, se ela tiver um intent filter, ela tem que estar obrigatoriamente com android exported="true"
 
-E nao faz sentido usar proguard8 
-pois o app tem o código-fonte publico
-
-E ele tem uma chave que assina os apps, usando essas 4 informações:
-
-KEYSTORE_BASE64
-KEYSTORE_PASSWORD
-KEY_ALIAS
-KEY_PASSWORD
+E o workflow utiliza um keystore de assinatura armazenado de forma protegida nos GitHub Actions Secrets. As informações necessárias para acessar o keystore e selecionar a chave são fornecidas pelas variáveis KEYSTORE_BASE64, KEYSTORE_PASSWORD, KEY_ALIAS e KEY_PASSWORD.
 
 Em:
 
@@ -52,7 +44,7 @@ Em:
 
 E eu também já consegui configurar um ssh na conta, e 2fa nela tambem, e com o ssh, eu consegui mover pastas inteiras para o repositório, e transformei 4 em 1, e mais de 100 commits em 1,
 
-e agora a pagina la no GitHub pages atualiza a cada 1 hora
+e agora a pagina la no GitHub pages faz um deploy a cada 1 hora
 
 e no site, ele conta com 3 botoes que ligam pro 192, 190 e 180 (ai voce escolhe), e eles usam o "tel:" do navegador
 
@@ -121,8 +113,8 @@ com isso, voce pode controlar o brilho da tela clicando em um botão..., porém,
 
 ----
 
-**Desligar o celular pelo barulho:**
-ao ativado, ao fazer barulho alto, ele usa o administrador do dispositivo e desliga o celular!, e o melhor e que da para ativar essa e a proteção por barulho ao mesmo tempo!, (sim, eu testei isso no dia 06/09/2026, e não só isso, se o agressor jogar o celular e ele não quebrar, a proteção por barulho se tiver ativa em teoria pode iniciar a ligação pro 180!)
+**Bloquear a tela do celular pelo barulho:**
+ao ativado, ao fazer barulho alto, ele usa o administrador do dispositivo e bloqueia a tela do celular!, e o melhor e que da para ativar essa e a proteção por barulho ao mesmo tempo!, (sim, eu testei isso no dia 06/09/2026, e não só isso, se o agressor jogar o celular e ele não quebrar, a proteção por barulho se tiver ativa em teoria pode iniciar a ligação pro 180!)
 
 ----
 
@@ -132,7 +124,7 @@ Saindo dessa área, existem botões que abrem o aplicativo nativo do telefone no
 ----
 
 **Compartilhamento Rápido de Localização:**
-Além disso, existe um botão dentro do app que pega a localização atual, monta um link do Google Maps e já manda para o WhatsApp do 180, precisando apenas clicar no botão de enviar.
+Além disso, existe um botão dentro do aplicativo que obtém a localização atual, monta um link do Google Maps com as coordenadas e abre uma conversa no WhatsApp do 180 com a mensagem preparada. O envio não é automático: é necessário apenas conferir a mensagem e tocar no botão de enviar.
 
 ----
 
@@ -206,7 +198,7 @@ Sistema de pontos, com registro de comidas e bebidas boas e ruins, bem como a ad
 ----
 
 **Mapa:**
-Mostra um mapa da região da usuária, com funções que dá para ver onde ela está
+Mostra um mapa da região e, quando a localização estiver disponível e autorizada, permite visualizar a posição atual.
 
 ----
 
@@ -230,14 +222,14 @@ O sistema permite categorizar tarefas em áreas como estudos, trabalho, pessoal 
 
 As tarefas podem ser marcadas como concluídas para acompanhamento do progresso.
 
-Todas as tarefas são salvas diretamente no navegador do usuário.
+Todas as tarefas são salvas diretamente no webview da usuária.
 
 Os dados ficam armazenados localmente no dispositivo do usuário.
 
 ----
 
 **Gravador de voz:**
-Usando uma activity (uma tela) em kotlin, é possivel ter um gravador de voz no app, sendo possível registrar evidências e provas, além do que a usuária quiser, sempre usando permissoes android e com o consentimento da usuária!
+Usando uma activity (uma tela) em kotlin, é possivel ter um gravador de voz no app, sendo possível registrar gravações que podem ser utilizadas pela própria usuária para documentação, além do que a usuária quiser, sempre usando permissoes android e com o consentimento da usuária!
 
 GRAVAÇÕES — COMPORTAMENTO E METADADOS
 
@@ -359,23 +351,25 @@ O SHA-256 permite verificar se os bytes de um arquivo correspondem ao conteúdo 
 
 ----
 
-**Meus arquivos:**
-Dentro do app, ele só visualiza as pastas e ao clicar em um arquivo, abre um seletor de apps para executar/visualizar ele
+Meus arquivos
 
-e ele tem um botão que troca entre armazenamento interno e cartão sd e pendrive
+Dentro do aplicativo, o Gerenciador de Arquivos do Mulher Amparada funciona como um visualizador. Ele permite navegar pelas pastas e, ao selecionar um arquivo, utiliza o mecanismo do Android para abrir um seletor de aplicativos compatíveis com aquele tipo de arquivo, permitindo que a usuária escolha um aplicativo para visualizá-lo ou executá-lo.
 
-Porém, é assim:
+O aplicativo possui um único botão para alternar entre os diferentes tipos de armazenamento disponíveis, seguindo uma sequência entre:
 
-Cartao sd e armazenamento interno (usa a permissão de acesso a todos os arquivos)
+Armazenamento interno → cartão SD → dispositivo externo (como pendrive via USB OTG) → armazenamento interno.
 
-Dispositivos externos (um exemplo é o pendrive via cabo otg) usa o "saf" Storage Acess Framework 
+O acesso varia de acordo com o tipo de armazenamento:
 
-E ELE NÃO LÊ OS ARQUIVOS DO GRAVADOR DE VOZ DO APP E NEM QUALQUER OUTRO RECURSO DO APP, APENAS ARQUIVOS JÁ EXISTENTES DO CELULAR DA USUÁRIA!
+- Armazenamento interno e cartão SD: utilizam a permissão de Acesso a todos os arquivos, quando concedida pelo Android.
+- Dispositivos externos, como pendrives conectados por USB OTG: utilizam o SAF (Storage Access Framework), mecanismo oficial do Android para acesso a documentos e dispositivos de armazenamento externos autorizados pela usuária.
+
+⚠️ Reforçando: o Gerenciador de Arquivos não acessa os arquivos internos do Gravador de Voz do Mulher Amparada nem os dados ou recursos internos de outras funcionalidades do aplicativo. Ele trabalha com arquivos que já estão disponíveis nos armazenamentos do dispositivo e que podem ser acessados pelos mecanismos de armazenamento autorizados pelo Android.
 
 ----
 
-**Desligar o celular:**
-Ao tocar neste botão, o aplicativo solicitará a permissão de Administrador do dispositivo, caso ela ainda não tenha sido concedida. Quando essa permissão estiver ativa, o aplicativo poderá bloquear imediatamente a tela do dispositivo, (aviso: possivelmente você não poderá usar a sua biometria!)
+**Bloquear a tela do celular:**
+Ao tocar neste botão, o aplicativo solicitará a permissão de Administrador do dispositivo, caso ela ainda não tenha sido concedida. Quando essa permissão estiver ativa, o aplicativo poderá bloquear imediatamente a tela do dispositivo, (aviso: depois que a tela é bloqueada pelo sistema, o Android pode exigir novamente o método de credencial do dispositivo antes de permitir determinadas formas de autenticação biométrica.)
 
 ----
 
@@ -387,8 +381,6 @@ Ao tocar neste botão, o app mostrará um site dentro do app que lista todos os 
 ## FUNÇÕES AVANÇADAS DA ÁREA PROTEGIDA!:
 
 **lembrando que, sobre esses apps, ja tem o código fonte dele dentro do repositório no site!:**
-
-**Lembrando que o app de gerenciador de arquivos so visualiza arquivos  nao copia, nao exclui, nao move e nao renomeia!**
 
 e o de comando de voz, também precisa desbloquear com biometria 
 
@@ -516,6 +508,9 @@ O Assistente Inteligente reconhece comandos em linguagem natural. Veja alguns ex
 🔍 Pesquisa
 • Pesquisar + termo a ser pesquisado (e ai ele abre o navegador com a pesquisa feita no google)
 
+
+```md
+
 ----
 
 ## Sobre o comando de baixar histórico de chamadas pelo assistente de voz:
@@ -629,7 +624,7 @@ A estrutura possui informações sobre o formato, o algoritmo utilizado e o regi
 
 Exemplo:
 
-```json
+
 {
   "tipo": "registro_de_chamada",
   "formato": "JSON",
@@ -645,7 +640,6 @@ Exemplo:
   ],
   "sha256_depois": "HASH_AQUI"
 }
-```
 
 Os valores apresentados acima são apenas ilustrativos.
 
@@ -663,7 +657,7 @@ O resultado é armazenado no campo:
 
 `sha256_antes`
 
-O SHA-256 produz uma representação hexadecimal do conteúdo utilizado no cálculo.
+O SHA-256 produz uma representação hexadecimal do conteúdo utilizado no cálculo do hash.
 
 ---
 
@@ -679,7 +673,7 @@ Em condições normais, os dois valores devem ser iguais:
 
 ```text
 sha256_antes == sha256_depois
-```
+
 
 Essa comparação funciona como uma verificação de consistência do conteúdo que foi utilizado para gerar o arquivo.
 
@@ -699,17 +693,14 @@ Dados originais
     SHA-256
        ↓
     Hash A
-```
 
 Se os dados forem alterados:
 
-```text
 Dados alterados
        ↓
     SHA-256
        ↓
     Hash B
-```
 
 Os valores `Hash A` e `Hash B` deverão ser diferentes quando o conteúdo realmente tiver sido alterado.
 
@@ -861,7 +852,7 @@ Para fins de organização, recomenda-se diferenciar:
 
 ```text
 registro_de_chamada.json
-```
+
 
 como arquivo original exportado pelo aplicativo, de eventuais cópias posteriormente modificadas.
 
@@ -871,7 +862,6 @@ Exemplo:
 registro_de_chamada.json
 registro_de_chamada_copia.json
 registro_de_chamada_anotado.json
-```
 
 Uma cópia modificada não deve ser apresentada como se fosse o arquivo original.
 
@@ -951,7 +941,7 @@ Histórico de chamadas do Android
        Arquivo JSON final
               ↓
         Pasta Downloads
-```
+
 
 O recurso foi projetado para fornecer uma cópia estruturada dos dados de chamadas disponíveis no dispositivo, acompanhada de informações de integridade criptográfica.
 
@@ -966,6 +956,10 @@ O SHA-256 acrescenta uma camada de verificação de integridade, mas não transf
 A utilização responsável do recurso envolve preservar o arquivo original, proteger os dados pessoais presentes nele e observar a legislação aplicável.
 
 ----
+
+```
+
+
 
 ## Considerações finais:
 
@@ -1070,7 +1064,7 @@ Em conjunto, a página transforma o aprendizado sobre a história das mulheres e
 
 e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, onde nem tinha os recursos, ja programei ele num app de A-IDE, num A05, e eu ja perdi vários projetos porque o celular nao aguentava, matava o projeto porque matou o processo de compilação!, e uma vez eu fiz o projeto do mulher amparada e eu mesmo fiz o app do mulher amparada (primeiro eu refiz, depois na 2 vez que perdi portei tudo do apk compilado para descompilado, e depois perdi denovo mas ai eu ja tinha o código-fonte!)
 
-e a calculadora falsa realmente faz contas, se digitar:
+e a calculadora de disfarce realmente faz contas, se digitar:
 
 2 + 2, aparece 4!
 
@@ -1084,17 +1078,21 @@ lembre-se que hoje em dia uso github para compilar os apps e o a16 5g da samsung
 
 Porque usei webview e html?
 
-porque ele e mais leve, sim ele e mais leve sim, um exemplo e o instagram lite, e porque nao precisa gerar muitos xml ou muito texto em kotlin para fazer todas as telas e além disso html com WebView é mais difícil de manter, mas eu tenho sim activitys em kotlin em xml, mas eu também tenho páginas em html
+porque ele e mais fluido, e também deixa o aplicativo mais leve em tamanho, um exemplo disso e o instagram lite, e porque nao precisa gerar muitos arquivos XMLs ou muito texto em kotlin para fazer todas as telas e além disso html com WebView é mais difícil de manter, mas eu tenho sim activitys em kotlin em xml, mas eu também tenho páginas em html, (mas não necessariamente o webview é mais leve universalmente!)
 
 ah, mas o webview carrega uma versão cromium inteira...
 
-e as activitys em kotlin e jetpack compose ou xml carrega imports do build, muitos arquivos e muitos textos para algo que dá para ser feito facilmente em html, e o html acaba sendo mais leve e por isso mais otimizado..., a proposta e ele ser otimizado para ser mais rápido, e o webview chama metodos expostos via js que chama o android, e sobre injeção de código, o app guarda os dados usando criptografia..., e TODAS AS PÁGINAS EM HTML, estão dentro da pasta assets (menos o navegador que usa o Google, mas aí eu não controlo e é com eles lá!)
+e as activitys em kotlin e jetpack compose ou xml carrega imports do build, muitos arquivos e muitos textos para algo que dá para ser feito facilmente em html, e para determinadas telas, HTML/CSS/JavaScript permite implementar a interface com menos código específico de Android..., 
 
-Porque usei a permissão de Administrador do dispositivo e não serviço de acessibilidade?
+Mas a proposta e ele ser otimizado para ser mais rápido!
 
-porque os serviços de acessibilidade para os ativar precisa ir para a tela de acessibilidade e conceder as permissões restritas, enquanto o administrador do dispositivo ele só precisa ativar e as permissões restritas só acontece quando o desativa!, exceto quando desinstala o app quando clica em informações do app!
+E também o webview chama metodos expostos via js que chama o android
 
-e bem verdade que ele está ficando deprecated, mas também é verdade que a parte de bloquear a tela não esta deprecated, o resto sim (alterar a senha e etc)
+, e sobre injeção de código, o app guarda os dados usando criptografia..., mas isso não garante que xss aconteça, mas eu só estou dizendo que ele guarda texto do diário por exemplo em criptografia, mas isso poderá acontecer como em qualquer outro app em certas condições...
+
+e TODAS AS PÁGINAS EM HTML, estão dentro da pasta assets (menos o navegador que usa o Google, mas aí eu não controlo e é com eles lá!)
+
+
 
 E o webview do app está assim!:
 
@@ -1122,35 +1120,66 @@ settings.domStorageEnabled = true
 
 settings.setGeolocationEnabled( true )
 
-// Necessário para o seu uso com android_asset
 settings.allowFileAccess = true
 
-// Não é necessário para as páginas locais
 settings.allowContentAccess = false
 
-// Evita que páginas file:// acessem outros file://
 settings.allowFileAccessFromFileURLs = false
 
-// Evita que páginas file:// acessem outras origens
 settings.allowUniversalAccessFromFileURLs = false
 
-// Reduz abertura automática de novas janelas
 settings.javaScriptCanOpenWindowsAutomatically = false
 
 settings.setSupportMultipleWindows( false )
 
-Porque na FileActivity, o botão para trocar o tipo de armazenamento é unificado em um só?
-
-Porque a mulher na hora do pânico, pode acabar esquecendo algo, então esse sistema obriga ela a trocar de armazenamento 1, 2, e 3 para chegar no 1 de novo, e acaba fazendo uma vistoria...
-
 ```
 
-Porque na FileActivity, o botão para trocar o tipo de armazenamento é unificado em um só?
+Por que, na FileActivity, o botão para trocar o tipo de armazenamento é unificado em um só?
 
-Porque a mulher na hora do pânico, pode acabar esquecendo algo, então esse sistema obriga ela a trocar de armazenamento 1, 2, e 3 para chegar no 1 de novo, e acaba fazendo uma vistoria...
+O botão foi unificado para tornar a navegação entre os diferentes tipos de armazenamento mais simples e organizada, especialmente em situações de pânico ou urgência.
+
+Em vez de apresentar vários botões separados, o mesmo botão alterna sequencialmente entre os armazenamentos disponíveis, seguindo o ciclo 1 → 2 → 3 → 1.
+
+Essa escolha também foi pensada como uma forma de incentivar uma vistoria sequencial. Ao passar por cada armazenamento antes de retornar ao primeiro, a usuária é estimulada a verificar diferentes locais onde arquivos importantes podem estar, reduzindo a possibilidade de deixar algum armazenamento sem ser conferido por distração ou pressa.
 
 é tipo assim:
 
 armazenamento interno, para trocar para cartao sd, clica no botão e troca o icone, mas aí para voltar atrás, tem passar pelo cartao sd e pelo pendrive para só então voltar para o armazenamento interno
+
+Por que usei a permissão de Administrador do dispositivo e não um Serviço de acessibilidade?
+
+Optei pelo Administrador do dispositivo em vez de um Serviço de acessibilidade porque, para a função específica que o aplicativo precisa realizar — bloquear imediatamente a tela do celular — o Administrador do dispositivo oferece um mecanismo próprio do Android para essa finalidade, por meio do "DevicePolicyManager.lockNow()".
+
+No caso de um Serviço de acessibilidade, é necessário habilitar o serviço nas configurações de Acessibilidade do Android, seguindo o fluxo de permissões e confirmações exigido pelo sistema. Além disso, o uso de Acessibilidade envolve requisitos e políticas próprios dessa plataforma.
+
+Já o Administrador do dispositivo possui um fluxo específico para sua ativação: o usuário concede a função de administrador ao aplicativo e, depois disso, o aplicativo pode utilizar as capacidades de administração que foram concedidas.
+
+É importante esclarecer uma diferença: as chamadas “permissões restritas” do Android não são simplesmente uma consequência de usar Administrador do dispositivo. Elas são um mecanismo separado do sistema. Dependendo da versão do Android e da forma como o aplicativo foi instalado, determinadas configurações podem aparecer durante o gerenciamento ou a desinstalação do aplicativo.
+
+E o fato de o Administrador do dispositivo estar sendo descontinuado?
+
+É verdade que várias funcionalidades tradicionais do Device Administrator foram descontinuadas ou deixaram de ser recomendadas pelo Android. Porém, isso não significa que toda a API tenha sido removida.
+
+A função utilizada pelo aplicativo para essa finalidade é:
+
+"DevicePolicyManager.lockNow()"
+
+Ela é destinada a bloquear imediatamente o dispositivo, e não a desligá-lo.
+
+Portanto, a documentação do projeto não deve dizer que “o Administrador do dispositivo está totalmente deprecated”. O correto é explicar que algumas capacidades tradicionais do Device Administrator foram descontinuadas/restritas, enquanto o bloqueio imediato da tela utilizado pelo aplicativo continua sendo uma capacidade disponível do Android.
+
+O aplicativo utiliza somente a capacidade necessária para o seu mecanismo de proteção, sem depender das funções administrativas antigas, como alteração de senha ou outras políticas que foram descontinuadas.
+
+----
+
+## Bibliografia
+
+- https://www.metmuseum.org/-/media/files/learn/for-educators/publications-for-educators/the-art-of-ancient-egypt.pdf
+
+- https://www.britishmuseum.org/blog/mary-beards-top-five-powerful-women-ancient-greece-and-rome
+
+- https://www.worldhistory.org/trans/pt/2-2081/mulheres-na-antiga-mesopotamia/
+
+- https://www.worldhistory.org/trans/pt/2-927/as-mulheres-na-grecia-antiga/
 
 ----

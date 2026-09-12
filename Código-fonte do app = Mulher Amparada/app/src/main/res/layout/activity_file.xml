@@ -26,7 +26,7 @@
         android:paddingStart="20dp"
         android:paddingTop="26dp"
         android:paddingEnd="20dp"
-        android:paddingBottom="12dp"
+        android:paddingBottom="4dp"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +34,7 @@
 
 
         <!-- ===================================================== -->
-        <!-- BARRA SUPERIOR                                       -->
+        <!-- TÍTULO + BOTÃO DE ARMAZENAMENTO                     -->
         <!-- ===================================================== -->
 
         <LinearLayout
@@ -69,7 +69,9 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
 
-                android:background="@android:color/transparent"
+                android:layout_marginStart="8dp"
+
+                android:background="@drawable/bg_storage_button"
 
                 android:padding="11dp"
 
@@ -93,106 +95,72 @@
         <!-- CAMINHO                                               -->
         <!-- ===================================================== -->
 
-        <TextView
-            android:id="@+id/pathText"
+        <HorizontalScrollView
+            android:id="@+id/pathScroll"
 
             android:layout_width="match_parent"
-            android:layout_height="42dp"
+            android:layout_height="40dp"
 
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="2dp"
 
-            android:gravity="center_vertical"
+            android:fillViewport="false"
 
-            android:text="Armazenamento interno"
-
-            android:textColor="#8A8A8A"
-            android:textSize="13sp"
-
-            android:singleLine="true"
-            android:maxLines="1"
-
-            android:ellipsize="none"
-
-            android:scrollHorizontally="true"
+            android:scrollbars="none"
 
             android:overScrollMode="never"
 
-            android:fontFamily="sans"
-            android:includeFontPadding="false" />
+            android:fadingEdge="none">
+
+
+            <TextView
+                android:id="@+id/pathText"
+
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+
+                android:gravity="center_vertical"
+
+                android:text="Armazenamento interno"
+
+                android:textColor="#858585"
+                android:textSize="13sp"
+
+                android:singleLine="true"
+                android:maxLines="1"
+                android:ellipsize="none"
+
+                android:fontFamily="sans"
+                android:includeFontPadding="false" />
+
+        </HorizontalScrollView>
 
     </LinearLayout>
 
 
     <!-- ========================================================= -->
-    <!-- CABEÇALHO DA LISTA                                       -->
+    <!-- QUANTIDADE DE ITENS                                      -->
     <!-- ========================================================= -->
 
-    <LinearLayout
-        android:id="@+id/listHeader"
+    <TextView
+        android:id="@+id/itemCount"
 
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="42dp"
 
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
 
         android:gravity="center_vertical"
 
-        android:orientation="horizontal"
+        android:text="0 itens"
+
+        android:textColor="#8A8A8A"
+        android:textSize="14sp"
+
+        android:fontFamily="sans"
+        android:includeFontPadding="false"
 
         app:layout_constraintTop_toBottomOf="@id/header"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-
-        <TextView
-            android:id="@+id/listTitle"
-
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-
-            android:layout_weight="1"
-
-            android:text=""
-
-            android:textColor="#FFFFFF"
-            android:textSize="17sp"
-            android:textStyle="bold"
-
-            android:fontFamily="sans"
-            android:includeFontPadding="false" />
-
-
-        <TextView
-            android:id="@+id/itemCount"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:text=""
-
-            android:textColor="#777777"
-            android:textSize="12sp"
-
-            android:fontFamily="sans"
-            android:includeFontPadding="false" />
-
-    </LinearLayout>
-
-
-    <!-- ========================================================= -->
-    <!-- DIVISOR                                                   -->
-    <!-- ========================================================= -->
-
-    <View
-        android:id="@+id/divider"
-
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-
-        android:background="#1E1E1E"
-
-        app:layout_constraintTop_toBottomOf="@id/listHeader"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -219,7 +187,7 @@
         android:paddingEnd="8dp"
         android:paddingBottom="24dp"
 
-        app:layout_constraintTop_toBottomOf="@id/divider"
+        app:layout_constraintTop_toBottomOf="@id/itemCount"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

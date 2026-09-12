@@ -388,7 +388,7 @@ Ao tocar neste botão, o app mostrará um site dentro do app que lista todos os 
 
 **lembrando que, sobre esses apps, ja tem o código fonte dele dentro do repositório no site!:**
 
-**Lembrando que o app de gerenciador de arquivos so visualiza arquivos  nao copia, nao exclui, nao move e nao renomeia, e ele também precisa desbloquear com biometria**
+**Lembrando que o app de gerenciador de arquivos so visualiza arquivos  nao copia, nao exclui, nao move e nao renomeia!**
 
 e o de comando de voz, também precisa desbloquear com biometria 
 

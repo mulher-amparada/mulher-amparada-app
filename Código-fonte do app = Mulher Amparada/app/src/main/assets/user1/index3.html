@@ -1261,9 +1261,7 @@ margin-top: 1%;
    VIBRAÇÃO
 ========================================================= */
 
-function vibrar(
-    duracao = 100
-) {
+function vibrar(duracao = 100) {
 
     try {
 
@@ -1271,11 +1269,7 @@ function vibrar(
             navigator.vibrate &&
             typeof navigator.vibrate === "function"
         ) {
-
-            navigator.vibrate(
-                duracao
-            );
-
+            navigator.vibrate(duracao);
         }
 
     } catch (e) {}
@@ -1287,10 +1281,7 @@ function vibrar(
    ANDROID BRIDGE
 ========================================================= */
 
-function chamarAndroid(
-    nome,
-    ...args
-) {
+function chamarAndroid(nome, ...args) {
 
     try {
 
@@ -1333,50 +1324,35 @@ function chamarAndroid(
 ========================================================= */
 
 const palmasCard =
-    document.getElementById(
-        "palmasCard"
-    );
+    document.getElementById("palmasCard");
 
 const palmasSwitch =
-    document.getElementById(
-        "palmasSwitch"
-    );
+    document.getElementById("palmasSwitch");
 
 const palmasStatus =
-    document.getElementById(
-        "palmasStatus"
-    );
+    document.getElementById("palmasStatus");
+
+let palmasAtiva = false;
 
 
-let palmasAtiva =
-    false;
+function atualizarPalmasUI(ativa) {
 
-
-function atualizarPalmasUI(
-    ativa
-) {
-
-    palmasAtiva =
-        ativa;
-
+    palmasAtiva = ativa;
 
     palmasCard.classList.toggle(
         "active",
         ativa
     );
 
-
     palmasSwitch.classList.toggle(
         "active",
         ativa
     );
 
-
     palmasSwitch.setAttribute(
         "aria-checked",
         String(ativa)
     );
-
 
     palmasSwitch.setAttribute(
         "aria-label",
@@ -1385,12 +1361,10 @@ function atualizarPalmasUI(
             : "Ativar proteção por barulho"
     );
 
-
     palmasStatus.innerText =
         ativa
             ? "ATIVADO"
             : "DESATIVADO";
-
 }
 
 
@@ -1400,7 +1374,6 @@ palmasSwitch.addEventListener(
 
         vibrar(70);
 
-
         if (!palmasAtiva) {
 
             const resultado =
@@ -1408,23 +1381,15 @@ palmasSwitch.addEventListener(
                     "ativarPalmas"
                 );
 
+            if (resultado.sucesso) {
 
-            if (
-                resultado.sucesso
-            ) {
-
-                atualizarPalmasUI(
-                    true
-                );
+                atualizarPalmasUI(true);
 
             } else {
 
-                atualizarPalmasUI(
-                    false
-                );
+                atualizarPalmasUI(false);
 
                 vibrar(150);
-
             }
 
         } else {
@@ -1434,17 +1399,10 @@ palmasSwitch.addEventListener(
                     "desativarPalmas"
                 );
 
+            if (resultado.sucesso) {
 
-            if (
-                resultado.sucesso
-            ) {
-
-                atualizarPalmasUI(
-                    false
-                );
-
+                atualizarPalmasUI(false);
             }
-
         }
 
     }
@@ -1456,32 +1414,51 @@ palmasSwitch.addEventListener(
 ========================================================= */
 
 const movimentoCard =
-    document.getElementById(
-        "movimentoCard"
-    );
+    document.getElementById("movimentoCard");
 
 const movimentoSwitch =
-    document.getElementById(
-        "movimentoSwitch"
-    );
+    document.getElementById("movimentoSwitch");
 
 const movimentoStatus =
-    document.getElementById(
-        "movimentoStatus"
-    );
+    document.getElementById("movimentoStatus");
 
 const movimentoDescricao =
-    movimentoCard.querySelector(
-        "p"
-    );
-
+    movimentoCard.querySelector("p");
 
 const movimentoDescricaoOriginal =
     movimentoDescricao.innerText;
 
+let protecaoAtiva = false;
 
-let protecaoAtiva =
-    false;
+
+function mostrarMovimentoIndisponivel() {
+
+    protecaoAtiva = false;
+
+    movimentoCard.classList.remove(
+        "active"
+    );
+
+    movimentoSwitch.classList.remove(
+        "active"
+    );
+
+    movimentoSwitch.setAttribute(
+        "aria-checked",
+        "false"
+    );
+
+    movimentoSwitch.setAttribute(
+        "aria-label",
+        "Ativar proteção por movimento"
+    );
+
+    movimentoStatus.innerText =
+        "DESATIVADO";
+
+    movimentoDescricao.innerText =
+        "Sensor indisponível no seu aparelho";
+}
 
 
 function atualizarProtecaoUI() {
@@ -1491,18 +1468,15 @@ function atualizarProtecaoUI() {
         protecaoAtiva
     );
 
-
     movimentoSwitch.classList.toggle(
         "active",
         protecaoAtiva
     );
 
-
     movimentoSwitch.setAttribute(
         "aria-checked",
         String(protecaoAtiva)
     );
-
 
     movimentoSwitch.setAttribute(
         "aria-label",
@@ -1511,16 +1485,13 @@ function atualizarProtecaoUI() {
             : "Ativar proteção por movimento"
     );
 
-
     movimentoStatus.innerText =
         protecaoAtiva
             ? "ATIVADO"
             : "DESATIVADO";
 
-
     movimentoDescricao.innerText =
         movimentoDescricaoOriginal;
-
 }
 
 
@@ -1529,7 +1500,6 @@ movimentoSwitch.addEventListener(
     function () {
 
         vibrar(70);
-
 
         /* -----------------------------------------------------
            DESATIVAR
@@ -1542,20 +1512,14 @@ movimentoSwitch.addEventListener(
                     "desativarProtecao"
                 );
 
+            if (resultado.sucesso) {
 
-            if (
-                resultado.sucesso
-            ) {
-
-                protecaoAtiva =
-                    false;
+                protecaoAtiva = false;
 
                 atualizarProtecaoUI();
-
             }
 
             return;
-
         }
 
 
@@ -1570,54 +1534,26 @@ movimentoSwitch.addEventListener(
 
 
         /*
-         * ativarProtecao() no Kotlin atual não retorna Boolean.
+         * O Kotlin agora retorna Boolean:
          *
-         * Portanto:
-         *
-         * sucesso = método Android foi encontrado
-         * e conseguiu ser chamado.
+         * true  = sensor disponível e registrado
+         * false = sensor indisponível ou falha
          */
 
         if (
-            resultado.sucesso
+            resultado.sucesso &&
+            resultado.valor === true
         ) {
 
-            protecaoAtiva =
-                true;
+            protecaoAtiva = true;
 
             atualizarProtecaoUI();
 
         } else {
 
-            protecaoAtiva =
-                false;
-
-            movimentoCard.classList.remove(
-                "active"
-            );
-
-            movimentoSwitch.classList.remove(
-                "active"
-            );
-
-            movimentoSwitch.setAttribute(
-                "aria-checked",
-                "false"
-            );
-
-            movimentoSwitch.setAttribute(
-                "aria-label",
-                "Ativar proteção por movimento"
-            );
-
-            movimentoStatus.innerText =
-                "DESATIVADO";
-
-            movimentoDescricao.innerText =
-                "Erro ao executar essa função";
+            mostrarMovimentoIndisponivel();
 
             vibrar(150);
-
         }
 
     }
@@ -1629,32 +1565,51 @@ movimentoSwitch.addEventListener(
 ========================================================= */
 
 const brilhoCard =
-    document.getElementById(
-        "brilhoCard"
-    );
+    document.getElementById("brilhoCard");
 
 const brilhoSwitch =
-    document.getElementById(
-        "brilhoSwitch"
-    );
+    document.getElementById("brilhoSwitch");
 
 const brilhoStatus =
-    document.getElementById(
-        "brilhoStatus"
-    );
+    document.getElementById("brilhoStatus");
 
 const brilhoDescricao =
-    brilhoCard.querySelector(
-        "p"
-    );
-
+    brilhoCard.querySelector("p");
 
 const brilhoDescricaoOriginal =
     brilhoDescricao.innerText;
 
+let brilhoAtivo = false;
 
-let brilhoAtivo =
-    false;
+
+function mostrarBrilhoIndisponivel() {
+
+    brilhoAtivo = false;
+
+    brilhoCard.classList.remove(
+        "active"
+    );
+
+    brilhoSwitch.classList.remove(
+        "active"
+    );
+
+    brilhoSwitch.setAttribute(
+        "aria-checked",
+        "false"
+    );
+
+    brilhoSwitch.setAttribute(
+        "aria-label",
+        "Ativar escurecimento por inclinação"
+    );
+
+    brilhoStatus.innerText =
+        "DESATIVADO";
+
+    brilhoDescricao.innerText =
+        "Sensor indisponível no seu aparelho";
+}
 
 
 function atualizarBrilhoUI() {
@@ -1664,18 +1619,15 @@ function atualizarBrilhoUI() {
         brilhoAtivo
     );
 
-
     brilhoSwitch.classList.toggle(
         "active",
         brilhoAtivo
     );
 
-
     brilhoSwitch.setAttribute(
         "aria-checked",
         String(brilhoAtivo)
     );
-
 
     brilhoSwitch.setAttribute(
         "aria-label",
@@ -1684,16 +1636,13 @@ function atualizarBrilhoUI() {
             : "Ativar escurecimento por inclinação"
     );
 
-
     brilhoStatus.innerText =
         brilhoAtivo
             ? "ATIVADO"
             : "DESATIVADO";
 
-
     brilhoDescricao.innerText =
         brilhoDescricaoOriginal;
-
 }
 
 
@@ -1703,23 +1652,11 @@ brilhoSwitch.addEventListener(
 
         vibrar(60);
 
-
         /* -----------------------------------------------------
            DESATIVAR
         ----------------------------------------------------- */
 
         if (brilhoAtivo) {
-
-            const resultado =
-                chamarAndroid(
-                    "TiltBrightness.stopTiltBrightness"
-                );
-
-
-            /*
-             * O método real está em outro objeto.
-             * Por isso usamos chamada direta abaixo.
-             */
 
             try {
 
@@ -1730,15 +1667,12 @@ brilhoSwitch.addEventListener(
                 ) {
 
                     TiltBrightness.stopTiltBrightness();
-
                 }
 
             } catch (e) {
 
                 console.warn(e);
-
             }
-
 
             try {
 
@@ -1749,23 +1683,18 @@ brilhoSwitch.addEventListener(
                 ) {
 
                     Android.desativarFullscreen();
-
                 }
 
             } catch (e) {
 
                 console.warn(e);
-
             }
 
-
-            brilhoAtivo =
-                false;
+            brilhoAtivo = false;
 
             atualizarBrilhoUI();
 
             return;
-
         }
 
 
@@ -1773,9 +1702,7 @@ brilhoSwitch.addEventListener(
            ATIVAR
         ----------------------------------------------------- */
 
-        let sucesso =
-            false;
-
+        let resultado = false;
 
         try {
 
@@ -1785,69 +1712,39 @@ brilhoSwitch.addEventListener(
                     "function"
             ) {
 
-                /*
-                 * startTiltBrightness() não retorna Boolean
-                 * no Kotlin atual.
-                 *
-                 * Se a função existir e puder ser chamada,
-                 * consideramos a ativação solicitada.
-                 */
-
-                TiltBrightness.startTiltBrightness();
-
-                sucesso =
-                    true;
-
+                resultado =
+                    TiltBrightness.startTiltBrightness();
             }
 
         } catch (e) {
 
-            console.warn(e);
+            console.warn(
+                "TiltBrightness",
+                e
+            );
 
-            sucesso =
-                false;
-
+            resultado = false;
         }
 
 
-        if (sucesso) {
+        /*
+         * O Kotlin agora retorna Boolean:
+         *
+         * true  = sensor disponível e registrado
+         * false = sensor indisponível ou falha
+         */
 
-            brilhoAtivo =
-                true;
+        if (resultado === true) {
+
+            brilhoAtivo = true;
 
             atualizarBrilhoUI();
 
         } else {
 
-            brilhoAtivo =
-                false;
-
-            brilhoCard.classList.remove(
-                "active"
-            );
-
-            brilhoSwitch.classList.remove(
-                "active"
-            );
-
-            brilhoSwitch.setAttribute(
-                "aria-checked",
-                "false"
-            );
-
-            brilhoSwitch.setAttribute(
-                "aria-label",
-                "Ativar escurecimento por inclinação"
-            );
-
-            brilhoStatus.innerText =
-                "DESATIVADO";
-
-            brilhoDescricao.innerText =
-                "Erro ao executar essa função";
+            mostrarBrilhoIndisponivel();
 
             vibrar(150);
-
         }
 
     }
@@ -1866,11 +1763,9 @@ window.addEventListener(
             e.detail === "dark"
         ) {
 
-            brilhoAtivo =
-                true;
+            brilhoAtivo = true;
 
             atualizarBrilhoUI();
-
         }
 
 
@@ -1878,11 +1773,9 @@ window.addEventListener(
             e.detail === "normal"
         ) {
 
-            brilhoAtivo =
-                false;
+            brilhoAtivo = false;
 
             atualizarBrilhoUI();
-
         }
 
     }
@@ -1908,14 +1801,8 @@ const proximidadeStatus =
         "proximidadeStatus"
     );
 
+let proximidadeAtiva = false;
 
-let proximidadeAtiva =
-    false;
-
-
-/* =========================================================
-   UI
-========================================================= */
 
 function atualizarProximidadeUI() {
 
@@ -1924,18 +1811,15 @@ function atualizarProximidadeUI() {
         proximidadeAtiva
     );
 
-
     proximidadeSwitch.classList.toggle(
         "active",
         proximidadeAtiva
     );
 
-
     proximidadeSwitch.setAttribute(
         "aria-checked",
         String(proximidadeAtiva)
     );
-
 
     proximidadeSwitch.setAttribute(
         "aria-label",
@@ -1944,18 +1828,12 @@ function atualizarProximidadeUI() {
             : "Ativar bloqueio por barulho"
     );
 
-
     proximidadeStatus.innerText =
         proximidadeAtiva
             ? "ATIVADO"
             : "DESATIVADO";
-
 }
 
-
-/* =========================================================
-   CLIQUE
-========================================================= */
 
 proximidadeSwitch.addEventListener(
     "click",
@@ -1963,22 +1841,17 @@ proximidadeSwitch.addEventListener(
 
         vibrar(70);
 
-
-        if (
-            proximidadeAtiva
-        ) {
+        if (proximidadeAtiva) {
 
             chamarAndroid(
                 "pararSensorProximidade"
             );
 
-            proximidadeAtiva =
-                false;
+            proximidadeAtiva = false;
 
             atualizarProximidadeUI();
 
             return;
-
         }
 
 
@@ -1988,25 +1861,20 @@ proximidadeSwitch.addEventListener(
             );
 
 
-        if (
-            resultado.sucesso
-        ) {
+        if (resultado.sucesso) {
 
-            proximidadeAtiva =
-                true;
+            proximidadeAtiva = true;
 
             atualizarProximidadeUI();
 
         } else {
 
-            proximidadeAtiva =
-                false;
+            proximidadeAtiva = false;
 
             proximidadeStatus.innerText =
                 "NÃO FOI POSSÍVEL ATIVAR";
 
             vibrar(150);
-
         }
 
     }
@@ -2017,9 +1885,7 @@ proximidadeSwitch.addEventListener(
    ESTADO INICIAL
 ========================================================= */
 
-atualizarPalmasUI(
-    false
-);
+atualizarPalmasUI(false);
 
 atualizarProtecaoUI();
 

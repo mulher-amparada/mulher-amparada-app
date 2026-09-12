@@ -348,12 +348,17 @@ private fun pedirPermissaoNotificacao() {
 
 private fun abrirBiometria() {
 
-    val biometricManager = BiometricManager.from(this)
+    val biometricManager =
+        BiometricManager.from(this)
+
+    val authenticators =
+        BiometricManager.Authenticators.BIOMETRIC_WEAK or
+        BiometricManager.Authenticators.DEVICE_CREDENTIAL
+
 
     when (
         biometricManager.canAuthenticate(
-            BiometricManager.Authenticators.BIOMETRIC_WEAK or
-            BiometricManager.Authenticators.DEVICE_CREDENTIAL
+            authenticators
         )
     ) {
 
@@ -362,50 +367,103 @@ private fun abrirBiometria() {
         }
 
         else -> {
+
             // Não há biometria nem bloqueio de tela compatível
             iniciarApp()
+
             return
         }
     }
 
-    val executor = ContextCompat.getMainExecutor(this)
 
-    val biometricPrompt = BiometricPrompt(
-        this,
-        executor,
-        object : BiometricPrompt.AuthenticationCallback() {
+    val executor =
+        ContextCompat.getMainExecutor(this)
 
-            override fun onAuthenticationSucceeded(
-                result: BiometricPrompt.AuthenticationResult
-            ) {
-                super.onAuthenticationSucceeded(result)
-                iniciarApp()
+
+    val biometricPrompt =
+        BiometricPrompt(
+            this,
+            executor,
+            object :
+                BiometricPrompt.AuthenticationCallback() {
+
+
+                // =================================================
+                // AUTENTICAÇÃO BEM-SUCEDIDA
+                // =================================================
+
+                override fun onAuthenticationSucceeded(
+                    result:
+                    BiometricPrompt.AuthenticationResult
+                ) {
+
+                    super.onAuthenticationSucceeded(
+                        result
+                    )
+
+                    iniciarApp()
+                }
+
+
+                // =================================================
+                // BIOMETRIA NÃO RECONHECIDA
+                // =================================================
+
+                override fun onAuthenticationFailed() {
+
+                    super.onAuthenticationFailed()
+Toast.makeText(
+                            this@MainActivity,
+                            "Biometria não reconhecida, abrindo a área protegida.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                }
+
+
+                // =================================================
+                // ERRO / CANCELAMENTO
+                // =================================================
+
+                override fun onAuthenticationError(
+                    errorCode: Int,
+                    errString: CharSequence
+                ) {
+
+                    super.onAuthenticationError(
+                        errorCode,
+                        errString
+                    )
+
+                    finish()
+                }
             }
-
-            override fun onAuthenticationFailed() {
-                super.onAuthenticationFailed()
-            }
-
-            override fun onAuthenticationError(
-                errorCode: Int,
-                errString: CharSequence
-            ) {
-                super.onAuthenticationError(errorCode, errString)
-                finish()
-            }
-        }
-    )
-
-    val info = BiometricPrompt.PromptInfo.Builder()
-        .setTitle("Desbloquear aplicativo")
-        .setSubtitle("Use biometria ou senha do dispositivo")
-        .setAllowedAuthenticators(
-            BiometricManager.Authenticators.BIOMETRIC_WEAK or
-            BiometricManager.Authenticators.DEVICE_CREDENTIAL
         )
-        .build()
 
-    biometricPrompt.authenticate(info)
+
+    // =============================================================
+    // TEXTO DO BIOMETRIC PROMPT
+    // =============================================================
+
+    val info =
+        BiometricPrompt.PromptInfo.Builder()
+            .setTitle(
+                "Desbloquear o acesso ao assistente de voz"
+            )
+            .setDescription(
+                "🌸 Apenas a usuária cadastrada pode acessar este local\n\n" +
+                "Use a sua impressão digital\n" +
+                "Use seu registro facial\n" +
+                "Use seu PIN, padrão ou senha"
+            )
+            .setAllowedAuthenticators(
+                authenticators
+            )
+            .build()
+
+
+    biometricPrompt.authenticate(
+        info
+    )
 }
 
 private fun iniciarApp() {

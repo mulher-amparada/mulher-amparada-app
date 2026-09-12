@@ -1034,172 +1034,212 @@ settings.setSupportMultipleWindows(
     }  
   
   
-    // =========================================================  
-    // BIOMETRIA  
-    // =========================================================  
-  
-    @JavascriptInterface  
-    fun iniciarBiometria() {  
-  
-        runOnUiThread {  
-  
-            val biometricManager =  
-                BiometricManager.from(  
-                    this  
-                )  
-  
-            val authenticators =  
-                BiometricManager.Authenticators  
-                    .BIOMETRIC_WEAK or  
-                BiometricManager.Authenticators  
-                    .DEVICE_CREDENTIAL  
-  
-            val canAuth =  
-                biometricManager.canAuthenticate(  
-                    authenticators  
-                )  
-  
-            if (  
-                canAuth !=  
-                BiometricManager.BIOMETRIC_SUCCESS  
-            ) {  
-  
-                Toast.makeText(  
-                    this,  
-                    "Biometria indisponível, mas abriremos o serviço pra você!",  
-                    Toast.LENGTH_SHORT  
-                ).show()  
-  
-                carregarWebView4()  
-  
-                return@runOnUiThread  
-            }  
-  
-  
-            val biometricPrompt =  
-                BiometricPrompt(  
-                    this,  
-                    ContextCompat.getMainExecutor(  
-                        this  
-                    ),  
-                    object :  
-                        BiometricPrompt.AuthenticationCallback() {  
-  
-                        override fun onAuthenticationSucceeded(  
-                            result:  
-                            BiometricPrompt.AuthenticationResult  
-                        ) {  
-  
-                            super.onAuthenticationSucceeded(  
-                                result  
-                            )  
-  
-                            when (  
-                                destinoBiometria  
-                            ) {  
-  
-                                1 ->  
-                                    carregarWebView1()  
-  
-                                2 ->  
-                                    carregarWebView2()  
-  
-                                3 ->  
-                                    carregarWebView3()  
-  
-                                else ->  
-                                    carregarWebView4()  
-                            }  
-                        }  
-  
-  
-                        override fun onAuthenticationFailed() {  
-  
-                            super.onAuthenticationFailed()  
-  
-                            Toast.makeText(  
-                                this@MainActivity,  
-                                "Biometria não disponível, recomendo ativar a biometria no seu aparelho, porém mesmo assim abriremos os seus acessos!",  
-                                Toast.LENGTH_SHORT  
-                            ).show()  
-  
-                            carregarWebView4()  
-                        }  
-  
-  
-                        override fun onAuthenticationError(  
-                            errorCode: Int,  
-                            errString: CharSequence  
-                        ) {  
-  
-                            super.onAuthenticationError(  
-                                errorCode,  
-                                errString  
-                            )  
-                        }  
-                    }  
-                )  
-  
-  
-            val promptInfo =  
-                BiometricPrompt.PromptInfo.Builder()  
-                    .setTitle(  
-                        "Desbloquear"  
-                    )  
-                    .setDescription(  
-                        "Use biometria, PIN ou senha"  
-                    )  
-                    .setAllowedAuthenticators(  
-                        authenticators  
-                    )  
-                    .build()  
-  
-            biometricPrompt.authenticate(  
-                promptInfo  
-            )  
-        }  
-    }  
-  
-  
-    @JavascriptInterface  
-    fun iniciarBiometriaPrincesa() {  
-  
-        destinoBiometria =  
-            1  
-  
-        iniciarBiometria()  
-    }  
-  
-  
-    @JavascriptInterface  
-    fun iniciarBiometriaPrincipe() {  
-  
-        destinoBiometria =  
-            2  
-  
-        iniciarBiometria()  
-    }  
-  
-  
-    @JavascriptInterface  
-    fun iniciarBiometriaAmor() {  
-  
-        destinoBiometria =  
-            3  
-  
-        iniciarBiometria()  
-    }  
-  
-  
-    @JavascriptInterface  
-    fun iniciarBiometriaMusica() {  
-  
-        destinoBiometria =  
-            4  
-  
-        iniciarBiometria()  
-    }  
-  
+// =========================================================
+// BIOMETRIA
+// =========================================================
+
+@JavascriptInterface
+fun iniciarBiometria() {
+
+    runOnUiThread {
+
+        val biometricManager =
+            BiometricManager.from(this)
+
+
+        val authenticators =
+            BiometricManager.Authenticators.BIOMETRIC_WEAK or
+            BiometricManager.Authenticators.DEVICE_CREDENTIAL
+
+
+        val canAuth =
+            biometricManager.canAuthenticate(
+                authenticators
+            )
+
+
+        if (
+            canAuth !=
+            BiometricManager.BIOMETRIC_SUCCESS
+        ) {
+
+            Toast.makeText(
+                this,
+                "Biometria indisponível, mas abriremos o serviço pra você!",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            carregarWebView4()
+
+            return@runOnUiThread
+        }
+
+
+        val biometricPrompt =
+            BiometricPrompt(
+                this,
+                ContextCompat.getMainExecutor(this),
+                object :
+                    BiometricPrompt.AuthenticationCallback() {
+
+
+                    // =================================================
+                    // AUTENTICAÇÃO BEM-SUCEDIDA
+                    // =================================================
+
+                    override fun onAuthenticationSucceeded(
+                        result:
+                        BiometricPrompt.AuthenticationResult
+                    ) {
+
+                        super.onAuthenticationSucceeded(
+                            result
+                        )
+
+
+                        when (
+                            destinoBiometria
+                        ) {
+
+                            1 ->
+                                carregarWebView1()
+
+                            2 ->
+                                carregarWebView2()
+
+                            3 ->
+                                carregarWebView3()
+
+                            else ->
+                                carregarWebView4()
+                        }
+                    }
+
+
+                    // =================================================
+                    // BIOMETRIA NÃO RECONHECIDA
+                    // =================================================
+
+                    override fun onAuthenticationFailed() {
+
+                        super.onAuthenticationFailed()
+
+
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Biometria não reconhecida, abrindo a área protegida.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+
+                        // Mesmo falhando, abre a área.
+                        carregarWebView4()
+                    }
+
+
+                    // =================================================
+                    // ERRO / CANCELAMENTO
+                    // =================================================
+
+                    override fun onAuthenticationError(
+                        errorCode: Int,
+                        errString: CharSequence
+                    ) {
+
+                        super.onAuthenticationError(
+                            errorCode,
+                            errString
+                        )
+
+                        // O comportamento de erro/cancelamento
+                        // permanece controlado pelo Android.
+                    }
+                }
+            )
+
+
+        // =============================================================
+        // TEXTO DO BIOMETRIC PROMPT
+        // =============================================================
+
+        val promptInfo =
+            BiometricPrompt.PromptInfo.Builder()
+                .setTitle(
+                    "Desbloquear a área protegida"
+                )
+                .setDescription(
+                    "🌸 Apenas a usuária cadastrada pode acessar este local\n\n" +
+                    "Use a sua impressão digital\n" +
+                    "Use seu registro facial\n" +
+                    "Use seu PIN, padrão ou senha"
+                )
+                .setAllowedAuthenticators(
+                    authenticators
+                )
+                .build()
+
+
+        // =============================================================
+        // ABRIR PROMPT
+        // =============================================================
+
+        biometricPrompt.authenticate(
+            promptInfo
+        )
+    }
+}
+
+
+// =========================================================
+// BIOMETRIA — PRINCESA
+// =========================================================
+
+@JavascriptInterface
+fun iniciarBiometriaPrincesa() {
+
+    destinoBiometria = 1
+
+    iniciarBiometria()
+}
+
+
+// =========================================================
+// BIOMETRIA — PRÍNCIPE
+// =========================================================
+
+@JavascriptInterface
+fun iniciarBiometriaPrincipe() {
+
+    destinoBiometria = 2
+
+    iniciarBiometria()
+}
+
+
+// =========================================================
+// BIOMETRIA — AMOR
+// =========================================================
+
+@JavascriptInterface
+fun iniciarBiometriaAmor() {
+
+    destinoBiometria = 3
+
+    iniciarBiometria()
+}
+
+
+// =========================================================
+// BIOMETRIA — MÚSICA
+// =========================================================
+
+@JavascriptInterface
+fun iniciarBiometriaMusica() {
+
+    destinoBiometria = 4
+
+    iniciarBiometria()
+}
   
     // =========================================================  
     // FULLSCREEN  

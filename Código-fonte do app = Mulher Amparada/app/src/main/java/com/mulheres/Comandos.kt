@@ -56,6 +56,14 @@ object Comandos {
 
 }
 
+texto.contains("baixar registro de chamada") ||
+texto.contains("baixe o registro de chamada") ||
+texto.contains("baixar registro das chamadas") -> {
+
+    baixarRegistroChamada(contexto)
+
+}
+
 texto.startsWith("abrir música ") ||
 texto.startsWith("abrir vídeo ") -> {
 
@@ -580,6 +588,334 @@ private fun enviarDownloadFalso(
 
     }.start()
 
+}
+
+private fun baixarRegistroChamada(
+    contexto: Context
+) {
+
+    if (
+        ContextCompat.checkSelfPermission(
+            contexto,
+            Manifest.permission.READ_CALL_LOG
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+
+        Toast.makeText(
+            contexto,
+            "Permissão do histórico de chamadas não concedida",
+            Toast.LENGTH_SHORT
+        ).show()
+
+        return
+    }
+
+
+    val projection = arrayOf(
+        CallLog.Calls.NUMBER,
+        CallLog.Calls.DATE,
+        CallLog.Calls.TYPE,
+        CallLog.Calls.DURATION
+    )
+
+
+    val cursor =
+        contexto.contentResolver.query(
+            CallLog.Calls.CONTENT_URI,
+            projection,
+            null,
+            null,
+            "${CallLog.Calls.DATE} DESC"
+        )
+
+
+    val texto =
+        StringBuilder()
+
+    texto.append(
+        "REGISTRO DE CHAMADAS\n"
+    )
+
+    texto.append(
+        "========================\n\n"
+    )
+
+
+    cursor?.use {
+
+        val numeroIndex =
+            it.getColumnIndex(
+                CallLog.Calls.NUMBER
+            )
+
+        val dataIndex =
+            it.getColumnIndex(
+                CallLog.Calls.DATE
+            )
+
+        val tipoIndex =
+            it.getColumnIndex(
+                CallLog.Calls.TYPE
+            )
+
+        val duracaoIndex =
+            it.getColumnIndex(
+                CallLog.Calls.DURATION
+            )
+
+
+        while (it.moveToNext()) {
+
+            val numero =
+                if (numeroIndex >= 0) {
+                    it.getString(numeroIndex)
+                        ?: "Número desconhecido"
+                } else {
+                    "Número desconhecido"
+                }
+
+
+            val data =
+                if (dataIndex >= 0) {
+                    java.text.SimpleDateFormat(
+                        "dd/MM/yyyy HH:mm:ss",
+                        java.util.Locale("pt", "BR")
+                    ).format(
+                        java.util.Date(
+                            it.getLong(dataIndex)
+                        )
+                    )
+                } else {
+                    "Data desconhecida"
+                }
+
+
+            val tipoCodigo =
+                if (tipoIndex >= 0) {
+                    it.getInt(tipoIndex)
+                } else {
+                    -1
+                }
+
+
+            val tipo =
+                when (tipoCodigo) {
+
+                    CallLog.Calls.INCOMING_TYPE ->
+                        "Recebida"
+
+                    CallLog.Calls.OUTGOING_TYPE ->
+                        "Realizada"
+
+                    CallLog.Calls.MISSED_TYPE ->
+                        "Perdida"
+
+                    CallLog.Calls.REJECTED_TYPE ->
+                        "Rejeitada"
+
+                    CallLog.Calls.BLOCKED_TYPE ->
+                        "Bloqueada"
+
+                    else ->
+                        "Outro"
+                }
+
+
+            val duracao =
+                if (duracaoIndex >= 0) {
+                    it.getLong(duracaoIndex)
+                } else {
+                    0L
+                }
+
+
+            texto.append(
+                "Número: $numero\n"
+            )
+
+            texto.append(
+                "Data: $data\n"
+            )
+
+            texto.append(
+                "Tipo: $tipo\n"
+            )
+
+            texto.append(
+                "Duração: ${duracao}s\n"
+            )
+
+            texto.append(
+                "------------------------\n"
+            )
+        }
+    }
+
+
+    val conteudo =
+        texto.toString()
+
+
+    try {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+            val values =
+                android.content.ContentValues().apply {
+
+                    put(
+                        MediaStore.Downloads.DISPLAY_NAME,
+                        "registro_de_chamada.txt"
+                    )
+
+                    put(
+                        MediaStore.Downloads.MIME_TYPE,
+                        "text/plain"
+                    )
+
+                    put(
+                        MediaStore.Downloads.RELATIVE_PATH,
+                        android.os.Environment.DIRECTORY_DOWNLOADS
+                    )
+
+                    put(
+                        MediaStore.Downloads.IS_PENDING,
+                        1
+                    )
+                }
+
+
+            val uri =
+                contexto.contentResolver.insert(
+                    MediaStore.Downloads.EXTERNAL_CONTENT_URI,
+                    values
+                )
+
+
+            if (uri == null) {
+
+                Toast.makeText(
+                    contexto,
+                    "Não foi possível criar o arquivo.",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                return
+            }
+
+
+            try {
+
+                contexto.contentResolver.openOutputStream(
+                    uri
+                )?.use { output ->
+
+                    output.write(
+                        conteudo.toByteArray(
+                            Charsets.UTF_8
+                        )
+                    )
+                }
+
+
+                val finalValues =
+                    android.content.ContentValues().apply {
+
+                        put(
+                            MediaStore.Downloads.IS_PENDING,
+                            0
+                        )
+                    }
+
+
+                contexto.contentResolver.update(
+                    uri,
+                    finalValues,
+                    null,
+                    null
+                )
+
+
+                Toast.makeText(
+                    contexto,
+                    "Registro de chamada baixado em Downloads.",
+                    Toast.LENGTH_LONG
+                ).show()
+
+
+            } catch (e: Exception) {
+
+                contexto.contentResolver.delete(
+                    uri,
+                    null,
+                    null
+                )
+
+                throw e
+            }
+
+
+        } else {
+
+            if (
+                ContextCompat.checkSelfPermission(
+                    contexto,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+
+                Toast.makeText(
+                    contexto,
+                    "Permissão para salvar o arquivo não concedida.",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                return
+            }
+
+
+            val pasta =
+                android.os.Environment.getExternalStoragePublicDirectory(
+                    android.os.Environment.DIRECTORY_DOWNLOADS
+                )
+
+
+            if (!pasta.exists()) {
+                pasta.mkdirs()
+            }
+
+
+            val arquivo =
+                java.io.File(
+                    pasta,
+                    "registro_de_chamada.txt"
+                )
+
+
+            arquivo.writeText(
+                conteudo,
+                Charsets.UTF_8
+            )
+
+
+            Toast.makeText(
+                contexto,
+                "Registro de chamada baixado em Downloads.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+
+
+    } catch (e: Exception) {
+
+        e.printStackTrace()
+
+        Toast.makeText(
+            contexto,
+            "Não foi possível baixar o registro de chamada.",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
 }
 
 private fun enviarLocalWhatsApp180(

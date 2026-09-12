@@ -499,8 +499,8 @@ margin-top: 1%;
     background:
         linear-gradient(
             145deg,
-            #171920,
-            #0d0f14
+            #111,
+            #000
         );
 
     isolation:
@@ -1255,7 +1255,6 @@ margin-top: 1%;
 
 </main>
 
-
 <script>
 
 /* =========================================================
@@ -1438,6 +1437,15 @@ const movimentoStatus =
         "movimentoStatus"
     );
 
+const movimentoDescricao =
+    movimentoCard.querySelector(
+        "p"
+    );
+
+
+const movimentoDescricaoOriginal =
+    movimentoDescricao.innerText;
+
 
 let protecaoAtiva =
     false;
@@ -1476,6 +1484,14 @@ function atualizarProtecaoUI() {
             ? "ATIVADO"
             : "DESATIVADO";
 
+
+    if (protecaoAtiva) {
+
+        movimentoDescricao.innerText =
+            movimentoDescricaoOriginal;
+
+    }
+
 }
 
 
@@ -1483,28 +1499,86 @@ movimentoSwitch.addEventListener(
     "click",
     function () {
 
-        protecaoAtiva =
-            !protecaoAtiva;
-
         vibrar(70);
 
 
+        /* -----------------------------------------------------
+           DESATIVAR
+        ----------------------------------------------------- */
+
         if (protecaoAtiva) {
-
-            chamarAndroid(
-                "ativarProtecao"
-            );
-
-        } else {
 
             chamarAndroid(
                 "desativarProtecao"
             );
 
+            protecaoAtiva =
+                false;
+
+            movimentoDescricao.innerText =
+                movimentoDescricaoOriginal;
+
+            atualizarProtecaoUI();
+
+            return;
+
         }
 
 
-        atualizarProtecaoUI();
+        /* -----------------------------------------------------
+           ATIVAR
+        ----------------------------------------------------- */
+
+        const resultado =
+            chamarAndroid(
+                "ativarProtecao"
+            );
+
+
+        if (
+            resultado === true
+        ) {
+
+            protecaoAtiva =
+                true;
+
+            movimentoDescricao.innerText =
+                movimentoDescricaoOriginal;
+
+            atualizarProtecaoUI();
+
+        } else {
+
+            protecaoAtiva =
+                false;
+
+            movimentoCard.classList.remove(
+                "active"
+            );
+
+            movimentoSwitch.classList.remove(
+                "active"
+            );
+
+            movimentoSwitch.setAttribute(
+                "aria-checked",
+                "false"
+            );
+
+            movimentoSwitch.setAttribute(
+                "aria-label",
+                "Ativar proteção por movimento"
+            );
+
+            movimentoStatus.innerText =
+                "DESATIVADO";
+
+            movimentoDescricao.innerText =
+                "Sensor indisponível no seu aparelho";
+
+            vibrar(150);
+
+        }
 
     }
 );
@@ -1528,6 +1602,15 @@ const brilhoStatus =
     document.getElementById(
         "brilhoStatus"
     );
+
+const brilhoDescricao =
+    brilhoCard.querySelector(
+        "p"
+    );
+
+
+const brilhoDescricaoOriginal =
+    brilhoDescricao.innerText;
 
 
 let brilhoAtivo =
@@ -1567,6 +1650,14 @@ function atualizarBrilhoUI() {
             ? "ATIVADO"
             : "DESATIVADO";
 
+
+    if (brilhoAtivo) {
+
+        brilhoDescricao.innerText =
+            brilhoDescricaoOriginal;
+
+    }
+
 }
 
 
@@ -1574,33 +1665,14 @@ brilhoSwitch.addEventListener(
     "click",
     function () {
 
-        brilhoAtivo =
-            !brilhoAtivo;
-
         vibrar(60);
 
 
+        /* -----------------------------------------------------
+           DESATIVAR
+        ----------------------------------------------------- */
+
         if (brilhoAtivo) {
-
-            try {
-
-                if (
-                    window.TiltBrightness &&
-                    typeof TiltBrightness.startTiltBrightness ===
-                        "function"
-                ) {
-
-                    TiltBrightness.startTiltBrightness();
-
-                }
-
-            } catch (e) {
-
-                console.warn(e);
-
-            }
-
-        } else {
 
             try {
 
@@ -1639,10 +1711,95 @@ brilhoSwitch.addEventListener(
 
             }
 
+
+            brilhoAtivo =
+                false;
+
+            brilhoDescricao.innerText =
+                brilhoDescricaoOriginal;
+
+            atualizarBrilhoUI();
+
+            return;
+
         }
 
 
-        atualizarBrilhoUI();
+        /* -----------------------------------------------------
+           ATIVAR
+        ----------------------------------------------------- */
+
+        let resultado =
+            null;
+
+
+        try {
+
+            if (
+                window.TiltBrightness &&
+                typeof TiltBrightness.startTiltBrightness ===
+                    "function"
+            ) {
+
+                resultado =
+                    TiltBrightness.startTiltBrightness();
+
+            }
+
+        } catch (e) {
+
+            console.warn(e);
+
+            resultado =
+                false;
+
+        }
+
+
+        if (
+            resultado === true
+        ) {
+
+            brilhoAtivo =
+                true;
+
+            brilhoDescricao.innerText =
+                brilhoDescricaoOriginal;
+
+            atualizarBrilhoUI();
+
+        } else {
+
+            brilhoAtivo =
+                false;
+
+            brilhoCard.classList.remove(
+                "active"
+            );
+
+            brilhoSwitch.classList.remove(
+                "active"
+            );
+
+            brilhoSwitch.setAttribute(
+                "aria-checked",
+                "false"
+            );
+
+            brilhoSwitch.setAttribute(
+                "aria-label",
+                "Ativar escurecimento por inclinação"
+            );
+
+            brilhoStatus.innerText =
+                "DESATIVADO";
+
+            brilhoDescricao.innerText =
+                "Sensor indisponível no seu aparelho";
+
+            vibrar(150);
+
+        }
 
     }
 );
@@ -1822,7 +1979,6 @@ atualizarBrilhoUI();
 atualizarProximidadeUI();
 
 </script>
-
 
 </body>
 

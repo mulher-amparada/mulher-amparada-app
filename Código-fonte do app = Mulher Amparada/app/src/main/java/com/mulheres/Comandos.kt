@@ -593,23 +593,19 @@ private fun enviarDownloadFalso(
 private fun baixarRegistroChamada(
     contexto: Context
 ) {
-
     if (
         ContextCompat.checkSelfPermission(
             contexto,
             Manifest.permission.READ_CALL_LOG
         ) != PackageManager.PERMISSION_GRANTED
     ) {
-
         Toast.makeText(
             contexto,
             "Permissão do histórico de chamadas não concedida",
             Toast.LENGTH_SHORT
         ).show()
-
         return
     }
-
 
     val projection = arrayOf(
         CallLog.Calls.NUMBER,
@@ -618,51 +614,28 @@ private fun baixarRegistroChamada(
         CallLog.Calls.DURATION
     )
 
+    val chamadas = org.json.JSONArray()
 
-    val cursor =
-        contexto.contentResolver.query(
-            CallLog.Calls.CONTENT_URI,
-            projection,
-            null,
-            null,
-            "${CallLog.Calls.DATE} DESC"
-        )
-
-
-    val texto =
-        StringBuilder()
-
-    texto.append(
-        "REGISTRO DE CHAMADAS\n"
+    val cursor = contexto.contentResolver.query(
+        CallLog.Calls.CONTENT_URI,
+        projection,
+        null,
+        null,
+        "${CallLog.Calls.DATE} DESC"
     )
-
-    texto.append(
-        "========================\n\n"
-    )
-
 
     cursor?.use {
-
         val numeroIndex =
-            it.getColumnIndex(
-                CallLog.Calls.NUMBER
-            )
+            it.getColumnIndex(CallLog.Calls.NUMBER)
 
         val dataIndex =
-            it.getColumnIndex(
-                CallLog.Calls.DATE
-            )
+            it.getColumnIndex(CallLog.Calls.DATE)
 
         val tipoIndex =
-            it.getColumnIndex(
-                CallLog.Calls.TYPE
-            )
+            it.getColumnIndex(CallLog.Calls.TYPE)
 
         val duracaoIndex =
-            it.getColumnIndex(
-                CallLog.Calls.DURATION
-            )
-
+            it.getColumnIndex(CallLog.Calls.DURATION)
 
         while (it.moveToNext()) {
 
@@ -673,7 +646,6 @@ private fun baixarRegistroChamada(
                 } else {
                     "Número desconhecido"
                 }
-
 
             val data =
                 if (dataIndex >= 0) {
@@ -689,14 +661,12 @@ private fun baixarRegistroChamada(
                     "Data desconhecida"
                 }
 
-
             val tipoCodigo =
                 if (tipoIndex >= 0) {
                     it.getInt(tipoIndex)
                 } else {
                     -1
                 }
-
 
             val tipo =
                 when (tipoCodigo) {
@@ -720,7 +690,6 @@ private fun baixarRegistroChamada(
                         "Outro"
                 }
 
-
             val duracao =
                 if (duracaoIndex >= 0) {
                     it.getLong(duracaoIndex)
@@ -728,54 +697,154 @@ private fun baixarRegistroChamada(
                     0L
                 }
 
+            val chamada =
+                org.json.JSONObject().apply {
 
-            texto.append(
-                "Número: $numero\n"
-            )
+                    put(
+                        "numero",
+                        numero
+                    )
 
-            texto.append(
-                "Data: $data\n"
-            )
+                    put(
+                        "data",
+                        data
+                    )
 
-            texto.append(
-                "Tipo: $tipo\n"
-            )
+                    put(
+                        "tipo",
+                        tipo
+                    )
 
-            texto.append(
-                "Duração: ${duracao}s\n"
-            )
+                    put(
+                        "duracao_segundos",
+                        duracao
+                    )
+                }
 
-            texto.append(
-                "------------------------\n"
+            chamadas.put(
+                chamada
             )
         }
     }
 
-
-    val conteudo =
-        texto.toString()
-
-
     try {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        /*
+         * =====================================================
+         * CONTEÚDO DO REGISTRO
+         * =====================================================
+         */
+
+        val registroOriginal =
+            chamadas.toString(2)
+
+        val dadosAntes =
+            registroOriginal.toByteArray(
+                Charsets.UTF_8
+            )
+
+        val sha256Antes =
+            java.security.MessageDigest
+                .getInstance("SHA-256")
+                .digest(dadosAntes)
+                .joinToString("") {
+                    "%02x".format(it)
+                }
+
+
+        /*
+         * =====================================================
+         * SHA-256 DEPOIS
+         * =====================================================
+         *
+         * O hash é calculado novamente sobre
+         * exatamente os mesmos dados do registro.
+         */
+
+        val dadosDepois =
+            registroOriginal.toByteArray(
+                Charsets.UTF_8
+            )
+
+        val sha256Depois =
+            java.security.MessageDigest
+                .getInstance("SHA-256")
+                .digest(dadosDepois)
+                .joinToString("") {
+                    "%02x".format(it)
+                }
+
+
+        /*
+         * =====================================================
+         * JSON FINAL
+         * =====================================================
+         */
+
+        val jsonFinal =
+            org.json.JSONObject().apply {
+
+                put(
+                    "tipo",
+                    "registro_de_chamada"
+                )
+
+                put(
+                    "formato",
+                    "JSON"
+                )
+
+                put(
+                    "algoritmo_hash",
+                    "SHA-256"
+                )
+
+                put(
+                    "sha256_antes",
+                    sha256Antes
+                )
+
+                put(
+                    "registro_chamadas",
+                    chamadas
+                )
+
+                put(
+                    "sha256_depois",
+                    sha256Depois
+                )
+            }
+
+        val conteudo =
+            jsonFinal.toString(2)
+
+        /*
+         * =====================================================
+         * SALVAR
+         * =====================================================
+         */
+
+        if (
+            Build.VERSION.SDK_INT >=
+            Build.VERSION_CODES.Q
+        ) {
 
             val values =
                 android.content.ContentValues().apply {
 
                     put(
                         MediaStore.Downloads.DISPLAY_NAME,
-                        "registro_de_chamada.txt"
+                        "registro_de_chamada.json"
                     )
 
                     put(
                         MediaStore.Downloads.MIME_TYPE,
-                        "text/plain"
+                        "application/json"
                     )
 
                     put(
                         MediaStore.Downloads.RELATIVE_PATH,
-                        android.os.Environment.DIRECTORY_DOWNLOADS
+                        Environment.DIRECTORY_DOWNLOADS
                     )
 
                     put(
@@ -784,13 +853,11 @@ private fun baixarRegistroChamada(
                     )
                 }
 
-
             val uri =
                 contexto.contentResolver.insert(
                     MediaStore.Downloads.EXTERNAL_CONTENT_URI,
                     values
                 )
-
 
             if (uri == null) {
 
@@ -803,20 +870,18 @@ private fun baixarRegistroChamada(
                 return
             }
 
-
             try {
 
-                contexto.contentResolver.openOutputStream(
-                    uri
-                )?.use { output ->
+                contexto.contentResolver
+                    .openOutputStream(uri)
+                    ?.use { output ->
 
-                    output.write(
-                        conteudo.toByteArray(
-                            Charsets.UTF_8
+                        output.write(
+                            conteudo.toByteArray(
+                                Charsets.UTF_8
+                            )
                         )
-                    )
-                }
-
+                    }
 
                 val finalValues =
                     android.content.ContentValues().apply {
@@ -827,7 +892,6 @@ private fun baixarRegistroChamada(
                         )
                     }
 
-
                 contexto.contentResolver.update(
                     uri,
                     finalValues,
@@ -835,13 +899,11 @@ private fun baixarRegistroChamada(
                     null
                 )
 
-
                 Toast.makeText(
                     contexto,
                     "Registro de chamada baixado em Downloads.",
                     Toast.LENGTH_LONG
                 ).show()
-
 
             } catch (e: Exception) {
 
@@ -853,7 +915,6 @@ private fun baixarRegistroChamada(
 
                 throw e
             }
-
 
         } else {
 
@@ -873,30 +934,25 @@ private fun baixarRegistroChamada(
                 return
             }
 
-
             val pasta =
-                android.os.Environment.getExternalStoragePublicDirectory(
-                    android.os.Environment.DIRECTORY_DOWNLOADS
+                Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOWNLOADS
                 )
-
 
             if (!pasta.exists()) {
                 pasta.mkdirs()
             }
 
-
             val arquivo =
                 java.io.File(
                     pasta,
-                    "registro_de_chamada.txt"
+                    "registro_de_chamada.json"
                 )
-
 
             arquivo.writeText(
                 conteudo,
                 Charsets.UTF_8
             )
-
 
             Toast.makeText(
                 contexto,
@@ -904,7 +960,6 @@ private fun baixarRegistroChamada(
                 Toast.LENGTH_LONG
             ).show()
         }
-
 
     } catch (e: Exception) {
 

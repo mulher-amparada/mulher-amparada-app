@@ -1,6 +1,7 @@
 package com.mulheres
 
 import android.animation.ValueAnimator
+import android.graphics.drawable.Drawable
 import android.content.ClipData
 import android.content.Intent
 import android.graphics.Canvas

@@ -6,99 +6,50 @@
     <!-- PERMISSÕES -->
     <!-- ===================================================== -->
 
-    <!-- Internet / WebView -->
-    <uses-permission
-        android:name="android.permission.INTERNET" />
+<!-- Internet / WebView -->
+<uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- Localização -->
-    <uses-permission
-        android:name="android.permission.ACCESS_FINE_LOCATION" />
+<!-- Localização -->
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <uses-permission
-        android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<!-- Contatos -->
+<uses-permission android:name="android.permission.READ_CONTACTS" />
 
-    <!-- Contatos -->
-    <uses-permission
-        android:name="android.permission.READ_CONTACTS" />
+<!-- Ligações -->
+<uses-permission android:name="android.permission.CALL_PHONE" />
 
-    <!-- Ligações -->
-    <uses-permission
-        android:name="android.permission.CALL_PHONE" />
+<!-- Microfone -->
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
 
-    <uses-permission
-        android:name="android.permission.READ_PHONE_STATE" />
+<!-- Consulta de aplicativos -->
+<uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
-    <uses-permission
-        android:name="android.permission.READ_CALL_LOG" />
+<!-- Vibração -->
+<uses-permission android:name="android.permission.VIBRATE" />
 
-    <!-- Microfone -->
-    <uses-permission
-        android:name="android.permission.RECORD_AUDIO" />
+<!-- Notificações Android 13+ -->
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-    <!-- Consulta de aplicativos -->
-    <uses-permission
-        android:name="android.permission.QUERY_ALL_PACKAGES" />
+<!-- Foreground Service -->
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
 
-    <!-- Vibração -->
-    <uses-permission
-        android:name="android.permission.VIBRATE" />
+<!-- Wake Lock -->
+<uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <!-- Notificações Android 13+ -->
-    <uses-permission
-        android:name="android.permission.POST_NOTIFICATIONS" />
+<!-- Armazenamento -->
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+<uses-permission
+    android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    android:maxSdkVersion="28" />
 
-    <!-- Foreground Service -->
-    <uses-permission
-        android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
-    <uses-permission
-        android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
-
-    <uses-permission
-        android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
-
-    <!-- Wake Lock -->
-    <uses-permission
-        android:name="android.permission.WAKE_LOCK" />
-
-    <!-- Armazenamento -->
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28" />
-
-    <uses-permission
-        android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
-
-    <!-- Mídia Android 13+ -->
-    <uses-permission
-        android:name="android.permission.READ_MEDIA_AUDIO" />
-
-    <uses-permission
-        android:name="android.permission.READ_MEDIA_IMAGES" />
-
-    <uses-permission
-        android:name="android.permission.READ_MEDIA_VIDEO" />
-
-    <!-- Bluetooth Android 12+ -->
-    <uses-permission
-        android:name="android.permission.BLUETOOTH_SCAN" />
-
-    <uses-permission
-        android:name="android.permission.BLUETOOTH_CONNECT" />
-
-    <uses-permission
-        android:name="android.permission.BLUETOOTH_ADVERTISE" />
-
-    <!-- Calendário -->
-    <uses-permission
-        android:name="android.permission.READ_CALENDAR" />
-
-    <uses-permission
-        android:name="android.permission.WRITE_CALENDAR" />
-
+<!-- Calendário -->
+<uses-permission android:name="android.permission.READ_CALENDAR" />
+<uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <!-- ===================================================== -->
     <!-- APPLICATION -->
@@ -168,35 +119,8 @@
             android:exported="false" />
 
 
-        <!-- ================================================= -->
-        <!-- ORDEM -->
-        <!-- ================================================= -->
 
-        <activity
-            android:name=".OrdemActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
-
-
-
-        <!-- ================================================= -->
-        <!-- MEDIA PLAYBACK SERVICE -->
-        <!-- ================================================= -->
-
-        <service
-            android:name=".MediaPlaybackService"
-            android:foregroundServiceType="mediaPlayback"
-            android:exported="true">
-
-            <intent-filter>
-
-                <action
-                    android:name="androidx.media3.session.MediaSessionService" />
-
-            </intent-filter>
-
-        </service>
-
+        
 <!-- ================================================= -->
         <!-- SD FILE PROVIDER -->
         <!-- ================================================= -->

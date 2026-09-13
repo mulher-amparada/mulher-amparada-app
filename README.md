@@ -14,6 +14,10 @@ Antes de conceder essa permissão, leia atentamente as informações exibidas pe
 
 (como o código esta dentro do repositório , nao precisarei explicar!)
 
+## Sobre as permissões:
+
+> ⚠️ Sobre as permissões: infelizmente, foi necessário fazer com que a "MainActivity" não solicite permissões automaticamente, devido ao funcionamento do disfarce do aplicativo. Por isso, a usuária deverá concedê-las manualmente pelas configurações do dispositivo. As permissões solicitadas por outras "Activity"s continuam sendo requisitadas normalmente pelo aplicativo.
+
 ## Avisos:
 
 > ⚠️Vale lembrar que o projeto não substitui serviços oficiais do governo e também não garante segurança imediata, bem como as funções dependem do estado e hardware de cada aparelho!

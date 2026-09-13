@@ -428,6 +428,26 @@ fun openRecorder() {
     )
 }
 
+@JavascriptInterface
+fun ConcederPermissoes() {
+
+    activity.runOnUiThread {
+
+        if (activity.temPermissoes()) {
+
+            activity.atualizarPaginaInicial()
+
+            return@runOnUiThread
+        }
+
+        activity.pedirPermissoes()
+    }
+}
+
+@JavascriptInterface
+fun verificarPermissoes(): Boolean {
+    return activity.temPermissoes()
+}
 
     @JavascriptInterface
     fun ligarDireto(numero: String) {

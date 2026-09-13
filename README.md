@@ -16,7 +16,7 @@ Antes de conceder essa permissão, leia atentamente as informações exibidas pe
 
 ## Sobre as permissões:
 
-> ⚠️ Sobre as permissões: infelizmente, foi necessário configurar a "MainActivity" para não solicitar permissões automaticamente. Por isso, as permissões necessárias deverão ser concedidas manualmente pela usuária nas configurações do dispositivo. As permissões utilizadas por outras "Activity"s continuam sendo solicitadas normalmente pelo aplicativo. Ao entrar no aplicativo após sair dos disfarces, um aviso é exibido bloqueando o acesso até que as permissões necessárias sejam verificadas, oferecendo à usuária a opção de acessar diretamente a tela de permissões do aplicativo nas configurações do dispositivo.
+> ⚠️ Sobre as permissões: infelizmente, foi necessário configurar a "MainActivity" para não solicitar permissões automaticamente devido ao funcionamento dos modos de disfarce. Por isso, as permissões necessárias deverão ser concedidas manualmente pela usuária nas configurações do dispositivo. As permissões utilizadas por outras "Activity"s continuam sendo solicitadas normalmente pelo aplicativo. Ao entrar no aplicativo após sair dos modos de disfarce, é exibido um aviso que bloqueia o acesso até que as permissões necessárias sejam verificadas, oferecendo à usuária a opção de acessar diretamente a tela de permissões do aplicativo nas configurações do dispositivo. Na página principal, onde está localizado o botão de Pânico, e nas demais páginas HTML que não pertencem à área protegida, também é exibido um aviso permanente lembrando a usuária de conceder as permissões necessárias.
 
 ## Avisos:
 

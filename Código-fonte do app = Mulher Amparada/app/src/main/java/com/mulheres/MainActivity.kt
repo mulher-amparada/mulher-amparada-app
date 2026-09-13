@@ -330,7 +330,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun pedirPermissoes() {
+     fun pedirPermissoes() {
 
         ActivityCompat.requestPermissions(
             this,
@@ -350,7 +350,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun temPermissoes(): Boolean {
+     fun temPermissoes(): Boolean {
 
         return ContextCompat.checkSelfPermission(
             this,
@@ -886,7 +886,7 @@ class MainActivity : AppCompatActivity() {
     // PÁGINA INICIAL
     // =========================================================
 
-    private fun atualizarPaginaInicial() {
+     fun atualizarPaginaInicial() {
 
         val prefs =
             getSharedPreferences(

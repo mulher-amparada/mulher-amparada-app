@@ -20,8 +20,6 @@ Antes de conceder essa permissão, leia atentamente as informações exibidas pe
 
 > ⚠️ Vale lembrar: o Gerenciador de Arquivos do Mulher Amparada funciona principalmente como um visualizador de arquivos. O nome “Gerenciador de Arquivos” também faz parte do disfarce do aplicativo. Ele foi projetado dessa forma por uma questão de segurança: o aplicativo não oferece funções próprias para excluir, mover, copiar ou renomear arquivos, reduzindo o risco de apagar ou alterar acidentalmente algum arquivo importante — inclusive possíveis registros que a usuária queira preservar.
 
-> ⚠️E também quando for clicar em qualquer botão de apagar no app, ele pode apagar TODOS OS CONTEÚDOS criptografados de TODO O APP, então CUIDADO!
-
 > ⚠️Ao utilizar a função de baixar o histórico de ajuda, o aplicativo gera um único arquivo no formato JSON. Os dados utilizados para gerar esse histórico são obtidos por meio das APIs protegidas do Android, que controlam o acesso ao histórico de chamadas por meio das permissões do sistema. Por isso, o aplicativo não aplica a classe "Cripto" novamente durante a exportação. O arquivo JSON exportado, entretanto, não é um arquivo criptografado. Ele é salvo como um arquivo comum na área de downloads do dispositivo. A proteção de acesso fornecida pelo Android ao histórico de chamadas não significa que o arquivo exportado permaneça criptografado. O arquivo também contém hashes SHA-256, utilizados para verificação de integridade dos dados. SHA-256 não é um mecanismo de criptografia e não substitui a criptografia para proteção do conteúdo.
 
 > ⚠️ATENÇÃO: Reforço que as proteções que utilizam sensores podem não funcionar corretamente em alguns aparelhos, dependendo das limitações ou características do hardware da usuária.

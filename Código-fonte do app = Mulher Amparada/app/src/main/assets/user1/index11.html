@@ -1035,46 +1035,13 @@ if (
      * Verifica se todas as permissões foram concedidas
      */
 
-    if (
-        typeof Android !== "undefined" &&
-        typeof Android.verificarPermissoes === "function"
-    ) {
+window.location.href =
+    "file:///android_asset/user1/index2.html";
 
-        const permissoesConcedidas =
-            Android.verificarPermissoes();
-
-        if (
-            permissoesConcedidas
-        ) {
-
-            window.location.href =
-                "file:///android_asset/user1/index2.html";
-
-        } else {
-
-            window.location.href =
-                "file:///android_asset/user1/permissão.html";
-
-        }
-
-    } else {
-
-        /*
-         * Se o método não estiver disponível,
-         * manda para a tela de permissões.
-         */
-
-        window.location.href =
-            "file:///android_asset/user1/permissão.html";
-
-    }
-
-    return;
+return;
 }
 
-    /*
-     * Expressão vazia
-     */
+
 
     if (!expr.trim()) {
 

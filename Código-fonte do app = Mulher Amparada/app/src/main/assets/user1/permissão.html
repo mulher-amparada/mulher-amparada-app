@@ -1,1 +1,764 @@
-a
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<title>Permissões</title>
+
+<style>
+
+/* =========================================================
+   FONTE
+========================================================= */
+
+@font-face {
+
+    font-family:
+        "Quicksand";
+
+    src:
+        url("font.ttf")
+        format("truetype");
+
+    font-weight:
+        100 900;
+
+    font-style:
+        normal;
+
+    font-display:
+        swap;
+}
+
+
+/* =========================================================
+   BASE
+========================================================= */
+
+* {
+
+    box-sizing:
+        border-box;
+
+    -webkit-tap-highlight-color:
+        transparent;
+
+}
+
+
+html,
+body {
+
+    width:
+        100%;
+
+    min-height:
+        100%;
+
+    margin:
+        0;
+
+    padding:
+        0;
+
+    background:
+        #000000;
+
+    color:
+        #ffffff;
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+}
+
+
+body {
+
+    min-height:
+        100vh;
+
+    overflow-x:
+        hidden;
+
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.container {
+
+    width:
+        100%;
+
+    max-width:
+        460px;
+
+    min-height:
+        100vh;
+
+    margin:
+        0 auto;
+
+    padding:
+        52px
+        24px
+        calc(28px + env(safe-area-inset-bottom));
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+}
+
+
+/* =========================================================
+   CABEÇALHO
+========================================================= */
+
+.header {
+
+    text-align:
+        center;
+
+    margin-bottom:
+        44px;
+
+}
+
+
+.titulo {
+
+    margin:
+        0;
+
+    font-size:
+        27px;
+
+    line-height:
+        1.2;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        -0.3px;
+
+}
+
+
+.subtitulo {
+
+    max-width:
+        350px;
+
+    margin:
+        12px auto 0;
+
+    font-size:
+        15px;
+
+    line-height:
+        1.5;
+
+    font-weight:
+        500;
+
+    color:
+        #9a9aa3;
+
+}
+
+
+/* =========================================================
+   LISTA
+========================================================= */
+
+.bolinhas {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        27px;
+
+    flex:
+        1;
+
+}
+
+
+/* =========================================================
+   ITEM
+========================================================= */
+
+.item {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    width:
+        100%;
+
+    min-height:
+        88px;
+
+    padding:
+        4px 0;
+
+}
+
+
+/* =========================================================
+   BOLINHA
+========================================================= */
+
+.bolinha {
+
+    flex:
+        0 0 72px;
+
+    width:
+        72px;
+
+    height:
+        72px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        50%;
+
+    background:
+        #16161b;
+
+    border:
+        1px solid #2b2b32;
+
+}
+
+
+/* =========================================================
+   SVG
+========================================================= */
+
+.bolinha svg {
+
+    width:
+        30px;
+
+    height:
+        30px;
+
+fill: #fff;
+
+    stroke:
+        #ffffff;
+
+    stroke-width:
+        1.7;
+
+    stroke-linecap:
+        round;
+
+    stroke-linejoin:
+        round;
+
+}
+
+
+/* =========================================================
+   TEXTOS
+========================================================= */
+
+.item-texto {
+
+    min-width:
+        0;
+
+    padding-left:
+        18px;
+
+}
+
+
+.nome {
+
+    margin:
+        0;
+
+    font-size:
+        17px;
+
+    line-height:
+        1.25;
+
+    font-weight:
+        700;
+
+    color:
+        #ffffff;
+
+}
+
+
+.descricao {
+
+    margin:
+        5px 0 0;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.45;
+
+    font-weight:
+        500;
+
+    color:
+        #85858e;
+
+}
+
+
+/* =========================================================
+   AÇÕES
+========================================================= */
+
+.acoes {
+
+    width:
+        100%;
+
+    margin-top:
+        38px;
+
+}
+
+
+.continuar {
+
+    width:
+        75%;
+
+    height:
+        58px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        none;
+
+    border-radius:
+        999px;
+
+    background:
+        #ff9999;
+
+    color:
+        #ffffff;
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+    font-size:
+        17px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    outline:
+        none;
+
+    transition:
+        transform 0.15s ease,
+        opacity 0.15s ease;
+
+position: fixed;
+
+bottom: 5%;
+margin: 5%;
+}
+
+
+.continuar:active {
+
+    transform:
+        scale(0.97);
+
+    opacity:
+        0.82;
+
+}
+
+
+
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<main class="container">
+
+
+    <!-- =====================================================
+         CABEÇALHO
+    ====================================================== -->
+
+    <header class="header">
+
+        <h1 class="titulo">
+            Permissões
+        </h1>
+
+        <p class="subtitulo">
+
+            Para utilizar todos os recursos do aplicativo,
+            algumas permissões precisam ser concedidas.
+
+        </p>
+
+    </header>
+
+
+    <!-- =====================================================
+         PERMISSÕES
+    ====================================================== -->
+
+    <section class="bolinhas">
+
+        <div class="item">
+
+            <div class="bolinha">
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-40q0-17 11.5-28.5T280-880q17 0 28.5 11.5T320-840v40h320v-40q0-17 11.5-28.5T680-880q17 0 28.5 11.5T720-840v40h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Zm120 240q-17 0-28.5-11.5T280-440q0-17 11.5-28.5T320-480h320q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400H320Zm0 160q-17 0-28.5-11.5T280-280q0-17 11.5-28.5T320-320h200q17 0 28.5 11.5T560-280q0 17-11.5 28.5T520-240H320Z"/></svg>
+
+            </div>
+
+            <div class="item-texto">
+
+                <p class="nome">
+                    Agenda
+                </p>
+
+                <p class="descricao">
+                    Permite consultar os eventos
+                    salvos no calendário.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="item">
+
+            <div class="bolinha">
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M501-500ZM480-80q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM200-200q-17 0-28.5-11.5T160-240q0-17 11.5-28.5T200-280h40v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q16 4 30 9.5t28 13.5q20 11 23 27t-5 30q-8 14-23 20t-31-5q-18-11-38.5-17t-43.5-6q-66 0-113 47t-47 113v280h440q17 0 28.5 11.5T800-240q0 17-11.5 28.5T760-200H200Zm497-298q-3 17-10 33-7 17-23 24t-32-1q-15-7-21-23t2-30q5-9 6-18t1-19q0-10-1.5-19.5T613-570q-6-14 0-28t20-21q15-7 30.5-.5T687-598q8 16 10.5 32.5T700-532q0 17-3 34Zm128 63q-15 47-45 87-9 12-25.5 11.5T727-348q-11-11-12-27t8-30q19-28 28-60.5t9-66.5q0-34-9-66.5T723-659q-9-14-8-30t12-27q11-11 27.5-11.5T780-716q30 40 45 87t15 97q0 50-15 97Z"/></svg>
+            </div>
+
+            <div class="item-texto">
+
+                <p class="nome">
+                    Notificações
+                </p>
+
+                <p class="descricao">
+                    Permite exibir notificações
+                    do aplicativo.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="item">
+
+            <div class="bolinha">
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M395-435q-35-35-35-85v-240q0-50 35-85t85-35q50 0 85 35t35 85v240q0 50-35 85t-85 35q-50 0-85-35Zm85-205Zm-40 480v-83q-92-13-157.5-78T203-479q-2-17 9-29t28-12q17 0 28.5 11.5T284-480q14 70 69.5 115T480-320q72 0 127-45.5T676-480q4-17 15.5-28.5T720-520q17 0 28 12t9 29q-14 91-79 157t-158 79v83q0 17-11.5 28.5T480-120q-17 0-28.5-11.5T440-160Zm68.5-331.5Q520-503 520-520v-240q0-17-11.5-28.5T480-800q-17 0-28.5 11.5T440-760v240q0 17 11.5 28.5T480-480q17 0 28.5-11.5Z"/></svg>
+
+            </div>
+
+            <div class="item-texto">
+
+                <p class="nome">
+                    Microfone
+                </p>
+
+                <p class="descricao">
+                    Usado para proteção por som,
+                    palmas e gravação de áudio.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="item">
+
+            <div class="bolinha">
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M200-246q54-53 125.5-83.5T480-360q83 0 154.5 30.5T760-246v-514H200v514Zm379-235q41-41 41-99t-41-99q-41-41-99-41t-99 41q-41 41-41 99t41 99q41 41 99 41t99-41ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm69-80h422q-44-39-99.5-59.5T480-280q-56 0-112.5 20.5T269-200Zm168.5-337.5Q420-555 420-580t17.5-42.5Q455-640 480-640t42.5 17.5Q540-605 540-580t-17.5 42.5Q505-520 480-520t-42.5-17.5ZM480-503Z"/></svg>
+
+            </div>
+
+            <div class="item-texto">
+
+                <p class="nome">
+                    Contatos e contas
+                </p>
+
+                <p class="descricao">
+                    Permite selecionar contatos
+                    para recursos de emergência.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="item">
+
+            <div class="bolinha">
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M480-186q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm-28 74q-14-5-25-15-65-60-115-117t-83.5-110.5q-33.5-53.5-51-103T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 45-17.5 94.5t-51 103Q698-301 648-244T533-127q-11 10-25 15t-28 5q-14 0-28-5Zm28-448Zm56.5 56.5Q560-527 560-560t-23.5-56.5Q513-640 480-640t-56.5 23.5Q400-593 400-560t23.5 56.5Q447-480 480-480t56.5-23.5Z"/></svg>
+
+            </div>
+
+            <div class="item-texto">
+
+                <p class="nome">
+                    Localização
+                </p>
+
+                <p class="descricao">
+                    Usada para enviar sua localização para o whatsapp do 180 e por recursos
+                    que precisam da localização atual.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="item">
+
+            <div class="bolinha">
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0 0v-560 560Zm80-80h400q12 0 18-11t-2-21L586-459q-6-8-16-8t-16 8L450-320l-74-99q-6-8-16-8t-16 8l-80 107q-8 10-2 21t18 11Z"/></svg>
+
+
+            </div>
+
+            <div class="item-texto">
+
+                <p class="nome">
+                    Fotos e vídeos
+                </p>
+
+                <p class="descricao">
+                    Permite acessar imagens
+                    armazenadas no aparelho.
+                </p>
+
+            </div>
+            
+            </div>
+
+        <div class="item">
+
+            <div class="bolinha">
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M127-167q-47-47-47-113t47-113q47-47 113-47 23 0 42.5 5.5T320-418v-308q0-15 9.5-26.5T353-766l400-66q18-3 32.5 8.5T800-793v433q0 66-47 113t-113 47q-66 0-113-47t-47-113q0-66 47-113t113-47q23 0 42.5 5.5T720-498v-165l-320 63v320q0 66-47 113t-113 47q-66 0-113-47Z"/></svg>
+
+            </div>
+
+            <div class="item-texto">
+
+                <p class="nome">
+                    Música e áudio 
+                </p>
+
+                <p class="descricao">
+                    Permite acessar arquivos
+                    de áudio armazenados.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+
+        <div class="item">
+
+            <div class="bolinha">
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M480-540Zm-40 380H120q-17 0-28.5-11.5T80-200q0-17 11.5-28.5T120-240h320q17 0 28.5 11.5T480-200q0 17-11.5 28.5T440-160ZM200-280q-33 0-56.5-23.5T120-360v-360q0-33 23.5-56.5T200-800h600q17 0 28.5 11.5T840-760q0 17-11.5 28.5T800-720H200v360h240q17 0 28.5 11.5T480-320q0 17-11.5 28.5T440-280H200Zm600 40v-320H640v320h160Zm-180 80q-25 0-42.5-17.5T560-220v-360q0-25 17.5-42.5T620-640h200q25 0 42.5 17.5T880-580v360q0 25-17.5 42.5T820-160H620Zm100-300q13 0 21.5-9t8.5-21q0-13-8.5-21.5T720-520q-12 0-21 8.5t-9 21.5q0 12 9 21t21 9Zm0 60Z"/></svg>
+
+            </div>
+
+            <div class="item-texto">
+
+                <p class="nome">
+                    Dispositivos por perto
+                </p>
+
+                <p class="descricao">
+                    Permite consultar aparelhos conectados.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+
+
+        <div class="item">
+
+            <div class="bolinha">
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M758-80q-125 0-247-54.5T289-289Q189-389 134.5-511T80-758q0-18 12-30t30-12h162q14 0 25 9.5t13 22.5l26 140q2 16-1 27t-11 19l-97 98q20 37 47.5 71.5T347-346q31 31 65 57.5t72 48.5l94-94q9-9 23.5-13.5T630-350l138 28q14 4 23 14.5t9 23.5v162q0 18-12 30t-30 12ZM201-560l66-66-17-94h-89q5 41 14 81t26 79Zm358 358q39 17 79.5 27t81.5 13v-88l-94-19-67 67ZM201-560Zm358 358Zm-39-598q-17 0-28.5-11.5T480-840q0-17 11.5-28.5T520-880h320q17 0 28.5 11.5T880-840q0 17-11.5 28.5T840-800H520Zm0 160q-17 0-28.5-11.5T480-680q0-17 11.5-28.5T520-720h320q17 0 28.5 11.5T880-680q0 17-11.5 28.5T840-640H520Zm0 160q-17 0-28.5-11.5T480-520q0-17 11.5-28.5T520-560h320q17 0 28.5 11.5T880-520q0 17-11.5 28.5T840-480H520Z"/></svg>
+            </div>
+
+            <div class="item-texto">
+
+                <p class="nome">
+                    Registro de chamadas
+                </p>
+
+                <p class="descricao">
+                    Permite acessar informações
+                    do histórico de chamadas.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- CALL_PHONE -->
+
+        <div class="item">
+
+            <div class="bolinha">
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M798-120q-125 0-247-54.5T329-329Q229-429 174.5-551T120-798q0-18 12-30t30-12h162q14 0 25 9.5t13 22.5l26 140q2 16-1 27t-11 19l-97 98q20 37 47.5 71.5T387-386q31 31 65 57.5t72 48.5l94-94q9-9 23.5-13.5T670-390l138 28q14 4 23 14.5t9 23.5v162q0 18-12 30t-30 12ZM241-600l66-66-17-94h-89q5 41 14 81t26 79Zm358 358q39 17 79.5 27t81.5 13v-88l-94-19-67 67ZM241-600Zm358 358Z"/></svg>
+
+            </div>
+
+            <div class="item-texto">
+
+                <p class="nome">
+                 Telefone
+                </p>
+
+                <p class="descricao">
+                    Permite realizar chamadas
+                    diretamente pelo aplicativo.
+                </p>
+
+            </div>
+
+        </div>
+
+
+    </section>
+    
+    <br><br><br><br>
+
+
+    <!-- =====================================================
+         BOTÃO
+    ====================================================== -->
+
+    <div class="acoes">
+
+        <button
+            class="continuar"
+            type="button"
+            onclick="ConcederPermissoes()"
+        >
+
+            Continuar
+
+        </button>
+
+
+
+
+    </div>
+
+
+</main>
+
+
+<script>
+
+/* =========================================================
+   CONCEDER PERMISSÕES
+========================================================= */
+
+function ConcederPermissoes() {
+
+    if (
+        typeof Android !== "undefined" &&
+        typeof Android.ConcederPermissoes === "function"
+    ) {
+
+        Android.ConcederPermissoes();
+
+    }
+
+}
+
+</script>
+
+
+</body>
+
+</html>

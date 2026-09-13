@@ -146,6 +146,8 @@ class MainActivity : AppCompatActivity() {
                 webView  
             )  
   
+  criarShakeListener()
+  
         locationClient =  
             LocationServices  
                 .getFusedLocationProviderClient(  
@@ -783,115 +785,421 @@ settings.setSupportMultipleWindows(
     // SENSOR / CHACOALHAR  
     // =========================================================  
   
-    private fun iniciarSensor() {  
-  
-        sensorManager =  
-            getSystemService(  
-                Context.SENSOR_SERVICE  
-            ) as SensorManager  
-  
-        acelerometro =  
-            sensorManager.getDefaultSensor(  
-                Sensor.TYPE_ACCELEROMETER  
-            )  
-  
-        shakeListener =  
-            object : SensorEventListener {  
-  
-                override fun onSensorChanged(  
-                    event: SensorEvent  
-                ) {  
-  
-                    if (!protecaoAtiva) {  
-                        return  
-                    }  
-  
-                    val x =  
-                        event.values[0]  
-  
-                    val y =  
-                        event.values[1]  
-  
-                    val z =  
-                        event.values[2]  
-  
-                    val aceleracao =  
-                        sqrt(  
-                            (  
-                                x * x +  
-                                y * y +  
-                                z * z  
-                            ).toDouble()  
-                        )  
-  
-                    if (  
-                        aceleracao > 18.0  
-                    ) {  
-  
-                        val agora =  
-                            System.currentTimeMillis()  
-  
-                        if (  
-                            agora -  
-                            ultimoShake >  
-                            4000  
-                        ) {  
-  
-                            ultimoShake =  
-                                agora  
-  
-                            val intent =  
-                                Intent(  
-                                    Intent.ACTION_DIAL  
-                                ).apply {  
-  
-                                    data =  
-                                        Uri.parse(  
-                                            "tel:180"  
-                                        )  
-                                }  
-  
-                            startActivity(  
-                                intent  
-                            )  
-                        }  
-                    }  
-                }  
-  
-  
-                override fun onAccuracyChanged(  
-                    sensor: Sensor?,  
-                    accuracy: Int  
-                ) {  
-                    // Nada  
-                }  
-            }  
-  
-  
-        acelerometro?.let {  
-  
-            sensorManager.registerListener(  
-                shakeListener,  
-                it,  
-                SensorManager.SENSOR_DELAY_GAME  
-            )  
-        }  
-    }  
-  
-  
-    private fun pararSensor() {  
-  
-        if (  
-            ::sensorManager.isInitialized &&  
-            ::shakeListener.isInitialized  
-        ) {  
-  
-            sensorManager.unregisterListener(  
-                shakeListener  
-            )  
-        }  
-    }  
-      
+    // =========================================================
+// SENSOR / CHACOALHAR
+// =========================================================
+
+private fun iniciarSensor() {
+
+    sensorManager =
+        getSystemService(
+            Context.SENSOR_SERVICE
+        ) as SensorManager
+
+    acelerometro =
+        sensorManager.getDefaultSensor(
+            Sensor.TYPE_ACCELEROMETER
+        )
+
+    /*
+     * =====================================================
+     * PRIMEIRA TENTATIVA:
+     * ACELERÔMETRO
+     * =====================================================
+     */
+
+    if (acelerometro != null) {
+
+        val registrado =
+            sensorManager.registerListener(
+                shakeListener,
+                acelerometro,
+                SensorManager.SENSOR_DELAY_GAME
+            )
+
+        /*
+         * Se o Android não conseguir registrar
+         * o acelerômetro, usa o microfone.
+         */
+
+        if (!registrado) {
+            iniciarMicrofoneShake()
+        }
+
+    } else {
+
+        /*
+         * O aparelho não possui acelerômetro.
+         * Usa o microfone como fallback.
+         */
+
+        iniciarMicrofoneShake()
+    }
+}
+
+
+// =========================================================
+// LISTENER DO ACELERÔMETRO
+// =========================================================
+
+private fun criarShakeListener() {
+
+    shakeListener =
+        object : SensorEventListener {
+
+            override fun onSensorChanged(
+                event: SensorEvent
+            ) {
+
+                if (!protecaoAtiva) {
+                    return
+                }
+
+                val x =
+                    event.values[0]
+
+                val y =
+                    event.values[1]
+
+                val z =
+                    event.values[2]
+
+                val aceleracao =
+                    sqrt(
+                        (
+                            x * x +
+                            y * y +
+                            z * z
+                        ).toDouble()
+                    )
+
+                /*
+                 * Funcionamento normal:
+                 * detecta o aparelho sendo balançado.
+                 */
+
+                if (aceleracao > 18.0) {
+
+                    executarAcaoShake()
+                }
+            }
+
+
+            override fun onAccuracyChanged(
+                sensor: Sensor?,
+                accuracy: Int
+            ) {
+                // Nada
+            }
+        }
+}
+
+
+// =========================================================
+// AÇÃO DO BALANÇAR
+// =========================================================
+
+private fun executarAcaoShake() {
+
+    if (!protecaoAtiva) {
+        return
+    }
+
+    val agora =
+        System.currentTimeMillis()
+
+    /*
+     * Evita várias ligações seguidas.
+     */
+
+    if (
+        agora - ultimoShake <= 4000
+    ) {
+        return
+    }
+
+    ultimoShake =
+        agora
+
+    try {
+
+        val intent =
+            Intent(
+                Intent.ACTION_DIAL
+            ).apply {
+
+                data =
+                    Uri.parse(
+                        "tel:180"
+                    )
+            }
+
+        startActivity(intent)
+
+    } catch (e: Exception) {
+
+        e.printStackTrace()
+    }
+}
+
+
+// =========================================================
+// MICROFONE — FALLBACK DO BALANÇAR
+// =========================================================
+
+private var shakeAudioRecord: AudioRecord? = null
+
+private var shakeMicrophoneThread: Thread? = null
+
+private var shakeMicrophoneRunning = false
+
+private val shakeSampleRate = 44100
+
+private val shakeBufferSize =
+    AudioRecord.getMinBufferSize(
+        shakeSampleRate,
+        AudioFormat.CHANNEL_IN_MONO,
+        AudioFormat.ENCODING_PCM_16BIT
+    )
+
+/*
+ * Som considerado alto.
+ *
+ * -10 dBFS = som bastante alto.
+ */
+
+private val shakeLoudSoundThreshold = -10.0
+
+
+// =========================================================
+// INICIAR MICROFONE DO BALANÇAR
+// =========================================================
+
+private fun iniciarMicrofoneShake() {
+
+    if (
+        !protecaoAtiva ||
+        shakeMicrophoneRunning
+    ) {
+        return
+    }
+
+    /*
+     * Confirma a permissão.
+     */
+
+    if (
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.RECORD_AUDIO
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+        return
+    }
+
+    if (shakeBufferSize <= 0) {
+        return
+    }
+
+    try {
+
+        shakeAudioRecord =
+            AudioRecord(
+                MediaRecorder.AudioSource.MIC,
+                shakeSampleRate,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT,
+                shakeBufferSize
+            )
+
+        if (
+            shakeAudioRecord?.state !=
+            AudioRecord.STATE_INITIALIZED
+        ) {
+
+            shakeAudioRecord?.release()
+
+            shakeAudioRecord = null
+
+            return
+        }
+
+        shakeMicrophoneRunning =
+            true
+
+        shakeMicrophoneThread =
+            Thread {
+
+                try {
+
+                    val buffer =
+                        ShortArray(
+                            shakeBufferSize
+                        )
+
+                    shakeAudioRecord?.startRecording()
+
+                    while (
+                        shakeMicrophoneRunning &&
+                        protecaoAtiva
+                    ) {
+
+                        val read =
+                            shakeAudioRecord?.read(
+                                buffer,
+                                0,
+                                buffer.size
+                            ) ?: 0
+
+                        if (read > 0) {
+
+                            val db =
+                                calcularDecibeisShake(
+                                    buffer,
+                                    read
+                                )
+
+                            /*
+                             * Som alto detectado.
+                             */
+
+                            if (
+                                db >=
+                                shakeLoudSoundThreshold
+                            ) {
+
+                                runOnUiThread {
+
+                                    executarAcaoShake()
+                                }
+
+                                /*
+                                 * Continua monitorando,
+                                 * respeitando o cooldown.
+                                 */
+                            }
+                        }
+                    }
+
+                } catch (_: Exception) {
+
+                    /*
+                     * Se o microfone falhar,
+                     * o fallback simplesmente encerra.
+                     */
+
+                } finally {
+
+                    pararMicrofoneShake()
+                }
+
+            }.apply {
+
+                name =
+                    "MulherAmparada-ShakeMicrophone"
+
+                start()
+            }
+
+    } catch (_: Exception) {
+
+        shakeAudioRecord?.release()
+
+        shakeAudioRecord = null
+
+        shakeMicrophoneRunning =
+            false
+    }
+}
+
+
+// =========================================================
+// CALCULAR DECIBÉIS
+// =========================================================
+
+private fun calcularDecibeisShake(
+    buffer: ShortArray,
+    length: Int
+): Double {
+
+    if (length <= 0) {
+        return -100.0
+    }
+
+    var soma = 0.0
+
+    for (i in 0 until length) {
+
+        val sample =
+            buffer[i].toDouble()
+
+        soma +=
+            sample * sample
+    }
+
+    val rms =
+        sqrt(
+            soma / length
+        )
+
+    if (rms <= 0.0) {
+        return -100.0
+    }
+
+    return 20.0 *
+        kotlin.math.log10(
+            rms / 32768.0
+        )
+}
+
+
+// =========================================================
+// PARAR MICROFONE DO BALANÇAR
+// =========================================================
+
+private fun pararMicrofoneShake() {
+
+    shakeMicrophoneRunning =
+        false
+
+    try {
+
+        shakeAudioRecord?.stop()
+
+    } catch (_: Exception) {
+    }
+
+    try {
+
+        shakeAudioRecord?.release()
+
+    } catch (_: Exception) {
+    }
+
+    shakeAudioRecord = null
+
+    shakeMicrophoneThread = null
+}
+
+
+// =========================================================
+// PARAR SENSOR / FALLBACK
+// =========================================================
+
+private fun pararSensor() {
+
+    if (
+        ::sensorManager.isInitialized &&
+        ::shakeListener.isInitialized
+    ) {
+
+        sensorManager.unregisterListener(
+            shakeListener
+        )
+    }
+
+    pararMicrofoneShake()
+}
   
     // =========================================================  
     // CONTATOS  

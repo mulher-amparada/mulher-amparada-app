@@ -1240,40 +1240,33 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+@JavascriptInterface
+fun ativarPalmas() {
 
-    // =========================================================
-    // PROTEÇÃO POR PALMAS
-    // =========================================================
+    if (
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.RECORD_AUDIO
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
 
-    @JavascriptInterface
-    fun ativarPalmas() {
+        Toast.makeText(
+            this,
+            "Ative o microfone nas configurações do aplicativo.",
+            Toast.LENGTH_LONG
+        ).show()
 
-        if (
-            !temPermissoesProtecao()
-        ) {
-
-            Toast.makeText(
-                this,
-                "Permissão de microfone não concedida",
-                Toast.LENGTH_SHORT
-            ).show()
-
-            return
-        }
-
-
-        val intent =
-            Intent(
-                this,
-                PalmaService::class.java
-            )
-
-
-        startForegroundService(
-            intent
-        )
+        return
     }
 
+    val intent =
+        Intent(
+            this,
+            PalmaService::class.java
+        )
+
+    startForegroundService(intent)
+}
 
     // =========================================================
     // PROTEÇÃO POR CHACOALHAR

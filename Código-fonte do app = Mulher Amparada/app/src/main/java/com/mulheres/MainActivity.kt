@@ -432,7 +432,7 @@ class MainActivity : AppCompatActivity() {
 
 
     // =====================================================
-    // DISPOSITIVOS POR PERTO
+    // BLUETOOTH
     // =====================================================
 
     if (
@@ -469,7 +469,7 @@ class MainActivity : AppCompatActivity() {
 
 
     // =====================================================
-    // SOLICITAR
+    // PEDIR PERMISSÕES NORMAIS
     // =====================================================
 
     ActivityCompat.requestPermissions(
@@ -477,6 +477,41 @@ class MainActivity : AppCompatActivity() {
         permissoes.toTypedArray(),
         PERMISSION_CODE
     )
+
+
+    // =====================================================
+    // ADMINISTRADOR DO DISPOSITIVO
+    // =====================================================
+
+    val devicePolicyManager =
+        getSystemService(
+            Context.DEVICE_POLICY_SERVICE
+        ) as DevicePolicyManager
+
+    val adminComponent =
+        ComponentName(
+            this,
+            MyDeviceAdminReceiver::class.java
+        )
+
+    if (
+        !devicePolicyManager.isAdminActive(
+            adminComponent
+        )
+    ) {
+
+        val intent =
+            Intent(
+                DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN
+            )
+
+        intent.putExtra(
+            DevicePolicyManager.EXTRA_DEVICE_ADMIN,
+            adminComponent
+        )
+
+        startActivity(intent)
+    }
 }
 
 
@@ -650,7 +685,7 @@ fun temPermissoes(): Boolean {
 
 
     // =====================================================
-    // DISPOSITIVOS POR PERTO
+    // BLUETOOTH
     // =====================================================
 
     if (
@@ -707,7 +742,31 @@ fun temPermissoes(): Boolean {
 
 
     // =====================================================
-    // TODAS CONCEDIDAS
+    // ADMINISTRADOR DO DISPOSITIVO
+    // =====================================================
+
+    val devicePolicyManager =
+        getSystemService(
+            Context.DEVICE_POLICY_SERVICE
+        ) as DevicePolicyManager
+
+    val adminComponent =
+        ComponentName(
+            this,
+            MyDeviceAdminReceiver::class.java
+        )
+
+    if (
+        !devicePolicyManager.isAdminActive(
+            adminComponent
+        )
+    ) {
+        return false
+    }
+
+
+    // =====================================================
+    // TUDO CONCEDIDO
     // =====================================================
 
     return true

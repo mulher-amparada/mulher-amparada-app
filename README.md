@@ -28,6 +28,8 @@ Antes de conceder essa permissão, leia atentamente as informações exibidas pe
 
 > ⚠️Botão de pânico: caso o aplicativo não possua a permissão necessária para realizar chamadas diretamente, ele utiliza o "ACTION_DIAL" como alternativa, abrindo o discador com o número de emergência. Dessa forma, o recurso continua disponível mesmo sem a permissão de chamada.
 
+> ⚠️ Sobre as proteções por movimento e escurecimento: caso ocorra alguma falha ou o aparelho da usuária não possua o sensor necessário, o aplicativo utiliza o microfone como alternativa. Ao detectar um barulho alto, a proteção é acionada.
+
 ## Sobre o site que está hospedado pelo github pages:
 
 Na primeira página do site, tem 3 botoes que ligam para (180, 190 e 192), e usam o tel: do navegador para abrir o telefone nativo do celular com esses números já discados de acordo com o que você escolheu!
@@ -126,6 +128,8 @@ Botão de Pânico, com ligação ao 180 de forma direta no primeiro clique.
 
 **Proteção por Barulho:**
 Ative a proteção, faça barulho alto e ele liga para o 180.
+
+caso ocorra alguma falha ou o aparelho da usuária não possua o sensor necessário, o aplicativo utiliza o microfone como alternativa. Ao detectar um barulho alto, a proteção é acionada.
 
 ----
 
@@ -388,7 +392,7 @@ O acesso varia de acordo com o tipo de armazenamento:
 - Armazenamento interno e cartão SD: utilizam a permissão de Acesso a todos os arquivos, quando concedida pelo Android.
 - Dispositivos externos, como pendrives conectados por USB OTG: utilizam o SAF (Storage Access Framework), mecanismo oficial do Android para acesso a documentos e dispositivos de armazenamento externos autorizados pela usuária.
 
-⚠️ Reforçando: o Gerenciador de Arquivos não acessa os arquivos internos do Gravador de Voz do Mulher Amparada nem os dados ou recursos internos de outras funcionalidades do aplicativo. Ele trabalha com arquivos que já estão disponíveis nos armazenamentos do dispositivo e que podem ser acessados pelos mecanismos de armazenamento autorizados pelo Android.
+> ⚠️ Reforçando: o Gerenciador de Arquivos não acessa os arquivos internos do Gravador de Voz do Mulher Amparada nem os dados ou recursos internos de outras funcionalidades do aplicativo. Ele trabalha com arquivos que já estão disponíveis nos armazenamentos do dispositivo e que podem ser acessados pelos mecanismos de armazenamento autorizados pelo Android.
 
 ----
 

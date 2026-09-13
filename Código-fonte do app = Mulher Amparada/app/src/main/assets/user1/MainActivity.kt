@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
      *
      * -10 dBFS = som bastante alto.
      */
-    private val shakeLoudSoundThreshold = -50.0
+    private val shakeLoudSoundThreshold = -25.0
 
 
     // =========================================================
@@ -256,28 +256,17 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-// =========================================================
-// PERMISSÕES — CHAMADO PELO SITE
-// =========================================================
-
-@JavascriptInterface
-fun ConcederPermissoes() {
-
-    runOnUiThread {
+        // =====================================================
+        // PERMISSÕES
+        // =====================================================
 
         if (
-            temPermissoes()
+            !temPermissoes()
         ) {
 
-            atualizarPaginaInicial()
-
-            return@runOnUiThread
+            pedirPermissoes()
         }
 
-
-        pedirPermissoes()
-    }
-}
 
         // =====================================================
         // BOTÃO VOLTAR
@@ -343,51 +332,396 @@ fun ConcederPermissoes() {
 
     private fun pedirPermissoes() {
 
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(
+    val permissoes = mutableListOf<String>()
 
-                Manifest.permission.ACCESS_FINE_LOCATION,
+    // =====================================================
+    // AGENDA
+    // =====================================================
 
-                Manifest.permission.READ_CONTACTS,
+    permissoes.add(
+        Manifest.permission.READ_CALENDAR
+    )
 
-                Manifest.permission.CALL_PHONE,
+    permissoes.add(
+        Manifest.permission.WRITE_CALENDAR
+    )
 
-                Manifest.permission.RECORD_AUDIO
 
-            ),
-            PERMISSION_CODE
+    // =====================================================
+    // NOTIFICAÇÕES
+    // =====================================================
+
+    if (
+        Build.VERSION.SDK_INT >=
+        Build.VERSION_CODES.TIRAMISU
+    ) {
+
+        permissoes.add(
+            Manifest.permission.POST_NOTIFICATIONS
         )
     }
 
 
-    private fun temPermissoes(): Boolean {
+    // =====================================================
+    // MICROFONE
+    // =====================================================
 
-        return ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) ==
-            PackageManager.PERMISSION_GRANTED &&
+    permissoes.add(
+        Manifest.permission.RECORD_AUDIO
+    )
 
+
+    // =====================================================
+    // CONTATOS
+    // =====================================================
+
+    permissoes.add(
+        Manifest.permission.READ_CONTACTS
+    )
+
+
+    // =====================================================
+    // LOCALIZAÇÃO
+    // =====================================================
+
+    permissoes.add(
+        Manifest.permission.ACCESS_FINE_LOCATION
+    )
+
+    permissoes.add(
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    )
+
+
+    // =====================================================
+    // FOTOS E VÍDEOS
+    // =====================================================
+
+    if (
+        Build.VERSION.SDK_INT >=
+        Build.VERSION_CODES.TIRAMISU
+    ) {
+
+        permissoes.add(
+            Manifest.permission.READ_MEDIA_IMAGES
+        )
+
+        permissoes.add(
+            Manifest.permission.READ_MEDIA_VIDEO
+        )
+
+    } else {
+
+        @Suppress("DEPRECATION")
+        permissoes.add(
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+    }
+
+
+    // =====================================================
+    // MÚSICA E ÁUDIO
+    // =====================================================
+
+    if (
+        Build.VERSION.SDK_INT >=
+        Build.VERSION_CODES.TIRAMISU
+    ) {
+
+        permissoes.add(
+            Manifest.permission.READ_MEDIA_AUDIO
+        )
+
+    } else {
+
+        @Suppress("DEPRECATION")
+        permissoes.add(
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+    }
+
+
+    // =====================================================
+    // DISPOSITIVOS POR PERTO
+    // =====================================================
+
+    if (
+        Build.VERSION.SDK_INT >=
+        Build.VERSION_CODES.S
+    ) {
+
+        permissoes.add(
+            Manifest.permission.BLUETOOTH_SCAN
+        )
+
+        permissoes.add(
+            Manifest.permission.BLUETOOTH_CONNECT
+        )
+    }
+
+
+    // =====================================================
+    // REGISTRO DE CHAMADAS
+    // =====================================================
+
+    permissoes.add(
+        Manifest.permission.READ_CALL_LOG
+    )
+
+
+    // =====================================================
+    // TELEFONE
+    // =====================================================
+
+    permissoes.add(
+        Manifest.permission.CALL_PHONE
+    )
+
+
+    // =====================================================
+    // SOLICITAR
+    // =====================================================
+
+    ActivityCompat.requestPermissions(
+        this,
+        permissoes.toTypedArray(),
+        PERMISSION_CODE
+    )
+}
+
+
+private fun temPermissoes(): Boolean {
+
+    // =====================================================
+    // AGENDA
+    // =====================================================
+
+    if (
         ContextCompat.checkSelfPermission(
             this,
-            Manifest.permission.READ_CONTACTS
-        ) ==
-            PackageManager.PERMISSION_GRANTED &&
+            Manifest.permission.READ_CALENDAR
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+        return false
+    }
 
+    if (
         ContextCompat.checkSelfPermission(
             this,
-            Manifest.permission.CALL_PHONE
-        ) ==
-            PackageManager.PERMISSION_GRANTED &&
+            Manifest.permission.WRITE_CALENDAR
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+        return false
+    }
 
+
+    // =====================================================
+    // NOTIFICAÇÕES
+    // =====================================================
+
+    if (
+        Build.VERSION.SDK_INT >=
+        Build.VERSION_CODES.TIRAMISU
+    ) {
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+    }
+
+
+    // =====================================================
+    // MICROFONE
+    // =====================================================
+
+    if (
         ContextCompat.checkSelfPermission(
             this,
             Manifest.permission.RECORD_AUDIO
-        ) ==
-            PackageManager.PERMISSION_GRANTED
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+        return false
     }
 
+
+    // =====================================================
+    // CONTATOS
+    // =====================================================
+
+    if (
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.READ_CONTACTS
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+        return false
+    }
+
+
+    // =====================================================
+    // LOCALIZAÇÃO
+    // =====================================================
+
+    if (
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+        return false
+    }
+
+    if (
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+        return false
+    }
+
+
+    // =====================================================
+    // FOTOS E VÍDEOS
+    // =====================================================
+
+    if (
+        Build.VERSION.SDK_INT >=
+        Build.VERSION_CODES.TIRAMISU
+    ) {
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_MEDIA_IMAGES
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_MEDIA_VIDEO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+
+    } else {
+
+        @Suppress("DEPRECATION")
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+    }
+
+
+    // =====================================================
+    // MÚSICA E ÁUDIO
+    // =====================================================
+
+    if (
+        Build.VERSION.SDK_INT >=
+        Build.VERSION_CODES.TIRAMISU
+    ) {
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_MEDIA_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+
+    } else {
+
+        @Suppress("DEPRECATION")
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+    }
+
+
+    // =====================================================
+    // DISPOSITIVOS POR PERTO
+    // =====================================================
+
+    if (
+        Build.VERSION.SDK_INT >=
+        Build.VERSION_CODES.S
+    ) {
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.BLUETOOTH_SCAN
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.BLUETOOTH_CONNECT
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+    }
+
+
+    // =====================================================
+    // REGISTRO DE CHAMADAS
+    // =====================================================
+
+    if (
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.READ_CALL_LOG
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+        return false
+    }
+
+
+    // =====================================================
+    // TELEFONE
+    // =====================================================
+
+    if (
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.CALL_PHONE
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+        return false
+    }
+
+
+    // =====================================================
+    // TUDO CONCEDIDO
+    // =====================================================
+
+    return true
+}
 
     private fun temPermissoesProtecao(): Boolean {
 
@@ -2124,10 +2458,6 @@ fun ConcederPermissoes() {
         }
     }
 
-@JavascriptInterface
-fun verificarPermissoes(): Boolean {
-    return temPermissoes()
-}
 
     // =========================================================
     // PEGAR LOCALIZAÇÃO

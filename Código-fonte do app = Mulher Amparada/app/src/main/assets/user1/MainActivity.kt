@@ -320,7 +320,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun pedirPermissoes() {
+     fun pedirPermissoes() {
 
     val permissoes = mutableListOf<String>()
 
@@ -480,7 +480,7 @@ class MainActivity : AppCompatActivity() {
 }
 
 
-private fun temPermissoes(): Boolean {
+ fun temPermissoes(): Boolean {
 
     // =====================================================
     // AGENDA
@@ -1221,7 +1221,7 @@ private fun temPermissoes(): Boolean {
     // PÁGINA INICIAL
     // =========================================================
 
-    private fun atualizarPaginaInicial() {
+     fun atualizarPaginaInicial() {
 
         val prefs =
             getSharedPreferences(

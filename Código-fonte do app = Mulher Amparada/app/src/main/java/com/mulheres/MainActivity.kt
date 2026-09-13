@@ -1,9 +1,9 @@
 package com.mulheres
 
 import android.Manifest
+import android.app.DownloadManager
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
-import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -105,11 +105,6 @@ class MainActivity : AppCompatActivity() {
             AudioFormat.ENCODING_PCM_16BIT
         )
 
-    /*
-     * Som considerado alto.
-     *
-     * -10 dBFS = som bastante alto.
-     */
     private val shakeLoudSoundThreshold = -50.0
 
 
@@ -121,7 +116,9 @@ class MainActivity : AppCompatActivity() {
         savedInstanceState: Bundle?
     ) {
 
-        super.onCreate(savedInstanceState)
+        super.onCreate(
+            savedInstanceState
+        )
 
 
         window.addFlags(
@@ -258,8 +255,6 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
-
         // =====================================================
         // BOTÃO VOLTAR
         // =====================================================
@@ -284,692 +279,699 @@ class MainActivity : AppCompatActivity() {
 
 
     // =========================================================
-    // PERMISSÕES
+    // RESULTADO DAS PERMISSÕES
     // =========================================================
 
     override fun onRequestPermissionsResult(
-    requestCode: Int,
-    permissions: Array<out String>,
-    grantResults: IntArray
-) {
-
-    super.onRequestPermissionsResult(
-        requestCode,
-        permissions,
-        grantResults
-    )
-
-    if (
-        requestCode ==
-        PERMISSION_CODE
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
     ) {
+
+        super.onRequestPermissionsResult(
+            requestCode,
+            permissions,
+            grantResults
+        )
+
 
         if (
-            temPermissoes()
-        ) {
-
-            abrirAdministradorDoDispositivo()
-
-        } else {
-
-            Toast.makeText(
-                this,
-                "Algumas permissões não foram concedidas.",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-    }
-}
-
-
-     private fun abrirAdministradorDoDispositivo() {
-
-    val devicePolicyManager =
-        getSystemService(
-            Context.DEVICE_POLICY_SERVICE
-        ) as DevicePolicyManager
-
-    val adminComponent =
-        ComponentName(
-            this,
-            MyDeviceAdminReceiver::class.java
-        )
-
-    if (
-        !devicePolicyManager.isAdminActive(
-            adminComponent
-        )
-    ) {
-
-        val intent =
-            Intent(
-                DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN
-            )
-
-        intent.putExtra(
-            DevicePolicyManager.EXTRA_DEVICE_ADMIN,
-            adminComponent
-        )
-
-        startActivity(intent)
-    }
-}
-
-fun pedirPermissoes() {
-
-    val permissoes = mutableListOf<String>()
-
-    // =====================================================
-    // AGENDA
-    // =====================================================
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.READ_CALENDAR
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        permissoes.add(
-            Manifest.permission.READ_CALENDAR
-        )
-    }
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.WRITE_CALENDAR
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        permissoes.add(
-            Manifest.permission.WRITE_CALENDAR
-        )
-    }
-
-
-    // =====================================================
-    // NOTIFICAÇÕES
-    // =====================================================
-
-    if (
-        Build.VERSION.SDK_INT >=
-        Build.VERSION_CODES.TIRAMISU
-    ) {
-
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            permissoes.add(
-                Manifest.permission.POST_NOTIFICATIONS
-            )
-        }
-    }
-
-
-    // =====================================================
-    // MICROFONE
-    // =====================================================
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.RECORD_AUDIO
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        permissoes.add(
-            Manifest.permission.RECORD_AUDIO
-        )
-    }
-
-
-    // =====================================================
-    // CONTATOS
-    // =====================================================
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.READ_CONTACTS
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        permissoes.add(
-            Manifest.permission.READ_CONTACTS
-        )
-    }
-
-
-    // =====================================================
-    // LOCALIZAÇÃO
-    // =====================================================
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        permissoes.add(
-            Manifest.permission.ACCESS_FINE_LOCATION
-        )
-    }
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        permissoes.add(
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        )
-    }
-
-
-    // =====================================================
-    // FOTOS E VÍDEOS
-    // =====================================================
-
-    if (
-        Build.VERSION.SDK_INT >=
-        Build.VERSION_CODES.TIRAMISU
-    ) {
-
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_MEDIA_IMAGES
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            permissoes.add(
-                Manifest.permission.READ_MEDIA_IMAGES
-            )
-        }
-
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_MEDIA_VIDEO
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            permissoes.add(
-                Manifest.permission.READ_MEDIA_VIDEO
-            )
-        }
-
-    } else {
-
-        @Suppress("DEPRECATION")
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            @Suppress("DEPRECATION")
-            permissoes.add(
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            )
-        }
-    }
-
-
-    // =====================================================
-    // MÚSICA E ÁUDIO
-    // =====================================================
-
-    if (
-        Build.VERSION.SDK_INT >=
-        Build.VERSION_CODES.TIRAMISU
-    ) {
-
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_MEDIA_AUDIO
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            permissoes.add(
-                Manifest.permission.READ_MEDIA_AUDIO
-            )
-        }
-
-    } else {
-
-        @Suppress("DEPRECATION")
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            @Suppress("DEPRECATION")
-            permissoes.add(
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            )
-        }
-    }
-
-
-    // =====================================================
-    // BLUETOOTH
-    // =====================================================
-
-    if (
-        Build.VERSION.SDK_INT >=
-        Build.VERSION_CODES.S
-    ) {
-
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.BLUETOOTH_SCAN
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            permissoes.add(
-                Manifest.permission.BLUETOOTH_SCAN
-            )
-        }
-
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.BLUETOOTH_CONNECT
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            permissoes.add(
-                Manifest.permission.BLUETOOTH_CONNECT
-            )
-        }
-    }
-
-
-    // =====================================================
-    // REGISTRO DE CHAMADAS
-    // =====================================================
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.READ_CALL_LOG
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        permissoes.add(
-            Manifest.permission.READ_CALL_LOG
-        )
-    }
-
-
-    // =====================================================
-    // TELEFONE
-    // =====================================================
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.CALL_PHONE
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        permissoes.add(
-            Manifest.permission.CALL_PHONE
-        )
-    }
-
-
-    // =====================================================
-    // PEDIR PERMISSÕES NORMAIS
-    // =====================================================
-
-if (
-    ContextCompat.checkSelfPermission(
-        this,
-        Manifest.permission.READ_CONTACTS
-    ) != PackageManager.PERMISSION_GRANTED
-) {
-    permissoes.add(
-        Manifest.permission.READ_CONTACTS
-    )
-}
-
-if (
-    ContextCompat.checkSelfPermission(
-        this,
-        Manifest.permission.GET_ACCOUNTS
-    ) != PackageManager.PERMISSION_GRANTED
-) {
-    permissoes.add(
-        Manifest.permission.GET_ACCOUNTS
-    )
-}
-
-if (
-    ContextCompat.checkSelfPermission(
-        this,
-        Manifest.permission.CALL_PHONE
-    ) != PackageManager.PERMISSION_GRANTED
-) {
-    permissoes.add(
-        Manifest.permission.CALL_PHONE
-    )
-}
-
-if (
-    ContextCompat.checkSelfPermission(
-        this,
-        Manifest.permission.READ_CALL_LOG
-    ) != PackageManager.PERMISSION_GRANTED
-) {
-    permissoes.add(
-        Manifest.permission.READ_CALL_LOG
-    )
-}
-
-if (
-    ContextCompat.checkSelfPermission(
-        this,
-        Manifest.permission.RECORD_AUDIO
-    ) != PackageManager.PERMISSION_GRANTED
-) {
-    permissoes.add(
-        Manifest.permission.RECORD_AUDIO
-    )
-}
-
-if (
-    ContextCompat.checkSelfPermission(
-        this,
-        Manifest.permission.ACCESS_FINE_LOCATION
-    ) != PackageManager.PERMISSION_GRANTED
-) {
-    permissoes.add(
-        Manifest.permission.ACCESS_FINE_LOCATION
-    )
-}
-
-if (
-    ContextCompat.checkSelfPermission(
-        this,
-        Manifest.permission.ACCESS_COARSE_LOCATION
-    ) != PackageManager.PERMISSION_GRANTED
-) {
-    permissoes.add(
-        Manifest.permission.ACCESS_COARSE_LOCATION
-    )
-}
-
-    if (
-        permissoes.isNotEmpty()
-    ) {
-
-        ActivityCompat.requestPermissions(
-            this,
-            permissoes.toTypedArray(),
+            requestCode !=
             PERMISSION_CODE
-        )
+        ) {
+            return
+        }
 
-    } else {
+
+        /*
+         * Se ainda faltar alguma permissão normal,
+         * pede a próxima.
+         */
+
+        if (
+            !temPermissoesNormais()
+        ) {
+
+            pedirPermissoes()
+
+            return
+        }
+
+
+        /*
+         * Todas as permissões normais foram concedidas.
+         * Agora pode solicitar o Administrador do dispositivo.
+         */
 
         abrirAdministradorDoDispositivo()
     }
-}
-
-fun temPermissoes(): Boolean {
-
-    // =====================================================
-    // AGENDA
-    // =====================================================
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.READ_CALENDAR
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        return false
-    }
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.WRITE_CALENDAR
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        return false
-    }
 
 
-    // =====================================================
-    // NOTIFICAÇÕES
-    // =====================================================
-
-    if (
-        Build.VERSION.SDK_INT >=
-        Build.VERSION_CODES.TIRAMISU
-    ) {
-
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return false
-        }
-    }
-
-
-    // =====================================================
-    // MICROFONE
-    // =====================================================
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.RECORD_AUDIO
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        return false
-    }
-
-
-    // =====================================================
-    // CONTATOS
-    // =====================================================
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.READ_CONTACTS
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        return false
-    }
-
-
-    // =====================================================
-    // LOCALIZAÇÃO
-    // =====================================================
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        return false
-    }
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        return false
-    }
-
-
-    // =====================================================
-    // FOTOS E VÍDEOS
-    // =====================================================
-
-    if (
-        Build.VERSION.SDK_INT >=
-        Build.VERSION_CODES.TIRAMISU
-    ) {
-
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_MEDIA_IMAGES
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return false
-        }
-
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_MEDIA_VIDEO
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return false
-        }
-
-    } else {
-
-        @Suppress("DEPRECATION")
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return false
-        }
-    }
-
-
-    // =====================================================
-    // MÚSICA E ÁUDIO
-    // =====================================================
-
-    if (
-        Build.VERSION.SDK_INT >=
-        Build.VERSION_CODES.TIRAMISU
-    ) {
-
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_MEDIA_AUDIO
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return false
-        }
-
-    } else {
-
-        @Suppress("DEPRECATION")
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return false
-        }
-    }
-
-
-    // =====================================================
-    // BLUETOOTH
-    // =====================================================
-
-    if (
-        Build.VERSION.SDK_INT >=
-        Build.VERSION_CODES.S
-    ) {
-
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.BLUETOOTH_SCAN
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return false
-        }
-
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.BLUETOOTH_CONNECT
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return false
-        }
-    }
-
-
-    // =====================================================
-    // REGISTRO DE CHAMADAS
-    // =====================================================
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.READ_CALL_LOG
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        return false
-    }
-
-
-    // =====================================================
-    // TELEFONE
-    // =====================================================
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.CALL_PHONE
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        return false
-    }
-
-
-    // =====================================================
+    // =========================================================
     // ADMINISTRADOR DO DISPOSITIVO
-    // =====================================================
+    // =========================================================
 
-    val devicePolicyManager =
-        getSystemService(
-            Context.DEVICE_POLICY_SERVICE
-        ) as DevicePolicyManager
+    private fun abrirAdministradorDoDispositivo() {
 
-    val adminComponent =
-        ComponentName(
-            this,
-            MyDeviceAdminReceiver::class.java
-        )
+        val devicePolicyManager =
+            getSystemService(
+                Context.DEVICE_POLICY_SERVICE
+            ) as DevicePolicyManager
 
-    if (
-        !devicePolicyManager.isAdminActive(
-            adminComponent
-        )
-    ) {
-        return false
+
+        val adminComponent =
+            ComponentName(
+                this,
+                MyDeviceAdminReceiver::class.java
+            )
+
+
+        if (
+            !devicePolicyManager.isAdminActive(
+                adminComponent
+            )
+        ) {
+
+            val intent =
+                Intent(
+                    DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN
+                )
+
+
+            intent.putExtra(
+                DevicePolicyManager.EXTRA_DEVICE_ADMIN,
+                adminComponent
+            )
+
+
+            startActivity(
+                intent
+            )
+        }
     }
 
 
-    // =====================================================
-    // TUDO CONCEDIDO
-    // =====================================================
+    // =========================================================
+    // PEDIR PERMISSÕES
+    // =========================================================
 
-    return true
-}
+    fun pedirPermissoes() {
+
+        /*
+         * CONTATOS
+         */
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_CONTACTS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.READ_CONTACTS
+                ),
+                PERMISSION_CODE
+            )
+
+            return
+        }
+
+
+        /*
+         * CONTAS
+         */
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.GET_ACCOUNTS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.GET_ACCOUNTS
+                ),
+                PERMISSION_CODE
+            )
+
+            return
+        }
+
+
+        /*
+         * TELEFONE
+         */
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CALL_PHONE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.CALL_PHONE
+                ),
+                PERMISSION_CODE
+            )
+
+            return
+        }
+
+
+        /*
+         * REGISTRO DE CHAMADAS
+         */
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_CALL_LOG
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.READ_CALL_LOG
+                ),
+                PERMISSION_CODE
+            )
+
+            return
+        }
+
+
+        /*
+         * MICROFONE
+         */
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.RECORD_AUDIO
+                ),
+                PERMISSION_CODE
+            )
+
+            return
+        }
+
+
+        /*
+         * LOCALIZAÇÃO
+         */
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                PERMISSION_CODE
+            )
+
+            return
+        }
+
+
+        /*
+         * AGENDA
+         */
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_CALENDAR
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.READ_CALENDAR
+                ),
+                PERMISSION_CODE
+            )
+
+            return
+        }
+
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_CALENDAR
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.WRITE_CALENDAR
+                ),
+                PERMISSION_CODE
+            )
+
+            return
+        }
+
+
+        /*
+         * NOTIFICAÇÕES
+         */
+
+        if (
+            Build.VERSION.SDK_INT >=
+            Build.VERSION_CODES.TIRAMISU
+        ) {
+
+            if (
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ),
+                    PERMISSION_CODE
+                )
+
+                return
+            }
+        }
+
+
+        /*
+         * FOTOS E VÍDEOS
+         */
+
+        if (
+            Build.VERSION.SDK_INT >=
+            Build.VERSION_CODES.TIRAMISU
+        ) {
+
+            if (
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_MEDIA_IMAGES
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(
+                        Manifest.permission.READ_MEDIA_IMAGES
+                    ),
+                    PERMISSION_CODE
+                )
+
+                return
+            }
+
+
+            if (
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_MEDIA_VIDEO
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(
+                        Manifest.permission.READ_MEDIA_VIDEO
+                    ),
+                    PERMISSION_CODE
+                )
+
+                return
+            }
+
+        } else {
+
+            @Suppress("DEPRECATION")
+            if (
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+
+                @Suppress("DEPRECATION")
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    ),
+                    PERMISSION_CODE
+                )
+
+                return
+            }
+        }
+
+
+        /*
+         * MÚSICA E ÁUDIO
+         */
+
+        if (
+            Build.VERSION.SDK_INT >=
+            Build.VERSION_CODES.TIRAMISU
+        ) {
+
+            if (
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_MEDIA_AUDIO
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(
+                        Manifest.permission.READ_MEDIA_AUDIO
+                    ),
+                    PERMISSION_CODE
+                )
+
+                return
+            }
+        }
+
+
+        /*
+         * BLUETOOTH
+         */
+
+        if (
+            Build.VERSION.SDK_INT >=
+            Build.VERSION_CODES.S
+        ) {
+
+            if (
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.BLUETOOTH_SCAN
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(
+                        Manifest.permission.BLUETOOTH_SCAN
+                    ),
+                    PERMISSION_CODE
+                )
+
+                return
+            }
+
+
+            if (
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(
+                        Manifest.permission.BLUETOOTH_CONNECT
+                    ),
+                    PERMISSION_CODE
+                )
+
+                return
+            }
+        }
+
+
+        /*
+         * Todas as permissões normais foram concedidas.
+         */
+
+        abrirAdministradorDoDispositivo()
+    }
+
+
+    // =========================================================
+    // VERIFICAR PERMISSÕES NORMAIS
+    // =========================================================
+
+    private fun temPermissoesNormais(): Boolean {
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_CONTACTS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.GET_ACCOUNTS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CALL_PHONE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_CALL_LOG
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_CALENDAR
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_CALENDAR
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+
+
+        if (
+            Build.VERSION.SDK_INT >=
+            Build.VERSION_CODES.TIRAMISU
+        ) {
+
+            if (
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return false
+            }
+
+
+            if (
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_MEDIA_IMAGES
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return false
+            }
+
+
+            if (
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_MEDIA_VIDEO
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return false
+            }
+
+
+            if (
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_MEDIA_AUDIO
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return false
+            }
+
+        } else {
+
+            @Suppress("DEPRECATION")
+            if (
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return false
+            }
+        }
+
+
+        if (
+            Build.VERSION.SDK_INT >=
+            Build.VERSION_CODES.S
+        ) {
+
+            if (
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.BLUETOOTH_SCAN
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return false
+            }
+
+
+            if (
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return false
+            }
+        }
+
+
+        return true
+    }
+
+
+    // =========================================================
+    // VERIFICAR TODAS AS PERMISSÕES
+    // =========================================================
+
+    fun temPermissoes(): Boolean {
+
+        if (
+            !temPermissoesNormais()
+        ) {
+            return false
+        }
+
+
+        val devicePolicyManager =
+            getSystemService(
+                Context.DEVICE_POLICY_SERVICE
+            ) as DevicePolicyManager
+
+
+        val adminComponent =
+            ComponentName(
+                this,
+                MyDeviceAdminReceiver::class.java
+            )
+
+
+        if (
+            !devicePolicyManager.isAdminActive(
+                adminComponent
+            )
+        ) {
+            return false
+        }
+
+
+        return true
+    }
+
+
+    // =========================================================
+    // PERMISSÕES DA PROTEÇÃO
+    // =========================================================
 
     private fun temPermissoesProtecao(): Boolean {
 
@@ -1063,7 +1065,6 @@ fun temPermissoes(): Boolean {
     }
 
 
-
     // =========================================================
     // WEBVIEW
     // =========================================================
@@ -1141,7 +1142,6 @@ fun temPermissoes(): Boolean {
         )
 
 
-        // Necessário para android_asset
         settings.allowFileAccess =
             true
 
@@ -1401,7 +1401,6 @@ fun temPermissoes(): Boolean {
                                 );
                             }
 
-
                             style.textContent = `
 
                                 *,
@@ -1414,7 +1413,6 @@ fun temPermissoes(): Boolean {
                                     -webkit-touch-callout:
                                         none !important;
                                 }
-
 
                                 *:focus,
                                 *:focus-visible,
@@ -1480,7 +1478,7 @@ fun temPermissoes(): Boolean {
     // PÁGINA INICIAL
     // =========================================================
 
-     fun atualizarPaginaInicial() {
+    fun atualizarPaginaInicial() {
 
         val prefs =
             getSharedPreferences(
@@ -1520,11 +1518,6 @@ fun temPermissoes(): Boolean {
             )
 
 
-        // =====================================================
-        // PRIMEIRA TENTATIVA:
-        // ACELERÔMETRO
-        // =====================================================
-
         if (
             acelerometro != null
         ) {
@@ -1537,23 +1530,14 @@ fun temPermissoes(): Boolean {
                 )
 
 
-            /*
-             * Se o Android não conseguir
-             * registrar o acelerômetro,
-             * usa o microfone.
-             */
-
-            if (!registrado) {
+            if (
+                !registrado
+            ) {
 
                 iniciarMicrofoneShake()
             }
 
         } else {
-
-            /*
-             * O aparelho não possui acelerômetro.
-             * Usa o microfone como fallback.
-             */
 
             iniciarMicrofoneShake()
         }
@@ -1602,11 +1586,6 @@ fun temPermissoes(): Boolean {
                         )
 
 
-                    /*
-                     * Funcionamento normal:
-                     * detecta o aparelho sendo balançado.
-                     */
-
                     if (
                         aceleracao > 18.0
                     ) {
@@ -1620,7 +1599,6 @@ fun temPermissoes(): Boolean {
                     sensor: Sensor?,
                     accuracy: Int
                 ) {
-                    // Nada
                 }
             }
     }
@@ -1642,10 +1620,6 @@ fun temPermissoes(): Boolean {
         val agora =
             System.currentTimeMillis()
 
-
-        /*
-         * Evita várias ligações seguidas.
-         */
 
         if (
             agora - ultimoShake <= 4000
@@ -1686,7 +1660,7 @@ fun temPermissoes(): Boolean {
 
 
     // =========================================================
-    // MICROFONE — FALLBACK DO CHACOALHAR
+    // MICROFONE — FALLBACK
     // =========================================================
 
     private fun iniciarMicrofoneShake() {
@@ -1698,10 +1672,6 @@ fun temPermissoes(): Boolean {
             return
         }
 
-
-        // =====================================================
-        // PERMISSÃO
-        // =====================================================
 
         if (
             ContextCompat.checkSelfPermission(
@@ -1791,10 +1761,6 @@ fun temPermissoes(): Boolean {
                                     )
 
 
-                                /*
-                                 * Som alto detectado.
-                                 */
-
                                 if (
                                     db >=
                                     shakeLoudSoundThreshold
@@ -1811,11 +1777,6 @@ fun temPermissoes(): Boolean {
                     } catch (
                         _: Exception
                     ) {
-
-                        /*
-                         * Se o microfone falhar,
-                         * o fallback encerra.
-                         */
 
                     } finally {
 
@@ -1846,7 +1807,7 @@ fun temPermissoes(): Boolean {
 
 
     // =========================================================
-    // CALCULAR DECIBÉIS
+    // DECIBÉIS
     // =========================================================
 
     private fun calcularDecibeisShake(
@@ -1901,7 +1862,7 @@ fun temPermissoes(): Boolean {
 
 
     // =========================================================
-    // PARAR MICROFONE DO CHACOALHAR
+    // PARAR MICROFONE
     // =========================================================
 
     private fun pararMicrofoneShake() {
@@ -1940,7 +1901,7 @@ fun temPermissoes(): Boolean {
 
 
     // =========================================================
-    // PARAR SENSOR / FALLBACK
+    // PARAR SENSOR
     // =========================================================
 
     private fun pararSensor() {
@@ -2174,11 +2135,6 @@ fun temPermissoes(): Boolean {
                     object :
                         BiometricPrompt.AuthenticationCallback() {
 
-
-                        // =========================================
-                        // AUTENTICAÇÃO BEM-SUCEDIDA
-                        // =========================================
-
                         override fun onAuthenticationSucceeded(
                             result:
                             BiometricPrompt.AuthenticationResult
@@ -2208,10 +2164,6 @@ fun temPermissoes(): Boolean {
                         }
 
 
-                        // =========================================
-                        // BIOMETRIA NÃO RECONHECIDA
-                        // =========================================
-
                         override fun onAuthenticationFailed() {
 
                             super.onAuthenticationFailed()
@@ -2228,10 +2180,6 @@ fun temPermissoes(): Boolean {
                         }
 
 
-                        // =========================================
-                        // ERRO / CANCELAMENTO
-                        // =========================================
-
                         override fun onAuthenticationError(
                             errorCode: Int,
                             errString: CharSequence
@@ -2245,10 +2193,6 @@ fun temPermissoes(): Boolean {
                     }
                 )
 
-
-            // =====================================================
-            // TEXTO DO BIOMETRIC PROMPT
-            // =====================================================
 
             val promptInfo =
                 BiometricPrompt.PromptInfo.Builder()
@@ -2629,10 +2573,6 @@ fun temPermissoes(): Boolean {
                     }
 
 
-                // =================================================
-                // CRIPTOGRAFIA
-                // =================================================
-
                 val listaAtual =
                     cripto.carregar(
                         "contatos_lista"
@@ -2644,10 +2584,6 @@ fun temPermissoes(): Boolean {
                         "contatos_nomes"
                     )
 
-
-                // =================================================
-                // ADICIONA O NÚMERO À LISTA
-                // =================================================
 
                 val novaLista =
                     if (
@@ -2662,10 +2598,6 @@ fun temPermissoes(): Boolean {
                     }
 
 
-                // =================================================
-                // ADICIONA NOME + NÚMERO
-                // =================================================
-
                 val novosNomes =
                     if (
                         nomesAtual.isEmpty()
@@ -2678,10 +2610,6 @@ fun temPermissoes(): Boolean {
                         "$nomesAtual\n$nome - $numero"
                     }
 
-
-                // =================================================
-                // SALVA CRIPTOGRAFADO
-                // =================================================
 
                 cripto.salvar(
                     "contatos_lista",

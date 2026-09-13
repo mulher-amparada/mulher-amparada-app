@@ -438,27 +438,5 @@ fun openRecorder() {
         activity.startActivity(intent)
     }
     
-    @JavascriptInterface
-fun ConcederPermissoes() {
-
-    safeMainActivityCall { act ->
-
-        act.runOnUiThread {
-
-            act.pedirPermissoes()
-
-        }
-    }
-}
-
-@JavascriptInterface
-fun verificarPermissoes(): Boolean {
-
-    return if (activity is MainActivity) {
-        (activity as MainActivity).temPermissoes()
-    } else {
-        false
-    }
-}
 
 }

@@ -16,7 +16,7 @@ Antes de conceder essa permissão, leia atentamente as informações exibidas pe
 
 ## Sobre as permissões:
 
-> ⚠️ Sobre as permissões: infelizmente, foi necessário fazer com que a "MainActivity" não solicite permissões automaticamente, devido ao funcionamento do disfarce do aplicativo. Por isso, a usuária deverá concedê-las manualmente pelas configurações do dispositivo. As permissões solicitadas por outras "Activity"s continuam sendo requisitadas normalmente pelo aplicativo.
+> ⚠️ Sobre as permissões: infelizmente, foi necessário configurar a "MainActivity" para não solicitar permissões automaticamente, devido ao funcionamento do disfarce do aplicativo. Por isso, as permissões necessárias deverão ser concedidas manualmente pela usuária nas configurações do dispositivo. As permissões utilizadas por outras "Activity"s continuam sendo solicitadas normalmente pelo aplicativo. Ao entrar no aplicativo após sair dos disfarces, um aviso é exibido bloqueando o acesso até que as permissões necessárias sejam verificadas, oferecendo à usuária a opção de acessar diretamente a tela de permissões do aplicativo nas configurações do dispositivo.
 
 ## Avisos:
 

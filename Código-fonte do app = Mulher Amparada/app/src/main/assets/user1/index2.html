@@ -2140,19 +2140,95 @@ document
 
 <script>
 /* =========================================================
-   BLOQUEIO DE PERMISSÕES
+   BLOQUEIO DE PERMISSÕES — EXIBIR APENAS UMA VEZ
 ========================================================= */
 
 const permissionOverlay =
-    document.getElementById(
-        "permissionOverlay"
-    );
+    document.getElementById("permissionOverlay");
 
 const permissionButton =
-    document.getElementById(
-        "permissionButton"
+    document.getElementById("permissionButton");
+
+
+let avisoJaExibido = false;
+
+
+/* =========================================================
+   VERIFICA SE O AVISO JÁ FOI EXIBIDO
+========================================================= */
+
+try {
+
+    if (
+        window.Cripto &&
+        typeof Cripto.carregar === "function"
+    ) {
+
+        avisoJaExibido =
+            Cripto.carregar(
+                "permissionOverlayExibido"
+            ) === "true";
+
+    }
+
+} catch (e) {
+
+    console.warn(
+        "Erro ao verificar o bloqueio de permissões:",
+        e
     );
 
+}
+
+
+/* =========================================================
+   CONTROLE DO OVERLAY
+========================================================= */
+
+if (permissionOverlay) {
+
+    if (avisoJaExibido) {
+
+        permissionOverlay.style.display = "none";
+
+    } else {
+
+        permissionOverlay.style.display = "flex";
+
+
+        /* Marca como exibido imediatamente */
+
+        try {
+
+            if (
+                window.Cripto &&
+                typeof Cripto.salvar === "function"
+            ) {
+
+                Cripto.salvar(
+                    "permissionOverlayExibido",
+                    "true"
+                );
+
+            }
+
+        } catch (e) {
+
+            console.warn(
+                "Erro ao salvar o estado do aviso:",
+                e
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   BOTÃO DE PERMISSÕES
+========================================================= */
 
 if (permissionButton) {
 

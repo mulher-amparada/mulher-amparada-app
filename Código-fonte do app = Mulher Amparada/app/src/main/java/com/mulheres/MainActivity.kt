@@ -621,6 +621,83 @@ fun pedirPermissoes() {
     // PEDIR PERMISSÕES NORMAIS
     // =====================================================
 
+if (
+    ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.READ_CONTACTS
+    ) != PackageManager.PERMISSION_GRANTED
+) {
+    permissoes.add(
+        Manifest.permission.READ_CONTACTS
+    )
+}
+
+if (
+    ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.GET_ACCOUNTS
+    ) != PackageManager.PERMISSION_GRANTED
+) {
+    permissoes.add(
+        Manifest.permission.GET_ACCOUNTS
+    )
+}
+
+if (
+    ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.CALL_PHONE
+    ) != PackageManager.PERMISSION_GRANTED
+) {
+    permissoes.add(
+        Manifest.permission.CALL_PHONE
+    )
+}
+
+if (
+    ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.READ_CALL_LOG
+    ) != PackageManager.PERMISSION_GRANTED
+) {
+    permissoes.add(
+        Manifest.permission.READ_CALL_LOG
+    )
+}
+
+if (
+    ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.RECORD_AUDIO
+    ) != PackageManager.PERMISSION_GRANTED
+) {
+    permissoes.add(
+        Manifest.permission.RECORD_AUDIO
+    )
+}
+
+if (
+    ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    ) != PackageManager.PERMISSION_GRANTED
+) {
+    permissoes.add(
+        Manifest.permission.ACCESS_FINE_LOCATION
+    )
+}
+
+if (
+    ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    ) != PackageManager.PERMISSION_GRANTED
+) {
+    permissoes.add(
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    )
+}
+
     if (
         permissoes.isNotEmpty()
     ) {

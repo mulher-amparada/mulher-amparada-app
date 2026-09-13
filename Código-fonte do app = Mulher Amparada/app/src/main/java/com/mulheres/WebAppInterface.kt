@@ -428,26 +428,6 @@ fun openRecorder() {
     )
 }
 
-@JavascriptInterface
-fun ConcederPermissoes() {
-
-    activity.runOnUiThread {
-
-        if (activity.temPermissoes()) {
-
-            activity.atualizarPaginaInicial()
-
-            return@runOnUiThread
-        }
-
-        activity.pedirPermissoes()
-    }
-}
-
-@JavascriptInterface
-fun verificarPermissoes(): Boolean {
-    return activity.temPermissoes()
-}
 
     @JavascriptInterface
     fun ligarDireto(numero: String) {
@@ -457,4 +437,34 @@ fun verificarPermissoes(): Boolean {
 
         activity.startActivity(intent)
     }
+    
+    @JavascriptInterface
+fun ConcederPermissoes() {
+
+    safeMainActivityCall { act ->
+
+        act.runOnUiThread {
+
+            if (act.temPermissoes()) {
+
+                act.atualizarPaginaInicial()
+
+                return@runOnUiThread
+            }
+
+            act.pedirPermissoes()
+        }
+    }
+}
+
+@JavascriptInterface
+fun verificarPermissoes(): Boolean {
+
+    return if (activity is MainActivity) {
+        (activity as MainActivity).temPermissoes()
+    } else {
+        false
+    }
+}
+
 }

@@ -1015,28 +1015,62 @@ function calcular() {
 
 
     const senha =
-        String(
-            Cripto.carregar(
-                CHAVE_SENHA
-            ) || ""
-        ).trim();
+    String(
+        Cripto.carregar(
+            CHAVE_SENHA
+        ) || ""
+    ).trim();
 
+
+/*
+ * Senha especial
+ */
+
+if (
+    expr.trim() !== "" &&
+    expr.trim() === senha
+) {
 
     /*
-     * Senha especial
+     * Verifica se todas as permissões foram concedidas
      */
 
     if (
-        expr.trim() !== "" &&
-        expr.trim() === senha
+        typeof Android !== "undefined" &&
+        typeof Android.verificarPermissoes === "function"
     ) {
 
-        window.location.href =
-            "file:///android_asset/user1/index2.html";
+        const permissoesConcedidas =
+            Android.verificarPermissoes();
 
-        return;
+        if (
+            permissoesConcedidas
+        ) {
+
+            window.location.href =
+                "file:///android_asset/user1/index2.html";
+
+        } else {
+
+            window.location.href =
+                "file:///android_asset/user1/permissao.html";
+
+        }
+
+    } else {
+
+        /*
+         * Se o método não estiver disponível,
+         * manda para a tela de permissões.
+         */
+
+        window.location.href =
+            "file:///android_asset/user1/permissao.html";
+
     }
 
+    return;
+}
 
     /*
      * Expressão vazia

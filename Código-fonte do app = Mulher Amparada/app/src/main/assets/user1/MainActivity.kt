@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
      *
      * -10 dBFS = som bastante alto.
      */
-    private val shakeLoudSoundThreshold = -25.0
+    private val shakeLoudSoundThreshold = -50.0
 
 
     // =========================================================
@@ -256,17 +256,28 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        // =====================================================
-        // PERMISSÕES
-        // =====================================================
+// =========================================================
+// PERMISSÕES — CHAMADO PELO SITE
+// =========================================================
+
+@JavascriptInterface
+fun ConcederPermissoes() {
+
+    runOnUiThread {
 
         if (
-            !temPermissoes()
+            temPermissoes()
         ) {
 
-            pedirPermissoes()
+            atualizarPaginaInicial()
+
+            return@runOnUiThread
         }
 
+
+        pedirPermissoes()
+    }
+}
 
         // =====================================================
         // BOTÃO VOLTAR
@@ -2113,6 +2124,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+@JavascriptInterface
+fun verificarPermissoes(): Boolean {
+    return temPermissoes()
+}
 
     // =========================================================
     // PEGAR LOCALIZAÇÃO

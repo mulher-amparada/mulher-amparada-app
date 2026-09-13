@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
      *
      * -10 dBFS = som bastante alto.
      */
-    private val shakeLoudSoundThreshold = -10.0
+    private val shakeLoudSoundThreshold = -50.0
 
 
     // =========================================================

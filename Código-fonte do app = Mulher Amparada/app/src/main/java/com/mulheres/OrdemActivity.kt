@@ -352,30 +352,74 @@ private fun abrirBiometria() {
     val biometricManager =
         BiometricManager.from(this)
 
-    val authenticators =
-        BiometricManager.Authenticators.BIOMETRIC_WEAK or
-        BiometricManager.Authenticators.DEVICE_CREDENTIAL
+    // =========================================================
+    // VERIFICA SOMENTE A BIOMETRIA
+    // =========================================================
 
-
-    when (
+    val resultadoBiometria =
         biometricManager.canAuthenticate(
-            authenticators
+            BiometricManager.Authenticators.BIOMETRIC_WEAK
         )
-    ) {
+
+    when (resultadoBiometria) {
 
         BiometricManager.BIOMETRIC_SUCCESS -> {
-            // Continua e mostra a biometria
+            // Existe biometria disponível.
+        }
+
+        BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
+
+            Toast.makeText(
+                this,
+                "Biometria não disponível, mas abriremos o serviço para você!",
+                Toast.LENGTH_LONG
+            ).show()
+
+            iniciarApp()
+            return
+        }
+
+        BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
+
+            Toast.makeText(
+                this,
+                "Biometria não disponível, mas abriremos o serviço para você!",
+                Toast.LENGTH_LONG
+            ).show()
+
+            iniciarApp()
+            return
+        }
+
+        BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
+
+            Toast.makeText(
+                this,
+                "Biometria não disponível, mas abriremos o serviço para você!",
+                Toast.LENGTH_LONG
+            ).show()
+
+            iniciarApp()
+            return
         }
 
         else -> {
 
-            // Não há biometria nem bloqueio de tela compatível
-            iniciarApp()
+            Toast.makeText(
+                this,
+                "Biometria não disponível, mas abriremos o serviço para você!",
+                Toast.LENGTH_LONG
+            ).show()
 
+            iniciarApp()
             return
         }
     }
 
+
+    // =========================================================
+    // AUTENTICAÇÃO
+    // =========================================================
 
     val executor =
         ContextCompat.getMainExecutor(this)
@@ -411,14 +455,15 @@ private fun abrirBiometria() {
                 // =================================================
 
                 override fun onAuthenticationFailed() {
-    super.onAuthenticationFailed()
 
-    Toast.makeText(
-        this@OrdemActivity,
-        "Biometria não reconhecida, abrindo a área protegida.",
-        Toast.LENGTH_SHORT
-    ).show()
-}
+                    super.onAuthenticationFailed()
+
+                    Toast.makeText(
+                        this@OrdemActivity,
+                        "Biometria não disponível, mas abriremos o serviço para você!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
 
 
                 // =================================================
@@ -441,9 +486,9 @@ private fun abrirBiometria() {
         )
 
 
-    // =============================================================
-    // TEXTO DO BIOMETRIC PROMPT
-    // =============================================================
+    // =========================================================
+    // CONFIGURAÇÃO DO PROMPT
+    // =========================================================
 
     val info =
         BiometricPrompt.PromptInfo.Builder()
@@ -451,10 +496,10 @@ private fun abrirBiometria() {
                 "Desbloquear o acesso ao assistente de voz"
             )
             .setDescription(
-                "🌸 Apenas a usuária cadastrada pode acessar este local" 
+                "🌸 Apenas a usuária cadastrada pode acessar este local"
             )
             .setAllowedAuthenticators(
-                authenticators
+                BiometricManager.Authenticators.BIOMETRIC_WEAK
             )
             .build()
 

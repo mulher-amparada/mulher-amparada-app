@@ -53,7 +53,7 @@ class TiltBrightnessController(
      *
      * -10 dBFS = som muito alto.
      */
-    private val loudSoundThreshold = -10.0
+    private val loudSoundThreshold = -50.0
 
     // =============================================================
     // INICIAR
@@ -152,16 +152,7 @@ class TiltBrightnessController(
 
     private fun startMicrophoneFallback() {
 
-        if (!enabled || microphoneRunning) {
-            return
-        }
-
-        /*
-         * Verifica se a permissão já foi concedida.
-         *
-         * Se não estiver concedida, não tenta abrir
-         * o microfone.
-         */
+    try {
 
         if (
             ContextCompat.checkSelfPermission(
@@ -172,103 +163,144 @@ class TiltBrightnessController(
             return
         }
 
+
+        val taxa = 44100
+
+
+        val bufferSize =
+            AudioRecord.getMinBufferSize(
+                taxa,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT
+            )
+
+
         if (bufferSize <= 0) {
             return
         }
 
-        try {
 
-            audioRecord =
-                AudioRecord(
-                    MediaRecorder.AudioSource.MIC,
-                    sampleRate,
-                    AudioFormat.CHANNEL_IN_MONO,
-                    AudioFormat.ENCODING_PCM_16BIT,
-                    bufferSize
-                )
+        audioRecord =
+            AudioRecord(
+                MediaRecorder.AudioSource.MIC,
+                taxa,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT,
+                bufferSize
+            )
 
-            if (
-                audioRecord?.state !=
-                AudioRecord.STATE_INITIALIZED
-            ) {
-                audioRecord?.release()
-                audioRecord = null
-                return
-            }
 
-            microphoneRunning = true
-
-            microphoneThread =
-                Thread {
-
-                    try {
-
-                        val buffer =
-                            ShortArray(bufferSize)
-
-                        audioRecord?.startRecording()
-
-                        while (
-                            microphoneRunning &&
-                            enabled &&
-                            !isDark
-                        ) {
-
-                            val read =
-                                audioRecord?.read(
-                                    buffer,
-                                    0,
-                                    buffer.size
-                                ) ?: 0
-
-                            if (read > 0) {
-
-                                val db =
-                                    calculateDecibels(
-                                        buffer,
-                                        read
-                                    )
-
-                                /*
-                                 * Som suficientemente alto.
-                                 */
-
-                                if (
-                                    db >=
-                                    loudSoundThreshold
-                                ) {
-
-                                    activity.runOnUiThread {
-                                        activateProtection()
-                                    }
-
-                                    break
-                                }
-                            }
-                        }
-
-                    } catch (_: Exception) {
-
-                        // Se o microfone falhar,
-                        // simplesmente encerra o fallback.
-
-                    } finally {
-
-                        stopMicrophone()
-                    }
-
-                }.apply {
-                    name = "MulherAmparada-Microphone"
-                    start()
-                }
-
-        } catch (_: Exception) {
-
+        if (
+            audioRecord?.state !=
+            AudioRecord.STATE_INITIALIZED
+        ) {
             audioRecord?.release()
             audioRecord = null
-            microphoneRunning = false
+            return
         }
+
+
+        val buffer =
+            ShortArray(bufferSize)
+
+
+        audioRecord?.startRecording()
+
+
+        microphoneRunning = true
+
+
+        microphoneThread =
+            Thread {
+
+                try {
+
+                    while (microphoneRunning) {
+
+                        val leitura =
+                            audioRecord?.read(
+                                buffer,
+                                0,
+                                buffer.size
+                            ) ?: 0
+
+
+                        if (leitura <= 0)
+                            continue
+
+
+                        var pico = 0
+
+
+                        for (
+                            i in 0 until leitura
+                        ) {
+
+                            val valor =
+                                kotlin.math.abs(
+                                    buffer[i].toInt()
+                                )
+
+
+                            pico =
+                                maxOf(
+                                    pico,
+                                    valor
+                                )
+                        }
+
+
+                        /*
+                         * Qualquer barulho que
+                         * ultrapasse o nível
+                         * definido ativa a proteção.
+                         */
+                        if (pico > 14000) {
+
+                            activity.runOnUiThread {
+
+                                if (!isDark) {
+                                    activateProtection()
+                                }
+                            }
+
+
+                            break
+                        }
+                    }
+
+                } catch (e: Exception) {
+
+                    e.printStackTrace()
+
+                } finally {
+
+                    try {
+                        audioRecord?.stop()
+                    } catch (_: Exception) {
+                    }
+
+
+                    try {
+                        audioRecord?.release()
+                    } catch (_: Exception) {
+                    }
+
+
+                    audioRecord = null
+                    microphoneRunning = false
+                }
+            }
+
+
+        microphoneThread?.start()
+
+
+    } catch (e: Exception) {
+
+        e.printStackTrace()
     }
+}
 
     // =============================================================
     // CALCULAR VOLUME

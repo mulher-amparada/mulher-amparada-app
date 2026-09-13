@@ -445,14 +445,8 @@ fun ConcederPermissoes() {
 
         act.runOnUiThread {
 
-            if (act.temPermissoes()) {
-
-                act.atualizarPaginaInicial()
-
-                return@runOnUiThread
-            }
-
             act.pedirPermissoes()
+
         }
     }
 }

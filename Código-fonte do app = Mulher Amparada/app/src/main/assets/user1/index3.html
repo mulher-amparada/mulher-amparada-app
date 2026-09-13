@@ -1405,6 +1405,10 @@ palmasSwitch.addEventListener(
             if (resultado.sucesso) {
 
                 atualizarPalmasUI(false);
+
+            } else {
+
+                vibrar(150);
             }
         }
 
@@ -1467,30 +1471,60 @@ movimentoSwitch.addEventListener(
 
         if (protecaoAtiva) {
 
-            chamarAndroid(
-                "desativarProtecao"
-            );
+            const resultado =
+                chamarAndroid(
+                    "desativarProtecao"
+                );
 
-            protecaoAtiva = false;
+            if (resultado.sucesso) {
 
-            atualizarProtecaoUI();
+                protecaoAtiva = false;
+
+                atualizarProtecaoUI();
+
+            } else {
+
+                vibrar(150);
+            }
 
             return;
         }
 
 
         /*
-         * Sem verificação de sensor.
-         * Apenas chama o Kotlin.
+         * O Kotlin decide automaticamente:
+         *
+         * 1. Sensor disponível:
+         *    usa o sensor de movimento.
+         *
+         * 2. Sensor ausente:
+         *    usa o microfone como fallback.
+         *
+         * 3. Sensor presente, mas falha:
+         *    usa o microfone como fallback.
+         *
+         * O JavaScript não verifica o sensor.
          */
 
-        chamarAndroid(
-            "ativarProtecao"
-        );
+        const resultado =
+            chamarAndroid(
+                "ativarProtecao"
+            );
 
-        protecaoAtiva = true;
+        if (resultado.sucesso) {
 
-        atualizarProtecaoUI();
+            protecaoAtiva = true;
+
+            atualizarProtecaoUI();
+
+        } else {
+
+            protecaoAtiva = false;
+
+            atualizarProtecaoUI();
+
+            vibrar(150);
+        }
 
     }
 );
@@ -1560,6 +1594,14 @@ brilhoSwitch.addEventListener(
                 ) {
 
                     TiltBrightness.stopTiltBrightness();
+
+                    brilhoAtivo = false;
+
+                    atualizarBrilhoUI();
+
+                } else {
+
+                    vibrar(150);
                 }
 
             } catch (e) {
@@ -1568,39 +1610,30 @@ brilhoSwitch.addEventListener(
                     "Erro ao desativar brilho:",
                     e
                 );
+
+                vibrar(150);
             }
-
-            try {
-
-                if (
-                    window.Android &&
-                    typeof Android.desativarFullscreen ===
-                    "function"
-                ) {
-
-                    Android.desativarFullscreen();
-                }
-
-            } catch (e) {
-
-                console.warn(
-                    "Erro ao restaurar tela:",
-                    e
-                );
-            }
-
-            brilhoAtivo = false;
-
-            atualizarBrilhoUI();
 
             return;
         }
 
 
         /*
-         * Sem verificação de sensor.
-         * Apenas chama o Kotlin.
+         * O Kotlin decide automaticamente:
+         *
+         * 1. Sensor de inclinação disponível:
+         *    usa o sensor.
+         *
+         * 2. Sensor ausente:
+         *    usa o microfone como fallback.
+         *
+         * 3. Sensor presente, mas falha:
+         *    usa o microfone como fallback.
+         *
+         * O JavaScript não verifica o sensor.
          */
+
+        let ativado = false;
 
         try {
 
@@ -1611,6 +1644,8 @@ brilhoSwitch.addEventListener(
             ) {
 
                 TiltBrightness.startTiltBrightness();
+
+                ativado = true;
             }
 
         } catch (e) {
@@ -1621,7 +1656,18 @@ brilhoSwitch.addEventListener(
             );
         }
 
-        brilhoAtivo = true;
+
+        if (ativado) {
+
+            brilhoAtivo = true;
+
+        } else {
+
+            brilhoAtivo = false;
+
+            vibrar(150);
+        }
+
 
         atualizarBrilhoUI();
 
@@ -1644,6 +1690,7 @@ window.addEventListener(
             return;
         }
 
+
         if (
             e.detail === "dark"
         ) {
@@ -1651,6 +1698,7 @@ window.addEventListener(
             brilhoAtivo = true;
 
             atualizarBrilhoUI();
+
         }
 
         else if (
@@ -1727,13 +1775,21 @@ proximidadeSwitch.addEventListener(
 
         if (proximidadeAtiva) {
 
-            chamarAndroid(
-                "pararSensorProximidade"
-            );
+            const resultado =
+                chamarAndroid(
+                    "pararSensorProximidade"
+                );
 
-            proximidadeAtiva = false;
+            if (resultado.sucesso) {
 
-            atualizarProximidadeUI();
+                proximidadeAtiva = false;
+
+                atualizarProximidadeUI();
+
+            } else {
+
+                vibrar(150);
+            }
 
             return;
         }
@@ -1743,6 +1799,7 @@ proximidadeSwitch.addEventListener(
             chamarAndroid(
                 "desligarPorBarulho"
             );
+
 
         if (resultado.sucesso) {
 

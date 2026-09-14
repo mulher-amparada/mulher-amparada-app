@@ -1835,8 +1835,20 @@ window.addEventListener(
             e.detail === "dark"
         ) {
 
+            /*
+             * A ação foi executada.
+             * O escurecimento deixa de ficar
+             * marcado como recurso ativo.
+             */
+
             brilhoAtivo =
-                true;
+                false;
+
+
+            salvarEstado(
+                "estado_brilho",
+                false
+            );
 
 
             atualizarBrilhoUI();
@@ -1848,12 +1860,11 @@ window.addEventListener(
         ) {
 
             /*
-             * Não alteramos o estado salvo aqui.
+             * A tela voltou ao brilho normal.
              *
-             * "normal" significa apenas que a tela
-             * voltou ao brilho normal.
-             *
-             * A função continua podendo estar ativa.
+             * Não alteramos o estado aqui,
+             * porque "normal" é somente o estado
+             * visual da tela.
              */
 
         }
@@ -1927,15 +1938,22 @@ proximidadeSwitch.addEventListener(
         vibrar(70);
 
 
+        /* -----------------------------------------------------
+           DESATIVAR MANUALMENTE
+        ----------------------------------------------------- */
+
         if (proximidadeAtiva) {
 
             const resultado =
                 chamarAndroid(
-                    "pararSensorProximidade"
+                    "pararBloqueio"
                 );
 
 
-            if (resultado.sucesso) {
+            if (
+                resultado.sucesso &&
+                resultado.valor === true
+            ) {
 
                 proximidadeAtiva =
                     false;
@@ -1958,6 +1976,10 @@ proximidadeSwitch.addEventListener(
             return;
         }
 
+
+        /* -----------------------------------------------------
+           ATIVAR
+        ----------------------------------------------------- */
 
         const resultado =
             chamarAndroid(
@@ -2002,21 +2024,160 @@ proximidadeSwitch.addEventListener(
 
 
 /* =========================================================
+   EVENTO DO ANDROID — ESTADO DOS RECURSOS
+========================================================= */
+
+window.addEventListener(
+    "estadoAndroid",
+    function (event) {
+
+        if (
+            !event ||
+            !event.detail
+        ) {
+            return;
+        }
+
+
+        const recurso =
+            event.detail.recurso;
+
+
+        const ativo =
+            event.detail.ativo === true;
+
+
+        /* -----------------------------------------------------
+           PALMAS
+        ----------------------------------------------------- */
+
+        if (
+            recurso === "palmas"
+        ) {
+
+            palmasAtiva =
+                ativo;
+
+
+            salvarEstado(
+                "estado_palmas",
+                ativo
+            );
+
+
+            atualizarPalmasUI(
+                ativo
+            );
+
+            return;
+        }
+
+
+        /* -----------------------------------------------------
+           MOVIMENTO
+        ----------------------------------------------------- */
+
+        if (
+            recurso === "movimento"
+        ) {
+
+            protecaoAtiva =
+                ativo;
+
+
+            salvarEstado(
+                "estado_movimento",
+                ativo
+            );
+
+
+            atualizarProtecaoUI();
+
+            return;
+        }
+
+
+        /* -----------------------------------------------------
+           BRILHO
+        ----------------------------------------------------- */
+
+        if (
+            recurso === "brilho"
+        ) {
+
+            brilhoAtivo =
+                ativo;
+
+
+            salvarEstado(
+                "estado_brilho",
+                ativo
+            );
+
+
+            atualizarBrilhoUI();
+
+            return;
+        }
+
+
+        /* -----------------------------------------------------
+           BLOQUEIO
+        ----------------------------------------------------- */
+
+        if (
+            recurso === "bloqueio"
+        ) {
+
+            proximidadeAtiva =
+                ativo;
+
+
+            salvarEstado(
+                "estado_proximidade",
+                ativo
+            );
+
+
+            atualizarProximidadeUI();
+
+            return;
+        }
+    }
+);
+
+
+/* =========================================================
+   BLOQUEIO POR BARULHO — AÇÃO CONCLUÍDA
+========================================================= */
+
+window.bloqueioPorBarulhoConcluido =
+    function () {
+
+        proximidadeAtiva =
+            false;
+
+
+        salvarEstado(
+            "estado_proximidade",
+            false
+        );
+
+
+        atualizarProximidadeUI();
+    };
+
+
+/* =========================================================
    RESTAURAR ESTADOS SALVOS
 ========================================================= */
 
 function restaurarEstados() {
 
     /*
-     * Importante:
+     * Aqui NÃO chamamos as funções nativas.
      *
-     * Aqui NÃO chamamos ativarPalmas(),
-     * ativarProtecao(), etc.
-     *
-     * Essas funções nativas podem continuar ativas
-     * enquanto apenas a página HTML foi trocada.
-     *
-     * Estamos apenas restaurando a interface.
+     * Apenas restauramos a interface.
      */
 
 

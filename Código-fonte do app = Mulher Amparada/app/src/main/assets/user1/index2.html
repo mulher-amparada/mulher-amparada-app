@@ -2152,7 +2152,7 @@ const permissionButton =
 
 
 /* =========================================================
-   MOSTRA O AVISO
+   MOSTRAR AVISO
 ========================================================= */
 
 function mostrarAvisoDePermissoes(permissoes) {
@@ -2181,7 +2181,22 @@ function mostrarAvisoDePermissoes(permissoes) {
 
 
 /* =========================================================
-   KOTLIN INFORMOU QUE EXISTEM PERMISSÕES FALTANDO
+   TODAS AS PERMISSÕES OK
+========================================================= */
+
+function todasPermissoesOK() {
+
+    if (permissionOverlay) {
+
+        permissionOverlay.style.display = "none";
+
+    }
+
+}
+
+
+/* =========================================================
+   RECEBE RESPOSTA DO KOTLIN
 ========================================================= */
 
 window.addEventListener(
@@ -2189,50 +2204,31 @@ window.addEventListener(
     function (event) {
 
         const permissoes =
-            event.detail?.permissoes || [];
+            event.detail &&
+            Array.isArray(event.detail.permissoes)
+                ? event.detail.permissoes
+                : [];
 
-        mostrarAvisoDePermissoes(permissoes);
+        mostrarAvisoDePermissoes(
+            permissoes
+        );
 
     }
 );
 
-
-/* =========================================================
-   KOTLIN INFORMOU QUE TODAS AS PERMISSÕES ESTÃO OK
-========================================================= */
 
 window.addEventListener(
     "todasPermissoesOK",
     function () {
 
-        console.log(
-            "Todas as permissões foram concedidas."
-        );
-
-        if (permissionOverlay) {
-
-            permissionOverlay.style.display = "none";
-
-        }
+        todasPermissoesOK();
 
     }
 );
 
 
 /* =========================================================
-   COMEÇA OCULTO
-   O KOTLIN decide se deve mostrar ou não.
-========================================================= */
-
-if (permissionOverlay) {
-
-    permissionOverlay.style.display = "none";
-
-}
-
-
-/* =========================================================
-   BOTÃO DE PERMISSÕES
+   BOTÃO
 ========================================================= */
 
 if (permissionButton) {
@@ -2264,6 +2260,37 @@ if (permissionButton) {
             }
 
         }
+    );
+
+}
+
+
+/* =========================================================
+   SOLICITA A VERIFICAÇÃO AO KOTLIN
+========================================================= */
+
+try {
+
+    if (
+        window.Android &&
+        typeof Android.verificarPermissoes === "function"
+    ) {
+
+        Android.verificarPermissoes();
+
+    } else {
+
+        console.warn(
+            "Android.verificarPermissoes() não está disponível."
+        );
+
+    }
+
+} catch (e) {
+
+    console.warn(
+        "Erro ao solicitar verificação de permissões:",
+        e
     );
 
 }

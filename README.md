@@ -42,6 +42,10 @@ Essa persistência permite que a interface continue refletindo o estado real con
 
 Mas quando a usuária desativar ou a função ser concluída, na página ele mostra como desativado!
 
+## Sobre a proteção por palmas/barulho:
+
+Nota de Segurança: Uma vez ativada, a proteção permanecerá vigilante e reativará o microfone automaticamente após cada detecção e ligação pro 180. Isso garante que o aplicativo continue te protegendo caso a situação de risco persista. Para desligá-la por completo, você deve fazer isso manualmente no aplicativo após o término da situação de risco.
+
 ## Sobre o site que está hospedado pelo github pages:
 
 Na primeira página do site, tem 3 botoes que ligam para (180, 190 e 192), e usam o tel: do navegador para abrir o telefone nativo do celular com esses números já discados de acordo com o que você escolheu!

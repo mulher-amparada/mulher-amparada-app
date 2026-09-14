@@ -2139,7 +2139,6 @@ document
 <script>
 /* =========================================================
    BLOQUEIO DE PERMISSÕES
-   O AVISO PERMANECE ATÉ TODAS AS PERMISSÕES SEREM CONCEDIDAS
 ========================================================= */
 
 const permissionOverlay =
@@ -2156,7 +2155,6 @@ const permissionButton =
 function mostrarAvisoDePermissoes(permissoes) {
 
     if (!permissionOverlay) return;
-
 
     if (
         Array.isArray(permissoes) &&
@@ -2192,7 +2190,6 @@ window.addEventListener(
                 ? event.detail.permissoes
                 : [];
 
-
         mostrarAvisoDePermissoes(
             permissoes
         );
@@ -2212,7 +2209,6 @@ window.addEventListener(
             "Todas as permissões foram concedidas."
         );
 
-
         if (permissionOverlay) {
 
             permissionOverlay.style.display =
@@ -2221,18 +2217,6 @@ window.addEventListener(
         }
     }
 );
-
-
-/* =========================================================
-   ESTADO INICIAL
-   O KOTLIN decide se deve mostrar o aviso.
-========================================================= */
-
-if (permissionOverlay) {
-
-    permissionOverlay.style.display =
-        "none";
-}
 
 
 /* =========================================================
@@ -2252,9 +2236,7 @@ if (permissionButton) {
                 ) {
 
                     vibrar(60);
-
                 }
-
 
                 if (
                     window.Android &&
@@ -2269,7 +2251,6 @@ if (permissionButton) {
                     console.warn(
                         "Android.abrirPermissoes() não está disponível."
                     );
-
                 }
 
             } catch (e) {
@@ -2278,7 +2259,6 @@ if (permissionButton) {
                     "Erro ao abrir permissões:",
                     e
                 );
-
             }
         }
     );
@@ -2287,18 +2267,26 @@ if (permissionButton) {
 
 /* =========================================================
    GARANTIA EXTRA AO CARREGAR A PÁGINA
-   O Kotlin também faz a verificação em onPageFinished()
-   e onResume(), portanto isto é apenas um reforço.
 ========================================================= */
 
 window.addEventListener(
     "load",
     function () {
 
-        console.log(
-            "Página carregada. Aguardando verificação do Kotlin."
-        );
+        if (
+            window.Android &&
+            typeof window.Android.verificarPermissoes ===
+                "function"
+        ) {
 
+            window.Android.verificarPermissoes();
+
+        } else {
+
+            console.warn(
+                "Android.verificarPermissoes() não está disponível."
+            );
+        }
     }
 );
 </script>

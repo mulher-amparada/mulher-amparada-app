@@ -93,9 +93,43 @@ jobs:
       # COMPILAR APK
       # =========================================================
 
-      - name: Compilar APK
+            - name: Compilar APK
+        id: compilar_apk
         working-directory: ${{ env.App1_DIR }}
-        run: ./gradlew assembleDebug --stacktrace
+        run: |
+
+          set -o pipefail
+
+          ./gradlew assembleDebug --stacktrace 2>&1 \
+            | tee "$GITHUB_WORKSPACE/gradle-build.log"
+
+          STATUS=${PIPESTATUS[0]}
+
+          if [ "$STATUS" -ne 0 ]; then
+
+            {
+              echo ""
+              echo "# ❌ ERRO NA COMPILAÇÃO"
+              echo ""
+              echo "## 🔴 Etapa"
+              echo ""
+              echo "**Compilar APK**"
+              echo ""
+              echo "## 💥 O que aconteceu"
+              echo ""
+              echo "O Gradle não conseguiu compilar o APK."
+              echo ""
+              echo "## 📋 Erro do Gradle"
+              echo ""
+              echo '```text'
+              tail -n 100 "$GITHUB_WORKSPACE/gradle-build.log"
+              echo '```'
+              echo ""
+              echo "**Código de saída:** \`$STATUS\`"
+            } >> "$GITHUB_STEP_SUMMARY"
+
+            exit "$STATUS"
+          fi
 
 
       # =========================================================

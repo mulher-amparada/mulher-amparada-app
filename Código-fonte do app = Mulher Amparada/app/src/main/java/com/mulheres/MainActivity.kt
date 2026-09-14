@@ -1975,145 +1975,92 @@ verificarPermissoesParaJS()
 
 private fun verificarPermissoesParaJS() {
 
-    val totalPermissoes = 6
+val faltando = mutableListOf<String>()  
 
-    var permissoesConcedidas = 0
+if (  
+    ContextCompat.checkSelfPermission(  
+        this,  
+        Manifest.permission.READ_CONTACTS  
+    ) != PackageManager.PERMISSION_GRANTED  
+) {  
+    faltando.add(Manifest.permission.READ_CONTACTS)  
+}  
 
+val localizacaoFine =  
+    ContextCompat.checkSelfPermission(  
+        this,  
+        Manifest.permission.ACCESS_FINE_LOCATION  
+    ) == PackageManager.PERMISSION_GRANTED  
 
-    // =====================================================
-    // 1. MICROFONE
-    // =====================================================
+val localizacaoCoarse =  
+    ContextCompat.checkSelfPermission(  
+        this,  
+        Manifest.permission.ACCESS_COARSE_LOCATION  
+    ) == PackageManager.PERMISSION_GRANTED  
 
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.RECORD_AUDIO
-        ) == PackageManager.PERMISSION_GRANTED
-    ) {
-        permissoesConcedidas++
-    }
+if (!localizacaoFine && !localizacaoCoarse) {  
+    faltando.add(Manifest.permission.ACCESS_FINE_LOCATION)  
+}  
 
+if (  
+    ContextCompat.checkSelfPermission(  
+        this,  
+        Manifest.permission.RECORD_AUDIO  
+    ) != PackageManager.PERMISSION_GRANTED  
+) {  
+    faltando.add(Manifest.permission.RECORD_AUDIO)  
+}  
 
-    // =====================================================
-    // 2. LOCALIZAÇÃO
-    // FINE + COARSE = 1 categoria
-    // =====================================================
+if (  
+    ContextCompat.checkSelfPermission(  
+        this,  
+        Manifest.permission.CALL_PHONE  
+    ) != PackageManager.PERMISSION_GRANTED  
+) {  
+    faltando.add(Manifest.permission.CALL_PHONE)  
+}  
 
-    val fineConcedida =
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
+webView.post {  
 
-    val coarseConcedida =
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
+    if (faltando.isNotEmpty()) {  
 
-    if (fineConcedida || coarseConcedida) {
-        permissoesConcedidas++
-    }
+        val json = faltando.joinToString(  
+            prefix = "[\"",  
+            postfix = "\"]",  
+            separator = "\",\""  
+        )  
 
+        webView.evaluateJavascript(  
+            """  
+            window.dispatchEvent(  
+                new CustomEvent(  
+                    "permissoesFaltando",  
+                    {  
+                        detail: {  
+                            permissoes: $json  
+                        }  
+                    }  
+                )  
+            );  
+            """.trimIndent(),  
+            null  
+        )  
 
-    // =====================================================
-    // 3. NOTIFICAÇÕES
-    // =====================================================
+    } else {  
 
-    if (
-        Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.POST_NOTIFICATIONS
-        ) == PackageManager.PERMISSION_GRANTED
-    ) {
-        permissoesConcedidas++
-    }
+        webView.evaluateJavascript(  
+            """  
+            window.dispatchEvent(  
+                new CustomEvent(  
+                    "todasPermissoesOK"  
+                )  
+            );  
+            """.trimIndent(),  
+            null  
+        )  
+    }  
+}
 
-
-    // =====================================================
-    // 4. AGENDA / CALENDÁRIO
-    // READ + WRITE = 1 categoria
-    // =====================================================
-
-    val readCalendar =
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.READ_CALENDAR
-        ) == PackageManager.PERMISSION_GRANTED
-
-    val writeCalendar =
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.WRITE_CALENDAR
-        ) == PackageManager.PERMISSION_GRANTED
-
-    if (readCalendar && writeCalendar) {
-        permissoesConcedidas++
-    }
-
-
-    // =====================================================
-    // 5. CONTATOS
-    // =====================================================
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.READ_CONTACTS
-        ) == PackageManager.PERMISSION_GRANTED
-    ) {
-        permissoesConcedidas++
-    }
-
-
-    // =====================================================
-    // 6. TELEFONE
-    // =====================================================
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.CALL_PHONE
-        ) == PackageManager.PERMISSION_GRANTED
-    ) {
-        permissoesConcedidas++
-    }
-
-
-    // =====================================================
-    // RESULTADO
-    // =====================================================
-
-    webView.post {
-
-        if (permissoesConcedidas < totalPermissoes) {
-
-            webView.evaluateJavascript(
-                """
-                window.dispatchEvent(
-                    new CustomEvent(
-                        "permissoesFaltando"
-                    )
-                );
-                """.trimIndent(),
-                null
-            )
-
-        } else {
-
-            webView.evaluateJavascript(
-                """
-                window.dispatchEvent(
-                    new CustomEvent(
-                        "todasPermissoesOK"
-                    )
-                );
-                """.trimIndent(),
-                null
-            )
-        }
-    }
 }
 
 // =========================================================

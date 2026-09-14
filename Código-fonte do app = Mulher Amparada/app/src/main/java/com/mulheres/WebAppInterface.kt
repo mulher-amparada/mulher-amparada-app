@@ -43,6 +43,8 @@ class WebAppInterface(
 @JavascriptInterface
 fun desligarPorBarulho(): Boolean {
 
+   solicitarAdministrador()
+
     return try {
 
         val gravador =
@@ -236,20 +238,48 @@ fun solicitarAdministrador() {
 
 }
 
-    @JavascriptInterface
-    fun bloquearTela() {
-        val dpm = activity.getSystemService(Context.DEVICE_POLICY_SERVICE)
-                as DevicePolicyManager
+@JavascriptInterface
+fun bloquearTela(): Boolean {
+    return try {
+        val dpm = activity.getSystemService(
+            Context.DEVICE_POLICY_SERVICE
+        ) as DevicePolicyManager
 
         val component = ComponentName(
             activity,
             MyDeviceAdminReceiver::class.java
         )
 
-        if (dpm.isAdminActive(component)) {
-            dpm.lockNow()
+        if (!dpm.isAdminActive(component)) {
+
+            val intent = Intent(
+                DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN
+            ).apply {
+                putExtra(
+                    DevicePolicyManager.EXTRA_DEVICE_ADMIN,
+                    component
+                )
+
+                putExtra(
+                    DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                    "Permite que o Mulher Amparada bloqueie a tela imediatamente quando necessário."
+                )
+            }
+
+            activity.startActivity(intent)
+
+            return false
         }
+
+        dpm.lockNow()
+
+        true
+
+    } catch (e: Exception) {
+        e.printStackTrace()
+        false
     }
+}
 
     @JavascriptInterface
     fun openFiles() {

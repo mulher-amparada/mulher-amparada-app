@@ -2152,12 +2152,13 @@ const permissionButton =
 
 
 /* =========================================================
-   MOSTRAR AVISO
+   MOSTRAR / OCULTAR AVISO
 ========================================================= */
 
 function mostrarAvisoDePermissoes(permissoes) {
 
     if (!permissionOverlay) return;
+
 
     if (
         Array.isArray(permissoes) &&
@@ -2176,27 +2177,11 @@ function mostrarAvisoDePermissoes(permissoes) {
         permissionOverlay.style.display = "none";
 
     }
-
 }
 
 
 /* =========================================================
-   TODAS AS PERMISSÕES OK
-========================================================= */
-
-function todasPermissoesOK() {
-
-    if (permissionOverlay) {
-
-        permissionOverlay.style.display = "none";
-
-    }
-
-}
-
-
-/* =========================================================
-   RECEBE RESPOSTA DO KOTLIN
+   KOTLIN INFORMOU QUE EXISTEM PERMISSÕES FALTANDO
 ========================================================= */
 
 window.addEventListener(
@@ -2209,26 +2194,51 @@ window.addEventListener(
                 ? event.detail.permissoes
                 : [];
 
+
         mostrarAvisoDePermissoes(
             permissoes
         );
-
-    }
-);
-
-
-window.addEventListener(
-    "todasPermissoesOK",
-    function () {
-
-        todasPermissoesOK();
-
     }
 );
 
 
 /* =========================================================
-   BOTÃO
+   KOTLIN INFORMOU QUE TODAS AS PERMISSÕES ESTÃO OK
+========================================================= */
+
+window.addEventListener(
+    "todasPermissoesOK",
+    function () {
+
+        console.log(
+            "Todas as permissões foram concedidas."
+        );
+
+
+        if (permissionOverlay) {
+
+            permissionOverlay.style.display =
+                "none";
+
+        }
+    }
+);
+
+
+/* =========================================================
+   ESTADO INICIAL
+   O KOTLIN decide se deve mostrar o aviso.
+========================================================= */
+
+if (permissionOverlay) {
+
+    permissionOverlay.style.display =
+        "none";
+}
+
+
+/* =========================================================
+   BOTÃO — ABRIR PERMISSÕES
 ========================================================= */
 
 if (permissionButton) {
@@ -2237,16 +2247,30 @@ if (permissionButton) {
         "click",
         function () {
 
-            vibrar(60);
-
             try {
 
                 if (
-                    window.Android &&
-                    typeof Android.abrirPermissoes === "function"
+                    typeof vibrar === "function"
                 ) {
 
-                    Android.abrirPermissoes();
+                    vibrar(60);
+
+                }
+
+
+                if (
+                    window.Android &&
+                    typeof window.Android.abrirPermissoes ===
+                        "function"
+                ) {
+
+                    window.Android.abrirPermissoes();
+
+                } else {
+
+                    console.warn(
+                        "Android.abrirPermissoes() não está disponível."
+                    );
 
                 }
 
@@ -2258,42 +2282,27 @@ if (permissionButton) {
                 );
 
             }
-
         }
     );
-
 }
 
 
 /* =========================================================
-   SOLICITA A VERIFICAÇÃO AO KOTLIN
+   GARANTIA EXTRA AO CARREGAR A PÁGINA
+   O Kotlin também faz a verificação em onPageFinished()
+   e onResume(), portanto isto é apenas um reforço.
 ========================================================= */
 
-try {
+window.addEventListener(
+    "load",
+    function () {
 
-    if (
-        window.Android &&
-        typeof Android.verificarPermissoes === "function"
-    ) {
-
-        Android.verificarPermissoes();
-
-    } else {
-
-        console.warn(
-            "Android.verificarPermissoes() não está disponível."
+        console.log(
+            "Página carregada. Aguardando verificação do Kotlin."
         );
 
     }
-
-} catch (e) {
-
-    console.warn(
-        "Erro ao solicitar verificação de permissões:",
-        e
-    );
-
-}
+);
 </script>
 
 </body>

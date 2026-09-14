@@ -2140,7 +2140,8 @@ document
 
 <script>
 /* =========================================================
-   BLOQUEIO DE PERMISSÕES — EXIBIR APENAS UMA VEZ
+   BLOQUEIO DE PERMISSÕES
+   O AVISO PERMANECE ATÉ TODAS AS PERMISSÕES SEREM CONCEDIDAS
 ========================================================= */
 
 const permissionOverlay =
@@ -2150,78 +2151,82 @@ const permissionButton =
     document.getElementById("permissionButton");
 
 
-let avisoJaExibido = false;
-
-
 /* =========================================================
-   VERIFICA SE O AVISO JÁ FOI EXIBIDO
+   MOSTRA O AVISO
 ========================================================= */
 
-try {
+function mostrarAvisoDePermissoes(permissoes) {
+
+    if (!permissionOverlay) return;
 
     if (
-        window.Cripto &&
-        typeof Cripto.carregar === "function"
+        Array.isArray(permissoes) &&
+        permissoes.length > 0
     ) {
 
-        avisoJaExibido =
-            Cripto.carregar(
-                "permissionOverlayExibido"
-            ) === "true";
+        permissionOverlay.style.display = "flex";
+
+        console.log(
+            "Permissões faltando:",
+            permissoes
+        );
+
+    } else {
+
+        permissionOverlay.style.display = "none";
 
     }
-
-} catch (e) {
-
-    console.warn(
-        "Erro ao verificar o bloqueio de permissões:",
-        e
-    );
 
 }
 
 
 /* =========================================================
-   CONTROLE DO OVERLAY
+   KOTLIN INFORMOU QUE EXISTEM PERMISSÕES FALTANDO
 ========================================================= */
 
-if (permissionOverlay) {
+window.addEventListener(
+    "permissoesFaltando",
+    function (event) {
 
-    if (avisoJaExibido) {
+        const permissoes =
+            event.detail?.permissoes || [];
 
-        permissionOverlay.style.display = "none";
+        mostrarAvisoDePermissoes(permissoes);
 
-    } else {
+    }
+);
 
-        permissionOverlay.style.display = "flex";
 
+/* =========================================================
+   KOTLIN INFORMOU QUE TODAS AS PERMISSÕES ESTÃO OK
+========================================================= */
 
-        /* Marca como exibido imediatamente */
+window.addEventListener(
+    "todasPermissoesOK",
+    function () {
 
-        try {
+        console.log(
+            "Todas as permissões foram concedidas."
+        );
 
-            if (
-                window.Cripto &&
-                typeof Cripto.salvar === "function"
-            ) {
+        if (permissionOverlay) {
 
-                Cripto.salvar(
-                    "permissionOverlayExibido",
-                    "true"
-                );
-
-            }
-
-        } catch (e) {
-
-            console.warn(
-                "Erro ao salvar o estado do aviso:",
-                e
-            );
+            permissionOverlay.style.display = "none";
 
         }
 
     }
+);
+
+
+/* =========================================================
+   COMEÇA OCULTO
+   O KOTLIN decide se deve mostrar ou não.
+========================================================= */
+
+if (permissionOverlay) {
+
+    permissionOverlay.style.display = "none";
 
 }
 
@@ -2251,13 +2256,13 @@ if (permissionButton) {
 
             } catch (e) {
 
-                console.warn(e);
+                console.warn(
+                    "Erro ao abrir permissões:",
+                    e
+                );
 
             }
 
-        },
-        {
-            once: true
         }
     );
 

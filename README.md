@@ -16,7 +16,7 @@ Antes de conceder essa permissão, leia atentamente as informações exibidas pe
 
 ## Sobre as permissões:
 
-> ⚠️ Sobre as permissões: infelizmente, foi necessário configurar a MainActivity para não solicitar permissões automaticamente. Por isso, as permissões necessárias deverão ser concedidas manualmente pela usuária nas configurações do dispositivo. As permissões utilizadas por outras Activitys continuam sendo solicitadas normalmente pelo aplicativo. Ao entrar no aplicativo após sair dos disfarces, um aviso é exibido, bloqueando o acesso até que todas as permissões necessárias estejam concedidas. O aviso oferece à usuária a opção de acessar diretamente a tela de permissões do aplicativo nas configurações do dispositivo. Ao retornar ao aplicativo, as permissões são verificadas novamente. Se ainda houver alguma permissão necessária que não tenha sido concedida, o aviso continuará sendo exibido e o acesso permanecerá bloqueado. O aviso só desaparecerá quando todas as permissões necessárias estiverem concedidas.
+> ⚠️ Sobre as permissões: infelizmente, foi necessário configurar a MainActivity para não solicitar permissões automaticamente. Por isso, as permissões necessárias deverão ser concedidas manualmente pela usuária nas configurações do dispositivo. As permissões utilizadas por outras Activitys continuam sendo solicitadas normalmente pelo aplicativo. Ao entrar no aplicativo após sair dos disfarces, um aviso é exibido, bloqueando o acesso até que todas as permissões necessárias estejam concedidas. O aviso oferece à usuária a opção de acessar diretamente a tela de permissões do aplicativo nas configurações do dispositivo. Ao retornar ao aplicativo, as permissões são verificadas novamente. Se ainda houver alguma permissão necessária que não tenha sido concedida, o aviso continuará sendo exibido e o acesso permanecerá bloqueado. O aviso só desaparecerá quando todas as permissões necessárias estiverem concedidas, (mas a permissão de Administrador do dispositivo a acitvity pede normalmente!).
 
 ## Avisos:
 
@@ -31,6 +31,14 @@ Antes de conceder essa permissão, leia atentamente as informações exibidas pe
 > ⚠️Botão de pânico: caso o aplicativo não possua a permissão necessária para realizar chamadas diretamente, ele utiliza o "ACTION_DIAL" como alternativa, abrindo o discador com o número de emergência. Dessa forma, o recurso continua disponível mesmo sem a permissão de chamada.
 
 > ⚠️ Sobre as proteções por movimento e escurecimento: caso ocorra alguma falha ou o aparelho da usuária não possua o sensor necessário, o aplicativo utiliza o microfone como alternativa. Ao detectar um barulho alto, a proteção é acionada.
+
+## Sobre as funções por sensores (desligar por barulho, proteção por barulho que liga pro 180, balançar o celular para pedir ajuda e escurecimento por inclinação):
+
+A função Desligar por Barulho foi projetada com uma medida adicional de segurança: depois de ser ativada e funcionar de fato, ela permanece ativa até que o usuário decida desativá-la pelo próprio aplicativo.
+
+Para evitar que o estado da função seja perdido ao sair e retornar à página, o aplicativo salva seu estado de ativação utilizando a classe Cripto. Dessa forma, ao retornar à página, o aplicativo recupera o estado salvo e exibe corretamente se a função está ATIVADA ou DESATIVADA.
+
+Essa persistência permite que a interface continue refletindo o estado real configurado pelo usuário, mesmo após a navegação entre as páginas do aplicativo.
 
 ## Sobre o site que está hospedado pelo github pages:
 

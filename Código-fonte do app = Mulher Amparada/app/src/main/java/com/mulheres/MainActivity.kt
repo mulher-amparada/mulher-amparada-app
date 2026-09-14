@@ -52,19 +52,18 @@ import com.google.android.gms.location.LocationServices
 import kotlin.math.log10
 import kotlin.math.sqrt
 
-
 class MainActivity : AppCompatActivity() {
 
-    companion object {
+companion object {  
 
-        const val PERMISSION_CODE = 100
-        const val PICK_CONTACT = 1
-    }
+    const val PERMISSION_CODE = 100  
+    const val PICK_CONTACT = 1  
+}  
 
 
-    // =========================================================
-    // VARIÁVEIS
-    // =========================================================
+// =========================================================  
+// VARIÁVEIS  
+// =========================================================
 
 private var palmasEmExecucao = false
 
@@ -72,1890 +71,1895 @@ private lateinit var telephonyManager: TelephonyManager
 
 private var telefoneListener: PhoneStateListener? = null
 
-    private var acelerometro: Sensor? = null
+private var acelerometro: Sensor? = null  
 
-    private lateinit var cripto: Cripto
+private lateinit var cripto: Cripto  
 
-    var destinoBiometria: Int = 0
+var destinoBiometria: Int = 0  
 
-    private lateinit var tiltBrightness: TiltBrightnessController
+private lateinit var tiltBrightness: TiltBrightnessController  
 
-    private lateinit var locationClient: FusedLocationProviderClient
+private lateinit var locationClient: FusedLocationProviderClient  
 
-    private var protecaoAtiva = false
+private var protecaoAtiva = false  
 
-    private lateinit var sensorManager: SensorManager
+private lateinit var sensorManager: SensorManager  
 
-    private lateinit var shakeListener: SensorEventListener
+private lateinit var shakeListener: SensorEventListener  
 
-    private var ultimoShake: Long = 0
+private var ultimoShake: Long = 0  
 
-    private lateinit var webView: WebView
+private lateinit var webView: WebView  
 
 
-    // =========================================================
-    // MICROFONE — FALLBACK DO CHACOALHAR
-    // =========================================================
+// =========================================================  
+// MICROFONE — FALLBACK DO CHACOALHAR  
+// =========================================================  
 
-    private var shakeAudioRecord: AudioRecord? = null
+private var shakeAudioRecord: AudioRecord? = null  
 
-    private var shakeMicrophoneThread: Thread? = null
+private var shakeMicrophoneThread: Thread? = null  
 
-    @Volatile
-    private var shakeMicrophoneRunning = false
+@Volatile  
+private var shakeMicrophoneRunning = false  
 
-    private val shakeSampleRate = 44100
+private val shakeSampleRate = 44100  
 
-    private val shakeBufferSize =
-        AudioRecord.getMinBufferSize(
-            shakeSampleRate,
-            AudioFormat.CHANNEL_IN_MONO,
-            AudioFormat.ENCODING_PCM_16BIT
-        )
+private val shakeBufferSize =  
+    AudioRecord.getMinBufferSize(  
+        shakeSampleRate,  
+        AudioFormat.CHANNEL_IN_MONO,  
+        AudioFormat.ENCODING_PCM_16BIT  
+    )  
 
-    private val shakeLoudSoundThreshold = -50.0
+private val shakeLoudSoundThreshold = -50.0  
 
 
-    // =========================================================
-    // ON CREATE
-    // =========================================================
+// =========================================================  
+// ON CREATE  
+// =========================================================  
 
-    override fun onCreate(
-        savedInstanceState: Bundle?
-    ) {
+override fun onCreate(  
+    savedInstanceState: Bundle?  
+) {  
 
-        super.onCreate(
-            savedInstanceState
-        )
+    super.onCreate(  
+        savedInstanceState  
+    )  
 
 
-        window.addFlags(
-            WindowManager.LayoutParams.FLAG_SECURE
-        )
+    window.addFlags(  
+        WindowManager.LayoutParams.FLAG_SECURE  
+    )  
 
 
-        sensorManager =
-            getSystemService(
-                Context.SENSOR_SERVICE
-            ) as SensorManager
+    sensorManager =  
+        getSystemService(  
+            Context.SENSOR_SERVICE  
+        ) as SensorManager  
 
 
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
-        )
+    WindowCompat.setDecorFitsSystemWindows(  
+        window,  
+        false  
+    )  
 
 
-        window.statusBarColor =
-            Color.TRANSPARENT
+    window.statusBarColor =  
+        Color.TRANSPARENT  
 
-        window.navigationBarColor =
-            Color.TRANSPARENT
+    window.navigationBarColor =  
+        Color.TRANSPARENT  
 
 
-        if (
-            Build.VERSION.SDK_INT >=
-            Build.VERSION_CODES.Q
-        ) {
+    if (  
+        Build.VERSION.SDK_INT >=  
+        Build.VERSION_CODES.Q  
+    ) {  
 
-            window.isStatusBarContrastEnforced =
-                false
+        window.isStatusBarContrastEnforced =  
+            false  
 
-            window.isNavigationBarContrastEnforced =
-                false
-        }
+        window.isNavigationBarContrastEnforced =  
+            false  
+    }  
 
 
-        val controller =
-            WindowInsetsControllerCompat(
-                window,
-                window.decorView
-            )
+    val controller =  
+        WindowInsetsControllerCompat(  
+            window,  
+            window.decorView  
+        )  
 
 
-        controller.isAppearanceLightStatusBars =
-            false
+    controller.isAppearanceLightStatusBars =  
+        false  
 
-        controller.isAppearanceLightNavigationBars =
-            false
+    controller.isAppearanceLightNavigationBars =  
+        false  
 
 
-        setContentView(
-            R.layout.activity_main
-        )
+    setContentView(  
+        R.layout.activity_main  
+    )  
 
 
-        ViewCompat.setOnApplyWindowInsetsListener(
-            window.decorView
-        ) { view, insets ->
+    ViewCompat.setOnApplyWindowInsetsListener(  
+        window.decorView  
+    ) { view, insets ->  
 
-            view.setPadding(
-                0,
-                0,
-                0,
-                0
-            )
+        view.setPadding(  
+            0,  
+            0,  
+            0,  
+            0  
+        )  
 
-            insets
-        }
+        insets  
+    }  
 
 
-        webView =
-            findViewById(
-                R.id.webview
-            )
+    webView =  
+        findViewById(  
+            R.id.webview  
+        )  
 
 
-        webView.setBackgroundColor(
-            Color.BLACK
-        )
+    webView.setBackgroundColor(  
+        Color.BLACK  
+    )  
 
-        webView.visibility =
-            View.VISIBLE
+    webView.visibility =  
+        View.VISIBLE  
 
 
-        tiltBrightness =
-            TiltBrightnessController(
-                this,
-                sensorManager,
-                webView
-            )
+    tiltBrightness =  
+        TiltBrightnessController(  
+            this,  
+            sensorManager,  
+            webView  
+        )  
 
 
-        criarShakeListener()
+    criarShakeListener()  
 
 
-        locationClient =
-            LocationServices
-                .getFusedLocationProviderClient(
-                    this
-                )
+    locationClient =  
+        LocationServices  
+            .getFusedLocationProviderClient(  
+                this  
+            )  
 
 
-        configurarWebView()
+    configurarWebView()  
 
 
-        cripto =
-            Cripto(this)
+    cripto =  
+        Cripto(this)  
 
 
-        // =====================================================
-        // ABERTURA INICIAL
-        // =====================================================
+    // =====================================================  
+    // ABERTURA INICIAL  
+    // =====================================================  
 
-        val pagina =
-            intent?.getStringExtra(
-                "pagina"
-            )
+    val pagina =  
+        intent?.getStringExtra(  
+            "pagina"  
+        )  
 
 
-        if (
-            !pagina.isNullOrEmpty()
-        ) {
+    if (  
+        !pagina.isNullOrEmpty()  
+    ) {  
 
-            webView.loadUrl(
-                pagina
-            )
+        webView.loadUrl(  
+            pagina  
+        )  
 
-        } else {
+    } else {  
 
-            atualizarPaginaInicial()
-        }
+        atualizarPaginaInicial()  
+    }  
 
 
-        // =====================================================
-        // BOTÃO VOLTAR
-        // =====================================================
+    // =====================================================  
+    // BOTÃO VOLTAR  
+    // =====================================================  
 
-        onBackPressedDispatcher.addCallback(
-            this,
-            object :
-                OnBackPressedCallback(true) {
+    onBackPressedDispatcher.addCallback(  
+        this,  
+        object :  
+            OnBackPressedCallback(true) {  
 
-                override fun handleOnBackPressed() {
+            override fun handleOnBackPressed() {  
 
-                    if (
-                        webView.canGoBack()
-                    ) {
+                if (  
+                    webView.canGoBack()  
+                ) {  
 
-                        webView.goBack()
-                    }
-                }
-            }
-        )
-    }
+                    webView.goBack()  
+                }  
+            }  
+        }  
+    )  
+}  
 
 
 
-    // =========================================================
-    // SMS
-    // =========================================================
+// =========================================================  
+// SMS  
+// =========================================================  
 
-    private fun abrirIntentSMS(
-        mensagem: String
-    ) {
+private fun abrirIntentSMS(  
+    mensagem: String  
+) {  
 
-        val lista =
-            cripto.carregar(
-                "contatos_lista"
-            )
+    val lista =  
+        cripto.carregar(  
+            "contatos_lista"  
+        )  
 
 
-        if (
-            lista.trim().isEmpty()
-        ) {
+    if (  
+        lista.trim().isEmpty()  
+    ) {  
 
-            Toast.makeText(
-                this,
-                "Nenhum contato cadastrado",
-                Toast.LENGTH_SHORT
-            ).show()
+        Toast.makeText(  
+            this,  
+            "Nenhum contato cadastrado",  
+            Toast.LENGTH_SHORT  
+        ).show()  
 
-            return
-        }
+        return  
+    }  
 
 
-        val intent =
-            Intent(
-                Intent.ACTION_SENDTO
-            ).apply {
+    val intent =  
+        Intent(  
+            Intent.ACTION_SENDTO  
+        ).apply {  
 
-                data =
-                    Uri.parse(
-                        "smsto:"
-                    )
+            data =  
+                Uri.parse(  
+                    "smsto:"  
+                )  
 
-                putExtra(
-                    "address",
-                    lista
-                )
+            putExtra(  
+                "address",  
+                lista  
+            )  
 
-                putExtra(
-                    "sms_body",
-                    mensagem
-                )
-            }
+            putExtra(  
+                "sms_body",  
+                mensagem  
+            )  
+        }  
 
 
-        startActivity(
-            intent
-        )
-    }
+    startActivity(  
+        intent  
+    )  
+}  
 
 
-    // =========================================================
-    // CONFIGURAÇÕES
-    // =========================================================
+// =========================================================  
+// CONFIGURAÇÕES  
+// =========================================================  
 
-    private fun abrirConfiguracoes() {
+private fun abrirConfiguracoes() {  
 
-        val intent =
-            Intent(
-                Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-            ).apply {
+    val intent =  
+        Intent(  
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS  
+        ).apply {  
 
-                data =
-                    Uri.fromParts(
-                        "package",
-                        packageName,
-                        null
-                    )
-            }
+            data =  
+                Uri.fromParts(  
+                    "package",  
+                    packageName,  
+                    null  
+                )  
+        }  
 
 
-        startActivity(
-            intent
-        )
-    }
+    startActivity(  
+        intent  
+    )  
+}  
 
 
-    // =========================================================
-    // WEBVIEW
-    // =========================================================
+// =========================================================  
+// WEBVIEW  
+// =========================================================  
 
-    private fun configurarWebView() {
+private fun configurarWebView() {  
 
-        webView.addJavascriptInterface(
-            WebAppInterface(this),
-            "Android"
-        )
+    webView.addJavascriptInterface(  
+        WebAppInterface(this),  
+        "Android"  
+    )  
 
 
-        webView.addJavascriptInterface(
-            TiltBrightnessController.WebAppInterface(
-                tiltBrightness
-            ),
-            "TiltBrightness"
-        )
+    webView.addJavascriptInterface(  
+        TiltBrightnessController.WebAppInterface(  
+            tiltBrightness  
+        ),  
+        "TiltBrightness"  
+    )  
 
 
-        webView.addJavascriptInterface(
-            Cripto(this),
-            "Cripto"
-        )
+    webView.addJavascriptInterface(  
+        Cripto(this),  
+        "Cripto"  
+    )  
 
 
-        val settings =
-            webView.settings
+    val settings =  
+        webView.settings  
 
 
-        webView.overScrollMode =
-            View.OVER_SCROLL_NEVER
+    webView.overScrollMode =  
+        View.OVER_SCROLL_NEVER  
 
 
-        webView.isVerticalScrollBarEnabled =
-            false
+    webView.isVerticalScrollBarEnabled =  
+        false  
 
 
-        webView.isFocusable =
-            true
+    webView.isFocusable =  
+        true  
 
 
-        webView.isFocusableInTouchMode =
-            true
+    webView.isFocusableInTouchMode =  
+        true  
 
 
-        webView.setOnFocusChangeListener {
-                _,
-                _ ->
-        }
+    webView.setOnFocusChangeListener {  
+            _,  
+            _ ->  
+    }  
 
 
-        webView.isHorizontalScrollBarEnabled =
-            false
+    webView.isHorizontalScrollBarEnabled =  
+        false  
 
 
-        webView.scrollBarStyle =
-            View.SCROLLBARS_INSIDE_OVERLAY
+    webView.scrollBarStyle =  
+        View.SCROLLBARS_INSIDE_OVERLAY  
 
 
-        settings.javaScriptEnabled =
-            true
+    settings.javaScriptEnabled =  
+        true  
 
 
-        settings.mediaPlaybackRequiresUserGesture =
-            false
+    settings.mediaPlaybackRequiresUserGesture =  
+        false  
 
 
-        settings.domStorageEnabled =
-            true
+    settings.domStorageEnabled =  
+        true  
 
 
-        settings.setGeolocationEnabled(
-            true
-        )
+    settings.setGeolocationEnabled(  
+        true  
+    )  
 
 
-        settings.allowFileAccess =
-            true
+    settings.allowFileAccess =  
+        true  
 
 
-        settings.allowContentAccess =
-            false
+    settings.allowContentAccess =  
+        false  
 
 
-        settings.allowFileAccessFromFileURLs =
-            false
+    settings.allowFileAccessFromFileURLs =  
+        false  
 
 
-        settings.allowUniversalAccessFromFileURLs =
-            false
+    settings.allowUniversalAccessFromFileURLs =  
+        false  
 
 
-        settings.javaScriptCanOpenWindowsAutomatically =
-            false
+    settings.javaScriptCanOpenWindowsAutomatically =  
+        false  
 
 
-        settings.setSupportMultipleWindows(
-            false
-        )
+    settings.setSupportMultipleWindows(  
+        false  
+    )  
 
 
-        // =====================================================
-        // DOWNLOAD
-        // =====================================================
+    // =====================================================  
+    // DOWNLOAD  
+    // =====================================================  
 
-        webView.setDownloadListener {
-                url,
-                userAgent,
-                contentDisposition,
-                mimeType,
-                _ ->
+    webView.setDownloadListener {  
+            url,  
+            userAgent,  
+            contentDisposition,  
+            mimeType,  
+            _ ->  
 
-            try {
+        try {  
 
-                val fileName =
-                    URLUtil.guessFileName(
-                        url,
-                        contentDisposition,
-                        mimeType
-                    )
+            val fileName =  
+                URLUtil.guessFileName(  
+                    url,  
+                    contentDisposition,  
+                    mimeType  
+                )  
 
 
-                val request =
-                    DownloadManager.Request(
-                        Uri.parse(url)
-                    ).apply {
+            val request =  
+                DownloadManager.Request(  
+                    Uri.parse(url)  
+                ).apply {  
 
-                        setMimeType(
-                            mimeType
-                        )
+                    setMimeType(  
+                        mimeType  
+                    )  
 
-                        addRequestHeader(
-                            "User-Agent",
-                            userAgent
-                        )
+                    addRequestHeader(  
+                        "User-Agent",  
+                        userAgent  
+                    )  
 
-                        setDescription(
-                            "Baixando arquivo..."
-                        )
+                    setDescription(  
+                        "Baixando arquivo..."  
+                    )  
 
-                        setTitle(
-                            fileName
-                        )
+                    setTitle(  
+                        fileName  
+                    )  
 
-                        setNotificationVisibility(
-                            DownloadManager
-                                .Request
-                                .VISIBILITY_VISIBLE_NOTIFY_COMPLETED
-                        )
+                    setNotificationVisibility(  
+                        DownloadManager  
+                            .Request  
+                            .VISIBILITY_VISIBLE_NOTIFY_COMPLETED  
+                    )  
 
-                        setDestinationInExternalPublicDir(
-                            Environment
-                                .DIRECTORY_DOWNLOADS,
-                            fileName
-                        )
-                    }
+                    setDestinationInExternalPublicDir(  
+                        Environment  
+                            .DIRECTORY_DOWNLOADS,  
+                        fileName  
+                    )  
+                }  
 
 
-                val downloadManager =
-                    getSystemService(
-                        Context.DOWNLOAD_SERVICE
-                    ) as DownloadManager
+            val downloadManager =  
+                getSystemService(  
+                    Context.DOWNLOAD_SERVICE  
+                ) as DownloadManager  
 
 
-                downloadManager.enqueue(
-                    request
-                )
+            downloadManager.enqueue(  
+                request  
+            )  
 
 
-                Toast.makeText(
-                    this,
-                    "Download iniciado",
-                    Toast.LENGTH_SHORT
-                ).show()
+            Toast.makeText(  
+                this,  
+                "Download iniciado",  
+                Toast.LENGTH_SHORT  
+            ).show()  
 
-            } catch (
-                e: Exception
-            ) {
+        } catch (  
+            e: Exception  
+        ) {  
 
-                Toast.makeText(
-                    this,
-                    "Não foi possível iniciar o download",
-                    Toast.LENGTH_SHORT
-                ).show()
+            Toast.makeText(  
+                this,  
+                "Não foi possível iniciar o download",  
+                Toast.LENGTH_SHORT  
+            ).show()  
 
-                e.printStackTrace()
-            }
-        }
+            e.printStackTrace()  
+        }  
+    }  
 
 
-        // =====================================================
-        // WEB CHROME CLIENT
-        // =====================================================
+    // =====================================================  
+    // WEB CHROME CLIENT  
+    // =====================================================  
 
-        webView.webChromeClient =
-            object : WebChromeClient() {
+    webView.webChromeClient =  
+        object : WebChromeClient() {  
 
-                override fun onGeolocationPermissionsShowPrompt(
-                    origin: String?,
-                    callback:
-                    GeolocationPermissions.Callback?
-                ) {
+            override fun onGeolocationPermissionsShowPrompt(  
+                origin: String?,  
+                callback:  
+                GeolocationPermissions.Callback?  
+            ) {  
 
-                    callback?.invoke(
-                        origin,
-                        true,
-                        false
-                    )
-                }
+                callback?.invoke(  
+                    origin,  
+                    true,  
+                    false  
+                )  
+            }  
 
 
-                override fun onPermissionRequest(
-                    request: PermissionRequest
-                ) {
+            override fun onPermissionRequest(  
+                request: PermissionRequest  
+            ) {  
 
-                    runOnUiThread {
+                runOnUiThread {  
 
-                        val resources =
-                            request.resources
+                    val resources =  
+                        request.resources  
 
 
-                        if (
-                            resources.contains(
-                                PermissionRequest
-                                    .RESOURCE_AUDIO_CAPTURE
-                            )
-                        ) {
+                    if (  
+                        resources.contains(  
+                            PermissionRequest  
+                                .RESOURCE_AUDIO_CAPTURE  
+                        )  
+                    ) {  
 
-                            request.grant(
-                                arrayOf(
-                                    PermissionRequest
-                                        .RESOURCE_AUDIO_CAPTURE
-                                )
-                            )
+                        request.grant(  
+                            arrayOf(  
+                                PermissionRequest  
+                                    .RESOURCE_AUDIO_CAPTURE  
+                            )  
+                        )  
 
-                        } else {
+                    } else {  
 
-                            request.deny()
-                        }
-                    }
-                }
-            }
+                        request.deny()  
+                    }  
+                }  
+            }  
+        }  
 
 
-        // =====================================================
-        // WEBVIEW CLIENT
-        // =====================================================
+    // =====================================================  
+    // WEBVIEW CLIENT  
+    // =====================================================  
 
-        webView.webViewClient =
-            object : WebViewClient() {
+    webView.webViewClient =  
+        object : WebViewClient() {  
 
-                override fun shouldOverrideUrlLoading(
-                    view: WebView?,
-                    request: WebResourceRequest?
-                ): Boolean {
+            override fun shouldOverrideUrlLoading(  
+                view: WebView?,  
+                request: WebResourceRequest?  
+            ): Boolean {  
 
-                    val url =
-                        request?.url
-                            ?.toString()
-                            ?: ""
+                val url =  
+                    request?.url  
+                        ?.toString()  
+                        ?: ""  
 
 
-                    if (
-                        url.startsWith(
-                            "tel:"
-                        )
-                    ) {
+                if (  
+                    url.startsWith(  
+                        "tel:"  
+                    )  
+                ) {  
 
-                        startActivity(
-                            Intent(
-                                Intent.ACTION_DIAL,
-                                Uri.parse(url)
-                            )
-                        )
+                    startActivity(  
+                        Intent(  
+                            Intent.ACTION_DIAL,  
+                            Uri.parse(url)  
+                        )  
+                    )  
 
-                        return true
-                    }
+                    return true  
+                }  
 
 
-                    if (
-                        url.startsWith(
-                            "https://wa.me"
-                        )
-                    ) {
+                if (  
+                    url.startsWith(  
+                        "https://wa.me"  
+                    )  
+                ) {  
 
-                        startActivity(
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse(url)
-                            )
-                        )
+                    startActivity(  
+                        Intent(  
+                            Intent.ACTION_VIEW,  
+                            Uri.parse(url)  
+                        )  
+                    )  
 
-                        return true
-                    }
+                    return true  
+                }  
 
 
-                    return false
-                }
+                return false  
+            }  
 
 
-                override fun onPageFinished(
-                    view: WebView?,
-                    url: String?
-                ) {
+            override fun onPageFinished(  
+                view: WebView?,  
+                url: String?  
+            ) {  
 
-                    super.onPageFinished(
-                        view,
-                        url
-                    )
+                super.onPageFinished(  
+                    view,  
+                    url  
+                )  
 
 
-                    view?.evaluateJavascript(
-                        """
-                        (function() {
+                view?.evaluateJavascript(  
+                    """  
+                    (function() {  
 
-                            let style =
-                                document.getElementById(
-                                    'androidTouchFix'
-                                );
+                        let style =  
+                            document.getElementById(  
+                                'androidTouchFix'  
+                            );  
 
-                            if (!style) {
+                        if (!style) {  
 
-                                style =
-                                    document.createElement(
-                                        'style'
-                                    );
+                            style =  
+                                document.createElement(  
+                                    'style'  
+                                );  
 
-                                style.id =
-                                    'androidTouchFix';
+                            style.id =  
+                                'androidTouchFix';  
 
-                                document.head.appendChild(
-                                    style
-                                );
-                            }
+                            document.head.appendChild(  
+                                style  
+                            );  
+                        }  
 
-                            style.textContent = `
+                        style.textContent = `  
 
-                                *,
-                                *::before,
-                                *::after {
+                            *,  
+                            *::before,  
+                            *::after {  
 
-                                    -webkit-tap-highlight-color:
-                                        transparent !important;
+                                -webkit-tap-highlight-color:  
+                                    transparent !important;  
 
-                                    -webkit-touch-callout:
-                                        none !important;
-                                }
+                                -webkit-touch-callout:  
+                                    none !important;  
+                            }  
 
-                                *:focus,
-                                *:focus-visible,
-                                *:active {
+                            *:focus,  
+                            *:focus-visible,  
+                            *:active {  
 
-                                    outline:
-                                        none !important;
+                                outline:  
+                                    none !important;  
 
-                                    -webkit-tap-highlight-color:
-                                        transparent !important;
-                                }
+                                -webkit-tap-highlight-color:  
+                                    transparent !important;  
+                            }  
 
-                            `;
-                        })();
-                        """.trimIndent(),
-                        null
-                    )
+                        `;  
+                    })();  
+                    """.trimIndent(),  
+                    null  
+                )  
 
 
-                    view?.evaluateJavascript(
-                        """
-                        if (
-                            typeof mostrarConteudo ===
-                            'function'
-                        ) {
-                            mostrarConteudo();
-                        }
-                        """.trimIndent(),
-                        null
-                    )
-                    
-                                                verificarPermissoesParaJS()
-                }
+                view?.evaluateJavascript(  
+                    """  
+                    if (  
+                        typeof mostrarConteudo ===  
+                        'function'  
+                    ) {  
+                        mostrarConteudo();  
+                    }  
+                    """.trimIndent(),  
+                    null  
+                )  
+                  
+                                            verificarPermissoesParaJS()  
+            }  
 
-            }
+        }  
 
-    }
+}  
 
 
-    // =========================================================
-    // CARREGAR PÁGINAS
-    // =========================================================
+// =========================================================  
+// CARREGAR PÁGINAS  
+// =========================================================  
 
-    private fun carregarWebView1() {
+private fun carregarWebView1() {  
 
-        webView.loadUrl(
-            "file:///android_asset/user1/index1.html"
-        )
+    webView.loadUrl(  
+        "file:///android_asset/user1/index1.html"  
+    )  
 
-        webView.visibility =
-            View.VISIBLE
-    }
+    webView.visibility =  
+        View.VISIBLE  
+}  
 
 
-    private fun carregarWebView4() {
+private fun carregarWebView4() {  
 
-        webView.loadUrl(
-            "file:///android_asset/user1/botao.html"
-        )
+    webView.loadUrl(  
+        "file:///android_asset/user1/botao.html"  
+    )  
 
-        webView.visibility =
-            View.VISIBLE
-    }
+    webView.visibility =  
+        View.VISIBLE  
+}  
 
 
-    // =========================================================
-    // PÁGINA INICIAL
-    // =========================================================
+// =========================================================  
+// PÁGINA INICIAL  
+// =========================================================  
 
-    fun atualizarPaginaInicial() {
+fun atualizarPaginaInicial() {  
 
-        val prefs =
-            getSharedPreferences(
-                "app_config",
-                MODE_PRIVATE
-            )
+    val prefs =  
+        getSharedPreferences(  
+            "app_config",  
+            MODE_PRIVATE  
+        )  
 
 
-        val pagina =
-            prefs.getString(
-                "launcher",
-                "index1.html"
-            ) ?: "index1.html"
+    val pagina =  
+        prefs.getString(  
+            "launcher",  
+            "index1.html"  
+        ) ?: "index1.html"  
 
 
-        webView.loadUrl(
-            "file:///android_asset/user1/$pagina"
-        )
-    }
+    webView.loadUrl(  
+        "file:///android_asset/user1/$pagina"  
+    )  
+}  
 
 
-    // =========================================================
-    // SENSOR / CHACOALHAR
-    // =========================================================
+// =========================================================  
+// SENSOR / CHACOALHAR  
+// =========================================================  
 
-    private fun iniciarSensor() {
+private fun iniciarSensor() {  
 
-        sensorManager =
-            getSystemService(
-                Context.SENSOR_SERVICE
-            ) as SensorManager
+    sensorManager =  
+        getSystemService(  
+            Context.SENSOR_SERVICE  
+        ) as SensorManager  
 
 
-        acelerometro =
-            sensorManager.getDefaultSensor(
-                Sensor.TYPE_ACCELEROMETER
-            )
+    acelerometro =  
+        sensorManager.getDefaultSensor(  
+            Sensor.TYPE_ACCELEROMETER  
+        )  
 
 
-        if (
-            acelerometro != null
-        ) {
+    if (  
+        acelerometro != null  
+    ) {  
 
-            val registrado =
-                sensorManager.registerListener(
-                    shakeListener,
-                    acelerometro,
-                    SensorManager.SENSOR_DELAY_GAME
-                )
+        val registrado =  
+            sensorManager.registerListener(  
+                shakeListener,  
+                acelerometro,  
+                SensorManager.SENSOR_DELAY_GAME  
+            )  
 
 
-            if (
-                !registrado
-            ) {
+        if (  
+            !registrado  
+        ) {  
 
-                iniciarMicrofoneShake()
-            }
+            iniciarMicrofoneShake()  
+        }  
 
-        } else {
+    } else {  
 
-            iniciarMicrofoneShake()
-        }
-    }
+        iniciarMicrofoneShake()  
+    }  
+}  
 
 
-    // =========================================================
-    // LISTENER DO ACELERÔMETRO
-    // =========================================================
+// =========================================================  
+// LISTENER DO ACELERÔMETRO  
+// =========================================================  
 
-    private fun criarShakeListener() {
+private fun criarShakeListener() {  
 
-        shakeListener =
-            object : SensorEventListener {
+    shakeListener =  
+        object : SensorEventListener {  
 
-                override fun onSensorChanged(
-                    event: SensorEvent
-                ) {
+            override fun onSensorChanged(  
+                event: SensorEvent  
+            ) {  
 
-                    if (
-                        !protecaoAtiva
-                    ) {
-                        return
-                    }
+                if (  
+                    !protecaoAtiva  
+                ) {  
+                    return  
+                }  
 
 
-                    val x =
-                        event.values[0]
+                val x =  
+                    event.values[0]  
 
 
-                    val y =
-                        event.values[1]
+                val y =  
+                    event.values[1]  
 
 
-                    val z =
-                        event.values[2]
+                val z =  
+                    event.values[2]  
 
 
-                    val aceleracao =
-                        sqrt(
-                            (
-                                x * x +
-                                y * y +
-                                z * z
-                            ).toDouble()
-                        )
+                val aceleracao =  
+                    sqrt(  
+                        (  
+                            x * x +  
+                            y * y +  
+                            z * z  
+                        ).toDouble()  
+                    )  
 
 
-                    if (
-                        aceleracao > 18.0
-                    ) {
+                if (  
+                    aceleracao > 18.0  
+                ) {  
 
-                        executarAcaoShake()
-                    }
-                }
+                    executarAcaoShake()  
+                }  
+            }  
 
 
-                override fun onAccuracyChanged(
-                    sensor: Sensor?,
-                    accuracy: Int
-                ) {
-                }
-            }
-    }
+            override fun onAccuracyChanged(  
+                sensor: Sensor?,  
+                accuracy: Int  
+            ) {  
+            }  
+        }  
+}  
 
 
-    // =========================================================
-    // AÇÃO DO BALANÇAR
-    // =========================================================
+// =========================================================  
+// AÇÃO DO BALANÇAR  
+// =========================================================  
 
-    private fun executarAcaoShake() {
+private fun executarAcaoShake() {  
 
-    if (!protecaoAtiva) {
-        return
-    }
+if (!protecaoAtiva) {  
+    return  
+}  
 
-    val agora =
-        System.currentTimeMillis()
+val agora =  
+    System.currentTimeMillis()  
 
-    if (agora - ultimoShake <= 4000) {
-        return
-    }
+if (agora - ultimoShake <= 4000) {  
+    return  
+}  
 
-    ultimoShake =
-        agora
+ultimoShake =  
+    agora  
 
-    try {
+try {  
 
-        val intent =
-            Intent(
-                Intent.ACTION_DIAL
-            ).apply {
+    val intent =  
+        Intent(  
+            Intent.ACTION_DIAL  
+        ).apply {  
 
-                data =
-                    Uri.parse(
-                        "tel:180"
-                    )
-            }
+            data =  
+                Uri.parse(  
+                    "tel:180"  
+                )  
+        }  
 
-        startActivity(intent)
+    startActivity(intent)  
 
-        // =====================================================
-        // AÇÃO CONCLUÍDA → DESATIVAR PROTEÇÃO
-        // =====================================================
+    // =====================================================  
+    // AÇÃO CONCLUÍDA → DESATIVAR PROTEÇÃO  
+    // =====================================================  
 
-        protecaoAtiva = false
+    protecaoAtiva = false  
 
-        pararSensor()
+    pararSensor()  
 
-        avisarEstadoAoHtml(
-            "movimento",
-            false
-        )
+    avisarEstadoAoHtml(  
+        "movimento",  
+        false  
+    )  
 
-    } catch (
-        e: Exception
-    ) {
+} catch (  
+    e: Exception  
+) {  
 
-        e.printStackTrace()
-    }
+    e.printStackTrace()  
 }
 
-    // =========================================================
-    // MICROFONE — FALLBACK
-    // =========================================================
+}
 
-    private fun iniciarMicrofoneShake() {
+// =========================================================  
+// MICROFONE — FALLBACK  
+// =========================================================  
 
-        if (
-            !protecaoAtiva ||
-            shakeMicrophoneRunning
-        ) {
-            return
-        }
+private fun iniciarMicrofoneShake() {  
 
+    if (  
+        !protecaoAtiva ||  
+        shakeMicrophoneRunning  
+    ) {  
+        return  
+    }  
 
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.RECORD_AUDIO
-            ) !=
-            PackageManager.PERMISSION_GRANTED
-        ) {
 
-            return
-        }
+    if (  
+        ContextCompat.checkSelfPermission(  
+            this,  
+            Manifest.permission.RECORD_AUDIO  
+        ) !=  
+        PackageManager.PERMISSION_GRANTED  
+    ) {  
 
+        return  
+    }  
 
-        if (
-            shakeBufferSize <= 0
-        ) {
 
-            return
-        }
+    if (  
+        shakeBufferSize <= 0  
+    ) {  
 
+        return  
+    }  
 
-        try {
 
-            shakeAudioRecord =
-                AudioRecord(
-                    MediaRecorder.AudioSource.MIC,
-                    shakeSampleRate,
-                    AudioFormat.CHANNEL_IN_MONO,
-                    AudioFormat.ENCODING_PCM_16BIT,
-                    shakeBufferSize
-                )
+    try {  
 
+        shakeAudioRecord =  
+            AudioRecord(  
+                MediaRecorder.AudioSource.MIC,  
+                shakeSampleRate,  
+                AudioFormat.CHANNEL_IN_MONO,  
+                AudioFormat.ENCODING_PCM_16BIT,  
+                shakeBufferSize  
+            )  
 
-            if (
-                shakeAudioRecord?.state !=
-                AudioRecord.STATE_INITIALIZED
-            ) {
 
-                shakeAudioRecord?.release()
+        if (  
+            shakeAudioRecord?.state !=  
+            AudioRecord.STATE_INITIALIZED  
+        ) {  
 
-                shakeAudioRecord =
-                    null
+            shakeAudioRecord?.release()  
 
-                return
-            }
+            shakeAudioRecord =  
+                null  
 
+            return  
+        }  
 
-            shakeMicrophoneRunning =
-                true
 
+        shakeMicrophoneRunning =  
+            true  
 
-            shakeMicrophoneThread =
-                Thread {
 
-                    try {
+        shakeMicrophoneThread =  
+            Thread {  
 
-                        val buffer =
-                            ShortArray(
-                                shakeBufferSize
-                            )
+                try {  
 
+                    val buffer =  
+                        ShortArray(  
+                            shakeBufferSize  
+                        )  
 
-                        shakeAudioRecord?.startRecording()
 
+                    shakeAudioRecord?.startRecording()  
 
-                        while (
-                            shakeMicrophoneRunning &&
-                            protecaoAtiva
-                        ) {
 
-                            val read =
-                                shakeAudioRecord?.read(
-                                    buffer,
-                                    0,
-                                    buffer.size
-                                ) ?: 0
+                    while (  
+                        shakeMicrophoneRunning &&  
+                        protecaoAtiva  
+                    ) {  
 
+                        val read =  
+                            shakeAudioRecord?.read(  
+                                buffer,  
+                                0,  
+                                buffer.size  
+                            ) ?: 0  
 
-                            if (
-                                read > 0
-                            ) {
 
-                                val db =
-                                    calcularDecibeisShake(
-                                        buffer,
-                                        read
-                                    )
+                        if (  
+                            read > 0  
+                        ) {  
 
+                            val db =  
+                                calcularDecibeisShake(  
+                                    buffer,  
+                                    read  
+                                )  
 
-                                if (
-                                    db >=
-                                    shakeLoudSoundThreshold
-                                ) {
 
-                                    runOnUiThread {
+                            if (  
+                                db >=  
+                                shakeLoudSoundThreshold  
+                            ) {  
 
-                                        executarAcaoShake()
-                                    }
-                                }
-                            }
-                        }
+                                runOnUiThread {  
 
-                    } catch (
-                        _: Exception
-                    ) {
+                                    executarAcaoShake()  
+                                }  
+                            }  
+                        }  
+                    }  
 
-                    } finally {
+                } catch (  
+                    _: Exception  
+                ) {  
 
-                        pararMicrofoneShake()
-                    }
+                } finally {  
 
-                }.apply {
+                    pararMicrofoneShake()  
+                }  
 
-                    name =
-                        "MulherAmparada-ShakeMicrophone"
+            }.apply {  
 
-                    start()
-                }
+                name =  
+                    "MulherAmparada-ShakeMicrophone"  
 
-        } catch (
-            _: Exception
-        ) {
+                start()  
+            }  
 
-            shakeAudioRecord?.release()
+    } catch (  
+        _: Exception  
+    ) {  
 
-            shakeAudioRecord =
-                null
+        shakeAudioRecord?.release()  
 
-            shakeMicrophoneRunning =
-                false
-        }
-    }
+        shakeAudioRecord =  
+            null  
 
+        shakeMicrophoneRunning =  
+            false  
+    }  
+}  
 
-    // =========================================================
-    // DECIBÉIS
-    // =========================================================
 
-    private fun calcularDecibeisShake(
-        buffer: ShortArray,
-        length: Int
-    ): Double {
+// =========================================================  
+// DECIBÉIS  
+// =========================================================  
 
-        if (
-            length <= 0
-        ) {
+private fun calcularDecibeisShake(  
+    buffer: ShortArray,  
+    length: Int  
+): Double {  
 
-            return -100.0
-        }
+    if (  
+        length <= 0  
+    ) {  
 
+        return -100.0  
+    }  
 
-        var soma =
-            0.0
 
+    var soma =  
+        0.0  
 
-        for (
-            i in 0 until length
-        ) {
 
-            val sample =
-                buffer[i].toDouble()
+    for (  
+        i in 0 until length  
+    ) {  
 
+        val sample =  
+            buffer[i].toDouble()  
 
-            soma +=
-                sample * sample
-        }
 
+        soma +=  
+            sample * sample  
+    }  
 
-        val rms =
-            sqrt(
-                soma / length
-            )
 
+    val rms =  
+        sqrt(  
+            soma / length  
+        )  
 
-        if (
-            rms <= 0.0
-        ) {
 
-            return -100.0
-        }
+    if (  
+        rms <= 0.0  
+    ) {  
 
+        return -100.0  
+    }  
 
-        return 20.0 *
-            log10(
-                rms / 32768.0
-            )
-    }
 
+    return 20.0 *  
+        log10(  
+            rms / 32768.0  
+        )  
+}  
 
-    // =========================================================
-    // PARAR MICROFONE
-    // =========================================================
 
-    private fun pararMicrofoneShake() {
+// =========================================================  
+// PARAR MICROFONE  
+// =========================================================  
 
-        shakeMicrophoneRunning =
-            false
+private fun pararMicrofoneShake() {  
 
+    shakeMicrophoneRunning =  
+        false  
 
-        try {
 
-            shakeAudioRecord?.stop()
+    try {  
 
-        } catch (
-            _: Exception
-        ) {
-        }
+        shakeAudioRecord?.stop()  
 
+    } catch (  
+        _: Exception  
+    ) {  
+    }  
 
-        try {
 
-            shakeAudioRecord?.release()
+    try {  
 
-        } catch (
-            _: Exception
-        ) {
-        }
+        shakeAudioRecord?.release()  
 
+    } catch (  
+        _: Exception  
+    ) {  
+    }  
 
-        shakeAudioRecord =
-            null
 
+    shakeAudioRecord =  
+        null  
 
-        shakeMicrophoneThread =
-            null
-    }
 
+    shakeMicrophoneThread =  
+        null  
+}  
 
-    // =========================================================
-    // PARAR SENSOR
-    // =========================================================
 
-    private fun pararSensor() {
+// =========================================================  
+// PARAR SENSOR  
+// =========================================================  
 
-        if (
-            ::sensorManager.isInitialized &&
-            ::shakeListener.isInitialized
-        ) {
+private fun pararSensor() {  
 
-            sensorManager.unregisterListener(
-                shakeListener
-            )
-        }
+    if (  
+        ::sensorManager.isInitialized &&  
+        ::shakeListener.isInitialized  
+    ) {  
 
+        sensorManager.unregisterListener(  
+            shakeListener  
+        )  
+    }  
 
-        pararMicrofoneShake()
-    }
 
+    pararMicrofoneShake()  
+}  
 
-    // =========================================================
-    // CONTATOS
-    // =========================================================
 
-    @JavascriptInterface
-    fun abrirContatos() {
+// =========================================================  
+// CONTATOS  
+// =========================================================  
 
-        val intent =
-            Intent(
-                Intent.ACTION_PICK,
-                ContactsContract
-                    .CommonDataKinds
-                    .Phone
-                    .CONTENT_URI
-            )
+@JavascriptInterface  
+fun abrirContatos() {  
 
+    val intent =  
+        Intent(  
+            Intent.ACTION_PICK,  
+            ContactsContract  
+                .CommonDataKinds  
+                .Phone  
+                .CONTENT_URI  
+        )  
 
-        startActivityForResult(
-            intent,
-            PICK_CONTACT
-        )
-    }
-    
-    // =========================================================
-    // PALMAS
-    // =========================================================
-    
+
+    startActivityForResult(  
+        intent,  
+        PICK_CONTACT  
+    )  
+}  
+  
+// =========================================================  
+// PALMAS  
+// =========================================================
 
 @JavascriptInterface
 fun ativarPalmas() {
 
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.RECORD_AUDIO
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
+if (  
+    ContextCompat.checkSelfPermission(  
+        this,  
+        Manifest.permission.RECORD_AUDIO  
+    ) != PackageManager.PERMISSION_GRANTED  
+) {  
 
-        Toast.makeText(
-            this,
-            "Ative o microfone nas configurações do aplicativo.",
-            Toast.LENGTH_LONG
-        ).show()
+    Toast.makeText(  
+        this,  
+        "Ative o microfone nas configurações do aplicativo.",  
+        Toast.LENGTH_LONG  
+    ).show()  
 
-        avisarEstadoAoHtml(
-            "palmas",
-            false
-        )
+    avisarEstadoAoHtml(  
+        "palmas",  
+        false  
+    )  
 
-        return
-    }
+    return  
+}  
 
-    palmasEmExecucao = false
+palmasEmExecucao = false  
 
-    monitorarFimDaLigacao()
+monitorarFimDaLigacao()  
 
-    val intent =
-        Intent(
-            this,
-            PalmaService::class.java
-        )
+val intent =  
+    Intent(  
+        this,  
+        PalmaService::class.java  
+    )  
 
-    startForegroundService(intent)
+startForegroundService(intent)  
 
-    avisarEstadoAoHtml(
-        "palmas",
-        true
-    )
+avisarEstadoAoHtml(  
+    "palmas",  
+    true  
+)
+
 }
 @JavascriptInterface
 fun desativarPalmas() {
 
-    stopService(
-        Intent(
-            this,
-            PalmaService::class.java
-        )
-    )
+stopService(  
+    Intent(  
+        this,  
+        PalmaService::class.java  
+    )  
+)  
 
-    avisarEstadoAoHtml(
-        "palmas",
-        false
-    )
+avisarEstadoAoHtml(  
+    "palmas",  
+    false  
+)  
 
-    Toast.makeText(
-        this,
-        "Proteção por palmas desativada",
-        Toast.LENGTH_SHORT
-    ).show()
+Toast.makeText(  
+    this,  
+    "Proteção por palmas desativada",  
+    Toast.LENGTH_SHORT  
+).show()
+
 }
 
 private val receptorPalmasConcluidas =
-    object : android.content.BroadcastReceiver() {
+object : android.content.BroadcastReceiver() {
 
-        override fun onReceive(
-            context: android.content.Context?,
-            intent: android.content.Intent?
-        ) {
+override fun onReceive(  
+        context: android.content.Context?,  
+        intent: android.content.Intent?  
+    ) {  
 
-            if (
-                intent?.action ==
-                "com.mulheres.PALMAS_CONCLUIDAS"
-            ) {
+        if (  
+            intent?.action ==  
+            "com.mulheres.PALMAS_CONCLUIDAS"  
+        ) {  
 
-                webView.post {
+            webView.post {  
 
-                    webView.evaluateJavascript(
-                        """
-                        if (
-                            typeof window.palmasConcluidas ===
-                            "function"
-                        ) {
-                            window.palmasConcluidas();
-                        }
-                        """.trimIndent(),
-                        null
-                    )
-                }
-            }
-        }
-    }
-
+                webView.evaluateJavascript(  
+                    """  
+                    if (  
+                        typeof window.palmasConcluidas ===  
+                        "function"  
+                    ) {  
+                        window.palmasConcluidas();  
+                    }  
+                    """.trimIndent(),  
+                    null  
+                )  
+            }  
+        }  
+    }  
+}
 
 private fun monitorarFimDaLigacao() {
 
-    if (!::telephonyManager.isInitialized) {
+if (!::telephonyManager.isInitialized) {  
 
-        telephonyManager =
-            getSystemService(
-                Context.TELEPHONY_SERVICE
-            ) as TelephonyManager
-    }
+    telephonyManager =  
+        getSystemService(  
+            Context.TELEPHONY_SERVICE  
+        ) as TelephonyManager  
+}  
 
-    telefoneListener =
-        object : PhoneStateListener() {
+telefoneListener =  
+    object : PhoneStateListener() {  
 
-            override fun onCallStateChanged(
-                state: Int,
-                phoneNumber: String?
-            ) {
+        override fun onCallStateChanged(  
+            state: Int,  
+            phoneNumber: String?  
+        ) {  
 
-                super.onCallStateChanged(
-                    state,
-                    phoneNumber
-                )
+            super.onCallStateChanged(  
+                state,  
+                phoneNumber  
+            )  
 
-                if (
-                    state ==
-                    TelephonyManager.CALL_STATE_OFFHOOK
-                ) {
+            if (  
+                state ==  
+                TelephonyManager.CALL_STATE_OFFHOOK  
+            ) {  
 
-                    palmasEmExecucao =
-                        true
-                }
+                palmasEmExecucao =  
+                    true  
+            }  
 
-                if (
-                    state ==
-                    TelephonyManager.CALL_STATE_IDLE &&
-                    palmasEmExecucao
-                ) {
+            if (  
+                state ==  
+                TelephonyManager.CALL_STATE_IDLE &&  
+                palmasEmExecucao  
+            ) {  
 
-                    palmasEmExecucao =
-                        false
+                palmasEmExecucao =  
+                    false  
 
-                    avisarPalmasConcluidas()
+                avisarPalmasConcluidas()  
 
-                    try {
+                try {  
 
-                        telephonyManager.listen(
-                            telefoneListener,
-                            PhoneStateListener.LISTEN_NONE
-                        )
+                    telephonyManager.listen(  
+                        telefoneListener,  
+                        PhoneStateListener.LISTEN_NONE  
+                    )  
 
-                    } catch (_: Exception) {
-                    }
+                } catch (_: Exception) {  
+                }  
 
-                    telefoneListener =
-                        null
-                }
-            }
-        }
+                telefoneListener =  
+                    null  
+            }  
+        }  
+    }  
 
-    try {
+try {  
 
-        telephonyManager.listen(
-            telefoneListener,
-            PhoneStateListener.LISTEN_CALL_STATE
-        )
+    telephonyManager.listen(  
+        telefoneListener,  
+        PhoneStateListener.LISTEN_CALL_STATE  
+    )  
 
-    } catch (e: Exception) {
+} catch (e: Exception) {  
 
-        e.printStackTrace()
-    }
+    e.printStackTrace()  
 }
 
+}
 
+// =========================================================  
+// PROTEÇÃO POR CHACOALHAR  
+// =========================================================
 
-    // =========================================================
-    // PROTEÇÃO POR CHACOALHAR
-    // =========================================================
 @JavascriptInterface
 fun ativarProtecao() {
 
-    if (!protecaoAtiva) {
+if (!protecaoAtiva) {  
 
-        protecaoAtiva = true
+    protecaoAtiva = true  
 
-        iniciarSensor()
+    iniciarSensor()  
 
-        avisarEstadoAoHtml(
-            "movimento",
-            true
-        )
-    }
+    avisarEstadoAoHtml(  
+        "movimento",  
+        true  
+    )  
+}
+
 }
 
 @JavascriptInterface
 fun desativarProtecao() {
 
-    protecaoAtiva = false
+protecaoAtiva = false  
 
-    pararSensor()
+pararSensor()  
 
-    avisarEstadoAoHtml(
-        "movimento",
-        false
-    )
+avisarEstadoAoHtml(  
+    "movimento",  
+    false  
+)
+
 }
 
+// =========================================================  
+// SOS  
+// =========================================================  
 
-    // =========================================================
-    // SOS
-    // =========================================================
+@JavascriptInterface  
+fun enviarSOS() {  
 
-    @JavascriptInterface
-    fun enviarSOS() {
+    if (  
+        ActivityCompat.checkSelfPermission(  
+            this,  
+            Manifest.permission.ACCESS_FINE_LOCATION  
+        ) !=  
+        PackageManager.PERMISSION_GRANTED  
+    ) {  
 
-        if (
-            ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) !=
-            PackageManager.PERMISSION_GRANTED
-        ) {
+        return  
+    }  
 
-            return
-        }
 
+    locationClient.lastLocation  
+        .addOnSuccessListener {  
 
-        locationClient.lastLocation
-            .addOnSuccessListener {
+            location ->  
 
-                location ->
+            if (  
+                location != null  
+            ) {  
 
-                if (
-                    location != null
-                ) {
+                val lat =  
+                    location.latitude  
 
-                    val lat =
-                        location.latitude
 
+                val lng =  
+                    location.longitude  
 
-                    val lng =
-                        location.longitude
 
+                val link =  
+                    "https://maps.google.com/?q=$lat,$lng"  
 
-                    val link =
-                        "https://maps.google.com/?q=$lat,$lng"
 
+                val mensagem =  
+                    "🚨 SOCORRO! Estou aqui: $link"  
 
-                    val mensagem =
-                        "🚨 SOCORRO! Estou aqui: $link"
 
+                abrirIntentSMS(  
+                    mensagem  
+                )  
+            }  
+        }  
+}  
 
-                    abrirIntentSMS(
-                        mensagem
-                    )
-                }
-            }
-    }
 
+// =========================================================  
+// BIOMETRIA  
+// =========================================================  
 
-    // =========================================================
-    // BIOMETRIA
-    // =========================================================
+@JavascriptInterface  
+fun iniciarBiometria() {  
 
-    @JavascriptInterface
-    fun iniciarBiometria() {
+    runOnUiThread {  
 
-        runOnUiThread {
+        val biometricManager =  
+            BiometricManager.from(  
+                this  
+            )  
 
-            val biometricManager =
-                BiometricManager.from(
-                    this
-                )
 
+        val authenticators =  
+            BiometricManager.Authenticators.BIOMETRIC_WEAK or  
+            BiometricManager.Authenticators.DEVICE_CREDENTIAL  
 
-            val authenticators =
-                BiometricManager.Authenticators.BIOMETRIC_WEAK or
-                BiometricManager.Authenticators.DEVICE_CREDENTIAL
 
+        val canAuth =  
+            biometricManager.canAuthenticate(  
+                authenticators  
+            )  
 
-            val canAuth =
-                biometricManager.canAuthenticate(
-                    authenticators
-                )
 
+        if (  
+            canAuth !=  
+            BiometricManager.BIOMETRIC_SUCCESS  
+        ) {  
 
-            if (
-                canAuth !=
-                BiometricManager.BIOMETRIC_SUCCESS
-            ) {
+            Toast.makeText(  
+                this,  
+                "Biometria indisponível, mas abriremos o serviço pra você!",  
+                Toast.LENGTH_SHORT  
+            ).show()  
 
-                Toast.makeText(
-                    this,
-                    "Biometria indisponível, mas abriremos o serviço pra você!",
-                    Toast.LENGTH_SHORT
-                ).show()
 
+            carregarWebView4()  
 
-                carregarWebView4()
 
+            return@runOnUiThread  
+        }  
 
-                return@runOnUiThread
-            }
 
+        val biometricPrompt =  
+            BiometricPrompt(  
+                this,  
+                ContextCompat.getMainExecutor(  
+                    this  
+                ),  
+                object :  
+                    BiometricPrompt.AuthenticationCallback() {  
 
-            val biometricPrompt =
-                BiometricPrompt(
-                    this,
-                    ContextCompat.getMainExecutor(
-                        this
-                    ),
-                    object :
-                        BiometricPrompt.AuthenticationCallback() {
+                    override fun onAuthenticationSucceeded(  
+                        result:  
+                        BiometricPrompt.AuthenticationResult  
+                    ) {  
 
-                        override fun onAuthenticationSucceeded(
-                            result:
-                            BiometricPrompt.AuthenticationResult
-                        ) {
+                        super.onAuthenticationSucceeded(  
+                            result  
+                        )  
 
-                            super.onAuthenticationSucceeded(
-                                result
-                            )
 
+                        when (  
+                            destinoBiometria  
+                        ) {  
 
-                            when (
-                                destinoBiometria
-                            ) {
+                            1 ->  
+                                carregarWebView1()  
 
-                                1 ->
-                                    carregarWebView1()
+                            2 ->  
+                                carregarWebView1()  
 
-                                2 ->
-                                    carregarWebView1()
+                            3 ->  
+                                carregarWebView1()  
 
-                                3 ->
-                                    carregarWebView1()
+                            else ->  
+                                carregarWebView4()  
+                        }  
+                    }  
 
-                                else ->
-                                    carregarWebView4()
-                            }
-                        }
 
+                    override fun onAuthenticationFailed() {  
 
-                        override fun onAuthenticationFailed() {
+                        super.onAuthenticationFailed()  
 
-                            super.onAuthenticationFailed()
 
+                        Toast.makeText(  
+                            this@MainActivity,  
+                            "Biometria não reconhecida, abrindo a área protegida.",  
+                            Toast.LENGTH_SHORT  
+                        ).show()  
 
-                            Toast.makeText(
-                                this@MainActivity,
-                                "Biometria não reconhecida, abrindo a área protegida.",
-                                Toast.LENGTH_SHORT
-                            ).show()
 
+                        carregarWebView4()  
+                    }  
 
-                            carregarWebView4()
-                        }
 
+                    override fun onAuthenticationError(  
+                        errorCode: Int,  
+                        errString: CharSequence  
+                    ) {  
 
-                        override fun onAuthenticationError(
-                            errorCode: Int,
-                            errString: CharSequence
-                        ) {
+                        super.onAuthenticationError(  
+                            errorCode,  
+                            errString  
+                        )  
+                    }  
+                }  
+            )  
 
-                            super.onAuthenticationError(
-                                errorCode,
-                                errString
-                            )
-                        }
-                    }
-                )
 
+        val promptInfo =  
+            BiometricPrompt.PromptInfo.Builder()  
+                .setTitle(  
+                    "Desbloquear a área protegida"  
+                )  
+                .setDescription(  
+                    "🌸 Apenas a usuária cadastrada pode acessar este local"  
+                )  
+                .setAllowedAuthenticators(  
+                    authenticators  
+                )  
+                .build()  
 
-            val promptInfo =
-                BiometricPrompt.PromptInfo.Builder()
-                    .setTitle(
-                        "Desbloquear a área protegida"
-                    )
-                    .setDescription(
-                        "🌸 Apenas a usuária cadastrada pode acessar este local"
-                    )
-                    .setAllowedAuthenticators(
-                        authenticators
-                    )
-                    .build()
 
+        biometricPrompt.authenticate(  
+            promptInfo  
+        )  
+    }  
+}  
 
-            biometricPrompt.authenticate(
-                promptInfo
-            )
-        }
-    }
 
+// =========================================================  
+// BIOMETRIA — PRINCESA  
+// =========================================================  
 
-    // =========================================================
-    // BIOMETRIA — PRINCESA
-    // =========================================================
+@JavascriptInterface  
+fun iniciarBiometriaPrincesa() {  
 
-    @JavascriptInterface
-    fun iniciarBiometriaPrincesa() {
+    destinoBiometria =  
+        1  
 
-        destinoBiometria =
-            1
 
+    iniciarBiometria()  
+}  
 
-        iniciarBiometria()
-    }
 
+// =========================================================  
+// BIOMETRIA — PRÍNCIPE  
+// =========================================================  
 
-    // =========================================================
-    // BIOMETRIA — PRÍNCIPE
-    // =========================================================
+@JavascriptInterface  
+fun iniciarBiometriaPrincipe() {  
 
-    @JavascriptInterface
-    fun iniciarBiometriaPrincipe() {
+    destinoBiometria =  
+        2  
 
-        destinoBiometria =
-            2
 
+    iniciarBiometria()  
+}  
 
-        iniciarBiometria()
-    }
 
+// =========================================================  
+// BIOMETRIA — AMOR  
+// =========================================================  
 
-    // =========================================================
-    // BIOMETRIA — AMOR
-    // =========================================================
+@JavascriptInterface  
+fun iniciarBiometriaAmor() {  
 
-    @JavascriptInterface
-    fun iniciarBiometriaAmor() {
+    destinoBiometria =  
+        3  
 
-        destinoBiometria =
-            3
 
+    iniciarBiometria()  
+}  
 
-        iniciarBiometria()
-    }
 
+// =========================================================  
+// BIOMETRIA — MÚSICA  
+// =========================================================  
 
-    // =========================================================
-    // BIOMETRIA — MÚSICA
-    // =========================================================
+@JavascriptInterface  
+fun iniciarBiometriaMusica() {  
 
-    @JavascriptInterface
-    fun iniciarBiometriaMusica() {
+    destinoBiometria =  
+        4  
 
-        destinoBiometria =
-            4
 
+    iniciarBiometria()  
+}  
 
-        iniciarBiometria()
-    }
 
+// =========================================================  
+// FULLSCREEN  
+// =========================================================  
 
-    // =========================================================
-    // FULLSCREEN
-    // =========================================================
+@JavascriptInterface  
+fun ativarFullscreen() {  
 
-    @JavascriptInterface
-    fun ativarFullscreen() {
+    val window =  
+        window  
 
-        val window =
-            window
 
+    val decorView =  
+        window.decorView  
 
-        val decorView =
-            window.decorView
 
+    WindowCompat.setDecorFitsSystemWindows(  
+        window,  
+        false  
+    )  
 
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
-        )
 
+    val controller =  
+        WindowCompat.getInsetsController(  
+            window,  
+            decorView  
+        )  
 
-        val controller =
-            WindowCompat.getInsetsController(
-                window,
-                decorView
-            )
 
+    controller.systemBarsBehavior =  
+        WindowInsetsControllerCompat  
+            .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE  
 
-        controller.systemBarsBehavior =
-            WindowInsetsControllerCompat
-                .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
+    controller.hide(  
+        WindowInsetsCompat.Type.systemBars()  
+    )  
 
-        controller.hide(
-            WindowInsetsCompat.Type.systemBars()
-        )
 
+    @Suppress("DEPRECATION")  
+    decorView.systemUiVisibility =  
+        View.SYSTEM_UI_FLAG_FULLSCREEN or  
+        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or  
+        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or  
+        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or  
+        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or  
+        View.SYSTEM_UI_FLAG_LAYOUT_STABLE  
 
-        @Suppress("DEPRECATION")
-        decorView.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_FULLSCREEN or
-            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 
+    @Suppress("DEPRECATION")  
+    window.addFlags(  
+        WindowManager.LayoutParams.FLAG_FULLSCREEN  
+    )  
 
-        @Suppress("DEPRECATION")
-        window.addFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
 
+    decorView.post {  
 
-        decorView.post {
+        controller.hide(  
+            WindowInsetsCompat.Type.systemBars()  
+        )  
 
-            controller.hide(
-                WindowInsetsCompat.Type.systemBars()
-            )
 
+        @Suppress("DEPRECATION")  
+        decorView.systemUiVisibility =  
+            View.SYSTEM_UI_FLAG_FULLSCREEN or  
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or  
+            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or  
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or  
+            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or  
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE  
+    }  
 
-            @Suppress("DEPRECATION")
-            decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-        }
 
+    decorView.postDelayed({  
 
-        decorView.postDelayed({
+        controller.hide(  
+            WindowInsetsCompat.Type.systemBars()  
+        )  
 
-            controller.hide(
-                WindowInsetsCompat.Type.systemBars()
-            )
+    }, 100)  
+}  
 
-        }, 100)
-    }
 
+@JavascriptInterface  
+fun desativarFullscreen() {  
 
-    @JavascriptInterface
-    fun desativarFullscreen() {
+    val window =  
+        window  
 
-        val window =
-            window
 
+    val decorView =  
+        window.decorView  
 
-        val decorView =
-            window.decorView
 
+    val controller =  
+        WindowCompat.getInsetsController(  
+            window,  
+            decorView  
+        )  
 
-        val controller =
-            WindowCompat.getInsetsController(
-                window,
-                decorView
-            )
 
+    controller.show(  
+        WindowInsetsCompat.Type.systemBars()  
+    )  
 
-        controller.show(
-            WindowInsetsCompat.Type.systemBars()
-        )
 
+    controller.isAppearanceLightStatusBars =  
+        false  
 
-        controller.isAppearanceLightStatusBars =
-            false
 
+    controller.isAppearanceLightNavigationBars =  
+        false  
 
-        controller.isAppearanceLightNavigationBars =
-            false
 
+    @Suppress("DEPRECATION")  
+    decorView.systemUiVisibility =  
+        View.SYSTEM_UI_FLAG_VISIBLE  
 
-        @Suppress("DEPRECATION")
-        decorView.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_VISIBLE
 
+    @Suppress("DEPRECATION")  
+    window.clearFlags(  
+        WindowManager.LayoutParams.FLAG_FULLSCREEN  
+    )  
+}  
 
-        @Suppress("DEPRECATION")
-        window.clearFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
-    }
 
+// =========================================================  
+// LIGAÇÃO DIRETA  
+// =========================================================  
 
-    // =========================================================
-    // LIGAÇÃO DIRETA
-    // =========================================================
+@JavascriptInterface  
+fun ligarDireto(  
+    numero: String  
+) {  
 
-    @JavascriptInterface
-    fun ligarDireto(
-        numero: String
-    ) {
+    if (  
+        numero.isBlank()  
+    ) {  
 
-        if (
-            numero.isBlank()
-        ) {
+        return  
+    }  
 
-            return
-        }
 
+    try {  
 
-        try {
+        val intent =  
+            Intent(  
+                Intent.ACTION_CALL  
+            ).apply {  
 
-            val intent =
-                Intent(
-                    Intent.ACTION_CALL
-                ).apply {
+                data =  
+                    Uri.parse(  
+                        "tel:$numero"  
+                    )  
+            }  
 
-                    data =
-                        Uri.parse(
-                            "tel:$numero"
-                        )
-                }
 
+        if (  
+            ContextCompat.checkSelfPermission(  
+                this,  
+                Manifest.permission.CALL_PHONE  
+            ) ==  
+            PackageManager.PERMISSION_GRANTED  
+        ) {  
 
-            if (
-                ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.CALL_PHONE
-                ) ==
-                PackageManager.PERMISSION_GRANTED
-            ) {
+            startActivity(  
+                intent  
+            )  
 
-                startActivity(
-                    intent
-                )
+        } else {  
 
-            } else {
+            Toast.makeText(  
+                this,  
+                "Permissão de ligação não concedida",  
+                Toast.LENGTH_SHORT  
+            ).show()  
+        }  
 
-                Toast.makeText(
-                    this,
-                    "Permissão de ligação não concedida",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+    } catch (  
+        e: Exception  
+    ) {  
 
-        } catch (
-            e: Exception
-        ) {
+        e.printStackTrace()  
 
-            e.printStackTrace()
 
+        val fallback =  
+            Intent(  
+                Intent.ACTION_DIAL  
+            ).apply {  
 
-            val fallback =
-                Intent(
-                    Intent.ACTION_DIAL
-                ).apply {
+                data =  
+                    Uri.parse(  
+                        "tel:$numero"  
+                    )  
+            }  
 
-                    data =
-                        Uri.parse(
-                            "tel:$numero"
-                        )
-                }
 
+        startActivity(  
+            fallback  
+        )  
+    }  
+}  
+  
+  
+  
+// =========================================================
 
-            startActivity(
-                fallback
-            )
-        }
-    }
-    
-    
-    
-    // =========================================================
 // AVISAR ESTADO AO HTML
 // =========================================================
 
 private fun avisarEstadoAoHtml(
-    recurso: String,
-    ativo: Boolean
+recurso: String,
+ativo: Boolean
 ) {
 
-    webView.post {
+webView.post {  
 
-        webView.evaluateJavascript(
-            """
-            window.dispatchEvent(
-                new CustomEvent(
-                    "estadoAndroid",
-                    {
-                        detail: {
-                            recurso: "$recurso",
-                            ativo: $ativo
-                        }
-                    }
-                )
-            );
-            """.trimIndent(),
-            null
-        )
-    }
+    webView.evaluateJavascript(  
+        """  
+        window.dispatchEvent(  
+            new CustomEvent(  
+                "estadoAndroid",  
+                {  
+                    detail: {  
+                        recurso: "$recurso",  
+                        ativo: $ativo  
+                    }  
+                }  
+            )  
+        );  
+        """.trimIndent(),  
+        null  
+    )  
+}
+
 }
 
 private fun avisarPalmasConcluidas() {
 
-    webView.post {
+webView.post {  
 
-        webView.evaluateJavascript(
-            """
-            if (
-                typeof window.palmasConcluidas ===
-                "function"
-            ) {
-                window.palmasConcluidas();
-            }
-            """.trimIndent(),
-            null
-        )
-    }
+    webView.evaluateJavascript(  
+        """  
+        if (  
+            typeof window.palmasConcluidas ===  
+            "function"  
+        ) {  
+            window.palmasConcluidas();  
+        }  
+        """.trimIndent(),  
+        null  
+    )  
+}
+
 }
 
 // =========================================================
@@ -1965,146 +1969,98 @@ private fun avisarPalmasConcluidas() {
 @JavascriptInterface
 fun verificarPermissoes() {
 
-    verificarPermissoesParaJS()
-}
+verificarPermissoesParaJS()
 
+}
 
 private fun verificarPermissoesParaJS() {
 
-    val totalPermissoes = 6
+val faltando = mutableListOf<String>()  
 
-    var permissoesConcedidas = 0
+if (  
+    ContextCompat.checkSelfPermission(  
+        this,  
+        Manifest.permission.READ_CONTACTS  
+    ) != PackageManager.PERMISSION_GRANTED  
+) {  
+    faltando.add(Manifest.permission.READ_CONTACTS)  
+}  
 
-    // =====================================================
-    // MICROFONE
-    // =====================================================
+val localizacaoFine =  
+    ContextCompat.checkSelfPermission(  
+        this,  
+        Manifest.permission.ACCESS_FINE_LOCATION  
+    ) == PackageManager.PERMISSION_GRANTED  
 
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.RECORD_AUDIO
-        ) == PackageManager.PERMISSION_GRANTED
-    ) {
-        permissoesConcedidas++
-    }
+val localizacaoCoarse =  
+    ContextCompat.checkSelfPermission(  
+        this,  
+        Manifest.permission.ACCESS_COARSE_LOCATION  
+    ) == PackageManager.PERMISSION_GRANTED  
 
+if (!localizacaoFine && !localizacaoCoarse) {  
+    faltando.add(Manifest.permission.ACCESS_FINE_LOCATION)  
+}  
 
-    // =====================================================
-    // LOCALIZAÇÃO
-    // FINE + COARSE = 1 PERMISSÃO LÓGICA
-    // =====================================================
+if (  
+    ContextCompat.checkSelfPermission(  
+        this,  
+        Manifest.permission.RECORD_AUDIO  
+    ) != PackageManager.PERMISSION_GRANTED  
+) {  
+    faltando.add(Manifest.permission.RECORD_AUDIO)  
+}  
 
-    val fineConcedida =
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
+if (  
+    ContextCompat.checkSelfPermission(  
+        this,  
+        Manifest.permission.CALL_PHONE  
+    ) != PackageManager.PERMISSION_GRANTED  
+) {  
+    faltando.add(Manifest.permission.CALL_PHONE)  
+}  
 
-    val coarseConcedida =
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
+webView.post {  
 
-    if (
-        fineConcedida || coarseConcedida
-    ) {
-        permissoesConcedidas++
-    }
+    if (faltando.isNotEmpty()) {  
 
+        val json = faltando.joinToString(  
+            prefix = "[\"",  
+            postfix = "\"]",  
+            separator = "\",\""  
+        )  
 
-    // =====================================================
-    // NOTIFICAÇÕES
-    // =====================================================
+        webView.evaluateJavascript(  
+            """  
+            window.dispatchEvent(  
+                new CustomEvent(  
+                    "permissoesFaltando",  
+                    {  
+                        detail: {  
+                            permissoes: $json  
+                        }  
+                    }  
+                )  
+            );  
+            """.trimIndent(),  
+            null  
+        )  
 
-    if (
-        Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.POST_NOTIFICATIONS
-        ) == PackageManager.PERMISSION_GRANTED
-    ) {
-        permissoesConcedidas++
-    }
+    } else {  
 
+        webView.evaluateJavascript(  
+            """  
+            window.dispatchEvent(  
+                new CustomEvent(  
+                    "todasPermissoesOK"  
+                )  
+            );  
+            """.trimIndent(),  
+            null  
+        )  
+    }  
+}
 
-    // =====================================================
-    // AGENDA / CALENDÁRIO
-    // =====================================================
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.READ_CALENDAR
-        ) == PackageManager.PERMISSION_GRANTED
-    ) {
-        permissoesConcedidas++
-    }
-
-
-    // =====================================================
-    // CONTATOS
-    // =====================================================
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.READ_CONTACTS
-        ) == PackageManager.PERMISSION_GRANTED
-    ) {
-        permissoesConcedidas++
-    }
-
-
-    // =====================================================
-    // TELEFONE
-    // =====================================================
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.CALL_PHONE
-        ) == PackageManager.PERMISSION_GRANTED
-    ) {
-        permissoesConcedidas++
-    }
-
-
-    // =====================================================
-    // RESULTADO
-    // =====================================================
-
-    webView.post {
-
-        if (
-            permissoesConcedidas < totalPermissoes
-        ) {
-
-            webView.evaluateJavascript(
-                """
-                window.dispatchEvent(
-                    new CustomEvent(
-                        "permissoesFaltando"
-                    )
-                );
-                """.trimIndent(),
-                null
-            )
-
-        } else {
-
-            webView.evaluateJavascript(
-                """
-                window.dispatchEvent(
-                    new CustomEvent(
-                        "todasPermissoesOK"
-                    )
-                );
-                """.trimIndent(),
-                null
-            )
-        }
-    }
 }
 
 // =========================================================
@@ -2113,87 +2069,89 @@ private fun verificarPermissoesParaJS() {
 
 override fun onResume() {
 
-    super.onResume()
+super.onResume()  
 
-    if (
-        ::webView.isInitialized &&
-        webView.url != null
-    ) {
+if (  
+    ::webView.isInitialized &&  
+    webView.url != null  
+) {  
 
-        verificarPermissoesParaJS()
-    }
+    verificarPermissoesParaJS()  
 }
 
-    // =========================================================
-    // PEGAR LOCALIZAÇÃO
-    // =========================================================
+}
 
-    @JavascriptInterface
-    fun pegarLocalizacao() {
+// =========================================================  
+// PEGAR LOCALIZAÇÃO  
+// =========================================================  
 
-        if (
-            ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) !=
-            PackageManager.PERMISSION_GRANTED
-        ) {
+@JavascriptInterface  
+fun pegarLocalizacao() {  
 
-            Toast.makeText(
-                this,
-                "Permissão de localização não concedida",
-                Toast.LENGTH_SHORT
-            ).show()
+    if (  
+        ActivityCompat.checkSelfPermission(  
+            this,  
+            Manifest.permission.ACCESS_FINE_LOCATION  
+        ) !=  
+        PackageManager.PERMISSION_GRANTED  
+    ) {  
 
-
-            return
-        }
+        Toast.makeText(  
+            this,  
+            "Permissão de localização não concedida",  
+            Toast.LENGTH_SHORT  
+        ).show()  
 
 
-        locationClient.lastLocation
-            .addOnSuccessListener {
-
-                location ->
-
-                if (
-                    location != null
-                ) {
-
-                    val lat =
-                        location.latitude
+        return  
+    }  
 
 
-                    val lng =
-                        location.longitude
+    locationClient.lastLocation  
+        .addOnSuccessListener {  
+
+            location ->  
+
+            if (  
+                location != null  
+            ) {  
+
+                val lat =  
+                    location.latitude  
 
 
-                    val js =
-                        "receberLocalizacao($lat,$lng)"
+                val lng =  
+                    location.longitude  
 
 
-                    webView.evaluateJavascript(
-                        js,
-                        null
-                    )
-
-                } else {
-
-                    Toast.makeText(
-                        this,
-                        "Não foi possível obter a localização.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
+                val js =  
+                    "receberLocalizacao($lat,$lng)"  
 
 
-            .addOnFailureListener {
+                webView.evaluateJavascript(  
+                    js,  
+                    null  
+                )  
 
-                Toast.makeText(
-                    this,
-                    "Erro ao obter localização.",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-    }
+            } else {  
+
+                Toast.makeText(  
+                    this,  
+                    "Não foi possível obter a localização.",  
+                    Toast.LENGTH_SHORT  
+                ).show()  
+            }  
+        }  
+
+
+        .addOnFailureListener {  
+
+            Toast.makeText(  
+                this,  
+                "Erro ao obter localização.",  
+                Toast.LENGTH_SHORT  
+            ).show()  
+        }  
+}
+
 }

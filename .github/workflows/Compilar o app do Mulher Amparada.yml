@@ -93,7 +93,7 @@ jobs:
       # COMPILAR APK
       # =========================================================
 
-            - name: Compilar APK
+      - name: Compilar APK
         id: compilar_apk
         working-directory: ${{ env.App1_DIR }}
         run: |

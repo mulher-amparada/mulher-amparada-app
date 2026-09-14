@@ -376,7 +376,7 @@ class TiltBrightnessController(
         }
 
         isDark = true
-
+enabled = false
         /*
          * Para o microfone imediatamente.
          */

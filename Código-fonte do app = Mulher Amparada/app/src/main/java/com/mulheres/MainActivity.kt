@@ -910,54 +910,55 @@ class MainActivity : AppCompatActivity() {
 
     private fun executarAcaoShake() {
 
-        if (
-            !protecaoAtiva
-        ) {
-            return
-        }
-
-
-        val agora =
-            System.currentTimeMillis()
-
-
-        if (
-            agora - ultimoShake <= 4000
-        ) {
-            return
-        }
-
-
-        ultimoShake =
-            agora
-
-
-        try {
-
-            val intent =
-                Intent(
-                    Intent.ACTION_DIAL
-                ).apply {
-
-                    data =
-                        Uri.parse(
-                            "tel:180"
-                        )
-                }
-
-
-            startActivity(
-                intent
-            )
-
-        } catch (
-            e: Exception
-        ) {
-
-            e.printStackTrace()
-        }
+    if (!protecaoAtiva) {
+        return
     }
 
+    val agora =
+        System.currentTimeMillis()
+
+    if (agora - ultimoShake <= 4000) {
+        return
+    }
+
+    ultimoShake =
+        agora
+
+    try {
+
+        val intent =
+            Intent(
+                Intent.ACTION_DIAL
+            ).apply {
+
+                data =
+                    Uri.parse(
+                        "tel:180"
+                    )
+            }
+
+        startActivity(intent)
+
+        // =====================================================
+        // AÇÃO CONCLUÍDA → DESATIVAR PROTEÇÃO
+        // =====================================================
+
+        protecaoAtiva = false
+
+        pararSensor()
+
+        avisarEstadoAoHtml(
+            "movimento",
+            false
+        )
+
+    } catch (
+        e: Exception
+    ) {
+
+        e.printStackTrace()
+    }
+}
 
     // =========================================================
     // MICROFONE — FALLBACK
@@ -1243,6 +1244,11 @@ class MainActivity : AppCompatActivity() {
             PICK_CONTACT
         )
     }
+    
+    // =========================================================
+    // PALMAS
+    // =========================================================
+    
 
 @JavascriptInterface
 fun ativarPalmas() {
@@ -1260,6 +1266,11 @@ fun ativarPalmas() {
             Toast.LENGTH_LONG
         ).show()
 
+        avisarEstadoAoHtml(
+            "palmas",
+            false
+        )
+
         return
     }
 
@@ -1270,56 +1281,66 @@ fun ativarPalmas() {
         )
 
     startForegroundService(intent)
+
+    avisarEstadoAoHtml(
+        "palmas",
+        true
+    )
+}
+
+@JavascriptInterface
+fun desativarPalmas() {
+
+    stopService(
+        Intent(
+            this,
+            PalmaService::class.java
+        )
+    )
+
+    avisarEstadoAoHtml(
+        "palmas",
+        false
+    )
+
+    Toast.makeText(
+        this,
+        "Proteção por palmas desativada",
+        Toast.LENGTH_SHORT
+    ).show()
 }
 
     // =========================================================
     // PROTEÇÃO POR CHACOALHAR
     // =========================================================
+@JavascriptInterface
+fun ativarProtecao() {
 
-    @JavascriptInterface
-    fun ativarProtecao() {
+    if (!protecaoAtiva) {
 
-        if (
-            !protecaoAtiva
-        ) {
+        protecaoAtiva = true
 
-            protecaoAtiva =
-                true
+        iniciarSensor()
 
-
-            iniciarSensor()
-        }
-    }
-
-
-    @JavascriptInterface
-    fun desativarPalmas() {
-
-        stopService(
-            Intent(
-                this,
-                PalmaService::class.java
-            )
+        avisarEstadoAoHtml(
+            "movimento",
+            true
         )
-
-
-        Toast.makeText(
-            this,
-            "Proteção por palmas desativada",
-            Toast.LENGTH_SHORT
-        ).show()
     }
+}
 
+@JavascriptInterface
+fun desativarProtecao() {
 
-    @JavascriptInterface
-    fun desativarProtecao() {
+    protecaoAtiva = false
 
-        protecaoAtiva =
-            false
+    pararSensor()
 
-
-        pararSensor()
-    }
+    avisarEstadoAoHtml(
+        "movimento",
+        false
+    )
+}
 
 
     // =========================================================
@@ -1772,8 +1793,39 @@ fun ativarPalmas() {
     
     
     // =========================================================
-    // PERMISSÕES 
+    // AVISAR AO HTML 
     // =========================================================
+    
+    // =========================================================
+// AVISAR ESTADO AO HTML
+// =========================================================
+
+private fun avisarEstadoAoHtml(
+    recurso: String,
+    ativo: Boolean
+) {
+
+    webView.post {
+
+        webView.evaluateJavascript(
+            """
+            window.dispatchEvent(
+                new CustomEvent(
+                    "estadoAndroid",
+                    {
+                        detail: {
+                            recurso: "$recurso",
+                            ativo: $ativo
+                        }
+                    }
+                )
+            );
+            """.trimIndent(),
+            null
+        )
+    }
+}
+
 // =========================================================
 // PERMISSÕES
 // =========================================================

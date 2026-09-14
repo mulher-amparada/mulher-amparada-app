@@ -24,11 +24,23 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
 import android.webkit.JavascriptInterface
+import android.media.MediaRecorder
 
 class WebAppInterface(
     private val activity: Activity
 ) {
 
+    // =========================================================
+    // BLOQUEIO POR BARULHO
+    // =========================================================
+
+    private var bloqueioRecorder: MediaRecorder? = null
+
+    private var bloqueioThread: Thread? = null
+
+    @Volatile
+    private var bloqueioRodando = false
+    
     private fun safeMainActivityCall(action: (MainActivity) -> Unit) {
         try {
             val act = activity
@@ -39,81 +51,334 @@ class WebAppInterface(
         }
     }
     
-
 @JavascriptInterface
 fun desligarPorBarulho(): Boolean {
 
-   solicitarAdministrador()
+    /*
+     * Solicita o Administrador do dispositivo.
+     *
+     * A função continua tentando iniciar o detector,
+     * mas o bloqueio somente será realizado se o
+     * Administrador estiver realmente ativo.
+     */
+    solicitarAdministrador()
 
     return try {
 
+        /*
+         * Evita criar dois detectores ao mesmo tempo.
+         */
+        if (bloqueioRodando) {
+            return true
+        }
+
+
+        /*
+         * Verifica o microfone.
+         */
+        if (
+            ContextCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+
+            return false
+        }
+
+
+        val arquivoTemporario =
+            java.io.File(
+                activity.cacheDir,
+                "temp_bloqueio.3gp"
+            )
+
+
+        /*
+         * Remove gravação temporária anterior.
+         */
+        try {
+            if (arquivoTemporario.exists()) {
+                arquivoTemporario.delete()
+            }
+        } catch (_: Exception) {
+        }
+
+
         val gravador =
-            android.media.MediaRecorder()
+            MediaRecorder()
+
 
         gravador.setAudioSource(
-            android.media.MediaRecorder.AudioSource.MIC
+            MediaRecorder.AudioSource.MIC
         )
+
 
         gravador.setOutputFormat(
-            android.media.MediaRecorder.OutputFormat.THREE_GPP
+            MediaRecorder.OutputFormat.THREE_GPP
         )
+
 
         gravador.setAudioEncoder(
-            android.media.MediaRecorder.AudioEncoder.AMR_NB
+            MediaRecorder.AudioEncoder.AMR_NB
         )
 
+
         gravador.setOutputFile(
-            activity.cacheDir.absolutePath + "/temp.3gp"
+            arquivoTemporario.absolutePath
         )
+
 
         gravador.prepare()
         gravador.start()
 
-        Thread {
 
-            try {
+        bloqueioRecorder =
+            gravador
 
-                while (true) {
 
-                    val amplitude =
-                        gravador.maxAmplitude
+        bloqueioRodando =
+            true
 
-                    if (amplitude >= 18000) {
 
-                        gravador.stop()
-                        gravador.release()
-
-                        val intent =
-                            Intent(
-                                activity,
-                                MyDeviceAdminReceiver::class.java
-                            ).apply {
-                                action =
-                                    "com.mulheres.BLOQUEAR_CELULAR"
-                            }
-
-                        activity.sendBroadcast(intent)
-
-                        break
-                    }
-
-                    Thread.sleep(100)
-                }
-
-            } catch (_: Exception) {
+        bloqueioThread =
+            Thread {
 
                 try {
-                    gravador.release()
+
+                    while (
+                        bloqueioRodando
+                    ) {
+
+                        val amplitude =
+                            try {
+                                gravador.maxAmplitude
+                            } catch (_: Exception) {
+                                0
+                            }
+
+
+                        /*
+                         * Som alto detectado.
+                         */
+                        if (
+                            amplitude >= 18000
+                        ) {
+
+                            /*
+                             * Primeiro encerramos o detector.
+                             */
+                            bloqueioRodando =
+                                false
+
+
+                            try {
+                                gravador.stop()
+                            } catch (_: Exception) {
+                            }
+
+
+                            try {
+                                gravador.release()
+                            } catch (_: Exception) {
+                            }
+
+
+                            bloqueioRecorder =
+                                null
+
+
+                            /*
+                             * Executa o bloqueio.
+                             */
+                            val intent =
+                                Intent(
+                                    activity,
+                                    MyDeviceAdminReceiver::class.java
+                                ).apply {
+
+                                    action =
+                                        "com.mulheres.BLOQUEAR_CELULAR"
+                                }
+
+
+                            activity.sendBroadcast(
+                                intent
+                            )
+
+
+                            /*
+                             * A ação foi concluída:
+                             * o detector não deve continuar ativo.
+                             *
+                             * Avisamos a página HTML para
+                             * atualizar o switch e salvar false.
+                             */
+                            activity.runOnUiThread {
+
+                                try {
+
+                                    activity
+                                        .findViewById<WebView>(
+                                            R.id.webview
+                                        )
+                                        ?.evaluateJavascript(
+                                            """
+                                            if (
+                                                typeof window.bloqueioPorBarulhoConcluido ===
+                                                'function'
+                                            ) {
+                                                window.bloqueioPorBarulhoConcluido();
+                                            }
+                                            """.trimIndent(),
+                                            null
+                                        )
+
+                                } catch (_: Exception) {
+                                }
+                            }
+
+
+                            break
+                        }
+
+
+                        Thread.sleep(100)
+                    }
+
                 } catch (_: Exception) {
+
+                    /*
+                     * Se ocorrer algum erro, encerra
+                     * o detector para não deixá-lo preso.
+                     */
+
+                } finally {
+
+                    if (
+                        !bloqueioRodando
+                    ) {
+
+                        try {
+                            bloqueioRecorder?.release()
+                        } catch (_: Exception) {
+                        }
+
+                        bloqueioRecorder =
+                            null
+                    }
                 }
 
+            }.apply {
+
+                name =
+                    "MulherAmparada-BloqueioPorBarulho"
+
+                start()
             }
 
-        }.start()
 
         true
 
-    } catch (_: Exception) {
+    } catch (e: Exception) {
+
+        e.printStackTrace()
+
+
+        bloqueioRodando =
+            false
+
+
+        try {
+            bloqueioRecorder?.release()
+        } catch (_: Exception) {
+        }
+
+
+        bloqueioRecorder =
+            null
+
+
+        false
+    }
+}
+
+@JavascriptInterface
+fun pararBloqueio(): Boolean {
+
+    return try {
+
+        /*
+         * Se já estiver parado, não há nada para fazer.
+         */
+        if (!bloqueioRodando) {
+
+            bloqueioRecorder = null
+
+            return true
+        }
+
+
+        /*
+         * Sinaliza para a thread encerrar.
+         */
+        bloqueioRodando =
+            false
+
+
+        /*
+         * Para e libera o MediaRecorder.
+         */
+        try {
+            bloqueioRecorder?.stop()
+        } catch (_: Exception) {
+        }
+
+
+        try {
+            bloqueioRecorder?.reset()
+        } catch (_: Exception) {
+        }
+
+
+        try {
+            bloqueioRecorder?.release()
+        } catch (_: Exception) {
+        }
+
+
+        bloqueioRecorder =
+            null
+
+
+        bloqueioThread =
+            null
+
+
+        /*
+         * Remove a gravação temporária.
+         */
+        try {
+
+            val arquivo =
+                java.io.File(
+                    activity.cacheDir,
+                    "temp_bloqueio.3gp"
+                )
+
+            if (arquivo.exists()) {
+                arquivo.delete()
+            }
+
+        } catch (_: Exception) {
+        }
+
+
+        true
+
+    } catch (e: Exception) {
+
+        e.printStackTrace()
 
         false
     }

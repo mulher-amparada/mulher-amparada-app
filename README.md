@@ -64,9 +64,17 @@ Em:
 
 /settings/secrets and variables/actions/repository secrets/
 
-E o app já está na versão:
+## Sobre as atualizações do app:
+
+O app já está na versão:
 
 "🌸33 (versão final)"
+
+ele tem o TargetSdkVersion 37
+
+ele tem o CompileSdkVersion 37
+
+Versão agp no toml de 9.4.0 e versão kotlin de 2.4.20
 
 ## Sobre como eu automatizo o projeto:
 

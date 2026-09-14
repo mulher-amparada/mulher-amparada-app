@@ -739,8 +739,12 @@ class MainActivity : AppCompatActivity() {
                         """.trimIndent(),
                         null
                     )
+                    
+                                                verificarPermissoesParaJS()
                 }
+
             }
+
     }
 
 
@@ -1770,211 +1774,105 @@ fun ativarPalmas() {
     // =========================================================
     // PERMISSÕES 
     // =========================================================
+// =========================================================
+// PERMISSÕES
+// =========================================================
+
+@JavascriptInterface
+fun verificarPermissoes() {
+
+    verificarPermissoesParaJS()
+}
+
 
 private fun verificarPermissoesParaJS() {
 
     val permissoes = arrayOf(
+
         Manifest.permission.READ_CONTACTS,
+
         Manifest.permission.ACCESS_FINE_LOCATION,
+
         Manifest.permission.ACCESS_COARSE_LOCATION,
+
         Manifest.permission.RECORD_AUDIO,
+
         Manifest.permission.CALL_PHONE
+
     )
 
-    val faltando = permissoes.filter {
-        ContextCompat.checkSelfPermission(
-            this,
-            it
-        ) != PackageManager.PERMISSION_GRANTED
-    }
 
-    val json = faltando.joinToString(
-        prefix = "[\"",
-        postfix = "\"]",
-        separator = "\",\""
-    )
+    val faltando =
+        permissoes.filter { permissao ->
 
-    if (faltando.isNotEmpty()) {
+            ContextCompat.checkSelfPermission(
+                this,
+                permissao
+            ) != PackageManager.PERMISSION_GRANTED
 
-        webView.evaluateJavascript(
-            """
-            window.dispatchEvent(new CustomEvent("permissoesFaltando", {
-                detail: {
-                    permissoes: $json
-                }
-            }));
-            """.trimIndent(),
-            null
-        )
+        }
 
-    } else {
 
-        webView.evaluateJavascript(
-            """
-            window.dispatchEvent(new CustomEvent("todasPermissoesOK"));
-            """.trimIndent(),
-            null
-        )
+    webView.post {
+
+        if (faltando.isNotEmpty()) {
+
+            val json =
+                faltando.joinToString(
+                    prefix = "[\"",
+                    postfix = "\"]",
+                    separator = "\",\""
+                )
+
+
+            webView.evaluateJavascript(
+                """
+                window.dispatchEvent(
+                    new CustomEvent(
+                        "permissoesFaltando",
+                        {
+                            detail: {
+                                permissoes: $json
+                            }
+                        }
+                    )
+                );
+                """.trimIndent(),
+                null
+            )
+
+        } else {
+
+            webView.evaluateJavascript(
+                """
+                window.dispatchEvent(
+                    new CustomEvent(
+                        "todasPermissoesOK"
+                    )
+                );
+                """.trimIndent(),
+                null
+            )
+        }
     }
 }
 
-    // =========================================================
-    // RESULTADO DO CONTATO
-    // =========================================================
+// =========================================================
+// VERIFICAR PERMISSÕES AO VOLTAR PARA O APP
+// =========================================================
 
-    override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?
+override fun onResume() {
+
+    super.onResume()
+
+    if (
+        ::webView.isInitialized &&
+        webView.url != null
     ) {
 
-        super.onActivityResult(
-            requestCode,
-            resultCode,
-            data
-        )
-
-
-        if (
-            requestCode ==
-            PICK_CONTACT &&
-            resultCode ==
-            RESULT_OK
-        ) {
-
-            val uri =
-                data?.data
-                    ?: return
-
-
-            val cursor =
-                contentResolver.query(
-                    uri,
-                    null,
-                    null,
-                    null,
-                    null
-                )
-
-
-            if (
-                cursor != null &&
-                cursor.moveToFirst()
-            ) {
-
-                val numeroIndex =
-                    cursor.getColumnIndex(
-                        "data1"
-                    )
-
-
-                val nomeIndex =
-                    cursor.getColumnIndex(
-                        "display_name"
-                    )
-
-
-                val numero =
-                    if (
-                        numeroIndex >= 0
-                    ) {
-
-                        cursor.getString(
-                            numeroIndex
-                        )
-                            ?.replace(
-                                Regex("\\s"),
-                                ""
-                            )
-                            ?.replace(
-                                "-",
-                                ""
-                            )
-                            ?: ""
-
-                    } else {
-
-                        ""
-                    }
-
-
-                val nome =
-                    if (
-                        nomeIndex >= 0
-                    ) {
-
-                        cursor.getString(
-                            nomeIndex
-                        ) ?: "Contato"
-
-                    } else {
-
-                        "Contato"
-                    }
-
-
-                val listaAtual =
-                    cripto.carregar(
-                        "contatos_lista"
-                    )
-
-
-                val nomesAtual =
-                    cripto.carregar(
-                        "contatos_nomes"
-                    )
-
-
-                val novaLista =
-                    if (
-                        listaAtual.isEmpty()
-                    ) {
-
-                        numero
-
-                    } else {
-
-                        "$listaAtual,$numero"
-                    }
-
-
-                val novosNomes =
-                    if (
-                        nomesAtual.isEmpty()
-                    ) {
-
-                        "$nome - $numero"
-
-                    } else {
-
-                        "$nomesAtual\n$nome - $numero"
-                    }
-
-
-                cripto.salvar(
-                    "contatos_lista",
-                    novaLista
-                )
-
-
-                cripto.salvar(
-                    "contatos_nomes",
-                    novosNomes
-                )
-
-
-                cursor.close()
-
-
-                Toast.makeText(
-                    this,
-                    "Contato salvo",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
+        verificarPermissoesParaJS()
     }
-
+}
 
     // =========================================================
     // PEGAR LOCALIZAÇÃO

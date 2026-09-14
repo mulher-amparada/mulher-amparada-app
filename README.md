@@ -76,6 +76,8 @@ ele tem o CompileSdkVersion 37
 
 Versão agp no toml de 9.4.0 e versão kotlin de 2.4.20
 
+e ele tem o jetpack compose e estilo via xml ativados!
+
 ## Sobre como eu automatizo o projeto:
 
 E eu também já consegui configurar um ssh na conta, e 2fa nela tambem, e com o ssh, eu consegui mover pastas inteiras para o repositório, e transformei 4 em 1, e mais de 100 commits em 1,

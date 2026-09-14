@@ -1464,10 +1464,12 @@ palmasSwitch.addEventListener(
                 palmasAtiva =
                     true;
 
+
                 salvarEstado(
                     "estado_palmas",
                     true
                 );
+
 
                 atualizarPalmasUI(
                     true
@@ -1496,10 +1498,12 @@ palmasSwitch.addEventListener(
                 palmasAtiva =
                     false;
 
+
                 salvarEstado(
                     "estado_palmas",
                     false
                 );
+
 
                 atualizarPalmasUI(
                     false
@@ -1835,12 +1839,6 @@ window.addEventListener(
             e.detail === "dark"
         ) {
 
-            /*
-             * A ação foi executada.
-             * O escurecimento deixa de ficar
-             * marcado como recurso ativo.
-             */
-
             brilhoAtivo =
                 false;
 
@@ -1860,11 +1858,8 @@ window.addEventListener(
         ) {
 
             /*
-             * A tela voltou ao brilho normal.
-             *
-             * Não alteramos o estado aqui,
-             * porque "normal" é somente o estado
-             * visual da tela.
+             * "normal" representa apenas
+             * o brilho visual da tela.
              */
 
         }
@@ -2145,6 +2140,34 @@ window.addEventListener(
         }
     }
 );
+
+
+/* =========================================================
+   PROTEÇÃO POR PALMAS — AÇÃO CONCLUÍDA
+========================================================= */
+
+window.palmasConcluidas =
+    function () {
+
+        palmasAtiva =
+            false;
+
+
+        salvarEstado(
+            "estado_palmas",
+            false
+        );
+
+
+        atualizarPalmasUI(
+            false
+        );
+
+
+        console.log(
+            "Proteção por palmas desativada após conclusão da ligação."
+        );
+    };
 
 
 /* =========================================================

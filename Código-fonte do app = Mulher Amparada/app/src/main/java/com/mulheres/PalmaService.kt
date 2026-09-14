@@ -13,7 +13,8 @@ import androidx.core.content.ContextCompat
 import kotlinx.coroutines.*
 import kotlin.math.abs
 import kotlin.math.max
-
+import android.telephony.PhoneStateListener
+import android.telephony.TelephonyManager
 
 class PalmaService : Service() {
 
@@ -21,15 +22,66 @@ class PalmaService : Service() {
     private var recorder: AudioRecord? = null
     private var rodando = true
     private var ultimaPalma: Long = 0
+private lateinit var telephonyManager: TelephonyManager
+private var chamadaIniciada = false
 
+private val listenerLigacao =
+    object : PhoneStateListener() {
+
+        override fun onCallStateChanged(
+            state: Int,
+            phoneNumber: String?
+        ) {
+            super.onCallStateChanged(
+                state,
+                phoneNumber
+            )
+
+            when (state) {
+
+                TelephonyManager.CALL_STATE_OFFHOOK -> {
+                    chamadaIniciada = true
+                }
+
+                TelephonyManager.CALL_STATE_IDLE -> {
+
+                    if (chamadaIniciada) {
+
+                        chamadaIniciada = false
+
+                        rodando = false
+
+                        try {
+                            recorder?.stop()
+                        } catch (_: Exception) {
+                        }
+
+                        try {
+                            recorder?.release()
+                        } catch (_: Exception) {
+                        }
+
+                        recorder = null
+
+                        avisarPalmasConcluidas()
+
+                        stopSelf()
+                    }
+                }
+            }
+        }
+    }
 
     override fun onCreate() {
-        super.onCreate()
+    super.onCreate()
 
-        criarCanal()
-        iniciarForeground()
-        iniciarDeteccao()
-    }
+    criarCanal()
+    iniciarForeground()
+
+    iniciarMonitorLigacao()
+
+    iniciarDeteccao()
+}
 
 
     override fun onStartCommand(
@@ -304,12 +356,52 @@ class PalmaService : Service() {
         }
     }
 
+@Suppress("DEPRECATION")
+private fun iniciarMonitorLigacao() {
 
+    telephonyManager =
+        getSystemService(
+            TelephonyManager::class.java
+        )
+
+    if (
+        ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.READ_PHONE_STATE
+        ) != android.content.pm.PackageManager.PERMISSION_GRANTED
+    ) {
+        return
+    }
+
+    telephonyManager.listen(
+        listenerLigacao,
+        PhoneStateListener.LISTEN_CALL_STATE
+    )
+}
+
+private fun avisarPalmasConcluidas() {
+
+    val intent = Intent(
+        "com.mulheres.PALMAS_CONCLUIDAS"
+    )
+
+    sendBroadcast(intent)
+}
 
     override fun onDestroy() {
 
+
+
         rodando = false
 
+@Suppress("DEPRECATION")
+try {
+    telephonyManager.listen(
+        listenerLigacao,
+        PhoneStateListener.LISTEN_NONE
+    )
+} catch (_: Exception) {
+}
 
         try {
 

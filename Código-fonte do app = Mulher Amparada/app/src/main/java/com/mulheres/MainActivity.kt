@@ -1,5 +1,7 @@
 package com.mulheres
 
+import android.telephony.TelephonyManager
+import android.telephony.PhoneStateListener
 import android.Manifest
 import android.app.DownloadManager
 import android.app.admin.DevicePolicyManager
@@ -63,6 +65,12 @@ class MainActivity : AppCompatActivity() {
     // =========================================================
     // VARIÁVEIS
     // =========================================================
+
+private var palmasEmExecucao = false
+
+private lateinit var telephonyManager: TelephonyManager
+
+private var telefoneListener: PhoneStateListener? = null
 
     private var acelerometro: Sensor? = null
 
@@ -1274,6 +1282,10 @@ fun ativarPalmas() {
         return
     }
 
+    palmasEmExecucao = false
+
+    monitorarFimDaLigacao()
+
     val intent =
         Intent(
             this,
@@ -1287,7 +1299,6 @@ fun ativarPalmas() {
         true
     )
 }
-
 @JavascriptInterface
 fun desativarPalmas() {
 
@@ -1308,6 +1319,104 @@ fun desativarPalmas() {
         "Proteção por palmas desativada",
         Toast.LENGTH_SHORT
     ).show()
+}
+
+private val receptorPalmasConcluidas =
+    object : android.content.BroadcastReceiver() {
+
+        override fun onReceive(
+            context: android.content.Context?,
+            intent: android.content.Intent?
+        ) {
+
+            if (
+                intent?.action ==
+                "com.mulheres.PALMAS_CONCLUIDAS"
+            ) {
+
+                webView.post {
+
+                    webView.evaluateJavascript(
+                        """
+                        if (
+                            typeof window.palmasConcluidas ===
+                            "function"
+                        ) {
+                            window.palmasConcluidas();
+                        }
+                        """.trimIndent(),
+                        null
+                    )
+                }
+            }
+        }
+
+private fun monitorarFimDaLigacao() {
+
+    if (!::telephonyManager.isInitialized) {
+
+        telephonyManager =
+            getSystemService(
+                Context.TELEPHONY_SERVICE
+            ) as TelephonyManager
+    }
+
+    telefoneListener =
+        object : PhoneStateListener() {
+
+            override fun onCallStateChanged(
+                state: Int,
+                phoneNumber: String?
+            ) {
+
+                super.onCallStateChanged(
+                    state,
+                    phoneNumber
+                )
+
+                if (
+                    state ==
+                    TelephonyManager.CALL_STATE_OFFHOOK
+                ) {
+                    palmasEmExecucao = true
+                }
+
+                if (
+                    state ==
+                    TelephonyManager.CALL_STATE_IDLE &&
+                    palmasEmExecucao
+                ) {
+
+                    palmasEmExecucao = false
+
+                    avisarPalmasConcluidas()
+
+                    try {
+
+                        telephonyManager.listen(
+                            telefoneListener,
+                            PhoneStateListener.LISTEN_NONE
+                        )
+
+                    } catch (_: Exception) {
+                    }
+
+                    telefoneListener = null
+                }
+            }
+        }
+
+    try {
+
+        telephonyManager.listen(
+            telefoneListener,
+            PhoneStateListener.LISTEN_CALL_STATE
+        )
+
+    } catch (e: Exception) {
+
+        e.printStackTrace()
+    }
 }
 
     // =========================================================
@@ -1792,9 +1901,6 @@ fun desativarProtecao() {
     }
     
     
-    // =========================================================
-    // AVISAR AO HTML 
-    // =========================================================
     
     // =========================================================
 // AVISAR ESTADO AO HTML
@@ -1820,6 +1926,24 @@ private fun avisarEstadoAoHtml(
                     }
                 )
             );
+            """.trimIndent(),
+            null
+        )
+    }
+}
+
+private fun avisarPalmasConcluidas() {
+
+    webView.post {
+
+        webView.evaluateJavascript(
+            """
+            if (
+                typeof window.palmasConcluidas ===
+                "function"
+            ) {
+                window.palmasConcluidas();
+            }
             """.trimIndent(),
             null
         )

@@ -79,36 +79,36 @@ jobs:
           java-version: "17"
           cache: gradle
           
-      # =========================================================
-      # INSTALAR ANDROID SDK 37
+            # =========================================================
+      # VERIFICAR ANDROID SDK 37
       # =========================================================
 
-      - name: Instalar Android SDK 37
+      - name: Verificar Android SDK 37
         run: |
 
-          SDKMANAGER=$(find "$ANDROID_HOME/cmdline-tools" \
-            -type f \
-            -name "sdkmanager" \
-            | head -n 1)
+          echo "ANDROID_HOME:"
+          echo "$ANDROID_HOME"
 
-          if [ -z "$SDKMANAGER" ]; then
-            echo "ERRO: sdkmanager não encontrado."
-            echo "ANDROID_HOME=$ANDROID_HOME"
-            find "$ANDROID_HOME/cmdline-tools" -maxdepth 3 -type f 2>/dev/null || true
+          echo ""
+          echo "Plataformas Android instaladas:"
+          ls -la "$ANDROID_HOME/platforms"
+
+          echo ""
+          echo "Plataformas 37 disponíveis:"
+          find "$ANDROID_HOME/platforms" \
+            -maxdepth 1 \
+            -type d \
+            -name "android-37*"
+
+          if ! find "$ANDROID_HOME/platforms" \
+            -maxdepth 1 \
+            -type d \
+            -name "android-37*" \
+            | grep -q .; then
+
+            echo "ERRO: nenhuma plataforma Android 37 encontrada."
             exit 1
           fi
-
-          echo "sdkmanager encontrado:"
-          echo "$SDKMANAGER"
-
-          yes | "$SDKMANAGER" --licenses > /dev/null || true
-
-          "$SDKMANAGER" "platforms;android-37"
-
-          echo "Android SDK 37 instalado."
-
-          "$SDKMANAGER" --list_installed \
-            | grep "platforms;android-37"
 
       # =========================================================
       # PERMISSÃO DO GRADLE

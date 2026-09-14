@@ -78,7 +78,7 @@ jobs:
           distribution: temurin
           java-version: "17"
           cache: gradle
-
+          
       # =========================================================
       # INSTALAR ANDROID SDK 37
       # =========================================================
@@ -86,13 +86,29 @@ jobs:
       - name: Instalar Android SDK 37
         run: |
 
-          yes | sdkmanager --licenses > /dev/null || true
+          SDKMANAGER=$(find "$ANDROID_HOME/cmdline-tools" \
+            -type f \
+            -name "sdkmanager" \
+            | head -n 1)
 
-          sdkmanager "platforms;android-37" \
-                     "build-tools;35.0.0"
+          if [ -z "$SDKMANAGER" ]; then
+            echo "ERRO: sdkmanager não encontrado."
+            echo "ANDROID_HOME=$ANDROID_HOME"
+            find "$ANDROID_HOME/cmdline-tools" -maxdepth 3 -type f 2>/dev/null || true
+            exit 1
+          fi
+
+          echo "sdkmanager encontrado:"
+          echo "$SDKMANAGER"
+
+          yes | "$SDKMANAGER" --licenses > /dev/null || true
+
+          "$SDKMANAGER" "platforms;android-37"
 
           echo "Android SDK 37 instalado."
 
+          "$SDKMANAGER" --list_installed \
+            | grep "platforms;android-37"
 
       # =========================================================
       # PERMISSÃO DO GRADLE

@@ -1971,43 +1971,60 @@ fun verificarPermissoes() {
 
 private fun verificarPermissoesParaJS() {
 
-    val permissoes = arrayOf(
+    val faltando = mutableListOf<String>()
 
-        Manifest.permission.READ_CONTACTS,
+    if (
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.READ_CONTACTS
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+        faltando.add(Manifest.permission.READ_CONTACTS)
+    }
 
-        Manifest.permission.ACCESS_FINE_LOCATION,
+    val localizacaoFine =
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
 
-        Manifest.permission.ACCESS_COARSE_LOCATION,
+    val localizacaoCoarse =
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
 
-        Manifest.permission.RECORD_AUDIO,
+    if (!localizacaoFine && !localizacaoCoarse) {
+        faltando.add(Manifest.permission.ACCESS_FINE_LOCATION)
+    }
 
-        Manifest.permission.CALL_PHONE
+    if (
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.RECORD_AUDIO
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+        faltando.add(Manifest.permission.RECORD_AUDIO)
+    }
 
-    )
-
-
-    val faltando =
-        permissoes.filter { permissao ->
-
-            ContextCompat.checkSelfPermission(
-                this,
-                permissao
-            ) != PackageManager.PERMISSION_GRANTED
-
-        }
-
+    if (
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.CALL_PHONE
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+        faltando.add(Manifest.permission.CALL_PHONE)
+    }
 
     webView.post {
 
         if (faltando.isNotEmpty()) {
 
-            val json =
-                faltando.joinToString(
-                    prefix = "[\"",
-                    postfix = "\"]",
-                    separator = "\",\""
-                )
-
+            val json = faltando.joinToString(
+                prefix = "[\"",
+                postfix = "\"]",
+                separator = "\",\""
+            )
 
             webView.evaluateJavascript(
                 """

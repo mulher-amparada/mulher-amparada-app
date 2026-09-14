@@ -633,6 +633,16 @@ Portanto, a documentação do projeto não deve dizer que “o Administrador do 
 
 O aplicativo utiliza somente a capacidade necessária para o seu mecanismo de proteção, sem depender das funções administrativas antigas, como alteração de senha ou outras políticas que foram descontinuadas.
 
+Por que o WebView do app não trata "intent" para abrir outros aplicativos?
+
+Por questões de segurança e privacidade.
+
+Permitir que páginas dentro do WebView utilizem "intent" livremente para abrir outros aplicativos ou executar ações externas poderia aumentar os riscos de comportamentos inesperados, abuso de links e rastreamento de usuários.
+
+Links também podem conter parâmetros de rastreamento, redirecionamentos e outros mecanismos capazes de identificar ou acompanhar a navegação.
+
+Por isso, o WebView mantém esse comportamento limitado. A exceção é a tela de aplicativos, que possui uma função específica e um fluxo controlado pelo próprio app.
+
 ----
 
 ## Bibliografia

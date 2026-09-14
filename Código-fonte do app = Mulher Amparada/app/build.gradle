@@ -1,14 +1,15 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.plugin.compose'
 }
 
 android {
-        namespace 'com.mulheres'
+    namespace 'com.mulheres'
     compileSdk 36
 
     defaultConfig {
-                applicationId "com.mulheres"
+        applicationId "com.mulheres"
         minSdk 23
         targetSdk 36
 
@@ -42,9 +43,9 @@ android {
     }
 
     buildFeatures {
-    compose true
-    viewBinding true
-}
+        compose true
+        viewBinding true
+    }
 
     packaging {
         resources {
@@ -79,7 +80,15 @@ dependencies {
     // Lifecycle
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.9.1'
 
-    
+    // Jetpack Compose
+    implementation platform('androidx.compose:compose-bom:2025.08.01')
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.activity:activity-compose'
+    implementation 'androidx.lifecycle:lifecycle-runtime-compose'
+
+    debugImplementation 'androidx.compose.ui:ui-tooling'
 
     // ZIP4J
     implementation 'net.lingala.zip4j:zip4j:2.11.5'
@@ -88,14 +97,4 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
-
-// Jetpack Compose
-implementation platform('androidx.compose:compose-bom:2025.08.01')
-implementation 'androidx.compose.ui:ui'
-implementation 'androidx.compose.ui:ui-tooling-preview'
-implementation 'androidx.compose.material3:material3'
-implementation 'androidx.activity:activity-compose'
-implementation 'androidx.lifecycle:lifecycle-runtime-compose'
-
-debugImplementation 'androidx.compose.ui:ui-tooling'
 }

@@ -6,15 +6,15 @@ plugins {
 
 android {
     namespace 'com.mulheres'
-    compileSdk 36
+    compileSdk 37
 
     defaultConfig {
         applicationId "com.mulheres"
         minSdk 23
-        targetSdk 36
+        targetSdk 37
 
-        versionCode 32
-        versionName "32"
+        versionCode 33
+        versionName "🌸33 (versão final)"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 

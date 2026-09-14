@@ -1971,71 +1971,120 @@ fun verificarPermissoes() {
 
 private fun verificarPermissoesParaJS() {
 
-    val faltando = mutableListOf<String>()
+    val totalPermissoes = 6
 
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.READ_CONTACTS
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        faltando.add(Manifest.permission.READ_CONTACTS)
-    }
+    var permissoesConcedidas = 0
 
-    val localizacaoFine =
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-
-    val localizacaoCoarse =
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-
-    if (!localizacaoFine && !localizacaoCoarse) {
-        faltando.add(Manifest.permission.ACCESS_FINE_LOCATION)
-    }
+    // =====================================================
+    // MICROFONE
+    // =====================================================
 
     if (
         ContextCompat.checkSelfPermission(
             this,
             Manifest.permission.RECORD_AUDIO
-        ) != PackageManager.PERMISSION_GRANTED
+        ) == PackageManager.PERMISSION_GRANTED
     ) {
-        faltando.add(Manifest.permission.RECORD_AUDIO)
+        permissoesConcedidas++
     }
+
+
+    // =====================================================
+    // LOCALIZAÇÃO
+    // FINE + COARSE = 1 PERMISSÃO LÓGICA
+    // =====================================================
+
+    val fineConcedida =
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+    val coarseConcedida =
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+    if (
+        fineConcedida || coarseConcedida
+    ) {
+        permissoesConcedidas++
+    }
+
+
+    // =====================================================
+    // NOTIFICAÇÕES
+    // =====================================================
+
+    if (
+        Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.POST_NOTIFICATIONS
+        ) == PackageManager.PERMISSION_GRANTED
+    ) {
+        permissoesConcedidas++
+    }
+
+
+    // =====================================================
+    // AGENDA / CALENDÁRIO
+    // =====================================================
+
+    if (
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.READ_CALENDAR
+        ) == PackageManager.PERMISSION_GRANTED
+    ) {
+        permissoesConcedidas++
+    }
+
+
+    // =====================================================
+    // CONTATOS
+    // =====================================================
+
+    if (
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.READ_CONTACTS
+        ) == PackageManager.PERMISSION_GRANTED
+    ) {
+        permissoesConcedidas++
+    }
+
+
+    // =====================================================
+    // TELEFONE
+    // =====================================================
 
     if (
         ContextCompat.checkSelfPermission(
             this,
             Manifest.permission.CALL_PHONE
-        ) != PackageManager.PERMISSION_GRANTED
+        ) == PackageManager.PERMISSION_GRANTED
     ) {
-        faltando.add(Manifest.permission.CALL_PHONE)
+        permissoesConcedidas++
     }
+
+
+    // =====================================================
+    // RESULTADO
+    // =====================================================
 
     webView.post {
 
-        if (faltando.isNotEmpty()) {
-
-            val json = faltando.joinToString(
-                prefix = "[\"",
-                postfix = "\"]",
-                separator = "\",\""
-            )
+        if (
+            permissoesConcedidas < totalPermissoes
+        ) {
 
             webView.evaluateJavascript(
                 """
                 window.dispatchEvent(
                     new CustomEvent(
-                        "permissoesFaltando",
-                        {
-                            detail: {
-                                permissoes: $json
-                            }
-                        }
+                        "permissoesFaltando"
                     )
                 );
                 """.trimIndent(),

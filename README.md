@@ -54,15 +54,19 @@ Na primeira página do site, tem 3 botoes que ligam para (180, 190 e 192), e usa
 
 e os apps são compilados com o workflow, gera o código sha-256 e o zip com o app, envia para a release pela tag correspondente, e atualiza o link das páginas de download, e o tamanho do apk dessas páginas!
 
-no repositório tem um yml que ativa todos os dias, procura no codigo fonte dos 3 apps o arquivo build do módulo do app, e se ele ver que saiu uma versão android nova, ele atualiza, totalmente sozinho!, mantendo os APKs sincronizados com as versões do código-fonte detectadas pelo workflow.
-
 e todas as activitys tem o android exported="false", menos a MainActivity porque a partir das versões mais recentes do android, a tela inicial do app, se ela tiver um intent filter, ela tem que estar obrigatoriamente com android exported="true"
 
 E o workflow utiliza um keystore de assinatura armazenado de forma protegida nos GitHub Actions Secrets. As informações necessárias para acessar o keystore e selecionar a chave são fornecidas pelas variáveis KEYSTORE_BASE64, KEYSTORE_PASSWORD, KEY_ALIAS e KEY_PASSWORD.
 
+
+
 Em:
 
 /settings/secrets and variables/actions/repository secrets/
+
+E o app já está na versão:
+
+"🌸33 (versão final)"
 
 ## Sobre como eu automatizo o projeto:
 

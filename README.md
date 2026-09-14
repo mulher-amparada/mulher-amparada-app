@@ -58,8 +58,6 @@ e todas as activitys tem o android exported="false", menos a MainActivity porque
 
 E o workflow utiliza um keystore de assinatura armazenado de forma protegida nos GitHub Actions Secrets. As informações necessárias para acessar o keystore e selecionar a chave são fornecidas pelas variáveis KEYSTORE_BASE64, KEYSTORE_PASSWORD, KEY_ALIAS e KEY_PASSWORD.
 
-
-
 Em:
 
 /settings/secrets and variables/actions/repository secrets/

@@ -79,6 +79,20 @@ jobs:
           java-version: "17"
           cache: gradle
 
+      # =========================================================
+      # INSTALAR ANDROID SDK 37
+      # =========================================================
+
+      - name: Instalar Android SDK 37
+        run: |
+
+          yes | sdkmanager --licenses > /dev/null || true
+
+          sdkmanager "platforms;android-37" \
+                     "build-tools;35.0.0"
+
+          echo "Android SDK 37 instalado."
+
 
       # =========================================================
       # PERMISSÃO DO GRADLE

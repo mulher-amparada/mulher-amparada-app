@@ -1765,7 +1765,58 @@ fun ativarPalmas() {
             )
         }
     }
+    
+    
+    // =========================================================
+    // PERMISSÕES 
+    // =========================================================
 
+private fun verificarPermissoesParaJS() {
+
+    val permissoes = arrayOf(
+        Manifest.permission.READ_CONTACTS,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.RECORD_AUDIO,
+        Manifest.permission.CALL_PHONE
+    )
+
+    val faltando = permissoes.filter {
+        ContextCompat.checkSelfPermission(
+            this,
+            it
+        ) != PackageManager.PERMISSION_GRANTED
+    }
+
+    val json = faltando.joinToString(
+        prefix = "[\"",
+        postfix = "\"]",
+        separator = "\",\""
+    )
+
+    if (faltando.isNotEmpty()) {
+
+        webView.evaluateJavascript(
+            """
+            window.dispatchEvent(new CustomEvent("permissoesFaltando", {
+                detail: {
+                    permissoes: $json
+                }
+            }));
+            """.trimIndent(),
+            null
+        )
+
+    } else {
+
+        webView.evaluateJavascript(
+            """
+            window.dispatchEvent(new CustomEvent("todasPermissoesOK"));
+            """.trimIndent(),
+            null
+        )
+    }
+}
 
     // =========================================================
     // RESULTADO DO CONTATO

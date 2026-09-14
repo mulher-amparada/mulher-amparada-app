@@ -1350,6 +1350,80 @@ private val receptorPalmasConcluidas =
                 }
             }
         }
+    }
+
+
+private fun monitorarFimDaLigacao() {
+
+    if (!::telephonyManager.isInitialized) {
+
+        telephonyManager =
+            getSystemService(
+                Context.TELEPHONY_SERVICE
+            ) as TelephonyManager
+    }
+
+    telefoneListener =
+        object : PhoneStateListener() {
+
+            override fun onCallStateChanged(
+                state: Int,
+                phoneNumber: String?
+            ) {
+
+                super.onCallStateChanged(
+                    state,
+                    phoneNumber
+                )
+
+                if (
+                    state ==
+                    TelephonyManager.CALL_STATE_OFFHOOK
+                ) {
+
+                    palmasEmExecucao =
+                        true
+                }
+
+                if (
+                    state ==
+                    TelephonyManager.CALL_STATE_IDLE &&
+                    palmasEmExecucao
+                ) {
+
+                    palmasEmExecucao =
+                        false
+
+                    avisarPalmasConcluidas()
+
+                    try {
+
+                        telephonyManager.listen(
+                            telefoneListener,
+                            PhoneStateListener.LISTEN_NONE
+                        )
+
+                    } catch (_: Exception) {
+                    }
+
+                    telefoneListener =
+                        null
+                }
+            }
+        }
+
+    try {
+
+        telephonyManager.listen(
+            telefoneListener,
+            PhoneStateListener.LISTEN_CALL_STATE
+        )
+
+    } catch (e: Exception) {
+
+        e.printStackTrace()
+    }
+}
 
 private fun monitorarFimDaLigacao() {
 

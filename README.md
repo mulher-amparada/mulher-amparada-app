@@ -32,9 +32,9 @@ Antes de conceder essa permissão, leia atentamente as informações exibidas pe
 
 > ⚠️ Sobre as proteções por movimento e escurecimento: caso ocorra alguma falha ou o aparelho da usuária não possua o sensor necessário, o aplicativo utiliza o microfone como alternativa. Ao detectar um barulho alto, a proteção é acionada.
 
-## Sobre as funções por sensores (desligar por barulho, proteção por barulho que liga pro 180, balançar o celular para pedir ajuda e escurecimento por inclinação):
+## Sobre as funções por sensores (bloquear a tela por barulho, proteção por barulho que liga pro 180, balançar o celular para pedir ajuda e escurecimento por inclinação):
 
-A função Desligar por Barulho foi projetada com uma medida adicional de segurança: depois de ser ativada e funcionar de fato, ela permanece ativa até que o usuário decida desativá-la pelo próprio aplicativo.
+A função Bloquear a tela por Barulho foi projetada com uma medida adicional de segurança: depois de ser ativada e funcionar de fato, ela permanece ativa até que o usuário decida desativá-la pelo próprio aplicativo.
 
 Para evitar que o estado da função seja perdido ao sair e retornar à página, o aplicativo salva seu estado de ativação utilizando a classe Cripto. Dessa forma, ao retornar à página, o aplicativo recupera o estado salvo e exibe corretamente se a função está ATIVADA ou DESATIVADA.
 
@@ -151,7 +151,7 @@ com isso, voce pode controlar o brilho da tela clicando em um botão..., porém,
 ----
 
 **Bloquear a tela do celular pelo barulho:**
-ao ativado, ao fazer barulho alto, ele usa o administrador do dispositivo e bloqueia a tela do celular!, e o melhor e que da para ativar essa e a proteção por barulho ao mesmo tempo!, (sim, eu testei isso no dia 06/09/2026, e não só isso, se o agressor jogar o celular e ele não quebrar, a proteção por barulho se tiver ativa em teoria pode iniciar a ligação pro 180!)
+ao ativado, ao fazer barulho alto, ele usa o administrador do dispositivo e bloqueia a tela do celular!
 
 ----
 

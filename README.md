@@ -80,13 +80,9 @@ e ele tem o jetpack compose (embora no app só usei xml até agora, mas ele est�
 
 E eu também já consegui configurar um ssh na conta, e 2fa nela tambem, e com o ssh, eu consegui mover pastas inteiras para o repositório, e transformei 4 em 1, e mais de 100 commits em 1,
 
-e agora a pagina la no GitHub pages faz um deploy a cada 1 hora
-
 e no site, ele conta com 3 botoes que ligam pro 192, 190 e 180 (ai voce escolhe), e eles usam o "tel:" do navegador
 
 e os contatos de confiança, quando são cadrastados eles também são criptografados!
-
-e o bloqueio do celular por barulho é assim: bloqueia, voce desbloqueia e pra ter denovo tem que desativar e ativar denovo!
 
 ## Sobre como foi escrito o texto do biometricPrompt do app:
 

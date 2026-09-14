@@ -40,6 +40,8 @@ Para evitar que o estado da função seja perdido ao sair e retornar à página,
 
 Essa persistência permite que a interface continue refletindo o estado real configurado pelo usuário, mesmo após a navegação entre as páginas do aplicativo.
 
+Mas quando a usuária desativar ou a função ser concluída, na página ele mostra como desativado!
+
 ## Sobre o site que está hospedado pelo github pages:
 
 Na primeira página do site, tem 3 botoes que ligam para (180, 190 e 192), e usam o tel: do navegador para abrir o telefone nativo do celular com esses números já discados de acordo com o que você escolheu!

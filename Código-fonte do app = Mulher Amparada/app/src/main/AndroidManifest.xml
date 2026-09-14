@@ -69,7 +69,8 @@
 
         <activity
             android:name=".MainActivity"
-            
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
             android:exported="true"
             android:autoVerify="true">
 
@@ -102,6 +103,8 @@
 
         <activity
             android:name=".FileActivity"
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
                      android:exported="false" />
 
 
@@ -114,7 +117,8 @@
 
         <activity
             android:name=".GravarActivity"
-            
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
             android:exported="false" />
 
 

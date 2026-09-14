@@ -74,7 +74,7 @@ ele tem o CompileSdkVersion 37
 
 Versão agp no toml de 9.4.0 e versão kotlin de 2.4.20
 
-e ele tem o jetpack compose e estilo via xml ativados!
+e ele tem o jetpack compose (embora no app só usei xml até agora, mas ele está ativado!) e estilo via xml ativados!
 
 ## Sobre como eu automatizo o projeto:
 

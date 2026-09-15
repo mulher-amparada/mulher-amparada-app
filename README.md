@@ -561,39 +561,110 @@ E o webview do app está assim!:
 
 ```kt
 
-val settings = webView.settings  
+val settings =  
+        webView.settings  
 
-webView.overScrollMode = View.OVER_SCROLL_NEVER  
+settings.cacheMode =
+    android.webkit.WebSettings.LOAD_DEFAULT
 
-  webView.isVerticalScrollBarEnabled = false
+settings.loadsImagesAutomatically =
+    true
 
-webView.isFocusable = true
-webView.isFocusableInTouchMode = true
-webView.setOnFocusChangeListener { _, _ -> }
+settings.blockNetworkImage =
+    false
 
-webView.isHorizontalScrollBarEnabled = false
+settings.databaseEnabled =
+    true
 
-webView.scrollBarStyle = View.SCROLLBARS_INSIDE_OVERLAY
+settings.displayZoomControls =
+    false
 
-settings.javaScriptEnabled = true
+settings.builtInZoomControls =
+    false
 
-settings.mediaPlaybackRequiresUserGesture = false
+settings.setSupportZoom(
+    false
+)
 
-settings.domStorageEnabled = true
+settings.textZoom =
+    100
 
-settings.setGeolocationEnabled( true )
+settings.defaultTextEncodingName =
+    "UTF-8"
 
-settings.allowFileAccess = true
+settings.mixedContentMode =
+    android.webkit.WebSettings.MIXED_CONTENT_NEVER_ALLOW
 
-settings.allowContentAccess = false
+    webView.overScrollMode =  
+        View.OVER_SCROLL_NEVER  
 
-settings.allowFileAccessFromFileURLs = false
 
-settings.allowUniversalAccessFromFileURLs = false
+    webView.isVerticalScrollBarEnabled =  
+        false  
 
-settings.javaScriptCanOpenWindowsAutomatically = false
 
-settings.setSupportMultipleWindows( false )
+    webView.isFocusable =  
+        true  
+
+
+    webView.isFocusableInTouchMode =  
+        true  
+
+
+    webView.setOnFocusChangeListener {  
+            _,  
+            _ ->  
+    }  
+
+
+    webView.isHorizontalScrollBarEnabled =  
+        false  
+
+
+    webView.scrollBarStyle =  
+        View.SCROLLBARS_INSIDE_OVERLAY  
+
+
+    settings.javaScriptEnabled =  
+        true  
+
+
+    settings.mediaPlaybackRequiresUserGesture =  
+        false  
+
+
+    settings.domStorageEnabled =  
+        true  
+
+
+    settings.setGeolocationEnabled(  
+        true  
+    )  
+
+
+    settings.allowFileAccess =  
+        true  
+
+
+    settings.allowContentAccess =  
+        false  
+
+
+    settings.allowFileAccessFromFileURLs =  
+        false  
+
+
+    settings.allowUniversalAccessFromFileURLs =  
+        false  
+
+
+    settings.javaScriptCanOpenWindowsAutomatically =  
+        false  
+
+
+    settings.setSupportMultipleWindows(  
+        false  
+    )  
 
 ```
 

@@ -252,9 +252,9 @@ override fun onCreate(
         !pagina.isNullOrEmpty()  
     ) {  
 
-        webView.loadUrl(  
-            pagina  
-        )  
+webView.loadUrl(
+    "file:///android_asset/user1/$pagina"
+)
 
     } else {  
 
@@ -397,6 +397,36 @@ private fun configurarWebView() {
     val settings =  
         webView.settings  
 
+settings.cacheMode =
+    android.webkit.WebSettings.LOAD_DEFAULT
+
+settings.loadsImagesAutomatically =
+    true
+
+settings.blockNetworkImage =
+    false
+
+settings.databaseEnabled =
+    true
+
+settings.displayZoomControls =
+    false
+
+settings.builtInZoomControls =
+    false
+
+settings.setSupportZoom(
+    false
+)
+
+settings.textZoom =
+    100
+
+settings.defaultTextEncodingName =
+    "UTF-8"
+
+settings.mixedContentMode =
+    android.webkit.WebSettings.MIXED_CONTENT_NEVER_ALLOW
 
     webView.overScrollMode =  
         View.OVER_SCROLL_NEVER  
@@ -668,6 +698,19 @@ private fun configurarWebView() {
                 return false  
             }  
 
+override fun onPageCommitVisible(
+    view: WebView?,
+    url: String?
+) {
+    super.onPageCommitVisible(
+        view,
+        url
+    )
+
+    view?.post {
+        view.alpha = 1f
+    }
+}
 
             override fun onPageFinished(  
                 view: WebView?,  
@@ -765,8 +808,7 @@ private fun carregarWebView1() {
         "file:///android_asset/user1/index1.html"  
     )  
 
-    webView.visibility =  
-        View.VISIBLE  
+    
 }  
 
 
@@ -776,8 +818,7 @@ private fun carregarWebView4() {
         "file:///android_asset/user1/botao.html"  
     )  
 
-    webView.visibility =  
-        View.VISIBLE  
+    
 }  
 
 

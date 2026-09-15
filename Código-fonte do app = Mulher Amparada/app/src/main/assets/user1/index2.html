@@ -4067,31 +4067,7 @@ function vibrar(duracao = 100) {
 }
 
 
-function chamarAndroid(nome, ...args) {
 
-    try {
-
-        if (
-            window.Android &&
-            typeof window.Android[nome] === "function"
-        ) {
-
-            return window.Android[nome](...args);
-
-        }
-
-    } catch (e) {
-
-        console.warn(
-            "Android." + nome,
-            e
-        );
-
-    }
-
-    return null;
-
-}
 
 
 /* =========================================================

@@ -52,7 +52,7 @@ Na primeira página do site, tem 3 botoes que ligam para (180, 190 e 192), e usa
 
 ## Sobre como o aplicativo é compilado:
 
-e os apps são compilados com o workflow, gera o código sha-256 e o zip com o app, envia para a release pela tag correspondente, e atualiza o link das páginas de download, e o tamanho do apk dessas páginas!
+e os apps são compilados com o workflow, gera o código sha-256 e o zip com o app, envia para a release pela tag correspondente, e atualiza o link da página de download, o código SHA-256, e o tamanho do apk dessas páginas!
 
 e todas as activitys tem o android exported="false", menos a MainActivity porque a partir das versões mais recentes do android, a tela inicial do app, se ela tiver um intent filter, ela tem que estar obrigatoriamente com android exported="true"
 

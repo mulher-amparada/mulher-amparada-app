@@ -1760,23 +1760,83 @@ padding-top: 2.5%;
 }
 
 
+/* =========================================================
+   SELETOR DE COR — ESTILIZADO
+========================================================= */
+
 #colorPicker {
 
-    width: 42px;
+    width: 46px;
 
-    height: 30px;
+    height: 34px;
 
-    padding: 0;
+    padding: 3px;
 
-    border: 0;
+    border:
+        1px solid
+        rgba(255,255,255,.14);
 
-    border-radius: 9px;
+    border-radius: 12px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    cursor: pointer;
 
     overflow: hidden;
 
-    background: transparent;
+    appearance: none;
 
-    cursor: pointer;
+    -webkit-appearance: none;
+
+    transition:
+        transform .18s ease,
+        border-color .18s ease,
+        background .18s ease;
+}
+
+
+#colorPicker:hover {
+
+    border-color:
+        var(--accent-border);
+
+    background:
+        rgba(255,255,255,.09);
+}
+
+
+#colorPicker:active {
+
+    transform:
+        scale(.92);
+}
+
+
+/* Área interna da cor — Chrome / Android WebView */
+
+#colorPicker::-webkit-color-swatch-wrapper {
+
+    padding: 0;
+
+}
+
+
+#colorPicker::-webkit-color-swatch {
+
+    border: none;
+
+    border-radius: 9px;
+}
+
+
+/* Firefox */
+
+#colorPicker::-moz-color-swatch {
+
+    border: none;
+
+    border-radius: 9px;
 }
 
 

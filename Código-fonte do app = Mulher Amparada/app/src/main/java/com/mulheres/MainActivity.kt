@@ -204,6 +204,10 @@ override fun onCreate(
             R.id.webview  
         )  
 
+webView.setLayerType(
+    View.LAYER_TYPE_HARDWARE,
+    null
+)
 
     webView.setBackgroundColor(  
         Color.BLACK  

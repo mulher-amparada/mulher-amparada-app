@@ -33,7 +33,7 @@
 
 *::-webkit-scrollbar-thumb{
     background:transparent;
-    border:none;
+    border:0;
 }
 
 *{
@@ -68,12 +68,16 @@ body::-webkit-scrollbar{
     font-family:"Quicksand",sans-serif;
 }
 
-
 @font-face{
     font-family:"Quicksand";
     src:url("font.ttf") format("truetype");
+    font-display:swap;
 }
 
+
+/* =========================================================
+   VARIÁVEIS
+========================================================= */
 
 :root{
 
@@ -97,27 +101,47 @@ body::-webkit-scrollbar{
     --vermelho:#ff657d;
 
     --raio:26px;
+
+    --sombra:
+        0 14px 40px rgba(0,0,0,.25);
+
+    --transicao:
+        220ms cubic-bezier(.2,.8,.2,1);
 }
 
 
 /* =========================================================
-   BODY
+   BASE
 ========================================================= */
 
 html{
     scroll-behavior:smooth;
+    background:#000;
 }
 
 body{
+
     min-height:100vh;
 
     overflow-x:hidden;
 
     color:var(--texto);
 
-    background:black;
+    background:
+        radial-gradient(
+            circle at 50% -10%,
+            rgba(255,79,120,.055),
+            transparent 38%
+        ),
+        #000;
 
-    padding-top:50px;
+    padding-top:
+        max(
+            50px,
+            env(safe-area-inset-top)
+        );
+
+    -webkit-tap-highlight-color:transparent;
 }
 
 
@@ -129,16 +153,20 @@ body{
 
     width:min(720px,100%);
 
-    padding-top: 16px 50px;
+    margin:0 auto;
+
+    padding:
+        16px
+        12px
+        35px;
 
     opacity:0;
-
-    
 
     animation:
         entrada
         .55s
-        ease both;
+        cubic-bezier(.2,.8,.2,1)
+        both;
 }
 
 
@@ -146,10 +174,12 @@ body{
 
     from{
         opacity:0;
+        transform:translateY(5px);
     }
 
     to{
         opacity:1;
+        transform:translateY(0);
     }
 
 }
@@ -163,8 +193,6 @@ body{
 
     position:relative;
 
-    top:0;
-
     z-index:100;
 
     display:flex;
@@ -173,29 +201,21 @@ body{
 
     justify-content:space-between;
 
-    height:82px;
+    width:100%;
 
-    margin-bottom:8px;
+    min-height:82px;
+
+    margin-bottom:15px;
+
+    padding:
+        0
+        4px;
 
     background:#000;
 
     border-radius:200px;
 
-    width:95%;
-
-    margin:2.5%;
-
-    backdrop-filter:none;
-
-    -webkit-backdrop-filter:none;
-
     isolation:isolate;
-}
-
-
-.topo::before,
-.topo::after{
-    display:none;
 }
 
 
@@ -205,13 +225,21 @@ body{
 
     flex-direction:column;
 
-    gap:3px;
+    justify-content:center;
+
+    gap:4px;
+
+    min-width:0;
+
+    padding-left:4px;
 }
 
 
 .titulo{
 
     font-size:25px;
+
+    line-height:1;
 
     font-weight:800;
 
@@ -220,12 +248,11 @@ body{
     background:
         linear-gradient(
             135deg,
-            #fff,
+            #fff 15%,
             var(--rosa3)
         );
 
     -webkit-background-clip:text;
-
     background-clip:text;
 
     color:transparent;
@@ -234,9 +261,13 @@ body{
 
 .subtitulo{
 
-    font-size:12px;
-
     color:var(--texto3);
+
+    font-size:11px;
+
+    font-weight:600;
+
+    line-height:1.3;
 }
 
 
@@ -250,7 +281,9 @@ body{
 
     align-items:center;
 
-    gap:9px;
+    gap:8px;
+
+    flex-shrink:0;
 }
 
 
@@ -269,23 +302,28 @@ body{
 
     height:48px;
 
+    flex-shrink:0;
+
     border:0;
 
-    border-radius:999px;
+    border-radius:50%;
+
+    outline:none;
 
     cursor:pointer;
 
-    color:white;
-
-    transition:
-        transform .22s ease,
-        box-shadow .22s ease,
-        background .22s ease;
+    color:#fff;
 
     overflow:hidden;
+
+    -webkit-tap-highlight-color:transparent;
+
+    transition:
+        transform var(--transicao),
+        background var(--transicao),
+        border-color var(--transicao),
+        box-shadow var(--transicao);
 }
-
-
 
 
 .botao::after,
@@ -295,19 +333,28 @@ body{
 
     position:absolute;
 
-    width:70%;
+    left:50%;
+    top:50%;
 
+    width:70%;
     height:70%;
 
     border-radius:50%;
 
-    background:rgba(255,255,255,.08);
+    background:
+        rgba(255,255,255,.08);
 
-    filter:blur(12px);
+    filter:blur(14px);
 
-    transform:translateY(35px);
+    transform:
+        translate(-50%,-50%)
+        scale(.65);
 
-    transition:transform .3s ease;
+    opacity:.55;
+
+    transition:
+        transform .3s ease,
+        opacity .3s ease;
 }
 
 
@@ -321,29 +368,35 @@ body{
         );
 
     box-shadow:
-        0 8px 24px rgba(255,79,120,.28);
+        0 8px 25px
+        rgba(255,79,120,.28);
 }
 
 
 .botao:hover{
 
-    transform:
-        
-        
-        scale(1.04);
+    transform:translateY(-2px) scale(1.035);
+
+    box-shadow:
+        0 12px 30px
+        rgba(255,79,120,.36);
 }
 
 
 .botao:hover::after{
 
-    transform:translateY(0);
+    transform:
+        translate(-50%,-50%)
+        scale(1.15);
+
+    opacity:.8;
 }
 
 
 .botao:active,
 .apagar:active{
 
-    transform:scale(.94);
+    transform:scale(.92);
 }
 
 
@@ -353,28 +406,36 @@ body{
 
     z-index:2;
 
-    font-size:30px;
+    font-size:29px;
 
     font-weight:300;
 
     line-height:1;
+
+    transform:translateY(-1px);
 }
 
 
 .apagar{
 
-    background:#111;
+    background:
+        rgba(255,255,255,.055);
 
-    border:1px solid var(--borda);
+    border:
+        1px solid
+        var(--borda);
 }
 
 
 .apagar:hover{
 
     background:
-        rgba(255,75,95,.18);
+        rgba(255,75,95,.14);
 
-    transform:scale(.94);
+    border-color:
+        rgba(255,101,125,.28);
+
+    transform:translateY(-1px);
 }
 
 
@@ -384,9 +445,9 @@ body{
 
     z-index:2;
 
-    width:20px;
+    width:19px;
 
-    height:20px;
+    height:19px;
 
     object-fit:contain;
 }
@@ -401,7 +462,7 @@ body{
     display:grid;
 
     grid-template-columns:
-        repeat(3,1fr);
+        repeat(3,minmax(0,1fr));
 
     gap:9px;
 
@@ -413,11 +474,15 @@ body{
 
     position:relative;
 
+    min-width:0;
+
     min-height:88px;
 
     padding:14px;
 
-    border:1px solid var(--borda);
+    border:
+        1px solid
+        var(--borda);
 
     border-radius:22px;
 
@@ -428,11 +493,19 @@ body{
             rgba(255,255,255,.035)
         );
 
+    box-shadow:
+        inset 0 1px 0
+        rgba(255,255,255,.035);
+
     backdrop-filter:blur(16px);
 
     -webkit-backdrop-filter:blur(16px);
 
     overflow:hidden;
+
+    transition:
+        border-color var(--transicao),
+        transform var(--transicao);
 }
 
 
@@ -442,20 +515,29 @@ body{
 
     position:absolute;
 
-    width:70px;
+    right:-30px;
+    bottom:-32px;
 
-    height:70px;
-
-    right:-28px;
-
-    bottom:-30px;
+    width:80px;
+    height:80px;
 
     border-radius:50%;
 
     background:
-        rgba(255,127,159,.18);
+        rgba(255,127,159,.16);
 
-    filter:blur(4px);
+    filter:blur(7px);
+
+    pointer-events:none;
+}
+
+
+.resumo-card:hover{
+
+    transform:translateY(-2px);
+
+    border-color:
+        rgba(255,127,159,.20);
 }
 
 
@@ -463,11 +545,15 @@ body{
 
     position:relative;
 
+    z-index:1;
+
     color:var(--texto3);
 
-    font-size:11px;
+    font-size:10px;
 
-    font-weight:600;
+    font-weight:700;
+
+    line-height:1.2;
 }
 
 
@@ -475,11 +561,17 @@ body{
 
     position:relative;
 
-    margin-top:5px;
+    z-index:1;
+
+    margin-top:6px;
 
     font-size:23px;
 
+    line-height:1;
+
     font-weight:800;
+
+    letter-spacing:-.5px;
 }
 
 
@@ -487,11 +579,15 @@ body{
 
     position:relative;
 
-    margin-top:1px;
+    z-index:1;
+
+    margin-top:4px;
 
     color:var(--texto3);
 
     font-size:9px;
+
+    line-height:1.2;
 }
 
 
@@ -521,45 +617,69 @@ body{
 
     height:46px;
 
-    padding:0 16px;
+    padding:
+        0
+        16px;
 
-    border:1px solid var(--borda);
+    border:
+        1px solid
+        var(--borda);
 
     border-radius:999px;
 
     outline:none;
 
-    color:white;
+    color:#fff;
 
     background:
-        rgba(255,255,255,.07);
+        rgba(255,255,255,.065);
 
-    font-size:13px;
+    font-size:12px;
+
+    font-weight:600;
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(255,255,255,.025);
 
     transition:
-        border .2s,
-        background .2s;
+        border-color var(--transicao),
+        background var(--transicao),
+        box-shadow var(--transicao);
 }
 
 
 .busca::placeholder{
 
-    color:var(--texto3);
+    color:
+        rgba(255,255,255,.30);
+}
+
+
+.busca:hover{
+
+    background:
+        rgba(255,255,255,.08);
 }
 
 
 .busca:focus{
 
     border-color:
-        rgba(255,127,159,.5);
+        rgba(255,127,159,.50);
 
     background:
-        rgba(255,255,255,.10);
+        rgba(255,255,255,.095);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(255,127,159,.07);
 }
+
 
 /* =========================================================
    DROPDOWN CUSTOMIZADO
-   HTML + CSS — SEM SELECT NATIVO
+   MANTIDO SEM ALTERAÇÃO FUNCIONAL
 ========================================================= */
 
 .ordenar-wrapper{
@@ -573,10 +693,6 @@ body{
     z-index:50;
 }
 
-
-/* =========================================================
-   BOTÃO
-========================================================= */
 
 .ordenar-botao{
 
@@ -593,11 +709,9 @@ body{
     height:46px;
 
     padding:
-        0 15px
         0 42px
-        0 16px;
-        
-        padding-left: 15px;
+        0 15px;
+
     border:
         1px solid
         var(--borda);
@@ -606,10 +720,9 @@ body{
 
     outline:none;
 
-    color:white;
+    color:#fff;
 
-    background:
-        #111;
+    background:#111;
 
     font-family:"Quicksand",sans-serif;
 
@@ -619,36 +732,28 @@ body{
 
     cursor:pointer;
 
-    
     transition:
         background .2s ease,
         border-color .2s ease,
         box-shadow .2s ease;
 }
 
-.ordenar-botao {
-    
+
+.ordenar-botao:hover{
+
+    border-color:
+        rgba(255,192,203,.5);
 }
 
-.ordenar-botao:hover {
-    border: 1px solid rgba(255, 192, 203, 0.5);
-}
-
-
-/* =========================================================
-   SETA
-========================================================= */
 
 .ordenar-seta{
 
     position:absolute;
 
     right:14px;
-
     top:50%;
 
     width:17px;
-
     height:17px;
 
     transform:
@@ -665,8 +770,6 @@ body{
 }
 
 
-/* SETA ABERTA */
-
 .ordenar-wrapper.aberto
 .ordenar-seta{
 
@@ -674,13 +777,13 @@ body{
         translateY(-50%)
         rotate(180deg);
 
-    color:
-        var(--rosa3);
+    color:var(--rosa3);
 }
 
 
 /* =========================================================
-   MENU
+   MENU DE OPÇÕES
+   NÃO ALTERADO
 ========================================================= */
 
 .menu-ordenar{
@@ -701,9 +804,7 @@ body{
 
     border-radius:20px;
 
-    background: #111;
-
-
+    background:#111;
 
     opacity:0;
 
@@ -715,8 +816,7 @@ body{
         translateY(-6px)
         scale(.97);
 
-    transform-origin:
-        top center;
+    transform-origin:top center;
 
     transition:
         opacity .18s ease,
@@ -724,10 +824,6 @@ body{
         visibility .18s ease;
 }
 
-
-/* =========================================================
-   MENU ABERTO
-========================================================= */
 
 .ordenar-wrapper.aberto
 .menu-ordenar{
@@ -737,14 +833,8 @@ body{
     visibility:visible;
 
     pointer-events:auto;
-
-    
 }
 
-
-/* =========================================================
-   OPÇÕES
-========================================================= */
 
 .opcao-ordenar{
 
@@ -758,8 +848,7 @@ body{
 
     min-height:42px;
 
-    padding:
-        0 11px;
+    padding:0 11px;
 
     border:0;
 
@@ -790,64 +879,26 @@ body{
 
 .opcao-ordenar:hover{
 
-    color:white;
-
-    
+    color:#fff;
 }
 
 
 .opcao-ordenar:active{
 
     background:
-        rgba(255, 192, 203, 0.5);
+        rgba(255,192,203,.5);
 }
 
-
-/* =========================================================
-   OPÇÃO SELECIONADA
-========================================================= */
 
 .opcao-ordenar.ativa{
 
-    color:white;
+    color:#fff;
 
-    background: rgba(255, 192, 203, 0.5);
+    background:
+        rgba(255,192,203,.5);
 }
 
 
-
-
-
-
-/* =========================================================
-   RESPONSIVO
-========================================================= */
-
-@media(max-width:560px){
-
-    .ordenar-wrapper{
-
-        width:100%;
-
-    }
-
-
-    .ordenar-botao{
-
-        width:100%;
-
-    }
-
-
-    .menu-ordenar{
-
-        top:calc(100% + 7px);
-
-        border-radius:18px;
-
-    }
-
-}
 /* =========================================================
    LISTA
 ========================================================= */
@@ -858,7 +909,6 @@ body{
 
     flex-direction:column;
 
-
     gap:10px;
 }
 
@@ -867,23 +917,53 @@ body{
 
     position:relative;
 
-    padding:45px 20px;
+    padding:
+        45px
+        20px;
 
     text-align:center;
 
-    border:1px dashed
+    border:
+        1px dashed
         rgba(255,255,255,.13);
 
     border-radius:28px;
 
     background:
         rgba(255,255,255,.035);
+
+    overflow:hidden;
+}
+
+
+.vazio::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+    top:-80px;
+
+    width:160px;
+    height:160px;
+
+    border-radius:50%;
+
+    background:
+        rgba(255,127,159,.06);
+
+    filter:blur(25px);
+
+    transform:translateX(-50%);
 }
 
 
 .vazio-icone{
 
-    font-size:38px;
+    position:relative;
+
+    font-size:36px;
 
     margin-bottom:10px;
 }
@@ -891,24 +971,30 @@ body{
 
 .vazio-titulo{
 
+    position:relative;
+
     font-size:16px;
 
-    font-weight:700;
+    font-weight:800;
 }
 
 
 .vazio-texto{
 
+    position:relative;
+
     margin-top:5px;
 
     color:var(--texto3);
 
-    font-size:12px;
+    font-size:11px;
+
+    line-height:1.5;
 }
 
 
 /* =========================================================
-   CARD
+   CARD DE REGISTRO
 ========================================================= */
 
 .card{
@@ -923,11 +1009,15 @@ body{
 
     min-height:88px;
 
-    padding:14px 15px;
+    padding:
+        14px
+        15px;
 
     padding-right:68px;
 
-    border:1px solid var(--borda);
+    border:
+        1px solid
+        var(--borda);
 
     border-radius:26px;
 
@@ -937,6 +1027,10 @@ body{
             rgba(255,255,255,.105),
             rgba(255,255,255,.045)
         );
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(255,255,255,.035);
 
     backdrop-filter:blur(16px);
 
@@ -949,14 +1043,14 @@ body{
     animation:
         cardEntrada
         .45s
-        ease
+        cubic-bezier(.2,.8,.2,1)
         both;
 
     transition:
-        transform .25s ease,
-        border-color .25s ease,
-        background .25s ease,
-        box-shadow .25s ease;
+        transform var(--transicao),
+        border-color var(--transicao),
+        background var(--transicao),
+        box-shadow var(--transicao);
 }
 
 
@@ -964,12 +1058,13 @@ body{
 
     from{
         opacity:0;
+        transform:translateY(7px);
     }
 
     to{
         opacity:1;
+        transform:translateY(0);
     }
-
 }
 
 
@@ -980,15 +1075,16 @@ body{
     position:absolute;
 
     left:0;
-
     top:12px;
-
     bottom:12px;
 
     width:3px;
 
     border-radius:
-        0 5px 5px 0;
+        0
+        5px
+        5px
+        0;
 
     background:
         linear-gradient(
@@ -996,6 +1092,10 @@ body{
             var(--rosa),
             var(--rosa2)
         );
+
+    box-shadow:
+        0 0 14px
+        rgba(255,79,120,.20);
 }
 
 
@@ -1005,13 +1105,11 @@ body{
 
     position:absolute;
 
-    width:120px;
-
-    height:120px;
-
     right:-70px;
-
     top:-70px;
+
+    width:120px;
+    height:120px;
 
     border-radius:50%;
 
@@ -1020,8 +1118,10 @@ body{
 
     filter:blur(8px);
 
+    pointer-events:none;
+
     transition:
-        transform .35s ease;
+        transform .4s ease;
 }
 
 
@@ -1030,7 +1130,7 @@ body{
     transform:translateY(-3px);
 
     border-color:
-        rgba(255,127,159,.28);
+        rgba(255,127,159,.30);
 
     background:
         linear-gradient(
@@ -1040,8 +1140,8 @@ body{
         );
 
     box-shadow:
-        0 14px 35px
-        rgba(0,0,0,.22);
+        0 15px 38px
+        rgba(0,0,0,.24);
 }
 
 
@@ -1064,10 +1164,13 @@ body{
     justify-content:center;
 
     width:52px;
-
     height:52px;
 
     flex-shrink:0;
+
+    border:
+        1px solid
+        rgba(255,255,255,.10);
 
     border-radius:19px;
 
@@ -1078,11 +1181,20 @@ body{
             rgba(255,255,255,.06)
         );
 
-    border:
-        1px solid
-        rgba(255,255,255,.10);
+    box-shadow:
+        inset 0 1px 0
+        rgba(255,255,255,.05);
 
     font-size:26px;
+
+    transition:
+        transform var(--transicao);
+}
+
+
+.card:hover .humor{
+
+    transform:scale(1.035);
 }
 
 
@@ -1100,13 +1212,17 @@ body{
 
 .card-data{
 
+    overflow:hidden;
+
+    color:#fff;
+
     font-size:15px;
+
+    line-height:1.2;
 
     font-weight:800;
 
     white-space:nowrap;
-
-    overflow:hidden;
 
     text-overflow:ellipsis;
 }
@@ -1114,11 +1230,13 @@ body{
 
 .card-humor{
 
-    margin-top:3px;
+    margin-top:4px;
 
     color:var(--texto3);
 
-    font-size:11px;
+    font-size:10px;
+
+    font-weight:600;
 }
 
 
@@ -1134,7 +1252,7 @@ body{
 
     align-items:flex-end;
 
-    gap:4px;
+    gap:5px;
 
     flex-shrink:0;
 }
@@ -1142,16 +1260,21 @@ body{
 
 .dor{
 
-    padding:5px 9px;
+    padding:
+        5px
+        9px;
 
     border-radius:999px;
 
-    font-size:10px;
-
-    font-weight:800;
-
     background:
         rgba(255,255,255,.08);
+
+    color:
+        rgba(255,255,255,.75);
+
+    font-size:9px;
+
+    font-weight:800;
 }
 
 
@@ -1160,13 +1283,23 @@ body{
     color:var(--texto3);
 
     font-size:17px;
+
+    transition:
+        transform var(--transicao),
+        color var(--transicao);
 }
 
 
+.card:hover .seta{
+
+    color:var(--rosa3);
+
+    transform:translateX(2px);
+}
 
 
 /* =========================================================
-   TELA GRÁFICOS
+   TELA DE GRÁFICOS
 ========================================================= */
 
 #telaGraficos{
@@ -1198,32 +1331,43 @@ body{
 ========================================================= */
 
 #volta{
-    width:44px;
-    height:44px;
-
-    padding:0;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 
+    width:44px;
+    height:44px;
+
     flex-shrink:0;
 
-    border:1px solid var(--borda);
-    border-radius:999px;
+    padding:0;
 
-    background:rgba(255,255,255,.08);
+    border:
+        1px solid
+        var(--borda);
 
-    color:white;
+    border-radius:50%;
+
+    outline:none;
+
+    color:#fff;
+
+    background:
+        rgba(255,255,255,.075);
 
     cursor:pointer;
 
     transition:
-        transform .2s,
-        background .2s;
+        transform var(--transicao),
+        background var(--transicao),
+        border-color var(--transicao);
 }
 
+
 #volta svg{
+
     display:block;
 
     width:21px;
@@ -1232,14 +1376,32 @@ body{
     flex-shrink:0;
 }
 
+
 #volta:hover{
+
     transform:translateX(-3px);
-    background:rgba(255,255,255,.13);
+
+    background:
+        rgba(255,255,255,.13);
+
+    border-color:
+        rgba(255,127,159,.20);
 }
+
+
+#volta:active{
+
+    transform:
+        translateX(-3px)
+        scale(.94);
+}
+
 
 .detalhe-titulo{
 
     font-size:20px;
+
+    line-height:1.1;
 
     font-weight:800;
 }
@@ -1247,11 +1409,11 @@ body{
 
 .detalhe-sub{
 
-    margin-top:2px;
+    margin-top:3px;
 
     color:var(--texto3);
 
-    font-size:11px;
+    font-size:10px;
 }
 
 
@@ -1275,6 +1437,10 @@ body{
 
     margin-bottom:12px;
 
+    border:
+        1px solid
+        rgba(255,127,159,.20);
+
     border-radius:28px;
 
     background:
@@ -1284,9 +1450,9 @@ body{
             rgba(255,255,255,.055)
         );
 
-    border:
-        1px solid
-        rgba(255,127,159,.20);
+    box-shadow:
+        inset 0 1px 0
+        rgba(255,255,255,.04);
 
     overflow:hidden;
 }
@@ -1298,20 +1464,20 @@ body{
 
     position:absolute;
 
-    width:170px;
-
-    height:170px;
-
     right:-70px;
-
     top:-70px;
+
+    width:170px;
+    height:170px;
 
     border-radius:50%;
 
     background:
         rgba(255,127,159,.15);
 
-    filter:blur(8px);
+    filter:blur(10px);
+
+    pointer-events:none;
 }
 
 
@@ -1321,7 +1487,9 @@ body{
 
     color:var(--texto2);
 
-    font-size:12px;
+    font-size:11px;
+
+    font-weight:600;
 }
 
 
@@ -1336,6 +1504,8 @@ body{
     line-height:1;
 
     font-weight:900;
+
+    letter-spacing:-1px;
 }
 
 
@@ -1345,7 +1515,7 @@ body{
 
     color:var(--texto3);
 
-    font-size:11px;
+    font-size:10px;
 }
 
 
@@ -1362,15 +1532,19 @@ body{
     background:
         rgba(255,255,255,.10);
 
+    box-shadow:
+        inset 0 1px 2px
+        rgba(0,0,0,.18);
+
     overflow:hidden;
 }
 
 
 .dor-progresso{
 
-    height:100%;
-
     width:0;
+
+    height:100%;
 
     border-radius:inherit;
 
@@ -1382,8 +1556,13 @@ body{
             var(--vermelho)
         );
 
+    box-shadow:
+        0 0 12px
+        rgba(255,127,159,.22);
+
     transition:
-        width .8s ease;
+        width .8s
+        cubic-bezier(.2,.8,.2,1);
 }
 
 
@@ -1395,7 +1574,8 @@ body{
 
     display:grid;
 
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
 
     gap:12px;
 }
@@ -1422,6 +1602,10 @@ body{
             rgba(255,255,255,.035)
         );
 
+    box-shadow:
+        inset 0 1px 0
+        rgba(255,255,255,.035);
+
     backdrop-filter:blur(14px);
 
     -webkit-backdrop-filter:blur(14px);
@@ -1436,18 +1620,20 @@ body{
 
     position:absolute;
 
+    right:-45px;
     top:-45px;
 
-    right:-45px;
-
     width:100px;
-
     height:100px;
 
     border-radius:50%;
 
     background:
         rgba(255,127,159,.08);
+
+    filter:blur(5px);
+
+    pointer-events:none;
 }
 
 
@@ -1455,9 +1641,13 @@ body{
 
     position:relative;
 
+    z-index:1;
+
     margin-bottom:8px;
 
     font-size:12px;
+
+    line-height:1.2;
 
     font-weight:800;
 }
@@ -1494,7 +1684,10 @@ body{
     padding:
         15px
         15px
-        max(20px,env(safe-area-inset-bottom));
+        max(
+            20px,
+            env(safe-area-inset-bottom)
+        );
 
     background:
         rgba(0,0,0,.65);
@@ -1514,7 +1707,7 @@ body{
     animation:
         modalFundo
         .25s
-        ease;
+        ease both;
 }
 
 
@@ -1527,7 +1720,6 @@ body{
     to{
         opacity:1;
     }
-
 }
 
 
@@ -1544,7 +1736,10 @@ body{
     max-height:
         calc(
             90vh -
-            max(20px,env(safe-area-inset-bottom))
+            max(
+                20px,
+                env(safe-area-inset-bottom)
+            )
         );
 
     padding:
@@ -1552,7 +1747,6 @@ body{
         22px
         28px;
 
-    
     overflow-y:auto;
 
     overflow-x:hidden;
@@ -1576,12 +1770,16 @@ body{
 
     box-shadow:
         0 -20px 80px
-        rgba(0,0,0,.45);
+        rgba(0,0,0,.45),
+
+        inset 0 1px 0
+        rgba(255,255,255,.04);
 
     animation:
         modalSubir
         .35s
-        cubic-bezier(.2,.8,.2,1);
+        cubic-bezier(.2,.8,.2,1)
+        both;
 }
 
 
@@ -1596,13 +1794,8 @@ body{
         transform:translateY(0);
         opacity:1;
     }
-
 }
 
-
-/* =========================================================
-   BARRINHA MODAL
-========================================================= */
 
 .modal-conteudo::before{
 
@@ -1611,20 +1804,18 @@ body{
     position:absolute;
 
     top:9px;
-
     left:50%;
 
     width:45px;
-
     height:4px;
-
-    transform:
-        translateX(-50%);
 
     border-radius:999px;
 
     background:
         rgba(255,255,255,.20);
+
+    transform:
+        translateX(-50%);
 }
 
 
@@ -1650,28 +1841,55 @@ body{
 
     font-size:21px;
 
+    line-height:1.1;
+
     font-weight:800;
 }
 
 
 .fechar{
 
-    width:38px;
+    display:flex;
 
+    align-items:center;
+    justify-content:center;
+
+    width:38px;
     height:38px;
+
+    flex-shrink:0;
 
     border:0;
 
     border-radius:50%;
 
+    outline:none;
+
     background:
         rgba(255,255,255,.08);
 
-    color:white;
+    color:#fff;
 
     cursor:pointer;
 
     font-size:19px;
+
+    transition:
+        background var(--transicao),
+        transform var(--transicao);
+}
+
+
+.fechar:hover{
+
+    background:
+        rgba(255,255,255,.13);
+}
+
+
+.fechar:active{
+
+    transform:scale(.90);
 }
 
 
@@ -1683,7 +1901,8 @@ body{
 
     display:grid;
 
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
 
     gap:11px;
 }
@@ -1696,6 +1915,8 @@ body{
     flex-direction:column;
 
     gap:6px;
+
+    min-width:0;
 }
 
 
@@ -1709,9 +1930,9 @@ body{
 
     color:var(--texto2);
 
-    font-size:11px;
+    font-size:10px;
 
-    font-weight:600;
+    font-weight:700;
 }
 
 
@@ -1722,7 +1943,9 @@ body{
 
     height:45px;
 
-    padding:0 13px;
+    padding:
+        0
+        13px;
 
     border:
         1px solid
@@ -1732,10 +1955,25 @@ body{
 
     outline:none;
 
-    color:white;
+    color:#fff;
 
     background:
         rgba(255,255,255,.07);
+
+    font-size:12px;
+
+    transition:
+        border-color var(--transicao),
+        background var(--transicao),
+        box-shadow var(--transicao);
+}
+
+
+.campo input:hover,
+.campo select:hover{
+
+    background:
+        rgba(255,255,255,.085);
 }
 
 
@@ -1744,14 +1982,26 @@ body{
 
     border-color:
         rgba(255,127,159,.5);
+
+    background:
+        rgba(255,255,255,.09);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(255,127,159,.06);
 }
 
+
+/* =========================================================
+   CHECKS
+========================================================= */
 
 .checks{
 
     display:grid;
 
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
 
     gap:8px;
 
@@ -1773,7 +2023,9 @@ body{
 
     min-height:43px;
 
-    padding:9px 11px;
+    padding:
+        9px
+        11px;
 
     border:
         1px solid
@@ -1791,8 +2043,9 @@ body{
     font-size:11px;
 
     transition:
-        background .2s ease,
-        border-color .2s ease;
+        background var(--transicao),
+        border-color var(--transicao),
+        transform var(--transicao);
 }
 
 
@@ -1800,13 +2053,21 @@ body{
 
     background:
         rgba(255,255,255,.08);
+
+    border-color:
+        rgba(255,127,159,.22);
+}
+
+
+.check:active{
+
+    transform:scale(.98);
 }
 
 
 .check input{
 
     width:18px;
-
     height:18px;
 
     flex:0 0 18px;
@@ -1818,6 +2079,10 @@ body{
     cursor:pointer;
 }
 
+
+/* =========================================================
+   SALVAR
+========================================================= */
 
 .salvar{
 
@@ -1831,11 +2096,9 @@ body{
 
     border-radius:999px;
 
-    color:white;
+    outline:none;
 
-    font-size:14px;
-
-    font-weight:800;
+    color:#fff;
 
     background:
         linear-gradient(
@@ -1850,9 +2113,13 @@ body{
 
     cursor:pointer;
 
+    font-size:14px;
+
+    font-weight:800;
+
     transition:
-        transform .2s,
-        box-shadow .2s;
+        transform var(--transicao),
+        box-shadow var(--transicao);
 }
 
 
@@ -1866,37 +2133,1277 @@ body{
 }
 
 
+.salvar:active{
+
+    transform:scale(.985);
+}
+
+
 /* =========================================================
-   RESPONSIVO
+   SELETORES CUSTOMIZADOS
+========================================================= */
+
+.seletor-data-custom{
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    width:100%;
+    height:45px;
+
+    padding:
+        0 42px
+        0 13px;
+
+    border:
+        1px solid
+        var(--borda);
+
+    border-radius:15px;
+
+    outline:none;
+
+    color:#fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,127,159,.10),
+            rgba(255,255,255,.055)
+        );
+
+    font-size:12px;
+
+    font-weight:700;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(255,255,255,.04);
+
+    transition:
+        background var(--transicao),
+        border-color var(--transicao),
+        transform var(--transicao),
+        box-shadow var(--transicao);
+}
+
+
+.seletor-data-custom:hover{
+
+    border-color:
+        rgba(255,127,159,.45);
+
+    background:
+        rgba(255,127,159,.12);
+}
+
+
+.seletor-data-custom:focus-visible{
+
+    box-shadow:
+        0 0 0 3px
+        rgba(255,127,159,.07);
+}
+
+
+.seletor-data-custom:active{
+
+    transform:scale(.985);
+}
+
+
+.seletor-data-icone{
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    width:26px;
+    height:26px;
+
+    margin-right:9px;
+
+    flex-shrink:0;
+
+    border-radius:9px;
+
+    background:
+        rgba(255,127,159,.15);
+
+    font-size:14px;
+}
+
+
+.seletor-data-texto{
+
+    min-width:0;
+
+    overflow:hidden;
+
+    color:
+        rgba(255,255,255,.78);
+
+    white-space:nowrap;
+
+    text-overflow:ellipsis;
+}
+
+
+.seletor-data-seta{
+
+    position:absolute;
+
+    right:14px;
+    top:50%;
+
+    color:
+        rgba(255,177,196,.8);
+
+    font-size:20px;
+
+    line-height:1;
+
+    transform:
+        translateY(-50%);
+}
+
+
+/* =========================================================
+   HUMOR — SELETOR
+========================================================= */
+
+.seletor-humor-custom{
+
+    position:relative;
+
+    width:100%;
+}
+
+
+.seletor-humor-botao{
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    width:100%;
+    height:45px;
+
+    padding:
+        0 42px
+        0 12px;
+
+    border:
+        1px solid
+        var(--borda);
+
+    border-radius:15px;
+
+    outline:none;
+
+    color:#fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,127,159,.10),
+            rgba(255,255,255,.055)
+        );
+
+    font-size:12px;
+
+    font-weight:700;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    transition:
+        background var(--transicao),
+        border-color var(--transicao),
+        transform var(--transicao);
+}
+
+
+.seletor-humor-botao:hover{
+
+    border-color:
+        rgba(255,127,159,.45);
+
+    background:
+        rgba(255,127,159,.12);
+}
+
+
+.seletor-humor-botao:active{
+
+    transform:scale(.985);
+}
+
+
+.seletor-humor-emoji{
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    width:29px;
+    height:29px;
+
+    margin-right:9px;
+
+    flex-shrink:0;
+
+    border-radius:10px;
+
+    background:
+        rgba(255,127,159,.14);
+
+    font-size:17px;
+}
+
+
+.seletor-humor-texto{
+
+    min-width:0;
+
+    overflow:hidden;
+
+    white-space:nowrap;
+
+    text-overflow:ellipsis;
+}
+
+
+.seletor-humor-seta{
+
+    position:absolute;
+
+    right:14px;
+    top:50%;
+
+    width:16px;
+    height:16px;
+
+    color:
+        rgba(255,177,196,.8);
+
+    pointer-events:none;
+
+    transform:
+        translateY(-50%);
+
+    transition:
+        transform .2s ease;
+}
+
+
+.seletor-humor-custom.aberto
+.seletor-humor-seta{
+
+    transform:
+        translateY(-50%)
+        rotate(180deg);
+}
+
+
+/* =========================================================
+   MENU DE HUMOR
+========================================================= */
+
+.menu-humor-custom{
+
+    position:absolute;
+
+    z-index:700;
+
+    top:calc(100% + 7px);
+
+    left:0;
+
+    width:100%;
+
+    padding:6px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    border-radius:19px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(32,24,28,.99),
+            rgba(10,9,10,.99)
+        );
+
+    box-shadow:
+        0 20px 50px
+        rgba(0,0,0,.55),
+
+        inset 0 1px 0
+        rgba(255,255,255,.055);
+
+    backdrop-filter:blur(22px);
+
+    -webkit-backdrop-filter:blur(22px);
+
+    opacity:0;
+
+    visibility:hidden;
+
+    pointer-events:none;
+
+    transform:
+        translateY(-6px)
+        scale(.97);
+
+    transform-origin:top center;
+
+    transition:
+        opacity .18s ease,
+        transform .18s ease,
+        visibility .18s ease;
+}
+
+
+.seletor-humor-custom.aberto
+.menu-humor-custom{
+
+    opacity:1;
+
+    visibility:visible;
+
+    pointer-events:auto;
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+/* =========================================================
+   OPÇÕES DE HUMOR
+========================================================= */
+
+.opcao-humor{
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    width:100%;
+
+    min-height:47px;
+
+    padding:6px 9px;
+
+    border:0;
+
+    border-radius:14px;
+
+    outline:none;
+
+    color:
+        rgba(255,255,255,.72);
+
+    background:transparent;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    transition:
+        background .18s ease,
+        color .18s ease,
+        transform .12s ease;
+}
+
+
+.opcao-humor:hover{
+
+    color:#fff;
+
+    background:
+        rgba(255,127,159,.11);
+}
+
+
+.opcao-humor:active{
+
+    transform:scale(.985);
+
+    background:
+        rgba(255,127,159,.17);
+}
+
+
+.opcao-humor-emoji{
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    width:34px;
+    height:34px;
+
+    margin-right:10px;
+
+    flex-shrink:0;
+
+    border-radius:11px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    font-size:19px;
+}
+
+
+.opcao-humor-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:2px;
+
+    min-width:0;
+}
+
+
+.opcao-humor-nome{
+
+    color:
+        rgba(255,255,255,.88);
+
+    font-size:12px;
+
+    font-weight:800;
+}
+
+
+.opcao-humor-descricao{
+
+    color:
+        rgba(255,255,255,.38);
+
+    font-size:9px;
+
+    font-weight:500;
+}
+
+
+.opcao-humor-check{
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    width:21px;
+    height:21px;
+
+    margin-left:auto;
+
+    flex-shrink:0;
+
+    border-radius:50%;
+
+    color:transparent;
+
+    background:transparent;
+
+    font-size:11px;
+
+    font-weight:900;
+
+    transition:
+        background .18s ease,
+        color .18s ease,
+        transform .18s ease;
+}
+
+
+.opcao-humor.ativa{
+
+    color:#fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,127,159,.19),
+            rgba(255,127,159,.07)
+        );
+}
+
+
+.opcao-humor.ativa
+.opcao-humor-emoji{
+
+    background:
+        rgba(255,127,159,.18);
+}
+
+
+.opcao-humor.ativa
+.opcao-humor-check{
+
+    color:#fff;
+
+    background:var(--rosa2);
+
+    transform:scale(1.05);
+
+    box-shadow:
+        0 4px 12px
+        rgba(255,79,120,.25);
+}
+
+
+/* =========================================================
+   CALENDÁRIO
+========================================================= */
+
+.calendario-fundo{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:3000;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:18px;
+
+    background:
+        rgba(0,0,0,.70);
+
+    backdrop-filter:blur(12px);
+
+    -webkit-backdrop-filter:blur(12px);
+
+    animation:
+        calendarioFundo
+        .2s ease both;
+}
+
+
+@keyframes calendarioFundo{
+
+    from{
+        opacity:0;
+    }
+
+    to{
+        opacity:1;
+    }
+}
+
+
+.calendario-painel{
+
+    position:relative;
+
+    width:min(390px,100%);
+
+    padding:20px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.13);
+
+    border-radius:28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(35,27,30,.99),
+            rgba(12,10,11,.99)
+        );
+
+    box-shadow:
+        0 25px 80px
+        rgba(0,0,0,.60),
+
+        inset 0 1px 0
+        rgba(255,255,255,.06);
+
+    animation:
+        calendarioPainel
+        .25s
+        cubic-bezier(.2,.8,.2,1)
+        both;
+}
+
+
+@keyframes calendarioPainel{
+
+    from{
+        opacity:0;
+
+        transform:
+            translateY(15px)
+            scale(.97);
+    }
+
+    to{
+        opacity:1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+.calendario-topo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-bottom:18px;
+}
+
+
+.calendario-titulo{
+
+    font-size:19px;
+
+    font-weight:900;
+
+    color:#fff;
+}
+
+
+.calendario-subtitulo{
+
+    margin-top:2px;
+
+    color:
+        rgba(255,255,255,.38);
+
+    font-size:10px;
+}
+
+
+.calendario-fechar{
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    width:38px;
+    height:38px;
+
+    flex-shrink:0;
+
+    margin-left:auto;
+
+    border:0;
+
+    border-radius:50%;
+
+    color:#fff;
+
+    background:
+        rgba(255,255,255,.08);
+
+    font-size:21px;
+
+    cursor:pointer;
+
+    transition:
+        background var(--transicao),
+        transform var(--transicao);
+}
+
+
+.calendario-fechar:hover{
+
+    background:
+        rgba(255,255,255,.13);
+}
+
+
+.calendario-fechar:active{
+
+    transform:scale(.92);
+}
+
+
+.calendario-navegacao{
+
+    display:grid;
+
+    grid-template-columns:
+        42px
+        1fr
+        42px;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin-bottom:12px;
+}
+
+
+.calendario-navegacao strong{
+
+    text-align:center;
+
+    color:
+        rgba(255,255,255,.85);
+
+    font-size:13px;
+
+    font-weight:800;
+}
+
+
+.calendario-navegacao button{
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    width:42px;
+    height:38px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    border-radius:13px;
+
+    color:#fff;
+
+    background:
+        rgba(255,255,255,.055);
+
+    font-size:23px;
+
+    line-height:1;
+
+    cursor:pointer;
+
+    transition:
+        background var(--transicao),
+        transform var(--transicao);
+}
+
+
+.calendario-navegacao button:hover{
+
+    background:
+        rgba(255,127,159,.14);
+}
+
+
+.calendario-navegacao button:active{
+
+    transform:scale(.93);
+}
+
+
+/* =========================================================
+   SEMANA
+========================================================= */
+
+.calendario-semana{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(7,1fr);
+
+    gap:4px;
+
+    margin-bottom:6px;
+}
+
+
+.calendario-semana span{
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    height:28px;
+
+    color:
+        rgba(255,255,255,.32);
+
+    font-size:8px;
+
+    font-weight:800;
+}
+
+
+/* =========================================================
+   DIAS
+========================================================= */
+
+.calendario-dias{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(7,1fr);
+
+    gap:5px;
+}
+
+
+.calendario-dia{
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    width:100%;
+
+    aspect-ratio:1;
+
+    border:0;
+
+    border-radius:13px;
+
+    color:
+        rgba(255,255,255,.72);
+
+    background:transparent;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:
+        background .16s ease,
+        color .16s ease,
+        transform .12s ease;
+}
+
+
+.calendario-dia:hover{
+
+    color:#fff;
+
+    background:
+        rgba(255,127,159,.13);
+}
+
+
+.calendario-dia:active{
+
+    transform:scale(.90);
+}
+
+
+.calendario-dia.outro-mes{
+
+    color:
+        rgba(255,255,255,.16);
+}
+
+
+.calendario-dia.hoje{
+
+    border:
+        1px solid
+        rgba(255,127,159,.55);
+
+    color:#ffb1c4;
+}
+
+
+.calendario-dia.selecionado{
+
+    color:#fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--rosa),
+            var(--rosa2)
+        );
+
+    box-shadow:
+        0 6px 16px
+        rgba(255,79,120,.25);
+}
+
+
+.calendario-hoje{
+
+    width:100%;
+
+    height:43px;
+
+    margin-top:15px;
+
+    border:
+        1px solid
+        rgba(255,127,159,.20);
+
+    border-radius:14px;
+
+    color:#ffb1c4;
+
+    background:
+        rgba(255,127,159,.08);
+
+    font-size:11px;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+    transition:
+        background var(--transicao),
+        transform var(--transicao);
+}
+
+
+.calendario-hoje:hover{
+
+    background:
+        rgba(255,127,159,.14);
+}
+
+
+.calendario-hoje:active{
+
+    transform:scale(.98);
+}
+
+
+/* =========================================================
+   COMO VOCÊ SE SENTIU?
+========================================================= */
+
+.humor-label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    color:var(--texto2);
+
+    font-size:11px;
+
+    font-weight:600;
+}
+
+
+.humor-opcoes{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:9px;
+}
+
+
+.humor-opcao{
+
+    position:relative;
+
+    display:block;
+
+    cursor:pointer;
+
+    user-select:none;
+}
+
+
+.humor-opcao input{
+
+    position:absolute;
+
+    opacity:0;
+
+    pointer-events:none;
+}
+
+
+.humor-conteudo{
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    min-height:52px;
+
+    padding:
+        9px
+        11px;
+
+    border:
+        1px solid
+        var(--borda);
+
+    border-radius:17px;
+
+    color:var(--texto2);
+
+    background:
+        rgba(255,255,255,.045);
+
+    transition:
+        background var(--transicao),
+        border-color var(--transicao),
+        transform var(--transicao),
+        box-shadow var(--transicao);
+}
+
+
+.humor-emoji{
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    width:32px;
+    height:32px;
+
+    flex-shrink:0;
+
+    border-radius:11px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    font-size:19px;
+
+    transition:
+        background var(--transicao),
+        transform var(--transicao);
+}
+
+
+.humor-nome{
+
+    flex:1;
+
+    min-width:0;
+
+    font-size:11px;
+
+    font-weight:700;
+}
+
+
+.humor-check{
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    width:21px;
+    height:21px;
+
+    flex-shrink:0;
+
+    border-radius:50%;
+
+    color:transparent;
+
+    background:transparent;
+
+    font-size:12px;
+
+    font-weight:900;
+
+    transition:
+        background var(--transicao),
+        color var(--transicao),
+        transform var(--transicao);
+}
+
+
+.humor-opcao:hover
+.humor-conteudo{
+
+    border-color:
+        rgba(255,127,159,.30);
+
+    background:
+        rgba(255,127,159,.08);
+
+}
+
+
+.humor-opcao
+input:checked
++
+.humor-conteudo{
+
+    color:#fff;
+
+    border-color:
+        rgba(255,127,159,.50);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,127,159,.20),
+            rgba(255,127,159,.08)
+        );
+
+    box-shadow:
+        0 7px 20px
+        rgba(255,79,120,.10);
+}
+
+
+.humor-opcao
+input:checked
++
+.humor-conteudo
+.humor-emoji{
+
+    background:
+        rgba(255,127,159,.18);
+
+    transform:scale(1.05);
+}
+
+
+.humor-opcao
+input:checked
++
+.humor-conteudo
+.humor-check{
+
+    color:#fff;
+
+    background:var(--rosa2);
+
+    box-shadow:
+        0 4px 12px
+        rgba(255,79,120,.25);
+
+    transform:scale(1.05);
+}
+
+
+.humor-opcao:active
+.humor-conteudo{
+
+    transform:scale(.97);
+}
+
+
+/* =========================================================
+   ACESSIBILIDADE
+========================================================= */
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible{
+
+    outline:
+        2px solid
+        var(--rosa);
+
+    outline-offset:2px;
+}
+
+
+.seletor-data-custom:focus-visible,
+.seletor-humor-botao:focus-visible,
+.opcao-humor:focus-visible,
+.calendario-dia:focus-visible,
+.calendario-navegacao button:focus-visible,
+.calendario-hoje:focus-visible{
+
+    outline:
+        2px solid
+        var(--rosa);
+
+    outline-offset:2px;
+}
+
+
+/* =========================================================
+   RESPONSIVO — ATÉ 560px
 ========================================================= */
 
 @media(max-width:560px){
 
     #app{
 
-        padding-left:12px;
+        width:100%;
 
-        padding-right:12px;
+        padding:
+            12px
+            12px
+            30px;
     }
 
 
     .topo{
 
-        height:76px;
+        min-height:76px;
 
-        background:#000;
+        margin-bottom:14px;
 
-        border-radius:200px;
-
-        width:95%;
-
-        margin:2.5%;
+        padding:0 2px;
     }
 
 
     .titulo{
 
         font-size:22px;
+    }
+
+
+    .subtitulo{
+
+        font-size:10px;
     }
 
 
@@ -1908,21 +3415,31 @@ body{
 
     .resumo-card{
 
-        padding:12px;
-
         min-height:82px;
+
+        padding:12px;
+    }
+
+
+    .resumo-label{
+
+        font-size:9px;
     }
 
 
     .resumo-valor{
 
-        font-size:15px;
+        font-size:17px;
+
+        letter-spacing:-.3px;
     }
 
 
-    /* =====================================================
-       CONTROLES UM EMBAIXO DO OUTRO
-    ====================================================== */
+    .resumo-detalhe{
+
+        font-size:8px;
+    }
+
 
     .controles{
 
@@ -1944,7 +3461,16 @@ body{
     }
 
 
-    
+    .ordenar-wrapper{
+
+        width:100%;
+    }
+
+
+    .ordenar-botao{
+
+        width:100%;
+    }
 
 
     .graficos-grid{
@@ -1999,1110 +3525,6 @@ body{
             18px;
     }
 
-}
-
-
-@media(max-width:370px){
-
-    .resumo-detalhe{
-
-        display:none;
-    }
-
-
-    .card{
-
-        padding:12px;
-
-        padding-right:62px;
-    }
-
-
-    .humor{
-
-        width:46px;
-
-        height:46px;
-    }
-
-
-    .checks{
-
-        grid-template-columns:1fr;
-    }
-
-
-
-
-}
-
-
-/* =========================================================
-   ACESSIBILIDADE
-========================================================= */
-
-button:focus-visible,
-input:focus-visible,
-select:focus-visible{
-
-    outline:
-        2px solid
-        var(--rosa);
-
-    outline-offset:2px;
-}
-
-/* =========================================================
-   SELETORES CUSTOMIZADOS DO FORMULÁRIO
-   DATA + HUMOR
-   SEM SELETOR NATIVO DO ANDROID / NAVEGADOR
-========================================================= */
-
-
-/* =========================================================
-   CAMPO DE DATA CUSTOMIZADO
-========================================================= */
-
-.seletor-data-custom{
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    width:100%;
-
-    height:45px;
-
-    padding:
-        0 42px
-        0 13px;
-
-    border:
-        1px solid
-        var(--borda);
-
-    border-radius:15px;
-
-    outline:none;
-
-    color:#fff;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,127,159,.10),
-            rgba(255,255,255,.055)
-        );
-
-    font-family:"Quicksand",sans-serif;
-
-    font-size:12px;
-
-    font-weight:700;
-
-    text-align:left;
-
-    cursor:pointer;
-
-    box-shadow:
-        inset 0 1px 0
-        rgba(255,255,255,.04);
-
-    transition:
-        background .2s ease,
-        border-color .2s ease,
-        transform .15s ease;
-}
-
-
-.seletor-data-custom:hover{
-
-    border-color:
-        rgba(255,127,159,.45);
-
-    background:
-        rgba(255,127,159,.12);
-}
-
-
-.seletor-data-custom:active{
-
-    transform:scale(.985);
-}
-
-
-.seletor-data-icone{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    width:26px;
-
-    height:26px;
-
-    margin-right:9px;
-
-    border-radius:9px;
-
-    background:
-        rgba(255,127,159,.15);
-
-    font-size:14px;
-
-    flex-shrink:0;
-}
-
-
-.seletor-data-texto{
-
-    overflow:hidden;
-
-    white-space:nowrap;
-
-    text-overflow:ellipsis;
-
-    color:
-        rgba(255,255,255,.78);
-}
-
-
-.seletor-data-seta{
-
-    position:absolute;
-
-    right:14px;
-
-    top:50%;
-
-    transform:
-        translateY(-50%);
-
-    color:
-        rgba(255,177,196,.8);
-
-    font-size:20px;
-
-    line-height:1;
-}
-
-
-/* =========================================================
-   SELETOR DE HUMOR CUSTOMIZADO
-========================================================= */
-
-.seletor-humor-custom{
-
-    position:relative;
-
-    width:100%;
-}
-
-
-.seletor-humor-botao{
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    width:100%;
-
-    height:45px;
-
-    padding:
-        0 42px
-        0 12px;
-
-    border:
-        1px solid
-        var(--borda);
-
-    border-radius:15px;
-
-    outline:none;
-
-    color:#fff;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,127,159,.10),
-            rgba(255,255,255,.055)
-        );
-
-    font-family:"Quicksand",sans-serif;
-
-    font-size:12px;
-
-    font-weight:700;
-
-    text-align:left;
-
-    cursor:pointer;
-
-    transition:
-        background .2s ease,
-        border-color .2s ease,
-        transform .15s ease;
-}
-
-
-.seletor-humor-botao:hover{
-
-    border-color:
-        rgba(255,127,159,.45);
-
-    background:
-        rgba(255,127,159,.12);
-}
-
-
-.seletor-humor-botao:active{
-
-    transform:scale(.985);
-}
-
-
-.seletor-humor-emoji{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    width:29px;
-
-    height:29px;
-
-    margin-right:9px;
-
-    border-radius:10px;
-
-    background:
-        rgba(255,127,159,.14);
-
-    font-size:17px;
-
-    flex-shrink:0;
-}
-
-
-.seletor-humor-texto{
-
-    overflow:hidden;
-
-    white-space:nowrap;
-
-    text-overflow:ellipsis;
-}
-
-
-.seletor-humor-seta{
-
-    position:absolute;
-
-    right:14px;
-
-    top:50%;
-
-    width:16px;
-
-    height:16px;
-
-    transform:
-        translateY(-50%);
-
-    color:
-        rgba(255,177,196,.8);
-
-    pointer-events:none;
-
-    transition:
-        transform .2s ease;
-}
-
-
-.seletor-humor-custom.aberto
-.seletor-humor-seta{
-
-    transform:
-        translateY(-50%)
-        rotate(180deg);
-}
-
-
-/* =========================================================
-   MENU DE HUMOR
-========================================================= */
-
-.menu-humor-custom{
-
-    position:absolute;
-
-    z-index:700;
-
-    top:calc(100% + 7px);
-
-    left:0;
-
-    width:100%;
-
-    padding:6px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.12);
-
-    border-radius:19px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(32,24,28,.99),
-            rgba(10,9,10,.99)
-        );
-
-    box-shadow:
-        0 20px 50px
-        rgba(0,0,0,.55),
-
-        inset 0 1px 0
-        rgba(255,255,255,.055);
-
-    backdrop-filter:
-        blur(22px);
-
-    -webkit-backdrop-filter:
-        blur(22px);
-
-    opacity:0;
-
-    visibility:hidden;
-
-    pointer-events:none;
-
-    transform:
-        translateY(-6px)
-        scale(.97);
-
-    transform-origin:
-        top center;
-
-    transition:
-        opacity .18s ease,
-        transform .18s ease,
-        visibility .18s ease;
-}
-
-
-.seletor-humor-custom.aberto
-.menu-humor-custom{
-
-    opacity:1;
-
-    visibility:visible;
-
-    pointer-events:auto;
-
-    transform:
-        translateY(0)
-        scale(1);
-}
-
-
-/* =========================================================
-   OPÇÕES DE HUMOR
-========================================================= */
-
-.opcao-humor{
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    width:100%;
-
-    min-height:47px;
-
-    padding:
-        6px 9px;
-
-    border:0;
-
-    border-radius:14px;
-
-    outline:none;
-
-    color:
-        rgba(255,255,255,.72);
-
-    background:transparent;
-
-    font-family:"Quicksand",sans-serif;
-
-    font-size:11px;
-
-    font-weight:700;
-
-    text-align:left;
-
-    cursor:pointer;
-
-    transition:
-        background .18s ease,
-        color .18s ease,
-        transform .12s ease;
-}
-
-
-.opcao-humor:hover{
-
-    color:#fff;
-
-    background:
-        rgba(255,127,159,.11);
-}
-
-
-.opcao-humor:active{
-
-    transform:scale(.985);
-
-    background:
-        rgba(255,127,159,.17);
-}
-
-
-/* =========================================================
-   EMOJI DA OPÇÃO
-========================================================= */
-
-.opcao-humor-emoji{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    width:34px;
-
-    height:34px;
-
-    margin-right:10px;
-
-    border-radius:11px;
-
-    background:
-        rgba(255,255,255,.06);
-
-    font-size:19px;
-
-    flex-shrink:0;
-}
-
-
-/* =========================================================
-   TEXTO DA OPÇÃO
-========================================================= */
-
-.opcao-humor-info{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:2px;
-
-    min-width:0;
-}
-
-
-.opcao-humor-nome{
-
-    color:
-        rgba(255,255,255,.88);
-
-    font-size:12px;
-
-    font-weight:800;
-}
-
-
-.opcao-humor-descricao{
-
-    color:
-        rgba(255,255,255,.38);
-
-    font-size:9px;
-
-    font-weight:500;
-}
-
-
-/* =========================================================
-   CHECK DO HUMOR
-========================================================= */
-
-.opcao-humor-check{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    width:21px;
-
-    height:21px;
-
-    margin-left:auto;
-
-    border-radius:50%;
-
-    color:transparent;
-
-    background:transparent;
-
-    font-size:11px;
-
-    font-weight:900;
-
-    flex-shrink:0;
-
-    transition:
-        background .18s ease,
-        color .18s ease,
-        transform .18s ease;
-}
-
-
-.opcao-humor.ativa{
-
-    color:#fff;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,127,159,.19),
-            rgba(255,127,159,.07)
-        );
-}
-
-
-.opcao-humor.ativa
-.opcao-humor-emoji{
-
-    background:
-        rgba(255,127,159,.18);
-}
-
-
-.opcao-humor.ativa
-.opcao-humor-check{
-
-    color:#fff;
-
-    background:
-        var(--rosa2);
-
-    transform:scale(1.05);
-
-    box-shadow:
-        0 4px 12px
-        rgba(255,79,120,.25);
-}
-
-
-/* =========================================================
-   CALENDÁRIO CUSTOMIZADO
-========================================================= */
-
-.calendario-fundo{
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:3000;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    padding:18px;
-
-    background:
-        rgba(0,0,0,.70);
-
-    backdrop-filter:
-        blur(12px);
-
-    -webkit-backdrop-filter:
-        blur(12px);
-
-    animation:
-        calendarioFundo
-        .2s ease;
-}
-
-
-@keyframes calendarioFundo{
-
-    from{
-        opacity:0;
-    }
-
-    to{
-        opacity:1;
-    }
-
-}
-
-
-.calendario-painel{
-
-    position:relative;
-
-    width:min(390px,100%);
-
-    padding:20px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.13);
-
-    border-radius:28px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(35,27,30,.99),
-            rgba(12,10,11,.99)
-        );
-
-    box-shadow:
-        0 25px 80px
-        rgba(0,0,0,.60),
-
-        inset 0 1px 0
-        rgba(255,255,255,.06);
-
-    animation:
-        calendarioPainel
-        .25s
-        cubic-bezier(.2,.8,.2,1);
-}
-
-
-@keyframes calendarioPainel{
-
-    from{
-
-        opacity:0;
-
-        transform:
-            translateY(15px)
-            scale(.97);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:
-            translateY(0)
-            scale(1);
-
-    }
-
-}
-
-
-/* =========================================================
-   TOPO DO CALENDÁRIO
-========================================================= */
-
-.calendario-topo{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-    margin-bottom:18px;
-}
-
-
-.calendario-titulo{
-
-    font-size:19px;
-
-    font-weight:900;
-
-    color:#fff;
-}
-
-
-.calendario-subtitulo{
-
-    margin-top:2px;
-
-    color:
-        rgba(255,255,255,.38);
-
-    font-size:10px;
-}
-
-
-.calendario-fechar{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    width:38px;
-
-    height:38px;
-
-    flex-shrink:0;
-
-    border:0;
-
-    border-radius:50%;
-
-    color:#fff;
-
-    background:
-        rgba(255,255,255,.08);
-
-    font-size:21px;
-
-    cursor:pointer;
-
-    transition:
-        background .18s ease,
-        transform .15s ease;
-}
-
-
-.calendario-fechar:hover{
-
-    background:
-        rgba(255,255,255,.13);
-}
-
-
-.calendario-fechar:active{
-
-    transform:scale(.92);
-}
-
-
-/* =========================================================
-   NAVEGAÇÃO DO MÊS
-========================================================= */
-
-.calendario-navegacao{
-
-    display:grid;
-
-    grid-template-columns:42px 1fr 42px;
-
-    align-items:center;
-
-    gap:8px;
-
-    margin-bottom:12px;
-}
-
-
-.calendario-navegacao strong{
-
-    text-align:center;
-
-    font-size:13px;
-
-    font-weight:800;
-
-    color:
-        rgba(255,255,255,.85);
-}
-
-
-.calendario-navegacao button{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    width:42px;
-
-    height:38px;
-
-    border:1px solid
-        rgba(255,255,255,.08);
-
-    border-radius:13px;
-
-    color:#fff;
-
-    background:
-        rgba(255,255,255,.055);
-
-    font-size:23px;
-
-    line-height:1;
-
-    cursor:pointer;
-
-    transition:
-        background .18s ease,
-        transform .15s ease;
-}
-
-
-.calendario-navegacao button:hover{
-
-    background:
-        rgba(255,127,159,.14);
-}
-
-
-.calendario-navegacao button:active{
-
-    transform:scale(.93);
-}
-
-
-/* =========================================================
-   DIAS DA SEMANA
-========================================================= */
-
-.calendario-semana{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(7,1fr);
-
-    gap:4px;
-
-    margin-bottom:6px;
-}
-
-
-.calendario-semana span{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    height:28px;
-
-    color:
-        rgba(255,255,255,.32);
-
-    font-size:8px;
-
-    font-weight:800;
-}
-
-
-/* =========================================================
-   GRADE DOS DIAS
-========================================================= */
-
-.calendario-dias{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(7,1fr);
-
-    gap:5px;
-}
-
-
-.calendario-dia{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    width:100%;
-
-    aspect-ratio:1;
-
-    border:0;
-
-    border-radius:13px;
-
-    color:
-        rgba(255,255,255,.72);
-
-    background:transparent;
-
-    font-family:"Quicksand",sans-serif;
-
-    font-size:11px;
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    transition:
-        background .16s ease,
-        color .16s ease,
-        transform .12s ease;
-}
-
-
-.calendario-dia:hover{
-
-    color:#fff;
-
-    background:
-        rgba(255,127,159,.13);
-}
-
-
-.calendario-dia:active{
-
-    transform:scale(.9);
-}
-
-
-.calendario-dia.outro-mes{
-
-    color:
-        rgba(255,255,255,.16);
-}
-
-
-.calendario-dia.hoje{
-
-    border:
-        1px solid
-        rgba(255,127,159,.55);
-
-    color:
-        #ffb1c4;
-}
-
-
-.calendario-dia.selecionado{
-
-    color:#fff;
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--rosa),
-            var(--rosa2)
-        );
-
-    box-shadow:
-        0 6px 16px
-        rgba(255,79,120,.25);
-}
-
-
-/* =========================================================
-   BOTÃO HOJE
-========================================================= */
-
-.calendario-hoje{
-
-    width:100%;
-
-    height:43px;
-
-    margin-top:15px;
-
-    border:1px solid
-        rgba(255,127,159,.20);
-
-    border-radius:14px;
-
-    color:
-        #ffb1c4;
-
-    background:
-        rgba(255,127,159,.08);
-
-    font-family:"Quicksand",sans-serif;
-
-    font-size:11px;
-
-    font-weight:800;
-
-    cursor:pointer;
-
-    transition:
-        background .18s ease,
-        transform .15s ease;
-}
-
-
-.calendario-hoje:hover{
-
-    background:
-        rgba(255,127,159,.14);
-}
-
-
-.calendario-hoje:active{
-
-    transform:scale(.98);
-}
-
-
-/* =========================================================
-   FOCO
-========================================================= */
-
-.seletor-data-custom:focus-visible,
-.seletor-humor-botao:focus-visible,
-.opcao-humor:focus-visible,
-.calendario-dia:focus-visible,
-.calendario-navegacao button:focus-visible,
-.calendario-hoje:focus-visible{
-
-    outline:
-        2px solid
-        var(--rosa);
-
-    outline-offset:2px;
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media(max-width:560px){
 
     .calendario-fundo{
 
@@ -3115,7 +3537,6 @@ select:focus-visible{
                 12px,
                 env(safe-area-inset-bottom)
             );
-
     }
 
 
@@ -3123,43 +3544,105 @@ select:focus-visible{
 
         width:100%;
 
+        padding:18px;
+
         border-radius:
             28px
             28px
             19px
             19px;
-
-        padding:18px;
-
     }
 
 
     .calendario-dia{
 
         border-radius:11px;
-
     }
 
 }
 
 
 /* =========================================================
-   TELAS MUITO PEQUENAS
+   TELAS MUITO PEQUENAS — ATÉ 370px
 ========================================================= */
 
 @media(max-width:370px){
 
+    .resumo-detalhe{
+
+        display:none;
+    }
+
+
+    .resumo-card{
+
+        min-height:76px;
+
+        padding:10px;
+    }
+
+
+    .resumo-valor{
+
+        font-size:15px;
+    }
+
+
+    .card{
+
+        min-height:82px;
+
+        padding:
+            12px;
+
+        padding-right:62px;
+    }
+
+
+    .humor{
+
+        width:46px;
+        height:46px;
+
+        border-radius:17px;
+
+        font-size:23px;
+    }
+
+
+    .card-data{
+
+        font-size:14px;
+    }
+
+
+    .card-humor{
+
+        font-size:9px;
+    }
+
+
+    .checks{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .humor-opcoes{
+
+        grid-template-columns:1fr;
+    }
+
+
     .calendario-painel{
 
         padding:15px;
-
     }
 
 
     .calendario-dias{
 
         gap:3px;
-
     }
 
 
@@ -3168,338 +3651,36 @@ select:focus-visible{
         font-size:10px;
 
         border-radius:9px;
-
     }
 
 
     .calendario-semana span{
 
         font-size:7px;
-
     }
 
 }
 
-/* =========================================================
-   COMO VOCÊ SE SENTIU?
-========================================================= */
-
-.humor-label{
-
-    display:block;
-
-    margin-bottom:8px;
-
-    color:var(--texto2);
-
-    font-size:11px;
-
-    font-weight:600;
-}
-
 
 /* =========================================================
-   OPÇÕES DE HUMOR
+   REDUÇÃO DE MOVIMENTO
 ========================================================= */
 
-.humor-opcoes{
+@media(prefers-reduced-motion:reduce){
 
-    display:grid;
+    *,
+    *::before,
+    *::after{
 
-    grid-template-columns:
-        repeat(2,1fr);
+        scroll-behavior:auto !important;
 
-    gap:9px;
+        animation-duration:.01ms !important;
+        animation-iteration-count:1 !important;
 
-}
-
-
-/* =========================================================
-   OPÇÃO
-========================================================= */
-
-.humor-opcao{
-
-    position:relative;
-
-    display:block;
-
-    cursor:pointer;
-
-    user-select:none;
-
-}
-
-
-/* ESCONDE O RADIO NATIVO */
-
-.humor-opcao input{
-
-    position:absolute;
-
-    opacity:0;
-
-    pointer-events:none;
-
-}
-
-
-/* =========================================================
-   CARTÃO
-========================================================= */
-
-.humor-conteudo{
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    min-height:52px;
-
-    padding:
-        9px
-        11px;
-
-    border:
-        1px solid
-        var(--borda);
-
-    border-radius:17px;
-
-    color:var(--texto2);
-
-    background:
-        rgba(255,255,255,.045);
-
-    transition:
-        background .2s ease,
-        border-color .2s ease,
-        transform .2s ease,
-        box-shadow .2s ease;
-
-}
-
-
-/* =========================================================
-   EMOJI
-========================================================= */
-
-.humor-emoji{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    width:32px;
-
-    height:32px;
-
-    flex-shrink:0;
-
-    border-radius:11px;
-
-    background:
-        rgba(255,255,255,.06);
-
-    font-size:19px;
-
-    transition:
-        background .2s ease,
-        transform .2s ease;
-
-}
-
-
-/* =========================================================
-   NOME
-========================================================= */
-
-.humor-nome{
-
-    flex:1;
-
-    min-width:0;
-
-    font-size:11px;
-
-    font-weight:700;
-
-}
-
-
-/* =========================================================
-   CHECK
-========================================================= */
-
-.humor-check{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    width:21px;
-
-    height:21px;
-
-    flex-shrink:0;
-
-    border-radius:50%;
-
-    color:transparent;
-
-    background:transparent;
-
-    font-size:12px;
-
-    font-weight:900;
-
-    transition:
-        background .2s ease,
-        color .2s ease,
-        transform .2s ease;
-
-}
-
-
-/* =========================================================
-   HOVER
-========================================================= */
-
-.humor-opcao:hover
-.humor-conteudo{
-
-    border-color:
-        rgba(255,127,159,.30);
-
-    background:
-        rgba(255,127,159,.08);
-
-}
-
-
-/* =========================================================
-   SELECIONADO
-========================================================= */
-
-.humor-opcao
-input:checked
-+
-.humor-conteudo{
-
-    color:white;
-
-    border-color:
-        rgba(255,127,159,.50);
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,127,159,.20),
-            rgba(255,127,159,.08)
-        );
-
-    box-shadow:
-        0 7px 20px
-        rgba(255,79,120,.10);
-
-}
-
-
-/* =========================================================
-   EMOJI SELECIONADO
-========================================================= */
-
-.humor-opcao
-input:checked
-+
-.humor-conteudo
-.humor-emoji{
-
-    background:
-        rgba(255,127,159,.18);
-
-    transform:
-        scale(1.05);
-
-}
-
-
-/* =========================================================
-   CHECK SELECIONADO
-========================================================= */
-
-.humor-opcao
-input:checked
-+
-.humor-conteudo
-.humor-check{
-
-    color:white;
-
-    background:
-        var(--rosa2);
-
-    box-shadow:
-        0 4px 12px
-        rgba(255,79,120,.25);
-
-    transform:
-        scale(1.05);
-
-}
-
-
-/* =========================================================
-   CLIQUE
-========================================================= */
-
-.humor-opcao:active
-.humor-conteudo{
-
-    transform:scale(.97);
-
-}
-
-
-/* =========================================================
-   FOCO
-========================================================= */
-
-.humor-opcao
-input:focus-visible
-+
-.humor-conteudo{
-
-    outline:
-        2px solid
-        var(--rosa);
-
-    outline-offset:2px;
-
-}
-
-
-/* =========================================================
-   CELULARES PEQUENOS
-========================================================= */
-
-@media(max-width:370px){
-
-    .humor-opcoes{
-
-        grid-template-columns:1fr;
-
+        transition-duration:.01ms !important;
     }
-
 }
+
 </style>
 
 </head>
@@ -5865,64 +6046,7 @@ function renderizar(){
                     </div>
 
 
-                    <div class="card-acoes">
 
-                        <button
-                            class="card-apagar"
-                            type="button"
-                            aria-label="Apagar registro"
-                        >
-
-                            <svg
-                                viewBox="0 0 24 24"
-                                aria-hidden="true"
-                            >
-
-                                <path
-                                    d="M4 7H20"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                />
-
-                                <path
-                                    d="M9 7V4H15V7"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-
-                                <path
-                                    d="M7 7L8 20H16L17 7"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linejoin="round"
-                                />
-
-                                <path
-                                    d="M10 11V16M14 11V16"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                />
-
-                            </svg>
-
-                        </button>
-
-
-                        <div class="seta">
-
-                            ›
-
-                        </div>
-
-                    </div>
 
                 </div>
 

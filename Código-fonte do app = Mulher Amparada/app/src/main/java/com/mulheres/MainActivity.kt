@@ -371,6 +371,20 @@ private fun abrirConfiguracoes() {
     )  
 }  
 
+private fun prepararPaginaExterna() {
+
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        true
+    )
+
+    WindowCompat.getInsetsController(
+        window,
+        window.decorView
+    ).show(
+        WindowInsetsCompat.Type.systemBars()
+    )
+}
 
 // =========================================================  
 // WEBVIEW  
@@ -653,54 +667,53 @@ settings.mixedContentMode =
 
     webView.webViewClient =  
         object : WebViewClient() {  
+        
+        override fun shouldOverrideUrlLoading(
+    view: WebView?,
+    request: WebResourceRequest?
+): Boolean {
 
-            override fun shouldOverrideUrlLoading(  
-                view: WebView?,  
-                request: WebResourceRequest?  
-            ): Boolean {  
+    val url = request?.url?.toString() ?: return false
 
-                val url =  
-                    request?.url  
-                        ?.toString()  
-                        ?: ""  
+    if (
+        url.startsWith("tel:")
+    ) {
 
+        startActivity(
+            Intent(
+                Intent.ACTION_DIAL,
+                Uri.parse(url)
+            )
+        )
 
-                if (  
-                    url.startsWith(  
-                        "tel:"  
-                    )  
-                ) {  
+        return true
+    }
 
-                    startActivity(  
-                        Intent(  
-                            Intent.ACTION_DIAL,  
-                            Uri.parse(url)  
-                        )  
-                    )  
+    if (
+        url.startsWith("https://wa.me")
+    ) {
 
-                    return true  
-                }  
+        startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse(url)
+            )
+        )
 
+        return true
+    }
 
-                if (  
-                    url.startsWith(  
-                        "https://wa.me"  
-                    )  
-                ) {  
+    if (
+        url.startsWith("https://") ||
+        url.startsWith("http://")
+    ) {
 
-                    startActivity(  
-                        Intent(  
-                            Intent.ACTION_VIEW,  
-                            Uri.parse(url)  
-                        )  
-                    )  
+        prepararPaginaExterna()
+    }
 
-                    return true  
-                }  
+    return false
+}
 
-
-                return false  
-            }  
 
 override fun onPageCommitVisible(
     view: WebView?,
@@ -2112,6 +2125,7 @@ webView.post {
 // VERIFICAR PERMISSÕES AO VOLTAR PARA O APP
 // =========================================================
 
+
 override fun onResume() {
 
 super.onResume()  
@@ -2200,3 +2214,4 @@ fun pegarLocalizacao() {
 }
 
 }
+

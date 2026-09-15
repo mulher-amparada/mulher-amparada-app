@@ -42,6 +42,8 @@
 
     --line: #24242a;
     --line-light: #303038;
+    
+    --pink: #ff3f82;
 
     --text: #ffffff;
     --text-soft: #a6a6ae;
@@ -130,10 +132,38 @@ body {
     text-align: center;
 
     padding-top: 20px;
-    padding-bottom: 24px;
+    padding-bottom: 104px;
 
 }
 
+.heroIcon {
+
+    width: 102px;
+    height: 102px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 18px;
+
+    background: #7c3aed;
+
+    border-radius: 22px;
+
+}
+
+.heroIcon img {
+
+    width: 48px;
+    height: 48px;
+
+    display: block;
+
+    object-fit: contain;
+
+}
 
 /* =========================================================
    HEROTAG
@@ -153,7 +183,7 @@ body {
 
     margin: 0 auto 12px;
 
-    color: #ffffff;
+    color: mediumslateblue;
 
     font-family: "Quicksand", sans-serif;
 
@@ -178,7 +208,7 @@ body {
 
     max-width: 500px;
 
-    color: var(--text-soft);
+    color: royalblue;
 
     font-size: clamp(14px, 3.8vw, 17px);
 
@@ -222,18 +252,62 @@ body {
 
 .sectionTitle {
 
-    color: #ffffff;
+    display:
+        flex;
 
-    font-size: 19px;
+    align-items:
+        center;
 
-    font-weight: 800;
+    gap:
+        9px;
 
-    letter-spacing: -0.3px;
+    margin:
+        0
+        0
+        13px
+        4px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        2px;
+
+    line-height:
+        1;
+
+    text-transform:
+        uppercase;
 
 }
 
+.sectionTitle::before {
 
+    content:
+        "";
 
+    width:
+        5px;
+
+    height:
+        5px;
+
+    flex:
+        0 0 5px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--pink);
+
+}
 
 /* =========================================================
    LISTA
@@ -596,6 +670,12 @@ margin-bottom: 1.5%;
 
     <header class="hero">
 
+<header class="hero">
+
+    <div class="heroIcon">
+        <img src="1.svg" alt="">
+    </div>
+
         <div class="heroTag">
             Meus Acessos
         </div>
@@ -603,8 +683,10 @@ margin-bottom: 1.5%;
         <div class="heroSubtitle">
             Tudo o que você precisa, organizado em um só lugar.
         </div>
+        
+</header>
 
-    </header>
+
 
 
     <!-- =====================================================
@@ -1140,7 +1222,7 @@ margin-bottom: 1.5%;
     </section>
 
     <!-- =====================================================
-         LINKS
+         Especial, só para você!
     ====================================================== -->
 
     <section
@@ -1151,7 +1233,7 @@ margin-bottom: 1.5%;
         <div class="sectionHeader">
 
             <h2 class="sectionTitle">
-                Links
+                Especial, só para você!
             </h2>
 
 

@@ -286,26 +286,6 @@ body{
 }
 
 
-.botao::before,
-.apagar::before{
-
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    border-radius:inherit;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.22),
-            transparent 55%
-        );
-
-    opacity:.8;
-}
 
 
 .botao::after,
@@ -348,7 +328,8 @@ body{
 .botao:hover{
 
     transform:
-        translateY(-2px)
+        
+        
         scale(1.04);
 }
 
@@ -382,7 +363,7 @@ body{
 
 .apagar{
 
-    background:rgba(255,255,255,.08);
+    background:#111;
 
     border:1px solid var(--borda);
 }
@@ -393,7 +374,7 @@ body{
     background:
         rgba(255,75,95,.18);
 
-    transform:translateY(-2px);
+    transform:scale(.94);
 }
 
 

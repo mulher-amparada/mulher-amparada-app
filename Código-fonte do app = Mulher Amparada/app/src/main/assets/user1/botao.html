@@ -7,71 +7,25 @@
 
 <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
 >
 
-<title>Ciclo</title>
+<meta name="theme-color" content="#000000">
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<title>Meus Acessos</title>
 
 <style>
 
 /* =========================================================
-   BARRAS DE ROLAGEM — TOTALMENTE TRANSPARENTES
+   FONT
 ========================================================= */
 
-*::-webkit-scrollbar{
-    width:0;
-    height:0;
-    background:transparent;
-}
-
-*::-webkit-scrollbar-track{
-    background:transparent;
-}
-
-*::-webkit-scrollbar-thumb{
-    background:transparent;
-    border:0;
-}
-
-*{
-    scrollbar-width:none;
-    scrollbar-color:transparent transparent;
-}
-
-html,
-body{
-    scrollbar-width:none;
-    scrollbar-color:transparent transparent;
-}
-
-html::-webkit-scrollbar,
-body::-webkit-scrollbar{
-    width:0;
-    height:0;
-    background:transparent;
-}
-
-
-/* =========================================================
-   RESET
-========================================================= */
-
-*,
-*::before,
-*::after{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:"Quicksand",sans-serif;
-}
-
-@font-face{
-    font-family:"Quicksand";
-    src:url("font.ttf") format("truetype");
-    font-display:swap;
+@font-face {
+    font-family: "Quicksand";
+    src: url("file:///android_asset/font.ttf") format("truetype");
+    font-weight: 400 800;
+    font-style: normal;
+    font-display: swap;
 }
 
 
@@ -79,3611 +33,629 @@ body::-webkit-scrollbar{
    VARIÁVEIS
 ========================================================= */
 
-:root{
+:root {
 
-    --rosa:#ff7f9f;
-    --rosa2:#ff4f78;
-    --rosa3:#ffb1c4;
+    --bg: #000000;
+    --surface: #0d0d0f;
+    --surface-2: #121216;
+    --surface-3: #18181d;
 
-    --fundo:#080808;
+    --line: #24242a;
+    --line-light: #303038;
+    
+    --pink: #ff3f82;
 
-    --card:rgba(255,255,255,.075);
-    --card2:rgba(255,255,255,.11);
+    --text: #ffffff;
+    --text-soft: #a6a6ae;
+    --text-muted: #707078;
 
-    --texto:#fff;
-    --texto2:rgba(255,255,255,.68);
-    --texto3:rgba(255,255,255,.42);
+    --blue: #7c6cff;
+    --blue-2: #9589ff;
+    --blue-dark: #5548d8;
 
-    --borda:rgba(255,255,255,.10);
+    --danger: #ff4f67;
 
-    --verde:#67e8a5;
-    --amarelo:#ffd166;
-    --vermelho:#ff657d;
-
-    --raio:26px;
-
-    --sombra:
-        0 14px 40px rgba(0,0,0,.25);
-
-    --transicao:
-        220ms cubic-bezier(.2,.8,.2,1);
-}
-
-
-/* =========================================================
-   BASE
-========================================================= */
-
-html{
-    scroll-behavior:smooth;
-    background:#000;
-}
-
-body{
-
-    min-height:100vh;
-
-    overflow-x:hidden;
-
-    color:var(--texto);
-
-    background:
-        radial-gradient(
-            circle at 50% -10%,
-            rgba(255,79,120,.055),
-            transparent 38%
-        ),
-        #000;
-
-    padding-top:
-        max(
-            50px,
-            env(safe-area-inset-top)
-        );
-
-    -webkit-tap-highlight-color:transparent;
-}
-
-
-/* =========================================================
-   APP
-========================================================= */
-
-#app{
-
-    width:min(720px,100%);
-
-    margin:0 auto;
-
-    padding:
-        16px
-        12px
-        35px;
-
-    opacity:0;
-
-    animation:
-        entrada
-        .55s
-        cubic-bezier(.2,.8,.2,1)
-        both;
-}
-
-
-@keyframes entrada{
-
-    from{
-        opacity:0;
-        transform:translateY(5px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+    --radius: 24px;
 
 }
 
 
 /* =========================================================
-   TOPO
+   RESET
 ========================================================= */
 
-.topo{
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
 
-    position:relative;
+html {
+    width: 100%;
+    min-height: 100%;
+    background: #000000 !important;
+    scroll-behavior: smooth;
+}
 
-    z-index:100;
+body {
+    width: 100%;
+    min-height: 100vh;
 
-    display:flex;
+padding-top: 5%;
+    background: #000000 !important;
+    color: var(--text);
 
-    align-items:center;
+    font-family: "Quicksand", sans-serif;
 
-    justify-content:space-between;
+    overflow-x: hidden;
 
-    width:100%;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
 
-    min-height:82px;
 
-    margin-bottom:15px;
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.container {
+
+    width: 100%;
+    max-width: 720px;
+
+    margin: 0 auto;
 
     padding:
         0
+        clamp(18px, 5vw, 34px)
+        60px;
+
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+
+    width: 100%;
+
+    min-height: clamp(190px, 32vh, 270px);
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    padding-top: 20px;
+    padding-bottom: 104px;
+
+}
+
+.heroIcon {
+
+    width: 102px;
+    height: 102px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 18px;
+
+    background: #7c3aed;
+
+    border-radius: 22px;
+
+}
+
+.heroIcon img {
+
+    width: 48px;
+    height: 48px;
+
+    display: block;
+
+    object-fit: contain;
+
+}
+
+/* =========================================================
+   HEROTAG
+   SEM BACKGROUND
+========================================================= */
+
+.heroTag {
+
+    width: 100%;
+
+    min-height: 70px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto;
+
+    color: #fff;
+
+    font-family: "Quicksand", sans-serif;
+
+    font-size: clamp(27px, 8vw, 42px);
+
+    font-weight: 800;
+
+    line-height: 1.1;
+
+    letter-spacing: -0.8px;
+
+    text-align: center;
+
+}
+
+
+/* =========================================================
+   SUBTÍTULO
+========================================================= */
+
+.heroSubtitle {
+
+    max-width: 500px;
+
+    color: #fff;
+
+    font-size: clamp(14px, 3.8vw, 17px);
+
+    font-weight: 500;
+
+    line-height: 1.5;
+
+    text-align: center;
+    
+    margin-top: -5%;
+
+}
+
+
+
+
+/* =========================================================
+   SEÇÃO
+========================================================= */
+
+.section {
+
+    width: 100%;
+
+
+    margin-bottom: 34px;
+
+}
+
+
+.sectionHeader {
+
+    display: flex;
+
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 13px;
+
+}
+
+
+.sectionTitle {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    margin:
+        0
+        0
+        13px
         4px;
 
-    background:#000;
-
-    border-radius:200px;
-
-    isolation:isolate;
-}
-
-
-.topo-esquerda{
-
-    display:flex;
-
-    flex-direction:column;
-
-    justify-content:center;
-
-    gap:4px;
-
-    min-width:0;
-
-    padding-left:4px;
-}
-
-
-.titulo{
-
-    font-size:25px;
-
-    line-height:1;
-
-    font-weight:800;
-
-    letter-spacing:-.8px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #fff 15%,
-            var(--rosa3)
-        );
-
-    -webkit-background-clip:text;
-    background-clip:text;
-
-    color:transparent;
-}
-
-
-.subtitulo{
-
-    color:var(--texto3);
-
-    font-size:11px;
-
-    font-weight:600;
-
-    line-height:1.3;
-}
-
-
-/* =========================================================
-   AÇÕES
-========================================================= */
-
-.acoes{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
-
-    flex-shrink:0;
-}
-
-
-.botao,
-.apagar{
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    width:48px;
-
-    height:48px;
-
-    flex-shrink:0;
-
-    border:0;
-
-    border-radius:50%;
-
-    outline:none;
-
-    cursor:pointer;
-
-    color:#fff;
-
-    overflow:hidden;
-
-    -webkit-tap-highlight-color:transparent;
-
-    transition:
-        transform var(--transicao),
-        background var(--transicao),
-        border-color var(--transicao),
-        box-shadow var(--transicao);
-}
-
-
-.botao::after,
-.apagar::after{
-
-    content:"";
-
-    position:absolute;
-
-    left:50%;
-    top:50%;
-
-    width:70%;
-    height:70%;
-
-    border-radius:50%;
-
-    background:
-        rgba(255,255,255,.08);
-
-    filter:blur(14px);
-
-    transform:
-        translate(-50%,-50%)
-        scale(.65);
-
-    opacity:.55;
-
-    transition:
-        transform .3s ease,
-        opacity .3s ease;
-}
-
-
-.botao{
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--rosa),
-            var(--rosa2)
-        );
-
-    box-shadow:
-        0 8px 25px
-        rgba(255,79,120,.28);
-}
-
-
-.botao:hover{
-
-    transform:translateY(-2px) scale(1.035);
-
-    box-shadow:
-        0 12px 30px
-        rgba(255,79,120,.36);
-}
-
-
-.botao:hover::after{
-
-    transform:
-        translate(-50%,-50%)
-        scale(1.15);
-
-    opacity:.8;
-}
-
-
-.botao:active,
-.apagar:active{
-
-    transform:scale(.92);
-}
-
-
-.mais{
-
-    position:relative;
-
-    z-index:2;
-
-    font-size:29px;
-
-    font-weight:300;
-
-    line-height:1;
-
-    transform:translateY(-1px);
-}
-
-
-.apagar{
-
-    background:
-        rgba(255,255,255,.055);
-
-    border:
-        1px solid
-        var(--borda);
-}
-
-
-.apagar:hover{
-
-    background:
-        rgba(255,75,95,.14);
-
-    border-color:
-        rgba(255,101,125,.28);
-
-    transform:translateY(-1px);
-}
-
-
-.apagar img{
-
-    position:relative;
-
-    z-index:2;
-
-    width:19px;
-
-    height:19px;
-
-    object-fit:contain;
-}
-
-
-/* =========================================================
-   RESUMO
-========================================================= */
-
-.resumo{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(3,minmax(0,1fr));
-
-    gap:9px;
-
-    margin-bottom:18px;
-}
-
-
-.resumo-card{
-
-    position:relative;
-
-    min-width:0;
-
-    min-height:88px;
-
-    padding:14px;
-
-    border:
-        1px solid
-        var(--borda);
-
-    border-radius:22px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.10),
-            rgba(255,255,255,.035)
-        );
-
-    box-shadow:
-        inset 0 1px 0
-        rgba(255,255,255,.035);
-
-    backdrop-filter:blur(16px);
-
-    -webkit-backdrop-filter:blur(16px);
-
-    overflow:hidden;
-
-    transition:
-        border-color var(--transicao),
-        transform var(--transicao);
-}
-
-
-.resumo-card::before{
-
-    content:"";
-
-    position:absolute;
-
-    right:-30px;
-    bottom:-32px;
-
-    width:80px;
-    height:80px;
-
-    border-radius:50%;
-
-    background:
-        rgba(255,127,159,.16);
-
-    filter:blur(7px);
-
-    pointer-events:none;
-}
-
-
-.resumo-card:hover{
-
-    transform:translateY(-2px);
-
-    border-color:
-        rgba(255,127,159,.20);
-}
-
-
-.resumo-label{
-
-    position:relative;
-
-    z-index:1;
-
-    color:var(--texto3);
-
-    font-size:10px;
-
-    font-weight:700;
-
-    line-height:1.2;
-}
-
-
-.resumo-valor{
-
-    position:relative;
-
-    z-index:1;
-
-    margin-top:6px;
-
-    font-size:23px;
-
-    line-height:1;
-
-    font-weight:800;
-
-    letter-spacing:-.5px;
-}
-
-
-.resumo-detalhe{
-
-    position:relative;
-
-    z-index:1;
-
-    margin-top:4px;
-
-    color:var(--texto3);
-
-    font-size:9px;
-
-    line-height:1.2;
-}
-
-
-/* =========================================================
-   CONTROLES
-========================================================= */
-
-.controles{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:9px;
-
-    width:100%;
-
-    margin-bottom:15px;
-}
-
-
-.busca{
-
-    flex:1;
-
-    min-width:0;
-
-    height:46px;
-
-    padding:
-        0
-        16px;
-
-    border:
-        1px solid
-        var(--borda);
-
-    border-radius:999px;
-
-    outline:none;
-
-    color:#fff;
-
-    background:
-        rgba(255,255,255,.065);
-
-    font-size:12px;
-
-    font-weight:600;
-
-    box-shadow:
-        inset 0 1px 0
-        rgba(255,255,255,.025);
-
-    transition:
-        border-color var(--transicao),
-        background var(--transicao),
-        box-shadow var(--transicao);
-}
-
-
-.busca::placeholder{
-
     color:
-        rgba(255,255,255,.30);
+        var(--muted);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        2px;
+
+    line-height:
+        1;
+
+    text-transform:
+        uppercase;
+
 }
 
+.sectionTitle::before {
 
-.busca:hover{
+    content:
+        "";
+
+    width:
+        5px;
+
+    height:
+        5px;
+
+    flex:
+        0 0 5px;
+
+    border-radius:
+        50%;
 
     background:
-        rgba(255,255,255,.08);
+        var(--pink);
+
 }
-
-
-.busca:focus{
-
-    border-color:
-        rgba(255,127,159,.50);
-
-    background:
-        rgba(255,255,255,.095);
-
-    box-shadow:
-        0 0 0 3px
-        rgba(255,127,159,.07);
-}
-
-
-/* =========================================================
-   DROPDOWN CUSTOMIZADO
-   MANTIDO SEM ALTERAÇÃO FUNCIONAL
-========================================================= */
-
-.ordenar-wrapper{
-
-    position:relative;
-
-    width:175px;
-
-    flex-shrink:0;
-
-    z-index:50;
-}
-
-
-.ordenar-botao{
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    width:100%;
-
-    height:46px;
-
-    padding:
-        0 42px
-        0 15px;
-
-    border:
-        1px solid
-        var(--borda);
-
-    border-radius:999px;
-
-    outline:none;
-
-    color:#fff;
-
-    background:#111;
-
-    font-family:"Quicksand",sans-serif;
-
-    font-size:12px;
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    transition:
-        background .2s ease,
-        border-color .2s ease,
-        box-shadow .2s ease;
-}
-
-
-.ordenar-botao:hover{
-
-    border-color:
-        rgba(255,192,203,.5);
-}
-
-
-.ordenar-seta{
-
-    position:absolute;
-
-    right:14px;
-    top:50%;
-
-    width:17px;
-    height:17px;
-
-    transform:
-        translateY(-50%);
-
-    color:
-        rgba(255,177,196,.85);
-
-    pointer-events:none;
-
-    transition:
-        transform .25s ease,
-        color .25s ease;
-}
-
-
-.ordenar-wrapper.aberto
-.ordenar-seta{
-
-    transform:
-        translateY(-50%)
-        rotate(180deg);
-
-    color:var(--rosa3);
-}
-
-
-/* =========================================================
-   MENU DE OPÇÕES
-   NÃO ALTERADO
-========================================================= */
-
-.menu-ordenar{
-
-    position:absolute;
-
-    top:calc(100% + 8px);
-
-    left:50%;
-
-    width:50%;
-
-    padding:6px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.12);
-
-    border-radius:20px;
-
-    background:#111;
-
-    opacity:0;
-
-    visibility:hidden;
-
-    pointer-events:none;
-
-    transform:
-        translateY(-6px)
-        scale(.97);
-
-    transform-origin:top center;
-
-    transition:
-        opacity .18s ease,
-        transform .18s ease,
-        visibility .18s ease;
-}
-
-
-.ordenar-wrapper.aberto
-.menu-ordenar{
-
-    opacity:1;
-
-    visibility:visible;
-
-    pointer-events:auto;
-}
-
-
-.opcao-ordenar{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    width:100%;
-
-    min-height:42px;
-
-    padding:0 11px;
-
-    border:0;
-
-    border-radius:14px;
-
-    outline:none;
-
-    color:
-        rgba(255,255,255,.72);
-
-    background:transparent;
-
-    font-family:"Quicksand",sans-serif;
-
-    font-size:11px;
-
-    font-weight:650;
-
-    text-align:left;
-
-    cursor:pointer;
-
-    transition:
-        background .18s ease,
-        color .18s ease;
-}
-
-
-.opcao-ordenar:hover{
-
-    color:#fff;
-}
-
-
-.opcao-ordenar:active{
-
-    background:
-        rgba(255,192,203,.5);
-}
-
-
-.opcao-ordenar.ativa{
-
-    color:#fff;
-
-    background:
-        rgba(255,192,203,.5);
-}
-
 
 /* =========================================================
    LISTA
 ========================================================= */
 
-#lista{
+.list {
 
-    display:flex;
+    width: 100%;
 
-    flex-direction:column;
+    display: flex;
 
-    gap:10px;
+    flex-direction: column;
 
-    padding-block:10px;
+    gap: 9px;
 
-    margin-bottom:5%;
-}
-
-
-.vazio{
-
-    position:relative;
-
-    padding:
-        45px
-        20px;
-
-    text-align:center;
-
-    border:
-        1px dashed
-        rgba(255,255,255,.13);
-
-    border-radius:28px;
-
-    background:
-        rgba(255,255,255,.035);
-
-    overflow:hidden;
-}
-
-
-.vazio::before{
-
-    content:"";
-
-    position:absolute;
-
-    left:50%;
-    top:-80px;
-
-    width:160px;
-    height:160px;
-
-    border-radius:50%;
-
-    background:
-        rgba(255,127,159,.06);
-
-    filter:blur(25px);
-
-    transform:translateX(-50%);
-}
-
-
-.vazio-icone{
-
-    position:relative;
-
-    font-size:36px;
-
-    margin-bottom:10px;
-}
-
-
-.vazio-titulo{
-
-    position:relative;
-
-    font-size:16px;
-
-    font-weight:800;
-}
-
-
-.vazio-texto{
-
-    position:relative;
-
-    margin-top:5px;
-
-    color:var(--texto3);
-
-    font-size:11px;
-
-    line-height:1.5;
 }
 
 
 /* =========================================================
-   CARD DE REGISTRO
+   BOTÃO
 ========================================================= */
-
-.card{
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:14px;
-
-    min-height:88px;
-
-    padding:
-        14px
-        15px;
-
-    padding-right:68px;
-
-    border:
-        1px solid
-        var(--borda);
-
-    border-radius:26px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.105),
-            rgba(255,255,255,.045)
-        );
-
-    box-shadow:
-        inset 0 1px 0
-        rgba(255,255,255,.035);
-
-    backdrop-filter:blur(16px);
-
-    -webkit-backdrop-filter:blur(16px);
-
-    cursor:pointer;
-
-    overflow:hidden;
-
-    animation:
-        cardEntrada
-        .45s
-        cubic-bezier(.2,.8,.2,1)
-        both;
-
-    transition:
-        transform var(--transicao),
-        border-color var(--transicao),
-        background var(--transicao),
-        box-shadow var(--transicao);
-}
-
-
-@keyframes cardEntrada{
-
-    from{
-        opacity:0;
-        transform:translateY(7px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-
-.card::before{
-
-    content:"";
-
-    position:absolute;
-
-    left:0;
-    top:12px;
-    bottom:12px;
-
-    width:3px;
-
-    border-radius:
-        0
-        5px
-        5px
-        0;
-
-    background:
-        linear-gradient(
-            180deg,
-            var(--rosa),
-            var(--rosa2)
-        );
-
-    box-shadow:
-        0 0 14px
-        rgba(255,79,120,.20);
-}
-
-
-.card::after{
-
-    content:"";
-
-    position:absolute;
-
-    right:-70px;
-    top:-70px;
-
-    width:120px;
-    height:120px;
-
-    border-radius:50%;
-
-    background:
-        rgba(255,127,159,.10);
-
-    filter:blur(8px);
-
-    pointer-events:none;
-
-    transition:
-        transform .4s ease;
-}
-
-
-.card:hover{
-
-    transform:translateY(-3px);
-
-    border-color:
-        rgba(255,127,159,.30);
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.14),
-            rgba(255,255,255,.06)
-        );
-
-    box-shadow:
-        0 15px 38px
-        rgba(0,0,0,.24);
-}
-
-
-.card:hover::after{
-
-    transform:scale(1.6);
-}
-
-
-.humor{
-
-    position:relative;
-
-    z-index:2;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    width:52px;
-    height:52px;
-
-    flex-shrink:0;
-
-    border:
-        1px solid
-        rgba(255,255,255,.10);
-
-    border-radius:19px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,127,159,.22),
-            rgba(255,255,255,.06)
-        );
-
-    box-shadow:
-        inset 0 1px 0
-        rgba(255,255,255,.05);
-
-    font-size:26px;
-
-    transition:
-        transform var(--transicao);
-}
-
-
-.card:hover .humor{
-
-    transform:scale(1.035);
-}
-
-
-.card-info{
-
-    position:relative;
-
-    z-index:2;
-
-    flex:1;
-
-    min-width:0;
-}
-
-
-.card-data{
-
-    overflow:hidden;
-
-    color:#fff;
-
-    font-size:15px;
-
-    line-height:1.2;
-
-    font-weight:800;
-
-    white-space:nowrap;
-
-    text-overflow:ellipsis;
-}
-
-
-.card-humor{
-
-    margin-top:4px;
-
-    color:var(--texto3);
-
-    font-size:10px;
-
-    font-weight:600;
-}
-
-
-.card-direita{
-
-    position:relative;
-
-    z-index:2;
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:flex-end;
-
-    gap:5px;
-
-    flex-shrink:0;
-}
-
-
-.dor{
-
-    padding:
-        5px
-        9px;
-
-    border-radius:999px;
-
-    background:
-        rgba(255,255,255,.08);
-
-    color:
-        rgba(255,255,255,.75);
-
-    font-size:9px;
-
-    font-weight:800;
-}
-
-
-.seta{
-
-    color:var(--texto3);
-
-    font-size:17px;
-
-    transition:
-        transform var(--transicao),
-        color var(--transicao);
-}
-
-
-.card:hover .seta{
-
-    color:var(--rosa3);
-
-    transform:translateX(2px);
-}
-
-
 /* =========================================================
-   TELA DE GRÁFICOS
+   BOTÃO
 ========================================================= */
 
-#telaGraficos{
+.btn {
 
-    display:none;
+    width: 100%;
+    height: auto;
 
-    animation:
-        entrada
-        .4s
-        ease
-        both;
-}
+    display: flex;
+    align-items: center;
 
+    padding: 26px;
+    
+    gap: 20px;
 
-.graficos-topo{
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
 
-    display:flex;
+    background: var(--surface);
+    color: #ffffff;
 
-    align-items:center;
+    font-family: "Quicksand", sans-serif;
 
-    gap:12px;
-
-    margin-bottom:15px;
-}
-
-
-/* =========================================================
-   BOTÃO VOLTAR
-========================================================= */
-
-#volta{
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    width:44px;
-    height:44px;
-
-    flex-shrink:0;
-
-    padding:0;
-
-    border:
-        1px solid
-        var(--borda);
-
-    border-radius:50%;
-
-    outline:none;
-
-    color:#fff;
-
-    background:
-        rgba(255,255,255,.075);
-
-    cursor:pointer;
+    cursor: pointer;
 
     transition:
-        transform var(--transicao),
-        background var(--transicao),
-        border-color var(--transicao);
-}
-
-
-#volta svg{
-
-    display:block;
-
-    width:21px;
-    height:21px;
-
-    flex-shrink:0;
-}
-
-
-#volta:hover{
-
-    transform:translateX(-3px);
-
-    background:
-        rgba(255,255,255,.13);
-
-    border-color:
-        rgba(255,127,159,.20);
-}
-
-
-#volta:active{
-
-    transform:
-        translateX(-3px)
-        scale(.94);
-}
-
-
-.detalhe-titulo{
-
-    font-size:20px;
-
-    line-height:1.1;
-
-    font-weight:800;
-}
-
-
-.detalhe-sub{
-
-    margin-top:3px;
-
-    color:var(--texto3);
-
-    font-size:10px;
-}
-
-
-/* =========================================================
-   DESTAQUE DA DOR
-========================================================= */
-
-.dor-destaque{
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    min-height:105px;
-
-    padding:20px;
-
-    margin-bottom:12px;
-
-    border:
-        1px solid
-        rgba(255,127,159,.20);
-
-    border-radius:28px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,127,159,.22),
-            rgba(255,255,255,.055)
-        );
-
-    box-shadow:
-        inset 0 1px 0
-        rgba(255,255,255,.04);
-
-    overflow:hidden;
-}
-
-
-.dor-destaque::before{
-
-    content:"";
-
-    position:absolute;
-
-    right:-70px;
-    top:-70px;
-
-    width:170px;
-    height:170px;
-
-    border-radius:50%;
-
-    background:
-        rgba(255,127,159,.15);
-
-    filter:blur(10px);
-
-    pointer-events:none;
-}
-
-
-.dor-label{
-
-    position:relative;
-
-    color:var(--texto2);
-
-    font-size:11px;
-
-    font-weight:600;
-}
-
-
-.dor-numero{
-
-    position:relative;
-
-    margin-top:3px;
-
-    font-size:40px;
-
-    line-height:1;
-
-    font-weight:900;
-
-    letter-spacing:-1px;
-}
-
-
-.dor-max{
-
-    position:relative;
-
-    color:var(--texto3);
-
-    font-size:10px;
-}
-
-
-.dor-barra{
-
-    position:relative;
-
-    width:45%;
-
-    height:9px;
-
-    border-radius:999px;
-
-    background:
-        rgba(255,255,255,.10);
-
-    box-shadow:
-        inset 0 1px 2px
-        rgba(0,0,0,.18);
-
-    overflow:hidden;
-}
-
-
-.dor-progresso{
-
-    width:0;
-
-    height:100%;
-
-    border-radius:inherit;
-
-    background:
-        linear-gradient(
-            90deg,
-            var(--verde),
-            var(--amarelo),
-            var(--vermelho)
-        );
-
-    box-shadow:
-        0 0 12px
-        rgba(255,127,159,.22);
-
-    transition:
-        width .8s
-        cubic-bezier(.2,.8,.2,1);
-}
-
-
-/* =========================================================
-   GRID DE GRÁFICOS
-========================================================= */
-
-.graficos-grid{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(2,minmax(0,1fr));
-
-    gap:12px;
-}
-
-
-.grafico-card{
-
-    position:relative;
-
-    min-width:0;
-
-    padding:14px;
-
-    border:
-        1px solid
-        var(--borda);
-
-    border-radius:25px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.09),
-            rgba(255,255,255,.035)
-        );
-
-    box-shadow:
-        inset 0 1px 0
-        rgba(255,255,255,.035);
-
-    backdrop-filter:blur(14px);
-
-    -webkit-backdrop-filter:blur(14px);
-
-    overflow:hidden;
-}
-
-
-.grafico-card::before{
-
-    content:"";
-
-    position:absolute;
-
-    right:-45px;
-    top:-45px;
-
-    width:100px;
-    height:100px;
-
-    border-radius:50%;
-
-    background:
-        rgba(255,127,159,.08);
-
-    filter:blur(5px);
-
-    pointer-events:none;
-}
-
-
-.grafico-titulo{
-
-    position:relative;
-
-    z-index:1;
-
-    margin-bottom:8px;
-
-    font-size:12px;
-
-    line-height:1.2;
-
-    font-weight:800;
-}
-
-
-.grafico-card canvas{
-
-    position:relative;
-
-    width:100% !important;
-
-    height:220px !important;
-}
-
-
-/* =========================================================
-   MODAL
-========================================================= */
-
-#modal{
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:1000;
-
-    display:none;
-
-    align-items:flex-end;
-
-    justify-content:center;
-
-    padding:
-        15px
-        15px
-        max(
-            20px,
-            env(safe-area-inset-bottom)
-        );
-
-    background:
-        rgba(0,0,0,.65);
-
-    backdrop-filter:blur(10px);
-
-    -webkit-backdrop-filter:blur(10px);
-
-    overflow:hidden;
-}
-
-
-#modal.aberto{
-
-    display:flex;
-
-    animation:
-        modalFundo
-        .25s
-        ease both;
-}
-
-
-@keyframes modalFundo{
-
-    from{
-        opacity:0;
-    }
-
-    to{
-        opacity:1;
-    }
-}
-
-
-/* =========================================================
-   CONTEÚDO MODAL
-========================================================= */
-
-.modal-conteudo{
-
-    position:relative;
-
-    width:min(650px,100%);
-
-    max-height:
-        calc(
-            90vh -
-            max(
-                20px,
-                env(safe-area-inset-bottom)
-            )
-        );
-
-    padding:
-        22px
-        22px
-        28px;
-
-    overflow-y:auto;
-
-    overflow-x:hidden;
-
-    border:
-        1px solid
-        rgba(255,255,255,.13);
-
-    border-radius:
-        32px
-        32px
-        20px
-        20px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(35,35,35,.97),
-            rgba(12,12,12,.97)
-        );
-
-    box-shadow:
-        0 -20px 80px
-        rgba(0,0,0,.45),
-
-        inset 0 1px 0
-        rgba(255,255,255,.04);
-
-    animation:
-        modalSubir
-        .35s
-        cubic-bezier(.2,.8,.2,1)
-        both;
-}
-
-
-@keyframes modalSubir{
-
-    from{
-        transform:translateY(60px);
-        opacity:0;
-    }
-
-    to{
-        transform:translateY(0);
-        opacity:1;
-    }
-}
-
-
-.modal-conteudo::before{
-
-    content:"";
-
-    position:absolute;
-
-    top:9px;
-    left:50%;
-
-    width:45px;
-    height:4px;
-
-    border-radius:999px;
-
-    background:
-        rgba(255,255,255,.20);
-
-    transform:
-        translateX(-50%);
-}
-
-
-/* =========================================================
-   TOPO MODAL
-========================================================= */
-
-.modal-topo{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    margin-bottom:18px;
-
-    padding-top:8px;
-}
-
-
-.modal-titulo{
-
-    font-size:21px;
-
-    line-height:1.1;
-
-    font-weight:800;
-}
-
-
-.fechar{
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    width:38px;
-    height:38px;
-
-    flex-shrink:0;
-
-    border:0;
-
-    border-radius:50%;
-
-    outline:none;
-
-    background:
-        rgba(255,255,255,.08);
-
-    color:#fff;
-
-    cursor:pointer;
-
-    font-size:19px;
-
-    transition:
-        background var(--transicao),
-        transform var(--transicao);
-}
-
-
-.fechar:hover{
-
-    background:
-        rgba(255,255,255,.13);
-}
-
-
-.fechar:active{
-
-    transform:scale(.90);
-}
-
-
-/* =========================================================
-   FORM
-========================================================= */
-
-.form-grid{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(2,minmax(0,1fr));
-
-    gap:11px;
-}
-
-
-.campo{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:6px;
-
-    min-width:0;
-}
-
-
-.campo.full{
-
-    grid-column:1/-1;
-}
-
-
-.campo label{
-
-    color:var(--texto2);
-
-    font-size:10px;
-
-    font-weight:700;
-}
-
-
-.campo input,
-.campo select{
-
-    width:100%;
-
-    height:45px;
-
-    padding:
-        0
-        13px;
-
-    border:
-        1px solid
-        var(--borda);
-
-    border-radius:15px;
-
-    outline:none;
-
-    color:#fff;
-
-    background:
-        rgba(255,255,255,.07);
-
-    font-size:12px;
-
-    transition:
-        border-color var(--transicao),
-        background var(--transicao),
-        box-shadow var(--transicao);
-}
-
-
-.campo input:hover,
-.campo select:hover{
-
-    background:
-        rgba(255,255,255,.085);
-}
-
-
-.campo input:focus,
-.campo select:focus{
-
-    border-color:
-        rgba(255,127,159,.5);
-
-    background:
-        rgba(255,255,255,.09);
-
-    box-shadow:
-        0 0 0 3px
-        rgba(255,127,159,.06);
-}
-
-
-/* =========================================================
-   CHECKS
-========================================================= */
-
-.checks{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(2,minmax(0,1fr));
-
-    gap:8px;
-
-    margin-top:5px;
-}
-
-
-.check{
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:flex-start;
-
-    gap:10px;
-
-    min-height:43px;
-
-    padding:
-        9px
-        11px;
-
-    border:
-        1px solid
-        var(--borda);
-
-    border-radius:15px;
-
-    color:var(--texto2);
-
-    background:
-        rgba(255,255,255,.045);
-
-    cursor:pointer;
-
-    font-size:11px;
-
-    transition:
-        background var(--transicao),
-        border-color var(--transicao),
-        transform var(--transicao);
-}
-
-
-.check:hover{
-
-    background:
-        rgba(255,255,255,.08);
-
-    border-color:
-        rgba(255,127,159,.22);
-}
-
-
-.check:active{
-
-    transform:scale(.98);
-}
-
-
-.check input{
-
-    width:18px;
-    height:18px;
-
-    flex:0 0 18px;
-
-    margin:0;
-
-    accent-color:var(--rosa);
-
-    cursor:pointer;
-}
-
-
-/* =========================================================
-   SALVAR
-========================================================= */
-
-.salvar{
-
-    width:100%;
-
-    height:50px;
-
-    margin-top:23px;
-
-    border:0;
-
-    border-radius:999px;
-
-    outline:none;
-
-    color:#fff;
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--rosa),
-            var(--rosa2)
-        );
-
-    box-shadow:
-        0 10px 30px
-        rgba(255,79,120,.25);
-
-    cursor:pointer;
-
-    font-size:14px;
-
-    font-weight:800;
-
-    transition:
-        transform var(--transicao),
-        box-shadow var(--transicao);
-}
-
-
-.salvar:hover{
-
-    transform:translateY(-2px);
-
-    box-shadow:
-        0 14px 35px
-        rgba(255,79,120,.35);
-}
-
-
-.salvar:active{
-
-    transform:scale(.985);
-}
-
-
-/* =========================================================
-   SELETORES CUSTOMIZADOS
-========================================================= */
-
-.seletor-data-custom{
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    width:100%;
-    height:45px;
-
-    padding:
-        0 42px
-        0 13px;
-
-    border:
-        1px solid
-        var(--borda);
-
-    border-radius:15px;
-
-    outline:none;
-
-    color:#fff;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,127,159,.10),
-            rgba(255,255,255,.055)
-        );
-
-    font-size:12px;
-
-    font-weight:700;
-
-    text-align:left;
-
-    cursor:pointer;
-
-    box-shadow:
-        inset 0 1px 0
-        rgba(255,255,255,.04);
-
-    transition:
-        background var(--transicao),
-        border-color var(--transicao),
-        transform var(--transicao),
-        box-shadow var(--transicao);
-}
-
-
-.seletor-data-custom:hover{
-
-    border-color:
-        rgba(255,127,159,.45);
-
-    background:
-        rgba(255,127,159,.12);
-}
-
-
-.seletor-data-custom:focus-visible{
-
-    box-shadow:
-        0 0 0 3px
-        rgba(255,127,159,.07);
-}
-
-
-.seletor-data-custom:active{
-
-    transform:scale(.985);
-}
-
-
-.seletor-data-icone{
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    width:26px;
-    height:26px;
-
-    margin-right:9px;
-
-    flex-shrink:0;
-
-    border-radius:9px;
-
-    background:
-        rgba(255,127,159,.15);
-
-    font-size:14px;
-}
-
-
-.seletor-data-texto{
-
-    min-width:0;
-
-    overflow:hidden;
-
-    color:
-        rgba(255,255,255,.78);
-
-    white-space:nowrap;
-
-    text-overflow:ellipsis;
-}
-
-
-.seletor-data-seta{
-
-    position:absolute;
-
-    right:14px;
-    top:50%;
-
-    color:
-        rgba(255,177,196,.8);
-
-    font-size:20px;
-
-    line-height:1;
-
-    transform:
-        translateY(-50%);
-}
-
-
-/* =========================================================
-   HUMOR — SELETOR
-========================================================= */
-
-.seletor-humor-custom{
-
-    position:relative;
-
-    width:100%;
-}
-
-
-.seletor-humor-botao{
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    width:100%;
-    height:45px;
-
-    padding:
-        0 42px
-        0 12px;
-
-    border:
-        1px solid
-        var(--borda);
-
-    border-radius:15px;
-
-    outline:none;
-
-    color:#fff;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,127,159,.10),
-            rgba(255,255,255,.055)
-        );
-
-    font-size:12px;
-
-    font-weight:700;
-
-    text-align:left;
-
-    cursor:pointer;
-
-    transition:
-        background var(--transicao),
-        border-color var(--transicao),
-        transform var(--transicao);
-}
-
-
-.seletor-humor-botao:hover{
-
-    border-color:
-        rgba(255,127,159,.45);
-
-    background:
-        rgba(255,127,159,.12);
-}
-
-
-.seletor-humor-botao:active{
-
-    transform:scale(.985);
-}
-
-
-.seletor-humor-emoji{
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    width:29px;
-    height:29px;
-
-    margin-right:9px;
-
-    flex-shrink:0;
-
-    border-radius:10px;
-
-    background:
-        rgba(255,127,159,.14);
-
-    font-size:17px;
-}
-
-
-.seletor-humor-texto{
-
-    min-width:0;
-
-    overflow:hidden;
-
-    white-space:nowrap;
-
-    text-overflow:ellipsis;
-}
-
-
-.seletor-humor-seta{
-
-    position:absolute;
-
-    right:14px;
-    top:50%;
-
-    width:16px;
-    height:16px;
-
-    color:
-        rgba(255,177,196,.8);
-
-    pointer-events:none;
-
-    transform:
-        translateY(-50%);
-
-    transition:
-        transform .2s ease;
-}
-
-
-.seletor-humor-custom.aberto
-.seletor-humor-seta{
-
-    transform:
-        translateY(-50%)
-        rotate(180deg);
-}
-
-
-/* =========================================================
-   MENU DE HUMOR
-========================================================= */
-
-.menu-humor-custom{
-
-    position:absolute;
-
-    z-index:700;
-
-    top:calc(100% + 7px);
-
-    left:0;
-
-    width:100%;
-
-    padding:6px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.12);
-
-    border-radius:19px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(32,24,28,.99),
-            rgba(10,9,10,.99)
-        );
-
-    box-shadow:
-        0 20px 50px
-        rgba(0,0,0,.55),
-
-        inset 0 1px 0
-        rgba(255,255,255,.055);
-
-    backdrop-filter:blur(22px);
-
-    -webkit-backdrop-filter:blur(22px);
-
-    opacity:0;
-
-    visibility:hidden;
-
-    pointer-events:none;
-
-    transform:
-        translateY(-6px)
-        scale(.97);
-
-    transform-origin:top center;
-
-    transition:
-        opacity .18s ease,
-        transform .18s ease,
-        visibility .18s ease;
-}
-
-
-.seletor-humor-custom.aberto
-.menu-humor-custom{
-
-    opacity:1;
-
-    visibility:visible;
-
-    pointer-events:auto;
-
-    transform:
-        translateY(0)
-        scale(1);
-}
-
-
-/* =========================================================
-   OPÇÕES DE HUMOR
-========================================================= */
-
-.opcao-humor{
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    width:100%;
-
-    min-height:47px;
-
-    padding:6px 9px;
-
-    border:0;
-
-    border-radius:14px;
-
-    outline:none;
-
-    color:
-        rgba(255,255,255,.72);
-
-    background:transparent;
-
-    font-size:11px;
-
-    font-weight:700;
-
-    text-align:left;
-
-    cursor:pointer;
-
-    transition:
-        background .18s ease,
-        color .18s ease,
-        transform .12s ease;
-}
-
-
-.opcao-humor:hover{
-
-    color:#fff;
-
-    background:
-        rgba(255,127,159,.11);
-}
-
-
-.opcao-humor:active{
-
-    transform:scale(.985);
-
-    background:
-        rgba(255,127,159,.17);
-}
-
-
-.opcao-humor-emoji{
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    width:34px;
-    height:34px;
-
-    margin-right:10px;
-
-    flex-shrink:0;
-
-    border-radius:11px;
-
-    background:
-        rgba(255,255,255,.06);
-
-    font-size:19px;
-}
-
-
-.opcao-humor-info{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:2px;
-
-    min-width:0;
-}
-
-
-.opcao-humor-nome{
-
-    color:
-        rgba(255,255,255,.88);
-
-    font-size:12px;
-
-    font-weight:800;
-}
-
-
-.opcao-humor-descricao{
-
-    color:
-        rgba(255,255,255,.38);
-
-    font-size:9px;
-
-    font-weight:500;
-}
-
-
-.opcao-humor-check{
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    width:21px;
-    height:21px;
-
-    margin-left:auto;
-
-    flex-shrink:0;
-
-    border-radius:50%;
-
-    color:transparent;
-
-    background:transparent;
-
-    font-size:11px;
-
-    font-weight:900;
-
-    transition:
-        background .18s ease,
-        color .18s ease,
-        transform .18s ease;
-}
-
-
-.opcao-humor.ativa{
-
-    color:#fff;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,127,159,.19),
-            rgba(255,127,159,.07)
-        );
-}
-
-
-.opcao-humor.ativa
-.opcao-humor-emoji{
-
-    background:
-        rgba(255,127,159,.18);
-}
-
-
-.opcao-humor.ativa
-.opcao-humor-check{
-
-    color:#fff;
-
-    background:var(--rosa2);
-
-    transform:scale(1.05);
-
-    box-shadow:
-        0 4px 12px
-        rgba(255,79,120,.25);
-}
-
-
-/* =========================================================
-   CALENDÁRIO
-========================================================= */
-
-.calendario-fundo{
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:3000;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    padding:18px;
-
-    background:
-        rgba(0,0,0,.70);
-
-    backdrop-filter:blur(12px);
-
-    -webkit-backdrop-filter:blur(12px);
-
-    animation:
-        calendarioFundo
-        .2s ease both;
-}
-
-
-@keyframes calendarioFundo{
-
-    from{
-        opacity:0;
-    }
-
-    to{
-        opacity:1;
-    }
-}
-
-
-.calendario-painel{
-
-    position:relative;
-
-    width:min(390px,100%);
-
-    padding:20px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.13);
-
-    border-radius:28px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(35,27,30,.99),
-            rgba(12,10,11,.99)
-        );
-
-    box-shadow:
-        0 25px 80px
-        rgba(0,0,0,.60),
-
-        inset 0 1px 0
-        rgba(255,255,255,.06);
-
-    animation:
-        calendarioPainel
-        .25s
-        cubic-bezier(.2,.8,.2,1)
-        both;
-}
-
-
-@keyframes calendarioPainel{
-
-    from{
-        opacity:0;
-
-        transform:
-            translateY(15px)
-            scale(.97);
-    }
-
-    to{
-        opacity:1;
-
-        transform:
-            translateY(0)
-            scale(1);
-    }
-}
-
-
-.calendario-topo{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-    margin-bottom:18px;
-}
-
-
-.calendario-titulo{
-
-    font-size:19px;
-
-    font-weight:900;
-
-    color:#fff;
-}
-
-
-.calendario-subtitulo{
-
-    margin-top:2px;
-
-    color:
-        rgba(255,255,255,.38);
-
-    font-size:10px;
-}
-
-
-.calendario-fechar{
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    width:38px;
-    height:38px;
-
-    flex-shrink:0;
-
-    margin-left:auto;
-
-    border:0;
-
-    border-radius:50%;
-
-    color:#fff;
-
-    background:
-        rgba(255,255,255,.08);
-
-    font-size:21px;
-
-    cursor:pointer;
-
-    transition:
-        background var(--transicao),
-        transform var(--transicao);
-}
-
-
-.calendario-fechar:hover{
-
-    background:
-        rgba(255,255,255,.13);
-}
-
-
-.calendario-fechar:active{
-
-    transform:scale(.92);
-}
-
-
-.calendario-navegacao{
-
-    display:grid;
-
-    grid-template-columns:
-        42px
-        1fr
-        42px;
-
-    align-items:center;
-
-    gap:8px;
-
-    margin-bottom:12px;
-}
-
-
-.calendario-navegacao strong{
-
-    text-align:center;
-
-    color:
-        rgba(255,255,255,.85);
-
-    font-size:13px;
-
-    font-weight:800;
-}
-
-
-.calendario-navegacao button{
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    width:42px;
-    height:38px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.08);
-
-    border-radius:13px;
-
-    color:#fff;
-
-    background:
-        rgba(255,255,255,.055);
-
-    font-size:23px;
-
-    line-height:1;
-
-    cursor:pointer;
-
-    transition:
-        background var(--transicao),
-        transform var(--transicao);
-}
-
-
-.calendario-navegacao button:hover{
-
-    background:
-        rgba(255,127,159,.14);
-}
-
-
-.calendario-navegacao button:active{
-
-    transform:scale(.93);
-}
-
-
-/* =========================================================
-   SEMANA
-========================================================= */
-
-.calendario-semana{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(7,1fr);
-
-    gap:4px;
+        transform .15s ease,
+        background .15s ease,
+        border-color .15s ease;
 
-    margin-bottom:6px;
-}
-
-
-.calendario-semana span{
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    height:28px;
-
-    color:
-        rgba(255,255,255,.32);
-
-    font-size:8px;
-
-    font-weight:800;
-}
-
-
-/* =========================================================
-   DIAS
-========================================================= */
-
-.calendario-dias{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(7,1fr);
-
-    gap:5px;
-}
-
-
-.calendario-dia{
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    width:100%;
-
-    aspect-ratio:1;
-
-    border:0;
-
-    border-radius:13px;
-
-    color:
-        rgba(255,255,255,.72);
-
-    background:transparent;
-
-    font-size:11px;
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    transition:
-        background .16s ease,
-        color .16s ease,
-        transform .12s ease;
-}
-
-
-.calendario-dia:hover{
-
-    color:#fff;
-
-    background:
-        rgba(255,127,159,.13);
-}
-
-
-.calendario-dia:active{
-
-    transform:scale(.90);
-}
-
-
-.calendario-dia.outro-mes{
-
-    color:
-        rgba(255,255,255,.16);
-}
-
-
-.calendario-dia.hoje{
-
-    border:
-        1px solid
-        rgba(255,127,159,.55);
-
-    color:#ffb1c4;
-}
-
-
-.calendario-dia.selecionado{
-
-    color:#fff;
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--rosa),
-            var(--rosa2)
-        );
-
-    box-shadow:
-        0 6px 16px
-        rgba(255,79,120,.25);
-}
-
-
-.calendario-hoje{
-
-    width:100%;
-
-    height:43px;
-
-    margin-top:15px;
-
-    border:
-        1px solid
-        rgba(255,127,159,.20);
-
-    border-radius:14px;
-
-    color:#ffb1c4;
-
-    background:
-        rgba(255,127,159,.08);
-
-    font-size:11px;
-
-    font-weight:800;
-
-    cursor:pointer;
-
-    transition:
-        background var(--transicao),
-        transform var(--transicao);
-}
-
-
-.calendario-hoje:hover{
-
-    background:
-        rgba(255,127,159,.14);
-}
-
-
-.calendario-hoje:active{
-
-    transform:scale(.98);
-}
-
-
-/* =========================================================
-   COMO VOCÊ SE SENTIU?
-========================================================= */
-
-.humor-label{
-
-    display:block;
-
-    margin-bottom:8px;
-
-    color:var(--texto2);
-
-    font-size:11px;
-
-    font-weight:600;
-}
-
-
-.humor-opcoes{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(2,minmax(0,1fr));
-
-    gap:9px;
-}
-
-
-.humor-opcao{
-
-    position:relative;
-
-    display:block;
-
-    cursor:pointer;
-
-    user-select:none;
-}
-
-
-.humor-opcao input{
-
-    position:absolute;
-
-    opacity:0;
-
-    pointer-events:none;
-}
-
-
-.humor-conteudo{
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    min-height:52px;
-
-    padding:
-        9px
-        11px;
-
-    border:
-        1px solid
-        var(--borda);
-
-    border-radius:17px;
-
-    color:var(--texto2);
-
-    background:
-        rgba(255,255,255,.045);
-
-    transition:
-        background var(--transicao),
-        border-color var(--transicao),
-        transform var(--transicao),
-        box-shadow var(--transicao);
-}
-
-
-.humor-emoji{
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    width:32px;
-    height:32px;
-
-    flex-shrink:0;
-
-    border-radius:11px;
-
-    background:
-        rgba(255,255,255,.06);
 
-    font-size:19px;
+padding-bottom: 15px;
+padding-top: 15px;
 
-    transition:
-        background var(--transicao),
-        transform var(--transicao);
+margin-top: 1.5%;
+margin-bottom: 1.5%;
 }
 
+.btn:active {
 
-.humor-nome{
+    transform: scale(.985);
 
-    flex:1;
+    background: var(--surface-2);
 
-    min-width:0;
-
-    font-size:11px;
-
-    font-weight:700;
-}
-
-
-.humor-check{
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    width:21px;
-    height:21px;
-
-    flex-shrink:0;
-
-    border-radius:50%;
-
-    color:transparent;
-
-    background:transparent;
-
-    font-size:12px;
-
-    font-weight:900;
-
-    transition:
-        background var(--transicao),
-        color var(--transicao),
-        transform var(--transicao);
-}
-
-
-.humor-opcao:hover
-.humor-conteudo{
-
-    border-color:
-        rgba(255,127,159,.30);
-
-    background:
-        rgba(255,127,159,.08);
-
-}
-
-
-.humor-opcao
-input:checked
-+
-.humor-conteudo{
-
-    color:#fff;
-
-    border-color:
-        rgba(255,127,159,.50);
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,127,159,.20),
-            rgba(255,127,159,.08)
-        );
-
-    box-shadow:
-        0 7px 20px
-        rgba(255,79,120,.10);
-}
-
-
-.humor-opcao
-input:checked
-+
-.humor-conteudo
-.humor-emoji{
-
-    background:
-        rgba(255,127,159,.18);
-
-    transform:scale(1.05);
-}
-
-
-.humor-opcao
-input:checked
-+
-.humor-conteudo
-.humor-check{
-
-    color:#fff;
-
-    background:var(--rosa2);
-
-    box-shadow:
-        0 4px 12px
-        rgba(255,79,120,.25);
-
-    transform:scale(1.05);
-}
-
-
-.humor-opcao:active
-.humor-conteudo{
-
-    transform:scale(.97);
-}
-
-
-/* =========================================================
-   ACESSIBILIDADE
-========================================================= */
-
-button:focus-visible,
-input:focus-visible,
-select:focus-visible{
-
-    outline:
-        2px solid
-        var(--rosa);
-
-    outline-offset:2px;
-}
-
-
-.seletor-data-custom:focus-visible,
-.seletor-humor-botao:focus-visible,
-.opcao-humor:focus-visible,
-.calendario-dia:focus-visible,
-.calendario-navegacao button:focus-visible,
-.calendario-hoje:focus-visible{
-
-    outline:
-        2px solid
-        var(--rosa);
-
-    outline-offset:2px;
 }
-
-
-/* =========================================================
-   RESPONSIVO — ATÉ 560px
-========================================================= */
-
-@media(max-width:560px){
-
-    #app{
-
-        width:100%;
-
-        padding:
-            12px
-            12px
-            30px;
-    }
-
-
-    .topo{
-
-        min-height:76px;
-
-        margin-bottom:14px;
-
-        padding:0 2px;
-    }
-
-
-    .titulo{
-
-        font-size:22px;
-    }
-
-
-    .subtitulo{
-
-        font-size:10px;
-    }
-
-
-    .resumo{
-
-        gap:7px;
-    }
-
-
-    .resumo-card{
-
-        min-height:82px;
-
-        padding:12px;
-    }
-
-
-    .resumo-label{
-
-        font-size:9px;
-    }
-
-
-    .resumo-valor{
-
-        font-size:17px;
-
-        letter-spacing:-.3px;
-    }
-
-
-    .resumo-detalhe{
-
-        font-size:8px;
-    }
-
-
-    .controles{
-
-        flex-direction:column;
-
-        align-items:stretch;
-
-        gap:9px;
-
-        width:100%;
-    }
-
-
-    .busca{
-
-        width:100%;
-
-        flex:none;
-    }
-
-
-    .ordenar-wrapper{
-
-        width:100%;
-    }
-
-
-    .ordenar-botao{
-
-        width:100%;
-    }
-
-
-    .graficos-grid{
-
-        grid-template-columns:1fr;
-    }
-
-
-    .form-grid{
-
-        grid-template-columns:1fr;
-    }
-
-
-    .campo.full{
-
-        grid-column:auto;
-    }
-
-
-    .modal-conteudo{
-
-        width:100%;
-
-        max-height:
-            calc(
-                88vh -
-                env(safe-area-inset-bottom)
-            );
-
-        padding:
-            18px
-            18px
-            max(
-                30px,
-                calc(
-                    28px +
-                    env(safe-area-inset-bottom)
-                )
-            );
-
-        margin-bottom:
-            max(
-                6px,
-                env(safe-area-inset-bottom)
-            );
-
-        border-radius:
-            29px
-            29px
-            18px
-            18px;
-    }
-
-
-    .calendario-fundo{
-
-        align-items:flex-end;
-
-        padding:
-            12px
-            12px
-            max(
-                12px,
-                env(safe-area-inset-bottom)
-            );
-    }
-
-
-    .calendario-painel{
-
-        width:100%;
-
-        padding:18px;
 
-        border-radius:
-            28px
-            28px
-            19px
-            19px;
-    }
 
+.btn:hover {
 
-    .calendario-dia{
+    background: var(--surface-2);
 
-        border-radius:11px;
-    }
+    border-color: var(--line-light);
 
 }
 
 
 /* =========================================================
-   TELAS MUITO PEQUENAS — ATÉ 370px
+   ÍCONE / EMOJI
 ========================================================= */
 
-@media(max-width:370px){
+.emoji {
 
-    .resumo-detalhe{
-
-        display:none;
-    }
+    width: 44px;
+    height: 44px;
 
 
-    .resumo-card{
 
-        min-height:76px;
+    display: flex;
 
-        padding:10px;
-    }
+    align-items: center;
+    justify-content: center;
 
+    overflow: hidden;
 
-    .resumo-valor{
-
-        font-size:15px;
-    }
+    border-radius: 14px;
 
 
-    .card{
-
-        min-height:82px;
-
-        padding:
-            12px;
-
-        padding-right:62px;
-    }
+}
 
 
-    .humor{
+.emoji img {
 
-        width:46px;
-        height:46px;
+    width: 100%;
+    height: 100%;
 
-        border-radius:17px;
+    display: block;
 
-        font-size:23px;
-    }
+    object-fit: cover;
+    object-position: center;
 
-
-    .card-data{
-
-        font-size:14px;
-    }
+}
 
 
-    .card-humor{
+.emoji svg {
 
-        font-size:9px;
-    }
+    width: 100%;
+    height: 100%;
 
+    display: block;
 
-    .checks{
-
-        grid-template-columns:1fr;
-    }
-
-
-    .humor-opcoes{
-
-        grid-template-columns:1fr;
-    }
-
-
-    .calendario-painel{
-
-        padding:15px;
-    }
-
-
-    .calendario-dias{
-
-        gap:3px;
-    }
-
-
-    .calendario-dia{
-
-        font-size:10px;
-
-        border-radius:9px;
-    }
-
-
-    .calendario-semana span{
-
-        font-size:7px;
-    }
+    color: #ffffff;
 
 }
 
 
 /* =========================================================
-   REDUÇÃO DE MOVIMENTO
+   CONTEÚDO
 ========================================================= */
 
-@media(prefers-reduced-motion:reduce){
+.content {
 
-    *,
-    *::before,
-    *::after{
+    min-width: 0;
 
-        scroll-behavior:auto !important;
+    flex: 1;
 
-        animation-duration:.01ms !important;
-        animation-iteration-count:1 !important;
+    display: flex;
 
-        transition-duration:.01ms !important;
-    }
+    flex-direction: column;
+
+    justify-content: center;
+
+    gap: 3px;
+
 }
+
+
+.title {
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 750;
+
+    line-height: 1.25;
+
+
+    white-space:
+        normal;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        clip;
+        
+}
+
+.description {
+    color: var(--text-muted);
+
+    font-size: 12px;
+    font-weight: 500;
+
+    line-height: 1.3;
+    
+    white-space:
+        normal;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        clip;
+
+    
+}
+/* =========================================================
+   SETA
+========================================================= */
+
+.arrow {
+
+    width: 30px;
+    height: 30px;
+
+    flex: 0 0 30px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #64646d;
+
+}
+
+
+.arrow svg {
+
+    width: 18px;
+    height: 18px;
+
+}
+
+
+/* =========================================================
+   EMERGÊNCIA
+========================================================= */
+
+.emergency {
+
+    border-color: #32171c;
+
+    background: #100a0c;
+
+}
+
+
+
+
+.emergency .title {
+
+    color: #ff6679;
+    
+    white-space:
+        normal;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        clip;
+
+}
+
+
+.emergency .description {
+
+    color: #98616a;
+
+}
+
+
+.emergency .arrow {
+
+    color: #a94453;
+
+}
+
+
+/* =========================================================
+   APPS
+========================================================= */
+
+.appCard {
+
+    min-height: 84px;
+
+}
+
+
+.appCard .emoji {
+
+    width: 50px;
+    height: 50px;
+
+    flex-basis: 50px;
+
+    border-radius: 15px;
+
+}
+
+
+.appCard .emoji img {
+
+    object-fit: cover;
+
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.emptyState {
+
+    display: none;
+
+    width: 100%;
+
+    padding: 34px 20px;
+
+    border: 1px solid var(--line);
+
+    border-radius: 22px;
+
+    background: var(--surface);
+
+    text-align: center;
+
+}
+
+
+.emptyIcon {
+
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 12px;
+
+    border-radius: 14px;
+
+    background: #17171c;
+
+    color: #8b8b94;
+
+}
+
+
+.emptyIcon svg {
+
+    width: 23px;
+    height: 23px;
+
+}
+
+
+
+
 
 </style>
 
@@ -3692,904 +664,765 @@ select:focus-visible{
 
 <body>
 
+<div class="container">
 
-<div id="app">
 
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
 
-<!-- =====================================================
-     TOPO
-====================================================== -->
+    <header class="hero">
 
-<header class="topo">
+<header class="hero">
 
-    <div class="topo-esquerda">
-
-        <div class="titulo">
-            Ciclo
-        </div>
-
-        <div class="subtitulo">
-            Acompanhe seus registros
-        </div>
-
+    <div class="heroIcon">
+        <img src="1.svg" alt="">
     </div>
 
+        <div class="heroTag">
+            Meus Acessos
+        </div>
 
-    <div class="acoes">
-
-        <!-- ADICIONAR REGISTRO -->
-
-        <button
-            class="botao"
-            type="button"
-            onclick="abrirRegistro()"
-            aria-label="Adicionar registro"
-        >
-
-            <span class="mais">
-                +
-            </span>
-
-        </button>
-
-
-        <!-- APAGAR TODOS OS REGISTROS -->
-
-        <button
-            class="apagar"
-            type="button"
-            onclick="apagarTudo()"
-            aria-label="Apagar todos os registros"
-        >
-
-            <img
-                src="14.svg"
-                alt=""
-            >
-
-        </button>
-
-    </div>
-
+        <div class="heroSubtitle">
+            Tudo o que você precisa, organizado em um só lugar.
+        </div>
+        
 </header>
 
 
-<!-- =====================================================
-     RESUMO
-====================================================== -->
-
-<section class="resumo">
-
-    <div class="resumo-card">
-
-        <div class="resumo-label">
-            Registros
-        </div>
-
-        <div
-            class="resumo-valor"
-            id="totalRegistros"
-        >
-            0
-        </div>
-
-        <div class="resumo-detalhe">
-            registrados
-        </div>
-
-    </div>
 
 
-    <div class="resumo-card">
-
-        <div class="resumo-label">
-            Dor média
-        </div>
-
-        <div
-            class="resumo-valor"
-            id="dorMedia"
-        >
-            0
-        </div>
-
-        <div class="resumo-detalhe">
-            de 10
-        </div>
-
-    </div>
+    <!-- =====================================================
+         BUSCA
+    ====================================================== -->
 
 
-    <div class="resumo-card">
-
-        <div class="resumo-label">
-            Último
-        </div>
-
-        <div
-            class="resumo-valor"
-            id="ultimoRegistro"
-            style="font-size:10px;"
-        >
-            —
-        </div>
-
-        <div class="resumo-detalhe">
-            registro
-        </div>
-
-    </div>
-
-</section>
 
 
-<!-- =====================================================
-     CONTROLES
-====================================================== -->
+    <!-- =====================================================
+         RECURSOS DO APLICATIVO
+    ====================================================== -->
 
-<div class="controles">
-
-    <input
-        id="busca"
-        class="busca"
-        type="search"
-        placeholder="Pesquisar registros..."
-        oninput="renderizar()"
-    >
-<div class="ordenar-wrapper">
-
-    <button
-        id="ordenarBotao"
-        class="ordenar-botao"
-        type="button"
-        onclick="alternarOrdenar()"
-        aria-haspopup="listbox"
-        aria-expanded="false"
+    <section
+        class="section"
+        data-section
     >
 
-        <span id="ordenarTexto">
-            Mais recentes
-        </span>
+        <div class="sectionHeader">
 
-        <svg
-            class="ordenar-seta"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-        >
-            <path
-                d="M7 9.5L12 14.5L17 9.5"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-            />
-        </svg>
-
-    </button>
+            <h2 class="sectionTitle">
+                Recursos do aplicativo
+            </h2>
 
 
-    <div
-        id="menuOrdenar"
-        class="menu-ordenar"
-        role="listbox"
-    >
-
-        <button
-            type="button"
-            class="opcao-ordenar ativa"
-            data-value="novo"
-            onclick="selecionarOrdenacao('novo','Mais recentes')"
-        >
-            <span>Mais recentes</span>
-
-
-        </button>
-
-
-        <button
-            type="button"
-            class="opcao-ordenar"
-            data-value="antigo"
-            onclick="selecionarOrdenacao('antigo','Mais antigos')"
-        >
-            <span>Mais antigos</span>
-
-
-        </button>
-
-
-        <button
-            type="button"
-            class="opcao-ordenar"
-            data-value="dor"
-            onclick="selecionarOrdenacao('dor','Maior dor')"
-        >
-            <span>Maior dor</span>
-
-
-        </button>
-
-    </div>
-
-</div>
-
-</div>
-
-
-<!-- =====================================================
-     LISTA
-====================================================== -->
-
-<main id="lista"></main>
-
-
-<!-- =====================================================
-     GRÁFICOS
-====================================================== -->
-
-<section id="telaGraficos">
-
-
-    <div class="graficos-topo">
-
-
-        <button
-    id="volta"
-    onclick="voltarLista()"
-    aria-label="Voltar"
->
-    <svg
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-    >
-        <path
-            d="M15 5L8 12L15 19"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        />
-    </svg>
-</button>
-
-
-        <div>
-
-            <div
-                class="detalhe-titulo"
-                id="detalheData"
-            >
-                Registro
-            </div>
-
-            <div
-                class="detalhe-sub"
-                id="detalheHumor"
-            >
-                Detalhes
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="dor-destaque">
-
-
-        <div>
-
-            <div class="dor-label">
-                Intensidade da dor
-            </div>
-
-            <div
-                class="dor-numero"
-                id="dorNumero"
-            >
-                0
-            </div>
-
-            <div class="dor-max">
-                de 10
-            </div>
 
         </div>
 
 
-        <div class="dor-barra">
-
-            <div
-                class="dor-progresso"
-                id="dorProgresso"
-            ></div>
-
-        </div>
-
-    </div>
-
-
-    <div class="graficos-grid">
-
-
-        <div class="grafico-card">
-
-            <div class="grafico-titulo">
-                Consumo
-            </div>
-
-            <canvas id="g1"></canvas>
-
-        </div>
-
-
-        <div class="grafico-card">
-
-            <div class="grafico-titulo">
-                Sintomas
-            </div>
-
-            <canvas id="g2"></canvas>
-
-        </div>
-
-
-        <div class="grafico-card">
-
-            <div class="grafico-titulo">
-                Estado emocional
-            </div>
-
-            <canvas id="g3"></canvas>
-
-        </div>
-
-
-        <div class="grafico-card">
-
-            <div class="grafico-titulo">
-                Corpo
-            </div>
-
-            <canvas id="g4"></canvas>
-
-        </div>
-
-
-        <div
-            class="grafico-card"
-            style="grid-column:1/-1"
-        >
-
-            <div class="grafico-titulo">
-                Rotina
-            </div>
-
-            <canvas id="g5"></canvas>
-
-        </div>
-
-
-    </div>
-
-</section>
-
-
-</div>
-
-
-<!-- =====================================================
-     MODAL
-========================================================= -->
-
-<div id="modal">
-
-
-    <div class="modal-conteudo">
-
-
-        <div class="modal-topo">
-
-
-            <div class="modal-titulo">
-                Novo registro
-            </div>
+        <div class="list">
 
 
             <button
-                class="fechar"
-                onclick="fecharModal()"
-                aria-label="Fechar"
+                class="btn"
+                type="button"
+                data-search="calendario menstrual ciclo"
+                onclick="ir('calendario.html')"
             >
-                ×
+
+                <div class="emoji">
+                    <img src="2.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Calendário menstrual
+                    </div>
+
+                    <div class="description">
+                        Acompanhe seu ciclo
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="calendario eventos"
+                onclick="ir('calendar.html')"
+            >
+
+                <div class="emoji">
+                    <img src="3.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Calendário de eventos
+                    </div>
+
+                    <div class="description">
+                        Organize seus compromissos
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="mapa região localização"
+                onclick="ir('mapa.html')"
+            >
+
+                <div class="emoji">
+                    <img src="4.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Mapa da sua região
+                    </div>
+
+                    <div class="description">
+                        Visualize locais próximos
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="diário anotações caderno"
+                onclick="ir('caderno.html')"
+            >
+
+                <div class="emoji">
+                    <img src="5.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Diário e anotações
+                    </div>
+
+                    <div class="description">
+                        Escreva e guarde seus registros
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="rotina gamificada treino"
+                onclick="ir('treino.html')"
+            >
+
+                <div class="emoji">
+                    <img src="6.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Rotina gamificada
+                    </div>
+
+                    <div class="description">
+                        Transforme tarefas em desafios
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="relógio localização"
+                onclick="ir('daora.html')"
+            >
+
+                <div class="emoji">
+                    <img src="7.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Relógio + Localização
+                    </div>
+
+                    <div class="description">
+                        Horário e posição atual
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="calculadora cálculo"
+                onclick="ir('calc.html')"
+            >
+
+                <div class="emoji">
+                    <img src="8.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Calculadora
+                    </div>
+
+                    <div class="description">
+                        Faça seus cálculos rapidamente
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="tarefas lista"
+                onclick="ir('task.html')"
+            >
+
+                <div class="emoji">
+                    <img src="9.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Minhas tarefas
+                    </div>
+
+                    <div class="description">
+                        Organize o que precisa fazer
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="navegador internet web"
+                onclick="ir('navegador.html')"
+            >
+
+                <div class="emoji">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="9"
+                        ></circle>
+
+                        <path
+                            d="M3 12h18"
+                        ></path>
+
+                        <path
+                            d="M12 3c2.3 2.5 3.5 5.5 3.5 9S14.3 18.5 12 21"
+                        ></path>
+
+                        <path
+                            d="M12 3c-2.3 2.5-3.5 5.5-3.5 9S9.7 18.5 12 21"
+                        ></path>
+
+                    </svg>
+
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Navegador
+                    </div>
+
+                    <div class="description">
+                        Acesse páginas da internet
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         OUTRAS FUNÇÕES
+    ====================================================== -->
+
+    <section
+        class="section"
+        data-section
+    >
+
+        <div class="sectionHeader">
+
+            <h2 class="sectionTitle">
+                Outras funções
+            </h2>
+
+
+
+        </div>
+
+
+        <div class="list">
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="gravador voz áudio"
+                onclick="androidCall('openRecorder')"
+            >
+
+                <div class="emoji">
+                    <img src="10.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Gravador de voz
+                    </div>
+
+                    <div class="description">
+                        Grave áudios rapidamente
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="arquivos gerenciador"
+                onclick="androidCall('openFiles')"
+            >
+
+                <div class="emoji">
+                    <img src="11.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Meus arquivos
+                    </div>
+
+                    <div class="description">
+                        Acesse seus arquivos
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="arquivos gerenciador"
+                onclick="ir('pesquisar.html')"
+            >
+
+                <div class="emoji">
+                    <img src="pes.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Tela de aplicativos 
+                    </div>
+
+                    <div class="description">
+                        Acesse seus apps
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
             </button>
 
         </div>
 
+    </section>
 
-        <form
-            id="formRegistro"
-            onsubmit="salvarRegistro(event)"
-        >
 
+    <!-- =====================================================
+         EMERGÊNCIA
+    ====================================================== -->
 
-            <div class="form-grid">
+    <section
+        class="section"
+        data-section
+    >
 
+        <div class="sectionHeader">
 
-                <div class="campo">
+            <h2 class="sectionTitle">
+                Emergência
+            </h2>
 
-                    <label for="data">
-                        Data
-                    </label>
 
-                    <input
-                        id="data"
-                        type="date"
-                        required
-                    >
 
-                </div>
+        </div>
 
 
-                <div class="campo">
-
-                    <label for="dor">
-                        Dor — 0 a 10
-                    </label>
-
-                    <input
-                        id="dor"
-                        type="number"
-                        min="0"
-                        max="10"
-                        value="0"
-                        required
-                    >
-
-                </div>
-
-
-<div class="campo full">
-
-    <label class="humor-label">
-        Como você se sentiu?
-    </label>
-
-    <div class="humor-opcoes">
-
-        <label class="humor-opcao">
-            <input
-                type="radio"
-                name="humor"
-                value="feliz"
-                checked
-            >
-
-            <span class="humor-conteudo">
-                <span class="humor-emoji">😊</span>
-                <span class="humor-nome">Feliz</span>
-                <span class="humor-check">✓</span>
-            </span>
-        </label>
-
-
-        <label class="humor-opcao">
-            <input
-                type="radio"
-                name="humor"
-                value="neutro"
-            >
-
-            <span class="humor-conteudo">
-                <span class="humor-emoji">😐</span>
-                <span class="humor-nome">Neutro</span>
-                <span class="humor-check">✓</span>
-            </span>
-        </label>
-
-
-        <label class="humor-opcao">
-            <input
-                type="radio"
-                name="humor"
-                value="desconfortavel"
-            >
-
-            <span class="humor-conteudo">
-                <span class="humor-emoji">😣</span>
-                <span class="humor-nome">Desconfortável</span>
-                <span class="humor-check">✓</span>
-            </span>
-        </label>
-
-
-        <label class="humor-opcao">
-            <input
-                type="radio"
-                name="humor"
-                value="triste"
-            >
-
-            <span class="humor-conteudo">
-                <span class="humor-emoji">😢</span>
-                <span class="humor-nome">Triste</span>
-                <span class="humor-check">✓</span>
-            </span>
-        </label>
-
-    </div>
-
-</div>
-
-                <div class="campo full">
-
-                    <label>
-                        Hábitos
-                    </label>
-
-
-                    <div class="checks">
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="agua"
-                            >
-
-                            💧 Bebeu água
-
-                        </label>
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="cafe"
-                            >
-
-                            ☕ Tomou café
-
-                        </label>
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="chocolate"
-                            >
-
-                            🍫 Comeu chocolate
-
-                        </label>
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="exercicio"
-                            >
-
-                            🏃 Fez exercício
-
-                        </label>
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="sonoRuim"
-                            >
-
-                            😴 Sono ruim
-
-                        </label>
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="apetite"
-                            >
-
-                            🍽️ Apetite alterado
-
-                        </label>
-
-
-                    </div>
-
-                </div>
-
-
-                <div class="campo full">
-
-                    <label>
-                        Sintomas
-                    </label>
-
-
-                    <div class="checks">
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="cansaco"
-                            >
-
-                            😮‍💨 Cansaço
-
-                        </label>
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="irritacao"
-                            >
-
-                            😤 Irritação
-
-                        </label>
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="ansiedade"
-                            >
-
-                            🌫️ Ansiedade
-
-                        </label>
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="colica"
-                            >
-
-                            🌀 Cólica
-
-                        </label>
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="dorCabeca"
-                            >
-
-                            🤕 Dor de cabeça
-
-                        </label>
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="inchaco"
-                            >
-
-                            🫧 Inchaço
-
-                        </label>
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="acne"
-                            >
-
-                            ✨ Acne
-
-                        </label>
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="nausea"
-                            >
-
-                            🤢 Náusea
-
-                        </label>
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="tontura"
-                            >
-
-                            🌀 Tontura
-
-                        </label>
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="energiaBaixa"
-                            >
-
-                            🔋 Energia baixa
-
-                        </label>
-
-
-                    </div>
-
-                </div>
-
-
-                <div class="campo full">
-
-                    <label>
-                        Emocional e concentração
-                    </label>
-
-
-                    <div class="checks">
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="estresse"
-                            >
-
-                            ⚡ Estresse
-
-                        </label>
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="tristeza"
-                            >
-
-                            🌧️ Tristeza
-
-                        </label>
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="felicidade"
-                            >
-
-                            ☀️ Felicidade
-
-                        </label>
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="sensibilidade"
-                            >
-
-                            💗 Sensibilidade
-
-                        </label>
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="concentracao"
-                            >
-
-                            🧠 Concentração ruim
-
-                        </label>
-
-
-                        <label class="check">
-
-                            <input
-                                type="checkbox"
-                                id="libido"
-                            >
-
-                            💫 Libido alterada
-
-                        </label>
-
-
-                    </div>
-
-                </div>
-
-
-            </div>
+        <div class="list">
 
 
             <button
-                class="salvar"
-                type="submit"
+                class="btn emergency"
+                type="button"
+                data-search="bloquear dispositivo tela segurança"
+                onclick="androidCall('bloquearTela')"
             >
-                Salvar registro
+
+                <div class="emoji">
+                    <img src="11.png" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Bloquear dispositivo
+                    </div>
+
+                    <div class="description">
+                        Bloqueie a tela imediatamente
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
             </button>
 
 
-        </form>
+        </div>
+
+    </section>
+
+    <!-- =====================================================
+         Especial, só para você!
+    ====================================================== -->
+
+    <section
+        class="section"
+        data-section
+    >
+
+        <div class="sectionHeader">
+
+            <h2 class="sectionTitle">
+                Especial, só para você!
+            </h2>
 
 
-    </div>
+
+        </div>
+
+
+        <div class="list">
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="dia mulheres feliz"
+                onclick="ir('dia.html')"
+            >
+
+                <div class="emoji">
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M400-120v-200h-61q-21 0-33-17.5t-4-37.5l100-253q10-24 31-38t47-14q26 0 47 14t31 38l100 253q8 20-4 37.5T621-320h-61v200q0 17-11.5 28.5T520-80h-80q-17 0-28.5-11.5T400-120Zm23.5-623.5Q400-767 400-800t23.5-56.5Q447-880 480-880t56.5 23.5Q560-833 560-800t-23.5 56.5Q513-720 480-720t-56.5-23.5Z"/></svg>
+
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Feliz Dia das Mulheres!
+                    </div>
+
+                    <div class="description">
+                        Um jogo gamificado 
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+            <button
+                class="btn"
+                type="button"
+                data-search="100 direitos"
+                onclick="ir('texto.html')"
+            >
+
+                <div class="emoji">
+                
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M200-200h400q17 0 28.5 11.5T640-160q0 17-11.5 28.5T600-120H200q-17 0-28.5-11.5T160-160q0-17 11.5-28.5T200-200Zm129-171L216-484q-23-23-23.5-56.5T215-597l29-29 228 226-29 29q-23 23-57 23t-57-23Zm311-197L414-796l29-29q23-23 56.5-22.5T556-824l113 113q23 23 23 57t-23 57l-29 29Zm156 380L302-682l56-56 494 494q11 11 11 28t-11 28q-11 11-28 11t-28-11Z"/></svg>
+
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                    100 dos seus direitos
+                    </div>
+
+                    <div class="description">
+                        seja amparada pela lei
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="dicas financeiras"                onclick="ir('texto1.html')"
+            >
+
+                <div class="emoji">
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M481-120q-17 0-28.5-11.5T441-160v-46q-45-10-79-35t-55-70q-7-14-.5-29.5T330-363q14-6 29 .5t23 21.5q17 30 43 45.5t64 15.5q41 0 69.5-18.5T587-356q0-35-22-55.5T463-458q-86-27-118-64.5T313-614q0-65 42-101t86-41v-44q0-17 11.5-28.5T481-840q17 0 28.5 11.5T521-800v44q38 6 66 24.5t46 45.5q9 13 3.5 29T614-634q-14 6-29 .5T557-653q-13-14-30.5-21.5T483-682q-44 0-67 19.5T393-614q0 33 30 52t104 40q69 20 104.5 63.5T667-358q0 71-42 108t-104 46v44q0 17-11.5 28.5T481-120Z"/></svg>
+
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Dicas de como recuperar sua autonomia financeira 
+                    </div>
+
+                    <div class="description">
+                        Conhecimentos valiosos
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="carta para você"
+                onclick="ir('texto2.html')"
+            >
+
+                <div class="emoji">
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M280-280q-33 0-56.5-23.5T200-360v-400q0-33 23.5-56.5T280-840h560q33 0 56.5 23.5T920-760v400q0 33-23.5 56.5T840-280H280Zm257-204L280-663v303h560v-303L583-484q-11 8-23 8t-23-8Zm23-82 280-194H280l280 194ZM120-120q-33 0-56.5-23.5T40-200v-460q0-17 11.5-28.5T80-700q17 0 28.5 11.5T120-660v460h620q17 0 28.5 11.5T780-160q0 17-11.5 28.5T740-120H120Zm720-546v-94H280v94-94h560v94Z"/></svg>
+
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Uma carta para você, mulher!
+                    </div>
+
+                    <div class="description">
+                        Uma mensagem especial
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+        </div>
+
+    </section>
+
+
+
+        
+
 
 </div>
+
+
 <script>
 
 /* =========================================================
-   DADOS
+   NAVEGAÇÃO ENTRE PÁGINAS HTML
 ========================================================= */
 
-let charts = [];
+function ir(pagina) {
 
-let ordemAtual = "novo";
+    if (
+        typeof pagina !== "string" ||
+        pagina.trim() === ""
+    ) {
+        return false;
+    }
 
+    try {
 
-/* =========================================================
-   CARREGAR DADOS
-========================================================= */
+        window.location.href = pagina;
 
-function getDados(){
+        return true;
 
-    try{
-
-        const dados =
-            Cripto.carregar("ciclo");
-
-        if(!dados){
-            return [];
-        }
-
-        const parsed =
-            JSON.parse(dados);
-
-        return Array.isArray(parsed)
-            ? parsed
-            : [];
-
-    }catch(e){
+    } catch (erro) {
 
         console.error(
-            "Erro ao carregar dados:",
-            e
+            "Erro ao navegar para:",
+            pagina,
+            erro
         );
 
-        return [];
+        return false;
 
     }
 
@@ -4597,2322 +1430,101 @@ function getDados(){
 
 
 /* =========================================================
-   SALVAR DADOS
+   ANDROID BRIDGE
 ========================================================= */
 
-function salvarDados(dados){
+function androidCall(metodo) {
 
-    try{
+    if (
+        typeof metodo !== "string" ||
+        metodo.trim() === ""
+    ) {
+        console.warn("Método Android inválido.");
+        return false;
+    }
 
-        const json =
-            JSON.stringify(dados);
 
-        Cripto.salvar(
-            "ciclo",
-            json
-        );
+    try {
 
-    }catch(e){
+        /*
+         * Verifica se a interface Android existe.
+         */
+
+        if (
+            typeof Android === "undefined" ||
+            Android === null
+        ) {
+
+            console.warn(
+                "Interface Android não disponível."
+            );
+
+            return false;
+
+        }
+
+
+        /*
+         * Verifica se o método realmente existe
+         * no WebAppInterface.
+         */
+
+        if (
+            typeof Android[metodo] !== "function"
+        ) {
+
+            console.warn(
+                "Método Android não encontrado:",
+                metodo
+            );
+
+            return false;
+
+        }
+
+
+        /*
+         * Executa o método.
+         */
+
+        Android[metodo]();
+
+        return true;
+
+    } catch (erro) {
 
         console.error(
-            "Erro ao salvar dados:",
-            e
+            "Erro ao executar método Android:",
+            metodo,
+            erro
         );
+
+        return false;
 
     }
 
 }
+
 
 
 /* =========================================================
-   UTILITÁRIOS
-========================================================= */
-
-function valor(id){
-
-    const elemento =
-        document.getElementById(id);
-
-    return elemento
-        ? elemento.checked
-        : false;
-
-}
-
-
-function formatarData(data){
-
-    if(!data){
-        return "—";
-    }
-
-    const partes =
-        data.split("-");
-
-    if(partes.length !== 3){
-        return data;
-    }
-
-    return `${partes[2]}/${partes[1]}/${partes[0]}`;
-
-}
-
-
-function emojiHumor(humor){
-
-    const emojis = {
-
-        feliz:"😊",
-        neutro:"😐",
-        triste:"😢",
-        desconfortavel:"😣"
-
-    };
-
-    return emojis[humor] || "😐";
-
-}
-
-
-function nomeHumor(humor){
-
-    const nomes = {
-
-        feliz:"Feliz",
-        neutro:"Neutro",
-        triste:"Triste",
-        desconfortavel:"Desconfortável"
-
-    };
-
-    return nomes[humor] || "Neutro";
-
-}
-
-
-/* =========================================================
-   SELETOR DE HUMOR
-========================================================= */
-
-function criarSeletorHumor(){
-
-    const select =
-        document.getElementById("humor");
-
-    if(!select){
-        return;
-    }
-
-    select.style.display = "none";
-
-    const campo =
-        select.closest(".campo");
-
-    if(!campo){
-        return;
-    }
-
-    /*
-       Evita criar o seletor duas vezes.
-    */
-
-    if(
-        campo.querySelector(
-            ".humor-selector"
-        )
-    ){
-
-        return;
-
-    }
-
-
-    const valores = [
-
-        {
-            value:"feliz",
-            emoji:"😊",
-            texto:"Feliz"
-        },
-
-        {
-            value:"neutro",
-            emoji:"😐",
-            texto:"Neutro"
-        },
-
-        {
-            value:"desconfortavel",
-            emoji:"😣",
-            texto:"Desconfortável"
-        },
-
-        {
-            value:"triste",
-            emoji:"😢",
-            texto:"Triste"
-        }
-
-    ];
-
-
-    const wrapper =
-        document.createElement("div");
-
-    wrapper.className =
-        "humor-selector";
-
-
-    wrapper.innerHTML = `
-
-        <button
-            type="button"
-            class="humor-selector-botao"
-            aria-haspopup="listbox"
-            aria-expanded="false"
-        >
-
-            <span class="humor-selector-valor">
-                😊 Feliz
-            </span>
-
-            <svg
-                class="humor-selector-seta"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-            >
-
-                <path
-                    d="M7 9.5L12 14.5L17 9.5"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                />
-
-            </svg>
-
-        </button>
-
-
-        <div
-            class="humor-selector-menu"
-            role="listbox"
-        ></div>
-
-    `;
-
-
-    const menu =
-        wrapper.querySelector(
-            ".humor-selector-menu"
-        );
-
-
-    valores.forEach(item => {
-
-        const opcao =
-            document.createElement("button");
-
-        opcao.type = "button";
-
-        opcao.className =
-            "humor-opcao";
-
-        opcao.dataset.value =
-            item.value;
-
-
-        opcao.innerHTML = `
-
-            <span class="humor-opcao-esquerda">
-
-                <span class="humor-opcao-emoji">
-                    ${item.emoji}
-                </span>
-
-                <span>
-                    ${item.texto}
-                </span>
-
-            </span>
-
-            <span class="humor-opcao-check">
-                ✓
-            </span>
-
-        `;
-
-
-        opcao.onclick =
-            function(event){
-
-                event.stopPropagation();
-
-                selecionarHumor(
-                    item.value,
-                    item.emoji,
-                    item.texto
-                );
-
-            };
-
-
-        menu.appendChild(
-            opcao
-        );
-
-    });
-
-
-    select.insertAdjacentElement(
-        "afterend",
-        wrapper
-    );
-
-
-    const botao =
-        wrapper.querySelector(
-            ".humor-selector-botao"
-        );
-
-
-    botao.addEventListener(
-        "click",
-        function(event){
-
-            event.stopPropagation();
-
-            alternarHumor();
-
-        }
-    );
-
-
-    marcarHumorSelecionado(
-        "feliz"
-    );
-
-}
-
-
-/* =========================================================
-   ABRIR / FECHAR HUMOR
-========================================================= */
-
-function alternarHumor(){
-
-    const wrapper =
-        document.querySelector(
-            ".humor-selector"
-        );
-
-    if(!wrapper){
-        return;
-    }
-
-
-    const aberto =
-        wrapper.classList.contains(
-            "aberto"
-        );
-
-
-    fecharTodosSeletores();
-
-
-    if(!aberto){
-
-        wrapper.classList.add(
-            "aberto"
-        );
-
-
-        const botao =
-            wrapper.querySelector(
-                ".humor-selector-botao"
-            );
-
-
-        if(botao){
-
-            botao.setAttribute(
-                "aria-expanded",
-                "true"
-            );
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   SELECIONAR HUMOR
-========================================================= */
-
-function selecionarHumor(
-    valorSelecionado,
-    emoji,
-    texto
-){
-
-    const select =
-        document.getElementById(
-            "humor"
-        );
-
-
-    const wrapper =
-        document.querySelector(
-            ".humor-selector"
-        );
-
-
-    if(select){
-
-        select.value =
-            valorSelecionado;
-
-    }
-
-
-    if(wrapper){
-
-        const textoElemento =
-            wrapper.querySelector(
-                ".humor-selector-valor"
-            );
-
-
-        if(textoElemento){
-
-            textoElemento.textContent =
-                `${emoji} ${texto}`;
-
-        }
-
-
-        wrapper
-            .querySelectorAll(
-                ".humor-opcao"
-            )
-            .forEach(opcao => {
-
-                opcao.classList.toggle(
-                    "ativa",
-                    opcao.dataset.value ===
-                        valorSelecionado
-                );
-
-            });
-
-
-        wrapper.classList.remove(
-            "aberto"
-        );
-
-
-        const botao =
-            wrapper.querySelector(
-                ".humor-selector-botao"
-            );
-
-
-        if(botao){
-
-            botao.setAttribute(
-                "aria-expanded",
-                "false"
-            );
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   MARCAR HUMOR
-========================================================= */
-
-function marcarHumorSelecionado(
-    valorSelecionado
-){
-
-    const item =
-        document.querySelector(
-            `.humor-opcao[data-value="${valorSelecionado}"]`
-        );
-
-
-    if(!item){
-        return;
-    }
-
-
-    const emoji =
-        item.querySelector(
-            ".humor-opcao-emoji"
-        )?.textContent || "";
-
-
-    const texto =
-        item
-            .querySelector(
-                ".humor-opcao-esquerda"
-            )
-            ?.innerText
-            ?.replace(
-                emoji,
-                ""
-            )
-            ?.trim() || "";
-
-
-    selecionarHumor(
-        valorSelecionado,
-        emoji,
-        texto
-    );
-
-}
-
-
-/* =========================================================
-   ORDENAÇÃO
-========================================================= */
-
-function alternarOrdenar(){
-
-    const wrapper =
-        document.querySelector(
-            ".ordenar-wrapper"
-        );
-
-    if(!wrapper){
-        return;
-    }
-
-
-    const aberto =
-        wrapper.classList.contains(
-            "aberto"
-        );
-
-
-    fecharTodosSeletores();
-
-
-    if(!aberto){
-
-        wrapper.classList.add(
-            "aberto"
-        );
-
-
-        const botao =
-            document.getElementById(
-                "ordenarBotao"
-            );
-
-
-        if(botao){
-
-            botao.setAttribute(
-                "aria-expanded",
-                "true"
-            );
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   SELECIONAR ORDENAÇÃO
-========================================================= */
-
-function selecionarOrdenacao(
-    valorSelecionado,
-    texto
-){
-
-    ordemAtual =
-        valorSelecionado;
-
-
-    const textoElemento =
-        document.getElementById(
-            "ordenarTexto"
-        );
-
-
-    if(textoElemento){
-
-        textoElemento.textContent =
-            texto;
-
-    }
-
-
-    document
-        .querySelectorAll(
-            ".opcao-ordenar"
-        )
-        .forEach(opcao => {
-
-            opcao.classList.toggle(
-                "ativa",
-                opcao.dataset.value ===
-                    valorSelecionado
-            );
-
-        });
-
-
-    const wrapper =
-        document.querySelector(
-            ".ordenar-wrapper"
-        );
-
-
-    if(wrapper){
-
-        wrapper.classList.remove(
-            "aberto"
-        );
-
-    }
-
-
-    const botao =
-        document.getElementById(
-            "ordenarBotao"
-        );
-
-
-    if(botao){
-
-        botao.setAttribute(
-            "aria-expanded",
-            "false"
-        );
-
-    }
-
-
-    renderizar();
-
-}
-
-
-/* =========================================================
-   FECHAR SELETORES
-========================================================= */
-
-function fecharTodosSeletores(){
-
-    const ordenar =
-        document.querySelector(
-            ".ordenar-wrapper"
-        );
-
-
-    if(ordenar){
-
-        ordenar.classList.remove(
-            "aberto"
-        );
-
-
-        const botao =
-            document.getElementById(
-                "ordenarBotao"
-            );
-
-
-        if(botao){
-
-            botao.setAttribute(
-                "aria-expanded",
-                "false"
-            );
-
-        }
-
-    }
-
-
-    const humor =
-        document.querySelector(
-            ".humor-selector"
-        );
-
-
-    if(humor){
-
-        humor.classList.remove(
-            "aberto"
-        );
-
-
-        const botao =
-            humor.querySelector(
-                ".humor-selector-botao"
-            );
-
-
-        if(botao){
-
-            botao.setAttribute(
-                "aria-expanded",
-                "false"
-            );
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   CLIQUE FORA
+   DESATIVAR MENU DE CONTEXTO
 ========================================================= */
 
 document.addEventListener(
-    "click",
-    function(event){
+    "contextmenu",
+    function (event) {
 
-        if(
-            !event.target.closest(
-                ".ordenar-wrapper"
-            ) &&
-            !event.target.closest(
-                ".humor-selector"
-            )
-        ){
+        event.preventDefault();
 
-            fecharTodosSeletores();
-
-        }
-
-    }
+    },
+    false
 );
 
 
-/* =========================================================
-   MODAL
-========================================================= */
-
-function abrirRegistro(){
-
-    const hoje =
-        new Date();
-
-
-    const ano =
-        hoje.getFullYear();
-
-
-    const mes =
-        String(
-            hoje.getMonth() + 1
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const dia =
-        String(
-            hoje.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const dataAtual =
-        `${ano}-${mes}-${dia}`;
-
-
-    const form =
-        document.getElementById(
-            "formRegistro"
-        );
-
-
-    if(form){
-
-        form.reset();
-
-    }
-
-
-    const data =
-        document.getElementById(
-            "data"
-        );
-
-
-    if(data){
-
-        data.value =
-            dataAtual;
-
-    }
-
-
-    selecionarHumor(
-        "feliz",
-        "😊",
-        "Feliz"
-    );
-
-
-    const modal =
-        document.getElementById(
-            "modal"
-        );
-
-
-    if(modal){
-
-        modal.classList.add(
-            "aberto"
-        );
-
-    }
-
-}
-
-
-function fecharModal(){
-
-    const modal =
-        document.getElementById(
-            "modal"
-        );
-
-
-    if(modal){
-
-        modal.classList.remove(
-            "aberto"
-        );
-
-    }
-
-
-    fecharTodosSeletores();
-
-}
-
-
-const modal =
-    document.getElementById(
-        "modal"
-    );
-
-
-if(modal){
-
-    modal.addEventListener(
-        "click",
-        function(e){
-
-            if(e.target === this){
-
-                fecharModal();
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   SALVAR REGISTRO
-========================================================= */
-
-function salvarRegistro(event){
-
-    event.preventDefault();
-
-
-    const dataElemento =
-        document.getElementById(
-            "data"
-        );
-
-
-    const dorElemento =
-        document.getElementById(
-            "dor"
-        );
-
-
-    const humorElemento =
-        document.getElementById(
-            "humor"
-        );
-
-
-    const registro = {
-
-        data:
-            dataElemento
-                ? dataElemento.value
-                : "",
-
-
-        dor:
-            dorElemento
-                ? Number(
-                    dorElemento.value
-                ) || 0
-                : 0,
-
-
-        humorTexto:
-            humorElemento
-                ? humorElemento.value
-                : "feliz",
-
-
-        /* Hábitos */
-
-        agua:
-            valor("agua"),
-
-        cafe:
-            valor("cafe"),
-
-        chocolate:
-            valor("chocolate"),
-
-        exercicio:
-            valor("exercicio"),
-
-        sonoRuim:
-            valor("sonoRuim"),
-
-        apetite:
-            valor("apetite"),
-
-
-        /* Sintomas */
-
-        cansaco:
-            valor("cansaco"),
-
-        irritacao:
-            valor("irritacao"),
-
-        ansiedade:
-            valor("ansiedade"),
-
-        colica:
-            valor("colica"),
-
-        dorCabeca:
-            valor("dorCabeca"),
-
-        inchaco:
-            valor("inchaco"),
-
-        acne:
-            valor("acne"),
-
-        nausea:
-            valor("nausea"),
-
-        tontura:
-            valor("tontura"),
-
-        energiaBaixa:
-            valor("energiaBaixa"),
-
-
-        /* Emocional */
-
-        estresse:
-            valor("estresse"),
-
-        tristeza:
-            valor("tristeza"),
-
-        felicidade:
-            valor("felicidade"),
-
-        sensibilidade:
-            valor("sensibilidade"),
-
-        concentracao:
-            valor("concentracao"),
-
-        libido:
-            valor("libido")
-
-    };
-
-
-    /*
-       Carrega os registros existentes.
-    */
-
-    const dados =
-        getDados();
-
-
-    /*
-       Adiciona o novo registro.
-    */
-
-    dados.push(
-        registro
-    );
-
-
-    /*
-       SALVA DIRETAMENTE NA CRIPTO.
-    */
-
-    salvarDados(
-        dados
-    );
-
-
-    /*
-       Limpa o formulário.
-    */
-
-    const form =
-        document.getElementById(
-            "formRegistro"
-        );
-
-
-    if(form){
-
-        form.reset();
-
-    }
-
-
-    /*
-       Restaura o humor padrão.
-    */
-
-    selecionarHumor(
-        "feliz",
-        "😊",
-        "Feliz"
-    );
-
-
-    /*
-       Fecha o modal.
-    */
-
-    fecharModal();
-
-
-    /*
-       Atualiza a lista.
-    */
-
-    renderizar();
-
-}
-
-
-/* =========================================================
-   APAGAR TODOS
-========================================================= */
-
-function apagarTudo(){
-
-    const dados =
-        getDados();
-
-
-    if(dados.length === 0){
-
-        return;
-
-    }
-
-
-    if(
-        !confirm(
-            "Apagar todos os registros?\n\nEssa ação não pode ser desfeita."
-        )
-    ){
-
-        return;
-
-    }
-
-
-    Cripto.remover(
-        "ciclo"
-    );
-
-
-    renderizar();
-
-}
-
-
-/* =========================================================
-   APAGAR REGISTRO INDIVIDUAL
-========================================================= */
-
-function apagarRegistro(registro){
-
-    const dados =
-        getDados();
-
-
-    const indice =
-        dados.indexOf(
-            registro
-        );
-
-
-    if(indice === -1){
-
-        return;
-
-    }
-
-
-    if(
-        !confirm(
-            "Apagar este registro?\n\nEssa ação não pode ser desfeita."
-        )
-    ){
-
-        return;
-
-    }
-
-
-    dados.splice(
-        indice,
-        1
-    );
-
-
-    if(dados.length === 0){
-
-        Cripto.remover(
-            "ciclo"
-        );
-
-    }else{
-
-        salvarDados(
-            dados
-        );
-
-    }
-
-
-    renderizar();
-
-}
-
-
-/* =========================================================
-   RESUMO
-========================================================= */
-
-function atualizarResumo(dados){
-
-    const total =
-        document.getElementById(
-            "totalRegistros"
-        );
-
-
-    const mediaElemento =
-        document.getElementById(
-            "dorMedia"
-        );
-
-
-    const ultimo =
-        document.getElementById(
-            "ultimoRegistro"
-        );
-
-
-    if(total){
-
-        total.textContent =
-            dados.length;
-
-    }
-
-
-    if(dados.length === 0){
-
-        if(mediaElemento){
-
-            mediaElemento.textContent =
-                "0";
-
-        }
-
-
-        if(ultimo){
-
-            ultimo.textContent =
-                "—";
-
-        }
-
-
-        return;
-
-    }
-
-
-    const media =
-        dados.reduce(
-            (total,d) => {
-
-                return total +
-                    (
-                        Number(d.dor) || 0
-                    );
-
-            },
-            0
-        ) / dados.length;
-
-
-    if(mediaElemento){
-
-        mediaElemento.textContent =
-            media.toFixed(1);
-
-    }
-
-
-    const ordenados =
-        [...dados].sort(
-            (a,b) =>
-                String(b.data)
-                    .localeCompare(
-                        String(a.data)
-                    )
-        );
-
-
-    if(ultimo){
-
-        ultimo.textContent =
-            formatarData(
-                ordenados[0].data
-            );
-
-    }
-
-}
-
-
-/* =========================================================
-   LISTA
-========================================================= */
-
-function renderizar(){
-
-    const container =
-        document.getElementById(
-            "lista"
-        );
-
-
-    if(!container){
-        return;
-    }
-
-
-    let dados =
-        getDados();
-
-
-    atualizarResumo(
-        dados
-    );
-
-
-    const busca =
-        document
-            .getElementById(
-                "busca"
-            )
-            ?.value
-            ?.toLowerCase()
-            .trim() || "";
-
-
-    const ordem =
-        ordemAtual || "novo";
-
-
-    /* =====================================================
-       PESQUISA
-    ===================================================== */
-
-    if(busca){
-
-        dados =
-            dados.filter(
-                d => {
-
-                    const texto = [
-
-                        d.data,
-                        d.humorTexto,
-                        d.dor
-
-                    ]
-                    .join(" ")
-                    .toLowerCase();
-
-
-                    return texto.includes(
-                        busca
-                    );
-
-                }
-            );
-
-    }
-
-
-    /* =====================================================
-       ORDENAÇÃO
-    ===================================================== */
-
-    dados.sort(
-        (a,b) => {
-
-            if(ordem === "dor"){
-
-                return (
-                    Number(b.dor) -
-                    Number(a.dor)
-                );
-
-            }
-
-
-            const comparacao =
-                String(b.data)
-                    .localeCompare(
-                        String(a.data)
-                    );
-
-
-            return ordem === "novo"
-                ? comparacao
-                : -comparacao;
-
-        }
-    );
-
-
-    container.innerHTML =
-        "";
-
-
-    /* =====================================================
-       VAZIO
-    ===================================================== */
-
-    if(dados.length === 0){
-
-        container.innerHTML = `
-
-            <div class="vazio">
-
-                <div class="vazio-icone">
-                    ${busca ? "🔎" : "🌸"}
-                </div>
-
-                <div class="vazio-titulo">
-
-                    ${
-                        busca
-                            ? "Nenhum resultado"
-                            : "Nenhum registro ainda"
-                    }
-
-                </div>
-
-                <div class="vazio-texto">
-
-                    ${
-                        busca
-                            ? "Tente pesquisar por outra data ou informação."
-                            : "Toque no botão + para criar seu primeiro registro."
-                    }
-
-                </div>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    /* =====================================================
-       CARDS
-    ===================================================== */
-
-    dados.forEach(
-        (d,index) => {
-
-            const card =
-                document.createElement(
-                    "article"
-                );
-
-
-            card.className =
-                "card";
-
-
-            card.style.animationDelay =
-                `${index * .035}s`;
-
-
-            const dor =
-                Number(d.dor) || 0;
-
-
-            card.innerHTML = `
-
-                <div class="humor">
-
-                    ${emojiHumor(
-                        d.humorTexto
-                    )}
-
-                </div>
-
-
-                <div class="card-info">
-
-                    <div class="card-data">
-
-                        ${formatarData(
-                            d.data
-                        )}
-
-                    </div>
-
-
-                    <div class="card-humor">
-
-                        ${nomeHumor(
-                            d.humorTexto
-                        )}
-
-                    </div>
-
-                </div>
-
-
-                <div class="card-direita">
-
-                    <div class="dor">
-
-                        Dor ${dor}/10
-
-                    </div>
-
-
-
-
-                </div>
-
-            `;
-
-
-            card.onclick =
-                () =>
-                    abrirGraficos(d);
-
-
-            const botaoApagar =
-                card.querySelector(
-                    ".card-apagar"
-                );
-
-
-            if(botaoApagar){
-
-                botaoApagar.onclick =
-                    function(event){
-
-                        event.preventDefault();
-
-                        event.stopPropagation();
-
-                        apagarRegistro(d);
-
-                    };
-
-            }
-
-
-            container.appendChild(
-                card
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   CHART CONFIG
-========================================================= */
-
-function destruir(){
-
-    charts.forEach(
-        chart => {
-
-            try{
-
-                chart.destroy();
-
-            }catch(e){}
-
-        }
-    );
-
-
-    charts = [];
-
-}
-
-
-const chartBase = {
-
-    responsive:true,
-
-    maintainAspectRatio:false,
-
-    plugins:{
-
-        legend:{
-
-            labels:{
-
-                color:
-                    "rgba(255,255,255,.65)",
-
-                font:{
-
-                    family:"Quicksand",
-
-                    size:10
-
-                },
-
-                boxWidth:10,
-
-                boxHeight:10
-
-            }
-
-        }
-
-    }
-
-};
-
-
-function bool(v){
-
-    return v ? 1 : 0;
-
-}
-
-
-/* =========================================================
-   ABRIR GRÁFICOS
-========================================================= */
-
-function abrirGraficos(d){
-
-    document
-        .getElementById("lista")
-        .style.display =
-            "none";
-
-
-    const controles =
-        document.querySelector(
-            ".controles"
-        );
-
-
-    if(controles){
-
-        controles.style.display =
-            "none";
-
-    }
-
-
-    const resumo =
-        document.querySelector(
-            ".resumo"
-        );
-
-
-    if(resumo){
-
-        resumo.style.display =
-            "none";
-
-    }
-
-
-    const topo =
-        document.querySelector(
-            ".topo"
-        );
-
-
-    if(topo){
-
-        topo.style.display =
-            "none";
-
-    }
-
-
-    const tela =
-        document.getElementById(
-            "telaGraficos"
-        );
-
-
-    if(tela){
-
-        tela.style.display =
-            "block";
-
-    }
-
-
-    const detalheData =
-        document.getElementById(
-            "detalheData"
-        );
-
-
-    if(detalheData){
-
-        detalheData.textContent =
-            formatarData(
-                d.data
-            );
-
-    }
-
-
-    const detalheHumor =
-        document.getElementById(
-            "detalheHumor"
-        );
-
-
-    if(detalheHumor){
-
-        detalheHumor.textContent =
-            `${emojiHumor(
-                d.humorTexto
-            )} ${nomeHumor(
-                d.humorTexto
-            )}`;
-
-    }
-
-
-    const dor =
-        Number(d.dor) || 0;
-
-
-    const dorNumero =
-        document.getElementById(
-            "dorNumero"
-        );
-
-
-    if(dorNumero){
-
-        dorNumero.textContent =
-            dor;
-
-    }
-
-
-    const dorProgresso =
-        document.getElementById(
-            "dorProgresso"
-        );
-
-
-    if(dorProgresso){
-
-        dorProgresso.style.width =
-            `${
-                Math.max(
-                    0,
-                    Math.min(
-                        10,
-                        dor
-                    )
-                ) * 10
-            }%`;
-
-    }
-
-
-    destruir();
-
-
-    /* =====================================================
-       CONSUMO
-    ===================================================== */
-
-    charts.push(
-
-        new Chart(
-            document.getElementById("g1"),
-            {
-
-                type:"doughnut",
-
-                data:{
-
-                    labels:[
-
-                        "Água",
-                        "Café",
-                        "Chocolate"
-
-                    ],
-
-                    datasets:[{
-
-                        data:[
-
-                            bool(d.agua),
-                            bool(d.cafe),
-                            bool(d.chocolate)
-
-                        ]
-
-                    }]
-
-                },
-
-                options:{
-
-                    ...chartBase,
-
-                    cutout:"65%",
-
-                    plugins:{
-
-                        legend:{
-
-                            position:"bottom",
-
-                            labels:{
-
-                                color:
-                                    "rgba(255,255,255,.65)",
-
-                                font:{
-
-                                    family:"Quicksand",
-
-                                    size:9
-
-                                }
-
-                            }
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        )
-
-    );
-
-
-    /* =====================================================
-       SINTOMAS
-    ===================================================== */
-
-    charts.push(
-
-        new Chart(
-            document.getElementById("g2"),
-            {
-
-                type:"bar",
-
-                data:{
-
-                    labels:[
-
-                        "Cólica",
-                        "Cabeça",
-                        "Inchaço",
-                        "Náusea",
-                        "Tontura"
-
-                    ],
-
-                    datasets:[{
-
-                        data:[
-
-                            bool(d.colica),
-                            bool(d.dorCabeca),
-                            bool(d.inchaco),
-                            bool(d.nausea),
-                            bool(d.tontura)
-
-                        ],
-
-                        borderRadius:8,
-
-                        borderSkipped:false
-
-                    }]
-
-                },
-
-                options:{
-
-                    ...chartBase,
-
-                    scales:{
-
-                        y:{
-
-                            beginAtZero:true,
-
-                            max:1,
-
-                            ticks:{
-
-                                display:false
-
-                            },
-
-                            grid:{
-
-                                display:false
-
-                            }
-
-                        },
-
-                        x:{
-
-                            ticks:{
-
-                                color:
-                                    "rgba(255,255,255,.5)",
-
-                                font:{
-
-                                    family:"Quicksand",
-
-                                    size:8
-
-                                }
-
-                            },
-
-                            grid:{
-
-                                display:false
-
-                            }
-
-                        }
-
-                    },
-
-                    plugins:{
-
-                        legend:{
-
-                            display:false
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        )
-
-    );
-
-
-    /* =====================================================
-       EMOCIONAL
-    ===================================================== */
-
-    charts.push(
-
-        new Chart(
-            document.getElementById("g3"),
-            {
-
-                type:"radar",
-
-                data:{
-
-                    labels:[
-
-                        "Ansiedade",
-                        "Estresse",
-                        "Tristeza",
-                        "Felicidade",
-                        "Sensibilidade"
-
-                    ],
-
-                    datasets:[{
-
-                        data:[
-
-                            bool(d.ansiedade),
-                            bool(d.estresse),
-                            bool(d.tristeza),
-                            bool(d.felicidade),
-                            bool(d.sensibilidade)
-
-                        ],
-
-                        borderWidth:2,
-
-                        pointRadius:3
-
-                    }]
-
-                },
-
-                options:{
-
-                    ...chartBase,
-
-                    scales:{
-
-                        r:{
-
-                            min:0,
-
-                            max:1,
-
-                            ticks:{
-
-                                display:false
-
-                            },
-
-                            grid:{
-
-                                color:
-                                    "rgba(255,255,255,.08)"
-
-                            },
-
-                            angleLines:{
-
-                                color:
-                                    "rgba(255,255,255,.08)"
-
-                            },
-
-                            pointLabels:{
-
-                                color:
-                                    "rgba(255,255,255,.55)",
-
-                                font:{
-
-                                    family:"Quicksand",
-
-                                    size:8
-
-                                }
-
-                            }
-
-                        }
-
-                    },
-
-                    plugins:{
-
-                        legend:{
-
-                            display:false
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        )
-
-    );
-
-
-    /* =====================================================
-       CORPO
-    ===================================================== */
-
-    charts.push(
-
-        new Chart(
-            document.getElementById("g4"),
-            {
-
-                type:"polarArea",
-
-                data:{
-
-                    labels:[
-
-                        "Acne",
-                        "Cansaço",
-                        "Energia baixa",
-                        "Apetite",
-                        "Sono ruim"
-
-                    ],
-
-                    datasets:[{
-
-                        data:[
-
-                            bool(d.acne),
-                            bool(d.cansaco),
-                            bool(d.energiaBaixa),
-                            bool(d.apetite),
-                            bool(d.sonoRuim)
-
-                        ]
-
-                    }]
-
-                },
-
-                options:{
-
-                    ...chartBase,
-
-                    scales:{
-
-                        r:{
-
-                            ticks:{
-
-                                display:false
-
-                            },
-
-                            grid:{
-
-                                color:
-                                    "rgba(255,255,255,.08)"
-
-                            }
-
-                        }
-
-                    },
-
-                    plugins:{
-
-                        legend:{
-
-                            position:"bottom"
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        )
-
-    );
-
-
-    /* =====================================================
-       ROTINA
-    ===================================================== */
-
-    charts.push(
-
-        new Chart(
-            document.getElementById("g5"),
-            {
-
-                type:"line",
-
-                data:{
-
-                    labels:[
-
-                        "Exercício",
-                        "Concentração",
-                        "Libido",
-                        "Irritação",
-                        "Dor"
-
-                    ],
-
-                    datasets:[{
-
-                        data:[
-
-                            bool(d.exercicio),
-                            bool(d.concentracao),
-                            bool(d.libido),
-                            bool(d.irritacao),
-                            dor / 10
-
-                        ],
-
-                        tension:.4,
-
-                        borderWidth:3,
-
-                        pointRadius:4,
-
-                        fill:true
-
-                    }]
-
-                },
-
-                options:{
-
-                    ...chartBase,
-
-                    scales:{
-
-                        y:{
-
-                            min:0,
-
-                            max:1,
-
-                            ticks:{
-
-                                display:false
-
-                            },
-
-                            grid:{
-
-                                color:
-                                    "rgba(255,255,255,.06)"
-
-                            }
-
-                        },
-
-                        x:{
-
-                            ticks:{
-
-                                color:
-                                    "rgba(255,255,255,.5)",
-
-                                font:{
-
-                                    family:"Quicksand",
-
-                                    size:9
-
-                                }
-
-                            },
-
-                            grid:{
-
-                                display:false
-
-                            }
-
-                        }
-
-                    },
-
-                    plugins:{
-
-                        legend:{
-
-                            display:false
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        )
-
-    );
-
-}
-
-
-/* =========================================================
-   VOLTAR PARA LISTA
-========================================================= */
-
-function voltarLista(){
-
-    destruir();
-
-
-    const lista =
-        document.getElementById(
-            "lista"
-        );
-
-
-    if(lista){
-
-        lista.style.display =
-            "flex";
-
-    }
-
-
-    const controles =
-        document.querySelector(
-            ".controles"
-        );
-
-
-    if(controles){
-
-        controles.style.display =
-            "flex";
-
-    }
-
-
-    const resumo =
-        document.querySelector(
-            ".resumo"
-        );
-
-
-    if(resumo){
-
-        resumo.style.display =
-            "grid";
-
-    }
-
-
-    const topo =
-        document.querySelector(
-            ".topo"
-        );
-
-
-    if(topo){
-
-        topo.style.display =
-            "flex";
-
-    }
-
-
-    const tela =
-        document.getElementById(
-            "telaGraficos"
-        );
-
-
-    if(tela){
-
-        tela.style.display =
-            "none";
-
-    }
-
-
-    renderizar();
-
-}
-
-
-
-
-/* =========================================================
-   INICIALIZAÇÃO
-========================================================= */
-
-renderizar();
-
 
 </script>
+
 </body>
 
 </html>

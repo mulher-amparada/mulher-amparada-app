@@ -60,7 +60,7 @@ E o fundo do icone do app é um adaptativo, em que o fundo e preto, e tem um bon
 
 e quando você clica no botão voltar na MainActivity, ele volta a página!
 
-e o fundo de todas as telas são nativamente pretas!
+e o fundo de todas as telas são nativamente pretas, (exceto a tela de splash screen inicial do app, pois ela é mais puxada para o cinza escuro!)
 
 E o workflow utiliza um keystore de assinatura armazenado de forma protegida nos GitHub Actions Secrets. As informações necessárias para acessar o keystore e selecionar a chave são fornecidas pelas variáveis KEYSTORE_BASE64, KEYSTORE_PASSWORD, KEY_ALIAS e KEY_PASSWORD.
 

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<meta name="theme-color" content="#000000">
+
+<title>Permissões necessárias</title>
+
+<style>
+
+/* =========================================================
+   BASE
+========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+    -webkit-tap-highlight-color:
+        transparent;
+}
+
+html,
+body {
+
+    width: 100%;
+    min-height: 100%;
+
+    background: #000000;
+    color: #ffffff;
+
+    overflow-x: hidden;
+}
+
+body {
+
+    min-height: 100vh;
+
+    padding-top:
+        env(safe-area-inset-top);
+
+    padding-bottom:
+        env(safe-area-inset-bottom);
+}
+
+
+/* =========================================================
+   ANIMAÇÃO
+========================================================= */
+
+@keyframes pageIn {
+
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+}
+
+
+/* =========================================================
+   BLOQUEIO INICIAL DE PERMISSÕES
+========================================================= */
+
+.permissionOverlay {
+
+    position: fixed;
+
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 99999;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background: #000000;
+
+    overflow: hidden;
+
+    animation:
+        pageIn
+        .45s
+        ease
+        both;
+
+    transform: none;
+    -webkit-transform: none;
+
+    backface-visibility: visible;
+    -webkit-backface-visibility: visible;
+
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.permissionCard {
+
+    width: 100%;
+
+    max-width: 430px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding:
+        28px
+        24px
+        24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #151318,
+            #0b0a0e
+        );
+
+    border:
+        1px solid
+        #302b35;
+
+    border-radius:
+        28px;
+
+}
+
+
+/* =========================================================
+   LINHA
+========================================================= */
+
+.permissionLine {
+
+    width: 42px;
+
+    height: 3px;
+
+    margin-bottom: 22px;
+
+    border-radius: 999px;
+
+    background: #ff3f82;
+
+}
+
+
+/* =========================================================
+   TÍTULO
+========================================================= */
+
+.permissionTitle {
+
+    color: #ffffff;
+
+    font-size: 24px;
+
+    font-weight: 800;
+
+    line-height: 1.05;
+
+    letter-spacing: -.5px;
+
+}
+
+
+/* =========================================================
+   TEXTO
+========================================================= */
+
+.permissionText {
+
+    margin-top: 13px;
+
+    color: #85858e;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    line-height: 1.55;
+
+}
+
+
+/* =========================================================
+   BOTÃO
+========================================================= */
+
+.permissionButton {
+
+    width: 100%;
+
+    min-height: 52px;
+
+    margin-top: 24px;
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ff3f82,
+            #db2c6d
+        );
+
+    border:
+        1px solid
+        #ff6b9f;
+
+    border-radius: 17px;
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    -webkit-appearance: none;
+    appearance: none;
+
+    transition:
+        filter
+        .18s
+        ease;
+
+}
+
+
+.permissionButton:active {
+
+    filter:
+        brightness(.85);
+
+}
+
+
+.permissionButton:focus-visible {
+
+    outline:
+        2px solid
+        #ffffff;
+
+    outline-offset:
+        4px;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =======================================================
+     POPUP
+======================================================= -->
+
+<div
+    class="permissionOverlay"
+    id="permissionOverlay"
+>
+
+    <div class="permissionCard">
+
+        <div class="permissionLine"></div>
+
+        <div class="permissionTitle">
+            Permissões necessárias
+        </div>
+
+        <div class="permissionText">
+            Para aproveitar todos os recursos do Mulher Amparada,
+            verifique as permissões do aplicativo nas configurações
+            do Android.
+        </div>
+
+        <button
+            class="permissionButton"
+            id="permissionButton"
+            type="button"
+        >
+            Abrir permissões
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   ELEMENTOS
+========================================================= */
+
+const permissionButton =
+    document.getElementById(
+        "permissionButton"
+    );
+
+
+/* =========================================================
+   ALGUMA PERMISSÃO FALTANDO
+========================================================= */
+
+window.addEventListener(
+    "permissoesFaltando",
+    function () {
+
+        /*
+         * Permanece nesta página.
+         * O botão continua disponível.
+         */
+
+        console.log(
+            "Existem permissões faltando."
+        );
+
+    }
+);
+
+
+/* =========================================================
+   TODAS AS PERMISSÕES CONCEDIDAS
+========================================================= */
+
+window.addEventListener(
+    "todasPermissoesOK",
+    function () {
+
+        /*
+         * Todas as permissões estão concedidas.
+         */
+
+        window.location.href =
+            "index2.html";
+
+    }
+);
+
+
+/* =========================================================
+   BOTÃO — ABRIR PERMISSÕES
+========================================================= */
+
+if (permissionButton) {
+
+    permissionButton.addEventListener(
+        "click",
+        function () {
+
+            try {
+
+                if (
+                    typeof vibrar === "function"
+                ) {
+
+                    vibrar(60);
+
+                }
+
+                if (
+                    window.Android &&
+                    typeof window.Android.abrirPermissoes ===
+                        "function"
+                ) {
+
+                    window.Android.abrirPermissoes();
+
+                } else {
+
+                    console.warn(
+                        "Android.abrirPermissoes() não está disponível."
+                    );
+
+                }
+
+            } catch (e) {
+
+                console.warn(
+                    "Erro ao abrir permissões:",
+                    e
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   VERIFICAR AO CARREGAR
+========================================================= */
+
+window.addEventListener(
+    "load",
+    function () {
+
+        if (
+            window.Android &&
+            typeof window.Android.verificarPermissoes ===
+                "function"
+        ) {
+
+            window.Android.verificarPermissoes();
+
+        } else {
+
+            console.warn(
+                "Android.verificarPermissoes() não está disponível."
+            );
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

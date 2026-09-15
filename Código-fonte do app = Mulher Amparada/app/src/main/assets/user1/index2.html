@@ -1070,202 +1070,6 @@ background: #000;
 
 }
 
-/* =========================================================
-   BLOQUEIO INICIAL DE PERMISSÕES
-========================================================= */
-
-.permissionOverlay {
-
-    position:
-        fixed;
-
-    inset:
-        0;
-
-    z-index:
-        99999;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    padding:
-        24px;
-
-    background:
-        #000000;
-
-    animation:
-        pageIn
-        .45s
-        ease
-        both;
-
-}
-
-.permissionCard {
-
-    width:
-        100%;
-
-    max-width:
-        430px;
-
-    position:
-        relative;
-
-    overflow:
-        hidden;
-
-    padding:
-        28px
-        24px
-        24px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #151318,
-            #0b0a0e
-        );
-
-    border:
-        1px solid
-        #302b35;
-
-    border-radius:
-        28px;
-
-}
-
-.permissionLine {
-
-    width:
-        42px;
-
-    height:
-        3px;
-
-    margin-bottom:
-        22px;
-
-    border-radius:
-        999px;
-
-    background:
-        var(--pink);
-
-}
-
-.permissionTitle {
-
-    color:
-        #ffffff;
-
-    font-size:
-        24px;
-
-    font-weight:
-        800;
-
-    line-height:
-        1.05;
-
-    letter-spacing:
-        -.5px;
-
-}
-
-.permissionText {
-
-    margin-top:
-        13px;
-
-    color:
-        #85858e;
-
-    font-size:
-        11px;
-
-    font-weight:
-        600;
-
-    line-height:
-        1.55;
-
-}
-
-.permissionButton {
-
-    width:
-        100%;
-
-    min-height:
-        52px;
-
-    margin-top:
-        24px;
-
-    color:
-        #ffffff;
-
-    background:
-        linear-gradient(
-            145deg,
-            #ff3f82,
-            #db2c6d
-        );
-
-    border:
-        1px solid
-        #ff6b9f;
-
-    border-radius:
-        17px;
-
-    font-family:
-        "Quicksand",
-        sans-serif;
-
-    font-size:
-        12px;
-
-    font-weight:
-        800;
-
-    cursor:
-        pointer;
-
-    -webkit-appearance:
-        none;
-
-    appearance:
-        none;
-
-    transition:
-        filter
-        .18s
-        ease;
-
-}
-
-
-
-.permissionButton:focus-visible {
-
-    outline:
-        2px solid
-        #ffffff;
-
-    outline-offset:
-        4px;
-
-}
 
 
 /* =========================================================
@@ -4450,77 +4254,10 @@ function enviarSOSContatos() {
 
 </script>
 
-<div class="permissionOverlay" id="permissionOverlay">
-
-    <div class="permissionCard">
-
-        <div class="permissionLine"></div>
-
-        <div class="permissionTitle">
-            Permissões necessárias
-        </div>
-
-        <div class="permissionText">
-            Para aproveitar todos os recursos do Mulher Amparada,
-            verifique as permissões do aplicativo nas configurações
-            do Android.
-        </div>
-
-        <button
-            class="permissionButton"
-            id="permissionButton"
-            type="button"
-        >
-            Abrir permissões
-        </button>
-
-    </div>
-
-</div>
-
-
 <script>
-/* =========================================================
-   BLOQUEIO DE PERMISSÕES
-========================================================= */
-
-const permissionOverlay =
-    document.getElementById("permissionOverlay");
-
-const permissionButton =
-    document.getElementById("permissionButton");
-
 
 /* =========================================================
-   MOSTRAR / OCULTAR AVISO
-========================================================= */
-
-function mostrarAvisoDePermissoes(permissoes) {
-
-    if (!permissionOverlay) return;
-
-    if (
-        Array.isArray(permissoes) &&
-        permissoes.length > 0
-    ) {
-
-        permissionOverlay.style.display = "flex";
-
-        console.log(
-            "Permissões faltando:",
-            permissoes
-        );
-
-    } else {
-
-        permissionOverlay.style.display = "none";
-
-    }
-}
-
-
-/* =========================================================
-   KOTLIN INFORMOU QUE EXISTEM PERMISSÕES FALTANDO
+   VERIFICAÇÃO DE PERMISSÕES
 ========================================================= */
 
 window.addEventListener(
@@ -4533,83 +4270,40 @@ window.addEventListener(
                 ? event.detail.permissoes
                 : [];
 
-        mostrarAvisoDePermissoes(
-            permissoes
-        );
+        if (permissoes.length > 0) {
+
+            window.location.href =
+                "permissao.html";
+
+        }
+
     }
 );
 
 
 /* =========================================================
-   KOTLIN INFORMOU QUE TODAS AS PERMISSÕES ESTÃO OK
+   TODAS AS PERMISSÕES OK
 ========================================================= */
 
 window.addEventListener(
     "todasPermissoesOK",
     function () {
 
+        /*
+         * Todas as permissões estão concedidas.
+         * Permanece nesta página.
+         */
+
         console.log(
-            "Todas as permissões foram concedidas."
+            "Todas as permissões estão OK."
         );
 
-        if (permissionOverlay) {
-
-            permissionOverlay.style.display =
-                "none";
-
-        }
     }
 );
 
 
 /* =========================================================
-   BOTÃO — ABRIR PERMISSÕES
-========================================================= */
-
-if (permissionButton) {
-
-    permissionButton.addEventListener(
-        "click",
-        function () {
-
-            try {
-
-                if (
-                    typeof vibrar === "function"
-                ) {
-
-                    vibrar(60);
-                }
-
-                if (
-                    window.Android &&
-                    typeof window.Android.abrirPermissoes ===
-                        "function"
-                ) {
-
-                    window.Android.abrirPermissoes();
-
-                } else {
-
-                    console.warn(
-                        "Android.abrirPermissoes() não está disponível."
-                    );
-                }
-
-            } catch (e) {
-
-                console.warn(
-                    "Erro ao abrir permissões:",
-                    e
-                );
-            }
-        }
-    );
-}
-
-
-/* =========================================================
-   GARANTIA EXTRA AO CARREGAR A PÁGINA
+   VERIFICAR AO CARREGAR
 ========================================================= */
 
 window.addEventListener(
@@ -4629,9 +4323,12 @@ window.addEventListener(
             console.warn(
                 "Android.verificarPermissoes() não está disponível."
             );
+
         }
+
     }
 );
+
 </script>
 
 </body>

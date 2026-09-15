@@ -132,22 +132,25 @@ body::-webkit-scrollbar,
         #000000;
 
     --surface:
-        #0b0b0e;
+        #101116;
 
     --surface-2:
-        #111115;
+        #15171e;
 
     --surface-3:
-        #18181d;
+        #1b1e27;
 
-    --text:
+    --white:
         #ffffff;
 
+    --text:
+        #f7f7fa;
+
     --soft:
-        #b4b4bd;
+        #a0a4b0;
 
     --muted:
-        #696972;
+        #686d79;
 
     --pink:
         #ff3f82;
@@ -158,17 +161,11 @@ body::-webkit-scrollbar,
     --pink-dark:
         #db2c6d;
 
-    --red:
-        #ff4358;
-
-    --red-dark:
-        #d5253d;
-
     --purple:
-        #8d79ff;
+        #8b5cf6;
 
     --purple-light:
-        #a395ff;
+        #b79aff;
 
     --purple-dark:
         #5947d4;
@@ -176,17 +173,37 @@ body::-webkit-scrollbar,
     --blue:
         #173b8f;
 
+    --orange:
+        #ff9f43;
+
+    --orange-light:
+        #ffc071;
+
+    --green:
+        #32d477;
+
+    --cyan:
+        #27c9c1;
+
+    --red:
+        #ff4054;
+
+    --red-dark:
+        #d5253d;
+
     --border:
-        #242429;
+        #ffffff12;
 
     --border-light:
         #33333a;
 
+    --border-strong:
+        #ffffff20;
+
     --radius:
-        28px;
+        26px;
 
 }
-
 
 /* =========================================================
    RESET
@@ -662,384 +679,7 @@ body {
    ATALHOS
 ========================================================= */
 
-.navigationButtons {
 
-    width:
-        100%;
-
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-}
-
-
-/* =========================================================
-   BOTÃO DE NAVEGAÇÃO
-========================================================= */
-
-.navigationButton {
-
-    width:
-        100%;
-
-    min-height:
-        116px;
-
-    margin-bottom:
-        13px;
-
-    position:
-        relative;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        15px;
-
-    padding:
-        17px
-        17px
-        17px
-        20px;
-
-    overflow:
-        hidden;
-
-    color:
-        #ffffff;
-
-    background:
-        linear-gradient(
-            145deg,
-            #111115,
-            #09090b
-        );
-
-    border:
-        1px solid
-        #25252b;
-
-    border-radius:
-        26px;
-
-    text-align:
-        left;
-
-    cursor:
-        pointer;
-
-    box-shadow:
-        0 12px 30px
-        #0000006e;
-
-    transition:
-        background
-        .18s
-        ease,
-
-        border-color
-        .18s
-        ease,
-
-        filter
-        .18s
-        ease;
-
-    -webkit-appearance:
-        none;
-
-    appearance:
-        none;
-
-}
-
-
-.navigationButton::before {
-
-    content:
-        "";
-
-    position:
-        absolute;
-
-    width:
-        180px;
-
-    height:
-        180px;
-
-    top:
-        -105px;
-
-    right:
-        -60px;
-
-    border-radius:
-        50%;
-
-    background:
-        #7b68ee28;
-
-    pointer-events:
-        none;
-
-}
-
-
-/* =========================================================
-   ÍCONE DOS ATALHOS
-========================================================= */
-
-.navigationIcon {
-
-    width:
-        53px;
-
-    height:
-        53px;
-
-    flex:
-        0 0 53px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    position:
-        relative;
-
-    z-index:
-        2;
-
-    color:
-        var(--pink);
-
-    background:
-        #18181d;
-
-    border:
-        1px solid
-        #303038;
-
-    border-radius:
-        17px;
-
-}
-
-.navigationIcon svg {
-
-    width:
-        26px;
-
-    height:
-        26px;
-
-    display:
-        block;
-
-    fill:
-        #fff;
-
-}
-
-
-/* =========================================================
-   CONTEÚDO DOS ATALHOS
-========================================================= */
-
-.navigationContent {
-
-    min-width:
-        0;
-
-    flex:
-        1;
-
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    justify-content:
-        center;
-
-    gap:
-        5px;
-
-    position:
-        relative;
-
-    z-index:
-        2;
-
-}
-
-.navigationTitle {
-
-    color:
-        #f4f4f6;
-
-    font-size:
-        14px;
-
-    font-weight:
-        800;
-
-    line-height:
-        1.2;
-
-}
-
-.navigationDescription {
-
-    color:
-        #77777f;
-
-    font-size:
-        9px;
-
-    font-weight:
-        600;
-
-    line-height:
-        1.45;
-
-}
-
-.navigationMeta {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    margin-top:
-        3px;
-
-}
-
-.navigationStatus {
-
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    gap:
-        6px;
-
-    color:
-        #575760;
-
-    font-size:
-        7px;
-
-    font-weight:
-        800;
-
-    letter-spacing:
-        1px;
-
-    text-transform:
-        uppercase;
-
-}
-
-.navigationStatus::before {
-
-    content:
-        "";
-
-    width:
-        4px;
-
-    height:
-        4px;
-
-    border-radius:
-        50%;
-
-    background:
-        var(--pink);
-
-}
-
-
-/* =========================================================
-   SETA
-========================================================= */
-
-.navigationArrow {
-
-    width:
-        41px;
-
-    height:
-        41px;
-
-    flex:
-        0 0 41px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    position:
-        relative;
-
-    z-index:
-        2;
-
-    color:
-        #73737b;
-
-    background:
-        #18181d;
-
-    border:
-        1px solid
-        #303038;
-
-    border-radius:
-        14px;
-
-}
-
-.navigationArrow svg {
-
-    width:
-        19px;
-
-    height:
-        19px;
-
-    display:
-        block;
-
-    stroke:
-        currentColor;
-
-}
 
 
 /* =========================================================
@@ -1366,25 +1006,6 @@ body {
 
 }
 
-.protectMeta::before {
-
-    content:
-        "";
-
-    width:
-        5px;
-
-    height:
-        5px;
-
-    border-radius:
-        50%;
-
-    background:
-        var(--pink);
-
-}
-
 
 /* =========================================================
    SETA DO BIG BUTTON
@@ -1671,6 +1292,1154 @@ body {
 
 }
 
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.control-card {
+
+    width:
+        100%;
+
+    min-height:
+        128px;
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        20px;
+
+    padding:
+        21px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        var(--radius);
+
+    background:
+        linear-gradient(
+            145deg,
+            #111,
+            #000
+        );
+
+    isolation:
+        isolate;
+
+    transition:
+        border-color .2s ease,
+        background .2s ease;
+
+}
+
+
+/* =========================================================
+   DECORAÇÃO DO CARD
+========================================================= */
+
+.control-card::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        210px;
+
+    height:
+        210px;
+
+    top:
+        -150px;
+
+    right:
+        -90px;
+
+    border-radius:
+        50%;
+
+    background:
+        #ffffff05;
+
+    pointer-events:
+        none;
+
+    z-index:
+        -1;
+
+}
+
+
+.control-card::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        100px;
+
+    height:
+        100px;
+
+    bottom:
+        -72px;
+
+    left:
+        -35px;
+
+    border-radius:
+        50%;
+
+    background:
+        #ffffff03;
+
+    pointer-events:
+        none;
+
+    z-index:
+        -1;
+
+}
+
+
+/* =========================================================
+   CONTEÚDO
+========================================================= */
+
+.control-card-content {
+
+    min-width:
+        0;
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        7px;
+
+}
+
+
+.control-card h3 {
+
+    color:
+        #ffffff;
+
+    font-size:
+        clamp(
+            17px,
+            4.5vw,
+            20px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        1.2;
+
+}
+
+
+.control-card p {
+
+    max-width:
+        480px;
+
+    color:
+        var(--soft);
+
+    font-size:
+        11px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.55;
+
+}
+
+
+.control-status {
+
+    margin-top:
+        2px;
+
+    color:
+        #686d79;
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1.3px;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+/* =========================================================
+   CARD ATIVO — ROSA
+========================================================= */
+
+.control-card.active {
+
+    background:
+        linear-gradient(
+            145deg,
+            #241520,
+            #120d12
+        );
+
+    border-color:
+        #ff3f8255;
+
+}
+
+
+.control-card.active::before {
+
+    background:
+        #ff3f8210;
+
+}
+
+
+.control-card.active::after {
+
+    background:
+        #ff3f8208;
+
+}
+
+
+.control-card.active .control-status {
+
+    color:
+        var(--pink-light);
+
+}
+
+
+/* =========================================================
+   MOVIMENTO — ROXO
+========================================================= */
+
+.control-card.movement.active {
+
+    background:
+        linear-gradient(
+            145deg,
+            #211936,
+            #110d1d
+        );
+
+    border-color:
+        #8b5cf655;
+
+}
+
+
+.control-card.movement.active::before {
+
+    background:
+        #8b5cf612;
+
+}
+
+
+.control-card.movement.active::after {
+
+    background:
+        #8b5cf609;
+
+}
+
+
+.control-card.movement.active .control-status {
+
+    color:
+        var(--purple-light);
+
+}
+
+
+/* =========================================================
+   BRILHO — LARANJA
+========================================================= */
+
+.control-card.brightness.active {
+
+    background:
+        linear-gradient(
+            145deg,
+            #241b0d,
+            #151008
+        );
+
+    border-color:
+        #ff9f4355;
+
+}
+
+
+.control-card.brightness.active::before {
+
+    background:
+        #ff9f4312;
+
+}
+
+
+.control-card.brightness.active::after {
+
+    background:
+        #ff9f4309;
+
+}
+
+
+.control-card.brightness.active .control-status {
+
+    color:
+        var(--orange-light);
+
+}
+
+
+/* =========================================================
+   BLOQUEIO — BRANCO
+========================================================= */
+
+.control-card.proximity.active {
+
+    background:
+        linear-gradient(
+            145deg,
+            #1b1c20,
+            #0e0f12
+        );
+
+    border-color:
+        #ffffff40;
+
+}
+
+
+.control-card.proximity.active::before {
+
+    background:
+        #ffffff0b;
+
+}
+
+
+.control-card.proximity.active::after {
+
+    background:
+        #ffffff07;
+
+}
+
+
+.control-card.proximity.active .control-status {
+
+    color:
+        #ffffff;
+
+}
+
+
+/* =========================================================
+   SWITCH
+========================================================= */
+
+.switch {
+
+    width:
+        58px;
+
+    height:
+        34px;
+
+    flex-shrink:
+        0;
+
+    position:
+        relative;
+
+    z-index:
+        5;
+
+    padding:
+        0;
+
+    border:
+        1px solid #ffffff12;
+
+    border-radius:
+        100px;
+
+    background:
+        #292c35;
+
+    cursor:
+        pointer;
+
+    transition:
+        background .22s ease,
+        border-color .22s ease;
+
+}
+
+
+.switch::after {
+
+    content:
+        "";
+
+    width:
+        26px;
+
+    height:
+        26px;
+
+    position:
+        absolute;
+
+    top:
+        3px;
+
+    left:
+        3px;
+
+    border-radius:
+        50%;
+
+    background:
+        #9297a3;
+
+    transition:
+        transform .22s cubic-bezier(.22,1,.36,1),
+        background .22s ease;
+
+}
+
+
+/* =========================================================
+   SWITCH ROSA
+========================================================= */
+
+.switch.active {
+
+    background:
+        var(--pink);
+
+    border-color:
+        var(--pink);
+
+}
+
+
+.switch.active::after {
+
+    background:
+        #ffffff;
+
+    transform:
+        translateX(24px);
+
+}
+
+
+/* =========================================================
+   SWITCH ROXO
+========================================================= */
+
+.switch.purple.active {
+
+    background:
+        var(--purple);
+
+    border-color:
+        var(--purple);
+
+}
+
+
+/* =========================================================
+   SWITCH LARANJA
+========================================================= */
+
+.switch.orange.active {
+
+    background:
+        var(--orange);
+
+    border-color:
+        var(--orange);
+
+}
+
+
+/* =========================================================
+   SWITCH BRANCO
+========================================================= */
+
+.switch.white.active {
+
+    background:
+        #ffffff;
+
+    border-color:
+        #ffffff;
+
+}
+
+
+.switch.white.active::after {
+
+    background:
+        #000000;
+
+    transform:
+        translateX(24px);
+
+}
+
+
+/* =========================================================
+   PRESS
+========================================================= */
+
+.switch:active {
+
+    opacity:
+        .72;
+
+}
+
+
+.navigationArrow {
+
+    width:
+        41px;
+
+    height:
+        41px;
+
+    flex:
+        0 0 41px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    color:
+        #73737b;
+
+    background:
+        #18181d;
+
+    border:
+        1px solid
+        #303038;
+
+    border-radius:
+        14px;
+
+}
+
+.navigationArrow svg {
+
+    width:
+        19px;
+
+    height:
+        19px;
+
+    display:
+        block;
+
+    stroke:
+        currentColor;
+
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.actionCard {
+
+    width:
+        100%;
+
+    min-height:
+        88px;
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        52px
+        minmax(0, 1fr)
+        40px;
+
+    column-gap:
+        13px;
+
+    align-items:
+        center;
+
+    padding:
+        17px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        var(--radius);
+
+    color:
+        #ffffff;
+
+    cursor:
+        pointer;
+
+    text-align:
+        left;
+
+    outline:
+        none;
+
+    -webkit-appearance:
+        none;
+
+    appearance:
+        none;
+
+    isolation:
+        isolate;
+
+    transition:
+        filter .18s ease,
+        border-color .18s ease;
+
+margin-bottom: 24px;
+
+}
+
+
+/* =========================================================
+   BRILHO DO CARD
+========================================================= */
+
+.actionCard::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        190px;
+
+    height:
+        190px;
+
+    top:
+        -135px;
+
+    right:
+        -65px;
+
+    border-radius:
+        50%;
+
+    background:
+        #ffffff0d;
+
+    pointer-events:
+        none;
+
+    z-index:
+        -1;
+
+}
+
+
+
+
+
+/* =========================================================
+   ÍCONE
+========================================================= */
+
+.actionIcon {
+
+    width:
+        52px;
+
+    height:
+        52px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        17px;
+
+    background:
+        #ffffff16;
+
+    color:
+        #ffffff;
+
+}
+
+
+.actionIcon svg {
+
+    width:
+        28px;
+
+    height:
+        28px;
+
+    display:
+        block;
+
+    fill:
+        currentColor;
+
+}
+
+
+/* =========================================================
+   CONTEÚDO
+========================================================= */
+
+.actionTitle {
+
+    min-width:
+        0;
+
+    color:
+        #ffffff;
+
+    font-size:
+        15px;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.2;
+
+    
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+white-space:
+        normal;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        clip;
+}
+
+
+.actionDescription {
+
+    display:
+        block;
+
+    min-width:
+        0;
+
+    max-width:
+        100%;
+
+    margin-top:
+        4px;
+
+    color:
+        #ffffffb8;
+
+    font-size:
+        10px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.3;
+
+    white-space:
+        normal;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        clip;
+
+}
+
+/* =========================================================
+   SETA
+========================================================= */
+.actionArrow {
+
+    width:
+        40px;
+
+    height:
+        40px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    color:
+        #ffffffc7;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--accent) 10%,
+            #000000
+        );
+
+    border:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--accent) 20%,
+            #ffffff08
+        );
+
+    border-radius:
+        14px;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size:
+        27px;
+
+    font-weight:
+        300;
+
+    line-height:
+        1;
+
+}
+
+.actionArrow svg {
+
+    width:
+        19px;
+
+    height:
+        19px;
+
+    display:
+        block;
+
+    color:
+        #ffffffc7;
+
+}
+
+/* =========================================================
+   CORES
+========================================================= */
+
+.policia {
+
+    --accent:
+        var(--blue);
+
+    background:
+        linear-gradient(
+            145deg,
+            #182744,
+            #0f1829
+        );
+
+    border-color:
+        #4f8cff38;
+
+}
+
+
+.policia .actionIcon {
+
+    background:
+        #4f8cff22;
+
+    color:
+        var(--blue-light);
+
+}
+
+
+.samu {
+
+    --accent:
+        var(--orange);
+
+    background:
+        linear-gradient(
+            145deg,
+            #2a2116,
+            #171109
+        );
+
+    border-color:
+        #ff9f4338;
+
+}
+
+
+.samu .actionIcon {
+
+    background:
+        #ff9f4320;
+
+    color:
+        var(--orange-light);
+
+}
+
+
+.mulher {
+
+    --accent:
+        var(--pink);
+
+    background:
+        linear-gradient(
+            145deg,
+            #281521,
+            #170c12
+        );
+
+    border-color:
+        #ff3f8238;
+
+}
+
+
+.mulher .actionIcon {
+
+    background:
+        #ff3f8220;
+
+    color:
+        var(--pink-light);
+
+}
+
+
+.localizacao {
+
+    --accent:
+        var(--cyan);
+
+    min-height:
+        96px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #112b2b,
+            #0b1717
+        );
+
+    border-color:
+        #27c9c138;
+
+}
+
+
+.localizacao .actionIcon {
+
+    background:
+        #27c9c120;
+
+    color:
+        var(--cyan-light);
+
+}
+
+
+.contato {
+
+    --accent:
+        var(--purple);
+
+    background:
+        linear-gradient(
+            145deg,
+            #21183a,
+            #120e20
+        );
+
+    border-color:
+        #8b5cf638;
+
+}
+
+
+.contato .actionIcon {
+
+    background:
+        #8b5cf622;
+
+    color:
+        var(--purple-light);
+
+}
+
+
+.sos {
+
+    --accent:
+        var(--red);
+
+    background:
+        linear-gradient(
+            145deg,
+            #2b171d,
+            #170b0e
+        );
+
+    border-color:
+        #ff405438;
+
+}
+
+
+.sos .actionIcon {
+
+    background:
+        #ff405422;
+
+    color:
+        var(--red-light);
+
+}
+
+
+/* =========================================================
+   INTERAÇÃO
+========================================================= */
+
+.actionCard:active {
+
+    filter:
+        brightness(1.12);
+
+}
+
+
+.actionCard:hover {
+
+    filter:
+        brightness(1.06);
+
+    border-color:
+        #ffffff28;
+
+}
+
+
+.actionCard:focus-visible {
+
+    outline:
+        2px solid #ffffffb8;
+
+    outline-offset:
+        3px;
+
+}
+
 </style>
 
 </head>
@@ -1732,69 +2501,254 @@ body {
     </section>
 
 
+
     <!-- ===================================================
-         ATALHOS
+         BARULHO
     ==================================================== -->
 
-    <section class="navigationButtons">
+    <section class="section">
 
         <div class="label">
-            Atalhos
+            Barulho alto
+        </div>
+
+
+        <div
+            class="control-card"
+            id="palmasCard"
+        >
+
+            <div class="control-card-content">
+
+                <h3>
+                    Proteção por barulho
+                </h3>
+
+                <p>
+                    Detecta sons altos e situações
+                    suspeitas para acionar ajuda.
+                </p>
+
+                <span
+                    class="control-status"
+                    id="palmasStatus"
+                >
+                    DESATIVADO
+                </span>
+
+            </div>
+
+
+            <button
+                class="switch"
+                id="palmasSwitch"
+                type="button"
+                role="switch"
+                aria-checked="false"
+                aria-label="Ativar proteção por barulho"
+            ></button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         MOVIMENTO
+    ==================================================== -->
+
+    <section class="section">
+
+        <div class="label">
+            Movimento
+        </div>
+
+
+        <div
+            class="control-card movement"
+            id="movimentoCard"
+        >
+
+            <div class="control-card-content">
+
+                <h3>
+                    Balançar o celular
+                </h3>
+
+                <p>
+                    Detecta o movimento do celular.
+                    Se o sensor não estiver disponível ou der qualquer outro erro,
+                    o microfone será usado como alternativa.
+                </p>
+
+                <span
+                    class="control-status"
+                    id="movimentoStatus"
+                >
+                    DESATIVADO
+                </span>
+
+            </div>
+
+
+            <button
+                class="switch purple"
+                id="movimentoSwitch"
+                type="button"
+                role="switch"
+                aria-checked="false"
+                aria-label="Ativar proteção por movimento"
+            ></button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         BRILHO
+    ==================================================== -->
+
+    <section class="section">
+
+        <div class="label">
+            Brilho
+        </div>
+
+
+        <div
+            class="control-card brightness"
+            id="brilhoCard"
+        >
+
+            <div class="control-card-content">
+
+<h3>
+    Escurecimento por inclinação
+</h3>
+
+<p>
+    Escurece a tela automaticamente
+    quando a função estiver ativa.
+Se o sensor não estiver disponível ou der qualquer outro erro,
+    o microfone será usado como alternativa.
+</p>
+                <span
+                    class="control-status"
+                    id="brilhoStatus"
+                >
+                    DESATIVADO
+                </span>
+
+            </div>
+
+
+            <button
+                class="switch orange"
+                id="brilhoSwitch"
+                type="button"
+                role="switch"
+                aria-checked="false"
+                aria-label="Ativar escurecimento por inclinação"
+            ></button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         BLOQUEIO
+    ==================================================== -->
+
+    <section class="section">
+
+        <div class="label">
+            Desligar o celular
+        </div>
+
+
+        <div
+            class="control-card proximity"
+            id="proximidadeCard"
+        >
+
+            <div class="control-card-content">
+
+                <h3>
+                    Bloqueio por barulho
+                </h3>
+
+                <p>
+                    Detecta sons altos e bloqueia
+                    o celular automaticamente.
+                </p>
+
+                <span
+                    class="control-status"
+                    id="proximidadeStatus"
+                >
+                    DESATIVADO
+                </span>
+
+            </div>
+
+
+            <button
+                class="switch white"
+                id="proximidadeSwitch"
+                type="button"
+                role="switch"
+                aria-checked="false"
+                aria-label="Ativar bloqueio por barulho"
+            ></button>
+
+        </div>
+
+    </section>
+
+
+    <!-- AJUDA RÁPIDA -->
+
+    <section class="section">
+
+        <div class="label">
+            Ajuda rápida
         </div>
 
 
         <button
-            class="navigationButton"
+            class="actionCard policia"
             type="button"
-            onclick="window.location.href='index3.html'"
-            aria-label="Abrir proteção por sensores"
+            onclick="ligar('190')"
         >
 
-            <span
-                class="navigationIcon"
-                aria-hidden="true"
-            >
+            <span class="actionIcon" aria-hidden="true">
 
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 -960 960 960"
                 >
 
-                    <path
-                        d="M480-514ZM160-705q0-25 14.5-45t37.5-29l240-90q14-5 28-5t28 5l240 90q23 9 37.5 29t14.5 45v68q0 17-11.5 28.5T760-597q-17 0-28.5-11.5T720-637v-68l-240-90-240 90v189q0 80 32 154.5T363-233q12 11 13 28t-10 29q-11 12-27.5 12.5T310-174q-71-66-110.5-155.5T160-516v-189Zm692 597q-12 12-28.5 12T795-108l-94-95q-3 1-21 3-33 0-56.5-23.5T600-280q0-33 23.5-56.5T680-360q33 0 56.5 23.5T760-280q0 3-3 21l95 95q12 12 12 28t-12 28ZM440-280q0-100 70-170t170-70q100 0 170 70t70 170q0 17-11.5 28.5T880-240q-17 0-28.5-11.5T840-280q0-66-47-113t-113-47q-66 0-113 47t-47 113q0 66 47 113t113 47q17 0 28.5 11.5T720-80q0 17-11.5 28.5T680-40q-100 0-170-70t-70-170Z"
-                    />
+                    <path d="M467-85q-6-1-12-3-135-45-215-166.5T160-516v-189q0-25 14.5-45t37.5-29l240-90q14-5 28-5t28 5l240 90q23 9 37.5 29t14.5 45v189q0 140-80 261.5T505-88q-6 2-12 3t-13 1q-7 0-13-1Zm13-79q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/>
 
                 </svg>
 
             </span>
 
+            <span class="actionContent">
 
-            <span class="navigationContent">
-
-                <span class="navigationTitle">
-                    Proteção por sensores
+                <span class="actionTitle">
+                    Polícia
                 </span>
 
-                <span class="navigationDescription">
-                    Recursos de proteção acionados pelos sensores do dispositivo.
-                </span>
-
-                <span class="navigationMeta">
-
-                    <span class="navigationStatus">
-                        Proteção
-                    </span>
-
-                </span>
+                <small class="actionDescription">
+                    Emergência policial
+                </small>
 
             </span>
 
-
-            <span
-                class="navigationArrow"
-                aria-hidden="true"
-            >
-
+            <span class="actionArrow" aria-hidden="true">
                 <svg
                     viewBox="0 0 24 24"
                     fill="none"
@@ -1810,64 +2764,43 @@ body {
                     />
 
                 </svg>
-
             </span>
 
         </button>
 
 
         <button
-            class="navigationButton"
+            class="actionCard samu"
             type="button"
-            onclick="window.location.href='index4.html'"
-            aria-label="Abrir ajuda rápida"
+            onclick="ligar('192')"
         >
 
-            <span
-                class="navigationIcon"
-                aria-hidden="true"
-            >
+            <span class="actionIcon" aria-hidden="true">
 
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 -960 960 960"
                 >
 
-                    <path
-                        d="M700-480q0-21 4-40.5t10-39.5h46q10 0 18-4t14-12l27-36q9-12 8-27t-12-26l-28-28q-11-11-27-11.5T732-694q-43 40-67.5 97.5T640-480q0 59 24.5 116.5T732-266q12 11 28 10.5t27-11.5l28-28q11-11 12-26t-8-27l-27-36q-6-8-14-12t-18-4h-46q-6-18-10-38.5t-4-41.5ZM80-120q-33 0-56.5-23.5T0-200v-560q0-33 23.5-56.5T80-840h800q33 0 56.5 23.5T960-760v560q0 33-23.5 56.5T880-120H80Zm556-80h244v-560H80v560h4q42-75 116-117.5T360-360q86 0 160 42.5T636-200ZM445-435q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35ZM182-200h356q-34-38-80.5-59T360-280q-51 0-97 21t-81 59Zm149.5-291.5Q320-503 320-520t11.5-28.5Q343-560 360-560t28.5 11.5Q400-537 400-520t-11.5 28.5Q377-480 360-480t-28.5-11.5ZM480-480Z"
-                    />
+                    <path d="M440-360v80q0 17 11.5 28.5T480-240q17 0 28.5-11.5T520-280v-80h80q17 0 28.5-11.5T640-400q0-17-11.5-28.5T600-440h-80v-80q0-17-11.5-28.5T480-560q-17 0-28.5 11.5T440-520v80h-80q-17 0-28.5 11.5T320-400q0 17 11.5 28.5T360-360h80ZM160-80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h160v-80q0-33 23.5-56.5T400-880h160q33 0 56.5 23.5T640-800v80h160q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Zm240-560h160v-80H400v80ZM160-160v-480 480Z"/>
 
                 </svg>
 
             </span>
 
+            <span class="actionContent">
 
-            <span class="navigationContent">
-
-                <span class="navigationTitle">
-                    Ajuda rápida
+                <span class="actionTitle">
+                    SAMU
                 </span>
 
-                <span class="navigationDescription">
-                    Localização, compartilhamento e contatos de confiança em um só lugar.
-                </span>
-
-                <span class="navigationMeta">
-
-                    <span class="navigationStatus">
-                        Assistência
-                    </span>
-
-                </span>
+                <small class="actionDescription">
+                    Atendimento médico de emergência
+                </small>
 
             </span>
 
-
-            <span
-                class="navigationArrow"
-                aria-hidden="true"
-            >
-
+            <span class="actionArrow" aria-hidden="true">
                 <svg
                     viewBox="0 0 24 24"
                     fill="none"
@@ -1883,13 +2816,241 @@ body {
                     />
 
                 </svg>
+            </span>
 
+        </button>
+
+
+        <button
+            class="actionCard mulher"
+            type="button"
+            onclick="ligar('180')"
+        >
+
+            <span class="actionIcon" aria-hidden="true">
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 -960 960 960"
+                >
+
+                    <path d="M440-200h-40q-17 0-28.5-11.5T360-240q0-17 11.5-28.5T400-280h40v-84q-79-14-129.5-75.5T260-582q0-91 64.5-154.5T480-800q91 0 155.5 63.5T700-582q0 81-50.5 142.5T520-364v84h40q17 0 28.5 11.5T600-240q0 17-11.5 28.5T560-200h-40v40q0 17-11.5 28.5T480-120q-17 0-28.5-11.5T440-160v-40Zm139-281q41-41 41-99t-41-99q-41-41-99-41t-99 41q-41 41-41 99t41 99q41 41 99 41t99-41Z"/>
+
+                </svg>
+
+            </span>
+
+            <span class="actionContent">
+
+                <span class="actionTitle">
+                    Central da Mulher
+                </span>
+
+                <small class="actionDescription">
+                    Orientação e atendimento
+                </small>
+
+            </span>
+
+            <span class="actionArrow" aria-hidden="true">
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+
+                    <path
+                        d="M9 18L15 12L9 6"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                </svg>
             </span>
 
         </button>
 
     </section>
 
+
+    <!-- LOCALIZAÇÃO -->
+
+    <section class="section">
+
+        <div class="label">
+            Localização
+        </div>
+
+        <button
+            class="actionCard localizacao"
+            type="button"
+            onclick="enviarLocalizacao()"
+        >
+
+            <span class="actionIcon" aria-hidden="true">
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 -960 960 960"
+                >
+
+                    <path d="M480-186q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm-28 74q-14-5-25-15-65-60-115-117t-83.5-110.5q-33.5-53.5-51-103T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 45-17.5 94.5t-51 103Q698-301 648-244T533-127q-11 10-25 15t-28 5q-14 0-28-5Zm28-448Zm56.5 56.5Q560-527 560-560t-23.5-56.5Q513-640 480-640t-56.5 23.5Q400-593 400-560t23.5 56.5Q447-480 480-480t56.5-23.5Z"/>
+
+                </svg>
+
+            </span>
+
+            <span class="actionContent">
+
+                <span class="actionTitle">
+                    Enviar localização
+                </span>
+
+                <small class="actionDescription">
+                    Compartilhe sua localização atual
+                </small>
+
+            </span>
+
+            <span class="actionArrow" aria-hidden="true">
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+
+                    <path
+                        d="M9 18L15 12L9 6"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                </svg>
+            </span>
+
+        </button>
+
+    </section>
+
+
+    <!-- CONTATOS -->
+
+    <section class="section">
+
+        <div class="label">
+            Contatos de confiança
+        </div>
+
+
+        <button
+            class="actionCard contato"
+            type="button"
+            onclick="selecionarContato()"
+        >
+
+            <span class="actionIcon" aria-hidden="true">
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 -960 960 960"
+                >
+
+                    <path d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm146.5-204.5Q340-521 340-580t40.5-99.5Q421-720 480-720t99.5 40.5Q620-639 620-580t-40.5 99.5Q539-440 480-440t-99.5-40.5ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm100-95.5q47-15.5 86-44.5-39-29-86-44.5T480-280q-53 0-100 15.5T294-220q39 29 86 44.5T480-160q53 0 100-15.5ZM523-537q17-17 17-43t-17-43q-17-17-43-17t-43 17q-17 17-17 43t17 43q17 17 43 17t43-17Zm-43-43Zm0 360Z"/>
+
+                </svg>
+
+            </span>
+
+            <span class="actionContent">
+
+                <span class="actionTitle">
+                    Adicionar contato
+                </span>
+
+                <small class="actionDescription">
+                    Escolha uma pessoa de confiança
+                </small>
+
+            </span>
+
+            <span class="actionArrow" aria-hidden="true">
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+
+                    <path
+                        d="M9 18L15 12L9 6"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                </svg>
+            </span>
+
+        </button>
+
+
+        <button
+            class="actionCard sos"
+            type="button"
+            onclick="enviarSOSContatos()"
+        >
+
+            <span class="actionIcon" aria-hidden="true">
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 -960 960 960"
+                >
+
+                    <path d="M240-160q-17 0-28.5-11.5T200-200q0-17 11.5-28.5T240-240h24l79-263q8-26 29.5-41.5T420-560h120q26 0 47.5 15.5T617-503l79 263h24q17 0 28.5 11.5T760-200q0 17-11.5 28.5T720-160H240Zm108-80h264l-72-240H420l-72 240Zm92-440v-120q0-17 11.5-28.5T480-840q17 0 28.5 11.5T520-800v120q0 17 11.5 28.5T480-640q-17 0-28.5-11.5T440-680Zm210 54 85-85q11-11 27.5-11.5T791-711q11 11 11 28t-11 28l-85 86q-12 12-28 12t-28-12q-12-12-12-28.5t12-28.5Zm110 186h120q17 0 28.5 11.5T920-400q0 17-11.5 28.5T880-360H760q-17 0-28.5-11.5T720-400q0-17 11.5-28.5T760-440ZM254-570l-85-85q-11-11-11.5-27.5T169-711q11-11 28-11t28 11l86 85q12 12 12 28t-12 28q-12 12-28.5 12T254-570ZM80-360q-17 0-28.5-11.5T40-400q0-17 11.5-28.5T80-440h120q17 0 28.5 11.5T240-400q0 17-11.5 28.5T200-360H80Z"/>
+
+                </svg>
+
+            </span>
+
+            <span class="actionContent">
+
+                <span class="actionTitle">
+                    SOS contatos
+                </span>
+
+                <small class="actionDescription">
+                    Enviar alerta para seus contatos
+                </small>
+
+            </span>
+
+            <span class="actionArrow" aria-hidden="true">
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+
+                    <path
+                        d="M9 18L15 12L9 6"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                </svg>
+            </span>
+
+        </button>
+
+    </section>
+    
 
     <!-- ===================================================
          ÁREA PROTEGIDA
@@ -2108,6 +3269,1220 @@ document
 
 </script>
 
+
+<script>
+/* =========================================================
+   VIBRAÇÃO
+========================================================= */
+
+function vibrar(duracao = 100) {
+
+    try {
+
+        if (
+            navigator.vibrate &&
+            typeof navigator.vibrate === "function"
+        ) {
+            navigator.vibrate(duracao);
+        }
+
+    } catch (e) {}
+
+}
+
+
+/* =========================================================
+   ANDROID BRIDGE
+========================================================= */
+
+function chamarAndroid(nome, ...args) {
+
+    try {
+
+        if (
+            window.Android &&
+            typeof window.Android[nome] === "function"
+        ) {
+
+            return {
+                sucesso: true,
+                valor: window.Android[nome](...args)
+            };
+
+        }
+
+    } catch (e) {
+
+        console.warn(
+            "Android." + nome,
+            e
+        );
+
+        return {
+            sucesso: false,
+            valor: null
+        };
+    }
+
+    return {
+        sucesso: false,
+        valor: null
+    };
+}
+
+
+/* =========================================================
+   CRIPTO — SALVAR ESTADO
+========================================================= */
+
+function salvarEstado(chave, valor) {
+
+    try {
+
+        if (
+            window.Cripto &&
+            typeof Cripto.salvar === "function"
+        ) {
+
+            Cripto.salvar(
+                chave,
+                valor ? "true" : "false"
+            );
+
+            return true;
+        }
+
+    } catch (e) {
+
+        console.warn(
+            "Erro ao salvar estado:",
+            chave,
+            e
+        );
+    }
+
+    return false;
+}
+
+
+/* =========================================================
+   CRIPTO — CARREGAR ESTADO
+========================================================= */
+
+function carregarEstado(chave) {
+
+    try {
+
+        if (
+            window.Cripto &&
+            typeof Cripto.carregar === "function"
+        ) {
+
+            const valor =
+                Cripto.carregar(chave);
+
+            return valor === "true";
+        }
+
+    } catch (e) {
+
+        console.warn(
+            "Erro ao carregar estado:",
+            chave,
+            e
+        );
+    }
+
+    return false;
+}
+
+
+/* =========================================================
+   PROTEÇÃO POR BARULHO
+========================================================= */
+
+const palmasCard =
+    document.getElementById("palmasCard");
+
+const palmasSwitch =
+    document.getElementById("palmasSwitch");
+
+const palmasStatus =
+    document.getElementById("palmasStatus");
+
+
+let palmasAtiva =
+    false;
+
+
+function atualizarPalmasUI(ativa) {
+
+    palmasAtiva =
+        ativa;
+
+
+    palmasCard.classList.toggle(
+        "active",
+        ativa
+    );
+
+
+    palmasSwitch.classList.toggle(
+        "active",
+        ativa
+    );
+
+
+    palmasSwitch.setAttribute(
+        "aria-checked",
+        String(ativa)
+    );
+
+
+    palmasSwitch.setAttribute(
+        "aria-label",
+        ativa
+            ? "Desativar proteção por barulho"
+            : "Ativar proteção por barulho"
+    );
+
+
+    palmasStatus.innerText =
+        ativa
+            ? "ATIVADO"
+            : "DESATIVADO";
+}
+
+
+palmasSwitch.addEventListener(
+    "click",
+    function () {
+
+        vibrar(70);
+
+
+        if (!palmasAtiva) {
+
+            const resultado =
+                chamarAndroid(
+                    "ativarPalmas"
+                );
+
+
+            if (resultado.sucesso) {
+
+                palmasAtiva =
+                    true;
+
+
+                salvarEstado(
+                    "estado_palmas",
+                    true
+                );
+
+
+                atualizarPalmasUI(
+                    true
+                );
+
+            } else {
+
+                atualizarPalmasUI(
+                    false
+                );
+
+                vibrar(150);
+            }
+
+
+        } else {
+
+            const resultado =
+                chamarAndroid(
+                    "desativarPalmas"
+                );
+
+
+            if (resultado.sucesso) {
+
+                palmasAtiva =
+                    false;
+
+
+                salvarEstado(
+                    "estado_palmas",
+                    false
+                );
+
+
+                atualizarPalmasUI(
+                    false
+                );
+
+            } else {
+
+                vibrar(150);
+            }
+        }
+    }
+);
+
+
+/* =========================================================
+   BALANÇAR O CELULAR
+========================================================= */
+
+const movimentoCard =
+    document.getElementById(
+        "movimentoCard"
+    );
+
+const movimentoSwitch =
+    document.getElementById(
+        "movimentoSwitch"
+    );
+
+const movimentoStatus =
+    document.getElementById(
+        "movimentoStatus"
+    );
+
+
+let protecaoAtiva =
+    false;
+
+
+function atualizarProtecaoUI() {
+
+    movimentoCard.classList.toggle(
+        "active",
+        protecaoAtiva
+    );
+
+
+    movimentoSwitch.classList.toggle(
+        "active",
+        protecaoAtiva
+    );
+
+
+    movimentoSwitch.setAttribute(
+        "aria-checked",
+        String(protecaoAtiva)
+    );
+
+
+    movimentoSwitch.setAttribute(
+        "aria-label",
+        protecaoAtiva
+            ? "Desativar proteção por movimento"
+            : "Ativar proteção por movimento"
+    );
+
+
+    movimentoStatus.innerText =
+        protecaoAtiva
+            ? "ATIVADO"
+            : "DESATIVADO";
+}
+
+
+movimentoSwitch.addEventListener(
+    "click",
+    function () {
+
+        vibrar(70);
+
+
+        if (protecaoAtiva) {
+
+            const resultado =
+                chamarAndroid(
+                    "desativarProtecao"
+                );
+
+
+            if (resultado.sucesso) {
+
+                protecaoAtiva =
+                    false;
+
+
+                salvarEstado(
+                    "estado_movimento",
+                    false
+                );
+
+
+                atualizarProtecaoUI();
+
+            } else {
+
+                vibrar(150);
+            }
+
+
+            return;
+        }
+
+
+        const resultado =
+            chamarAndroid(
+                "ativarProtecao"
+            );
+
+
+        if (resultado.sucesso) {
+
+            protecaoAtiva =
+                true;
+
+
+            salvarEstado(
+                "estado_movimento",
+                true
+            );
+
+
+            atualizarProtecaoUI();
+
+        } else {
+
+            protecaoAtiva =
+                false;
+
+
+            salvarEstado(
+                "estado_movimento",
+                false
+            );
+
+
+            atualizarProtecaoUI();
+
+            vibrar(150);
+        }
+    }
+);
+
+
+/* =========================================================
+   ESCURECIMENTO POR INCLINAÇÃO
+========================================================= */
+
+const brilhoCard =
+    document.getElementById(
+        "brilhoCard"
+    );
+
+const brilhoSwitch =
+    document.getElementById(
+        "brilhoSwitch"
+    );
+
+const brilhoStatus =
+    document.getElementById(
+        "brilhoStatus"
+    );
+
+
+let brilhoAtivo =
+    false;
+
+
+function atualizarBrilhoUI() {
+
+    brilhoCard.classList.toggle(
+        "active",
+        brilhoAtivo
+    );
+
+
+    brilhoSwitch.classList.toggle(
+        "active",
+        brilhoAtivo
+    );
+
+
+    brilhoSwitch.setAttribute(
+        "aria-checked",
+        String(brilhoAtivo)
+    );
+
+
+    brilhoSwitch.setAttribute(
+        "aria-label",
+        brilhoAtivo
+            ? "Desativar escurecimento por inclinação"
+            : "Ativar escurecimento por inclinação"
+    );
+
+
+    brilhoStatus.innerText =
+        brilhoAtivo
+            ? "ATIVADO"
+            : "DESATIVADO";
+}
+
+
+brilhoSwitch.addEventListener(
+    "click",
+    function () {
+
+        vibrar(70);
+
+
+        if (brilhoAtivo) {
+
+            try {
+
+                if (
+                    window.TiltBrightness &&
+                    typeof TiltBrightness.stopTiltBrightness ===
+                    "function"
+                ) {
+
+                    TiltBrightness.stopTiltBrightness();
+
+
+                    brilhoAtivo =
+                        false;
+
+
+                    salvarEstado(
+                        "estado_brilho",
+                        false
+                    );
+
+
+                    atualizarBrilhoUI();
+
+                } else {
+
+                    vibrar(150);
+                }
+
+            } catch (e) {
+
+                console.warn(
+                    "Erro ao desativar brilho:",
+                    e
+                );
+
+                vibrar(150);
+            }
+
+
+            return;
+        }
+
+
+        let ativado =
+            false;
+
+
+        try {
+
+            if (
+                window.TiltBrightness &&
+                typeof TiltBrightness.startTiltBrightness ===
+                "function"
+            ) {
+
+                TiltBrightness.startTiltBrightness();
+
+                ativado =
+                    true;
+            }
+
+        } catch (e) {
+
+            console.warn(
+                "Erro ao ativar escurecimento:",
+                e
+            );
+        }
+
+
+        if (ativado) {
+
+            brilhoAtivo =
+                true;
+
+
+            salvarEstado(
+                "estado_brilho",
+                true
+            );
+
+        } else {
+
+            brilhoAtivo =
+                false;
+
+            vibrar(150);
+        }
+
+
+        atualizarBrilhoUI();
+    }
+);
+
+
+/* =========================================================
+   EVENTO DO ANDROID — ESCURECIMENTO
+========================================================= */
+
+window.addEventListener(
+    "tiltbrightness",
+    function (e) {
+
+        if (
+            !e ||
+            !e.detail
+        ) {
+            return;
+        }
+
+
+        if (
+            e.detail === "dark"
+        ) {
+
+            brilhoAtivo =
+                false;
+
+
+            salvarEstado(
+                "estado_brilho",
+                false
+            );
+
+
+            atualizarBrilhoUI();
+
+        }
+
+        else if (
+            e.detail === "normal"
+        ) {
+
+            /*
+             * "normal" representa apenas
+             * o brilho visual da tela.
+             */
+
+        }
+    }
+);
+
+
+/* =========================================================
+   BLOQUEIO POR BARULHO
+========================================================= */
+
+const proximidadeCard =
+    document.getElementById(
+        "proximidadeCard"
+    );
+
+const proximidadeSwitch =
+    document.getElementById(
+        "proximidadeSwitch"
+    );
+
+const proximidadeStatus =
+    document.getElementById(
+        "proximidadeStatus"
+    );
+
+
+let proximidadeAtiva =
+    false;
+
+
+function atualizarProximidadeUI() {
+
+    proximidadeCard.classList.toggle(
+        "active",
+        proximidadeAtiva
+    );
+
+
+    proximidadeSwitch.classList.toggle(
+        "active",
+        proximidadeAtiva
+    );
+
+
+    proximidadeSwitch.setAttribute(
+        "aria-checked",
+        String(proximidadeAtiva)
+    );
+
+
+    proximidadeSwitch.setAttribute(
+        "aria-label",
+        proximidadeAtiva
+            ? "Desativar bloqueio por barulho"
+            : "Ativar bloqueio por barulho"
+    );
+
+
+    proximidadeStatus.innerText =
+        proximidadeAtiva
+            ? "ATIVADO"
+            : "DESATIVADO";
+}
+
+
+proximidadeSwitch.addEventListener(
+    "click",
+    function () {
+
+        vibrar(70);
+
+
+        /* -----------------------------------------------------
+           DESATIVAR MANUALMENTE
+        ----------------------------------------------------- */
+
+        if (proximidadeAtiva) {
+
+            const resultado =
+                chamarAndroid(
+                    "pararBloqueio"
+                );
+
+
+            if (
+                resultado.sucesso &&
+                resultado.valor === true
+            ) {
+
+                proximidadeAtiva =
+                    false;
+
+
+                salvarEstado(
+                    "estado_proximidade",
+                    false
+                );
+
+
+                atualizarProximidadeUI();
+
+            } else {
+
+                vibrar(150);
+            }
+
+
+            return;
+        }
+
+
+        /* -----------------------------------------------------
+           ATIVAR
+        ----------------------------------------------------- */
+
+        const resultado =
+            chamarAndroid(
+                "desligarPorBarulho"
+            );
+
+
+        if (resultado.sucesso) {
+
+            proximidadeAtiva =
+                true;
+
+
+            salvarEstado(
+                "estado_proximidade",
+                true
+            );
+
+
+            atualizarProximidadeUI();
+
+        } else {
+
+            proximidadeAtiva =
+                false;
+
+
+            salvarEstado(
+                "estado_proximidade",
+                false
+            );
+
+
+            proximidadeStatus.innerText =
+                "NÃO FOI POSSÍVEL ATIVAR";
+
+
+            vibrar(150);
+        }
+    }
+);
+
+
+/* =========================================================
+   EVENTO DO ANDROID — ESTADO DOS RECURSOS
+========================================================= */
+
+window.addEventListener(
+    "estadoAndroid",
+    function (event) {
+
+        if (
+            !event ||
+            !event.detail
+        ) {
+            return;
+        }
+
+
+        const recurso =
+            event.detail.recurso;
+
+
+        const ativo =
+            event.detail.ativo === true;
+
+
+        /* -----------------------------------------------------
+           PALMAS
+        ----------------------------------------------------- */
+
+        if (
+            recurso === "palmas"
+        ) {
+
+            palmasAtiva =
+                ativo;
+
+
+            salvarEstado(
+                "estado_palmas",
+                ativo
+            );
+
+
+            atualizarPalmasUI(
+                ativo
+            );
+
+            return;
+        }
+
+
+        /* -----------------------------------------------------
+           MOVIMENTO
+        ----------------------------------------------------- */
+
+        if (
+            recurso === "movimento"
+        ) {
+
+            protecaoAtiva =
+                ativo;
+
+
+            salvarEstado(
+                "estado_movimento",
+                ativo
+            );
+
+
+            atualizarProtecaoUI();
+
+            return;
+        }
+
+
+        /* -----------------------------------------------------
+           BRILHO
+        ----------------------------------------------------- */
+
+        if (
+            recurso === "brilho"
+        ) {
+
+            brilhoAtivo =
+                ativo;
+
+
+            salvarEstado(
+                "estado_brilho",
+                ativo
+            );
+
+
+            atualizarBrilhoUI();
+
+            return;
+        }
+
+
+        /* -----------------------------------------------------
+           BLOQUEIO
+        ----------------------------------------------------- */
+
+        if (
+            recurso === "bloqueio"
+        ) {
+
+            proximidadeAtiva =
+                ativo;
+
+
+            salvarEstado(
+                "estado_proximidade",
+                ativo
+            );
+
+
+            atualizarProximidadeUI();
+
+            return;
+        }
+    }
+);
+
+
+/* =========================================================
+   PROTEÇÃO POR PALMAS — AÇÃO CONCLUÍDA
+========================================================= */
+
+window.palmasConcluidas =
+    function () {
+
+        palmasAtiva =
+            false;
+
+
+        salvarEstado(
+            "estado_palmas",
+            false
+        );
+
+
+        atualizarPalmasUI(
+            false
+        );
+
+
+        console.log(
+            "Proteção por palmas desativada após conclusão da ligação."
+        );
+    };
+
+
+/* =========================================================
+   BLOQUEIO POR BARULHO — AÇÃO CONCLUÍDA
+========================================================= */
+
+window.bloqueioPorBarulhoConcluido =
+    function () {
+
+        proximidadeAtiva =
+            false;
+
+
+        salvarEstado(
+            "estado_proximidade",
+            false
+        );
+
+
+        atualizarProximidadeUI();
+    };
+
+
+/* =========================================================
+   RESTAURAR ESTADOS SALVOS
+========================================================= */
+
+function restaurarEstados() {
+
+    /*
+     * Aqui NÃO chamamos as funções nativas.
+     *
+     * Apenas restauramos a interface.
+     */
+
+
+    palmasAtiva =
+        carregarEstado(
+            "estado_palmas"
+        );
+
+
+    protecaoAtiva =
+        carregarEstado(
+            "estado_movimento"
+        );
+
+
+    brilhoAtivo =
+        carregarEstado(
+            "estado_brilho"
+        );
+
+
+    proximidadeAtiva =
+        carregarEstado(
+            "estado_proximidade"
+        );
+
+
+    atualizarPalmasUI(
+        palmasAtiva
+    );
+
+
+    atualizarProtecaoUI();
+
+
+    atualizarBrilhoUI();
+
+
+    atualizarProximidadeUI();
+
+
+    console.log(
+        "Estados restaurados:",
+        {
+            palmas: palmasAtiva,
+            movimento: protecaoAtiva,
+            brilho: brilhoAtivo,
+            bloqueio: proximidadeAtiva
+        }
+    );
+}
+
+
+/* =========================================================
+   ESTADO INICIAL
+========================================================= */
+
+restaurarEstados();
+
+</script>
+
+<script>
+
+/* =========================================================
+   UTILITÁRIOS
+========================================================= */
+
+function vibrar(duracao = 100) {
+
+    try {
+
+        if (
+            navigator.vibrate &&
+            typeof navigator.vibrate === "function"
+        ) {
+
+            navigator.vibrate(duracao);
+
+        }
+
+    } catch (e) {}
+
+}
+
+
+function chamarAndroid(nome, ...args) {
+
+    try {
+
+        if (
+            window.Android &&
+            typeof window.Android[nome] === "function"
+        ) {
+
+            return window.Android[nome](...args);
+
+        }
+
+    } catch (e) {
+
+        console.warn(
+            "Android." + nome,
+            e
+        );
+
+    }
+
+    return null;
+
+}
+
+
+/* =========================================================
+   LIGAÇÃO
+========================================================= */
+
+function ligar(numero) {
+
+    if (!numero) {
+        return;
+    }
+
+    vibrar(60);
+
+    try {
+
+        window.location.href =
+            "tel:" + numero;
+
+    } catch (e) {
+
+        alert(
+            "Não foi possível iniciar a ligação."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LOCALIZAÇÃO
+========================================================= */
+
+function enviarLocalizacao() {
+
+    if (!navigator.geolocation) {
+
+        alert(
+            "A geolocalização não é suportada neste dispositivo."
+        );
+
+        return;
+
+    }
+
+    vibrar(60);
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(pos) {
+
+            const latitude =
+                pos.coords.latitude;
+
+            const longitude =
+                pos.coords.longitude;
+
+            const link =
+                "https://maps.google.com/?q=" +
+                latitude +
+                "," +
+                longitude;
+
+            const mensagem =
+                "🚨 SOCORRO! Estou aqui: " +
+                link;
+
+            const url =
+                "https://wa.me/556196100180?text=" +
+                encodeURIComponent(
+                    mensagem
+                );
+
+            window.location.href =
+                url;
+
+        },
+
+        function(error) {
+
+            console.warn(
+                "Geolocalização:",
+                error
+            );
+
+            alert(
+                "Não foi possível obter sua localização. " +
+                "Verifique se a localização está ativada."
+            );
+
+        },
+
+        {
+
+            enableHighAccuracy:
+                true,
+
+            timeout:
+                10000,
+
+            maximumAge:
+                5000
+
+        }
+
+    );
+
+}
+
+
+/* =========================================================
+   CONTATOS
+========================================================= */
+
+function selecionarContato() {
+
+    vibrar(60);
+
+    if (
+        chamarAndroid(
+            "abrirContatos"
+        ) !== null
+    ) {
+
+        return;
+
+    }
+
+    alert(
+        "A função de contatos precisa da integração com o Android."
+    );
+
+}
+
+
+/* =========================================================
+   SOS CONTATOS
+========================================================= */
+
+function enviarSOSContatos() {
+
+    vibrar(150);
+
+    if (
+        chamarAndroid(
+            "enviarSOS"
+        ) !== null
+    ) {
+
+        return;
+
+    }
+
+    alert(
+        "A função SOS dos contatos precisa da integração com o Android."
+    );
+
+}
+
+</script>
+
 <div class="permissionOverlay" id="permissionOverlay">
 
     <div class="permissionCard">
@@ -2135,6 +4510,7 @@ document
     </div>
 
 </div>
+
 
 <script>
 /* =========================================================
@@ -2294,3 +4670,4 @@ window.addEventListener(
 </body>
 
 </html>
+

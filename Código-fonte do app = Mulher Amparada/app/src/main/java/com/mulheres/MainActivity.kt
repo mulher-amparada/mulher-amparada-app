@@ -371,20 +371,6 @@ private fun abrirConfiguracoes() {
     )  
 }  
 
-private fun prepararPaginaExterna() {
-
-    WindowCompat.setDecorFitsSystemWindows(
-        window,
-        true
-    )
-
-    WindowCompat.getInsetsController(
-        window,
-        window.decorView
-    ).show(
-        WindowInsetsCompat.Type.systemBars()
-    )
-}
 
 // =========================================================  
 // WEBVIEW  
@@ -716,24 +702,7 @@ override fun onPageCommitVisible(
     }
 }
 
-override fun onPageStarted(
-    view: WebView?,
-    url: String?,
-    favicon: Bitmap?
-) {
-    super.onPageStarted(
-        view,
-        url,
-        favicon
-    )
 
-    if (
-        url?.startsWith("https://") == true ||
-        url?.startsWith("http://") == true
-    ) {
-        prepararPaginaExterna()
-    }
-}
 
             override fun onPageFinished(  
                 view: WebView?,  

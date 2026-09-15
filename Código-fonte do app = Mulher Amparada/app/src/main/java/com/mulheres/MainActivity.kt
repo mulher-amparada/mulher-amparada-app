@@ -34,7 +34,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
-
+import android.graphics.Bitmap
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
@@ -675,9 +675,7 @@ settings.mixedContentMode =
 
     val url = request?.url?.toString() ?: return false
 
-    if (
-        url.startsWith("tel:")
-    ) {
+    if (url.startsWith("tel:")) {
 
         startActivity(
             Intent(
@@ -689,9 +687,7 @@ settings.mixedContentMode =
         return true
     }
 
-    if (
-        url.startsWith("https://wa.me")
-    ) {
+    if (url.startsWith("https://wa.me")) {
 
         startActivity(
             Intent(
@@ -703,17 +699,8 @@ settings.mixedContentMode =
         return true
     }
 
-    if (
-        url.startsWith("https://") ||
-        url.startsWith("http://")
-    ) {
-
-        prepararPaginaExterna()
-    }
-
     return false
 }
-
 
 override fun onPageCommitVisible(
     view: WebView?,
@@ -726,6 +713,25 @@ override fun onPageCommitVisible(
 
     view?.post {
         view.alpha = 1f
+    }
+}
+
+override fun onPageStarted(
+    view: WebView?,
+    url: String?,
+    favicon: Bitmap?
+) {
+    super.onPageStarted(
+        view,
+        url,
+        favicon
+    )
+
+    if (
+        url?.startsWith("https://") == true ||
+        url?.startsWith("http://") == true
+    ) {
+        prepararPaginaExterna()
     }
 }
 

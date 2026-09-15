@@ -1264,20 +1264,6 @@ height: 25px;
             </button>
 
 
-            <button
-                class="icon-btn"
-                onclick="toggleTelaCheia()"
-                aria-label="Tela cheia"
-                title="Tela cheia"
-                type="button"
-            >
-
-                <img
-                    src="16.svg"
-                    alt=""
-                >
-
-            </button>
 
         </div>
 
@@ -2212,39 +2198,6 @@ async function carregarLocalizacao(
 }
 
 
-/* =========================================================
-   TELA CHEIA
-========================================================= */
-
-async function toggleTelaCheia(){
-
-    try{
-
-        if(
-            !document.fullscreenElement
-        ){
-
-            await document
-                .documentElement
-                .requestFullscreen();
-
-        }else{
-
-            await document
-                .exitFullscreen();
-
-        }
-
-    }catch(error){
-
-        showToast(
-            "Tela cheia não disponível"
-        );
-
-    }
-
-}
-
 
 /* =========================================================
    TOAST
@@ -2340,22 +2293,7 @@ document.addEventListener(
    TECLADO
 ========================================================= */
 
-document.addEventListener(
-    "keydown",
-    event => {
 
-        if(
-            event.key === "F11"
-        ){
-
-            event.preventDefault();
-
-            toggleTelaCheia();
-
-        }
-
-    }
-);
 
 </script>
 

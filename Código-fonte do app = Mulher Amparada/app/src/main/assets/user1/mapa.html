@@ -1079,7 +1079,10 @@ width: 92%;
         fixed;
 
     left:
-        50%;
+        22px;
+
+    white-space:
+        pre-line;
 
     bottom:
         calc(
@@ -1099,7 +1102,7 @@ width: 92%;
         11px 16px;
 
     transform:
-        translate(-50%, 18px);
+        translateY(18px);
 
     border:
         1px solid
@@ -1151,9 +1154,8 @@ width: 92%;
         1;
 
     transform:
-        translate(-50%, 0);
+        translateY(0);
 }
-
 
 /* =========================================================
    SVG
@@ -1941,7 +1943,7 @@ function locateUser() {
             ) {
 
                 message =
-                    "Permissão de localização negada.";
+                    "Permissão de\nlocalização negada.";
 
             }
 

@@ -94,13 +94,20 @@ private val OrangeLight = Color(0xFFFFC071)
 private val Cyan = Color(0xFF27C9C1)
 private val Red = Color(0xFFFF4054)
 
-private val Quicksand = FontFamily(
-    Font(R.font.font, FontWeight.Normal),
-    Font(R.font.font, FontWeight.Medium),
-    Font(R.font.font, FontWeight.SemiBold),
-    Font(R.font.font, FontWeight.Bold),
-    Font(R.font.font, FontWeight.ExtraBold)
-)
+val quicksandTypeface = remember {
+    Typeface.createFromAsset(
+        context.assets,
+        "font.ttf"
+    )
+}
+
+val Quicksand = remember(quicksandTypeface) {
+    FontFamily(
+        Font(
+            ResId = 0
+        )
+    )
+}
 
 class MainActivity : ComponentActivity() {
 

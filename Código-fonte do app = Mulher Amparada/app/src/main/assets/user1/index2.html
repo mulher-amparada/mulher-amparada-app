@@ -68,6 +68,32 @@
 
 }
 
+* {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    
+        box-sizing:
+        border-box;
+
+    margin:
+        0;
+
+    padding:
+        0;
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+    font-weight:
+        700;
+
+    -webkit-tap-highlight-color:
+        transparent;
+    }
 
 /* =========================================================
    ROLAGEM
@@ -209,44 +235,19 @@ body::-webkit-scrollbar,
    RESET
 ========================================================= */
 
-* {
-
-    box-sizing:
-        border-box;
-
-    margin:
-        0;
-
-    padding:
-        0;
-
-    font-family:
-        "Quicksand",
-        sans-serif;
-
-    font-weight:
-        700;
-
-    -webkit-tap-highlight-color:
-        transparent;
-
-}
 
 html,
 body {
+    width: 100%;
+    min-height: 100%;
+    background: transparent;
+    color: #ffffff;
 
-    width:
-        100%;
+        -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 
-    min-height:
-        100%;
-
-    background:
-        #000000;
-
-    color:
-        #ffffff;
-
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
 }
 
 body {
@@ -263,6 +264,7 @@ body {
     padding-bottom:
         env(safe-area-inset-bottom);
 
+background: #000;
 }
 
 
@@ -271,41 +273,32 @@ body {
 ========================================================= */
 
 .mainUI {
-
-    width:
-        100%;
-
-    max-width:
-        700px;
-
-    min-height:
-        100vh;
-
-    margin:
-        0 auto;
+    width: 100%;
+    max-width: 700px;
+    min-height: 100vh;
+    margin: 0 auto;
 
     padding:
         24px
         16px
         100px;
 
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    gap:
-        31px;
+    display: flex;
+    flex-direction: column;
+    gap: 31px;
 
     animation:
         pageIn
         .55s
         ease
         both;
+        
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
 }
-
 
 /* =========================================================
    HERO
@@ -648,20 +641,13 @@ body {
 
 .panic:hover {
 
-    filter:
-        brightness(1.045);
+    
 
     border-color:
         #ffffff9e;
 
 }
 
-.panic:active {
-
-    filter:
-        brightness(1.10);
-
-}
 
 .panic:focus-visible {
 
@@ -1041,8 +1027,7 @@ body {
 
 .bigButton:hover {
 
-    filter:
-        brightness(1.06);
+    
 
     border-color:
         #a395ff;
@@ -1072,12 +1057,7 @@ body {
 
 }
 
-.bigButton:active {
 
-    filter:
-        brightness(1.10);
-
-}
 
 .bigButton:focus-visible {
 
@@ -1274,12 +1254,7 @@ body {
 
 }
 
-.permissionButton:active {
 
-    filter:
-        brightness(1.12);
-
-}
 
 .permissionButton:focus-visible {
 
@@ -2100,8 +2075,8 @@ margin-bottom: 24px;
 
     
 
-    overflow:
-        hidden;
+    
+    
 
     text-overflow:
         ellipsis;
@@ -2411,19 +2386,11 @@ white-space:
    INTERAÇÃO
 ========================================================= */
 
-.actionCard:active {
-
-    filter:
-        brightness(1.12);
-
-}
 
 
 .actionCard:hover {
 
-    filter:
-        brightness(1.06);
-
+    
     border-color:
         #ffffff28;
 
@@ -4483,189 +4450,6 @@ function enviarSOSContatos() {
 
 </script>
 
-<div class="permissionOverlay" id="permissionOverlay">
-
-    <div class="permissionCard">
-
-        <div class="permissionLine"></div>
-
-        <div class="permissionTitle">
-            Permissões necessárias
-        </div>
-
-        <div class="permissionText">
-            Para aproveitar todos os recursos do Mulher Amparada,
-            verifique as permissões do aplicativo nas configurações
-            do Android.
-        </div>
-
-        <button
-            class="permissionButton"
-            id="permissionButton"
-            type="button"
-        >
-            Abrir permissões
-        </button>
-
-    </div>
-
-</div>
-
-
-<script>
-/* =========================================================
-   BLOQUEIO DE PERMISSÕES
-========================================================= */
-
-const permissionOverlay =
-    document.getElementById("permissionOverlay");
-
-const permissionButton =
-    document.getElementById("permissionButton");
-
-
-/* =========================================================
-   MOSTRAR / OCULTAR AVISO
-========================================================= */
-
-function mostrarAvisoDePermissoes(permissoes) {
-
-    if (!permissionOverlay) return;
-
-    if (
-        Array.isArray(permissoes) &&
-        permissoes.length > 0
-    ) {
-
-        permissionOverlay.style.display = "flex";
-
-        console.log(
-            "Permissões faltando:",
-            permissoes
-        );
-
-    } else {
-
-        permissionOverlay.style.display = "none";
-
-    }
-}
-
-
-/* =========================================================
-   KOTLIN INFORMOU QUE EXISTEM PERMISSÕES FALTANDO
-========================================================= */
-
-window.addEventListener(
-    "permissoesFaltando",
-    function (event) {
-
-        const permissoes =
-            event.detail &&
-            Array.isArray(event.detail.permissoes)
-                ? event.detail.permissoes
-                : [];
-
-        mostrarAvisoDePermissoes(
-            permissoes
-        );
-    }
-);
-
-
-/* =========================================================
-   KOTLIN INFORMOU QUE TODAS AS PERMISSÕES ESTÃO OK
-========================================================= */
-
-window.addEventListener(
-    "todasPermissoesOK",
-    function () {
-
-        console.log(
-            "Todas as permissões foram concedidas."
-        );
-
-        if (permissionOverlay) {
-
-            permissionOverlay.style.display =
-                "none";
-
-        }
-    }
-);
-
-
-/* =========================================================
-   BOTÃO — ABRIR PERMISSÕES
-========================================================= */
-
-if (permissionButton) {
-
-    permissionButton.addEventListener(
-        "click",
-        function () {
-
-            try {
-
-                if (
-                    typeof vibrar === "function"
-                ) {
-
-                    vibrar(60);
-                }
-
-                if (
-                    window.Android &&
-                    typeof window.Android.abrirPermissoes ===
-                        "function"
-                ) {
-
-                    window.Android.abrirPermissoes();
-
-                } else {
-
-                    console.warn(
-                        "Android.abrirPermissoes() não está disponível."
-                    );
-                }
-
-            } catch (e) {
-
-                console.warn(
-                    "Erro ao abrir permissões:",
-                    e
-                );
-            }
-        }
-    );
-}
-
-
-/* =========================================================
-   GARANTIA EXTRA AO CARREGAR A PÁGINA
-========================================================= */
-
-window.addEventListener(
-    "load",
-    function () {
-
-        if (
-            window.Android &&
-            typeof window.Android.verificarPermissoes ===
-                "function"
-        ) {
-
-            window.Android.verificarPermissoes();
-
-        } else {
-
-            console.warn(
-                "Android.verificarPermissoes() não está disponível."
-            );
-        }
-    }
-);
-</script>
 
 </body>
 

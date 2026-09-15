@@ -76,7 +76,11 @@ body::-webkit-scrollbar {
     user-select: none;
 
     -webkit-user-select: none;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
     -webkit-tap-highlight-color: transparent;
 }
 

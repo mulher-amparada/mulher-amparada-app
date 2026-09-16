@@ -25,16 +25,19 @@ jobs:
         run: |
           TOTAL=$(git rev-list --all --count)
 
-          python3 <<PY
+          python3 - "$TOTAL" <<'PY'
           from pathlib import Path
           import re
+          import sys
+
+          total = sys.argv[1]
 
           arquivo = Path("README.md")
           texto = arquivo.read_text(encoding="utf-8")
 
           texto = re.sub(
               r"## Commits do projeto =.*",
-              f"## Commits do projeto = {TOTAL}",
+              f"## Commits do projeto = {total}",
               texto,
               count=1
           )

@@ -732,8 +732,8 @@ jobs:
           texto = arquivo.read_text(encoding="utf-8")
 
           texto = re.sub(
-              r"## Commits do projeto =.*",
-              f"## Commits do projeto = {total}",
+              r"## Commits totais de toda a história do projeto =.*",
+              f"## Commits totais de toda a história do projeto = {total}",
               texto,
               count=1
           )

@@ -4,7 +4,7 @@
 
 ## E saibam que o projeto é: Source-Available
 
-## Commits do projeto = 2517
+## Commits do projeto = 
 
 O **Mulher Amparada** é um aplicativo de segurança e proteção desenvolvido especialmente para mulheres que desejam se sentir mais seguras em situações do dia a dia. O objetivo principal do aplicativo é oferecer suporte rápido, eficiente e acessível em momentos de risco, permitindo que a usuária consiga pedir ajuda de forma simples e imediata. Em um cenário onde muitas mulheres enfrentam situações de vulnerabilidade, ter uma ferramenta confiável pode fazer toda a diferença, e é exatamente isso que o Mulher Amparada busca proporcionar.
 
@@ -54,8 +54,6 @@ Na primeira página do site, tem 3 botoes que ligam para (180, 190 e 192), e usa
 
 ## Sobre como o aplicativo é compilado:
 
-e os apps são compilados com o workflow, gera o código sha-256 e o zip com o app, envia para a release pela tag correspondente, e atualiza o link da página de download, o código SHA-256, e o tamanho do apk dessas páginas!
-
 e todas as activitys tem o android exported="false", menos a MainActivity porque a partir das versões mais recentes do android, a tela inicial do app, se ela tiver um intent filter, ela tem que estar obrigatoriamente com android exported="true"
 
 E o fundo do icone do app é um adaptativo, em que o fundo e preto, e tem um bonequinho em cores azuis correndo, e o ic_launcher_foreground na pasta res/drawable, e os ic_launcher em cada mipmap tem o fundo transparente, eo ic_launcher_background também na pasta res/drawable é um quadrado preto
@@ -84,11 +82,11 @@ Versão agp no toml de 9.4.0 e versão kotlin de 2.4.20
 
 e ele tem o jetpack compose (embora no app só usei xml até agora, mas ele está ativado!) e estilo via xml ativados!
 
-## Sobre como eu automatizo o projeto:
+## Sobre como eu automatizo o projeto
+:
+e os apps são compilados com o workflow, gera o código sha-256 e o zip com o app, envia para a release pela tag correspondente, e atualiza o link da página de download, o código SHA-256, e o tamanho do apk dessas páginas!, e depois ele publica as alterações no site, e depois altera o número de commits do projeto, (tudo isso em um único workflow!)
 
 E eu também já consegui configurar um ssh na conta, e 2fa nela tambem, e com o ssh, eu consegui mover pastas inteiras para o repositório, e transformei 4 em 1, e mais de 100 commits em 1,
-
-e no site, ele conta com 3 botoes que ligam pro 192, 190 e 180 (ai voce escolhe), e eles usam o "tel:" do navegador
 
 e os contatos de confiança, quando são cadrastados eles também são criptografados!
 

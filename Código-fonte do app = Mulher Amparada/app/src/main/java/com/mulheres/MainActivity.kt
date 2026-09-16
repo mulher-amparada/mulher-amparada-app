@@ -1996,7 +1996,81 @@ webView.post {
 }
 
 // =========================================================
-// PERMISSÕES
+// RESULTADO DA SELEÇÃO DE CONTATO
+// =========================================================
+
+@Suppress("DEPRECATION")
+override fun onActivityResult(
+    requestCode: Int,
+    resultCode: Int,
+    data: Intent?
+) {
+    super.onActivityResult(
+        requestCode,
+        resultCode,
+        data
+    )
+
+    if (
+        requestCode != PICK_CONTACT ||
+        resultCode != RESULT_OK ||
+        data == null
+    ) {
+        return
+    }
+
+    val uri =
+        data.data
+            ?: return
+
+    try {
+
+        contentResolver.query(
+            uri,
+            arrayOf(
+                ContactsContract.CommonDataKinds.Phone.NUMBER
+            ),
+            null,
+            null,
+            null
+        )?.use { cursor ->
+
+            if (cursor.moveToFirst()) {
+
+                val numero =
+                    cursor.getString(
+                        cursor.getColumnIndexOrThrow(
+                            ContactsContract.CommonDataKinds.Phone.NUMBER
+                        )
+                    )
+
+                cripto.salvar(
+                    "contatos_lista",
+                    numero
+                )
+
+                Toast.makeText(
+                    this,
+                    "Contato cadastrado",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+    } catch (e: Exception) {
+
+        e.printStackTrace()
+
+        Toast.makeText(
+            this,
+            "Não foi possível salvar o contato",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+}
+
+// =========================================================
+// PERMISSÕES 
 // =========================================================
 
 @JavascriptInterface

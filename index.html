@@ -3,55 +3,60 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    >
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
 
-    <meta
-        name="theme-color"
-        content="#09090d"
-    >
+<meta
+    name="theme-color"
+    content="#050505"
+>
 
-    <meta
-        name="color-scheme"
-        content="dark"
-    >
+<meta
+    name="color-scheme"
+    content="dark"
+>
 
-    <title>Mulher Amparada — Proteção, Segurança e Emergência</title>
+<meta
+    name="author"
+    content="Mulher Amparada"
+>
 
-    <meta
-        name="author"
-        content="Mulher Amparada"
-    >
+<meta
+    name="application-name"
+    content="Mulher Amparada"
+>
 
-    <meta
-        name="application-name"
-        content="Mulher Amparada"
-    >
+<meta
+    name="description"
+    content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
+>
 
-    <meta
-        name="google-site-verification"
-        content="e34arcSd3RmEQ6iYX7et3EEZqZAyc92J_BBQFNVgf8A"
-    >
+<meta
+    name="google-site-verification"
+    content="e34arcSd3RmEQ6iYX7et3EEZqZAyc92J_BBQFNVgf8A"
+>
 
-    <link
-        rel="canonical"
-        href="https://mulher-amparada.github.io/mulher-amparada-app/"
-    >
+<link
+    rel="canonical"
+    href="https://mulher-amparada.github.io/mulher-amparada-app/"
+>
 
-    <link
-        rel="icon"
-        type="image/png"
-        href="favicon.png"
-    >
+<link
+    rel="icon"
+    type="image/png"
+    href="favicon.png"
+>
 
-    <link
-        rel="apple-touch-icon"
-        href="favicon.png"
-    >
+<link
+    rel="apple-touch-icon"
+    href="favicon.png"
+>
+
+<title>Hub • Mulher Amparada</title>
 
 <style>
 
@@ -61,15 +66,18 @@
 
 @font-face {
 
-    font-family: "Quicksand";
+    font-family:
+        "Quicksand";
 
     src:
         url("font.ttf")
         format("truetype");
 
-    font-weight: 400 800;
+    font-weight:
+        400 800;
 
-    font-display: swap;
+    font-display:
+        swap;
 
 }
 
@@ -77,35 +85,47 @@
 /* =========================================================
    VARIÁVEIS
 ========================================================= */
-
 :root {
 
     --bg: #000000;
 
-    --surface: #101218;
-    --surface-2: #151720;
-    --surface-3: #1b1d25;
+    --surface: #0d0d0f;
+    --surface-2: #121216;
+    --surface-3: #18181d;
 
-    --line: rgba(255,255,255,.075);
-    --line-light: rgba(255,255,255,.14);
+    --text: #ffffff;
 
-    --text: #f7f7fa;
-    --soft: #969baa;
-    --muted: #626877;
+    --soft: #858791;
+    --muted: #62646d;
+    --muted-2: #484a52;
 
-    --pink: #ff3f9f;
-    --pink-light: #ff6db5;
+    --text-soft: #a6a6ae;
+    --text-muted: #707078;
+
+    --pink:
+        #ff3f82;
+        
+    --pink-light: #ff9bc5;
+
+    --purple: #a855f7;
+
+    --blue: #7c6cff;
+    --blue-2: #9589ff;
+    --blue-dark: #5548d8;
 
     --red: #ff4054;
     --red-dark: #d9273d;
 
+    --danger: #ff4f67;
+
+    --line: #24242a;
+    --line-light: #303038;
+
+    --ease: cubic-bezier(.22,1,.36,1);
+
     --radius: 24px;
 
-    --ease:
-        cubic-bezier(.22,1,.36,1);
-
 }
-
 
 /* =========================================================
    RESET
@@ -115,22 +135,28 @@
 *::before,
 *::after {
 
-    box-sizing: border-box;
+    margin:
+        0;
 
-    margin: 0;
+    padding:
+        0;
 
-    padding: 0;
+    box-sizing:
+        border-box;
 
-    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color:
+        transparent;
 
 }
 
 
 html {
 
-    width: 100%;
+    width:
+        100%;
 
-    min-height: 100%;
+    min-height:
+        100%;
 
     background:
         var(--bg);
@@ -138,27 +164,36 @@ html {
     color:
         var(--text);
 
-    scroll-behavior: smooth;
+    color-scheme:
+        dark;
 
-    scrollbar-width: none;
+    scroll-behavior:
+        smooth;
+
+    scrollbar-width:
+        none;
 
 }
 
 
 html::-webkit-scrollbar {
 
-    display: none;
+    display:
+        none;
 
 }
 
 
 body {
 
-    width: 100%;
+    width:
+        100%;
 
-    min-height: 100vh;
+    min-height:
+        100dvh;
 
-    margin: 0;
+    margin:
+        0;
 
     background:
         var(--bg);
@@ -171,18 +206,23 @@ body {
         Arial,
         sans-serif;
 
-    overflow-x: hidden;
+    overflow-x:
+        hidden;
+
+    -webkit-font-smoothing:
+        antialiased;
 
     padding-bottom:
         calc(
-            24px +
+            30px +
             env(safe-area-inset-bottom)
         );
 
-    opacity: 1;
+    opacity:
+        1;
 
     transition:
-        opacity .42s
+        opacity .3s
         var(--ease);
 
 }
@@ -190,9 +230,102 @@ body {
 
 body.fade-out {
 
-    opacity: 0;
+    opacity:
+        0;
 
-    pointer-events: none;
+    pointer-events:
+        none;
+
+}
+
+
+/* =========================================================
+   FUNDO
+========================================================= */
+
+body::before {
+
+    content:
+        "";
+
+    position:
+        fixed;
+
+    z-index:
+        -2;
+
+    width:
+        520px;
+
+    height:
+        520px;
+
+    top:
+        -330px;
+
+    left:
+        50%;
+
+    transform:
+        translateX(-50%);
+
+    border-radius:
+        50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,105,170,.13),
+            transparent 68%
+        );
+
+    filter:
+        blur(25px);
+
+    pointer-events:
+        none;
+
+}
+
+
+body::after {
+
+    content:
+        "";
+
+    position:
+        fixed;
+
+    z-index:
+        -2;
+
+    width:
+        450px;
+
+    height:
+        450px;
+
+    right:
+        -300px;
+
+    bottom:
+        -260px;
+
+    border-radius:
+        50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(143,92,246,.10),
+            transparent 70%
+        );
+
+    filter:
+        blur(30px);
+
+    pointer-events:
+        none;
 
 }
 
@@ -230,7 +363,7 @@ a:focus-visible {
 
     outline:
         2px solid
-        rgba(255,63,159,.85);
+        rgba(255,121,176,.8);
 
     outline-offset:
         3px;
@@ -239,38 +372,7 @@ a:focus-visible {
 
 
 /* =========================================================
-   REDUÇÃO DE MOVIMENTO
-========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-    html {
-
-        scroll-behavior:
-            auto;
-
-    }
-
-    *,
-    *::before,
-    *::after {
-
-        animation-duration:
-            .01ms !important;
-
-        animation-iteration-count:
-            1 !important;
-
-        transition-duration:
-            .01ms !important;
-
-    }
-
-}
-
-
-/* =========================================================
-   ENTRADA DA PÁGINA
+   ENTRADA
 ========================================================= */
 
 @keyframes pageIn {
@@ -280,6 +382,9 @@ a:focus-visible {
         opacity:
             0;
 
+        transform:
+            translateY(8px);
+
     }
 
     to {
@@ -287,64 +392,74 @@ a:focus-visible {
         opacity:
             1;
 
+        transform:
+            translateY(0);
+
     }
 
 }
 
 
-.mainUI {
+.page {
 
-    width: 100%;
+    width:
+        100%;
 
-    max-width: 720px;
+    max-width:
+        680px;
+
+    min-height:
+        100dvh;
 
     margin:
         0 auto;
 
     padding:
-        28px
-        18px
-        20px;
+        calc(
+            22px +
+            env(safe-area-inset-top)
+        )
+        5%
+        calc(
+            35px +
+            env(safe-area-inset-bottom)
+        );
 
     animation:
-        pageIn .55s ease both;
+        pageIn
+        .55s
+        var(--ease)
+        both;
 
 }
 
 
 /* =========================================================
-   CABEÇALHO
+   HERO
 ========================================================= */
 
 .hero {
 
-    position: relative;
+    width:
+        100%;
 
     padding:
-        30px
         4px
-        34px;
+        4px
+        0;
 
 }
 
-
-.hero::before {
-
-    content: "";
-
-    position: absolute;
-
-    top:
-        5px;
-
-    left:
-        3px;
+.heroTopLine {
 
     width:
-        34px;
+        43px;
 
     height:
-        4px;
+        3px;
+
+    margin-bottom:
+        18px;
 
     border-radius:
         999px;
@@ -352,53 +467,55 @@ a:focus-visible {
     background:
         var(--pink);
 
-    box-shadow:
-        0 0 16px
-        rgba(255,63,159,.25);
-
 }
 
+.heroTitle {
 
-.hero h1 {
+    color:
+        #ffffff;
 
     font-size:
         clamp(
-            38px,
-            10vw,
-            58px
+            32px,
+            9vw,
+            48px
         );
+
+    font-weight:
+        800;
 
     line-height:
         .98;
 
     letter-spacing:
-        -2.5px;
-
-    font-weight:
-        800;
+        -1.6px;
 
 }
 
-
-.hero p {
+.heroSubtitle {
 
     max-width:
-        570px;
+        410px;
 
     margin-top:
-        15px;
+        14px;
 
     color:
-        var(--muted);
+        #85858e;
 
     font-size:
-        13px;
+        11px;
+
+    font-weight:
+        600;
 
     line-height:
-        1.7;
+        1.5;
+
+    letter-spacing:
+        .15px;
 
 }
-
 
 /* =========================================================
    SEÇÕES
@@ -410,7 +527,7 @@ a:focus-visible {
         100%;
 
     margin-top:
-        35px;
+        30px;
 
 }
 
@@ -431,15 +548,28 @@ a:focus-visible {
     align-items:
         center;
 
+    justify-content:
+        space-between;
+
+    margin:
+        0 4px 11px;
+
+}
+
+
+.section-label strong {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
     gap:
         8px;
 
-    margin:
-        0 0 12px
-        3px;
-
     color:
-        var(--muted);
+        #d7d7db;
 
     font-size:
         10px;
@@ -447,19 +577,16 @@ a:focus-visible {
     font-weight:
         700;
 
-    letter-spacing:
-        1.8px;
-
-    line-height:
-        1;
-
     text-transform:
         uppercase;
+
+    letter-spacing:
+        1.3px;
 
 }
 
 
-.section-label::before {
+.section-label strong::before {
 
     content:
         "";
@@ -481,7 +608,18 @@ a:focus-visible {
 
     box-shadow:
         0 0 8px
-        rgba(255,63,159,.5);
+        rgba(255,121,176,.5);
+
+}
+
+
+.section-label span {
+
+    color:
+        #494950;
+
+    font-size:
+        9px;
 
 }
 
@@ -492,9 +630,6 @@ a:focus-visible {
 
 .emergency-list {
 
-    width:
-        100%;
-
     display:
         flex;
 
@@ -502,7 +637,7 @@ a:focus-visible {
         column;
 
     gap:
-        11px;
+        9px;
 
 }
 
@@ -519,23 +654,28 @@ a:focus-visible {
         68px;
 
     display:
-        flex;
+        grid;
+
+    grid-template-columns:
+        43px
+        minmax(0,1fr)
+        28px;
 
     align-items:
         center;
 
     gap:
-        14px;
+        12px;
 
     padding:
-        12px 16px;
+        11px 13px;
 
     border:
         1px solid
         rgba(255,255,255,.07);
 
     border-radius:
-        22px;
+        20px;
 
     background:
         linear-gradient(
@@ -556,12 +696,12 @@ a:focus-visible {
     cursor:
         pointer;
 
+    overflow:
+        hidden;
+
     box-shadow:
         0 9px 24px
         rgba(255,64,84,.12);
-
-    overflow:
-        hidden;
 
     transition:
         transform .16s var(--ease),
@@ -580,16 +720,16 @@ a:focus-visible {
         absolute;
 
     width:
-        150px;
+        180px;
 
     height:
-        150px;
+        180px;
 
     top:
-        -95px;
+        -125px;
 
     right:
-        -45px;
+        -65px;
 
     border-radius:
         50%;
@@ -603,29 +743,6 @@ a:focus-visible {
 }
 
 
-.emergency-button:hover {
-
-    filter:
-        brightness(1.04);
-
-    box-shadow:
-        0 12px 30px
-        rgba(255,64,84,.18);
-
-}
-
-
-.emergency-button:active {
-
-    transform:
-        scale(.972);
-
-    filter:
-        brightness(1.07);
-
-}
-
-
 .emergency-icon {
 
     position:
@@ -635,21 +752,15 @@ a:focus-visible {
         1;
 
     width:
-        44px;
+        43px;
 
     height:
-        44px;
-
-    flex:
-        0 0 44px;
+        43px;
 
     display:
-        flex;
+        grid;
 
-    align-items:
-        center;
-
-    justify-content:
+    place-items:
         center;
 
     border:
@@ -657,10 +768,13 @@ a:focus-visible {
         rgba(255,255,255,.16);
 
     border-radius:
-        15px;
+        14px;
 
     background:
         rgba(0,0,0,.16);
+
+    color:
+        #ffffff;
 
     font-size:
         11px;
@@ -682,9 +796,6 @@ a:focus-visible {
     min-width:
         0;
 
-    flex:
-        1;
-
     display:
         flex;
 
@@ -699,8 +810,11 @@ a:focus-visible {
 
 .emergency-title {
 
+    color:
+        #ffffff;
+
     font-size:
-        14px;
+        13px;
 
     font-weight:
         800;
@@ -717,23 +831,90 @@ a:focus-visible {
         rgba(255,255,255,.72);
 
     font-size:
-        11px;
+        10px;
 
     line-height:
-        1.4;
+        1.35;
 
 }
 
 
+.emergency-arrow {
 
+    position:
+        relative;
 
-.emergency-button:hover {
+    z-index:
+        1;
 
-    transform:
-        translateX(3px);
+    width:
+        28px;
+
+    height:
+        28px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border-radius:
+        10px;
+
+    background:
+        rgba(0,0,0,.10);
 
     color:
-        #ffffff;
+        rgba(255,255,255,.78);
+
+    font-size:
+        21px;
+
+    line-height:
+        1;
+
+    transition:
+        transform .16s ease,
+        background .16s ease;
+
+}
+
+
+@media(hover:hover) {
+
+    .emergency-button:hover {
+
+        transform:
+            translateX(3px);
+
+        filter:
+            brightness(1.04);
+
+        box-shadow:
+            0 12px 30px
+            rgba(255,64,84,.18);
+
+    }
+
+    .emergency-button:hover
+    .emergency-arrow {
+
+        transform:
+            translateX(3px);
+
+        background:
+            rgba(255,255,255,.08);
+
+    }
+
+}
+
+
+.emergency-button:active {
+
+    transform:
+        scale(.975);
 
 }
 
@@ -754,23 +935,28 @@ a:focus-visible {
         68px;
 
     display:
-        flex;
+        grid;
+
+    grid-template-columns:
+        44px
+        minmax(0,1fr)
+        28px;
 
     align-items:
         center;
 
     gap:
-        15px;
+        13px;
 
     padding:
-        13px 17px;
+        12px 14px;
 
     border:
         1px solid
         var(--line);
 
     border-radius:
-        22px;
+        20px;
 
     background:
         linear-gradient(
@@ -785,12 +971,12 @@ a:focus-visible {
     text-decoration:
         none;
 
+    overflow:
+        hidden;
+
     box-shadow:
         0 10px 25px
         rgba(0,0,0,.25);
-
-    overflow:
-        hidden;
 
     transition:
         transform .18s var(--ease),
@@ -833,39 +1019,6 @@ a:focus-visible {
 }
 
 
-.repo-button:hover {
-
-    transform:
-        translateY(-2px);
-
-    border-color:
-        var(--line-light);
-
-    background:
-        linear-gradient(
-            145deg,
-            #1a1b22,
-            #101117
-        );
-
-    box-shadow:
-        0 15px 34px
-        rgba(0,0,0,.32);
-
-}
-
-
-.repo-button:active {
-
-    transform:
-        scale(.975);
-
-    border-color:
-        rgba(255,63,159,.35);
-
-}
-
-
 .repo-icon {
 
     position:
@@ -880,16 +1033,10 @@ a:focus-visible {
     height:
         44px;
 
-    flex:
-        0 0 44px;
-
     display:
-        flex;
+        grid;
 
-    align-items:
-        center;
-
-    justify-content:
+    place-items:
         center;
 
     border:
@@ -911,10 +1058,10 @@ a:focus-visible {
 .repo-icon svg {
 
     width:
-        22px;
+        21px;
 
     height:
-        22px;
+        21px;
 
     display:
         block;
@@ -932,9 +1079,6 @@ a:focus-visible {
 
     min-width:
         0;
-
-    flex:
-        1;
 
     display:
         flex;
@@ -954,7 +1098,7 @@ a:focus-visible {
         #ffffff;
 
     font-size:
-        14px;
+        13px;
 
     font-weight:
         800;
@@ -971,10 +1115,7 @@ a:focus-visible {
         var(--muted);
 
     font-size:
-        11px;
-
-    font-weight:
-        500;
+        10px;
 
     line-height:
         1.3;
@@ -982,16 +1123,98 @@ a:focus-visible {
 }
 
 
+.item-arrow {
 
+    position:
+        relative;
 
+    z-index:
+        1;
 
-.repo-button:hover {
+    width:
+        28px;
 
-    transform:
-        translateX(3px);
+    height:
+        28px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border-radius:
+        10px;
+
+    background:
+        rgba(255,255,255,.025);
 
     color:
-        #858a98;
+        #66666c;
+
+    font-size:
+        22px;
+
+    font-weight:
+        300;
+
+    line-height:
+        1;
+
+    transition:
+        transform .16s ease,
+        color .16s ease,
+        background .16s ease;
+
+}
+
+
+@media(hover:hover) {
+
+    .repo-button:hover {
+
+        transform:
+            translateX(3px);
+
+        border-color:
+            var(--line-light);
+
+        background:
+            linear-gradient(
+                145deg,
+                #1a1b22,
+                #101117
+            );
+
+        box-shadow:
+            0 15px 34px
+            rgba(0,0,0,.32);
+
+    }
+
+    .repo-button:hover .item-arrow {
+
+        transform:
+            translateX(3px);
+
+        color:
+            var(--pink-light);
+
+        background:
+            rgba(255,255,255,.035);
+
+    }
+
+}
+
+
+.repo-button:active {
+
+    transform:
+        scale(.975);
+
+    border-color:
+        rgba(255,63,159,.35);
 
 }
 
@@ -1002,9 +1225,6 @@ a:focus-visible {
 
 .apps {
 
-    width:
-        100%;
-
     display:
         flex;
 
@@ -1012,7 +1232,7 @@ a:focus-visible {
         column;
 
     gap:
-        13px;
+        9px;
 
 }
 
@@ -1026,26 +1246,31 @@ a:focus-visible {
         100%;
 
     min-height:
-        92px;
+        82px;
 
     display:
-        flex;
+        grid;
+
+    grid-template-columns:
+        56px
+        minmax(0,1fr)
+        28px;
 
     align-items:
         center;
 
     gap:
-        17px;
+        14px;
 
     padding:
-        14px 17px;
+        12px 14px;
 
     border:
         1px solid
         var(--line);
 
     border-radius:
-        25px;
+        22px;
 
     background:
         linear-gradient(
@@ -1071,10 +1296,7 @@ a:focus-visible {
 
     box-shadow:
         0 13px 30px
-        rgba(0,0,0,.28),
-
-        0 25px 55px
-        rgba(0,0,0,.20);
+        rgba(0,0,0,.28);
 
     transition:
         transform .18s var(--ease),
@@ -1120,80 +1342,6 @@ a:focus-visible {
 }
 
 
-.app-card::after {
-
-    content:
-        "";
-
-    position:
-        absolute;
-
-    width:
-        150px;
-
-    height:
-        150px;
-
-    right:
-        -80px;
-
-    bottom:
-        -95px;
-
-    border-radius:
-        50%;
-
-    background:
-        rgba(255,63,159,.035);
-
-    filter:
-        blur(10px);
-
-    pointer-events:
-        none;
-
-    z-index:
-        -1;
-
-}
-
-
-.app-card:hover {
-
-    transform:
-        translateY(-2px);
-
-    border-color:
-        var(--line-light);
-
-    background:
-        linear-gradient(
-            145deg,
-            #1a1c24,
-            #101117
-        );
-
-    box-shadow:
-        0 17px 38px
-        rgba(0,0,0,.34),
-
-        0 30px 65px
-        rgba(0,0,0,.22);
-
-}
-
-
-.app-card:active {
-
-    transform:
-        scale(.975);
-
-    border-color:
-        rgba(255,63,159,.35);
-
-}
-
-
 .app-image {
 
     position:
@@ -1203,16 +1351,10 @@ a:focus-visible {
         1;
 
     width:
-        57px;
+        56px;
 
     height:
-        57px;
-
-    flex:
-        0 0 57px;
-
-    display:
-        block;
+        56px;
 
     object-fit:
         cover;
@@ -1234,7 +1376,7 @@ a:focus-visible {
 }
 
 
-.app-name {
+.app-content {
 
     position:
         relative;
@@ -1245,14 +1387,25 @@ a:focus-visible {
     min-width:
         0;
 
-    flex:
-        1;
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        3px;
+
+}
+
+
+.app-name {
 
     color:
         #ffffff;
 
     font-size:
-        16px;
+        14px;
 
     font-weight:
         800;
@@ -1263,45 +1416,72 @@ a:focus-visible {
 }
 
 
-
-.app-card:hover {
-
-    transform:
-        translateX(3px);
+.app-description {
 
     color:
-        #858a98;
+        var(--muted);
+
+    font-size:
+        10px;
+
+    line-height:
+        1.3;
+
+}
+
+
+@media(hover:hover) {
+
+    .app-card:hover {
+
+        transform:
+            translateX(3px);
+
+        border-color:
+            var(--line-light);
+
+        background:
+            linear-gradient(
+                145deg,
+                #1a1c24,
+                #101117
+            );
+
+        box-shadow:
+            0 17px 38px
+            rgba(0,0,0,.34);
+
+    }
+
+    .app-card:hover .item-arrow {
+
+        transform:
+            translateX(3px);
+
+        color:
+            var(--pink-light);
+
+    }
+
+}
+
+
+.app-card:active {
+
+    transform:
+        scale(.975);
+
+    border-color:
+        rgba(255,63,159,.35);
 
 }
 
 
 /* =========================================================
-   CONTEÚDO EXTRA
+   MENU / HUB
 ========================================================= */
 
-.container {
-
-    width:
-        100%;
-
-    max-width:
-        720px;
-
-    margin:
-        0 auto;
-
-    padding:
-        0
-        clamp(18px, 5vw, 34px)
-        60px;
-
-}
-
-
-.list {
-
-    width:
-        100%;
+.menu {
 
     display:
         flex;
@@ -1310,43 +1490,55 @@ a:focus-visible {
         column;
 
     gap:
-        9px;
+        8px;
 
 }
 
 
-.btn {
+.menu button {
+
+    position:
+        relative;
 
     width:
         100%;
 
     min-height:
-        74px;
+        72px;
+
+    padding:
+        12px 13px;
 
     display:
-        flex;
+        grid;
+
+    grid-template-columns:
+        42px
+        minmax(0,1fr)
+        28px;
 
     align-items:
         center;
 
     gap:
-        20px;
-
-    padding:
-        15px 18px;
+        12px;
 
     border:
         1px solid
-        var(--line);
+        rgba(255,255,255,.055);
 
     border-radius:
-        var(--radius);
+        19px;
 
     background:
-        var(--surface);
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.055),
+            rgba(255,255,255,.018)
+        );
 
     color:
-        #ffffff;
+        #fff;
 
     font-family:
         inherit;
@@ -1357,114 +1549,99 @@ a:focus-visible {
     cursor:
         pointer;
 
+    overflow:
+        hidden;
+
     transition:
-        transform .15s var(--ease),
-        background .15s ease,
-        border-color .15s ease;
+        transform .16s ease,
+        border-color .16s ease,
+        background .16s ease,
+        box-shadow .16s ease;
 
 }
 
 
-.btn:hover {
+.menu button::before {
 
-    background:
-        var(--surface-2);
+    content:
+        "";
 
-    border-color:
-        var(--line-light);
+    position:
+        absolute;
 
-}
+    left:
+        0;
 
+    top:
+        14px;
 
-.btn:active {
-
-    transform:
-        scale(.985);
-
-    background:
-        var(--surface-2);
-
-}
-
-
-/* =========================================================
-   ÍCONE
-========================================================= */
-
-.emoji {
+    bottom:
+        14px;
 
     width:
-        44px;
+        3px;
+
+    border-radius:
+        0 5px 5px 0;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--pink),
+            var(--purple)
+        );
+
+    opacity:
+        .75;
+
+}
+
+
+.item-number {
+
+    width:
+        42px;
 
     height:
-        44px;
-
-    flex:
-        0 0 44px;
+        42px;
 
     display:
-        flex;
+        grid;
 
-    align-items:
+    place-items:
         center;
 
-    justify-content:
-        center;
+    border:
+        1px solid
+        rgba(255,255,255,.055);
 
     border-radius:
         14px;
 
-    overflow:
-        hidden;
-
-}
-
-
-.emoji svg {
-
-    width:
-        100%;
-
-    height:
-        100%;
-
-    display:
-        block;
+    background:
+        #181818;
 
     color:
-        #ffffff;
+        #a7a7ad;
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+    transition:
+        background .16s ease,
+        color .16s ease,
+        border-color .16s ease;
 
 }
 
 
-.emoji img {
-
-    width:
-        100%;
-
-    height:
-        100%;
-
-    display:
-        block;
-
-    object-fit:
-        cover;
-
-}
-
-
-/* =========================================================
-   CONTEÚDO DO BOTÃO
-========================================================= */
-
-.content {
+.item-content {
 
     min-width:
         0;
-
-    flex:
-        1;
 
     display:
         flex;
@@ -1472,42 +1649,19 @@ a:focus-visible {
     flex-direction:
         column;
 
-    justify-content:
-        center;
-
-    gap:
-        3px;
-
 }
 
 
-.title {
+.item-title {
 
     color:
-        #ffffff;
+        #eeeeef;
 
     font-size:
-        15px;
+        13px;
 
     font-weight:
-        750;
-
-    line-height:
-        1.25;
-
-}
-
-
-.description {
-
-    color:
-        var(--muted);
-
-    font-size:
-        12px;
-
-    font-weight:
-        500;
+        700;
 
     line-height:
         1.3;
@@ -1515,341 +1669,463 @@ a:focus-visible {
 }
 
 
+.item-subtitle {
 
-/* =========================================================
-   BOTÃO FLUTUANTE
-========================================================= */
-
-@keyframes aparecerToggle {
-
-    from {
-
-        opacity:
-            0;
-
-        transform:
-            translateX(-50%)
-            scale(.88);
-
-    }
-
-    60% {
-
-        opacity:
-            1;
-
-        transform:
-            translateX(-50%)
-            scale(1.06);
-
-    }
-
-    to {
-
-        opacity:
-            1;
-
-        transform:
-            translateX(-50%)
-            scale(1);
-
-    }
-
-}
-
-
-.toggle {
-
-    position:
-        absolute;
-
-    z-index:
-        10000;
-
-    top:
-        7.5%;
-
-    left:
-        77.5%;
-
-    width:
-        62px;
-
-    height:
-        62px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    padding:
-        7px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.16);
-
-    border-radius:
-        50%;
-
-    background:
-        #444;
+    margin-top:
+        3px;
 
     color:
-        #ffffff;
+        #66666d;
 
-    transform:
-        translateX(-50%);
+    font-size:
+        10px;
 
-    cursor:
-        pointer;
+    line-height:
+        1.3;
+
+    white-space:
+        nowrap;
 
     overflow:
         hidden;
 
-    box-shadow:
-        0 10px 30px
-        rgba(0,0,0,.45);
-
-    animation:
-        aparecerToggle
-        .55s
-        var(--ease)
-        both;
+    text-overflow:
+        ellipsis;
 
 }
 
 
-.toggle-inner {
-
-    width:
-        100%;
-
-    height:
-        100%;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    border-radius:
-        50%;
+.menu button .item-arrow {
 
     background:
-        #222;
-
-    overflow:
-        hidden;
+        rgba(255,255,255,.025);
 
 }
 
 
-.toggle-inner img {
+@media(hover:hover) {
 
-    width:
-        100%;
+    .menu button:hover {
 
-    height:
-        100%;
+        transform:
+            translateY(-2px);
+
+        border-color:
+            rgba(255,130,185,.22);
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,110,174,.085),
+                rgba(151,85,244,.055)
+            );
+
+        box-shadow:
+            0 10px 30px
+            rgba(0,0,0,.32);
+
+    }
+
+    .menu button:hover .item-number {
+
+        color:
+            #ff9bc2;
+
+        background:
+            rgba(255,120,177,.09);
+
+        border-color:
+            rgba(255,120,177,.15);
+
+    }
+
+    .menu button:hover .item-arrow {
+
+        transform:
+            translateX(3px);
+
+        color:
+            #ff8fba;
+
+        background:
+            rgba(255,255,255,.035);
+
+    }
+
+}
+
+
+.menu button:active {
+
+    transform:
+        scale(.985);
+
+    border-color:
+        rgba(255,130,185,.18);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,110,174,.12),
+            rgba(151,85,244,.08)
+        );
+
+}
+
+
+
+/* =========================================================
+   BOTÃO
+========================================================= */
+/* =========================================================
+   BOTÃO
+========================================================= */
+
+.btn {
+
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    align-items: center;
+
+    padding: 26px;
+    
+    gap: 20px;
+
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+
+    background: var(--surface);
+    color: #ffffff;
+
+    font-family: "Quicksand", sans-serif;
+
+    cursor: pointer;
+
+    transition:
+        transform .15s ease,
+        background .15s ease,
+        border-color .15s ease;
+
+
+padding-bottom: 15px;
+padding-top: 15px;
+
+margin-top: 1.5%;
+margin-bottom: 1.5%;
+}
+
+.btn:active {
+
+    transform: scale(.985);
+
+    background: var(--surface-2);
+
+}
+
+
+.btn:hover {
+
+    background: var(--surface-2);
+
+    border-color: var(--line-light);
+
+}
+
+
+/* =========================================================
+   ÍCONE / EMOJI
+========================================================= */
+
+.emoji {
+
+    width: 44px;
+    height: 44px;
+
+
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    border-radius: 14px;
+
+
+}
+
+
+.emoji img {
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+    object-position: center;
+
+}
+
+
+.emoji svg {
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    color: #ffffff;
+
+}
+
+
+/* =========================================================
+   CONTEÚDO
+========================================================= */
+
+.content {
+
+    min-width: 0;
+
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    gap: 3px;
+
+}
+
+
+.title {
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 750;
+
+    line-height: 1.25;
+
+
+    white-space:
+        normal;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        clip;
+        
+}
+
+.description {
+    color: var(--text-muted);
+
+    font-size: 12px;
+    font-weight: 500;
+
+    line-height: 1.3;
+    
+    white-space:
+        normal;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        clip;
+
+    
+}
+/* =========================================================
+   SETA
+========================================================= */
+
+.arrow {
+
+    width: 30px;
+    height: 30px;
+
+    flex: 0 0 30px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #64646d;
+
+}
+
+
+.arrow svg {
+
+    width: 18px;
+    height: 18px;
+
+}
+
+
+/* =========================================================
+   EMERGÊNCIA
+========================================================= */
+
+.emergency {
+
+    border-color: #32171c;
+
+    background: #100a0c;
+
+}
+
+
+
+
+.emergency .title {
+
+    color: #ff6679;
+    
+    white-space:
+        normal;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        clip;
+
+}
+
+
+.emergency .description {
+
+    color: #98616a;
+
+}
+
+
+.emergency .arrow {
+
+    color: #a94453;
+
+}
+
+
+/* =========================================================
+   APPS
+========================================================= */
+
+.appCard {
+
+    min-height: 84px;
+
+}
+
+
+.appCard .emoji {
+
+    width: 50px;
+    height: 50px;
+
+    flex-basis: 50px;
+
+    border-radius: 15px;
+
+}
+
+
+.appCard .emoji img {
+
+    object-fit: cover;
+
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.emptyState {
+
+    display: none;
+
+    width: 100%;
+
+    padding: 34px 20px;
+
+    border: 1px solid var(--line);
+
+    border-radius: 22px;
+
+    background: var(--surface);
+
+    text-align: center;
+
+}
+
+
+.emptyIcon {
+
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 12px;
+
+    border-radius: 14px;
+
+    background: #17171c;
+
+    color: #8b8b94;
+
+}
+
+
+.emptyIcon svg {
+
+    width: 23px;
+    height: 23px;
+
+}
+
+
+
+
+/* =========================================================
+   SVG GLOBAL
+========================================================= */
+
+svg {
 
     display:
         block;
 
-    object-fit:
-        cover;
-
-    border-radius:
-        50%;
-
 }
 
 
 /* =========================================================
-   DESKTOP
+   LISTA
 ========================================================= */
 
-@media (min-width: 600px) {
+.list {
 
-    .mainUI {
+    width: 100%;
 
-        padding:
-            35px
-            28px
-            20px;
+    display: flex;
 
-    }
+    flex-direction: column;
 
-    .app-card {
-
-        min-height:
-            98px;
-
-        padding:
-            16px 20px;
-
-    }
-
-    .app-image {
-
-        width:
-            61px;
-
-        height:
-            61px;
-
-        flex-basis:
-            61px;
-
-    }
-
-    .app-name {
-
-        font-size:
-            17px;
-
-    }
-
-}
-
-
-/* =========================================================
-   TELAS PEQUENAS
-========================================================= */
-
-@media (max-width: 360px) {
-
-    .mainUI {
-
-        padding:
-            22px
-            14px
-            15px;
-
-    }
-
-    .hero {
-
-        padding-top:
-            27px;
-
-    }
-
-    .hero h1 {
-
-        font-size:
-            36px;
-
-        letter-spacing:
-            -2px;
-
-    }
-
-    .hero p {
-
-        font-size:
-            12px;
-
-    }
-
-    .app-card {
-
-        min-height:
-            84px;
-
-        padding:
-            12px 14px;
-
-        border-radius:
-            22px;
-
-        gap:
-            13px;
-
-    }
-
-    .app-image {
-
-        width:
-            52px;
-
-        height:
-            52px;
-
-        flex-basis:
-            52px;
-
-    }
-
-    .app-name {
-
-        font-size:
-            14px;
-
-    }
-
-    .emergency-button {
-
-        min-height:
-            63px;
-
-        border-radius:
-            20px;
-
-    }
-
-    .emergency-icon {
-
-        width:
-            41px;
-
-        height:
-            41px;
-
-        flex-basis:
-            41px;
-
-    }
-
-    .btn {
-
-        gap:
-            14px;
-
-    }
-
-    .title {
-
-        font-size:
-            14px;
-
-    }
-
-    .description {
-
-        font-size:
-            11px;
-
-    }
-
-    .toggle {
-
-        width:
-            56px;
-
-        height:
-            56px;
-
-    }
+    gap: 9px;
 
 }
 
@@ -1861,44 +2137,51 @@ a:focus-visible {
 <body>
 
 
-<!-- =======================================================
-     INTERFACE PRINCIPAL
-======================================================== -->
 
-<main
-    class="mainUI"
-    id="mainUI"
->
+<main class="page" id="page">
 
 
-    <!-- =================================================
-         CABEÇALHO
-    ================================================== -->
+    <!-- ===================================================
+         HERO
+    ==================================================== -->
 
     <header class="hero">
 
-        <h1>
-            Mulher <br>
-            Amparada
+        <div class="heroTopLine"></div>
+
+        <h1 class="heroTitle">
+            Mulher <br> Amparada
         </h1>
 
-        <p>
-            Acesse rapidamente os serviços de emergência
-            e os aplicativos do projeto.
+        <p class="heroSubtitle">
+            Proteção, assistência e recursos reunidos em um só lugar.
         </p>
+        
+
 
     </header>
 
+<br><br>
 
-    <!-- =================================================
+
+    <!-- =====================================================
          EMERGÊNCIA
-    ================================================== -->
+    ====================================================== -->
 
     <section class="section">
 
         <div class="section-label">
-            Emergência
+
+            <strong>
+                Emergência
+            </strong>
+
+            <span>
+                03 serviços
+            </span>
+
         </div>
+
 
         <div class="emergency-list">
 
@@ -1928,7 +2211,9 @@ a:focus-visible {
 
                 </span>
 
-
+                <span class="emergency-arrow">
+                    ›
+                </span>
 
             </button>
 
@@ -1958,7 +2243,9 @@ a:focus-visible {
 
                 </span>
 
-
+                <span class="emergency-arrow">
+                    ›
+                </span>
 
             </button>
 
@@ -1988,23 +2275,36 @@ a:focus-visible {
 
                 </span>
 
+                <span class="emergency-arrow">
+                    ›
+                </span>
 
             </button>
+
 
         </div>
 
     </section>
 
 
-    <!-- =================================================
+    <!-- =====================================================
          REPOSITÓRIO
-    ================================================== -->
+    ====================================================== -->
 
     <section class="section">
 
         <div class="section-label">
-            Repositórios
+
+            <strong>
+                Repositório
+            </strong>
+
+            <span>
+                Código aberto
+            </span>
+
         </div>
+
 
         <a
             class="repo-button"
@@ -2044,27 +2344,38 @@ a:focus-visible {
 
             </span>
 
+            <span class="item-arrow">
+                ›
+            </span>
 
-            
         </a>
 
     </section>
 
 
-    <!-- =================================================
+    <!-- =====================================================
          APLICATIVOS
-    ================================================== -->
+    ====================================================== -->
 
     <section class="section">
 
         <div class="section-label">
-            Aplicativos
+
+            <strong>
+                Aplicativos
+            </strong>
+
+            <span>
+                Projeto
+            </span>
+
         </div>
+
 
         <div class="apps">
 
             <a
-                class="app-card app1"
+                class="app-card"
                 href="./app1.html"
                 data-page="./app1.html"
                 aria-label="Abrir Mulher Amparada"
@@ -2076,10 +2387,21 @@ a:focus-visible {
                     alt=""
                 >
 
-                <span class="app-name">
-                    Mulher Amparada
+                <span class="app-content">
+
+                    <span class="app-name">
+                        Mulher Amparada
+                    </span>
+
+                    <span class="app-description">
+                        Proteção, segurança e assistência
+                    </span>
+
                 </span>
 
+                <span class="item-arrow">
+                    ›
+                </span>
 
             </a>
 
@@ -2087,132 +2409,292 @@ a:focus-visible {
 
     </section>
 
-</main>
 
+    <!-- =====================================================
+         EXPLORAR / 6 OPÇÕES
+    ====================================================== -->
 
-<!-- =======================================================
-     BOTÃO FLUTUANTE
-======================================================== -->
-
-<button
-    class="toggle"
-    id="toggle"
-    type="button"
-    aria-label="Voltar para o início"
->
-
-    <span class="toggle-inner">
-
-        <img
-            src="user1.png"
-            alt=""
-        >
-
-    </span>
-
-</button>
-
-
-<!-- =======================================================
-     MENSAGENS
-======================================================== -->
-
-<div class="container">
-
-    <section
-        class="section"
-        data-section
-    >
+    <section class="section">
 
         <div class="section-label">
-            Mensagens
+
+            <strong>
+                Explorar
+            </strong>
+
+            <span>
+                06 opções
+            </span>
+
         </div>
 
-        <div class="list">
+
+        <nav
+            class="menu"
+            aria-label="Explorar o projeto"
+        >
 
 
-            <!-- =================================================
-                 100 DIREITOS
-            ================================================== -->
+            <!-- 01 -->
 
+            <button
+                type="button"
+                onclick="navigate('qr.html')"
+                aria-label="Gerador de QR CODE"
+            >
+
+                <span class="item-number">
+                    01
+                </span>
+
+                <span class="item-content">
+
+                    <span class="item-title">
+                        Gerador de QR CODE
+                    </span>
+
+                    <span class="item-subtitle">
+                        Ferramenta para geração de códigos
+                    </span>
+
+                </span>
+
+                <span class="item-arrow">
+                    ›
+                </span>
+
+            </button>
+
+
+            <!-- 02 -->
+
+            <button
+                type="button"
+                onclick="navigate('projeto.html')"
+                aria-label="Desenvolvimento e versões do app"
+            >
+
+                <span class="item-number">
+                    02
+                </span>
+
+                <span class="item-content">
+
+                    <span class="item-title">
+                        Desenvolvimento e versões do app
+                    </span>
+
+                    <span class="item-subtitle">
+                        Conheça o desenvolvimento e a evolução do aplicativo
+                    </span>
+
+                </span>
+
+                <span class="item-arrow">
+                    ›
+                </span>
+
+            </button>
+
+
+            <!-- 03 -->
+
+            <button
+                type="button"
+                onclick="navigate('nome.html')"
+                aria-label="Nome verdadeiro do app"
+            >
+
+                <span class="item-number">
+                    03
+                </span>
+
+                <span class="item-content">
+
+                    <span class="item-title">
+                        Nome verdadeiro do app
+                    </span>
+
+                    <span class="item-subtitle">
+                        Descubra a origem do nome
+                    </span>
+
+                </span>
+
+                <span class="item-arrow">
+                    ›
+                </span>
+
+            </button>
+
+
+            <!-- 04 -->
+
+            <button
+                type="button"
+                onclick="navigate('codigo.html')"
+                aria-label="Código usado para fazer o app"
+            >
+
+                <span class="item-number">
+                    04
+                </span>
+
+                <span class="item-content">
+
+                    <span class="item-title">
+                        Código usado para fazer o app
+                    </span>
+
+                    <span class="item-subtitle">
+                        Tecnologias e código utilizados no projeto
+                    </span>
+
+                </span>
+
+                <span class="item-arrow">
+                    ›
+                </span>
+
+            </button>
+
+
+            <!-- 05 -->
+
+            <button
+                type="button"
+                onclick="navigate('data.html')"
+                aria-label="Onde nos encontrar"
+            >
+
+                <span class="item-number">
+                    05
+                </span>
+
+                <span class="item-content">
+
+                    <span class="item-title">
+                        Onde nos encontrar?
+                    </span>
+
+                    <span class="item-subtitle">
+                        Locais e canais oficiais do projeto
+                    </span>
+
+                </span>
+
+                <span class="item-arrow">
+                    ›
+                </span>
+
+            </button>
+
+
+            <!-- 06 -->
+
+            <button
+                type="button"
+                onclick="navigate('trabalhar.html')"
+                aria-label="Um trabalho de uma mulher empoderada"
+            >
+
+                <span class="item-number">
+                    06
+                </span>
+
+                <span class="item-content">
+
+                    <span class="item-title">
+                        Um trabalho de uma mulher empoderada!
+                    </span>
+
+                    <span class="item-subtitle">
+                        Conheça um trabalho autônomo incrível!
+                    </span>
+
+                </span>
+
+                <span class="item-arrow">
+                    ›
+                </span>
+
+            </button>
+
+
+        </nav>
+
+    </section>
+
+
+    <!-- =====================================================
+         MENSAGENS
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="section-label">
+
+            <strong>
+                Mensagens
+            </strong>
+
+            <span>
+                03 textos
+            </span>
+
+        </div>
+
+<div class="list">
             <button
                 class="btn"
                 type="button"
                 data-search="100 direitos"
                 onclick="ir('texto.html')"
-                aria-label="Abrir 100 dos seus direitos"
             >
 
-                <div
-                    class="emoji"
-                    aria-hidden="true"
-                >
-
-                    <svg
-                        viewBox="0 -960 960 960"
-                        fill="currentColor"
-                    >
-
-                        <path
-                            d="M200-200h400q17 0 28.5 11.5T640-160q0 17-11.5 28.5T600-120H200q-17 0-28.5-11.5T160-160q0-17 11.5-28.5T200-200Zm129-171L216-484q-23-23-23.5-56.5T215-597l29-29 228 226-29 29q-23 23-57 23t-57-23Zm311-197L414-796l29-29q23-23 56.5-22.5T556-824l113 113q23 23 23 57t-23 57l-29 29Zm156 380L302-682l56-56 494 494q11 11 11 28t-11 28q-11 11-28 11t-28-11Z"
-                        />
-
-                    </svg>
+                <div class="emoji">
+                
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M200-200h400q17 0 28.5 11.5T640-160q0 17-11.5 28.5T600-120H200q-17 0-28.5-11.5T160-160q0-17 11.5-28.5T200-200Zm129-171L216-484q-23-23-23.5-56.5T215-597l29-29 228 226-29 29q-23 23-57 23t-57-23Zm311-197L414-796l29-29q23-23 56.5-22.5T556-824l113 113q23 23 23 57t-23 57l-29 29Zm156 380L302-682l56-56 494 494q11 11 11 28t-11 28q-11 11-28 11t-28-11Z"/></svg>
 
                 </div>
 
                 <div class="content">
 
                     <div class="title">
-                        100 dos seus direitos
+                    100 dos seus direitos
                     </div>
 
                     <div class="description">
-                        Seja amparada pela lei
+                        seja amparada pela lei
                     </div>
 
                 </div>
 
-
-
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
 
             </button>
 
 
-            <!-- =================================================
-                 AUTONOMIA FINANCEIRA
-            ================================================== -->
-
             <button
                 class="btn"
                 type="button"
-                data-search="dicas financeiras"
-                onclick="ir('texto1.html')"
-                aria-label="Abrir dicas de como recuperar sua autonomia financeira"
+                data-search="dicas financeiras"                onclick="ir('texto1.html')"
             >
 
-                <div
-                    class="emoji"
-                    aria-hidden="true"
-                >
+                <div class="emoji">
 
-                    <svg
-                        viewBox="0 -960 960 960"
-                        fill="currentColor"
-                    >
-
-                        <path
-                            d="M481-120q-17 0-28.5-11.5T441-160v-46q-45-10-79-35t-55-70q-7-14-.5-29.5T330-363q14-6 29 .5t23 21.5q17 30 43 45.5t64 15.5q41 0 69.5-18.5T587-356q0-35-22-55.5T463-458q-86-27-118-64.5T313-614q0-65 42-101t86-41v-44q0-17 11.5-28.5T481-840q17 0 28.5 11.5T521-800v44q38 6 66 24.5t46 45.5q9 13 3.5 29T614-634q-14 6-29 .5T557-653q-13-14-30.5-21.5T483-682q-44 0-67 19.5T393-614q0 33 30 52t104 40q69 20 104.5 63.5T667-358q0 71-42 108t-104 46v44q0 17-11.5 28.5T481-120Z"
-                        />
-
-                    </svg>
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M481-120q-17 0-28.5-11.5T441-160v-46q-45-10-79-35t-55-70q-7-14-.5-29.5T330-363q14-6 29 .5t23 21.5q17 30 43 45.5t64 15.5q41 0 69.5-18.5T587-356q0-35-22-55.5T463-458q-86-27-118-64.5T313-614q0-65 42-101t86-41v-44q0-17 11.5-28.5T481-840q17 0 28.5 11.5T521-800v44q38 6 66 24.5t46 45.5q9 13 3.5 29T614-634q-14 6-29 .5T557-653q-13-14-30.5-21.5T483-682q-44 0-67 19.5T393-614q0 33 30 52t104 40q69 20 104.5 63.5T667-358q0 71-42 108t-104 46v44q0 17-11.5 28.5T481-120Z"/></svg>
 
                 </div>
 
                 <div class="content">
 
                     <div class="title">
-                        Dicas de como recuperar sua autonomia financeira
+                        Dicas de como recuperar sua autonomia financeira 
                     </div>
 
                     <div class="description">
@@ -2221,38 +2703,25 @@ a:focus-visible {
 
                 </div>
 
-
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
 
             </button>
 
-
-            <!-- =================================================
-                 CARTA
-            ================================================== -->
 
             <button
                 class="btn"
                 type="button"
                 data-search="carta para você"
                 onclick="ir('texto2.html')"
-                aria-label="Abrir uma carta para você, mulher"
             >
 
-                <div
-                    class="emoji"
-                    aria-hidden="true"
-                >
+                <div class="emoji">
 
-                    <svg
-                        viewBox="0 -960 960 960"
-                        fill="currentColor"
-                    >
-
-                        <path
-                            d="M280-280q-33 0-56.5-23.5T200-360v-400q0-33 23.5-56.5T280-840h560q33 0 56.5 23.5T920-760v400q0 33-23.5 56.5T840-280H280Zm257-204L280-663v303h560v-303L583-484q-11 8-23 8t-23-8Zm23-82 280-194H280l280 194ZM120-120q-33 0-56.5-23.5T40-200v-460q0-17 11.5-28.5T80-700q17 0 28.5 11.5T120-660v460h620q17 0 28.5 11.5T780-160q0 17-11.5 28.5T740-120H120Zm720-546v-94H280v94-94h560v94Z"
-                        />
-
-                    </svg>
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M280-280q-33 0-56.5-23.5T200-360v-400q0-33 23.5-56.5T280-840h560q33 0 56.5 23.5T920-760v400q0 33-23.5 56.5T840-280H280Zm257-204L280-663v303h560v-303L583-484q-11 8-23 8t-23-8Zm23-82 280-194H280l280 194ZM120-120q-33 0-56.5-23.5T40-200v-460q0-17 11.5-28.5T80-700q17 0 28.5 11.5T120-660v460h620q17 0 28.5 11.5T780-160q0 17-11.5 28.5T740-120H120Zm720-546v-94H280v94-94h560v94Z"/></svg>
 
                 </div>
 
@@ -2268,61 +2737,39 @@ a:focus-visible {
 
                 </div>
 
-
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
 
             </button>
 
-        </div>
 
     </section>
-
 </div>
+
+
+</main>
 
 
 <script>
 
 /* =========================================================
-   NAVEGAÇÃO SIMPLES
+   CONTROLE DE NAVEGAÇÃO
 ========================================================= */
 
-function ir(pagina) {
-
-    if (
-        typeof pagina !== "string" ||
-        pagina.trim() === ""
-    ) {
-
-        return false;
-
-    }
-
-    try {
-
-        window.location.href =
-            pagina;
-
-        return true;
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao navegar para:",
-            pagina,
-            erro
-        );
-
-        return false;
-
-    }
-
-}
+let navegando =
+    false;
 
 
 /* =========================================================
    VIBRAÇÃO
 ========================================================= */
 
-function vibrar(duracao = 40) {
+function vibrar(
+    duracao = 40
+) {
 
     try {
 
@@ -2339,9 +2786,78 @@ function vibrar(duracao = 40) {
 
     } catch (erro) {
 
-        /* Alguns WebViews podem não permitir vibração. */
+        console.warn(
+            "Vibração indisponível.",
+            erro
+        );
 
     }
+
+}
+
+
+/* =========================================================
+   NAVEGAÇÃO
+========================================================= */
+
+function navigate(
+    page
+) {
+
+    if (
+        typeof page !== "string" ||
+        !page.trim()
+    ) {
+
+        return;
+
+    }
+
+    sairDaPagina(
+        page
+    );
+
+}
+
+
+/* =========================================================
+   SAÍDA COM FADE
+========================================================= */
+
+function sairDaPagina(
+    destino
+) {
+
+    if (
+        navegando ||
+        typeof destino !== "string" ||
+        !destino.trim()
+    ) {
+
+        return;
+
+    }
+
+    navegando =
+        true;
+
+    vibrar(
+        40
+    );
+
+    document.body.classList.add(
+        "fade-out"
+    );
+
+    window.setTimeout(
+        function() {
+
+            window.location.href =
+                destino;
+
+        },
+        300
+    );
 
 }
 
@@ -2350,18 +2866,22 @@ function vibrar(duracao = 40) {
    LIGAÇÕES
 ========================================================= */
 
-function ligar(numero) {
+function ligar(
+    numero
+) {
 
     if (
         typeof numero !== "string" ||
-        numero.trim() === ""
+        !numero.trim()
     ) {
 
         return;
 
     }
 
-    vibrar(50);
+    vibrar(
+        50
+    );
 
     try {
 
@@ -2376,50 +2896,6 @@ function ligar(numero) {
         );
 
     }
-
-}
-
-
-/* =========================================================
-   CONTROLE DE NAVEGAÇÃO
-========================================================= */
-
-let navegando = false;
-
-
-/* =========================================================
-   SAÍDA COM FADE
-========================================================= */
-
-function sairDaPagina(destino) {
-
-    if (
-        navegando ||
-        typeof destino !== "string" ||
-        destino.trim() === ""
-    ) {
-
-        return;
-
-    }
-
-    navegando = true;
-
-    vibrar(40);
-
-    document.body.classList.add(
-        "fade-out"
-    );
-
-    window.setTimeout(
-        function() {
-
-            window.location.href =
-                destino;
-
-        },
-        420
-    );
 
 }
 
@@ -2469,33 +2945,8 @@ if (repoButton) {
         "click",
         function() {
 
-            vibrar(40);
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   BOTÃO FLUTUANTE
-========================================================= */
-
-const toggle =
-    document.getElementById(
-        "toggle"
-    );
-
-if (toggle) {
-
-    toggle.addEventListener(
-        "click",
-        function(event) {
-
-            event.preventDefault();
-
-            sairDaPagina(
-                "home.html"
+            vibrar(
+                40
             );
 
         }
@@ -2505,36 +2956,15 @@ if (toggle) {
 
 
 /* =========================================================
-   BOTÕES DE MENSAGEM
-========================================================= */
-
-document
-    .querySelectorAll(".btn")
-    .forEach(
-        function(botao) {
-
-            botao.addEventListener(
-                "click",
-                function() {
-
-                    vibrar(40);
-
-                }
-            );
-
-        }
-    );
-
-
-/* =========================================================
-   RESTAURAÇÃO DA PÁGINA
+   RESTAURAÇÃO
 ========================================================= */
 
 window.addEventListener(
     "pageshow",
     function() {
 
-        navegando = false;
+        navegando =
+            false;
 
         document.body.classList.remove(
             "fade-out"

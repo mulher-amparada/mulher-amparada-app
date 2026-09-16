@@ -763,9 +763,10 @@ jobs:
     steps:
 
       - name: Baixar todo o histórico
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
+  uses: actions/checkout@v6
+  with:
+    fetch-depth: 0
+    ref: main
 
 
       - name: Atualizar total de commits

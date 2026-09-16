@@ -1,0 +1,10 @@
+- name: Testar no Android Emulator
+  uses: ReactiveCircus/android-emulator-runner@v2
+  with:
+    api-level: 35
+    arch: x86_64
+    profile: Pixel_6
+    script: |
+      adb install app-debug.apk
+      adb shell am start -n com.mulheres/.MainActivity
+      sleep 10

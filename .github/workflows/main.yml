@@ -767,7 +767,7 @@ jobs:
   # JEKYLL / GITHUB PAGES
   # =========================================================
 
-    build-site:
+  build-site:
 
     runs-on: ubuntu-latest
 

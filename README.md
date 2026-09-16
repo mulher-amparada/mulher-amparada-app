@@ -82,9 +82,9 @@ Versão agp no toml de 9.4.0 e versão kotlin de 2.4.20
 
 e ele tem o jetpack compose (embora no app só usei xml até agora, mas ele está ativado!) e estilo via xml ativados!
 
-## Sobre como eu automatizo o projeto
+## Sobre como eu automatizo o projeto:
 :
-e os apps são compilados com o workflow, gera o código sha-256 e o zip com o app, envia para a release pela tag correspondente, e atualiza o link da página de download, o código SHA-256, e o tamanho do apk dessas páginas!, e depois ele publica as alterações no site, e depois altera o número de commits do projeto, (tudo isso em um único workflow!)
+e os apps são compilados com o workflow, gera o código sha-256 e o zip com o app, envia para a release pela tag correspondente, e atualiza o link da página de download, o código SHA-256, e o tamanho do apk dessas páginas!, e depois ele publica as alterações no site, e depois altera o valor donúmero de commits que é informado no readme, (tudo isso em um único workflow!)
 
 E eu também já consegui configurar um ssh na conta, e 2fa nela tambem, e com o ssh, eu consegui mover pastas inteiras para o repositório, e transformei 4 em 1, e mais de 100 commits em 1,
 

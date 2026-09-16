@@ -704,9 +704,11 @@ jobs:
   # ATUALIZAR TOTAL DE COMMITS
   # =========================================================
 
-  atualizar-commits:
+    atualizar-commits:
 
     runs-on: ubuntu-latest
+
+    needs: build
 
     steps:
 

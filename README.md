@@ -4,7 +4,7 @@
 
 ## E saibam que o projeto é: Source-Available
 
-## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2546
+## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2550
 
 O **Mulher Amparada** é um aplicativo de segurança e proteção desenvolvido especialmente para mulheres que desejam se sentir mais seguras em situações do dia a dia. O objetivo principal do aplicativo é oferecer suporte rápido, eficiente e acessível em momentos de risco, permitindo que a usuária consiga pedir ajuda de forma simples e imediata. Em um cenário onde muitas mulheres enfrentam situações de vulnerabilidade, ter uma ferramenta confiável pode fazer toda a diferença, e é exatamente isso que o Mulher Amparada busca proporcionar.
 

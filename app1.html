@@ -36,7 +36,11 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
     -webkit-tap-highlight-color: transparent;
 }
 

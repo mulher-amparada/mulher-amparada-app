@@ -699,7 +699,70 @@ jobs:
           echo '```' \
             >> "$GITHUB_STEP_SUMMARY"
 
+  # =========================================================
+  # ATUALIZAR TOTAL DE COMMITS
+  # =========================================================
 
+  atualizar-commits:
+
+    runs-on: ubuntu-latest
+
+    needs: build
+
+    steps:
+
+      - name: Baixar todo o histórico
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+
+      - name: Atualizar total de commits
+        run: |
+
+          TOTAL=$(git rev-list --all --count)
+
+          python3 - "$TOTAL" <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          total = sys.argv[1]
+
+          arquivo = Path("README.md")
+          texto = arquivo.read_text(encoding="utf-8")
+
+          texto = re.sub(
+              r"## Commits totais de toda a história do projeto, \(feitos por mim e pelos workflows do github actions!\) =.*",
+              f"## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = {total}",
+              texto,
+              count=1
+          )
+
+          arquivo.write_text(texto, encoding="utf-8")
+          PY
+
+
+      - name: Salvar alteração
+        run: |
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add README.md
+
+          if git diff --cached --quiet; then
+
+            echo "Nenhuma alteração necessária."
+
+          else
+
+            git commit -m "Atualizar total de commits [skip ci]"
+
+            git push origin main
+
+          fi
+          
   # =========================================================
   # JEKYLL / GITHUB PAGES
   # =========================================================
@@ -751,68 +814,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
-
-  # =========================================================
-  # ATUALIZAR TOTAL DE COMMITS
-  # =========================================================
-
-  atualizar-commits:
-
-    runs-on: ubuntu-latest
-
-    needs: build
-
-    steps:
-
-      - name: Baixar todo o histórico
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-
-      - name: Atualizar total de commits
-        run: |
-
-          TOTAL=$(git rev-list --all --count)
-
-          python3 - "$TOTAL" <<'PY'
-          from pathlib import Path
-          import re
-          import sys
-
-          total = sys.argv[1]
-
-          arquivo = Path("README.md")
-          texto = arquivo.read_text(encoding="utf-8")
-
-          texto = re.sub(
-              r"## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) =.*",
-              f"## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = {total}",
-              texto,
-              count=1
-          )
-
-          arquivo.write_text(texto, encoding="utf-8")
-          PY
-
-
-      - name: Salvar alteração
-        run: |
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add README.md
-
-          if git diff --cached --quiet; then
-
-            echo "Nenhuma alteração necessária."
-
-          else
-
-            git commit -m "Atualizar total de commits [skip ci]"
-
-            git push
-
-          fi
-

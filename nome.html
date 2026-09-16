@@ -46,8 +46,11 @@
 ========================================================= */
 
 @font-face {
+
     font-family: "Quicksand";
+
     src: url("font.ttf") format("truetype");
+
     font-display: swap;
 }
 
@@ -57,13 +60,19 @@
 ========================================================= */
 
 * {
+
     margin: 0;
+
     padding: 0;
+
     box-sizing: border-box;
-        -webkit-backface-visibility: hidden;
+
+    -webkit-backface-visibility: hidden;
+
     backface-visibility: hidden;
 
     -webkit-transform: translateZ(0);
+
     transform: translateZ(0);
 }
 
@@ -73,14 +82,28 @@
 ========================================================= */
 
 html {
+
+    width: 100%;
+
     min-height: 100%;
+
+    background: #000;
 }
+
 
 body {
 
-    background: #000;
+    width: 100%;
+
+    min-width: 100%;
 
     min-height: 100vh;
+
+    min-height: 100dvh;
+
+    margin: 0;
+
+    background: #000;
 
     color: #fff;
 
@@ -89,8 +112,10 @@ body {
     overflow-x: hidden;
 
     -webkit-tap-highlight-color: transparent;
-    
-    margin-top: -5%;
+
+    display: flex;
+
+    flex-direction: column;
 }
 
 
@@ -105,9 +130,11 @@ body::before {
     position: fixed;
 
     width: 420px;
+
     height: 420px;
 
     left: 50%;
+
     top: 42%;
 
     transform: translate(-50%, -50%);
@@ -127,7 +154,7 @@ body::before {
 
 
 /* =========================================================
-   ANIMAÇÃO
+   ANIMAÇÕES
 ========================================================= */
 
 @keyframes fadeIn {
@@ -141,6 +168,7 @@ body::before {
     }
 
 }
+
 
 @keyframes fadeOut {
 
@@ -161,11 +189,17 @@ body::before {
 
 .container {
 
-    width: min(100%, 720px);
+    position: relative;
+
+    z-index: 1;
+
+    width: 100%;
+
+    min-width: 0;
 
     min-height: 100vh;
 
-    margin: auto;
+    min-height: 100dvh;
 
     padding:
         calc(34px + env(safe-area-inset-top))
@@ -195,7 +229,6 @@ body.fade-out .container {
 
     animation:
         fadeOut .26s ease both;
-
 }
 
 
@@ -218,6 +251,7 @@ body.fade-out .container {
     text-transform: uppercase;
 }
 
+
 .brand span {
 
     color: #ff70ad;
@@ -233,7 +267,10 @@ body.fade-out .container {
     position: relative;
 
     width: 188px;
+
     height: 188px;
+
+    flex: 0 0 188px;
 
     margin-bottom: 38px;
 
@@ -296,6 +333,7 @@ body.fade-out .container {
     display: block;
 
     width: 100%;
+
     height: 100%;
 
     object-fit: cover;
@@ -310,7 +348,7 @@ body.fade-out .container {
 
 
 /* =========================================================
-   PEQUENO INDICADOR
+   STATUS
 ========================================================= */
 
 .status {
@@ -318,9 +356,11 @@ body.fade-out .container {
     position: absolute;
 
     right: 8px;
+
     bottom: 8px;
 
     width: 17px;
+
     height: 17px;
 
     border-radius: 50%;
@@ -338,7 +378,7 @@ body.fade-out .container {
 
 .text-top {
 
-    max-width: 470px;
+    width: min(100%, 470px);
 
     margin-bottom: 16px;
 
@@ -358,7 +398,7 @@ body.fade-out .container {
 
 .text-main {
 
-    max-width: 620px;
+    width: min(100%, 620px);
 
     color: #f5f5f7;
 
@@ -390,6 +430,7 @@ body.fade-out .container {
 .line {
 
     width: 38px;
+
     height: 2px;
 
     margin: 26px auto 0;
@@ -408,7 +449,7 @@ body.fade-out .container {
 
 .message {
 
-    max-width: 410px;
+    width: min(100%, 410px);
 
     margin-top: 25px;
 
@@ -439,6 +480,151 @@ body.fade-out .container {
 
 
 /* =========================================================
+   COMPUTADOR
+========================================================= */
+
+@media (min-width: 768px) {
+
+    html,
+    body {
+
+        width: 100%;
+
+        min-width: 100%;
+
+        min-height: 100vh;
+
+        min-height: 100dvh;
+    }
+
+
+    body {
+
+        margin-top: 0;
+    }
+
+
+    .container {
+
+        width: 100%;
+
+        min-width: 100%;
+
+        min-height: 100vh;
+
+        min-height: 100dvh;
+
+        padding:
+            60px
+            60px
+            70px;
+
+        align-self: stretch;
+    }
+
+
+    .avatar {
+
+        width: 220px;
+
+        height: 220px;
+
+        flex-basis: 220px;
+
+        margin-bottom: 44px;
+    }
+
+
+    .text-top {
+
+        width: min(100%, 650px);
+
+        font-size: 15px;
+    }
+
+
+    .text-main {
+
+        width: min(100%, 900px);
+
+        font-size:
+            clamp(3.5rem, 6vw, 5.5rem);
+
+        letter-spacing: -2.5px;
+    }
+
+
+    .message {
+
+        width: min(100%, 560px);
+
+        font-size: 13px;
+    }
+
+
+    .footer {
+
+        margin-top: 44px;
+
+        font-size: 10px;
+    }
+
+}
+
+
+/* =========================================================
+   COMPUTADOR GRANDE
+========================================================= */
+
+@media (min-width: 1200px) {
+
+    .container {
+
+        padding:
+            70px
+            80px
+            80px;
+    }
+
+
+    .avatar {
+
+        width: 240px;
+
+        height: 240px;
+
+        flex-basis: 240px;
+    }
+
+
+    .text-top {
+
+        width: min(100%, 720px);
+
+        font-size: 16px;
+    }
+
+
+    .text-main {
+
+        width: min(100%, 1100px);
+
+        font-size:
+            clamp(4rem, 6vw, 6.5rem);
+    }
+
+
+    .message {
+
+        width: min(100%, 620px);
+
+        font-size: 14px;
+    }
+
+}
+
+
+/* =========================================================
    MOBILE
 ========================================================= */
 
@@ -447,26 +633,34 @@ body.fade-out .container {
     .container {
 
         padding-left: 18px;
+
         padding-right: 18px;
     }
+
 
     .brand {
 
         margin-bottom: 30px;
     }
 
+
     .avatar {
 
         width: 164px;
+
         height: 164px;
+
+        flex-basis: 164px;
 
         margin-bottom: 34px;
     }
+
 
     .text-top {
 
         font-size: 12px;
     }
+
 
     .text-main {
 
@@ -474,6 +668,7 @@ body.fade-out .container {
 
         letter-spacing: -1.1px;
     }
+
 
     .message {
 
@@ -565,6 +760,7 @@ function sairDaPagina(destino) {
     }, 260);
 
 }
+
 
 window.addEventListener("pageshow", function() {
 

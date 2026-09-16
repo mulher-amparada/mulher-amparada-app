@@ -86,8 +86,9 @@ margin-left: 2.5%;
 margin-right: 2.5%;
     animation:
         fadeUp 0.55s ease both;
+          display: flex;
+    flex-direction: column;
 }
-
 
 /* =========================================================
    ANIMAÇÃO
@@ -131,7 +132,7 @@ margin-right: 2.5%;
 
 .container {
 
-    width: min(100% - 36px, 760px);
+    
 
     margin: 0 auto;
 
@@ -590,12 +591,18 @@ margin-right: 2.5%;
    MOBILE
 ========================================================= */
 
-@media (max-width: 500px) {
+@media (width: 768px) {
+body {
+    display: flex;
+    flex-direction: column;
+}
 
-    .container {
-
-        width: calc(100% - 28px);
-    }
+.container {
+    flex: 1 1 auto;
+    align-self: stretch;
+    width: auto;
+    max-width: none;
+}
 
     .header {
 
@@ -636,46 +643,9 @@ margin-right: 2.5%;
 }
 
 
-/* =========================================================
-   TELAS BAIXAS
-========================================================= */
-
-@media (max-height: 650px) {
-
-    .header {
-
-        padding-top: 10px;
-
-        padding-bottom: 25px;
-    }
-
-    .section {
-
-        margin-top: 18px;
-    }
-}
 
 
-/* =========================================================
-   ACESSIBILIDADE
-========================================================= */
 
-@media (prefers-reduced-motion: reduce) {
-
-    html {
-
-        scroll-behavior: auto;
-    }
-
-    *,
-    *::before,
-    *::after {
-
-        animation: none !important;
-
-        transition: none !important;
-    }
-}
 
 </style>
 

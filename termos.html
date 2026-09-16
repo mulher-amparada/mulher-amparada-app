@@ -370,7 +370,7 @@ width: 90%;
 
     width: 60%;
 
-    min-height: 58px;
+    min-height: 5%;
 
     padding:
         15px 22px;
@@ -464,7 +464,7 @@ width: 90%;
 ========================================================= */
 
 .footer {
-    width: 100%;
+    width: stretch;
     max-width: 850px;
 
     margin:
@@ -528,184 +528,8 @@ width: 90%;
 }
 
 
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 700px) {
-
-    body {
-        padding:
-            12px
-            12px
-            145px;
-    }
 
 
-    .card {
-        width: 100%;
-
-        margin-bottom: 13px;
-
-        padding:
-            21px
-            18px
-            22px;
-
-        border-radius: 21px;
-    }
-
-
-    .card::before {
-        top: 17px;
-
-        height: 40px;
-    }
-
-
-    .card h1 {
-        font-size: 25px;
-    }
-
-
-    .card h2 {
-        margin-bottom: 14px;
-
-        font-size: 18px;
-    }
-
-
-    .card h3 {
-        font-size: 15px;
-    }
-
-
-    .card p {
-        font-size: 13px;
-
-        line-height: 1.8;
-    }
-
-
-    .card li {
-        font-size: 13px;
-
-        line-height: 1.7;
-    }
-
-
-    .botao {
-        
-
-        min-height: 56px;
-
-        padding:
-            14px 18px;
-
-        bottom:
-            calc(
-                15px +
-                env(safe-area-inset-bottom)
-            );
-
-        font-size: 14px;
-    }
-
-
-    .footer {
-        padding-bottom: 20px;
-
-        font-size: 11.5px;
-    }
-}
-
-
-/* =========================================================
-   TELAS PEQUENAS
-========================================================= */
-
-@media (max-width: 380px) {
-
-    body {
-        padding:
-            9px
-            9px
-            140px;
-    }
-
-
-    .card {
-        padding:
-            18px
-            15px
-            19px;
-
-        border-radius: 19px;
-    }
-
-
-    .card h1 {
-        font-size: 23px;
-    }
-
-
-    .card h2 {
-        font-size: 17px;
-    }
-
-
-    .card p {
-        font-size: 12.5px;
-
-        line-height: 1.78;
-    }
-
-
-    .card li {
-        font-size: 12.5px;
-    }
-
-
-    .botao {
-        
-
-        min-height: 54px;
-
-        font-size: 13px;
-
-        border:
-            1px solid
-            mediumslateblue;
-    }
-}
-
-
-/* =========================================================
-   ÁREA SEGURA
-========================================================= */
-
-@supports (
-    padding-bottom:
-    env(safe-area-inset-bottom)
-) {
-
-    body {
-        padding-bottom:
-            calc(
-                140px +
-                env(safe-area-inset-bottom)
-            );
-    }
-
-
-    .botao {
-        bottom:
-            calc(
-                15px +
-                env(safe-area-inset-bottom)
-            );
-    }
-}
 
 
 /* =========================================================
@@ -721,21 +545,6 @@ body {
     perspective: none !important;
 }
 
-
-/* =========================================================
-   PWA / STANDALONE
-========================================================= */
-
-@media (display-mode: standalone) {
-
-    .botao {
-        bottom:
-            calc(
-                18px +
-                env(safe-area-inset-bottom)
-            );
-    }
-}
 
 </style>
 

@@ -127,7 +127,7 @@ override fun onCreate(
         savedInstanceState  
     )  
 
-window.decorView.alpha = 0f
+
 
     window.addFlags(  
         WindowManager.LayoutParams.FLAG_SECURE  
@@ -184,13 +184,9 @@ window.decorView.alpha = 0f
         R.layout.activity_main  
     )  
 
-window.decorView.animate()
-    .alpha(1f)
-    .setDuration(350)
-    .setInterpolator(
-        android.view.animation.AccelerateDecelerateInterpolator()
-    )
-    .start()
+
+
+
     
     ViewCompat.setOnApplyWindowInsetsListener(  
         window.decorView  
@@ -1587,7 +1583,7 @@ fun iniciarBiometria() {
 
             Toast.makeText(  
                 this,  
-                "Biometria indisponível, mas abriremos o serviço pra você!",  
+                "Parece que não há métodos de autenticação disponíveis neste aparelho. Não se preocupe: vamos abrir a área protegida para você continuar com segurança.",  
                 Toast.LENGTH_SHORT  
             ).show()  
 
@@ -1641,12 +1637,6 @@ fun iniciarBiometria() {
 
                         super.onAuthenticationFailed()  
 
-
-                        Toast.makeText(  
-                            this@MainActivity,  
-                            "Biometria não reconhecida, abrindo a área protegida.",  
-                            Toast.LENGTH_SHORT  
-                        ).show()  
 
 
                         carregarWebView4()  

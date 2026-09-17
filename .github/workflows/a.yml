@@ -1,4 +1,4 @@
-name: Data do primeiro commit da main
+name: Data do primeiro commit da man
 
 on:
   workflow_dispatch:

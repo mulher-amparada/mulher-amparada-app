@@ -62,11 +62,20 @@
 
 
         <!-- ================================================= -->
-        <!-- MAIN ACTIVITY -->
+        <!-- MAIN ACTIVITY E ENTRADA ACTIVITY -->
         <!-- ================================================= -->
 
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
+            android:exported="false"
+            android:autoVerify="true">
+
+        </activity>
+
+        <activity
+            android:name=".EntradaActivity"
             android:screenOrientation="portrait"
     android:configChanges="orientation|screenSize"
             android:exported="true"
@@ -83,6 +92,7 @@
             </intent-filter>
 
         </activity>
+
 
 
         <!-- ================================================= -->

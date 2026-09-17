@@ -3171,6 +3171,26 @@ function ir(
 }
 
 
+function navigate(
+    page
+) {
+
+    if (
+        typeof page !== "string" ||
+        !page.trim()
+    ) {
+
+        return;
+
+    }
+
+    sairDaPagina(
+        page
+    );
+
+}
+
+
 /* =========================================================
    SAÍDA COM FADE
 ========================================================= */

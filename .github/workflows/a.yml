@@ -1,0 +1,19 @@
+name: Data do primeiro commit
+
+on:
+  workflow_dispatch:
+
+jobs:
+  primeiro-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar todo o histórico
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Obter data do primeiro commit
+        run: |
+          DATA=$(git log --reverse --format=%cI | head -n 1)
+          echo "Primeiro commit: $DATA"

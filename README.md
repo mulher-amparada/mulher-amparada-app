@@ -4,7 +4,7 @@
 
 ## E saibam que o projeto é: Source-Available
 
-## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2611
+## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2606
 
 O **Mulher Amparada** é um aplicativo de segurança e proteção desenvolvido especialmente para mulheres que desejam se sentir mais seguras em situações do dia a dia. O objetivo principal do aplicativo é oferecer suporte rápido, eficiente e acessível em momentos de risco, permitindo que a usuária consiga pedir ajuda de forma simples e imediata. Em um cenário onde muitas mulheres enfrentam situações de vulnerabilidade, ter uma ferramenta confiável pode fazer toda a diferença, e é exatamente isso que o Mulher Amparada busca proporcionar.
 
@@ -100,6 +100,22 @@ Em:
 
 /settings/secrets and variables/actions/repository secrets/
 
+----
+
+🎭 Ícone Monocromático e Integração com Material You
+
+O aplicativo possui suporte aos ícones temáticos do Android (Themed Icons), permitindo que seu ícone se adapte visualmente à paleta de cores dinâmica definida pelo sistema.
+
+* Máscara Monocromática: O aplicativo fornece uma versão monocromática específica do ícone para que o Android possa utilizá-la quando os ícones temáticos estiverem disponíveis e ativados no dispositivo.
+
+* Adaptação à Paleta do Sistema: Em vez de utilizar uma cor fixa definida pelo aplicativo, o Android pode aplicar a paleta dinâmica escolhida para o dispositivo ao ícone temático. Dessa forma, o ícone acompanha visualmente as cores utilizadas pelo restante da interface.
+
+* Integração Visual: A utilização do sistema de ícones temáticos permite que o aplicativo mantenha uma aparência mais integrada à tela inicial, acompanhando o padrão visual adotado pelo próprio Android.
+
+O Impacto Visual: O ícone deixa de depender exclusivamente de suas cores originais e passa a responder à personalização visual do sistema. Isso proporciona uma apresentação mais discreta e consistente com a interface do dispositivo, sem que o aplicativo precise criar manualmente uma versão diferente para cada paleta de cores.
+
+----
+
 ## Sobre as atualizações do app:
 
 O app já está na versão:
@@ -113,6 +129,7 @@ ele tem o CompileSdkVersion 37
 Versão agp no toml de 9.4.0 e versão kotlin de 2.4.20
 
 e ele tem o jetpack compose (embora no app só usei xml até agora, mas ele está ativado!) e estilo via xml ativados!
+
 
 ## Sobre como eu automatizo o projeto:
 :

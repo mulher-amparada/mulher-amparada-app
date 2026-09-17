@@ -1,9 +1,10 @@
 package com.mulheres
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import android.os.Bundle
-import android.view.Window
-import android.view.WindowManager
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.VideoView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -33,6 +34,8 @@ class EntradaActivity : ComponentActivity() {
             isAppearanceLightNavigationBars = false
         }
 
+        window.decorView.alpha = 1f
+
         setContent {
             Box(
                 modifier = Modifier
@@ -49,22 +52,42 @@ class EntradaActivity : ComponentActivity() {
                                 "android.resource://${context.packageName}/${R.raw.entrada}"
                             )
 
+                            // Sem controles
                             setMediaController(null)
 
+                            // Toca automaticamente e apenas uma vez
                             setOnPreparedListener { mediaPlayer ->
                                 mediaPlayer.isLooping = false
                                 start()
                             }
 
+                            // Quando o vídeo terminar
                             setOnCompletionListener {
-                                startActivity(
-                                    Intent(
-                                        this@EntradaActivity,
-                                        MainActivity::class.java
-                                    )
-                                )
 
-                                finish()
+                                // Fade out somente pela opacidade
+                                window.decorView.animate()
+                                    .alpha(0f)
+                                    .setDuration(350)
+                                    .setInterpolator(
+                                        AccelerateDecelerateInterpolator()
+                                    )
+                                    .setListener(
+                                        object : AnimatorListenerAdapter() {
+                                            override fun onAnimationEnd(
+                                                animation: Animator
+                                            ) {
+                                                startActivity(
+                                                    Intent(
+                                                        this@EntradaActivity,
+                                                        MainActivity::class.java
+                                                    )
+                                                )
+
+                                                finish()
+                                            }
+                                        }
+                                    )
+                                    .start()
                             }
                         }
                     }

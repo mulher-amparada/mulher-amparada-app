@@ -127,6 +127,7 @@ override fun onCreate(
         savedInstanceState  
     )  
 
+window.decorView.alpha = 0f
 
     window.addFlags(  
         WindowManager.LayoutParams.FLAG_SECURE  
@@ -183,7 +184,14 @@ override fun onCreate(
         R.layout.activity_main  
     )  
 
-
+window.decorView.animate()
+    .alpha(1f)
+    .setDuration(350)
+    .setInterpolator(
+        android.view.animation.AccelerateDecelerateInterpolator()
+    )
+    .start()
+    
     ViewCompat.setOnApplyWindowInsetsListener(  
         window.decorView  
     ) { view, insets ->  

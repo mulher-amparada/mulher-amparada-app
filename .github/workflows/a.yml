@@ -8,13 +8,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Baixar histórico da main
+      - name: Baixar todo o histórico
         uses: actions/checkout@v4
         with:
-          ref: main
           fetch-depth: 0
 
-      - name: Obter data do primeiro commit da main
+      - name: Encontrar primeiro commit
         run: |
-          DATA=$(git log main --reverse --format=%cI | head -n 1)
-          echo "Primeiro commit da main: $DATA"
+          PRIMEIRO=$(git rev-list --max-parents=0 HEAD | tail -n 1)
+          DATA=$(git show -s --format=%cI "$PRIMEIRO")
+
+          echo "Hash: $PRIMEIRO"
+          echo "Data: $DATA"

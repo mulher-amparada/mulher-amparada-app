@@ -34,6 +34,19 @@ Antes de conceder essa permissão, leia atentamente as informações exibidas pe
 
 > ⚠️ Sobre as proteções por movimento e escurecimento: caso ocorra alguma falha ou o aparelho da usuária não possua o sensor necessário, o aplicativo utiliza o microfone como alternativa. Ao detectar um barulho alto, a proteção é acionada.
 
+> ⚠️ **Recurso de Privacidade: Escurecimento por Inclinação (Disfarce Rápido)**
+>
+> O aplicativo conta com uma funcionalidade exclusiva de privacidade, projetada para proteger as informações da usuária contra olhares curiosos. Ao inclinar o dispositivo, o aplicativo ativa instantaneamente um modo de disfarce visual, escurecendo a interface para simular que a tela está desligada ou que o celular está bloqueado.
+>
+> #### Funcionamento Exclusivo na Tela Principal (MainActivity)
+>
+> Por decisões estratégicas de segurança, desempenho e utilidade prática, este recurso opera **estritamente dentro da tela principal do aplicativo**, não sendo ativado nas demais telas ou no momento em que o app está abrindo. As razões para essa escolha incluem:
+>
+> * **Velocidade Máxima no Socorro:** A tela de entrada do aplicativo precisa abrir o app o mais rápido possível. Ligar os sensores de movimento do celular logo na inicialização causaria um atraso na abertura, o que comprometeria o pedido de ajuda em situações de urgência extrema.
+> * **Economia Extrema de Bateria:** Os sensores de inclinação consomem energia do dispositivo. Ao restringir o uso do sensor apenas para a tela principal (onde a usuária passa a maior parte do tempo), o aplicativo evita o desgaste desnecessário da bateria e impede que o sensor continue rodando quando o aplicativo for fechado ou minimizado.
+> * **Proteção Focada onde Importa:** A tela principal é o local que concentra as informações realmente sensíveis do projeto (como finanças e anotações). Telas de transição ou de carregamento não exibem dados confidenciais, eliminando a necessidade de um disfarce visual nessas etapas.
+
+
 ## Sobre as funções por sensores (bloquear a tela por barulho, proteção por barulho que liga pro 180, balançar o celular para pedir ajuda e escurecimento por inclinação):
 
 A função Bloquear a tela por Barulho foi projetada com uma medida adicional de segurança: depois de ser ativada e funcionar de fato, ela permanece ativa até que o usuário decida desativá-la pelo próprio aplicativo.

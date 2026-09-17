@@ -62,6 +62,8 @@ A MainActivity permanece com android:exported="false", impedindo que outros apli
 
 Dessa forma, a EntradaActivity funciona como uma camada de entrada: ela gerencia a inicialização visual do aplicativo e encaminha o usuário de forma segura para a MainActivity internamente. 
 
+E a EntradaActivity tem o fundo preto!
+
 Essa configuração reduz a exposição direta das Activities internas a inicializações externas. Ela não impede a análise do APK ou de seus arquivos por ferramentas de engenharia reversa.
 
 Proteção do Código
@@ -77,7 +79,7 @@ E o fundo do icone do app é um adaptativo, em que o fundo e preto, e tem um bon
 
 e quando você clica no botão voltar na MainActivity, ele volta a página!
 
-e o fundo de todas as telas são nativamente pretas, (exceto a tela de splash screen inicial do app, pois ela é mais puxada para o cinza escuro!)
+e o fundo de todas as telas são nativamente pretas!
 
 E o workflow utiliza um keystore de assinatura armazenado de forma protegida nos GitHub Actions Secrets. As informações necessárias para acessar o keystore e selecionar a chave são fornecidas pelas variáveis KEYSTORE_BASE64, KEYSTORE_PASSWORD, KEY_ALIAS e KEY_PASSWORD.
 

@@ -58,7 +58,7 @@ Esta licença não deve ser interpretada como uma transferência de propriedade,
 
 ----
 
-> 🚫 **RESTRIÇÃO GOVERNAMENTAL ABSOLUTA**
+> 🚫 **RESTRIÇÃO GOVERNAMENTAL ABSOLUTA:**
 >
 > É proibido a qualquer órgão, entidade ou agente governamental utilizar, copiar, modificar, adaptar, incorporar ou derivar qualquer parte deste projeto, incluindo seu código-fonte, estrutura, recursos, funcionalidades ou documentação, com a finalidade de criar, desenvolver ou distribuir outro software, sistema, produto ou serviço a partir deste projeto.
 >

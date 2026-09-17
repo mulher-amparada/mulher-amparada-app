@@ -102,7 +102,7 @@ Em:
 
 ----
 
-🎭 Ícone Monocromático e Integração com Material You
+🎭 Ícone Monocromático e Integração com Material You:
 
 O aplicativo possui suporte aos ícones temáticos do Android (Themed Icons), permitindo que seu ícone se adapte visualmente à paleta de cores dinâmica definida pelo sistema.
 

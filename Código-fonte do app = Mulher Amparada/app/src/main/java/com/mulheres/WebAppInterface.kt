@@ -660,28 +660,16 @@ fun bloquearTela(): Boolean {
     }
 
     @JavascriptInterface
-    fun iniciarBiometriaAmor() {
-        safeMainActivityCall {
-            it.iniciarBiometriaAmor()
-        }
-    }
-
-    @JavascriptInterface
-    fun iniciarBiometriaMusica() {
+    fun iniciarBiometriaÁreaProtegida() {
         safeMainActivityCall {
             it.iniciarBiometriaMusica()
         }
     }
 
-    @JavascriptInterface
-    fun iniciarBiometriaPrincesa() {
-        safeMainActivityCall {
-            it.iniciarBiometriaPrincesa()
-        }
-    }
+
 
     @JavascriptInterface
-    fun iniciarBiometriaPrincipe() {
+    fun iniciarBiometriaAmparo() {
         safeMainActivityCall {
             it.iniciarBiometriaPrincipe()
         }

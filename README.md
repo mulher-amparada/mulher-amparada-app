@@ -622,7 +622,6 @@ e
 
 lembre-se que hoje em dia uso github para compilar os apps e o a16 5g da samsung, então ele nao mata o processo de compilação mais!
 
-
 Porque usei webview e html?
 
 porque ele e mais fluido, e também deixa o aplicativo mais leve em tamanho, um exemplo disso e o instagram lite, e porque nao precisa gerar muitos arquivos XMLs ou muito texto em kotlin para fazer todas as telas e além disso html com WebView é mais difícil de manter, mas eu tenho sim activitys em kotlin em xml, mas eu também tenho páginas em html, (mas não necessariamente o webview é mais leve universalmente!)

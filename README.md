@@ -4,7 +4,7 @@
 
 ## E saibam que o projeto é: Source-Available
 
-## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2632
+## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2616
 
 O **Mulher Amparada** é um aplicativo de segurança e proteção desenvolvido especialmente para mulheres que desejam se sentir mais seguras em situações do dia a dia. O objetivo principal do aplicativo é oferecer suporte rápido, eficiente e acessível em momentos de risco, permitindo que a usuária consiga pedir ajuda de forma simples e imediata. Em um cenário onde muitas mulheres enfrentam situações de vulnerabilidade, ter uma ferramenta confiável pode fazer toda a diferença, e é exatamente isso que o Mulher Amparada busca proporcionar.
 
@@ -587,6 +587,14 @@ e a calculadora de disfarce realmente faz contas, se digitar:
 2 + 2, aparece 4!
 
 e se digitar a senha ele desbloqueia...
+
+----
+
+## Área do amparo:
+
+A Área do amparo também utiliza o sistema "BiometricPrompt", com autenticação por "BIOMETRIC_WEAK" e "DEVICE_CREDENTIAL".
+
+Após o desbloqueio, é exibida uma carteirinha informativa que não é um documento oficial do governo. Ao tocar nela, a usuária é direcionada para uma página destinada à apresentação à equipe de motoristas do transporte, para solicitar o desembarque em um ponto mais seguro durante o período noturno, quando a legislação aplicável permitir.
 
 ----
 

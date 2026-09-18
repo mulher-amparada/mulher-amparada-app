@@ -608,11 +608,13 @@ O gesto é um sinal silencioso de pedido de ajuda e pode ser utilizado em difere
 
 ## 🔒 Estrutura de Telas Secretas (Acesso Biométrico):
 
-Para garantir a segurança máxima e a organização das informações, o aplicativo divide suas funcionalidades confidenciais em **DUAS ÁREAS COMPLETAMENTE SEPARADAS** no menu principal. Ambas são protegidas de forma independente por biometria (`BiometricPrompt` via `BIOMETRIC_WEAK` e `DEVICE_CREDENTIAL`):
+I aplicativo divide suas funcionalidades confidenciais em DUAS ÁREAS COMPLETAMENTE SEPARADAS no menu principal:
 
-**1. Área Protegida**
+Cada área possui sua própria proteção e requer autenticação independente por meio do sistema "BiometricPrompt", utilizando "BIOMETRIC_WEAK" e "DEVICE_CREDENTIAL".
 
-**2. Área do Amparo**
+1. Área Protegida.
+
+2. Área do amparo.
 
 ----
 

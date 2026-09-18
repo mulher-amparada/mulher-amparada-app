@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<meta
+    name="theme-color"
+    content="#000000"
+>
+
+<title>Gesto de Combate à Violência</title>
+
+<style>
+
+@font-face {
+
+    font-family:
+        "Quicksand";
+
+    src:
+        url("font.ttf")
+        format("truetype");
+
+    font-weight:
+        400 800;
+
+    font-style:
+        normal;
+
+    font-display:
+        swap;
+
+}
+
+
+* {
+
+    box-sizing:
+        border-box;
+
+    margin:
+        0;
+
+    padding:
+        0;
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+    -webkit-user-select:
+        none;
+
+    -webkit-tap-highlight-color:
+        transparent;
+
+}
+
+
+:root {
+
+    --bg:
+        #000000;
+
+    --surface:
+        #101116;
+
+    --surface-2:
+        #171820;
+
+    --white:
+        #ffffff;
+
+    --soft:
+        #92949e;
+
+    --muted:
+        #686d79;
+
+    --pink:
+        #ff3f82;
+
+    --pink-soft:
+        #ff6b9f;
+
+    --border:
+        #ffffff12;
+
+}
+
+
+@keyframes pagein {
+
+    from {
+        opacity:
+            0;
+    }
+
+    to {
+        opacity:
+            1;
+    }
+
+}
+
+
+html,
+body {
+
+    width:
+        100%;
+
+    min-height:
+        100%;
+
+    background:
+        var(--bg);
+
+    color:
+        var(--white);
+
+    scrollbar-width:
+        none;
+
+}
+
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+
+    width:
+        0;
+
+    height:
+        0;
+
+}
+
+
+body {
+
+    min-height:
+        100vh;
+
+    overflow-x:
+        hidden;
+
+    padding:
+        env(safe-area-inset-top)
+        16px
+        env(safe-area-inset-bottom);
+
+    animation:
+        pagein
+        .55s
+        ease
+        both;
+
+}
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+.main {
+
+    width:
+        100%;
+
+    max-width:
+        650px;
+
+    min-height:
+        100vh;
+
+    margin:
+        auto;
+
+    padding:
+        25px
+        0
+        70px;
+
+}
+
+
+/* =========================================================
+   CABEÇALHO
+========================================================= */
+
+.topLine {
+
+    width:
+        43px;
+
+    height:
+        3px;
+
+    margin-bottom:
+        18px;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--pink);
+
+}
+
+
+h1 {
+
+    font-size:
+        clamp(
+            31px,
+            8vw,
+            45px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        .98;
+
+    letter-spacing:
+        -1.5px;
+
+}
+
+
+.subtitle {
+
+    max-width:
+        470px;
+
+    margin-top:
+        14px;
+
+    color:
+        var(--soft);
+
+    font-size:
+        12px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.55;
+
+}
+
+
+/* =========================================================
+   CARD PRINCIPAL
+========================================================= */
+
+.rightCard {
+
+    margin-top:
+        30px;
+
+    padding:
+        27px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        30px;
+
+    background:
+        var(--surface);
+
+}
+
+
+/* =========================================================
+   IDENTIFICAÇÃO
+========================================================= */
+
+.cardLabel {
+
+    color:
+        var(--pink-soft);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        2px;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.cardTitle {
+
+    margin-top:
+        13px;
+
+    color:
+        var(--white);
+
+    font-size:
+        clamp(
+            24px,
+            6vw,
+            34px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        1.05;
+
+}
+
+
+.cardText {
+
+    margin-top:
+        13px;
+
+    color:
+        #b4b5bd;
+
+    font-size:
+        12px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.65;
+
+}
+
+
+/* =========================================================
+   GESTO
+========================================================= */
+
+.gesture {
+
+    margin-top:
+        24px;
+
+    padding:
+        21px;
+
+    border:
+        1px solid
+        #ff3f8230;
+
+    border-radius:
+        22px;
+
+    background:
+        #ff3f820b;
+
+}
+
+
+.gestureLabel {
+
+    color:
+        var(--pink-soft);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1.7px;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.gestureTitle {
+
+    margin-top:
+        17px;
+
+    color:
+        var(--white);
+
+    font-size:
+        clamp(
+            18px,
+            5vw,
+            23px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        1.25;
+
+    text-align:
+        center;
+
+}
+
+
+.gestureDescription {
+
+    margin-top:
+        9px;
+
+    color:
+        var(--soft);
+
+    font-size:
+        10px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.6;
+
+    text-align:
+        center;
+
+}
+
+
+/* =========================================================
+   PASSO A PASSO
+========================================================= */
+
+.steps {
+
+    margin-top:
+        16px;
+
+    padding:
+        21px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        22px;
+
+    background:
+        var(--surface-2);
+
+}
+
+
+.stepsTitle {
+
+    color:
+        var(--white);
+
+    font-size:
+        15px;
+
+    font-weight:
+        800;
+
+}
+
+
+.step {
+
+    margin-top:
+        16px;
+
+    padding:
+        15px;
+
+    border:
+        1px solid
+        #ffffff08;
+
+    border-radius:
+        16px;
+
+    background:
+        #ffffff05;
+
+}
+
+
+.stepNumber {
+
+    color:
+        var(--pink-soft);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1.5px;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.step strong {
+
+    display:
+        block;
+
+    margin-top:
+        6px;
+
+    color:
+        var(--white);
+
+    font-size:
+        11px;
+
+}
+
+
+.step span {
+
+    display:
+        block;
+
+    margin-top:
+        5px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        9px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.5;
+
+}
+
+
+/* =========================================================
+   EXPLICAÇÃO
+========================================================= */
+
+.explanation {
+
+    margin-top:
+        16px;
+
+    padding:
+        21px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        22px;
+
+    background:
+        var(--surface-2);
+
+}
+
+
+.explanationTitle {
+
+    color:
+        var(--white);
+
+    font-size:
+        15px;
+
+    font-weight:
+        800;
+
+}
+
+
+.explanation p {
+
+    margin-top:
+        11px;
+
+    color:
+        #a7a9b2;
+
+    font-size:
+        11px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.65;
+
+}
+
+
+/* =========================================================
+   AVISO
+========================================================= */
+
+.notice {
+
+    margin-top:
+        17px;
+
+    padding:
+        18px;
+
+    border-radius:
+        20px;
+
+    background:
+        #0c0d11;
+
+}
+
+
+.notice strong {
+
+    color:
+        var(--white);
+
+    font-size:
+        11px;
+
+}
+
+
+.notice p {
+
+    margin-top:
+        7px;
+
+    color:
+        var(--soft);
+
+    font-size:
+        10px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.6;
+
+}
+
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
+@media (max-width: 390px) {
+
+    body {
+
+        padding-left:
+            14px;
+
+        padding-right:
+            14px;
+
+    }
+
+
+    .rightCard {
+
+        padding:
+            21px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<main class="main">
+
+
+    <div class="topLine"></div>
+
+
+    <h1>
+        Gesto de ajuda
+    </h1>
+
+
+    <p class="subtitle">
+        Aprenda a reconhecer e utilizar o gesto da mão
+        criado para sinalizar silenciosamente que você
+        precisa de ajuda em uma situação de violência.
+    </p>
+
+
+    <section class="rightCard">
+
+
+        <div class="cardLabel">
+            Sinal internacional de ajuda
+        </div>
+
+
+        <h2 class="cardTitle">
+            O gesto da mão
+        </h2>
+
+
+        <p class="cardText">
+            O Signal for Help é um gesto simples feito com
+            uma mão. Ele foi criado para permitir que uma
+            pessoa peça ajuda de forma discreta quando não
+            consegue falar livremente.
+        </p>
+
+
+        <div class="gesture">
+
+            <div class="gestureLabel">
+                Aprenda o gesto
+            </div>
+
+
+            <div class="gestureTitle">
+                Palma aberta, polegar dobrado
+            </div>
+
+
+            <div class="gestureDescription">
+                O polegar é colocado sobre a palma e os
+                outros dedos são fechados sobre ele.
+            </div>
+
+        </div>
+
+
+        <div class="steps">
+
+            <div class="stepsTitle">
+                Como fazer
+            </div>
+
+
+            <div class="step">
+
+                <div class="stepNumber">
+                    Passo 01
+                </div>
+
+                <strong>
+                    Mostre a palma da mão
+                </strong>
+
+                <span>
+                    Mantenha a mão aberta e voltada para
+                    a pessoa que você deseja sinalizar.
+                </span>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="stepNumber">
+                    Passo 02
+                </div>
+
+                <strong>
+                    Dobre o polegar
+                </strong>
+
+                <span>
+                    Coloque o polegar para dentro da palma
+                    da mão.
+                </span>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="stepNumber">
+                    Passo 03
+                </div>
+
+                <strong>
+                    Feche os dedos
+                </strong>
+
+                <span>
+                    Feche os quatro dedos sobre o polegar,
+                    formando o sinal.
+                </span>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="stepNumber">
+                    Passo 04
+                </div>
+
+                <strong>
+                    Repita
+                </strong>
+
+                <span>
+                    Se necessário, volte ao primeiro passo
+                    e repita o gesto quando for seguro.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="explanation">
+
+            <div class="explanationTitle">
+                Para que serve?
+            </div>
+
+
+            <p>
+                O gesto pode ser usado quando uma pessoa
+                precisa comunicar discretamente que está
+                em uma situação de violência ou que precisa
+                de ajuda.
+            </p>
+
+
+            <p>
+                Ele não substitui uma conversa segura nem
+                garante uma resposta imediata. Se alguém
+                perceber o sinal, é importante procurar uma
+                forma segura de oferecer ajuda ou acionar
+                os serviços apropriados.
+            </p>
+
+        </div>
+
+
+        <div class="notice">
+
+            <strong>
+                Importante
+            </strong>
+
+            <p>
+                O gesto deve ser utilizado somente quando
+                for seguro fazê-lo. Se a pessoa que está
+                cometendo a violência puder perceber o
+                sinal, priorize a segurança e procure ajuda
+                de uma maneira que não aumente o risco.
+            </p>
+
+        </div>
+
+
+    </section>
+
+</main>
+
+</body>
+
+</html>

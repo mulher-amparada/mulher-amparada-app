@@ -36,18 +36,6 @@
 
 }
 
-@keyframes tabIn {
-
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-
-}
-
 
 /* =========================================================
    RESET
@@ -71,13 +59,23 @@
     font-weight:
         700;
 
-    -webkit-user-select: none;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
+    -webkit-user-select:
+        none;
 
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    -webkit-tap-highlight-color: transparent;
+    -webkit-backface-visibility:
+        hidden;
+
+    backface-visibility:
+        hidden;
+
+    -webkit-transform:
+        translateZ(0);
+
+    transform:
+        translateZ(0);
+
+    -webkit-tap-highlight-color:
+        transparent;
 
 }
 
@@ -143,9 +141,6 @@ body::-webkit-scrollbar {
     --surface:
         #101116;
 
-    --surface-2:
-        #15171e;
-
     --white:
         #ffffff;
 
@@ -203,12 +198,11 @@ body {
     padding-bottom:
         env(safe-area-inset-bottom);
 
-animation:
+    animation:
         pageIn
         .55s
         ease
         both;
-
 
 }
 
@@ -245,7 +239,6 @@ animation:
     gap:
         31px;
 
-    
 }
 
 
@@ -414,7 +407,7 @@ animation:
 
 
 /* =========================================================
-   CARTEIRINHA
+   CARTEIRINHAS
 ========================================================= */
 
 .walletCard {
@@ -422,8 +415,14 @@ animation:
     width:
         100%;
 
-    position:
-        relative;
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        18px;
 
 }
 
@@ -440,6 +439,9 @@ animation:
     position:
         relative;
 
+    display:
+        block;
+
     overflow:
         hidden;
 
@@ -448,12 +450,6 @@ animation:
 
     background:
         #111111;
-
-    cursor:
-        pointer;
-
-    z-index:
-        2;
 
     border:
         1px solid
@@ -465,10 +461,42 @@ animation:
         45px
         #00000080;
 
+    cursor:
+        pointer;
+
+    text-decoration:
+        none;
+
+    transform:
+        translateY(0);
+
     transition:
-        border-radius
-        .25s
+        transform
+        .28s
+        cubic-bezier(
+            .22,
+            1,
+            .36,
+            1
+        ),
+
+        box-shadow
+        .28s
         ease;
+
+}
+
+
+
+
+/* =========================================================
+   TOQUE / CLIQUE
+========================================================= */
+
+.cardMain:active {
+
+    transform:
+        scale(.90);
 
 }
 
@@ -501,307 +529,6 @@ animation:
 
 
 /* =========================================================
-   CARTÃO ABERTO
-========================================================= */
-
-.walletCard.open
-.cardMain {
-
-    border-radius:
-        27px
-        27px
-        14px
-        14px;
-
-}
-
-/* =========================================================
-   ABA
-========================================================= */
-
-.cardTab {
-
-    width:
-        calc(100% - 30px);
-
-    position:
-        relative;
-
-    margin:
-        0 auto;
-
-    display:
-        grid;
-
-    grid-template-rows:
-        0fr;
-
-    overflow:
-        hidden;
-
-    opacity:
-        0;
-
-    border-radius:
-        0
-        0
-        23px
-        23px;
-
-    background:
-        var(--surface-2);
-
-    transform:
-        translateY(-4px);
-
-    pointer-events:
-        none;
-
-    transition:
-        grid-template-rows
-        .32s
-        cubic-bezier(
-            .22,
-            1,
-            .36,
-            1
-        ),
-
-        opacity
-        .20s
-        ease,
-
-        transform
-        .32s
-        cubic-bezier(
-            .22,
-            1,
-            .36,
-            1
-        );
-
-}
-
-
-/* =========================================================
-   CONTEÚDO INTERNO DA ABA
-========================================================= */
-
-.cardTab a {
-
-    min-height:
-        68px;
-
-    overflow:
-        hidden;
-
-}
-
-
-/* =========================================================
-   INDICADOR
-========================================================= */
-
-.cardTab::before {
-
-    content:
-        "";
-
-    position:
-        absolute;
-
-    top:
-        7px;
-
-    left:
-        50%;
-
-    width:
-        34px;
-
-    height:
-        4px;
-
-    transform:
-        translateX(-50%);
-
-    border-radius:
-        999px;
-
-    background:
-        #555861;
-
-    z-index:
-        2;
-
-}
-
-
-/* =========================================================
-   ABA ABERTA
-========================================================= */
-
-.walletCard.open
-.cardTab {
-
-    grid-template-rows:
-        1fr;
-
-    opacity:
-        1;
-
-    transform:
-        translateY(0);
-
-    pointer-events:
-        auto;
-
-}
-
-/* =========================================================
-   LINK
-========================================================= */
-
-.cardTab a {
-
-    width:
-        100%;
-
-    min-height:
-        68px;
-
-    padding:
-        18px
-        20px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    color:
-        var(--white);
-
-    text-decoration:
-        none;
-
-    font-size:
-        14px;
-
-    font-weight:
-        800;
-
-}
-
-
-/* =========================================================
-   TEXTO
-========================================================= */
-
-.cardTabText {
-
-    color:
-        var(--white);
-
-    line-height:
-        1.2;
-
-}
-
-
-/* =========================================================
-   SETA
-========================================================= */
-
-.cardArrow {
-
-    width:
-        40px;
-
-    height:
-        40px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    flex:
-        0 0 40px;
-
-    color:
-        #a7c4e5;
-
-    background:
-        #ffffff08;
-
-    border:
-        1px solid
-        #ffffff12;
-
-    border-radius:
-        14px;
-
-}
-
-
-.cardArrow svg {
-
-    width:
-        20px;
-
-    height:
-        20px;
-
-    display:
-        block;
-
-}
-
-
-/* =========================================================
-   ABA ABERTA
-========================================================= */
-
-.walletCard.open
-.cardTab {
-
-    max-height:
-        68px;
-
-    opacity:
-        1;
-
-    transform:
-        translateY(0);
-
-    pointer-events:
-        auto;
-
-}
-
-
-.walletCard.open
-.cardTab a {
-
-    animation:
-        tabIn
-        .25s
-        ease
-        both;
-
-}
-
-
-/* =========================================================
    PEQUENAS TELAS
 ========================================================= */
 
@@ -825,14 +552,6 @@ animation:
 
     }
 
-
-    .cardTab a {
-
-        font-size:
-            13px;
-
-    }
-
 }
 
 
@@ -843,8 +562,6 @@ animation:
 @media (prefers-reduced-motion: reduce) {
 
     .mainUI,
-    .cardTab,
-    .cardTab a,
     .cardMain {
 
         animation:
@@ -885,85 +602,72 @@ animation:
         </p>
 
         <p class="heroSubtitle">
-Recurso informativo do aplicativo para apresentação à equipe de transporte. Estas carteirinhas não são um documento governamental nem são emitidas por órgãos públicos.
+            Recurso informativo do aplicativo para apresentação
+            à equipe de transporte. Estas carteirinhas não são
+            um documento governamental nem são emitidas por
+            órgãos públicos.
         </p>
-
 
     </header>
 
 
     <!-- =====================================================
-         CARTEIRINHA
+         CARTEIRINHAS
     ====================================================== -->
 
     <section class="section">
 
         <div class="label">
-            Exigindo seus direitos
+            Exigindo seus direitos no transporte
         </div>
 
 
-        <div
-            class="walletCard"
-            id="walletCard"
-        >
+        <div class="walletCard">
 
 
-            <!-- CARTÃO -->
+            <!-- =================================================
+                 PRIMEIRA CARTEIRINHA
+            ================================================== -->
 
-            <div
+            <a
                 class="cardMain"
-                id="cardMain"
-                role="button"
-                tabindex="0"
-                aria-label="Abrir opções da carteirinha"
+                href="exigir.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Abrir carteirinha sobre transporte"
             >
 
                 <img
                     src="cartao.jpg"
-                    alt="Carteirinha"
+                    alt="Carteirinha sobre transporte"
                 >
 
-            </div>
+            </a>
 
+</section>
+    <section class="section">
+        <div class="label">
+             Sobre o gesto de combate da violência 
+        </div>
 
-            <!-- ABA -->
+            <!-- =================================================
+                 SEGUNDA CARTEIRINHA
+            ================================================== -->
 
-            <div class="cardTab">
+            <a
+                class="cardMain"
+                href="gesto.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Abrir carteirinha sobre o gesto"
+            >
 
-                <a
-                    href="exigir.html"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                <img
+                    src="cartao1.jpg"
+                    alt="Carteirinha sobre o gesto"
                 >
 
-                    <span class="cardTabText">
-                        Abrir carteirinha sobre o transporte 
-                    </span>
-
-
-                    <span
-                        class="cardArrow"
-                        aria-hidden="true"
-                    >
-
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 -960 960 960"
-                            fill="currentColor"
-                        >
-
-                            <path
-                                d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L404-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l156-156Z"
-                            />
-
-                        </svg>
-
-                    </span>
-
-                </a>
-
-            </div>
+            </a>
 
 
         </div>
@@ -972,75 +676,6 @@ Recurso informativo do aplicativo para apresentação à equipe de transporte. E
 
 
 </main>
-
-
-<script>
-
-/* =========================================================
-   ELEMENTOS
-========================================================= */
-
-const walletCard =
-    document.getElementById(
-        "walletCard"
-    );
-
-const cardMain =
-    document.getElementById(
-        "cardMain"
-    );
-
-
-/* =========================================================
-   ABRIR / FECHAR
-========================================================= */
-
-function toggleWallet() {
-
-    walletCard.classList.toggle(
-        "open"
-    );
-
-}
-
-
-/* =========================================================
-   CLIQUE
-========================================================= */
-
-cardMain.addEventListener(
-    "click",
-    toggleWallet
-);
-
-
-/* =========================================================
-   TECLADO
-========================================================= */
-
-cardMain.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.key ===
-            "Enter"
-            ||
-            event.key ===
-            " "
-        ) {
-
-            event.preventDefault();
-
-            toggleWallet();
-
-        }
-
-    }
-);
-
-</script>
-
 
 </body>
 

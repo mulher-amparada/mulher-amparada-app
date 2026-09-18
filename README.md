@@ -606,9 +606,28 @@ O gesto é um sinal silencioso de pedido de ajuda e pode ser utilizado em difere
 
 ----
 
+## 🔒 Estrutura de Telas Secretas (Acesso Biométrico)
+
+Para garantir a segurança máxima e a organização das informações, o aplicativo divide suas funcionalidades confidenciais em **DUAS ÁREAS COMPLETAMENTE SEPARADAS** no menu principal. Ambas são protegidas de forma independente por biometria (`BiometricPrompt` via `BIOMETRIC_WEAK` e `DEVICE_CREDENTIAL`):
+
+### 🔐 1. Área Protegida (Utilitários e Dados Pessoais)
+Esta área é destinada à rotina, produtividade e ao armazenamento criptografado de dados pessoais da usuária. Ela contém:
+* **Diário Secreto:** Notas criptografadas locais.
+* **Gravador de Voz:** Gravações protegidas em AES/GCM com geração de metadados técnicos avançados (SHA-256, força G, localização).
+* **Utilitários de Rotina:** Calendário menstrual, calendário de eventos, sistema de hábitos/pontos, gerenciador de tarefas e mapas.
+* **História das Mulheres:** Um jogo interativo de progressão e prestígio sobre a história feminina.
+
+### 🌸 2. Área do Amparo (Suporte, Direitos e Orientações)
+Uma tela totalmente separada da Área Protegida, focada exclusivamente em amparo humanizado, ferramentas de reivindicação de direitos e tutoriais de segurança:
+* **Carteirinha de Reivindicação de Transporte:** Tela informativa para apresentar a motoristas de ônibus e solicitar desembarque noturno em locais seguros.
+* **Carteirinha do Gesto de Ajuda:** Guia e tutorial detalhado sobre como realizar o sinal silencioso internacional de socorro contra a violência.
+
+----
+
 # Decisões técnicas:
 
 lembre-se que hoje em dia uso github para compilar os apps e o a16 5g da samsung, então ele nao mata o processo de compilação mais!
+
 
 Porque usei webview e html?
 

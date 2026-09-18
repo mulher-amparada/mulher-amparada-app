@@ -2228,6 +2228,479 @@ white-space:
 
 }
 
+.amparoSection {
+
+    width:
+        100%;
+
+}
+
+
+/* =========================================================
+   LABEL
+========================================================= */
+
+.amparoLabel {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    margin:
+        0
+        0
+        13px
+        4px;
+
+    color:
+        #686d79;
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        2px;
+
+    line-height:
+        1;
+
+    text-transform:
+        uppercase;
+
+}
+
+.amparoLabel::before {
+
+    content:
+        "";
+
+    width:
+        5px;
+
+    height:
+        5px;
+
+    flex:
+        0 0 5px;
+
+    border-radius:
+        50%;
+
+    background:
+        #ff3f82;
+
+}
+
+
+/* =========================================================
+   BOTÃO
+========================================================= */
+
+.amparoButton {
+
+    width:
+        100%;
+
+    min-height:
+        138px;
+
+    position:
+        relative;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        16px;
+
+    padding:
+        18px;
+
+    overflow:
+        hidden;
+
+    color:
+        #ffffff;
+
+    background:
+        #24152b;
+
+    border:
+        1px solid
+        #9b4fc4;
+
+    border-radius:
+        30px;
+
+    text-align:
+        left;
+
+    cursor:
+        pointer;
+
+    -webkit-appearance:
+        none;
+
+    appearance:
+        none;
+
+    isolation:
+        isolate;
+
+}
+
+
+/* =========================================================
+   DECORAÇÕES
+========================================================= */
+
+.amparoButton::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        250px;
+
+    height:
+        250px;
+
+    top:
+        -175px;
+
+    right:
+        -95px;
+
+    border-radius:
+        50%;
+
+    background:
+        #422052;
+
+    pointer-events:
+        none;
+
+    z-index:
+        -1;
+
+}
+
+.amparoButton::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        115px;
+
+    height:
+        115px;
+
+    bottom:
+        -78px;
+
+    left:
+        -38px;
+
+    border-radius:
+        50%;
+
+    background:
+        #5b254e;
+
+    pointer-events:
+        none;
+
+    z-index:
+        -1;
+
+}
+
+
+/* =========================================================
+   ÍCONE
+========================================================= */
+
+.amparoIcon {
+
+    width:
+        64px;
+
+    height:
+        64px;
+
+    flex:
+        0 0 64px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    background:
+        #392047;
+
+    border:
+        1px solid
+        #70458b;
+
+    border-radius:
+        21px;
+
+}
+
+.amparoIcon img {
+
+    width:
+        32px;
+
+    height:
+        32px;
+
+    display:
+        block;
+
+    object-fit:
+        contain;
+
+}
+
+
+/* =========================================================
+   CONTEÚDO
+========================================================= */
+
+.amparoContent {
+
+    min-width:
+        0;
+
+    flex:
+        1;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        flex-start;
+
+    justify-content:
+        center;
+
+    gap:
+        6px;
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+}
+
+.amparoTitle {
+
+    color:
+        #ffffff;
+
+    font-size:
+        clamp(
+            19px,
+            5vw,
+            25px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        1.1;
+
+    letter-spacing:
+        -.35px;
+
+}
+
+.amparoSubtitle {
+
+    color:
+        #b7a4bd;
+
+    font-size:
+        10px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.4;
+
+}
+
+.amparoMeta {
+
+    margin-top:
+        3px;
+
+    color:
+        #d38ae8;
+
+    font-size:
+        7px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1.2px;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+/* =========================================================
+   SETA
+========================================================= */
+
+.amparoArrow {
+
+    width:
+        43px;
+
+    height:
+        43px;
+
+    flex:
+        0 0 43px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    color:
+        #d49bea;
+
+    background:
+        #351c40;
+
+    border:
+        1px solid
+        #623875;
+
+    border-radius:
+        14px;
+
+}
+
+.amparoArrow svg {
+
+    width:
+        19px;
+
+    height:
+        19px;
+
+    display:
+        block;
+
+}
+
+
+/* =========================================================
+   INTERAÇÃO
+========================================================= */
+
+.amparoButton:hover {
+
+    border-color:
+        #c878e5;
+
+}
+
+.amparoButton:hover .amparoIcon {
+
+    background:
+        #482657;
+
+    border-color:
+        #8d58aa;
+
+}
+
+.amparoButton:hover .amparoArrow {
+
+    color:
+        #ffffff;
+
+    background:
+        #43234f;
+
+    border-color:
+        #7d4a93;
+
+}
+
+.amparoButton:active {
+
+    opacity:
+        .82;
+
+}
+
+.amparoButton:focus-visible {
+
+    outline:
+        2px solid
+        #d38ae8;
+
+    outline-offset:
+        4px;
+
+}
+
 </style>
 
 </head>
@@ -2915,6 +3388,73 @@ Se o sensor não estiver disponível ou der qualquer outro erro,
 
     </section>
 
+<section class="amparoSection">
+
+    <div class="amparoLabel">
+        Área do amparo
+    </div>
+<button
+    class="amparoButton"
+    id="areaAmparo"
+    type="button"
+    aria-label="Abrir área do amparo"
+    onclick="abrirAreaDoAmparo()"
+>
+
+        <span
+            class="amparoIcon"
+            aria-hidden="true"
+        >
+
+            <img
+                src="support.svg"
+                alt=""
+            >
+
+        </span>
+
+        <span class="amparoContent">
+
+            <span class="amparoTitle">
+                Área do amparo
+            </span>
+
+            <span class="amparoSubtitle">
+                Acesso protegido por biometria
+            </span>
+
+            <span class="amparoMeta">
+                Proteção ativa
+            </span>
+
+        </span>
+
+        <span
+            class="amparoArrow"
+            aria-hidden="true"
+        >
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+
+                <path
+                    d="M9 18L15 12L9 6"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                />
+
+            </svg>
+
+        </span>
+
+    </button>
+
+</section>
 
 </main>
 
@@ -4322,6 +4862,11 @@ window.addEventListener(
     }
 );
 
+function abrirAreaDoAmparo() {
+    if (window.Android && typeof Android.iniciarBiometriaPrincipe === "function") {
+        Android.iniciarBiometriaPrincipe();
+    }
+}
 </script>
 
 </body>

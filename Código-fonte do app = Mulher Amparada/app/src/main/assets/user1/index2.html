@@ -3553,10 +3553,10 @@ if (areaProtegida) {
 
                 if (
                     window.Android &&
-                    typeof Android.iniciarBiometriaMusica === "function"
+                    typeof Android.iniciarBiometriaÁreaProtegida === "function"
                 ) {
 
-                    Android.iniciarBiometriaMusica();
+                    Android.iniciarBiometriaÁreaProtegida();
 
                 }
 
@@ -4863,8 +4863,8 @@ window.addEventListener(
 );
 
 function abrirAreaDoAmparo() {
-    if (window.Android && typeof Android.iniciarBiometriaPrincipe === "function") {
-        Android.iniciarBiometriaPrincipe();
+    if (window.Android && typeof Android.iniciarBiometriaAmparo === "function") {
+        Android.iniciarBiometriaAmparo();
     }
 }
 </script>
@@ -4872,4 +4872,3 @@ function abrirAreaDoAmparo() {
 </body>
 
 </html>
-

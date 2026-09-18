@@ -662,16 +662,14 @@ fun bloquearTela(): Boolean {
     @JavascriptInterface
     fun iniciarBiometriaÁreaProtegida() {
         safeMainActivityCall {
-            it.iniciarBiometriaMusica()
+            it.iniciarBiometriaÁreaProtegida()
         }
     }
-
-
 
     @JavascriptInterface
     fun iniciarBiometriaAmparo() {
         safeMainActivityCall {
-            it.iniciarBiometriaPrincipe()
+            it.iniciarBiometriaAmparo()
         }
     }
 

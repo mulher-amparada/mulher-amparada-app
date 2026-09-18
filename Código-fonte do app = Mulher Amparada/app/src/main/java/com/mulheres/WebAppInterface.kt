@@ -660,9 +660,9 @@ fun bloquearTela(): Boolean {
     }
 
     @JavascriptInterface
-    fun iniciarBiometriaÁreaProtegida() {
+    fun IniciarBiometriaÁreaProtegida() {
         safeMainActivityCall {
-            it.iniciarBiometriaÁreaProtegida()
+            it.IniciarBiometriaÁreaProtegida()
         }
     }
 

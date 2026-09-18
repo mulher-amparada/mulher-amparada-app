@@ -4,7 +4,7 @@
 
 ## E saibam que o projeto é: Source-Available
 
-## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2652
+## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2616
 
 O **Mulher Amparada** é um aplicativo de segurança e proteção desenvolvido especialmente para mulheres que desejam se sentir mais seguras em situações do dia a dia. O objetivo principal do aplicativo é oferecer suporte rápido, eficiente e acessível em momentos de risco, permitindo que a usuária consiga pedir ajuda de forma simples e imediata. Em um cenário onde muitas mulheres enfrentam situações de vulnerabilidade, ter uma ferramenta confiável pode fazer toda a diferença, e é exatamente isso que o Mulher Amparada busca proporcionar.
 
@@ -594,7 +594,15 @@ e se digitar a senha ele desbloqueia...
 
 A Área do amparo também utiliza o sistema "BiometricPrompt", com autenticação por "BIOMETRIC_WEAK" e "DEVICE_CREDENTIAL".
 
-Após o desbloqueio, é exibida uma carteirinha informativa que não é um documento oficial do governo. Ao tocar nela, a usuária é direcionada para uma página destinada à apresentação à equipe de motoristas do transporte, para solicitar o desembarque em um ponto mais seguro durante o período noturno, quando a legislação aplicável permitir.
+Carteirinha de reivindicação dos direitos de transporte das mulheres:
+
+Após o desbloqueio, é exibida uma carteirinha informativa que não constitui um documento oficial do governo. Ao tocá-la, a usuária é direcionada para uma página destinada à apresentação à equipe de motoristas do transporte, para solicitar o desembarque em um ponto mais seguro durante o período noturno, quando a legislação aplicável permitir.
+
+Carteirinha do gesto de ajuda:
+
+Também há uma segunda carteirinha que, ao ser selecionada, direciona para um tutorial sobre como realizar o gesto internacional de combate à violência.
+
+O gesto é um sinal silencioso de pedido de ajuda e pode ser utilizado em diferentes situações de violência. Ele não é exclusivo de mulheres: qualquer pessoa, independentemente de ser homem ou mulher, pode realizá-lo quando precisar sinalizar que necessita de ajuda.
 
 ----
 

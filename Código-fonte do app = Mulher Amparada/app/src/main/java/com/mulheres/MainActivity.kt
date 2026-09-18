@@ -256,18 +256,18 @@ webView.setLayerType(
         )  
 
 
-    if (  
-        !pagina.isNullOrEmpty()  
-    ) {  
+if (!pagina.isNullOrEmpty()) {
 
-webView.loadUrl(
-    "file:///android_asset/user1/$pagina"
-)
+    webView.loadUrl(
+        "file:///android_asset/user1/$pagina"
+    )
 
-    } else {  
+} else {
 
-        atualizarPaginaInicial()  
-    }  
+    webView.loadUrl(
+        "file:///android_asset/user1/index1.html"
+    )
+}
 
 
     // =====================================================  
@@ -807,6 +807,15 @@ private fun carregarWebView1() {
     
 }  
 
+private fun carregarWebView2() {  
+
+    webView.loadUrl(  
+        "file:///android_asset/user1/carteira.html"  
+    )  
+
+    
+}  
+
 
 private fun carregarWebView4() {  
 
@@ -818,30 +827,6 @@ private fun carregarWebView4() {
 }  
 
 
-// =========================================================  
-// PÁGINA INICIAL  
-// =========================================================  
-
-fun atualizarPaginaInicial() {  
-
-    val prefs =  
-        getSharedPreferences(  
-            "app_config",  
-            MODE_PRIVATE  
-        )  
-
-
-    val pagina =  
-        prefs.getString(  
-            "launcher",  
-            "index1.html"  
-        ) ?: "index1.html"  
-
-
-    webView.loadUrl(  
-        "file:///android_asset/user1/$pagina"  
-    )  
-}  
 
 
 // =========================================================  
@@ -1614,22 +1599,19 @@ fun iniciarBiometria() {
                         )  
 
 
-                        when (  
-                            destinoBiometria  
-                        ) {  
+                        when (
+    destinoBiometria
+) {
 
-                            1 ->  
-                                carregarWebView1()  
+    1 ->
+        carregarWebView1()
 
-                            2 ->  
-                                carregarWebView1()  
+    2 ->
+        carregarWebView2()
 
-                            3 ->  
-                                carregarWebView1()  
-
-                            else ->  
-                                carregarWebView4()  
-                        }  
+    4 ->
+        carregarWebView4()
+}
                     }  
 
 
@@ -1716,7 +1698,7 @@ fun iniciarBiometriaPrincipe() {
 fun iniciarBiometriaAmor() {  
 
     destinoBiometria =  
-        3  
+        1 
 
 
     iniciarBiometria()  

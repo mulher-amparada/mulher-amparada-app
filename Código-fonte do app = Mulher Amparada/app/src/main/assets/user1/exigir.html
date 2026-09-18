@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<meta
+    name="theme-color"
+    content="#000000"
+>
+
+<title>Direito ao Desembarque Seguro</title>
+
+<style>
+
+@font-face {
+
+    font-family:
+        "Quicksand";
+
+    src:
+        url("font.ttf")
+        format("truetype");
+
+    font-weight:
+        400 800;
+
+    font-style:
+        normal;
+
+    font-display:
+        swap;
+
+}
+
+
+* {
+
+    box-sizing:
+        border-box;
+
+    margin:
+        0;
+
+    padding:
+        0;
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+    -webkit-user-select: none;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-tap-highlight-color: transparent;
+
+}
+
+
+:root {
+
+    --bg:
+        #000000;
+
+    --surface:
+        #101116;
+
+    --surface-2:
+        #171820;
+
+    --white:
+        #ffffff;
+
+    --soft:
+        #92949e;
+
+    --muted:
+        #686d79;
+
+    --pink:
+        #ff3f82;
+
+    --pink-soft:
+        #ff6b9f;
+
+    --border:
+        #ffffff12;
+
+}
+
+
+html,
+body {
+
+    width:
+        100%;
+
+    min-height:
+        100%;
+
+    background:
+        var(--bg);
+
+    color:
+        var(--white);
+
+    scrollbar-width:
+        none;
+
+}
+
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+
+    width:
+        0;
+
+    height:
+        0;
+
+}
+
+
+body {
+
+    min-height:
+        100vh;
+
+    overflow-x:
+        hidden;
+
+    padding:
+        env(safe-area-inset-top)
+        16px
+        env(safe-area-inset-bottom);
+
+}
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+.main {
+
+    width:
+        100%;
+
+    max-width:
+        650px;
+
+    min-height:
+        100vh;
+
+    margin:
+        auto;
+
+    padding:
+        25px
+        0
+        70px;
+
+}
+
+
+/* =========================================================
+   CABEÇALHO
+========================================================= */
+
+.topLine {
+
+    width:
+        43px;
+
+    height:
+        3px;
+
+    margin-bottom:
+        18px;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--pink);
+
+}
+
+
+h1 {
+
+    font-size:
+        clamp(
+            31px,
+            8vw,
+            45px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        .98;
+
+    letter-spacing:
+        -1.5px;
+
+}
+
+
+.subtitle {
+
+    max-width:
+        470px;
+
+    margin-top:
+        14px;
+
+    color:
+        var(--soft);
+
+    font-size:
+        12px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.55;
+
+}
+
+
+/* =========================================================
+   CARTEIRINHA
+========================================================= */
+
+.rightCard {
+
+    margin-top:
+        30px;
+
+    padding:
+        27px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        30px;
+
+    background:
+        var(--surface);
+
+}
+
+
+/* =========================================================
+   IDENTIFICAÇÃO
+========================================================= */
+
+.cardLabel {
+
+    color:
+        var(--pink-soft);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        2px;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.cardTitle {
+
+    margin-top:
+        13px;
+
+    color:
+        var(--white);
+
+    font-size:
+        clamp(
+            24px,
+            6vw,
+            34px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        1.05;
+
+}
+
+
+.cardText {
+
+    margin-top:
+        13px;
+
+    color:
+        #b4b5bd;
+
+    font-size:
+        12px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.65;
+
+}
+
+
+/* =========================================================
+   FRASE PARA MOSTRAR
+========================================================= */
+
+.request {
+
+    margin-top:
+        24px;
+
+    padding:
+        21px;
+
+    border:
+        1px solid
+        #ff3f8230;
+
+    border-radius:
+        22px;
+
+    background:
+        #ff3f820b;
+
+}
+
+
+.requestSmall {
+
+    color:
+        var(--pink-soft);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1.7px;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.requestText {
+
+    margin-top:
+        11px;
+
+    color:
+        #ffffff;
+
+    font-size:
+        clamp(
+            18px,
+            5vw,
+            23px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        1.25;
+
+}
+
+
+/* =========================================================
+   HORÁRIO
+========================================================= */
+
+.time {
+
+    margin-top:
+        16px;
+
+    padding:
+        15px 16px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    border-radius:
+        17px;
+
+    background:
+        #ffffff08;
+
+}
+
+
+.timeIcon {
+
+    width:
+        38px;
+
+    height:
+        38px;
+
+    flex:
+        0 0 38px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        12px;
+
+    background:
+        var(--pink);
+
+}
+
+
+.timeIcon svg {
+
+    width:
+        19px;
+
+    height:
+        19px;
+
+}
+
+
+.time strong {
+
+    display:
+        block;
+
+    color:
+        var(--white);
+
+    font-size:
+        13px;
+
+}
+
+
+.time span {
+
+    display:
+        block;
+
+    margin-top:
+        3px;
+
+    color:
+        var(--soft);
+
+    font-size:
+        10px;
+
+    font-weight:
+        600;
+
+}
+
+
+/* =========================================================
+   LEI
+========================================================= */
+
+.law {
+
+    margin-top:
+        16px;
+
+    padding:
+        21px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        22px;
+
+    background:
+        var(--surface-2);
+
+}
+
+
+.lawTitle {
+
+    color:
+        var(--white);
+
+    font-size:
+        15px;
+
+    font-weight:
+        800;
+
+}
+
+
+.lawNumber {
+
+    display:
+        inline-block;
+
+    margin-top:
+        6px;
+
+    color:
+        var(--pink-soft);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+}
+
+
+.law p {
+
+    margin-top:
+        12px;
+
+    color:
+        #a7a9b2;
+
+    font-size:
+        11px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.65;
+
+}
+
+
+/* =========================================================
+   CONDIÇÕES
+========================================================= */
+
+.conditions {
+
+    margin-top:
+        17px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            1fr
+        );
+
+    gap:
+        9px;
+
+}
+
+
+.condition {
+
+    padding:
+        14px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        15px;
+
+    background:
+        #ffffff05;
+
+}
+
+
+.condition strong {
+
+    display:
+        block;
+
+    color:
+        #ffffff;
+
+    font-size:
+        10px;
+
+}
+
+
+.condition span {
+
+    display:
+        block;
+
+    margin-top:
+        4px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        9px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.4;
+
+}
+
+
+/* =========================================================
+   AVISO
+========================================================= */
+
+.notice {
+
+    margin-top:
+        17px;
+
+    padding:
+        18px;
+
+    border-radius:
+        20px;
+
+    background:
+        #0c0d11;
+
+}
+
+
+.notice strong {
+
+    color:
+        #ffffff;
+
+    font-size:
+        11px;
+
+}
+
+
+.notice p {
+
+    margin-top:
+        7px;
+
+    color:
+        var(--soft);
+
+    font-size:
+        10px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.6;
+
+}
+
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
+@media (max-width: 390px) {
+
+    body {
+
+        padding-left:
+            14px;
+
+        padding-right:
+            14px;
+
+    }
+
+
+    .rightCard {
+
+        padding:
+            21px;
+
+    }
+
+
+    .conditions {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<main class="main">
+
+
+    <div class="topLine"></div>
+
+
+    <h1>
+        Desembarque seguro
+    </h1>
+
+
+    <p class="subtitle">
+        Uma forma simples de informar ao motorista que você
+        deseja desembarcar em um local mais seguro.
+    </p>
+
+
+    <section class="rightCard">
+
+
+        <div class="cardLabel">
+            Direito da passageira
+        </div>
+
+
+        <h2 class="cardTitle">
+            Solicitação de desembarque
+        </h2>
+
+
+        <p class="cardText">
+            Apresente esta tela ao motorista quando quiser
+            solicitar o desembarque em um local mais seguro,
+            dentro das condições previstas pela legislação
+            municipal.
+        </p>
+
+
+        <div class="request">
+
+            <div class="requestSmall">
+                Para mostrar ao motorista
+            </div>
+
+
+            <div class="requestText">
+                “Por favor, gostaria de desembarcar
+                em um local mais seguro.”
+            </div>
+
+
+            <div class="time">
+
+                <div class="timeIcon">
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="9"
+                        />
+
+                        <path
+                            d="M12 7v5l3 2"
+                        />
+
+                    </svg>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Das 22h às 5h
+                    </strong>
+
+                    <span>
+                        Horário previsto pela legislação municipal.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="law">
+
+            <div class="lawTitle">
+                Fundamentação legal
+            </div>
+
+
+            <div class="lawNumber">
+                LEI MUNICIPAL Nº 16.490/2016
+            </div>
+
+
+            <p>
+                A Lei nº 16.490/2016 dispõe sobre o desembarque
+                de mulheres e idosos usuários do Sistema de
+                Transporte Coletivo do Município de São Paulo.
+            </p>
+
+
+            <p>
+                O Decreto nº 57.399/2016 regulamenta a lei e
+                estabelece que, no horário noturno, das 22h às 5h,
+                os veículos podem parar fora dos pontos
+                preestabelecidos para o desembarque de mulheres,
+                observadas as condições de segurança e as
+                restrições previstas.
+            </p>
+
+
+            <div class="conditions">
+
+                <div class="condition">
+
+                    <strong>
+                        22h — 5h
+                    </strong>
+
+                    <span>
+                        Período do desembarque noturno.
+                    </span>
+
+                </div>
+
+
+                <div class="condition">
+
+                    <strong>
+                        Local seguro
+                    </strong>
+
+                    <span>
+                        A parada deve ser adequada e segura.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="notice">
+
+            <strong>
+                Importante
+            </strong>
+
+            <p>
+                A solicitação deve ser feita com antecedência.
+                O motorista deve avaliar se a parada pode ser
+                realizada com segurança e dentro das regras de
+                trânsito. Há locais onde o desembarque fora do
+                ponto não é permitido, como viadutos, pontes,
+                túneis e determinados corredores exclusivos.
+            </p>
+
+        </div>
+
+
+    </section>
+
+</main>
+
+</body>
+
+</html>

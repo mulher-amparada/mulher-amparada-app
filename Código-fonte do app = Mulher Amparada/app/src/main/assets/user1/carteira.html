@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<meta
+    name="theme-color"
+    content="#000000"
+>
+
+<title>Carteira</title>
+
+
+<style>
+
+/* =========================================================
+   ANIMAÇÕES
+========================================================= */
+
+@keyframes pageIn {
+
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+}
+
+@keyframes tabIn {
+
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+
+    box-sizing:
+        border-box;
+
+    margin:
+        0;
+
+    padding:
+        0;
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+    font-weight:
+        700;
+
+    -webkit-user-select: none;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-tap-highlight-color: transparent;
+
+}
+
+
+/* =========================================================
+   ROLAGEM
+========================================================= */
+
+html,
+body {
+
+    scrollbar-width:
+        none;
+
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+
+    width:
+        0;
+
+    height:
+        0;
+
+}
+
+
+/* =========================================================
+   FONTE
+========================================================= */
+
+@font-face {
+
+    font-family:
+        "Quicksand";
+
+    src:
+        url("font.ttf")
+        format("truetype");
+
+    font-weight:
+        400 800;
+
+    font-style:
+        normal;
+
+    font-display:
+        swap;
+
+}
+
+
+/* =========================================================
+   VARIÁVEIS
+========================================================= */
+
+:root {
+
+    --bg:
+        #000000;
+
+    --surface:
+        #101116;
+
+    --surface-2:
+        #15171e;
+
+    --white:
+        #ffffff;
+
+    --text:
+        #f7f7fa;
+
+    --soft:
+        #85858e;
+
+    --muted:
+        #686d79;
+
+    --pink:
+        #ff3f82;
+
+    --border:
+        #ffffff12;
+
+}
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
+html,
+body {
+
+    width:
+        100%;
+
+    min-height:
+        100%;
+
+    background:
+        var(--bg);
+
+    color:
+        var(--white);
+
+}
+
+
+body {
+
+    min-height:
+        100vh;
+
+    overflow-x:
+        hidden;
+
+    padding-top:
+        env(safe-area-inset-top);
+
+    padding-bottom:
+        env(safe-area-inset-bottom);
+
+}
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+.mainUI {
+
+    width:
+        100%;
+
+    max-width:
+        700px;
+
+    min-height:
+        100vh;
+
+    margin:
+        0 auto;
+
+    padding:
+        24px
+        16px
+        100px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        31px;
+
+    animation:
+        pageIn
+        .55s
+        ease
+        both;
+
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+
+    width:
+        100%;
+
+    padding:
+        4px
+        4px
+        0;
+
+}
+
+
+.heroTopLine {
+
+    width:
+        43px;
+
+    height:
+        3px;
+
+    margin-bottom:
+        18px;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--pink);
+
+}
+
+
+.heroTitle {
+
+    color:
+        var(--white);
+
+    font-size:
+        clamp(
+            32px,
+            9vw,
+            48px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        .98;
+
+    letter-spacing:
+        -1.6px;
+
+}
+
+
+.heroSubtitle {
+
+    max-width:
+        410px;
+
+    margin-top:
+        14px;
+
+    color:
+        var(--soft);
+
+    font-size:
+        11px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.5;
+
+    letter-spacing:
+        .15px;
+
+}
+
+
+/* =========================================================
+   SEÇÃO
+========================================================= */
+
+.section {
+
+    width:
+        100%;
+
+}
+
+
+/* =========================================================
+   LABEL
+========================================================= */
+
+.label {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    margin:
+        0
+        0
+        13px
+        4px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        2px;
+
+    line-height:
+        1;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.label::before {
+
+    content:
+        "";
+
+    width:
+        5px;
+
+    height:
+        5px;
+
+    flex:
+        0 0 5px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--pink);
+
+}
+
+
+/* =========================================================
+   CARTEIRINHA
+========================================================= */
+
+.walletCard {
+
+    width:
+        100%;
+
+    position:
+        relative;
+
+}
+
+
+/* =========================================================
+   CARTÃO PRINCIPAL
+========================================================= */
+
+.cardMain {
+
+    width:
+        100%;
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    border-radius:
+        27px;
+
+    background:
+        #111111;
+
+    cursor:
+        pointer;
+
+    z-index:
+        2;
+
+    border:
+        1px solid
+        #ffffff18;
+
+    box-shadow:
+        0
+        18px
+        45px
+        #00000080;
+
+    transition:
+        border-radius
+        .25s
+        ease;
+
+}
+
+
+/* =========================================================
+   IMAGEM
+========================================================= */
+
+.cardMain img {
+
+    width:
+        100%;
+
+    height:
+        auto;
+
+    display:
+        block;
+
+    object-fit:
+        contain;
+
+    object-position:
+        center;
+
+    border-radius:
+        inherit;
+
+}
+
+
+/* =========================================================
+   CARTÃO ABERTO
+========================================================= */
+
+.walletCard.open
+.cardMain {
+
+    border-radius:
+        27px
+        27px
+        14px
+        14px;
+
+}
+
+/* =========================================================
+   ABA
+========================================================= */
+
+.cardTab {
+
+    width:
+        calc(100% - 30px);
+
+    position:
+        relative;
+
+    margin:
+        0 auto;
+
+    display:
+        grid;
+
+    grid-template-rows:
+        0fr;
+
+    overflow:
+        hidden;
+
+    opacity:
+        0;
+
+    border-radius:
+        0
+        0
+        23px
+        23px;
+
+    background:
+        var(--surface-2);
+
+    transform:
+        translateY(-4px);
+
+    pointer-events:
+        none;
+
+    transition:
+        grid-template-rows
+        .32s
+        cubic-bezier(
+            .22,
+            1,
+            .36,
+            1
+        ),
+
+        opacity
+        .20s
+        ease,
+
+        transform
+        .32s
+        cubic-bezier(
+            .22,
+            1,
+            .36,
+            1
+        );
+
+}
+
+
+/* =========================================================
+   CONTEÚDO INTERNO DA ABA
+========================================================= */
+
+.cardTab a {
+
+    min-height:
+        68px;
+
+    overflow:
+        hidden;
+
+}
+
+
+/* =========================================================
+   INDICADOR
+========================================================= */
+
+.cardTab::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        7px;
+
+    left:
+        50%;
+
+    width:
+        34px;
+
+    height:
+        4px;
+
+    transform:
+        translateX(-50%);
+
+    border-radius:
+        999px;
+
+    background:
+        #555861;
+
+    z-index:
+        2;
+
+}
+
+
+/* =========================================================
+   ABA ABERTA
+========================================================= */
+
+.walletCard.open
+.cardTab {
+
+    grid-template-rows:
+        1fr;
+
+    opacity:
+        1;
+
+    transform:
+        translateY(0);
+
+    pointer-events:
+        auto;
+
+}
+
+/* =========================================================
+   LINK
+========================================================= */
+
+.cardTab a {
+
+    width:
+        100%;
+
+    min-height:
+        68px;
+
+    padding:
+        18px
+        20px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    color:
+        var(--white);
+
+    text-decoration:
+        none;
+
+    font-size:
+        14px;
+
+    font-weight:
+        800;
+
+}
+
+
+/* =========================================================
+   TEXTO
+========================================================= */
+
+.cardTabText {
+
+    color:
+        var(--white);
+
+    line-height:
+        1.2;
+
+}
+
+
+/* =========================================================
+   SETA
+========================================================= */
+
+.cardArrow {
+
+    width:
+        40px;
+
+    height:
+        40px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    flex:
+        0 0 40px;
+
+    color:
+        #a7c4e5;
+
+    background:
+        #ffffff08;
+
+    border:
+        1px solid
+        #ffffff12;
+
+    border-radius:
+        14px;
+
+}
+
+
+.cardArrow svg {
+
+    width:
+        20px;
+
+    height:
+        20px;
+
+    display:
+        block;
+
+}
+
+
+/* =========================================================
+   ABA ABERTA
+========================================================= */
+
+.walletCard.open
+.cardTab {
+
+    max-height:
+        68px;
+
+    opacity:
+        1;
+
+    transform:
+        translateY(0);
+
+    pointer-events:
+        auto;
+
+}
+
+
+.walletCard.open
+.cardTab a {
+
+    animation:
+        tabIn
+        .25s
+        ease
+        both;
+
+}
+
+
+/* =========================================================
+   PEQUENAS TELAS
+========================================================= */
+
+@media (max-width: 390px) {
+
+    .mainUI {
+
+        padding-left:
+            15px;
+
+        padding-right:
+            15px;
+
+    }
+
+
+    .heroTitle {
+
+        font-size:
+            32px;
+
+    }
+
+
+    .cardTab a {
+
+        font-size:
+            13px;
+
+    }
+
+}
+
+
+/* =========================================================
+   REDUÇÃO DE MOVIMENTO
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .mainUI,
+    .cardTab,
+    .cardTab a,
+    .cardMain {
+
+        animation:
+            none;
+
+        transition:
+            none;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<main class="mainUI">
+
+
+    <!-- =====================================================
+         TÍTULO
+    ====================================================== -->
+
+    <header class="hero">
+
+        <div class="heroTopLine"></div>
+
+        <h1 class="heroTitle">
+            Carteira
+        </h1>
+
+        <p class="heroSubtitle">
+            Suas carteirinhas reunidas em um só lugar.
+        </p>
+
+        <p class="heroSubtitle">
+Recurso informativo do aplicativo para apresentação à equipe de transporte. Estas carteirinhas não são um documento governamental nem são emitidas por órgãos públicos.
+        </p>
+
+
+    </header>
+
+
+    <!-- =====================================================
+         CARTEIRINHA
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="label">
+            Exigindo seus direitos
+        </div>
+
+
+        <div
+            class="walletCard"
+            id="walletCard"
+        >
+
+
+            <!-- CARTÃO -->
+
+            <div
+                class="cardMain"
+                id="cardMain"
+                role="button"
+                tabindex="0"
+                aria-label="Abrir opções da carteirinha"
+            >
+
+                <img
+                    src="cartao.jpg"
+                    alt="Carteirinha"
+                >
+
+            </div>
+
+
+            <!-- ABA -->
+
+            <div class="cardTab">
+
+                <a
+                    href="exigir.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+
+                    <span class="cardTabText">
+                        Abrir carteirinha sobre o transporte 
+                    </span>
+
+
+                    <span
+                        class="cardArrow"
+                        aria-hidden="true"
+                    >
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 -960 960 960"
+                            fill="currentColor"
+                        >
+
+                            <path
+                                d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L404-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l156-156Z"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<script>
+
+/* =========================================================
+   ELEMENTOS
+========================================================= */
+
+const walletCard =
+    document.getElementById(
+        "walletCard"
+    );
+
+const cardMain =
+    document.getElementById(
+        "cardMain"
+    );
+
+
+/* =========================================================
+   ABRIR / FECHAR
+========================================================= */
+
+function toggleWallet() {
+
+    walletCard.classList.toggle(
+        "open"
+    );
+
+}
+
+
+/* =========================================================
+   CLIQUE
+========================================================= */
+
+cardMain.addEventListener(
+    "click",
+    toggleWallet
+);
+
+
+/* =========================================================
+   TECLADO
+========================================================= */
+
+cardMain.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key ===
+            "Enter"
+            ||
+            event.key ===
+            " "
+        ) {
+
+            event.preventDefault();
+
+            toggleWallet();
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

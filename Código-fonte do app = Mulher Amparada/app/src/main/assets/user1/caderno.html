@@ -1024,22 +1024,253 @@ textarea::placeholder {
     }
 }
 
-
 /* =========================================================
-   REDUÇÃO DE MOVIMENTO
+   POPUP DE CONFIRMAÇÃO
 ========================================================= */
 
-@media (
-    prefers-reduced-motion: reduce
-) {
+.confirm-overlay {
 
-    *,
-    *::before,
-    *::after {
+    position: fixed;
 
-        animation: none !important;
-        transition: none !important;
+    inset: 0;
+
+    z-index: 99999;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 22px;
+
+    background:
+        #000;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity .22s ease,
+        visibility .22s ease;
+}
+
+
+.confirm-overlay.aberto {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.confirm-modal {
+
+    width:
+        min(100%, 370px);
+
+    padding:
+        25px 22px 21px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.10);
+
+    border-radius:
+        25px;
+
+    background:
+        #111116;
+
+    box-shadow:
+        0 25px 80px
+        rgba(0,0,0,.65);
+
+    text-align:
+        center;
+
+    transform:
+        
+        scale(.96);
+
+    transition:
+        transform .22s
+        cubic-bezier(.22,.7,.2,1);
+}
+
+
+.confirm-overlay.aberto
+.confirm-modal {
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+
+
+
+/* =========================================================
+   TÍTULO
+========================================================= */
+
+.confirm-modal h2 {
+
+    color:
+        #fff;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    margin-bottom: 9px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+
+/* =========================================================
+   MENSAGEM
+========================================================= */
+
+.confirm-modal p {
+
+    color:
+        rgba(255,255,255,.52);
+
+    font-size: 12px;
+
+    line-height: 1.55;
+
+    white-space: normal;
+
+    margin-bottom: 21px;
+
+    text-align: left;
+}
+
+/* =========================================================
+   AÇÕES
+========================================================= */
+
+.confirm-acoes {
+
+    display: flex;
+
+    gap: 9px;
+
+    width: 100%;
+}
+
+
+.confirm-botao {
+
+    flex: 1;
+
+    min-height: 44px;
+
+    border-radius: 14px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.09);
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform .12s ease,
+        background .12s ease;
+}
+
+
+.confirm-botao:active {
+
+    transform:
+        scale(.94);
+}
+
+
+.confirm-botao.cancelar {
+
+    color:
+        rgba(255,255,255,.72);
+
+    background:
+        rgba(255,255,255,.045);
+}
+
+
+.confirm-botao.cancelar:active {
+
+    background:
+        rgba(255,255,255,.09);
+}
+
+
+.confirm-botao.apagar {
+
+    color:
+        #fff;
+
+    background:
+        #e96d92;
+
+    border-color:
+        #e96d92;
+}
+
+
+.confirm-botao.apagar:active {
+
+    background:
+        #d95f84;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .confirm-overlay {
+
+        padding:
+            18px;
     }
+
+
+    .confirm-modal {
+
+        width:
+            min(100%, 350px);
+
+        padding:
+            23px 18px 18px;
+
+        border-radius:
+            23px;
+    }
+
 }
 
 </style>
@@ -1108,6 +1339,60 @@ textarea::placeholder {
 
 </div>
 
+<!-- =======================================================
+     POPUP DE CONFIRMAÇÃO
+======================================================= -->
+
+<div
+    id="confirmOverlay"
+    class="confirm-overlay"
+    aria-hidden="true"
+>
+
+    <div
+        class="confirm-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="confirmTitulo"
+    >
+
+
+
+        <h2 id="confirmTitulo">
+            Apagar diário
+        </h2>
+
+        <p id="confirmMensagem">
+            Apagar todas as páginas do diário?
+            
+            <br>
+            
+            Esta ação não pode ser desfeita.
+        </p>
+
+        <div class="confirm-acoes">
+
+            <button
+                type="button"
+                id="confirmCancelar"
+                class="confirm-botao cancelar"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                id="confirmConfirmar"
+                class="confirm-botao apagar"
+            >
+                Apagar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 
 <!-- =======================================================
      JAVASCRIPT
@@ -1871,15 +2156,299 @@ function focarPaginaAtual() {
 
 
 /* =========================================================
+   CONFIRMAÇÃO PERSONALIZADA
+========================================================= */
+
+let confirmResolve = null;
+
+
+/* =========================================================
+   ABRIR
+========================================================= */
+
+function abrirConfirmacao(
+    mensagem,
+    titulo = "Confirmação",
+    textoConfirmar = "Confirmar"
+){
+
+    return new Promise(
+        function(resolve){
+
+            const overlay =
+                document.getElementById(
+                    "confirmOverlay"
+                );
+
+
+            const tituloElemento =
+                document.getElementById(
+                    "confirmTitulo"
+                );
+
+
+            const mensagemElemento =
+                document.getElementById(
+                    "confirmMensagem"
+                );
+
+
+            const confirmar =
+                document.getElementById(
+                    "confirmConfirmar"
+                );
+
+
+            if(
+                !overlay ||
+                !tituloElemento ||
+                !mensagemElemento ||
+                !confirmar
+            ){
+
+                console.error(
+                    "Elementos do popup não encontrados."
+                );
+
+                resolve(false);
+
+                return;
+
+            }
+
+
+            confirmResolve =
+                resolve;
+
+
+            tituloElemento.textContent =
+                titulo;
+
+
+            mensagemElemento.innerHTML = mensagem;
+
+
+            confirmar.textContent =
+                textoConfirmar;
+
+
+            overlay.classList.add(
+                "aberto"
+            );
+
+
+            overlay.setAttribute(
+                "aria-hidden",
+                "false"
+            );
+
+
+            setTimeout(
+                function(){
+
+                    confirmar.focus();
+
+                },
+                100
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   FECHAR
+========================================================= */
+
+function fecharConfirmacao(
+    resultado
+){
+
+    const overlay =
+        document.getElementById(
+            "confirmOverlay"
+        );
+
+
+    if(overlay){
+
+        overlay.classList.remove(
+            "aberto"
+        );
+
+
+        overlay.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+    }
+
+
+    if(confirmResolve){
+
+        const resolver =
+            confirmResolve;
+
+
+        confirmResolve =
+            null;
+
+
+        resolver(
+            resultado
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   BOTÕES
+========================================================= */
+
+document
+    .getElementById(
+        "confirmConfirmar"
+    )
+    ?.addEventListener(
+        "click",
+        function(event){
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            fecharConfirmacao(
+                true
+            );
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "confirmCancelar"
+    )
+    ?.addEventListener(
+        "click",
+        function(event){
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            fecharConfirmacao(
+                false
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   CLICAR FORA
+========================================================= */
+
+document
+    .getElementById(
+        "confirmOverlay"
+    )
+    ?.addEventListener(
+        "click",
+        function(event){
+
+            if(
+                event.target ===
+                this
+            ){
+
+                fecharConfirmacao(
+                    false
+                );
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   ESC
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        const overlay =
+            document.getElementById(
+                "confirmOverlay"
+            );
+
+
+        if(
+            !overlay ||
+            !overlay.classList.contains(
+                "aberto"
+            )
+        ){
+
+            return;
+
+        }
+
+
+        if(
+            event.key ===
+            "Escape"
+        ){
+
+            event.preventDefault();
+
+            fecharConfirmacao(
+                false
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   FUNÇÃO
+========================================================= */
+
+async function confirmPersonalizado(
+    mensagem,
+    titulo = "Confirmação",
+    textoConfirmar = "Confirmar"
+){
+
+    return await abrirConfirmacao(
+        mensagem,
+        titulo,
+        textoConfirmar
+    );
+
+}
+
+/* =========================================================
    LIMPAR TUDO
 ========================================================= */
 
-function limparTudo() {
+async function limparTudo() {
 
-    const confirmar =
-        confirm(
-            "Apagar todas as páginas do diário?"
-        );
+    const confirmar = await confirmPersonalizado(
+    "Apagar todas as páginas do diário.<br><br>Esta ação não pode ser desfeita.",
+    "Apagar diário",
+    "Apagar"
+);
 
 
     if (!confirmar) {

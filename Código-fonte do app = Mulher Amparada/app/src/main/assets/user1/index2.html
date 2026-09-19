@@ -72,8 +72,7 @@
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
+
     
         box-sizing:
         border-box;
@@ -249,8 +248,7 @@ body {
         -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
+
 }
 
 body {
@@ -299,8 +297,6 @@ background: #000;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
 }
 
 /* =========================================================
@@ -2700,6 +2696,186 @@ white-space:
         4px;
 
 }
+.custom-popup-overlay {
+    position: fixed;
+
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 99999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 22px;
+    box-sizing: border-box;
+
+    background: #000000;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+        opacity .22s ease,
+        visibility .22s ease;
+}
+
+.custom-popup-overlay.aberto {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.custom-popup {
+    position: relative;
+
+    width: min(100%, 370px);
+
+    padding: 25px 22px 21px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #ffffff12;
+    border-radius: 25px;
+
+    background: #111116;
+
+    box-shadow:
+        0 25px 80px #000000a6;
+
+    text-align: left;
+
+    transform: scale(.96);
+
+    transition:
+        transform .22s
+        cubic-bezier(.22, .7, .2, 1);
+}
+
+.custom-popup-overlay.aberto .custom-popup {
+    transform: scale(1);
+}
+.custom-popup h2 {
+
+    color:
+        #ffffff;
+
+    font-size:
+        18px;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.2;
+
+    margin-bottom:
+        9px;
+
+}
+
+
+.custom-popup p {
+
+    color:
+        #a0a4b0;
+
+    font-size:
+        12px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.55;
+
+    white-space:
+        normal;
+
+    overflow-wrap:
+        anywhere;
+
+    margin-bottom:
+        21px;
+
+}
+
+
+.custom-popup-button {
+
+    width:
+        100%;
+
+    min-height:
+        46px;
+
+    border:
+        1px solid
+        #ff3f8255;
+
+    border-radius:
+        15px;
+
+    background:
+        #ff3f8218;
+
+    color:
+        #ff6b9f;
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+    font-size:
+        13px;
+
+    font-weight:
+        800;
+
+    cursor:
+        pointer;
+
+    transition:
+        background .18s ease,
+        border-color .18s ease,
+        opacity .18s ease;
+
+}
+
+.custom-popup-button:hover {
+
+    background:
+        #ff3f8230;
+
+    border-color:
+        #ff3f82;
+
+}
+
+.custom-popup-button:active {
+
+    opacity:
+        .72;
+
+}
+
+.custom-popup-button:focus-visible {
+
+    outline:
+        2px solid
+        #ff6b9f;
+
+    outline-offset:
+        3px;
+
+}
 
 </style>
 
@@ -3458,8 +3634,73 @@ Se o sensor não estiver disponível ou der qualquer outro erro,
 
 </main>
 
+<!-- =========================================================
+     POPUP PERSONALIZADO
+========================================================= -->
+
+<div
+    id="customPopupOverlay"
+    class="custom-popup-overlay"
+    aria-hidden="true"
+>
+
+    <div
+        class="custom-popup"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="customPopupTitulo"
+    >
+
+        <h2 id="customPopupTitulo">
+            Aviso
+        </h2>
+
+        <p id="customPopupMensagem">
+            Mensagem
+        </p>
+
+        <button
+            type="button"
+            id="customPopupOK"
+            class="custom-popup-button"
+        >
+            OK
+        </button>
+
+    </div>
+
+</div>
 
 <script>
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    const botao =
+        document.getElementById("customPopupOK");
+
+    const overlay =
+        document.getElementById("customPopupOverlay");
+
+    if (botao) {
+        botao.addEventListener("click", function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            fecharPopup();
+        });
+    }
+
+    if (overlay) {
+        overlay.addEventListener("click", function(event) {
+
+            if (event.target === overlay) {
+                fecharPopup();
+            }
+
+        });
+    }
+
+});
 
 /* =========================================================
    VIBRAÇÃO
@@ -3594,6 +3835,208 @@ document
 
         }
     );
+    
+    
+/* =========================================================
+   POPUP PERSONALIZADO
+========================================================= */
+
+let popupResolver = null;
+
+
+function abrirPopup(
+    mensagem,
+    titulo = "Aviso",
+    textoBotao = "OK"
+) {
+
+    return new Promise(function(resolve) {
+
+        const overlay =
+            document.getElementById(
+                "customPopupOverlay"
+            );
+
+        const tituloElemento =
+            document.getElementById(
+                "customPopupTitulo"
+            );
+
+        const mensagemElemento =
+            document.getElementById(
+                "customPopupMensagem"
+            );
+
+        const botao =
+            document.getElementById(
+                "customPopupOK"
+            );
+
+
+        if (
+            !overlay ||
+            !tituloElemento ||
+            !mensagemElemento ||
+            !botao
+        ) {
+
+            resolve(false);
+
+            return;
+
+        }
+
+
+        popupResolver =
+            resolve;
+
+
+        tituloElemento.textContent =
+            titulo;
+
+
+        mensagemElemento.innerHTML =
+            mensagem;
+
+
+        botao.textContent =
+            textoBotao;
+
+
+        overlay.classList.add(
+            "aberto"
+        );
+
+
+        overlay.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+
+        setTimeout(
+            function() {
+
+                botao.focus();
+
+            },
+            100
+        );
+
+    });
+
+}
+
+
+function fecharPopup() {
+
+    const overlay =
+        document.getElementById(
+            "customPopupOverlay"
+        );
+
+
+    if (overlay) {
+
+        overlay.classList.remove(
+            "aberto"
+        );
+
+        overlay.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+    }
+
+
+    if (popupResolver) {
+
+        const resolver =
+            popupResolver;
+
+        popupResolver =
+            null;
+
+        resolver(true);
+
+    }
+
+}
+
+
+document
+    .getElementById(
+        "customPopupOK"
+    )
+    ?.addEventListener(
+        "click",
+        function(event) {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            fecharPopup();
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "customPopupOverlay"
+    )
+    ?.addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                event.target === this
+            ) {
+
+                fecharPopup();
+
+            }
+
+        }
+    );
+
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        const overlay =
+            document.getElementById(
+                "customPopupOverlay"
+            );
+
+
+        if (
+            !overlay ||
+            !overlay.classList.contains(
+                "aberto"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            event.preventDefault();
+
+            fecharPopup();
+
+        }
+
+    }
+);
 
 </script>
 
@@ -4624,14 +5067,11 @@ function vibrar(duracao = 100) {
 }
 
 
-
-
-
 /* =========================================================
    LIGAÇÃO
 ========================================================= */
 
-function ligar(numero) {
+async function ligar(numero) {
 
     if (!numero) {
         return;
@@ -4646,8 +5086,9 @@ function ligar(numero) {
 
     } catch (e) {
 
-        alert(
-            "Não foi possível iniciar a ligação."
+        await abrirPopup(
+            "Não foi possível iniciar a ligação.",
+            "Ligação"
         );
 
     }
@@ -4659,12 +5100,13 @@ function ligar(numero) {
    LOCALIZAÇÃO
 ========================================================= */
 
-function enviarLocalizacao() {
+async function enviarLocalizacao() {
 
     if (!navigator.geolocation) {
 
-        alert(
-            "A geolocalização não é suportada neste dispositivo."
+        await abrirPopup(
+            "A geolocalização não é suportada neste dispositivo.",
+            "Localização"
         );
 
         return;
@@ -4704,16 +5146,17 @@ function enviarLocalizacao() {
 
         },
 
-        function(error) {
+        async function(error) {
 
             console.warn(
                 "Geolocalização:",
                 error
             );
 
-            alert(
-                "Não foi possível obter sua localização. " +
-                "Verifique se a localização está ativada."
+            await abrirPopup(
+                "Não foi possível obter sua localização.<br><br>" +
+                "Verifique se a localização está ativada.",
+                "Localização"
             );
 
         },
@@ -4740,47 +5183,43 @@ function enviarLocalizacao() {
    CONTATOS
 ========================================================= */
 
-function selecionarContato() {
+async function selecionarContato() {
 
     vibrar(60);
 
-    if (
+    const resultado =
         chamarAndroid(
             "abrirContatos"
-        ) !== null
-    ) {
+        );
 
+    if (resultado.sucesso) {
         return;
-
     }
 
-    alert(
-        "A função de contatos precisa da integração com o Android."
+    await abrirPopup(
+        "A função de contatos precisa da integração com o Android.",
+        "Contatos"
     );
 
 }
 
 
-/* =========================================================
-   SOS CONTATOS
-========================================================= */
-
-function enviarSOSContatos() {
+async function enviarSOSContatos() {
 
     vibrar(150);
 
-    if (
+    const resultado =
         chamarAndroid(
             "enviarSOS"
-        ) !== null
-    ) {
+        );
 
+    if (resultado.sucesso) {
         return;
-
     }
 
-    alert(
-        "A função SOS dos contatos precisa da integração com o Android."
+    await abrirPopup(
+        "A função SOS dos contatos precisa da integração com o Android.",
+        "SOS contatos"
     );
 
 }
@@ -4867,6 +5306,7 @@ function abrirAreaDoAmparo() {
         Android.iniciarBiometriaAmparo();
     }
 }
+
 </script>
 
 </body>

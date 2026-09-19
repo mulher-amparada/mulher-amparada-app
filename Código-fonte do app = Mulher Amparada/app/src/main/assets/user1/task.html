@@ -147,7 +147,7 @@ body::-webkit-scrollbar {
 html,
 body {
 
-    width: 100%;
+    width: 99%;
 
     min-height: 100%;
 
@@ -195,59 +195,6 @@ padding-top: 2.5%;
 }
 
 
-/* =========================================================
-   FUNDO
-========================================================= */
-
-.fundo {
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: -10;
-
-    background:
-
-        radial-gradient(
-            circle at 50% -15%,
-            var(--accent-soft),
-            transparent 38%
-        ),
-
-        radial-gradient(
-            circle at 100% 100%,
-            rgba(255,255,255,.025),
-            transparent 40%
-        ),
-
-        #050507;
-
-    background-size: cover;
-
-    background-position: center;
-
-    background-repeat: no-repeat;
-
-    transform: scale(1.03);
-}
-
-
-.fundo::after {
-
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    background:
-        linear-gradient(
-            to bottom,
-            rgba(0,0,0,.18),
-            rgba(0,0,0,.5)
-        );
-}
 
 
 /* =========================================================
@@ -1201,7 +1148,7 @@ padding-top: 2.5%;
     z-index: 2500;
 
     background:
-        rgba(0,0,0,.5);
+        #000;
 
     backdrop-filter:
         blur(5px);
@@ -1215,6 +1162,8 @@ padding-top: 2.5%;
 
     transition:
         .3s ease;
+        
+
 }
 
 
@@ -1230,7 +1179,7 @@ padding-top: 2.5%;
 
     position: fixed;
 
-    top: 0;
+    top: 10px;
 
     left: 0;
 
@@ -1239,6 +1188,8 @@ padding-top: 2.5%;
     width: min(310px, 86vw);
 
     height: 100vh;
+    
+    left: 2.5%;
 
     padding:
         max(20px, env(safe-area-inset-top))
@@ -1248,7 +1199,7 @@ padding-top: 2.5%;
     background:
         rgba(12,12,15,.94);
 
-    border-right:
+    border:
         1px solid var(--border);
 
     backdrop-filter:
@@ -1263,6 +1214,10 @@ padding-top: 2.5%;
     transition:
         transform .32s
         cubic-bezier(.2,.8,.2,1);
+        
+        border-radius: 20px;
+        
+
 }
 
 
@@ -1765,18 +1720,33 @@ padding-top: 2.5%;
     font-size: 11px;
 }
 
-
 /* =========================================================
-   SELETOR DE COR — ESTILIZADO
+   COLOR PICKER RGB PERSONALIZADO
 ========================================================= */
 
-#colorPicker {
+.rgb-picker {
+
+    position: relative;
+
+    flex: 0 0 auto;
+}
+
+
+/* =========================================================
+   BOTÃO DA COR
+========================================================= */
+
+.rgb-picker-button {
 
     width: 46px;
 
     height: 34px;
 
     padding: 3px;
+
+    display: grid;
+
+    place-items: center;
 
     border:
         1px solid
@@ -1789,11 +1759,7 @@ padding-top: 2.5%;
 
     cursor: pointer;
 
-    overflow: hidden;
-
-    appearance: none;
-
-    -webkit-appearance: none;
+    outline: none;
 
     transition:
         transform .18s ease,
@@ -1802,7 +1768,7 @@ padding-top: 2.5%;
 }
 
 
-#colorPicker:hover {
+.rgb-picker-button:hover {
 
     border-color:
         var(--accent-border);
@@ -1812,39 +1778,395 @@ padding-top: 2.5%;
 }
 
 
-#colorPicker:active {
+.rgb-picker-button:active {
 
     transform:
         scale(.92);
 }
 
 
-/* Área interna da cor — Chrome / Android WebView */
+.rgb-color-preview {
 
-#colorPicker::-webkit-color-swatch-wrapper {
+    width: 100%;
 
-    padding: 0;
+    height: 100%;
 
-}
-
-
-#colorPicker::-webkit-color-swatch {
-
-    border: none;
+    display: block;
 
     border-radius: 9px;
+
+    background:
+        var(--accent);
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(255,255,255,.12);
 }
 
 
-/* Firefox */
+/* =========================================================
+   POPUP
+========================================================= */
 
-#colorPicker::-moz-color-swatch {
+.rgb-picker-popup {
 
-    border: none;
+    position: absolute;
+
+    top:
+        calc(100% + 9px);
+
+    right: 0;
+
+    z-index: 10000;
+
+    width: 250px;
+
+    padding: 15px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.10);
+
+    border-radius: 18px;
+
+    background:
+        rgba(15,15,18,.97);
+
+    box-shadow:
+        0 20px 50px
+        rgba(0,0,0,.65);
+
+    backdrop-filter:
+        blur(25px);
+
+    -webkit-backdrop-filter:
+        blur(25px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transform:
+        translateY(-7px)
+        scale(.97);
+
+    transform-origin:
+        top right;
+
+    transition:
+        opacity .18s ease,
+        transform .18s ease,
+        visibility .18s ease;
+}
+
+
+.rgb-picker.open
+.rgb-picker-popup {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+/* =========================================================
+   CABEÇALHO
+========================================================= */
+
+.rgb-picker-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 15px;
+
+    color:
+        rgba(255,255,255,.85);
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+.rgb-hex {
+
+    color:
+        var(--accent);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: .5px;
+}
+
+
+/* =========================================================
+   CANAIS RGB
+========================================================= */
+
+/* =========================================================
+   RGB PICKER — BARRAS PERSONALIZADAS
+========================================================= */
+
+.rgb-channel {
+    width: 100%;
+    margin-top: 18px;
+}
+
+.rgb-channel-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 9px;
+
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.rgb-channel-top > span:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 27px;
+    height: 27px;
 
     border-radius: 9px;
+
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-border);
+
+    color: var(--accent);
+
+    font-size: 12px;
 }
 
+.rgb-channel-top > span:last-child {
+    min-width: 30px;
+
+    text-align: right;
+
+    color: var(--muted);
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   BARRA
+========================================================= */
+
+.rgb-slider {
+    position: relative;
+
+    width: 85%;
+    height: 32px;
+    margin-left: 7.5%;
+    border-radius: 999px;
+
+    cursor: pointer;
+
+    touch-action: none;
+
+    user-select: none;
+}
+
+
+/* =========================================================
+   TRILHO
+========================================================= */
+
+.rgb-slider-track {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    top: 50%;
+
+    height: 8px;
+
+    transform: translateY(-50%);
+
+    border-radius: 999px;
+
+    overflow: visible;
+
+    background: #222;
+}
+
+
+/* =========================================================
+   GRADIENTES
+========================================================= */
+
+#rgbRSlider .rgb-slider-track {
+    background:
+        linear-gradient(
+            90deg,
+            #000000 0%,
+            #ff0000 100%
+        );
+}
+
+#rgbGSlider .rgb-slider-track {
+    background:
+        linear-gradient(
+            90deg,
+            #000000 0%,
+            #00ff00 100%
+        );
+}
+
+#rgbBSlider .rgb-slider-track {
+    background:
+        linear-gradient(
+            90deg,
+            #000000 0%,
+            #008cff 100%
+        );
+}
+
+
+/* =========================================================
+   PARTE SELECIONADA
+========================================================= */
+
+.rgb-slider-fill {
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 0;
+
+    border-radius: inherit;
+
+    pointer-events: none;
+
+    opacity: .9;
+}
+
+
+/* =========================================================
+   INDICADOR
+========================================================= */
+
+.rgb-slider-thumb {
+    position: absolute;
+
+    top: 50%;
+
+    width: 24px;
+    height: 24px;
+
+    transform:
+        translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    border: 3px solid #111111;
+
+    box-shadow:
+        0 2px 7px rgba(0,0,0,.45),
+        0 0 0 1px rgba(255,255,255,.15);
+
+    pointer-events: none;
+
+    transition:
+        transform .12s ease,
+        box-shadow .12s ease;
+}
+
+
+/* =========================================================
+   ARRASTANDO
+========================================================= */
+
+.rgb-slider.active .rgb-slider-thumb {
+    transform:
+        translate(-50%, -50%)
+        scale(1.16);
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,.55),
+        0 0 0 5px var(--accent-soft);
+}
+
+
+/* =========================================================
+   HOVER
+========================================================= */
+
+.rgb-slider:hover .rgb-slider-thumb {
+    box-shadow:
+        0 3px 9px rgba(0,0,0,.5),
+        0 0 0 4px rgba(255,255,255,.07);
+}
+
+
+/* =========================================================
+   CORES DO INDICADOR
+========================================================= */
+
+#rgbRSlider .rgb-slider-thumb {
+    border-color: #ff3030;
+}
+
+#rgbGSlider .rgb-slider-thumb {
+    border-color: #36e56b;
+}
+
+#rgbBSlider .rgb-slider-thumb {
+    border-color: #3d9cff;
+}
+
+/* =========================================================
+   PRÉVIA GRANDE
+========================================================= */
+
+.rgb-large-preview {
+
+    width: 100%;
+
+    height: 42px;
+
+    margin-top: 16px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    border-radius: 12px;
+
+    background:
+        var(--accent);
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(255,255,255,.05);
+}
 
 /* =========================================================
    TOAST
@@ -2443,10 +2765,6 @@ padding-top: 2.5%;
 
 <body>
 
-
-<div class="fundo"></div>
-
-
 <!-- =======================================================
      MENU
 ======================================================== -->
@@ -2534,12 +2852,73 @@ padding-top: 2.5%;
         <span>
             Cor do sistema
         </span>
+<div class="rgb-picker" id="rgbPicker">
 
-        <input
-            type="color"
-            id="colorPicker"
-            value="#ff9db7"
-        >
+    <button
+        type="button"
+        class="rgb-picker-button"
+        id="rgbPickerButton"
+        aria-label="Escolher cor"
+    >
+        <span
+            class="rgb-color-preview"
+            id="rgbColorPreview"
+        ></span>
+    </button>
+
+    <div
+        class="rgb-picker-popup"
+        id="rgbPickerPopup"
+    >
+
+        <div class="rgb-picker-header">
+            <span>Cor do sistema</span>
+
+            <span
+                class="rgb-hex"
+                id="rgbHex"
+            >
+                #FF9DB7
+            </span>
+        </div>
+
+<div class="rgb-channel">
+    <div class="rgb-channel-top">
+        <span>R</span>
+        <span id="rgbRValue">255</span>
+    </div>
+    <div class="rgb-slider" id="rgbRSlider" data-channel="r">
+        <div class="rgb-slider-track"></div>
+        <div class="rgb-slider-fill"></div>
+        <div class="rgb-slider-thumb"></div>
+    </div>
+</div>
+
+<div class="rgb-channel">
+    <div class="rgb-channel-top">
+        <span>G</span>
+        <span id="rgbGValue">157</span>
+    </div>
+    <div class="rgb-slider" id="rgbGSlider" data-channel="g">
+        <div class="rgb-slider-track"></div>
+        <div class="rgb-slider-fill"></div>
+        <div class="rgb-slider-thumb"></div>
+    </div>
+</div>
+
+<div class="rgb-channel">
+    <div class="rgb-channel-top">
+        <span>B</span>
+        <span id="rgbBValue">183</span>
+    </div>
+    <div class="rgb-slider" id="rgbBSlider" data-channel="b">
+        <div class="rgb-slider-track"></div>
+        <div class="rgb-slider-fill"></div>
+        <div class="rgb-slider-thumb"></div>
+    </div>
+</div>
+
+</div>
 
     </div>
 
@@ -3236,18 +3615,7 @@ function loadTheme() {
     );
 
 
-    const picker =
-        document.getElementById(
-            "colorPicker"
-        );
-
-
-    if (picker) {
-
-        picker.value =
-            saved;
-
-    }
+    
 
 }
 
@@ -3330,22 +3698,302 @@ function hexToRGBA(
 }
 
 
-document
-    .getElementById(
-        "colorPicker"
-    )
-    .addEventListener(
-        "input",
-        event => {
+/* =========================================================
+   COLOR PICKER RGB PERSONALIZADO
+========================================================= */
 
-            const color =
-                event.target.value;
+(function () {
+
+    const picker =
+        document.getElementById(
+            "rgbPicker"
+        );
+
+    const button =
+        document.getElementById(
+            "rgbPickerButton"
+        );
+
+    const popup =
+        document.getElementById(
+            "rgbPickerPopup"
+        );
+
+    const preview =
+        document.getElementById(
+            "rgbColorPreview"
+        );
+
+    const largePreview =
+        document.getElementById(
+            "rgbLargePreview"
+        );
+
+    const hexText =
+        document.getElementById(
+            "rgbHex"
+        );
 
 
-            applyTheme(
-                color
+    /* =====================================================
+       VALORES RGB
+    ===================================================== */
+
+    const values = {
+
+        r: 255,
+
+        g: 157,
+
+        b: 183
+
+    };
+
+
+    /* =====================================================
+       BARRAS
+    ===================================================== */
+
+    const sliders = {
+
+        r:
+            document.getElementById(
+                "rgbRSlider"
+            ),
+
+        g:
+            document.getElementById(
+                "rgbGSlider"
+            ),
+
+        b:
+            document.getElementById(
+                "rgbBSlider"
+            )
+
+    };
+
+
+    /* =====================================================
+       VALORES DAS BARRAS
+    ===================================================== */
+
+    const valueLabels = {
+
+        r:
+            document.getElementById(
+                "rgbRValue"
+            ),
+
+        g:
+            document.getElementById(
+                "rgbGValue"
+            ),
+
+        b:
+            document.getElementById(
+                "rgbBValue"
+            )
+
+    };
+
+
+    /* =====================================================
+       RGB → HEX
+    ===================================================== */
+
+    function rgbToHex(
+        r,
+        g,
+        b
+    ) {
+
+        return "#" +
+
+            Number(r)
+                .toString(16)
+                .padStart(2, "0") +
+
+            Number(g)
+                .toString(16)
+                .padStart(2, "0") +
+
+            Number(b)
+                .toString(16)
+                .padStart(2, "0");
+
+    }
+
+
+    /* =====================================================
+       HEX → RGB
+    ===================================================== */
+
+    function hexToRGB(
+        hex
+    ) {
+
+        if (
+            !/^#[0-9A-F]{6}$/i.test(
+                hex
+            )
+        ) {
+
+            return {
+
+                r: 255,
+
+                g: 157,
+
+                b: 183
+
+            };
+
+        }
+
+
+        return {
+
+            r:
+                parseInt(
+                    hex.slice(1, 3),
+                    16
+                ),
+
+            g:
+                parseInt(
+                    hex.slice(3, 5),
+                    16
+                ),
+
+            b:
+                parseInt(
+                    hex.slice(5, 7),
+                    16
+                )
+
+        };
+
+    }
+
+
+    /* =====================================================
+       ATUALIZAR UMA BARRA
+    ===================================================== */
+
+    function updateSlider(
+        channel
+    ) {
+
+        const slider =
+            sliders[channel];
+
+
+        if (!slider) {
+
+            return;
+
+        }
+
+
+        const percent =
+            (values[channel] / 255) * 100;
+
+
+        const fill =
+            slider.querySelector(
+                ".rgb-slider-fill"
             );
 
+
+        const thumb =
+            slider.querySelector(
+                ".rgb-slider-thumb"
+            );
+
+
+        if (fill) {
+
+            fill.style.width =
+                percent + "%";
+
+        }
+
+
+        if (thumb) {
+
+            thumb.style.left =
+                percent + "%";
+
+        }
+
+
+        if (
+            valueLabels[channel]
+        ) {
+
+            valueLabels[channel]
+                .textContent =
+                    values[channel];
+
+        }
+
+    }
+
+
+    /* =====================================================
+       ATUALIZAR COR
+    ===================================================== */
+
+    function updateColor(
+        save = true
+    ) {
+
+        const color =
+            rgbToHex(
+                values.r,
+                values.g,
+                values.b
+            );
+
+
+        if (hexText) {
+
+            hexText.textContent =
+                color.toUpperCase();
+
+        }
+
+
+        if (preview) {
+
+            preview.style.background =
+                color;
+
+        }
+
+
+        if (largePreview) {
+
+            largePreview.style.background =
+                color;
+
+        }
+
+
+        applyTheme(
+            color
+        );
+
+
+        updateSlider("r");
+
+        updateSlider("g");
+
+        updateSlider("b");
+
+
+        if (save) {
 
             cryptoSave(
                 "accent",
@@ -3353,9 +4001,328 @@ document
             );
 
         }
+
+    }
+
+
+    /* =====================================================
+       MOVIMENTO DA BARRA
+    ===================================================== */
+
+    function setFromPointer(
+        event,
+        channel
+    ) {
+
+        const slider =
+            sliders[channel];
+
+
+        if (!slider) {
+
+            return;
+
+        }
+
+
+        const rect =
+            slider.getBoundingClientRect();
+
+
+        let x =
+            event.clientX -
+            rect.left;
+
+
+        x =
+            Math.max(
+                0,
+                Math.min(
+                    x,
+                    rect.width
+                )
+            );
+
+
+        const value =
+            Math.round(
+                (x / rect.width) * 255
+            );
+
+
+        values[channel] =
+            value;
+
+
+        updateColor(
+            true
+        );
+
+    }
+
+
+    /* =====================================================
+       CONFIGURAR AS 3 BARRAS
+    ===================================================== */
+
+    Object.keys(
+        sliders
+    ).forEach(
+        channel => {
+
+            const slider =
+                sliders[channel];
+
+
+            if (!slider) {
+
+                return;
+
+            }
+
+
+            /* ---------------------------------------------
+               COMEÇAR A ARRASTAR
+            --------------------------------------------- */
+
+            slider.addEventListener(
+                "pointerdown",
+                event => {
+
+                    event.preventDefault();
+
+
+                    slider.classList.add(
+                        "active"
+                    );
+
+
+                    try {
+
+                        slider.setPointerCapture(
+                            event.pointerId
+                        );
+
+                    } catch {}
+
+
+                    setFromPointer(
+                        event,
+                        channel
+                    );
+
+                }
+            );
+
+
+            /* ---------------------------------------------
+               MOVER
+            --------------------------------------------- */
+
+            slider.addEventListener(
+                "pointermove",
+                event => {
+
+                    if (
+                        !slider.classList.contains(
+                            "active"
+                        )
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    event.preventDefault();
+
+
+                    setFromPointer(
+                        event,
+                        channel
+                    );
+
+                }
+            );
+
+
+            /* ---------------------------------------------
+               SOLTAR
+            --------------------------------------------- */
+
+            slider.addEventListener(
+                "pointerup",
+                event => {
+
+                    slider.classList.remove(
+                        "active"
+                    );
+
+
+                    try {
+
+                        slider.releasePointerCapture(
+                            event.pointerId
+                        );
+
+                    } catch {}
+
+                }
+            );
+
+
+            /* ---------------------------------------------
+               CANCELAR
+            --------------------------------------------- */
+
+            slider.addEventListener(
+                "pointercancel",
+                () => {
+
+                    slider.classList.remove(
+                        "active"
+                    );
+
+                }
+            );
+
+        }
     );
 
 
+    /* =====================================================
+       ABRIR / FECHAR
+    ===================================================== */
+
+    button.addEventListener(
+        "click",
+        function (event) {
+
+            event.stopPropagation();
+
+
+            picker.classList.toggle(
+                "open"
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       IMPEDIR QUE O POPUP FECHE AO CLICAR NELE
+    ===================================================== */
+
+    popup.addEventListener(
+        "click",
+        function (event) {
+
+            event.stopPropagation();
+
+        }
+    );
+
+
+    /* =====================================================
+       CLICAR FORA
+    ===================================================== */
+
+    document.addEventListener(
+        "pointerdown",
+        function (event) {
+
+            if (
+                picker &&
+                !picker.contains(
+                    event.target
+                )
+            ) {
+
+                picker.classList.remove(
+                    "open"
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       ESC
+    ===================================================== */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Escape"
+            ) {
+
+                picker.classList.remove(
+                    "open"
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       CARREGAR COR SALVA
+    ===================================================== */
+
+    function loadRGBColor() {
+
+        const saved =
+            cryptoLoad(
+                "accent"
+            );
+
+
+        const color =
+            typeof saved === "string" &&
+            /^#[0-9A-F]{6}$/i.test(
+                saved
+            )
+
+                ? saved
+
+                : "#ff9db7";
+
+
+        const rgb =
+            hexToRGB(
+                color
+            );
+
+
+        values.r =
+            rgb.r;
+
+        values.g =
+            rgb.g;
+
+        values.b =
+            rgb.b;
+
+
+        updateColor(
+            false
+        );
+
+    }
+
+
+    /* =====================================================
+       INICIALIZAR
+    ===================================================== */
+
+    loadRGBColor();
+
+})();
 /* =========================================================
    MODAL
 ========================================================= */

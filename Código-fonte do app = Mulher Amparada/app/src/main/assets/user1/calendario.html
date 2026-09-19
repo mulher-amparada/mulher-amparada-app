@@ -39,12 +39,7 @@
 *{
     scrollbar-width:none;
     scrollbar-color:transparent transparent;
-    
-        -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
 
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
 }
 
 html,
@@ -698,6 +693,7 @@ margin-bottom: 10%;
 
     flex-shrink:0;
 
+
     z-index:50;
 }
 
@@ -867,7 +863,7 @@ margin-bottom: 10%;
     color:
         rgba(255,255,255,.72);
 
-    background:transparent;
+    background:#111;
 
     font-family:"Quicksand",sans-serif;
 
@@ -894,7 +890,7 @@ margin-bottom: 10%;
 .opcao-ordenar:active{
 
     background:
-        rgba(255,192,203,.5);
+        rgba(255,192,203,1);
 }
 
 
@@ -903,7 +899,7 @@ margin-bottom: 10%;
     color:#fff;
 
     background:
-        rgba(255,192,203,.5);
+        rgba(255,192,203,1);
 }
 
 
@@ -3670,24 +3666,231 @@ select:focus-visible{
 
 }
 
-
 /* =========================================================
-   REDUÇÃO DE MOVIMENTO
+   CONFIRMAÇÃO PERSONALIZADA
 ========================================================= */
 
-@media(prefers-reduced-motion:reduce){
+.confirm-overlay{
 
-    *,
-    *::before,
-    *::after{
+    position:fixed;
 
-        scroll-behavior:auto !important;
+    inset:0;
 
-        animation-duration:.01ms !important;
-        animation-iteration-count:1 !important;
+    z-index:99999;
 
-        transition-duration:.01ms !important;
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
+    background:
+        #000;
+
+    
+
+    opacity:0;
+
+    visibility:hidden;
+
+    pointer-events:none;
+
+    transition:
+        opacity .2s ease,
+        visibility .2s ease;
+}
+
+
+.confirm-overlay.aberto{
+
+    opacity:1;
+
+    visibility:visible;
+
+    pointer-events:auto;
+}
+
+
+.confirm-modal{
+
+    position:relative;
+
+    width:min(100%,370px);
+
+    padding:24px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.13);
+
+    border-radius:28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(35,35,35,.98),
+            rgba(12,12,12,.98)
+        );
+
+    box-shadow:
+        0 25px 80px
+        rgba(0,0,0,.65),
+
+        inset 0 1px 0
+        rgba(255,255,255,.05);
+
+    transform:
+        
+        scale(.96);
+
+    transition:
+        transform .2s
+        cubic-bezier(.2,.8,.2,1);
+}
+
+
+.confirm-overlay.aberto
+.confirm-modal{
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+.confirm-titulo{
+
+    color:#fff;
+
+    font-size:20px;
+
+    line-height:1.15;
+
+    font-weight:800;
+}
+
+
+.confirm-mensagem{
+
+    margin-top:10px;
+
+    color:
+        rgba(255,255,255,.65);
+
+    font-size:13px;
+
+    line-height:1.5;
+
+    white-space:pre-wrap;
+}
+
+
+.confirm-botoes{
+
+    display:flex;
+
+    gap:9px;
+
+    margin-top:22px;
+}
+
+
+.confirm-botoes button{
+
+    width:100%;
+
+    height:48px;
+
+    border:0;
+
+    border-radius:15px;
+
+    outline:none;
+
+    font-family:"Quicksand",sans-serif;
+
+    font-size:13px;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+    transition:
+        transform .15s ease,
+        background .15s ease;
+}
+
+
+.confirm-botoes button:active{
+
+    transform:scale(.95);
+}
+
+
+.confirm-cancelar{
+
+    color:#fff;
+
+    background:
+        rgba(255,255,255,.08);
+}
+
+
+.confirm-cancelar:hover{
+
+    background:
+        rgba(255,255,255,.13);
+}
+
+
+.confirm-confirmar{
+
+    color:#fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--rosa),
+            var(--rosa2)
+        );
+
+    box-shadow:
+        0 8px 22px
+        rgba(255,79,120,.22);
+}
+
+
+.confirm-confirmar:hover{
+
+    box-shadow:
+        0 10px 28px
+        rgba(255,79,120,.32);
+}
+
+
+@media(max-width:370px){
+
+    .confirm-modal{
+
+        padding:20px;
+
+        border-radius:24px;
     }
+
+
+    .confirm-titulo{
+
+        font-size:19px;
+    }
+
+
+    .confirm-mensagem{
+
+        font-size:12px;
+    }
+
 }
 
 </style>
@@ -4554,6 +4757,58 @@ select:focus-visible{
     </div>
 
 </div>
+
+<!-- =====================================================
+     CONFIRMAÇÃO PERSONALIZADA
+===================================================== -->
+
+<div
+    id="confirmOverlay"
+    class="confirm-overlay"
+    aria-hidden="true"
+>
+    <div
+        class="confirm-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="confirmTitulo"
+    >
+
+        <div
+            class="confirm-titulo"
+            id="confirmTitulo"
+        >
+            Confirmação
+        </div>
+
+        <div
+            class="confirm-mensagem"
+            id="confirmMensagem"
+        ></div>
+
+        <div class="confirm-botoes">
+
+            <button
+                type="button"
+                class="confirm-cancelar"
+                id="confirmCancelar"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                class="confirm-confirmar"
+                id="confirmConfirmar"
+            >
+                Apagar
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
 <script>
 
 /* =========================================================
@@ -5644,8 +5899,214 @@ function salvarRegistro(event){
 /* =========================================================
    APAGAR TODOS
 ========================================================= */
+/* =========================================================
+   CONFIRMAÇÃO PERSONALIZADA
+========================================================= */
 
-function apagarTudo(){
+const confirmOverlay =
+    document.getElementById(
+        "confirmOverlay"
+    );
+
+const confirmTitulo =
+    document.getElementById(
+        "confirmTitulo"
+    );
+
+const confirmMensagem =
+    document.getElementById(
+        "confirmMensagem"
+    );
+
+const confirmCancelar =
+    document.getElementById(
+        "confirmCancelar"
+    );
+
+const confirmConfirmar =
+    document.getElementById(
+        "confirmConfirmar"
+    );
+
+
+let confirmResolve = null;
+
+
+function abrirConfirmacao(
+    mensagem,
+    titulo = "Confirmação",
+    textoConfirmar = "Confirmar"
+){
+
+    return new Promise(
+        resolve => {
+
+            confirmResolve =
+                resolve;
+
+
+            confirmTitulo.textContent =
+                titulo;
+
+
+            confirmMensagem.textContent =
+                mensagem;
+
+
+            confirmConfirmar.textContent =
+                textoConfirmar;
+
+
+            confirmOverlay.classList.add(
+                "aberto"
+            );
+
+
+            confirmOverlay.setAttribute(
+                "aria-hidden",
+                "false"
+            );
+
+
+            setTimeout(
+                () => {
+
+                    confirmConfirmar.focus();
+
+                },
+                200
+            );
+
+        }
+    );
+
+}
+
+
+function fecharConfirmacao(
+    resultado
+){
+
+    confirmOverlay.classList.remove(
+        "aberto"
+    );
+
+
+    confirmOverlay.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    if(confirmResolve){
+
+        const resolver =
+            confirmResolve;
+
+
+        confirmResolve =
+            null;
+
+
+        resolver(
+            resultado
+        );
+
+    }
+
+}
+
+
+confirmConfirmar.addEventListener(
+    "click",
+    () => {
+
+        fecharConfirmacao(
+            true
+        );
+
+    }
+);
+
+
+confirmCancelar.addEventListener(
+    "click",
+    () => {
+
+        fecharConfirmacao(
+            false
+        );
+
+    }
+);
+
+
+confirmOverlay.addEventListener(
+    "click",
+    event => {
+
+        if(
+            event.target ===
+            confirmOverlay
+        ){
+
+            fecharConfirmacao(
+                false
+            );
+
+        }
+
+    }
+);
+
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            !confirmOverlay.classList.contains(
+                "aberto"
+            )
+        ){
+
+            return;
+
+        }
+
+
+        if(
+            event.key ===
+            "Escape"
+        ){
+
+            event.preventDefault();
+
+            fecharConfirmacao(
+                false
+            );
+
+        }
+
+    }
+);
+
+
+async function confirmPersonalizado(
+    mensagem,
+    titulo = "Confirmação",
+    textoConfirmar = "Confirmar"
+){
+
+    return await abrirConfirmacao(
+        mensagem,
+        titulo,
+        textoConfirmar
+    );
+
+}
+
+async function apagarTudo(){
 
     const dados =
         getDados();
@@ -5658,11 +6119,15 @@ function apagarTudo(){
     }
 
 
-    if(
-        !confirm(
-            "Apagar todos os registros?\n\nEssa ação não pode ser desfeita."
-        )
-    ){
+    const confirmado =
+        await confirmPersonalizado(
+            "Apagar todos os registros?\n\nEssa ação não pode ser desfeita.",
+            "Apagar registros",
+            "Apagar"
+        );
+
+
+    if(!confirmado){
 
         return;
 
@@ -5678,65 +6143,6 @@ function apagarTudo(){
 
 }
 
-
-/* =========================================================
-   APAGAR REGISTRO INDIVIDUAL
-========================================================= */
-
-function apagarRegistro(registro){
-
-    const dados =
-        getDados();
-
-
-    const indice =
-        dados.indexOf(
-            registro
-        );
-
-
-    if(indice === -1){
-
-        return;
-
-    }
-
-
-    if(
-        !confirm(
-            "Apagar este registro?\n\nEssa ação não pode ser desfeita."
-        )
-    ){
-
-        return;
-
-    }
-
-
-    dados.splice(
-        indice,
-        1
-    );
-
-
-    if(dados.length === 0){
-
-        Cripto.remover(
-            "ciclo"
-        );
-
-    }else{
-
-        salvarDados(
-            dados
-        );
-
-    }
-
-
-    renderizar();
-
-}
 
 
 /* =========================================================
@@ -6082,7 +6488,7 @@ function renderizar(){
 
                         event.stopPropagation();
 
-                        apagarRegistro(d);
+                        
 
                     };
 

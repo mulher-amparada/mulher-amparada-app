@@ -34,8 +34,7 @@
         -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
+    
 }
 
 
@@ -974,7 +973,6 @@ margin-top: 5%;
 /* =========================================================
    FASE
 ========================================================= */
-
 .phase-card {
 
     background:
@@ -995,8 +993,7 @@ margin-top: 5%;
 
     animation:
         cardAppear .35s ease;
-        
-        overflow: scroll;
+
 
 }
 
@@ -1028,9 +1025,7 @@ margin-top: 5%;
         5px 0 10px;
 
 }
-
 .phase-card p {
-
     color:
         #c2bec8;
 
@@ -1040,6 +1035,11 @@ margin-top: 5%;
     font-size:
         14px;
 
+    overflow-wrap:
+        anywhere;
+
+    word-break:
+        break-word;
 }
 
 .progress {
@@ -1738,6 +1738,238 @@ margin-top: 5%;
 
 }
 
+/* =========================================================
+   POPUP DE CONFIRMAÇÃO
+========================================================= */
+
+.confirm-overlay {
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    z-index:
+        99999;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        22px;
+
+    background: #000;
+
+    
+    opacity:
+        0;
+
+    visibility:
+        hidden;
+
+    pointer-events:
+        none;
+
+    transition:
+        opacity .22s ease,
+        visibility .22s ease;
+
+}
+
+.confirm-overlay.aberto {
+
+    opacity:
+        1;
+
+    visibility:
+        visible;
+
+    pointer-events:
+        auto;
+
+}
+
+.confirm-modal {
+
+    width:
+        min(
+            100%,
+            370px
+        );
+
+    padding:
+        25px 22px 21px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.10);
+
+    border-radius:
+        25px;
+
+    background:
+        #111116;
+
+    box-shadow:
+        0 25px 80px
+        rgba(0,0,0,.65);
+
+    text-align:
+        center;
+
+    transform:
+        scale(.96);
+
+    transition:
+        transform .22s
+        cubic-bezier(.22,.7,.2,1);
+
+}
+
+.confirm-overlay.aberto
+.confirm-modal {
+
+    transform:
+        translateY(0)
+        scale(1);
+
+}
+
+.confirm-modal h2 {
+
+    color:
+        #fff;
+
+    font-size:
+        18px;
+
+    font-weight:
+        700;
+
+    line-height:
+        1.2;
+
+    margin-bottom:
+        9px;
+
+    text-align:
+        left;
+
+}
+
+.confirm-modal p {
+
+    color:
+        rgba(255,255,255,.52);
+
+    font-size:
+        12px;
+
+    line-height:
+        1.55;
+
+    white-space:
+        normal;
+
+    margin-bottom:
+        21px;
+
+    text-align:
+        left;
+
+}
+
+.confirm-acoes {
+
+    display:
+        flex;
+
+    gap:
+        9px;
+
+}
+
+.confirm-botao {
+
+    flex:
+        1;
+
+    min-height:
+        45px;
+
+    border:
+        none;
+
+    border-radius:
+        14px;
+
+    font-family:
+        inherit;
+
+    font-size:
+        13px;
+
+    font-weight:
+        800;
+
+    cursor:
+        pointer;
+
+    transition:
+        transform .15s ease,
+        opacity .15s ease;
+
+}
+
+.confirm-botao:active {
+
+    transform:
+        scale(.95);
+
+}
+
+.confirm-botao.cancelar {
+
+    background:
+        rgba(255,255,255,.07);
+
+    color:
+        rgba(255,255,255,.72);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+}
+
+.confirm-botao.apagar {
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--pink),
+            var(--purple)
+        );
+
+    color:
+        #fff;
+
+}
+
+.confirm-botao:hover {
+
+    opacity:
+        .88;
+
+}
+
 </style>
 </head>
 
@@ -1948,23 +2180,21 @@ margin-top: 5%;
         bibliográficas e institucionais.
     </p>
 
-<ul>
-    <li style="color: blue; text-decoration: underline;">
-        https://www.metmuseum.org/-/media/files/learn/for-educators/publications-for-educators/the-art-of-ancient-egypt.pdf
-    </li>
+<p style="color: blue; text-decoration: underline;">
+    https://www.metmuseum.org/-/media/files/learn/for-educators/publications-for-educators/the-art-of-ancient-egypt.pdf
+</p>
 
-    <li style="color: blue; text-decoration: underline;">
-        https://www.britishmuseum.org/blog/mary-beards-top-five-powerful-women-ancient-greece-and-rome
-    </li>
+<p style="color: blue; text-decoration: underline;">
+    https://www.britishmuseum.org/blog/mary-beards-top-five-powerful-women-ancient-greece-and-rome
+</p>
 
-    <li style="color: blue; text-decoration: underline;">
-        https://www.worldhistory.org/trans/pt/2-2081/mulheres-na-antiga-mesopotamia/
-    </li>
+<p style="color: blue; text-decoration: underline;">
+    https://www.worldhistory.org/trans/pt/2-2081/mulheres-na-antiga-mesopotamia/
+</p>
 
-    <li style="color: blue; text-decoration: underline;">
-        https://www.worldhistory.org/trans/pt/2-927/as-mulheres-na-grecia-antiga/
-    </li>
-</ul>
+<p style="color: blue; text-decoration: underline;">
+    https://www.worldhistory.org/trans/pt/2-927/as-mulheres-na-grecia-antiga/
+</p>
 
 </section>
 
@@ -1976,6 +2206,53 @@ margin-top: 5%;
 </button>
 
 
+</div>
+
+<!-- =====================================================
+     POPUP DE CONFIRMAÇÃO
+====================================================== -->
+
+<div
+    id="confirmOverlay"
+    class="confirm-overlay"
+    aria-hidden="true"
+>
+    <div
+        class="confirm-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="confirmTitulo"
+    >
+
+        <h2 id="confirmTitulo">
+            Confirmação
+        </h2>
+
+        <p id="confirmMensagem">
+            Deseja continuar?
+        </p>
+
+        <div class="confirm-acoes">
+
+            <button
+                type="button"
+                id="confirmCancelar"
+                class="confirm-botao cancelar"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                id="confirmConfirmar"
+                class="confirm-botao apagar"
+            >
+                Confirmar
+            </button>
+
+        </div>
+
+    </div>
 </div>
 
 
@@ -3294,7 +3571,7 @@ clickButton.addEventListener(
 
 prestigeButton.addEventListener(
     "click",
-    () => {
+    async () => {
 
         const requirement =
             getPrestigeRequirement();
@@ -3315,37 +3592,39 @@ prestigeButton.addEventListener(
 
 
         const confirmed =
-            confirm(
+    await confirmPersonalizado(
 
-                "REALIZAR PRESTÍGIO?\n\n" +
+        "Realizar o prestígio?<br><br>" +
 
-                "Pontos atuais: " +
-                formatNumber(
-                    game.points
-                ) +
+        "Pontos atuais: " +
+        formatNumber(
+            game.points
+        ) +
 
-                "\n\n" +
+        "<br><br>" +
 
-                "Os upgrades normais serão " +
-                "resetados." +
+        "Os upgrades normais serão resetados." +
 
-                "\n\n" +
+        "<br><br>" +
 
-                "O Legado permanecerá." +
+        "O Legado permanecerá." +
 
-                "\n\n" +
+        "<br><br>" +
 
-                "Recompensa: +" +
-                reward +
-                " Legado."
+        "Recompensa: +" +
+        reward +
+        " Legado.",
 
-            );
+        "Realizar prestígio",
+
+        "Prestigiar"
+
+    );
 
 
-        if (!confirmed) {
-            return;
-        }
-
+if (!confirmed) {
+    return;
+}
 
         createPrestigeEffect();
 
@@ -3514,7 +3793,7 @@ function createPrestigeEffect() {
 
 
 /* =========================================================
-   HISTÓRIAS
+   HISTÓRIAS E POPUP PERSONALIZADO 
 ========================================================= */
 
 function renderStories(force = false) {
@@ -3670,6 +3949,258 @@ function renderStories(force = false) {
 
 }
 
+/* =========================================================
+   POPUP PERSONALIZADO
+========================================================= */
+
+let confirmResolve = null;
+
+
+function abrirConfirmacao(
+    mensagem,
+    titulo = "Confirmação",
+    textoConfirmar = "Confirmar"
+){
+
+    return new Promise(
+        function(resolve){
+
+            const overlay =
+                document.getElementById(
+                    "confirmOverlay"
+                );
+
+            const tituloElemento =
+                document.getElementById(
+                    "confirmTitulo"
+                );
+
+            const mensagemElemento =
+                document.getElementById(
+                    "confirmMensagem"
+                );
+
+            const confirmar =
+                document.getElementById(
+                    "confirmConfirmar"
+                );
+
+
+            if(
+                !overlay ||
+                !tituloElemento ||
+                !mensagemElemento ||
+                !confirmar
+            ){
+
+                console.error(
+                    "Elementos do popup não encontrados."
+                );
+
+                resolve(false);
+
+                return;
+
+            }
+
+
+            confirmResolve =
+                resolve;
+
+
+            tituloElemento.textContent =
+                titulo;
+
+
+            mensagemElemento.innerHTML =
+                mensagem;
+
+
+            confirmar.textContent =
+                textoConfirmar;
+
+
+            overlay.classList.add(
+                "aberto"
+            );
+
+
+            overlay.setAttribute(
+                "aria-hidden",
+                "false"
+            );
+
+
+            setTimeout(
+                function(){
+
+                    confirmar.focus();
+
+                },
+                100
+            );
+
+        }
+    );
+
+}
+
+
+function fecharConfirmacao(
+    resultado
+){
+
+    const overlay =
+        document.getElementById(
+            "confirmOverlay"
+        );
+
+
+    if(overlay){
+
+        overlay.classList.remove(
+            "aberto"
+        );
+
+        overlay.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+    }
+
+
+    if(confirmResolve){
+
+        const resolver =
+            confirmResolve;
+
+        confirmResolve =
+            null;
+
+        resolver(
+            resultado
+        );
+
+    }
+
+}
+
+
+document
+    .getElementById(
+        "confirmConfirmar"
+    )
+    ?.addEventListener(
+        "click",
+        function(event){
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            fecharConfirmacao(
+                true
+            );
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "confirmCancelar"
+    )
+    ?.addEventListener(
+        "click",
+        function(event){
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            fecharConfirmacao(
+                false
+            );
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "confirmOverlay"
+    )
+    ?.addEventListener(
+        "click",
+        function(event){
+
+            if(
+                event.target === this
+            ){
+
+                fecharConfirmacao(
+                    false
+                );
+
+            }
+
+        }
+    );
+
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        const overlay =
+            document.getElementById(
+                "confirmOverlay"
+            );
+
+
+        if(
+            !overlay ||
+            !overlay.classList.contains(
+                "aberto"
+            )
+        ){
+
+            return;
+
+        }
+
+
+        if(
+            event.key ===
+            "Escape"
+        ){
+
+            event.preventDefault();
+
+            fecharConfirmacao(
+                false
+            );
+
+        }
+
+    }
+);
+
+
+async function confirmPersonalizado(
+    mensagem,
+    titulo = "Confirmação",
+    textoConfirmar = "Confirmar"
+){
+
+    return await abrirConfirmacao(
+        mensagem,
+        titulo,
+        textoConfirmar
+    );
+
+}
 
 /* =========================================================
    ATUALIZAR INTERFACE
@@ -3978,33 +4509,31 @@ document
     )
     .addEventListener(
         "click",
-        () => {
+        async () => {
 
             const confirmed =
-                confirm(
+    await confirmPersonalizado(
 
-                    "REINICIAR TODO O PROGRESSO?\n\n" +
+        "Reiniciar todo o progresso?<br><br>" +
 
-                    "Isso apagará:" +
+        "Isso apagará:<br>" +
+        "• Pontos<br>" +
+        "• Upgrades<br>" +
+        "• Legado<br>" +
+        "• Bônus permanentes<br><br>" +
 
-                    "\n• Pontos" +
+        "Esta ação não pode ser desfeita.",
 
-                    "\n• Upgrades" +
+        "Reiniciar progresso",
 
-                    "\n• Legado" +
+        "Reiniciar"
 
-                    "\n• Bônus permanentes" +
-                    
-"\n\nEsta ação não pode ser desfeita."
-                    
-                    
-
-                );
+    );
 
 
-            if (!confirmed) {
-                return;
-            }
+if (!confirmed) {
+    return;
+}
 
 
             const flash =

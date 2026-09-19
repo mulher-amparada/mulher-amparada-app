@@ -498,7 +498,253 @@ svg {
     }
 }
 
+/* =====================================================
+   POP-UP PERSONALIZADO
+===================================================== */
 
+.modal-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 99999;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background: #000;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity .18s ease,
+        visibility .18s ease;
+
+
+}
+
+
+.modal-overlay.aberto {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+}
+
+
+.modal {
+
+    width: min(100%, 360px);
+
+    padding: 24px;
+
+    border-radius: 26px;
+
+    background: #151515;
+
+    color: #fff;
+
+    box-shadow:
+        0 20px 60px
+        rgba(0, 0, 0, .65);
+
+    transform:
+        scale(.92)
+        translateY(8px);
+
+    transition:
+        transform .18s ease;
+}
+
+
+.modal-overlay.aberto .modal {
+
+    transform:
+        scale(1)
+        translateY(0);
+}
+
+
+.modal-titulo {
+
+    margin-bottom: 10px;
+
+    color: #fff;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    text-align: left;
+}
+
+
+.modal-mensagem {
+
+    color: #d0d0d0;
+
+    font-size: 16px;
+
+    line-height: 1.45;
+
+    white-space: pre-wrap;
+
+    word-break: break-word;
+}
+
+
+.modal-input {
+
+    display: none;
+
+    width: 100%;
+
+    height: 52px;
+
+    margin-top: 18px;
+
+    padding: 0 16px;
+
+    border: 1px solid #353535;
+
+    outline: none;
+
+    border-radius: 16px;
+
+    background: #080808;
+
+    color: #fff;
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+    font-size: 17px;
+
+    font-weight: 600;
+
+    transition:
+        border-color .15s ease;
+}
+
+
+.modal-input:focus {
+
+    border-color:
+        #6F7AFF;
+}
+
+
+.modal-botoes {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 22px;
+}
+
+
+.modal-botoes button {
+
+    width: 100%;
+
+    height: 48px;
+
+    aspect-ratio: auto;
+
+    border: 0;
+
+    border-radius: 16px;
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform .12s ease,
+        background .12s ease;
+}
+
+
+.modal-botoes button:active {
+
+    transform:
+        scale(.94);
+}
+
+
+.modal-cancelar {
+
+    background:
+        #252525;
+
+    color:
+        #fff;
+}
+
+
+.modal-cancelar:hover {
+
+    background:
+        #303030;
+}
+
+
+.modal-confirmar {
+
+    background:
+        #6F7AFF;
+
+    color:
+        #fff;
+}
+
+
+.modal-confirmar:hover {
+
+    background:
+        #686DFF;
+}
+
+
+@media (max-width: 360px) {
+
+    .modal {
+
+        padding: 20px;
+
+        border-radius: 22px;
+    }
+
+    .modal-titulo {
+
+        font-size: 20px;
+    }
+
+    .modal-mensagem {
+
+        font-size: 15px;
+    }
+
+}
 
 </style>
 
@@ -703,7 +949,425 @@ svg {
     </div>
 
 </div>
+
+<!-- =====================================================
+     POP-UP PERSONALIZADO
+===================================================== -->
+
+<div
+    class="modal-overlay"
+    id="modalOverlay"
+    aria-hidden="true"
+>
+
+    <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitulo"
+    >
+
+        <div
+            class="modal-titulo"
+            id="modalTitulo"
+        >
+            Aviso
+        </div>
+
+        <div
+            class="modal-mensagem"
+            id="modalMensagem"
+        ></div>
+
+        <input
+            id="modalInput"
+            class="modal-input"
+            type="text"
+            autocomplete="off"
+            spellcheck="false"
+        >
+
+        <div class="modal-botoes">
+
+            <button
+                type="button"
+                class="modal-cancelar"
+                id="modalCancelar"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                class="modal-confirmar"
+                id="modalConfirmar"
+            >
+                OK
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
 <script>
+
+/* =====================================================
+   POP-UP PERSONALIZADO
+===================================================== */
+
+const modalOverlay =
+    document.getElementById(
+        "modalOverlay"
+    );
+
+const modalTitulo =
+    document.getElementById(
+        "modalTitulo"
+    );
+
+const modalMensagem =
+    document.getElementById(
+        "modalMensagem"
+    );
+
+const modalInput =
+    document.getElementById(
+        "modalInput"
+    );
+
+const modalCancelar =
+    document.getElementById(
+        "modalCancelar"
+    );
+
+const modalConfirmar =
+    document.getElementById(
+        "modalConfirmar"
+    );
+
+
+let modalResolve = null;
+
+
+/* =====================================================
+   ABRIR MODAL
+===================================================== */
+
+function abrirModal({
+    titulo = "Aviso",
+    mensagem = "",
+    input = false,
+    valor = "",
+    cancelar = true,
+    confirmarTexto = "OK"
+}) {
+
+    return new Promise(resolve => {
+
+        modalResolve = resolve;
+
+        modalTitulo.textContent =
+            titulo;
+
+        modalMensagem.textContent =
+            mensagem;
+
+        modalInput.style.display =
+            input
+                ? "block"
+                : "none";
+
+        modalInput.value =
+            valor;
+
+        modalCancelar.style.display =
+            cancelar
+                ? "flex"
+                : "none";
+
+        modalConfirmar.textContent =
+            confirmarTexto;
+
+        modalOverlay.classList.add(
+            "aberto"
+        );
+
+        modalOverlay.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+
+        if (input) {
+
+            setTimeout(() => {
+
+                modalInput.focus();
+
+            }, 180);
+
+        } else {
+
+            setTimeout(() => {
+
+                modalConfirmar.focus();
+
+            }, 180);
+
+        }
+
+    });
+}
+
+
+/* =====================================================
+   FECHAR MODAL
+===================================================== */
+
+function fecharModal(resultado) {
+
+    modalOverlay.classList.remove(
+        "aberto"
+    );
+
+    modalOverlay.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    if (modalResolve) {
+
+        const resolver =
+            modalResolve;
+
+        modalResolve = null;
+
+        resolver(resultado);
+    }
+}
+
+
+/* =====================================================
+   BOTÃO CONFIRMAR
+===================================================== */
+
+modalConfirmar.addEventListener(
+    "click",
+    () => {
+
+        fecharModal({
+
+            confirmado: true,
+
+            valor:
+                modalInput.value
+
+        });
+
+    }
+);
+
+
+/* =====================================================
+   BOTÃO CANCELAR
+===================================================== */
+
+modalCancelar.addEventListener(
+    "click",
+    () => {
+
+        fecharModal({
+
+            confirmado: false,
+
+            valor: null
+
+        });
+
+    }
+);
+
+
+/* =====================================================
+   ENTER NO INPUT
+===================================================== */
+
+modalInput.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            event.preventDefault();
+
+            fecharModal({
+
+                confirmado: true,
+
+                valor:
+                    modalInput.value
+
+            });
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   ESC
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            !modalOverlay.classList.contains(
+                "aberto"
+            )
+        ) {
+
+            return;
+        }
+
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            event.preventDefault();
+
+            fecharModal({
+
+                confirmado: false,
+
+                valor: null
+
+            });
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   PROMPT PERSONALIZADO
+===================================================== */
+
+async function promptPersonalizado(
+    mensagem,
+    valorInicial = "",
+    titulo = "Digite"
+) {
+
+    const resultado =
+        await abrirModal({
+
+            titulo:
+                titulo,
+
+            mensagem:
+                mensagem,
+
+            input:
+                true,
+
+            valor:
+                valorInicial,
+
+            cancelar:
+                true,
+
+            confirmarTexto:
+                "OK"
+
+        });
+
+
+    if (
+        !resultado.confirmado
+    ) {
+
+        return null;
+    }
+
+
+    return resultado.valor;
+}
+
+
+/* =====================================================
+   ALERT PERSONALIZADO
+===================================================== */
+
+async function alertPersonalizado(
+    mensagem,
+    titulo = "Aviso"
+) {
+
+    await abrirModal({
+
+        titulo:
+            titulo,
+
+        mensagem:
+            mensagem,
+
+        input:
+            false,
+
+        cancelar:
+            false,
+
+        confirmarTexto:
+            "OK"
+
+    });
+
+}
+
+
+/* =====================================================
+   CONFIRM PERSONALIZADO
+===================================================== */
+
+async function confirmPersonalizado(
+    mensagem,
+    titulo = "Confirmação"
+) {
+
+    const resultado =
+        await abrirModal({
+
+            titulo:
+                titulo,
+
+            mensagem:
+                mensagem,
+
+            input:
+                false,
+
+            cancelar:
+                true,
+
+            confirmarTexto:
+                "Confirmar"
+
+        });
+
+
+    return resultado.confirmado;
+}
+
 
 /* =====================================================
    CHAVES
@@ -751,20 +1415,10 @@ function rolarVisor() {
 
     requestAnimationFrame(() => {
 
-        /*
-         * Mantém o final da expressão
-         * visível horizontalmente.
-         */
-
         display.scrollLeft =
             display.scrollWidth -
             display.clientWidth;
 
-
-        /*
-         * Mantém a última linha
-         * visível verticalmente.
-         */
 
         display.scrollTop =
             display.scrollHeight -
@@ -778,7 +1432,7 @@ function rolarVisor() {
    SENHA
 ===================================================== */
 
-function inicializarSenha() {
+async function inicializarSenha() {
 
     let senhaSalva = "";
 
@@ -807,8 +1461,10 @@ function inicializarSenha() {
 
 
     const novaSenha =
-        prompt(
-            "Crie uma senha"
+        await promptPersonalizado(
+            "Crie uma senha",
+            "",
+            "Criar senha"
         );
 
 
@@ -824,8 +1480,10 @@ function inicializarSenha() {
 
 
     const resposta =
-        prompt(
-            "Como você gosta de ser chamada?"
+        await promptPersonalizado(
+            "Como você gosta de ser chamada?",
+            "",
+            "Recuperação"
         );
 
 
@@ -857,7 +1515,7 @@ function inicializarSenha() {
 
     } catch (e) {
 
-        alert(
+        await alertPersonalizado(
             "Não foi possível salvar os dados."
         );
 
@@ -891,13 +1549,7 @@ function atualizar() {
 
 function add(valor) {
 
-
     if (valor === ".") {
-
-        /*
-         * Procura somente a parte
-         * atual da expressão.
-         */
 
         const partes =
             expr.split(
@@ -922,7 +1574,6 @@ function add(valor) {
 
     expr += valor;
 
-
     atualizar();
 }
 
@@ -932,7 +1583,6 @@ function add(valor) {
 ===================================================== */
 
 function operacao(op) {
-
 
     if (!expr) {
 
@@ -1019,34 +1669,28 @@ function apagar() {
 
 function calcular() {
 
-
     const senha =
-    String(
-        Cripto.carregar(
-            CHAVE_SENHA
-        ) || ""
-    ).trim();
+        String(
+            Cripto.carregar(
+                CHAVE_SENHA
+            ) || ""
+        ).trim();
 
-
-/*
- * Senha especial
- */
-
-if (
-    expr.trim() !== "" &&
-    expr.trim() === senha
-) {
 
     /*
-     * Verifica se todas as permissões foram concedidas
+     * Senha especial
      */
 
-window.location.href =
-    "file:///android_asset/user1/index2.html";
+    if (
+        expr.trim() !== "" &&
+        expr.trim() === senha
+    ) {
 
-return;
-}
+        window.location.href =
+            "file:///android_asset/user1/index2.html";
 
+        return;
+    }
 
 
     if (!expr.trim()) {
@@ -1084,7 +1728,6 @@ return;
 
             rolarVisor();
 
-
             return;
         }
 
@@ -1094,7 +1737,6 @@ return;
     mostrarMensagem(
         "Erro"
     );
-
 
     expr = "";
 }
@@ -1108,7 +1750,6 @@ function mostrarMensagem(
     texto,
     tempo = 1000
 ) {
-
 
     displayTexto.textContent =
         texto;
@@ -1134,8 +1775,7 @@ function mostrarMensagem(
    RECUPERAÇÃO DE SENHA
 ===================================================== */
 
-function recuperarSenha() {
-
+async function recuperarSenha() {
 
     let respostaSalva = "";
 
@@ -1163,8 +1803,10 @@ function recuperarSenha() {
 
 
     const resposta =
-        prompt(
-            "Como você gosta de ser chamada?"
+        await promptPersonalizado(
+            "Como você gosta de ser chamada?",
+            "",
+            "Recuperar senha"
         );
 
 
@@ -1187,8 +1829,10 @@ function recuperarSenha() {
 
 
     const novaSenha =
-        prompt(
-            "Digite a nova senha"
+        await promptPersonalizado(
+            "Digite a nova senha",
+            "",
+            "Nova senha"
         );
 
 
@@ -1202,8 +1846,10 @@ function recuperarSenha() {
 
 
     const confirmarSenha =
-        prompt(
-            "Confirme a nova senha"
+        await promptPersonalizado(
+            "Confirme a nova senha",
+            "",
+            "Confirmar senha"
         );
 
 
@@ -1240,7 +1886,7 @@ function recuperarSenha() {
 
 
     const trocarResposta =
-        confirm(
+        await confirmPersonalizado(
             "Deseja alterar a resposta de recuperação?"
         );
 
@@ -1248,8 +1894,10 @@ function recuperarSenha() {
     if (trocarResposta) {
 
         const novaResposta =
-            prompt(
-                "Como você gosta de ser chamada?"
+            await promptPersonalizado(
+                "Como você gosta de ser chamada?",
+                "",
+                "Nova resposta"
             );
 
 
@@ -1295,7 +1943,6 @@ function recuperarSenha() {
 ===================================================== */
 
 function registrarToque() {
-
 
     contadorToques++;
 
@@ -1343,7 +1990,6 @@ document.addEventListener(
     "keydown",
     e => {
 
-
         if (
             /^\d$/.test(
                 e.key
@@ -1351,7 +1997,6 @@ document.addEventListener(
         ) {
 
             add(e.key);
-
 
         } else if (
             [
@@ -1364,13 +2009,11 @@ document.addEventListener(
 
             operacao(e.key);
 
-
         } else if (
             e.key === "."
         ) {
 
             add(".");
-
 
         } else if (
             e.key === "Backspace"
@@ -1378,13 +2021,11 @@ document.addEventListener(
 
             apagar();
 
-
         } else if (
             e.key === "Escape"
         ) {
 
             limpar();
-
 
         } else if (
             e.key === "Enter" ||
@@ -1392,7 +2033,6 @@ document.addEventListener(
         ) {
 
             calcular();
-
 
         } else if (
             e.key === "%"
@@ -1414,7 +2054,6 @@ inicializarSenha();
 atualizar();
 
 </script>
-
 
 </body>
 </html>

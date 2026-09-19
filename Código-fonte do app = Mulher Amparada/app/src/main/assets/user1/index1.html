@@ -69,54 +69,12 @@ body{
 
 }
 
-body{
-
-    color:#fff;
-
-    overflow-x:hidden;
-
-    animation:
-        entrada
-        .65s
-        ease
-        both;
-
-}
-
-button{
-
-    font:inherit;
-
-}
-
-img{
-
-    display:block;
-
-}
-
 
 /* =========================================================
    KEYFRAMES — SOMENTE OPACITY
 ========================================================= */
 
 @keyframes entrada{
-
-    from{
-
-        opacity:0;
-
-    }
-
-    to{
-
-        opacity:1;
-
-    }
-
-}
-
-@keyframes surgir{
 
     from{
 
@@ -148,6 +106,34 @@ img{
     }
 
 }
+
+body{
+
+    color:#fff;
+
+    overflow-x:hidden;
+
+    animation:
+        entrada
+        1s
+        ease
+        both;
+
+}
+
+button{
+
+    font:inherit;
+
+}
+
+img{
+
+    display:block;
+
+}
+
+
 
 
 /* =========================================================
@@ -191,11 +177,7 @@ img{
 
     margin-bottom:28px;
 
-    animation:
-        surgir
-        .65s
-        .05s
-        both;
+    
 
 }
 
@@ -324,11 +306,7 @@ img{
 
     background:#050505;
 
-    animation:
-        surgir
-        .7s
-        .1s
-        both;
+    
 
 }
 
@@ -546,12 +524,7 @@ img{
 
     margin-top:12px;
 
-    animation:
-        surgir
-        .7s
-        .17s
-        both;
-
+    
 }
 
 .summary-item{
@@ -627,11 +600,7 @@ img{
 
     margin-top:36px;
 
-    animation:
-        surgir
-        .7s
-        .23s
-        both;
+    
 
 }
 
@@ -1276,24 +1245,6 @@ img{
 
 }
 
-
-/* =========================================================
-   ACESSIBILIDADE
-========================================================= */
-
-@media(prefers-reduced-motion:reduce){
-
-    *,
-    *::before,
-    *::after{
-
-        animation:none !important;
-
-        transition:none !important;
-
-    }
-
-}
 
 </style>
 

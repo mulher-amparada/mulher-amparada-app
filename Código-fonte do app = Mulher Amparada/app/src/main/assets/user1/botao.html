@@ -105,6 +105,21 @@ padding-top: 5%;
    CONTAINER
 ========================================================= */
 
+
+@keyframes elementPopIn {
+    0% {
+        opacity: 0;
+        transform: scale(.9);
+    }
+
+    
+    
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 .container {
 
     width: 100%;
@@ -334,9 +349,7 @@ padding-top: 5%;
 /* =========================================================
    BOTÃO
 ========================================================= */
-/* =========================================================
-   BOTÃO
-========================================================= */
+
 
 .btn {
 
@@ -672,8 +685,6 @@ margin-bottom: 1.5%;
     <!-- =====================================================
          HERO
     ====================================================== -->
-
-    <header class="hero">
 
 <header class="hero">
 
@@ -1525,6 +1536,29 @@ document.addEventListener(
 
 
 
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const elementos = document.querySelectorAll(
+    ".btn, h2, .heroIcon, .heroTag, .heroSubtitle"
+);
+
+    elementos.forEach((elemento, index) => {
+
+        elemento.style.opacity = "0";
+
+        requestAnimationFrame(() => {
+
+            elemento.style.animation =
+                "elementPopIn .45s ease forwards";
+
+        });
+
+    });
+
+});
 </script>
 
 </body>

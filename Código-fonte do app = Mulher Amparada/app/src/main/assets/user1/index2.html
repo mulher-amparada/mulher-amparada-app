@@ -58,6 +58,29 @@
 
 }
 
+/* =========================================================
+   ANIMAÇÃO DE ENTRADA DOS ELEMENTOS
+   menor → maior → tamanho original
+========================================================= */
+
+.elementPopIn {
+    animation: elementPopIn .45s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+@keyframes elementPopIn {
+    0% {
+        transform: scale(.96);
+    }
+
+    55% {
+        transform: scale(1.025);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
 .mainUI.saindo {
 
     animation:
@@ -67,6 +90,7 @@
         forwards;
 
 }
+
 
 * {
     -webkit-backface-visibility: hidden;
@@ -5307,6 +5331,53 @@ function abrirAreaDoAmparo() {
     }
 }
 
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const elementos = document.querySelectorAll(`
+        .hero,
+        .label,
+        .panic,
+        .control-card,
+        .actionCard,
+        .bigButton,
+        .amparoButton,
+        .amparoLabel
+    `);
+
+    const observer = new IntersectionObserver((entries) => {
+
+        entries.forEach(entry => {
+
+            const elemento = entry.target;
+
+            if (entry.isIntersecting) {
+
+                elemento.classList.remove("elementPopIn");
+
+                void elemento.offsetWidth;
+
+                elemento.classList.add("elementPopIn");
+
+            } else {
+
+                elemento.classList.remove("elementPopIn");
+
+            }
+
+        });
+
+    }, {
+        threshold: 0.1
+    });
+
+    elementos.forEach(elemento => {
+        observer.observe(elemento);
+    });
+
+});
 </script>
 
 </body>

@@ -1147,8 +1147,7 @@ padding-top: 2.5%;
 
     z-index: 2500;
 
-    background:
-        #000;
+    background: (0, 0, 0, 0.5);
 
     backdrop-filter:
         blur(5px);
@@ -1187,8 +1186,8 @@ padding-top: 2.5%;
 
     width: min(310px, 86vw);
 
-    height: 100vh;
-    
+    height: 82vh;
+
     left: 2.5%;
 
     padding:
@@ -1212,14 +1211,19 @@ padding-top: 2.5%;
         translateX(-105%);
 
     transition:
-        transform .32s
-        cubic-bezier(.2,.8,.2,1);
-        
-        border-radius: 20px;
-        
+        transform .12s cubic-bezier(.2,.8,.2,1),
+        height .2s ease;
 
+    border-radius: 20px;
 }
 
+/* =========================================================
+   ALTURA DO MENU COM COLOR PICKER ABERTO
+========================================================= */
+
+.side-menu:has(.rgb-picker.open) {
+    height: 132vh;
+}
 
 .side-menu.open {
 
@@ -1338,6 +1342,8 @@ padding-top: 2.5%;
     position: fixed;
 
     inset: 0;
+
+
 
     z-index: 5000;
 
@@ -1793,6 +1799,8 @@ padding-top: 2.5%;
 
     display: block;
 
+
+
     border-radius: 9px;
 
     background:
@@ -1859,6 +1867,8 @@ padding-top: 2.5%;
         opacity .18s ease,
         transform .18s ease,
         visibility .18s ease;
+        
+        margin-top: 55%;
 }
 
 

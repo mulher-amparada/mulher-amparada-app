@@ -80,36 +80,7 @@ img {
 }
 
 
-@keyframes elementPopIn {
 
-    0% {
-        opacity: 0;
-        transform: scale(.96);
-    }
-
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-
-}
-
-
-/* =========================================================
-   ACESSIBILIDADE
-========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-    *,
-    *::before,
-    *::after {
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: .01ms !important;
-    }
-
-}
 
 
 /* =========================================================
@@ -1947,73 +1918,6 @@ setInterval(
     3000
 );
 
-
-/* =========================================================
-   ANIMAÇÃO DE ENTRADA
-   SOMENTE BLOCOS PRINCIPAIS
-========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        const seletores = [
-            ".header",
-            ".hero",
-            ".summary",
-            ".section"
-        ];
-
-
-        const elementos = [];
-
-
-        seletores.forEach(
-            seletor => {
-
-                document
-                    .querySelectorAll(seletor)
-                    .forEach(elemento => {
-
-                        elementos.push(elemento);
-
-                    });
-
-            }
-        );
-
-
-        elementos.forEach(
-            elemento => {
-
-                elemento.style.opacity = "0";
-
-                elemento.style.transform =
-                    "scale(.96)";
-
-            }
-        );
-
-
-        requestAnimationFrame(() => {
-
-            requestAnimationFrame(() => {
-
-                elementos.forEach(
-                    (elemento, index) => {
-
-                        elemento.style.animation =
-                            "elementPopIn .55s cubic-bezier(.22,.7,.2,1) forwards";
-
-                    }
-                );
-
-            });
-
-        });
-
-    }
-);
 
 </script>
 

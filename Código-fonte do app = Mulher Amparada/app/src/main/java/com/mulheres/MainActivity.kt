@@ -1602,21 +1602,30 @@ class MainActivity : AppCompatActivity() {
                     authenticators
                 )
 
-            if (
-                canAuth !=
-                BiometricManager.BIOMETRIC_SUCCESS
-            ) {
+if (
+    canAuth !=
+    BiometricManager.BIOMETRIC_SUCCESS
+) {
 
-                Toast.makeText(
-                    this,
-                    "Parece que não há métodos de autenticação disponíveis neste aparelho. Não se preocupe: vamos abrir a área protegida para você continuar com segurança.",
-                    Toast.LENGTH_SHORT
-                ).show()
+    Toast.makeText(
+        this,
+        "Biometria não disponível",
+        Toast.LENGTH_SHORT
+    ).show()
 
-                carregarWebView4()
+    when (
+        destinoBiometria
+    ) {
 
-                return@runOnUiThread
-            }
+        1 ->
+            carregarWebView2()
+
+        2 ->
+            carregarWebView4()
+    }
+
+    return@runOnUiThread
+}
 
             val biometricPrompt =
                 BiometricPrompt(

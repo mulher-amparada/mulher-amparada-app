@@ -29,7 +29,7 @@ jobs:
 
     name: Compilar APK Kotlin
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     env:
       App1_DIR: "Código-fonte do app = Mulher Amparada"
@@ -705,7 +705,7 @@ jobs:
 
   build-site:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     needs: build
 

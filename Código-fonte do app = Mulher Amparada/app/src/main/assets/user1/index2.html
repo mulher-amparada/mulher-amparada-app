@@ -58,25 +58,19 @@
 
 }
 
-/* =========================================================
-   ANIMAÇÃO DE ENTRADA DOS ELEMENTOS
-   menor → maior → tamanho original
-========================================================= */
-
-.elementPopIn {
-    animation: elementPopIn .45s cubic-bezier(.22, 1, .36, 1) both;
-}
-
 @keyframes elementPopIn {
     0% {
-        transform: scale(.96);
+        opacity: 0;
+        transform: scale(.9);
     }
 
     55% {
+        opacity: 1;
         transform: scale(1.025);
     }
-
+    
     100% {
+        opacity: 1;
         transform: scale(1);
     }
 }
@@ -93,8 +87,7 @@
 
 
 * {
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
+
 
 
     
@@ -269,8 +262,7 @@ body {
     background: transparent;
     color: #ffffff;
 
-        -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
+    
 
 
 }
@@ -302,25 +294,10 @@ background: #000;
     max-width: 700px;
     min-height: 100vh;
     margin: 0 auto;
-
-    padding:
-        24px
-        16px
-        100px;
-
+    padding: 24px 16px 100px;
     display: flex;
     flex-direction: column;
     gap: 31px;
-
-    animation:
-        pageIn
-        .55s
-        ease
-        both;
-        
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-
 }
 
 /* =========================================================
@@ -5336,45 +5313,21 @@ function abrirAreaDoAmparo() {
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-    const elementos = document.querySelectorAll(`
-        .hero,
-        .label,
-        .panic,
-        .control-card,
-        .actionCard,
-        .bigButton,
-        .amparoButton,
-        .amparoLabel
-    `);
+    const elementos = document.querySelectorAll(
+        ".mainUI > *"
+    );
 
-    const observer = new IntersectionObserver((entries) => {
+    elementos.forEach((elemento, index) => {
 
-        entries.forEach(entry => {
+        elemento.style.opacity = "0";
 
-            const elemento = entry.target;
+        requestAnimationFrame(() => {
 
-            if (entry.isIntersecting) {
-
-                elemento.classList.remove("elementPopIn");
-
-                void elemento.offsetWidth;
-
-                elemento.classList.add("elementPopIn");
-
-            } else {
-
-                elemento.classList.remove("elementPopIn");
-
-            }
+            elemento.style.animation =
+                "elementPopIn .45s ease forwards";
 
         });
 
-    }, {
-        threshold: 0.1
-    });
-
-    elementos.forEach(elemento => {
-        observer.observe(elemento);
     });
 
 });

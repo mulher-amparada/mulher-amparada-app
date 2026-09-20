@@ -20,14 +20,7 @@
    BASE
 ========================================================= */
 
-@keyframes fadein {
-from {
-opacity: 0;
-}
-to {
-opacity: 1;
-}
-}
+
 
 @font-face {
     font-family: "Quicksand";
@@ -42,8 +35,6 @@ opacity: 1;
         -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
 }
 
 html {
@@ -65,7 +56,7 @@ body {
 
     overflow-x: hidden;
     
-    animation: fadein .55s ease both;
+    
 }
 
 
@@ -74,7 +65,7 @@ body {
 ========================================================= */
 
 .container {
-    width: min(100%, 760px);
+    width: stretch;
     margin: 0 auto;
 
     padding:
@@ -536,6 +527,13 @@ body {
     color: #fff;
 }
 
+@media (prefers-reduced-motion: reduce) {
+    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
+
+    * {
+        animation-name: none !important;
+    }
+}
 </style>
 
 </head>

@@ -1922,42 +1922,52 @@ function criarPagina(index) {
        DIGITAÇÃO
     ===================================================== */
 
-    textarea.addEventListener(
-        "input",
-        function () {
+    let temporizadorSalvamento = null;
 
-            /*
-             * Salva o conteúdo desta página
-             * no índice correspondente.
-             */
+textarea.addEventListener(
+    "input",
+    function () {
 
-            dados[index] =
-                textarea.value;
+        dados[index] =
+            textarea.value;
 
+        clearTimeout(
+            temporizadorSalvamento
+        );
 
-            /*
-             * Salva o diário e altera
-             * somente a data desta página.
-             */
+        const ultimoCaractere =
+            textarea.value.slice(-1);
+
+        if (
+            ultimoCaractere === " "
+        ) {
 
             salvar(index);
 
+        } else {
 
-            /*
-             * Cria automaticamente
-             * a próxima página.
-             */
+            temporizadorSalvamento =
+                setTimeout(
+                    function () {
 
-            if (
-                textarea.value.length > 220 &&
-                index === atual
-            ) {
+                        salvar(index);
 
-                virarProxima();
-
-            }
+                    },
+                    1000
+                );
 
         }
+
+        if (
+            textarea.value.length > 220 &&
+            index === atual
+        ) {
+
+            virarProxima();
+
+        }
+
+    }
     );
 
 

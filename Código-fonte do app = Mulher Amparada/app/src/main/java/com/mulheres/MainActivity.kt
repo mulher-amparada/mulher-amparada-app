@@ -257,22 +257,25 @@ class MainActivity : AppCompatActivity() {
         // BOTÃO VOLTAR
         // =====================================================
 
-        onBackPressedDispatcher.addCallback(
-            this,
-            object :
-                OnBackPressedCallback(true) {
+onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+    override fun handleOnBackPressed() {
+        val urlAtual = webView.url
 
-                override fun handleOnBackPressed() {
-
-                    if (
-                        webView.canGoBack()
-                    ) {
-
-                        webView.goBack()
-                    }
-                }
+        if (urlAtual != null && urlAtual.contains("google.com")) {
+            webView.clearHistory()
+            finish()
+        } else {
+            if (webView.canGoBack()) {
+                webView.goBack()
+            } else {
+                isEnabled = false
+                onBackPressedDispatcher.onBackPressed()
             }
-        )
+        }
+    }
+})
+        
+        
     }
 
 

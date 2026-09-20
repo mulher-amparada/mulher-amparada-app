@@ -763,7 +763,14 @@ settings.mixedContentMode =
     )  
 
 ```
-E também:
+
+🔐 Navegação da área protegida:
+
+A entrada na Área do amparo deve utilizar "window.location.replace()" em vez de "window.location.href".
+
+O uso de "window.location.replace()" impede que a página anterior permaneça no histórico de navegação do navegador/WebView. Dessa forma, após acessar a área protegida, o usuário não consegue retornar à página anterior utilizando o botão de voltar do navegador.
+
+Essa abordagem é utilizada como uma camada adicional de segurança para evitar que uma página anterior de acesso permaneça disponível no histórico.
 
 ```kt
 

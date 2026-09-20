@@ -3,12 +3,19 @@
 
 <head>
 
+
+
 <meta charset="UTF-8">
 
 <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
 >
+
+    <meta
+        name="description"
+        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
+    >
 
 <meta name="theme-color" content="#000000">
 
@@ -637,12 +644,10 @@ body {
         animation-name: none !important;
     }
 }
+
 </style>
 
-    <meta
-        name="description"
-        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
-    >
+
 
 </head>
 
@@ -959,58 +964,9 @@ body {
 
 
 
-<style>
-
-body.fade-out {
-
-    opacity: 0;
-
-    pointer-events: none;
-
-    transition:
-        opacity .26s
-        ease;
-
-}
-
-@media (prefers-reduced-motion: reduce) {
-    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
-
-    * {
-        animation-name: none !important;
-    }
-}
-</style>
 
 
-<script>
 
-let navegando = false;
 
-function sairDaPagina(destino) {
-
-    if (navegando || !destino) {
-        return;
-    }
-
-    navegando = true;
-
-    document.body.classList.add("fade-out");
-
-    setTimeout(function() {
-        window.location.href = destino;
-    }, 260);
-
-}
-
-window.addEventListener("pageshow", function() {
-
-    navegando = false;
-
-    document.body.classList.remove("fade-out");
-
-});
-
-</script>
 </body>
 </html>

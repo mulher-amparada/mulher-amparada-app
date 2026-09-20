@@ -10,14 +10,14 @@
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
 >
 
+    <meta
+        name="description"
+        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
+    >
+
 <meta name="theme-color" content="#000000">
 
 <title>Mulher Amparada</title>
-
-<meta
-    name="description"
-    content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
->
 
 <link
     rel="apple-touch-icon"
@@ -204,8 +204,7 @@ body::before {
 
     text-align: center;
 
-    animation:
-        fadeIn .55s ease both;
+    
 }
 
 
@@ -672,7 +671,10 @@ body.fade-out .container {
         animation-name: none !important;
     }
 }
+
 </style>
+
+
 
 </head>
 
@@ -734,38 +736,7 @@ body.fade-out .container {
 </main>
 
 
-<script>
 
-let navegando = false;
-
-function sairDaPagina(destino) {
-
-    if (navegando || !destino) {
-        return;
-    }
-
-    navegando = true;
-
-    document.body.classList.add("fade-out");
-
-    setTimeout(function() {
-
-        window.location.href = destino;
-
-    }, 260);
-
-}
-
-
-window.addEventListener("pageshow", function() {
-
-    navegando = false;
-
-    document.body.classList.remove("fade-out");
-
-});
-
-</script>
 
 </body>
 

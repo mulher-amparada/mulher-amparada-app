@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
+    >
 
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="manifest" href="/site.webmanifest">
-<meta name="description" content="Interface moderna IntelliCore com design avançado e recursos personalizados">
 <meta name="keywords" content="interface moderna, , design web">
 <meta name="author" content="Seu nome">
 <title>Termos e Privacidade</title>
@@ -542,7 +548,10 @@ body {
         animation-name: none !important;
     }
 }
+
 </style>
+
+
 
 </head>
 
@@ -1818,58 +1827,9 @@ O rastreamento pode variar conforme o navegador utilizado. Em alguns casos, o pr
 
 </div>
 
-<style>
-
-body.fade-out {
-
-    opacity: 0;
-
-    pointer-events: none;
-
-    transition:
-        opacity .26s
-        ease;
-
-}
-
-@media (prefers-reduced-motion: reduce) {
-    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
-
-    * {
-        animation-name: none !important;
-    }
-}
-</style>
 
 
-<script>
 
-let navegando = false;
 
-function sairDaPagina(destino) {
-
-    if (navegando || !destino) {
-        return;
-    }
-
-    navegando = true;
-
-    document.body.classList.add("fade-out");
-
-    setTimeout(function() {
-        window.location.href = destino;
-    }, 260);
-
-}
-
-window.addEventListener("pageshow", function() {
-
-    navegando = false;
-
-    document.body.classList.remove("fade-out");
-
-});
-
-</script>
 </body>
 </html>

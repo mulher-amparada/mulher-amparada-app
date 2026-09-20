@@ -11,13 +11,13 @@
     >
 
     <meta
-        name="theme-color"
-        content="#080605"
+        name="description"
+        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
     >
 
     <meta
-        name="description"
-        content="Zenaide Caramelizada — doces, chocolates e sabores especiais para deixar qualquer momento mais gostoso."
+        name="theme-color"
+        content="#080605"
     >
 
     <title>Zenaide Caramelizada | Doces e Sabores Especiais</title>
@@ -923,6 +923,8 @@ margin-right: 1%;
 
     </style>
 
+
+
 </head>
 
 
@@ -1179,52 +1181,10 @@ margin-right: 1%;
 
     </footer>
 
-<style>
-
-body.fade-out {
-
-    opacity: 0;
-
-    pointer-events: none;
-
-    transition:
-        opacity .26s
-        ease;
-
-}
-
-</style>
 
 
-<script>
 
-let navegando = false;
 
-function sairDaPagina(destino) {
-
-    if (navegando || !destino) {
-        return;
-    }
-
-    navegando = true;
-
-    document.body.classList.add("fade-out");
-
-    setTimeout(function() {
-        window.location.href = destino;
-    }, 260);
-
-}
-
-window.addEventListener("pageshow", function() {
-
-    navegando = false;
-
-    document.body.classList.remove("fade-out");
-
-});
-
-</script>
 
 
 </body>

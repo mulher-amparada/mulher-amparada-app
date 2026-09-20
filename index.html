@@ -220,27 +220,7 @@ body {
             env(safe-area-inset-bottom)
         );
 
-    opacity:
-        1;
-
-    transition:
-        opacity .3s
-        var(--ease);
-
 }
-
-
-body.fade-out {
-
-    opacity:
-        0;
-
-    pointer-events:
-        none;
-
-}
-
-
 /* =========================================================
    SELEÇÃO
 ========================================================= */
@@ -286,29 +266,6 @@ a:focus-visible {
    ENTRADA
 ========================================================= */
 
-@keyframes pageIn {
-
-    from {
-
-        opacity:
-            0;
-
-        transform:
-            translateY(8px);
-
-    }
-
-    to {
-
-        opacity:
-            1;
-
-        transform:
-            translateY(0);
-
-    }
-
-}
 
 
 .page {
@@ -336,11 +293,7 @@ a:focus-visible {
             env(safe-area-inset-bottom)
         );
 
-    animation:
-        pageIn
-        .55s
-        var(--ease)
-        both;
+    
 
 }
 
@@ -3218,20 +3171,7 @@ function sairDaPagina(
     vibrar(
         40
     );
-
-    document.body.classList.add(
-        "fade-out"
-    );
-
-    window.setTimeout(
-        function() {
-
-            window.location.href =
-                destino;
-
-        },
-        300
-    );
+    window.location.href = destino;
 
 }
 

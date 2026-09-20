@@ -97,22 +97,7 @@ body::-webkit-scrollbar {
   }
 }
 
-@keyframes elementPopIn {
-    0% {
-        opacity: 1;
-        transform: scale(.9);
-    }
 
-    55% {
-        opacity: 1;
-        transform: scale(1.025);
-    }
-    
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
 
 html,
 body {
@@ -2071,26 +2056,6 @@ atualizar();
 
 </script>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-    const elementos = document.querySelectorAll("button, .tela");
-
-    elementos.forEach((elemento, index) => {
-
-        elemento.style.opacity = "0";
-
-        requestAnimationFrame(() => {
-
-            elemento.style.animation =
-                "elementPopIn .45s ease forwards";
-
-        });
-
-    });
-
-});
-</script>
 
 </body>
 </html>

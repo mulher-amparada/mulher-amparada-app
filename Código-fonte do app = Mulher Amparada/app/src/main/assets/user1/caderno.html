@@ -148,22 +148,7 @@ body {
    ANIMAÇÕES
 ========================================================= */
 
-@keyframes elementPopIn {
-    0% {
-        opacity: 1;
-        transform: scale(.9);
-    }
 
-    55% {
-        opacity: 1;
-        transform: scale(1.025);
-    }
-    
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
 
 
 @keyframes floatIn {
@@ -2765,33 +2750,7 @@ document.addEventListener(
 
 </script>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
 
-    const elementos = document.querySelectorAll(`
-        .topo,
-        .diario-brand,
-        .diario-icon,
-        .diario-info,
-        .diario-title,
-        .diario-subtitle,
-        .voltar,
-        .hint,
-        .confirm-overlay,
-        .confirm-modal h2,
-        .confirm-modal p,
-        .confirm-acoes
-    `);
-
-    elementos.forEach((elemento) => {
-
-        elemento.style.animation =
-            "elementPopIn .45s ease both";
-
-    });
-
-});
-</script>
 </body>
 
 </html>

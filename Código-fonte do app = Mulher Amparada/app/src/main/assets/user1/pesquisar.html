@@ -122,39 +122,8 @@ body {
 
 
 
-@keyframes elementPopIn {
-    0% {
-        opacity: 1;
-        transform: scale(.9);
-         }
 
-    55% {
-        opacity: 1;
-        transform: scale(1.025);
-    }
-    
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
 
-@keyframes searchPopIn {
-    0% {
-        opacity: 1;
-        transform: translateX(-50%) scale(.9);
-    }
-
-    55% {
-        opacity: 1;
-        transform: translateX(-50%) scale(1.025);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateX(-50%) scale(1);
-    }
-}
 
 
 /* =========================================================
@@ -1766,35 +1735,7 @@ if (
 
 </script>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
 
-    const elementos = document.querySelectorAll(".app, .title, .subtitle, .actions, .empty");
-
-    elementos.forEach((elemento, index) => {
-
-        elemento.style.opacity = "0";
-
-        requestAnimationFrame(() => {
-
-            elemento.style.animation =
-                "elementPopIn .45s ease forwards";
-
-        });
-
-    });
-    
-    const search = document.querySelector(".search");
-
-search.style.opacity = "0";
-
-requestAnimationFrame(() => {
-    search.style.animation =
-        "searchPopIn .45s ease forwards";
-});
-
-});
-</script>
 
 </body>
 

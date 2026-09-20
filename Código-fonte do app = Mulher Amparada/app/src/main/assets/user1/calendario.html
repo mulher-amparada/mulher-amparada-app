@@ -187,22 +187,7 @@ margin-bottom: 10%;
 
 }
 
-@keyframes elementPopIn {
-    0% {
-        opacity: 1;
-        transform: scale(.9);
-    }
 
-    55% {
-        opacity: 1;
-        transform: scale(1.025);
-    }
-    
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
 
 
 /* =========================================================
@@ -7350,51 +7335,7 @@ renderizar();
 
 </script>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
 
-    const elementos = document.querySelectorAll(`
-        .topo,
-        .resumo,
-        .resumo-card,
-        .controles,
-
-        #lista,
-        #telaGraficos,
-        .graficos-topo,
-        .dor-destaque,
-        .dor-barra,
-        .graficos-grid,
-        .grafico-card,
-        #modal,
-        .modal-conteudo,
-        .modal-topo,
-        #formRegistro,
-        .form-grid,
-        .campo,
-        .humor-opcoes,
-        .humor-opcao,
-        .checks,
-        .confirm-overlay,
-        .confirm-modal,
-        .confirm-botoes
-    `);
-
-    elementos.forEach((elemento) => {
-
-        elemento.style.opacity = "0";
-
-        requestAnimationFrame(() => {
-
-            elemento.style.animation =
-                "elementPopIn .45s ease forwards";
-
-        });
-
-    });
-
-});
-</script>
 </body>
 
 </html>

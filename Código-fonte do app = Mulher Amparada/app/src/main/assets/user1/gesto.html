@@ -39,22 +39,7 @@
 
 }
 
-@keyframes elementPopIn {
-    0% {
-        opacity: 1;
-        transform: scale(.9);
-    }
 
-    55% {
-        opacity: 1;
-        transform: scale(1.025);
-    }
-    
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
 
 
 * {
@@ -905,43 +890,7 @@ h1 {
 
 </main>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
 
-    const elementos = document.querySelectorAll(`
-        button,
-        .visor,
-        .topLine,
-        .subtitle,
-        .cardTitle,
-        .cardText,
-        .gesture,
-        .gestureLabel,
-        .gestureTitle,
-        .gestureDescription,
-        .stepsTitle,
-        .step,
-        .stepNumber,
-        .explanation,
-        .explanationTitle,
-        .notice
-    `);
-
-    elementos.forEach((elemento) => {
-
-        elemento.style.opacity = "0";
-
-        requestAnimationFrame(() => {
-
-            elemento.style.animation =
-                "elementPopIn .45s ease forwards";
-
-        });
-
-    });
-
-});
-</script>
 
 </body>
 

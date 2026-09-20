@@ -1017,6 +1017,1051 @@ svg {
 
 </div>
 
+
+<script>
+
+/* =====================================================
+   POP-UP PERSONALIZADO
+===================================================== */
+
+const modalOverlay =
+    document.getElementById(
+        "modalOverlay"
+    );
+
+const modalTitulo =
+    document.getElementById(
+        "modalTitulo"
+    );
+
+const modalMensagem =
+    document.getElementById(
+        "modalMensagem"
+    );
+
+const modalInput =
+    document.getElementById(
+        "modalInput"
+    );
+
+const modalCancelar =
+    document.getElementById(
+        "modalCancelar"
+    );
+
+const modalConfirmar =
+    document.getElementById(
+        "modalConfirmar"
+    );
+
+
+let modalResolve = null;
+
+
+/* =====================================================
+   ABRIR MODAL
+===================================================== */
+
+function abrirModal({
+    titulo = "Aviso",
+    mensagem = "",
+    input = false,
+    valor = "",
+    cancelar = true,
+    confirmarTexto = "OK"
+}) {
+
+    return new Promise(resolve => {
+
+        modalResolve = resolve;
+
+        modalTitulo.textContent =
+            titulo;
+
+        modalMensagem.textContent =
+            mensagem;
+
+        modalInput.style.display =
+            input
+                ? "block"
+                : "none";
+
+        modalInput.value =
+            valor;
+
+        modalCancelar.style.display =
+            cancelar
+                ? "flex"
+                : "none";
+
+        modalConfirmar.textContent =
+            confirmarTexto;
+
+        modalOverlay.classList.add(
+            "aberto"
+        );
+
+        modalOverlay.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+
+        if (input) {
+
+            setTimeout(() => {
+
+                modalInput.focus();
+
+            }, 180);
+
+        } else {
+
+            setTimeout(() => {
+
+                modalConfirmar.focus();
+
+            }, 180);
+
+        }
+
+    });
+}
+
+
+/* =====================================================
+   FECHAR MODAL
+===================================================== */
+
+function fecharModal(resultado) {
+
+    modalOverlay.classList.remove(
+        "aberto"
+    );
+
+    modalOverlay.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    if (modalResolve) {
+
+        const resolver =
+            modalResolve;
+
+        modalResolve = null;
+
+        resolver(resultado);
+    }
+}
+
+
+/* =====================================================
+   BOTÃO CONFIRMAR
+===================================================== */
+
+modalConfirmar.addEventListener(
+    "click",
+    () => {
+
+        fecharModal({
+
+            confirmado: true,
+
+            valor:
+                modalInput.value
+
+        });
+
+    }
+);
+
+
+/* =====================================================
+   BOTÃO CANCELAR
+===================================================== */
+
+modalCancelar.addEventListener(
+    "click",
+    () => {
+
+        fecharModal({
+
+            confirmado: false,
+
+            valor: null
+
+        });
+
+    }
+);
+
+
+/* =====================================================
+   ENTER NO INPUT
+===================================================== */
+
+modalInput.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            event.preventDefault();
+
+            fecharModal({
+
+                confirmado: true,
+
+                valor:
+                    modalInput.value
+
+            });
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   ESC
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            !modalOverlay.classList.contains(
+                "aberto"
+            )
+        ) {
+
+            return;
+        }
+
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            event.preventDefault();
+
+            fecharModal({
+
+                confirmado: false,
+
+                valor: null
+
+            });
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   PROMPT PERSONALIZADO
+===================================================== */
+
+async function promptPersonalizado(
+    mensagem,
+    valorInicial = "",
+    titulo = "Digite"
+) {
+
+    const resultado =
+        await abrirModal({
+
+            titulo:
+                titulo,
+
+            mensagem:
+                mensagem,
+
+            input:
+                true,
+
+            valor:
+                valorInicial,
+
+            cancelar:
+                true,
+
+            confirmarTexto:
+                "OK"
+
+        });
+
+
+    if (
+        !resultado.confirmado
+    ) {
+
+        return null;
+    }
+
+
+    return resultado.valor;
+}
+
+
+/* =====================================================
+   ALERT PERSONALIZADO
+===================================================== */
+
+async function alertPersonalizado(
+    mensagem,
+    titulo = "Aviso"
+) {
+
+    await abrirModal({
+
+        titulo:
+            titulo,
+
+        mensagem:
+            mensagem,
+
+        input:
+            false,
+
+        cancelar:
+            false,
+
+        confirmarTexto:
+            "OK"
+
+    });
+
+}
+
+
+/* =====================================================
+   CONFIRM PERSONALIZADO
+===================================================== */
+
+async function confirmPersonalizado(
+    mensagem,
+    titulo = "Confirmação"
+) {
+
+    const resultado =
+        await abrirModal({
+
+            titulo:
+                titulo,
+
+            mensagem:
+                mensagem,
+
+            input:
+                false,
+
+            cancelar:
+                true,
+
+            confirmarTexto:
+                "Confirmar"
+
+        });
+
+
+    return resultado.confirmado;
+}
+
+
+/* =====================================================
+   CHAVES
+===================================================== */
+
+const CHAVE_SENHA =
+    "senha";
+
+const CHAVE_RECUPERACAO =
+    "nome_recuperacao";
+
+
+/* =====================================================
+   ELEMENTOS
+===================================================== */
+
+const display =
+    document.getElementById(
+        "display"
+    );
+
+
+const displayTexto =
+    document.getElementById(
+        "displayTexto"
+    );
+
+
+/* =====================================================
+   ESTADO
+===================================================== */
+
+let expr = "";
+
+let contadorToques = 0;
+
+let timerToques = null;
+
+
+/* =====================================================
+   ROLAGEM DO VISOR
+===================================================== */
+
+function rolarVisor() {
+
+    requestAnimationFrame(() => {
+
+        display.scrollLeft =
+            display.scrollWidth -
+            display.clientWidth;
+
+
+        display.scrollTop =
+            display.scrollHeight -
+            display.clientHeight;
+
+    });
+}
+
+
+/* =====================================================
+   SENHA
+===================================================== */
+
+async function inicializarSenha() {
+
+    let senhaSalva = "";
+
+
+    try {
+
+        senhaSalva =
+            String(
+                Cripto.carregar(
+                    CHAVE_SENHA
+                ) || ""
+            ).trim();
+
+    } catch (e) {
+
+        senhaSalva = "";
+    }
+
+
+    if (senhaSalva) {
+
+        atualizar();
+
+        return;
+    }
+
+
+    const novaSenha =
+        await promptPersonalizado(
+            "Crie uma senha",
+            "",
+            "Criar senha"
+        );
+
+
+    if (
+        !novaSenha ||
+        !novaSenha.trim()
+    ) {
+
+        location.reload();
+
+        return;
+    }
+
+
+    const resposta =
+        await promptPersonalizado(
+            "Como você gosta de ser chamada?",
+            "",
+            "Recuperação"
+        );
+
+
+    if (
+        !resposta ||
+        !resposta.trim()
+    ) {
+
+        location.reload();
+
+        return;
+    }
+
+
+    try {
+
+        Cripto.salvar(
+            CHAVE_SENHA,
+            novaSenha.trim()
+        );
+
+
+        Cripto.salvar(
+            CHAVE_RECUPERACAO,
+            resposta
+                .trim()
+                .toLowerCase()
+        );
+
+    } catch (e) {
+
+        await alertPersonalizado(
+            "Não foi possível salvar os dados."
+        );
+
+        return;
+    }
+
+
+    location.reload();
+}
+
+
+/* =====================================================
+   VISOR
+===================================================== */
+
+function atualizar() {
+
+    displayTexto.textContent =
+        expr.length
+            ? expr
+            : "0";
+
+
+    rolarVisor();
+}
+
+
+/* =====================================================
+   ADICIONAR
+===================================================== */
+
+function add(valor) {
+
+    if (valor === ".") {
+
+        const partes =
+            expr.split(
+                /[+\-*/()]/
+            );
+
+
+        const parteAtual =
+            partes[
+                partes.length - 1
+            ];
+
+
+        if (
+            parteAtual.includes(".")
+        ) {
+
+            return;
+        }
+    }
+
+
+    expr += valor;
+
+    atualizar();
+}
+
+
+/* =====================================================
+   OPERAÇÃO
+===================================================== */
+
+function operacao(op) {
+
+    if (!expr) {
+
+        if (op === "-") {
+
+            expr = "-";
+
+            atualizar();
+        }
+
+        return;
+    }
+
+
+    if (
+        /[+\-*/]$/.test(expr)
+    ) {
+
+        expr =
+            expr.slice(0, -1) +
+            op;
+
+    } else {
+
+        expr += op;
+    }
+
+
+    atualizar();
+}
+
+
+/* =====================================================
+   PORCENTAGEM
+===================================================== */
+
+function porcentagem() {
+
+    if (!expr) {
+
+        return;
+    }
+
+
+    expr =
+        expr.replace(
+            /(\d+(?:\.\d+)?)$/,
+            "($1/100)"
+        );
+
+
+    atualizar();
+}
+
+
+/* =====================================================
+   LIMPAR
+===================================================== */
+
+function limpar() {
+
+    expr = "";
+
+    atualizar();
+}
+
+
+/* =====================================================
+   APAGAR
+===================================================== */
+
+function apagar() {
+
+    expr =
+        expr.slice(0, -1);
+
+    atualizar();
+}
+
+
+/* =====================================================
+   CALCULAR
+===================================================== */
+
+function calcular() {
+
+    const senha =
+        String(
+            Cripto.carregar(
+                CHAVE_SENHA
+            ) || ""
+        ).trim();
+
+
+    /*
+     * Senha especial
+     */
+
+    if (
+        expr.trim() !== "" &&
+        expr.trim() === senha
+    ) {
+
+        window.location.href =
+            "file:///android_asset/user1/index2.html";
+
+        return;
+    }
+
+
+    if (!expr.trim()) {
+
+        return;
+    }
+
+
+    try {
+
+        const resultado =
+            Function(
+                '"use strict";return (' +
+                expr +
+                ')'
+            )();
+
+
+        if (
+            typeof resultado ===
+                "number" &&
+
+            Number.isFinite(
+                resultado
+            )
+        ) {
+
+            expr =
+                String(resultado);
+
+
+            displayTexto.textContent =
+                expr;
+
+
+            rolarVisor();
+
+            return;
+        }
+
+    } catch (e) {}
+
+
+    mostrarMensagem(
+        "Erro"
+    );
+
+    expr = "";
+}
+
+
+/* =====================================================
+   MENSAGEM
+===================================================== */
+
+function mostrarMensagem(
+    texto,
+    tempo = 1000
+) {
+
+    displayTexto.textContent =
+        texto;
+
+
+    rolarVisor();
+
+
+    clearTimeout(
+        mostrarMensagem.timer
+    );
+
+
+    mostrarMensagem.timer =
+        setTimeout(
+            atualizar,
+            tempo
+        );
+}
+
+
+/* =====================================================
+   RECUPERAÇÃO DE SENHA
+===================================================== */
+
+async function recuperarSenha() {
+
+    let respostaSalva = "";
+
+
+    try {
+
+        respostaSalva =
+            String(
+                Cripto.carregar(
+                    CHAVE_RECUPERACAO
+                ) || ""
+            )
+            .toLowerCase()
+            .trim();
+
+    } catch (e) {
+
+        mostrarMensagem(
+            "Erro",
+            1500
+        );
+
+        return;
+    }
+
+
+    const resposta =
+        await promptPersonalizado(
+            "Como você gosta de ser chamada?",
+            "",
+            "Recuperar senha"
+        );
+
+
+    if (
+        !resposta ||
+
+        resposta
+            .toLowerCase()
+            .trim() !==
+        respostaSalva
+    ) {
+
+        mostrarMensagem(
+            "Resposta incorreta",
+            1500
+        );
+
+        return;
+    }
+
+
+    const novaSenha =
+        await promptPersonalizado(
+            "Digite a nova senha",
+            "",
+            "Nova senha"
+        );
+
+
+    if (
+        !novaSenha ||
+        !novaSenha.trim()
+    ) {
+
+        return;
+    }
+
+
+    const confirmarSenha =
+        await promptPersonalizado(
+            "Confirme a nova senha",
+            "",
+            "Confirmar senha"
+        );
+
+
+    if (
+        confirmarSenha !==
+        novaSenha
+    ) {
+
+        mostrarMensagem(
+            "Senhas diferentes",
+            1500
+        );
+
+        return;
+    }
+
+
+    try {
+
+        Cripto.salvar(
+            CHAVE_SENHA,
+            novaSenha.trim()
+        );
+
+    } catch (e) {
+
+        mostrarMensagem(
+            "Erro ao salvar",
+            1500
+        );
+
+        return;
+    }
+
+
+    const trocarResposta =
+        await confirmPersonalizado(
+            "Deseja alterar a resposta de recuperação?"
+        );
+
+
+    if (trocarResposta) {
+
+        const novaResposta =
+            await promptPersonalizado(
+                "Como você gosta de ser chamada?",
+                "",
+                "Nova resposta"
+            );
+
+
+        if (
+            novaResposta &&
+            novaResposta.trim()
+        ) {
+
+            try {
+
+                Cripto.salvar(
+                    CHAVE_RECUPERACAO,
+                    novaResposta
+                        .trim()
+                        .toLowerCase()
+                );
+
+            } catch (e) {
+
+                mostrarMensagem(
+                    "Erro ao salvar",
+                    1500
+                );
+
+                return;
+            }
+        }
+    }
+
+
+    expr = "";
+
+
+    mostrarMensagem(
+        "Senha alterada",
+        1500
+    );
+}
+
+
+/* =====================================================
+   CINCO TOQUES
+===================================================== */
+
+function registrarToque() {
+
+    contadorToques++;
+
+
+    clearTimeout(
+        timerToques
+    );
+
+
+    if (
+        contadorToques >= 5
+    ) {
+
+        contadorToques = 0;
+
+        recuperarSenha();
+
+        return;
+    }
+
+
+    timerToques =
+        setTimeout(
+            () => {
+
+                contadorToques = 0;
+
+            },
+            2000
+        );
+}
+
+
+display.addEventListener(
+    "click",
+    registrarToque
+);
+
+
+/* =====================================================
+   TECLADO FÍSICO
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    e => {
+
+        if (
+            /^\d$/.test(
+                e.key
+            )
+        ) {
+
+            add(e.key);
+
+        } else if (
+            [
+                "+",
+                "-",
+                "*",
+                "/"
+            ].includes(e.key)
+        ) {
+
+            operacao(e.key);
+
+        } else if (
+            e.key === "."
+        ) {
+
+            add(".");
+
+        } else if (
+            e.key === "Backspace"
+        ) {
+
+            apagar();
+
+        } else if (
+            e.key === "Escape"
+        ) {
+
+            limpar();
+
+        } else if (
+            e.key === "Enter" ||
+            e.key === "="
+        ) {
+
+            calcular();
+
+        } else if (
+            e.key === "%"
+        ) {
+
+            porcentagem();
+        }
+
+    }
+);
+
+
+/* =====================================================
+   INICIALIZAÇÃO
+===================================================== */
+
+inicializarSenha();
+
+atualizar();
+
+</script>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 

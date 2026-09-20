@@ -763,6 +763,28 @@ settings.mixedContentMode =
     )  
 
 ```
+E também:
+
+```kt
+
+onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+    override fun handleOnBackPressed() {
+        val urlAtual = webView.url
+
+        if (urlAtual != null && urlAtual.contains("google.com")) {
+            webView.clearHistory()
+            finish()
+        } else {
+            if (webView.canGoBack()) {
+                webView.goBack()
+            } else {
+                isEnabled = false
+                onBackPressedDispatcher.onBackPressed()
+            }
+        }
+    }
+})
+```
 
 Por que, na FileActivity, o botão para trocar o tipo de armazenamento é unificado em um só?
 

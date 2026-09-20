@@ -69,7 +69,7 @@ body {
 ========================================================= */
 @keyframes elementPopIn {
     0% {
-        opacity: 0;
+        opacity: 1;
         transform: scale(.9);
     }
 
@@ -285,6 +285,14 @@ body {
 
 }
 
+@media (prefers-reduced-motion: reduce) {
+    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
+
+    * {
+        animation-name: none !important;
+    }
+}
+
 </style>
 
 </head>
@@ -473,7 +481,7 @@ document.addEventListener("DOMContentLoaded", () => {
         requestAnimationFrame(() => {
 
             elemento.style.animation =
-                "elementPopIn .65s ease forwards";
+                "elementPopIn .3s ease forwards";
 
         });
 

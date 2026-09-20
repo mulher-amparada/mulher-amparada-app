@@ -169,7 +169,7 @@ margin-top: 2.5%;
 ========================================================= */
 @keyframes elementPopIn {
     0% {
-        opacity: 0;
+        opacity: 1;
         transform: scale(.9);
     }
 
@@ -1168,20 +1168,13 @@ align-items: center;
 
 }
 
+@media (prefers-reduced-motion: reduce) {
 
-@media(prefers-reduced-motion:reduce){
-
-    *,
-    *::before,
-    *::after{
-
-        animation:none !important;
-
-        transition:none !important;
-
+    * {
+        animation-name: none !important;
     }
-
 }
+
 
 svg {
 width: 25px;
@@ -1577,7 +1570,7 @@ const elementos = document.querySelectorAll(`
         requestAnimationFrame(() => {
 
             elemento.style.animation =
-                "elementPopIn .65s ease both";
+                "elementPopIn .3s ease both";
 
         });
 

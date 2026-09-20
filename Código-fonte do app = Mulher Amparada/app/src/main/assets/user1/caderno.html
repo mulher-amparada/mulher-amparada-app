@@ -150,7 +150,7 @@ body {
 
 @keyframes elementPopIn {
     0% {
-        opacity: 0;
+        opacity: 1;
         transform: scale(.9);
     }
 
@@ -1274,6 +1274,15 @@ textarea::placeholder {
             23px;
     }
 
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
+
+    * {
+        animation-name: none !important;
+    }
 }
 
 </style>
@@ -2777,7 +2786,7 @@ document.addEventListener("DOMContentLoaded", () => {
     elementos.forEach((elemento) => {
 
         elemento.style.animation =
-            "elementPopIn .65s ease both";
+            "elementPopIn .3s ease both";
 
     });
 

@@ -46,12 +46,7 @@ Antes de conceder essa permissão, leia atentamente as informações exibidas pe
 > * **Economia Extrema de Bateria:** Os sensores de inclinação consomem energia do dispositivo. Ao restringir o uso do sensor apenas para a tela principal (onde a usuária passa a maior parte do tempo), o aplicativo evita o desgaste desnecessário da bateria e impede que o sensor continue rodando quando o aplicativo for fechado ou minimizado.
 > * **Proteção Focada onde Importa:** A tela principal é o local que concentra as informações realmente sensíveis do projeto (como finanças e anotações). Telas de transição ou de carregamento não exibem dados confidenciais, eliminando a necessidade de um disfarce visual nessas etapas.
 
-
-
-
-
-> ⚠️Aviso — Desembarque seguro
-O recurso de “Desembarque seguro” do Mulher Amparada é informativo e atualmente apresenta a legislação aplicável à Cidade de São Paulo, especialmente a Lei Municipal nº 16.490/2016 e sua regulamentação. Essa legislação não deve ser interpretada como uma regra válida em todo o Brasil. As regras sobre desembarque fora dos pontos podem variar conforme o município, o estado e o tipo de transporte. A carteirinha apresentada pelo aplicativo não é um documento oficial e não substitui a legislação vigente, regulamentações, orientações das empresas de transporte ou autoridades competentes. E antes de utilizar esse recurso em outra localidade, verifique a legislação específica aplicável ao local.
+> ⚠️Aviso — O recurso de “Desembarque seguro” do Mulher Amparada é informativo e atualmente apresenta a legislação aplicável à Cidade de São Paulo, especialmente a Lei Municipal nº 16.490/2016 e sua regulamentação. Essa legislação não deve ser interpretada como uma regra válida em todo o Brasil. As regras sobre desembarque fora dos pontos podem variar conforme o município, o estado e o tipo de transporte. A carteirinha apresentada pelo aplicativo não é um documento oficial e não substitui a legislação vigente, regulamentações, orientações das empresas de transporte ou autoridades competentes. E antes de utilizar esse recurso em outra localidade, verifique a legislação específica aplicável ao local.
 
 ## Sobre as funções por sensores (bloquear a tela por barulho, proteção por barulho que liga pro 180, balançar o celular para pedir ajuda e escurecimento por inclinação):
 

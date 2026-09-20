@@ -67,17 +67,21 @@ body {
 /* =========================================================
    ANIMAÇÃO
 ========================================================= */
-
-@keyframes pageIn {
-
-    from {
+@keyframes elementPopIn {
+    0% {
         opacity: 0;
+        transform: scale(.9);
     }
 
-    to {
+    55% {
         opacity: 1;
+        transform: scale(1.025);
     }
-
+    
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 
@@ -110,11 +114,7 @@ body {
 
     overflow: hidden;
 
-    animation:
-        pageIn
-        .45s
-        ease
-        both;
+    
 
     transform: none;
     -webkit-transform: none;
@@ -461,6 +461,26 @@ window.addEventListener(
 
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const elementos = document.querySelectorAll(".permissionCard, .permissionLine, .permissionTitle, .permissionText, .permissionButton");
+
+    elementos.forEach((elemento, index) => {
+
+        elemento.style.opacity = "0";
+
+        requestAnimationFrame(() => {
+
+            elemento.style.animation =
+                "elementPopIn .65s ease forwards";
+
+        });
+
+    });
+
+});
+</script>
 
 </body>
 

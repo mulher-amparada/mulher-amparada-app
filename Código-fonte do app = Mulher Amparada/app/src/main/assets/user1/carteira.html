@@ -23,18 +23,23 @@
 /* =========================================================
    ANIMAÇÕES
 ========================================================= */
-
-@keyframes pageIn {
-
-    from {
+@keyframes elementPopIn {
+    0% {
         opacity: 0;
+        transform: scale(.9);
     }
 
-    to {
+    55% {
         opacity: 1;
+        transform: scale(1.025);
     }
-
+    
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
+
 
 
 /* =========================================================
@@ -198,11 +203,6 @@ body {
     padding-bottom:
         env(safe-area-inset-bottom);
 
-    animation:
-        pageIn
-        .55s
-        ease
-        both;
 
 }
 
@@ -490,18 +490,6 @@ body {
 
 
 /* =========================================================
-   TOQUE / CLIQUE
-========================================================= */
-
-.cardMain:active {
-
-    transform:
-        scale(.90);
-
-}
-
-
-/* =========================================================
    IMAGEM
 ========================================================= */
 
@@ -676,6 +664,39 @@ body {
 
 
 </main>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const elementos = document.querySelectorAll(`
+
+    .hero,
+    .heroTopLine,
+    .heroTitle,
+    .heroSubtitle,
+    .section,
+    .label,
+    .walletCard,
+    .cardMain
+`);
+
+    elementos.forEach((elemento) => {
+
+        elemento.style.opacity = "0";
+
+        requestAnimationFrame(() => {
+
+            elemento.style.animation =
+                "elementPopIn .65s ease both";
+
+        });
+
+    });
+
+});
+
+</script>
 
 </body>
 

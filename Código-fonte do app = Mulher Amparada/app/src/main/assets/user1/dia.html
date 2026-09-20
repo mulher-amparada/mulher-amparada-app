@@ -110,16 +110,21 @@ margin-top: 5%;
    ANIMAÇÕES
 ========================================================= */
 
-@keyframes fade {
-
-    from {
+@keyframes elementPopIn {
+    0% {
         opacity: 0;
+        transform: scale(.9);
     }
 
-    to {
+    55% {
         opacity: 1;
+        transform: scale(1.025);
     }
-
+    
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 @keyframes pop {
@@ -385,8 +390,7 @@ margin-top: 5%;
     margin:
         auto;
 
-    animation:
-        fade .6s ease;
+    
 
 }
 
@@ -4619,6 +4623,68 @@ lastUpgradeLevels = "";
 
 updateUI();
 
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const elementos = document.querySelectorAll(`
+        .header,
+        .header h1,
+        .header p,
+
+        .score-card,
+        .score-label,
+        .score,
+        .stats,
+        .stat,
+
+        .legacy-card,
+        .prestige-button,
+
+        .click-area,
+        .combo,
+        .history-button,
+
+        .phase-card,
+        .phase-number,
+        .phase-card h2,
+        .phase-card p,
+        .progress,
+        .progress-bar,
+
+        .section-title,
+        .upgrade,
+
+        .story,
+        .story-title,
+        .story-title span,
+        .story h3,
+        .story p,
+        .highlight,
+
+        .timeline,
+        .timeline-item,
+        .timeline-dot,
+        .timeline-year,
+
+        .reset
+    `);
+
+    elementos.forEach((elemento) => {
+
+        elemento.style.opacity = "0";
+
+        requestAnimationFrame(() => {
+
+            elemento.style.animation =
+                "elementPopIn .6s ease forwards";
+
+        });
+
+    });
+
+});
 </script>
 
 </body>

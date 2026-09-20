@@ -171,6 +171,7 @@ body::-webkit-scrollbar,
 }
 
 
+
 body {
 
     position:
@@ -234,75 +235,6 @@ body {
 }
 
 
-/* =========================================================
-   FUNDO
-========================================================= */
-
-#background {
-
-    position:
-        fixed;
-
-    inset:
-        -2%;
-
-    z-index:
-        -10;
-
-    pointer-events:
-        none;
-
-    background:
-
-        radial-gradient(
-            circle at 50% 0%,
-            rgba(255, 105, 180, .11),
-            transparent 42%
-        ),
-
-        radial-gradient(
-            circle at 100% 100%,
-            rgba(100, 80, 255, .035),
-            transparent 40%
-        ),
-
-        var(--bg);
-
-    background-position:
-        center;
-
-    background-repeat:
-        no-repeat;
-
-    transform:
-        translateZ(0);
-
-    will-change:
-        transform;
-}
-
-
-#background::after {
-
-    content:
-        "";
-
-    position:
-        absolute;
-
-    inset:
-        0;
-
-    pointer-events:
-        none;
-
-    background:
-        linear-gradient(
-            to bottom,
-            rgba(0, 0, 0, .38),
-            rgba(0, 0, 0, .68)
-        );
-}
 
 
 /* =========================================================
@@ -339,8 +271,7 @@ body {
         var(--safe-bottom)
         var(--safe-left);
 
-    animation:
-        pageIn .45s ease both;
+    
 }
 
 
@@ -560,7 +491,7 @@ width: 92%;
         layout paint;
 
     animation:
-        headerIn .45s ease both;
+        headerIn .65s ease both;
 }
 
 
@@ -1186,19 +1117,23 @@ svg {
 /* =========================================================
    ANIMAÇÕES
 ========================================================= */
-
-@keyframes pageIn {
-
-    from {
-        opacity:
-            0;
+@keyframes elementPopIn {
+    0% {
+        opacity: 0;
+        transform: scale(.9);
     }
 
-    to {
-        opacity:
-            1;
+    55% {
+        opacity: 1;
+        transform: scale(1.025);
+    }
+    
+    100% {
+        opacity: 1;
+        transform: scale(1);
     }
 }
+
 
 
 @keyframes mapIn {
@@ -1329,10 +1264,6 @@ svg {
 
 
 <body>
-
-
-<div id="background"></div>
-
 
 <div class="app">
 
@@ -2219,6 +2150,27 @@ window.addEventListener(
 
 );
 
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const elementos = document.querySelectorAll(".app");
+
+    elementos.forEach((elemento, index) => {
+
+        elemento.style.opacity = "0";
+
+        requestAnimationFrame(() => {
+
+            elemento.style.animation =
+                "elementPopIn .65s ease forwards";
+
+        });
+
+    });
+
+});
 </script>
 
 </body>

@@ -114,22 +114,6 @@ svg {
 }
 
 
-/* =========================================================
-   FUNDO
-========================================================= */
-
-body::before {
-    content: "";
-
-    position: fixed;
-    inset: 0;
-
-    background: rgba(0,0,0,.45);
-
-    pointer-events: none;
-
-    z-index: -1;
-}
 
 
 /* =========================================================
@@ -145,17 +129,21 @@ body::before {
 /* =========================================================
    ANIMAÇÃO DE ENTRADA
 ========================================================= */
-
-@keyframes pageIn {
-
-    from {
+@keyframes elementPopIn {
+    0% {
         opacity: 0;
+        transform: scale(.9);
     }
 
-    to {
+    55% {
         opacity: 1;
+        transform: scale(1.025);
     }
-
+    
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 
@@ -196,7 +184,7 @@ body::before {
         16px
         max(28px, env(safe-area-inset-bottom));
 
-    animation: pageIn .25s ease-out both;
+    
 }
 
 
@@ -2341,6 +2329,29 @@ loadEvents();
 
 render();
 
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const elementos = document.querySelectorAll(
+        ".header, .summary-card, .calendar, .footer"
+    );
+
+    elementos.forEach((elemento) => {
+
+        elemento.style.opacity = "0";
+
+        requestAnimationFrame(() => {
+
+            elemento.style.animation =
+                "elementPopIn .65s ease forwards";
+
+        });
+
+    });
+
+});
 </script>
 
 </body>

@@ -39,6 +39,23 @@
 
 }
 
+@keyframes elementPopIn {
+    0% {
+        opacity: 0;
+        transform: scale(.9);
+    }
+
+    55% {
+        opacity: 1;
+        transform: scale(1.025);
+    }
+    
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 
 * {
 
@@ -96,21 +113,6 @@
 }
 
 
-@keyframes pagein {
-
-    from {
-        opacity:
-            0;
-    }
-
-    to {
-        opacity:
-            1;
-    }
-
-}
-
-
 html,
 body {
 
@@ -157,11 +159,7 @@ body {
         16px
         env(safe-area-inset-bottom);
 
-    animation:
-        pagein
-        .55s
-        ease
-        both;
+
 
 }
 
@@ -898,6 +896,44 @@ h1 {
     </section>
 
 </main>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const elementos = document.querySelectorAll(`
+        button,
+        .visor,
+        .topLine,
+        .subtitle,
+        .cardTitle,
+        .cardText,
+        .gesture,
+        .gestureLabel,
+        .gestureTitle,
+        .gestureDescription,
+        .stepsTitle,
+        .step,
+        .stepNumber,
+        .explanation,
+        .explanationTitle,
+        .notice
+    `);
+
+    elementos.forEach((elemento) => {
+
+        elemento.style.opacity = "0";
+
+        requestAnimationFrame(() => {
+
+            elemento.style.animation =
+                "elementPopIn .65s ease forwards";
+
+        });
+
+    });
+
+});
+</script>
 
 </body>
 

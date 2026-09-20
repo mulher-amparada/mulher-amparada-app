@@ -160,63 +160,30 @@ margin-top: 2.5%;
 }
 
 
-/* =========================================================
-   FUNDO
-========================================================= */
-
-body::before{
-
-    content:"";
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:-5;
-
-    background:
-
-        radial-gradient(
-            circle at 10% 0%,
-            rgba(255,105,145,.07),
-            transparent 28%
-        ),
-
-        radial-gradient(
-            circle at 100% 100%,
-            rgba(120,183,255,.035),
-            transparent 28%
-        ),
-
-        #070709;
-
-    pointer-events:none;
-
-}
 
 
-/* =========================================================
-   SCROLLBAR
-========================================================= */
 
 
 /* =========================================================
    ANIMAÇÕES
 ========================================================= */
-
-@keyframes pageIn{
-
-        from {
+@keyframes elementPopIn {
+    0% {
         opacity: 0;
-        
+        transform: scale(.9);
     }
 
-    to {
+    55% {
         opacity: 1;
-        
+        transform: scale(1.025);
     }
-
+    
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
+
 
 
 @keyframes pulse{
@@ -259,10 +226,7 @@ body::before{
 
         max(30px,env(safe-area-inset-bottom));
 
-    animation:
-
-        pageIn .55s
-        cubic-bezier(.2,.8,.2,1);
+    
 
 }
 
@@ -1579,6 +1543,49 @@ height: 25px;
     id="toast"
 ></div>
 
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+const elementos = document.querySelectorAll(`
+    .topbar,
+    .brand,
+    .title,
+    .subtitle,
+    .top-actions,
+    .icon-btn,
+    .hero,
+
+
+    .section-title,
+    .info-grid,
+    .info,
+    .info-label,
+    .info-value,
+    .status-card,
+    .status-head,
+    .status-title,
+    .status-indicator,
+    .status-text,
+    .location-button
+`);
+
+    elementos.forEach((elemento) => {
+
+        elemento.style.opacity = "0";
+
+        requestAnimationFrame(() => {
+
+            elemento.style.animation =
+                "elementPopIn .65s ease both";
+
+        });
+
+    });
+
+});
+
+</script>
 
 <script>
 

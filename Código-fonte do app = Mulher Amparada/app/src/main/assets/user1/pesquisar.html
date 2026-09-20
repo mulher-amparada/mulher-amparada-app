@@ -79,8 +79,7 @@ body::-webkit-scrollbar {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
+    
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -97,6 +96,9 @@ body {
     color: white;
 
     background: black;
+    
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: auto;
     
 }
 
@@ -120,33 +122,38 @@ body {
 
 
 
-/* =========================================================
-   FUNDO
-========================================================= */
+@keyframes elementPopIn {
+    0% {
+        opacity: 0;
+        transform: scale(.9);
+         }
 
-.fundo {
+    55% {
+        opacity: 1;
+        transform: scale(1.025);
+    }
+    
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
 
-    position: fixed;
+@keyframes searchPopIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) scale(.9);
+    }
 
-    inset: 0;
+    55% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1.025);
+    }
 
-    z-index: -10;
-
-    background:
-
-        radial-gradient(
-            circle at 50% -10%,
-            rgba(255,150,150,.12),
-            transparent 35%
-        ),
-
-        radial-gradient(
-            circle at 100% 100%,
-            rgba(255,255,255,.025),
-            transparent 40%
-        ),
-
-        #000;
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+    }
 }
 
 
@@ -154,17 +161,6 @@ body {
    APP
 ========================================================= */
 
-@keyframes pageIn {
-        from {
-        opacity: 0;
-        
-    }
-
-    to {
-        opacity: 1;
-        
-    }
-}
 
 
 main {
@@ -183,8 +179,7 @@ main {
 
         max(16px, env(safe-area-inset-left));
         
-        animation:
-        pageIn .6s ease both;
+        
 }
 
 
@@ -341,13 +336,15 @@ main {
 
         30px;
 
-    overscroll-behavior-y: contain;
-
-    scrollbar-width: thin;
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
     
     height: 80%;
 border-radius: 40px;
 }
+
+
 
 
 /* =========================================================
@@ -508,48 +505,36 @@ border-radius: 40px;
 ========================================================= */
 
 .search {
-margin-bottom: 5%;
     position: fixed;
 
     left: 50%;
-
-    bottom:
-        max(20px, env(safe-area-inset-bottom));
+    bottom: max(20px, env(safe-area-inset-bottom));
 
     transform: translateX(-50%);
 
     z-index: 1000;
 
     width: min(68%, 430px);
-
     height: 56px;
 
     display: flex;
-
     align-items: center;
 
     gap: 12px;
-
     padding: 0 18px;
 
     border-radius: 999px;
 
-    background:
-
-        rgba(255,145,145,.88);
+    background: rgba(255,145,145,.88);
 
     box-shadow:
-
         0 15px 45px rgba(0,0,0,.35);
 
     backdrop-filter: blur(18px);
-
     -webkit-backdrop-filter: blur(18px);
 
     transition:
-
         width .25s ease,
-
         background .25s ease;
 }
 
@@ -663,62 +648,6 @@ margin-bottom: 5%;
 }
 
 
-/* =========================================================
-   PULL TO REFRESH
-========================================================= */
-
-.pull-indicator {
-
-    position: fixed;
-
-    top: 5px;
-
-    left: 50%;
-
-    z-index: 3000;
-
-    width: 34px;
-
-    height: 34px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border-radius: 50%;
-
-    background: rgba(25,25,25,.9);
-
-    opacity: 0;
-
-    transform:
-        translate(-50%, -45px);
-
-    transition:
-
-        opacity .15s ease,
-
-        transform .15s ease;
-}
-
-
-.pull-indicator.visible {
-
-    opacity: 1;
-
-    transform:
-        translate(-50%, 0);
-}
-
-
-.pull-indicator.refresh {
-
-    animation:
-        girar .7s linear infinite;
-}
-
 
 /* =========================================================
    ANIMAÇÕES
@@ -817,12 +746,6 @@ height: 25px;
 <body>
 
 
-<div class="fundo"></div>
-
-
-<div class="pull-indicator" id="pullIndicator">
-    ↻
-</div>
 
 
 <div class="update-status" id="updateStatus">
@@ -937,9 +860,6 @@ const contador =
 
 const updateStatus =
     document.getElementById("updateStatus");
-
-const pullIndicator =
-    document.getElementById("pullIndicator");
 
 
 /* =========================================================
@@ -1503,18 +1423,7 @@ async function atualizarApps(
     }
 
 
-    /*
-     * Esta é a chamada que procura os
-     * aplicativos instalados no Android.
-     *
-     * Ela NÃO acontece ao abrir a página.
-     *
-     * Só acontece quando o usuário:
-     *
-     * 1. toca em Atualizar
-     * ou
-     * 2. faz Pull to Refresh.
-     */
+
 
     if (
         typeof Android === "undefined" ||
@@ -1773,137 +1682,6 @@ atualizar.addEventListener(
 
 
 /* =========================================================
-   PULL TO REFRESH
-========================================================= */
-
-let inicioY =
-    0;
-
-let puxando =
-    false;
-
-
-grid.addEventListener(
-    "touchstart",
-    event => {
-
-        if (
-            grid.scrollTop > 0
-        ) {
-
-            return;
-
-        }
-
-
-        inicioY =
-            event.touches[0].clientY;
-
-
-        puxando =
-            true;
-
-    },
-    {
-        passive: true
-    }
-);
-
-
-grid.addEventListener(
-    "touchmove",
-    event => {
-
-        if (!puxando) {
-
-            return;
-
-        }
-
-
-        const atualY =
-            event.touches[0].clientY;
-
-
-        const distancia =
-            atualY - inicioY;
-
-
-        if (
-            distancia <= 0
-        ) {
-
-            return;
-
-        }
-
-
-        if (
-            distancia > 25
-        ) {
-
-            pullIndicator.classList.add(
-                "visible"
-            );
-
-        }
-
-    },
-    {
-        passive: true
-    }
-);
-
-
-grid.addEventListener(
-    "touchend",
-    () => {
-
-        if (!puxando) {
-
-            return;
-
-        }
-
-
-        puxando =
-            false;
-
-
-        if (
-            pullIndicator.classList.contains(
-                "visible"
-            )
-        ) {
-
-            pullIndicator.classList.add(
-                "refresh"
-            );
-
-
-            atualizarApps(
-                true
-            ).finally(
-                () => {
-
-                    pullIndicator.classList.remove(
-                        "visible",
-                        "refresh"
-                    );
-
-                }
-            );
-
-        }
-
-    },
-    {
-        passive: true
-    }
-);
-
-
-/* =========================================================
    INICIALIZAÇÃO
 ========================================================= */
 
@@ -1977,6 +1755,36 @@ if (
 
 }
 
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const elementos = document.querySelectorAll(".app, .title, .subtitle, .actions, .empty");
+
+    elementos.forEach((elemento, index) => {
+
+        elemento.style.opacity = "0";
+
+        requestAnimationFrame(() => {
+
+            elemento.style.animation =
+                "elementPopIn .65s ease forwards";
+
+        });
+
+    });
+    
+    const search = document.querySelector(".search");
+
+search.style.opacity = "0";
+
+requestAnimationFrame(() => {
+    search.style.animation =
+        "searchPopIn .65s ease forwards";
+});
+
+});
 </script>
 
 </body>

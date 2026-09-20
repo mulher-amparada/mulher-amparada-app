@@ -10,6 +10,11 @@
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
 >
 
+    <meta
+        name="description"
+        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
+    >
+
 <meta name="theme-color" content="#000000">
 
 <title>Mulher Amparada</title>
@@ -35,6 +40,8 @@
         -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
 }
 
 html {
@@ -65,7 +72,7 @@ body {
 ========================================================= */
 
 .container {
-    width: stretch;
+    width: min(100%, 760px);
     margin: 0 auto;
 
     padding:
@@ -527,6 +534,10 @@ body {
     color: #fff;
 }
 
+</style>
+
+<style>
+
 @media (prefers-reduced-motion: reduce) {
     /* Procura por QUALQUER elemento que use a sua animação e a desativa */
 
@@ -534,6 +545,7 @@ body {
         animation-name: none !important;
     }
 }
+
 </style>
 
 </head>

@@ -640,11 +640,13 @@ body {
     }
 }
 
+@media (prefers-reduced-motion: reduce) {
+    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
 
-
-
-
-
+    * {
+        animation-name: none !important;
+    }
+}
 </style>
 
     <meta
@@ -981,6 +983,13 @@ body.fade-out {
 
 }
 
+@media (prefers-reduced-motion: reduce) {
+    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
+
+    * {
+        animation-name: none !important;
+    }
+}
 </style>
 
 

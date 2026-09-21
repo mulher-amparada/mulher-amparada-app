@@ -179,30 +179,6 @@ if (
                 R.id.webview
             )
 
-
-ViewCompat.setOnApplyWindowInsetsListener(
-    webView
-) { view, insets ->
-
-    val barras =
-        insets.getInsets(
-            WindowInsetsCompat.Type.systemBars()
-        )
-
-    val params =
-        view.layoutParams as ViewGroup.MarginLayoutParams
-
-    params.topMargin =
-        barras.top
-
-    params.bottomMargin =
-        barras.bottom
-
-    view.layoutParams =
-        params
-
-    insets
-}
         
         webView.setBackgroundColor(
     Color.BLACK

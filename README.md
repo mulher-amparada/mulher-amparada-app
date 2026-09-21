@@ -1,10 +1,12 @@
 # Mulher Amparada
 
+----
+
 ## um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!
 
 ## E saibam que o projeto é: Source-Available
 
-## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2818
+## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2778
 
 ----
 
@@ -125,7 +127,7 @@ Em:
 
 ----
 
-🎭 Ícone Monocromático e Integração com Material You:
+## Ícone Monocromático e Integração com Material You:
 
 O aplicativo possui suporte aos ícones temáticos do Android (Themed Icons), permitindo que seu ícone se adapte visualmente à paleta de cores dinâmica definida pelo sistema.
 
@@ -153,6 +155,7 @@ Versão agp no toml de 9.4.0 e versão kotlin de 2.4.20
 
 e ele tem o jetpack compose (embora no app só usei xml até agora, mas ele está ativado!) e estilo via xml ativados!
 
+----
 
 ## Sobre como eu automatizo o projeto:
 :
@@ -161,6 +164,8 @@ e os apps são compilados com o workflow, gera o código sha-256 e o zip com o a
 E eu também já consegui configurar um ssh na conta, e 2fa nela tambem, e com o ssh, eu consegui mover pastas inteiras para o repositório, e transformei 4 em 1, e mais de 100 commits em 1,
 
 e os contatos de confiança, quando são cadrastados eles também são criptografados!
+
+----
 
 ## Sobre como foi escrito o texto do biometricPrompt do app:
 
@@ -172,8 +177,9 @@ e os contatos de confiança, quando são cadrastados eles também são criptogra
 **Descrição:**
 > 🌸 Apenas a usuária cadastrada pode acessar este local
 
-
 O método de autenticação é definido pelo próprio Android de acordo com os autenticadores disponíveis no dispositivo, utilizando "BIOMETRIC_WEAK" e "DEVICE_CREDENTIAL".
+
+----
 
 # Direitos que toda mulher tem!
 
@@ -487,7 +493,7 @@ O acesso varia de acordo com o tipo de armazenamento:
 - Armazenamento interno e cartão SD: utilizam a permissão de Acesso a todos os arquivos, quando concedida pelo Android.
 - Dispositivos externos, como pendrives conectados por USB OTG: utilizam o SAF (Storage Access Framework), mecanismo oficial do Android para acesso a documentos e dispositivos de armazenamento externos autorizados pela usuária.
 
-> ⚠️ Reforçando: o Gerenciador de Arquivos não acessa os arquivos internos do Gravador de Voz do Mulher Amparada nem os dados ou recursos internos de outras funcionalidades do aplicativo. Ele trabalha com arquivos que já estão disponíveis nos armazenamentos do dispositivo e que podem ser acessados pelos mecanismos de armazenamento autorizados pelo Android.
+> ⚠️Reforçando: o Gerenciador de Arquivos não acessa os arquivos internos do Gravador de Voz do Mulher Amparada nem os dados ou recursos internos de outras funcionalidades do aplicativo. Ele trabalha com arquivos que já estão disponíveis nos armazenamentos do dispositivo e que podem ser acessados pelos mecanismos de armazenamento autorizados pelo Android.
 
 ----
 
@@ -499,8 +505,7 @@ Ao tocar neste botão, o aplicativo solicitará a permissão de Administrador do
 **Tela de aplicativos:**
 Ao tocar neste botão, o app mostrará um site dentro do app que lista todos os outros apps com a permissão query all packpages...
 
-
-
+----
 
 ## Considerações finais:
 
@@ -641,7 +646,7 @@ Caso o dispositivo não possua nenhum dos métodos de autenticação aceitos con
 
 ----
 
-## 🔒 Estrutura de Telas Secretas (Acesso Biométrico):
+## Estrutura de Telas Secretas (Acesso Biométrico):
 
 O aplicativo divide suas funcionalidades confidenciais em DUAS ÁREAS COMPLETAMENTE SEPARADAS no menu principal. Cada área possui sua própria proteção e requer autenticação independente por meio do sistema BiometricPrompt  utilizando BIOMETRIC_WEAK e DEVICE_CREDENTIAL:
 
@@ -672,8 +677,6 @@ E também o webview chama metodos expostos via js que chama o android
 , e sobre injeção de código, o app guarda os dados usando criptografia..., mas isso não garante que xss aconteça, mas eu só estou dizendo que ele guarda texto do diário por exemplo em criptografia, mas isso poderá acontecer como em qualquer outro app em certas condições...
 
 e TODAS AS PÁGINAS EM HTML, estão dentro da pasta assets (menos o navegador que usa o Google, mas aí eu não controlo e é com eles lá!)
-
-
 
 E o webview do app está assim!:
 
@@ -786,7 +789,7 @@ settings.mixedContentMode =
 
 ```
 
-🔐 Navegação da área protegida:
+Navegação da área protegida:
 
 A entrada na Área do amparo deve utilizar "window.location.replace()" em vez de "window.location.href".
 
@@ -861,7 +864,9 @@ Links também podem conter parâmetros de rastreamento, redirecionamentos e outr
 
 Por isso, o WebView mantém esse comportamento limitado. A exceção é a tela de aplicativos, que possui uma função específica e um fluxo controlado pelo próprio app.
 
-### Tema escuro, conforto visual e discrição
+----
+
+## Tema escuro, conforto visual e discrição:
 
 O projeto utiliza fundos escuros em todas as páginas da interface, independentemente do tipo de tela utilizado pelo dispositivo. Essa escolha busca manter uma experiência visual consistente, confortável e com menor brilho geral, evitando o uso desnecessário de grandes áreas brancas.
 
@@ -869,7 +874,9 @@ A interface também utiliza uma variedade de cores nos elementos, em vez de depe
 
 O tema escuro também considera o contexto de uso do aplicativo. Em situações nas quais a usuária precisa pedir ajuda ou utilizar o aplicativo de forma discreta, telas muito claras e brilhantes podem chamar atenção desnecessariamente. Por isso, a interface mantém uma aparência escura, discreta e confortável, sem comprometer a legibilidade.
 
-### Animações e desempenho
+----
+
+## Animações e desempenho:
 
 Todas as páginas sob controle do projeto implementam suporte a `prefers-reduced-motion`, permitindo que as animações sejam desativadas automaticamente quando essa preferência estiver habilitada no dispositivo. A página `navegador.html` é uma exceção, pois utiliza `window.replace` e pode carregar páginas externas que não são controladas pelo projeto.
 

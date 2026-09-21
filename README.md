@@ -4,7 +4,9 @@
 
 ## E saibam que o projeto é: Source-Available
 
-## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2814
+## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2778
+
+----
 
 O **Mulher Amparada** é um aplicativo de segurança e proteção desenvolvido especialmente para mulheres que desejam se sentir mais seguras em situações do dia a dia. O objetivo principal do aplicativo é oferecer suporte rápido, eficiente e acessível em momentos de risco, permitindo que a usuária consiga pedir ajuda de forma simples e imediata. Em um cenário onde muitas mulheres enfrentam situações de vulnerabilidade, ter uma ferramenta confiável pode fazer toda a diferença, e é exatamente isso que o Mulher Amparada busca proporcionar.
 
@@ -15,6 +17,16 @@ Para desinstalar o aplicativo, primeiro será necessário desativar a permissão
 Antes de conceder essa permissão, leia atentamente as informações exibidas pelo Android e só prossiga se compreender as funcionalidades e os efeitos dessa autorização.
 
 (como o código esta dentro do repositório , nao precisarei explicar!)
+
+----
+
+Uso de inteligência artificial:
+
+Grande parte dos textos presentes no projeto foi produzida com auxílio de inteligência artificial, incluindo textos de interface, descrições e documentação. O conteúdo foi utilizado e adaptado conforme as necessidades do projeto.
+
+A página "About" é uma exceção: seu texto não foi produzido por inteligência artificial.
+
+----
 
 ## Sobre as permissões:
 
@@ -48,6 +60,12 @@ Antes de conceder essa permissão, leia atentamente as informações exibidas pe
 
 > ⚠️Aviso — O recurso de “Desembarque seguro” do Mulher Amparada é informativo e atualmente apresenta a legislação aplicável à Cidade de São Paulo, especialmente a Lei Municipal nº 16.490/2016 e sua regulamentação. Essa legislação não deve ser interpretada como uma regra válida em todo o Brasil. As regras sobre desembarque fora dos pontos podem variar conforme o município, o estado e o tipo de transporte. A carteirinha apresentada pelo aplicativo não é um documento oficial e não substitui a legislação vigente, regulamentações, orientações das empresas de transporte ou autoridades competentes. E antes de utilizar esse recurso em outra localidade, verifique a legislação específica aplicável ao local.
 
+### Documentação e conteúdo:
+
+O conteúdo dos arquivos `about.md`, `LEIS.md` e `FINANÇAS.md` está disponível tanto no site publicado pelo GitHub Pages quanto dentro da área protegida do aplicativo.
+
+Dessa forma, essas informações podem ser consultadas diretamente pelo site ou pelo próprio aplicativo, mantendo o conteúdo acessível nos dois ambientes.
+
 ## Sobre as funções por sensores (bloquear a tela por barulho, proteção por barulho que liga pro 180, balançar o celular para pedir ajuda e escurecimento por inclinação):
 
 A função Bloquear a tela por Barulho foi projetada com uma medida adicional de segurança: depois de ser ativada e funcionar de fato, ela permanece ativa até que o usuário decida desativá-la pelo próprio aplicativo.
@@ -65,6 +83,18 @@ Nota de Segurança: Uma vez ativada, a proteção permanecerá vigilante e reati
 ## Sobre o site que está hospedado pelo github pages:
 
 Na primeira página do site, tem 3 botoes que ligam para (180, 190 e 192), e usam o tel: do navegador para abrir o telefone nativo do celular com esses números já discados de acordo com o que você escolheu!
+
+embaixo, tem um botão que leva pro repositório 
+
+depois um gerador de qr code
+
+depois uma página com imagens dos apks de todas as versões do app (só as imagens)
+
+o nome verdadeiro do app = Mulher Amparada Pela Liberdade Feminina 
+
+uma página dos canais oficiais do projeto = Medium, Instagram, TikTok, Comunidade do WhatsApp
+
+E uma página mostrando o trabalho de uma mulher empoderada (e eu estava mostrando sobre as vendas dela, para dizer que todas as mulheres podem crescer!, e ela não tem relação com a questão do projeto ser gratuito, essa página é algo separado, o app ainda é totalmente grátis!)
 
 ## Sobre como o aplicativo é compilado:
 
@@ -838,6 +868,20 @@ Permitir que páginas dentro do WebView utilizem "intent" livremente para abrir 
 Links também podem conter parâmetros de rastreamento, redirecionamentos e outros mecanismos capazes de identificar ou acompanhar a navegação.
 
 Por isso, o WebView mantém esse comportamento limitado. A exceção é a tela de aplicativos, que possui uma função específica e um fluxo controlado pelo próprio app.
+
+### Tema escuro, conforto visual e discrição
+
+O projeto utiliza fundos escuros em todas as páginas da interface, independentemente do tipo de tela utilizado pelo dispositivo. Essa escolha busca manter uma experiência visual consistente, confortável e com menor brilho geral, evitando o uso desnecessário de grandes áreas brancas.
+
+A interface também utiliza uma variedade de cores nos elementos, em vez de depender exclusivamente do contraste entre preto e branco. Isso não significa que textos brancos sejam evitados: eles continuam presentes quando são apropriados e necessários para garantir boa legibilidade. As cores são utilizadas para criar hierarquia visual, destacar informações e tornar a interface mais equilibrada e agradável.
+
+O tema escuro também considera o contexto de uso do aplicativo. Em situações nas quais a usuária precisa pedir ajuda ou utilizar o aplicativo de forma discreta, telas muito claras e brilhantes podem chamar atenção desnecessariamente. Por isso, a interface mantém uma aparência escura, discreta e confortável, sem comprometer a legibilidade.
+
+### Animações e desempenho
+
+Todas as páginas sob controle do projeto implementam suporte a `prefers-reduced-motion`, permitindo que as animações sejam desativadas automaticamente quando essa preferência estiver habilitada no dispositivo. A página `navegador.html` é uma exceção, pois utiliza `window.replace` e pode carregar páginas externas que não são controladas pelo projeto.
+
+Além disso, as animações foram amplamente reduzidas, principalmente as animações de entrada. O projeto prioriza transições rápidas e discretas, mantendo apenas algumas animações pontuais quando elas contribuem para a experiência de uso. Dessa forma, a interface permanece visualmente agradável sem comprometer a agilidade e a responsividade do aplicativo.
 
 ----
 

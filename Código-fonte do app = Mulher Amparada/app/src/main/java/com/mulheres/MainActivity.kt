@@ -171,29 +171,32 @@ if (
             R.layout.activity_main
         )
 
-        ViewCompat.setOnApplyWindowInsetsListener(
-            window.decorView
-        ) { view, insets ->
 
-            view.setPadding(
-                0,
-                0,
-                0,
-                0
-            )
-
-            insets
-        }
 
         webView =
             findViewById(
                 R.id.webview
             )
 
-        webView.setLayerType(
-            View.LAYER_TYPE_HARDWARE,
-            null
+ViewCompat.setOnApplyWindowInsetsListener(
+    webView
+) { view, insets ->
+
+    val barras =
+        insets.getInsets(
+            WindowInsetsCompat.Type.systemBars()
         )
+
+    view.setPadding(
+        0,
+        barras.top,
+        0,
+        barras.bottom
+    )
+
+    insets
+}
+
 
         webView.setBackgroundColor(
     Color.BLACK

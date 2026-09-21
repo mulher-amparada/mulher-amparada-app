@@ -6,7 +6,7 @@
 
 ## E saibam que o projeto é: Source-Available
 
-## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2894
+## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2820
 
 ----
 
@@ -124,6 +124,8 @@ E o workflow utiliza um keystore de assinatura armazenado de forma protegida nos
 Em:
 
 /settings/secrets and variables/actions/repository secrets/
+
+E também as barras tanto de status tanto de navegação são transparentes, porém o fundo atrás do WebView e preto, espaçado dos lados e de cima e com um raio de borda!
 
 ----
 

@@ -4,7 +4,7 @@
 
 ## E saibam que o projeto é: Source-Available
 
-## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2816
+## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2778
 
 ----
 
@@ -17,14 +17,6 @@ Para desinstalar o aplicativo, primeiro será necessário desativar a permissão
 Antes de conceder essa permissão, leia atentamente as informações exibidas pelo Android e só prossiga se compreender as funcionalidades e os efeitos dessa autorização.
 
 (como o código esta dentro do repositório , nao precisarei explicar!)
-
-----
-
-Uso de inteligência artificial:
-
-Grande parte dos textos presentes no projeto foi produzida com auxílio de inteligência artificial, incluindo textos de interface, descrições e documentação. O conteúdo foi utilizado e adaptado conforme as necessidades do projeto.
-
-A página "About" é uma exceção: seu texto não foi produzido por inteligência artificial.
 
 ----
 

@@ -46,6 +46,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import android.view.ViewGroup
 
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -178,6 +179,7 @@ if (
                 R.id.webview
             )
 
+
 ViewCompat.setOnApplyWindowInsetsListener(
     webView
 ) { view, insets ->
@@ -187,17 +189,21 @@ ViewCompat.setOnApplyWindowInsetsListener(
             WindowInsetsCompat.Type.systemBars()
         )
 
-    view.setPadding(
-        0,
-        barras.top,
-        0,
+    val params =
+        view.layoutParams as ViewGroup.MarginLayoutParams
+
+    params.topMargin =
+        barras.top
+
+    params.bottomMargin =
         barras.bottom
-    )
+
+    view.layoutParams =
+        params
 
     insets
 }
-
-
+        
         webView.setBackgroundColor(
     Color.BLACK
 )
@@ -1777,28 +1783,39 @@ if (
     }
 
 
-    @JavascriptInterface
-    fun desativarFullscreen() {
+@JavascriptInterface
+fun desativarFullscreen() {
 
-        val window =
-            window
+    val window =
+        window
 
-        val controller =
-            WindowCompat.getInsetsController(
-                window,
-                window.decorView
-            )
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        true
+    )
 
-        controller.show(
-            WindowInsetsCompat.Type.systemBars()
+    val controller =
+        WindowCompat.getInsetsController(
+            window,
+            window.decorView
         )
 
-        controller.isAppearanceLightStatusBars =
-            false
+    controller.show(
+        WindowInsetsCompat.Type.systemBars()
+    )
 
-        controller.isAppearanceLightNavigationBars =
-            false
-    }
+    controller.isAppearanceLightStatusBars =
+        false
+
+    controller.isAppearanceLightNavigationBars =
+        false
+
+    window.statusBarColor =
+    Color.TRANSPARENT
+
+window.navigationBarColor =
+    Color.TRANSPARENT
+}
 
 
     // =========================================================

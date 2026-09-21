@@ -134,28 +134,27 @@ class MainActivity : AppCompatActivity() {
                 Context.SENSOR_SERVICE
             ) as SensorManager
 
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
-        )
+WindowCompat.setDecorFitsSystemWindows(
+    window,
+    true
+)
 
-        window.statusBarColor =
-            Color.TRANSPARENT
+window.statusBarColor =
+    Color.TRANSPARENT
 
-        window.navigationBarColor =
-            Color.TRANSPARENT
+window.navigationBarColor =
+    Color.TRANSPARENT
 
-        if (
-            Build.VERSION.SDK_INT >=
-            Build.VERSION_CODES.Q
-        ) {
-            window.isStatusBarContrastEnforced =
-                false
+if (
+    Build.VERSION.SDK_INT >=
+    Build.VERSION_CODES.Q
+) {
+    window.isStatusBarContrastEnforced =
+        false
 
-            window.isNavigationBarContrastEnforced =
-                false
-        }
-
+    window.isNavigationBarContrastEnforced =
+        false
+}
         val controller =
             WindowInsetsControllerCompat(
                 window,

@@ -197,11 +197,14 @@ class MainActivity : AppCompatActivity() {
         )
 
         webView.setBackgroundColor(
-            Color.BLACK
-        )
+    Color.BLACK
+)
 
-        webView.visibility =
-            View.VISIBLE
+webView.alpha =
+    0f
+
+webView.visibility =
+    View.VISIBLE
 
         tiltBrightness =
             TiltBrightnessController(
@@ -739,20 +742,33 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
                 }
 
 
+override fun onPageStarted(
+    view: WebView?,
+    url: String?,
+    favicon: android.graphics.Bitmap?
+) {
+
+    super.onPageStarted(
+        view,
+        url,
+        favicon
+    )
+
+    view?.alpha = 0f
+}
+
                 override fun onPageCommitVisible(
-                    view: WebView?,
-                    url: String?
-                ) {
+    view: WebView?,
+    url: String?
+) {
 
-                    super.onPageCommitVisible(
-                        view,
-                        url
-                    )
+    super.onPageCommitVisible(
+        view,
+        url
+    )
 
-                    view?.post {
-                        view.alpha = 1f
-                    }
-                }
+    view?.alpha = 1f
+}
 
 
                 override fun onPageFinished(

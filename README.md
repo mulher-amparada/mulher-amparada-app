@@ -1,4 +1,7 @@
-# Mulher Amparada
+<div align="center">
+  <img src="assets/user1.png" alt="Logo Mulher Amparada" width="150" height="150">
+  <h1>Mulher Amparada</h1>
+</div>
 
 ----
 

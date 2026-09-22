@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="user1.png" alt="Logo Mulher Amparada" width="300" height="300">
+  <img src="user1.png" alt="Logo Mulher Amparada" width="250" height="250">
 </div>
 
 <div align="center">

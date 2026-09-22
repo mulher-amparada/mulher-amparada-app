@@ -133,6 +133,24 @@ E eu também já consegui configurar um ssh na conta, e 2fa nela tambem, e com o
 
 e os contatos de confiança, quando são cadrastados eles também são criptografados!
 
+## Sobre o site que está hospedado pelo github pages:
+
+Na primeira página do site, tem 3 botoes que ligam para (180, 190 e 192), e usam o tel: do navegador para abrir o telefone nativo do celular com esses números já discados de acordo com o que você escolheu!
+
+embaixo, tem um botão que leva pro repositório 
+
+depois um gerador de qr code
+
+depois uma página com imagens dos apks de todas as versões do app (só as imagens)
+
+o nome verdadeiro do app = Mulher Amparada Pela Liberdade Feminina 
+
+uma página dos canais oficiais do projeto = Medium, Instagram, TikTok, Comunidade do WhatsApp
+
+E uma página mostrando o trabalho de uma mulher empoderada (e eu estava mostrando sobre as vendas dela, para dizer que todas as mulheres podem crescer!, e ela não tem relação com a questão do projeto ser gratuito, essa página é algo separado, o app ainda é totalmente grátis!)
+
+e as páginas desse site estão indexadas no google search console também!
+
 ### Sobre as atualizações do app:
 
 O app já está na versão:

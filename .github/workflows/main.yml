@@ -763,8 +763,8 @@ jobs:
           texto = arquivo.read_text(encoding="utf-8")
 
           texto = re.sub(
-              r"## Commits totais de toda a história do projeto, \(feitos por mim e pelos workflows do github actions!\) =.*",
-              f"## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = {total}",
+              r"\*\*Commits totais de toda a história do projeto, \(feitos por mim e pelos workflows do github actions!\) =.*\*\*",
+              f"**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = {total}**",
               texto,
               count=1
           )

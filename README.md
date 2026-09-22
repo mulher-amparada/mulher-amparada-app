@@ -10,22 +10,25 @@ Um projeto totalmente gratuito e livre de anúncios, projetado por um menino aut
 
 E saibam que o projeto é: Source-Available
 
-## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2921
+## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2898
 
 ----
 
 # ⚠️MURAL DE AVISOS:
 
->Sobre as permissões: infelizmente, foi necessário configurar a MainActivity para não solicitar permissões automaticamente. Por isso, as permissões necessárias deverão ser concedidas manualmente pela usuária nas configurações do dispositivo. As permissões utilizadas por outras Activitys continuam sendo solicitadas normalmente pelo aplicativo.
+### Sobre como o projeto foi estruturado:
 
-* Ao entrar no aplicativo após sair dos disfarces, um aviso é exibido, bloqueando o acesso até que todas as permissões necessárias estejam concedidas. O aviso oferece à usuária a opção de acessar diretamente a tela de permissões do aplicativo nas configurações do dispositivo. Ao retornar ao aplicativo, as permissões são verificadas novamente. Se ainda houver alguma permissão necessária que não tenha sido concedida, o aviso continuará sendo exibido e o acesso permanecerá bloqueado. O aviso só desaparecerá quando todas as permissões necessárias estiverem concedidas.
- 
- * (mas a permissão de Administrador do dispositivo a acitvity pede normalmente!).
- 
+>Sobre as permissões: infelizmente, foi necessário configurar a MainActivity para não solicitar permissões automaticamente. Por isso, as permissões necessárias deverão ser concedidas manualmente pela usuária nas configurações do dispositivo. As permissões utilizadas por outras Activitys continuam sendo solicitadas normalmente pelo aplicativo.
+>
+> Ao entrar no aplicativo após sair dos disfarces, um aviso é exibido, bloqueando o acesso até que todas as permissões necessárias estejam concedidas. O aviso oferece à usuária a opção de acessar diretamente a tela de permissões do aplicativo nas configurações do dispositivo. Ao retornar ao aplicativo, as permissões são verificadas novamente. Se ainda houver alguma permissão necessária que não tenha sido concedida, o aviso continuará sendo exibido e o acesso permanecerá bloqueado. O aviso só desaparecerá quando todas as permissões necessárias estiverem concedidas.
+>
+> (mas a permissão de Administrador do dispositivo a acitvity pede normalmente!).
  
 >Vale lembrar que o projeto não substitui serviços oficiais do governo e também não garante segurança imediata, bem como as funções dependem do estado e hardware de cada aparelho!
 
 > Vale lembrar: o Gerenciador de Arquivos do Mulher Amparada funciona principalmente como um visualizador de arquivos. O nome “Gerenciador de Arquivos” também faz parte do disfarce do aplicativo. Ele foi projetado dessa forma por uma questão de segurança: o aplicativo não oferece funções próprias para excluir, mover, copiar ou renomear arquivos, reduzindo o risco de apagar ou alterar acidentalmente algum arquivo importante — inclusive possíveis registros que a usuária queira preservar.
+
+### Sobre as funções do projeto:
 
 >Ao utilizar a função de baixar o histórico de ajuda, o aplicativo gera um único arquivo no formato JSON. Os dados utilizados para gerar esse histórico são obtidos por meio das APIs protegidas do Android, que controlam o acesso ao histórico de chamadas por meio das permissões do sistema. Por isso, o aplicativo não aplica a classe "Cripto" novamente durante a exportação. O arquivo JSON exportado, entretanto, não é um arquivo criptografado. Ele é salvo como um arquivo comum na área de downloads do dispositivo. A proteção de acesso fornecida pelo Android ao histórico de chamadas não significa que o arquivo exportado permaneça criptografado. O arquivo também contém hashes SHA-256, utilizados para verificação de integridade dos dados. SHA-256 não é um mecanismo de criptografia e não substitui a criptografia para proteção do conteúdo.
 
@@ -49,6 +52,10 @@ E saibam que o projeto é: Source-Available
 
 >Aviso — O recurso de “Desembarque seguro” do Mulher Amparada é informativo e atualmente apresenta a legislação aplicável à Cidade de São Paulo, especialmente a Lei Municipal nº 16.490/2016 e sua regulamentação. Essa legislação não deve ser interpretada como uma regra válida em todo o Brasil. As regras sobre desembarque fora dos pontos podem variar conforme o município, o estado e o tipo de transporte. A carteirinha apresentada pelo aplicativo não é um documento oficial e não substitui a legislação vigente, regulamentações, orientações das empresas de transporte ou autoridades competentes. E antes de utilizar esse recurso em outra localidade, verifique a legislação específica aplicável ao local.
 
+>Sobre a proteção por palmas/barulho: Nota de Segurança: Uma vez ativada, a proteção permanecerá vigilante e reativará o microfone automaticamente após cada detecção e ligação pro 180. Isso garante que o aplicativo continue te protegendo caso a situação de risco persista. Para desligá-la por completo, você deve fazer isso manualmente no aplicativo após o término da situação de risco.
+
+> Sobre as funções por sensores (bloquear a tela por barulho, proteção por barulho que liga pro 180, balançar o celular para pedir ajuda e escurecimento por inclinação): A função Bloquear a tela por Barulho foi projetada com uma medida adicional de segurança: depois de ser ativada e funcionar de fato, ela permanece ativa até que o usuário decida desativá-la pelo próprio aplicativo. Para evitar que o estado da função seja perdido ao sair e retornar à página, o aplicativo salva seu estado de ativação utilizando a classe Cripto. Dessa forma, ao retornar à página, o aplicativo recupera o estado salvo e exibe corretamente se a função está ATIVADA ou DESATIVADA. Essa persistência permite que a interface continue refletindo o estado real configurado pelo usuário, mesmo após a navegação entre as páginas do aplicativo. Mas quando a usuária desativar ou a função ser concluída, na página ele mostra como desativado!
+
 ----
 
 ## Documentação e conteúdo:
@@ -56,24 +63,6 @@ E saibam que o projeto é: Source-Available
 O conteúdo dos arquivos `about.md`, `LEIS.md` e `FINANÇAS.md` está disponível tanto no site publicado pelo GitHub Pages quanto dentro da área protegida do aplicativo.
 
 Dessa forma, essas informações podem ser consultadas diretamente pelo site ou pelo próprio aplicativo, mantendo o conteúdo acessível nos dois ambientes.
-
-----
-
-## Sobre as funções por sensores (bloquear a tela por barulho, proteção por barulho que liga pro 180, balançar o celular para pedir ajuda e escurecimento por inclinação):
-
-A função Bloquear a tela por Barulho foi projetada com uma medida adicional de segurança: depois de ser ativada e funcionar de fato, ela permanece ativa até que o usuário decida desativá-la pelo próprio aplicativo.
-
-Para evitar que o estado da função seja perdido ao sair e retornar à página, o aplicativo salva seu estado de ativação utilizando a classe Cripto. Dessa forma, ao retornar à página, o aplicativo recupera o estado salvo e exibe corretamente se a função está ATIVADA ou DESATIVADA.
-
-Essa persistência permite que a interface continue refletindo o estado real configurado pelo usuário, mesmo após a navegação entre as páginas do aplicativo.
-
-Mas quando a usuária desativar ou a função ser concluída, na página ele mostra como desativado!
-
-----
-
-## Sobre a proteção por palmas/barulho:
-
-Nota de Segurança: Uma vez ativada, a proteção permanecerá vigilante e reativará o microfone automaticamente após cada detecção e ligação pro 180. Isso garante que o aplicativo continue te protegendo caso a situação de risco persista. Para desligá-la por completo, você deve fazer isso manualmente no aplicativo após o término da situação de risco.
 
 ----
 

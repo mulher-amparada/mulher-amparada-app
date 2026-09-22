@@ -10,9 +10,9 @@ Um projeto totalmente gratuito e livre de anúncios, projetado por um menino aut
 
 E saibam que o projeto é: Source-Available
 
-## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2925
+## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2898
 
-----
+
 
 # ⚠️MURAL DE AVISOS:
 
@@ -56,33 +56,60 @@ E saibam que o projeto é: Source-Available
 
 > Sobre as funções por sensores (bloquear a tela por barulho, proteção por barulho que liga pro 180, balançar o celular para pedir ajuda e escurecimento por inclinação): A função Bloquear a tela por Barulho foi projetada com uma medida adicional de segurança: depois de ser ativada e funcionar de fato, ela permanece ativa até que o usuário decida desativá-la pelo próprio aplicativo. Para evitar que o estado da função seja perdido ao sair e retornar à página, o aplicativo salva seu estado de ativação utilizando a classe Cripto. Dessa forma, ao retornar à página, o aplicativo recupera o estado salvo e exibe corretamente se a função está ATIVADA ou DESATIVADA. Essa persistência permite que a interface continue refletindo o estado real configurado pelo usuário, mesmo após a navegação entre as páginas do aplicativo. Mas quando a usuária desativar ou a função ser concluída, na página ele mostra como desativado!
 
-----
+>O Gerenciador de Arquivos (que apenas visualiza) não acessa os arquivos internos do Gravador de Voz do Mulher Amparada nem os dados ou recursos internos de outras funcionalidades do aplicativo. Ele trabalha com arquivos que já estão disponíveis nos armazenamentos do dispositivo e que podem ser acessados pelos mecanismos de armazenamento autorizados pelo Android.
 
-## Documentação e conteúdo:
+>O aplicativo possui um navegador interno. A navegação para o Google é feita diretamente pelo código usando window location replace(), sem disponibilizar o endereço como um link na interface. O aplicativo também não implementa um sistema próprio de registro de histórico de navegação, (ou pelo ou menos eu não coloquei na página)
 
-O conteúdo dos arquivos `about.md`, `LEIS.md` e `FINANÇAS.md` está disponível tanto no site publicado pelo GitHub Pages quanto dentro da área protegida do aplicativo.
+### Estrutura de Telas Secretas (Acesso Biométrico):
 
-Dessa forma, essas informações podem ser consultadas diretamente pelo site ou pelo próprio aplicativo, mantendo o conteúdo acessível nos dois ambientes.
+>O aplicativo divide suas funcionalidades confidenciais em DUAS ÁREAS COMPLETAMENTE SEPARADAS no menu principal. Cada área possui sua própria proteção e requer autenticação independente por meio do sistema BiometricPrompt  utilizando BIOMETRIC_WEAK e DEVICE_CREDENTIAL:
+>
+>Área Protegida.
+>
+>e
+>
+>Área do amparo.
 
-----
+>Sobre a autenticação quando não há biometria ou credencial cadastrada:
+>
+>As áreas protegidas do aplicativo utilizam o BiometricPrompt com os autenticadores BIOMETRIC_WEAK e DEVICE_CREDENTIAL.
+>
+>Quando existe uma biometria cadastrada, o Android pode apresentar a autenticação biométrica, como impressão digital ou reconhecimento facial compatível.
+>
+>Quando não existe biometria cadastrada, mas o dispositivo possui uma credencial de segurança configurada, como PIN, padrão ou senha, o Android pode utilizar essa credencial como alternativa.
+>
+>Caso o dispositivo não possua nenhum dos métodos de autenticação aceitos configurado, não existe um método válido para desbloquear a área protegida. Nesse cenário, o aplicativo não deve considerar a autenticação como concluída nem liberar a área protegida simplesmente porque a biometria não está disponível.
 
-## Sobre o site que está hospedado pelo github pages:
+### Documentação e conteúdo:
 
-Na primeira página do site, tem 3 botoes que ligam para (180, 190 e 192), e usam o tel: do navegador para abrir o telefone nativo do celular com esses números já discados de acordo com o que você escolheu!
+>O conteúdo dos arquivos `about.md`, `LEIS.md` e `FINANÇAS.md` está disponível tanto no site publicado pelo GitHub Pages quanto dentro da área protegida do aplicativo.
+>
+>Dessa forma, essas informações podem ser consultadas diretamente pelo site ou pelo próprio aplicativo, mantendo o conteúdo acessível nos dois ambientes.
 
-embaixo, tem um botão que leva pro repositório 
+# 🏗Estrutura do projeto:
 
-depois um gerador de qr code
+### Sobre como eu automatizo o projeto:
 
-depois uma página com imagens dos apks de todas as versões do app (só as imagens)
+e os apps são compilados com o workflow, gera o código sha-256 e o zip com o app, envia para a release pela tag correspondente, e atualiza o link da página de download, o código SHA-256, e o tamanho do apk dessas páginas!, e depois ele publica as alterações no site, e depois altera o valor donúmero de commits que é informado no readme, (tudo isso em um único workflow!)
 
-o nome verdadeiro do app = Mulher Amparada Pela Liberdade Feminina 
+E eu também já consegui configurar um ssh na conta, e 2fa nela tambem, e com o ssh, eu consegui mover pastas inteiras para o repositório, e transformei 4 em 1, e mais de 100 commits em 1,
 
-uma página dos canais oficiais do projeto = Medium, Instagram, TikTok, Comunidade do WhatsApp
+e os contatos de confiança, quando são cadrastados eles também são criptografados!
 
-E uma página mostrando o trabalho de uma mulher empoderada (e eu estava mostrando sobre as vendas dela, para dizer que todas as mulheres podem crescer!, e ela não tem relação com a questão do projeto ser gratuito, essa página é algo separado, o app ainda é totalmente grátis!)
+### Sobre as atualizações do app:
 
-----
+O app já está na versão:
+
+`🌸33 (versão final)`
+
+ele tem o TargetSdkVersion 37
+
+ele tem o CompileSdkVersion 37
+
+Versão agp no toml de 9.4.0 e versão kotlin é a 2.4.20
+
+e ele tem o jetpack compose (embora no app só usei xml até agora, mas ele está ativado!) e estilo via xml ativados!
+
 
 ## Sobre como o aplicativo é compilado:
 
@@ -106,7 +133,6 @@ O R8 reduz o tamanho do aplicativo e aplica a ofuscação no código compilado, 
 
 *Nota: Esta proteção aumenta a barreira contra análise estática, mas não torna o APK completamente imune à engenharia reversa.*
 
-
 E o fundo do icone do app é um adaptativo, em que o fundo e preto, e tem um bonequinho em cores azuis correndo, e o ic_launcher_foreground na pasta res/drawable, e os ic_launcher em cada mipmap tem o fundo transparente, eo ic_launcher_background também na pasta res/drawable é um quadrado preto
 
 e quando você clica no botão voltar na MainActivity, ele volta a página!
@@ -121,49 +147,7 @@ Em:
 
 E também as barras tanto de status tanto de navegação são transparentes, porém o fundo atrás do WebView e preto, espaçado dos lados e de cima e com um raio de borda!, e o webview não fica mais embaixo das duas barras, ele respeita elas!
 
-----
-
-## Ícone Monocromático e Integração com Material You:
-
-O aplicativo possui suporte aos ícones temáticos do Android (Themed Icons), permitindo que seu ícone se adapte visualmente à paleta de cores dinâmica definida pelo sistema.
-
-* Máscara Monocromática: O aplicativo fornece uma versão monocromática específica do ícone para que o Android possa utilizá-la quando os ícones temáticos estiverem disponíveis e ativados no dispositivo.
-
-* Adaptação à Paleta do Sistema: Em vez de utilizar uma cor fixa definida pelo aplicativo, o Android pode aplicar a paleta dinâmica escolhida para o dispositivo ao ícone temático. Dessa forma, o ícone acompanha visualmente as cores utilizadas pelo restante da interface.
-
-* Integração Visual: A utilização do sistema de ícones temáticos permite que o aplicativo mantenha uma aparência mais integrada à tela inicial, acompanhando o padrão visual adotado pelo próprio Android.
-
-O Impacto Visual: O ícone deixa de depender exclusivamente de suas cores originais e passa a responder à personalização visual do sistema. Isso proporciona uma apresentação mais discreta e consistente com a interface do dispositivo, sem que o aplicativo precise criar manualmente uma versão diferente para cada paleta de cores.
-
-----
-
-## Sobre as atualizações do app:
-
-O app já está na versão:
-
-"🌸33 (versão final)"
-
-ele tem o TargetSdkVersion 37
-
-ele tem o CompileSdkVersion 37
-
-Versão agp no toml de 9.4.0 e versão kotlin de 2.4.20
-
-e ele tem o jetpack compose (embora no app só usei xml até agora, mas ele está ativado!) e estilo via xml ativados!
-
-----
-
-## Sobre como eu automatizo o projeto:
-:
-e os apps são compilados com o workflow, gera o código sha-256 e o zip com o app, envia para a release pela tag correspondente, e atualiza o link da página de download, o código SHA-256, e o tamanho do apk dessas páginas!, e depois ele publica as alterações no site, e depois altera o valor donúmero de commits que é informado no readme, (tudo isso em um único workflow!)
-
-E eu também já consegui configurar um ssh na conta, e 2fa nela tambem, e com o ssh, eu consegui mover pastas inteiras para o repositório, e transformei 4 em 1, e mais de 100 commits em 1,
-
-e os contatos de confiança, quando são cadrastados eles também são criptografados!
-
-----
-
-## Sobre como foi escrito o texto do biometricPrompt do app:
+### Sobre como foi escrito o texto do biometricPrompt do app:
 
 - MainActivity (tela que contém o webview):
 
@@ -175,121 +159,79 @@ e os contatos de confiança, quando são cadrastados eles também são criptogra
 
 O método de autenticação é definido pelo próprio Android de acordo com os autenticadores disponíveis no dispositivo, utilizando "BIOMETRIC_WEAK" e "DEVICE_CREDENTIAL".
 
-----
+# ⚒️Todas as funções do aplicativo!:
 
-# Direitos que toda mulher tem!
+### Ícone Monocromático e Integração com Material You:
 
-Conheça 100 direitos e garantias assegurados às mulheres pela legislação brasileira.
+O aplicativo possui suporte aos ícones temáticos do Android (Themed Icons), permitindo que seu ícone se adapte visualmente à paleta de cores dinâmica definida pelo sistema.
 
-Para consultar a legislação completa e as referências utilizadas nesta seção, acesse**[LEIS.md](LEIS.md)**.
+* Máscara Monocromática: O aplicativo fornece uma versão monocromática específica do ícone para que o Android possa utilizá-la quando os ícones temáticos estiverem disponíveis e ativados no dispositivo.
 
-Conhecer seus direitos é importante para reconhecer situações de proteção, buscar ajuda quando necessário e entender as garantias previstas em lei.
+* Adaptação à Paleta do Sistema: Em vez de utilizar uma cor fixa definida pelo aplicativo, o Android pode aplicar a paleta dinâmica escolhida para o dispositivo ao ícone temático. Dessa forma, o ícone acompanha visualmente as cores utilizadas pelo restante da interface.
 
-----
+* Integração Visual: A utilização do sistema de ícones temáticos permite que o aplicativo mantenha uma aparência mais integrada à tela inicial, acompanhando o padrão visual adotado pelo próprio Android.
 
-# Conhecimentos para recuperar sua autonomia
+O Impacto Visual: O ícone deixa de depender exclusivamente de suas cores originais e passa a responder à personalização visual do sistema. Isso proporciona uma apresentação mais discreta e consistente com a interface do dispositivo, sem que o aplicativo precise criar manualmente uma versão diferente para cada paleta de cores.
 
-Conhecimentos e informações para ajudar você a compreender melhor sua vida financeira, organizar seu dinheiro e fortalecer sua autonomia.
-
-Para acessar o conteúdo completo sobre finanças, consulte**[Finanças](FINANÇAS.md)**.
-
-----
-
-# Mensagem de apoio e acolhimento para as usuárias
-
-Uma carta para você
-
-Esta carta foi feita para apoiar você em sua caminhada, trazendo conhecimentos e informações que podem ajudar a compreender melhor sua vida financeira, organizar seu dinheiro e fortalecer, cada vez mais, sua autonomia.
-
-Você não precisa saber tudo de uma vez. Conhecimento também é uma forma de proteção, e entender suas próprias finanças pode ajudar você a tomar decisões com mais segurança e independência.
-
-Para acessar o conteúdo completo sobre finanças, consulte a [Carta do desenvolvedor](ABOUT.md).
-
-----
-
-## Todas as funções do aplicativo!:
-
-**Disfarce do app (assistente de saúde falso!):**
+### Disfarce do app (assistente de saúde falso!):
 tutorial: ao entrar no app, clique no canto superior direito com o icone de calculadora. e ai quando ele for iniciado, ele pedirá para criar uma senha (e salva em uma classe kt de criptografia), assim so acessa com a senha informada, para resetar essa senha (dê 5 toques em menos de 2 segundos, e digite como você gosta de ser chamada, e digite sua nova senha!), mas antes dessa tela, tem outra tipo uma gaveta de apps..., porém, agora no mulher amparada, ele já vem com o icone de calculadora e o nome calculadora, só dá para mudar o icone, ou seja, o app ja vem com icone de (Assistente de saúde), uma tela genérica de elementos de medição de saúde (bpm e etc), e vale lembrar que:
 
 Os dados da primeira página do app são meramente fictícios e não representam informações reais!
 
 e tambem, reforcando que no canto superior direito tem um icone de calculadora que quando clica vai pra uma calculadora e aparece o disfarce de calculadora 
 
-----
-
-**Botão de Pânico:**
+### Botão de Pânico:
 Botão de Pânico, com ligação ao 180 de forma direta no primeiro clique.
 
-----
-
-**Proteção por Barulho:**
+### Proteção por Barulho:
 Ative a proteção, faça barulho alto e ele liga para o 180.
 
 caso ocorra alguma falha ou o aparelho da usuária não possua o sensor necessário, o aplicativo utiliza o microfone como alternativa. Ao detectar um barulho alto, a proteção é acionada.
 
-----
-
-**Balançar o Celular para Pedir Ajuda:**
+### Balançar o Celular para Pedir Ajuda:
 Ative e, ao chacoalhar o celular, ele liga para o 180.
 
-**Escurecimento por inclinação:**
+### Escurecimento por inclinação:
 com isso, voce pode controlar o brilho da tela clicando em um botão..., porém, e tipo como se fosse o menor brilho do celular, e ai depois ele deixa a tela preta (nao com brilho e sim colocando a cor), (honestamente, antes aparecia as duas barras, agora elas se escondem!), e o efeito e vitalicio ate fechar e abrir o app!
 
-----
-
-**Bloquear a tela do celular pelo barulho:**
+###Bloquear a tela do celular pelo barulho:
 ao ativado, ao fazer barulho alto, ele usa o administrador do dispositivo e bloqueia a tela do celular!
 
-----
-
-**Emergência:**
+###Emergência:
 Saindo dessa área, existem botões que abrem o aplicativo nativo do telefone nos números 190, 192 e 180.
 
-----
-
-**Compartilhamento Rápido de Localização:**
+###Compartilhamento Rápido de Localização:
 Além disso, existe um botão dentro do aplicativo que obtém a localização atual, monta um link do Google Maps com as coordenadas e abre uma conversa no WhatsApp do 180 com a mensagem preparada. O envio não é automático: é necessário apenas conferir a mensagem e tocar no botão de enviar.
 
-----
-
-Contatos de Confiança:
+### Contatos de Confiança:
 Além dos contatos de confiança, clicando no primeiro botão você seleciona e salva o contato. O botão abaixo envia um pedido de ajuda para ele.
 
-----
-
-## Área Protegida:
+# 🔐Área Protegida:
 Se estiver cadastrado no celular, com Biometric Prompt junto com Device Credential e autenticação weak, pode desbloquear essa área com impressão digital, rosto, PIN, padrão, senha e outros métodos.
 
 
-🔐 Sistema Cripto (Segurança do App) = Antigo LocalStorage!:
-
-
+### Sistema Cripto (Segurança do App) = Antigo LocalStorage!:
 Este sistema salva dados de forma segura usando criptografia nativa do Android.
 
-
-🧠 Como funciona:
-
-
+```
+Como funciona:
 Quando você salva um dado no app, ele não fica em texto normal no celular. Ele é automaticamente criptografado antes de ser armazenado.
 
-
 Isso significa que mesmo acessando os arquivos do dispositivo, os dados aparecem como códigos ilegíveis.
+```
 
-
-🔑 Tecnologia usada:
-
-
+```
+Tecnologia usada:
 
 AES-256 (criptografia forte)
 
 Android Keystore (chave protegida pelo sistema)
 
 EncryptedSharedPreferences
+```
 
-
-⚙️ O que cada função faz:
-
+```
+O que cada função faz:
 
 salvar(chave, valor) → guarda o dado de forma criptografada
 
@@ -298,51 +240,34 @@ carregar(chave) → recupera o dado original
 remover(chave) → apaga um dado específico
 
 limparTudo() → remove todos os dados salvos
-
-
-🔒 Segurança:
-
-
+```
+```
+Segurança:
 Os dados são protegidos por uma chave segura do próprio Android e não ficam visíveis diretamente no armazenamento do aparelho.
+```
 
-----
-
-**Calendário Menstrual:**
+###Calendário Menstrual:
 Registre como dói cada dia e, com isso, o aplicativo monta um calendário.
 
-----
-
-**Calendário de eventos:**
+###Calendário de eventos:
 Registra eventos da usuária quando ela precisar
 
-----
-
-**Rotina:**
+###Rotina:
 Sistema de pontos, com registro de comidas e bebidas boas e ruins, bem como a adição de registro de exercícios físicos fáceis, médios ou difíceis e contagem de tempo de cada um deles, além de sistema de nível e conquistas.
 
-----
-
-**Mapa:**
+###Mapa:
 Mostra um mapa da região e, quando a localização estiver disponível e autorizada, permite visualizar a posição atual.
 
-----
-
-**Diário:**
+###Diário:
 Usando criptografia, a usuária poderá anotar o que quiser. Com a senha, ficará seguro e também não some, pois estará guardado.
 
-----
-
-**Relógio:**
+###Relógio:
 Mostra o mapa do local atual, o país e outros dados, bem como o ano, semestre, bimestre, mês, quinzena, semana, dia, hora, minuto e segundo.
 
-----
-
-**Calculadora:**
+###Calculadora:
 A calculadora pode ser usada para cálculos rápidos do dia a dia.
 
-----
-
-**Tarefas:**
+###Tarefas:
 O sistema permite categorizar tarefas em áreas como estudos, trabalho, pessoal e saúde.
 
 As tarefas podem ser marcadas como concluídas para acompanhamento do progresso.
@@ -351,9 +276,8 @@ Todas as tarefas são salvas diretamente no webview da usuária.
 
 Os dados ficam armazenados localmente no dispositivo do usuário.
 
-----
-
-**Gravador de voz:**
+###Gravador de voz:
+```
 Usando uma activity (uma tela) em kotlin, é possivel ter um gravador de voz no app, sendo possível registrar gravações que podem ser utilizadas pela própria usuária para documentação, além do que a usuária quiser, sempre usando permissoes android e com o consentimento da usuária!
 
 GRAVAÇÕES — COMPORTAMENTO E METADADOS
@@ -473,10 +397,9 @@ Caso contrário, eles ficam como null.
 Esses metadados são registros técnicos produzidos pelo aplicativo. Eles podem ajudar a documentar como e quando uma gravação foi criada, mas a existência de hashes, localização ou timestamps, por si só, NÃO garante validade jurídica ou prova que um fato ocorreu.
 
 O SHA-256 permite verificar se os bytes de um arquivo correspondem ao conteúdo anteriormente registrado, enquanto os dados de localização, sensores e horário dependem dos recursos e configurações do próprio aparelho.
+```
 
-----
-
-Meus arquivos
+### Meus arquivos:
 
 Dentro do aplicativo, o Gerenciador de Arquivos do Mulher Amparada funciona como um visualizador. Ele permite navegar pelas pastas e, ao selecionar um arquivo, utiliza o mecanismo do Android para abrir um seletor de aplicativos compatíveis com aquele tipo de arquivo, permitindo que a usuária escolha um aplicativo para visualizá-lo ou executá-lo.
 
@@ -489,36 +412,15 @@ O acesso varia de acordo com o tipo de armazenamento:
 - Armazenamento interno e cartão SD: utilizam a permissão de Acesso a todos os arquivos, quando concedida pelo Android.
 - Dispositivos externos, como pendrives conectados por USB OTG: utilizam o SAF (Storage Access Framework), mecanismo oficial do Android para acesso a documentos e dispositivos de armazenamento externos autorizados pela usuária.
 
->Reforçando: o Gerenciador de Arquivos não acessa os arquivos internos do Gravador de Voz do Mulher Amparada nem os dados ou recursos internos de outras funcionalidades do aplicativo. Ele trabalha com arquivos que já estão disponíveis nos armazenamentos do dispositivo e que podem ser acessados pelos mecanismos de armazenamento autorizados pelo Android.
-
-----
-
-**Bloquear a tela do celular:**
+###Bloquear a tela do celular:
 Ao tocar neste botão, o aplicativo solicitará a permissão de Administrador do dispositivo, caso ela ainda não tenha sido concedida. Quando essa permissão estiver ativa, o aplicativo poderá bloquear imediatamente a tela do dispositivo, (aviso: depois que a tela é bloqueada pelo sistema, o Android pode exigir novamente o método de credencial do dispositivo antes de permitir determinadas formas de autenticação biométrica.)
 
-----
-
-**Tela de aplicativos:**
+###Tela de aplicativos:
 Ao tocar neste botão, o app mostrará um site dentro do app que lista todos os outros apps com a permissão query all packpages...
 
-----
+### História das Mulheres:
 
-## Considerações finais:
-
-e os audios do gravador de voz também são criptografados com a classe Cripto
-
-e o recurso de proteção ppr barulho, chacalhoar o celular e escurecer a tela, tem como ativar e desativar!
-
-todas as activitys tem a flag secure!
-
-e no application do AndroidManifest do app tem allowBackup="false" 
-
-O aplicativo possui um navegador interno. A navegação para o Google é feita diretamente pelo código usando window location replace(), sem disponibilizar o endereço como um link na interface. O aplicativo também não implementa um sistema próprio de registro de histórico de navegação, (ou pelo ou menos eu não coloquei na página)
-
-E temos um recurso na área protegida que é:
-
-História das Mulheres
-
+```
 A página “História das Mulheres” é uma experiência interativa que combina conteúdo histórico com um sistema de progressão. O usuário acumula Pontos de História, desbloqueia cinco períodos históricos, compra melhorias para aumentar sua produção e pode realizar prestígios para obter Legado Permanente.
 
 Pontos de História
@@ -611,54 +513,41 @@ e a calculadora de disfarce realmente faz contas, se digitar:
 2 + 2, aparece 4!
 
 e se digitar a senha ele desbloqueia...
+```
 
-----
+### Navegador: 
 
-## Área do amparo:
+A navegação para o Google é feita diretamente pelo código usando window location replace(), sem disponibilizar o endereço como um link na interface. O aplicativo também não implementa um sistema próprio de registro de histórico de navegação, (ou pelo ou menos eu não coloquei na página)
+
+## Considerações finais:
+
+e os audios do gravador de voz também são criptografados com a classe Cripto
+
+e o recurso de proteção ppr barulho, chacalhoar o celular e escurecer a tela, tem como ativar e desativar!
+
+todas as activitys tem a flag secure!
+
+e no application do AndroidManifest do app tem allowBackup="false" 
+
+# ❤️‍🩹Área do amparo:
 
 A Área do amparo também utiliza o sistema "BiometricPrompt", com autenticação por "BIOMETRIC_WEAK" e "DEVICE_CREDENTIAL".
 
-Carteirinha de reivindicação dos direitos de transporte das mulheres:
+### Carteirinha de reivindicação dos direitos de transporte das mulheres:
 
 Após o desbloqueio, é exibida uma carteirinha informativa que não constitui um documento oficial do governo. Ao tocá-la, a usuária é direcionada para uma página destinada à apresentação à equipe de motoristas do transporte, para solicitar o desembarque em um ponto mais seguro durante o período noturno, quando a legislação aplicável permitir.
 
-Carteirinha do gesto de ajuda:
+### Carteirinha do gesto de ajuda:
 
 Também há uma segunda carteirinha que, ao ser selecionada, direciona para um tutorial sobre como realizar o gesto internacional de combate à violência.
 
 O gesto é um sinal silencioso de pedido de ajuda e pode ser utilizado em diferentes situações de violência. Ele não é exclusivo de mulheres: qualquer pessoa, independentemente de ser homem ou mulher, pode realizá-lo quando precisar sinalizar que necessita de ajuda.
 
-----
-
-Sobre a autenticação quando não há biometria ou credencial cadastrada:
-
-As áreas protegidas do aplicativo utilizam o BiometricPrompt com os autenticadores BIOMETRIC_WEAK e DEVICE_CREDENTIAL.
-
-Quando existe uma biometria cadastrada, o Android pode apresentar a autenticação biométrica, como impressão digital ou reconhecimento facial compatível.
-
-Quando não existe biometria cadastrada, mas o dispositivo possui uma credencial de segurança configurada, como PIN, padrão ou senha, o Android pode utilizar essa credencial como alternativa.
-
-Caso o dispositivo não possua nenhum dos métodos de autenticação aceitos configurado, não existe um método válido para desbloquear a área protegida. Nesse cenário, o aplicativo não deve considerar a autenticação como concluída nem liberar a área protegida simplesmente porque a biometria não está disponível.
-
-----
-
-## Estrutura de Telas Secretas (Acesso Biométrico):
-
-O aplicativo divide suas funcionalidades confidenciais em DUAS ÁREAS COMPLETAMENTE SEPARADAS no menu principal. Cada área possui sua própria proteção e requer autenticação independente por meio do sistema BiometricPrompt  utilizando BIOMETRIC_WEAK e DEVICE_CREDENTIAL:
-
-Área Protegida.
-
-e
-
-Área do amparo.
-
-----
-
 # Decisões técnicas:
 
 lembre-se que hoje em dia uso github para compilar os apps e o a16 5g da samsung, então ele nao mata o processo de compilação mais!
 
-Porque usei webview e html?
+### Porque usei webview e html?
 
 porque ele e mais fluido, e também deixa o aplicativo mais leve em tamanho, um exemplo disso e o instagram lite, e porque nao precisa gerar muitos arquivos XMLs ou muito texto em kotlin para fazer todas as telas e além disso html com WebView é mais difícil de manter, mas eu tenho sim activitys em kotlin em xml, mas eu também tenho páginas em html, (mas não necessariamente o webview é mais leve universalmente!)
 
@@ -670,7 +559,11 @@ Mas a proposta e ele ser otimizado para ser mais rápido!
 
 E também o webview chama metodos expostos via js que chama o android
 
-, e sobre injeção de código, o app guarda os dados usando criptografia..., mas isso não garante que xss aconteça, mas eu só estou dizendo que ele guarda texto do diário por exemplo em criptografia, mas isso poderá acontecer como em qualquer outro app em certas condições...
+### Sobre injeção de código:
+
+o app guarda os dados usando criptografia..., mas isso não garante que xss aconteça, mas eu só estou dizendo que ele guarda texto do diário por exemplo em criptografia, mas isso poderá acontecer como em qualquer outro app em certas condições..., e também eu uso o proguard8
+
+### Sobre o WebView do app:
 
 e TODAS AS PÁGINAS EM HTML, estão dentro da pasta assets (menos o navegador que usa o Google, mas aí eu não controlo e é com eles lá!)
 
@@ -785,14 +678,6 @@ settings.mixedContentMode =
 
 ```
 
-Navegação da área protegida:
-
-A entrada na Área do amparo deve utilizar "window.location.replace()" em vez de "window.location.href".
-
-O uso de "window.location.replace()" impede que a página anterior permaneça no histórico de navegação do navegador/WebView. Dessa forma, após acessar a área protegida, o usuário não consegue retornar à página anterior utilizando o botão de voltar do navegador.
-
-Essa abordagem é utilizada como uma camada adicional de segurança para evitar que uma página anterior de acesso permaneça disponível no histórico.
-
 ```kt
 
 onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -814,7 +699,7 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
 })
 ```
 
-Por que, na FileActivity, o botão para trocar o tipo de armazenamento é unificado em um só?
+### Por que, na FileActivity, o botão para trocar o tipo de armazenamento é unificado em um só?
 
 O botão foi unificado para tornar a navegação entre os diferentes tipos de armazenamento mais simples e organizada, especialmente em situações de pânico ou urgência.
 
@@ -826,7 +711,7 @@ Essa escolha também foi pensada como uma forma de incentivar uma vistoria seque
 
 armazenamento interno, para trocar para cartao sd, clica no botão e troca o icone, mas aí para voltar atrás, tem passar pelo cartao sd e pelo pendrive para só então voltar para o armazenamento interno
 
-Por que usei a permissão de Administrador do dispositivo e não um Serviço de acessibilidade?
+### Por que usei a permissão de Administrador do dispositivo e não um Serviço de acessibilidade?
 
 Optei pelo Administrador do dispositivo em vez de um Serviço de acessibilidade porque, para a função específica que o aplicativo precisa realizar — bloquear imediatamente a tela do celular — o Administrador do dispositivo oferece um mecanismo próprio do Android para essa finalidade, por meio do "DevicePolicyManager.lockNow()".
 
@@ -850,7 +735,7 @@ Portanto, a documentação do projeto não deve dizer que “o Administrador do 
 
 O aplicativo utiliza somente a capacidade necessária para o seu mecanismo de proteção, sem depender das funções administrativas antigas, como alteração de senha ou outras políticas que foram descontinuadas.
 
-Por que o WebView do app não trata "intent" para abrir outros aplicativos?
+### Por que o WebView do app não trata "intent" para abrir outros aplicativos?
 
 Por questões de segurança e privacidade.
 
@@ -860,9 +745,7 @@ Links também podem conter parâmetros de rastreamento, redirecionamentos e outr
 
 Por isso, o WebView mantém esse comportamento limitado. A exceção é a tela de aplicativos, que possui uma função específica e um fluxo controlado pelo próprio app.
 
-----
-
-## Tema escuro, conforto visual e discrição:
+### Sobre o tema escuro, o conforto visual e a discrição:
 
 O projeto utiliza fundos escuros em todas as páginas da interface, independentemente do tipo de tela utilizado pelo dispositivo. Essa escolha busca manter uma experiência visual consistente, confortável e com menor brilho geral, evitando o uso desnecessário de grandes áreas brancas.
 
@@ -870,17 +753,39 @@ A interface também utiliza uma variedade de cores nos elementos, em vez de depe
 
 O tema escuro também considera o contexto de uso do aplicativo. Em situações nas quais a usuária precisa pedir ajuda ou utilizar o aplicativo de forma discreta, telas muito claras e brilhantes podem chamar atenção desnecessariamente. Por isso, a interface mantém uma aparência escura, discreta e confortável, sem comprometer a legibilidade.
 
-----
-
-## Animações e desempenho:
+## Sobre as animações e o desempenho:
 
 Todas as páginas sob controle do projeto implementam suporte a `prefers-reduced-motion`, permitindo que as animações sejam desativadas automaticamente quando essa preferência estiver habilitada no dispositivo. A página `navegador.html` é uma exceção, pois utiliza `window.replace` e pode carregar páginas externas que não são controladas pelo projeto.
 
 Além disso, as animações foram amplamente reduzidas, principalmente as animações de entrada. O projeto prioriza transições rápidas e discretas, mantendo apenas algumas animações pontuais quando elas contribuem para a experiência de uso. Dessa forma, a interface permanece visualmente agradável sem comprometer a agilidade e a responsividade do aplicativo.
 
-----
+# 🔗Seção de links e paginas:
 
-## Bibliografia
+### Direitos que toda mulher tem!
+
+Conheça 100 direitos e garantias assegurados às mulheres pela legislação brasileira.
+
+Para consultar a legislação completa e as referências utilizadas nesta seção, acesse**[LEIS.md](LEIS.md)**.
+
+Conhecer seus direitos é importante para reconhecer situações de proteção, buscar ajuda quando necessário e entender as garantias previstas em lei.
+
+### Conhecimentos para recuperar sua autonomia
+
+Conhecimentos e informações para ajudar você a compreender melhor sua vida financeira, organizar seu dinheiro e fortalecer sua autonomia.
+
+Para acessar o conteúdo completo sobre finanças, consulte**[Finanças](FINANÇAS.md)**.
+
+### Mensagem de apoio e acolhimento para as usuárias
+
+Uma carta para você
+
+Esta carta foi feita para apoiar você em sua caminhada, trazendo conhecimentos e informações que podem ajudar a compreender melhor sua vida financeira, organizar seu dinheiro e fortalecer, cada vez mais, sua autonomia.
+
+Você não precisa saber tudo de uma vez. Conhecimento também é uma forma de proteção, e entender suas próprias finanças pode ajudar você a tomar decisões com mais segurança e independência.
+
+Para acessar o conteúdo completo sobre finanças, consulte a [Carta do desenvolvedor](ABOUT.md).
+
+### Bibliografia
 
 - https://www.metmuseum.org/-/media/files/learn/for-educators/publications-for-educators/the-art-of-ancient-egypt.pdf
 
@@ -889,5 +794,3 @@ Além disso, as animações foram amplamente reduzidas, principalmente as anima�
 - https://www.worldhistory.org/trans/pt/2-2081/mulheres-na-antiga-mesopotamia/
 
 - https://www.worldhistory.org/trans/pt/2-927/as-mulheres-na-grecia-antiga/
-
-----

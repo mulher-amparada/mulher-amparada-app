@@ -3,8 +3,7 @@
   <h1>Mulher Amparada</h1>
 </div>
 
-<details>
-  <summary>🛠️ Clique aqui para ver as especificações técnicas</summary>
+ <div align="center">
 
 um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!
 
@@ -19,8 +18,8 @@ Para desinstalar o aplicativo, primeiro será necessário desativar a permissão
 
 Antes de conceder essa permissão, leia atentamente as informações exibidas pelo Android e só prossiga se compreender as funcionalidades e os efeitos dessa autorização.
 
-(como o código esta dentro do repositório , nao precisarei explicar!)
-</details>
+(como o código esta dentro do repositório, não precisarei explicar!)
+</div>
 
 
 

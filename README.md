@@ -1,8 +1,8 @@
-<h1 align="center">
-  <img src="user1.png" alt="Logo Mulher Amparada" width="55" height="55" align="center" style="margin-right: 15px;"> Mulher Amparada
-</h1>
-<p align="center"><i>Uma armadura digital calorosa, potente de proteção e acolhedora.</i></p>
+<div align="center">
+  <img src="user1.png" alt="Logo Mulher Amparada" width="150" height="150">
+</div>
 
+# Mulher Amparada
 
  <div align="center">
 Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!
@@ -11,6 +11,7 @@ E saibam que o projeto é: Source-Available
 </div>
 
 ## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2898
+
 
 ## Sobre as permissões:
 

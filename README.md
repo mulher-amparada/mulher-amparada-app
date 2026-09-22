@@ -1,4 +1,4 @@
-<div align="center">
+<div align="center" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
   <img src="user1.png" alt="Logo Mulher Amparada" width="150" height="150">
   <h1>Mulher Amparada</h1>
 </div>

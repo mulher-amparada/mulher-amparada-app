@@ -84,6 +84,43 @@ E saibam que o projeto é: Source-Available
 >
 >Dessa forma, essas informações podem ser consultadas diretamente pelo site ou pelo próprio aplicativo, mantendo o conteúdo acessível nos dois ambientes.
 
+
+# 🔗Seção de links e paginas:
+
+### Direitos que toda mulher tem!
+
+Conheça 100 direitos e garantias assegurados às mulheres pela legislação brasileira.
+
+Para consultar a legislação completa e as referências utilizadas nesta seção, acesse**[LEIS.md](LEIS.md)**.
+
+Conhecer seus direitos é importante para reconhecer situações de proteção, buscar ajuda quando necessário e entender as garantias previstas em lei.
+
+### Conhecimentos para recuperar sua autonomia
+
+Conhecimentos e informações para ajudar você a compreender melhor sua vida financeira, organizar seu dinheiro e fortalecer sua autonomia.
+
+Para acessar o conteúdo completo sobre finanças, consulte**[Finanças](FINANÇAS.md)**.
+
+### Mensagem de apoio e acolhimento para as usuárias
+
+Uma carta para você
+
+Esta carta foi feita para apoiar você em sua caminhada, trazendo conhecimentos e informações que podem ajudar a compreender melhor sua vida financeira, organizar seu dinheiro e fortalecer, cada vez mais, sua autonomia.
+
+Você não precisa saber tudo de uma vez. Conhecimento também é uma forma de proteção, e entender suas próprias finanças pode ajudar você a tomar decisões com mais segurança e independência.
+
+Para acessar o conteúdo completo sobre finanças, consulte a [Carta do desenvolvedor](ABOUT.md).
+
+### Bibliografia
+
+- https://www.metmuseum.org/-/media/files/learn/for-educators/publications-for-educators/the-art-of-ancient-egypt.pdf
+
+- https://www.britishmuseum.org/blog/mary-beards-top-five-powerful-women-ancient-greece-and-rome
+
+- https://www.worldhistory.org/trans/pt/2-2081/mulheres-na-antiga-mesopotamia/
+
+- https://www.worldhistory.org/trans/pt/2-927/as-mulheres-na-grecia-antiga/
+
 # 🏗Estrutura do projeto:
 
 ### Sobre como eu automatizo o projeto:
@@ -567,7 +604,7 @@ e TODAS AS PÁGINAS EM HTML, estão dentro da pasta assets (menos o navegador qu
 
 E o webview do app está assim!:
 
-```kt
+```kotlin
 
 val settings =  
         webView.settings  
@@ -676,7 +713,7 @@ settings.mixedContentMode =
 
 ```
 
-```kt
+```kotlin
 
 onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
     override fun handleOnBackPressed() {
@@ -756,39 +793,3 @@ O tema escuro também considera o contexto de uso do aplicativo. Em situações 
 Todas as páginas sob controle do projeto implementam suporte a `prefers-reduced-motion`, permitindo que as animações sejam desativadas automaticamente quando essa preferência estiver habilitada no dispositivo. A página `navegador.html` é uma exceção, pois utiliza `window.replace` e pode carregar páginas externas que não são controladas pelo projeto.
 
 Além disso, as animações foram amplamente reduzidas, principalmente as animações de entrada. O projeto prioriza transições rápidas e discretas, mantendo apenas algumas animações pontuais quando elas contribuem para a experiência de uso. Dessa forma, a interface permanece visualmente agradável sem comprometer a agilidade e a responsividade do aplicativo.
-
-# 🔗Seção de links e paginas:
-
-### Direitos que toda mulher tem!
-
-Conheça 100 direitos e garantias assegurados às mulheres pela legislação brasileira.
-
-Para consultar a legislação completa e as referências utilizadas nesta seção, acesse**[LEIS.md](LEIS.md)**.
-
-Conhecer seus direitos é importante para reconhecer situações de proteção, buscar ajuda quando necessário e entender as garantias previstas em lei.
-
-### Conhecimentos para recuperar sua autonomia
-
-Conhecimentos e informações para ajudar você a compreender melhor sua vida financeira, organizar seu dinheiro e fortalecer sua autonomia.
-
-Para acessar o conteúdo completo sobre finanças, consulte**[Finanças](FINANÇAS.md)**.
-
-### Mensagem de apoio e acolhimento para as usuárias
-
-Uma carta para você
-
-Esta carta foi feita para apoiar você em sua caminhada, trazendo conhecimentos e informações que podem ajudar a compreender melhor sua vida financeira, organizar seu dinheiro e fortalecer, cada vez mais, sua autonomia.
-
-Você não precisa saber tudo de uma vez. Conhecimento também é uma forma de proteção, e entender suas próprias finanças pode ajudar você a tomar decisões com mais segurança e independência.
-
-Para acessar o conteúdo completo sobre finanças, consulte a [Carta do desenvolvedor](ABOUT.md).
-
-### Bibliografia
-
-- https://www.metmuseum.org/-/media/files/learn/for-educators/publications-for-educators/the-art-of-ancient-egypt.pdf
-
-- https://www.britishmuseum.org/blog/mary-beards-top-five-powerful-women-ancient-greece-and-rome
-
-- https://www.worldhistory.org/trans/pt/2-2081/mulheres-na-antiga-mesopotamia/
-
-- https://www.worldhistory.org/trans/pt/2-927/as-mulheres-na-grecia-antiga/

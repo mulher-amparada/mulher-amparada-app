@@ -25,7 +25,7 @@ Antes de conceder essa permissão, leia atentamente as informações exibidas pe
 
 ## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2898
 
-----
+<hr>
 
 ## Sobre as permissões:
 

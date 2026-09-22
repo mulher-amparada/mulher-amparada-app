@@ -6,13 +6,9 @@
   <h1>Mulher Amparada</h1>
   </div>
 
- <div align="center">
 Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!
-</div>
 
-<div align="center">
 E saibam que o projeto é: Source-Available
-</div>
 
 ## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2898
 

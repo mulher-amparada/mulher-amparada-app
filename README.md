@@ -40,7 +40,7 @@ E saibam que o projeto é: Source-Available
 >
 >O aplicativo conta com uma funcionalidade exclusiva de privacidade, projetada para proteger as informações da usuária contra olhares curiosos. Ao inclinar o dispositivo, o aplicativo ativa instantaneamente um modo de disfarce visual, escurecendo a interface para simular que a tela está desligada ou que o celular está bloqueado.
 >
->#### Funcionamento Exclusivo na Tela Principal (MainActivity)
+>### Funcionamento Exclusivo na Tela Principal (MainActivity)
 >
 >Por decisões estratégicas de segurança, desempenho e utilidade prática, este recurso opera **estritamente dentro da tela principal do aplicativo**, não sendo ativado nas demais telas ou no momento em que o app está abrindo. As razões para essa escolha incluem:
 >
@@ -55,6 +55,8 @@ E saibam que o projeto é: Source-Available
 > Sobre as funções por sensores (bloquear a tela por barulho, proteção por barulho que liga pro 180, balançar o celular para pedir ajuda e escurecimento por inclinação): A função Bloquear a tela por Barulho foi projetada com uma medida adicional de segurança: depois de ser ativada e funcionar de fato, ela permanece ativa até que o usuário decida desativá-la pelo próprio aplicativo. Para evitar que o estado da função seja perdido ao sair e retornar à página, o aplicativo salva seu estado de ativação utilizando a classe Cripto. Dessa forma, ao retornar à página, o aplicativo recupera o estado salvo e exibe corretamente se a função está ATIVADA ou DESATIVADA. Essa persistência permite que a interface continue refletindo o estado real configurado pelo usuário, mesmo após a navegação entre as páginas do aplicativo. Mas quando a usuária desativar ou a função ser concluída, na página ele mostra como desativado!
 
 >O Gerenciador de Arquivos (que apenas visualiza) não acessa os arquivos internos do Gravador de Voz do Mulher Amparada nem os dados ou recursos internos de outras funcionalidades do aplicativo. Ele trabalha com arquivos que já estão disponíveis nos armazenamentos do dispositivo e que podem ser acessados pelos mecanismos de armazenamento autorizados pelo Android.
+
+>Porém, quando eu digo que o Gerenciador de arquivos apenas visualiza, eu quero dizer que ele nao faz operações de arquivos, mas quando clica em um arquivo, ele abre um seletor de apps, ajudando muito para a coleta de evidências!, porém, se a usuária selecionar um app por esse seletor e perder os dados, o desenvolvedor não se responsabiliza!
 
 >O aplicativo possui um navegador interno. A navegação para o Google é feita diretamente pelo código usando window location replace(), sem disponibilizar o endereço como um link na interface. O aplicativo também não implementa um sistema próprio de registro de histórico de navegação, (ou pelo ou menos eu não coloquei na página)
 

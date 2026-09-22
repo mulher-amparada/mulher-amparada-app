@@ -1,17 +1,15 @@
-<div align="center" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+<div align="center">
   <img src="user1.png" alt="Logo Mulher Amparada" width="150" height="150">
   <h1>Mulher Amparada</h1>
 </div>
 
-----
+<details>
+  <summary>🛠️ Clique aqui para ver as especificações técnicas</summary>
 
-! um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!
+um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!
 
-## E saibam que o projeto é: Source-Available
+E saibam que o projeto é: Source-Available
 
-## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2898
-
-----
 
 O **Mulher Amparada** é um aplicativo de segurança e proteção desenvolvido especialmente para mulheres que desejam se sentir mais seguras em situações do dia a dia. O objetivo principal do aplicativo é oferecer suporte rápido, eficiente e acessível em momentos de risco, permitindo que a usuária consiga pedir ajuda de forma simples e imediata. Em um cenário onde muitas mulheres enfrentam situações de vulnerabilidade, ter uma ferramenta confiável pode fazer toda a diferença, e é exatamente isso que o Mulher Amparada busca proporcionar.
 
@@ -22,6 +20,11 @@ Para desinstalar o aplicativo, primeiro será necessário desativar a permissão
 Antes de conceder essa permissão, leia atentamente as informações exibidas pelo Android e só prossiga se compreender as funcionalidades e os efeitos dessa autorização.
 
 (como o código esta dentro do repositório , nao precisarei explicar!)
+</details>
+
+
+
+## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2898
 
 ----
 

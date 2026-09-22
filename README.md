@@ -1,7 +1,17 @@
 <div align="center">
-  <img src="user1.png" alt="Logo Mulher Amparada" width="300" height="300">
-  <h1>Mulher Amparada</h1>
+  <table border="0" style="border-collapse: collapse; border: none;">
+    <tr style="border: none;">
+      <td style="border: none; padding-right: 15px; vertical-align: middle;">
+        <img src="user1.png" alt="Logo Mulher Amparada" width="100" height="100">
+      </td>
+      <td style="border: none; vertical-align: middle; text-align: left;">
+        <h1 style="margin: 0; border: none; padding: 0;">Mulher Amparada</h1>
+        <p style="margin: 0; color: #888;"><i>Uma armadura digital calorosa, potente de proteção e acolhedora.</i></p>
+      </td>
+    </tr>
+  </table>
 </div>
+
 
  <div align="center">
 Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!

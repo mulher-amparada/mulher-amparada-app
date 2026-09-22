@@ -1,16 +1,7 @@
-<div align="center">
-  <table border="0" style="border-collapse: collapse; border: none;">
-    <tr style="border: none;">
-      <td style="border: none; padding-right: 15px; vertical-align: middle;">
-        <img src="user1.png" alt="Logo Mulher Amparada" width="100" height="100">
-      </td>
-      <td style="border: none; vertical-align: middle; text-align: left;">
-        <h1 style="margin: 0; border: none; padding: 0;">Mulher Amparada</h1>
-        <p style="margin: 0; color: #888;"><i>Uma armadura digital calorosa, potente de proteção e acolhedora.</i></p>
-      </td>
-    </tr>
-  </table>
-</div>
+<h1 align="center">
+  <img src="user1.png" alt="Logo Mulher Amparada" width="55" height="55" align="center" style="margin-right: 15px;"> Mulher Amparada
+</h1>
+<p align="center"><i>Uma armadura digital calorosa, potente de proteção e acolhedora.</i></p>
 
 
  <div align="center">
@@ -20,8 +11,6 @@ E saibam que o projeto é: Source-Available
 </div>
 
 ## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2898
-
-----
 
 ## Sobre as permissões:
 

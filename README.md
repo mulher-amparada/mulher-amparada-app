@@ -2,56 +2,62 @@
   <img src="user1.png" alt="Logo Mulher Amparada" width="200" height="200">
 </div>
 
+<div align="center">
   <h1>Mulher Amparada</h1>
+  </div>
 
 Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!
 
 E saibam que o projeto é: Source-Available
 
-## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2919
+## Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2898
 
+----
 
-## Sobre as permissões:
+# ⚠️MURAL DE AVISOS:
 
-> ⚠️ Sobre as permissões: infelizmente, foi necessário configurar a MainActivity para não solicitar permissões automaticamente. Por isso, as permissões necessárias deverão ser concedidas manualmente pela usuária nas configurações do dispositivo. As permissões utilizadas por outras Activitys continuam sendo solicitadas normalmente pelo aplicativo.
+>Sobre as permissões: infelizmente, foi necessário configurar a MainActivity para não solicitar permissões automaticamente. Por isso, as permissões necessárias deverão ser concedidas manualmente pela usuária nas configurações do dispositivo. As permissões utilizadas por outras Activitys continuam sendo solicitadas normalmente pelo aplicativo.
 
 * Ao entrar no aplicativo após sair dos disfarces, um aviso é exibido, bloqueando o acesso até que todas as permissões necessárias estejam concedidas. O aviso oferece à usuária a opção de acessar diretamente a tela de permissões do aplicativo nas configurações do dispositivo. Ao retornar ao aplicativo, as permissões são verificadas novamente. Se ainda houver alguma permissão necessária que não tenha sido concedida, o aviso continuará sendo exibido e o acesso permanecerá bloqueado. O aviso só desaparecerá quando todas as permissões necessárias estiverem concedidas.
  
  * (mas a permissão de Administrador do dispositivo a acitvity pede normalmente!).
+ 
+ 
+>Vale lembrar que o projeto não substitui serviços oficiais do governo e também não garante segurança imediata, bem como as funções dependem do estado e hardware de cada aparelho!
 
-## Avisos:
+> Vale lembrar: o Gerenciador de Arquivos do Mulher Amparada funciona principalmente como um visualizador de arquivos. O nome “Gerenciador de Arquivos” também faz parte do disfarce do aplicativo. Ele foi projetado dessa forma por uma questão de segurança: o aplicativo não oferece funções próprias para excluir, mover, copiar ou renomear arquivos, reduzindo o risco de apagar ou alterar acidentalmente algum arquivo importante — inclusive possíveis registros que a usuária queira preservar.
 
-> ⚠️Vale lembrar que o projeto não substitui serviços oficiais do governo e também não garante segurança imediata, bem como as funções dependem do estado e hardware de cada aparelho!
+>Ao utilizar a função de baixar o histórico de ajuda, o aplicativo gera um único arquivo no formato JSON. Os dados utilizados para gerar esse histórico são obtidos por meio das APIs protegidas do Android, que controlam o acesso ao histórico de chamadas por meio das permissões do sistema. Por isso, o aplicativo não aplica a classe "Cripto" novamente durante a exportação. O arquivo JSON exportado, entretanto, não é um arquivo criptografado. Ele é salvo como um arquivo comum na área de downloads do dispositivo. A proteção de acesso fornecida pelo Android ao histórico de chamadas não significa que o arquivo exportado permaneça criptografado. O arquivo também contém hashes SHA-256, utilizados para verificação de integridade dos dados. SHA-256 não é um mecanismo de criptografia e não substitui a criptografia para proteção do conteúdo.
 
-> ⚠️ Vale lembrar: o Gerenciador de Arquivos do Mulher Amparada funciona principalmente como um visualizador de arquivos. O nome “Gerenciador de Arquivos” também faz parte do disfarce do aplicativo. Ele foi projetado dessa forma por uma questão de segurança: o aplicativo não oferece funções próprias para excluir, mover, copiar ou renomear arquivos, reduzindo o risco de apagar ou alterar acidentalmente algum arquivo importante — inclusive possíveis registros que a usuária queira preservar.
+>ATENÇÃO: Reforço que as proteções que utilizam sensores podem não funcionar corretamente em alguns aparelhos, dependendo das limitações ou características do hardware da usuária.
 
-> ⚠️Ao utilizar a função de baixar o histórico de ajuda, o aplicativo gera um único arquivo no formato JSON. Os dados utilizados para gerar esse histórico são obtidos por meio das APIs protegidas do Android, que controlam o acesso ao histórico de chamadas por meio das permissões do sistema. Por isso, o aplicativo não aplica a classe "Cripto" novamente durante a exportação. O arquivo JSON exportado, entretanto, não é um arquivo criptografado. Ele é salvo como um arquivo comum na área de downloads do dispositivo. A proteção de acesso fornecida pelo Android ao histórico de chamadas não significa que o arquivo exportado permaneça criptografado. O arquivo também contém hashes SHA-256, utilizados para verificação de integridade dos dados. SHA-256 não é um mecanismo de criptografia e não substitui a criptografia para proteção do conteúdo.
+>Botão de pânico: caso o aplicativo não possua a permissão necessária para realizar chamadas diretamente, ele utiliza o "ACTION_DIAL" como alternativa, abrindo o discador com o número de emergência. Dessa forma, o recurso continua disponível mesmo sem a permissão de chamada.
 
-> ⚠️ATENÇÃO: Reforço que as proteções que utilizam sensores podem não funcionar corretamente em alguns aparelhos, dependendo das limitações ou características do hardware da usuária.
+> Sobre as proteções por movimento e escurecimento: caso ocorra alguma falha ou o aparelho da usuária não possua o sensor necessário, o aplicativo utiliza o microfone como alternativa. Ao detectar um barulho alto, a proteção é acionada.
 
-> ⚠️Botão de pânico: caso o aplicativo não possua a permissão necessária para realizar chamadas diretamente, ele utiliza o "ACTION_DIAL" como alternativa, abrindo o discador com o número de emergência. Dessa forma, o recurso continua disponível mesmo sem a permissão de chamada.
-
-> ⚠️ Sobre as proteções por movimento e escurecimento: caso ocorra alguma falha ou o aparelho da usuária não possua o sensor necessário, o aplicativo utiliza o microfone como alternativa. Ao detectar um barulho alto, a proteção é acionada.
-
-> ⚠️ **Recurso de Privacidade: Escurecimento por Inclinação (Disfarce Rápido)**
+> **Recurso de Privacidade: Escurecimento por Inclinação (Disfarce Rápido)**
 >
-> O aplicativo conta com uma funcionalidade exclusiva de privacidade, projetada para proteger as informações da usuária contra olhares curiosos. Ao inclinar o dispositivo, o aplicativo ativa instantaneamente um modo de disfarce visual, escurecendo a interface para simular que a tela está desligada ou que o celular está bloqueado.
+>O aplicativo conta com uma funcionalidade exclusiva de privacidade, projetada para proteger as informações da usuária contra olhares curiosos. Ao inclinar o dispositivo, o aplicativo ativa instantaneamente um modo de disfarce visual, escurecendo a interface para simular que a tela está desligada ou que o celular está bloqueado.
 >
-> #### Funcionamento Exclusivo na Tela Principal (MainActivity)
+>#### Funcionamento Exclusivo na Tela Principal (MainActivity)
 >
-> Por decisões estratégicas de segurança, desempenho e utilidade prática, este recurso opera **estritamente dentro da tela principal do aplicativo**, não sendo ativado nas demais telas ou no momento em que o app está abrindo. As razões para essa escolha incluem:
+>Por decisões estratégicas de segurança, desempenho e utilidade prática, este recurso opera **estritamente dentro da tela principal do aplicativo**, não sendo ativado nas demais telas ou no momento em que o app está abrindo. As razões para essa escolha incluem:
 >
-> * **Velocidade Máxima no Socorro:** A tela de entrada do aplicativo precisa abrir o app o mais rápido possível. Ligar os sensores de movimento do celular logo na inicialização causaria um atraso na abertura, o que comprometeria o pedido de ajuda em situações de urgência extrema.
-> * **Economia Extrema de Bateria:** Os sensores de inclinação consomem energia do dispositivo. Ao restringir o uso do sensor apenas para a tela principal (onde a usuária passa a maior parte do tempo), o aplicativo evita o desgaste desnecessário da bateria e impede que o sensor continue rodando quando o aplicativo for fechado ou minimizado.
-> * **Proteção Focada onde Importa:** A tela principal é o local que concentra as informações realmente sensíveis do projeto (como finanças e anotações). Telas de transição ou de carregamento não exibem dados confidenciais, eliminando a necessidade de um disfarce visual nessas etapas.
+>* **Velocidade Máxima no Socorro:** A tela de entrada do aplicativo precisa abrir o app o mais rápido possível. Ligar os sensores de movimento do celular logo na inicialização causaria um atraso na abertura, o que comprometeria o pedido de ajuda em situações de urgência extrema.
+>* **Economia Extrema de Bateria:** Os sensores de inclinação consomem energia do dispositivo. Ao restringir o uso do sensor apenas para a tela principal (onde a usuária passa a maior parte do tempo), o aplicativo evita o desgaste desnecessário da bateria e impede que o sensor continue rodando quando o aplicativo for fechado ou minimizado.
+>* **Proteção Focada onde Importa:** A tela principal é o local que concentra as informações realmente sensíveis do projeto (como finanças e anotações). Telas de transição ou de carregamento não exibem dados confidenciais, eliminando a necessidade de um disfarce visual nessas etapas.
 
-> ⚠️Aviso — O recurso de “Desembarque seguro” do Mulher Amparada é informativo e atualmente apresenta a legislação aplicável à Cidade de São Paulo, especialmente a Lei Municipal nº 16.490/2016 e sua regulamentação. Essa legislação não deve ser interpretada como uma regra válida em todo o Brasil. As regras sobre desembarque fora dos pontos podem variar conforme o município, o estado e o tipo de transporte. A carteirinha apresentada pelo aplicativo não é um documento oficial e não substitui a legislação vigente, regulamentações, orientações das empresas de transporte ou autoridades competentes. E antes de utilizar esse recurso em outra localidade, verifique a legislação específica aplicável ao local.
+>Aviso — O recurso de “Desembarque seguro” do Mulher Amparada é informativo e atualmente apresenta a legislação aplicável à Cidade de São Paulo, especialmente a Lei Municipal nº 16.490/2016 e sua regulamentação. Essa legislação não deve ser interpretada como uma regra válida em todo o Brasil. As regras sobre desembarque fora dos pontos podem variar conforme o município, o estado e o tipo de transporte. A carteirinha apresentada pelo aplicativo não é um documento oficial e não substitui a legislação vigente, regulamentações, orientações das empresas de transporte ou autoridades competentes. E antes de utilizar esse recurso em outra localidade, verifique a legislação específica aplicável ao local.
 
-### Documentação e conteúdo:
+----
+
+## Documentação e conteúdo:
 
 O conteúdo dos arquivos `about.md`, `LEIS.md` e `FINANÇAS.md` está disponível tanto no site publicado pelo GitHub Pages quanto dentro da área protegida do aplicativo.
 
 Dessa forma, essas informações podem ser consultadas diretamente pelo site ou pelo próprio aplicativo, mantendo o conteúdo acessível nos dois ambientes.
+
+----
 
 ## Sobre as funções por sensores (bloquear a tela por barulho, proteção por barulho que liga pro 180, balançar o celular para pedir ajuda e escurecimento por inclinação):
 
@@ -63,9 +69,13 @@ Essa persistência permite que a interface continue refletindo o estado real con
 
 Mas quando a usuária desativar ou a função ser concluída, na página ele mostra como desativado!
 
+----
+
 ## Sobre a proteção por palmas/barulho:
 
 Nota de Segurança: Uma vez ativada, a proteção permanecerá vigilante e reativará o microfone automaticamente após cada detecção e ligação pro 180. Isso garante que o aplicativo continue te protegendo caso a situação de risco persista. Para desligá-la por completo, você deve fazer isso manualmente no aplicativo após o término da situação de risco.
+
+----
 
 ## Sobre o site que está hospedado pelo github pages:
 
@@ -82,6 +92,8 @@ o nome verdadeiro do app = Mulher Amparada Pela Liberdade Feminina
 uma página dos canais oficiais do projeto = Medium, Instagram, TikTok, Comunidade do WhatsApp
 
 E uma página mostrando o trabalho de uma mulher empoderada (e eu estava mostrando sobre as vendas dela, para dizer que todas as mulheres podem crescer!, e ela não tem relação com a questão do projeto ser gratuito, essa página é algo separado, o app ainda é totalmente grátis!)
+
+----
 
 ## Sobre como o aplicativo é compilado:
 
@@ -167,10 +179,10 @@ e os contatos de confiança, quando são cadrastados eles também são criptogra
 - MainActivity (tela que contém o webview):
 
 **Título:**
-> Desbloquear a área protegida
+>Desbloquear a área protegida
 
 **Descrição:**
-> 🌸 Apenas a usuária cadastrada pode acessar este local
+>🌸 Apenas a usuária cadastrada pode acessar este local
 
 O método de autenticação é definido pelo próprio Android de acordo com os autenticadores disponíveis no dispositivo, utilizando "BIOMETRIC_WEAK" e "DEVICE_CREDENTIAL".
 
@@ -488,7 +500,7 @@ O acesso varia de acordo com o tipo de armazenamento:
 - Armazenamento interno e cartão SD: utilizam a permissão de Acesso a todos os arquivos, quando concedida pelo Android.
 - Dispositivos externos, como pendrives conectados por USB OTG: utilizam o SAF (Storage Access Framework), mecanismo oficial do Android para acesso a documentos e dispositivos de armazenamento externos autorizados pela usuária.
 
-> ⚠️Reforçando: o Gerenciador de Arquivos não acessa os arquivos internos do Gravador de Voz do Mulher Amparada nem os dados ou recursos internos de outras funcionalidades do aplicativo. Ele trabalha com arquivos que já estão disponíveis nos armazenamentos do dispositivo e que podem ser acessados pelos mecanismos de armazenamento autorizados pelo Android.
+>Reforçando: o Gerenciador de Arquivos não acessa os arquivos internos do Gravador de Voz do Mulher Amparada nem os dados ou recursos internos de outras funcionalidades do aplicativo. Ele trabalha com arquivos que já estão disponíveis nos armazenamentos do dispositivo e que podem ser acessados pelos mecanismos de armazenamento autorizados pelo Android.
 
 ----
 
@@ -729,7 +741,7 @@ settings.mixedContentMode =
 
     webView.setOnFocusChangeListener {  
             _,  
-            _ ->  
+            _ -> 
     }  
 
 

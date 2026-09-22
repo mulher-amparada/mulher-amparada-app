@@ -10,7 +10,7 @@ Um projeto totalmente gratuito e livre de anúncios, projetado por um menino aut
 
 E saibam que o projeto é: Source-Available
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2929**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2898**
 
 # ⚠️MURAL DE AVISOS:
 
@@ -541,7 +541,7 @@ Também há uma segunda carteirinha que, ao ser selecionada, direciona para um t
 
 O gesto é um sinal silencioso de pedido de ajuda e pode ser utilizado em diferentes situações de violência. Ele não é exclusivo de mulheres: qualquer pessoa, independentemente de ser homem ou mulher, pode realizá-lo quando precisar sinalizar que necessita de ajuda.
 
-# Decisões técnicas:
+# ⚙️Decisões técnicas:
 
 lembre-se que hoje em dia uso github para compilar os apps e o a16 5g da samsung, então ele nao mata o processo de compilação mais!
 

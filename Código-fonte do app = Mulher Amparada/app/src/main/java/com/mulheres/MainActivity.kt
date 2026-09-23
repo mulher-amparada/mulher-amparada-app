@@ -184,12 +184,18 @@ if (
 
 
 
-        webView =
-            findViewById(
-                R.id.webview
-            )
+webView =
+    findViewById(
+        R.id.webview
+    )
 
-        criarEmergencyOverlay()
+locationClient =
+    LocationServices
+        .getFusedLocationProviderClient(
+            this
+        )
+
+criarEmergencyOverlay()
         
         webView.setBackgroundColor(
     Color.BLACK
@@ -227,11 +233,7 @@ ViewCompat.setOnApplyWindowInsetsListener(webView) { view, insets ->
 
         criarShakeListener()
 
-        locationClient =
-            LocationServices
-                .getFusedLocationProviderClient(
-                    this
-                )
+  
 
         /*
          * Inicializa uma única instância do Cripto
@@ -2172,9 +2174,15 @@ private fun compartilharLocalizacaoEmergencia() {
         .getCurrentLocation(
             com.google.android.gms.location.Priority
                 .PRIORITY_HIGH_ACCURACY,
-            com.google.android.gms.tasks
-                .CancellationTokenSource()
-                .token
+            val cancellationTokenSource =
+    com.google.android.gms.tasks.CancellationTokenSource()
+
+locationClient
+    .getCurrentLocation(
+        com.google.android.gms.location.Priority
+            .PRIORITY_HIGH_ACCURACY,
+        cancellationTokenSource.token
+    )
         )
         .addOnSuccessListener { location ->
 

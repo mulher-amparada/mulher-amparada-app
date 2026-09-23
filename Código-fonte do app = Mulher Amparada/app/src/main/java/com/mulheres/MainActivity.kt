@@ -2112,27 +2112,24 @@ private fun criarEmergencyOverlay() {
             android.R.id.content
         )
 
-    emergencyComposeView =
-        ComposeView(this).apply {
+emergencyComposeView =
+    ComposeView(this).apply {
 
-            setViewCompositionStrategy(
-                ViewCompositionStrategy
-                    .DisposeOnViewTreeLifecycleDestroyed
+        setViewCompositionStrategy(
+            ViewCompositionStrategy
+                .DisposeOnViewTreeLifecycleDestroyed
+        )
+
+        setContent {
+
+            EmergencyOverlay(
+                visivel = emergenciaVisivel,
+                aoClicar = {
+                    compartilharLocalizacaoEmergencia()
+                }
             )
-
-            setContent {
-
-                EmergencyOverlay(
-
-                    visivel = emergenciaVisivel,
-
-                    aoClicar = {
-
-                        compartilharLocalizacaoEmergencia()
-                    }
-                )
-            }
         }
+    }
 
     raiz.addView(
 
@@ -2170,11 +2167,7 @@ private fun compartilharLocalizacaoEmergencia() {
         return
     }
 
-    locationClient
-        .getCurrentLocation(
-            com.google.android.gms.location.Priority
-                .PRIORITY_HIGH_ACCURACY,
-            val cancellationTokenSource =
+    val cancellationTokenSource =
     com.google.android.gms.tasks.CancellationTokenSource()
 
 locationClient
@@ -2183,7 +2176,7 @@ locationClient
             .PRIORITY_HIGH_ACCURACY,
         cancellationTokenSource.token
     )
-        )
+
         .addOnSuccessListener { location ->
 
             if (location != null) {

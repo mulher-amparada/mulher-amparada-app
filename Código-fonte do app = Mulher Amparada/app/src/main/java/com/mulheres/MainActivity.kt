@@ -51,7 +51,9 @@ import android.widget.FrameLayout
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.runtime.mutableStateOf
-
+import android.os.BatteryManager
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 

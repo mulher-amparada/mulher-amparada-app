@@ -1987,28 +1987,6 @@ window.navigationBarColor =
             )
         }
 
-        /*
-         * POST_NOTIFICATIONS só existe a partir
-         * do Android 13.
-         */
-        if (
-            Build.VERSION.SDK_INT >=
-            Build.VERSION_CODES.TIRAMISU
-        ) {
-
-            if (
-                ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) !=
-                PackageManager.PERMISSION_GRANTED
-            ) {
-
-                faltando.add(
-                    Manifest.permission.POST_NOTIFICATIONS
-                )
-            }
-        }
 
         if (
             ContextCompat.checkSelfPermission(

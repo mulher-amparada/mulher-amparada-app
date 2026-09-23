@@ -10,7 +10,7 @@ Um projeto totalmente gratuito e livre de anúncios, projetado por um menino aut
 
 E saibam que o projeto é: Source-Available
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3033**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3027**
 
 # ⚠️MURAL DE AVISOS:
 
@@ -59,6 +59,8 @@ E saibam que o projeto é: Source-Available
 >Porém, quando eu digo que o Gerenciador de arquivos apenas visualiza, eu quero dizer que ele nao faz operações de arquivos, mas quando clica em um arquivo, ele abre um seletor de apps, ajudando muito para a coleta de evidências!, porém, se a usuária selecionar um app por esse seletor e perder os dados, o desenvolvedor não se responsabiliza!
 
 >O aplicativo possui um navegador interno. A navegação para o Google é feita diretamente pelo código usando window location replace(), sem disponibilizar o endereço como um link na interface. O aplicativo também não implementa um sistema próprio de registro de histórico de navegação, (ou pelo ou menos eu não coloquei na página)
+
+> Caso a usuária nege a permissão de Administrador do dispositivo, o aplicativo exibe uma caixa de diálogo informando quais funções poderão não funcionar!
 
 ### Estrutura de Telas Secretas (Acesso Biométrico):
 
@@ -279,6 +281,8 @@ A mensagem contém:
 A usuária pode escolher por qual aplicativo deseja compartilhar essas informações, como WhatsApp, SMS ou e-mail.
 
  O compartilhamento não é enviado automaticamente para um contato específico. O usuário precisa escolher o aplicativo e confirmar o envio.
+
+Vale lembrar que o compose é um overlay usandi a classe `EmergencyOverlay`, e a MainActivity chama essa classe!
 
 # 🔐Área Protegida:
 Se estiver cadastrado no celular, com Biometric Prompt junto com Device Credential e autenticação weak, pode desbloquear essa área com impressão digital, rosto, PIN, padrão, senha e outros métodos.

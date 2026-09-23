@@ -58,7 +58,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.math.log10
 import kotlin.math.sqrt
 
@@ -2084,13 +2084,15 @@ fun ocultarBotaoEmergencia() {
     // VERIFICAR PERMISSÕES AO VOLTAR PARA O APP
     // =========================================================
 
+fun solicitarAdministradorNovamente() {
+    WebAppInterface(this).solicitarAdministrador()
+}
+
     override fun onResume() {
 
     super.onResume()
 
-    if (
-        aguardandoAdministrador
-    ) {
+    if (aguardandoAdministrador) {
 
         aguardandoAdministrador = false
 
@@ -2105,28 +2107,19 @@ fun ocultarBotaoEmergencia() {
                 MyDeviceAdminReceiver::class.java
             )
 
-        if (
-            !dpm.isAdminActive(component)
-        ) {
+        if (!dpm.isAdminActive(component)) {
 
-            android.app.AlertDialog.Builder(this)
-                .setTitle(
-                    "Administrador necessário"
-                )
+            MaterialAlertDialogBuilder(this)
+                .setTitle("Administrador necessário")
                 .setMessage(
-                    "Sem essa permissão, o recurso de desligar o celular não funcionará."
+                    "Sem essa permissão, o recurso de bloqueio por barulho não funcionará."
                 )
-                .setPositiveButton(
-                    "Tentar novamente"
-                ) { _, _ ->
+                .setNegativeButton("Cancelar", null)
+                .setPositiveButton("Tentar novamente") { _, _ ->
 
                     WebAppInterface(this)
                         .solicitarAdministrador()
                 }
-                .setNegativeButton(
-                    "Cancelar",
-                    null
-                )
                 .show()
         }
     }
@@ -2135,7 +2128,6 @@ fun ocultarBotaoEmergencia() {
         ::webView.isInitialized &&
         webView.url != null
     ) {
-
         verificarPermissoesParaJS()
     }
 }

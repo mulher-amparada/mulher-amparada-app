@@ -1,5 +1,6 @@
 package com.mulheres
 
+import android.widget.TextView
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.Manifest
@@ -2092,28 +2093,31 @@ private fun aplicarFonteDialogo(
     dialog: android.app.Dialog
 ) {
 
-    val fonte =
-        android.graphics.Typeface.createFromAsset(
-            assets,
-            "font.ttf"
-        )
+    val fonte = android.graphics.Typeface.createFromAsset(
+        assets,
+        "font.ttf"
+    )
 
-    val decorView =
-        dialog.window?.decorView
-            ?: return
+    val decorView = dialog.window?.decorView
+        ?: return
 
-    listOf(
-        android.R.id.alertTitle,
-        android.R.id.message,
-        android.R.id.button1,
-        android.R.id.button2,
-        android.R.id.button3
-    ).forEach { id ->
+    fun aplicarRecursivamente(view: View) {
 
-        decorView.findViewById<android.widget.TextView>(
-            id
-        )?.typeface = fonte
+        if (view is TextView) {
+            view.typeface = fonte
+        }
+
+        if (view is ViewGroup) {
+
+            for (i in 0 until view.childCount) {
+                aplicarRecursivamente(
+                    view.getChildAt(i)
+                )
+            }
+        }
     }
+
+    aplicarRecursivamente(decorView)
 }
 
     override fun onResume() {

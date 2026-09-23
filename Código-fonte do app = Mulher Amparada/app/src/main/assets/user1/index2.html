@@ -5494,22 +5494,35 @@ function abrirAreaDoAmparo() {
 const abrirEmergenciaCompose =
     document.getElementById("abrirEmergenciaCompose");
 
+let emergenciaAtiva = false;
+
 if (abrirEmergenciaCompose) {
-    function abrirBotaoEmergencia() {
+    function alternarBotaoEmergencia() {
         vibrar(70);
 
         try {
             if (
                 window.Android &&
                 typeof Android.mostrarBotaoEmergencia ===
+                    "function" &&
+                typeof Android.ocultarBotaoEmergencia ===
                     "function"
             ) {
-                Android.mostrarBotaoEmergencia();
+                if (emergenciaAtiva) {
+                    Android.ocultarBotaoEmergencia();
+
+                    emergenciaAtiva = false;
+                } else {
+                    Android.mostrarBotaoEmergencia();
+
+                    emergenciaAtiva = true;
+                }
+
                 return;
             }
         } catch (erro) {
             console.warn(
-                "Erro ao abrir botão de emergência:",
+                "Erro ao alternar botão de emergência:",
                 erro
             );
         }
@@ -5522,7 +5535,7 @@ if (abrirEmergenciaCompose) {
 
     abrirEmergenciaCompose.addEventListener(
         "click",
-        abrirBotaoEmergencia
+        alternarBotaoEmergencia
     );
 
     abrirEmergenciaCompose.addEventListener(
@@ -5533,7 +5546,8 @@ if (abrirEmergenciaCompose) {
                 evento.key === " "
             ) {
                 evento.preventDefault();
-                abrirBotaoEmergencia();
+
+                alternarBotaoEmergencia();
             }
         }
     );

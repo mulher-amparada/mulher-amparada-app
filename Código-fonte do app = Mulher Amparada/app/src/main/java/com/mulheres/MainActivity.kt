@@ -199,11 +199,7 @@ criarEmergencyOverlay()
         
         
 
-webView.alpha =
-    0f
 
-webView.visibility =
-    View.VISIBLE
 
 ViewCompat.setOnApplyWindowInsetsListener(webView) { view, insets ->
 
@@ -773,13 +769,7 @@ override fun onPageStarted(
     view: WebView?,
     url: String?
 ) {
-
-    super.onPageCommitVisible(
-        view,
-        url
-    )
-
-    view?.alpha = 1f
+    super.onPageCommitVisible(view, url)
 }
 
 

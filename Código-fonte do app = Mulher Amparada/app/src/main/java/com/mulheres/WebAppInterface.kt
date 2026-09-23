@@ -567,6 +567,18 @@ fun bloquearTela(): Boolean {
             .apply()
     }
 
+@JavascriptInterface
+fun mostrarBotaoEmergencia() {
+
+    activity.mostrarBotaoEmergencia()
+}
+
+@JavascriptInterface
+fun ocultarBotaoEmergencia() {
+
+    activity.ocultarBotaoEmergencia()
+}
+
     @JavascriptInterface
     fun carregar(chave: String): String {
         val prefs = activity.getSharedPreferences(

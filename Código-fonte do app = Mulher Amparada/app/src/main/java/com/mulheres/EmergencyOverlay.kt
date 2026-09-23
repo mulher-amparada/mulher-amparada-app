@@ -1,9 +1,9 @@
 package com.mulheres
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.core.tween
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -43,12 +43,18 @@ fun EmergencyOverlay(
 
             enter = slideInVertically(
                 initialOffsetY = { it * 2 },
-                animationSpec = tween(650)
+                animationSpec = spring(
+                    dampingRatio = 0.82f,
+                    stiffness = 280f
+                )
             ),
 
             exit = slideOutVertically(
                 targetOffsetY = { it * 2 },
-                animationSpec = tween(450)
+                animationSpec = spring(
+                    dampingRatio = 0.9f,
+                    stiffness = 300f
+                )
             ),
 
             modifier = Modifier
@@ -90,24 +96,17 @@ fun EmergencyOverlay(
             ) {
 
                 IconButton(
-
                     onClick = aoClicar,
-
-                    modifier = Modifier
-                        .fillMaxSize()
+                    modifier = Modifier.fillMaxSize()
                 ) {
 
                     Icon(
-
                         painter = painterResource(
                             id = R.drawable.emergency
                         ),
-
                         contentDescription =
                             "Compartilhar localização de emergência",
-
                         tint = Color.White,
-
                         modifier = Modifier.size(43.dp)
                     )
                 }

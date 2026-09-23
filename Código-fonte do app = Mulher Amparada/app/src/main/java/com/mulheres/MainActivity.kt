@@ -47,6 +47,10 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.runtime.mutableStateOf
 
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -90,6 +94,10 @@ class MainActivity : AppCompatActivity() {
     private var ultimoShake: Long = 0
 
     private lateinit var webView: WebView
+
+private lateinit var emergencyComposeView: ComposeView
+
+private var emergenciaVisivel by mutableStateOf(false)
 
     private lateinit var selecionarContatoLauncher: ActivityResultLauncher<Intent>
 
@@ -179,6 +187,7 @@ if (
                 R.id.webview
             )
 
+        criarEmergencyOverlay()
         
         webView.setBackgroundColor(
     Color.BLACK
@@ -1932,7 +1941,22 @@ window.navigationBarColor =
             )
         }
     }
+    
+    fun mostrarBotaoEmergencia() {
 
+    runOnUiThread {
+
+        emergenciaVisivel = true
+    }
+}
+
+fun ocultarBotaoEmergencia() {
+
+    runOnUiThread {
+
+        emergenciaVisivel = false
+    }
+}
 
     // =========================================================
     // PERMISSÕES
@@ -2077,6 +2101,179 @@ window.navigationBarColor =
         }
     }
 
+private fun criarEmergencyOverlay() {
+
+    val raiz =
+        findViewById<ViewGroup>(
+            android.R.id.content
+        )
+
+    emergencyComposeView =
+        ComposeView(this).apply {
+
+            setViewCompositionStrategy(
+                ViewCompositionStrategy
+                    .DisposeOnViewTreeLifecycleDestroyed
+            )
+
+            setContent {
+
+                EmergencyOverlay(
+
+                    visivel = emergenciaVisivel,
+
+                    aoClicar = {
+
+                        compartilharLocalizacaoEmergencia()
+                    }
+                )
+            }
+        }
+
+    raiz.addView(
+
+        emergencyComposeView,
+
+        ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+    )
+}
+
+private fun compartilharLocalizacaoEmergencia() {
+
+    val permissaoPrecisa =
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+    val permissaoAproximada =
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+    if (!permissaoPrecisa && !permissaoAproximada) {
+
+        Toast.makeText(
+            this,
+            "Permissão de localização necessária.",
+            Toast.LENGTH_LONG
+        ).show()
+
+        return
+    }
+
+    locationClient
+        .getCurrentLocation(
+            com.google.android.gms.location.Priority
+                .PRIORITY_HIGH_ACCURACY,
+            com.google.android.gms.tasks
+                .CancellationTokenSource()
+                .token
+        )
+        .addOnSuccessListener { location ->
+
+            if (location != null) {
+
+                val latitude =
+                    location.latitude
+
+                val longitude =
+                    location.longitude
+
+                val precisao =
+                    location.accuracy
+
+                val dataHora =
+                    java.text.SimpleDateFormat(
+                        "dd/MM/yyyy HH:mm:ss",
+                        java.util.Locale.getDefault()
+                    ).format(
+                        java.util.Date()
+                    )
+
+                val dispositivo =
+                    "${Build.MANUFACTURER} ${Build.MODEL}"
+
+                val android =
+                    "Android ${Build.VERSION.RELEASE} " +
+                    "(API ${Build.VERSION.SDK_INT})"
+
+                val bateria =
+                    (getSystemService(
+                        BATTERY_SERVICE
+                    ) as BatteryManager)
+                        .getIntProperty(
+                            BatteryManager
+                                .BATTERY_PROPERTY_CAPACITY
+                        )
+
+                val link =
+                    "https://www.google.com/maps/search/" +
+                    "?api=1&query=$latitude,$longitude"
+
+                val mensagem = """
+                    🚨 MULHER AMPARADA
+
+                    📍 LOCALIZAÇÃO DE EMERGÊNCIA
+
+                    Latitude: $latitude
+                    Longitude: $longitude
+                    Precisão: $precisao metros
+
+                    🌐 Google Maps:
+                    $link
+
+                    🕒 Data e hora:
+                    $dataHora
+
+                    📱 Dispositivo:
+                    $dispositivo
+
+                    🤖 Sistema:
+                    $android
+
+                    🔋 Bateria:
+                    $bateria%
+
+                """.trimIndent()
+
+                val intent =
+                    Intent(Intent.ACTION_SEND).apply {
+
+                        type = "text/plain"
+
+                        putExtra(
+                            Intent.EXTRA_SUBJECT,
+                            "🚨 Localização — Mulher Amparada"
+                        )
+
+                        putExtra(
+                            Intent.EXTRA_TEXT,
+                            mensagem
+                        )
+                    }
+
+                startActivity(
+                    Intent.createChooser(
+                        intent,
+                        "Compartilhar localização"
+                    )
+                )
+
+            } else {
+
+                Toast.makeText(
+                    this,
+                    "Não foi possível obter localização.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+}
 
     // =========================================================
     // PEGAR LOCALIZAÇÃO

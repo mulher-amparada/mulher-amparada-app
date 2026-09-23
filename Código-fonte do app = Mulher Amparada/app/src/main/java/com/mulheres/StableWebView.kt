@@ -2,10 +2,8 @@ package com.mulheres
 
 import android.content.Context
 import android.graphics.Color
-import android.os.Build
 import android.util.AttributeSet
 import android.view.View
-import android.webkit.WebSettings
 import android.webkit.WebView
 
 class StableWebView @JvmOverloads constructor(
@@ -15,84 +13,75 @@ class StableWebView @JvmOverloads constructor(
 ) : WebView(context, attrs, defStyleAttr) {
 
     init {
-        // Renderização estável
-        setLayerType(
-            View.LAYER_TYPE_HARDWARE,
-            null
-        )
-
-        // Fundo sólido para evitar áreas transparentes
         setBackgroundColor(Color.BLACK)
 
         alpha = 1f
         visibility = View.VISIBLE
 
+        // Hardware
+        setLayerType(View.LAYER_TYPE_HARDWARE, null)
+
         // Rolagem
         overScrollMode = View.OVER_SCROLL_NEVER
         isVerticalScrollBarEnabled = false
         isHorizontalScrollBarEnabled = false
-        scrollBarStyle = View.SCROLLBARS_INSIDE_OVERLAY
+        isScrollbarFadingEnabled = false
 
-        // Foco e interação
-        isFocusable = true
-        isFocusableInTouchMode = true
-        isClickable = true
-        isLongClickable = true
+        setVerticalFadingEdgeEnabled(false)
+        setHorizontalFadingEdgeEnabled(false)
 
-        // Evita que o WebView tente desenhar fora dos próprios limites
-        clipToOutline = true
+        // Nested Scrolling
+        isNestedScrollingEnabled = true
 
-        // Configurações de renderização
-        settings.apply {
-            cacheMode = WebSettings.LOAD_DEFAULT
+        // Evita efeitos de elevação
+        elevation = 0f
+        translationZ = 0f
 
-            setSupportZoom(false)
-            builtInZoomControls = false
-            displayZoomControls = false
-
-            domStorageEnabled = true
-            databaseEnabled = true
-
-            loadsImagesAutomatically = true
-            blockNetworkImage = false
-
-            javaScriptEnabled = true
-            javaScriptCanOpenWindowsAutomatically = false
-
-            mediaPlaybackRequiresUserGesture = false
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                safeBrowsingEnabled = true
-            }
-        }
-
-        // Mantém o conteúdo dentro da área visível
         setPadding(0, 0, 0, 0)
 
-        // Não exibe a barra de rolagem durante a movimentação
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            isForceDarkAllowed = false
-        }
-
-        // Remove efeitos de borda ao alcançar o limite
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            elevation = 0f
-            translationZ = 0f
-        }
+        isFocusable = true
+        isFocusableInTouchMode = true
     }
 
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-
-        alpha = 1f
-        visibility = View.VISIBLE
+    override fun hasNestedScrollingParent(): Boolean {
+        return super.hasNestedScrollingParent()
     }
 
-    override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
-        super.onWindowFocusChanged(hasWindowFocus)
+    override fun startNestedScroll(axes: Int): Boolean {
+        return super.startNestedScroll(axes)
+    }
 
-        if (hasWindowFocus) {
-            alpha = 1f
-        }
+    override fun stopNestedScroll() {
+        super.stopNestedScroll()
+    }
+
+    override fun dispatchNestedPreScroll(
+        dx: Int,
+        dy: Int,
+        consumed: IntArray?,
+        offsetInWindow: IntArray?
+    ): Boolean {
+        return super.dispatchNestedPreScroll(
+            dx,
+            dy,
+            consumed,
+            offsetInWindow
+        )
+    }
+
+    override fun dispatchNestedScroll(
+        dxConsumed: Int,
+        dyConsumed: Int,
+        dxUnconsumed: Int,
+        dyUnconsumed: Int,
+        offsetInWindow: IntArray?
+    ): Boolean {
+        return super.dispatchNestedScroll(
+            dxConsumed,
+            dyConsumed,
+            dxUnconsumed,
+            dyUnconsumed,
+            offsetInWindow
+        )
     }
 }

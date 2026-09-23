@@ -51,6 +51,18 @@ class WebAppInterface(
         }
     }
     
+    private fun safeMainActivityCall(
+    action: (MainActivity) -> Unit
+) {
+    val mainActivity =
+        activity as? MainActivity
+            ?: return
+
+    mainActivity.runOnUiThread {
+        action(mainActivity)
+    }
+}
+
 @JavascriptInterface
 fun desligarPorBarulho(): Boolean {
 
@@ -569,14 +581,16 @@ fun bloquearTela(): Boolean {
 
 @JavascriptInterface
 fun mostrarBotaoEmergencia() {
-
-    activity.mostrarBotaoEmergencia()
+    safeMainActivityCall {
+        it.mostrarBotaoEmergencia()
+    }
 }
 
 @JavascriptInterface
 fun ocultarBotaoEmergencia() {
-
-    activity.ocultarBotaoEmergencia()
+    safeMainActivityCall {
+        it.ocultarBotaoEmergencia()
+    }
 }
 
     @JavascriptInterface

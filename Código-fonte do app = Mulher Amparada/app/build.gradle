@@ -13,7 +13,7 @@ android {
         targetSdk 37
 
         versionCode 33
-        versionName "🌸33 (versão final)"
+        versionName "33 (versão final)"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 

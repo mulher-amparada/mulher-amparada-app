@@ -473,34 +473,37 @@ fun solicitarAdministrador() {
             activity as? MainActivity
                 ?: return
 
-        mainActivity.marcarSolicitacaoAdministrador()
+        mainActivity.runOnUiThread {
 
-        val component =
-            ComponentName(
-                activity,
-                MyDeviceAdminReceiver::class.java
+            mainActivity.marcarSolicitacaoAdministrador()
+
+            val component =
+                ComponentName(
+                    activity,
+                    MyDeviceAdminReceiver::class.java
+                )
+
+            val intent =
+                Intent(
+                    DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN
+                ).apply {
+
+                    putExtra(
+                        DevicePolicyManager.EXTRA_DEVICE_ADMIN,
+                        component
+                    )
+
+                    putExtra(
+                        DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                        "Este aplicativo precisa da permissão de Administrador do dispositivo."
+                    )
+                }
+
+            activity.startActivityForResult(
+                intent,
+                1001
             )
-
-        val intent =
-            Intent(
-                DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN
-            ).apply {
-
-                putExtra(
-                    DevicePolicyManager.EXTRA_DEVICE_ADMIN,
-                    component
-                )
-
-                putExtra(
-                    DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                    "Este aplicativo precisa da permissão de Administrador do dispositivo."
-                )
-            }
-
-        activity.startActivityForResult(
-            intent,
-            1001
-        )
+        }
 
     } catch (e: Exception) {
 
@@ -511,33 +514,51 @@ fun solicitarAdministrador() {
 
 @JavascriptInterface
 fun bloquearTela(): Boolean {
-    return try {
-        val dpm = activity.getSystemService(
-            Context.DEVICE_POLICY_SERVICE
-        ) as DevicePolicyManager
 
-        val component = ComponentName(
-            activity,
-            MyDeviceAdminReceiver::class.java
-        )
+    return try {
+
+        val dpm =
+            activity.getSystemService(
+                Context.DEVICE_POLICY_SERVICE
+            ) as DevicePolicyManager
+
+        val component =
+            ComponentName(
+                activity,
+                MyDeviceAdminReceiver::class.java
+            )
 
         if (!dpm.isAdminActive(component)) {
 
-            val intent = Intent(
-                DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN
-            ).apply {
-                putExtra(
-                    DevicePolicyManager.EXTRA_DEVICE_ADMIN,
-                    component
-                )
+            val mainActivity =
+                activity as? MainActivity
+                    ?: return false
 
-                putExtra(
-                    DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                    "Permite que o Mulher Amparada bloqueie a tela imediatamente quando necessário."
+            mainActivity.runOnUiThread {
+
+                mainActivity.marcarSolicitacaoAdministrador()
+
+                val intent =
+                    Intent(
+                        DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN
+                    ).apply {
+
+                        putExtra(
+                            DevicePolicyManager.EXTRA_DEVICE_ADMIN,
+                            component
+                        )
+
+                        putExtra(
+                            DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                            "Permite que o Mulher Amparada bloqueie a tela imediatamente quando necessário."
+                        )
+                    }
+
+                activity.startActivityForResult(
+                    intent,
+                    1001
                 )
             }
-
-            activity.startActivity(intent)
 
             return false
         }
@@ -547,7 +568,9 @@ fun bloquearTela(): Boolean {
         true
 
     } catch (e: Exception) {
+
         e.printStackTrace()
+
         false
     }
 }

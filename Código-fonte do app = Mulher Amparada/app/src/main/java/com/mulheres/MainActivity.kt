@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
 
     private var ultimoShake: Long = 0
 
-    private lateinit var webView: WebView
+    private lateinit var webView: StableWebView
 
 private lateinit var emergencyComposeView: ComposeView
 
@@ -197,9 +197,7 @@ locationClient =
 
 criarEmergencyOverlay()
         
-        webView.setBackgroundColor(
-    Color.BLACK
-)
+        
 
 webView.alpha =
     0f
@@ -768,7 +766,7 @@ override fun onPageStarted(
         favicon
     )
 
-    view?.alpha = 0f
+    
 }
 
                 override fun onPageCommitVisible(

@@ -18,70 +18,21 @@ class StableWebView @JvmOverloads constructor(
         alpha = 1f
         visibility = View.VISIBLE
 
-        // Hardware
-        setLayerType(View.LAYER_TYPE_HARDWARE, null)
-
-        // Rolagem
         overScrollMode = View.OVER_SCROLL_NEVER
+
         isVerticalScrollBarEnabled = false
         isHorizontalScrollBarEnabled = false
-        isScrollbarFadingEnabled = false
-
-        setVerticalFadingEdgeEnabled(false)
-        setHorizontalFadingEdgeEnabled(false)
-
-        // Nested Scrolling
-        isNestedScrollingEnabled = true
-
-        // Evita efeitos de elevação
-        elevation = 0f
-        translationZ = 0f
+        scrollBarStyle = View.SCROLLBARS_INSIDE_OVERLAY
 
         setPadding(0, 0, 0, 0)
 
+        elevation = 0f
+        translationZ = 0f
+
         isFocusable = true
         isFocusableInTouchMode = true
-    }
 
-    override fun hasNestedScrollingParent(): Boolean {
-        return super.hasNestedScrollingParent()
-    }
-
-    override fun startNestedScroll(axes: Int): Boolean {
-        return super.startNestedScroll(axes)
-    }
-
-    override fun stopNestedScroll() {
-        super.stopNestedScroll()
-    }
-
-    override fun dispatchNestedPreScroll(
-        dx: Int,
-        dy: Int,
-        consumed: IntArray?,
-        offsetInWindow: IntArray?
-    ): Boolean {
-        return super.dispatchNestedPreScroll(
-            dx,
-            dy,
-            consumed,
-            offsetInWindow
-        )
-    }
-
-    override fun dispatchNestedScroll(
-        dxConsumed: Int,
-        dyConsumed: Int,
-        dxUnconsumed: Int,
-        dyUnconsumed: Int,
-        offsetInWindow: IntArray?
-    ): Boolean {
-        return super.dispatchNestedScroll(
-            dxConsumed,
-            dyConsumed,
-            dxUnconsumed,
-            dyUnconsumed,
-            offsetInWindow
-        )
+        // Manter aceleração por hardware
+        setLayerType(View.LAYER_TYPE_HARDWARE, null)
     }
 }

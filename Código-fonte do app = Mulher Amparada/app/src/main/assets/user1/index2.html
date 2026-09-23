@@ -2859,6 +2859,147 @@ white-space:
 
 }
 
+.emergency-access-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    min-height: 112px;
+    padding: 18px;
+    box-sizing: border-box;
+    overflow: hidden;
+    cursor: pointer;
+
+    border: 1px solid rgba(255, 75, 75, 0.35);
+    border-radius: 25px;
+
+    background: #1b1516;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.04),
+        0 8px 25px rgba(0, 0, 0, 0.22);
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+/* Brilho decorativo superior */
+.emergency-access-card::before {
+    content: "";
+    position: absolute;
+    top: -45px;
+    right: -35px;
+
+    width: 130px;
+    height: 130px;
+
+    border: 1px solid rgba(255, 100, 100, 0.12);
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 0 18px rgba(255, 100, 100, 0.025),
+        0 0 0 36px rgba(255, 100, 100, 0.018);
+
+    pointer-events: none;
+}
+
+/* Detalhe inferior */
+.emergency-access-card::after {
+    content: "";
+    position: absolute;
+    right: 25px;
+    bottom: 0;
+
+    width: 75px;
+    height: 2px;
+
+    border-radius: 100px 100px 0 0;
+    background: rgba(255, 90, 90, 0.45);
+
+    pointer-events: none;
+}
+
+.emergency-access-card:active {
+    transform: scale(0.97);
+
+    border-color: rgba(255, 90, 90, 0.75);
+
+    box-shadow:
+        0 0 0 3px rgba(255, 50, 50, 0.08),
+        0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.emergency-access-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 55px;
+    height: 55px;
+
+    border: 1px solid rgba(255, 110, 110, 0.35);
+    border-radius: 19px;
+
+    color: #ff7777;
+    background: rgba(255, 55, 65, 0.12);
+}
+
+.emergency-access-icon svg {
+    width: 29px;
+    height: 29px;
+}
+
+.emergency-access-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    gap: 4px;
+}
+
+.emergency-access-label {
+    color: #ff7777;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+}
+
+.emergency-access-content strong {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.emergency-access-content p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.58);
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.emergency-access-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 30px;
+    height: 30px;
+
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.emergency-access-arrow svg {
+    width: 17px;
+    height: 17px;
+}
+
 @media (prefers-reduced-motion: reduce) {
     /* Procura por QUALQUER elemento que use a sua animação e a desativa */
 
@@ -3480,6 +3621,57 @@ Se o sensor não estiver disponível ou der qualquer outro erro,
 
     </section>
     
+            <div class="label">
+            Compartilhamento de metadados
+        </div>
+
+<div
+    class="emergency-access-card"
+    id="abrirEmergenciaCompose"
+    role="button"
+    tabindex="0"
+    aria-label="Abrir acesso de emergência"
+>
+    <div class="emergency-access-icon">
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        >
+            <path d="M12 3 4 7v5c0 5 3.5 8 8 9 4.5-1 8-4 8-9V7l-8-4Z"/>
+            <path d="M12 8v5"/>
+            <path d="M12 17h.01"/>
+        </svg>
+    </div>
+
+    <div class="emergency-access-content">
+        <span class="emergency-access-label">
+            ASSISTÊNCIA RÁPIDA
+        </span>
+
+        <strong>Acesso de emergência</strong>
+
+        <p>
+            Exiba o botão flutuante para pedir ajuda.
+        </p>
+    </div>
+
+    <div class="emergency-access-arrow">
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        >
+            <path d="m9 18 6-6-6-6"/>
+        </svg>
+    </div>
+</div>
 
     <!-- ===================================================
          ÁREA PROTEGIDA
@@ -5297,6 +5489,54 @@ function abrirAreaDoAmparo() {
     if (window.Android && typeof Android.iniciarBiometriaAmparo === "function") {
         Android.iniciarBiometriaAmparo();
     }
+}
+
+const abrirEmergenciaCompose =
+    document.getElementById("abrirEmergenciaCompose");
+
+if (abrirEmergenciaCompose) {
+    function abrirBotaoEmergencia() {
+        vibrar(70);
+
+        try {
+            if (
+                window.Android &&
+                typeof Android.mostrarBotaoEmergencia ===
+                    "function"
+            ) {
+                Android.mostrarBotaoEmergencia();
+                return;
+            }
+        } catch (erro) {
+            console.warn(
+                "Erro ao abrir botão de emergência:",
+                erro
+            );
+        }
+
+        abrirPopup(
+            "O botão de emergência nativo não está disponível.",
+            "Emergência"
+        );
+    }
+
+    abrirEmergenciaCompose.addEventListener(
+        "click",
+        abrirBotaoEmergencia
+    );
+
+    abrirEmergenciaCompose.addEventListener(
+        "keydown",
+        function (evento) {
+            if (
+                evento.key === "Enter" ||
+                evento.key === " "
+            ) {
+                evento.preventDefault();
+                abrirBotaoEmergencia();
+            }
+        }
+    );
 }
 
 </script>

@@ -41,16 +41,6 @@ class WebAppInterface(
     @Volatile
     private var bloqueioRodando = false
     
-    private fun safeMainActivityCall(action: (MainActivity) -> Unit) {
-        try {
-            val act = activity
-            if (act is MainActivity) {
-                action(act)
-            }
-        } catch (_: Exception) {
-        }
-    }
-    
     private fun safeMainActivityCall(
     action: (MainActivity) -> Unit
 ) {

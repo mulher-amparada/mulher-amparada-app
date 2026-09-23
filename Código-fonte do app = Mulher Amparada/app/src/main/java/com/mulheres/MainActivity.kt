@@ -2112,7 +2112,7 @@ fun solicitarAdministradorNovamente() {
             MaterialAlertDialogBuilder(this)
                 .setTitle("Administrador necessário")
                 .setMessage(
-                    "Sem essa permissão, o recurso de bloqueio por barulho não funcionará."
+                    "Sem essa permissão, recursos que bloqueiam a tela não funcionarão (como por exemplo o bloqueio por barulho ou bloquear a tela pela área protegida)"
                 )
                 .setNegativeButton("Cancelar", null)
                 .setPositiveButton("Tentar novamente") { _, _ ->

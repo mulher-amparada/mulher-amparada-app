@@ -1,12 +1,5 @@
 package com.mulheres
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -35,87 +28,63 @@ fun EmergencyOverlay(
     aoClicar: () -> Unit
 ) {
 
+    if (!visivel) {
+        return
+    }
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
 
-        AnimatedVisibility(
-
-            visible = visivel,
-
-            enter = slideInVertically(
-                initialOffsetY = { fullHeight ->
-                    fullHeight * 2
-                },
-                animationSpec = tween(
-                    durationMillis = 650,
-                    easing = FastOutSlowInEasing
-                )
-            ),
-
-            exit = slideOutVertically(
-                targetOffsetY = { fullHeight ->
-                    fullHeight * 2
-                },
-                animationSpec = tween(
-                    durationMillis = 400,
-                    easing = LinearOutSlowInEasing
-                )
-            ),
-
+        Box(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(
                     end = 22.dp,
                     bottom = 115.dp
                 )
+                .size(86.dp)
+                .shadow(
+                    elevation = 18.dp,
+                    shape = CircleShape,
+                    ambientColor = Color.Red,
+                    spotColor = Color.Red
+                )
+                .background(
+                    color = Color(0xFFB51224),
+                    shape = CircleShape
+                )
+                .border(
+                    width = 2.dp,
+                    color = Color(0xFFFF8585),
+                    shape = CircleShape
+                )
+                .padding(5.dp)
+                .background(
+                    color = Color(0xFFE52A3C),
+                    shape = CircleShape
+                )
+                .border(
+                    width = 1.dp,
+                    color = Color.White.copy(alpha = 0.28f),
+                    shape = CircleShape
+                )
         ) {
 
-            Box(
-                modifier = Modifier
-                    .size(86.dp)
-                    .shadow(
-                        elevation = 18.dp,
-                        shape = CircleShape,
-                        ambientColor = Color.Red,
-                        spotColor = Color.Red
-                    )
-                    .background(
-                        color = Color(0xFFB51224),
-                        shape = CircleShape
-                    )
-                    .border(
-                        width = 2.dp,
-                        color = Color(0xFFFF8585),
-                        shape = CircleShape
-                    )
-                    .padding(5.dp)
-                    .background(
-                        color = Color(0xFFE52A3C),
-                        shape = CircleShape
-                    )
-                    .border(
-                        width = 1.dp,
-                        color = Color.White.copy(alpha = 0.28f),
-                        shape = CircleShape
-                    )
+            IconButton(
+                onClick = aoClicar,
+                modifier = Modifier.fillMaxSize()
             ) {
 
-                IconButton(
-                    onClick = aoClicar,
-                    modifier = Modifier.fillMaxSize()
-                ) {
-
-                    Icon(
-                        painter = painterResource(
-                            id = R.drawable.emergency
-                        ),
-                        contentDescription =
-                            "Compartilhar localização de emergência",
-                        tint = Color.White,
-                        modifier = Modifier.size(43.dp)
-                    )
-                }
+                Icon(
+                    painter = painterResource(
+                        id = R.drawable.emergency
+                    ),
+                    contentDescription =
+                        "Compartilhar localização de emergência",
+                    tint = Color.White,
+                    modifier = Modifier.size(43.dp)
+                )
             }
         }
     }

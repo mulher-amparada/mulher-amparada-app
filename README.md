@@ -10,7 +10,7 @@ Um projeto totalmente gratuito e livre de anúncios, projetado por um menino aut
 
 E saibam que o projeto é: Source-Available
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2961**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2937**
 
 # ⚠️MURAL DE AVISOS:
 
@@ -264,7 +264,7 @@ Além dos contatos de confiança, clicando no primeiro botão você seleciona e 
 
 ### Compartilhamento de metadados;
 
-Ao pressionar o botão de emergência, o aplicativo obtém a localização atual do dispositivo e abre o menu de compartilhamento do Android.
+Ao pressionar o botão de emergência, um botao circular feito com compose sobe debaixo da tela até ao canto inferior direito. O aplicativo obtém a localização atual do dispositivo e abre o menu de compartilhamento do Android.
 
 A mensagem contém:
 

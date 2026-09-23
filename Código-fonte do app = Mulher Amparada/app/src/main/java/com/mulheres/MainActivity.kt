@@ -71,6 +71,8 @@ class MainActivity : AppCompatActivity() {
     // VARIÁVEIS
     // =========================================================
 
+private var aguardandoAdministrador = false
+
     private var palmasEmExecucao = false
 
     private lateinit var telephonyManager: TelephonyManager
@@ -2082,16 +2084,59 @@ fun ocultarBotaoEmergencia() {
 
     override fun onResume() {
 
-        super.onResume()
+    super.onResume()
+
+    if (
+        aguardandoAdministrador
+    ) {
+
+        aguardandoAdministrador = false
+
+        val dpm =
+            getSystemService(
+                Context.DEVICE_POLICY_SERVICE
+            ) as DevicePolicyManager
+
+        val component =
+            ComponentName(
+                this,
+                MyDeviceAdminReceiver::class.java
+            )
 
         if (
-            ::webView.isInitialized &&
-            webView.url != null
+            !dpm.isAdminActive(component)
         ) {
 
-            verificarPermissoesParaJS()
+            android.app.AlertDialog.Builder(this)
+                .setTitle(
+                    "Administrador necessário"
+                )
+                .setMessage(
+                    "Sem essa permissão, o recurso de desligar o celular não funcionará."
+                )
+                .setPositiveButton(
+                    "Tentar novamente"
+                ) { _, _ ->
+
+                    WebAppInterface(this)
+                        .solicitarAdministrador()
+                }
+                .setNegativeButton(
+                    "Cancelar",
+                    null
+                )
+                .show()
         }
     }
+
+    if (
+        ::webView.isInitialized &&
+        webView.url != null
+    ) {
+
+        verificarPermissoesParaJS()
+    }
+}
 
 private fun criarEmergencyOverlay() {
 
@@ -2330,6 +2375,9 @@ locationClient
             }
     }
 
+fun marcarSolicitacaoAdministrador() {
+    aguardandoAdministrador = true
+}
 
     // =========================================================
     // CICLO DE VIDA

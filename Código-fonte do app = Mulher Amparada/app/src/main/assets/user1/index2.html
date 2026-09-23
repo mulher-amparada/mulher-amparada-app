@@ -2859,147 +2859,259 @@ white-space:
 
 }
 
+/* =========================================================
+   ACESSO DE EMERGÊNCIA — PADRÃO DOS ACTION CARDS
+========================================================= */
+
 .emergency-access-card {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 15px;
+
     width: 100%;
-    min-height: 112px;
-    padding: 18px;
-    box-sizing: border-box;
+
+    min-height: 88px;
+
+    position: relative;
+
     overflow: hidden;
-    cursor: pointer;
 
-    border: 1px solid rgba(255, 75, 75, 0.35);
-    border-radius: 25px;
+    display: grid;
 
-    background: #1b1516;
+    grid-template-columns:
+        52px
+        minmax(0, 1fr)
+        40px;
 
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.04),
-        0 8px 25px rgba(0, 0, 0, 0.22);
+    column-gap: 13px;
 
-    transition:
-        transform 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-/* Brilho decorativo superior */
-.emergency-access-card::before {
-    content: "";
-    position: absolute;
-    top: -45px;
-    right: -35px;
-
-    width: 130px;
-    height: 130px;
-
-    border: 1px solid rgba(255, 100, 100, 0.12);
-    border-radius: 50%;
-
-    box-shadow:
-        0 0 0 18px rgba(255, 100, 100, 0.025),
-        0 0 0 36px rgba(255, 100, 100, 0.018);
-
-    pointer-events: none;
-}
-
-.emergency-access-card:active {
-    transform: scale(0.97);
-
-    border-color: rgba(255, 90, 90, 0.75);
-
-    box-shadow:
-        0 0 0 3px rgba(255, 50, 50, 0.08),
-        0 8px 25px rgba(0, 0, 0, 0.3);
-}
-
-.emergency-access-icon {
-    display: flex;
     align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
 
-    width: 55px;
-    height: 55px;
+    padding: 17px;
 
-    
-    border-radius: 19px;
+    border: 1px solid #ff405438;
 
-    color: #ff7777;
-    background: rgba(255, 55, 65, 0.12);
-}
+    border-radius: var(--radius);
 
-.emergency-access-icon svg {
-    width: 29px;
-    height: 29px;
-}
-
-.emergency-access-content {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-width: 0;
-    gap: 4px;
-}
-
-.emergency-access-content strong {
     color: #ffffff;
-    font-size: 16px;
-    font-weight: 700;
-}
-
-.emergency-access-content p {
-    margin: 0;
-    color: rgba(255, 255, 255, 0.58);
-    font-size: 11px;
-    line-height: 1.4;
-}
-
-.emergency-access-arrow {
-        width:
-        43px;
-
-    height:
-        43px;
-
-    flex:
-        0 0 43px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    position:
-        relative;
-
-    z-index:
-        2;
-
-    color:
-        #D97E7E;
 
     background:
-        #160C0C;
+        linear-gradient(
+            145deg,
+            #2b171d,
+            #170b0e
+        );
 
-    border:
-        1px solid
-        #471212;
+    cursor: pointer;
 
-    border-radius:
-        14px;
+    text-align: left;
+
+    outline: none;
+
+    -webkit-appearance: none;
+
+    appearance: none;
+
+    isolation: isolate;
+
+    transition:
+        filter .18s ease,
+        border-color .18s ease;
+
 }
 
+
+/* =========================================================
+   BRILHO DECORATIVO
+========================================================= */
+
+.emergency-access-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 190px;
+
+    height: 190px;
+
+    top: -135px;
+
+    right: -65px;
+
+    border-radius: 50%;
+
+    background: #ff40540d;
+
+    pointer-events: none;
+
+    z-index: -1;
+
+}
+
+
+/* =========================================================
+   ÍCONE
+========================================================= */
+
+.emergency-access-icon {
+
+    width: 52px;
+
+    height: 52px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 17px;
+
+    background: #ff405422;
+
+    color: #ff7777;
+
+}
+
+
+.emergency-access-icon svg {
+
+    width: 28px;
+
+    height: 28px;
+
+    display: block;
+
+}
+
+
+/* =========================================================
+   CONTEÚDO
+========================================================= */
+
+.emergency-access-content {
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+}
+
+
+.emergency-access-content strong {
+
+    min-width: 0;
+
+    color: #ffffff;
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    line-height: 1.2;
+
+}
+
+
+.emergency-access-content p {
+
+    display: block;
+
+    min-width: 0;
+
+    max-width: 100%;
+
+    margin: 0;
+
+    color: #ffffffb8;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    line-height: 1.3;
+
+}
+
+
+/* =========================================================
+   SETA
+========================================================= */
+
+.emergency-access-arrow {
+
+    width: 40px;
+
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #ffaaaF;
+
+    background:
+        color-mix(
+            in srgb,
+            #ff4054 10%,
+            #000000
+        );
+
+    border: 1px solid
+        color-mix(
+            in srgb,
+            #ff4054 20%,
+            #ffffff08
+        );
+
+    border-radius: 14px;
+
+}
+
+
 .emergency-access-arrow svg {
-    width: 17px;
-    height: 17px;
+
+    width: 19px;
+
+    height: 19px;
+
+    display: block;
+
+}
+
+
+/* =========================================================
+   INTERAÇÃO
+========================================================= */
+
+.emergency-access-card:hover {
+
+    border-color: #ffffff28;
+
+    filter: brightness(1.08);
+
+}
+
+
+.emergency-access-card:active {
+
+    filter: brightness(.92);
+
+}
+
+
+.emergency-access-card:focus-visible {
+
+    outline: 2px solid #ffffffb8;
+
+    outline-offset: 3px;
+
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -5561,4 +5673,4 @@ if (abrirEmergenciaCompose) {
 
 </body>
 
-            </html>
+</html>

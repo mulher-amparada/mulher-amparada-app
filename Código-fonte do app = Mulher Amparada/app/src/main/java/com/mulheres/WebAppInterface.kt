@@ -469,40 +469,44 @@ fun solicitarAdministrador() {
 
     try {
 
+        val mainActivity =
+            activity as? MainActivity
+                ?: return
+
+        mainActivity.marcarSolicitacaoAdministrador()
+
         val component =
             ComponentName(
                 activity,
                 MyDeviceAdminReceiver::class.java
             )
 
-
         val intent =
             Intent(
                 DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN
-            )
+            ).apply {
 
+                putExtra(
+                    DevicePolicyManager.EXTRA_DEVICE_ADMIN,
+                    component
+                )
 
-        intent.putExtra(
-            DevicePolicyManager.EXTRA_DEVICE_ADMIN,
-            component
+                putExtra(
+                    DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                    "Este aplicativo precisa da permissão de Administrador do dispositivo."
+                )
+            }
+
+        activity.startActivityForResult(
+            intent,
+            1001
         )
-
-
-        intent.putExtra(
-            DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-            "Este aplicativo precisa da permissão de Administrador do dispositivo."
-        )
-
-
-        activity.startActivity(intent)
-
 
     } catch (e: Exception) {
 
         e.printStackTrace()
 
     }
-
 }
 
 @JavascriptInterface

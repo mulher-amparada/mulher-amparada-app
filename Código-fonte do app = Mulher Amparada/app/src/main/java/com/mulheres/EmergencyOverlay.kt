@@ -6,6 +6,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.core.tween
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -20,6 +21,7 @@ import androidx.compose.runtime.Composable
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -40,46 +42,75 @@ fun EmergencyOverlay(
             visible = visivel,
 
             enter = slideInVertically(
-                initialOffsetY = { it },
-                animationSpec = tween(500)
+                initialOffsetY = { it * 2 },
+                animationSpec = tween(650)
             ),
 
             exit = slideOutVertically(
-                targetOffsetY = { it },
-                animationSpec = tween(400)
+                targetOffsetY = { it * 2 },
+                animationSpec = tween(450)
             ),
 
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(20.dp)
+                .padding(
+                    end = 22.dp,
+                    bottom = 115.dp
+                )
         ) {
 
-            IconButton(
-
-                onClick = aoClicar,
-
+            Box(
                 modifier = Modifier
-                    .size(72.dp)
+                    .size(86.dp)
+                    .shadow(
+                        elevation = 18.dp,
+                        shape = CircleShape,
+                        ambientColor = Color.Red,
+                        spotColor = Color.Red
+                    )
                     .background(
-                        color = Color.Red,
+                        color = Color(0xFFB51224),
                         shape = CircleShape
                     )
-
+                    .border(
+                        width = 2.dp,
+                        color = Color(0xFFFF8585),
+                        shape = CircleShape
+                    )
+                    .padding(5.dp)
+                    .background(
+                        color = Color(0xFFE52A3C),
+                        shape = CircleShape
+                    )
+                    .border(
+                        width = 1.dp,
+                        color = Color.White.copy(alpha = 0.28f),
+                        shape = CircleShape
+                    )
             ) {
 
-                Icon(
+                IconButton(
 
-                    painter = painterResource(
-                        id = R.drawable.emergency
-                    ),
+                    onClick = aoClicar,
 
-                    contentDescription =
-                        "Compartilhar localização de emergência",
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
 
-                    tint = Color.White,
+                    Icon(
 
-                    modifier = Modifier.size(40.dp)
-                )
+                        painter = painterResource(
+                            id = R.drawable.emergency
+                        ),
+
+                        contentDescription =
+                            "Compartilhar localização de emergência",
+
+                        tint = Color.White,
+
+                        modifier = Modifier.size(43.dp)
+                    )
+                }
             }
         }
     }

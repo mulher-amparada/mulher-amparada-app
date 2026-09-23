@@ -1,5 +1,7 @@
 package com.mulheres
 
+import android.app.admin.DevicePolicyManager
+import android.content.ComponentName
 import android.Manifest
 import android.app.DownloadManager
 import android.content.BroadcastReceiver

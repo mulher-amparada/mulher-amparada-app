@@ -10,7 +10,7 @@ Um projeto totalmente gratuito e livre de anúncios, projetado por um menino aut
 
 E saibam que o projeto é: Source-Available
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2947**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2937**
 
 # ⚠️MURAL DE AVISOS:
 
@@ -163,8 +163,9 @@ ele tem o CompileSdkVersion 37
 
 Versão agp no toml de 9.4.0 e versão kotlin é a 2.4.20
 
-e ele tem o jetpack compose (embora no app só usei xml até agora, mas ele está ativado!) e estilo via xml ativados!
+e ele tem o jetpack compose e estilo via xml ativados!
 
+e a versão do gradle é 9.6!
 
 ## Sobre como o aplicativo é compilado:
 
@@ -260,6 +261,24 @@ Além disso, existe um botão dentro do aplicativo que obtém a localização at
 
 ### Contatos de Confiança:
 Além dos contatos de confiança, clicando no primeiro botão você seleciona e salva o contato. O botão abaixo envia um pedido de ajuda para ele.
+
+### Compartilhamento de metadados;
+
+Ao pressionar o botão de emergência, o aplicativo obtém a localização atual do dispositivo e abre o menu de compartilhamento do Android.
+
+A mensagem contém:
+
+- Latitude e longitude;
+- Link para visualizar a localização no Google Maps;
+- Precisão da localização em metros;
+- Data e hora;
+- Fabricante e modelo do dispositivo;
+- Versão do Android;
+- Porcentagem da bateria.
+
+A usuária pode escolher por qual aplicativo deseja compartilhar essas informações, como WhatsApp, SMS ou e-mail.
+
+ O compartilhamento não é enviado automaticamente para um contato específico. O usuário precisa escolher o aplicativo e confirmar o envio.
 
 # 🔐Área Protegida:
 Se estiver cadastrado no celular, com Biometric Prompt junto com Device Credential e autenticação weak, pode desbloquear essa área com impressão digital, rosto, PIN, padrão, senha e outros métodos.

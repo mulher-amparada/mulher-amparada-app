@@ -1,7 +1,9 @@
 package com.mulheres
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 
@@ -42,18 +44,22 @@ fun EmergencyOverlay(
             visible = visivel,
 
             enter = slideInVertically(
-                initialOffsetY = { it * 2 },
-                animationSpec = spring(
-                    dampingRatio = 0.82f,
-                    stiffness = 280f
+                initialOffsetY = { fullHeight ->
+                    fullHeight * 2
+                },
+                animationSpec = tween(
+                    durationMillis = 650,
+                    easing = FastOutSlowInEasing
                 )
             ),
 
             exit = slideOutVertically(
-                targetOffsetY = { it * 2 },
-                animationSpec = spring(
-                    dampingRatio = 0.9f,
-                    stiffness = 300f
+                targetOffsetY = { fullHeight ->
+                    fullHeight * 2
+                },
+                animationSpec = tween(
+                    durationMillis = 400,
+                    easing = LinearOutSlowInEasing
                 )
             ),
 

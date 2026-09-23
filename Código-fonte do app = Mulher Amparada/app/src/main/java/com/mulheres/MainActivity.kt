@@ -2110,7 +2110,7 @@ fun solicitarAdministradorNovamente() {
         if (!dpm.isAdminActive(component)) {
 
             MaterialAlertDialogBuilder(this)
-                .setTitle("Administrador necessário")
+                .setTitle("Administrador necessário:")
                 .setMessage(
                     "Sem essa permissão, recursos que bloqueiam a tela não funcionarão, como por exemplo o bloqueio por barulho ou bloquear a tela pela área protegida"
                 )

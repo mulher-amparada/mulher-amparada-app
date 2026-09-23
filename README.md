@@ -10,7 +10,7 @@ Um projeto totalmente gratuito e livre de anúncios, projetado por um menino aut
 
 E saibam que o projeto é: Source-Available
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2973**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 2937**
 
 # ⚠️MURAL DE AVISOS:
 
@@ -155,7 +155,7 @@ e as páginas desse site estão indexadas no google search console também!
 
 O app já está na versão:
 
-`🌸33 (versão final)`
+`33 (versão final)`
 
 ele tem o TargetSdkVersion 37
 

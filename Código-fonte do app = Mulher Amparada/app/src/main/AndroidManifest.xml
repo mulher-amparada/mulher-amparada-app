@@ -28,9 +28,6 @@
 <!-- Vibração -->
 <uses-permission android:name="android.permission.VIBRATE" />
 
-<!-- Notificações Android 13+ -->
-<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
 <!-- Foreground Service -->
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />

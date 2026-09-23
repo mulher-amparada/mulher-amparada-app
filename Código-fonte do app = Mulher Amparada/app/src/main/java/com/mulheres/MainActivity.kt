@@ -2088,6 +2088,34 @@ fun solicitarAdministradorNovamente() {
     WebAppInterface(this).solicitarAdministrador()
 }
 
+private fun aplicarFonteDialogo(
+    dialog: android.app.Dialog
+) {
+
+    val fonte =
+        android.graphics.Typeface.createFromAsset(
+            assets,
+            "font.ttf"
+        )
+
+    val decorView =
+        dialog.window?.decorView
+            ?: return
+
+    listOf(
+        android.R.id.alertTitle,
+        android.R.id.message,
+        android.R.id.button1,
+        android.R.id.button2,
+        android.R.id.button3
+    ).forEach { id ->
+
+        decorView.findViewById<android.widget.TextView>(
+            id
+        )?.typeface = fonte
+    }
+}
+
     override fun onResume() {
 
     super.onResume()
@@ -2109,18 +2137,23 @@ fun solicitarAdministradorNovamente() {
 
         if (!dpm.isAdminActive(component)) {
 
-            MaterialAlertDialogBuilder(this)
-                .setTitle("Administrador necessário:")
-                .setMessage(
-                    "Sem essa permissão, recursos que bloqueiam a tela não funcionarão, como por exemplo o bloqueio por barulho ou bloquear a tela pela área protegida"
-                )
-                .setNegativeButton("Cancelar", null)
-                .setPositiveButton("Tentar novamente") { _, _ ->
+         val dialog =
+    MaterialAlertDialogBuilder(this)
+        .setTitle("Administrador necessário:")
+        .setMessage(
+            "Sem essa permissão, recursos que bloqueiam a tela não funcionarão, como por exemplo o bloqueio por barulho ou bloquear a tela pela área protegida"
+        )
+        .setNegativeButton("Cancelar", null)
+        .setPositiveButton("Tentar novamente") { _, _ ->
 
-                    WebAppInterface(this)
-                        .solicitarAdministrador()
-                }
-                .show()
+            WebAppInterface(this)
+                .solicitarAdministrador()
+        }
+        .create()
+
+dialog.show()
+
+aplicarFonteDialogo(dialog)
         }
     }
 

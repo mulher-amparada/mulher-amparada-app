@@ -1824,6 +1824,10 @@ margin: 5%;
    CARDS DE AÇÃO — DESIGN AVANÇADO
 ========================================================= */
 
+/* ACESSO DE EMERGÊNCIA — LARANJA AMARELADO */
+
+
+
 .actionCard,
 .emergency-access-card {
 
@@ -2241,37 +2245,35 @@ margin: 5%;
 /* =========================================================
    SAMU
 ========================================================= */
-
 .samu {
 
-    color: var(--orange);
+    color: #ff6347;
 
     background:
         linear-gradient(
             135deg,
-            #3a2917 0%,
-            #241a11 55%,
-            #17120d 100%
+            #3a1d19 0%,
+            #281512 55%,
+            #17100e 100%
         );
 
-    border-color: #ffb45e50;
+    border-color: #ff634750;
 
 }
 
 .samu .actionIcon {
 
-    background: #ffb45e18;
-    border-color: #ffb45e55;
+    background: #b2222218;
+    border-color: #b2222255;
 
 }
 
 .samu .actionArrow {
 
-    background: #ffb45e12;
-    border-color: #ffb45e38;
+    background: #b2222212;
+    border-color: #b2222238;
 
 }
-
 
 /* =========================================================
    CENTRAL DA MULHER
@@ -2419,19 +2421,19 @@ margin: 5%;
 
 .emergency-access-card {
 
-    color: var(--red);
+    color: #ffcf66;
 
     min-height: 128px;
 
     background:
         linear-gradient(
             135deg,
-            #3b1a23 0%,
-            #28131b 55%,
-            #1a0d13 100%
+            #432018 0%,
+            #2d1710 55%,
+            #1a0c09 100%
         );
 
-    border-color: #ff465b55;
+    border-color: #ffcf6655;
 
     cursor: pointer;
 
@@ -2439,15 +2441,15 @@ margin: 5%;
 
 .emergency-access-icon {
 
-    background: #ff465b18;
-    border-color: #ff465b55;
+    background: #ff4d1818;
+    border-color: #ff4d1855;
 
 }
 
 .emergency-access-arrow {
 
-    background: #ff465b12;
-    border-color: #ff465b38;
+    background: #ff4d1812;
+    border-color: #ff4d1838;
 
 }
 
@@ -2468,7 +2470,6 @@ margin: 5%;
     content: "ACESSO EXTERNO";
 
 }
-
 
 /* =========================================================
    ESPAÇAMENTO ENTRE CARDS
@@ -3260,7 +3261,7 @@ margin: 5%;
         22px;
 
     background:
-        #000000dc;
+        #000000;
 
     opacity:
         0;
@@ -3271,9 +3272,7 @@ margin: 5%;
     pointer-events:
         none;
 
-    transition:
-        opacity .25s ease,
-        visibility .25s ease;
+    
 
 }
 
@@ -3310,22 +3309,14 @@ margin: 5%;
     background:
         #121218;
 
-    transform:
-        translateY(15px)
-        scale(.95);
+    
 
     transition:
         transform .28s ease;
 
 }
 
-.custom-popup-overlay.aberto .custom-popup {
 
-    transform:
-        translateY(0)
-        scale(1);
-
-}
 
 .custom-popup h2 {
 
@@ -3853,6 +3844,8 @@ margin: 5%;
         border-color .35s ease;
 
 }
+
+
 
 @media (prefers-reduced-motion: reduce) {
     /* Procura por QUALQUER elemento que use a sua animação e a desativa */

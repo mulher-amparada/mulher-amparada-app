@@ -17,4 +17,6 @@
     <color name="textColorPrimary">#FF000000</color>
     <color name="windowBackgroundColor">#FFFFFFFF</color>
 
+<color name="record_text">#000000</color>
+
 </resources>

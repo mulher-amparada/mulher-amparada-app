@@ -12,6 +12,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import androidx.core.content.ContextCompat
 
 class FolderAdapter(
     private val onClick: (StorageItem) -> Unit
@@ -83,6 +84,13 @@ class FolderAdapter(
         holder.name.typeface = fonte
         holder.date.typeface = fonte
         holder.count.typeface = fonte
+
+holder.name.setTextColor(
+    ContextCompat.getColor(
+        holder.itemView.context,
+        R.color.file_item_name
+    )
+)
 
         when (item) {
 

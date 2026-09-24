@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    android:background="@android:color/black"
+    android:background="@color/recorder_background"
     android:fitsSystemWindows="true">
 
 
@@ -41,7 +41,7 @@
 
             android:text="Gravador"
 
-            android:textColor="#777"
+            android:textColor="@color/recorder_title"
             android:textSize="32sp"
             android:textStyle="bold"
 
@@ -61,7 +61,7 @@
 
             android:text="Suas gravações"
 
-            android:textColor="#888"
+            android:textColor="@color/recorder_subtitle"
             android:textSize="15sp"
 
             android:fontFamily="sans"
@@ -184,7 +184,7 @@
 
                 android:text="Pronto para gravar"
 
-                android:textColor="#333333"
+                android:textColor="@color/recorder_status_text"
                 android:textSize="13sp"
 
                 android:fontFamily="sans"
@@ -245,7 +245,7 @@
 
                 android:src="@drawable/mic"
 
-                android:tint="#FFFFFF" />
+                android:tint="@color/recorder_mic" />
 
         </FrameLayout>
 
@@ -265,7 +265,7 @@
 
             android:text="Toque para gravar"
 
-            android:textColor="#777777"
+            android:textColor="@color/recorder_hint"
             android:textSize="13sp"
 
             android:fontFamily="sans"

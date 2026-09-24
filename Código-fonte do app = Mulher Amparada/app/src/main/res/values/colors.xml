@@ -32,6 +32,7 @@
 <color name="recorder_background">#FFFFFF</color>
 
 <color name="recorder_title">#333333</color>
+
 <color name="recorder_subtitle">#666666</color>
 
 <color name="recorder_status_text">#333333</color>
@@ -51,5 +52,9 @@
 <color name="file_path">#666666</color>
 
 <color name="file_count">#666666</color>
+
+<color name="record_item_background">#E6E6E6</color>
+
+<color name="record_item_stroke">#CCCCCC</color>
 
 </resources>

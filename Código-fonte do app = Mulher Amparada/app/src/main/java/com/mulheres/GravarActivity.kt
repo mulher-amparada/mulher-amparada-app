@@ -163,11 +163,16 @@ class GravarActivity : AppCompatActivity(),
                 window.decorView
             )
 
-        controller.isAppearanceLightStatusBars =
-            false
+        val isDark =
+    (resources.configuration.uiMode and
+        android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
+        android.content.res.Configuration.UI_MODE_NIGHT_YES
 
-        controller.isAppearanceLightNavigationBars =
-            false
+controller.isAppearanceLightStatusBars =
+    !isDark
+
+controller.isAppearanceLightNavigationBars =
+    !isDark
 
         setContentView(
             R.layout.activity_gravar
@@ -1729,8 +1734,11 @@ class GravarActivity : AppCompatActivity(),
             16f
 
         text.setTextColor(
-            Color.WHITE
-        )
+    ContextCompat.getColor(
+        this,
+        R.color.record_text
+    )
+)
 
         text.setPadding(
             18,

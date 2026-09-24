@@ -177,11 +177,16 @@ if (
                 window.decorView
             )
 
-        controller.isAppearanceLightStatusBars =
-            false
+        val isDark =
+    (resources.configuration.uiMode and
+        android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
+        android.content.res.Configuration.UI_MODE_NIGHT_YES
 
-        controller.isAppearanceLightNavigationBars =
-            false
+controller.isAppearanceLightStatusBars =
+    !isDark
+
+controller.isAppearanceLightNavigationBars =
+    !isDark
 
         setContentView(
             R.layout.activity_main
@@ -1803,11 +1808,16 @@ fun desativarFullscreen() {
         WindowInsetsCompat.Type.systemBars()
     )
 
-    controller.isAppearanceLightStatusBars =
-        false
+    val isDark =
+    (resources.configuration.uiMode and
+        android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
+        android.content.res.Configuration.UI_MODE_NIGHT_YES
 
-    controller.isAppearanceLightNavigationBars =
-        false
+controller.isAppearanceLightStatusBars =
+    !isDark
+
+controller.isAppearanceLightNavigationBars =
+    !isDark
 
     window.statusBarColor =
     Color.TRANSPARENT

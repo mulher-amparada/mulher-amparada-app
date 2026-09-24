@@ -297,11 +297,16 @@ pathText.overScrollMode = View.OVER_SCROLL_NEVER
                 window.decorView
             )
 
-        controller.isAppearanceLightStatusBars =
-            false
+        val isDark =
+    (resources.configuration.uiMode and
+        android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
+        android.content.res.Configuration.UI_MODE_NIGHT_YES
 
-        controller.isAppearanceLightNavigationBars =
-            false
+controller.isAppearanceLightStatusBars =
+    !isDark
+
+controller.isAppearanceLightNavigationBars =
+    !isDark
     }
 
     // =========================================================

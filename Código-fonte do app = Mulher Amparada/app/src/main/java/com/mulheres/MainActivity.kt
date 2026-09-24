@@ -464,6 +464,18 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
 
     private fun configurarWebView() {
 
+    webView.setBackgroundColor(
+        Color.TRANSPARENT
+    )
+
+    webView.background =
+        null
+
+    webView.isOpaque =
+        false
+
+
+
         webView.addJavascriptInterface(
             WebAppInterface(this),
             "Android"

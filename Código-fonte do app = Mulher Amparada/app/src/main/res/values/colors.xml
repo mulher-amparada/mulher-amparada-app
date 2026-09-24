@@ -16,8 +16,8 @@
     <color name="colorAccent">#FF03DAC5</color>
     <color name="textColorPrimary">#FF000000</color>
     <color name="windowBackgroundColor">#FFFFFFFF</color>
-
-<color name="record_text">#000000</color>
+    
+    <color name="record_text">#000000</color>
 
 <color name="recorder_background">#FFFFFF</color>
 
@@ -29,5 +29,14 @@
 <color name="recorder_mic">#FFFFFF</color>
 
 <color name="recorder_hint">#666666</color>
+
+<color name="file_background">#FFFFFF</color>
+<color name="file_title">#222222</color>
+
+<color name="file_icon">#FFFFFF</color>
+
+<color name="file_path">#666666</color>
+
+<color name="file_count">#666666</color>
 
 </resources>

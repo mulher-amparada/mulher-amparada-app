@@ -10,109 +10,16 @@
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
 >
 
-    <meta
-        name="description"
-        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
-    >
+<meta
+    name="description"
+    content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
+>
 
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#050507">
 
-<title>Controle</title>
+<title>Mulher Amparada</title>
 
 <style>
-
-/* =========================================================
-   ANIMAÇÕES
-========================================================= */
-
-
-
-@keyframes fadeOut {
-
-    from {
-        opacity: 1;
-    }
-
-    to {
-        opacity: 0;
-    }
-
-}
-
-@keyframes statusPulse {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: .42;
-    }
-
-}
-
-
-
-.mainUI.saindo {
-
-    animation:
-        fadeOut
-        .65s
-        ease
-        forwards;
-
-}
-
-
-* {
-        box-sizing:
-        border-box;
-
-    margin:
-        0;
-
-    padding:
-        0;
-
-    font-family:
-        "Quicksand",
-        sans-serif;
-
-    font-weight:
-        700;
-
-    -webkit-tap-highlight-color:
-        transparent;
-    }
-
-/* =========================================================
-   ROLAGEM
-========================================================= */
-
-html,
-body {
-
-    scrollbar-width:
-        none;
-
-}
-
-html::-webkit-scrollbar,
-body::-webkit-scrollbar,
-*::-webkit-scrollbar {
-
-    width:
-        0;
-
-    height:
-        0;
-
-    background:
-        transparent;
-
-}
-
 
 /* =========================================================
    FONTE
@@ -121,17 +28,11 @@ body::-webkit-scrollbar,
 @font-face {
 
     font-family:
-        "Quicksand";
+        Quicksand;
 
     src:
         url("font.ttf")
         format("truetype");
-
-    font-weight:
-        400 800;
-
-    font-style:
-        normal;
 
     font-display:
         swap;
@@ -145,109 +46,122 @@ body::-webkit-scrollbar,
 
 :root {
 
-
+    --background:
+        #050507;
 
     --surface:
-        #101116;
+        #111116;
 
-    --surface-2:
-        #15171e;
+    --surface-light:
+        #18181f;
 
-    --surface-3:
-        #1b1e27;
+    --surface-hover:
+        #20202a;
 
     --white:
         #ffffff;
 
     --text:
-        #f7f7fa;
+        #eeeeF4;
 
-    --soft:
-        #a0a4b0;
+    --secondary:
+        #aaaab8;
 
     --muted:
-        #686d79;
-
-    --pink:
-        #ff3f82;
-
-    --pink-light:
-        #ff6b9f;
-
-    --pink-dark:
-        #db2c6d;
-
-    --purple:
-        #8b5cf6;
-
-    --purple-light:
-        #b79aff;
-
-    --purple-dark:
-        #5947d4;
-
-    --blue:
-        #173b8f;
-
-    --blue-light:
-        #0059FF;
-
-    --orange:
-        #ff9f43;
-
-    --orange-light:
-        #ffc071;
-
-    --green:
-        #32d477;
-
-    --cyan:
-        #27c9c1;
-
-    --red:
-        #ff4054;
-
-    --red-dark:
-        #d5253d;
+        #70707e;
 
     --border:
-        #ffffff12;
+        #ffffff14;
 
     --border-light:
-        #33333a;
+        #ffffff25;
 
-    --border-strong:
-        #ffffff20;
+    --pink:
+        #ff3d82;
 
-    --radius:
-        26px;
+    --pink-light:
+        #ff8fb5;
+
+    --red:
+        #ff465b;
+
+    --purple:
+        #9a7cff;
+
+    --orange:
+        #ffb45e;
+
+    --cyan:
+        #54ded4;
+
+    --blue:
+        #729fff;
+
+    --green:
+        #69dfa1;
+
+    --radius-large:
+        32px;
+
+    --radius-medium:
+        25px;
+
+    --radius-small:
+        17px;
 
 }
+
 
 /* =========================================================
    RESET
 ========================================================= */
 
+* {
 
-html,
-body {
-    width: 100%;
-    min-height: 100%;
-    
-    color: #ffffff;
+    box-sizing:
+        border-box;
 
-    
+    margin:
+        0;
 
+    padding:
+        0;
+
+    font-family:
+        Quicksand,
+        sans-serif;
+
+    -webkit-tap-highlight-color:
+        transparent;
+
+}
+
+html {
+
+    background:
+        var(--background);
+
+    scrollbar-width:
+        none;
 
 }
 
 body {
+
+    min-width:
+        0;
 
     min-height:
         100vh;
 
     overflow-x:
         hidden;
+
+    color:
+        var(--white);
+
+    background:
+        var(--background);
 
     padding-top:
         env(safe-area-inset-top);
@@ -257,49 +171,154 @@ body {
 
 }
 
+button {
+
+    border:
+        0;
+
+    font:
+        inherit;
+
+    -webkit-appearance:
+        none;
+
+    appearance:
+        none;
+
+    cursor:
+        pointer;
+
+}
+
+button:focus-visible {
+
+    outline:
+        2px solid
+        var(--pink);
+
+    outline-offset:
+        4px;
+
+}
+
 
 /* =========================================================
-   LAYOUT PRINCIPAL
+   ANIMAÇÕES
+========================================================= */
+
+
+@keyframes bubbleFloat {
+
+    0%,
+    100% {
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+    50% {
+
+        transform:
+            translateY(-12px)
+            scale(1.04);
+
+    }
+
+}
+
+@keyframes statusPulse {
+
+    0%,
+    100% {
+
+        opacity:
+            .45;
+
+    }
+
+    50% {
+
+        opacity:
+            1;
+
+    }
+
+}
+
+
+/* =========================================================
+   ESTRUTURA PRINCIPAL
 ========================================================= */
 
 .mainUI {
-    width: 100%;
-    max-width: 700px;
-    min-height: 100vh;
-    margin: 0 auto;
-    padding: 24px 16px 100px;
-    display: flex;
-    flex-direction: column;
-    gap: 31px;
-}
-
-/* =========================================================
-   HERO
-   PRIMEIRO TÍTULO LIMPO
-========================================================= */
-
-.hero {
 
     width:
         100%;
 
+    max-width:
+        680px;
+
+    min-height:
+        100vh;
+
+    margin:
+        0 auto;
+
     padding:
-        4px
-        4px
-        0;
+        24px
+        17px
+        100px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        34px;
+
+    
 
 }
 
-.heroTopLine {
+
+/* =========================================================
+   CABEÇALHO
+========================================================= */
+
+.hero {
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    padding:
+        8px
+        3px
+        25px;
+
+    border-bottom:
+        1px solid
+        var(--border);
+
+}
+
+
+.hero-mark {
 
     width:
-        43px;
+        48px;
 
     height:
-        3px;
+        5px;
 
     margin-bottom:
-        18px;
+        21px;
 
     border-radius:
         999px;
@@ -309,72 +328,7 @@ body {
 
 }
 
-.heroTitle {
-
-    color:
-        #ffffff;
-
-    font-size:
-        clamp(
-            32px,
-            9vw,
-            48px
-        );
-
-    font-weight:
-        800;
-
-    line-height:
-        .98;
-
-    letter-spacing:
-        -1.6px;
-
-}
-
-.heroSubtitle {
-
-    max-width:
-        410px;
-
-    margin-top:
-        14px;
-
-    color:
-        #85858e;
-
-    font-size:
-        11px;
-
-    font-weight:
-        600;
-
-    line-height:
-        1.5;
-
-    letter-spacing:
-        .15px;
-
-}
-
-
-/* =========================================================
-   SEÇÕES
-========================================================= */
-
-.section {
-
-    width:
-        100%;
-
-}
-
-
-/* =========================================================
-   LABEL
-========================================================= */
-
-.label {
+.hero-eyebrow {
 
     display:
         flex;
@@ -383,19 +337,16 @@ body {
         center;
 
     gap:
-        9px;
+        8px;
 
-    margin:
-        0
-        0
-        13px
-        4px;
+    margin-bottom:
+        13px;
 
     color:
-        var(--muted);
+        var(--pink-light);
 
     font-size:
-        10px;
+        9px;
 
     font-weight:
         800;
@@ -403,27 +354,21 @@ body {
     letter-spacing:
         2px;
 
-    line-height:
-        1;
-
     text-transform:
         uppercase;
 
 }
 
-.label::before {
+.hero-eyebrow::before {
 
     content:
         "";
 
     width:
-        5px;
+        6px;
 
     height:
-        5px;
-
-    flex:
-        0 0 5px;
+        6px;
 
     border-radius:
         50%;
@@ -431,133 +376,15 @@ body {
     background:
         var(--pink);
 
-}
-
-
-/* =========================================================
-   SOS
-========================================================= */
-
-.panic {
-
-    width:
-        100%;
-
-    height:
-        260px;
-
-    position:
-        relative;
-
-    overflow:
-        hidden;
-
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    gap:
-        14px;
-
-    border:
-        1px solid
-        #ff6470;
-
-    border-radius:
-        32px;
-
-    color:
-        #ffffff;
-
-    background:
-
-        radial-gradient(
-            circle at 50% 0%,
-            #ffffff30,
-            transparent 34%
-        ),
-
-        radial-gradient(
-            circle at 50% 100%,
-            #82001940,
-            transparent 55%
-        ),
-
-        linear-gradient(
-            145deg,
-            #ff4a5e,
-            #dc263d
-        );
-
-    cursor:
-        pointer;
-
-    box-shadow:
-        0 22px 52px
-        #ff344838;
-
-    transition:
-        filter
-        .18s
-        ease,
-
-        box-shadow
-        .2s
-        ease,
-
-        border-color
-        .18s
-        ease;
-
-    -webkit-appearance:
-        none;
-
-    appearance:
-        none;
+    animation:
+        statusPulse
+        2s
+        ease-in-out
+        infinite;
 
 }
 
-.panic::before {
-
-    content:
-        "";
-
-    position:
-        absolute;
-
-    width:
-        410px;
-
-    height:
-        410px;
-
-    top:
-        -300px;
-
-    right:
-        -135px;
-
-    border-radius:
-        50%;
-
-    background:
-        #ffffff13;
-
-    pointer-events:
-        none;
-
-}
-
-
-.panic span {
+.hero h1 {
 
     position:
         relative;
@@ -566,40 +393,43 @@ body {
         2;
 
     color:
-        #ffffff;
+        var(--white);
 
     font-size:
         clamp(
-            64px,
-            18vw,
-            94px
+            40px,
+            10vw,
+            64px
         );
 
     font-weight:
         800;
 
     line-height:
-        .85;
+        .9;
 
     letter-spacing:
-        6px;
-
-    text-shadow:
-        0 7px 24px
-        #00000033;
+        -3px;
 
 }
 
-.panic small {
-
-    position:
-        relative;
-
-    z-index:
-        2;
+.hero h1 span {
 
     color:
-        #ffffffc2;
+        var(--pink);
+
+}
+
+.hero-description {
+
+    max-width:
+        370px;
+
+    margin-top:
+        20px;
+
+    color:
+        var(--secondary);
 
     font-size:
         11px;
@@ -607,455 +437,23 @@ body {
     font-weight:
         600;
 
-    letter-spacing:
-        .6px;
-
-}
-
-.panic:hover {
-
-    
-
-    border-color:
-        #ffffff9e;
-
-}
-
-
-.panic:focus-visible {
-
-    outline:
-        2px solid
-        #ffffff;
-
-    outline-offset:
-        4px;
+    line-height:
+        1.7;
 
 }
 
 
 /* =========================================================
-   ATALHOS
+   VISÃO GERAL
 ========================================================= */
 
-
-
-
-/* =========================================================
-   ÁREA PROTEGIDA — BIG BUTTON
-========================================================= */
-
-.bigButton {
+.system-overview {
 
     width:
         100%;
 
     min-height:
-        138px;
-
-    position:
-        relative;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        16px;
-
-    padding:
-        18px;
-
-    overflow:
-        hidden;
-
-    color:
-        #ffffff;
-
-    background:
-        linear-gradient(
-            145deg,
-            #211c48,
-            #151329 58%,
-            #0d0c16
-        );
-
-    /*
-       SOMENTE BORDER
-       SEM BOX-SHADOW
-    */
-
-    border:
-        1px solid
-        #8d79ff;
-
-    border-radius:
-        30px;
-
-    text-align:
-        left;
-
-    cursor:
-        pointer;
-
-    -webkit-appearance:
-        none;
-
-    appearance:
-        none;
-
-    transition:
-        background
-        .18s
-        ease,
-
-        border-color
-        .18s
-        ease,
-
-        filter
-        .18s
-        ease;
-
-}
-
-
-/* =========================================================
-   BIG BUTTON — BEFORE
-   COR SÓLIDA
-========================================================= */
-
-.bigButton::before {
-
-    content:
-        "";
-
-    position:
-        absolute;
-
-    width:
-        250px;
-
-    height:
-        250px;
-
-    top:
-        -175px;
-
-    right:
-        -95px;
-
-    border-radius:
-        50%;
-
-    background:
-        #38286d;
-
-    pointer-events:
-        none;
-
-}
-
-
-/* =========================================================
-   BIG BUTTON — AFTER
-   COR SÓLIDA
-========================================================= */
-
-.bigButton::after {
-
-    content:
-        "";
-
-    position:
-        absolute;
-
-    width:
-        115px;
-
-    height:
-        115px;
-
-    bottom:
-        -78px;
-
-    left:
-        -38px;
-
-    border-radius:
-        50%;
-
-    background:
-        #552052;
-
-    pointer-events:
-        none;
-
-}
-
-
-/* =========================================================
-   ÍCONE PROTEGIDO
-========================================================= */
-
-.protectIcon {
-
-    width:
-        64px;
-
-    height:
-        64px;
-
-    flex:
-        0 0 64px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    position:
-        relative;
-
-    z-index:
-        2;
-
-    background:
-        #30245a;
-
-    border:
-        1px solid
-        #6252a8;
-
-    border-radius:
-        21px;
-
-}
-
-.protectIcon img {
-
-    width:
-        32px;
-
-    height:
-        32px;
-
-    display:
-        block;
-
-    object-fit:
-        contain;
-
-}
-
-
-/* =========================================================
-   CONTEÚDO PROTEGIDO
-========================================================= */
-
-.protectContent {
-
-    min-width:
-        0;
-
-    flex:
-        1;
-
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    align-items:
-        flex-start;
-
-    justify-content:
-        center;
-
-    gap:
-        6px;
-
-    position:
-        relative;
-
-    z-index:
-        2;
-
-}
-
-.protectTitle {
-
-    color:
-        #ffffff;
-
-    font-size:
-        clamp(
-            19px,
-            5vw,
-            25px
-        );
-
-    font-weight:
-        800;
-
-    line-height:
-        1.1;
-
-    letter-spacing:
-        -.35px;
-
-}
-
-.protectSubtitle {
-
-    color:
-        #a49caf;
-
-    font-size:
-        10px;
-
-    font-weight:
-        600;
-
-    line-height:
-        1.4;
-
-}
-
-
-/* =========================================================
-   META
-========================================================= */
-
-.protectMeta {
-
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    gap:
-        6px;
-
-    margin-top:
-        3px;
-
-    color:
-        #756d7d;
-
-    font-size:
-        7px;
-
-    font-weight:
-        800;
-
-    letter-spacing:
-        1.2px;
-
-    text-transform:
-        uppercase;
-
-}
-
-
-/* =========================================================
-   SETA DO BIG BUTTON
-========================================================= */
-
-.bigButton .navigationArrow {
-
-    width:
-        43px;
-
-    height:
-        43px;
-
-    flex:
-        0 0 43px;
-
-    color:
-        #a395ff;
-
-    background:
-        #211b3b;
-
-    border:
-        1px solid
-        #493d78;
-
-}
-
-
-/* =========================================================
-   ESTADOS DO BIG BUTTON
-========================================================= */
-
-.bigButton:hover {
-
-    
-
-    border-color:
-        #a395ff;
-
-}
-
-.bigButton:hover .protectIcon {
-
-    background:
-        #382b68;
-
-    border-color:
-        #7968c9;
-
-}
-
-.bigButton:hover .navigationArrow {
-
-    color:
-        #ffffff;
-
-    background:
-        #2b2450;
-
-    border-color:
-        #6557a1;
-
-}
-
-
-
-.bigButton:focus-visible {
-
-    outline:
-        2px solid
-        var(--purple-light);
-
-    outline-offset:
-        4px;
-
-}
-
-
-
-/* =========================================================
-   CARD
-========================================================= */
-
-.control-card {
-
-    width:
-        100%;
-
-    min-height:
-        128px;
+        155px;
 
     position:
         relative;
@@ -1076,34 +474,829 @@ body {
         20px;
 
     padding:
-        21px;
+        22px;
 
     border:
-        1px solid var(--border);
+        1px solid
+        #ffffff18;
 
     border-radius:
-        var(--radius);
+        var(--radius-large);
 
     background:
         linear-gradient(
-            145deg,
-            #111,
-            #000
+            135deg,
+            #1b1823,
+            #101016
         );
 
-    isolation:
-        isolate;
+}
 
-    transition:
-        border-color .2s ease,
-        background .2s ease;
+.system-overview::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        230px;
+
+    height:
+        230px;
+
+    top:
+        -175px;
+
+    right:
+        -90px;
+
+    border-radius:
+        50%;
+
+    background:
+        #ff3d8212;
+
+    animation:
+        bubbleFloat
+        10s
+        ease-in-out
+        infinite;
+
+    pointer-events:
+        none;
+
+}
+
+.system-overview::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        115px;
+
+    height:
+        115px;
+
+    bottom:
+        -85px;
+
+    left:
+        -48px;
+
+    border-radius:
+        50%;
+
+    background:
+        #ffffff06;
+
+    pointer-events:
+        none;
+
+}
+
+.overview-content {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        8px;
+
+}
+
+.overview-label {
+
+    color:
+        var(--muted);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1.5px;
+
+    text-transform:
+        uppercase;
+
+}
+
+.overview-title {
+
+    color:
+        var(--white);
+
+    font-size:
+        21px;
+
+    font-weight:
+        800;
+
+}
+
+.overview-description {
+
+    max-width:
+        280px;
+
+    color:
+        var(--secondary);
+
+    font-size:
+        10px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.5;
+
+}
+
+.overview-indicator {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    margin-top:
+        5px;
+
+    color:
+        var(--green);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .8px;
+
+    text-transform:
+        uppercase;
+
+}
+
+.overview-indicator::before {
+
+    content:
+        "";
+
+    width:
+        7px;
+
+    height:
+        7px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--green);
+
+    animation:
+        statusPulse
+        2s
+        ease-in-out
+        infinite;
+
+}
+
+.overview-symbol {
+
+    width:
+        78px;
+
+    height:
+        78px;
+
+    flex:
+        0 0 78px;
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        1px solid
+        #ff3d8240;
+
+    border-radius:
+        27px;
+
+    background:
+        #ff3d8212;
+
+}
+
+.overview-symbol::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        9px;
+
+    border:
+        1px solid
+        #ff3d8235;
+
+    border-radius:
+        20px;
+
+}
+
+.overview-symbol img {
+
+    width:
+        36px;
+
+    height:
+        36px;
+
+    object-fit:
+        contain;
 
 }
 
 
 /* =========================================================
-   DECORAÇÃO DO CARD
+   TÍTULOS DE SEÇÃO
 ========================================================= */
+
+.section,
+.amparoSection {
+
+    width:
+        100%;
+
+}
+
+.label,
+.amparoLabel {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    margin:
+        0
+        0
+        14px
+        3px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        2px;
+
+    text-transform:
+        uppercase;
+
+}
+
+.label::before,
+.amparoLabel::before {
+
+    content:
+        "";
+
+    width:
+        7px;
+
+    height:
+        7px;
+
+    border-radius:
+        2px;
+
+    background:
+        var(--pink);
+
+    transform:
+        rotate(45deg);
+
+}
+
+.amparoLabel::before {
+
+    background:
+        var(--purple);
+
+}
+
+/* =========================================================
+   BOTÃO DE PÂNICO — COMPLETO
+========================================================= */
+
+.panic {
+
+    position: relative;
+
+    width: 100%;
+    min-height: 260px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 14px;
+
+    margin: 0;
+    padding: 32px 24px;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    isolation: isolate;
+
+    color: #ffffff;
+    text-align: center;
+
+    background: #ff315d;
+
+    border: 1px solid #ff6b87;
+    border-radius: 32px;
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+        transform 180ms ease,
+        background 180ms ease;
+
+}
+
+
+/* =========================================================
+   BOLHA SUPERIOR
+========================================================= */
+
+.panic::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 210px;
+    height: 210px;
+
+    top: -125px;
+    right: -75px;
+
+    background: #ff6684;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    z-index: -1;
+
+}
+
+
+/* =========================================================
+   BOLHA INFERIOR
+========================================================= */
+
+.panic::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 250px;
+    height: 250px;
+
+    bottom: -170px;
+    left: -105px;
+
+    background: #e91e4f;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    z-index: -1;
+
+}
+
+
+/* =========================================================
+   ÁREA INTERNA
+========================================================= */
+
+.panic > * {
+
+    position: relative;
+
+    z-index: 1;
+
+    flex-shrink: 0;
+
+}
+
+
+/* =========================================================
+   ÍCONE
+========================================================= */
+
+.panic img {
+
+    display: block;
+
+    width: 62px;
+    height: 62px;
+
+    margin: 0;
+    padding: 0;
+
+    object-fit: contain;
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   TEXTOS DO BOTÃO DE PÂNICO
+========================================================= */
+
+.panic h1,
+.panic h2,
+.panic h3,
+.panic h4,
+.panic strong,
+.panic .panic-title {
+
+    position: relative !important;
+
+    display: flex !important;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: #ffffff !important;
+
+    font-family: inherit !important;
+
+    font-size: 30px !important;
+    font-weight: 850 !important;
+
+    line-height: 1.05 !important;
+
+    letter-spacing: -1.2px !important;
+
+    text-align: center !important;
+
+    white-space: normal !important;
+
+    word-break: keep-all !important;
+    overflow-wrap: normal !important;
+
+    text-transform: none !important;
+
+    transform: none !important;
+
+}
+
+
+/* Texto de apoio */
+
+.panic p,
+.panic .panic-description {
+
+    display: block !important;
+
+    width: 100% !important;
+    max-width: 280px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: rgba(255, 255, 255, 0.92) !important;
+
+    font-family: inherit !important;
+
+    font-size: 14px !important;
+    font-weight: 500 !important;
+
+    line-height: 1.4 !important;
+
+    letter-spacing: -0.15px !important;
+
+    text-align: center !important;
+
+}
+
+
+/* Remove efeitos e elementos herdados */
+
+.panic h1::before,
+.panic h1::after,
+.panic h2::before,
+.panic h2::after,
+.panic h3::before,
+.panic h3::after,
+.panic h4::before,
+.panic h4::after,
+.panic strong::before,
+.panic strong::after,
+.panic .panic-title::before,
+.panic .panic-title::after {
+
+    content: none !important;
+
+    display: none !important;
+
+}
+
+
+/* Caso o título esteja dentro de uma div */
+
+.panic > div {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    gap: 10px;
+
+    text-align: center;
+
+}
+
+/* =========================================================
+   ÍCONES SVG EXTERNOS
+========================================================= */
+
+.panic svg {
+
+    display: block;
+
+    width: 62px;
+    height: 62px;
+
+    margin: 0;
+
+    fill: #ffffff;
+
+    color: #ffffff;
+
+    pointer-events: none;
+
+}
+
+svg {
+margin: 5%;
+}
+
+/* =========================================================
+   HOVER
+========================================================= */
+
+@media (hover: hover) {
+
+    .panic:hover {
+
+        background: #ff3b66;
+
+    }
+
+}
+
+
+/* =========================================================
+   TOQUE
+========================================================= */
+
+.panic:active {
+
+    transform: scale(0.985);
+
+}
+
+
+/* =========================================================
+   FOCO ACESSÍVEL
+========================================================= */
+
+.panic:focus-visible {
+
+    outline: 3px solid #ffffff;
+    outline-offset: 4px;
+
+}
+
+
+/* =========================================================
+   ESTADO DESABILITADO
+========================================================= */
+
+.panic:disabled {
+
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+}
+
+
+/* =========================================================
+   CORREÇÃO CONTRA ESTILOS GLOBAIS
+========================================================= */
+
+.panic h1,
+.panic h2,
+.panic h3,
+.panic h4,
+.panic p,
+.panic strong,
+.panic small {
+
+    position: relative !important;
+
+    inset: auto !important;
+
+    float: none !important;
+
+    clear: both !important;
+
+    text-indent: 0 !important;
+
+    writing-mode: horizontal-tb !important;
+
+    direction: ltr !important;
+
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+========================================================= */
+
+@media (max-width: 360px) {
+
+    .panic {
+
+        min-height: 235px;
+
+        padding: 26px 18px;
+
+        border-radius: 28px;
+
+    }
+
+    .panic img,
+    .panic svg {
+
+        width: 54px;
+        height: 54px;
+
+    }
+
+    .panic h1,
+    .panic h2,
+    .panic h3,
+    .panic h4,
+    .panic strong,
+    .panic .panic-title {
+
+        font-size: 23px;
+
+    }
+
+    .panic p,
+    .panic .panic-description {
+
+        font-size: 13px;
+
+    }
+
+}
+
+/* =========================================================
+   CARDS DE PROTEÇÃO
+========================================================= */
+
+.control-card {
+
+    width:
+        100%;
+
+    min-height:
+        190px;
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    justify-content:
+        space-between;
+
+    gap:
+        22px;
+
+    padding:
+        22px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        var(--radius-medium);
+
+    background:
+        var(--surface);
+
+    isolation:
+        isolate;
+
+}
+
+.control-card + .control-card {
+
+    margin-top:
+        13px;
+
+}
 
 .control-card::before {
 
@@ -1114,16 +1307,16 @@ body {
         absolute;
 
     width:
-        210px;
+        235px;
 
     height:
-        210px;
+        235px;
 
     top:
-        -150px;
+        -180px;
 
     right:
-        -90px;
+        -105px;
 
     border-radius:
         50%;
@@ -1134,11 +1327,7 @@ body {
     pointer-events:
         none;
 
-    z-index:
-        -1;
-
 }
-
 
 .control-card::after {
 
@@ -1149,1284 +1338,29 @@ body {
         absolute;
 
     width:
-        100px;
+        125px;
 
     height:
-        100px;
+        125px;
 
     bottom:
-        -72px;
-
-    left:
-        -35px;
-
-    border-radius:
-        50%;
-
-    background:
-        #ffffff03;
-
-    pointer-events:
-        none;
-
-    z-index:
-        -1;
-
-}
-
-
-/* =========================================================
-   CONTEÚDO
-========================================================= */
-
-.control-card-content {
-
-    min-width:
-        0;
-
-    position:
-        relative;
-
-    z-index:
-        2;
-
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    gap:
-        7px;
-
-}
-
-
-.control-card h3 {
-
-    color:
-        #ffffff;
-
-    font-size:
-        clamp(
-            17px,
-            4.5vw,
-            20px
-        );
-
-    font-weight:
-        800;
-
-    line-height:
-        1.2;
-
-}
-
-
-.control-card p {
-
-    max-width:
-        480px;
-
-    color:
-        var(--soft);
-
-    font-size:
-        11px;
-
-    font-weight:
-        600;
-
-    line-height:
-        1.55;
-
-}
-
-
-.control-status {
-
-    margin-top:
-        2px;
-
-    color:
-        #686d79;
-
-    font-size:
-        9px;
-
-    font-weight:
-        800;
-
-    letter-spacing:
-        1.3px;
-
-    text-transform:
-        uppercase;
-
-}
-
-
-/* =========================================================
-   CARD ATIVO — ROSA
-========================================================= */
-
-.control-card.active {
-
-    background:
-        linear-gradient(
-            145deg,
-            #241520,
-            #120d12
-        );
-
-    border-color:
-        #ff3f8255;
-
-}
-
-
-.control-card.active::before {
-
-    background:
-        #ff3f8210;
-
-}
-
-
-.control-card.active::after {
-
-    background:
-        #ff3f8208;
-
-}
-
-
-.control-card.active .control-status {
-
-    color:
-        var(--pink-light);
-
-}
-
-
-/* =========================================================
-   MOVIMENTO — ROXO
-========================================================= */
-
-.control-card.movement.active {
-
-    background:
-        linear-gradient(
-            145deg,
-            #211936,
-            #110d1d
-        );
-
-    border-color:
-        #8b5cf655;
-
-}
-
-
-.control-card.movement.active::before {
-
-    background:
-        #8b5cf612;
-
-}
-
-
-.control-card.movement.active::after {
-
-    background:
-        #8b5cf609;
-
-}
-
-
-.control-card.movement.active .control-status {
-
-    color:
-        var(--purple-light);
-
-}
-
-
-/* =========================================================
-   BRILHO — LARANJA
-========================================================= */
-
-.control-card.brightness.active {
-
-    background:
-        linear-gradient(
-            145deg,
-            #241b0d,
-            #151008
-        );
-
-    border-color:
-        #ff9f4355;
-
-}
-
-
-.control-card.brightness.active::before {
-
-    background:
-        #ff9f4312;
-
-}
-
-
-.control-card.brightness.active::after {
-
-    background:
-        #ff9f4309;
-
-}
-
-
-.control-card.brightness.active .control-status {
-
-    color:
-        var(--orange-light);
-
-}
-
-
-/* =========================================================
-   BLOQUEIO — BRANCO
-========================================================= */
-
-.control-card.proximity.active {
-
-    background:
-        linear-gradient(
-            145deg,
-            #1b1c20,
-            #0e0f12
-        );
-
-    border-color:
-        #ffffff40;
-
-}
-
-
-.control-card.proximity.active::before {
-
-    background:
-        #ffffff0b;
-
-}
-
-
-.control-card.proximity.active::after {
-
-    background:
-        #ffffff07;
-
-}
-
-
-.control-card.proximity.active .control-status {
-
-    color:
-        #ffffff;
-
-}
-
-
-/* =========================================================
-   SWITCH
-========================================================= */
-
-.switch {
-
-    width:
-        58px;
-
-    height:
-        34px;
-
-    flex-shrink:
-        0;
-
-    position:
-        relative;
-
-    z-index:
-        5;
-
-    padding:
-        0;
-
-    border:
-        1px solid #ffffff12;
-
-    border-radius:
-        100px;
-
-    background:
-        #292c35;
-
-    cursor:
-        pointer;
-
-    transition:
-        background .22s ease,
-        border-color .22s ease;
-
-}
-
-
-.switch::after {
-
-    content:
-        "";
-
-    width:
-        26px;
-
-    height:
-        26px;
-
-    position:
-        absolute;
-
-    top:
-        3px;
-
-    left:
-        3px;
-
-    border-radius:
-        50%;
-
-    background:
-        #9297a3;
-
-    transition:
-        transform .22s cubic-bezier(.22,1,.36,1),
-        background .22s ease;
-
-}
-
-
-/* =========================================================
-   SWITCH ROSA
-========================================================= */
-
-.switch.active {
-
-    background:
-        var(--pink);
-
-    border-color:
-        var(--pink);
-
-}
-
-
-.switch.active::after {
-
-    background:
-        #ffffff;
-
-    transform:
-        translateX(24px);
-
-}
-
-
-/* =========================================================
-   SWITCH ROXO
-========================================================= */
-
-.switch.purple.active {
-
-    background:
-        var(--purple);
-
-    border-color:
-        var(--purple);
-
-}
-
-
-/* =========================================================
-   SWITCH LARANJA
-========================================================= */
-
-.switch.orange.active {
-
-    background:
-        var(--orange);
-
-    border-color:
-        var(--orange);
-
-}
-
-
-/* =========================================================
-   SWITCH BRANCO
-========================================================= */
-
-.switch.white.active {
-
-    background:
-        #ffffff;
-
-    border-color:
-        #ffffff;
-
-}
-
-
-.switch.white.active::after {
-
-    background:
-        #000000;
-
-    transform:
-        translateX(24px);
-
-}
-
-
-/* =========================================================
-   PRESS
-========================================================= */
-
-.switch:active {
-
-    opacity:
-        .72;
-
-}
-
-
-.navigationArrow {
-
-    width:
-        41px;
-
-    height:
-        41px;
-
-    flex:
-        0 0 41px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    position:
-        relative;
-
-    z-index:
-        2;
-
-    color:
-        #73737b;
-
-    background:
-        #18181d;
-
-    border:
-        1px solid
-        #303038;
-
-    border-radius:
-        14px;
-
-}
-
-.navigationArrow svg {
-
-    width:
-        19px;
-
-    height:
-        19px;
-
-    display:
-        block;
-
-    stroke:
-        currentColor;
-
-}
-
-
-/* =========================================================
-   CARD
-========================================================= */
-
-.actionCard {
-
-    width:
-        100%;
-
-    min-height:
-        88px;
-
-    position:
-        relative;
-
-    overflow:
-        hidden;
-
-    display:
-        grid;
-
-    grid-template-columns:
-        52px
-        minmax(0, 1fr)
-        40px;
-
-    column-gap:
-        13px;
-
-    align-items:
-        center;
-
-    padding:
-        17px;
-
-    border:
-        1px solid var(--border);
-
-    border-radius:
-        var(--radius);
-
-    color:
-        #ffffff;
-
-    cursor:
-        pointer;
-
-    text-align:
-        left;
-
-    outline:
-        none;
-
-    -webkit-appearance:
-        none;
-
-    appearance:
-        none;
-
-    isolation:
-        isolate;
-
-    transition:
-        filter .18s ease,
-        border-color .18s ease;
-
-margin-bottom: 24px;
-
-}
-
-
-/* =========================================================
-   BRILHO DO CARD
-========================================================= */
-
-.actionCard::before {
-
-    content:
-        "";
-
-    position:
-        absolute;
-
-    width:
-        190px;
-
-    height:
-        190px;
-
-    top:
-        -135px;
-
-    right:
-        -65px;
-
-    border-radius:
-        50%;
-
-    background:
-        #ffffff0d;
-
-    pointer-events:
-        none;
-
-    z-index:
-        -1;
-
-}
-
-
-
-
-
-/* =========================================================
-   ÍCONE
-========================================================= */
-
-.actionIcon {
-
-    width:
-        52px;
-
-    height:
-        52px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    border-radius:
-        17px;
-
-    background:
-        #ffffff16;
-
-    color:
-        #ffffff;
-
-}
-
-
-.actionIcon svg {
-
-    width:
-        28px;
-
-    height:
-        28px;
-
-    display:
-        block;
-
-    fill:
-        currentColor;
-
-}
-
-
-/* =========================================================
-   CONTEÚDO
-========================================================= */
-
-.actionTitle {
-
-    min-width:
-        0;
-
-    color:
-        #ffffff;
-
-    font-size:
-        15px;
-
-    font-weight:
-        800;
-
-    line-height:
-        1.2;
-
-    
-
-    
-    
-
-    text-overflow:
-        ellipsis;
-
-white-space:
-        normal;
-
-    overflow:
-        hidden;
-
-    text-overflow:
-        clip;
-}
-
-
-.actionDescription {
-
-    display:
-        block;
-
-    min-width:
-        0;
-
-    max-width:
-        100%;
-
-    margin-top:
-        4px;
-
-    color:
-        #ffffffb8;
-
-    font-size:
-        10px;
-
-    font-weight:
-        600;
-
-    line-height:
-        1.3;
-
-    white-space:
-        normal;
-
-    overflow:
-        hidden;
-
-    text-overflow:
-        clip;
-
-}
-
-/* =========================================================
-   SETA
-========================================================= */
-.actionArrow {
-
-    width:
-        40px;
-
-    height:
-        40px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    color:
-        #ffffffc7;
-
-    background:
-        color-mix(
-            in srgb,
-            var(--accent) 10%,
-            #000000
-        );
-
-    border:
-        1px solid
-        color-mix(
-            in srgb,
-            var(--accent) 20%,
-            #ffffff08
-        );
-
-    border-radius:
-        14px;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size:
-        27px;
-
-    font-weight:
-        300;
-
-    line-height:
-        1;
-
-}
-
-.actionArrow svg {
-
-    width:
-        19px;
-
-    height:
-        19px;
-
-    display:
-        block;
-
-    color:
-        #ffffffc7;
-
-}
-
-/* =========================================================
-   CORES
-========================================================= */
-
-.policia {
-
-    --accent:
-        var(--blue);
-
-    background:
-        linear-gradient(
-            145deg,
-            #182744,
-            #0f1829
-        );
-
-    border-color:
-        #4f8cff38;
-
-}
-
-.policia .actionIcon {
-
-    background:
-        #4f8cff22;
-
-    color:
-        var(--blue-light);
-
-}
-
-.policia .actionArrow {
-    background:
-        color-mix(
-            in srgb,
-            #4f8cff 10%,
-            #000000
-        );
-
-    border-color:
-        color-mix(
-            in srgb,
-            #4f8cff 20%,
-            #ffffff08
-        );
-}
-
-.samu {
-
-    --accent:
-        var(--orange);
-
-    background:
-        linear-gradient(
-            145deg,
-            #2a2116,
-            #171109
-        );
-
-    border-color:
-        #ff9f4338;
-
-}
-
-
-.samu .actionIcon {
-
-    background:
-        #ff9f4320;
-
-    color:
-        var(--orange-light);
-
-}
-
-
-.mulher {
-
-    --accent:
-        var(--pink);
-
-    background:
-        linear-gradient(
-            145deg,
-            #281521,
-            #170c12
-        );
-
-    border-color:
-        #ff3f8238;
-
-}
-
-
-.mulher .actionIcon {
-
-    background:
-        #ff3f8220;
-
-    color:
-        var(--pink-light);
-
-}
-
-
-.localizacao {
-
-    --accent:
-        var(--cyan);
-
-    min-height:
-        96px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #112b2b,
-            #0b1717
-        );
-
-    border-color:
-        #27c9c138;
-
-}
-
-
-.localizacao .actionIcon {
-
-    background:
-        #27c9c120;
-
-    color:
-        var(--cyan-light);
-
-}
-
-
-.contato {
-
-    --accent:
-        var(--purple);
-
-    background:
-        linear-gradient(
-            145deg,
-            #21183a,
-            #120e20
-        );
-
-    border-color:
-        #8b5cf638;
-
-}
-
-
-.contato .actionIcon {
-
-    background:
-        #8b5cf622;
-
-    color:
-        var(--purple-light);
-
-}
-
-
-.sos {
-
-    --accent:
-        var(--red);
-
-    background:
-        linear-gradient(
-            145deg,
-            #2b171d,
-            #170b0e
-        );
-
-    border-color:
-        #ff405438;
-
-}
-
-
-.sos .actionIcon {
-
-    background:
-        #ff405422;
-
-    color:
-        var(--red-light);
-
-}
-
-
-/* =========================================================
-   INTERAÇÃO
-========================================================= */
-
-
-
-.actionCard:hover {
-
-    
-    border-color:
-        #ffffff28;
-
-}
-
-
-.actionCard:focus-visible {
-
-    outline:
-        2px solid #ffffffb8;
-
-    outline-offset:
-        3px;
-
-}
-
-.amparoSection {
-
-    width:
-        100%;
-
-}
-
-
-/* =========================================================
-   LABEL
-========================================================= */
-
-.amparoLabel {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        9px;
-
-    margin:
-        0
-        0
-        13px
-        4px;
-
-    color:
-        #686d79;
-
-    font-size:
-        10px;
-
-    font-weight:
-        800;
-
-    letter-spacing:
-        2px;
-
-    line-height:
-        1;
-
-    text-transform:
-        uppercase;
-
-}
-
-.amparoLabel::before {
-
-    content:
-        "";
-
-    width:
-        5px;
-
-    height:
-        5px;
-
-    flex:
-        0 0 5px;
-
-    border-radius:
-        50%;
-
-    background:
-        #ff3f82;
-
-}
-
-
-/* =========================================================
-   BOTÃO
-========================================================= */
-
-.amparoButton {
-
-    width:
-        100%;
-
-    min-height:
-        138px;
-
-    position:
-        relative;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        16px;
-
-    padding:
-        18px;
-
-    overflow:
-        hidden;
-
-    color:
-        #ffffff;
-
-    background:
-        #24152b;
-
-    border:
-        1px solid
-        #9b4fc4;
-
-    border-radius:
-        30px;
-
-    text-align:
-        left;
-
-    cursor:
-        pointer;
-
-    -webkit-appearance:
-        none;
-
-    appearance:
-        none;
-
-    isolation:
-        isolate;
-
-}
-
-
-/* =========================================================
-   DECORAÇÕES
-========================================================= */
-
-.amparoButton::before {
-
-    content:
-        "";
-
-    position:
-        absolute;
-
-    width:
-        250px;
-
-    height:
-        250px;
-
-    top:
-        -175px;
-
-    right:
         -95px;
 
-    border-radius:
-        50%;
-
-    background:
-        #422052;
-
-    pointer-events:
-        none;
-
-    z-index:
-        -1;
-
-}
-
-.amparoButton::after {
-
-    content:
-        "";
-
-    position:
-        absolute;
-
-    width:
-        115px;
-
-    height:
-        115px;
-
-    bottom:
-        -78px;
-
     left:
-        -38px;
+        -55px;
 
     border-radius:
         50%;
 
     background:
-        #5b254e;
+        #ffffff04;
 
     pointer-events:
         none;
 
-    z-index:
-        -1;
-
 }
 
-
-/* =========================================================
-   ÍCONE
-========================================================= */
-
-.amparoIcon {
-
-    width:
-        64px;
-
-    height:
-        64px;
-
-    flex:
-        0 0 64px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
+.control-top {
 
     position:
         relative;
@@ -2434,61 +1368,76 @@ white-space:
     z-index:
         2;
 
-    background:
-        #392047;
-
-    border:
-        1px solid
-        #70458b;
-
-    border-radius:
-        21px;
-
-}
-
-.amparoIcon img {
-
-    width:
-        32px;
-
-    height:
-        32px;
-
-    display:
-        block;
-
-    object-fit:
-        contain;
-
-}
-
-
-/* =========================================================
-   CONTEÚDO
-========================================================= */
-
-.amparoContent {
-
-    min-width:
-        0;
-
-    flex:
-        1;
-
     display:
         flex;
-
-    flex-direction:
-        column;
 
     align-items:
         flex-start;
 
     justify-content:
-        center;
+        space-between;
 
     gap:
-        6px;
+        15px;
+
+}
+
+.control-heading {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        10px;
+
+}
+
+.control-number {
+
+    color:
+        var(--muted);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1.5px;
+
+}
+
+.control-card h3 {
+
+    max-width:
+        320px;
+
+    color:
+        var(--white);
+
+    font-size:
+        clamp(
+            20px,
+            5vw,
+            27px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        1.05;
+
+    letter-spacing:
+        -.8px;
+
+}
+
+.control-card p {
 
     position:
         relative;
@@ -2496,35 +1445,11 @@ white-space:
     z-index:
         2;
 
-}
-
-.amparoTitle {
-
-    color:
-        #ffffff;
-
-    font-size:
-        clamp(
-            19px,
-            5vw,
-            25px
-        );
-
-    font-weight:
-        800;
-
-    line-height:
-        1.1;
-
-    letter-spacing:
-        -.35px;
-
-}
-
-.amparoSubtitle {
+    max-width:
+        470px;
 
     color:
-        #b7a4bd;
+        var(--secondary);
 
     font-size:
         10px;
@@ -2533,20 +1458,48 @@ white-space:
         600;
 
     line-height:
-        1.4;
+        1.6;
 
 }
 
-.amparoMeta {
+.control-bottom {
 
-    margin-top:
-        3px;
+    position:
+        relative;
 
-     color:
-        #756d7d;
+    z-index:
+        2;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        15px;
+
+}
+
+.control-status {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    color:
+        var(--muted);
 
     font-size:
-        7px;
+        9px;
 
     font-weight:
         800;
@@ -2559,21 +1512,63 @@ white-space:
 
 }
 
+.control-status::before {
 
-/* =========================================================
-   SETA
-========================================================= */
-
-.amparoArrow {
+    content:
+        "";
 
     width:
-        43px;
+        6px;
 
     height:
-        43px;
+        6px;
+
+    border-radius:
+        50%;
+
+    background:
+        #555560;
+
+}
+
+.control-card.active .control-status {
+
+    color:
+        var(--pink-light);
+
+}
+
+.control-card.active .control-status::before {
+
+    background:
+        var(--pink);
+
+    animation:
+        statusPulse
+        2s
+        ease-in-out
+        infinite;
+
+}
+
+
+/* =========================================================
+   ÍCONES DOS CONTROLES
+========================================================= */
+
+.control-visual {
+
+    width:
+        64px;
+
+    height:
+        64px;
 
     flex:
-        0 0 43px;
+        0 0 64px;
+
+    position:
+        relative;
 
     display:
         flex;
@@ -2584,353 +1579,345 @@ white-space:
     justify-content:
         center;
 
+    border:
+        1px solid
+        #ffffff18;
+
+    border-radius:
+        22px;
+
+    background:
+        #ffffff06;
+
+}
+
+.control-visual::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        8px;
+
+    border:
+        1px solid
+        #ffffff12;
+
+    border-radius:
+        16px;
+
+}
+
+.control-visual img {
+
+    width:
+        31px;
+
+    height:
+        31px;
+
     position:
         relative;
 
     z-index:
         2;
 
-    color:
-        #d49bea;
-
-    background:
-        #351c40;
-
-    border:
-        1px solid
-        #623875;
-
-    border-radius:
-        14px;
+    object-fit:
+        contain;
 
 }
 
-.amparoArrow svg {
+
+/* =========================================================
+   CORES DOS CONTROLES
+========================================================= */
+
+.palmas {
+
+    border-color:
+        #ff3d8230;
+
+}
+
+.palmas .control-visual {
+
+    border-color:
+        #ff3d8245;
+
+    background:
+        #ff3d8212;
+
+}
+
+.movimento {
+
+    border-color:
+        #9a7cff30;
+
+}
+
+.movimento .control-visual {
+
+    border-color:
+        #9a7cff45;
+
+    background:
+        #9a7cff12;
+
+}
+
+.brilho {
+
+    border-color:
+        #ffb45e30;
+
+}
+
+.brilho .control-visual {
+
+    border-color:
+        #ffb45e45;
+
+    background:
+        #ffb45e12;
+
+}
+
+.proximidade {
+
+    border-color:
+        #54ded430;
+
+}
+
+.proximidade .control-visual {
+
+    border-color:
+        #54ded445;
+
+    background:
+        #54ded412;
+
+}
+
+
+/* =========================================================
+   SWITCHES
+========================================================= */
+
+.switch {
 
     width:
-        19px;
+        59px;
 
     height:
-        19px;
+        36px;
 
-    display:
-        block;
+    position:
+        relative;
 
-}
-
-
-/* =========================================================
-   INTERAÇÃO
-========================================================= */
-
-.amparoButton:hover {
-
-    border-color:
-        #c878e5;
-
-}
-
-.amparoButton:hover .amparoIcon {
-
-    background:
-        #482657;
-
-    border-color:
-        #8d58aa;
-
-}
-
-.amparoButton:hover .amparoArrow {
-
-    color:
-        #ffffff;
-
-    background:
-        #43234f;
-
-    border-color:
-        #7d4a93;
-
-}
-
-.amparoButton:active {
-
-    opacity:
-        .82;
-
-}
-
-.amparoButton:focus-visible {
-
-    outline:
-        2px solid
-        #d38ae8;
-
-    outline-offset:
-        4px;
-
-}
-.custom-popup-overlay {
-    position: fixed;
-
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100%;
-
-    z-index: 99999;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 22px;
-    box-sizing: border-box;
-
-    background: #000000;
-
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-
-    transition:
-        opacity .22s ease,
-        visibility .22s ease;
-}
-
-.custom-popup-overlay.aberto {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-}
-
-.custom-popup {
-    position: relative;
-
-    width: min(100%, 370px);
-
-    padding: 25px 22px 21px;
-
-    box-sizing: border-box;
-
-    border: 1px solid #ffffff12;
-    border-radius: 25px;
-
-    background: #111116;
-
-    box-shadow:
-        0 25px 80px #000000a6;
-
-    text-align: left;
-
-    transform: scale(.96);
-
-    transition:
-        transform .22s
-        cubic-bezier(.22, .7, .2, 1);
-}
-
-.custom-popup-overlay.aberto .custom-popup {
-    transform: scale(1);
-}
-.custom-popup h2 {
-
-    color:
-        #ffffff;
-
-    font-size:
-        18px;
-
-    font-weight:
-        800;
-
-    line-height:
-        1.2;
-
-    margin-bottom:
-        9px;
-
-}
-
-
-.custom-popup p {
-
-    color:
-        #a0a4b0;
-
-    font-size:
-        12px;
-
-    font-weight:
-        600;
-
-    line-height:
-        1.55;
-
-    white-space:
-        normal;
-
-    overflow-wrap:
-        anywhere;
-
-    margin-bottom:
-        21px;
-
-}
-
-
-.custom-popup-button {
-
-    width:
-        100%;
-
-    min-height:
-        46px;
+    flex:
+        0 0 59px;
 
     border:
         1px solid
-        #ff3f8255;
+        #ffffff18;
 
     border-radius:
-        15px;
+        999px;
 
     background:
-        #ff3f8218;
-
-    color:
-        #ff6b9f;
-
-    font-family:
-        "Quicksand",
-        sans-serif;
-
-    font-size:
-        13px;
-
-    font-weight:
-        800;
-
-    cursor:
-        pointer;
+        #292a33;
 
     transition:
-        background .18s ease,
-        border-color .18s ease,
-        opacity .18s ease;
+        background .25s ease,
+        border-color .25s ease;
 
 }
 
-.custom-popup-button:hover {
+.switch::after {
+
+    content:
+        "";
+
+    width:
+        28px;
+
+    height:
+        28px;
+
+    position:
+        absolute;
+
+    top:
+        3px;
+
+    left:
+        3px;
+
+    border-radius:
+        50%;
 
     background:
-        #ff3f8230;
+        #777986;
+
+    transition:
+        transform .25s ease,
+        background .25s ease;
+
+}
+
+.switch.active {
+
+    background:
+        var(--pink);
 
     border-color:
-        #ff3f82;
+        var(--pink);
 
 }
 
-.custom-popup-button:active {
+.switch.active::after {
 
-    opacity:
-        .72;
+    background:
+        #ffffff;
+
+    transform:
+        translateX(23px);
 
 }
 
-.custom-popup-button:focus-visible {
+.switch.purple.active {
 
-    outline:
-        2px solid
-        #ff6b9f;
+    background:
+        var(--purple);
 
-    outline-offset:
-        3px;
+    border-color:
+        var(--purple);
+
+}
+
+.switch.orange.active {
+
+    background:
+        var(--orange);
+
+    border-color:
+        var(--orange);
+
+}
+
+.switch.cyan.active {
+
+    background:
+        var(--cyan);
+
+    border-color:
+        var(--cyan);
 
 }
 
 /* =========================================================
-   ACESSO DE EMERGÊNCIA — PADRÃO DOS ACTION CARDS
+   CARDS DE AÇÃO — DESIGN AVANÇADO
 ========================================================= */
 
+.actionCard,
 .emergency-access-card {
 
     width: 100%;
-
-    min-height: 88px;
+    min-height: 128px;
 
     position: relative;
-
     overflow: hidden;
 
     display: grid;
 
     grid-template-columns:
-        52px
+        66px
         minmax(0, 1fr)
-        40px;
-
-    column-gap: 13px;
+        43px;
 
     align-items: center;
 
-    padding: 17px;
+    gap: 16px;
 
-    border: 1px solid #ff405438;
+    padding: 20px;
 
-    border-radius: var(--radius);
-
-    color: #ffffff;
-
-    background:
-        linear-gradient(
-            145deg,
-            #2b171d,
-            #170b0e
-        );
-
-    cursor: pointer;
+    border: 1px solid var(--border-light);
+    border-radius: 27px;
 
     text-align: left;
 
-    outline: none;
-
-    -webkit-appearance: none;
-
-    appearance: none;
+    color: var(--white);
 
     isolation: isolate;
 
+    background: var(--surface);
+
     transition:
-        filter .18s ease,
-        border-color .18s ease;
+        transform .22s ease,
+        border-color .22s ease,
+        filter .22s ease;
 
 }
 
 
 /* =========================================================
-   BRILHO DECORATIVO
+   LINHA COLORIDA LATERAL
 ========================================================= */
 
+.actionCard > .actionIcon,
+.emergency-access-card > .emergency-access-icon {
+
+    position: relative;
+
+}
+
+.actionCard > .actionIcon::before,
+.emergency-access-card > .emergency-access-icon::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 9px;
+    bottom: 9px;
+    left: -21px;
+
+    width: 3px;
+
+    border-radius: 999px;
+
+    background: currentColor;
+
+    opacity: .8;
+
+}
+
+
+/* =========================================================
+   BOLHA SUPERIOR
+========================================================= */
+
+.actionCard::before,
 .emergency-access-card::before {
 
     content: "";
 
     position: absolute;
 
-    width: 190px;
+    width: 250px;
+    height: 250px;
 
-    height: 190px;
-
-    top: -135px;
-
-    right: -65px;
+    top: -190px;
+    right: -115px;
 
     border-radius: 50%;
 
-    background: #ff40540d;
+    background: #ffffff08;
 
     pointer-events: none;
 
@@ -2940,140 +1927,61 @@ white-space:
 
 
 /* =========================================================
-   ÍCONE
+   BOLHA INFERIOR
 ========================================================= */
 
-.emergency-access-icon {
+.actionCard::after,
+.emergency-access-card::after {
 
-    width: 52px;
+    content: "";
 
-    height: 52px;
+    position: absolute;
 
-    display: flex;
+    width: 130px;
+    height: 130px;
 
-    align-items: center;
+    bottom: -100px;
+    left: -55px;
 
-    justify-content: center;
+    border-radius: 50%;
 
-    flex-shrink: 0;
+    background: #ffffff06;
 
-    border-radius: 17px;
+    pointer-events: none;
 
-    background: #ff405422;
-
-    color: #ff7777;
-
-}
-
-
-.emergency-access-icon svg {
-
-    width: 28px;
-
-    height: 28px;
-
-    display: block;
+    z-index: -1;
 
 }
 
 
 /* =========================================================
-   CONTEÚDO
+   REFLEXO INTERNO
 ========================================================= */
 
-.emergency-access-content {
+.actionCard > span,
+.emergency-access-card > div {
 
-    min-width: 0;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 4px;
+    position: relative;
+    z-index: 2;
 
 }
 
+.actionCard .actionContent::before,
+.emergency-access-card .emergency-access-content::before {
 
-.emergency-access-content strong {
+    content: "";
 
-    min-width: 0;
+    position: absolute;
 
-    color: #ffffff;
+    width: 70px;
+    height: 1px;
 
-    font-size: 15px;
+    top: -9px;
+    left: 0;
 
-    font-weight: 800;
+    background: currentColor;
 
-    line-height: 1.2;
-
-}
-
-
-.emergency-access-content p {
-
-    display: block;
-
-    min-width: 0;
-
-    max-width: 100%;
-
-    margin: 0;
-
-    color: #ffffffb8;
-
-    font-size: 10px;
-
-    font-weight: 600;
-
-    line-height: 1.3;
-
-}
-
-
-/* =========================================================
-   SETA
-========================================================= */
-
-.emergency-access-arrow {
-
-    width: 40px;
-
-    height: 40px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    color: #ffaaaF;
-
-    background:
-        color-mix(
-            in srgb,
-            #ff4054 10%,
-            #000000
-        );
-
-    border: 1px solid
-        color-mix(
-            in srgb,
-            #ff4054 20%,
-            #ffffff08
-        );
-
-    border-radius: 14px;
-
-}
-
-
-.emergency-access-arrow svg {
-
-    width: 19px;
-
-    height: 19px;
-
-    display: block;
+    opacity: .22;
 
 }
 
@@ -3082,79 +1990,1676 @@ white-space:
    INTERAÇÃO
 ========================================================= */
 
-.emergency-access-card:hover {
-
-    border-color: #ffffff28;
-
-    filter: brightness(1.08);
-
-}
-
-
+.actionCard:active,
 .emergency-access-card:active {
 
-    filter: brightness(.92);
+    transform: scale(.975);
+
+    filter: brightness(.88);
 
 }
 
+@media (hover: hover) {
 
-.emergency-access-card:focus-visible {
+    .actionCard:hover,
+    .emergency-access-card:hover {
 
-    outline: 2px solid #ffffffb8;
+        border-color: #ffffff45;
 
-    outline-offset: 3px;
+        filter: brightness(1.08);
 
-}
-
-@media (prefers-reduced-motion: reduce) {
-    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
-
-    * {
-        animation-name: none !important;
     }
+
+}
+
+
+/* =========================================================
+   ÍCONE
+========================================================= */
+
+.actionIcon,
+.emergency-access-icon {
+
+    width: 66px;
+    height: 66px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+
+    border: 1px solid #ffffff22;
+
+    border-radius: 23px;
+
+    background: #ffffff08;
+
+}
+
+.actionIcon::after,
+.emergency-access-icon::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 6px;
+
+    border: 1px solid #ffffff12;
+
+    border-radius: 18px;
+
+    pointer-events: none;
+
+}
+
+.actionIcon img,
+.emergency-access-icon img {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 35px;
+    height: 35px;
+
+    object-fit: contain;
+
+}
+
+
+/* =========================================================
+   CONTEÚDO
+========================================================= */
+
+.actionContent,
+.emergency-access-content {
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 8px;
+
+}
+
+.actionTitle,
+.emergency-access-content strong {
+
+    display: block;
+
+    width: 100%;
+
+    color: #ffffff;
+
+    font-size: 16px;
+
+    font-weight: 850;
+
+    line-height: 1.12;
+
+    letter-spacing: -.45px;
+
+}
+
+.actionDescription,
+.emergency-access-content p {
+
+    display: block;
+
+    width: 100%;
+
+    color: #ffffffa8;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    line-height: 1.55;
+
+}
+
+
+/* =========================================================
+   PEQUENO INDICADOR DE SERVIÇO
+========================================================= */
+
+.actionContent::after,
+.emergency-access-content::after {
+
+    content: "ATENDIMENTO DISPONÍVEL";
+
+    display: block;
+
+    margin-top: 2px;
+
+    color: currentColor;
+
+    font-size: 7px;
+
+    font-weight: 850;
+
+    letter-spacing: 1px;
+
+    opacity: .7;
+
+}
+
+
+/* =========================================================
+   SETA
+========================================================= */
+
+.actionArrow,
+.emergency-access-arrow {
+
+    width: 43px;
+    height: 43px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #ffffff20;
+
+    border-radius: 16px;
+
+    background: #00000022;
+
+    transition:
+        transform .22s ease,
+        background .22s ease;
+
+}
+
+.actionCard:active .actionArrow,
+.emergency-access-card:active .emergency-access-arrow {
+
+    transform: translateX(3px);
+
+}
+
+.actionArrow img,
+.emergency-access-arrow img {
+
+    width: 19px;
+    height: 19px;
+
+    object-fit: contain;
+
+}
+
+
+/* =========================================================
+   POLÍCIA
+========================================================= */
+
+.policia {
+
+    color: var(--blue);
+
+    background:
+        linear-gradient(
+            135deg,
+            #182844 0%,
+            #101a2d 55%,
+            #0d1423 100%
+        );
+
+    border-color: #729fff50;
+
+}
+
+.policia .actionIcon {
+
+    background: #729fff18;
+    border-color: #729fff55;
+
+}
+
+.policia .actionArrow {
+
+    background: #729fff12;
+    border-color: #729fff38;
+
+}
+
+.policia .actionTitle {
+
+    color: #ffffff;
+
+}
+
+
+/* =========================================================
+   SAMU
+========================================================= */
+
+.samu {
+
+    color: var(--orange);
+
+    background:
+        linear-gradient(
+            135deg,
+            #3a2917 0%,
+            #241a11 55%,
+            #17120d 100%
+        );
+
+    border-color: #ffb45e50;
+
+}
+
+.samu .actionIcon {
+
+    background: #ffb45e18;
+    border-color: #ffb45e55;
+
+}
+
+.samu .actionArrow {
+
+    background: #ffb45e12;
+    border-color: #ffb45e38;
+
+}
+
+
+/* =========================================================
+   CENTRAL DA MULHER
+========================================================= */
+
+.mulher {
+
+    color: var(--pink-light);
+
+    background:
+        linear-gradient(
+            135deg,
+            #3c1b2c 0%,
+            #281522 55%,
+            #1a1018 100%
+        );
+
+    border-color: #ff3d8250;
+
+}
+
+.mulher .actionIcon {
+
+    background: #ff3d8218;
+    border-color: #ff3d8255;
+
+}
+
+.mulher .actionArrow {
+
+    background: #ff3d8212;
+    border-color: #ff3d8238;
+
+}
+
+
+/* =========================================================
+   LOCALIZAÇÃO
+========================================================= */
+
+.localizacao {
+
+    color: var(--cyan);
+
+    background:
+        linear-gradient(
+            135deg,
+            #153434 0%,
+            #102727 55%,
+            #0b1b1b 100%
+        );
+
+    border-color: #54ded450;
+
+}
+
+.localizacao .actionIcon {
+
+    background: #54ded418;
+    border-color: #54ded455;
+
+}
+
+.localizacao .actionArrow {
+
+    background: #54ded412;
+    border-color: #54ded438;
+
+}
+
+
+/* =========================================================
+   CONTATO
+========================================================= */
+
+.contato {
+
+    color: var(--purple);
+
+    background:
+        linear-gradient(
+            135deg,
+            #2d214b 0%,
+            #1e1733 55%,
+            #151024 100%
+        );
+
+    border-color: #9a7cff50;
+
+}
+
+.contato .actionIcon {
+
+    background: #9a7cff18;
+    border-color: #9a7cff55;
+
+}
+
+.contato .actionArrow {
+
+    background: #9a7cff12;
+    border-color: #9a7cff38;
+
+}
+
+
+/* =========================================================
+   SOS PARA CONTATOS
+========================================================= */
+
+.sos {
+
+    color: var(--red);
+
+    background:
+        linear-gradient(
+            135deg,
+            #3c1b25 0%,
+            #2b131b 55%,
+            #1c0d13 100%
+        );
+
+    border-color: #ff465b50;
+
+}
+
+.sos .actionIcon {
+
+    background: #ff465b18;
+    border-color: #ff465b55;
+
+}
+
+.sos .actionArrow {
+
+    background: #ff465b12;
+    border-color: #ff465b38;
+
+}
+
+
+/* =========================================================
+   ACESSO DE EMERGÊNCIA
+========================================================= */
+
+.emergency-access-card {
+
+    color: var(--red);
+
+    min-height: 128px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #3b1a23 0%,
+            #28131b 55%,
+            #1a0d13 100%
+        );
+
+    border-color: #ff465b55;
+
+    cursor: pointer;
+
+}
+
+.emergency-access-icon {
+
+    background: #ff465b18;
+    border-color: #ff465b55;
+
+}
+
+.emergency-access-arrow {
+
+    background: #ff465b12;
+    border-color: #ff465b38;
+
+}
+
+.emergency-access-content strong {
+
+    color: #ffffff;
+
+}
+
+.emergency-access-content p {
+
+    color: #ffffffa8;
+
+}
+
+.emergency-access-content::after {
+
+    content: "ACESSO EXTERNO";
+
+}
+
+
+/* =========================================================
+   ESPAÇAMENTO ENTRE CARDS
+========================================================= */
+
+.actionCard + .actionCard {
+
+    margin-top: 14px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .actionCard,
+    .emergency-access-card {
+
+        grid-template-columns:
+            58px
+            minmax(0, 1fr)
+            39px;
+
+        gap: 13px;
+
+        min-height: 120px;
+
+        padding: 17px;
+
+        border-radius: 24px;
+
+    }
+
+    .actionIcon,
+    .emergency-access-icon {
+
+        width: 58px;
+        height: 58px;
+
+        border-radius: 20px;
+
+    }
+
+    .actionIcon img,
+    .emergency-access-icon img {
+
+        width: 31px;
+        height: 31px;
+
+    }
+
+    .actionIcon::before,
+    .emergency-access-icon::before {
+
+        left: -18px;
+
+    }
+
+    .actionTitle,
+    .emergency-access-content strong {
+
+        font-size: 14px;
+
+    }
+
+    .actionDescription,
+    .emergency-access-content p {
+
+        font-size: 9px;
+
+        line-height: 1.45;
+
+    }
+
+    .actionArrow,
+    .emergency-access-arrow {
+
+        width: 39px;
+        height: 39px;
+
+        border-radius: 14px;
+
+    }
+
+    .actionArrow img,
+    .emergency-access-arrow img {
+
+        width: 17px;
+        height: 17px;
+
+    }
+
+    .actionContent::after,
+    .emergency-access-content::after {
+
+        font-size: 6px;
+
+        letter-spacing: .7px;
+
+    }
+
+}
+
+/* =========================================================
+   ÁREAS ESPECIAIS
+   PORTAIS DE ACESSO PROTEGIDO
+========================================================= */
+
+.bigButton,
+.amparoButton {
+
+    width: 100%;
+    min-height: 205px;
+
+    position: relative;
+    overflow: hidden;
+
+    display: grid;
+
+    grid-template-columns:
+        72px
+        minmax(0, 1fr)
+        44px;
+
+    align-items: center;
+
+    gap: 17px;
+
+    padding: 25px 22px;
+
+    border: 1px solid;
+
+    border-radius: 32px;
+
+    color: #ffffff;
+    text-align: left;
+
+    isolation: isolate;
+
+    cursor: pointer;
+
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+        transform .22s ease,
+        filter .22s ease,
+        border-color .22s ease;
+
+}
+
+
+/* =========================================================
+   ÁREA PROTEGIDA — IDENTIDADE VISUAL
+========================================================= */
+
+.bigButton {
+
+    background:
+        linear-gradient(
+            145deg,
+            #292052 0%,
+            #211a3c 45%,
+            #151329 100%
+        );
+
+    border-color:
+        #9a7cff70;
+
+}
+
+
+/* =========================================================
+   ÁREA DO AMPARO — IDENTIDADE VISUAL
+========================================================= */
+
+.amparoButton {
+
+    background:
+        linear-gradient(
+            145deg,
+            #3b2047 0%,
+            #2b1936 45%,
+            #1b1124 100%
+        );
+
+    border-color:
+        #c36cda70;
+
+}
+
+
+/* =========================================================
+   BOLHAS ORIGINAIS — MANTIDAS
+========================================================= */
+
+.bigButton::before,
+.amparoButton::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 310px;
+    height: 310px;
+
+    top: -235px;
+    right: -135px;
+
+    border-radius: 50%;
+
+    background: #ffffff08;
+
+    pointer-events: none;
+
+    z-index: -1;
+
+}
+
+
+.bigButton::after,
+.amparoButton::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 175px;
+    height: 175px;
+
+    bottom: -135px;
+    left: -78px;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    z-index: -1;
+
+}
+
+
+.bigButton::after {
+
+    background: #4b39952c;
+
+}
+
+
+.amparoButton::after {
+
+    background: #a348b52c;
+
+}
+
+
+/* =========================================================
+   LINHAS GEOMÉTRICAS DECORATIVAS
+========================================================= */
+
+.bigButton .protectContent::before,
+.amparoButton .amparoContent::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 100%;
+    height: 1px;
+
+    top: -15px;
+    left: 0;
+
+    background: currentColor;
+
+    opacity: .25;
+
+}
+
+
+/* =========================================================
+   ÍCONE — MÓDULO DE ACESSO
+========================================================= */
+
+.protectIcon,
+.amparoIcon {
+
+    width: 72px;
+    height: 72px;
+
+    flex-shrink: 0;
+
+    position: relative;
+    z-index: 3;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid;
+
+    border-radius: 25px;
+
+    isolation: isolate;
+
+}
+
+
+/* Área protegida */
+
+.protectIcon {
+
+    color: #b5a3ff;
+
+    border-color: #9a7cff75;
+
+    background: #9a7cff18;
+
+}
+
+
+/* Área do amparo */
+
+.amparoIcon {
+
+    color: #e0a1f0;
+
+    border-color: #c36cda75;
+
+    background: #c36cda18;
+
+}
+
+
+/* =========================================================
+   MOLDURA INTERNA DO ÍCONE
+========================================================= */
+
+.protectIcon::before,
+.amparoIcon::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 7px;
+
+    border: 1px solid currentColor;
+
+    border-radius: 19px;
+
+    opacity: .28;
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   MARCA GEOMÉTRICA NO ÍCONE
+========================================================= */
+
+.protectIcon::after,
+.amparoIcon::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 7px;
+    height: 7px;
+
+    top: 5px;
+    right: 5px;
+
+    border-top: 1px solid currentColor;
+    border-right: 1px solid currentColor;
+
+    opacity: .8;
+
+}
+
+
+/* =========================================================
+   IMAGEM DO ÍCONE
+========================================================= */
+
+.protectIcon img,
+.amparoIcon img {
+
+    position: relative;
+    z-index: 3;
+
+    width: 39px;
+    height: 39px;
+
+    object-fit: contain;
+
+}
+
+
+/* =========================================================
+   CONTEÚDO
+========================================================= */
+
+.protectContent,
+.amparoContent {
+
+    min-width: 0;
+
+    position: relative;
+    z-index: 3;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 9px;
+
+}
+
+/* =========================================================
+   TÍTULOS
+========================================================= */
+
+.protectTitle,
+.amparoTitle {
+
+    display: block;
+
+    color: #ffffff;
+
+    font-size: clamp(
+        21px,
+        5.5vw,
+        29px
+    );
+
+    font-weight: 850;
+
+    line-height: 1;
+
+    letter-spacing: -1px;
+
+}
+
+
+/* =========================================================
+   SUBTÍTULOS
+========================================================= */
+
+.protectSubtitle,
+.amparoSubtitle {
+
+    display: block;
+
+    max-width: 230px;
+
+    color: #c9c0ed;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    line-height: 1.55;
+
+}
+
+
+.amparoSubtitle {
+
+    color: #d9b8e4;
+
+}
+
+
+/* =========================================================
+   METADADOS
+========================================================= */
+
+.protectMeta,
+.amparoMeta {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 2px;
+
+    color: #b9a7ff;
+
+    font-size: 7px;
+
+    font-weight: 850;
+
+    letter-spacing: 1.3px;
+
+    text-transform: uppercase;
+
+}
+
+
+.amparoMeta {
+
+    color: #e2a2f0;
+
+}
+
+
+.protectMeta::before,
+.amparoMeta::before {
+
+    content: "";
+
+    width: 6px;
+    height: 6px;
+
+    border: 1px solid currentColor;
+
+    border-radius: 2px;
+
+    transform: rotate(45deg);
+
+}
+
+
+/* =========================================================
+   SETA — PORTAL
+========================================================= */
+
+.navigationArrow,
+.amparoArrow {
+
+    width: 44px;
+    height: 44px;
+
+    position: relative;
+    z-index: 3;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid;
+
+    border-radius: 16px;
+
+    transition:
+        transform .22s ease,
+        background .22s ease;
+
+}
+
+
+/* Área protegida */
+
+.navigationArrow {
+
+    color: #b9a7ff;
+
+    border-color: #9a7cff55;
+
+    background: #9a7cff15;
+
+}
+
+
+/* Área do amparo */
+
+.amparoArrow {
+
+    color: #e2a2f0;
+
+    border-color: #c36cda55;
+
+    background: #c36cda15;
+
+}
+
+
+/* =========================================================
+   DETALHE INTERNO DA SETA
+========================================================= */
+
+.navigationArrow::before,
+.amparoArrow::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 5px;
+
+    border: 1px solid currentColor;
+
+    border-radius: 11px;
+
+    opacity: .2;
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   IMAGEM DA SETA
+========================================================= */
+
+.navigationArrow img,
+.amparoArrow img {
+
+    position: relative;
+    z-index: 2;
+
+    width: 19px;
+    height: 19px;
+
+    object-fit: contain;
+
+}
+
+
+/* =========================================================
+   EFEITO DE INTERAÇÃO
+========================================================= */
+
+.bigButton:active,
+.amparoButton:active {
+
+    transform: scale(.975);
+
+    filter: brightness(.88);
+
+}
+
+
+@media (hover: hover) {
+
+    .bigButton:hover {
+
+        border-color: #b6a4ff;
+
+        filter: brightness(1.08);
+
+    }
+
+    .amparoButton:hover {
+
+        border-color: #e19aef;
+
+        filter: brightness(1.08);
+
+    }
+
+    .bigButton:hover .navigationArrow,
+    .amparoButton:hover .amparoArrow {
+
+        transform: translateX(4px);
+
+    }
+
+}
+
+
+/* =========================================================
+   FOCO ACESSÍVEL
+========================================================= */
+
+.bigButton:focus-visible,
+.amparoButton:focus-visible {
+
+    outline: 2px solid currentColor;
+
+    outline-offset: 4px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .bigButton,
+    .amparoButton {
+
+        grid-template-columns:
+            60px
+            minmax(0, 1fr)
+            40px;
+
+        min-height: 185px;
+
+        gap: 13px;
+
+        padding: 20px 17px;
+
+        border-radius: 28px;
+
+    }
+
+    .protectIcon,
+    .amparoIcon {
+
+        width: 60px;
+        height: 60px;
+
+        border-radius: 21px;
+
+    }
+
+    .protectIcon::before,
+    .amparoIcon::before {
+
+        inset: 6px;
+
+        border-radius: 16px;
+
+    }
+
+    .protectIcon img,
+    .amparoIcon img {
+
+        width: 32px;
+        height: 32px;
+
+    }
+
+    .protectTitle,
+    .amparoTitle {
+
+        font-size: 20px;
+
+    }
+
+    .protectSubtitle,
+    .amparoSubtitle {
+
+        font-size: 9px;
+
+    }
+
+    .navigationArrow,
+    .amparoArrow {
+
+        width: 40px;
+        height: 40px;
+
+        border-radius: 14px;
+
+    }
+
+}
+
+/* =========================================================
+   POPUP
+========================================================= */
+
+.custom-popup-overlay {
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    z-index:
+        99999;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        22px;
+
+    background:
+        #000000dc;
+
+    opacity:
+        0;
+
+    visibility:
+        hidden;
+
+    pointer-events:
+        none;
+
+    transition:
+        opacity .25s ease,
+        visibility .25s ease;
+
+}
+
+.custom-popup-overlay.aberto {
+
+    opacity:
+        1;
+
+    visibility:
+        visible;
+
+    pointer-events:
+        auto;
+
+}
+
+.custom-popup {
+
+    width:
+        min(100%, 390px);
+
+    padding:
+        28px
+        23px
+        22px;
+
+    border:
+        1px solid
+        #ffffff20;
+
+    border-radius:
+        28px;
+
+    background:
+        #121218;
+
+    transform:
+        translateY(15px)
+        scale(.95);
+
+    transition:
+        transform .28s ease;
+
+}
+
+.custom-popup-overlay.aberto .custom-popup {
+
+    transform:
+        translateY(0)
+        scale(1);
+
+}
+
+.custom-popup h2 {
+
+    margin-bottom:
+        11px;
+
+    color:
+        #ffffff;
+
+    font-size:
+        21px;
+
+    font-weight:
+        800;
+
+}
+
+.custom-popup p {
+
+    margin-bottom:
+        23px;
+
+    color:
+        #b7b7c4;
+
+    font-size:
+        12px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.6;
+
+}
+
+.custom-popup-button {
+
+    width:
+        100%;
+
+    min-height:
+        49px;
+
+    border:
+        1px solid
+        #ff3d8255;
+
+    border-radius:
+        16px;
+
+    color:
+        var(--pink-light);
+
+    background:
+        #ff3d8218;
+
+    font-size:
+        13px;
+
+    font-weight:
+        800;
+
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .mainUI {
+
+        padding:
+            20px
+            14px
+            90px;
+
+        gap:
+            30px;
+
+    }
+
+    .system-overview {
+
+        padding:
+            18px;
+
+    }
+
+    .overview-symbol {
+
+        width:
+            67px;
+
+        height:
+            67px;
+
+        flex-basis:
+            67px;
+
+    }
+
+    .control-card {
+
+        padding:
+            19px;
+
+    }
+
+    .control-visual {
+
+        width:
+            55px;
+
+        height:
+            55px;
+
+        flex-basis:
+            55px;
+
+    }
+
+    .switch {
+
+        width:
+            55px;
+
+        flex-basis:
+            55px;
+
+    }
+
+    .switch.active::after {
+
+        transform:
+            translateX(19px);
+
+    }
+
+    .bigButton,
+    .amparoButton {
+
+        grid-template-columns:
+            59px
+            minmax(0, 1fr)
+            39px;
+
+        min-height:
+            165px;
+
+        gap:
+            12px;
+
+        padding:
+            17px;
+
+    }
+
+    .protectIcon,
+    .amparoIcon {
+
+        width:
+            59px;
+
+        height:
+            59px;
+
+        border-radius:
+            20px;
+
+    }
+
+    .protectIcon img,
+    .amparoIcon img {
+
+        width:
+            31px;
+
+        height:
+            31px;
+
+    }
+
+    .protectTitle,
+    .amparoTitle {
+
+        font-size:
+            20px;
+
+    }
+
+    .navigationArrow,
+    .amparoArrow {
+
+        width:
+            39px;
+
+        height:
+            39px;
+
+        border-radius:
+            14px;
+
+    }
+
+}
+
+/* =========================================================
+   ÍCONES DOS SENSORES — TAMANHO REDUZIDO
+========================================================= */
+
+.control-visual img,
+.control-visual svg
+ {
+
+    width: 24px !important;
+
+    height: 24px !important;
+
+    object-fit: contain;
+
+    margin: 0 !important;
+
+}
+
+.navigationArrow svg,
+.amparoArrow svg
+ {
+
+    width: 18px !important;
+
+    height: 18px !important;
+
+    object-fit: contain;
+
+    margin: 0 !important;
+
+}
+
+.navigationArrow img,
+.amparoArrow img {
+
+    width: 17px !important;
+    height: 17px !important;
+
+    object-fit: contain;
+    margin: 0 !important;
+
 }
 
 </style>
 
-
-
 </head>
-
 
 <body>
 
 <main class="mainUI">
 
 
-    <!-- ===================================================
-         HERO
-    ==================================================== -->
+    <!-- =================================================
+         CABEÇALHO
+    ================================================== -->
 
     <header class="hero">
 
-        <div class="heroTopLine"></div>
+        <div class="hero-mark"></div>
 
-        <h1 class="heroTitle">
-            Mulher <br> Amparada
+        <div class="hero-eyebrow">
+            Sistema de proteção pessoal
+        </div>
+
+        <h1>
+            Mulher<br>
+            <span>Amparada.</span>
         </h1>
 
-        <p class="heroSubtitle">
-            Proteção, assistência e recursos reunidos em um só lugar.
+        <p class="hero-description">
+            Tecnologia criada para oferecer proteção,
+            assistência e resposta rápida quando você precisar.
         </p>
-        
-
 
     </header>
 
 
-    <!-- ===================================================
+    <!-- =================================================
+         VISÃO GERAL
+    ================================================== -->
+
+    <section class="system-overview">
+
+        <div class="overview-content">
+
+            <span class="overview-label">
+                Estado do sistema
+            </span>
+
+            <strong class="overview-title">
+                Central de proteção
+            </strong>
+
+            <p class="overview-description">
+                Gerencie seus recursos de segurança
+                e mantenha suas ferramentas de emergência
+                sempre acessíveis.
+            </p>
+
+            <span class="overview-indicator">
+                Sistema disponível
+            </span>
+
+        </div>
+
+        <div class="overview-symbol">
+
+            <img
+                src="0001.svg"
+                alt=""
+            >
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
          EMERGÊNCIA
-    ==================================================== -->
+    ================================================== -->
 
     <section class="section">
 
         <div class="label">
-            Emergência
+            Resposta imediata
         </div>
 
         <button
@@ -3164,234 +3669,279 @@ white-space:
             aria-label="Pedir ajuda"
         >
 
-            <span>
-                SOS
-            </span>
+            <div class="panic-content">
 
-            <small>
-                toque para pedir ajuda
-            </small>
+                <div class="panic-icon">
+
+                    <img
+                        src="0002.svg"
+                        alt=""
+                    >
+
+                </div>
+
+<h2 class="panic-title">Precisa de ajuda?</h2>
+
+<p class="panic-description">
+    Toque aqui para acionar o suporte de emergência.
+</p>
+            </div>
 
         </button>
 
     </section>
 
 
-
-    <!-- ===================================================
-         BARULHO
-    ==================================================== -->
+    <!-- =================================================
+         PROTEÇÕES AUTOMÁTICAS
+    ================================================== -->
 
     <section class="section">
 
         <div class="label">
-            Barulho alto
+            Proteções automáticas
         </div>
 
 
         <div
-            class="control-card"
+            class="control-card palmas"
             id="palmasCard"
         >
 
-            <div class="control-card-content">
+            <div class="control-top">
 
-                <h3>
-                    Proteção por barulho
-                </h3>
+                <div class="control-heading">
 
-                <p>
-                    Detecta sons altos e situações
-                    suspeitas para acionar ajuda.
-                </p>
+                    <span class="control-number">
+                        01 / ÁUDIO
+                    </span>
+
+                    <h3>
+                        Proteção por barulho
+                    </h3>
+
+                </div>
+
+                <div class="control-visual">
+
+                    <img
+                        src="0003.svg"
+                        alt=""
+                    >
+
+                </div>
+
+            </div>
+
+            <p>
+                Detecta sons altos e situações suspeitas
+                para acionar os mecanismos de proteção.
+            </p>
+
+            <div class="control-bottom">
 
                 <span
                     class="control-status"
                     id="palmasStatus"
                 >
-                    DESATIVADO
+                    Desativado
                 </span>
+
+                <button
+                    class="switch"
+                    id="palmasSwitch"
+                    type="button"
+                    role="switch"
+                    aria-checked="false"
+                ></button>
 
             </div>
 
-
-            <button
-                class="switch"
-                id="palmasSwitch"
-                type="button"
-                role="switch"
-                aria-checked="false"
-                aria-label="Ativar proteção por barulho"
-            ></button>
-
-        </div>
-
-    </section>
-
-
-    <!-- ===================================================
-         MOVIMENTO
-    ==================================================== -->
-
-    <section class="section">
-
-        <div class="label">
-            Movimento
         </div>
 
 
         <div
-            class="control-card movement"
+            class="control-card movimento"
             id="movimentoCard"
         >
 
-            <div class="control-card-content">
+            <div class="control-top">
 
-                <h3>
-                    Balançar o celular
-                </h3>
+                <div class="control-heading">
 
-                <p>
-                    Detecta o movimento do celular.
-                    Se o sensor não estiver disponível ou der qualquer outro erro,
-                    o microfone será usado como alternativa.
-                </p>
+                    <span class="control-number">
+                        02 / MOVIMENTO
+                    </span>
+
+                    <h3>
+                        Proteção por movimento
+                    </h3>
+
+                </div>
+
+                <div class="control-visual">
+
+                    <img
+                        src="0004.svg"
+                        alt=""
+                    >
+
+                </div>
+
+            </div>
+
+            <p>
+                Detecta movimentos bruscos no celular
+                e pode iniciar uma resposta de emergência.
+            </p>
+
+            <div class="control-bottom">
 
                 <span
                     class="control-status"
                     id="movimentoStatus"
                 >
-                    DESATIVADO
+                    Desativado
                 </span>
+
+                <button
+                    class="switch purple"
+                    id="movimentoSwitch"
+                    type="button"
+                    role="switch"
+                    aria-checked="false"
+                ></button>
 
             </div>
 
-
-            <button
-                class="switch purple"
-                id="movimentoSwitch"
-                type="button"
-                role="switch"
-                aria-checked="false"
-                aria-label="Ativar proteção por movimento"
-            ></button>
-
-        </div>
-
-    </section>
-
-
-    <!-- ===================================================
-         BRILHO
-    ==================================================== -->
-
-    <section class="section">
-
-        <div class="label">
-            Brilho
         </div>
 
 
         <div
-            class="control-card brightness"
+            class="control-card brilho"
             id="brilhoCard"
         >
 
-            <div class="control-card-content">
+            <div class="control-top">
 
-<h3>
-    Escurecimento por inclinação
-</h3>
+                <div class="control-heading">
 
-<p>
-    Escurece a tela automaticamente
-    quando a função estiver ativa.
-Se o sensor não estiver disponível ou der qualquer outro erro,
-    o microfone será usado como alternativa.
-</p>
+                    <span class="control-number">
+                        03 / VISIBILIDADE
+                    </span>
+
+                    <h3>
+                        Escurecimento por inclinação
+                    </h3>
+
+                </div>
+
+                <div class="control-visual">
+
+                    <img
+                        src="0005.svg"
+                        alt=""
+                    >
+
+                </div>
+
+            </div>
+
+            <p>
+                Escurece a tela automaticamente quando
+                o dispositivo identifica a posição configurada.
+            </p>
+
+            <div class="control-bottom">
+
                 <span
                     class="control-status"
                     id="brilhoStatus"
                 >
-                    DESATIVADO
+                    Desativado
                 </span>
+
+                <button
+                    class="switch orange"
+                    id="brilhoSwitch"
+                    type="button"
+                    role="switch"
+                    aria-checked="false"
+                ></button>
 
             </div>
 
-
-            <button
-                class="switch orange"
-                id="brilhoSwitch"
-                type="button"
-                role="switch"
-                aria-checked="false"
-                aria-label="Ativar escurecimento por inclinação"
-            ></button>
-
-        </div>
-
-    </section>
-
-
-    <!-- ===================================================
-         BLOQUEIO
-    ==================================================== -->
-
-    <section class="section">
-
-        <div class="label">
-            Desligar o celular
         </div>
 
 
         <div
-            class="control-card proximity"
+            class="control-card proximidade"
             id="proximidadeCard"
         >
 
-            <div class="control-card-content">
+            <div class="control-top">
 
-                <h3>
-                    Bloqueio por barulho
-                </h3>
+                <div class="control-heading">
 
-                <p>
-                    Detecta sons altos e bloqueia
-                    o celular automaticamente.
-                </p>
+                    <span class="control-number">
+                        04 / BLOQUEIO
+                    </span>
+
+                    <h3>
+                        Bloqueio por barulho
+                    </h3>
+
+                </div>
+
+                <div class="control-visual">
+
+                    <img
+                        src="0006.svg"
+                        alt=""
+                    >
+
+                </div>
+
+            </div>
+
+            <p>
+                Detecta sons altos e bloqueia o celular
+                automaticamente quando ativado.
+            </p>
+
+            <div class="control-bottom">
 
                 <span
                     class="control-status"
                     id="proximidadeStatus"
                 >
-                    DESATIVADO
+                    Desativado
                 </span>
 
+                <button
+                    class="switch cyan"
+                    id="proximidadeSwitch"
+                    type="button"
+                    role="switch"
+                    aria-checked="false"
+                ></button>
+
             </div>
-
-
-            <button
-                class="switch white"
-                id="proximidadeSwitch"
-                type="button"
-                role="switch"
-                aria-checked="false"
-                aria-label="Ativar bloqueio por barulho"
-            ></button>
 
         </div>
 
     </section>
 
 
-    <!-- AJUDA RÁPIDA -->
+    <!-- =================================================
+         SERVIÇOS DE EMERGÊNCIA
+    ================================================== -->
 
     <section class="section">
 
         <div class="label">
-            Ajuda rápida
+            Serviços de emergência
         </div>
-
 
         <button
             class="actionCard policia"
@@ -3399,47 +3949,34 @@ Se o sensor não estiver disponível ou der qualquer outro erro,
             onclick="ligar('190')"
         >
 
-            <span class="actionIcon" aria-hidden="true">
+            <span class="actionIcon">
 
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 -960 960 960"
+                <img
+                    src="0007.svg"
+                    alt=""
                 >
-
-                    <path d="M467-85q-6-1-12-3-135-45-215-166.5T160-516v-189q0-25 14.5-45t37.5-29l240-90q14-5 28-5t28 5l240 90q23 9 37.5 29t14.5 45v189q0 140-80 261.5T505-88q-6 2-12 3t-13 1q-7 0-13-1Zm13-79q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/>
-
-                </svg>
 
             </span>
 
             <span class="actionContent">
 
                 <span class="actionTitle">
-                    Polícia
+                    Polícia — 190
                 </span>
 
-                <small class="actionDescription">
-                    Emergência policial
-                </small>
+                <span class="actionDescription">
+                    Emergência policial e atendimento imediato
+                </span>
 
             </span>
 
-            <span class="actionArrow" aria-hidden="true">
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+            <span class="actionArrow">
+
+                <img
+                    src="arrow.svg"
+                    alt=""
                 >
 
-                    <path
-                        d="M9 18L15 12L9 6"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    />
-
-                </svg>
             </span>
 
         </button>
@@ -3451,47 +3988,34 @@ Se o sensor não estiver disponível ou der qualquer outro erro,
             onclick="ligar('192')"
         >
 
-            <span class="actionIcon" aria-hidden="true">
+            <span class="actionIcon">
 
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 -960 960 960"
+                <img
+                    src="0008.svg"
+                    alt=""
                 >
-
-                    <path d="M440-360v80q0 17 11.5 28.5T480-240q17 0 28.5-11.5T520-280v-80h80q17 0 28.5-11.5T640-400q0-17-11.5-28.5T600-440h-80v-80q0-17-11.5-28.5T480-560q-17 0-28.5 11.5T440-520v80h-80q-17 0-28.5 11.5T320-400q0 17 11.5 28.5T360-360h80ZM160-80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h160v-80q0-33 23.5-56.5T400-880h160q33 0 56.5 23.5T640-800v80h160q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Zm240-560h160v-80H400v80ZM160-160v-480 480Z"/>
-
-                </svg>
 
             </span>
 
             <span class="actionContent">
 
                 <span class="actionTitle">
-                    SAMU
+                    SAMU — 192
                 </span>
 
-                <small class="actionDescription">
+                <span class="actionDescription">
                     Atendimento médico de emergência
-                </small>
+                </span>
 
             </span>
 
-            <span class="actionArrow" aria-hidden="true">
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+            <span class="actionArrow">
+
+                <img
+                    src="arrow.svg"
+                    alt=""
                 >
 
-                    <path
-                        d="M9 18L15 12L9 6"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    />
-
-                </svg>
             </span>
 
         </button>
@@ -3503,47 +4027,34 @@ Se o sensor não estiver disponível ou der qualquer outro erro,
             onclick="ligar('180')"
         >
 
-            <span class="actionIcon" aria-hidden="true">
+            <span class="actionIcon">
 
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 -960 960 960"
+                <img
+                    src="0009.svg"
+                    alt=""
                 >
-
-                    <path d="M440-200h-40q-17 0-28.5-11.5T360-240q0-17 11.5-28.5T400-280h40v-84q-79-14-129.5-75.5T260-582q0-91 64.5-154.5T480-800q91 0 155.5 63.5T700-582q0 81-50.5 142.5T520-364v84h40q17 0 28.5 11.5T600-240q0 17-11.5 28.5T560-200h-40v40q0 17-11.5 28.5T480-120q-17 0-28.5-11.5T440-160v-40Zm139-281q41-41 41-99t-41-99q-41-41-99-41t-99 41q-41 41-41 99t41 99q41 41 99 41t99-41Z"/>
-
-                </svg>
 
             </span>
 
             <span class="actionContent">
 
                 <span class="actionTitle">
-                    Central da Mulher
+                    Central da Mulher — 180
                 </span>
 
-                <small class="actionDescription">
-                    Orientação e atendimento
-                </small>
+                <span class="actionDescription">
+                    Orientação, acolhimento e atendimento
+                </span>
 
             </span>
 
-            <span class="actionArrow" aria-hidden="true">
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+            <span class="actionArrow">
+
+                <img
+                    src="arrow.svg"
+                    alt=""
                 >
 
-                    <path
-                        d="M9 18L15 12L9 6"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    />
-
-                </svg>
             </span>
 
         </button>
@@ -3551,12 +4062,14 @@ Se o sensor não estiver disponível ou der qualquer outro erro,
     </section>
 
 
-    <!-- LOCALIZAÇÃO -->
+    <!-- =================================================
+         RECURSOS DE APOIO
+    ================================================== -->
 
     <section class="section">
 
         <div class="label">
-            Localização
+            Recursos de apoio
         </div>
 
         <button
@@ -3565,16 +4078,12 @@ Se o sensor não estiver disponível ou der qualquer outro erro,
             onclick="enviarLocalizacao()"
         >
 
-            <span class="actionIcon" aria-hidden="true">
+            <span class="actionIcon">
 
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 -960 960 960"
+                <img
+                    src="0010.svg"
+                    alt=""
                 >
-
-                    <path d="M480-186q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm-28 74q-14-5-25-15-65-60-115-117t-83.5-110.5q-33.5-53.5-51-103T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 45-17.5 94.5t-51 103Q698-301 648-244T533-127q-11 10-25 15t-28 5q-14 0-28-5Zm28-448Zm56.5 56.5Q560-527 560-560t-23.5-56.5Q513-640 480-640t-56.5 23.5Q400-593 400-560t23.5 56.5Q447-480 480-480t56.5-23.5Z"/>
-
-                </svg>
 
             </span>
 
@@ -3584,42 +4093,22 @@ Se o sensor não estiver disponível ou der qualquer outro erro,
                     Enviar localização
                 </span>
 
-                <small class="actionDescription">
+                <span class="actionDescription">
                     Compartilhe sua localização atual
-                </small>
+                </span>
 
             </span>
 
-            <span class="actionArrow" aria-hidden="true">
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+            <span class="actionArrow">
+
+                <img
+                    src="arrow.svg"
+                    alt=""
                 >
 
-                    <path
-                        d="M9 18L15 12L9 6"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    />
-
-                </svg>
             </span>
 
         </button>
-
-    </section>
-
-
-    <!-- CONTATOS -->
-
-    <section class="section">
-
-        <div class="label">
-            Contatos de confiança
-        </div>
 
 
         <button
@@ -3628,16 +4117,12 @@ Se o sensor não estiver disponível ou der qualquer outro erro,
             onclick="selecionarContato()"
         >
 
-            <span class="actionIcon" aria-hidden="true">
+            <span class="actionIcon">
 
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 -960 960 960"
+                <img
+                    src="0011.svg"
+                    alt=""
                 >
-
-                    <path d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm146.5-204.5Q340-521 340-580t40.5-99.5Q421-720 480-720t99.5 40.5Q620-639 620-580t-40.5 99.5Q539-440 480-440t-99.5-40.5ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm100-95.5q47-15.5 86-44.5-39-29-86-44.5T480-280q-53 0-100 15.5T294-220q39 29 86 44.5T480-160q53 0 100-15.5ZM523-537q17-17 17-43t-17-43q-17-17-43-17t-43 17q-17 17-17 43t17 43q17 17 43 17t43-17Zm-43-43Zm0 360Z"/>
-
-                </svg>
 
             </span>
 
@@ -3647,28 +4132,19 @@ Se o sensor não estiver disponível ou der qualquer outro erro,
                     Adicionar contato
                 </span>
 
-                <small class="actionDescription">
+                <span class="actionDescription">
                     Escolha uma pessoa de confiança
-                </small>
+                </span>
 
             </span>
 
-            <span class="actionArrow" aria-hidden="true">
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+            <span class="actionArrow">
+
+                <img
+                    src="arrow.svg"
+                    alt=""
                 >
 
-                    <path
-                        d="M9 18L15 12L9 6"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    />
-
-                </svg>
             </span>
 
         </button>
@@ -3680,128 +4156,111 @@ Se o sensor não estiver disponível ou der qualquer outro erro,
             onclick="enviarSOSContatos()"
         >
 
-            <span class="actionIcon" aria-hidden="true">
+            <span class="actionIcon">
 
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 -960 960 960"
+                <img
+                    src="0012.svg"
+                    alt=""
                 >
-
-                    <path d="M240-160q-17 0-28.5-11.5T200-200q0-17 11.5-28.5T240-240h24l79-263q8-26 29.5-41.5T420-560h120q26 0 47.5 15.5T617-503l79 263h24q17 0 28.5 11.5T760-200q0 17-11.5 28.5T720-160H240Zm108-80h264l-72-240H420l-72 240Zm92-440v-120q0-17 11.5-28.5T480-840q17 0 28.5 11.5T520-800v120q0 17 11.5 28.5T480-640q-17 0-28.5-11.5T440-680Zm210 54 85-85q11-11 27.5-11.5T791-711q11 11 11 28t-11 28l-85 86q-12 12-28 12t-28-12q-12-12-12-28.5t12-28.5Zm110 186h120q17 0 28.5 11.5T920-400q0 17-11.5 28.5T880-360H760q-17 0-28.5-11.5T720-400q0-17 11.5-28.5T760-440ZM254-570l-85-85q-11-11-11.5-27.5T169-711q11-11 28-11t28 11l86 85q12 12 12 28t-12 28q-12 12-28.5 12T254-570ZM80-360q-17 0-28.5-11.5T40-400q0-17 11.5-28.5T80-440h120q17 0 28.5 11.5T240-400q0 17-11.5 28.5T200-360H80Z"/>
-
-                </svg>
 
             </span>
 
             <span class="actionContent">
 
                 <span class="actionTitle">
-                    SOS contatos
+                    SOS para contatos
                 </span>
 
-                <small class="actionDescription">
-                    Enviar alerta para seus contatos
-                </small>
+                <span class="actionDescription">
+                    Envie um alerta para pessoas de confiança
+                </span>
 
             </span>
 
-            <span class="actionArrow" aria-hidden="true">
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+            <span class="actionArrow">
+
+                <img
+                    src="arrow.svg"
+                    alt=""
                 >
 
-                    <path
-                        d="M9 18L15 12L9 6"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    />
-
-                </svg>
             </span>
 
         </button>
 
     </section>
-    
-    
-    <section class="section">
-    
-            <div class="label">
-            Compartilhamento de metadados
-        </div>
 
-<div
-    class="emergency-access-card"
-    id="abrirEmergenciaCompose"
-    role="button"
-    tabindex="0"
-    aria-label="Abrir acesso de emergência"
->
-    <div class="emergency-access-icon">
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        >
-            <path d="M12 3 4 7v5c0 5 3.5 8 8 9 4.5-1 8-4 8-9V7l-8-4Z"/>
-            <path d="M12 8v5"/>
-            <path d="M12 17h.01"/>
-        </svg>
-    </div>
 
-    <div class="emergency-access-content">
-
-        <strong>Acesso de emergência</strong>
-
-        <p>
-            Exiba o botão flutuante para pedir ajuda.
-        </p>
-    </div>
-
-    <div class="emergency-access-arrow">
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        >
-            <path d="m9 18 6-6-6-6"/>
-        </svg>
-    </div>
-</div>
-
-</section>
-    <!-- ===================================================
-         ÁREA PROTEGIDA
-    ==================================================== -->
+    <!-- =================================================
+         ACESSO DE EMERGÊNCIA
+    ================================================== -->
 
     <section class="section">
 
         <div class="label">
-            Área protegida
+            Acesso rápido
         </div>
 
+        <div
+            class="emergency-access-card"
+            id="abrirEmergenciaCompose"
+            role="button"
+            tabindex="0"
+        >
+
+            <div class="emergency-access-icon">
+
+                <img
+                    src="0013.svg"
+                    alt=""
+                >
+
+            </div>
+
+            <div class="emergency-access-content">
+
+                <strong>
+                    Acesso de emergência
+                </strong>
+
+                <p>
+                    Exiba o botão flutuante para pedir ajuda
+                    mesmo fora do aplicativo.
+                </p>
+
+            </div>
+
+            <div class="emergency-access-arrow">
+
+                <img
+                    src="arrow.svg"
+                    alt=""
+                >
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         ÁREA PROTEGIDA
+    ================================================== -->
+
+    <section class="section">
+
+        <div class="label">
+            Espaços protegidos
+        </div>
 
         <button
             class="bigButton"
             id="areaProtegida"
             type="button"
-            aria-label="Abrir área protegida"
         >
 
-            <span
-                class="protectIcon"
-                aria-hidden="true"
-            >
+            <span class="protectIcon">
 
                 <img
                     src="lock.svg"
@@ -3809,7 +4268,6 @@ Se o sensor não estiver disponível ou der qualquer outro erro,
                 >
 
             </span>
-
 
             <span class="protectContent">
 
@@ -3822,32 +4280,17 @@ Se o sensor não estiver disponível ou der qualquer outro erro,
                 </span>
 
                 <span class="protectMeta">
-                    Proteção ativa
+                    Ambiente seguro
                 </span>
 
             </span>
 
+            <span class="navigationArrow">
 
-            <span
-                class="navigationArrow"
-                aria-hidden="true"
-            >
-
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+                <img
+                    src="arrow.svg"
+                    alt=""
                 >
-
-                    <path
-                        d="M9 18L15 12L9 6"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    />
-
-                </svg>
 
             </span>
 
@@ -3855,79 +4298,68 @@ Se o sensor não estiver disponível ou der qualquer outro erro,
 
     </section>
 
-<section class="amparoSection">
 
-    <div class="amparoLabel">
-        Área do amparo
-    </div>
-<button
-    class="amparoButton"
-    id="areaAmparo"
-    type="button"
-    aria-label="Abrir área do amparo"
-    onclick="abrirAreaDoAmparo()"
->
+    <!-- =================================================
+         ÁREA DO AMPARO
+    ================================================== -->
 
-        <span
-            class="amparoIcon"
-            aria-hidden="true"
+    <section class="amparoSection">
+
+        <div class="amparoLabel">
+            Espaço de acolhimento
+        </div>
+
+        <button
+            class="amparoButton"
+            id="areaAmparo"
+            type="button"
+            onclick="abrirAreaDoAmparo()"
         >
 
-            <img
-                src="support.svg"
-                alt=""
-            >
+            <span class="amparoIcon">
 
-        </span>
+                <img
+                    src="0015.svg"
+                    alt=""
+                >
 
-        <span class="amparoContent">
-
-            <span class="amparoTitle">
-                Área do amparo
             </span>
 
-            <span class="amparoSubtitle">
-                Acesso protegido por biometria
+            <span class="amparoContent">
+
+                <span class="amparoTitle">
+                    Área do amparo
+                </span>
+
+                <span class="amparoSubtitle">
+                    Acesso protegido por biometria
+                </span>
+
+                <span class="amparoMeta">
+                    Espaço reservado
+                </span>
+
             </span>
 
-            <span class="amparoMeta">
-                Proteção ativa
+            <span class="amparoArrow">
+
+                <img
+                    src="arrow.svg"
+                    alt=""
+                >
+
             </span>
 
-        </span>
+        </button>
 
-        <span
-            class="amparoArrow"
-            aria-hidden="true"
-        >
-
-            <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-
-                <path
-                    d="M9 18L15 12L9 6"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                />
-
-            </svg>
-
-        </span>
-
-    </button>
-
-</section>
+    </section>
 
 </main>
 
-<!-- =========================================================
-     POPUP PERSONALIZADO
-========================================================= -->
+
+<!-- =====================================================
+     POPUP
+====================================================== -->
 
 <div
     id="customPopupOverlay"
@@ -3955,7 +4387,7 @@ Se o sensor não estiver disponível ou der qualquer outro erro,
             id="customPopupOK"
             class="custom-popup-button"
         >
-            OK
+            Entendi
         </button>
 
     </div>
@@ -5661,7 +6093,6 @@ if (abrirEmergenciaCompose) {
 }
 
 </script>
-
 
 </body>
 

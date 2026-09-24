@@ -24,4 +24,8 @@
 
 <color name="file_item_name">#FFFFFF</color>
 
+<color name="record_item_background">#1AFFFFFF</color>
+
+<color name="record_item_stroke">#33FFFFFF</color>
+
 </resources>

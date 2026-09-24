@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="record_text">#FFFFFF</color>
+
+    <color name="recorder_background">#000000</color>
+
+    <color name="recorder_title">#FFFFFF</color>
+    <color name="recorder_subtitle">#999999</color>
+
+    <color name="recorder_status_text">#DDDDDD</color>
+
+    <color name="recorder_mic">#FFFFFF</color>
+
+    <color name="recorder_hint">#999999</color>
+
 </resources>

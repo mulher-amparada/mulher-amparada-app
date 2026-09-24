@@ -3578,6 +3578,290 @@ margin: 5%;
 
 }
 
+/* =========================================================
+   CORES ATIVAS DOS SENSORES
+========================================================= */
+
+/* ---------------------------------------------------------
+   PALMAS — ROSA
+--------------------------------------------------------- */
+
+.palmas.active {
+
+    background:
+        linear-gradient(
+            135deg,
+            #542039 0%,
+            #3b172b 55%,
+            #24101c 100%
+        );
+
+    border-color:
+        #ff3d8290;
+
+    box-shadow:
+        0 0 0 1px #ff3d8218,
+        0 12px 40px #ff3d8210;
+
+}
+
+.palmas.active::before {
+
+    background:
+        #ff3d8240;
+
+}
+
+.palmas.active::after {
+
+    background:
+        #c51d582c;
+
+}
+
+.palmas.active .control-visual {
+
+    background:
+        #ff3d8230;
+
+    border-color:
+        #ff3d8290;
+
+}
+
+.palmas.active .control-visual::before {
+
+    border-color:
+        #ff3d8260;
+
+}
+
+.palmas.active .control-status {
+
+    color:
+        #ff8fb5;
+
+}
+
+
+/* ---------------------------------------------------------
+   MOVIMENTO — ROXO
+--------------------------------------------------------- */
+
+.movimento.active {
+
+    background:
+        linear-gradient(
+            135deg,
+            #38275e 0%,
+            #281b47 55%,
+            #19122e 100%
+        );
+
+    border-color:
+        #9a7cff90;
+
+    box-shadow:
+        0 0 0 1px #9a7cff18,
+        0 12px 40px #9a7cff10;
+
+}
+
+.movimento.active::before {
+
+    background:
+        #9a7cff40;
+
+}
+
+.movimento.active::after {
+
+    background:
+        #6846c72c;
+
+}
+
+.movimento.active .control-visual {
+
+    background:
+        #9a7cff30;
+
+    border-color:
+        #9a7cff90;
+
+}
+
+.movimento.active .control-visual::before {
+
+    border-color:
+        #9a7cff60;
+
+}
+
+.movimento.active .control-status {
+
+    color:
+        #b9a7ff;
+
+}
+
+
+/* ---------------------------------------------------------
+   BRILHO — LARANJA
+--------------------------------------------------------- */
+
+.brilho.active {
+
+    background:
+        linear-gradient(
+            135deg,
+            #594022 0%,
+            #3d2a17 55%,
+            #24190e 100%
+        );
+
+    border-color:
+        #ffb45e90;
+
+    box-shadow:
+        0 0 0 1px #ffb45e18,
+        0 12px 40px #ffb45e10;
+
+}
+
+.brilho.active::before {
+
+    background:
+        #ffb45e40;
+
+}
+
+.brilho.active::after {
+
+    background:
+        #c879292c;
+
+}
+
+.brilho.active .control-visual {
+
+    background:
+        #ffb45e30;
+
+    border-color:
+        #ffb45e90;
+
+}
+
+.brilho.active .control-visual::before {
+
+    border-color:
+        #ffb45e60;
+
+}
+
+.brilho.active .control-status {
+
+    color:
+        #ffd19a;
+
+}
+
+
+/* ---------------------------------------------------------
+   PROXIMIDADE — CIANO
+--------------------------------------------------------- */
+
+.proximidade.active {
+
+    background:
+        linear-gradient(
+            135deg,
+            #205452 0%,
+            #173c3b 55%,
+            #0e2928 100%
+        );
+
+    border-color:
+        #54ded490;
+
+    box-shadow:
+        0 0 0 1px #54ded418,
+        0 12px 40px #54ded410;
+
+}
+
+.proximidade.active::before {
+
+    background:
+        #54ded440;
+
+}
+
+.proximidade.active::after {
+
+    background:
+        #248e892c;
+
+}
+
+.proximidade.active .control-visual {
+
+    background:
+        #54ded430;
+
+    border-color:
+        #54ded490;
+
+}
+
+.proximidade.active .control-visual::before {
+
+    border-color:
+        #54ded460;
+
+}
+
+.proximidade.active .control-status {
+
+    color:
+        #9ef5ed;
+
+}
+
+
+/* =========================================================
+   TRANSIÇÃO SUAVE
+========================================================= */
+
+.control-card {
+
+    transition:
+        background .35s ease,
+        border-color .35s ease,
+        box-shadow .35s ease;
+
+}
+
+.control-card::before,
+.control-card::after,
+.control-visual,
+.control-visual::before {
+
+    transition:
+        background .35s ease,
+        border-color .35s ease;
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
+
+    * {
+        animation-name: none !important;
+    }
+}
+
 </style>
 
 </head>
@@ -4110,6 +4394,13 @@ margin: 5%;
 
         </button>
 
+</section>
+
+    <section class="section">
+    
+        <div class="label">
+            Contatos de confiança 
+        </div>
 
         <button
             class="actionCard contato"

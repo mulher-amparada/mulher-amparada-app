@@ -468,11 +468,8 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
         Color.TRANSPARENT
     )
 
-    webView.background =
-        null
-
-    webView.isOpaque =
-        false
+    
+    
 
 
 

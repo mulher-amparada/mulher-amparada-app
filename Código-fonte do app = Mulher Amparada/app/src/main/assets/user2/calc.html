@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+    <meta
+        name="description"
+        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
+    >
+
+<meta name="theme-color" content="#000000">
+
+<title>Calculadora</title>
+
+<style>
+/* =========================================================
+   BARRAS DE ROLAGEM — TOTALMENTE TRANSPARENTES
+========================================================= */
+
+*::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background: transparent;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: transparent;
+    border: none;
+}
+
+* {
+    scrollbar-width: none;
+    scrollbar-color: transparent transparent;
+
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+html,
+body {
+    scrollbar-width: none;
+    scrollbar-color: transparent transparent;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background: transparent;
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+
+    background: #ffffff;
+}
+
+body {
+    min-height: 100dvh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    color: #17181c;
+
+    font-family: "Quicksand", sans-serif;
+}
+
+
+/* =========================================================
+   FONTE
+========================================================= */
+
+@font-face {
+    font-family: "Quicksand";
+
+    src: url("font.ttf") format("truetype");
+
+    font-display: swap;
+}
+
+
+/* =========================================================
+   CALCULADORA
+========================================================= */
+
+.calculadora {
+
+    width: min(
+        94vw,
+        430px
+    );
+
+    height: auto;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 0;
+
+    padding:
+        12px
+        10px
+        max(12px, env(safe-area-inset-bottom));
+}
+
+
+/* =========================================================
+   TELA
+========================================================= */
+
+.tela {
+
+    width: 100%;
+
+    margin-bottom: 30%;
+
+    min-height: 150px;
+
+    padding:
+        20px
+        18px
+        18px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    justify-content: flex-end;
+
+    border-radius: 28px;
+
+    
+
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   HISTÓRICO
+========================================================= */
+
+.historico {
+
+    width: 100%;
+
+    min-height: 22px;
+
+    margin-bottom: 7px;
+
+    color: #858994;
+
+    font-size: 14px;
+
+    line-height: 1.2;
+
+    text-align: right;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   DISPLAY
+========================================================= */
+
+#display {
+
+    width: 100%;
+
+    color: #17181c;
+
+    font-size:
+        clamp(
+            42px,
+            13vw,
+            62px
+        );
+
+    font-weight: 600;
+
+    line-height: 1;
+
+    text-align: right;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   BOTÕES
+========================================================= */
+
+.botoes {
+
+    width: 100%;
+
+    margin-top: 16px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 10px;
+}
+
+
+/* =========================================================
+   BOTÃO
+========================================================= */
+
+.botao {
+
+    width: 100%;
+
+    aspect-ratio: 1 / 1;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    border: 1px solid #00000008;
+
+    border-radius: 200px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 0;
+
+    color: #17181c;
+
+    background: #eceef1;
+
+    font-family: inherit;
+
+    font-size:
+        clamp(
+            18px,
+            5.5vw,
+            24px
+        );
+
+    font-weight: 600;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    outline: none;
+
+    appearance: none;
+
+    -webkit-appearance: none;
+
+    transition:
+        transform .1s ease,
+        background .15s ease;
+}
+
+
+.botao:hover {
+    background: #e1e3e7;
+}
+
+
+.botao:active {
+    transform: scale(.90);
+}
+
+
+/* =========================================================
+   FUNÇÕES
+========================================================= */
+
+.funcao {
+    background: #dedfe3;
+
+    color: #4f525b;
+}
+
+.funcao:hover {
+    background: #d3d5da;
+}
+
+
+/* =========================================================
+   OPERADORES
+========================================================= */
+
+.operador {
+    background: #e4e5e9;
+
+    color: #17181c;
+}
+
+.operador:hover {
+    background: #d9dbe0;
+}
+
+
+/* =========================================================
+   IGUAL
+========================================================= */
+
+.igual {
+    background: #17181c;
+
+    color: #ffffff;
+
+    border-color: #17181c;
+}
+
+.igual:hover {
+    background: #2b2d32;
+}
+
+
+/* =========================================================
+   SVG
+========================================================= */
+
+.botao svg {
+
+    width:
+        clamp(
+            22px,
+            7vw,
+            30px
+        );
+
+    height:
+        clamp(
+            22px,
+            7vw,
+            30px
+        );
+
+    display: block;
+
+    pointer-events: none;
+
+    /* Mantém o SVG visível no modo claro */
+    filter: brightness(0);
+}
+
+
+/* =========================================================
+   ERRO
+========================================================= */
+
+.erro {
+    animation: erro .2s ease;
+}
+
+@keyframes erro {
+
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    50% {
+        transform: translateX(5px);
+    }
+
+    75% {
+        transform: translateX(-3px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+
+}
+
+
+/* =========================================================
+   TELAS BAIXAS
+========================================================= */
+
+@media(max-height:680px) {
+
+    .calculadora {
+        width: min(92vw, 400px);
+
+        padding-top: 6px;
+    }
+
+    .tela {
+        min-height: 115px;
+
+        padding:
+            14px
+            16px
+            12px;
+    }
+
+    .historico {
+        font-size: 12px;
+
+        min-height: 18px;
+
+        margin-bottom: 4px;
+    }
+
+    #display {
+        font-size:
+            clamp(
+                36px,
+                11vw,
+                50px
+            );
+    }
+
+    .botoes {
+        margin-top: 10px;
+
+        gap: 8px;
+    }
+
+}
+
+
+/* =========================================================
+   TELAS MUITO BAIXAS
+========================================================= */
+
+@media(max-height:570px) {
+
+    .calculadora {
+        width: min(88vw, 370px);
+
+        padding-top: 3px;
+    }
+
+    .tela {
+        min-height: 90px;
+
+        padding:
+            10px
+            14px
+            8px;
+    }
+
+    .historico {
+        display: none;
+    }
+
+    #display {
+        font-size:
+            clamp(
+                32px,
+                10vw,
+                44px
+            );
+    }
+
+    .botoes {
+        margin-top: 7px;
+
+        gap: 7px;
+    }
+
+}
+
+
+/* =========================================================
+   CELULARES ESTREITOS
+========================================================= */
+
+@media(max-width:350px) {
+
+    .calculadora {
+        width: 94vw;
+
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+
+    .tela {
+        min-height: 125px;
+
+        border-radius: 24px;
+    }
+
+    .botoes {
+        gap: 7px;
+    }
+
+    .botao {
+        font-size: 19px;
+    }
+
+}
+
+
+/* =========================================================
+   TELAS GRANDES
+========================================================= */
+
+@media(min-width:600px) {
+
+    .calculadora {
+        width: 430px;
+    }
+
+    .tela {
+        min-height: 175px;
+    }
+
+    .botoes {
+        gap: 11px;
+    }
+
+}
+
+
+/* =========================================================
+   ACESSIBILIDADE
+========================================================= */
+
+button:focus-visible {
+    outline:
+        2px solid
+        rgba(23, 24, 28, .6);
+
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
+
+    * {
+        animation-name: none !important;
+    }
+}
+
+</style>
+
+
+
+</head>
+
+
+<body>
+
+
+<div class="calculadora">
+
+
+    <!-- =====================================================
+         DISPLAY
+    ====================================================== -->
+
+    <div class="tela">
+
+        <div
+            class="historico"
+            id="historico"
+        ></div>
+
+        <div id="display">0</div>
+
+    </div>
+
+
+    <!-- =====================================================
+         BOTÕES
+    ====================================================== -->
+
+    <div class="botoes">
+
+
+        <button
+            class="botao funcao"
+            data-v="C"
+        >
+            C
+        </button>
+
+
+        <button
+            class="botao funcao"
+            data-v="back"
+        >
+
+        
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="m560-424 76 76q11 11 28 11t28-11q11-11 11-28t-11-28l-76-76 76-76q11-11 11-28t-11-28q-11-11-28-11t-28 11l-76 76-76-76q-11-11-28-11t-28 11q-11 11-11 28t11 28l76 76-76 76q-11 11-11 28t11 28q11 11 28 11t28-11l76-76ZM360-160q-19 0-36-8.5T296-192L116-432q-16-21-16-48t16-48l180-240q11-15 28-23.5t36-8.5h440q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H360Zm0-80h440v-480H360L180-480l180 240Zm130-240Z"/></svg>
+
+        </button>
+
+
+        <button
+            class="botao funcao"
+            data-v="%"
+        >
+            %
+        </button>
+
+
+        <button
+            class="botao operador"
+            data-v="/"
+        >
+            ÷
+        </button>
+
+
+        <button
+            class="botao"
+            data-v="7"
+        >
+            7
+        </button>
+
+        <button
+            class="botao"
+            data-v="8"
+        >
+            8
+        </button>
+
+        <button
+            class="botao"
+            data-v="9"
+        >
+            9
+        </button>
+
+        <button
+            class="botao operador"
+            data-v="*"
+        >
+            ×
+        </button>
+
+
+        <button
+            class="botao"
+            data-v="4"
+        >
+            4
+        </button>
+
+        <button
+            class="botao"
+            data-v="5"
+        >
+            5
+        </button>
+
+        <button
+            class="botao"
+            data-v="6"
+        >
+            6
+        </button>
+
+        <button
+            class="botao operador"
+            data-v="-"
+        >
+            −
+        </button>
+
+
+        <button
+            class="botao"
+            data-v="1"
+        >
+            1
+        </button>
+
+        <button
+            class="botao"
+            data-v="2"
+        >
+            2
+        </button>
+
+        <button
+            class="botao"
+            data-v="3"
+        >
+            3
+        </button>
+
+        <button
+            class="botao operador"
+            data-v="+"
+        >
+            +
+        </button>
+
+
+        <button
+            class="botao igual"
+            data-v="="
+        >
+            =
+        </button>
+
+        <button
+            class="botao"
+            data-v="()"
+        >
+            ()
+        </button>
+
+        <button
+            class="botao"
+            data-v="."
+        >
+            ,
+        </button>
+
+        <button
+            class="botao"
+            data-v="0"
+        >
+            0
+        </button>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   ELEMENTOS
+========================================================= */
+
+const display =
+    document.getElementById("display");
+
+const historico =
+    document.getElementById("historico");
+
+
+let expr = "";
+
+let acabouDeCalcular = false;
+
+
+/* =========================================================
+   ATUALIZAR DISPLAY
+========================================================= */
+
+function atualizar(){
+
+    display.textContent =
+        expr || "0";
+
+}
+
+
+/* =========================================================
+   ERRO
+========================================================= */
+
+function animarErro(){
+
+    display.classList.remove("erro");
+
+    void display.offsetWidth;
+
+    display.classList.add("erro");
+
+}
+
+
+/* =========================================================
+   PARENTÊSES
+========================================================= */
+
+function adicionarParenteses(){
+
+    if(acabouDeCalcular){
+
+        expr = "";
+
+        historico.textContent = "";
+
+        acabouDeCalcular = false;
+
+    }
+
+
+    const ultimo =
+        expr.slice(-1);
+
+
+    const abertos =
+        (expr.match(/\(/g) || []).length;
+
+
+    const fechados =
+        (expr.match(/\)/g) || []).length;
+
+
+    if(
+        !expr ||
+        "+-*/(".includes(ultimo)
+    ){
+
+        expr += "(";
+
+        return;
+
+    }
+
+
+    if(abertos > fechados){
+
+        if(
+            !"+-*/(".includes(ultimo)
+        ){
+
+            expr += ")";
+
+        }
+
+        return;
+
+    }
+
+
+    expr += "*(";
+
+}
+
+
+/* =========================================================
+   PORCENTAGEM
+========================================================= */
+
+function prepararPorcentagem(expressao){
+
+    return expressao.replace(
+        /(\d+(?:\.\d+)?)%/g,
+        "($1/100)"
+    );
+
+}
+
+
+/* =========================================================
+   CALCULAR
+========================================================= */
+
+function calcular(){
+
+    if(!expr) return;
+
+
+    try{
+
+        let expressao =
+            expr.replace(/,/g,".");
+
+
+        const ultimo =
+            expressao.slice(-1);
+
+
+        if(
+            "+-*/(".includes(ultimo)
+        ){
+
+            throw new Error();
+
+        }
+
+
+        const abertos =
+            (expressao.match(/\(/g) || []).length;
+
+
+        const fechados =
+            (expressao.match(/\)/g) || []).length;
+
+
+        if(
+            abertos !== fechados
+        ){
+
+            throw new Error();
+
+        }
+
+
+        if(
+            !/^[0-9+\-*/().%\s]+$/.test(
+                expressao
+            )
+        ){
+
+            throw new Error();
+
+        }
+
+
+        expressao =
+            prepararPorcentagem(
+                expressao
+            );
+
+
+        const resultado =
+            Function(
+                '"use strict"; return (' +
+                expressao +
+                ')'
+            )();
+
+
+        if(
+            !Number.isFinite(resultado)
+        ){
+
+            throw new Error();
+
+        }
+
+
+        historico.textContent =
+            expr + " =";
+
+
+        expr =
+            String(
+                Number(
+                    resultado.toFixed(10)
+                )
+            );
+
+
+        acabouDeCalcular = true;
+
+
+        atualizar();
+
+    }
+
+    catch{
+
+        display.textContent =
+            "Erro";
+
+        animarErro();
+
+
+        setTimeout(()=>{
+
+            expr = "";
+
+            historico.textContent = "";
+
+            acabouDeCalcular = false;
+
+            atualizar();
+
+        },700);
+
+    }
+
+}
+
+
+/* =========================================================
+   BOTÕES
+========================================================= */
+
+document
+.querySelectorAll(".botao")
+.forEach(btn=>{
+
+    btn.addEventListener(
+        "click",
+        ()=>{
+
+            const valor =
+                btn.dataset.v;
+
+
+            if(valor === "C"){
+
+                expr = "";
+
+                historico.textContent = "";
+
+                acabouDeCalcular = false;
+
+                atualizar();
+
+                return;
+
+            }
+
+
+            if(valor === "back"){
+
+                expr =
+                    expr.slice(0,-1);
+
+                acabouDeCalcular = false;
+
+                atualizar();
+
+                return;
+
+            }
+
+
+            if(valor === "="){
+
+                calcular();
+
+                return;
+
+            }
+
+
+            if(valor === "()"){
+
+                adicionarParenteses();
+
+                atualizar();
+
+                return;
+
+            }
+
+
+            if(valor === "."){
+
+                if(acabouDeCalcular){
+
+                    expr = "";
+
+                    historico.textContent = "";
+
+                    acabouDeCalcular = false;
+
+                }
+
+
+                const partes =
+                    expr.split(/[+\-*/()]/);
+
+
+                const atual =
+                    partes[partes.length - 1];
+
+
+                if(!atual.includes(".")){
+
+                    if(
+                        !expr ||
+                        "+-*/(".includes(
+                            expr.slice(-1)
+                        )
+                    ){
+
+                        expr += "0";
+
+                    }
+
+                    expr += ".";
+
+                }
+
+
+                atualizar();
+
+                return;
+
+            }
+
+
+            if(
+                /^[0-9]$/.test(valor)
+            ){
+
+                if(acabouDeCalcular){
+
+                    expr = "";
+
+                    historico.textContent = "";
+
+                    acabouDeCalcular = false;
+
+                }
+
+
+                expr += valor;
+
+                atualizar();
+
+                return;
+
+            }
+
+
+            if(
+                "+-*/".includes(valor)
+            ){
+
+                acabouDeCalcular = false;
+
+
+                if(!expr){
+
+                    if(valor === "-"){
+
+                        expr = "-";
+
+                    }
+
+                    atualizar();
+
+                    return;
+
+                }
+
+
+                const ultimo =
+                    expr.slice(-1);
+
+
+                if(
+                    "+-*/".includes(ultimo)
+                ){
+
+                    expr =
+                        expr.slice(0,-1);
+
+                }
+
+
+                expr += valor;
+
+                atualizar();
+
+                return;
+
+            }
+
+
+            if(valor === "%"){
+
+                if(
+                    expr &&
+                    /[0-9)]$/.test(expr)
+                ){
+
+                    expr += "%";
+
+                }
+
+                atualizar();
+
+            }
+
+        }
+    );
+
+});
+
+
+/* =========================================================
+   TECLADO
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    e=>{
+
+        const tecla =
+            e.key;
+
+
+        if(
+            /^[0-9]$/.test(tecla)
+        ){
+
+            if(acabouDeCalcular){
+
+                expr = "";
+
+                historico.textContent = "";
+
+                acabouDeCalcular = false;
+
+            }
+
+            expr += tecla;
+
+            atualizar();
+
+            return;
+
+        }
+
+
+        if(
+            "+-*/".includes(tecla)
+        ){
+
+            acabouDeCalcular = false;
+
+
+            if(!expr){
+
+                if(tecla === "-"){
+
+                    expr = "-";
+
+                }
+
+                atualizar();
+
+                return;
+
+            }
+
+
+            const ultimo =
+                expr.slice(-1);
+
+
+            if(
+                "+-*/".includes(ultimo)
+            ){
+
+                expr =
+                    expr.slice(0,-1);
+
+            }
+
+
+            expr += tecla;
+
+            atualizar();
+
+            return;
+
+        }
+
+
+        if(
+            tecla === "." ||
+            tecla === ","
+        ){
+
+            const partes =
+                expr.split(/[+\-*/()]/);
+
+
+            const atual =
+                partes[partes.length - 1];
+
+
+            if(!atual.includes(".")){
+
+                if(
+                    !expr ||
+                    "+-*/(".includes(
+                        expr.slice(-1)
+                    )
+                ){
+
+                    expr += "0";
+
+                }
+
+                expr += ".";
+
+            }
+
+
+            atualizar();
+
+            return;
+
+        }
+
+
+        if(
+            tecla === "(" ||
+            tecla === ")"
+        ){
+
+            if(tecla === "("){
+
+                adicionarParenteses();
+
+            }
+
+            else{
+
+                const abertos =
+                    (expr.match(/\(/g) || []).length;
+
+
+                const fechados =
+                    (expr.match(/\)/g) || []).length;
+
+
+                const ultimo =
+                    expr.slice(-1);
+
+
+                if(
+                    abertos > fechados &&
+                    expr &&
+                    !"+-*/(".includes(ultimo)
+                ){
+
+                    expr += ")";
+
+                }
+
+            }
+
+
+            atualizar();
+
+            return;
+
+        }
+
+
+        if(tecla === "%"){
+
+            if(
+                expr &&
+                /[0-9)]$/.test(expr)
+            ){
+
+                expr += "%";
+
+            }
+
+            atualizar();
+
+            return;
+
+        }
+
+
+        if(tecla === "Backspace"){
+
+            expr =
+                expr.slice(0,-1);
+
+            acabouDeCalcular = false;
+
+            atualizar();
+
+            return;
+
+        }
+
+
+        if(
+            tecla === "Enter" ||
+            tecla === "="
+        ){
+
+            calcular();
+
+            return;
+
+        }
+
+
+        if(tecla === "Escape"){
+
+            expr = "";
+
+            historico.textContent = "";
+
+            acabouDeCalcular = false;
+
+            atualizar();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INICIAR
+========================================================= */
+
+atualizar();
+
+
+</script>
+
+
+</body>
+
+</html>

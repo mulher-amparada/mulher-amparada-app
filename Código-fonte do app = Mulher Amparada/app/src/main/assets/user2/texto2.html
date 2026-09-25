@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+    <meta
+        name="description"
+        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
+    >
+
+<meta name="theme-color" content="#000000">
+
+<title>Mulher Amparada</title>
+
+<style>
+/* =========================================================
+   BASE
+========================================================= */
+
+@font-face {
+    font-family: "Quicksand";
+    src: url("font.ttf") format("truetype");
+    font-weight: 400 800;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: "Quicksand", sans-serif;
+
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+html {
+    min-height: 100%;
+    background: #ffffff;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    color: #17181c;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    overflow-x: hidden;
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.container {
+    width: min(100%, 760px);
+    margin: 0 auto;
+
+    padding:
+        58px
+        22px
+        60px;
+}
+
+
+/* =========================================================
+   MARCA
+========================================================= */
+
+.marca {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    margin-bottom: 45px;
+}
+
+.traco {
+    width: 44px;
+    height: 4px;
+
+    margin-bottom: 13px;
+
+    border-radius: 999px;
+
+    background: #9b5cff;
+
+    box-shadow:
+        0 0 18px rgba(155, 92, 255, .25);
+}
+
+.marca h1 {
+    margin: 0;
+
+    color: #17181c;
+
+    font-size: clamp(28px, 7vw, 42px);
+    line-height: 1.05;
+
+    font-weight: 700;
+
+    letter-spacing: -1.5px;
+}
+
+.marca p {
+    margin: 13px 0 0;
+
+    max-width: 430px;
+
+    color: #666a74;
+
+    font-size: 15px;
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   DESTAQUE
+========================================================= */
+
+.destaque {
+    position: relative;
+
+    min-height: 190px;
+
+    padding: 30px;
+
+    margin-bottom: 18px;
+
+    border-radius: 30px;
+
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(155, 92, 255, .12),
+            transparent 42%
+        ),
+        #f5f6f8;
+
+    border: 1px solid #e1e2e6;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, .05);
+}
+
+.destaque::before {
+    content: "";
+
+    position: absolute;
+
+    width: 150px;
+    height: 150px;
+
+    top: -85px;
+    right: -45px;
+
+    border-radius: 50%;
+
+    background: rgba(155, 92, 255, .07);
+}
+
+.destaque::after {
+    content: "";
+
+    position: absolute;
+
+    width: 70px;
+    height: 70px;
+
+    bottom: -32px;
+    left: 35px;
+
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, .025);
+}
+
+
+/* =========================================================
+   TÍTULOS DO DESTAQUE
+========================================================= */
+
+.destaque h1 {
+    position: relative;
+    z-index: 2;
+
+    margin: 45px 0 25px;
+
+    color: #17181c;
+
+    font-size: 28px;
+    line-height: 1.2;
+
+    letter-spacing: -.8px;
+}
+
+.destaque h1:first-child {
+    margin-top: 0;
+}
+
+.destaque h2 {
+    position: relative;
+    z-index: 2;
+
+    margin: 35px 0 18px;
+
+    color: #17181c;
+
+    font-size: 24px;
+    line-height: 1.25;
+
+    letter-spacing: -.6px;
+}
+
+.destaque h3 {
+    position: relative;
+    z-index: 2;
+
+    margin: 30px 0 12px;
+
+    color: #25262b;
+
+    font-size: 18px;
+    line-height: 1.3;
+
+    letter-spacing: -.3px;
+}
+
+
+/* =========================================================
+   PARÁGRAFOS
+========================================================= */
+
+.destaque p {
+    position: relative;
+    z-index: 2;
+
+    max-width: 470px;
+
+    margin: 0;
+
+    color: #666a74;
+
+    font-size: 14px;
+    line-height: 1.6;
+
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   BOLHAS DO DESTAQUE
+========================================================= */
+
+.bolhas {
+    position: relative;
+    z-index: 3;
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 25px;
+}
+
+.bolhas span {
+    display: block;
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #9b5cff;
+
+    opacity: .8;
+}
+
+.bolhas span:nth-child(2) {
+    width: 6px;
+    height: 6px;
+
+    opacity: .45;
+}
+
+.bolhas span:nth-child(3) {
+    width: 11px;
+    height: 11px;
+
+    opacity: .2;
+}
+
+
+/* =========================================================
+   LISTAS
+========================================================= */
+
+.destaque ul {
+    position: relative;
+    z-index: 2;
+
+    margin: 15px 0 25px;
+
+    padding-left: 22px;
+
+    color: #666a74;
+
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.destaque li {
+    margin-bottom: 7px;
+    padding-left: 4px;
+}
+
+.destaque li::marker {
+    color: #9b5cff;
+}
+
+
+/* =========================================================
+   BLOCO DE CITAÇÃO
+========================================================= */
+
+.destaque blockquote {
+    position: relative;
+    z-index: 2;
+
+    margin: 25px 0;
+
+    padding: 20px;
+
+    border-left: 3px solid #9b5cff;
+    border-radius: 0 18px 18px 0;
+
+    background: #ffffff;
+
+    border-top: 1px solid #e5e6e9;
+    border-right: 1px solid #e5e6e9;
+    border-bottom: 1px solid #e5e6e9;
+
+    color: #666a74;
+
+    font-size: 14px;
+    line-height: 1.6;
+
+    box-shadow:
+        0 4px 18px rgba(0, 0, 0, .035);
+}
+
+
+/* =========================================================
+   CÓDIGO
+========================================================= */
+
+.destaque code {
+    padding: 4px 8px;
+
+    border-radius: 8px;
+
+    background: #ececf0;
+
+    border: 1px solid #dfe0e4;
+
+    color: #7b3fd0;
+
+    font-family: monospace;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   DESTAQUES
+========================================================= */
+
+.destaque strong {
+    color: #17181c;
+}
+
+
+/* =========================================================
+   ELEMENTOS EM
+========================================================= */
+
+.destaque em {
+    color: #555861;
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .container {
+        padding:
+            48px
+            18px
+            50px;
+    }
+
+    .destaque {
+        padding: 25px;
+    }
+
+    .destaque h1 {
+        font-size: 26px;
+    }
+
+    .destaque h2 {
+        font-size: 22px;
+    }
+
+    .destaque h3 {
+        font-size: 17px;
+    }
+
+    .destaque p,
+    .destaque ul,
+    .destaque blockquote {
+        font-size: 14px;
+    }
+}
+
+</style>
+
+<style>
+
+@media (prefers-reduced-motion: reduce) {
+    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
+
+    * {
+        animation-name: none !important;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- =====================================================
+         MARCA
+    ====================================================== -->
+
+    <header class="marca">
+
+        <span class="traco"></span>
+
+        <h1>
+            Mulher Amparada
+        </h1>
+
+        <p>
+            Uma carta para você!
+        </p>
+
+    </header>
+
+
+    <!-- =====================================================
+         DESTAQUE
+    ====================================================== -->
+
+    <section class="destaque">
+<h1>Uma carta para você, mulher!:</h1>
+
+<p>
+    <strong>E eu me inspiro em Martin Luther King para lhes dizer (não é uma citação direta dele!):</strong>
+</p>
+
+<blockquote>
+    "eu tenho um sonho, que as mulheres vivam em paz, sem nenhuma violência, porque todos somos iguais..."
+</blockquote>
+
+<p>
+    e eu me sinto lisongeado de fazer esse projeto para todas essas usuárias,
+    (vocês são mulheres do jeitinho que são!)
+</p>
+
+<p>
+    e honestamente, cada uma de vocês são importantes (tanto em talento e etc),
+    e pelo amor de Deus, não deixem que esses agressores tirem o brilho de vocês...,
+    vocês são as pessoas mais maravilhosas!, cada uma de vocês existe um valor que
+    as vezes não conseguem perceber pela violência, mas ele existe, ele está aí,
+    então nunca desista de você mesma, ainda tem gente que te ama e quer o seu bem!,
+    (não precisa ter culpa ou vergonha por essa violência, você <strong>NÃO TEM CULPA DISSO!</strong>),
+    lembre-se que você é forte, só de pedir ajuda já fez um grande passo!, e lembre-se
+    que você é uma pessoa virtuosa, e que seu valor excede a de muitos rubis, e fica
+    com esse fato aqui:
+    <strong>QUEM TEM CULPA DA VIOLÊNCIA É O AGRESSOR, NÃO VOCÊ!</strong>
+</p>
+
+<p>
+    Geralmente, o padrão do agressor é assim, mas isso varia: te humilha, pede desculpas
+    e fala que vai mudar, você acredita, te humilha denovo...
+    (Esse comportamento é um padrão reconhecido pela psicologia como o
+    <strong>Ciclo da Violência</strong>)
+</p>
+
+<p>
+    então, não acredite nas mentiras dele, acredite em si mesma e na esperança que
+    <strong>VOCÊ NÃO ESTÁ SOZINHA E QUE PODE SEMPRE PEDIR AJUDA!</strong>
+</p>
+
+
+<h1>Números de apoio:</h1>
+
+<p>
+    uma dica valiosa: se você estiver em sofrimento, ligue para o
+    <strong>CVV = Centro de Valorização da Vida = 188</strong>,
+    gratuito, sigiloso, funciona 24 horas, e você não precisa de créditos no chip
+    para ligar pra esse número e tem profissionais treinados para ouvir você!,
+    mas ele serve para apoio emocional, e não um canal de denúncia como a polícia!
+</p>
+
+<p>
+    se quiser denunciar algo, ligue para o
+    <strong>190 = polícia</strong>,
+    e <strong>180 = Central de Atendimento à Mulher</strong>.
+</p>
+
+
+<h1>A minha palavra favorita do português!:</h1>
+
+<p>
+    e se eu fosse escolher a palavra mais bonita da língua portuguesa, seria:
+</p>
+
+<blockquote>
+    <strong>"Mulheres"</strong>
+</blockquote>
+
+<p>
+    é serio, e bom de pronunciar, lindo de ouvir e pensar no significado,
+    e maravilhoso de escrever, além que me lembra de pessoas muito valiosas!
+</p>
+
+
+<h1>Autoridades políticas, escutem bem!:</h1>
+
+<p>
+    Voces tem que entender que as mulheres não precisam de discursos longos e frios,
+    elas precisam de ações, acolhimento sem julgamento, um tanque de guerra blindado
+    contra a violência e uma armadura calorosa.
+</p>
+
+<p>
+    Elas não precisam dos seus votos, elas precisam de políticas públicas fortes
+    que não quebram na primeira brecha.
+</p>
+
+<p>
+    Elas não precisam ser inferiorizadas, elas precisam ser empoderadas
+    (que já são né)!
+</p>
+
+<p>
+    Elas não precisam de softwares e programas burocráticos e inseguros,
+    elas precisam de uma rede de proteção!
+</p>
+
+<p>
+    E as estudantes, elas precisam de voz!, elas precisam ter um ambiente seguro
+    <strong>SEM ASSÉDIO, SEM STALKING E SEM AS OUTRAS VIOLÊNCIAS.</strong>
+</p>
+
+<p>
+    E as trabalhadoras, elas não querem ser escravas de um sistema falho,
+    elas querem igualdade salarial.
+</p>
+
+<p>
+    E as autistas, elas nao precisam ser inferiorizadas e sofrerem bullyng,
+    elas precisam ter disponível terapias e remédios (se prescrito, e se o médico
+    deu o seu parecer!), elas precisam de diagnóstico quando for preciso,
+    atendimento rápido e ágil sem fazer elas se sentirem desreguladas.
+</p>
+
+<p>
+    E para as juizas, elas precisam de leis duras contra esses agressores,
+    precisam de ferramentas precisas!
+</p>
+
+<p>
+    E para as mulheres que estão no topo de autoridades: elas precisam de um ambiente
+    onde não tenha esses homens misóginos e machistas, elas precisam de um ambiente
+    onde possam se desenvolver e defender os nossos direitos
+    (os das mulheres, dos autistas, e etc!)
+</p>
+
+<p>
+    E para as mulheres que trabalham com a área (puxado para mercados, varejo e etc),
+    elas precisam de um ambiente com mais salário e carga horária adequada.
+</p>
+
+<p>
+    E para as professoras: eu mesmo tenho professoras mulheres que me orgulho muito,
+    e elas precisam (nao so elas mas como todos e todas), salários mais altos,
+    independencia (por exemplo, sem essas provas do governo decidindo a nota e eles
+    não podendo decidir), lembre-se que são eles que nos formaram!
+</p>
+
+<p>
+    E para mães grávidas: elas querem ter folgas do trabalho quando for preciso,
+    ter pré-natal, remédios, acompanhamento médico, vacinas, um parto tranquilo,
+    e assentos garantidos em lugares publicos e transportes públicos.
+</p>
+
+<p>
+    Elas não querem o voto de vocês, elas querem ação, direitos, políticas públicas
+    e leis garantidas e fortes que não quebram ao mudar os mandatos!
+</p>
+
+<p>
+    E elas querem saneamento básico que inúmeras vezes falta
+    (elas querem esgoto tratato, córregos fechados, segurança alimentar,
+    uma casa onde não dá enchente toda hora, água limpa sem doenças,
+    comida de qualidade!, remédios nos hospitais sempre!)
+</p>
+
+<p>
+    E pra esses agressores: eles tem que ser punidos pelo que fizeram e fazem,
+    sem simplesmente sair pro mundo só porque a lei os deixa impunes!
+</p>
+
+<p>
+    E para as mães de mulheres: elas querem segurança para suas filhas,
+    elas querem escolas com infraestrutura, sem estar caindo aos pedaços,
+    elas querem empregos sem a escala 6x1, e principalmente, elas querem viver
+    num mundo onde não tenham um medo extremo de pensar que suas filhas estão em perigo!
+</p>
+
+<p>
+    Para cientistas: pelo que já estudei, aparece mais nos livros cientistas homens
+    do que mulheres, precisamos mudar isso!, e isso aconteceu porque por muito tempo
+    mulheres não tinham direito de entrar nesse trabalho, temos que fazer com que
+    elas possam sim, porque o lugar delas é onde elas quiserem!
+</p>
+
+<p>
+    Mulheres que trabalham na internet: redes sociais tem que banir conteúdos
+    explícitos, e banir comentários maldosos sobre elas!
+</p>
+
+<p>
+    Mulheres prodígias: temos que dar estrutura de recursos para elas voarem longe,
+    e temos que parar de, por exemplo, criar leis de menores que criam o Family Link
+    que excluem a pasta segura e o trabalho delas, essas leis deveriam proteger,
+    não machucar.
+</p>
+
+<p>
+    Para a indústria da música: parem de fazer com que a imagem da mulher seja
+    uma máquina de coisas inapropriadas (a não ser que elas queiram).
+</p>
+
+<p>
+    Muita gente nao sabe, mas na época de colonização, elas foram violentadas,
+    temos uma grande dívida histórica com elas!, e temos muito o que aprender ainda.
+</p>
+
+<p>
+    Então se vocês homens querem ser homens de verdade, parem de machucar elas,
+    virem cidadãos e lutem ao lado delas, não contra elas.
+</p>
+
+<p>
+    <strong>
+        E para todas: ELAS PRECISAM SER CONSIDERADAS COMO PESSOAS,
+        NÃO SÓ MAIS UMA ESTATÍSTICA!
+    </strong>
+</p>
+
+        
+
+<h1>Às Meretíssimas Juízas, Advogadas e outras profissionais do Direito</h1>
+
+<p>Olha, os homens costumam humilhar vocês e tentar, sabe?, intimidar e desvalorizar seu trabalho só por vocês serem mulheres.</p>
+
+<p>Mas eu, como homem de 15 anos, lhes digo:</p>
+
+<blockquote>
+    <strong>Vocês têm todo o meu respeito. Eu tiro o meu chapéu para vocês.</strong>
+</blockquote>
+
+<p>Cara, enfrentar a violência contra a mulher nos tribunais não é fácil.</p>
+
+<p>Pelo lado da lei, é difícil aplicar a lei quando não sabemos o que fazer porque não temos provas concretas.</p>
+
+<p>E tenho certeza que chegam até vocês casos extremamente violentos, né? Casos pesados. Então, para mim, vocês representam uma força emocional extremamente determinada — maior que <strong>10¹⁰⁰</strong>.</p>
+
+<p>Os homens — os covardes, né? Porque homem de verdade não faz isso — tentam humilhar vocês, mas, na verdade, eles têm medo de vocês, da força de vocês.</p>
+
+<p>Vocês não sabem, mas eu tenho <strong>temor de respeito extremo por vocês</strong>.</p>
+
+<h2>Já vou adiantando:</h2>
+
+<h3>Vocês <strong>NÃO SÃO:</strong></h3>
+
+<ul>
+    <li>Loucas;</li>
+    <li>Histéricas;</li>
+    <li>Desequilibradas;</li>
+    <li>Ou emocionais demais.</li>
+</ul>
+
+<h3><strong>VOCÊS SÃO:</strong></h3>
+
+<ul>
+    <li>Fortes;</li>
+    <li>Guerreiras;</li>
+    <li>Determinadas em <em>level</em> elevado;</li>
+    <li>E, principalmente, <strong>mulheres!</strong></li>
+</ul>
+
+<p>Não tenham vergonha de serem mulheres. Vocês carregam um gênero que representa força e determinação — ou o que vocês decidirem que seja!</p>
+
+<p>É difícil mesmo quando um homem corta a sua fala, né?</p>
+
+<p>Mas sabe o que é?</p>
+
+<p>Isso demonstra <strong>o caráter deles, não o de vocês</strong>.</p>
+
+<p>Isso demonstra que vocês são mais inteligentes que eles!</p>
+
+<p>E, sinceramente, juízas, eu posso dizer com tranquilidade que, quando estudei filosofia, eu digo:</p>
+
+<blockquote>
+    Quem tenta explicar algo óbvio que vocês já sabem, na filosofia, é ignorante — isto é, não sabe — e é o oposto de filósofo.
+</blockquote>
+
+<p>E outra: temos que reconhecer que não sabemos de nada ainda e que ainda estamos aprendendo.</p>
+
+<p>Eu digo com tranquilidade que vocês <strong>não precisam das explicações deles!</strong></p>
+
+<h2>E NÃO DUVIDEM DE SI MESMAS</h2>
+
+<p>Quando alguém fizer <em>gaslighting jurídico</em>, <strong>vocês são mais fortes que isso!</strong></p>
+
+<p>E lembrem-se:</p>
+
+<blockquote>
+    <strong>O valor de uma mulher excede o de muitos rubis; o de um homem machista é menos do que a escória da terra.</strong>
+</blockquote>
+
+
+
+<h1>Mulheres na Pedagogia</h1>
+
+<p>Primeiro, é... saibam que existia aquela ideia de que o homem busca o sustento e a mulher faz o serviço de casa.</p>
+
+<p>Agora, essa ideia está sendo quebrada — porque <strong>a mulher tem que decidir por si mesma o que ela quer!</strong></p>
+
+<p>Deve ser <strong>beeeeeem difícil</strong> trabalhar. Vamos combinar que é praticamente o dia todo, desde a madrugada até a noite, e isso se repete.</p>
+
+<p>Talvez a escola não seja 6x1, mas, na prática, vocês trabalham em um nível de desgaste muito grande.</p>
+
+<p>Eu entendo vocês. Eu sei como seria um trabalho desgastante. Talvez não seja igual, mas passei muito tempo trabalhando para criar este projeto, horas nas minhas atividades e muitas outras horas em lições de escola — e é nível <strong>modo inferno desbloqueado</strong>, sabe?</p>
+
+<p>E eu sei, sim, que vocês trabalham em uma profissão que é exercida <strong>antes, durante a carga horária e depois dela!</strong></p>
+
+<p>Mas sabe por que tudo isso?</p>
+
+<p><strong>Por culpa dos políticos do Brasil!</strong></p>
+
+<p>Vocês precisam e merecem descanso.</p>
+
+<p>Então, se não puderem descansar fisicamente, descansem na certeza de que esse trabalho está sendo notado por alguém:</p>
+
+<p><strong>Por mim.</strong></p>
+
+
+
+<p>E é verdade: nas escolas tem bituca de cigarro no banheiro, às vezes não tem papel higiênico — mas eu oro a Deus para que tenham absorventes disponíveis nos banheiros das meninas! — e é toda hora banheiro sendo entupido.</p>
+
+<p>Nas escolas já teve goteira na lâmpada e, em muitas delas, existem paredes sujas.</p>
+
+<p>Mas eu tenho que dizer que parte de tudo isso também é causada pelos alunos que não cuidam da escola.</p>
+
+<p>E outra parte gigantesca é o governo querendo voto e deixando de cuidar das vidas das pessoas!</p>
+
+
+
+<p>E, com certeza, vocês são as primeiras a perceberem violências.</p>
+
+<p>Muitas de vocês são mães, então conseguem perceber determinadas situações rapidamente — até comigo!</p>
+
+<p>E essa é uma das partes mais bonitas da alma de vocês.</p>
+
+<p>É uma parte do coração de Deus: <strong>esse instinto de mãe!</strong></p>
+
+
+
+<p>E é verdade: é difícil ensinar sobre cidadania e conduta.</p>
+
+<p>Mas, sinceramente:</p>
+
+<p><strong>Isso é um peso que vocês não deveriam carregar sozinhas.</strong></p>
+
+<p>São os pais que deveriam carregar a responsabilidade de ensinar como seus filhos devem se comportar e ter uma boa conduta.</p>
+
+<p>Afinal, <strong>a educação básica também vem de casa.</strong></p>
+
+<div class="bolhas">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+    </section>
+
+</div>
+
+</body>
+
+</html>

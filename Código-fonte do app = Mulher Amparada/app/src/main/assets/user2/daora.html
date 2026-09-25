@@ -1,0 +1,2149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+    <meta
+        name="description"
+        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
+    >
+
+<meta
+    name="theme-color"
+    content="#08080a"
+>
+
+<title>Meu Relógio</title>
+
+<style>
+/* =========================================================
+   BARRAS DE ROLAGEM — TOTALMENTE TRANSPARENTES
+========================================================= */
+
+*::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background: transparent;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: transparent;
+    border: none;
+}
+
+* {
+    scrollbar-width: none;
+    scrollbar-color: transparent transparent;
+
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+html,
+body {
+    scrollbar-width: none;
+    scrollbar-color: transparent transparent;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background: transparent;
+}
+
+
+/* =========================================================
+   FONTE
+========================================================= */
+
+@font-face {
+    font-family: "Quicksand";
+
+    src: url("font.ttf")
+        format("truetype");
+
+    font-display: swap;
+}
+
+
+/* =========================================================
+   VARIÁVEIS — MODO CLARO
+========================================================= */
+
+:root {
+
+    --pink: #ff6f91;
+    --pink2: #ff3f6c;
+    --pink3: #d93663;
+
+    --green: #16a05d;
+    --blue: #3978d4;
+    --yellow: #d99b00;
+
+    --card: #ffffff;
+    --card2: #f7f7f9;
+
+    --border: rgba(0,0,0,.09);
+
+    --text: #17171b;
+
+    --muted: rgba(23,23,27,.62);
+    --muted2: rgba(23,23,27,.42);
+
+    --shadow:
+        0 18px 45px rgba(0,0,0,.10);
+
+    --radius: 26px;
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*,
+*::before,
+*::after {
+
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+
+    font-family: "Quicksand", sans-serif;
+}
+
+
+/* =========================================================
+   HTML
+========================================================= */
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
+body {
+
+    min-height: 100vh;
+
+    color: var(--text);
+
+    background: #f4f4f7;
+
+    overflow-x: hidden;
+
+    margin-bottom: 5%;
+    margin-top: 2.5%;
+}
+
+
+/* =========================================================
+   ANIMAÇÕES
+========================================================= */
+
+@keyframes pulse {
+
+    0%,
+    100% {
+
+        transform: scale(1);
+        opacity: 1;
+
+    }
+
+    50% {
+
+        transform: scale(1.4);
+        opacity: .55;
+
+    }
+
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app {
+
+    width: min(760px,100%);
+
+    min-height: 100vh;
+
+    margin: auto;
+
+    padding:
+        max(20px,env(safe-area-inset-top))
+        14px
+        max(30px,env(safe-area-inset-bottom));
+}
+
+
+/* =========================================================
+   TOPO
+========================================================= */
+
+.topbar {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 14px;
+
+    margin-bottom: 18px;
+}
+
+
+.brand {
+    min-width: 0;
+}
+
+
+.title {
+
+    font-size:
+        clamp(
+            2rem,
+            8vw,
+            3.2rem
+        );
+
+    font-weight: 900;
+
+    letter-spacing: -2px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #222226 10%,
+            var(--pink3) 55%,
+            var(--pink) 100%
+        );
+
+    -webkit-background-clip: text;
+
+    background-clip: text;
+
+    color: transparent;
+}
+
+
+.subtitle {
+
+    margin-top: 8px;
+
+    color: var(--muted);
+
+    font-size: .76rem;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   AÇÕES
+========================================================= */
+
+.top-actions {
+
+    display: flex;
+
+    gap: 8px;
+}
+
+
+.icon-btn {
+
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--border);
+
+    border-radius: 15px;
+
+    color: #222;
+
+    background: #ffffff;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.09);
+
+    transition:
+        transform .18s ease,
+        background .18s ease,
+        border-color .18s ease;
+}
+
+
+.icon-btn:hover {
+
+    background: #fafafa;
+
+    border-color:
+        rgba(255,63,108,.28);
+
+    transform: translateY(-1px);
+}
+
+
+.icon-btn:active {
+    transform: scale(.91);
+}
+
+
+.icon-btn img {
+
+    width: 20px;
+    height: 20px;
+
+    object-fit: contain;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+}
+
+
+.icon-symbol {
+
+    font-size: 20px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* =========================================================
+   CARD PRINCIPAL
+========================================================= */
+
+.hero {
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 25px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 32px;
+
+    background: #ffffff;
+
+    box-shadow: var(--shadow);
+}
+
+
+.hero::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 190px;
+    height: 190px;
+
+    right: -105px;
+    top: -105px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,105,145,.08);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   LOCALIZAÇÃO
+========================================================= */
+
+.hero-top {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+
+.location {
+    min-width: 0;
+}
+
+
+.country {
+
+    font-size: 1.35rem;
+
+    font-weight: 900;
+
+    line-height: 1.1;
+}
+
+
+.city {
+
+    margin-top: 5px;
+
+    color: var(--muted);
+
+    font-size: .85rem;
+
+    font-weight: 600;
+}
+
+
+.location-status {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 8px;
+
+    color: var(--muted2);
+
+    font-size: .62rem;
+
+    font-weight: 700;
+}
+
+
+.live {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    flex-shrink: 0;
+
+    padding: 6px 9px;
+
+    border-radius: 999px;
+
+    color: #087a42;
+
+    background: #edf9f2;
+
+    border:
+        1px solid
+        rgba(22,160,93,.18);
+
+    font-size: .62rem;
+
+    font-weight: 900;
+}
+
+
+.live-dot {
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    box-shadow:
+        0 0 10px rgba(22,160,93,.45);
+
+    animation: pulse 1.5s infinite;
+}
+
+
+/* =========================================================
+   RELÓGIO
+========================================================= */
+
+.clock {
+
+    position: relative;
+
+    z-index: 2;
+
+    margin-top: 28px;
+
+    font-size:
+        clamp(
+            3.4rem,
+            16vw,
+            6.5rem
+        );
+
+    line-height: .86;
+
+    font-weight: 900;
+
+    letter-spacing: -5px;
+
+    white-space: nowrap;
+}
+
+
+.clock span {
+    color: var(--pink3);
+}
+
+
+.date {
+
+    position: relative;
+
+    z-index: 2;
+
+    margin-top: 18px;
+
+    color: var(--muted);
+
+    font-size: .86rem;
+
+    font-weight: 600;
+}
+
+
+.timezone {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 12px;
+
+    padding: 7px 10px;
+
+    border-radius: 999px;
+
+    color: var(--muted);
+
+    background: #f3f3f5;
+
+    border:
+        1px solid
+        rgba(0,0,0,.07);
+
+    font-size: .65rem;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   PROGRESSO
+========================================================= */
+
+.progress-section {
+
+    position: relative;
+
+    z-index: 2;
+
+    margin-top: 24px;
+}
+
+
+.progress-label {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 8px;
+
+    color: var(--muted2);
+
+    font-size: .64rem;
+
+    font-weight: 800;
+}
+
+
+.progress {
+
+    width: 100%;
+
+    height: 7px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: #e6e6e9;
+}
+
+
+.progress-bar {
+
+    width: 0%;
+
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--pink),
+            var(--pink2)
+        );
+
+    box-shadow:
+        0 0 14px
+        rgba(255,63,108,.25);
+
+    transition:
+        width .4s linear;
+}
+
+
+/* =========================================================
+   TÍTULO DA SEÇÃO
+========================================================= */
+
+.section-title {
+
+    margin:
+        22px
+        2px
+        11px;
+
+    font-size: 1.05rem;
+
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   INFORMAÇÕES
+========================================================= */
+
+.info-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap: 9px;
+}
+
+
+.info {
+
+    position: relative;
+
+    overflow: hidden;
+
+    min-width: 0;
+
+    padding: 14px 11px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 20px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 8px 22px rgba(0,0,0,.07);
+
+    transition:
+        transform .18s ease,
+        background .18s ease;
+}
+
+
+.info:hover {
+
+    transform: translateY(-2px);
+
+    background: #fafafa;
+}
+
+
+.info::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 45px;
+    height: 45px;
+
+    right: -25px;
+    bottom: -25px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,127,159,.06);
+}
+
+
+.info-label {
+
+    position: relative;
+
+    z-index: 1;
+
+    color: var(--muted2);
+
+    font-size: .57rem;
+
+    font-weight: 800;
+}
+
+
+.info-value {
+
+    position: relative;
+
+    z-index: 1;
+
+    margin-top: 5px;
+
+    font-size: .92rem;
+
+    font-weight: 900;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    margin-top: 18px;
+
+    padding: 18px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 23px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.08);
+}
+
+
+.status-head {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+}
+
+
+.status-title {
+
+    font-size: .92rem;
+
+    font-weight: 900;
+}
+
+
+.status-indicator {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    color: #087a42;
+
+    font-size: .62rem;
+
+    font-weight: 800;
+}
+
+
+.status-text {
+
+    margin-top: 7px;
+
+    color: var(--muted);
+
+    font-size: .7rem;
+
+    line-height: 1.5;
+}
+
+
+.location-button {
+
+    width: 100%;
+
+    margin-top: 13px;
+
+    padding: 12px;
+
+    border: 0;
+
+    border-radius: 150px;
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--pink),
+            var(--pink2)
+        );
+
+    font-size: .73rem;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 22px
+        rgba(255,63,108,.18);
+
+    transition:
+        transform .18s ease,
+        filter .18s ease;
+}
+
+
+.location-button:hover {
+
+    filter: brightness(1.07);
+
+    transform: translateY(-1px);
+}
+
+
+.location-button:active {
+    transform: scale(.97);
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast {
+
+    position: fixed;
+
+    left: 50%;
+
+    bottom:
+        max(
+            22px,
+            env(safe-area-inset-bottom)
+        );
+
+    z-index: 200;
+
+    transform:
+        translate(-50%,20px);
+
+    width: max-content;
+
+    max-width: calc(100% - 30px);
+
+    padding: 11px 15px;
+
+    border:
+        1px solid
+        rgba(0,0,0,.10);
+
+    border-radius: 999px;
+
+    color: #17171b;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.15);
+
+    font-size: .68rem;
+
+    font-weight: 700;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity .25s ease,
+        transform .25s ease;
+}
+
+
+.toast.show {
+
+    opacity: 1;
+
+    transform:
+        translate(-50%,0);
+}
+
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
+@media(max-width:600px) {
+
+    .app {
+        padding-inline: 12px;
+    }
+
+    .top-actions {
+        gap: 6px;
+    }
+
+    .icon-btn {
+
+        width: 42px;
+        height: 42px;
+
+        border-radius: 14px;
+
+        display: flex;
+
+        justify-content: center;
+        align-items: center;
+    }
+
+    .hero {
+
+        padding: 21px;
+
+        border-radius: 28px;
+    }
+
+    .clock {
+
+        font-size:
+            clamp(
+                3.1rem,
+                17vw,
+                5.2rem
+            );
+
+        letter-spacing: -3px;
+    }
+
+    .info-grid {
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+}
+
+
+@media(max-width:390px) {
+
+    .title {
+        font-size: 1.75rem;
+    }
+
+    .subtitle {
+        font-size: .65rem;
+    }
+
+    .top-actions .icon-btn {
+
+        width: 39px;
+        height: 39px;
+    }
+
+    .hero {
+        padding: 18px;
+    }
+
+    .country {
+        font-size: 1.15rem;
+    }
+
+    .clock {
+        font-size: 3rem;
+    }
+
+    .live {
+
+        padding: 5px 7px;
+
+        font-size: .55rem;
+    }
+}
+
+
+/* =========================================================
+   SVG
+========================================================= */
+
+svg {
+
+    width: 25px;
+    height: 25px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    * {
+        animation-name: none !important;
+    }
+}
+
+</style>
+
+
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+    <!-- =====================================================
+         TOPO
+    ====================================================== -->
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="title">
+                Meu Relógio
+            </div>
+
+            <div class="subtitle">
+                Horário da sua localização atual
+            </div>
+
+        </div>
+
+
+        <div class="top-actions">
+
+            <button
+                class="icon-btn"
+                onclick="carregarLocalizacao(true)"
+                aria-label="Atualizar localização"
+                title="Atualizar localização"
+                type="button"
+            >
+
+                <span class="icon-symbol">
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M480-120q-126 0-223-76.5T131-392q-4-15 6-27.5t27-14.5q16-2 29 6t18 24q24 90 99 147t170 57q117 0 198.5-81.5T760-480q0-117-81.5-198.5T480-760q-69 0-129 32t-101 88h70q17 0 28.5 11.5T360-600q0 17-11.5 28.5T320-560H160q-17 0-28.5-11.5T120-600v-160q0-17 11.5-28.5T160-800q17 0 28.5 11.5T200-760v54q51-64 124.5-99T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-120Zm40-376 100 100q11 11 11 28t-11 28q-11 11-28 11t-28-11L452-452q-6-6-9-13.5t-3-15.5v-159q0-17 11.5-28.5T480-680q17 0 28.5 11.5T520-640v144Z"/></svg>
+                </span>
+
+            </button>
+
+
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         RELÓGIO
+    ====================================================== -->
+
+    <main>
+
+        <section class="hero">
+
+            <div class="hero-top">
+
+                <div class="location">
+
+                    <div
+                        class="country"
+                        id="currentCountry"
+                    >
+                        Localização atual
+                    </div>
+
+
+                    <div
+                        class="city"
+                        id="currentCity"
+                    >
+                        Obtendo localização...
+                    </div>
+
+
+                    <div class="location-status">
+
+                        <span></span>
+
+                        <span id="locationStatus">
+                            Detectando localização
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="live">
+
+                    <span class="live-dot"></span>
+
+                    AO VIVO
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="clock"
+                id="mainClock"
+            >
+                00:00<span>:00</span>
+            </div>
+
+
+            <div
+                class="date"
+                id="mainDate"
+            >
+                Carregando data...
+            </div>
+
+
+            <div
+                class="timezone"
+                id="mainTimezone"
+            >
+                Detectando fuso...
+            </div>
+
+
+            <div class="progress-section">
+
+                <div class="progress-label">
+
+                    <span>
+                        Progresso do dia
+                    </span>
+
+                    <span id="dayPercent">
+                        0%
+                    </span>
+
+                </div>
+
+
+                <div class="progress">
+
+                    <div
+                        class="progress-bar"
+                        id="dayProgress"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             INFORMAÇÕES
+        ================================================== -->
+
+        <div class="section-title">
+            Informações de hoje
+        </div>
+
+
+        <section class="info-grid">
+
+            <div class="info">
+
+                <div class="info-label">
+                    ANO
+                </div>
+
+                <div
+                    class="info-value"
+                    id="yearValue"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="info">
+
+                <div class="info-label">
+                    SEMESTRE
+                </div>
+
+                <div
+                    class="info-value"
+                    id="semesterValue"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="info">
+
+                <div class="info-label">
+                    MÊS
+                </div>
+
+                <div
+                    class="info-value"
+                    id="monthValue"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="info">
+
+                <div class="info-label">
+                    SEMANA
+                </div>
+
+                <div
+                    class="info-value"
+                    id="weekValue"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="info">
+
+                <div class="info-label">
+                    BIMESTRE
+                </div>
+
+                <div
+                    class="info-value"
+                    id="bimesterValue"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="info">
+
+                <div class="info-label">
+                    QUINZENA
+                </div>
+
+                <div
+                    class="info-value"
+                    id="fortnightValue"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="info">
+
+                <div class="info-label">
+                    DIA DO ANO
+                </div>
+
+                <div
+                    class="info-value"
+                    id="yearDayValue"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="info">
+
+                <div class="info-label">
+                    UTC
+                </div>
+
+                <div
+                    class="info-value"
+                    id="utcValue"
+                >
+                    —
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             STATUS
+        ================================================== -->
+
+        <section class="status-card">
+
+            <div class="status-head">
+
+                <div class="status-title">
+                    Sua localização
+                </div>
+
+
+                <div class="status-indicator">
+
+                    <span class="live-dot"></span>
+
+                    ATIVA
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="status-text"
+                id="statusText"
+            >
+                O relógio usa somente o horário da sua localização
+                atual.
+            </div>
+
+
+            <button
+                class="location-button"
+                onclick="carregarLocalizacao(true)"
+                type="button"
+            >
+                 Atualizar localização
+            </button>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+
+<script>
+
+/* =========================================================
+   ELEMENTOS
+========================================================= */
+
+const mainClock =
+    document.getElementById("mainClock");
+
+const mainDate =
+    document.getElementById("mainDate");
+
+const mainTimezone =
+    document.getElementById("mainTimezone");
+
+const currentCountry =
+    document.getElementById("currentCountry");
+
+const currentCity =
+    document.getElementById("currentCity");
+
+const locationStatus =
+    document.getElementById("locationStatus");
+
+const statusText =
+    document.getElementById("statusText");
+
+
+/* =========================================================
+   FUSO LOCAL
+========================================================= */
+
+let localTimezone =
+    Intl.DateTimeFormat()
+        .resolvedOptions()
+        .timeZone;
+
+
+/* =========================================================
+   FORMATAR DATA
+========================================================= */
+
+function formatDate(date, zone){
+
+    return new Intl.DateTimeFormat(
+        "pt-BR",
+        {
+            timeZone:zone,
+
+            weekday:"long",
+
+            day:"2-digit",
+
+            month:"long",
+
+            year:"numeric"
+        }
+    ).format(date);
+
+}
+
+
+/* =========================================================
+   PARTES DA DATA
+========================================================= */
+
+function getParts(date, zone){
+
+    const parts =
+        new Intl.DateTimeFormat(
+            "en-US",
+            {
+                timeZone:zone,
+
+                year:"numeric",
+
+                month:"numeric",
+
+                day:"numeric",
+
+                hour:"numeric",
+
+                minute:"numeric",
+
+                second:"numeric",
+
+                hourCycle:"h23"
+            }
+        ).formatToParts(date);
+
+
+    const result = {};
+
+
+    parts.forEach(part => {
+
+        if(
+            part.type !== "literal"
+        ){
+
+            result[part.type] =
+                Number(part.value);
+
+        }
+
+    });
+
+
+    return result;
+
+}
+
+
+/* =========================================================
+   UTC
+========================================================= */
+
+function getTimezoneOffset(
+    zone,
+    date
+){
+
+    try{
+
+        const parts =
+            new Intl.DateTimeFormat(
+                "en-US",
+                {
+                    timeZone:zone,
+
+                    timeZoneName:"longOffset"
+                }
+            ).formatToParts(date);
+
+
+        const timezone =
+            parts.find(
+                part =>
+                    part.type ===
+                    "timeZoneName"
+            );
+
+
+        if(!timezone){
+
+            return "UTC";
+
+        }
+
+
+        return timezone.value
+            .replace("GMT","UTC");
+
+    }catch(error){
+
+        return "UTC";
+
+    }
+
+}
+
+
+/* =========================================================
+   DIA DO ANO
+========================================================= */
+
+function getDayOfYear(
+    date,
+    zone
+){
+
+    const p =
+        getParts(date,zone);
+
+
+    const start =
+        new Date(
+            Date.UTC(
+                p.year,
+                0,
+                1
+            )
+        );
+
+
+    const current =
+        new Date(
+            Date.UTC(
+                p.year,
+                p.month - 1,
+                p.day
+            )
+        );
+
+
+    return Math.floor(
+        (
+            current - start
+        ) / 86400000
+    ) + 1;
+
+}
+
+
+/* =========================================================
+   SEMANA ISO
+========================================================= */
+
+function getWeekNumber(
+    date,
+    zone
+){
+
+    const p =
+        getParts(date,zone);
+
+
+    const utc =
+        new Date(
+            Date.UTC(
+                p.year,
+                p.month - 1,
+                p.day
+            )
+        );
+
+
+    const day =
+        utc.getUTCDay() || 7;
+
+
+    utc.setUTCDate(
+        utc.getUTCDate()
+        + 4
+        - day
+    );
+
+
+    const yearStart =
+        new Date(
+            Date.UTC(
+                utc.getUTCFullYear(),
+                0,
+                1
+            )
+        );
+
+
+    return Math.ceil(
+        (
+            (
+                utc - yearStart
+            ) / 86400000
+            + 1
+        ) / 7
+    );
+
+}
+
+
+/* =========================================================
+   PROGRESSO
+========================================================= */
+
+function getDayProgress(
+    date,
+    zone
+){
+
+    const p =
+        getParts(date,zone);
+
+
+    const seconds =
+        p.hour * 3600 +
+        p.minute * 60 +
+        p.second;
+
+
+    return (
+        seconds / 86400
+    ) * 100;
+
+}
+
+
+/* =========================================================
+   ATUALIZAR
+========================================================= */
+
+function updateInfo(){
+
+    const now =
+        new Date();
+
+
+    const parts =
+        getParts(
+            now,
+            localTimezone
+        );
+
+
+    const hour =
+        String(parts.hour)
+            .padStart(2,"0");
+
+
+    const minute =
+        String(parts.minute)
+            .padStart(2,"0");
+
+
+    const second =
+        String(parts.second)
+            .padStart(2,"0");
+
+
+    mainClock.innerHTML =
+        `${hour}:${minute}<span>:${second}</span>`;
+
+
+    let dateText =
+        formatDate(
+            now,
+            localTimezone
+        );
+
+
+    dateText =
+        dateText.charAt(0).toUpperCase()
+        + dateText.slice(1);
+
+
+    mainDate.textContent =
+        dateText;
+
+
+    mainTimezone.textContent =
+        ` ${localTimezone} · ${
+            getTimezoneOffset(
+                localTimezone,
+                now
+            )
+        }`;
+
+
+    const progress =
+        getDayProgress(
+            now,
+            localTimezone
+        );
+
+
+    document
+        .getElementById("dayProgress")
+        .style.width =
+            `${progress}%`;
+
+
+    document
+        .getElementById("dayPercent")
+        .textContent =
+            `${progress.toFixed(1)}%`;
+
+
+    document
+        .getElementById("yearValue")
+        .textContent =
+            parts.year;
+
+
+    document
+        .getElementById("semesterValue")
+        .textContent =
+            parts.month <= 6
+                ? "1º"
+                : "2º";
+
+
+    const monthName =
+        new Intl.DateTimeFormat(
+            "pt-BR",
+            {
+                timeZone:
+                    localTimezone,
+
+                month:"long"
+            }
+        )
+        .format(now);
+
+
+    document
+        .getElementById("monthValue")
+        .textContent =
+            monthName.replace(
+                /^./,
+                char =>
+                    char.toUpperCase()
+            );
+
+
+    document
+        .getElementById("weekValue")
+        .textContent =
+            getWeekNumber(
+                now,
+                localTimezone
+            );
+
+
+    document
+        .getElementById("bimesterValue")
+        .textContent =
+            `${Math.ceil(
+                parts.month / 2
+            )}º`;
+
+
+    document
+        .getElementById("fortnightValue")
+        .textContent =
+            parts.day <= 15
+                ? "1ª"
+                : "2ª";
+
+
+    document
+        .getElementById("yearDayValue")
+        .textContent =
+            getDayOfYear(
+                now,
+                localTimezone
+            );
+
+
+    document
+        .getElementById("utcValue")
+        .textContent =
+            getTimezoneOffset(
+                localTimezone,
+                now
+            );
+
+}
+
+
+/* =========================================================
+   GEOLOCALIZAÇÃO
+========================================================= */
+
+async function carregarLocalizacao(
+    mostrarToast = false
+){
+
+    if(
+        !navigator.geolocation
+    ){
+
+        locationStatus.textContent =
+            "GPS não disponível";
+
+        statusText.textContent =
+            "Seu navegador não oferece acesso à localização.";
+
+        return;
+
+    }
+
+
+    locationStatus.textContent =
+        "Obtendo localização...";
+
+
+    statusText.textContent =
+        "Solicitando a localização do dispositivo.";
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        async position => {
+
+            const latitude =
+                position.coords.latitude;
+
+            const longitude =
+                position.coords.longitude;
+
+
+            try{
+
+                const response =
+                    await fetch(
+
+                        `https://nominatim.openstreetmap.org/reverse` +
+                        `?format=json` +
+                        `&lat=${latitude}` +
+                        `&lon=${longitude}` +
+                        `&zoom=10` +
+                        `&addressdetails=1`,
+
+                        {
+                            headers:{
+                                "Accept-Language":
+                                    "pt-BR"
+                            }
+                        }
+
+                    );
+
+
+                if(!response.ok){
+
+                    throw new Error(
+                        "Falha no servidor"
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                const address =
+                    data.address || {};
+
+
+                const city =
+                    address.city ||
+                    address.town ||
+                    address.village ||
+                    address.municipality ||
+                    address.county ||
+                    "Localização atual";
+
+
+                const country =
+                    address.country ||
+                    "País não identificado";
+
+
+                currentCountry.textContent =
+                    country;
+
+
+                currentCity.textContent =
+                    city;
+
+
+                locationStatus.textContent =
+                    "Localização detectada";
+
+
+                statusText.textContent =
+                    "O relógio está usando somente o horário desta localização.";
+
+
+                if(mostrarToast){
+
+                    showToast(
+                        "📍 Localização atualizada"
+                    );
+
+                }
+
+            }catch(error){
+
+                currentCountry.textContent =
+                    "Localização atual";
+
+
+                currentCity.textContent =
+                    "GPS detectado";
+
+
+                locationStatus.textContent =
+                    "GPS ativo";
+
+
+                statusText.textContent =
+                    "A localização foi detectada, mas o nome da cidade não pôde ser obtido.";
+
+            }
+
+        },
+
+
+        error => {
+
+            currentCountry.textContent =
+                "Localização não autorizada";
+
+
+            currentCity.textContent =
+                "Ative o acesso à localização";
+
+
+            locationStatus.textContent =
+                "Permissão necessária";
+
+
+            statusText.textContent =
+                "Permita o acesso à localização para identificar sua cidade.";
+
+        },
+
+
+        {
+
+            enableHighAccuracy:true,
+
+            timeout:10000,
+
+            maximumAge:300000
+
+        }
+
+    );
+
+}
+
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer;
+
+
+function showToast(message){
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            2500
+        );
+
+}
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+========================================================= */
+
+function start(){
+
+    updateInfo();
+
+    carregarLocalizacao();
+
+}
+
+
+start();
+
+
+/* =========================================================
+   ATUALIZAÇÃO
+========================================================= */
+
+setInterval(
+    updateInfo,
+    1000
+);
+
+
+/* =========================================================
+   VISIBILIDADE
+========================================================= */
+
+document.addEventListener(
+    "visibilitychange",
+    () => {
+
+        if(
+            !document.hidden
+        ){
+
+            updateInfo();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   TECLADO
+========================================================= */
+
+
+
+</script>
+
+</body>
+
+</html>

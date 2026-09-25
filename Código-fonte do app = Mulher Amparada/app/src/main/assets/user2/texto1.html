@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+    <meta
+        name="description"
+        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
+    >
+
+<meta name="theme-color" content="#000000">
+
+<title>Mulher Amparada</title>
+
+<style>
+/* =========================================================
+   BASE
+========================================================= */
+
+@font-face {
+    font-family: "Quicksand";
+    src: url("font.ttf") format("truetype");
+    font-weight: 400 800;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: "Quicksand", sans-serif;
+
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+html {
+    min-height: 100%;
+    background: #ffffff;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    color: #17181c;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    overflow-x: hidden;
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.container {
+    width: min(100%, 760px);
+    margin: 0 auto;
+
+    padding:
+        58px
+        22px
+        60px;
+}
+
+
+/* =========================================================
+   MARCA
+========================================================= */
+
+.marca {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    margin-bottom: 45px;
+}
+
+.traco {
+    width: 44px;
+    height: 4px;
+
+    margin-bottom: 13px;
+
+    border-radius: 999px;
+
+    background: #9b5cff;
+
+    box-shadow:
+        0 0 18px rgba(155, 92, 255, .25);
+}
+
+.marca h1 {
+    margin: 0;
+
+    color: #17181c;
+
+    font-size: clamp(28px, 7vw, 42px);
+    line-height: 1.05;
+
+    font-weight: 700;
+
+    letter-spacing: -1.5px;
+}
+
+.marca p {
+    margin: 13px 0 0;
+
+    max-width: 430px;
+
+    color: #666a74;
+
+    font-size: 15px;
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   DESTAQUE
+========================================================= */
+
+.destaque {
+    position: relative;
+
+    min-height: 190px;
+
+    padding: 30px;
+
+    margin-bottom: 18px;
+
+    border-radius: 30px;
+
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(155, 92, 255, .12),
+            transparent 42%
+        ),
+        #f5f6f8;
+
+    border: 1px solid #e1e2e6;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, .05);
+}
+
+.destaque::before {
+    content: "";
+
+    position: absolute;
+
+    width: 150px;
+    height: 150px;
+
+    top: -85px;
+    right: -45px;
+
+    border-radius: 50%;
+
+    background: rgba(155, 92, 255, .07);
+}
+
+.destaque::after {
+    content: "";
+
+    position: absolute;
+
+    width: 70px;
+    height: 70px;
+
+    bottom: -32px;
+    left: 35px;
+
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, .025);
+}
+
+.destaque h2 {
+    position: relative;
+    z-index: 2;
+
+    margin: 0 0 10px;
+
+    color: #17181c;
+
+    font-size: 25px;
+    line-height: 1.2;
+
+    letter-spacing: -.6px;
+}
+
+.destaque p {
+    position: relative;
+    z-index: 2;
+
+    max-width: 470px;
+
+    margin: 0;
+
+    color: #666a74;
+
+    font-size: 14px;
+    line-height: 1.6;
+
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   BOLHAS DO DESTAQUE
+========================================================= */
+
+.bolhas {
+    position: relative;
+    z-index: 3;
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 25px;
+}
+
+.bolhas span {
+    display: block;
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #9b5cff;
+
+    opacity: .8;
+}
+
+.bolhas span:nth-child(2) {
+    width: 6px;
+    height: 6px;
+
+    opacity: .45;
+}
+
+.bolhas span:nth-child(3) {
+    width: 11px;
+    height: 11px;
+
+    opacity: .2;
+}
+
+
+/* =========================================================
+   SEÇÕES
+========================================================= */
+
+.secoes {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 14px;
+}
+
+.secao {
+    position: relative;
+
+    min-height: 170px;
+
+    padding: 25px;
+
+    border-radius: 27px;
+
+    background: #ffffff;
+
+    border: 1px solid #e1e2e6;
+
+    overflow: hidden;
+
+    transition:
+        transform .2s ease,
+        border-color .2s ease;
+
+    box-shadow:
+        0 6px 24px rgba(0, 0, 0, .04);
+}
+
+.secao:hover {
+    transform: translateY(-2px);
+
+    border-color: #d4c5f4;
+}
+
+
+/* =========================================================
+   BOLHA PRINCIPAL DE CADA SEÇÃO
+========================================================= */
+
+.secao::before {
+    content: "";
+
+    position: absolute;
+
+    width: 115px;
+    height: 115px;
+
+    top: -58px;
+    right: -38px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(155, 92, 255, .07);
+}
+
+
+/* =========================================================
+   BOLHA SECUNDÁRIA
+========================================================= */
+
+.secao::after {
+    content: "";
+
+    position: absolute;
+
+    width: 48px;
+    height: 48px;
+
+    right: 43px;
+    bottom: -23px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(0, 0, 0, .025);
+}
+
+
+/* =========================================================
+   CONTEÚDO DA SEÇÃO
+========================================================= */
+
+.secao h3 {
+    position: relative;
+    z-index: 2;
+
+    margin: 0 0 10px;
+
+    color: #17181c;
+
+    font-size: 18px;
+
+    letter-spacing: -.3px;
+}
+
+.secao p {
+    position: relative;
+    z-index: 2;
+
+    color: #666a74;
+
+    font-size: 13px;
+    line-height: 1.6;
+
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   PEQUENO DETALHE
+========================================================= */
+
+.indicador {
+    position: absolute;
+    z-index: 3;
+
+    left: 25px;
+    bottom: 24px;
+
+    width: 25px;
+    height: 3px;
+
+    border-radius: 999px;
+
+    background: #9b5cff;
+
+    opacity: .65;
+}
+
+
+/* =========================================================
+   ELEMENTOS DO CONTEÚDO FINANCEIRO
+========================================================= */
+
+.destaque h1 {
+    position: relative;
+    z-index: 2;
+
+    margin: 45px 0 25px;
+
+    color: #17181c;
+
+    font-size: 28px;
+    line-height: 1.2;
+
+    letter-spacing: -0.8px;
+}
+
+.destaque h1:first-child {
+    margin-top: 0;
+}
+
+.destaque h2 {
+    position: relative;
+    z-index: 2;
+
+    margin: 35px 0 18px;
+
+    color: #17181c;
+
+    font-size: 24px;
+    line-height: 1.25;
+
+    letter-spacing: -.6px;
+}
+
+.destaque h3 {
+    position: relative;
+    z-index: 2;
+
+    margin: 30px 0 12px;
+
+    color: #25262b;
+
+    font-size: 18px;
+    line-height: 1.3;
+
+    letter-spacing: -.3px;
+}
+
+
+/* =========================================================
+   LISTAS
+========================================================= */
+
+.destaque ul {
+    position: relative;
+    z-index: 2;
+
+    margin: 15px 0 25px;
+
+    padding-left: 22px;
+
+    color: #666a74;
+
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.destaque li {
+    margin-bottom: 7px;
+    padding-left: 4px;
+}
+
+.destaque li::marker {
+    color: #9b5cff;
+}
+
+
+/* =========================================================
+   BLOCO DE CITAÇÃO
+========================================================= */
+
+.destaque blockquote {
+    position: relative;
+    z-index: 2;
+
+    margin: 25px 0;
+
+    padding: 20px;
+
+    border-left: 3px solid #9b5cff;
+    border-radius: 0 18px 18px 0;
+
+    background: #ffffff;
+
+    color: #666a74;
+
+    font-size: 14px;
+    line-height: 1.6;
+
+    box-shadow:
+        inset 0 0 0 1px #e5e6e9;
+}
+
+
+/* =========================================================
+   CÓDIGO
+========================================================= */
+
+.destaque code {
+    padding: 4px 8px;
+
+    border-radius: 8px;
+
+    background: #ececf0;
+
+    border: 1px solid #dfe0e4;
+
+    color: #7b3fd0;
+
+    font-family: monospace;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   DESTAQUES
+========================================================= */
+
+.destaque strong {
+    color: #17181c;
+}
+
+</style>
+
+<style>
+
+@media (prefers-reduced-motion: reduce) {
+    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
+
+    * {
+        animation-name: none !important;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- =====================================================
+         MARCA
+    ====================================================== -->
+
+    <header class="marca">
+
+        <span class="traco"></span>
+
+        <h1>
+            Mulher Amparada
+        </h1>
+
+        <p>
+            Educação financeira 
+        </p>
+
+    </header>
+
+
+    <!-- =====================================================
+         DESTAQUE
+    ====================================================== -->
+
+    <section class="destaque">
+<h1>💰 Educação financeira e proteção do seu dinheiro</h1>
+
+<p>
+    <strong>Usuárias, vou ensinar tudo o que eu sei sobre finanças para vocês, começando pelo mais urgente: como proteger o seu dinheiro.</strong>
+</p>
+
+<blockquote>
+    ⚠️ <strong>Importante:</strong> os recursos disponíveis mudam de um banco para outro. Nem todas as funções abaixo existem em todos os aplicativos.
+</blockquote>
+
+
+<h2>🚨 E se o agressor estiver com o seu cartão?</h2>
+
+<p>
+    Se você ainda consegue acessar sua conta com segurança, existem algumas medidas que podem ajudar:
+</p>
+
+
+<h3>1. Desative o pagamento por aproximação</h3>
+
+<p>
+    Alguns bancos permitem ativar ou desativar a função de pagamento por aproximação.
+</p>
+
+<p>
+    Assim, dependendo do banco, novos pagamentos por aproximação podem exigir outra forma de autenticação.
+</p>
+
+
+<h3>2. Bloqueie o cartão</h3>
+
+<p>
+    Muitos aplicativos permitem <strong>bloquear temporariamente o cartão</strong> pelo próprio aplicativo.
+</p>
+
+<p>
+    Em algumas situações, também é possível solicitar o cancelamento definitivo e pedir outro cartão.
+</p>
+
+
+<h1>🔐 Outras formas de proteger sua conta</h1>
+
+
+<h3>1. Defina limites</h3>
+
+<p>
+    Alguns bancos permitem configurar limites para determinadas operações ou pagamentos.
+</p>
+
+<p>
+    Isso pode ajudar a reduzir o impacto de uma movimentação indevida.
+</p>
+
+<p>
+    ⚠️ Lembre-se: se você colocar um limite muito baixo, <strong>você também poderá ficar limitada</strong> ao usar sua própria conta.
+</p>
+
+
+<h3>2. Proteja o acesso ao aplicativo</h3>
+
+<p>
+    Alguns aplicativos permitem utilizar <strong>biometria, senha ou outros métodos de autenticação</strong>.
+</p>
+
+<p>
+    Sempre que estiver disponível e for seguro para você, considere ativar a biometria.
+</p>
+
+<p>
+    <strong>Nunca compartilhe sua senha ou código de autenticação.</strong>
+</p>
+
+
+<h3>3. Recursos baseados em localização</h3>
+
+<p>
+    Algumas instituições oferecem recursos de segurança que utilizam a localização do aparelho ou identificam situações consideradas diferentes do comportamento habitual.
+</p>
+
+<p>
+    Dependendo do serviço, isso pode ajudar a aplicar proteções adicionais.
+</p>
+
+<p>
+    ⚠️ <strong>Esse recurso não existe necessariamente em todos os bancos e pode depender de análise e configuração.</strong>
+</p>
+
+
+<h3>4. Autorize seu aparelho</h3>
+
+<p>
+    Alguns bancos permitem cadastrar ou reconhecer o celular utilizado para acessar a conta.
+</p>
+
+<p>
+    Quando alguém tenta utilizar outro aparelho, podem ser solicitadas verificações adicionais de identidade.
+</p>
+
+
+<h3>5. Utilize um cartão virtual</h3>
+
+<p>
+    Alguns bancos oferecem cartões virtuais que podem ser utilizados para determinadas compras.
+</p>
+
+<p>
+    Também existem formas de pagamento pelo celular, como carteiras digitais e aproximação pelo NFC.
+</p>
+
+<p>
+    <strong>Mas atenção:</strong> cartão virtual e pagamento por aproximação são coisas diferentes. O funcionamento depende do banco, do cartão e do celular.
+</p>
+
+
+<h1>🔎 Uma dica MUITO importante</h1>
+
+<p>
+    Se você estiver com pressa, <strong>não fique procurando desesperadamente pelo menu do aplicativo.</strong>
+</p>
+
+<p>
+    Procure pelo botão de <strong>lupa 🔍</strong> e pesquise palavras como:
+</p>
+
+<ul>
+    <li><code>bloquear cartão</code></li>
+    <li><code>limite</code></li>
+    <li><code>segurança</code></li>
+    <li><code>cartão virtual</code></li>
+    <li><code>aproximação</code></li>
+    <li><code>dispositivo</code></li>
+    <li><code>biometria</code></li>
+</ul>
+
+<p>
+    Os nomes das funções podem mudar de banco para banco.
+</p>
+
+
+<h1>💵 Agora vamos falar sobre cuidar do seu dinheiro</h1>
+
+<p>
+    Uma coisa importante:
+</p>
+
+<p>
+    <strong>dinheiro físico e dinheiro digital possuem riscos diferentes.</strong>
+</p>
+
+<p>
+    O dinheiro físico pode ser levado fisicamente por outra pessoa.
+</p>
+
+<p>
+    Já uma conta digital pode possuir várias camadas de segurança, como:
+</p>
+
+<ul>
+    <li>senha;</li>
+    <li>biometria;</li>
+    <li>confirmação de identidade;</li>
+    <li>limites;</li>
+    <li>bloqueio do cartão;</li>
+    <li>dispositivo autorizado;</li>
+    <li>notificações de movimentação.</li>
+</ul>
+
+<p>
+    Por isso, para quem precisa de maior controle sobre o próprio dinheiro,
+    <strong>uma conta com bons recursos de segurança pode ser bastante útil</strong>.
+</p>
+
+<p>
+    ⚠️ Mas isso não significa que dinheiro digital seja impossível de movimentar por outra pessoa.
+    Se alguém tiver acesso à sua senha, aparelho ou métodos de autenticação, ainda pode existir risco.
+</p>
+
+
+<h1>📚 E os juros?</h1>
+
+<p>
+    Agora vem uma coisa que muita gente aprende apenas quando começa a lidar com dinheiro:
+</p>
+
+<p>
+    <strong>nem todo juro trabalha contra você.</strong>
+</p>
+
+<p>
+    Existem situações em que <strong>você paga juros</strong> e outras em que
+    <strong>você recebe juros</strong>.
+</p>
+
+
+<h3>😟 Quando você deve dinheiro</h3>
+
+<p>
+    Imagine que você pegou <strong>R$ 1.000 emprestados</strong>.
+</p>
+
+<p>
+    Se houver juros e você demorar para pagar, a dívida poderá aumentar.
+</p>
+
+<p>
+    Nesse caso, <strong>os juros estão trabalhando contra você</strong>.
+</p>
+
+
+<h3>🙂 Quando seu dinheiro está investido</h3>
+
+<p>
+    Agora imagine o contrário.
+</p>
+
+<p>
+    Você coloca dinheiro em um investimento que remunera você.
+</p>
+
+<p>
+    Nesse caso, você pode receber rendimentos ao longo do tempo.
+</p>
+
+<p>
+    <strong>Aqui, os juros estão trabalhando a seu favor.</strong>
+</p>
+
+<blockquote>
+    💸 <strong>Dívida:</strong> você pode pagar juros.<br>
+    💰 <strong>Investimento:</strong> você pode receber rendimentos.
+</blockquote>
+
+
+<h1>🏦 E o CDB?</h1>
+
+<p>
+    <strong>CDB significa Certificado de Depósito Bancário.</strong>
+</p>
+
+<p>
+    Alguns aplicativos chamam determinadas funções de
+    <strong>"cofrinho", "caixinha" ou nomes parecidos</strong>,
+    mas isso não significa que todo cofrinho seja um CDB.
+</p>
+
+<p>
+    Um CDB é um investimento emitido por uma instituição financeira.
+</p>
+
+<p>
+    Por exemplo, você pode encontrar um CDB que ofereça uma rentabilidade de
+    <strong>110% do CDI</strong>.
+</p>
+
+<p>
+    Isso significa que a rentabilidade é calculada com base em
+    <strong>110% da variação do CDI</strong>, conforme as condições daquele produto.
+</p>
+
+<p>
+    ⚠️ <strong>Não significa que R$ 445 vão necessariamente render exatamente R$ 5 por mês.</strong>
+</p>
+
+<p>
+    A rentabilidade depende das taxas do período, do produto e de outros fatores.
+</p>
+
+
+<h1>🧾 E os impostos?</h1>
+
+<p>
+    Alguns investimentos possuem <strong>impostos sobre os rendimentos</strong>.
+</p>
+
+<p>
+    Isso significa que você não deve olhar somente para a rentabilidade anunciada.
+</p>
+
+<p>
+    Sempre procure saber:
+</p>
+
+<p>
+    <strong>"Quanto vou receber depois dos impostos e das taxas?"</strong>
+</p>
+
+<p>
+    O valor líquido é o que realmente importa para comparar investimentos.
+</p>
+
+
+<h1>🚑 CDB pode servir para uma reserva de emergência?</h1>
+
+<p>
+    <strong>Pode, dependendo do CDB.</strong>
+</p>
+
+<p>
+    Para uma reserva de emergência, uma das características mais importantes é a
+    <strong>liquidez</strong> — ou seja, a facilidade e o prazo para conseguir transformar o investimento em dinheiro.
+</p>
+
+<p>
+    Por isso, não basta olhar para "110% do CDI".
+</p>
+
+<p>
+    Também é importante verificar:
+</p>
+
+<ul>
+    <li>se existe liquidez diária;</li>
+    <li>quando o dinheiro pode ser resgatado;</li>
+    <li>quais são os impostos;</li>
+    <li>quais são as taxas;</li>
+    <li>qual é a instituição emissora;</li>
+    <li>quais proteções se aplicam ao produto.</li>
+</ul>
+
+
+<h1>📊 E os fundos de investimento?</h1>
+
+<p>
+    Agora vamos para outro tipo de investimento.
+</p>
+
+<p>
+    Imagine uma grande "caixinha" onde várias pessoas colocam dinheiro.
+</p>
+
+<p>
+    Esse patrimônio é dividido em <strong>cotas</strong>, e o fundo investe o dinheiro conforme suas regras.
+</p>
+
+<p>
+    Dependendo do fundo, ele pode investir em:
+</p>
+
+<ul>
+    <li>títulos;</li>
+    <li>ações;</li>
+    <li>moedas;</li>
+    <li>outros fundos;</li>
+    <li>títulos de empresas;</li>
+    <li>outros ativos.</li>
+</ul>
+
+<p>
+    Você não está simplesmente "emprestando dinheiro para os profissionais".
+</p>
+
+<p>
+    Você está adquirindo <strong>cotas de um fundo</strong>, cujo patrimônio é investido de acordo com uma política determinada.
+</p>
+
+
+<h1>⚠️ Fundos podem perder dinheiro?</h1>
+
+<p>
+    <strong>Sim.</strong>
+</p>
+
+<p>
+    E isso é muito importante entender.
+</p>
+
+<p>
+    Dependendo do fundo e dos investimentos que ele possui, o valor da sua cota pode subir ou cair.
+</p>
+
+<p>
+    Se os ativos do fundo se valorizarem, o fundo pode ganhar valor.
+</p>
+
+<p>
+    Se eles perderem valor, o fundo também pode perder valor.
+</p>
+
+
+<h3>E a liquidez?</h3>
+
+<p>
+    <strong>Liquidez não significa chance de ganhar ou perder.</strong>
+</p>
+
+<p>
+    Liquidez significa, principalmente, <strong>quanto tempo e quais condições são necessários para transformar seu investimento em dinheiro</strong>.
+</p>
+
+<p>
+    Alguns fundos permitem resgate rapidamente.
+</p>
+
+<p>
+    Outros possuem prazos maiores.
+</p>
+
+<p>
+    E existem investimentos com prazo determinado em que você pode não conseguir retirar o dinheiro livremente antes do vencimento.
+</p>
+
+<p>
+    <strong>Sempre confira essas condições antes de investir.</strong>
+</p>
+
+
+<h1>👩‍🏫 Então qual escolher?</h1>
+
+<p>
+    Não existe um investimento que seja simplesmente "o melhor".
+</p>
+
+<p>
+    Depende do objetivo.
+</p>
+
+
+<h3>🟢 Para dinheiro que você pode precisar rapidamente</h3>
+
+<p>
+    Priorize entender:
+</p>
+
+<p>
+    <strong>segurança + liquidez + previsibilidade.</strong>
+</p>
+
+
+<h3>🟡 Para objetivos de médio prazo</h3>
+
+<p>
+    Pode haver mais opções, dependendo da sua tolerância a risco.
+</p>
+
+
+<h3>🔴 Para investimentos que podem oscilar bastante</h3>
+
+<p>
+    É necessário entender que <strong>você pode ganhar, mas também pode perder dinheiro.</strong>
+</p>
+
+
+<h1>🌷 Para finalizar</h1>
+
+<p>
+    <strong>Seu dinheiro é seu.</strong>
+</p>
+
+<p>
+    Você não precisa investir porque alguém mandou.
+</p>
+
+<p>
+    Não precisa escolher o investimento que promete o maior rendimento.
+</p>
+
+<p>
+    E não precisa ter vergonha de perguntar:
+</p>
+
+<blockquote>
+    <strong>"Como exatamente meu dinheiro vai ser investido?"</strong>
+</blockquote>
+
+<p>
+    Antes de colocar seu dinheiro em qualquer produto, procure entender:
+</p>
+
+<ul>
+    <li><strong>📌 Rentabilidade:</strong> quanto pode render?</li>
+    <li><strong>📌 Risco:</strong> quanto posso perder?</li>
+    <li><strong>📌 Liquidez:</strong> quando posso retirar?</li>
+    <li><strong>📌 Impostos:</strong> quanto será descontado?</li>
+    <li><strong>📌 Taxas:</strong> quanto vou pagar?</li>
+    <li><strong>📌 Proteção:</strong> existe alguma garantia ou proteção aplicável?</li>
+</ul>
+
+<p>
+    <strong>Conhecimento financeiro também é uma forma de proteção. 🌷</strong>
+</p>
+
+        <div class="bolhas">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+    </section>
+
+
+
+
+
+
+
+
+
+
+</div>
+
+</body>
+
+</html>

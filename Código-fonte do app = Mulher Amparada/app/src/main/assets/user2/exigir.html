@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+    <meta
+        name="description"
+        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
+    >
+
+<meta
+    name="theme-color"
+    content="#000000"
+>
+
+<title>Direito ao Desembarque Seguro</title>
+
+<style>
+@font-face {
+
+    font-family:
+        "Quicksand";
+
+    src:
+        url("font.ttf")
+        format("truetype");
+
+    font-weight:
+        400 800;
+
+    font-style:
+        normal;
+
+    font-display:
+        swap;
+
+}
+
+
+* {
+
+    box-sizing:
+        border-box;
+
+    margin:
+        0;
+
+    padding:
+        0;
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+    -webkit-user-select:
+        none;
+
+    -webkit-backface-visibility:
+        hidden;
+
+    backface-visibility:
+        hidden;
+
+    -webkit-transform:
+        translateZ(0);
+
+    transform:
+        translateZ(0);
+
+    -webkit-tap-highlight-color:
+        transparent;
+
+}
+
+
+:root {
+
+    --surface:
+        #ffffff;
+
+    --surface-2:
+        #f5f6f8;
+
+    --white:
+        #17181c;
+
+    --soft:
+        #666a74;
+
+    --muted:
+        #858994;
+
+    --pink:
+        #ff3f82;
+
+    --pink-soft:
+        #e92f70;
+
+    --border:
+        #00000012;
+
+}
+
+
+html,
+body {
+
+    width:
+        100%;
+
+    min-height:
+        100%;
+
+    color:
+        var(--white);
+
+    background:
+        #ffffff;
+
+    scrollbar-width:
+        none;
+
+}
+
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+
+    width:
+        0;
+
+    height:
+        0;
+
+}
+
+
+body {
+
+    min-height:
+        100vh;
+
+    overflow-x:
+        hidden;
+
+    padding:
+        env(safe-area-inset-top)
+        16px
+        env(safe-area-inset-bottom);
+
+    background:
+        #ffffff;
+
+}
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+.main {
+
+    width:
+        100%;
+
+    max-width:
+        650px;
+
+    min-height:
+        100vh;
+
+    margin:
+        auto;
+
+    padding:
+        25px
+        0
+        70px;
+
+}
+
+
+/* =========================================================
+   CABEÇALHO
+========================================================= */
+
+.topLine {
+
+    width:
+        43px;
+
+    height:
+        3px;
+
+    margin-bottom:
+        18px;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--pink);
+
+}
+
+
+h1 {
+
+    font-size:
+        clamp(
+            31px,
+            8vw,
+            45px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        .98;
+
+    letter-spacing:
+        -1.5px;
+
+}
+
+
+.subtitle {
+
+    max-width:
+        470px;
+
+    margin-top:
+        14px;
+
+    color:
+        var(--soft);
+
+    font-size:
+        12px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.55;
+
+}
+
+
+/* =========================================================
+   CARTEIRINHA
+========================================================= */
+
+.rightCard {
+
+    margin-top:
+        30px;
+
+    padding:
+        27px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        30px;
+
+    background:
+        var(--surface);
+
+    box-shadow:
+        0 8px 30px
+        #00000008;
+
+}
+
+
+/* =========================================================
+   IDENTIFICAÇÃO
+========================================================= */
+
+.cardLabel {
+
+    color:
+        var(--pink-soft);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        2px;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.cardTitle {
+
+    margin-top:
+        13px;
+
+    color:
+        var(--white);
+
+    font-size:
+        clamp(
+            24px,
+            6vw,
+            34px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        1.05;
+
+}
+
+
+.cardText {
+
+    margin-top:
+        13px;
+
+    color:
+        #555861;
+
+    font-size:
+        12px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.65;
+
+}
+
+
+/* =========================================================
+   FRASE PARA MOSTRAR
+========================================================= */
+
+.request {
+
+    margin-top:
+        24px;
+
+    padding:
+        21px;
+
+    border:
+        1px solid
+        #ff3f8230;
+
+    border-radius:
+        22px;
+
+    background:
+        #ff3f820c;
+
+}
+
+
+.requestSmall {
+
+    color:
+        var(--pink-soft);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1.7px;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.requestText {
+
+    margin-top:
+        11px;
+
+    color:
+        var(--white);
+
+    font-size:
+        clamp(
+            18px,
+            5vw,
+            23px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        1.25;
+
+}
+
+
+/* =========================================================
+   HORÁRIO
+========================================================= */
+
+.time {
+
+    margin-top:
+        16px;
+
+    padding:
+        15px 16px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    border-radius:
+        17px;
+
+    background:
+        #f0f1f3;
+
+}
+
+
+.timeIcon {
+
+    width:
+        38px;
+
+    height:
+        38px;
+
+    flex:
+        0 0 38px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        12px;
+
+    background:
+        var(--pink);
+
+    color:
+        #ffffff;
+
+}
+
+
+.timeIcon svg {
+
+    width:
+        19px;
+
+    height:
+        19px;
+
+}
+
+
+.time strong {
+
+    display:
+        block;
+
+    color:
+        var(--white);
+
+    font-size:
+        13px;
+
+}
+
+
+.time span {
+
+    display:
+        block;
+
+    margin-top:
+        3px;
+
+    color:
+        var(--soft);
+
+    font-size:
+        10px;
+
+    font-weight:
+        600;
+
+}
+
+
+/* =========================================================
+   LEI
+========================================================= */
+
+.law {
+
+    margin-top:
+        16px;
+
+    padding:
+        21px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        22px;
+
+    background:
+        var(--surface-2);
+
+}
+
+
+.lawTitle {
+
+    color:
+        var(--white);
+
+    font-size:
+        15px;
+
+    font-weight:
+        800;
+
+}
+
+
+.lawNumber {
+
+    display:
+        inline-block;
+
+    margin-top:
+        6px;
+
+    color:
+        var(--pink-soft);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+}
+
+
+.law p {
+
+    margin-top:
+        12px;
+
+    color:
+        #5f626b;
+
+    font-size:
+        11px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.65;
+
+}
+
+
+/* =========================================================
+   CONDIÇÕES
+========================================================= */
+
+.conditions {
+
+    margin-top:
+        17px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            1fr
+        );
+
+    gap:
+        9px;
+
+}
+
+
+.condition {
+
+    padding:
+        14px;
+
+    border:
+        1px solid
+        #0000000c;
+
+    border-radius:
+        15px;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 2px 8px
+        #00000006;
+
+}
+
+
+.condition strong {
+
+    display:
+        block;
+
+    color:
+        var(--white);
+
+    font-size:
+        10px;
+
+}
+
+
+.condition span {
+
+    display:
+        block;
+
+    margin-top:
+        4px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        9px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.4;
+
+}
+
+
+/* =========================================================
+   AVISO
+========================================================= */
+
+.notice {
+
+    margin-top:
+        17px;
+
+    padding:
+        18px;
+
+    border:
+        1px solid
+        #00000008;
+
+    border-radius:
+        20px;
+
+    background:
+        #f0f1f3;
+
+}
+
+
+.notice strong {
+
+    color:
+        var(--white);
+
+    font-size:
+        11px;
+
+}
+
+
+.notice p {
+
+    margin-top:
+        7px;
+
+    color:
+        var(--soft);
+
+    font-size:
+        10px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.6;
+
+}
+
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
+@media (max-width: 390px) {
+
+    body {
+
+        padding-left:
+            14px;
+
+        padding-right:
+            14px;
+
+    }
+
+
+    .rightCard {
+
+        padding:
+            21px;
+
+    }
+
+
+    .conditions {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+
+
+@media (prefers-reduced-motion: reduce) {
+    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
+
+    * {
+        animation-name: none !important;
+    }
+}
+
+</style>
+
+
+
+</head>
+
+
+<body>
+
+<main class="main">
+
+
+    <div class="topLine"></div>
+
+
+    <h1>
+        Desembarque seguro
+    </h1>
+
+
+    <p class="subtitle">
+        Uma forma simples de informar ao motorista que você
+deseja desembarcar em um local mais seguro, conforme
+as regras aplicáveis ao transporte coletivo urbano da
+Cidade de São Paulo.
+    </p>
+
+
+    <section class="rightCard">
+
+
+        <div class="cardLabel">
+            Direito da passageira
+        </div>
+
+
+        <h2 class="cardTitle">
+            Solicitação de desembarque
+        </h2>
+
+
+        <p class="cardText">
+            Apresente esta tela ao motorista quando quiser
+            solicitar o desembarque em um local mais seguro,
+            dentro das condições previstas pela legislação
+            municipal.
+        </p>
+
+
+        <div class="request">
+
+            <div class="requestSmall">
+                Para mostrar ao motorista
+            </div>
+
+
+            <div class="requestText">
+                “Por favor, gostaria de desembarcar
+                em um local mais seguro.”
+            </div>
+
+
+            <div class="time">
+
+                <div class="timeIcon">
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="9"
+                        />
+
+                        <path
+                            d="M12 7v5l3 2"
+                        />
+
+                    </svg>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Das 22h às 5h
+                    </strong>
+
+                    <span>
+                        Horário previsto pela legislação municipal.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="law">
+
+            <div class="lawTitle">
+                Fundamentação legal
+            </div>
+
+
+            <div class="lawNumber">
+                LEI MUNICIPAL Nº 16.490/2016
+            </div>
+
+
+            <p>
+ A Lei Municipal nº 16.490/2016, da Cidade de São Paulo,
+permite que mulheres e idosos usuários do transporte
+coletivo urbano optem por um local mais seguro e acessível
+para desembarque entre 22h e 5h, desde que o local esteja
+no trajeto regular da linha e não seja proibida a parada
+de veículos.
+            </p>
+
+
+            <p>
+
+O Decreto nº 57.399/2016 regulamenta a lei e estabelece
+as condições para o desembarque fora dos pontos
+preestabelecidos. A parada deve ocorrer em local adequado,
+com espaço suficiente e observando as regras de segurança
+de trânsito.
+            </p>
+
+
+<p>O desembarque fora do ponto não é permitido em determinadas
+situações, incluindo viadutos, pontes, túneis e trechos
+especificamente previstos na regulamentação.</p>
+
+<p>Esta tela é informativa e não substitui a legislação oficial
+nem garante que qualquer local solicitado possa ser utilizado
+para desembarque.</p>
+            <div class="conditions">
+
+                <div class="condition">
+
+                    <strong>
+                        22h — 5h
+                    </strong>
+
+                    <span>
+                        Período do desembarque noturno.
+                    </span>
+
+                </div>
+
+
+                <div class="condition">
+
+                    <strong>
+                        Local seguro
+                    </strong>
+
+                    <span>
+                        A parada deve ser adequada e segura.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="notice">
+
+            <strong>
+                Importante
+            </strong>
+
+            <p>
+                A solicitação deve ser feita com antecedência.
+                O motorista deve avaliar se a parada pode ser
+                realizada com segurança e dentro das regras de
+                trânsito. Há locais onde o desembarque fora do
+                ponto não é permitido, como viadutos, pontes,
+                túneis e determinados corredores exclusivos.
+            </p>
+
+        </div>
+
+
+    </section>
+
+</main>
+
+
+</body>
+
+</html>

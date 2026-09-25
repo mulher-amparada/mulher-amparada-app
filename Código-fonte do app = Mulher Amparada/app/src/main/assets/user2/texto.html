@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+    <meta
+        name="description"
+        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
+    >
+
+<meta name="theme-color" content="#000000">
+
+<title>Mulher Amparada</title>
+
+<style>
+
+/* =========================================================
+   BASE
+========================================================= */
+
+@font-face {
+    font-family: "Quicksand";
+    src: url("font.ttf") format("truetype");
+    font-weight: 400 800;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: "Quicksand", sans-serif;
+
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+html {
+    min-height: 100%;
+    background: #ffffff;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    color: #17181c;
+
+    background: #ffffff;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.container {
+    width: min(100%, 760px);
+    margin: 0 auto;
+
+    padding:
+        58px
+        22px
+        60px;
+}
+
+
+/* =========================================================
+   MARCA
+========================================================= */
+
+.marca {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    margin-bottom: 45px;
+}
+
+.traco {
+    width: 44px;
+    height: 4px;
+
+    margin-bottom: 13px;
+
+    border-radius: 999px;
+
+    background: #9b5cff;
+
+    box-shadow:
+        0 0 18px rgba(155, 92, 255, .28);
+}
+
+.marca h1 {
+    margin: 0;
+
+    color: #17181c;
+
+    font-size: clamp(28px, 7vw, 42px);
+    line-height: 1.05;
+
+    font-weight: 700;
+
+    letter-spacing: -1.5px;
+}
+
+.marca p {
+    margin: 13px 0 0;
+
+    max-width: 430px;
+
+    color: #666a74;
+
+    font-size: 15px;
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   DESTAQUE
+========================================================= */
+
+.destaque {
+    position: relative;
+
+    min-height: 190px;
+
+    padding: 30px;
+
+    margin-bottom: 18px;
+
+    border-radius: 30px;
+
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(155, 92, 255, .10),
+            transparent 42%
+        ),
+        #f5f6f8;
+
+    border: 1px solid #00000012;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 30px
+        rgba(0, 0, 0, .05);
+}
+
+.destaque::before {
+    content: "";
+
+    position: absolute;
+
+    width: 150px;
+    height: 150px;
+
+    top: -85px;
+    right: -45px;
+
+    border-radius: 50%;
+
+    background: rgba(155, 92, 255, .07);
+}
+
+.destaque::after {
+    content: "";
+
+    position: absolute;
+
+    width: 70px;
+    height: 70px;
+
+    bottom: -32px;
+    left: 35px;
+
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, .025);
+}
+
+.destaque h2 {
+    position: relative;
+    z-index: 2;
+
+    margin: 0 0 10px;
+
+    color: #17181c;
+
+    font-size: 25px;
+    line-height: 1.2;
+
+    letter-spacing: -.6px;
+}
+
+.destaque p {
+    position: relative;
+    z-index: 2;
+
+    max-width: 470px;
+
+    margin: 0;
+
+    color: #666a74;
+
+    font-size: 14px;
+    line-height: 1.6;
+
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   BOLHAS DO DESTAQUE
+========================================================= */
+
+.bolhas {
+    position: relative;
+    z-index: 3;
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 25px;
+}
+
+.bolhas span {
+    display: block;
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #9b5cff;
+
+    opacity: .8;
+}
+
+.bolhas span:nth-child(2) {
+    width: 6px;
+    height: 6px;
+
+    opacity: .45;
+}
+
+.bolhas span:nth-child(3) {
+    width: 11px;
+    height: 11px;
+
+    opacity: .2;
+}
+
+
+/* =========================================================
+   SEÇÕES
+========================================================= */
+
+.secoes {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 14px;
+}
+
+.secao {
+    position: relative;
+
+    min-height: 170px;
+
+    padding: 25px;
+
+    border-radius: 27px;
+
+    background: #ffffff;
+
+    border: 1px solid #00000012;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 6px 24px
+        rgba(0, 0, 0, .04);
+
+    transition:
+        transform .2s ease,
+        border-color .2s ease;
+}
+
+.secao:hover {
+    transform: translateY(-2px);
+
+    border-color: #d8c9ed;
+}
+
+
+/* =========================================================
+   BOLHA PRINCIPAL DE CADA SEÇÃO
+========================================================= */
+
+.secao::before {
+    content: "";
+
+    position: absolute;
+
+    width: 115px;
+    height: 115px;
+
+    top: -58px;
+    right: -38px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(155, 92, 255, .07);
+}
+
+
+/* =========================================================
+   BOLHA SECUNDÁRIA
+========================================================= */
+
+.secao::after {
+    content: "";
+
+    position: absolute;
+
+    width: 48px;
+    height: 48px;
+
+    right: 43px;
+    bottom: -23px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(0, 0, 0, .025);
+}
+
+
+/* =========================================================
+   CONTEÚDO DA SEÇÃO
+========================================================= */
+
+.secao h3 {
+    position: relative;
+    z-index: 2;
+
+    margin: 0 0 10px;
+
+    color: #17181c;
+
+    font-size: 18px;
+
+    letter-spacing: -.3px;
+}
+
+.secao p {
+    position: relative;
+    z-index: 2;
+
+    color: #666a74;
+
+    font-size: 13px;
+    line-height: 1.6;
+
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   PEQUENO DETALHE
+========================================================= */
+
+.indicador {
+    position: absolute;
+    z-index: 3;
+
+    left: 25px;
+    bottom: 24px;
+
+    width: 25px;
+    height: 3px;
+
+    border-radius: 999px;
+
+    background: #9b5cff;
+
+    opacity: .65;
+}
+
+
+/* =========================================================
+   ELEMENTOS DO CONTEÚDO FINANCEIRO
+========================================================= */
+
+.destaque h1 {
+    position: relative;
+    z-index: 2;
+
+    margin: 45px 0 25px;
+
+    color: #17181c;
+
+    font-size: 28px;
+    line-height: 1.2;
+
+    letter-spacing: -0.8px;
+}
+
+.destaque h1:first-child {
+    margin-top: 0;
+}
+
+.destaque h2 {
+    position: relative;
+    z-index: 2;
+
+    margin: 35px 0 18px;
+
+    color: #17181c;
+
+    font-size: 24px;
+    line-height: 1.25;
+
+    letter-spacing: -.6px;
+}
+
+.destaque h3 {
+    position: relative;
+    z-index: 2;
+
+    margin: 30px 0 12px;
+
+    color: #17181c;
+
+    font-size: 18px;
+    line-height: 1.3;
+
+    letter-spacing: -.3px;
+}
+
+
+/* =========================================================
+   LISTAS
+========================================================= */
+
+.destaque ul {
+    position: relative;
+    z-index: 2;
+
+    margin: 15px 0 25px;
+
+    padding-left: 22px;
+
+    color: #666a74;
+
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.destaque li {
+    margin-bottom: 7px;
+    padding-left: 4px;
+}
+
+.destaque li::marker {
+    color: #9b5cff;
+}
+
+
+/* =========================================================
+   BLOCO DE CITAÇÃO
+========================================================= */
+
+.destaque blockquote {
+    position: relative;
+    z-index: 2;
+
+    margin: 25px 0;
+
+    padding: 20px;
+
+    border-left: 3px solid #9b5cff;
+    border-radius: 0 18px 18px 0;
+
+    background: #ffffff;
+
+    border-top: 1px solid #00000008;
+    border-right: 1px solid #00000008;
+    border-bottom: 1px solid #00000008;
+
+    color: #666a74;
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   CÓDIGO
+========================================================= */
+
+.destaque code {
+    padding: 4px 8px;
+
+    border-radius: 8px;
+
+    background: #eeeeF1;
+
+    border: 1px solid #00000012;
+
+    color: #7b42d1;
+
+    font-family: monospace;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   DESTAQUES
+========================================================= */
+
+.destaque strong {
+    color: #17181c;
+}
+</style>
+
+<style>
+
+@media (prefers-reduced-motion: reduce) {
+    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
+
+    * {
+        animation-name: none !important;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- =====================================================
+         MARCA
+    ====================================================== -->
+
+    <header class="marca">
+
+        <span class="traco"></span>
+
+        <h1>
+            Mulher Amparada
+        </h1>
+
+        <p>
+            100 dos seus direitos
+        </p>
+
+    </header>
+
+
+    <!-- =====================================================
+         DESTAQUE
+    ====================================================== -->
+
+    <section class="destaque">
+<h2>100 DIREITOS DAS MULHERES GARANTIDOS PELA LEGISLAÇÃO BRASILEIRA</h2>
+
+<p>
+1. Direito à igualdade perante a lei.<br>
+Lei: Constituição Federal, art. 5º, caput.
+</p>
+
+<p>
+2. Direito de não sofrer discriminação por motivo de sexo.<br>
+Lei: Constituição Federal, art. 3º, IV.
+</p>
+
+<p>
+3. Direito à igualdade de direitos e obrigações entre mulheres e homens.<br>
+Lei: Constituição Federal, art. 5º, I.
+</p>
+
+<p>
+4. Direito à vida.<br>
+Lei: Constituição Federal, art. 5º, caput.
+</p>
+
+<p>
+5. Direito à liberdade.<br>
+Lei: Constituição Federal, art. 5º, caput.
+</p>
+
+<p>
+6. Direito à segurança.<br>
+Lei: Constituição Federal, art. 5º, caput.
+</p>
+
+<p>
+7. Direito à dignidade.<br>
+Lei: Constituição Federal, art. 1º, III.
+</p>
+
+<p>
+8. Direito à intimidade.<br>
+Lei: Constituição Federal, art. 5º, X.
+</p>
+
+<p>
+9. Direito à vida privada.<br>
+Lei: Constituição Federal, art. 5º, X.
+</p>
+
+<p>
+10. Direito à honra.<br>
+Lei: Constituição Federal, art. 5º, X.
+</p>
+
+<p>
+11. Direito à imagem.<br>
+Lei: Constituição Federal, art. 5º, X.
+</p>
+
+<p>
+12. Direito de acesso à Justiça.<br>
+Lei: Constituição Federal, art. 5º, XXXV.
+</p>
+
+<p>
+13. Direito à assistência jurídica integral e gratuita quando preencher os requisitos legais.<br>
+Lei: Constituição Federal, art. 5º, LXXIV.
+</p>
+
+<p>
+14. Direito ao devido processo legal.<br>
+Lei: Constituição Federal, art. 5º, LIV.
+</p>
+
+<p>
+15. Direito ao contraditório e à ampla defesa.<br>
+Lei: Constituição Federal, art. 5º, LV.
+</p>
+
+<p>
+16. Direito de não ser submetida à tortura ou a tratamento desumano ou degradante.<br>
+Lei: Constituição Federal, art. 5º, III.
+</p>
+
+<p>
+17. Direito à liberdade de expressão.<br>
+Lei: Constituição Federal, art. 5º, IV e IX.
+</p>
+
+<p>
+18. Direito à liberdade de consciência e de crença.<br>
+Lei: Constituição Federal, art. 5º, VI.
+</p>
+
+<p>
+19. Direito à liberdade de associação.<br>
+Lei: Constituição Federal, art. 5º, XVII.
+</p>
+
+<p>
+20. Direito de reunião pacífica.<br>
+Lei: Constituição Federal, art. 5º, XVI.
+</p>
+
+<p>
+21. Direito à educação.<br>
+Lei: Constituição Federal, arts. 6º e 205.
+</p>
+
+<p>
+22. Direito à saúde.<br>
+Lei: Constituição Federal, arts. 6º e 196.
+</p>
+
+<p>
+23. Direito à alimentação.<br>
+Lei: Constituição Federal, art. 6º.
+</p>
+
+<p>
+24. Direito à moradia.<br>
+Lei: Constituição Federal, art. 6º.
+</p>
+
+<p>
+25. Direito ao trabalho.<br>
+Lei: Constituição Federal, arts. 6º e 7º.
+</p>
+
+<p>
+26. Direito ao lazer.<br>
+Lei: Constituição Federal, art. 6º.
+</p>
+
+<p>
+27. Direito à previdência social.<br>
+Lei: Constituição Federal, art. 6º.
+</p>
+
+<p>
+28. Direito à assistência aos desamparados.<br>
+Lei: Constituição Federal, art. 6º.
+</p>
+
+<p>
+29. Direito à proteção à maternidade.<br>
+Lei: Constituição Federal, art. 6º.
+</p>
+
+<p>
+30. Direito à proteção da família.<br>
+Lei: Constituição Federal, art. 226.
+</p>
+
+<p>
+31. Direito à igualdade de direitos e deveres na sociedade conjugal.<br>
+Lei: Constituição Federal, art. 226, §5º.
+</p>
+
+<p>
+32. Direito ao divórcio.<br>
+Lei: Constituição Federal, art. 226, §6º; Código Civil, arts. 1.571 e seguintes.
+</p>
+
+<p>
+33. Direito ao planejamento familiar livre.<br>
+Lei: Constituição Federal, art. 226, §7º.
+</p>
+
+<p>
+34. Direito de não sofrer violência no âmbito familiar.<br>
+Lei: Constituição Federal, art. 226, §8º.
+</p>
+
+<p>
+35. Direito a mecanismos estatais de proteção contra a violência doméstica.<br>
+Lei: Constituição Federal, art. 226, §8º; Lei nº 11.340/2006.
+</p>
+
+<p>
+36. Direito de viver sem violência doméstica e familiar.<br>
+Lei: Lei nº 11.340/2006, arts. 2º e 3º.
+</p>
+
+<p>
+37. Direito à proteção contra violência física.<br>
+Lei: Lei nº 11.340/2006, art. 7º, I.
+</p>
+
+<p>
+38. Direito à proteção contra violência psicológica.<br>
+Lei: Lei nº 11.340/2006, art. 7º, II.
+</p>
+
+<p>
+39. Direito à proteção contra violência sexual.<br>
+Lei: Lei nº 11.340/2006, art. 7º, III.
+</p>
+
+<p>
+40. Direito à proteção contra violência patrimonial.<br>
+Lei: Lei nº 11.340/2006, art. 7º, IV.
+</p>
+
+<p>
+41. Direito à proteção contra violência moral.<br>
+Lei: Lei nº 11.340/2006, art. 7º, V.
+</p>
+
+<p>
+42. Direito a medidas protetivas de urgência em situação de violência doméstica e familiar.<br>
+Lei: Lei nº 11.340/2006, arts. 18 e seguintes.
+</p>
+
+<p>
+43. Direito de solicitar medidas protetivas de urgência.<br>
+Lei: Lei nº 11.340/2006, art. 18.
+</p>
+
+<p>
+44. Direito à proteção contra o contato do agressor, quando determinada judicialmente.<br>
+Lei: Lei nº 11.340/2006, art. 22.
+</p>
+
+<p>
+45. Direito à proteção contra a aproximação do agressor, quando determinada judicialmente.<br>
+Lei: Lei nº 11.340/2006, art. 22.
+</p>
+
+<p>
+46. Direito à proteção contra a frequência do agressor a determinados lugares, quando determinada judicialmente.<br>
+Lei: Lei nº 11.340/2006, art. 22.
+</p>
+
+<p>
+47. Direito à assistência jurídica quando necessário em situação de violência doméstica.<br>
+Lei: Lei nº 11.340/2006, art. 9º, §2º, III.
+</p>
+
+<p>
+48. Direito à manutenção do vínculo trabalhista quando o afastamento do trabalho for necessário por violência doméstica.<br>
+Lei: Lei nº 11.340/2006, art. 9º, §2º, II.
+</p>
+
+<p>
+49. Direito à remoção prioritária, quando servidora pública, em determinadas situações de violência doméstica.<br>
+Lei: Lei nº 11.340/2006, art. 9º, §2º, I.
+</p>
+
+<p>
+50. Direito à assistência prioritária no SUS e no sistema de segurança pública em situação de violência doméstica.<br>
+Lei: Lei nº 11.340/2006, art. 9º.
+</p>
+
+<p>
+51. Direito ao acesso a serviços de contracepção de emergência nos casos previstos em lei após violência sexual.<br>
+Lei: Lei nº 11.340/2006, art. 9º, §3º; Lei nº 12.845/2013.
+</p>
+
+<p>
+52. Direito à profilaxia de infecções sexualmente transmissíveis após violência sexual.<br>
+Lei: Lei nº 12.845/2013, art. 3º, V.
+</p>
+
+<p>
+53. Direito ao atendimento médico, psicológico e social imediato após violência sexual.<br>
+Lei: Lei nº 12.845/2013, art. 3º, II.
+</p>
+
+<p>
+54. Direito ao atendimento emergencial e integral após violência sexual.<br>
+Lei: Lei nº 12.845/2013, arts. 1º e 3º.
+</p>
+
+<p>
+55. Direito à coleta de material para exame de HIV após violência sexual, conforme atendimento previsto em lei.<br>
+Lei: Lei nº 12.845/2013, art. 3º, VI.
+</p>
+
+<p>
+56. Direito a receber informações sobre seus direitos e serviços disponíveis após violência sexual.<br>
+Lei: Lei nº 12.845/2013, art. 3º, VII.
+</p>
+
+<p>
+57. Direito à facilitação do registro da ocorrência após violência sexual.<br>
+Lei: Lei nº 12.845/2013, art. 3º, III.
+</p>
+
+<p>
+58. Direito ao atendimento especializado no SUS em caso de violência.<br>
+Lei: Lei nº 8.080/1990, art. 7º, XIV.
+</p>
+
+<p>
+59. Direito à privacidade no atendimento de saúde em caso de violência.<br>
+Lei: Lei nº 8.080/1990, art. 7º, XIV, parágrafo único.
+</p>
+
+<p>
+60. Direito de ter acompanhante em consultas, exames e procedimentos de saúde.<br>
+Lei: Lei nº 8.080/1990, art. 19-J, incluído pela Lei nº 14.737/2023.
+</p>
+
+<p>
+61. Direito de escolher o acompanhante em atendimento de saúde.<br>
+Lei: Lei nº 8.080/1990, art. 19-J, §1º.
+</p>
+
+<p>
+62. Direito a acompanhante durante atendimento com sedação, nas condições previstas em lei.<br>
+Lei: Lei nº 8.080/1990, art. 19-J, §2º.
+</p>
+
+<p>
+63. Direito de recusar o acompanhante indicado pelo estabelecimento de saúde em atendimento com sedação.<br>
+Lei: Lei nº 8.080/1990, art. 19-J, §2º.
+</p>
+
+<p>
+64. Direito à prevenção, detecção e tratamento do câncer do colo do útero.<br>
+Lei: Lei nº 11.664/2008, com alterações da Lei nº 14.335/2022.
+</p>
+
+<p>
+65. Direito à prevenção, detecção e tratamento do câncer de mama.<br>
+Lei: Lei nº 11.664/2008, com alterações da Lei nº 14.335/2022.
+</p>
+
+<p>
+66. Direito à prevenção, detecção e tratamento do câncer colorretal, conforme a legislação do SUS.<br>
+Lei: Lei nº 11.664/2008, com alterações da Lei nº 14.335/2022.
+</p>
+
+<p>
+67. Direito à realização de exames previstos na legislação para prevenção e detecção desses cânceres.<br>
+Lei: Lei nº 11.664/2008, art. 2º, II.
+</p>
+
+<p>
+68. Direito à atenção integral quando diagnosticada com câncer do colo do útero, mama ou colorretal.<br>
+Lei: Lei nº 11.664/2008, art. 2º, III-A.
+</p>
+
+<p>
+69. Direito a encaminhamento para serviço de maior complexidade quando necessário.<br>
+Lei: Lei nº 11.664/2008, art. 2º, IV.
+</p>
+
+<p>
+70. Direito a condições e equipamentos adequados para mulheres com deficiência na prevenção e tratamento desses cânceres.<br>
+Lei: Lei nº 11.664/2008, art. 2º, §2º.
+</p>
+
+<p>
+71. Direito à proteção contra discriminação no acesso ao trabalho por motivo de sexo.<br>
+Lei: Lei nº 9.029/1995, art. 1º.
+</p>
+
+<p>
+72. Direito à proteção contra discriminação na manutenção do emprego por motivo de sexo.<br>
+Lei: Lei nº 9.029/1995, art. 1º.
+</p>
+
+<p>
+73. Direito de não ser submetida a exigência discriminatória relacionada à gravidez para acesso ao emprego.<br>
+Lei: Lei nº 9.029/1995, arts. 1º e 2º.
+</p>
+
+<p>
+74. Direito de não ser submetida a exigência discriminatória relacionada à esterilização para acesso ao emprego.<br>
+Lei: Lei nº 9.029/1995, arts. 1º e 2º.
+</p>
+
+<p>
+75. Direito à igualdade salarial entre mulheres e homens que exerçam trabalho de igual valor.<br>
+Lei: Constituição Federal, art. 7º, XXX; Lei nº 14.611/2023.
+</p>
+
+<p>
+76. Direito à igualdade de critérios de admissão no trabalho, sem discriminação por sexo.<br>
+Lei: Constituição Federal, art. 7º, XXX.
+</p>
+
+<p>
+77. Direito à igualdade no exercício das funções profissionais, sem discriminação por sexo.<br>
+Lei: Constituição Federal, art. 7º, XXX.
+</p>
+
+<p>
+78. Direito à licença-maternidade.<br>
+Lei: Constituição Federal, art. 7º, XVIII; CLT, art. 392.
+</p>
+
+<p>
+79. Direito à licença-maternidade sem prejuízo do emprego.<br>
+Lei: Constituição Federal, art. 7º, XVIII; CLT, art. 392.
+</p>
+
+<p>
+80. Direito à licença-maternidade sem prejuízo do salário, nos termos da legislação.<br>
+Lei: Constituição Federal, art. 7º, XVIII; CLT, art. 392.
+</p>
+
+<p>
+81. Direito à estabilidade provisória da gestante nos termos da Constituição e da legislação trabalhista.<br>
+Lei: ADCT, art. 10, II, "b"; CLT, art. 391-A.
+</p>
+
+<p>
+82. Direito à estabilidade mesmo quando a gravidez é confirmada durante o aviso-prévio, nas condições legais.<br>
+Lei: CLT, art. 391-A; Lei nº 12.812/2013.
+</p>
+
+<p>
+83. Direito à transferência de função durante a gravidez quando as condições de saúde exigirem, nos termos da CLT.<br>
+Lei: CLT, art. 392, §4º, I.
+</p>
+
+<p>
+84. Direito a dispensa do horário de trabalho para consultas e exames durante a gravidez, nas condições previstas na CLT.<br>
+Lei: CLT, art. 392, §4º, II.
+</p>
+
+<p>
+85. Direito de afastamento de atividades insalubres durante a gestação e lactação, conforme as condições estabelecidas na legislação.<br>
+Lei: CLT, art. 394-A.
+</p>
+
+<p>
+86. Direito a pausas para amamentação durante a jornada de trabalho.<br>
+Lei: CLT, art. 396.
+</p>
+
+<p>
+87. Direito à licença-maternidade em caso de adoção ou guarda judicial para adoção, nos termos legais.<br>
+Lei: CLT, art. 392-A.
+</p>
+
+<p>
+88. Direito à proteção contra discriminação no trabalho por situação familiar.<br>
+Lei: Lei nº 9.029/1995, art. 1º.
+</p>
+
+<p>
+89. Direito à proteção contra assédio sexual no ambiente de trabalho, conforme a legislação aplicável.<br>
+Lei: Código Penal, art. 216-A; Lei nº 14.540/2023, quando aplicável.
+</p>
+
+<p>
+90. Direito à proteção contra importunação sexual.<br>
+Lei: Código Penal, art. 215-A, incluído pela Lei nº 13.718/2018.
+</p>
+
+<p>
+91. Direito à proteção contra perseguição (stalking).<br>
+Lei: Código Penal, art. 147-A, incluído pela Lei nº 14.132/2021.
+</p>
+
+<p>
+92. Direito à proteção contra divulgação não autorizada de cena de sexo, nudez ou pornografia nas hipóteses previstas em lei.<br>
+Lei: Código Penal, art. 218-C, incluído pela Lei nº 13.718/2018.
+</p>
+
+<p>
+93. Direito à proteção penal específica contra feminicídio.<br>
+Lei: Código Penal, art. 121-A, incluído pela Lei nº 14.994/2024.
+</p>
+
+<p>
+94. Direito à proteção contra violência política de gênero.<br>
+Lei: Lei nº 14.192/2021.
+</p>
+
+<p>
+95. Direito de participar da vida política sem sofrer violência ou discriminação política em razão de ser mulher.<br>
+Lei: Lei nº 14.192/2021.
+</p>
+
+<p>
+96. Direito à proteção contra violência doméstica independentemente da condição pessoal da vítima ou do agressor, nas hipóteses abrangidas pela Lei Maria da Penha.<br>
+Lei: Lei nº 11.340/2006, com alterações da Lei nº 14.550/2023.
+</p>
+
+<p>
+97. Direito à aplicação das medidas protetivas de urgência independentemente da existência de inquérito policial, ação penal ou registro de boletim de ocorrência, nas condições previstas na Lei Maria da Penha.<br>
+Lei: Lei nº 11.340/2006, art. 19, conforme alterações posteriores.
+</p>
+
+<p>
+98. Direito de receber atendimento gratuito pelo Ligue 180 em situações de violência contra a mulher.<br>
+Base legal: Lei nº 11.340/2006; Decreto nº 7.393/2010, com alterações posteriores.
+</p>
+
+<p>
+99. Direito à informação e às políticas públicas de prevenção e enfrentamento da violência contra as mulheres.<br>
+Lei: Lei nº 14.232/2021.
+</p>
+
+<p>
+100. Direito de viver com proteção contra negligência, discriminação, exploração, violência, crueldade e opressão nas relações domésticas e familiares.<br>
+Lei: Lei nº 11.340/2006, arts. 2º e 3º.
+</p>
+
+        <div class="bolhas">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+    </section>
+
+
+
+
+
+
+
+
+
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,2742 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+    <meta
+        name="description"
+        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
+    >
+
+<meta
+    name="theme-color"
+    content="#09090d"
+>
+
+<title>Diário</title>
+
+<style>
+/* =========================================================
+   BARRAS DE ROLAGEM
+========================================================= */
+
+* {
+    scrollbar-width: none;
+    scrollbar-color: transparent transparent;
+    -webkit-tap-highlight-color: transparent;
+
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+*::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background: transparent;
+}
+
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-thumb {
+    background: transparent;
+    border: 0;
+}
+
+
+/* =========================================================
+   FONTE
+========================================================= */
+
+@font-face {
+    font-family: "Quicksand";
+    src: url("font.ttf") format("truetype");
+    font-display: swap;
+}
+
+
+/* =========================================================
+   VARIÁVEIS — MODO CLARO
+========================================================= */
+
+:root {
+
+    --accent: #ff8eaf;
+    --accent-light: #ffc1d2;
+    --accent-dark: #e96d92;
+
+    --surface: #ffffff;
+    --surface-light: #f5f6f8;
+
+    --border: #e1e2e6;
+    --border-light: #d4d6dc;
+
+    --text: #17181c;
+    --muted: #777b85;
+
+    --page: #ffc0d0;
+    --page-text: #292127;
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+}
+
+
+/* =========================================================
+   HTML
+========================================================= */
+
+html {
+    width: 100%;
+    min-height: 100%;
+
+    scrollbar-width: none;
+    scroll-behavior: auto;
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
+body {
+
+    width: 100%;
+    min-height: 100vh;
+
+    color: var(--text);
+
+    overflow-x: hidden;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding:
+        max(10px, env(safe-area-inset-top))
+        0
+        max(14px, env(safe-area-inset-bottom));
+
+    margin-bottom: 5%;
+
+    position: relative;
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   ANIMAÇÕES
+========================================================= */
+
+@keyframes floatIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================================
+   TOPO
+========================================================= */
+
+.topo {
+
+    position: relative;
+
+    width: min(92%, 900px);
+    min-height: 66px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 14px;
+
+    padding:
+        9px
+        10px
+        9px
+        17px;
+
+    border: 1px solid var(--border);
+    border-radius: 999px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 10px 28px rgba(0,0,0,.08);
+
+    z-index: 10;
+}
+
+
+/* =========================================================
+   IDENTIDADE
+========================================================= */
+
+.diario-brand {
+
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+}
+
+
+.diario-icon {
+
+    width: 42px;
+    height: 42px;
+
+    flex: 0 0 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    color: #ffffff;
+    background: #17181c;
+
+    border:
+        1px solid
+        rgba(0,0,0,.08);
+
+    box-shadow:
+        0 5px 14px
+        rgba(0,0,0,.12);
+
+    font-size: 19px;
+}
+
+
+.diario-info {
+    min-width: 0;
+}
+
+
+.diario-title {
+
+    color: var(--text);
+
+    font-size: 17px;
+    font-weight: 700;
+
+    letter-spacing: -.3px;
+    line-height: 1.1;
+}
+
+
+.diario-subtitle {
+
+    margin-top: 3px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+    line-height: 1;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   BOTÃO DO TOPO
+========================================================= */
+
+.voltar {
+
+    width: 42px;
+    height: 42px;
+
+    flex: 0 0 42px;
+
+    display: grid;
+    place-items: center;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 14px;
+
+    background:
+        #f5f6f8;
+
+    cursor: pointer;
+
+    transition:
+        transform .15s ease,
+        background .15s ease;
+}
+
+
+.voltar:active {
+
+    transform: scale(.92);
+
+    background:
+        #eceef1;
+}
+
+
+.voltar img {
+
+    width: 20px;
+    height: 20px;
+
+    object-fit: contain;
+
+    opacity: .8;
+
+    filter:
+        brightness(0)
+        saturate(100%)
+        invert(34%)
+        sepia(7%)
+        saturate(475%)
+        hue-rotate(190deg)
+        brightness(91%)
+        contrast(88%);
+}
+
+
+/* =========================================================
+   ÁREA DO LIVRO
+========================================================= */
+
+.book-wrapper {
+
+    position: relative;
+
+    width: min(92%, 900px);
+
+    animation:
+        floatIn .4s .05s ease both;
+
+    z-index: 1;
+}
+
+
+/* =========================================================
+   LIVRO
+========================================================= */
+
+.book {
+
+    position: relative;
+
+    width: 100%;
+
+    height: min(75vh, 700px);
+
+    min-height: 430px;
+
+    perspective: 1400px;
+
+    transform-style: preserve-3d;
+
+    border-radius: 28px;
+
+    background: var(--surface);
+
+    border:
+        1px solid
+        #e1e2e6;
+
+    box-shadow:
+        0 18px 42px
+        rgba(0,0,0,.12);
+
+    overflow: visible;
+}
+
+
+/* =========================================================
+   CAMADAS TRASEIRAS
+========================================================= */
+
+.book::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: -4px;
+    top: 5px;
+
+    width: 100%;
+    height: 100%;
+
+    border-radius: 28px;
+
+    background: #f3f4f6;
+
+    border:
+        1px solid
+        #e5e6e9;
+
+    z-index: -1;
+}
+
+
+.book::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 3px;
+    top: 9px;
+
+    width: 100%;
+    height: 100%;
+
+    border-radius: 28px;
+
+    background: #e9eaed;
+
+    z-index: -2;
+}
+
+
+/* =========================================================
+   PÁGINA
+========================================================= */
+
+.page {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    transform-style: preserve-3d;
+
+    transform-origin: left center;
+
+    border-radius: 27px;
+
+    will-change: transform;
+
+    transition:
+        transform .58s
+        cubic-bezier(.22,.7,.2,1);
+}
+
+
+/* =========================================================
+   FACES
+========================================================= */
+
+.face {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    padding:
+        34px 31px;
+
+    border-radius: inherit;
+
+    overflow: hidden;
+
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+
+/* =========================================================
+   FRENTE — PÁGINA ROSA
+========================================================= */
+
+.front {
+
+    color: var(--page-text);
+
+    background: var(--page);
+
+    box-shadow:
+
+        inset 0 0 35px
+        rgba(130,70,90,.07),
+
+        8px 12px 30px
+        rgba(0,0,0,.10);
+}
+
+
+/* =========================================================
+   VERSO
+========================================================= */
+
+.back {
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e86f95,
+            #b94870
+        );
+
+    transform:
+        rotateY(180deg);
+
+    box-shadow: none;
+}
+
+
+/* =========================================================
+   INDICADOR
+========================================================= */
+
+.indicador-pagina {
+
+    position: absolute;
+
+    top: 13px;
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    z-index: 5;
+
+    padding:
+        5px 11px;
+
+    border:
+        1px solid
+        rgba(41,33,39,.12);
+
+    border-radius: 999px;
+
+    color:
+        rgba(41,33,39,.65);
+
+    background:
+        rgba(255,255,255,.35);
+
+    font-size: 9px;
+    line-height: 1;
+
+    white-space: nowrap;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   ÁREA DE TEXTO
+========================================================= */
+
+textarea {
+
+    position: absolute;
+
+    z-index: 2;
+
+    top: 52px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width:
+        calc(100% - 62px);
+
+    height:
+        calc(100% - 76px);
+
+    margin: 0;
+
+    padding:
+        8px 3px 3px;
+
+    border: 0;
+    outline: 0;
+
+    resize: none;
+
+    background: transparent;
+
+    color: var(--page-text);
+
+    font-size: 16px;
+    font-weight: 500;
+
+    line-height: 1.9;
+    letter-spacing: .1px;
+
+    caret-color:
+        var(--accent-dark);
+
+    -webkit-appearance: none;
+}
+
+
+textarea::placeholder {
+
+    color:
+        rgba(60,35,45,.35);
+}
+
+
+/* =========================================================
+   PÁGINA VIRADA
+========================================================= */
+
+.page.virada {
+
+    transform:
+        rotateY(-180deg);
+}
+
+
+/* =========================================================
+   CONTROLES
+========================================================= */
+
+.controls {
+
+    width: min(92%, 900px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    margin-top: 13px;
+
+    padding: 7px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 18px;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 7px 20px
+        rgba(0,0,0,.08);
+
+    animation:
+        floatIn .4s .1s ease both;
+}
+
+
+/* =========================================================
+   BOTÕES DE CONTROLE
+========================================================= */
+
+.control-button {
+
+    width: 45px;
+    height: 39px;
+
+    display: grid;
+    place-items: center;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 12px;
+
+    color:
+        #666a74;
+
+    background:
+        #f5f6f8;
+
+    cursor: pointer;
+
+    transition:
+        transform .12s ease,
+        background .12s ease,
+        color .12s ease;
+}
+
+
+.control-button:active {
+
+    transform:
+        scale(.91);
+
+    background:
+        #eceef1;
+}
+
+
+.control-button.danger:active {
+
+    color: #ff5268;
+
+    background:
+        #fff0f2;
+}
+
+
+/* =========================================================
+   ESPAÇADOR
+========================================================= */
+
+.control-spacer {
+    flex: 1;
+}
+
+
+/* =========================================================
+   TEXTO DE AJUDA
+========================================================= */
+
+.hint {
+
+    color:
+        #a0a3aa;
+
+    font-size: 9px;
+
+    text-align: center;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    body {
+
+        padding-top:
+            max(
+                8px,
+                env(safe-area-inset-top)
+            );
+    }
+
+
+    .topo {
+
+        width:
+            calc(100% - 22px);
+
+        min-height: 61px;
+
+        padding:
+            8px
+            8px
+            8px
+            13px;
+
+        border-radius: 999px;
+    }
+
+
+    .diario-icon {
+
+        width: 37px;
+        height: 37px;
+
+        flex-basis: 37px;
+
+        border-radius: 50%;
+
+        font-size: 16px;
+    }
+
+
+    .diario-title {
+        font-size: 15px;
+    }
+
+
+    .diario-subtitle {
+        font-size: 8px;
+    }
+
+
+    .voltar {
+
+        width: 37px;
+        height: 37px;
+
+        flex-basis: 37px;
+
+        border-radius: 50%;
+    }
+
+
+    .book-wrapper {
+
+        width:
+            calc(100% - 22px);
+    }
+
+
+    .book {
+
+        height:
+            calc(100vh - 178px);
+
+        min-height: 450px;
+        max-height: 720px;
+
+        border-radius: 23px;
+    }
+
+
+    .book::before,
+    .book::after {
+
+        border-radius: 23px;
+    }
+
+
+    .page,
+    .face {
+
+        border-radius: 22px;
+    }
+
+
+    .face {
+
+        padding:
+            29px 21px;
+    }
+
+
+    .indicador-pagina {
+
+        top: 12px;
+
+        padding:
+            5px 9px;
+
+        font-size: 8px;
+    }
+
+
+    textarea {
+
+        top: 48px;
+
+        width:
+            calc(100% - 42px);
+
+        height:
+            calc(100% - 69px);
+
+        padding:
+            8px 2px 2px;
+
+        font-size: 15px;
+
+        line-height: 1.88;
+    }
+
+
+    .controls {
+
+        width:
+            calc(100% - 22px);
+
+        margin-top: 11px;
+
+        border-radius: 17px;
+    }
+
+
+    .hint {
+        display: none;
+    }
+
+
+    .control-button {
+
+        width: 43px;
+        height: 37px;
+    }
+}
+
+
+/* =========================================================
+   TELAS MUITO PEQUENAS
+========================================================= */
+
+@media (max-width: 360px) {
+
+    .book {
+
+        min-height: 410px;
+    }
+
+
+    .face {
+
+        padding:
+            26px 17px;
+    }
+
+
+    .indicador-pagina {
+
+        top: 10px;
+        font-size: 8px;
+    }
+
+
+    textarea {
+
+        top: 45px;
+
+        width:
+            calc(100% - 34px);
+
+        height:
+            calc(100% - 64px);
+
+        font-size: 14px;
+
+        line-height: 1.85;
+    }
+}
+
+
+/* =========================================================
+   LANDSCAPE
+========================================================= */
+
+@media (
+    orientation: landscape
+) and (
+    max-height: 600px
+) {
+
+    .topo {
+        min-height: 56px;
+    }
+
+
+    .book {
+
+        height:
+            calc(100vh - 128px);
+
+        min-height: 280px;
+    }
+
+
+    .indicador-pagina {
+        top: 9px;
+    }
+
+
+    textarea {
+
+        top: 42px;
+
+        height:
+            calc(100% - 58px);
+    }
+
+
+    .controls {
+        margin-top: 8px;
+    }
+}
+
+
+/* =========================================================
+   POPUP DE CONFIRMAÇÃO
+========================================================= */
+
+.confirm-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 99999;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 22px;
+
+    background:
+        rgba(255,255,255,.72);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity .22s ease,
+        visibility .22s ease;
+}
+
+
+.confirm-overlay.aberto {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.confirm-modal {
+
+    width:
+        min(100%, 370px);
+
+    padding:
+        25px 22px 21px;
+
+    border:
+        1px solid
+        #e1e2e6;
+
+    border-radius:
+        25px;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 25px 80px
+        rgba(0,0,0,.16);
+
+    text-align:
+        center;
+
+    transform:
+        scale(.96);
+
+    transition:
+        transform .22s
+        cubic-bezier(.22,.7,.2,1);
+}
+
+
+.confirm-overlay.aberto
+.confirm-modal {
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+/* =========================================================
+   TÍTULO
+========================================================= */
+
+.confirm-modal h2 {
+
+    color:
+        #17181c;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    margin-bottom: 9px;
+
+    display: flex;
+    justify-content: flex-start;
+}
+
+
+/* =========================================================
+   MENSAGEM
+========================================================= */
+
+.confirm-modal p {
+
+    color:
+        #666a74;
+
+    font-size: 12px;
+
+    line-height: 1.55;
+
+    white-space: normal;
+
+    margin-bottom: 21px;
+
+    text-align: left;
+}
+
+
+/* =========================================================
+   AÇÕES
+========================================================= */
+
+.confirm-acoes {
+
+    display: flex;
+
+    gap: 9px;
+
+    width: 100%;
+}
+
+
+.confirm-botao {
+
+    flex: 1;
+
+    min-height: 44px;
+
+    border-radius: 14px;
+
+    border:
+        1px solid
+        #e1e2e6;
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform .12s ease,
+        background .12s ease;
+}
+
+
+.confirm-botao:active {
+
+    transform:
+        scale(.94);
+}
+
+
+.confirm-botao.cancelar {
+
+    color:
+        #666a74;
+
+    background:
+        #f5f6f8;
+}
+
+
+.confirm-botao.cancelar:active {
+
+    background:
+        #eceef1;
+}
+
+
+.confirm-botao.apagar {
+
+    color:
+        #ffffff;
+
+    background:
+        #e96d92;
+
+    border-color:
+        #e96d92;
+}
+
+
+.confirm-botao.apagar:active {
+
+    background:
+        #d95f84;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .confirm-overlay {
+
+        padding:
+            18px;
+    }
+
+
+    .confirm-modal {
+
+        width:
+            min(100%, 350px);
+
+        padding:
+            23px 18px 18px;
+
+        border-radius:
+            23px;
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
+
+    * {
+        animation-name: none !important;
+    }
+}
+
+</style>
+
+
+
+</head>
+
+
+<body>
+
+
+<!-- =======================================================
+     TOPO
+======================================================= -->
+
+<header class="topo">
+
+    <div class="diario-brand">
+
+        <div class="diario-icon">
+            ✦
+        </div>
+
+
+        <div class="diario-info">
+
+            <div class="diario-title">
+                Meu Diário
+            </div>
+
+
+            <div class="diario-subtitle">
+                Suas idéias estão seguras
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <button
+        class="voltar"
+        onclick="limparTudo()"
+        aria-label="Apagar diário"
+    >
+
+        <img
+            src="14.svg"
+            alt=""
+        >
+
+    </button>
+
+</header>
+
+<br><br>
+<!-- =======================================================
+     LIVRO
+======================================================= -->
+
+<div class="book-wrapper">
+
+    <div
+        class="book"
+        id="book"
+    ></div>
+
+</div>
+
+<!-- =======================================================
+     POPUP DE CONFIRMAÇÃO
+======================================================= -->
+
+<div
+    id="confirmOverlay"
+    class="confirm-overlay"
+    aria-hidden="true"
+>
+
+    <div
+        class="confirm-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="confirmTitulo"
+    >
+
+
+
+        <h2 id="confirmTitulo">
+            Apagar diário
+        </h2>
+
+        <p id="confirmMensagem">
+            Apagar todas as páginas do diário?
+            
+            <br>
+            
+            Esta ação não pode ser desfeita.
+        </p>
+
+        <div class="confirm-acoes">
+
+            <button
+                type="button"
+                id="confirmCancelar"
+                class="confirm-botao cancelar"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                id="confirmConfirmar"
+                class="confirm-botao apagar"
+            >
+                Apagar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =======================================================
+     JAVASCRIPT
+======================================================= -->
+
+<script>
+
+/* =========================================================
+   ESTADO
+========================================================= */
+
+let dados = [];
+
+let paginas = [];
+
+let datas = [];
+
+let atual = 0;
+
+let startX = 0;
+
+let movendo = false;
+
+let arrastandoPagina = false;
+
+
+/* =========================================================
+   ELEMENTO
+========================================================= */
+
+const book =
+    document.getElementById(
+        "book"
+    );
+
+
+/* =========================================================
+   VERIFICAR CRIPTO
+========================================================= */
+
+function criptoDisponivel() {
+
+    return (
+        typeof Cripto !== "undefined" &&
+        Cripto !== null
+    );
+
+}
+
+
+/* =========================================================
+   CHAVE DA DATA DA PÁGINA
+========================================================= */
+
+function chaveDataPagina(index) {
+
+    return (
+        "diario_data_" +
+        index
+    );
+
+}
+
+
+/* =========================================================
+   OBTER DATA ATUAL
+========================================================= */
+
+function obterDataAtual() {
+
+    const agora =
+        new Date();
+
+
+    const dia =
+        String(
+            agora.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const mes =
+        String(
+            agora.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const ano =
+        agora.getFullYear();
+
+
+    return (
+        dia +
+        "/" +
+        mes +
+        "/" +
+        ano
+    );
+
+}
+
+
+/* =========================================================
+   CARREGAR DIÁRIO
+========================================================= */
+
+function carregarDiario() {
+
+    try {
+
+        if (
+            !criptoDisponivel() ||
+            typeof Cripto.carregar !== "function"
+        ) {
+
+            dados = [];
+
+            return;
+
+        }
+
+
+        const salvo =
+            Cripto.carregar(
+                "diario"
+            );
+
+
+        if (
+            !salvo ||
+            typeof salvo !== "string"
+        ) {
+
+            dados = [];
+
+            return;
+
+        }
+
+
+        try {
+
+            const parsed =
+                JSON.parse(
+                    salvo
+                );
+
+
+            if (
+                Array.isArray(parsed)
+            ) {
+
+                dados =
+                    parsed;
+
+            } else {
+
+                dados = [];
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Erro ao interpretar diário:",
+                error
+            );
+
+            dados = [];
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Erro ao carregar diário:",
+            error
+        );
+
+        dados = [];
+
+    }
+
+}
+
+
+/* =========================================================
+   CARREGAR DATA INDIVIDUAL DE CADA PÁGINA
+========================================================= */
+
+function carregarDatas() {
+
+    datas = [];
+
+
+    if (
+        !criptoDisponivel() ||
+        typeof Cripto.carregar !== "function"
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+     * Carrega uma quantidade correspondente
+     * às páginas que já possuem conteúdo.
+     */
+
+    const quantidade =
+        Math.max(
+            dados.length,
+            1
+        );
+
+
+    for (
+        let i = 0;
+        i < quantidade;
+        i++
+    ) {
+
+        try {
+
+            const data =
+                Cripto.carregar(
+                    chaveDataPagina(i)
+                );
+
+
+            if (
+                data &&
+                typeof data === "string"
+            ) {
+
+                datas[i] =
+                    data;
+
+            } else {
+
+                datas[i] =
+                    null;
+
+            }
+
+        } catch (error) {
+
+            datas[i] =
+                null;
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   SALVAR DATA DE UMA PÁGINA
+========================================================= */
+
+function salvarDataPagina(index) {
+
+    try {
+
+        if (
+            !criptoDisponivel() ||
+            typeof Cripto.salvar !== "function"
+        ) {
+
+            return;
+
+        }
+
+
+        const data =
+            obterDataAtual();
+
+
+        /*
+         * SOMENTE esta página recebe
+         * a nova data.
+         */
+
+        datas[index] =
+            data;
+
+
+        Cripto.salvar(
+            chaveDataPagina(index),
+            data
+        );
+
+
+        atualizarIndicadorPagina(
+            index
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Erro ao salvar data da página:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ATUALIZAR UM ÚNICO INDICADOR
+========================================================= */
+
+function atualizarIndicadorPagina(index) {
+
+    const pagina =
+        paginas[index];
+
+
+    if (!pagina) {
+
+        return;
+
+    }
+
+
+    const indicador =
+        pagina.querySelector(
+            ".indicador-pagina"
+        );
+
+
+    if (!indicador) {
+
+        return;
+
+    }
+
+
+    const data =
+        datas[index];
+
+
+    indicador.textContent =
+        data
+            ? (
+                "Página " +
+                (index + 1) +
+                " = " +
+                data
+            )
+            : (
+                "Página " +
+                (index + 1) +
+                " = Sem data"
+            );
+
+}
+
+
+/* =========================================================
+   SALVAR DIÁRIO
+========================================================= */
+
+function salvar(index) {
+
+    try {
+
+        if (
+            !criptoDisponivel() ||
+            typeof Cripto.salvar !== "function"
+        ) {
+
+            console.error(
+                "Cripto.salvar não disponível."
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * Salva todo o conteúdo do diário.
+         */
+
+        Cripto.salvar(
+            "diario",
+            JSON.stringify(
+                dados
+            )
+        );
+
+
+        /*
+         * Atualiza SOMENTE a data da
+         * página que foi modificada.
+         */
+
+        salvarDataPagina(
+            index
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Erro ao salvar diário:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CRIAR PÁGINA
+========================================================= */
+
+function criarPagina(index) {
+
+    const page =
+        document.createElement(
+            "div"
+        );
+
+
+    page.className =
+        "page";
+
+
+    page.style.zIndex =
+        100 - index;
+
+
+    /* =====================================================
+       FRENTE
+    ===================================================== */
+
+    const front =
+        document.createElement(
+            "div"
+        );
+
+
+    front.className =
+        "face front";
+
+
+    /* =====================================================
+       VERSO
+    ===================================================== */
+
+    const back =
+        document.createElement(
+            "div"
+        );
+
+
+    back.className =
+        "face back";
+
+
+    /* =====================================================
+       INDICADOR
+    ===================================================== */
+
+    const indicador =
+        document.createElement(
+            "div"
+        );
+
+
+    indicador.className =
+        "indicador-pagina";
+
+
+    indicador.textContent =
+        datas[index]
+            ? (
+                "Página " +
+                (index + 1) +
+                " = " +
+                datas[index]
+            )
+            : (
+                "Página " +
+                (index + 1) +
+                " = Sem data"
+            );
+
+
+    /* =====================================================
+       TEXTAREA
+    ===================================================== */
+
+    const textarea =
+        document.createElement(
+            "textarea"
+        );
+
+
+    textarea.value =
+        typeof dados[index] === "string"
+            ? dados[index]
+            : "";
+
+
+    textarea.placeholder =
+        "Comece a escrever aqui...";
+
+
+    textarea.setAttribute(
+        "spellcheck",
+        "true"
+    );
+
+
+    /* =====================================================
+       DIGITAÇÃO
+    ===================================================== */
+
+    let temporizadorSalvamento = null;
+
+textarea.addEventListener(
+    "input",
+    function () {
+
+        dados[index] =
+            textarea.value;
+
+        clearTimeout(
+            temporizadorSalvamento
+        );
+
+        const ultimoCaractere =
+            textarea.value.slice(-1);
+
+        if (
+            ultimoCaractere === " "
+        ) {
+
+            salvar(index);
+
+        } else {
+
+            temporizadorSalvamento =
+                setTimeout(
+                    function () {
+
+                        salvar(index);
+
+                    },
+                    1000
+                );
+
+        }
+
+        if (
+            textarea.value.length > 220 &&
+            index === atual
+        ) {
+
+            virarProxima();
+
+        }
+
+    }
+    );
+
+
+    /* =====================================================
+       MONTAR PÁGINA
+    ===================================================== */
+
+    front.appendChild(
+        indicador
+    );
+
+
+    front.appendChild(
+        textarea
+    );
+
+
+    page.appendChild(
+        front
+    );
+
+
+    page.appendChild(
+        back
+    );
+
+
+    book.appendChild(
+        page
+    );
+
+
+    paginas[index] =
+        page;
+
+
+    /* =====================================================
+       FOCO
+    ===================================================== */
+
+    if (
+        index === atual
+    ) {
+
+        setTimeout(
+            function () {
+
+                textarea.focus();
+
+            },
+            150
+        );
+
+    }
+
+
+    atualizarIndicadorPagina(
+        index
+    );
+
+}
+
+
+/* =========================================================
+   CARREGAR DADOS
+========================================================= */
+
+carregarDiario();
+
+carregarDatas();
+
+
+/* =========================================================
+   INICIAR
+========================================================= */
+
+criarPagina(
+    0
+);
+
+
+/* =========================================================
+   PRÓXIMA PÁGINA
+========================================================= */
+
+function virarProxima() {
+
+    const pagina =
+        paginas[atual];
+
+
+    if (!pagina) {
+
+        return;
+
+    }
+
+
+    pagina.classList.add(
+        "virada"
+    );
+
+
+    atual++;
+
+
+    if (
+        !paginas[atual]
+    ) {
+
+        criarPagina(
+            atual
+        );
+
+    }
+
+
+    focarPaginaAtual();
+
+}
+
+
+/* =========================================================
+   VOLTAR
+========================================================= */
+
+function voltarPagina() {
+
+    if (
+        atual <= 0
+    ) {
+
+        return;
+
+    }
+
+
+    atual--;
+
+
+    const pagina =
+        paginas[atual];
+
+
+    if (pagina) {
+
+        pagina.classList.remove(
+            "virada"
+        );
+
+    }
+
+
+    focarPaginaAtual();
+
+}
+
+
+/* =========================================================
+   FOCO
+========================================================= */
+
+function focarPaginaAtual() {
+
+    setTimeout(
+        function () {
+
+            const pagina =
+                paginas[atual];
+
+
+            if (!pagina) {
+
+                return;
+
+            }
+
+
+            const textarea =
+                pagina.querySelector(
+                    "textarea"
+                );
+
+
+            if (textarea) {
+
+                textarea.focus();
+
+            }
+
+        },
+        350
+    );
+
+}
+
+
+/* =========================================================
+   CONFIRMAÇÃO PERSONALIZADA
+========================================================= */
+
+let confirmResolve = null;
+
+
+/* =========================================================
+   ABRIR
+========================================================= */
+
+function abrirConfirmacao(
+    mensagem,
+    titulo = "Confirmação",
+    textoConfirmar = "Confirmar"
+){
+
+    return new Promise(
+        function(resolve){
+
+            const overlay =
+                document.getElementById(
+                    "confirmOverlay"
+                );
+
+
+            const tituloElemento =
+                document.getElementById(
+                    "confirmTitulo"
+                );
+
+
+            const mensagemElemento =
+                document.getElementById(
+                    "confirmMensagem"
+                );
+
+
+            const confirmar =
+                document.getElementById(
+                    "confirmConfirmar"
+                );
+
+
+            if(
+                !overlay ||
+                !tituloElemento ||
+                !mensagemElemento ||
+                !confirmar
+            ){
+
+                console.error(
+                    "Elementos do popup não encontrados."
+                );
+
+                resolve(false);
+
+                return;
+
+            }
+
+
+            confirmResolve =
+                resolve;
+
+
+            tituloElemento.textContent =
+                titulo;
+
+
+            mensagemElemento.innerHTML = mensagem;
+
+
+            confirmar.textContent =
+                textoConfirmar;
+
+
+            overlay.classList.add(
+                "aberto"
+            );
+
+
+            overlay.setAttribute(
+                "aria-hidden",
+                "false"
+            );
+
+
+            setTimeout(
+                function(){
+
+                    confirmar.focus();
+
+                },
+                100
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   FECHAR
+========================================================= */
+
+function fecharConfirmacao(
+    resultado
+){
+
+    const overlay =
+        document.getElementById(
+            "confirmOverlay"
+        );
+
+
+    if(overlay){
+
+        overlay.classList.remove(
+            "aberto"
+        );
+
+
+        overlay.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+    }
+
+
+    if(confirmResolve){
+
+        const resolver =
+            confirmResolve;
+
+
+        confirmResolve =
+            null;
+
+
+        resolver(
+            resultado
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   BOTÕES
+========================================================= */
+
+document
+    .getElementById(
+        "confirmConfirmar"
+    )
+    ?.addEventListener(
+        "click",
+        function(event){
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            fecharConfirmacao(
+                true
+            );
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "confirmCancelar"
+    )
+    ?.addEventListener(
+        "click",
+        function(event){
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            fecharConfirmacao(
+                false
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   CLICAR FORA
+========================================================= */
+
+document
+    .getElementById(
+        "confirmOverlay"
+    )
+    ?.addEventListener(
+        "click",
+        function(event){
+
+            if(
+                event.target ===
+                this
+            ){
+
+                fecharConfirmacao(
+                    false
+                );
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   ESC
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        const overlay =
+            document.getElementById(
+                "confirmOverlay"
+            );
+
+
+        if(
+            !overlay ||
+            !overlay.classList.contains(
+                "aberto"
+            )
+        ){
+
+            return;
+
+        }
+
+
+        if(
+            event.key ===
+            "Escape"
+        ){
+
+            event.preventDefault();
+
+            fecharConfirmacao(
+                false
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   FUNÇÃO
+========================================================= */
+
+async function confirmPersonalizado(
+    mensagem,
+    titulo = "Confirmação",
+    textoConfirmar = "Confirmar"
+){
+
+    return await abrirConfirmacao(
+        mensagem,
+        titulo,
+        textoConfirmar
+    );
+
+}
+
+/* =========================================================
+   LIMPAR TUDO
+========================================================= */
+
+async function limparTudo() {
+
+    const confirmar = await confirmPersonalizado(
+    "Apagar todas as páginas do diário.<br><br>Esta ação não pode ser desfeita.",
+    "Apagar diário",
+    "Apagar"
+);
+
+
+    if (!confirmar) {
+
+        return;
+
+    }
+
+
+    try {
+
+        if (
+            criptoDisponivel() &&
+            typeof Cripto.remover === "function"
+        ) {
+
+            /*
+             * Remove o conteúdo.
+             */
+
+            Cripto.remover(
+                "diario"
+            );
+
+
+            /*
+             * Remove as datas individuais.
+             */
+
+            const quantidade =
+                Math.max(
+                    dados.length,
+                    datas.length,
+                    paginas.length
+                );
+
+
+            for (
+                let i = 0;
+                i < quantidade;
+                i++
+            ) {
+
+                Cripto.remover(
+                    chaveDataPagina(i)
+                );
+
+            }
+
+        }
+
+
+        dados = [];
+
+        paginas = [];
+
+        datas = [];
+
+        atual = 0;
+
+    } catch (error) {
+
+        console.error(
+            "Erro ao apagar diário:",
+            error
+        );
+
+    }
+
+
+    location.reload();
+
+}
+
+
+/* =========================================================
+   TOUCH — INÍCIO
+========================================================= */
+
+book.addEventListener(
+    "touchstart",
+    function (event) {
+
+        if (
+            event.touches.length !== 1
+        ) {
+
+            return;
+
+        }
+
+
+        startX =
+            event.touches[0].clientX;
+
+
+        movendo =
+            true;
+
+
+        arrastandoPagina =
+            false;
+
+    },
+    {
+        passive: true
+    }
+);
+
+
+/* =========================================================
+   TOUCH — MOVIMENTO
+========================================================= */
+
+book.addEventListener(
+    "touchmove",
+    function (event) {
+
+        if (
+            !movendo ||
+            event.touches.length !== 1
+        ) {
+
+            return;
+
+        }
+
+
+        const atualX =
+            event.touches[0].clientX;
+
+
+        const diff =
+            atualX - startX;
+
+
+        if (
+            Math.abs(diff) < 8
+        ) {
+
+            return;
+
+        }
+
+
+        arrastandoPagina =
+            true;
+
+
+        const pagina =
+            paginas[atual];
+
+
+        if (!pagina) {
+
+            return;
+
+        }
+
+
+        if (
+            atual === 0 &&
+            diff > 0
+        ) {
+
+            return;
+
+        }
+
+
+        let rot =
+            diff / 1.8;
+
+
+        rot =
+            Math.max(
+                Math.min(
+                    rot,
+                    0
+                ),
+                -180
+            );
+
+
+        pagina.style.transform =
+            "rotateY(" +
+            rot +
+            "deg)";
+
+    },
+    {
+        passive: true
+    }
+);
+
+
+/* =========================================================
+   TOUCH — FINAL
+========================================================= */
+
+book.addEventListener(
+    "touchend",
+    function (event) {
+
+        if (!movendo) {
+
+            return;
+
+        }
+
+
+        movendo =
+            false;
+
+
+        const endX =
+            event.changedTouches[0].clientX;
+
+
+        const diff =
+            endX - startX;
+
+
+        const pagina =
+            paginas[atual];
+
+
+        if (pagina) {
+
+            pagina.style.transform =
+                "";
+        }
+
+
+        if (
+            !arrastandoPagina
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            diff < -55
+        ) {
+
+            virarProxima();
+
+        } else if (
+            diff > 55
+        ) {
+
+            voltarPagina();
+
+        }
+
+    },
+    {
+        passive: true
+    }
+);
+
+
+/* =========================================================
+   TECLADO
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.key === "ArrowRight"
+        ) {
+
+            virarProxima();
+
+        }
+
+
+        if (
+            event.key === "ArrowLeft"
+        ) {
+
+            voltarPagina();
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

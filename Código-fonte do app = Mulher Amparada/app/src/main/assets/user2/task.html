@@ -1,0 +1,4307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
+
+    <meta
+        name="description"
+        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
+    >
+
+<meta
+    name="theme-color"
+    content="#070709"
+>
+
+<title>Planner</title>
+
+
+<style>
+/* =========================================================
+   BARRAS DE ROLAGEM — TRANSPARENTES
+========================================================= */
+
+*::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background: transparent;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: transparent;
+    border: none;
+}
+
+* {
+    scrollbar-width: none;
+    scrollbar-color: transparent transparent;
+}
+
+html,
+body {
+    scrollbar-width: none;
+    scrollbar-color: transparent transparent;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background: transparent;
+}
+
+
+/* =========================================================
+   FONTE
+========================================================= */
+
+@font-face {
+    font-family: "Quicksand";
+    src: url("font.ttf") format("truetype");
+    font-display: swap;
+}
+
+
+/* =========================================================
+   VARIÁVEIS — MODO CLARO
+========================================================= */
+
+:root {
+
+    --accent: #ff9db7;
+
+    --accent-soft:
+        rgba(255,157,183,.16);
+
+    --accent-border:
+        rgba(255,157,183,.38);
+
+    --card:
+        rgba(255,255,255,.94);
+
+    --card-hover:
+        rgba(255,255,255,1);
+
+    --border:
+        rgba(0,0,0,.09);
+
+    --text:
+        rgba(20,20,22,.95);
+
+    --muted:
+        rgba(20,20,22,.50);
+
+    --danger:
+        #e94f61;
+
+    --success:
+        #39b96f;
+
+    --warning:
+        #e5aa22;
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+
+    margin: 0;
+
+    padding: 0;
+
+    font-family:
+        Quicksand,
+        sans-serif;
+
+    -webkit-tap-highlight-color:
+        transparent;
+}
+
+
+html,
+body {
+
+    width: 99%;
+
+    min-height: 100%;
+
+    color: var(--text);
+
+    background: #f5f5f7;
+}
+
+
+body {
+
+    overflow-x: hidden;
+
+    user-select: none;
+
+    -webkit-user-select: none;
+
+    padding-top: 2.5%;
+
+    padding-bottom:
+        env(safe-area-inset-bottom);
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+
+    width: 5px;
+
+    height: 5px;
+}
+
+::-webkit-scrollbar-track {
+
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(0,0,0,.10);
+
+    border-radius: 999px;
+}
+
+
+/* =========================================================
+   ANIMAÇÕES
+========================================================= */
+
+@keyframes spin {
+
+    to {
+        transform:
+            rotate(360deg);
+    }
+}
+
+
+@keyframes pulse {
+
+    0%,
+    100% {
+
+        transform:
+            scale(1);
+
+        opacity: 1;
+    }
+
+    50% {
+
+        transform:
+            scale(.8);
+
+        opacity: .5;
+    }
+}
+
+
+/* =========================================================
+   TOPO
+========================================================= */
+
+.header {
+
+    position: relative;
+
+    top: 0;
+
+    z-index: 1000;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 14px;
+
+    width: 100%;
+
+    max-width: 900px;
+
+    margin: 0 auto;
+
+    padding:
+        max(14px, env(safe-area-inset-top))
+        18px
+        14px;
+}
+
+
+.brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    min-width: 0;
+}
+
+
+.brand-icon {
+
+    width: 43px;
+
+    height: 43px;
+
+    flex: 0 0 43px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 15px;
+
+    color: var(--accent);
+
+    background:
+        var(--accent-soft);
+
+    border:
+        1px solid var(--accent-border);
+
+    box-shadow:
+        0 6px 22px
+        rgba(0,0,0,.07);
+
+    font-size: 20px;
+}
+
+
+.brand-text {
+
+    min-width: 0;
+}
+
+
+.brand-title {
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    line-height: 1;
+}
+
+
+.brand-subtitle {
+
+    margin-top: 4px;
+
+    font-size: 10px;
+
+    color: var(--muted);
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   CONTEÚDO
+========================================================= */
+
+.container {
+
+    width: 100%;
+
+    max-width: 900px;
+
+    margin: 0 auto;
+
+    padding:
+        8px
+        18px
+        120px;
+}
+
+
+/* =========================================================
+   RESUMO
+========================================================= */
+
+.stats {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 9px;
+
+    margin-bottom: 15px;
+}
+
+
+.stat {
+
+    min-width: 0;
+
+    padding: 14px;
+
+    border-radius: 18px;
+
+    background:
+        var(--card);
+
+    border:
+        1px solid var(--border);
+
+    box-shadow:
+        0 8px 25px
+        rgba(0,0,0,.07);
+}
+
+
+.stat-number {
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    color: var(--accent);
+}
+
+
+.stat-label {
+
+    margin-top: 2px;
+
+    font-size: 10px;
+
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   BARRA DE PESQUISA
+========================================================= */
+
+.search {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    height: 52px;
+
+    margin-bottom: 10px;
+
+    padding:
+        0 15px;
+
+    border-radius: 17px;
+
+    background:
+        rgba(255,255,255,.96);
+
+    border:
+        1px solid var(--border);
+
+    box-shadow:
+        0 6px 22px
+        rgba(0,0,0,.05);
+
+    transition:
+        border .2s ease,
+        background .2s ease;
+}
+
+
+.search:focus-within {
+
+    background:
+        #ffffff;
+
+    border-color:
+        var(--accent-border);
+}
+
+
+.search svg {
+
+    width: 20px;
+
+    height: 20px;
+
+    color: rgba(0,0,0,.45);
+
+    flex: 0 0 auto;
+}
+
+
+.search input {
+
+    width: 100%;
+
+    min-width: 0;
+
+    border: 0;
+
+    outline: 0;
+
+    background: transparent;
+
+    color: #171717;
+
+    font-size: 14px;
+}
+
+
+.search input::placeholder {
+
+    color:
+        rgba(0,0,0,.38);
+}
+
+
+/* =========================================================
+   FILTROS
+========================================================= */
+
+.filters {
+
+    display: flex;
+
+    gap: 7px;
+
+    overflow-x: auto;
+
+    padding:
+        2px
+        0
+        8px;
+
+    scrollbar-width: none;
+}
+
+
+.filters::-webkit-scrollbar {
+
+    display: none;
+}
+
+
+.filter {
+
+    flex: 0 0 auto;
+
+    padding:
+        8px
+        13px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 999px;
+
+    color:
+        rgba(0,0,0,.52);
+
+    background:
+        rgba(255,255,255,.88);
+
+    font-size: 11px;
+
+    cursor: pointer;
+
+    transition:
+        .18s ease;
+}
+
+
+.filter.active {
+
+    color: #000;
+
+    background:
+        var(--accent);
+
+    border-color:
+        var(--accent);
+}
+
+
+/* =========================================================
+   ORDENAR
+========================================================= */
+
+.toolbar {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin:
+        5px
+        0
+        10px;
+}
+
+
+.result-count {
+
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+
+.sort {
+
+    width: auto;
+
+    margin: 0;
+
+    padding:
+        7px
+        10px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 10px;
+
+    color: #171717;
+
+    background:
+        rgba(255,255,255,.92);
+
+    outline: none;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   LISTA
+========================================================= */
+
+#list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+
+/* =========================================================
+   TAREFA
+========================================================= */
+
+.task {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    width: 100%;
+
+    min-height: 70px;
+
+    padding:
+        11px
+        12px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 18px;
+
+    background:
+        var(--card);
+
+    box-shadow:
+        0 7px 25px
+        rgba(0,0,0,.055);
+
+    transition:
+        transform .18s ease,
+        background .18s ease,
+        opacity .18s ease;
+}
+
+
+.task:hover {
+
+    background:
+        var(--card-hover);
+
+    transform:
+        translateY(-1px);
+}
+
+
+.task.high {
+
+    border-left:
+        3px solid #ff5d68;
+}
+
+
+.task.medium {
+
+    border-left:
+        3px solid #e5b629;
+}
+
+
+.task.low {
+
+    border-left:
+        3px solid #42c97a;
+}
+
+
+.task.done {
+
+    opacity: .46;
+}
+
+
+.task.done .task-text {
+
+    text-decoration:
+        line-through;
+}
+
+
+/* =========================================================
+   CHECK
+========================================================= */
+
+.check {
+
+    width: 34px;
+
+    height: 34px;
+
+    flex: 0 0 34px;
+
+    display: grid;
+
+    place-items: center;
+
+    border:
+        1px solid
+        rgba(0,0,0,.12);
+
+    border-radius: 12px;
+
+    color: transparent;
+
+    background:
+        rgba(0,0,0,.035);
+
+    cursor: pointer;
+
+    transition:
+        .2s ease;
+}
+
+
+.task.done .check {
+
+    color: #fff;
+
+    background:
+        var(--success);
+
+    border-color:
+        var(--success);
+}
+
+
+/* =========================================================
+   TEXTO
+========================================================= */
+
+.task-content {
+
+    min-width: 0;
+
+    flex: 1;
+}
+
+
+.task-text {
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    line-height: 1.3;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    word-break: break-word;
+}
+
+
+.task-meta {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 5px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+}
+
+
+.priority-dot {
+
+    width: 6px;
+
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: currentColor;
+}
+
+
+.task.high .priority-dot {
+
+    color: #ff5d68;
+}
+
+
+.task.medium .priority-dot {
+
+    color: #e5b629;
+}
+
+
+.task.low .priority-dot {
+
+    color: #42c97a;
+}
+
+
+/* =========================================================
+   AÇÕES DA TAREFA
+========================================================= */
+
+.task-actions {
+
+    display: flex;
+
+    gap: 5px;
+
+    flex: 0 0 auto;
+}
+
+
+.task-button {
+
+    width: 32px;
+
+    height: 32px;
+
+    display: grid;
+
+    place-items: center;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 10px;
+
+    color:
+        rgba(0,0,0,.52);
+
+    background:
+        rgba(0,0,0,.035);
+
+    cursor: pointer;
+
+    transition:
+        .18s ease;
+}
+
+
+.task-button:hover {
+
+    color: #171717;
+
+    background:
+        rgba(0,0,0,.07);
+}
+
+
+.task-button.delete:hover {
+
+    color: var(--danger);
+
+    border-color:
+        rgba(233,79,97,.25);
+}
+
+
+/* =========================================================
+   ESTADO VAZIO
+========================================================= */
+
+.empty {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-direction: column;
+
+    min-height: 260px;
+
+    text-align: center;
+
+    color: var(--muted);
+}
+
+
+.empty-icon {
+
+    width: 58px;
+
+    height: 58px;
+
+    display: grid;
+
+    place-items: center;
+
+    margin-bottom: 12px;
+
+    border-radius: 20px;
+
+    color: var(--accent);
+
+    background:
+        var(--accent-soft);
+
+    font-size: 25px;
+}
+
+
+.empty-title {
+
+    color:
+        rgba(0,0,0,.75);
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+
+.empty-text {
+
+    max-width: 260px;
+
+    margin-top: 5px;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   BOTÃO FLUTUANTE
+========================================================= */
+
+.add-button {
+
+    position: fixed;
+
+    right:
+        max(20px, env(safe-area-inset-right));
+
+    bottom:
+        max(20px, env(safe-area-inset-bottom));
+
+    z-index: 1500;
+
+    width: 58px;
+
+    height: 58px;
+
+    display: grid;
+
+    place-items: center;
+
+    border:
+        1px solid
+        rgba(0,0,0,.10);
+
+    border-radius: 20px;
+
+    color: #000;
+
+    background:
+        var(--accent);
+
+    box-shadow:
+        0 12px 35px
+        rgba(0,0,0,.18);
+
+    font-size: 25px;
+
+    cursor: pointer;
+
+    transition:
+        transform .18s ease;
+
+    margin-bottom: 5%;
+}
+
+
+.add-button:active {
+
+    transform:
+        scale(.9);
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 5000;
+
+    display: flex;
+
+    padding: 20px;
+
+    background:
+        rgba(245,245,247,.82);
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity .25s ease;
+}
+
+
+.modal.open {
+
+    opacity: 1;
+
+    pointer-events: auto;
+}
+
+
+.modal-card {
+
+    width: 320px;
+
+    min-width: 320px;
+
+    max-width: 320px;
+
+    height: 380px;
+
+    bottom: 10%;
+
+    position: absolute;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 24px;
+
+    background:
+        rgba(255,255,255,.97);
+
+    box-shadow:
+        0 25px 70px
+        rgba(0,0,0,.18);
+
+    transform:
+        translateY(12px)
+        scale(.97);
+
+    transition:
+        transform .25s ease;
+}
+
+
+.modal.open .modal-card {
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+.modal-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 15px;
+}
+
+
+.modal-title {
+
+    font-size: 18px;
+
+    font-weight: 700;
+}
+
+
+.modal-close {
+
+    width: 35px;
+
+    height: 35px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 11px;
+
+    color: #171717;
+
+    background:
+        rgba(0,0,0,.045);
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.field {
+
+    margin-top: 11px;
+}
+
+
+.field label {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+
+.field input,
+.field select {
+
+    width: 100%;
+
+    height: 48px;
+
+    padding:
+        0 13px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 14px;
+
+    outline: none;
+
+    color: #171717;
+
+    background:
+        #f7f7f8;
+
+    font-size: 13px;
+}
+
+
+.field input:focus,
+.field select:focus {
+
+    border-color:
+        var(--accent-border);
+}
+
+
+.field select option {
+
+    background: #fff;
+
+    color: #171717;
+}
+
+
+.form-buttons {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 8px;
+
+    margin-top: 15px;
+}
+
+
+.primary-button,
+.secondary-button {
+
+    height: 47px;
+
+    border: 0;
+
+    border-radius: 14px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.primary-button {
+
+    color: #000;
+
+    background:
+        var(--accent);
+}
+
+
+.secondary-button {
+
+    color: #171717;
+
+    background:
+        rgba(0,0,0,.055);
+
+    border:
+        1px solid var(--border);
+}
+
+
+/* =========================================================
+   POMODORO
+========================================================= */
+
+.pomodoro {
+
+    margin-top: 25px;
+
+    padding:
+        18px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 22px;
+
+    background:
+        var(--card);
+
+    box-shadow:
+        0 8px 25px
+        rgba(0,0,0,.055);
+}
+
+
+.pomodoro-title {
+
+    text-align: center;
+
+    font-size: 12px;
+
+    color: var(--muted);
+}
+
+
+.timer {
+
+    position: relative;
+
+    margin: 12px auto;
+
+    width: 170px;
+
+    height: 170px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 200px;
+
+    background:
+        conic-gradient(
+            var(--accent) var(--progress, 0%),
+            rgba(0,0,0,.08) 0
+        );
+
+    overflow: hidden;
+
+    isolation: isolate;
+}
+
+
+.timer::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 8px;
+
+    border-radius: 200px;
+
+    background:
+        #ffffff;
+}
+
+
+.timer span {
+
+    position: relative;
+
+    z-index: 1;
+
+    font-size: 36px;
+
+    font-weight: 700;
+
+    color: var(--accent);
+
+    text-shadow:
+        0 0 18px
+        var(--accent-soft);
+}
+
+
+.pomo-buttons {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr 1fr;
+
+    gap: 7px;
+}
+
+
+.pomo-button {
+
+    height: 40px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 12px;
+
+    color: #171717;
+
+    background:
+        rgba(0,0,0,.04);
+
+    cursor: pointer;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast {
+
+    position: fixed;
+
+    left: 50%;
+
+    bottom:
+        max(90px, calc(80px + env(safe-area-inset-bottom)));
+
+    z-index: 6000;
+
+    max-width:
+        calc(100% - 40px);
+
+    padding:
+        10px
+        15px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 999px;
+
+    color: #171717;
+
+    background:
+        rgba(255,255,255,.94);
+
+    backdrop-filter:
+        blur(15px);
+
+    -webkit-backdrop-filter:
+        blur(15px);
+
+    box-shadow:
+        0 10px 35px
+        rgba(0,0,0,.13);
+
+    font-size: 11px;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transform:
+        translate(-50%, 12px);
+
+    transition:
+        .25s ease;
+}
+
+
+.toast.show {
+
+    opacity: 1;
+
+    transform:
+        translate(-50%, 0);
+}
+
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
+@media (max-width: 430px) {
+
+    .container {
+
+        padding-left: 13px;
+
+        padding-right: 13px;
+    }
+
+
+    .header {
+
+        padding-left: 13px;
+
+        padding-right: 13px;
+    }
+
+
+    .stats {
+
+        gap: 6px;
+    }
+
+
+    .stat {
+
+        padding: 11px;
+    }
+
+
+    .stat-number {
+
+        font-size: 18px;
+    }
+
+
+    .task-actions {
+
+        gap: 3px;
+    }
+
+
+    .task-button {
+
+        width: 29px;
+
+        height: 29px;
+    }
+}
+
+
+@media (orientation: landscape) {
+
+    .container,
+    .header {
+
+        max-width: 1050px;
+    }
+
+
+    .stats {
+
+        grid-template-columns:
+            repeat(3, 180px);
+    }
+
+
+    .task {
+
+        min-height: 62px;
+    }
+
+
+    .grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+
+.task-button svg {
+
+    width: 16px;
+
+    height: 16px;
+
+    display: block;
+
+    flex: 0 0 auto;
+}
+
+
+/* =========================================================
+   ORDENAR — DROPDOWN PERSONALIZADO
+========================================================= */
+
+.sort {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 8px;
+
+    min-width: 145px;
+
+    height: 34px;
+
+    margin: 0;
+
+    padding:
+        0
+        10px
+        0
+        12px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 11px;
+
+    color: #171717;
+
+    background:
+        rgba(255,255,255,.94);
+
+    outline: none;
+
+    font-size: 10px;
+
+    cursor: pointer;
+
+    user-select: none;
+
+    box-shadow:
+        0 5px 18px
+        rgba(0,0,0,.045);
+
+    transition:
+        background .18s ease,
+        border-color .18s ease;
+}
+
+
+.sort:hover {
+
+    background:
+        #ffffff;
+}
+
+
+.sort:focus-visible {
+
+    border-color:
+        var(--accent-border);
+}
+
+
+.sort.open {
+
+    border-color:
+        var(--accent-border);
+
+    background:
+        #ffffff;
+}
+
+
+.sort-current {
+
+    overflow: hidden;
+
+    min-width: 0;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+}
+
+
+.sort-arrow {
+
+    width: 14px;
+
+    height: 14px;
+
+    flex: 0 0 14px;
+
+    color:
+        rgba(0,0,0,.48);
+
+    transition:
+        transform .2s ease;
+}
+
+
+.sort.open .sort-arrow {
+
+    transform:
+        rotate(180deg);
+
+    color:
+        var(--accent);
+}
+
+
+/* =========================================================
+   MENU DE ORDENAÇÃO
+========================================================= */
+
+.sort-menu {
+
+    position: absolute;
+
+    top:
+        calc(100% + 7px);
+
+    right: 0;
+
+    z-index: 4000;
+
+    width: 180px;
+
+    padding: 5px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 14px;
+
+    background:
+        rgba(255,255,255,.98);
+
+    box-shadow:
+        0 18px 45px
+        rgba(0,0,0,.15);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transform:
+        translateY(-5px)
+        scale(.98);
+
+    transform-origin:
+        top right;
+
+    transition:
+        opacity .16s ease,
+        transform .16s ease,
+        visibility .16s ease;
+}
+
+
+.sort.open .sort-menu {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+.sort-option {
+
+    display: flex;
+
+    align-items: center;
+
+    min-height: 36px;
+
+    padding:
+        0
+        10px;
+
+    border-radius: 10px;
+
+    color:
+        rgba(0,0,0,.62);
+
+    font-size: 10px;
+
+    cursor: pointer;
+
+    transition:
+        background .15s ease,
+        color .15s ease;
+}
+
+
+.sort-option:hover {
+
+    color: #171717;
+
+    background:
+        rgba(0,0,0,.055);
+}
+
+
+.sort-option.active {
+
+    color:
+        var(--accent);
+
+    background:
+        var(--accent-soft);
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   SELECT PERSONALIZADO
+========================================================= */
+
+.site-select {
+
+    position: relative;
+
+    width: 100%;
+}
+
+
+.site-select-button {
+
+    width: 100%;
+
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding:
+        0 13px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 14px;
+
+    outline: none;
+
+    color: #171717;
+
+    background:
+        #f7f7f8;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    cursor: pointer;
+
+    transition:
+        border-color .2s ease,
+        background .2s ease;
+}
+
+
+.site-select-button:active {
+
+    background:
+        #eeeeef;
+}
+
+
+.site-select.open .site-select-button {
+
+    border-color:
+        var(--accent-border);
+}
+
+
+/* =========================================================
+   TEXTO
+========================================================= */
+
+.site-select-value {
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   SETA
+========================================================= */
+
+.site-select-arrow {
+
+    width: 17px;
+
+    height: 17px;
+
+    flex: 0 0 17px;
+
+    margin-left: 14px;
+
+    color:
+        rgba(0,0,0,.48);
+
+    transition:
+        transform .2s ease,
+        color .2s ease;
+}
+
+
+.site-select.open .site-select-arrow {
+
+    transform:
+        rotate(180deg);
+
+    color:
+        var(--accent);
+}
+
+
+/* =========================================================
+   POPUP
+========================================================= */
+
+.site-select-popup {
+
+    position: absolute;
+
+    left: 0;
+
+    right: 0;
+
+    top:
+        calc(100% + 7px);
+
+    z-index: 9999;
+
+    padding: 6px;
+
+    border:
+        1px solid
+        rgba(0,0,0,.08);
+
+    border-radius: 16px;
+
+    background:
+        rgba(255,255,255,.97);
+
+    box-shadow:
+        0 18px 45px
+        rgba(0,0,0,.16),
+        inset 0 1px 0
+        rgba(255,255,255,.8);
+
+    backdrop-filter:
+        blur(22px);
+
+    -webkit-backdrop-filter:
+        blur(22px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform:
+        translateY(-7px)
+        scale(.98);
+
+    transform-origin:
+        top center;
+
+    pointer-events: none;
+
+    transition:
+        opacity .18s ease,
+        transform .18s ease,
+        visibility .18s ease;
+}
+
+
+.site-select.open .site-select-popup {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    transform:
+        translateY(0)
+        scale(1);
+
+    pointer-events: auto;
+}
+
+
+/* =========================================================
+   OPÇÕES
+========================================================= */
+
+.site-select-popup button {
+
+    width: 100%;
+
+    min-height: 44px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding:
+        0 13px;
+
+    border: 0;
+
+    border-radius: 11px;
+
+    outline: none;
+
+    color:
+        rgba(0,0,0,.78);
+
+    background:
+        transparent;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background .15s ease,
+        color .15s ease;
+}
+
+
+.site-select-popup button:hover {
+
+    background:
+        rgba(0,0,0,.055);
+}
+
+
+.site-select-popup button:active {
+
+    background:
+        rgba(0,0,0,.09);
+}
+
+
+.site-select-popup button.selected {
+
+    color:
+        var(--accent);
+
+    background:
+        var(--accent-soft);
+}
+
+
+/* =========================================================
+   ANTI-ESTOURO
+========================================================= */
+
+.field {
+
+    position: relative;
+}
+
+
+.site-select-popup {
+
+    max-height: 220px;
+
+    overflow-y: auto;
+
+    scrollbar-width: none;
+}
+
+
+.site-select-popup::-webkit-scrollbar {
+
+    display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
+
+    * {
+        animation-name: none !important;
+    }
+}
+
+</style>
+
+
+
+</head>
+
+
+<body>
+
+
+
+<!-- =======================================================
+     CABEÇALHO
+======================================================== -->
+
+<header class="header">
+
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            ✓
+        </div>
+
+        <div class="brand-text">
+
+            <div class="brand-title">
+                Planner
+            </div>
+
+            <div
+                class="brand-subtitle"
+                id="subtitle"
+            >
+                Organize seu dia
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+</header>
+
+
+<!-- =======================================================
+     CONTEÚDO
+======================================================== -->
+
+<main class="container">
+
+
+    <!-- ESTATÍSTICAS -->
+
+    <section class="stats">
+
+        <div class="stat">
+
+            <div
+                class="stat-number"
+                id="totalCount"
+            >
+                0
+            </div>
+
+            <div class="stat-label">
+                Total
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div
+                class="stat-number"
+                id="pendingCount"
+            >
+                0
+            </div>
+
+            <div class="stat-label">
+                Pendentes
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div
+                class="stat-number"
+                id="doneCount"
+            >
+                0
+            </div>
+
+            <div class="stat-label">
+                Concluídas
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PESQUISA -->
+
+    <div class="search">
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M380-320q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l224 224q11 11 11 28t-11 28q-11 11-28 11t-28-11L532-372q-30 24-69 38t-83 14Zm0-80q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>
+
+        <input
+            id="searchInput"
+            type="text"
+            placeholder="Pesquisar tarefas..."
+            autocomplete="off"
+            spellcheck="false"
+        >
+
+    </div>
+
+
+    <!-- FILTROS -->
+
+    <div
+        class="filters"
+        id="filters"
+    >
+
+        <button
+            class="filter active"
+            data-filter="Todos"
+        >
+            Todas
+        </button>
+
+        <button
+            class="filter"
+            data-filter="Estudos"
+        >
+            Estudos
+        </button>
+
+        <button
+            class="filter"
+            data-filter="Trabalho"
+        >
+            Trabalho
+        </button>
+
+        <button
+            class="filter"
+            data-filter="Pessoal"
+        >
+            Pessoal
+        </button>
+
+        <button
+            class="filter"
+            data-filter="Saúde"
+        >
+            Saúde
+        </button>
+
+    </div>
+
+
+    <!-- TOOLBAR -->
+
+    <div class="toolbar">
+
+        <div
+            class="result-count"
+            id="resultCount"
+        >
+            0 tarefas
+        </div>
+
+<div
+    class="sort"
+    id="sortSelect"
+    role="button"
+    tabindex="0"
+    aria-haspopup="listbox"
+    aria-expanded="false"
+    aria-label="Ordenar registros"
+>
+
+    <span
+        class="sort-current"
+        id="sortCurrent"
+    >
+        Ordem padrão
+    </span>
+
+    <svg
+        class="sort-arrow"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
+        <path d="m6 9 6 6 6-6"/>
+    </svg>
+
+
+    <div
+        class="sort-menu"
+        id="sortMenu"
+        role="listbox"
+    >
+
+        <div
+            class="sort-option active"
+            data-value="default"
+            role="option"
+            aria-selected="true"
+        >
+            Ordem padrão
+        </div>
+
+        <div
+            class="sort-option"
+            data-value="priority"
+            role="option"
+            aria-selected="false"
+        >
+            Prioridade
+        </div>
+
+        <div
+            class="sort-option"
+            data-value="name"
+            role="option"
+            aria-selected="false"
+        >
+            Nome
+        </div>
+
+        <div
+            class="sort-option"
+            data-value="status"
+            role="option"
+            aria-selected="false"
+        >
+            Pendentes primeiro
+        </div>
+
+    </div>
+
+</div>
+
+
+    </div>
+
+
+    <!-- LISTA -->
+
+    <section id="list"></section>
+
+
+    <!-- POMODORO -->
+
+    <section class="pomodoro">
+
+        <div class="pomodoro-title">
+            Pomodoro
+        </div>
+
+
+        <div
+            class="timer"
+            id="timerCircle"
+        >
+
+            <span id="timer">
+                25:00
+            </span>
+
+        </div>
+
+
+        <div class="pomo-buttons">
+
+            <button
+                class="pomo-button"
+                onclick="togglePomodoro()"
+                id="pomoStart"
+            >
+                Iniciar
+            </button>
+
+            <button
+                class="pomo-button"
+                onclick="resetPomodoro()"
+            >
+                Resetar
+            </button>
+
+            <button
+                class="pomo-button"
+                onclick="addMinute()"
+            >
+                +1 min
+            </button>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<!-- =======================================================
+     ADICIONAR TAREFA
+======================================================== -->
+
+<button
+    class="add-button"
+    onclick="openTaskModal()"
+    aria-label="Adicionar tarefa"
+>
+    +
+</button>
+
+
+<!-- =======================================================
+     MODAL
+======================================================== -->
+
+<div
+    class="modal"
+    id="taskModal"
+>
+
+    <div class="modal-card">
+
+
+        <div class="modal-header">
+
+            <div
+                class="modal-title"
+                id="modalTitle"
+            >
+                Nova tarefa
+            </div>
+
+
+            <button
+                class="modal-close"
+                onclick="closeTaskModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Tarefa
+            </label>
+
+            <input
+                id="taskInput"
+                placeholder="O que você precisa fazer?"
+                autocomplete="off"
+            >
+
+        </div>
+
+
+<div class="field">
+    <label>Categoria</label>
+
+    <div class="site-select" id="categorySelect">
+        <button type="button" class="site-select-button">
+            <span class="site-select-value">Estudos</span>
+
+            <svg class="site-select-arrow"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+                <path d="m6 9 6 6 6-6"/>
+            </svg>
+        </button>
+
+        <div class="site-select-popup">
+            <button type="button" data-value="Estudos">Estudos</button>
+            <button type="button" data-value="Trabalho">Trabalho</button>
+            <button type="button" data-value="Pessoal">Pessoal</button>
+            <button type="button" data-value="Saúde">Saúde</button>
+        </div>
+    </div>
+</div>
+
+
+<div class="field">
+    <label>Prioridade</label>
+
+    <div class="site-select" id="prioritySelect">
+        <button type="button" class="site-select-button">
+            <span class="site-select-value">Baixa</span>
+
+            <svg class="site-select-arrow"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+                <path d="m6 9 6 6 6-6"/>
+            </svg>
+        </button>
+
+        <div class="site-select-popup">
+            <button type="button" data-value="low">Baixa</button>
+            <button type="button" data-value="medium">Média</button>
+            <button type="button" data-value="high">Alta</button>
+        </div>
+    </div>
+</div>
+        <div class="form-buttons">
+
+            <button
+                class="secondary-button"
+                onclick="closeTaskModal()"
+            >
+                Cancelar
+            </button>
+
+
+            <button
+                class="primary-button"
+                onclick="saveTaskFromModal()"
+            >
+                Salvar
+            </button>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     TOAST
+======================================================== -->
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+
+/* =========================================================
+   ESTADO
+========================================================= */
+
+let tasks = [];
+
+let currentFilter = "Todos";
+
+let editingIndex = -1;
+
+let currentSort = "default";
+
+
+/* =========================================================
+   CRIPTO
+========================================================= */
+
+function cryptoLoad(
+    key
+) {
+
+    try {
+
+        if (
+            typeof Cripto === "undefined" ||
+            typeof Cripto.carregar !== "function"
+        ) {
+
+            return null;
+
+        }
+
+
+        return Cripto.carregar(
+            key
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Cripto.carregar:",
+            error
+        );
+
+        return null;
+
+    }
+
+}
+
+
+function cryptoSave(
+    key,
+    value
+) {
+
+    try {
+
+        if (
+            typeof Cripto === "undefined" ||
+            typeof Cripto.salvar !== "function"
+        ) {
+
+            return false;
+
+        }
+
+
+        Cripto.salvar(
+            key,
+            value
+        );
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            "Cripto.salvar:",
+            error
+        );
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   CARREGAR TAREFAS
+========================================================= */
+
+function loadTasks() {
+
+    try {
+
+        const data =
+            cryptoLoad(
+                "tasks"
+            );
+
+
+        if (!data) {
+
+            tasks = [];
+
+            return;
+
+        }
+
+
+        const parsed =
+            typeof data === "string"
+                ? JSON.parse(data)
+                : data;
+
+
+        if (
+            !Array.isArray(parsed)
+        ) {
+
+            tasks = [];
+
+            return;
+
+        }
+
+
+        tasks =
+            parsed
+                .filter(task =>
+                    task &&
+                    typeof task.text === "string"
+                )
+                .map(task => ({
+
+                    text:
+                        task.text.trim(),
+
+                    cat:
+                        task.cat || "Pessoal",
+
+                    priority:
+                        task.priority || "low",
+
+                    done:
+                        Boolean(task.done),
+
+                    created:
+                        Number(
+                            task.created
+                        ) ||
+                        Date.now(),
+
+                    updated:
+                        Number(
+                            task.updated
+                        ) ||
+                        Date.now()
+
+                }));
+
+
+    } catch (error) {
+
+        console.error(
+            "Erro ao carregar tarefas:",
+            error
+        );
+
+        tasks = [];
+
+    }
+
+}
+
+
+/* =========================================================
+   SALVAR
+========================================================= */
+
+function saveTasks() {
+
+    cryptoSave(
+        "tasks",
+        JSON.stringify(
+            tasks
+        )
+    );
+
+}
+
+
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function openTaskModal(index = -1) {
+
+    editingIndex = index;
+
+    const modal =
+        document.getElementById("taskModal");
+
+    const title =
+        document.getElementById("modalTitle");
+
+    const categorySelect =
+        document.getElementById("categorySelect");
+
+    const prioritySelect =
+        document.getElementById("prioritySelect");
+
+    const categoryValue =
+        categorySelect.querySelector(".site-select-value");
+
+    const priorityValue =
+        prioritySelect.querySelector(".site-select-value");
+
+    const categoryOptions =
+        categorySelect.querySelectorAll(".site-select-popup button");
+
+    const priorityOptions =
+        prioritySelect.querySelectorAll(".site-select-popup button");
+
+
+    if (index >= 0 && tasks[index]) {
+
+        title.textContent =
+            "Editar tarefa";
+
+
+        document.getElementById("taskInput").value =
+            tasks[index].text;
+
+
+        /*
+         * Categoria
+         */
+
+        const cat =
+            tasks[index].cat || "Pessoal";
+
+        categorySelect.dataset.value =
+            cat;
+
+        categoryOptions.forEach(option => {
+
+            const selected =
+                option.dataset.value === cat;
+
+            option.classList.toggle(
+                "selected",
+                selected
+            );
+
+            if (selected) {
+
+                categoryValue.textContent =
+                    option.textContent.trim();
+
+            }
+
+        });
+
+
+        /*
+         * Prioridade
+         */
+
+        const priority =
+            tasks[index].priority || "low";
+
+        prioritySelect.dataset.value =
+            priority;
+
+        priorityOptions.forEach(option => {
+
+            const selected =
+                option.dataset.value === priority;
+
+            option.classList.toggle(
+                "selected",
+                selected
+            );
+
+            if (selected) {
+
+                priorityValue.textContent =
+                    option.textContent.trim();
+
+            }
+
+        });
+
+    } else {
+
+        title.textContent =
+            "Nova tarefa";
+
+
+        document.getElementById("taskInput").value =
+            "";
+
+
+        /*
+         * Categoria padrão
+         */
+
+        categorySelect.dataset.value =
+            "Estudos";
+
+        categoryValue.textContent =
+            "Estudos";
+
+        categoryOptions.forEach(option => {
+
+            option.classList.toggle(
+                "selected",
+                option.dataset.value === "Estudos"
+            );
+
+        });
+
+
+        /*
+         * Prioridade padrão
+         */
+
+        prioritySelect.dataset.value =
+            "low";
+
+        priorityValue.textContent =
+            "Baixa";
+
+        priorityOptions.forEach(option => {
+
+            option.classList.toggle(
+                "selected",
+                option.dataset.value === "low"
+            );
+
+        });
+
+    }
+
+
+    /*
+     * Fecha qualquer dropdown aberto
+     */
+
+    categorySelect.classList.remove("open");
+    prioritySelect.classList.remove("open");
+
+
+    /*
+     * ABRE O MODAL
+     */
+
+    modal.classList.add("open");
+
+
+    setTimeout(() => {
+
+        document
+            .getElementById("taskInput")
+            .focus();
+
+    }, 100);
+
+}
+
+
+function closeTaskModal() {
+
+    document
+        .getElementById(
+            "taskModal"
+        )
+        .classList.remove(
+            "open"
+        );
+
+
+    editingIndex =
+        -1;
+
+}
+
+
+/* =========================================================
+   SALVAR TAREFA DO MODAL
+========================================================= */
+function saveTaskFromModal() {
+
+    const input =
+        document.getElementById("taskInput");
+
+    const text =
+        input.value.trim();
+
+
+    if (!text) {
+
+        input.focus();
+
+        showToast(
+            "Digite uma tarefa."
+        );
+
+        return;
+
+    }
+
+
+    const categorySelect =
+        document.getElementById("categorySelect");
+
+    const prioritySelect =
+        document.getElementById("prioritySelect");
+
+
+    const cat =
+        categorySelect.dataset.value ||
+        "Estudos";
+
+
+    const priority =
+        prioritySelect.dataset.value ||
+        "low";
+
+
+    if (
+        editingIndex >= 0 &&
+        tasks[editingIndex]
+    ) {
+
+        tasks[editingIndex].text =
+            text;
+
+        tasks[editingIndex].cat =
+            cat;
+
+        tasks[editingIndex].priority =
+            priority;
+
+        tasks[editingIndex].updated =
+            Date.now();
+
+
+        showToast(
+            "Tarefa atualizada."
+        );
+
+    } else {
+
+        tasks.unshift({
+
+            text,
+
+            cat,
+
+            priority,
+
+            done: false,
+
+            created:
+                Date.now(),
+
+            updated:
+                Date.now()
+
+        });
+
+
+        showToast(
+            "Tarefa adicionada."
+        );
+
+    }
+
+
+    saveTasks();
+
+    closeTaskModal();
+
+    render();
+
+}
+
+
+/* =========================================================
+   CONCLUIR
+========================================================= */
+
+function toggleTask(
+    index
+) {
+
+    if (
+        !tasks[index]
+    ) {
+
+        return;
+
+    }
+
+
+    tasks[index].done =
+        !tasks[index].done;
+
+
+    tasks[index].updated =
+        Date.now();
+
+
+    saveTasks();
+
+    render();
+
+
+    showToast(
+        tasks[index].done
+            ? "Tarefa concluída."
+            : "Tarefa reaberta."
+    );
+
+}
+
+
+/* =========================================================
+   EXCLUIR
+========================================================= */
+
+function deleteTask(
+    index
+) {
+
+    if (
+        !tasks[index]
+    ) {
+
+        return;
+
+    }
+
+
+    const task =
+        tasks[index];
+
+
+    tasks.splice(
+        index,
+        1
+    );
+
+
+    saveTasks();
+
+    render();
+
+
+    showToast(
+        `"${task.text}" removida.`
+    );
+
+}
+
+
+/* =========================================================
+   FILTRO
+========================================================= */
+
+function setFilter(
+    filter
+) {
+
+    currentFilter =
+        filter;
+
+
+    document
+        .querySelectorAll(
+            ".filter"
+        )
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.filter ===
+                    filter
+            );
+
+        });
+
+
+
+    render();
+
+}
+
+
+document
+    .querySelectorAll(
+        ".filter"
+    )
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                setFilter(
+                    button.dataset.filter
+                );
+
+            }
+        );
+
+    });
+
+
+/* =========================================================
+   ORDENAÇÃO
+========================================================= */
+
+/* =========================================================
+   ORDENAÇÃO — DROPDOWN PERSONALIZADO
+========================================================= */
+
+const sortSelect =
+    document.getElementById(
+        "sortSelect"
+    );
+
+const sortCurrent =
+    document.getElementById(
+        "sortCurrent"
+    );
+
+const sortMenu =
+    document.getElementById(
+        "sortMenu"
+    );
+
+
+function toggleSortMenu() {
+
+    const isOpen =
+        sortSelect.classList.contains(
+            "open"
+        );
+
+
+    sortSelect.classList.toggle(
+        "open",
+        !isOpen
+    );
+
+
+    sortSelect.setAttribute(
+        "aria-expanded",
+        String(!isOpen)
+    );
+
+}
+
+
+function closeSortMenu() {
+
+    sortSelect.classList.remove(
+        "open"
+    );
+
+
+    sortSelect.setAttribute(
+        "aria-expanded",
+        "false"
+    );
+
+}
+
+
+sortSelect.addEventListener(
+    "click",
+    event => {
+
+        const option =
+            event.target.closest(
+                ".sort-option"
+            );
+
+
+        if (option) {
+
+            event.stopPropagation();
+
+            const value =
+                option.dataset.value;
+
+
+            const label =
+                option.textContent.trim();
+
+
+            currentSort =
+                value;
+
+
+            sortCurrent.textContent =
+                label;
+
+
+            document
+                .querySelectorAll(
+                    ".sort-option"
+                )
+                .forEach(item => {
+
+                    const active =
+                        item.dataset.value ===
+                        value;
+
+
+                    item.classList.toggle(
+                        "active",
+                        active
+                    );
+
+
+                    item.setAttribute(
+                        "aria-selected",
+                        String(active)
+                    );
+
+                });
+
+
+            closeSortMenu();
+
+            render();
+
+            return;
+
+        }
+
+
+        toggleSortMenu();
+
+    }
+);
+
+
+/* =========================================================
+   ACESSIBILIDADE DO DROPDOWN
+========================================================= */
+
+sortSelect.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Enter" ||
+            event.key === " "
+        ) {
+
+            event.preventDefault();
+
+            toggleSortMenu();
+
+        }
+
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            closeSortMenu();
+
+            sortSelect.blur();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   FECHAR AO CLICAR FORA
+========================================================= */
+
+document.addEventListener(
+    "click",
+    event => {
+
+        if (
+            !sortSelect.contains(
+                event.target
+            )
+        ) {
+
+            closeSortMenu();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   PESQUISA
+========================================================= */
+
+document
+    .getElementById(
+        "searchInput"
+    )
+    .addEventListener(
+        "input",
+        render
+    );
+
+
+/* =========================================================
+   FILTRAR + ORDENAR
+========================================================= */
+
+function getVisibleTasks() {
+
+    const search =
+        document
+            .getElementById(
+                "searchInput"
+            )
+            .value
+            .toLocaleLowerCase(
+                "pt-BR"
+            )
+            .trim();
+
+
+    let result =
+        tasks.filter(task => {
+
+            const matchesFilter =
+                currentFilter === "Todos" ||
+                task.cat === currentFilter;
+
+
+            const matchesSearch =
+                !search ||
+                task.text
+                    .toLocaleLowerCase(
+                        "pt-BR"
+                    )
+                    .includes(
+                        search
+                    );
+
+
+            return (
+                matchesFilter &&
+                matchesSearch
+            );
+
+        });
+
+
+    if (
+        currentSort === "name"
+    ) {
+
+        result.sort(
+            (a,b) =>
+                a.text.localeCompare(
+                    b.text,
+                    "pt-BR",
+                    {
+                        sensitivity:
+                            "base"
+                    }
+                )
+        );
+
+    }
+
+
+    if (
+        currentSort === "priority"
+    ) {
+
+        const weight = {
+
+            high: 3,
+
+            medium: 2,
+
+            low: 1
+
+        };
+
+
+        result.sort(
+            (a,b) =>
+                weight[b.priority] -
+                weight[a.priority]
+        );
+
+    }
+
+
+    if (
+        currentSort === "status"
+    ) {
+
+        result.sort(
+            (a,b) =>
+                Number(a.done) -
+                Number(b.done)
+        );
+
+    }
+
+
+    return result;
+
+}
+
+
+/* =========================================================
+   TEXTO DE PRIORIDADE
+========================================================= */
+
+function priorityName(
+    priority
+) {
+
+    if (
+        priority === "high"
+    ) {
+
+        return "Alta";
+
+    }
+
+
+    if (
+        priority === "medium"
+    ) {
+
+        return "Média";
+
+    }
+
+
+    return "Baixa";
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function render() {
+
+    const list =
+        document.getElementById(
+            "list"
+        );
+
+
+    const visible =
+        getVisibleTasks();
+
+
+    updateStats();
+
+
+    document
+        .getElementById(
+            "resultCount"
+        )
+        .textContent =
+            `${visible.length} ${
+                visible.length === 1
+                    ? "tarefa"
+                    : "tarefas"
+            }`;
+
+
+    list.innerHTML =
+        "";
+
+
+    if (!visible.length) {
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    ✓
+                </div>
+
+                <div class="empty-title">
+                    ${
+                        tasks.length
+                            ? "Nada encontrado"
+                            : "Tudo tranquilo por aqui"
+                    }
+                </div>
+
+                <div class="empty-text">
+                    ${
+                        tasks.length
+                            ? "Tente mudar o filtro ou a pesquisa."
+                            : "Adicione sua primeira tarefa usando o botão +."
+                    }
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const fragment =
+        document.createDocumentFragment();
+
+
+    visible.forEach(
+        task => {
+
+            const realIndex =
+                tasks.indexOf(
+                    task
+                );
+
+
+            const article =
+                document.createElement(
+                    "article"
+                );
+
+
+            article.className =
+                `task ${task.priority} ${
+                    task.done
+                        ? "done"
+                        : ""
+                }`;
+
+
+            /* CHECK */
+
+            const check =
+                document.createElement(
+                    "button"
+                );
+
+
+            check.className =
+                "check";
+
+
+            check.textContent =
+                "✓";
+
+
+            check.title =
+                "Concluir";
+
+
+            check.addEventListener(
+                "click",
+                () =>
+                    toggleTask(
+                        realIndex
+                    )
+            );
+
+
+            /* CONTEÚDO */
+
+            const content =
+                document.createElement(
+                    "div"
+                );
+
+
+            content.className =
+                "task-content";
+
+
+            const text =
+                document.createElement(
+                    "div"
+                );
+
+
+            text.className =
+                "task-text";
+
+
+            text.textContent =
+                task.text;
+
+
+            const meta =
+                document.createElement(
+                    "div"
+                );
+
+
+            meta.className =
+                "task-meta";
+
+
+            meta.innerHTML =
+                `<span class="priority-dot"></span>
+                 ${task.cat}
+                 •
+                 ${priorityName(task.priority)}`;
+
+
+            content.appendChild(
+                text
+            );
+
+
+            content.appendChild(
+                meta
+            );
+
+
+            /* AÇÕES */
+
+            const actions =
+                document.createElement(
+                    "div"
+                );
+
+
+            actions.className =
+                "task-actions";
+
+
+            const edit =
+                document.createElement(
+                    "button"
+                );
+
+
+            edit.className =
+    "task-button";
+
+edit.innerHTML = `
+    <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+    >
+        <path
+            d="M12 20h9"
+        />
+
+        <path
+            d="M16.5 3.5
+               a2.121 2.121 0 0 1 3 3
+               L8 18l-4 1 1-4Z"
+        />
+    </svg>
+`;
+
+edit.title =
+    "Editar";
+
+
+            edit.title =
+                "Editar";
+
+
+            edit.addEventListener(
+                "click",
+                () =>
+                    openTaskModal(
+                        realIndex
+                    )
+            );
+
+
+            const del =
+                document.createElement(
+                    "button"
+                );
+
+
+            del.className =
+                "task-button delete";
+
+
+            del.textContent =
+                "×";
+
+
+            del.title =
+                "Excluir";
+
+
+            del.addEventListener(
+                "click",
+                () =>
+                    deleteTask(
+                        realIndex
+                    )
+            );
+
+
+            actions.appendChild(
+                edit
+            );
+
+
+            actions.appendChild(
+                del
+            );
+
+
+            article.appendChild(
+                check
+            );
+
+
+            article.appendChild(
+                content
+            );
+
+
+            article.appendChild(
+                actions
+            );
+
+
+            fragment.appendChild(
+                article
+            );
+
+        }
+    );
+
+
+    list.appendChild(
+        fragment
+    );
+
+}
+
+
+/* =========================================================
+   ESTATÍSTICAS
+========================================================= */
+
+function updateStats() {
+
+    const total =
+        tasks.length;
+
+
+    const done =
+        tasks.filter(
+            task => task.done
+        ).length;
+
+
+    const pending =
+        total - done;
+
+
+    document
+        .getElementById(
+            "totalCount"
+        )
+        .textContent =
+            total;
+
+
+    document
+        .getElementById(
+            "pendingCount"
+        )
+        .textContent =
+            pending;
+
+
+    document
+        .getElementById(
+            "doneCount"
+        )
+        .textContent =
+            done;
+
+
+    document
+        .getElementById(
+            "subtitle"
+        )
+        .textContent =
+            pending
+                ? `${pending} tarefa${
+                    pending === 1
+                        ? ""
+                        : "s"
+                  } pendente${
+                    pending === 1
+                        ? ""
+                        : "s"
+                  }`
+                : "Tudo em dia";
+}
+
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer = null;
+
+
+function showToast(
+    message
+) {
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            2200
+        );
+
+}
+
+
+/* =========================================================
+   POMODORO
+========================================================= */
+
+const POMO_TOTAL =
+    25 * 60;
+
+
+let pomodoroTime =
+    POMO_TOTAL;
+
+
+let pomodoroInterval =
+    null;
+
+
+function updatePomodoro() {
+
+    const minutes =
+        Math.floor(
+            pomodoroTime / 60
+        );
+
+
+    const seconds =
+        pomodoroTime % 60;
+
+
+    document
+        .getElementById(
+            "timer"
+        )
+        .textContent =
+            `${minutes}:${
+                seconds < 10
+                    ? "0"
+                    : ""
+            }${seconds}`;
+
+
+    const progress =
+        (
+            (POMO_TOTAL -
+                pomodoroTime) /
+            POMO_TOTAL
+        ) * 100;
+
+
+    document
+        .getElementById(
+            "timerCircle"
+        )
+        .style
+        .setProperty(
+            "--progress",
+            `${progress}%`
+        );
+
+}
+
+
+function togglePomodoro() {
+
+    if (
+        pomodoroInterval
+    ) {
+
+        clearInterval(
+            pomodoroInterval
+        );
+
+
+        pomodoroInterval =
+            null;
+
+
+        document
+            .getElementById(
+                "pomoStart"
+            )
+            .textContent =
+                "Continuar";
+
+
+        return;
+
+    }
+
+
+    if (
+        pomodoroTime <= 0
+    ) {
+
+        pomodoroTime =
+            POMO_TOTAL;
+
+    }
+
+
+    document
+        .getElementById(
+            "pomoStart"
+        )
+        .textContent =
+            "Pausar";
+
+
+    pomodoroInterval =
+        setInterval(
+            () => {
+
+                pomodoroTime--;
+
+                updatePomodoro();
+
+
+                if (
+                    pomodoroTime <= 0
+                ) {
+
+                    clearInterval(
+                        pomodoroInterval
+                    );
+
+
+                    pomodoroInterval =
+                        null;
+
+
+                    pomodoroTime =
+                        POMO_TOTAL;
+
+
+                    document
+                        .getElementById(
+                            "pomoStart"
+                        )
+                        .textContent =
+                            "Iniciar";
+
+
+                    updatePomodoro();
+
+
+                    showToast(
+                        "Pomodoro finalizado!"
+                    );
+
+                }
+
+            },
+            1000
+        );
+
+}
+
+
+function resetPomodoro() {
+
+    clearInterval(
+        pomodoroInterval
+    );
+
+
+    pomodoroInterval =
+        null;
+
+
+    pomodoroTime =
+        POMO_TOTAL;
+
+
+    document
+        .getElementById(
+            "pomoStart"
+        )
+        .textContent =
+            "Iniciar";
+
+
+    updatePomodoro();
+
+}
+
+
+function addMinute() {
+
+    pomodoroTime +=
+        60;
+
+
+    if (
+        pomodoroTime >
+        POMO_TOTAL
+    ) {
+
+        pomodoroTime =
+            POMO_TOTAL;
+
+    }
+
+
+    updatePomodoro();
+
+}
+
+
+/* =========================================================
+   TECLADO
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            
+
+            closeTaskModal();
+
+        }
+
+
+        if (
+            event.key === "Enter" &&
+            document.activeElement?.id ===
+                "taskInput"
+        ) {
+
+            saveTaskFromModal();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   FECHAR MODAL AO CLICAR FORA
+========================================================= */
+
+document
+    .getElementById(
+        "taskModal"
+    )
+    .addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target.id ===
+                "taskModal"
+            ) {
+
+                closeTaskModal();
+
+            }
+
+        }
+    );
+
+
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+========================================================= */
+
+
+
+loadTasks();
+
+updatePomodoro();
+
+render();
+
+</script>
+
+<script>
+/* =========================================================
+   SELECT PERSONALIZADO
+   100% HTML/CSS/JS
+========================================================= */
+
+(function () {
+
+    const selects = document.querySelectorAll(".site-select");
+
+    selects.forEach(select => {
+
+        const button = select.querySelector(".site-select-button");
+        const valueText = select.querySelector(".site-select-value");
+        const options = select.querySelectorAll(".site-select-popup button");
+
+        button.addEventListener("click", function (event) {
+
+            event.stopPropagation();
+
+            // Fecha os outros
+            selects.forEach(other => {
+                if (other !== select) {
+                    other.classList.remove("open");
+                }
+            });
+
+            // Abre/fecha este
+            select.classList.toggle("open");
+        });
+
+
+        options.forEach(option => {
+
+            option.addEventListener("click", function (event) {
+
+                event.stopPropagation();
+
+                const value = option.dataset.value;
+                const text = option.textContent.trim();
+
+                // Atualiza texto
+                valueText.textContent = text;
+
+                // Marca selecionado
+                options.forEach(item => {
+                    item.classList.remove("selected");
+                });
+
+                option.classList.add("selected");
+
+                // Guarda o valor
+                select.dataset.value = value;
+
+                // Fecha popup
+                select.classList.remove("open");
+
+                /*
+                 * Eventos personalizados para o seu código
+                 */
+
+                select.dispatchEvent(
+                    new CustomEvent("change", {
+                        detail: {
+                            value: value,
+                            text: text
+                        }
+                    })
+                );
+            });
+
+        });
+
+    });
+
+
+    /*
+     * Clicar fora fecha qualquer popup
+     */
+
+    document.addEventListener("click", function () {
+
+        selects.forEach(select => {
+            select.classList.remove("open");
+        });
+
+    });
+
+
+    /*
+     * ESC fecha
+     */
+
+    document.addEventListener("keydown", function (event) {
+
+        if (event.key === "Escape") {
+
+            selects.forEach(select => {
+                select.classList.remove("open");
+            });
+
+        }
+
+    });
+
+})();
+</script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,2165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+>
+
+    <meta
+        name="description"
+        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
+    >
+
+<meta
+    name="theme-color"
+    content="#08080a"
+>
+
+<meta
+    name="color-scheme"
+    content="dark"
+>
+
+<title>Mapa</title>
+
+
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+>
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+
+<style>
+/* =========================================================
+   VARIÁVEIS
+========================================================= */
+
+:root {
+
+    --bg:
+        #ffffff;
+
+    --surface:
+        rgba(255, 255, 255, .88);
+
+    --surface-soft:
+        rgba(0, 0, 0, .055);
+
+    --border:
+        rgba(0, 0, 0, .10);
+
+    --border-soft:
+        rgba(0, 0, 0, .07);
+
+    --text:
+        rgba(20, 21, 25, .92);
+
+    --text-muted:
+        rgba(20, 21, 25, .52);
+
+    --pink:
+        #ff4f91;
+
+    --pink-soft:
+        rgba(255, 79, 145, .10);
+
+    --blue:
+        #4b9fff;
+
+    --green:
+        #22b96b;
+
+    --radius-large:
+        22px;
+
+    --radius-medium:
+        16px;
+
+    --radius-small:
+        12px;
+
+    --safe-top:
+        max(6px, env(safe-area-inset-top));
+
+    --safe-right:
+        max(6px, env(safe-area-inset-right));
+
+    --safe-bottom:
+        max(6px, env(safe-area-inset-bottom));
+
+    --safe-left:
+        max(6px, env(safe-area-inset-left));
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*,
+*::before,
+*::after {
+
+    box-sizing:
+        border-box;
+
+    -webkit-tap-highlight-color:
+        transparent;
+
+    -webkit-backface-visibility:
+        hidden;
+
+    backface-visibility:
+        hidden;
+
+    -webkit-transform:
+        translateZ(0);
+
+    transform:
+        translateZ(0);
+}
+
+
+html,
+body {
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    min-width:
+        0;
+
+    min-height:
+        0;
+
+    margin:
+        0;
+
+    padding:
+        0;
+
+    overflow:
+        hidden;
+
+    background:
+        var(--bg);
+
+    scrollbar-width:
+        none;
+
+    scrollbar-color:
+        transparent transparent;
+}
+
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+
+    width:
+        0;
+
+    height:
+        0;
+
+    background:
+        transparent;
+}
+
+
+body {
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    overflow:
+        hidden;
+
+    color:
+        var(--text);
+
+    font-family:
+        "Quicksand",
+        Arial,
+        sans-serif;
+
+    user-select:
+        none;
+
+    -webkit-user-select:
+        none;
+
+    -webkit-touch-callout:
+        none;
+
+    overscroll-behavior:
+        none;
+
+    touch-action:
+        manipulation;
+
+    isolation:
+        isolate;
+}
+
+
+/* =========================================================
+   FONTE
+========================================================= */
+
+@font-face {
+
+    font-family:
+        "Quicksand";
+
+    src:
+        url("font.ttf")
+        format("truetype");
+
+    font-display:
+        swap;
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app {
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    min-width:
+        0;
+
+    min-height:
+        0;
+
+    overflow:
+        hidden;
+
+    padding:
+        var(--safe-top)
+        var(--safe-right)
+        var(--safe-bottom)
+        var(--safe-left);
+}
+
+
+/* =========================================================
+   ÁREA PRINCIPAL
+========================================================= */
+
+.map-wrapper {
+
+    position:
+        absolute;
+
+    margin-left:
+        2.5%;
+
+    margin-right:
+        2.5%;
+
+    width:
+        92%;
+
+    top:
+        15%;
+
+    height:
+        calc(
+            (
+                100vh
+                -
+                var(--safe-top)
+                -
+                var(--safe-bottom)
+                -
+                60px
+            ) * .95
+        );
+
+    min-width:
+        0;
+
+    min-height:
+        0;
+
+    overflow:
+        hidden;
+
+    border-radius:
+        var(--radius-large);
+
+    background:
+        #f2f3f5;
+
+    border:
+        1px solid
+        rgba(0, 0, 0, .08);
+
+    box-shadow:
+
+        0 20px 70px
+        rgba(0, 0, 0, .12),
+
+        0 0 0 1px
+        rgba(0, 0, 0, .025);
+
+    isolation:
+        isolate;
+
+    contain:
+        layout paint;
+
+    animation:
+        mapIn .55s ease both;
+}
+
+
+/* =========================================================
+   MAPA
+========================================================= */
+
+#map {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    min-width:
+        0;
+
+    min-height:
+        0;
+
+    overflow:
+        hidden;
+
+    outline:
+        none;
+
+    background:
+        #f2f3f5;
+}
+
+
+.leaflet-container {
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    min-width:
+        0;
+
+    min-height:
+        0;
+
+    overflow:
+        hidden;
+
+    background:
+        #f2f3f5;
+
+    color:
+        var(--text);
+
+    font-family:
+        "Quicksand",
+        Arial,
+        sans-serif;
+
+    outline:
+        none;
+}
+
+
+/* =========================================================
+   CABEÇALHO
+========================================================= */
+
+.header {
+
+    position:
+        absolute;
+
+    margin-top:
+        5%;
+
+    left:
+        50%;
+
+    z-index:
+        5000;
+
+    width:
+        min(
+            calc(100% - 24px),
+            520px
+        );
+
+    height:
+        54px;
+
+    min-height:
+        54px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        10px;
+
+    padding:
+        7px 9px 7px 13px;
+
+    transform:
+        translateX(-50%);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        17px;
+
+    background:
+        rgba(255, 255, 255, .88);
+
+    backdrop-filter:
+        blur(22px)
+        saturate(150%);
+
+    -webkit-backdrop-filter:
+        blur(22px)
+        saturate(150%);
+
+    box-shadow:
+        0 12px 35px
+        rgba(0, 0, 0, .12);
+
+    overflow:
+        hidden;
+
+    contain:
+        layout paint;
+
+    animation:
+        headerIn .65s ease both;
+}
+
+
+/* =========================================================
+   TÍTULO
+========================================================= */
+
+.title {
+
+    min-width:
+        0;
+
+    flex:
+        1 1 auto;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    overflow:
+        hidden;
+}
+
+
+.title-icon {
+
+    width:
+        34px;
+
+    height:
+        34px;
+
+    flex:
+        0 0 34px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border:
+        1px solid
+        rgba(255, 79, 145, .18);
+
+    border-radius:
+        11px;
+
+    color:
+        var(--pink);
+
+    background:
+        var(--pink-soft);
+
+    font-size:
+        17px;
+
+    box-shadow:
+        0 0 20px
+        rgba(255, 79, 145, .08);
+}
+
+
+.title-text {
+
+    min-width:
+        0;
+
+    flex:
+        1;
+
+    overflow:
+        hidden;
+}
+
+
+.title-name {
+
+    width:
+        100%;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+    color:
+        #17181c;
+
+    font-size:
+        16px;
+
+    line-height:
+        18px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        .2px;
+}
+
+
+.title-status {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        5px;
+
+    margin-top:
+        1px;
+
+    color:
+        var(--text-muted);
+
+    font-size:
+        10px;
+
+    line-height:
+        12px;
+
+    font-weight:
+        500;
+
+    white-space:
+        nowrap;
+}
+
+
+.status-dot {
+
+    width:
+        6px;
+
+    height:
+        6px;
+
+    flex:
+        0 0 6px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--green);
+
+    box-shadow:
+        0 0 10px
+        rgba(34, 185, 107, .45);
+
+    animation:
+        pulse 2s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   AÇÕES DO CABEÇALHO
+========================================================= */
+
+.header-actions {
+
+    flex:
+        0 0 auto;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        6px;
+}
+
+
+.icon-button {
+
+    width:
+        38px;
+
+    height:
+        38px;
+
+    flex:
+        0 0 38px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    padding:
+        0;
+
+    border:
+        0;
+
+    border-radius:
+        50%;
+
+    outline:
+        none;
+
+    color:
+        rgba(20, 21, 25, .88);
+
+    background:
+        var(--surface-soft);
+
+    box-shadow:
+        inset 0 0 0 1px
+        var(--border-soft);
+
+    cursor:
+        pointer;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size:
+        17px;
+
+    line-height:
+        1;
+
+    touch-action:
+        manipulation;
+
+    transition:
+        transform .15s ease,
+        background .15s ease,
+        color .15s ease;
+}
+
+
+.icon-button:active {
+
+    transform:
+        scale(.91);
+
+    color:
+        #17181c;
+
+    background:
+        rgba(0, 0, 0, .10);
+}
+
+
+/* =========================================================
+   CONTROLES DO MAPA
+========================================================= */
+
+.map-controls {
+
+    position:
+        absolute;
+
+    right:
+        14px;
+
+    bottom:
+        14px;
+
+    z-index:
+        1500;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    pointer-events:
+        none;
+
+    animation:
+        controlsIn .5s .12s ease both;
+}
+
+
+.map-button {
+
+    width:
+        44px;
+
+    height:
+        44px;
+
+    flex:
+        0 0 44px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    padding:
+        0;
+
+    border:
+        0;
+
+    border-radius:
+        14px;
+
+    outline:
+        none;
+
+    color:
+        #17181c;
+
+    background:
+        rgba(255, 255, 255, .90);
+
+    box-shadow:
+
+        inset 0 0 0 1px
+        rgba(0, 0, 0, .08),
+
+        0 8px 25px
+        rgba(0, 0, 0, .15);
+
+    backdrop-filter:
+        blur(15px);
+
+    -webkit-backdrop-filter:
+        blur(15px);
+
+    cursor:
+        pointer;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size:
+        20px;
+
+    line-height:
+        1;
+
+    pointer-events:
+        auto;
+
+    touch-action:
+        manipulation;
+
+    transition:
+        transform .15s ease,
+        background .15s ease;
+}
+
+
+.map-button:active {
+
+    transform:
+        scale(.90);
+
+    background:
+        rgba(235, 236, 239, .96);
+}
+
+
+/* =========================================================
+   LEAFLET
+========================================================= */
+
+.leaflet-control-zoom {
+
+    display:
+        none !important;
+}
+
+
+.leaflet-control-attribution {
+
+    display:
+        none !important;
+}
+
+
+/* =========================================================
+   MARCADOR PERSONALIZADO
+========================================================= */
+
+.custom-marker {
+
+    position:
+        relative;
+
+    width:
+        18px;
+
+    height:
+        18px;
+
+    pointer-events:
+        none;
+}
+
+
+.marker-core {
+
+    position:
+        absolute;
+
+    top:
+        50%;
+
+    left:
+        50%;
+
+    width:
+        9px;
+
+    height:
+        9px;
+
+    transform:
+        translate(-50%, -50%);
+
+    border:
+        2px solid #fff;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--pink);
+
+    box-shadow:
+        0 0 15px
+        rgba(255, 79, 145, .65);
+}
+
+
+.marker-ring {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    border:
+        1px solid
+        rgba(255, 79, 145, .65);
+
+    border-radius:
+        50%;
+
+    animation:
+        markerPulse 2s ease-out infinite;
+}
+
+
+/* =========================================================
+   LOCALIZAÇÃO DO USUÁRIO
+========================================================= */
+
+.user-location {
+
+    width:
+        18px;
+
+    height:
+        18px;
+
+    border:
+        3px solid #fff;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--blue);
+
+    box-shadow:
+
+        0 0 0 7px
+        rgba(75, 159, 255, .18),
+
+        0 0 25px
+        rgba(75, 159, 255, .55);
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast {
+
+    position:
+        fixed;
+
+    left:
+        22px;
+
+    white-space:
+        pre-line;
+
+    bottom:
+        calc(
+            var(--safe-bottom) + 22px
+        );
+
+    z-index:
+        9000;
+
+    width:
+        max-content;
+
+    max-width:
+        calc(100% - 40px);
+
+    padding:
+        11px 16px;
+
+    transform:
+        translateY(18px);
+
+    border:
+        1px solid
+        rgba(0, 0, 0, .10);
+
+    border-radius:
+        13px;
+
+    color:
+        rgba(20, 21, 25, .92);
+
+    background:
+        rgba(255, 255, 255, .94);
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
+
+    box-shadow:
+        0 12px 35px
+        rgba(0, 0, 0, .16);
+
+    font-size:
+        12px;
+
+    line-height:
+        16px;
+
+    text-align:
+        center;
+
+    pointer-events:
+        none;
+
+    opacity:
+        0;
+
+    transition:
+        opacity .25s ease,
+        transform .25s ease;
+}
+
+
+.toast.show {
+
+    opacity:
+        1;
+
+    transform:
+        translateY(0);
+}
+
+
+/* =========================================================
+   SVG
+========================================================= */
+
+svg {
+
+    width:
+        25px;
+
+    height:
+        25px;
+
+    display:
+        block;
+
+    flex:
+        0 0 auto;
+
+    filter:
+        brightness(0);
+}
+
+
+/* Ícone do título permanece rosa */
+
+.title-icon svg {
+
+    filter:
+        none;
+
+    fill:
+        var(--pink);
+}
+
+
+/* =========================================================
+   ANIMAÇÕES
+========================================================= */
+
+@keyframes mapIn {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            scale(.985);
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            scale(1);
+    }
+}
+
+
+@keyframes headerIn {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translate(-50%, -8px);
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translate(-50%, 0);
+    }
+}
+
+
+@keyframes controlsIn {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateX(10px);
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateX(0);
+    }
+}
+
+
+@keyframes pulse {
+
+    0%,
+    100% {
+
+        opacity:
+            1;
+
+        transform:
+            scale(1);
+    }
+
+    50% {
+
+        opacity:
+            .45;
+
+        transform:
+            scale(.78);
+    }
+}
+
+
+@keyframes markerPulse {
+
+    0% {
+
+        opacity:
+            .8;
+
+        transform:
+            scale(.65);
+    }
+
+    70% {
+
+        opacity:
+            0;
+
+        transform:
+            scale(1.8);
+    }
+
+    100% {
+
+        opacity:
+            0;
+
+        transform:
+            scale(1.8);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
+
+    * {
+        animation-name: none !important;
+    }
+}
+
+
+</style>
+
+
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- =====================================================
+         CABEÇALHO
+    ====================================================== -->
+
+    <header class="header">
+
+        <div class="title">
+
+            <div class="title-icon">
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M480-186q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm-28 74q-14-5-25-15-65-60-115-117t-83.5-110.5q-33.5-53.5-51-103T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 45-17.5 94.5t-51 103Q698-301 648-244T533-127q-11 10-25 15t-28 5q-14 0-28-5Zm28-448Zm56.5 56.5Q560-527 560-560t-23.5-56.5Q513-640 480-640t-56.5 23.5Q400-593 400-560t23.5 56.5Q447-480 480-480t56.5-23.5Z"/></svg>
+
+            </div>
+
+
+            <div class="title-text">
+
+                <div class="title-name">
+                    Mapa
+                </div>
+
+                <div class="title-status">
+
+                    <span class="status-dot"></span>
+
+                    Mapa online
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="header-actions"
+            style="border-radius: 200px;"
+        >
+
+            <button
+                class="icon-button"
+                style="border-radius: 200px;"
+                id="locateButton"
+                aria-label="Minha localização"
+                title="Minha localização"
+                type="button"
+            >
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="m574-129-214-75-186 72q-10 4-19.5 2.5T137-136q-8-5-12.5-13.5T120-169v-561q0-13 7.5-23t20.5-15l186-63q6-2 12.5-3t13.5-1q7 0 13.5 1t12.5 3l214 75 186-72q10-4 19.5-2.5T823-824q8 5 12.5 13.5T840-791v561q0 13-7.5 23T812-192l-186 63q-6 2-12.5 3t-13.5 1q-7 0-13.5-1t-12.5-3Zm-14-89v-468l-160-56v468l160 56Zm80 0 120-40v-474l-120 46v468Zm-440-10 120-46v-468l-120 40v474Zm440-458v468-468Zm-320-56v468-468Z"/></svg>
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         ÁREA DO MAPA
+    ====================================================== -->
+
+    <main class="map-wrapper">
+
+        <div id="map"></div>
+
+
+        <!-- =================================================
+             CONTROLES
+        ================================================== -->
+
+        <div class="map-controls">
+
+            <button
+                class="map-button"
+                id="zoomIn"
+                aria-label="Aumentar zoom"
+                title="Aumentar zoom"
+                type="button"
+            >
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M440-440H240q-17 0-28.5-11.5T200-480q0-17 11.5-28.5T240-520h200v-200q0-17 11.5-28.5T480-760q17 0 28.5 11.5T520-720v200h200q17 0 28.5 11.5T760-480q0 17-11.5 28.5T720-440H520v200q0 17-11.5 28.5T480-200q-17 0-28.5-11.5T440-240v-200Z"/></svg>
+
+            </button>
+
+
+            <button
+                class="map-button"
+                id="zoomOut"
+                aria-label="Diminuir zoom"
+                title="Diminuir zoom"
+                type="button"
+            >
+
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M240-440q-17 0-28.5-11.5T200-480q0-17 11.5-28.5T240-520h480q17 0 28.5 11.5T760-480q0 17-11.5 28.5T720-440H240Z"/></svg>
+
+            </button>
+
+
+            <button
+                class="map-button"
+                id="myLocation"
+                aria-label="Encontrar localização"
+                title="Encontrar localização"
+                type="button"
+            >
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M479-359q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35Zm-57 222-85-85q-12-12-11.5-28.5T338-279q12-12 28.5-12t28.5 12l85 86 85-85q11-11 28-11t28 11q11 11 11 28t-11 28l-85 85q-12 12-27 18t-30 6q-15 0-30-6t-27-18ZM221-337l-85-85q-12-12-18-27t-6-30q0-15 6-30t18-27l85-85q12-12 28.5-12t28.5 12q12 12 12 28.5T278-564l-86 86 85 85q11 11 11 28t-11 28q-11 11-28 11t-28-11Zm116-401 85-85q12-12 27-18t30-6q15 0 30 6t27 18l85 85q12 12 12 28t-12 28q-12 12-28.5 12T564-682l-86-85-85 85q-11 11-28 11t-28-11q-11-11-11-28t11-28Zm344 343 85-85-85-85q-11-11-11-28t11-28q11-11 28-11t28 11l85 85q12 12 18 27t6 30q0 15-6 30t-18 27l-85 85q-12 12-28 11.5T681-338q-12-12-12-28.5t12-28.5Z"/></svg>
+            </button>
+
+        </div>
+
+    </main>
+
+
+    <!-- =====================================================
+         TOAST
+    ====================================================== -->
+
+    <div
+        id="toast"
+        class="toast"
+        aria-live="polite"
+    ></div>
+
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   CONFIGURAÇÃO
+========================================================= */
+
+const CENTER =
+    [-23.5505, -46.6333];
+
+const DEFAULT_ZOOM =
+    12;
+
+
+/* =========================================================
+   MAPA
+========================================================= */
+
+const map =
+    L.map(
+        "map",
+        {
+
+            zoomControl:
+                false,
+
+            /*
+               Remove completamente
+               o controle de atribuição.
+            */
+
+            attributionControl:
+                false,
+
+            preferCanvas:
+                true,
+
+            zoomAnimation:
+                true,
+
+            fadeAnimation:
+                true,
+
+            markerZoomAnimation:
+                true,
+
+            minZoom:
+                3,
+
+            maxZoom:
+                19
+
+        }
+    )
+    .setView(
+        CENTER,
+        DEFAULT_ZOOM
+    );
+
+
+/* =========================================================
+   MAPA BASE
+========================================================= */
+
+L.tileLayer(
+
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
+    {
+
+        maxZoom:
+            19,
+
+        minZoom:
+            3,
+
+        updateWhenIdle:
+            true,
+
+        updateWhenZooming:
+            false,
+
+        keepBuffer:
+            2,
+
+        /*
+           Nenhuma atribuição
+           será exibida.
+        */
+
+        attribution:
+            ""
+
+    }
+
+)
+.addTo(map);
+
+
+/* =========================================================
+   MARCADOR CUSTOMIZADO
+========================================================= */
+
+const markerIcon =
+    L.divIcon({
+
+        className:
+            "",
+
+        html:
+            `
+            <div class="custom-marker">
+
+                <div class="marker-ring"></div>
+
+                <div class="marker-core"></div>
+
+            </div>
+            `,
+
+        iconSize:
+            [18, 18],
+
+        iconAnchor:
+            [9, 9]
+
+    });
+
+
+/* =========================================================
+   PONTOS
+========================================================= */
+
+const pontos = [
+
+    [-23.5505, -46.6333],
+
+    [-23.5600, -46.6200],
+
+    [-23.5400, -46.6500]
+
+];
+
+
+const markers =
+    [];
+
+
+pontos.forEach(
+    (position, index) => {
+
+        const marker =
+            L.marker(
+
+                position,
+
+                {
+                    icon:
+                        markerIcon,
+
+                    keyboard:
+                        false
+                }
+
+            )
+            .addTo(map);
+
+
+        marker.bindTooltip(
+
+            `Ponto ${index + 1}`,
+
+            {
+
+                direction:
+                    "top",
+
+                offset:
+                    [0, -10],
+
+                opacity:
+                    .9
+
+            }
+
+        );
+
+
+        markers.push(
+            marker
+        );
+
+    }
+);
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        window.toastTimer
+    );
+
+
+    window.toastTimer =
+        setTimeout(
+
+            () => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+
+            2500
+
+        );
+
+}
+
+
+/* =========================================================
+   ZOOM
+========================================================= */
+
+document
+    .getElementById("zoomIn")
+    .addEventListener(
+        "click",
+        () => {
+
+            map.zoomIn();
+
+        }
+    );
+
+
+document
+    .getElementById("zoomOut")
+    .addEventListener(
+        "click",
+        () => {
+
+            map.zoomOut();
+
+        }
+    );
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetMap() {
+
+    map.flyTo(
+
+        CENTER,
+
+        DEFAULT_ZOOM,
+
+        {
+
+            duration:
+                .8
+
+        }
+
+    );
+
+}
+
+
+/*
+   O botão resetButton não existe
+   no HTML atual.
+
+   Por isso não adicionamos
+   um listener inexistente.
+*/
+
+
+/* =========================================================
+   LOCALIZAÇÃO
+========================================================= */
+
+let userMarker =
+    null;
+
+let userAccuracy =
+    null;
+
+
+function locateUser() {
+
+    if (
+        !navigator.geolocation
+    ) {
+
+        showToast(
+            "A localização não está disponível neste dispositivo."
+        );
+
+        return;
+
+    }
+
+
+    showToast(
+        "Obtendo sua localização..."
+    );
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        position => {
+
+            const lat =
+                position.coords.latitude;
+
+            const lng =
+                position.coords.longitude;
+
+            const accuracy =
+                position.coords.accuracy;
+
+
+            const userIcon =
+                L.divIcon({
+
+                    className:
+                        "",
+
+                    html:
+                        `
+                        <div class="user-location"></div>
+                        `,
+
+                    iconSize:
+                        [18, 18],
+
+                    iconAnchor:
+                        [9, 9]
+
+                });
+
+
+            if (
+                userMarker
+            ) {
+
+                userMarker.setLatLng(
+                    [
+                        lat,
+                        lng
+                    ]
+                );
+
+            } else {
+
+                userMarker =
+                    L.marker(
+
+                        [
+                            lat,
+                            lng
+                        ],
+
+                        {
+
+                            icon:
+                                userIcon,
+
+                            zIndexOffset:
+                                1000
+
+                        }
+
+                    )
+                    .addTo(map);
+
+            }
+
+
+            if (
+                userAccuracy
+            ) {
+
+                map.removeLayer(
+                    userAccuracy
+                );
+
+            }
+
+
+            userAccuracy =
+                L.circle(
+
+                    [
+                        lat,
+                        lng
+                    ],
+
+                    {
+
+                        radius:
+                            accuracy,
+
+                        color:
+                            "#6eb5ff",
+
+                        weight:
+                            1,
+
+                        opacity:
+                            .35,
+
+                        fillColor:
+                            "#6eb5ff",
+
+                        fillOpacity:
+                            .06
+
+                    }
+
+                )
+                .addTo(map);
+
+
+            map.flyTo(
+
+                [
+                    lat,
+                    lng
+                ],
+
+                Math.max(
+                    map.getZoom(),
+                    15
+                ),
+
+                {
+
+                    duration:
+                        1
+
+                }
+
+            );
+
+
+            showToast(
+                "Localização encontrada."
+            );
+
+        },
+
+
+        error => {
+
+            let message =
+                "Não foi possível obter sua localização.";
+
+
+            if (
+                error.code === 1
+            ) {
+
+                message =
+                    "Permissão de\nlocalização negada.";
+
+            }
+
+
+            if (
+                error.code === 2
+            ) {
+
+                message =
+                    "Localização indisponível.";
+
+            }
+
+
+            if (
+                error.code === 3
+            ) {
+
+                message =
+                    "Tempo limite da localização.";
+
+            }
+
+
+            showToast(
+                message
+            );
+
+        },
+
+
+        {
+
+            enableHighAccuracy:
+                true,
+
+            timeout:
+                10000,
+
+            maximumAge:
+                30000
+
+        }
+
+    );
+
+}
+
+
+/* =========================================================
+   BOTÕES DE LOCALIZAÇÃO
+========================================================= */
+
+document
+    .getElementById("locateButton")
+    .addEventListener(
+        "click",
+        locateUser
+    );
+
+
+document
+    .getElementById("myLocation")
+    .addEventListener(
+        "click",
+        locateUser
+    );
+
+
+/* =========================================================
+   DUPLO CLIQUE
+========================================================= */
+
+map.on(
+
+    "dblclick",
+
+    event => {
+
+        map.flyTo(
+
+            event.latlng,
+
+            Math.min(
+                map.getZoom() + 2,
+                19
+            ),
+
+            {
+
+                duration:
+                    .5
+
+            }
+
+        );
+
+    }
+
+);
+
+
+/* =========================================================
+   TECLADO
+========================================================= */
+
+document.addEventListener(
+
+    "keydown",
+
+    event => {
+
+        if (
+
+            event.key === "+" ||
+            event.key === "="
+
+        ) {
+
+            map.zoomIn();
+
+        }
+
+
+        if (
+
+            event.key === "-" ||
+            event.key === "_"
+
+        ) {
+
+            map.zoomOut();
+
+        }
+
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            resetMap();
+
+        }
+
+    }
+
+);
+
+
+
+
+/* =========================================================
+   INVALIDATE DO LEAFLET
+========================================================= */
+
+function refreshMapSize() {
+
+    requestAnimationFrame(
+
+        () => {
+
+            map.invalidateSize({
+
+                pan:
+                    false,
+
+                animate:
+                    false
+
+            });
+
+        }
+
+    );
+
+}
+
+
+/* =========================================================
+   RESIZE NORMAL
+========================================================= */
+
+window.addEventListener(
+    "resize",
+    refreshMapSize
+);
+
+
+/* =========================================================
+   ORIENTAÇÃO
+========================================================= */
+
+window.addEventListener(
+
+    "orientationchange",
+
+    () => {
+
+        setTimeout(
+            refreshMapSize,
+            250
+        );
+
+        setTimeout(
+            refreshMapSize,
+            600
+        );
+
+    }
+
+);
+
+
+/* =========================================================
+   VISUAL VIEWPORT
+   IMPORTANTE PARA ANDROID WEBVIEW
+========================================================= */
+
+if (
+    window.visualViewport
+) {
+
+    window.visualViewport.addEventListener(
+
+        "resize",
+        refreshMapSize
+
+    );
+
+
+    window.visualViewport.addEventListener(
+
+        "scroll",
+        refreshMapSize
+
+    );
+
+}
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+========================================================= */
+
+window.addEventListener(
+
+    "load",
+
+    () => {
+
+        setTimeout(
+            refreshMapSize,
+            50
+        );
+
+        setTimeout(
+            refreshMapSize,
+            250
+        );
+
+        setTimeout(
+            refreshMapSize,
+            600
+        );
+
+    }
+
+);
+
+</script>
+
+</body>
+
+</html>

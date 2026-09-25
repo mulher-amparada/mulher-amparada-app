@@ -1,0 +1,4311 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+    <meta
+        name="description"
+        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
+    >
+
+<meta name="theme-color" content="#000000">
+
+<title>História das Mulheres</title>
+
+<style>
+/* =========================================================
+   SCROLLBARS
+========================================================= */
+
+*::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background: transparent;
+}
+
+* {
+    scrollbar-width: none;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+
+/* =========================================================
+   FONTE
+========================================================= */
+
+@font-face {
+    font-family: "Quicksand";
+    src: url("font.ttf") format("truetype");
+    font-display: swap;
+}
+
+
+/* =========================================================
+   VARIÁVEIS — MODO CLARO
+========================================================= */
+
+:root {
+
+    --card: #ffffff;
+    --card2: #f7f3f6;
+
+    --pink: #e83e73;
+    --pink-light: #c92f61;
+
+    --purple: #7650d6;
+    --purple-dark: #5d3bb3;
+
+    --text: #202027;
+    --muted: #706d76;
+
+    --border:
+        rgba(35,30,40,.10);
+
+}
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
+body {
+
+    min-height: 100vh;
+
+    color: var(--text);
+
+    font-family:
+        "Quicksand",
+        Arial,
+        sans-serif;
+
+    overflow-x: hidden;
+
+    padding:
+        24px 5% 60px;
+
+    margin-top: 5%;
+
+    background:
+        #f6f4f7;
+}
+
+
+/* =========================================================
+   ANIMAÇÕES
+========================================================= */
+
+@keyframes pop {
+
+    0% {
+        transform: scale(.88);
+    }
+
+    60% {
+        transform: scale(1.06);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+}
+
+@keyframes clickPulse {
+
+    0% {
+        box-shadow:
+            0 0 0 0
+            rgba(232,62,115,.35);
+    }
+
+    100% {
+        box-shadow:
+            0 0 0 35px
+            rgba(232,62,115,0);
+    }
+
+}
+
+@keyframes floatingNumber {
+
+    0% {
+        opacity: 0;
+        transform:
+            translate(-50%, 15px)
+            scale(.7);
+    }
+
+    15% {
+        opacity: 1;
+        transform:
+            translate(-50%, 0)
+            scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform:
+            translate(-50%, -90px)
+            scale(1.15);
+    }
+
+}
+
+@keyframes comboPulse {
+
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.18);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+}
+
+@keyframes unlock {
+
+    0% {
+        opacity: 0;
+        transform:
+            translateY(25px)
+            scale(.95);
+    }
+
+    100% {
+        opacity: 1;
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+}
+
+@keyframes glow {
+
+    0% {
+        filter:
+            drop-shadow(
+                0 0 0
+                rgba(232,62,115,0)
+            );
+    }
+
+    50% {
+        filter:
+            drop-shadow(
+                0 0 18px
+                rgba(232,62,115,.35)
+            );
+    }
+
+    100% {
+        filter:
+            drop-shadow(
+                0 0 0
+                rgba(232,62,115,0)
+            );
+    }
+
+}
+
+@keyframes prestigeFlash {
+
+    0% {
+        opacity: 0;
+        transform: scale(.2);
+    }
+
+    35% {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+
+    70% {
+        opacity: .8;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(2.2);
+    }
+
+}
+
+@keyframes prestigeText {
+
+    0% {
+        opacity: 0;
+        transform:
+            translateY(30px)
+            scale(.7);
+    }
+
+    25% {
+        opacity: 1;
+        transform:
+            translateY(0)
+            scale(1.1);
+    }
+
+    75% {
+        opacity: 1;
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform:
+            translateY(-45px)
+            scale(1.05);
+    }
+
+}
+
+@keyframes resetFlash {
+
+    0% {
+        opacity: 0;
+        transform: scale(.3);
+    }
+
+    40% {
+        opacity: .8;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(2);
+    }
+
+}
+
+@keyframes star {
+
+    0% {
+        opacity: 0;
+        transform:
+            translateY(30px)
+            scale(.3)
+            rotate(0deg);
+    }
+
+    40% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform:
+            translateY(-120px)
+            scale(1)
+            rotate(180deg);
+    }
+
+}
+
+@keyframes cardAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app {
+
+    width:
+        min(
+            100%,
+            850px
+        );
+
+    margin: auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header {
+
+    text-align: center;
+
+    margin-bottom: 22px;
+
+}
+
+.header h1 {
+
+    font-size:
+        clamp(
+            28px,
+            7vw,
+            48px
+        );
+
+    font-weight: 800;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--pink),
+            var(--purple),
+            var(--pink)
+        );
+
+    background-size: 200% auto;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+
+    animation:
+        glow 3s ease-in-out infinite;
+
+}
+
+.header p {
+
+    color: var(--muted);
+
+    margin-top: 8px;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+}
+
+
+/* =========================================================
+   SCORE
+========================================================= */
+
+.score-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(232,62,115,.06),
+            rgba(118,80,214,.06)
+        ),
+        var(--card);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 28px;
+
+    padding: 24px;
+
+    text-align: center;
+
+    box-shadow:
+        0 18px 45px
+        rgba(50,40,60,.10);
+
+    transition:
+        transform .2s ease;
+
+}
+
+.score-card:hover {
+    transform: translateY(-2px);
+}
+
+.score-label {
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+}
+
+.score {
+
+    font-size:
+        clamp(
+            48px,
+            14vw,
+            78px
+        );
+
+    font-weight: 800;
+
+    margin: 2px 0;
+
+    color: var(--pink);
+
+    text-shadow:
+        0 0 25px
+        rgba(232,62,115,.18);
+
+    transition:
+        transform .15s ease;
+
+}
+
+.score.pulse {
+    animation: pop .2s ease;
+}
+
+.stats {
+
+    display: flex;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+}
+
+.stat {
+
+    background:
+        rgba(40,35,45,.045);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 14px;
+
+    padding: 9px 13px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+}
+
+.stat strong {
+
+    color: var(--text);
+
+    margin-left: 4px;
+
+}
+
+
+/* =========================================================
+   LEGADO
+========================================================= */
+
+.legacy-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    margin-top: 12px;
+
+    padding: 17px;
+
+    border-radius: 21px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(118,80,214,.09),
+            rgba(232,62,115,.07)
+        );
+
+    border:
+        1px solid
+        rgba(118,80,214,.16);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    transition:
+        transform .2s ease;
+
+}
+
+.legacy-card:hover {
+    transform: translateY(-2px);
+}
+
+.legacy-info {
+    text-align: left;
+}
+
+.legacy-title {
+
+    color: var(--purple);
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+}
+
+.legacy-value {
+
+    font-size: 25px;
+
+    font-weight: 800;
+
+    margin-top: 2px;
+
+}
+
+.legacy-info p {
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    margin-top: 3px;
+
+}
+
+.prestige-button {
+
+    border: none;
+
+    border-radius: 15px;
+
+    padding: 12px 17px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--purple),
+            var(--pink)
+        );
+
+    color: #fff;
+
+    font-family: inherit;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    transition:
+        transform .15s ease,
+        opacity .2s ease,
+        box-shadow .2s ease;
+
+}
+
+.prestige-button:not(.disabled) {
+
+    box-shadow:
+        0 8px 22px
+        rgba(118,80,214,.20);
+
+}
+
+.prestige-button:not(.disabled):hover {
+
+    transform:
+        translateY(-2px)
+        scale(1.03);
+
+}
+
+.prestige-button:active {
+    transform: scale(.94);
+}
+
+.prestige-button.disabled {
+
+    opacity: .35;
+
+    cursor: not-allowed;
+
+}
+
+
+/* =========================================================
+   CLICK
+========================================================= */
+
+.click-area {
+
+    position: relative;
+
+    display: flex;
+
+    justify-content: center;
+
+    margin: 25px 0;
+
+}
+
+.history-button {
+
+    width: 100%;
+
+    aspect-ratio: 1;
+
+    border: none;
+
+    border-radius: 30px;
+
+    cursor: pointer;
+
+    background:
+        radial-gradient(
+            circle at 35% 25%,
+            #ffe7ee 0%,
+            #ef6f99 32%,
+            #7650d6 100%
+        );
+
+    color: #fff;
+
+    font-family: inherit;
+
+    font-size: 21px;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 0 0 10px
+        rgba(232,62,115,.045),
+
+        0 25px 55px
+        rgba(118,80,214,.18);
+
+    transition:
+        transform .08s ease,
+        box-shadow .2s ease;
+
+}
+
+.history-button:hover {
+
+    box-shadow:
+        0 0 0 15px
+        rgba(232,62,115,.05),
+
+        0 25px 70px
+        rgba(118,80,214,.23);
+
+}
+
+.history-button:active {
+    transform: scale(.92);
+}
+
+.history-button.clicked {
+    animation: clickPulse .35s ease;
+}
+
+
+/* =========================================================
+   +1 FLUTUANTE
+========================================================= */
+
+.floating-number {
+
+    position: absolute;
+
+    left: 50%;
+
+    top: 42%;
+
+    pointer-events: none;
+
+    color: var(--pink);
+
+    font-size: 23px;
+
+    font-weight: 800;
+
+    text-shadow:
+        0 2px 12px
+        rgba(255,255,255,.7);
+
+    animation:
+        floatingNumber .8s ease
+        forwards;
+
+    z-index: 10;
+
+}
+
+
+/* =========================================================
+   COMBO
+========================================================= */
+
+.combo {
+
+    position: absolute;
+
+    left: 50%;
+
+    top: 12px;
+
+    transform: translateX(-50%);
+
+    color: var(--pink);
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+}
+
+.combo.active {
+
+    opacity: 1;
+
+    animation: comboPulse .25s ease;
+
+}
+
+
+/* =========================================================
+   FASE
+========================================================= */
+
+.phase-card {
+
+    background: var(--card);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 22px;
+
+    padding: 22px;
+
+    margin-bottom: 18px;
+
+    animation:
+        cardAppear .35s ease;
+
+    box-shadow:
+        0 12px 35px
+        rgba(40,35,45,.06);
+
+}
+
+.phase-number {
+
+    color: var(--pink);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+}
+
+.phase-card h2 {
+
+    font-size: 25px;
+
+    margin: 5px 0 10px;
+
+}
+
+.phase-card p {
+
+    color: #5f5b65;
+
+    line-height: 1.65;
+
+    font-size: 14px;
+
+    overflow-wrap: anywhere;
+
+    word-break: break-word;
+
+}
+
+.progress {
+
+    height: 9px;
+
+    background: #e7e3e8;
+
+    border-radius: 20px;
+
+    margin-top: 18px;
+
+    overflow: hidden;
+
+}
+
+.progress-bar {
+
+    height: 100%;
+
+    width: 0%;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--pink),
+            var(--purple)
+        );
+
+    border-radius: 20px;
+
+    transition: width .35s ease;
+
+}
+
+
+/* =========================================================
+   TÍTULO
+========================================================= */
+
+.section-title {
+
+    font-size: 20px;
+
+    margin: 28px 0 12px;
+
+}
+
+
+/* =========================================================
+   UPGRADES
+========================================================= */
+
+.upgrades {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            1fr
+        );
+
+    gap: 12px;
+
+}
+
+.upgrade {
+
+    background: var(--card);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 20px;
+
+    padding: 18px;
+
+    cursor: pointer;
+
+    transition:
+        transform .15s ease,
+        background .15s ease,
+        border-color .15s ease;
+
+    box-shadow:
+        0 8px 25px
+        rgba(40,35,45,.045);
+
+}
+
+.upgrade:hover {
+
+    transform: translateY(-4px);
+
+    background: var(--card2);
+
+    border-color:
+        rgba(232,62,115,.18);
+
+}
+
+.upgrade:active {
+    transform: scale(.96);
+}
+
+.upgrade.disabled {
+
+    opacity: .45;
+
+    cursor: not-allowed;
+
+}
+
+.upgrade-icon {
+
+    font-size: 27px;
+
+    margin-bottom: 9px;
+
+}
+
+.upgrade h3 {
+
+    font-size: 16px;
+
+    margin-bottom: 5px;
+
+}
+
+.upgrade p {
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    line-height: 1.5;
+
+    min-height: 38px;
+
+}
+
+.upgrade-bottom {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-top: 12px;
+
+}
+
+.price {
+
+    color: var(--pink);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+}
+
+.level {
+
+    color: var(--purple);
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+}
+
+
+/* =========================================================
+   HISTÓRIAS
+========================================================= */
+
+.story {
+
+    background: var(--card);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 22px;
+
+    padding: 22px;
+
+    margin-top: 14px;
+
+    animation:
+        unlock .4s ease;
+
+    box-shadow:
+        0 10px 30px
+        rgba(40,35,45,.05);
+
+}
+
+.story.locked {
+    opacity: .48;
+}
+
+.story-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 12px;
+
+}
+
+.story-title span {
+    font-size: 25px;
+}
+
+.story h3 {
+    font-size: 19px;
+}
+
+.story p {
+
+    color: #5f5b65;
+
+    line-height: 1.7;
+
+    font-size: 14px;
+
+}
+
+.highlight {
+
+    margin-top: 15px;
+
+    padding: 13px;
+
+    border-left:
+        3px solid
+        var(--pink);
+
+    background:
+        rgba(232,62,115,.055);
+
+    border-radius:
+        0 10px 10px 0;
+
+    color: var(--pink);
+
+    font-size: 13px;
+
+}
+
+
+/* =========================================================
+   TIMELINE
+========================================================= */
+
+.timeline {
+
+    position: relative;
+
+    margin-top: 20px;
+
+}
+
+.timeline::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 10px;
+
+    top: 5px;
+
+    bottom: 5px;
+
+    width: 2px;
+
+    background:
+        linear-gradient(
+            var(--pink),
+            var(--purple)
+        );
+
+}
+
+.timeline-item {
+
+    position: relative;
+
+    padding-left: 32px;
+
+    margin-bottom: 20px;
+
+}
+
+.timeline-dot {
+
+    position: absolute;
+
+    left: 4px;
+
+    top: 4px;
+
+    width: 14px;
+
+    height: 14px;
+
+    border-radius: 50%;
+
+    background: var(--pink);
+
+    box-shadow:
+        0 0 12px
+        rgba(232,62,115,.25);
+
+}
+
+.timeline-year {
+
+    color: var(--pink);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+.reset {
+
+    width: 100%;
+
+    margin-top: 30px;
+
+    padding: 14px;
+
+    border-radius: 15px;
+
+    border:
+        1px solid
+        var(--border);
+
+    background: transparent;
+
+    color: var(--muted);
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        color .2s ease;
+
+}
+
+.reset:hover {
+
+    background:
+        rgba(40,35,45,.045);
+
+    color: var(--text);
+
+}
+
+
+/* =========================================================
+   EFEITO DE PRESTÍGIO
+========================================================= */
+
+#effectLayer {
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    overflow: hidden;
+
+    z-index: 9999;
+
+}
+
+.prestige-flash {
+
+    position: absolute;
+
+    left: 50%;
+
+    top: 50%;
+
+    width: 100px;
+
+    height: 100px;
+
+    margin: -50px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,.9),
+            rgba(118,80,214,.35),
+            transparent 70%
+        );
+
+    animation:
+        prestigeFlash 1.1s ease
+        forwards;
+
+}
+
+.prestige-text {
+
+    position: absolute;
+
+    left: 50%;
+
+    top: 45%;
+
+    transform: translateX(-50%);
+
+    color: var(--text);
+
+    text-align: center;
+
+    font-size:
+        clamp(
+            25px,
+            8vw,
+            50px
+        );
+
+    font-weight: 800;
+
+    text-shadow:
+        0 0 25px
+        rgba(232,62,115,.35);
+
+    animation:
+        prestigeText 1.8s ease
+        forwards;
+
+}
+
+.prestige-text small {
+
+    display: block;
+
+    margin-top: 5px;
+
+    color: var(--pink);
+
+    font-size: 14px;
+
+}
+
+
+/* =========================================================
+   ESTRELAS
+========================================================= */
+
+.prestige-star {
+
+    position: absolute;
+
+    left: 50%;
+
+    top: 50%;
+
+    color: var(--pink);
+
+    font-size: 20px;
+
+    animation:
+        star 1.2s ease
+        forwards;
+
+}
+
+
+/* =========================================================
+   RESET EFFECT
+========================================================= */
+
+.reset-flash {
+
+    position: absolute;
+
+    left: 50%;
+
+    top: 50%;
+
+    width: 120px;
+
+    height: 120px;
+
+    margin: -60px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,.55),
+            rgba(232,62,115,.16),
+            transparent
+        );
+
+    animation:
+        resetFlash .8s ease
+        forwards;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (
+    max-width: 600px
+) {
+
+    body {
+
+        padding-left: 5%;
+
+        padding-right: 5%;
+
+    }
+
+    .upgrades {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .legacy-card {
+
+        align-items: stretch;
+
+        flex-direction: column;
+
+    }
+
+    .prestige-button {
+
+        width: 100%;
+
+    }
+
+}
+
+
+/* =========================================================
+   POPUP DE CONFIRMAÇÃO — MODO CLARO
+========================================================= */
+
+.confirm-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 99999;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 22px;
+
+    background:
+        rgba(245,243,246,.82);
+
+    backdrop-filter:
+        blur(14px);
+
+    -webkit-backdrop-filter:
+        blur(14px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity .22s ease,
+        visibility .22s ease;
+
+}
+
+.confirm-overlay.aberto {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+
+}
+
+.confirm-modal {
+
+    width:
+        min(
+            100%,
+            370px
+        );
+
+    padding:
+        25px 22px 21px;
+
+    border:
+        1px solid
+        rgba(35,30,40,.10);
+
+    border-radius: 25px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 25px 80px
+        rgba(40,35,50,.18);
+
+    text-align: center;
+
+    transform:
+        scale(.96);
+
+    transition:
+        transform .22s
+        cubic-bezier(.22,.7,.2,1);
+
+}
+
+.confirm-overlay.aberto
+.confirm-modal {
+
+    transform:
+        translateY(0)
+        scale(1);
+
+}
+
+.confirm-modal h2 {
+
+    color: #202027;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    margin-bottom: 9px;
+
+    text-align: left;
+
+}
+
+.confirm-modal p {
+
+    color:
+        rgba(35,30,40,.60);
+
+    font-size: 12px;
+
+    line-height: 1.55;
+
+    white-space: normal;
+
+    margin-bottom: 21px;
+
+    text-align: left;
+
+}
+
+.confirm-acoes {
+
+    display: flex;
+
+    gap: 9px;
+
+}
+
+.confirm-botao {
+
+    flex: 1;
+
+    min-height: 45px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform .15s ease,
+        opacity .15s ease;
+
+}
+
+.confirm-botao:active {
+    transform: scale(.95);
+}
+
+.confirm-botao.cancelar {
+
+    background:
+        #f0edf1;
+
+    color:
+        rgba(35,30,40,.72);
+
+    border:
+        1px solid
+        rgba(35,30,40,.08);
+
+}
+
+.confirm-botao.apagar {
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--pink),
+            var(--purple)
+        );
+
+    color: #fff;
+
+}
+
+.confirm-botao:hover {
+    opacity: .88;
+}
+
+
+
+@media (prefers-reduced-motion: reduce) {
+    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
+
+    * {
+        animation-name: none !important;
+    }
+}
+
+</style>
+
+
+
+</head>
+
+
+<body>
+
+<div id="effectLayer"></div>
+
+
+<div class="app">
+
+
+<header class="header">
+
+    <h1>
+        História das Mulheres
+    </h1>
+
+    <p>
+        Avance através de cinco grandes períodos
+        e descubra lutas, transformações e conquistas
+        ao longo da história.
+    </p>
+
+</header>
+
+
+<!-- =====================================================
+     PLACAR
+====================================================== -->
+
+<section class="score-card">
+
+    <div class="score-label">
+        PONTOS DE HISTÓRIA
+    </div>
+
+    <div
+        class="score"
+        id="score"
+    >
+        0
+    </div>
+
+    <div class="stats">
+
+        <div class="stat">
+            Por clique:
+            <strong id="perClick">
+                1
+            </strong>
+        </div>
+
+        <div class="stat">
+            Por segundo:
+            <strong id="perSecond">
+                0
+            </strong>
+        </div>
+
+        <div class="stat">
+            Multiplicador:
+            <strong id="multiplier">
+                1x
+            </strong>
+        </div>
+
+        <div class="stat">
+            Combo:
+            <strong id="combo">
+                x1
+            </strong>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     LEGADO
+====================================================== -->
+
+<section class="legacy-card">
+
+    <div class="legacy-info">
+
+        <div class="legacy-title">
+            LEGADO PERMANENTE
+        </div>
+
+        <div
+            class="legacy-value"
+            id="legacy"
+        >
+            0
+        </div>
+
+        <p id="prestigeDescription">
+            Alcance 100 mil pontos para realizar
+            o primeiro prestígio.
+        </p>
+
+    </div>
+
+    <button
+        class="prestige-button disabled"
+        id="prestigeButton"
+    >
+        Prestígio
+    </button>
+
+</section>
+
+
+<!-- =====================================================
+     BOTÃO
+====================================================== -->
+
+<div class="click-area">
+
+    <div
+        class="combo"
+        id="comboText"
+    >
+        COMBO x1
+    </div>
+
+    <button
+        class="history-button"
+        id="clickButton"
+    >
+        + HISTÓRIA
+    </button>
+
+</div>
+
+
+<!-- =====================================================
+     FASE
+====================================================== -->
+
+<section class="phase-card">
+
+    <div
+        class="phase-number"
+        id="phaseNumber"
+    >
+        FASE 1
+    </div>
+
+    <h2 id="phaseTitle">
+        Antiguidade
+    </h2>
+
+    <p id="phaseDescription">
+        A humanidade era formada por sociedades
+        muito diferentes entre si.
+    </p>
+
+    <div class="progress">
+
+        <div
+            class="progress-bar"
+            id="progressBar"
+        ></div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     UPGRADES
+====================================================== -->
+
+<h2 class="section-title">
+    Melhorias
+</h2>
+
+<section
+    class="upgrades"
+    id="upgrades"
+></section>
+
+
+<!-- =====================================================
+     HISTÓRIAS
+====================================================== -->
+
+<h2 class="section-title">
+    As cinco fases
+</h2>
+
+<div id="stories"></div>
+
+
+<!-- =====================================================
+     RESET
+====================================================== -->
+
+<section class="phase-card" style="margin-top: 5%;">
+
+    <h2>Fontes e referências</h2>
+
+    <p>
+        Conteúdo histórico elaborado com base em fontes
+        bibliográficas e institucionais.
+    </p>
+
+<p style="color: blue; text-decoration: underline;">
+    https://www.metmuseum.org/-/media/files/learn/for-educators/publications-for-educators/the-art-of-ancient-egypt.pdf
+</p>
+
+<p style="color: blue; text-decoration: underline;">
+    https://www.britishmuseum.org/blog/mary-beards-top-five-powerful-women-ancient-greece-and-rome
+</p>
+
+<p style="color: blue; text-decoration: underline;">
+    https://www.worldhistory.org/trans/pt/2-2081/mulheres-na-antiga-mesopotamia/
+</p>
+
+<p style="color: blue; text-decoration: underline;">
+    https://www.worldhistory.org/trans/pt/2-927/as-mulheres-na-grecia-antiga/
+</p>
+
+</section>
+
+<button
+    class="reset"
+    id="resetButton"
+>
+    Reiniciar progresso
+</button>
+
+
+</div>
+
+<!-- =====================================================
+     POPUP DE CONFIRMAÇÃO
+====================================================== -->
+
+<div
+    id="confirmOverlay"
+    class="confirm-overlay"
+    aria-hidden="true"
+>
+    <div
+        class="confirm-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="confirmTitulo"
+    >
+
+        <h2 id="confirmTitulo">
+            Confirmação
+        </h2>
+
+        <p id="confirmMensagem">
+            Deseja continuar?
+        </p>
+
+        <div class="confirm-acoes">
+
+            <button
+                type="button"
+                id="confirmCancelar"
+                class="confirm-botao cancelar"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                id="confirmConfirmar"
+                class="confirm-botao apagar"
+            >
+                Confirmar
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+/* =========================================================
+   CLASSE CRIPTO
+========================================================= */
+
+class cripto {
+
+    static chave = "historiaDasMulheres";
+
+    static salvar(dados) {
+
+        try {
+
+            localStorage.setItem(
+                cripto.chave,
+                JSON.stringify(dados)
+            );
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao salvar:",
+                erro
+            );
+
+        }
+
+    }
+
+    static carregar() {
+
+        try {
+
+            const salvo =
+                localStorage.getItem(
+                    cripto.chave
+                );
+
+            if (!salvo) {
+                return null;
+            }
+
+            return JSON.parse(salvo);
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao carregar:",
+                erro
+            );
+
+            return null;
+
+        }
+
+    }
+
+    static apagar() {
+
+        try {
+
+            localStorage.removeItem(
+                cripto.chave
+            );
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao apagar:",
+                erro
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   FASES
+========================================================= */
+
+const phases = [
+
+    {
+        title: "Antiguidade",
+        icon: "🏺",
+
+        description:
+        "A humanidade era formada por sociedades muito diferentes entre si. Em muitas delas, mulheres tinham suas vidas fortemente determinadas pela família, pelo casamento, pelas leis e pela posição social.",
+
+        unlock: 0,
+
+        story:
+        "Mulheres participaram ativamente da vida econômica, familiar, religiosa e cultural das sociedades antigas. Ao mesmo tempo, muitas estruturas sociais colocavam homens em posições de maior autoridade jurídica e política.",
+
+        highlight:
+        "Existiram mulheres governantes, escritoras, sacerdotisas, comerciantes e líderes.",
+
+        timeline: [
+
+            [
+                "Antiguidade",
+                "Mulheres exerceram diferentes funções sociais, econômicas e religiosas."
+            ],
+
+            [
+                "Séculos V–IV a.C.",
+                "Filósofas e intelectuais aparecem em registros do mundo grego."
+            ],
+
+            [
+                "Antigo Egito",
+                "Algumas mulheres podiam possuir propriedades e administrar bens."
+            ]
+
+        ]
+
+    },
+
+    {
+        title: "Idade Média",
+        icon: "🏰",
+
+        description:
+        "A Idade Média reuniu sociedades muito diferentes. Para muitas mulheres, casamento, família, religião e posição social influenciavam profundamente suas possibilidades de vida.",
+
+        unlock: 500,
+
+        story:
+        "Mulheres trabalhavam na agricultura, no comércio, no artesanato e dentro dos lares. Algumas chegaram a administrar propriedades, oficinas e negócios.",
+
+        highlight:
+        "Mulheres medievais também foram escritoras, abadessas, governantes, artesãs, comerciantes e intelectuais.",
+
+        timeline: [
+
+            [
+                "Séculos V–XV",
+                "Mulheres participaram de atividades agrícolas, artesanais, comerciais e religiosas."
+            ],
+
+            [
+                "Século XII",
+                "A vida intelectual feminina esteve presente especialmente em comunidades religiosas."
+            ],
+
+            [
+                "Final da Idade Média",
+                "Mulheres participaram de atividades comerciais e urbanas."
+            ]
+
+        ]
+
+    },
+
+    {
+        title: "Idade Moderna",
+        icon: "📜",
+
+        description:
+        "Entre os séculos XV e XVIII, transformações políticas, econômicas e culturais alteraram as sociedades.",
+
+        unlock: 2500,
+
+        story:
+        "A expansão da educação e da imprensa abriu novas possibilidades para algumas mulheres. Escritoras e intelectuais questionaram ideias sobre a capacidade feminina.",
+
+        highlight:
+        "Pensadoras passaram a defender de forma mais explícita a educação e os direitos das mulheres.",
+
+        timeline: [
+
+            [
+                "Séculos XV–XVI",
+                "A imprensa ampliou a circulação de ideias."
+            ],
+
+            [
+                "Séculos XVI–XVII",
+                "Mulheres participaram de movimentos religiosos, culturais e políticos."
+            ],
+
+            [
+                "Século XVIII",
+                "Pensadoras defenderam educação e direitos das mulheres."
+            ]
+
+        ]
+
+    },
+
+    {
+        title: "Revolução Industrial",
+        icon: "🏭",
+
+        description:
+        "A industrialização mudou profundamente o trabalho. Muitas mulheres passaram a trabalhar em fábricas e outros empregos urbanos.",
+
+        unlock: 10000,
+
+        story:
+        "O crescimento das cidades criou novas oportunidades de trabalho, mas também trouxe jornadas extensas e pouca proteção trabalhista.",
+
+        highlight:
+        "O século XIX foi marcado pelo crescimento de movimentos que defendiam educação, direitos trabalhistas e participação política feminina.",
+
+        timeline: [
+
+            [
+                "Século XIX",
+                "A industrialização ampliou o trabalho assalariado feminino."
+            ],
+
+            [
+                "Final do século XIX",
+                "Movimentos organizados passaram a exigir direitos civis e educação."
+            ],
+
+            [
+                "Final do século XIX / início do XX",
+                "O movimento sufragista ganhou força em diversos países."
+            ]
+
+        ]
+
+    },
+
+    {
+        title: "Século XX e XXI",
+        icon: "🌎",
+
+        description:
+        "O século XX trouxe grandes transformações: expansão do direito ao voto, maior acesso à educação, entrada em diferentes profissões e crescimento da participação política feminina.",
+
+        unlock: 25000,
+
+        story:
+        "Conquistas importantes foram obtidas em diferentes países, mas não aconteceram todas ao mesmo tempo.",
+
+        highlight:
+        "A história continua: mulheres participam de movimentos sociais, ciência, política, cultura, tecnologia e inúmeras outras áreas.",
+
+        timeline: [
+
+            [
+                "Século XX",
+                "O direito ao voto feminino foi conquistado em diferentes países."
+            ],
+
+            [
+                "Século XX",
+                "A presença feminina cresceu em universidades, profissões, ciência e política."
+            ],
+
+            [
+                "Século XXI",
+                "Debates sobre igualdade, violência, trabalho, educação e participação política continuam."
+            ]
+
+        ]
+
+    }
+
+];
+
+
+/* =========================================================
+   UPGRADES
+========================================================= */
+
+const upgrades = [
+
+    {
+        id: "click",
+        icon: "✊",
+        name: "Voz coletiva",
+        description:
+        "Aumenta os pontos recebidos por clique.",
+        baseCost: 25,
+        growth: 1.55
+    },
+
+    {
+        id: "cps",
+        icon: "⚡",
+        name: "Movimento",
+        description:
+        "Gera pontos automaticamente.",
+        baseCost: 50,
+        growth: 1.60
+    },
+
+    {
+        id: "education",
+        icon: "📚",
+        name: "Educação",
+        description:
+        "Aumenta todos os ganhos em 10%.",
+        baseCost: 250,
+        growth: 1.75
+    },
+
+    {
+        id: "organization",
+        icon: "💼",
+        name: "Organização",
+        description:
+        "Aumenta a produção automática em 15%.",
+        baseCost: 500,
+        growth: 1.80
+    },
+
+    {
+        id: "press",
+        icon: "📰",
+        name: "Imprensa",
+        description:
+        "Adiciona +5 pontos ao valor base do clique.",
+        baseCost: 2500,
+        growth: 1.90
+    },
+
+    {
+        id: "memory",
+        icon: "💎",
+        name: "Memória histórica",
+        description:
+        "Aumenta todos os ganhos em 25%.",
+        baseCost: 10000,
+        growth: 2.00
+    }
+
+];
+
+
+/* =========================================================
+   ESTADO
+========================================================= */
+
+let game = {
+
+    points: 0,
+    legacy: 0,
+
+    clickLevel: 0,
+    cpsLevel: 0,
+    educationLevel: 0,
+    organizationLevel: 0,
+    pressLevel: 0,
+    memoryLevel: 0,
+
+    combo: 0,
+    lastClick: 0
+
+};
+
+
+/* =========================================================
+   ELEMENTOS
+========================================================= */
+
+const score =
+    document.getElementById("score");
+
+const perClick =
+    document.getElementById("perClick");
+
+const perSecond =
+    document.getElementById("perSecond");
+
+const multiplier =
+    document.getElementById("multiplier");
+
+const comboElement =
+    document.getElementById("combo");
+
+const comboText =
+    document.getElementById("comboText");
+
+const legacy =
+    document.getElementById("legacy");
+
+const progressBar =
+    document.getElementById("progressBar");
+
+const phaseNumber =
+    document.getElementById("phaseNumber");
+
+const phaseTitle =
+    document.getElementById("phaseTitle");
+
+const phaseDescription =
+    document.getElementById("phaseDescription");
+
+const stories =
+    document.getElementById("stories");
+
+const upgradesContainer =
+    document.getElementById("upgrades");
+
+const prestigeButton =
+    document.getElementById("prestigeButton");
+
+const prestigeDescription =
+    document.getElementById("prestigeDescription");
+
+const clickButton =
+    document.getElementById("clickButton");
+
+const effectLayer =
+    document.getElementById("effectLayer");
+
+
+/* =========================================================
+   CONTROLE DE PERFORMANCE
+========================================================= */
+
+let updateScheduled = false;
+let saveTimer = null;
+
+let lastRenderedPhase = -1;
+let lastUpgradeLevels = "";
+
+let floatingCount = 0;
+
+const MAX_FLOATING_NUMBERS = 18;
+
+
+/* =========================================================
+   FORMATADOR
+========================================================= */
+
+function formatNumber(number) {
+
+    if (!Number.isFinite(number)) {
+        return "0";
+    }
+
+    if (number < 1000) {
+
+        return Math.floor(number);
+
+    }
+
+    if (number < 1000000) {
+
+        return (
+            number / 1000
+        )
+        .toFixed(1)
+        .replace(".0", "")
+        + " mil";
+
+    }
+
+    if (number < 1000000000) {
+
+        return (
+            number / 1000000
+        )
+        .toFixed(1)
+        .replace(".0", "")
+        + " mi";
+
+    }
+
+    if (number < 1000000000000) {
+
+        return (
+            number / 1000000000
+        )
+        .toFixed(1)
+        .replace(".0", "")
+        + " bi";
+
+    }
+
+    return (
+        number / 1000000000000
+    )
+    .toFixed(1)
+    .replace(".0", "")
+    + " tri";
+
+}
+
+
+/* =========================================================
+   MULTIPLICADOR
+========================================================= */
+
+function getMultiplier() {
+
+    let value = 1;
+
+    value +=
+        game.educationLevel *
+        0.10;
+
+    value +=
+        game.memoryLevel *
+        0.25;
+
+    value +=
+        game.legacy *
+        0.10;
+
+    return value;
+
+}
+
+
+/* =========================================================
+   CLIQUE
+========================================================= */
+
+function getPerClick() {
+
+    let value = 1;
+
+    value +=
+        game.clickLevel;
+
+    value +=
+        game.pressLevel *
+        5;
+
+    return value;
+
+}
+
+
+/* =========================================================
+   PRODUÇÃO
+========================================================= */
+
+function getPerSecond() {
+
+    const base =
+        game.cpsLevel;
+
+    const organization =
+        1 +
+        (
+            game.organizationLevel *
+            0.15
+        );
+
+    return (
+        base *
+        organization *
+        getMultiplier()
+    );
+
+}
+
+
+/* =========================================================
+   NÍVEL
+========================================================= */
+
+function getUpgradeLevel(id) {
+
+    switch (id) {
+
+        case "click":
+            return game.clickLevel;
+
+        case "cps":
+            return game.cpsLevel;
+
+        case "education":
+            return game.educationLevel;
+
+        case "organization":
+            return game.organizationLevel;
+
+        case "press":
+            return game.pressLevel;
+
+        case "memory":
+            return game.memoryLevel;
+
+        default:
+            return 0;
+
+    }
+
+}
+
+
+/* =========================================================
+   PREÇO
+========================================================= */
+
+function getUpgradePrice(upgrade) {
+
+    const level =
+        getUpgradeLevel(
+            upgrade.id
+        );
+
+    return Math.floor(
+        upgrade.baseCost *
+        Math.pow(
+            upgrade.growth,
+            level
+        )
+    );
+
+}
+
+
+/* =========================================================
+   PRESTÍGIO
+========================================================= */
+
+function getPrestigeRequirement() {
+
+    return (
+        100000 *
+        Math.pow(
+            2,
+            game.legacy
+        )
+    );
+
+}
+
+
+function getPrestigeReward() {
+
+    return Math.max(
+
+        1,
+
+        Math.floor(
+
+            Math.sqrt(
+                game.points /
+                100000
+            )
+
+        )
+
+    );
+
+}
+
+
+/* =========================================================
+   FASE
+========================================================= */
+
+function getCurrentPhase() {
+
+    let current = 0;
+
+    for (
+        let i = 0;
+        i < phases.length;
+        i++
+    ) {
+
+        if (
+            game.points >=
+            phases[i].unlock
+        ) {
+
+            current = i;
+
+        }
+
+    }
+
+    return current;
+
+}
+
+
+/* =========================================================
+   AGENDAR UPDATE
+========================================================= */
+
+function scheduleUpdate() {
+
+    if (updateScheduled) {
+        return;
+    }
+
+    updateScheduled = true;
+
+    requestAnimationFrame(() => {
+
+        updateScheduled = false;
+
+        updateUI();
+
+    });
+
+}
+
+
+/* =========================================================
+   SAVE OTIMIZADO
+========================================================= */
+
+function scheduleSave() {
+
+    clearTimeout(
+        saveTimer
+    );
+
+    saveTimer = setTimeout(() => {
+
+        cripto.salvar(game);
+
+    }, 300);
+
+}
+
+
+/* =========================================================
+   RENDERIZAR UPGRADES
+========================================================= */
+
+function renderUpgrades(force = false) {
+
+    const levelsKey =
+        upgrades
+            .map(
+                upgrade =>
+                    getUpgradeLevel(
+                        upgrade.id
+                    )
+            )
+            .join(",");
+
+
+    /*
+     * Se nenhum nível mudou,
+     * não recria os elementos.
+     */
+
+    if (
+        !force &&
+        levelsKey ===
+        lastUpgradeLevels
+    ) {
+
+        /*
+         * Apenas atualiza
+         * preços/bloqueios.
+         */
+
+        updateUpgradeStates();
+
+        return;
+
+    }
+
+
+    lastUpgradeLevels =
+        levelsKey;
+
+
+    upgradesContainer.innerHTML =
+        "";
+
+
+    upgrades.forEach(
+        upgrade => {
+
+            const element =
+                document.createElement(
+                    "div"
+                );
+
+            element.className =
+                "upgrade";
+
+            element.dataset.id =
+                upgrade.id;
+
+            element.innerHTML = `
+
+                <div class="upgrade-icon">
+                    ${upgrade.icon}
+                </div>
+
+                <h3>
+                    ${upgrade.name}
+                </h3>
+
+                <p>
+                    ${upgrade.description}
+                </p>
+
+                <div class="upgrade-bottom">
+
+                    <span class="price">
+                        Custo:
+                        <span class="upgrade-price">
+                            ${formatNumber(
+                                getUpgradePrice(
+                                    upgrade
+                                )
+                            )}
+                        </span>
+                    </span>
+
+                    <span class="level">
+                        Nv.
+                        <span class="upgrade-level">
+                            ${getUpgradeLevel(
+                                upgrade.id
+                            )}
+                        </span>
+                    </span>
+
+                </div>
+
+            `;
+
+
+            element.addEventListener(
+                "click",
+                () => {
+
+                    buyUpgrade(
+                        upgrade
+                    );
+
+                }
+            );
+
+
+            upgradesContainer.appendChild(
+                element
+            );
+
+        }
+    );
+
+
+    updateUpgradeStates();
+
+}
+
+
+/* =========================================================
+   ATUALIZAR ESTADO DOS UPGRADES
+========================================================= */
+
+function updateUpgradeStates() {
+
+    const elements =
+        upgradesContainer.querySelectorAll(
+            ".upgrade"
+        );
+
+
+    elements.forEach(
+        element => {
+
+            const id =
+                element.dataset.id;
+
+            const upgrade =
+                upgrades.find(
+                    item =>
+                        item.id === id
+                );
+
+
+            if (!upgrade) {
+                return;
+            }
+
+
+            const price =
+                getUpgradePrice(
+                    upgrade
+                );
+
+
+            const level =
+                getUpgradeLevel(
+                    id
+                );
+
+
+            element.classList.toggle(
+                "disabled",
+                game.points < price
+            );
+
+
+            const priceElement =
+                element.querySelector(
+                    ".upgrade-price"
+                );
+
+
+            const levelElement =
+                element.querySelector(
+                    ".upgrade-level"
+                );
+
+
+            if (priceElement) {
+
+                priceElement.textContent =
+                    formatNumber(price);
+
+            }
+
+
+            if (levelElement) {
+
+                levelElement.textContent =
+                    level;
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   COMPRAR UPGRADE
+========================================================= */
+
+function buyUpgrade(upgrade) {
+
+    const price =
+        getUpgradePrice(
+            upgrade
+        );
+
+
+    if (
+        game.points <
+        price
+    ) {
+
+        return;
+
+    }
+
+
+    game.points -=
+        price;
+
+
+    switch (
+        upgrade.id
+    ) {
+
+        case "click":
+            game.clickLevel++;
+            break;
+
+        case "cps":
+            game.cpsLevel++;
+            break;
+
+        case "education":
+            game.educationLevel++;
+            break;
+
+        case "organization":
+            game.organizationLevel++;
+            break;
+
+        case "press":
+            game.pressLevel++;
+            break;
+
+        case "memory":
+            game.memoryLevel++;
+            break;
+
+    }
+
+
+    createUpgradeEffect();
+
+    scheduleUpdate();
+
+    scheduleSave();
+
+}
+
+
+/* =========================================================
+   EFEITO DE UPGRADE
+========================================================= */
+
+function createUpgradeEffect() {
+
+    const element =
+        document.createElement(
+            "div"
+        );
+
+    element.className =
+        "floating-number";
+
+    element.textContent =
+        "UPGRADE!";
+
+    element.style.top =
+        "35%";
+
+    effectLayer.appendChild(
+        element
+    );
+
+
+    setTimeout(
+        () => {
+
+            element.remove();
+
+        },
+        800
+    );
+
+}
+
+
+/* =========================================================
+   +PONTOS
+========================================================= */
+
+function showFloatingNumber(amount) {
+
+    /*
+     * Evita criar centenas/milhares
+     * de elementos se o usuário
+     * clicar absurdamente rápido.
+     */
+
+    if (
+        floatingCount >=
+        MAX_FLOATING_NUMBERS
+    ) {
+
+        return;
+
+    }
+
+
+    floatingCount++;
+
+
+    const element =
+        document.createElement(
+            "div"
+        );
+
+
+    element.className =
+        "floating-number";
+
+
+    element.textContent =
+        "+" +
+        formatNumber(
+            amount
+        );
+
+
+    const area =
+        document.querySelector(
+            ".click-area"
+        );
+
+
+    const randomX =
+        (
+            Math.random() *
+            80
+        ) -
+        40;
+
+
+    element.style.left =
+        `calc(50% + ${randomX}px)`;
+
+
+    area.appendChild(
+        element
+    );
+
+
+    setTimeout(
+        () => {
+
+            element.remove();
+
+            floatingCount--;
+
+        },
+        800
+    );
+
+}
+
+
+/* =========================================================
+   ANIMAÇÃO DO BOTÃO
+========================================================= */
+
+let buttonAnimationFrame = false;
+
+function animateClickButton() {
+
+    if (buttonAnimationFrame) {
+        return;
+    }
+
+    buttonAnimationFrame = true;
+
+
+    clickButton.classList.remove(
+        "clicked"
+    );
+
+
+    requestAnimationFrame(() => {
+
+        clickButton.classList.add(
+            "clicked"
+        );
+
+        buttonAnimationFrame = false;
+
+    });
+
+}
+
+
+/* =========================================================
+   ANIMAÇÃO DO SCORE
+========================================================= */
+
+let scoreAnimationFrame = false;
+
+function animateScore() {
+
+    if (scoreAnimationFrame) {
+        return;
+    }
+
+    scoreAnimationFrame = true;
+
+
+    score.classList.remove(
+        "pulse"
+    );
+
+
+    requestAnimationFrame(() => {
+
+        score.classList.add(
+            "pulse"
+        );
+
+        scoreAnimationFrame = false;
+
+    });
+
+}
+
+
+/* =========================================================
+   CLIQUE PRINCIPAL
+========================================================= */
+
+clickButton.addEventListener(
+    "click",
+    () => {
+
+        const now =
+            Date.now();
+
+
+        /*
+         * COMBO
+         */
+
+        if (
+            now -
+            game.lastClick
+            < 1000
+        ) {
+
+            game.combo++;
+
+        } else {
+
+            game.combo = 1;
+
+        }
+
+
+        game.lastClick =
+            now;
+
+
+        /*
+         * MULTIPLICADOR DO COMBO
+         */
+
+        const comboMultiplier =
+            Math.min(
+
+                1 +
+                (
+                    game.combo *
+                    0.02
+                ),
+
+                2
+
+            );
+
+
+        /*
+         * GANHO
+         */
+
+        const amount =
+            getPerClick() *
+            getMultiplier() *
+            comboMultiplier;
+
+
+        /*
+         * O PONTO É PROCESSADO
+         * IMEDIATAMENTE.
+         */
+
+        game.points +=
+            amount;
+
+
+        /*
+         * EFEITOS VISUAIS
+         * SÃO LIMITADOS.
+         */
+
+        showFloatingNumber(
+            amount
+        );
+
+
+        animateClickButton();
+
+        animateScore();
+
+
+        /*
+         * COMBO
+         */
+
+        if (
+            game.combo >= 3
+        ) {
+
+            comboText.textContent =
+                "COMBO x" +
+                game.combo;
+
+
+            comboText.classList.add(
+                "active"
+            );
+
+        }
+
+
+        /*
+         * NÃO atualiza o DOM
+         * milhares de vezes por segundo.
+         *
+         * O update será feito no
+         * próximo frame disponível.
+         */
+
+        scheduleUpdate();
+
+
+        /*
+         * Salva depois.
+         */
+
+        scheduleSave();
+
+    }
+);
+
+
+/* =========================================================
+   PRESTÍGIO
+========================================================= */
+
+prestigeButton.addEventListener(
+    "click",
+    async () => {
+
+        const requirement =
+            getPrestigeRequirement();
+
+
+        if (
+            game.points <
+            requirement
+        ) {
+
+            return;
+
+        }
+
+
+        const reward =
+            getPrestigeReward();
+
+
+        const confirmed =
+    await confirmPersonalizado(
+
+        "Realizar o prestígio?<br><br>" +
+
+        "Pontos atuais: " +
+        formatNumber(
+            game.points
+        ) +
+
+        "<br><br>" +
+
+        "Os upgrades normais serão resetados." +
+
+        "<br><br>" +
+
+        "O Legado permanecerá." +
+
+        "<br><br>" +
+
+        "Recompensa: +" +
+        reward +
+        " Legado.",
+
+        "Realizar prestígio",
+
+        "Prestigiar"
+
+    );
+
+
+if (!confirmed) {
+    return;
+}
+
+        createPrestigeEffect();
+
+
+        game.points = 0;
+
+        game.clickLevel = 0;
+        game.cpsLevel = 0;
+        game.educationLevel = 0;
+        game.organizationLevel = 0;
+        game.pressLevel = 0;
+        game.memoryLevel = 0;
+
+        game.combo = 0;
+
+
+        game.legacy +=
+            reward;
+
+
+        /*
+         * Força a reconstrução
+         * dos upgrades porque os
+         * níveis foram resetados.
+         */
+
+        lastUpgradeLevels = "";
+
+
+        scheduleUpdate();
+
+        scheduleSave();
+
+    }
+);
+
+
+/* =========================================================
+   EFEITO DO PRESTÍGIO
+========================================================= */
+
+function createPrestigeEffect() {
+
+    const flash =
+        document.createElement(
+            "div"
+        );
+
+    flash.className =
+        "prestige-flash";
+
+    effectLayer.appendChild(
+        flash
+    );
+
+
+    const text =
+        document.createElement(
+            "div"
+        );
+
+    text.className =
+        "prestige-text";
+
+
+    text.innerHTML = `
+
+        PRESTÍGIO
+
+        <small>
+            Novo legado desbloqueado
+        </small>
+
+    `;
+
+
+    effectLayer.appendChild(
+        text
+    );
+
+
+    for (
+        let i = 0;
+        i < 20;
+        i++
+    ) {
+
+        const particle =
+            document.createElement(
+                "div"
+            );
+
+
+        particle.className =
+            "prestige-star";
+
+
+        particle.textContent =
+            "✦";
+
+
+        const angle =
+            Math.random() *
+            Math.PI *
+            2;
+
+
+        const distance =
+            100 +
+            Math.random() *
+            250;
+
+
+        particle.style.left =
+            (
+                50 +
+                (
+                    Math.cos(angle) *
+                    distance /
+                    window.innerWidth *
+                    100
+                )
+            ) +
+            "%";
+
+
+        particle.style.top =
+            (
+                50 +
+                (
+                    Math.sin(angle) *
+                    distance /
+                    window.innerHeight *
+                    100
+                )
+            ) +
+            "%";
+
+
+        particle.style.animationDelay =
+            (
+                Math.random() *
+                0.4
+            ) +
+            "s";
+
+
+        effectLayer.appendChild(
+            particle
+        );
+
+    }
+
+
+    setTimeout(
+        () => {
+
+            effectLayer.innerHTML =
+                "";
+
+        },
+        2000
+    );
+
+}
+
+
+/* =========================================================
+   HISTÓRIAS E POPUP PERSONALIZADO 
+========================================================= */
+
+function renderStories(force = false) {
+
+    const currentPhase =
+        getCurrentPhase();
+
+
+    /*
+     * Não recria as histórias
+     * a cada clique.
+     */
+
+    if (
+        !force &&
+        currentPhase ===
+        lastRenderedPhase
+    ) {
+
+        return;
+
+    }
+
+
+    lastRenderedPhase =
+        currentPhase;
+
+
+    stories.innerHTML =
+        "";
+
+
+    phases.forEach(
+        (phase, index) => {
+
+            const unlocked =
+                game.points >=
+                phase.unlock;
+
+
+            const article =
+                document.createElement(
+                    "article"
+                );
+
+
+            article.className =
+                "story";
+
+
+            if (!unlocked) {
+
+                article.classList.add(
+                    "locked"
+                );
+
+
+                article.innerHTML = `
+
+                    <div class="story-title">
+
+                        <span>
+                            🔒
+                        </span>
+
+                        <h3>
+                            Fase ${index + 1} —
+                            ${phase.title}
+                        </h3>
+
+                    </div>
+
+                    <p>
+                        Esta fase ainda está bloqueada.
+                    </p>
+
+                    <div class="highlight">
+
+                        Necessário:
+                        ${formatNumber(
+                            phase.unlock
+                        )}
+                        pontos.
+
+                    </div>
+
+                `;
+
+            } else {
+
+                article.innerHTML = `
+
+                    <div class="story-title">
+
+                        <span>
+                            ${phase.icon}
+                        </span>
+
+                        <h3>
+                            Fase ${index + 1} —
+                            ${phase.title}
+                        </h3>
+
+                    </div>
+
+                    <p>
+                        ${phase.story}
+                    </p>
+
+                    <div class="highlight">
+                        ${phase.highlight}
+                    </div>
+
+                    <div class="timeline">
+
+                        ${
+                            phase.timeline
+                                .map(
+                                    item => `
+
+                                        <div class="timeline-item">
+
+                                            <div class="timeline-dot"></div>
+
+                                            <div class="timeline-year">
+                                                ${item[0]}
+                                            </div>
+
+                                            <p>
+                                                ${item[1]}
+                                            </p>
+
+                                        </div>
+
+                                    `
+                                )
+                                .join("")
+                        }
+
+                    </div>
+
+                `;
+
+            }
+
+
+            stories.appendChild(
+                article
+            );
+
+        }
+    );
+
+}
+
+/* =========================================================
+   POPUP PERSONALIZADO
+========================================================= */
+
+let confirmResolve = null;
+
+
+function abrirConfirmacao(
+    mensagem,
+    titulo = "Confirmação",
+    textoConfirmar = "Confirmar"
+){
+
+    return new Promise(
+        function(resolve){
+
+            const overlay =
+                document.getElementById(
+                    "confirmOverlay"
+                );
+
+            const tituloElemento =
+                document.getElementById(
+                    "confirmTitulo"
+                );
+
+            const mensagemElemento =
+                document.getElementById(
+                    "confirmMensagem"
+                );
+
+            const confirmar =
+                document.getElementById(
+                    "confirmConfirmar"
+                );
+
+
+            if(
+                !overlay ||
+                !tituloElemento ||
+                !mensagemElemento ||
+                !confirmar
+            ){
+
+                console.error(
+                    "Elementos do popup não encontrados."
+                );
+
+                resolve(false);
+
+                return;
+
+            }
+
+
+            confirmResolve =
+                resolve;
+
+
+            tituloElemento.textContent =
+                titulo;
+
+
+            mensagemElemento.innerHTML =
+                mensagem;
+
+
+            confirmar.textContent =
+                textoConfirmar;
+
+
+            overlay.classList.add(
+                "aberto"
+            );
+
+
+            overlay.setAttribute(
+                "aria-hidden",
+                "false"
+            );
+
+
+            setTimeout(
+                function(){
+
+                    confirmar.focus();
+
+                },
+                100
+            );
+
+        }
+    );
+
+}
+
+
+function fecharConfirmacao(
+    resultado
+){
+
+    const overlay =
+        document.getElementById(
+            "confirmOverlay"
+        );
+
+
+    if(overlay){
+
+        overlay.classList.remove(
+            "aberto"
+        );
+
+        overlay.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+    }
+
+
+    if(confirmResolve){
+
+        const resolver =
+            confirmResolve;
+
+        confirmResolve =
+            null;
+
+        resolver(
+            resultado
+        );
+
+    }
+
+}
+
+
+document
+    .getElementById(
+        "confirmConfirmar"
+    )
+    ?.addEventListener(
+        "click",
+        function(event){
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            fecharConfirmacao(
+                true
+            );
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "confirmCancelar"
+    )
+    ?.addEventListener(
+        "click",
+        function(event){
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            fecharConfirmacao(
+                false
+            );
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "confirmOverlay"
+    )
+    ?.addEventListener(
+        "click",
+        function(event){
+
+            if(
+                event.target === this
+            ){
+
+                fecharConfirmacao(
+                    false
+                );
+
+            }
+
+        }
+    );
+
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        const overlay =
+            document.getElementById(
+                "confirmOverlay"
+            );
+
+
+        if(
+            !overlay ||
+            !overlay.classList.contains(
+                "aberto"
+            )
+        ){
+
+            return;
+
+        }
+
+
+        if(
+            event.key ===
+            "Escape"
+        ){
+
+            event.preventDefault();
+
+            fecharConfirmacao(
+                false
+            );
+
+        }
+
+    }
+);
+
+
+async function confirmPersonalizado(
+    mensagem,
+    titulo = "Confirmação",
+    textoConfirmar = "Confirmar"
+){
+
+    return await abrirConfirmacao(
+        mensagem,
+        titulo,
+        textoConfirmar
+    );
+
+}
+
+/* =========================================================
+   ATUALIZAR INTERFACE
+========================================================= */
+
+function updateUI() {
+
+    const multi =
+        getMultiplier();
+
+
+    const click =
+        getPerClick() *
+        multi;
+
+
+    const cps =
+        getPerSecond();
+
+
+    /*
+     * PLACAR
+     */
+
+    score.textContent =
+        formatNumber(
+            game.points
+        );
+
+
+    perClick.textContent =
+        formatNumber(
+            click
+        );
+
+
+    perSecond.textContent =
+        formatNumber(
+            cps
+        );
+
+
+    multiplier.textContent =
+        multi.toFixed(1) +
+        "x";
+
+
+    comboElement.textContent =
+        "x" +
+        Math.max(
+            1,
+            game.combo
+        );
+
+
+    legacy.textContent =
+        formatNumber(
+            game.legacy
+        );
+
+
+    /* =====================================================
+       FASE
+    ===================================================== */
+
+    const phase =
+        getCurrentPhase();
+
+
+    phaseNumber.textContent =
+        "FASE " +
+        (
+            phase + 1
+        );
+
+
+    phaseTitle.textContent =
+        phases[phase].title;
+
+
+    phaseDescription.textContent =
+        phases[phase].description;
+
+
+    if (
+        phase <
+        phases.length - 1
+    ) {
+
+        const current =
+            phases[phase].unlock;
+
+
+        const next =
+            phases[
+                phase + 1
+            ].unlock;
+
+
+        const progress =
+            (
+                (
+                    game.points -
+                    current
+                ) /
+                (
+                    next -
+                    current
+                )
+            ) *
+            100;
+
+
+        progressBar.style.width =
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    progress
+                )
+            ) +
+            "%";
+
+    } else {
+
+        progressBar.style.width =
+            "100%";
+
+    }
+
+
+    /* =====================================================
+       PRESTÍGIO
+    ===================================================== */
+
+    const requirement =
+        getPrestigeRequirement();
+
+
+    const canPrestige =
+        game.points >=
+        requirement;
+
+
+    const reward =
+        getPrestigeReward();
+
+
+    prestigeButton.classList.toggle(
+        "disabled",
+        !canPrestige
+    );
+
+
+    if (canPrestige) {
+
+        prestigeButton.textContent =
+            "Prestigiar";
+
+
+        prestigeDescription.textContent =
+            "Você receberá +" +
+            reward +
+            " Legado.";
+
+    } else {
+
+        prestigeButton.textContent =
+            "Prestígio";
+
+
+        prestigeDescription.textContent =
+            "Necessário " +
+            formatNumber(
+                requirement
+            ) +
+            " pontos.";
+
+    }
+
+
+    /*
+     * UPGRADES
+     */
+
+    renderUpgrades();
+
+
+    /*
+     * HISTÓRIAS
+     */
+
+    renderStories();
+
+}
+
+
+/* =========================================================
+   SALVAR
+========================================================= */
+
+function saveGame() {
+
+    cripto.salvar(
+        game
+    );
+
+}
+
+
+/* =========================================================
+   CARREGAR
+========================================================= */
+
+function loadGame() {
+
+    const data =
+        cripto.carregar();
+
+
+    if (!data) {
+        return;
+    }
+
+
+    game = {
+
+        ...game,
+
+        ...data
+
+    };
+
+}
+
+
+/* =========================================================
+   PRODUÇÃO AUTOMÁTICA
+========================================================= */
+
+setInterval(
+    () => {
+
+        const cps =
+            getPerSecond();
+
+
+        if (cps <= 0) {
+            return;
+        }
+
+
+        game.points +=
+            cps;
+
+
+        scheduleUpdate();
+
+        scheduleSave();
+
+    },
+    1000
+);
+
+
+/* =========================================================
+   EXPIRAÇÃO DO COMBO
+========================================================= */
+
+setInterval(
+    () => {
+
+        if (
+            game.combo > 0 &&
+            Date.now() -
+            game.lastClick >
+            1200
+        ) {
+
+            game.combo = 0;
+
+
+            comboText.classList.remove(
+                "active"
+            );
+
+
+            scheduleUpdate();
+
+            scheduleSave();
+
+        }
+
+    },
+    250
+);
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+document
+    .getElementById(
+        "resetButton"
+    )
+    .addEventListener(
+        "click",
+        async () => {
+
+            const confirmed =
+    await confirmPersonalizado(
+
+        "Reiniciar todo o progresso?<br><br>" +
+
+        "Isso apagará:<br>" +
+        "• Pontos<br>" +
+        "• Upgrades<br>" +
+        "• Legado<br>" +
+        "• Bônus permanentes<br><br>" +
+
+        "Esta ação não pode ser desfeita.",
+
+        "Reiniciar progresso",
+
+        "Reiniciar"
+
+    );
+
+
+if (!confirmed) {
+    return;
+}
+
+
+            const flash =
+                document.createElement(
+                    "div"
+                );
+
+
+            flash.className =
+                "reset-flash";
+
+
+            effectLayer.appendChild(
+                flash
+            );
+
+
+            cripto.apagar();
+
+
+            game = {
+
+                points: 0,
+
+                legacy: 0,
+
+                clickLevel: 0,
+                cpsLevel: 0,
+                educationLevel: 0,
+                organizationLevel: 0,
+                pressLevel: 0,
+                memoryLevel: 0,
+
+                combo: 0,
+                lastClick: 0
+
+            };
+
+
+            /*
+             * Força reconstrução.
+             */
+
+            lastRenderedPhase = -1;
+            lastUpgradeLevels = "";
+
+
+            /*
+             * Aqui salva imediatamente
+             * o novo estado zerado.
+             */
+
+            saveGame();
+
+
+            updateUI();
+
+
+            setTimeout(
+                () => {
+
+                    effectLayer.innerHTML =
+                        "";
+
+                },
+                900
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+========================================================= */
+
+loadGame();
+
+
+lastRenderedPhase = -1;
+lastUpgradeLevels = "";
+
+
+updateUI();
+
+</script>
+
+
+</body>
+</html>

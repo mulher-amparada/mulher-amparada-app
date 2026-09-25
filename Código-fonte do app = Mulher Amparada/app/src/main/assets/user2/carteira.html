@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+    <meta
+        name="description"
+        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
+    >
+
+<meta
+    name="theme-color"
+    content="#000000"
+>
+
+<title>Carteira</title>
+
+
+<style>
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+
+    box-sizing:
+        border-box;
+
+    margin:
+        0;
+
+    padding:
+        0;
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+    font-weight:
+        700;
+
+    -webkit-user-select:
+        none;
+
+    -webkit-backface-visibility:
+        hidden;
+
+    backface-visibility:
+        hidden;
+
+    -webkit-transform:
+        translateZ(0);
+
+    transform:
+        translateZ(0);
+
+    -webkit-tap-highlight-color:
+        transparent;
+
+}
+
+
+/* =========================================================
+   ROLAGEM
+========================================================= */
+
+html,
+body {
+
+    scrollbar-width:
+        none;
+
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+
+    width:
+        0;
+
+    height:
+        0;
+
+}
+
+
+/* =========================================================
+   FONTE
+========================================================= */
+
+@font-face {
+
+    font-family:
+        "Quicksand";
+
+    src:
+        url("font.ttf")
+        format("truetype");
+
+    font-weight:
+        400 800;
+
+    font-style:
+        normal;
+
+    font-display:
+        swap;
+
+}
+
+
+/* =========================================================
+   VARIÁVEIS — MODO CLARO
+========================================================= */
+
+:root {
+
+    --surface:
+        #ffffff;
+
+    --white:
+        #18181c;
+
+    --text:
+        #18181c;
+
+    --soft:
+        #686870;
+
+    --muted:
+        #777780;
+
+    --pink:
+        #ff3f82;
+
+    --border:
+        rgba(0,0,0,.09);
+
+}
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
+html,
+body {
+
+    width:
+        100%;
+
+    min-height:
+        100%;
+
+    color:
+        var(--text);
+
+    background:
+        #f4f4f7;
+
+}
+
+
+body {
+
+    min-height:
+        100vh;
+
+    overflow-x:
+        hidden;
+
+    padding-top:
+        env(safe-area-inset-top);
+
+    padding-bottom:
+        env(safe-area-inset-bottom);
+
+}
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+.mainUI {
+
+    width:
+        100%;
+
+    max-width:
+        700px;
+
+    min-height:
+        100vh;
+
+    margin:
+        0 auto;
+
+    padding:
+        24px
+        16px
+        100px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        31px;
+
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+
+    width:
+        100%;
+
+    padding:
+        4px
+        4px
+        0;
+
+}
+
+
+.heroTopLine {
+
+    width:
+        43px;
+
+    height:
+        3px;
+
+    margin-bottom:
+        18px;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--pink);
+
+}
+
+
+.heroTitle {
+
+    color:
+        var(--text);
+
+    font-size:
+        clamp(
+            32px,
+            9vw,
+            48px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        .98;
+
+    letter-spacing:
+        -1.6px;
+
+}
+
+
+.heroSubtitle {
+
+    max-width:
+        410px;
+
+    margin-top:
+        14px;
+
+    color:
+        var(--soft);
+
+    font-size:
+        11px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.5;
+
+    letter-spacing:
+        .15px;
+
+}
+
+
+/* =========================================================
+   SEÇÃO
+========================================================= */
+
+.section {
+
+    width:
+        100%;
+
+}
+
+
+/* =========================================================
+   LABEL
+========================================================= */
+
+.label {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    margin:
+        0
+        0
+        13px
+        4px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        2px;
+
+    line-height:
+        1;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.label::before {
+
+    content:
+        "";
+
+    width:
+        5px;
+
+    height:
+        5px;
+
+    flex:
+        0 0 5px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--pink);
+
+}
+
+
+/* =========================================================
+   CARTEIRINHAS
+========================================================= */
+
+.walletCard {
+
+    width:
+        100%;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        18px;
+
+}
+
+
+/* =========================================================
+   CARTÃO PRINCIPAL
+========================================================= */
+
+.cardMain {
+
+    width:
+        100%;
+
+    position:
+        relative;
+
+    display:
+        block;
+
+    overflow:
+        hidden;
+
+    border-radius:
+        27px;
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid
+        rgba(0,0,0,.09);
+
+    box-shadow:
+        0
+        18px
+        45px
+        rgba(0,0,0,.13);
+
+    cursor:
+        pointer;
+
+    text-decoration:
+        none;
+
+    transform:
+        translateY(0);
+
+    transition:
+        transform
+        .28s
+        cubic-bezier(
+            .22,
+            1,
+            .36,
+            1
+        ),
+
+        box-shadow
+        .28s
+        ease;
+
+}
+
+
+.cardMain:active {
+
+    transform:
+        scale(.9);
+
+}
+
+
+/* =========================================================
+   IMAGEM
+========================================================= */
+
+.cardMain img {
+
+    width:
+        100%;
+
+    height:
+        auto;
+
+    display:
+        block;
+
+    object-fit:
+        contain;
+
+    object-position:
+        center;
+
+    border-radius:
+        inherit;
+
+}
+
+
+/* =========================================================
+   PEQUENAS TELAS
+========================================================= */
+
+@media (max-width: 390px) {
+
+    .mainUI {
+
+        padding-left:
+            15px;
+
+        padding-right:
+            15px;
+
+    }
+
+
+    .heroTitle {
+
+        font-size:
+            32px;
+
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
+
+    * {
+        animation-name: none !important;
+    }
+}
+
+</style>
+
+
+
+</head>
+
+
+<body>
+
+
+<main class="mainUI">
+
+
+    <!-- =====================================================
+         TÍTULO
+    ====================================================== -->
+
+    <header class="hero">
+
+        <div class="heroTopLine"></div>
+
+        <h1 class="heroTitle">
+            Carteira
+        </h1>
+
+        <p class="heroSubtitle">
+            Suas carteirinhas reunidas em um só lugar.
+        </p>
+
+        <p class="heroSubtitle">
+            Recurso informativo do aplicativo para apresentação
+            à equipe de transporte. Estas carteirinhas não são
+            um documento governamental nem são emitidas por
+            órgãos públicos.
+        </p>
+
+    </header>
+
+
+    <!-- =====================================================
+         CARTEIRINHAS
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="label">
+            Exigindo seus direitos no transporte
+        </div>
+
+
+        <div class="walletCard">
+
+
+            <!-- =================================================
+                 PRIMEIRA CARTEIRINHA
+            ================================================== -->
+
+            <a
+                class="cardMain"
+                href="exigir.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Abrir carteirinha sobre transporte"
+            >
+
+                <img
+                    src="cartao.jpg"
+                    alt="Carteirinha sobre transporte"
+                >
+
+            </a>
+
+</section>
+    <section class="section">
+        <div class="label">
+             Sobre o gesto de combate da violência 
+        </div>
+
+            <!-- =================================================
+                 SEGUNDA CARTEIRINHA
+            ================================================== -->
+
+            <a
+                class="cardMain"
+                href="gesto.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Abrir carteirinha sobre o gesto"
+            >
+
+                <img
+                    src="cartao1.jpg"
+                    alt="Carteirinha sobre o gesto"
+                >
+
+            </a>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+</body>
+
+</html>

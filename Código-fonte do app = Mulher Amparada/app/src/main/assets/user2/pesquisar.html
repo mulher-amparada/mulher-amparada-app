@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
+>
+
+    <meta
+        name="description"
+        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
+    >
+
+<meta
+    name="theme-color"
+    content="#000000"
+>
+
+<title>Apps</title>
+
+
+<style>
+/* =========================================================
+   BARRAS DE ROLAGEM — TOTALMENTE TRANSPARENTES
+========================================================= */
+
+*::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background: transparent;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: transparent;
+    border: none;
+}
+
+* {
+    scrollbar-width: none;
+    scrollbar-color: transparent transparent;
+}
+
+html,
+body {
+    scrollbar-width: none;
+    scrollbar-color: transparent transparent;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background: transparent;
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    font-family: Quicksand, sans-serif;
+
+    user-select: none;
+
+    -webkit-user-select: none;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+html,
+body {
+
+    width: 100%;
+
+    height: 100%;
+
+    overflow: hidden;
+
+    color: #171717;
+
+    background: #f5f5f5;
+
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: auto;
+}
+
+
+/* =========================================================
+   FONTE
+========================================================= */
+
+@font-face {
+
+    font-family: Quicksand;
+
+    src:
+        url("font.ttf")
+        format("truetype");
+
+    font-display: swap;
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+main {
+
+    width: 100%;
+
+    height: 100vh;
+
+    padding:
+
+        max(18px, env(safe-area-inset-top))
+
+        max(16px, env(safe-area-inset-right))
+
+        110px
+
+        max(16px, env(safe-area-inset-left));
+}
+
+
+/* =========================================================
+   TOPO
+========================================================= */
+
+.top {
+
+    width: 100%;
+
+    height: 55px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+
+.title-area {
+
+    min-width: 0;
+}
+
+
+.title {
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    line-height: 1;
+
+    color: #111111;
+}
+
+
+.subtitle {
+
+    margin-top: 5px;
+
+    font-size: 11px;
+
+    color: rgba(0,0,0,.48);
+
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   AÇÕES
+========================================================= */
+
+.actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+
+.action {
+
+    width: 42px;
+
+    height: 42px;
+
+    border: 0;
+    outline: none;
+
+    border-radius: 40px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #171717;
+
+    background:
+        rgba(0,0,0,.055);
+
+    border:
+        1px solid rgba(0,0,0,.08);
+
+    font-size: 19px;
+
+    cursor: pointer;
+
+    transition:
+        transform .18s ease,
+        background .18s ease,
+        opacity .18s ease;
+}
+
+
+.action:active {
+
+    transform: scale(.90);
+}
+
+
+.action:hover {
+
+    background:
+        rgba(0,0,0,.10);
+}
+
+
+#atualizar.loading {
+
+    animation:
+        girar .8s linear infinite;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.grid {
+
+    width: 100%;
+
+    height: calc(100vh - 165px);
+
+    margin-top: 10px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 26px 10px;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    padding:
+        8px 3px
+        30px;
+
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
+
+    height: 80%;
+
+    border-radius: 40px;
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app {
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: flex-start;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    contain: layout paint;
+
+    transition:
+        transform .15s ease,
+        opacity .15s ease;
+
+    padding-bottom: 18%;
+}
+
+
+.app:active {
+
+    transform: scale(.91);
+
+    opacity: .65;
+}
+
+
+/* =========================================================
+   ÍCONE
+========================================================= */
+
+.icon {
+
+    width: 68px;
+
+    height: 68px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+}
+
+
+.icon img {
+
+    width: 67px;
+
+    height: 67px;
+
+    display: block;
+
+    object-fit: contain;
+
+    border-radius: 17px;
+}
+
+
+/* =========================================================
+   NOME
+========================================================= */
+
+.name {
+
+    width: 100%;
+
+    max-width: 82px;
+
+    margin-top: 8px;
+
+    font-size: 12px;
+
+    line-height: 1.25;
+
+    font-weight: 600;
+
+    color: rgba(0,0,0,.82);
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   SEM RESULTADOS
+========================================================= */
+
+.empty {
+
+    grid-column: 1 / -1;
+
+    min-height: 250px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    color: rgba(0,0,0,.42);
+
+    text-align: center;
+}
+
+
+.empty-icon {
+
+    font-size: 34px;
+
+    opacity: .5;
+}
+
+
+.empty-title {
+
+    color: rgba(0,0,0,.72);
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+.empty-text {
+
+    font-size: 11px;
+
+    color: rgba(0,0,0,.48);
+}
+
+
+/* =========================================================
+   BARRA DE PESQUISA
+========================================================= */
+
+.search {
+
+    position: fixed;
+
+    left: 50%;
+
+    bottom:
+        max(20px, env(safe-area-inset-bottom));
+
+    transform: translateX(-50%);
+
+    z-index: 1000;
+
+    width: min(68%, 430px);
+
+    height: 56px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 0 18px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(255,145,145,.88);
+
+    box-shadow:
+        0 15px 45px rgba(0,0,0,.16);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    transition:
+        width .25s ease,
+        background .25s ease;
+}
+
+
+.search:focus-within {
+
+    width: min(74%, 470px);
+
+    background:
+        rgba(255,155,155,.96);
+}
+
+
+.search-icon {
+
+    width: 22px;
+
+    height: 22px;
+
+    flex-shrink: 0;
+
+    opacity: .75;
+}
+
+
+.search input {
+
+    width: 100%;
+
+    min-width: 0;
+
+    height: 100%;
+
+    border: 0;
+
+    outline: none;
+
+    background: transparent;
+
+    color: #171717;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    font-family: Quicksand, sans-serif;
+}
+
+
+.search input::placeholder {
+
+    color: rgba(0,0,0,.58);
+}
+
+
+/* =========================================================
+   INDICADOR DE ATUALIZAÇÃO
+========================================================= */
+
+.update-status {
+
+    position: fixed;
+
+    top:
+        max(80px, calc(65px + env(safe-area-inset-top)));
+
+    left: 50%;
+
+    z-index: 2000;
+
+    transform:
+        translate(-50%, -15px);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    padding: 8px 14px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(255,255,255,.94);
+
+    border:
+        1px solid rgba(0,0,0,.10);
+
+    color:
+        rgba(0,0,0,.72);
+
+    font-size: 10px;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.12);
+
+    transition:
+        opacity .2s ease,
+        transform .2s ease;
+}
+
+
+.update-status.show {
+
+    opacity: 1;
+
+    transform:
+        translate(-50%, 0);
+}
+
+
+/* =========================================================
+   ANIMAÇÕES
+========================================================= */
+
+@keyframes girar {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
+@media (max-width: 360px) {
+
+    main {
+
+        padding-left: 12px;
+
+        padding-right: 12px;
+    }
+
+
+    .grid {
+
+        gap: 22px 6px;
+    }
+
+
+    .icon,
+    .icon img {
+
+        width: 60px;
+
+        height: 60px;
+    }
+
+
+    .name {
+
+        max-width: 70px;
+
+        font-size: 11px;
+    }
+
+
+    .title {
+
+        font-size: 20px;
+    }
+
+
+    .search {
+
+        margin-bottom: 5%;
+
+        width: 76%;
+    }
+
+}
+
+
+@media (orientation: landscape) {
+
+    .grid {
+
+        grid-template-columns:
+            repeat(6, minmax(0, 1fr));
+
+        gap: 22px 8px;
+    }
+
+
+    .search {
+
+        margin-bottom: 5%;
+
+        width: 32%;
+    }
+
+}
+
+
+svg {
+
+    width: 25px;
+
+    height: 25px;
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
+
+    * {
+        animation-name: none !important;
+    }
+}
+
+</style>
+
+
+
+</head>
+
+
+<body>
+
+
+
+
+<div class="update-status" id="updateStatus">
+    Atualizando aplicativos...
+</div>
+
+
+<main>
+
+
+    <!-- =====================================================
+         TOPO
+    ====================================================== -->
+
+    <div class="top">
+
+
+        <div class="title-area">
+
+            <div class="title">
+                Apps
+            </div>
+
+            <div
+                class="subtitle"
+                id="contador"
+            >
+                Carregando...
+            </div>
+
+        </div>
+
+
+        <div class="actions">
+
+
+            <button
+                class="action"
+                id="atualizar"
+                aria-label="Atualizar aplicativos"
+                title="Atualizar aplicativos"
+            >
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M480-120q-126 0-223-76.5T131-392q-4-15 6-27.5t27-14.5q16-2 29 6t18 24q24 90 99 147t170 57q117 0 198.5-81.5T760-480q0-117-81.5-198.5T480-760q-69 0-129 32t-101 88h70q17 0 28.5 11.5T360-600q0 17-11.5 28.5T320-560H160q-17 0-28.5-11.5T120-600v-160q0-17 11.5-28.5T160-800q17 0 28.5 11.5T200-760v54q51-64 124.5-99T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-120Zm40-376 100 100q11 11 11 28t-11 28q-11 11-28 11t-28-11L452-452q-6-6-9-13.5t-3-15.5v-159q0-17 11.5-28.5T480-680q17 0 28.5 11.5T520-640v144Z"/></svg>
+            </button>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         GRID
+    ====================================================== -->
+
+    <div
+        class="grid"
+        id="grid"
+    ></div>
+
+
+</main>
+
+
+<!-- =========================================================
+     PESQUISA
+========================================================= -->
+
+<div class="search">
+
+
+
+
+    <input
+        id="pesquisaInput"
+        type="text"
+        placeholder="Pesquisar"
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+    >
+
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   CONFIGURAÇÃO
+========================================================= */
+
+const APPS_CRIPTO_KEY =
+    "apps_cache_v2";
+
+
+/* =========================================================
+   ELEMENTOS
+========================================================= */
+
+const grid =
+    document.getElementById("grid");
+
+const pesquisa =
+    document.getElementById("pesquisaInput");
+
+const atualizar =
+    document.getElementById("atualizar");
+
+const contador =
+    document.getElementById("contador");
+
+const updateStatus =
+    document.getElementById("updateStatus");
+
+
+/* =========================================================
+   ESTADO
+========================================================= */
+
+let apps = [];
+
+let appsFiltrados = [];
+
+let atualizando = false;
+
+let renderTimer = null;
+
+
+/* =========================================================
+   NORMALIZAR APPS
+========================================================= */
+
+function normalizarApps(lista) {
+
+    if (!Array.isArray(lista)) {
+
+        return [];
+
+    }
+
+
+    return lista
+
+        .filter(app =>
+            app &&
+            app.nome &&
+            app.pacote
+        )
+
+        .map(app => ({
+
+            nome:
+                String(app.nome),
+
+            pacote:
+                String(app.pacote),
+
+            icone:
+                app.icone
+                    ? String(app.icone)
+                    : ""
+
+        }))
+
+        .sort((a, b) =>
+            a.nome.localeCompare(
+                b.nome,
+                "pt-BR",
+                {
+                    sensitivity: "base"
+                }
+            )
+        );
+
+}
+
+
+/* =========================================================
+   CARREGAR APPS DA CRIPTO
+========================================================= */
+
+function carregarAppsCripto() {
+
+    try {
+
+        /*
+         * O WebAppInterface precisa expor
+         * o método carregar() da Cripto.
+         */
+
+        if (
+            typeof Android === "undefined" ||
+            typeof Android.carregar !== "function"
+        ) {
+
+            console.warn(
+                "Android.carregar() não está disponível."
+            );
+
+            return false;
+
+        }
+
+
+        /*
+         * Lê o valor criptografado salvo
+         * pela classe Cripto.
+         *
+         * A Cripto descriptografa antes
+         * de devolver o conteúdo.
+         */
+
+        const resposta =
+            Android.carregar(
+                APPS_CRIPTO_KEY
+            );
+
+
+        if (!resposta) {
+
+            return false;
+
+        }
+
+
+        const dados =
+            typeof resposta === "string"
+                ? JSON.parse(resposta)
+                : resposta;
+
+
+        const lista =
+            normalizarApps(
+                dados
+            );
+
+
+        if (!lista.length) {
+
+            return false;
+
+        }
+
+
+        apps =
+            lista;
+
+
+        renderizar(
+            apps
+        );
+
+
+        return true;
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao carregar aplicativos da Cripto:",
+            erro
+        );
+
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   SALVAR APPS NA CRIPTO
+========================================================= */
+
+function salvarAppsCripto(lista) {
+
+    try {
+
+        if (
+            typeof Android === "undefined" ||
+            typeof Android.salvar !== "function"
+        ) {
+
+            console.warn(
+                "Android.salvar() não está disponível."
+            );
+
+            return false;
+
+        }
+
+
+        const dados =
+            JSON.stringify(
+                lista
+            );
+
+
+        /*
+         * A Cripto recebe o JSON normal
+         * e faz a criptografia AES-256/GCM.
+         */
+
+        Android.salvar(
+            APPS_CRIPTO_KEY,
+            dados
+        );
+
+
+        return true;
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao salvar aplicativos na Cripto:",
+            erro
+        );
+
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   ESCAPAR HTML
+========================================================= */
+
+function escaparHTML(texto) {
+
+    return String(texto)
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   RENDERIZAÇÃO
+========================================================= */
+
+function renderizar(lista) {
+
+    appsFiltrados =
+        lista;
+
+
+    cancelAnimationFrame(
+        renderTimer
+    );
+
+
+    renderTimer =
+        requestAnimationFrame(() => {
+
+            grid.innerHTML =
+                "";
+
+
+            if (!lista.length) {
+
+                grid.innerHTML = `
+
+                    <div class="empty">
+
+                        <div class="empty-icon">
+                            ⌕
+                        </div>
+
+                        <div class="empty-title">
+                            Nenhum aplicativo encontrado
+                        </div>
+
+                        <div class="empty-text">
+                            Tente pesquisar outro nome
+                        </div>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            const fragment =
+                document.createDocumentFragment();
+
+
+            lista.forEach(app => {
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                div.className =
+                    "app";
+
+
+                div.dataset.package =
+                    app.pacote;
+
+
+                const icon =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                icon.className =
+                    "icon";
+
+
+                const img =
+                    document.createElement(
+                        "img"
+                    );
+
+
+                img.loading =
+                    "lazy";
+
+
+                img.decoding =
+                    "async";
+
+
+                img.alt =
+                    "";
+
+
+                if (app.icone) {
+
+                    img.src =
+                        app.icone;
+
+                }
+
+
+                img.onerror =
+                    () => {
+
+                        img.style.display =
+                            "none";
+
+                    };
+
+
+                icon.appendChild(
+                    img
+                );
+
+
+                const name =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                name.className =
+                    "name";
+
+
+                name.textContent =
+                    app.nome;
+
+
+                div.appendChild(
+                    icon
+                );
+
+
+                div.appendChild(
+                    name
+                );
+
+
+                div.addEventListener(
+                    "click",
+                    () => {
+
+                        abrirApp(
+                            app.pacote
+                        );
+
+                    },
+                    {
+                        passive: true
+                    }
+                );
+
+
+                fragment.appendChild(
+                    div
+                );
+
+            });
+
+
+            grid.appendChild(
+                fragment
+            );
+
+        });
+
+
+    atualizarContador(
+        lista.length
+    );
+
+}
+
+
+/* =========================================================
+   CONTADOR
+========================================================= */
+
+function atualizarContador(
+    quantidade
+) {
+
+    if (!apps.length) {
+
+        contador.textContent =
+            "Nenhum aplicativo";
+
+        return;
+
+    }
+
+
+    if (
+        pesquisa.value.trim()
+    ) {
+
+        contador.textContent =
+            `${quantidade} encontrado${quantidade === 1 ? "" : "s"}`;
+
+    } else {
+
+        contador.textContent =
+            `${quantidade} aplicativo${quantidade === 1 ? "" : "s"}`;
+
+    }
+
+}
+
+
+/* =========================================================
+   ABRIR APP
+========================================================= */
+
+function abrirApp(
+    pacote
+) {
+
+    try {
+
+        if (
+            typeof Android !== "undefined" &&
+            typeof Android.abrirApp === "function"
+        ) {
+
+            Android.abrirApp(
+                pacote
+            );
+
+        }
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao abrir app:",
+            erro
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   PESQUISA
+========================================================= */
+
+function pesquisar() {
+
+    const termo =
+        pesquisa.value
+            .toLocaleLowerCase(
+                "pt-BR"
+            )
+            .trim();
+
+
+    if (!termo) {
+
+        renderizar(
+            apps
+        );
+
+        return;
+
+    }
+
+
+    const resultado =
+        apps.filter(app =>
+            app.nome
+                .toLocaleLowerCase(
+                    "pt-BR"
+                )
+                .includes(
+                    termo
+                )
+        );
+
+
+    renderizar(
+        resultado
+    );
+
+}
+
+
+pesquisa.addEventListener(
+    "input",
+    pesquisar
+);
+
+
+/* =========================================================
+   ATUALIZAR DADOS DO ANDROID
+========================================================= */
+
+async function atualizarApps(
+    mostrarMensagem = true
+) {
+
+    if (atualizando) {
+
+        return;
+
+    }
+
+
+
+
+    if (
+        typeof Android === "undefined" ||
+        typeof Android.obterApps !== "function"
+    ) {
+
+        if (!apps.length) {
+
+            mostrarVazio();
+
+        }
+
+        return;
+
+    }
+
+
+    atualizando =
+        true;
+
+
+    atualizar.classList.add(
+        "loading"
+    );
+
+
+    if (mostrarMensagem) {
+
+        mostrarStatus(
+            "Atualizando aplicativos..."
+        );
+
+    }
+
+
+    try {
+
+        /*
+         * CHAMADA AO WEBAPPINTERFACE
+         *
+         * O Android procura os aplicativos.
+         */
+
+        const resposta =
+            await Promise.resolve(
+                Android.obterApps()
+            );
+
+
+        if (!resposta) {
+
+            throw new Error(
+                "Resposta vazia"
+            );
+
+        }
+
+
+        const dados =
+            typeof resposta === "string"
+                ? JSON.parse(resposta)
+                : resposta;
+
+
+        const novosApps =
+            normalizarApps(
+                dados
+            );
+
+
+        if (!novosApps.length) {
+
+            throw new Error(
+                "Nenhum aplicativo retornado"
+            );
+
+        }
+
+
+        /*
+         * Atualiza a memória do JavaScript.
+         */
+
+        apps =
+            novosApps;
+
+
+        /*
+         * SALVA NA CRIPTO
+         *
+         * O JSON é enviado para a Cripto,
+         * que criptografa usando AES-256/GCM
+         * e salva no SharedPreferences.
+         */
+
+        const salvou =
+            salvarAppsCripto(
+                apps
+            );
+
+
+        if (!salvou) {
+
+            console.warn(
+                "Os aplicativos foram carregados, mas não foram salvos na Cripto."
+            );
+
+        }
+
+
+        /*
+         * Mantém a pesquisa atual.
+         */
+
+        pesquisar();
+
+
+        mostrarStatus(
+            `${apps.length} aplicativos atualizados`
+        );
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao atualizar apps:",
+            erro
+        );
+
+
+        /*
+         * Não apaga os dados antigos.
+         *
+         * Se a atualização falhar,
+         * os aplicativos que já estavam
+         * carregados continuam disponíveis.
+         */
+
+        if (apps.length) {
+
+            mostrarStatus(
+                "Não foi possível atualizar. Dados salvos mantidos."
+            );
+
+        } else {
+
+            mostrarStatus(
+                "Não foi possível carregar os aplicativos"
+            );
+
+
+            mostrarVazio();
+
+        }
+
+    } finally {
+
+        atualizando =
+            false;
+
+
+        atualizar.classList.remove(
+            "loading"
+        );
+
+
+        setTimeout(
+            () => {
+
+                esconderStatus();
+
+            },
+            1800
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function mostrarStatus(
+    texto
+) {
+
+    updateStatus.textContent =
+        texto;
+
+
+    updateStatus.classList.add(
+        "show"
+    );
+
+}
+
+
+function esconderStatus() {
+
+    updateStatus.classList.remove(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   ESTADO VAZIO
+========================================================= */
+
+function mostrarVazio() {
+
+    grid.innerHTML = `
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                ◌
+            </div>
+
+            <div class="empty-title">
+                Nenhum aplicativo carregado
+            </div>
+
+            <div class="empty-text">
+                Toque em atualizar para carregar
+            </div>
+
+        </div>
+
+    `;
+
+
+    contador.textContent =
+        "Nenhum aplicativo";
+
+}
+
+
+/* =========================================================
+   BOTÃO ATUALIZAR
+========================================================= */
+
+atualizar.addEventListener(
+    "click",
+    () => {
+
+        atualizarApps(
+            true
+        );
+
+    }
+);
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+========================================================= */
+
+function iniciar() {
+
+    /*
+     * =====================================================
+     * IMPORTANTE
+     * =====================================================
+     *
+     * Ao abrir a página:
+     *
+     * NÃO chama Android.obterApps()
+     *
+     * NÃO procura aplicativos instalados.
+     *
+     * NÃO faz atualização.
+     *
+     * Apenas lê o JSON que já está salvo
+     * pela Cripto.
+     */
+
+    const possuiDados =
+        carregarAppsCripto();
+
+
+    if (possuiDados) {
+
+        /*
+         * Os dados já foram renderizados
+         * por carregarAppsCripto().
+         */
+
+        return;
+
+    }
+
+
+    /*
+     * Se não existe nada salvo,
+     * permanece vazio.
+     *
+     * O usuário precisa tocar
+     * em Atualizar.
+     */
+
+    mostrarVazio();
+
+}
+
+
+/* =========================================================
+   INICIAR
+========================================================= */
+
+if (
+    document.readyState === "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        iniciar,
+        {
+            once: true
+        }
+    );
+
+} else {
+
+    iniciar();
+
+}
+
+</script>
+
+
+
+</body>
+
+</html>
+

@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+    <meta
+        name="description"
+        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
+    >
+
+<meta name="theme-color" content="#000000">
+
+<title>Meus Acessos</title>
+
+<style>
+/* =========================================================
+   FONT
+========================================================= */
+
+@font-face {
+    font-family: "Quicksand";
+    src: url("file:///android_asset/font.ttf") format("truetype");
+    font-weight: 400 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+/* =========================================================
+   VARIÁVEIS — MODO CLARO
+========================================================= */
+
+:root {
+    --surface: #ffffff;
+    --surface-2: #f5f6f8;
+    --surface-3: #eceef1;
+
+    --line: #e1e2e6;
+    --line-light: #d4d6dc;
+
+    --pink: #ff3f82;
+
+    --text: #17181c;
+    --text-soft: #666a74;
+    --text-muted: #858994;
+
+    --blue: #7c6cff;
+    --blue-2: #9589ff;
+    --blue-dark: #5548d8;
+
+    --danger: #ff4f67;
+
+    --radius: 24px;
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+
+    -webkit-tap-highlight-color: transparent;
+
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+html {
+    width: 100%;
+    min-height: 100%;
+
+    scroll-behavior: smooth;
+
+    background: #ffffff;
+
+    scrollbar-width: none;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+
+    padding-top: 5%;
+
+    color: var(--text);
+
+    font-family: "Quicksand", sans-serif;
+
+    overflow-x: hidden;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.container {
+    width: 100%;
+    max-width: 720px;
+
+    margin: 0 auto;
+
+    padding:
+        0
+        clamp(18px, 5vw, 34px)
+        60px;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+    width: 100%;
+
+    min-height: clamp(190px, 32vh, 270px);
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    padding-top: 20px;
+    padding-bottom: 104px;
+}
+
+.heroIcon {
+    width: 102px;
+    height: 102px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 18px;
+
+    background: #7c3aed;
+
+    border-radius: 22px;
+}
+
+.heroIcon img {
+    width: 48px;
+    height: 48px;
+
+    display: block;
+
+    object-fit: contain;
+
+    /* SVG branco -> branco preservado no fundo roxo */
+    filter: none;
+}
+
+
+/* =========================================================
+   HERO TAG
+========================================================= */
+
+.heroTag {
+    width: 100%;
+
+    min-height: 70px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto;
+
+    color: var(--text);
+
+    font-family: "Quicksand", sans-serif;
+
+    font-size: clamp(27px, 8vw, 42px);
+
+    font-weight: 800;
+
+    line-height: 1.1;
+
+    letter-spacing: -0.8px;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   SUBTÍTULO
+========================================================= */
+
+.heroSubtitle {
+    max-width: 500px;
+
+    color: var(--text-soft);
+
+    font-size: clamp(14px, 3.8vw, 17px);
+
+    font-weight: 500;
+
+    line-height: 1.5;
+
+    text-align: center;
+
+    margin-top: -5%;
+}
+
+
+/* =========================================================
+   SEÇÃO
+========================================================= */
+
+.section {
+    width: 100%;
+
+    margin-bottom: 34px;
+}
+
+.sectionHeader {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 13px;
+}
+
+.sectionTitle {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin-bottom: -1%;
+
+    color: var(--text-muted);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    line-height: 1;
+
+    text-transform: uppercase;
+}
+
+.sectionTitle::before {
+    content: "";
+
+    width: 5px;
+    height: 5px;
+
+    flex: 0 0 5px;
+
+    border-radius: 50%;
+
+    background: var(--pink);
+}
+
+
+/* =========================================================
+   LISTA
+========================================================= */
+
+.list {
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 9px;
+}
+
+
+/* =========================================================
+   BOTÃO
+========================================================= */
+
+.btn {
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    align-items: center;
+
+    padding: 26px;
+
+    gap: 20px;
+
+    border: 1px solid var(--line);
+
+    border-radius: var(--radius);
+
+    background: var(--surface);
+
+    color: var(--text);
+
+    font-family: "Quicksand", sans-serif;
+
+    cursor: pointer;
+
+    transition:
+        transform .15s ease,
+        background .15s ease,
+        border-color .15s ease;
+
+    padding-bottom: 15px;
+    padding-top: 15px;
+
+    margin-top: 1.5%;
+    margin-bottom: 1.5%;
+
+    box-shadow:
+        0 4px 18px rgba(0, 0, 0, .035);
+}
+
+.btn:active {
+    transform: scale(.985);
+
+    background: var(--surface-2);
+}
+
+.btn:hover {
+    background: var(--surface-2);
+
+    border-color: var(--line-light);
+}
+
+
+/* =========================================================
+   ÍCONES
+========================================================= */
+
+.emoji {
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    border-radius: 14px;
+
+    flex: 0 0 44px;
+}
+
+
+/* =========================================================
+   SVG EXTERNO — 2.svg, 3.svg, 4.svg...
+========================================================= */
+
+.emoji img[src$=".svg"] {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+    object-position: center;
+
+    /*
+     * Converte SVG branco para cinza escuro.
+     */
+    filter:
+        brightness(0)
+        saturate(100%)
+        invert(34%)
+        sepia(7%)
+        saturate(475%)
+        hue-rotate(190deg)
+        brightness(91%)
+        contrast(88%);
+}
+
+/* =========================================================
+   SVG INLINE
+========================================================= */
+
+.emoji svg {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    color: #555861 !important;
+}
+
+
+/* =========================================================
+   ÍCONE DO NAVEGADOR
+========================================================= */
+
+.emoji svg[fill="none"] {
+    fill: none !important;
+    stroke: #555861 !important;
+    color: #555861 !important;
+}
+
+.emoji svg[fill="none"] path,
+.emoji svg[fill="none"] circle {
+    fill: none !important;
+    stroke: #555861 !important;
+}
+
+
+/* =========================================================
+   ÍCONES ESPECIAIS
+========================================================= */
+
+.emoji svg[fill="#e3e3e3"] {
+    fill: #555861 !important;
+    color: #555861 !important;
+}
+
+.emoji svg[fill="#e3e3e3"] path {
+    fill: #555861 !important;
+    stroke: none !important;
+}
+
+.emoji img[src="11.png"] {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+    object-position: center;
+
+    filter:
+        brightness(0)
+        saturate(100%)
+        invert(34%)
+        sepia(7%)
+        saturate(475%)
+        hue-rotate(190deg)
+        brightness(91%)
+        contrast(88%);
+}
+
+/* =========================================================
+   SETAS
+========================================================= */
+
+.arrow {
+    width: 30px;
+    height: 30px;
+
+    flex: 0 0 30px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #858994;
+}
+
+.arrow svg {
+    width: 18px;
+    height: 18px;
+
+    display: block;
+
+    color: currentColor !important;
+
+    fill: none !important;
+
+    stroke: currentColor !important;
+}
+
+.arrow svg path {
+    fill: none !important;
+
+    stroke: currentColor !important;
+}
+
+
+/* =========================================================
+   CONTEÚDO
+========================================================= */
+
+.content {
+    min-width: 0;
+
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    gap: 3px;
+}
+
+.title {
+    color: var(--text);
+
+    font-size: 15px;
+
+    font-weight: 750;
+
+    line-height: 1.25;
+
+    white-space: normal;
+
+    overflow: hidden;
+
+    text-overflow: clip;
+}
+
+.description {
+    color: var(--text-muted);
+
+    font-size: 12px;
+
+    font-weight: 500;
+
+    line-height: 1.3;
+
+    white-space: normal;
+
+    overflow: hidden;
+
+    text-overflow: clip;
+}
+
+
+/* =========================================================
+   EMERGÊNCIA
+========================================================= */
+
+.emergency {
+    border-color: #f1cfd4;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff5f6 0%,
+            #fff0f2 100%
+        );
+
+    box-shadow:
+        0 4px 18px rgba(255, 79, 103, .06);
+}
+
+.emergency:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #fff0f2 0%,
+            #ffe9ed 100%
+        );
+
+    border-color: #eabac2;
+}
+
+.emergency:active {
+    background: #ffe9ed;
+}
+
+.emergency .title {
+    color: #d9364e;
+
+    white-space: normal;
+
+    overflow: hidden;
+
+    text-overflow: clip;
+}
+
+.emergency .description {
+    color: #a45c68;
+}
+
+.emergency .arrow {
+    color: #c05a68;
+}
+
+
+/* =========================================================
+   APPS
+========================================================= */
+
+.appCard {
+    min-height: 84px;
+}
+
+.appCard .emoji {
+    width: 50px;
+    height: 50px;
+
+    flex-basis: 50px;
+
+    border-radius: 15px;
+}
+
+.appCard .emoji img {
+    object-fit: cover;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.emptyState {
+    display: none;
+
+    width: 100%;
+
+    padding: 34px 20px;
+
+    border: 1px solid var(--line);
+
+    border-radius: 22px;
+
+    background: var(--surface);
+
+    text-align: center;
+
+    box-shadow:
+        0 4px 18px rgba(0, 0, 0, .035);
+}
+
+.emptyIcon {
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 12px;
+
+    border-radius: 14px;
+
+    background: #f0f1f4;
+
+    color: #777b85;
+}
+
+.emptyIcon svg {
+    width: 23px;
+    height: 23px;
+
+    color: currentColor;
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .container {
+        padding-left: clamp(18px, 5vw, 34px);
+        padding-right: clamp(18px, 5vw, 34px);
+    }
+}
+
+
+/* =========================================================
+   BARRA DE ROLAGEM
+========================================================= */
+
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+html {
+    scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
+
+    * {
+        animation-name: none !important;
+    }
+}
+
+</style>
+
+
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+<header class="hero">
+
+    <div class="heroIcon">
+        <img src="1.svg" alt="">
+    </div>
+
+        <div class="heroTag">
+            Meus Acessos
+        </div>
+
+        <div class="heroSubtitle">
+            Tudo o que você precisa, organizado em um só lugar.
+        </div>
+        
+</header>
+
+
+
+
+    <!-- =====================================================
+         BUSCA
+    ====================================================== -->
+
+
+
+
+    <!-- =====================================================
+         RECURSOS DO APLICATIVO
+    ====================================================== -->
+
+    <section
+        class="section"
+        data-section
+    >
+
+        <div class="sectionHeader">
+
+            <h2 class="sectionTitle">
+                Recursos do aplicativo
+            </h2>
+
+
+
+        </div>
+
+
+        <div class="list">
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="calendario menstrual ciclo"
+                onclick="ir('calendario.html')"
+            >
+
+                <div class="emoji">
+                    <img src="2.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Calendário menstrual
+                    </div>
+
+                    <div class="description">
+                        Acompanhe seu ciclo
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="calendario eventos"
+                onclick="ir('calendar.html')"
+            >
+
+                <div class="emoji">
+                    <img src="3.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Calendário de eventos
+                    </div>
+
+                    <div class="description">
+                        Organize seus compromissos
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="mapa região localização"
+                onclick="ir('mapa.html')"
+            >
+
+                <div class="emoji">
+                    <img src="4.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Mapa da sua região
+                    </div>
+
+                    <div class="description">
+                        Visualize locais próximos
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="diário anotações caderno"
+                onclick="ir('caderno.html')"
+            >
+
+                <div class="emoji">
+                    <img src="5.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Diário e anotações
+                    </div>
+
+                    <div class="description">
+                        Escreva e guarde seus registros
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="rotina gamificada treino"
+                onclick="ir('treino.html')"
+            >
+
+                <div class="emoji">
+                    <img src="6.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Rotina gamificada
+                    </div>
+
+                    <div class="description">
+                        Transforme tarefas em desafios
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="relógio localização"
+                onclick="ir('daora.html')"
+            >
+
+                <div class="emoji">
+                    <img src="7.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Relógio + Localização
+                    </div>
+
+                    <div class="description">
+                        Horário e posição atual
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="calculadora cálculo"
+                onclick="ir('calc.html')"
+            >
+
+                <div class="emoji">
+                    <img src="8.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Calculadora
+                    </div>
+
+                    <div class="description">
+                        Faça seus cálculos rapidamente
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="tarefas lista"
+                onclick="ir('task.html')"
+            >
+
+                <div class="emoji">
+                    <img src="9.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Minhas tarefas
+                    </div>
+
+                    <div class="description">
+                        Organize o que precisa fazer
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="navegador internet web"
+                onclick="ir('navegador.html')"
+            >
+
+                <div class="emoji">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="9"
+                        ></circle>
+
+                        <path
+                            d="M3 12h18"
+                        ></path>
+
+                        <path
+                            d="M12 3c2.3 2.5 3.5 5.5 3.5 9S14.3 18.5 12 21"
+                        ></path>
+
+                        <path
+                            d="M12 3c-2.3 2.5-3.5 5.5-3.5 9S9.7 18.5 12 21"
+                        ></path>
+
+                    </svg>
+
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Navegador
+                    </div>
+
+                    <div class="description">
+                        Acesse páginas da internet
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         OUTRAS FUNÇÕES
+    ====================================================== -->
+
+    <section
+        class="section"
+        data-section
+    >
+
+        <div class="sectionHeader">
+
+            <h2 class="sectionTitle">
+                Outras funções
+            </h2>
+
+
+
+        </div>
+
+
+        <div class="list">
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="gravador voz áudio"
+                onclick="androidCall('openRecorder')"
+            >
+
+                <div class="emoji">
+                    <img src="10.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Gravador de voz
+                    </div>
+
+                    <div class="description">
+                        Grave áudios rapidamente
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="arquivos gerenciador"
+                onclick="androidCall('openFiles')"
+            >
+
+                <div class="emoji">
+                    <img src="11.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Meus arquivos
+                    </div>
+
+                    <div class="description">
+                        Acesse seus arquivos
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="arquivos gerenciador"
+                onclick="ir('pesquisar.html')"
+            >
+
+                <div class="emoji">
+                    <img src="pes.svg" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Tela de aplicativos 
+                    </div>
+
+                    <div class="description">
+                        Acesse seus apps
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         EMERGÊNCIA
+    ====================================================== -->
+
+    <section
+        class="section"
+        data-section
+    >
+
+        <div class="sectionHeader">
+
+            <h2 class="sectionTitle">
+                Emergência
+            </h2>
+
+
+
+        </div>
+
+
+        <div class="list">
+
+
+            <button
+                class="btn emergency"
+                type="button"
+                data-search="bloquear dispositivo tela segurança"
+                onclick="androidCall('bloquearTela')"
+            >
+
+                <div class="emoji">
+                    <img src="11.png" alt="">
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Bloquear dispositivo
+                    </div>
+
+                    <div class="description">
+                        Bloqueie a tela imediatamente
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+        </div>
+
+    </section>
+
+    <!-- =====================================================
+         Especial, só para você!
+    ====================================================== -->
+
+    <section
+        class="section"
+        data-section
+    >
+
+        <div class="sectionHeader">
+
+            <h2 class="sectionTitle">
+                Especial, só para você!
+            </h2>
+
+
+
+        </div>
+
+
+        <div class="list">
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="dia mulheres feliz"
+                onclick="ir('dia.html')"
+            >
+
+                <div class="emoji">
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M400-120v-200h-61q-21 0-33-17.5t-4-37.5l100-253q10-24 31-38t47-14q26 0 47 14t31 38l100 253q8 20-4 37.5T621-320h-61v200q0 17-11.5 28.5T520-80h-80q-17 0-28.5-11.5T400-120Zm23.5-623.5Q400-767 400-800t23.5-56.5Q447-880 480-880t56.5 23.5Q560-833 560-800t-23.5 56.5Q513-720 480-720t-56.5-23.5Z"/></svg>
+
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Feliz Dia das Mulheres!
+                    </div>
+
+                    <div class="description">
+                        Um jogo gamificado 
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+            <button
+                class="btn"
+                type="button"
+                data-search="100 direitos"
+                onclick="ir('texto.html')"
+            >
+
+                <div class="emoji">
+                
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M200-200h400q17 0 28.5 11.5T640-160q0 17-11.5 28.5T600-120H200q-17 0-28.5-11.5T160-160q0-17 11.5-28.5T200-200Zm129-171L216-484q-23-23-23.5-56.5T215-597l29-29 228 226-29 29q-23 23-57 23t-57-23Zm311-197L414-796l29-29q23-23 56.5-22.5T556-824l113 113q23 23 23 57t-23 57l-29 29Zm156 380L302-682l56-56 494 494q11 11 11 28t-11 28q-11 11-28 11t-28-11Z"/></svg>
+
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                    100 dos seus direitos
+                    </div>
+
+                    <div class="description">
+                        seja amparada pela lei
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="dicas financeiras"                onclick="ir('texto1.html')"
+            >
+
+                <div class="emoji">
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M481-120q-17 0-28.5-11.5T441-160v-46q-45-10-79-35t-55-70q-7-14-.5-29.5T330-363q14-6 29 .5t23 21.5q17 30 43 45.5t64 15.5q41 0 69.5-18.5T587-356q0-35-22-55.5T463-458q-86-27-118-64.5T313-614q0-65 42-101t86-41v-44q0-17 11.5-28.5T481-840q17 0 28.5 11.5T521-800v44q38 6 66 24.5t46 45.5q9 13 3.5 29T614-634q-14 6-29 .5T557-653q-13-14-30.5-21.5T483-682q-44 0-67 19.5T393-614q0 33 30 52t104 40q69 20 104.5 63.5T667-358q0 71-42 108t-104 46v44q0 17-11.5 28.5T481-120Z"/></svg>
+
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Dicas de como recuperar sua autonomia financeira 
+                    </div>
+
+                    <div class="description">
+                        Conhecimentos valiosos
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+            <button
+                class="btn"
+                type="button"
+                data-search="carta para você"
+                onclick="ir('texto2.html')"
+            >
+
+                <div class="emoji">
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M280-280q-33 0-56.5-23.5T200-360v-400q0-33 23.5-56.5T280-840h560q33 0 56.5 23.5T920-760v400q0 33-23.5 56.5T840-280H280Zm257-204L280-663v303h560v-303L583-484q-11 8-23 8t-23-8Zm23-82 280-194H280l280 194ZM120-120q-33 0-56.5-23.5T40-200v-460q0-17 11.5-28.5T80-700q17 0 28.5 11.5T120-660v460h620q17 0 28.5 11.5T780-160q0 17-11.5 28.5T740-120H120Zm720-546v-94H280v94-94h560v94Z"/></svg>
+
+                </div>
+
+                <div class="content">
+
+                    <div class="title">
+                        Uma carta para você, mulher!
+                    </div>
+
+                    <div class="description">
+                        Uma mensagem especial
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </div>
+
+            </button>
+
+
+        </div>
+
+    </section>
+
+
+
+        
+
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   NAVEGAÇÃO ENTRE PÁGINAS HTML
+========================================================= */
+
+function ir(pagina) {
+
+    if (
+        typeof pagina !== "string" ||
+        pagina.trim() === ""
+    ) {
+        return false;
+    }
+
+    try {
+
+        window.location.href = pagina;
+
+        return true;
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao navegar para:",
+            pagina,
+            erro
+        );
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   ANDROID BRIDGE
+========================================================= */
+
+function androidCall(metodo) {
+
+    if (
+        typeof metodo !== "string" ||
+        metodo.trim() === ""
+    ) {
+        console.warn("Método Android inválido.");
+        return false;
+    }
+
+
+    try {
+
+        /*
+         * Verifica se a interface Android existe.
+         */
+
+        if (
+            typeof Android === "undefined" ||
+            Android === null
+        ) {
+
+            console.warn(
+                "Interface Android não disponível."
+            );
+
+            return false;
+
+        }
+
+
+        /*
+         * Verifica se o método realmente existe
+         * no WebAppInterface.
+         */
+
+        if (
+            typeof Android[metodo] !== "function"
+        ) {
+
+            console.warn(
+                "Método Android não encontrado:",
+                metodo
+            );
+
+            return false;
+
+        }
+
+
+        /*
+         * Executa o método.
+         */
+
+        Android[metodo]();
+
+        return true;
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao executar método Android:",
+            metodo,
+            erro
+        );
+
+        return false;
+
+    }
+
+}
+
+
+
+/* =========================================================
+   DESATIVAR MENU DE CONTEXTO
+========================================================= */
+
+document.addEventListener(
+    "contextmenu",
+    function (event) {
+
+        event.preventDefault();
+
+    },
+    false
+);
+
+
+
+</script>
+
+
+</body>
+
+</html>

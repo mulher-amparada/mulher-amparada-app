@@ -1,0 +1,2310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+    <meta
+        name="description"
+        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
+    >
+
+<meta name="theme-color" content="#08080a">
+
+<title>Calendário</title>
+
+<style>
+/* =========================================================
+   RESET
+========================================================= */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+html {
+    min-height: 100%;
+
+    scrollbar-width: none;
+
+    background: #ffffff;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    font-family: "Quicksand", sans-serif;
+
+    color: #17181c;
+
+    background: #ffffff;
+
+    overflow-x: hidden;
+
+    -webkit-font-smoothing: antialiased;
+
+    padding-bottom: 5%;
+    padding-top: 5%;
+}
+
+
+/* =========================================================
+   FONTE
+========================================================= */
+
+@font-face {
+    font-family: "Quicksand";
+    src: url("font.ttf") format("truetype");
+    font-display: swap;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+* {
+    scrollbar-width: none;
+    scrollbar-color: transparent transparent;
+}
+
+*::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background: transparent;
+}
+
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-corner {
+    background: transparent;
+    border: 0;
+}
+
+
+/* =========================================================
+   SVG
+========================================================= */
+
+svg {
+    width: 25px;
+    height: 25px;
+}
+
+
+/* =========================================================
+   SELEÇÃO
+========================================================= */
+
+::selection {
+    background: rgba(0,0,0,.10);
+    color: #17181c;
+}
+
+
+/* =========================================================
+   ANIMAÇÃO
+========================================================= */
+
+@keyframes modalIn {
+
+    from {
+        opacity: 0;
+        transform: scale(.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app {
+
+    width: 100%;
+    max-width: 1000px;
+
+    height: 98%;
+
+    margin: 0 auto;
+
+    padding:
+        max(20px, env(safe-area-inset-top))
+        16px
+        max(28px, env(safe-area-inset-bottom));
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding: 10px 0 20px;
+}
+
+
+/* =========================================================
+   TÍTULO
+========================================================= */
+
+.title-area {
+
+    flex: 1;
+
+    min-width: 0;
+
+    text-align: center;
+}
+
+.title {
+
+    margin: 0;
+
+    font-size: 25px;
+
+    line-height: 1.1;
+
+    font-weight: 700;
+
+    letter-spacing: -.6px;
+
+    text-transform: capitalize;
+
+    color: #17181c;
+}
+
+.subtitle {
+
+    margin-top: 6px;
+
+    font-size: 12px;
+
+    color: #777b85;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   BOTÕES DE NAVEGAÇÃO
+========================================================= */
+
+.icon-btn {
+
+    border: 1px solid #e1e2e6;
+
+    background: #f5f6f8;
+
+    color: #17181c;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    transition:
+        background .12s ease,
+        transform .12s ease;
+
+    width: 42px;
+    height: 42px;
+
+    min-width: 42px;
+    min-height: 42px;
+
+    padding: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    line-height: 0;
+}
+
+
+.icon-btn svg {
+
+    display: block;
+
+    width: 22px;
+    height: 22px;
+
+    flex: none;
+
+    fill: #555861;
+}
+
+
+/* =========================================================
+   HOVER
+========================================================= */
+
+@media (hover:hover) {
+
+    .icon-btn:hover {
+
+        background: #eceef1;
+
+    }
+
+}
+
+
+/* =========================================================
+   TOQUE
+========================================================= */
+
+.icon-btn:active,
+.action-btn:active,
+.close-btn:active {
+
+    transform: scale(.96);
+
+}
+
+
+/* =========================================================
+   RESUMO
+========================================================= */
+
+.summary {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0,1fr));
+
+    gap: 10px;
+
+    margin-bottom: 16px;
+}
+
+
+.summary-card {
+
+    min-width: 0;
+
+    padding: 13px 15px;
+
+    border: 1px solid #e1e2e6;
+
+    border-radius: 16px;
+
+    background: #f5f6f8;
+
+}
+
+
+.summary-label {
+
+    color: #777b85;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+.summary-value {
+
+    margin-top: 4px;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    color: #17181c;
+}
+
+
+/* =========================================================
+   CALENDÁRIO
+========================================================= */
+
+.calendar {
+
+    overflow: hidden;
+
+    border: 1px solid #e1e2e6;
+
+    border-radius: 22px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.08);
+
+    height: 98%;
+}
+
+
+/* =========================================================
+   DIAS DA SEMANA
+========================================================= */
+
+.weekdays {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, minmax(0,1fr));
+
+    border-bottom: 1px solid #e5e6e9;
+}
+
+
+.weekday {
+
+    padding: 13px 4px;
+
+    text-align: center;
+
+    color: #777b85;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .4px;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.calendar-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, minmax(0,1fr));
+}
+
+
+/* =========================================================
+   DIA
+========================================================= */
+
+.day {
+
+    position: relative;
+
+    min-height: 105px;
+
+    padding: 10px;
+
+    border-right:
+        1px solid #eeeeef;
+
+    border-bottom:
+        1px solid #eeeeef;
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    transition:
+        background .10s ease;
+
+    contain: layout paint;
+}
+
+
+.day:nth-child(7n) {
+
+    border-right: 0;
+
+}
+
+
+/* =========================================================
+   HOVER
+========================================================= */
+
+@media (hover:hover) {
+
+    .day:hover {
+
+        background:
+            #f7f7f8;
+
+    }
+
+}
+
+
+/* =========================================================
+   TOQUE
+========================================================= */
+
+.day:active {
+
+    background:
+        #f0f1f3;
+
+}
+
+
+/* =========================================================
+   FORA DO MÊS
+========================================================= */
+
+.day.other-month {
+
+    opacity: .30;
+
+}
+
+
+/* =========================================================
+   NÚMERO
+========================================================= */
+
+.day-number {
+
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color: #3f4249;
+}
+
+
+/* =========================================================
+   HOJE
+========================================================= */
+
+.day.today .day-number {
+
+    background: #17181c;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,.14);
+}
+
+
+/* =========================================================
+   NOME DO DIA
+========================================================= */
+
+.day-name {
+
+    display: none;
+
+    margin-top: 3px;
+
+    color: #777b85;
+
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   EVENTO
+========================================================= */
+
+.event {
+
+    margin-top: 9px;
+
+    padding: 7px 8px;
+
+    border-radius: 9px;
+
+    background:
+        #f1f2f4;
+
+    border:
+        1px solid #e3e4e7;
+
+    color: #4b4e56;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    line-height: 1.3;
+
+    overflow: hidden;
+
+    display: -webkit-box;
+
+    -webkit-line-clamp: 3;
+
+    -webkit-box-orient: vertical;
+}
+
+
+/* =========================================================
+   SEM EVENTO
+========================================================= */
+
+.no-event {
+
+    margin-top: 12px;
+
+    width: 4px;
+    height: 4px;
+
+    border-radius: 50%;
+
+    background: #c5c7cc;
+}
+
+
+/* =========================================================
+   INDICADOR DE EVENTO
+========================================================= */
+
+.day.has-event::after {
+
+    content: "";
+
+    position: absolute;
+
+    top: 9px;
+    right: 9px;
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #555861;
+
+    opacity: .75;
+}
+
+
+/* =========================================================
+   RODAPÉ
+========================================================= */
+
+.footer {
+
+    margin-top: 18px;
+
+    text-align: center;
+
+    color: #858994;
+
+    font-size: 10px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   MODAL BACKDROP
+========================================================= */
+
+.modal-backdrop {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 100;
+
+    display: none;
+
+    align-items: flex-end;
+
+    justify-content: center;
+
+    padding: 16px;
+
+    background:
+        rgba(255,255,255,.72);
+}
+
+
+.modal-backdrop.show {
+
+    display: flex;
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal {
+
+    width: 100%;
+
+    max-width: 500px;
+
+    padding: 20px;
+
+    border:
+        1px solid #e1e2e6;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f5f6f8
+        );
+
+    box-shadow:
+        0 20px 55px rgba(0,0,0,.16);
+
+    animation:
+        modalIn .20s ease-out both;
+}
+
+
+/* =========================================================
+   MODAL HEADER
+========================================================= */
+
+.modal-header {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+}
+
+
+.modal-title {
+
+    margin: 0;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    color: #17181c;
+}
+
+
+.modal-date {
+
+    margin-top: 5px;
+
+    color: #777b85;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    text-transform: capitalize;
+}
+
+
+/* =========================================================
+   FECHAR
+========================================================= */
+
+.close-btn {
+
+    width: 34px;
+    height: 34px;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    background:
+        #f0f1f3;
+
+    color: #666a74;
+
+    cursor: pointer;
+
+    font-size: 18px;
+
+    font-family: inherit;
+
+    transition:
+        background .12s ease,
+        transform .12s ease;
+}
+
+
+/* =========================================================
+   TEXTAREA
+========================================================= */
+
+textarea {
+
+    width: 100%;
+
+    min-height: 125px;
+
+    resize: vertical;
+
+    padding: 14px;
+
+    border:
+        1px solid #dfe1e5;
+
+    border-radius: 15px;
+
+    outline: none;
+
+    background: #ffffff;
+
+    color: #17181c;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+textarea:focus {
+
+    border-color:
+        #bfc2c8;
+
+}
+
+
+textarea::placeholder {
+
+    color: #999ca4;
+
+}
+
+
+/* =========================================================
+   AÇÕES
+========================================================= */
+
+.modal-actions {
+
+    display: flex;
+
+    gap: 9px;
+
+    margin-top: 12px;
+}
+
+
+.action-btn {
+
+    flex: 1;
+
+    min-height: 44px;
+
+    border:
+        1px solid #e0e1e5;
+
+    border-radius: 130px;
+
+    background:
+        #f3f4f6;
+
+    color: #3f4249;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background .12s ease,
+        transform .12s ease;
+}
+
+
+@media (hover:hover) {
+
+    .action-btn:hover {
+
+        background:
+            #e9eaed;
+
+    }
+
+}
+
+
+.action-btn.primary {
+
+    background: #17181c;
+
+    color: #ffffff;
+
+    border-color: #17181c;
+}
+
+
+.action-btn.danger {
+
+    color: #e45f6d;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:650px) {
+
+    .app {
+
+        height: 98%;
+
+        padding-left: 10px;
+
+        padding-right: 10px;
+    }
+
+
+    .header {
+
+        padding-top: 4px;
+    }
+
+
+    .title {
+
+        font-size: 21px;
+    }
+
+
+    .subtitle {
+
+        font-size: 10px;
+    }
+
+
+    .summary {
+
+        gap: 7px;
+    }
+
+
+    .summary-card {
+
+        padding: 11px 12px;
+    }
+
+
+    .summary-value {
+
+        font-size: 18px;
+    }
+
+
+    .calendar {
+
+        border-radius: 18px;
+
+        height: 98%;
+    }
+
+
+    .weekday {
+
+        padding: 11px 2px;
+
+        font-size: 8px;
+    }
+
+
+    .day {
+
+        min-height: 82px;
+
+        padding: 7px;
+    }
+
+
+    .day-number {
+
+        width: 25px;
+        height: 25px;
+
+        font-size: 11px;
+    }
+
+
+    .event {
+
+        margin-top: 6px;
+
+        padding: 5px 6px;
+
+        font-size: 8px;
+
+        border-radius: 7px;
+
+        -webkit-line-clamp: 2;
+    }
+
+
+    .day.has-event::after {
+
+        top: 7px;
+        right: 7px;
+
+        width: 4px;
+        height: 4px;
+    }
+
+
+    .modal-backdrop {
+
+        padding: 10px;
+
+        margin-bottom: 12%;
+    }
+
+
+    .modal {
+
+        padding: 17px;
+
+        border-radius: 21px;
+    }
+
+}
+
+
+/* =========================================================
+   CELULARES PEQUENOS
+========================================================= */
+
+@media(max-width:390px) {
+
+    .day {
+
+        min-height: 70px;
+
+        padding: 5px;
+    }
+
+
+    .day-number {
+
+        width: 22px;
+        height: 22px;
+
+        font-size: 10px;
+    }
+
+
+    .event {
+
+        font-size: 7px;
+
+        padding: 4px;
+
+        margin-top: 4px;
+    }
+
+}
+
+
+/* =========================================================
+   DESKTOP
+========================================================= */
+
+@media(min-width:800px) {
+
+    .app {
+
+        height: 98%;
+
+        padding-top: 35px;
+    }
+
+
+    .day {
+
+        min-height: 125px;
+    }
+
+
+    .day-name {
+
+        display: block;
+    }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
+
+    * {
+        animation-name: none !important;
+    }
+}
+
+</style>
+
+
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- =====================================================
+         HEADER
+    ===================================================== -->
+
+    <header class="header">
+
+
+        <button
+            class="icon-btn"
+            id="prevBtn"
+            aria-label="Mês anterior"
+        >
+
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 -960 960 960"
+                fill="#ffffff"
+            >
+
+                <path
+                    d="m382-480 294 294q15 15 14.5 35T675-116q-15 15-35 15t-35-15L297-423q-12-12-18-27t-6-30q0-15 6-30t18-27l308-308q15-15 35.5-14.5T676-844q15 15 15 35t-15 35L382-480Z"
+                />
+
+            </svg>
+
+        </button>
+
+
+        <div class="title-area">
+
+            <h1
+                class="title"
+                id="title"
+            >
+                Calendário
+            </h1>
+
+
+            <div
+                class="subtitle"
+                id="subtitle"
+            >
+                Carregando...
+            </div>
+
+        </div>
+
+
+        <button
+            class="icon-btn"
+            id="nextBtn"
+            aria-label="Próximo mês"
+        >
+
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 -960 960 960"
+                fill="#ffffff"
+            >
+
+                <path
+                    d="M579-480 285-774q-15-15-14.5-35.5T286-845q15-15 35.5-15t35.5 15l307 308q12 12 18 27t6 30q0 15-6 30t-18 27L356-115q-15 15-35 14.5T286-116q-15-15-15-35.5t15-35.5l293-293Z"
+                />
+
+            </svg>
+
+        </button>
+
+    </header>
+
+
+    <!-- =====================================================
+         RESUMO
+    ===================================================== -->
+
+    <section class="summary">
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                Dias no mês
+            </div>
+
+
+            <div
+                class="summary-value"
+                id="daysCount"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                Eventos
+            </div>
+
+
+            <div
+                class="summary-value"
+                id="eventsCount"
+            >
+                0
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CALENDÁRIO
+    ===================================================== -->
+
+    <main class="calendar">
+
+
+        <div class="weekdays">
+
+            <div class="weekday">Dom</div>
+            <div class="weekday">Seg</div>
+            <div class="weekday">Ter</div>
+            <div class="weekday">Qua</div>
+            <div class="weekday">Qui</div>
+            <div class="weekday">Sex</div>
+            <div class="weekday">Sáb</div>
+
+        </div>
+
+
+        <div
+            class="calendar-grid"
+            id="grid"
+        ></div>
+
+    </main>
+
+
+    <div class="footer">
+
+        Toque em um dia para adicionar ou editar um evento
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL
+========================================================= -->
+
+<div
+    class="modal-backdrop"
+    id="modalBackdrop"
+>
+
+
+    <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+    >
+
+
+        <div class="modal-header">
+
+
+            <div>
+
+
+                <h2
+                    class="modal-title"
+                    id="modalTitle"
+                >
+                    Evento
+                </h2>
+
+
+                <div
+                    class="modal-date"
+                    id="modalDate"
+                ></div>
+
+            </div>
+
+
+            <button
+                class="close-btn"
+                id="closeModal"
+                aria-label="Fechar"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <textarea
+            id="eventInput"
+            maxlength="500"
+            placeholder="Digite seu evento..."
+        ></textarea>
+
+
+        <div class="modal-actions">
+
+
+            <button
+                class="action-btn danger"
+                id="deleteBtn"
+            >
+                Apagar
+            </button>
+
+
+            <button
+                class="action-btn"
+                id="cancelBtn"
+            >
+                Cancelar
+            </button>
+
+
+            <button
+                class="action-btn primary"
+                id="saveBtn"
+            >
+                Salvar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   ESTADO
+========================================================= */
+
+let current = new Date();
+
+let selectedDate = null;
+
+let events = {};
+
+
+/* =========================================================
+   ELEMENTOS
+========================================================= */
+
+const grid =
+    document.getElementById("grid");
+
+const title =
+    document.getElementById("title");
+
+const subtitle =
+    document.getElementById("subtitle");
+
+const daysCount =
+    document.getElementById("daysCount");
+
+const eventsCount =
+    document.getElementById("eventsCount");
+
+const modalBackdrop =
+    document.getElementById("modalBackdrop");
+
+const modalTitle =
+    document.getElementById("modalTitle");
+
+const modalDate =
+    document.getElementById("modalDate");
+
+const eventInput =
+    document.getElementById("eventInput");
+
+const deleteBtn =
+    document.getElementById("deleteBtn");
+
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+function loadEvents(){
+
+    try{
+
+        if(
+            typeof Cripto !== "undefined" &&
+            typeof Cripto.carregar === "function"
+        ){
+
+            const saved =
+                Cripto.carregar("events");
+
+
+            if(saved){
+
+                const parsed =
+                    JSON.parse(saved);
+
+
+                if(
+                    parsed &&
+                    typeof parsed === "object"
+                ){
+
+                    events = parsed;
+
+                    return;
+
+                }
+
+            }
+
+        }
+
+    }catch(error){
+
+        console.log(
+            "Erro ao carregar eventos:",
+            error
+        );
+
+    }
+
+    events = {};
+
+}
+
+
+function saveEvents(){
+
+    try{
+
+        if(
+            typeof Cripto !== "undefined" &&
+            typeof Cripto.salvar === "function"
+        ){
+
+            Cripto.salvar(
+                "events",
+                JSON.stringify(events)
+            );
+
+        }
+
+    }catch(error){
+
+        console.log(
+            "Erro ao salvar eventos:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   DATA LOCAL
+========================================================= */
+
+function dateKey(date){
+
+    const year =
+        date.getFullYear();
+
+
+    const month =
+        String(
+            date.getMonth() + 1
+        ).padStart(2,"0");
+
+
+    const day =
+        String(
+            date.getDate()
+        ).padStart(2,"0");
+
+
+    return `${year}-${month}-${day}`;
+
+}
+
+
+/* =========================================================
+   COMPARAR DATAS
+========================================================= */
+
+function isSameDay(a,b){
+
+    return (
+
+        a.getFullYear() ===
+            b.getFullYear()
+
+        &&
+
+        a.getMonth() ===
+            b.getMonth()
+
+        &&
+
+        a.getDate() ===
+            b.getDate()
+
+    );
+
+}
+
+
+/* =========================================================
+   FORMATAÇÕES
+========================================================= */
+
+function monthName(date){
+
+    return new Intl.DateTimeFormat(
+        "pt-BR",
+        {
+            month:"long"
+        }
+    ).format(date);
+
+}
+
+
+function fullDate(date){
+
+    return new Intl.DateTimeFormat(
+        "pt-BR",
+        {
+            weekday:"long",
+            day:"numeric",
+            month:"long",
+            year:"numeric"
+        }
+    ).format(date);
+
+}
+
+
+/* =========================================================
+   CRIAR ELEMENTO
+========================================================= */
+
+function createElement(
+    tag,
+    className,
+    text
+){
+
+    const element =
+        document.createElement(tag);
+
+
+    if(className){
+
+        element.className =
+            className;
+
+    }
+
+
+    if(text !== undefined){
+
+        element.textContent =
+            text;
+
+    }
+
+
+    return element;
+
+}
+
+
+/* =========================================================
+   CONTAGEM
+========================================================= */
+
+function countMonthEvents(
+    year,
+    month
+){
+
+    let count = 0;
+
+
+    Object.keys(events).forEach(
+        key => {
+
+            const parts =
+                key.split("-");
+
+
+            if(parts.length !== 3){
+
+                return;
+
+            }
+
+
+            const y =
+                Number(parts[0]);
+
+
+            const m =
+                Number(parts[1]) - 1;
+
+
+            if(
+                y === year &&
+                m === month &&
+                events[key] &&
+                String(events[key]).trim()
+            ){
+
+                count++;
+
+            }
+
+        }
+    );
+
+
+    return count;
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function render(){
+
+    grid.innerHTML = "";
+
+
+    const year =
+        current.getFullYear();
+
+
+    const month =
+        current.getMonth();
+
+
+    title.textContent =
+        `${monthName(current)} ${year}`;
+
+
+    subtitle.textContent =
+        "Calendário mensal";
+
+
+    const totalDays =
+        new Date(
+            year,
+            month + 1,
+            0
+        ).getDate();
+
+
+    daysCount.textContent =
+        totalDays;
+
+
+    eventsCount.textContent =
+        countMonthEvents(
+            year,
+            month
+        );
+
+
+    const firstDay =
+        new Date(
+            year,
+            month,
+            1
+        ).getDay();
+
+
+    const previousMonthLastDay =
+        new Date(
+            year,
+            month,
+            0
+        ).getDate();
+
+
+    /* =====================================================
+       MÊS ANTERIOR
+    ===================================================== */
+
+    for(
+        let i = firstDay - 1;
+        i >= 0;
+        i--
+    ){
+
+        const dayNumber =
+            previousMonthLastDay - i;
+
+
+        const date =
+            new Date(
+                year,
+                month - 1,
+                dayNumber
+            );
+
+
+        addDay(
+            date,
+            true
+        );
+
+    }
+
+
+    /* =====================================================
+       MÊS ATUAL
+    ===================================================== */
+
+    for(
+        let day = 1;
+        day <= totalDays;
+        day++
+    ){
+
+        const date =
+            new Date(
+                year,
+                month,
+                day
+            );
+
+
+        addDay(
+            date,
+            false
+        );
+
+    }
+
+
+    /* =====================================================
+       PRÓXIMO MÊS
+    ===================================================== */
+
+    const cells =
+        firstDay + totalDays;
+
+
+    const remaining =
+        (7 - (cells % 7)) % 7;
+
+
+    for(
+        let day = 1;
+        day <= remaining;
+        day++
+    ){
+
+        const date =
+            new Date(
+                year,
+                month + 1,
+                day
+            );
+
+
+        addDay(
+            date,
+            true
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ADICIONAR DIA
+========================================================= */
+
+function addDay(
+    date,
+    otherMonth
+){
+
+    const key =
+        dateKey(date);
+
+
+    const hasEvent =
+        !!(
+            events[key] &&
+            String(events[key]).trim()
+        );
+
+
+    const day =
+        createElement(
+            "div",
+            "day"
+        );
+
+
+    if(otherMonth){
+
+        day.classList.add(
+            "other-month"
+        );
+
+    }
+
+
+    if(
+        isSameDay(
+            date,
+            new Date()
+        )
+    ){
+
+        day.classList.add(
+            "today"
+        );
+
+    }
+
+
+    if(hasEvent){
+
+        day.classList.add(
+            "has-event"
+        );
+
+    }
+
+
+    const number =
+        createElement(
+            "div",
+            "day-number",
+            date.getDate()
+        );
+
+
+    day.appendChild(number);
+
+
+    if(hasEvent){
+
+        const event =
+            createElement(
+                "div",
+                "event",
+                events[key]
+            );
+
+
+        day.appendChild(event);
+
+    }else{
+
+        const dot =
+            createElement(
+                "div",
+                "no-event"
+            );
+
+
+        day.appendChild(dot);
+
+    }
+
+
+    day.addEventListener(
+        "click",
+        () => {
+
+            openModal(date);
+
+        }
+    );
+
+
+    grid.appendChild(day);
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function openModal(date){
+
+    selectedDate =
+        new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate()
+        );
+
+
+    const key =
+        dateKey(selectedDate);
+
+
+    const existing =
+        events[key] || "";
+
+
+    modalTitle.textContent =
+        existing
+            ? "Editar evento"
+            : "Novo evento";
+
+
+    modalDate.textContent =
+        fullDate(selectedDate);
+
+
+    eventInput.value =
+        existing;
+
+
+    deleteBtn.style.display =
+        existing
+            ? "block"
+            : "none";
+
+
+    modalBackdrop.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        () => {
+
+            eventInput.focus();
+
+        },
+        80
+    );
+
+}
+
+
+/* =========================================================
+   FECHAR MODAL
+========================================================= */
+
+function closeModal(){
+
+    modalBackdrop.classList.remove(
+        "show"
+    );
+
+
+    selectedDate =
+        null;
+
+}
+
+
+/* =========================================================
+   SALVAR
+========================================================= */
+
+function saveCurrentEvent(){
+
+    if(!selectedDate){
+
+        return;
+
+    }
+
+
+    const text =
+        eventInput.value.trim();
+
+
+    const key =
+        dateKey(selectedDate);
+
+
+    if(text){
+
+        events[key] =
+            text;
+
+    }else{
+
+        delete events[key];
+
+    }
+
+
+    saveEvents();
+
+    closeModal();
+
+    render();
+
+}
+
+
+/* =========================================================
+   APAGAR
+========================================================= */
+
+function deleteCurrentEvent(){
+
+    if(!selectedDate){
+
+        return;
+
+    }
+
+
+    const key =
+        dateKey(selectedDate);
+
+
+    if(events[key]){
+
+        delete events[key];
+
+        saveEvents();
+
+    }
+
+
+    closeModal();
+
+    render();
+
+}
+
+
+/* =========================================================
+   NAVEGAÇÃO
+========================================================= */
+
+function changeMonth(step){
+
+    current =
+        new Date(
+            current.getFullYear(),
+            current.getMonth() + step,
+            1
+        );
+
+
+    render();
+
+}
+
+
+/* =========================================================
+   BOTÕES
+========================================================= */
+
+document
+    .getElementById("prevBtn")
+    .addEventListener(
+        "click",
+        () => changeMonth(-1)
+    );
+
+
+document
+    .getElementById("nextBtn")
+    .addEventListener(
+        "click",
+        () => changeMonth(1)
+    );
+
+
+document
+    .getElementById("saveBtn")
+    .addEventListener(
+        "click",
+        saveCurrentEvent
+    );
+
+
+deleteBtn
+    .addEventListener(
+        "click",
+        deleteCurrentEvent
+    );
+
+
+document
+    .getElementById("cancelBtn")
+    .addEventListener(
+        "click",
+        closeModal
+    );
+
+
+document
+    .getElementById("closeModal")
+    .addEventListener(
+        "click",
+        closeModal
+    );
+
+
+/* =========================================================
+   CLICAR FORA DO MODAL
+========================================================= */
+
+modalBackdrop.addEventListener(
+    "click",
+    event => {
+
+        if(
+            event.target ===
+            modalBackdrop
+        ){
+
+            closeModal();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   TECLADO
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if(event.key === "Escape"){
+
+            closeModal();
+
+        }
+
+
+        if(
+            event.key === "ArrowLeft" &&
+            !modalBackdrop.classList.contains("show")
+        ){
+
+            changeMonth(-1);
+
+        }
+
+
+        if(
+            event.key === "ArrowRight" &&
+            !modalBackdrop.classList.contains("show")
+        ){
+
+            changeMonth(1);
+
+        }
+
+
+        if(
+            event.ctrlKey &&
+            event.key === "Enter" &&
+            modalBackdrop.classList.contains("show")
+        ){
+
+            saveCurrentEvent();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SWIPE NO CELULAR
+========================================================= */
+
+let touchStartX = 0;
+
+let touchStartY = 0;
+
+
+document
+    .querySelector(".calendar")
+    .addEventListener(
+        "touchstart",
+        event => {
+
+            const touch =
+                event.changedTouches[0];
+
+
+            touchStartX =
+                touch.screenX;
+
+
+            touchStartY =
+                touch.screenY;
+
+        },
+        {
+            passive:true
+        }
+    );
+
+
+document
+    .querySelector(".calendar")
+    .addEventListener(
+        "touchend",
+        event => {
+
+            const touch =
+                event.changedTouches[0];
+
+
+            const diffX =
+                touch.screenX -
+                touchStartX;
+
+
+            const diffY =
+                touch.screenY -
+                touchStartY;
+
+
+            if(
+                Math.abs(diffX) > 70 &&
+                Math.abs(diffX) >
+                Math.abs(diffY)
+            ){
+
+                if(diffX > 0){
+
+                    changeMonth(-1);
+
+                }else{
+
+                    changeMonth(1);
+
+                }
+
+            }
+
+        },
+        {
+            passive:true
+        }
+    );
+
+
+/* =========================================================
+   CARREGAR
+========================================================= */
+
+loadEvents();
+
+render();
+
+</script>
+
+
+
+</body>
+
+</html>

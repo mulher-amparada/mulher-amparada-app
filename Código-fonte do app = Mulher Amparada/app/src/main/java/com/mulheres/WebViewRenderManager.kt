@@ -106,7 +106,7 @@ class WebViewRenderManager(
                 !rendererAlive
             ) {
                 pendingAction = null
-                return@Choreographer.FrameCallback
+                return
             }
 
             val action =

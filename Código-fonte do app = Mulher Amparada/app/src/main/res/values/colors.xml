@@ -41,6 +41,8 @@
 
 <color name="recorder_hint">#666666</color>
 
+<color name="recorder_ring">#7E7E7E</color>
+
 <color name="file_background">#FFFFFF</color>
 
 <color name="file_item_name">#000000</color>

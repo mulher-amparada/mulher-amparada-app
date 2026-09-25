@@ -1071,20 +1071,13 @@ button:focus-visible {
 
     margin: 0;
 
-    fill: #ffffff;
+    
 
     color: #ffffff;
 
     pointer-events: none;
 
 }
-
-svg {
-
-    margin: 5%;
-
-}
-
 
 /* =========================================================
    HOVER / TOQUE / FOCO
@@ -3754,7 +3747,30 @@ svg {
 
 }
 
+/* =========================================================
+   TODOS OS ÍCONES SVG — PRETO
+========================================================= */
 
+/* SVGs inseridos diretamente no HTML */
+svg {
+
+    fill: #000000 !important;
+
+    color: #000000 !important;
+
+    stroke: #000000 !important;
+
+}
+
+
+/* SVGs externos carregados por <img> */
+img[src$=".svg"] {
+
+    filter:
+        brightness(0)
+        saturate(100%) !important;
+
+}
 
 @media (prefers-reduced-motion: reduce) {
     /* Procura por QUALQUER elemento que use a sua animação e a desativa */

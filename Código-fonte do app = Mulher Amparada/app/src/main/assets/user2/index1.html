@@ -51,8 +51,7 @@ body {
     width: 100%;
     min-height: 100%;
 
-    background:
-        #f5f5f7;
+    background: transparent;
 }
 
 body {
@@ -69,6 +68,7 @@ button {
 
 img {
     display: block;
+    
 }
 
 
@@ -1519,7 +1519,12 @@ img {
 
 }
 
-
+.hero-icon img,
+.metric-icon img,
+.wellbeing-icon img,
+.secret-button img {
+    filter: brightness(0);
+}
 @media (prefers-reduced-motion: reduce) {
     /* Procura por QUALQUER elemento que use a sua animação e a desativa */
 

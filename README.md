@@ -10,7 +10,7 @@ Um projeto totalmente gratuito e livre de anúncios, projetado por um menino aut
 
 E saibam que o projeto é: Source-Available
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3182**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3072**
 
 # ⚠️MURAL DE AVISOS:
 
@@ -824,6 +824,13 @@ Por isso, o WebView mantém esse comportamento limitado. A exceção é a tela d
 ### Sobre o tema escuro, o conforto visual e a discrição:
 
 O aplicativo oferece suporte a ícones monocromáticos, modo claro e modo escuro. O ícone do aplicativo também se adapta automaticamente ao tema selecionado, enquanto os sites acompanham a configuração, alterando seus fundos e elementos visuais conforme o modo ativo.
+
+E o site do github pages usa essa estrutura (os nomes dos arquivos podem varias):
+
+```
+<link rel="stylesheet" href="claro.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="escuro.css" media="(prefers-color-scheme: dark)">
+```
 
 ## Sobre as animações e o desempenho:
 

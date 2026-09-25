@@ -1,0 +1,1003 @@
+/* =========================================================
+   FONTE
+========================================================= */
+
+@font-face {
+
+    font-family: "Quicksand";
+
+    src: url("font.ttf") format("truetype");
+
+    font-display: swap;
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+    -webkit-backface-visibility: hidden;
+
+    backface-visibility: hidden;
+
+}
+
+
+/* =========================================================
+   BASE
+========================================================= */
+
+html {
+
+    scroll-behavior: smooth;
+
+    background: #f7f7f9;
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    background: #f7f7f9;
+
+    color: #17171c;
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+    overflow-x: hidden;
+
+    -webkit-tap-highlight-color: transparent;
+
+    animation:
+        fadeUp .75s ease both;
+}
+
+
+/* =========================================================
+   ANIMAÇÃO
+========================================================= */
+
+@keyframes fadeUp {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(10px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+
+}
+
+
+/* =========================================================
+   FUNDO
+========================================================= */
+
+.background {
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: -1;
+
+    overflow: hidden;
+}
+
+
+.background::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 330px;
+
+    height: 330px;
+
+    top: -170px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,105,169,.045),
+            transparent 70%
+        );
+
+    filter:
+        blur(30px);
+}
+
+
+.background::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 240px;
+
+    height: 240px;
+
+    right: -150px;
+
+    bottom: 5%;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,105,169,.025),
+            transparent 70%
+        );
+
+    filter:
+        blur(30px);
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app {
+
+    width:
+        min(100% - 30px, 560px);
+
+    margin:
+        0 auto;
+
+    width:
+        stretch;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header {
+
+    text-align:
+        center;
+
+    padding:
+        18px 0 27px;
+}
+
+
+.logo {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+
+    margin-bottom:
+        12px;
+
+    color:
+        #e84b88;
+
+    font-size:
+        9px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        2.5px;
+
+    text-transform:
+        uppercase;
+}
+
+
+.logo::before {
+
+    content:
+        "";
+
+    width:
+        5px;
+
+    height:
+        5px;
+
+    border-radius:
+        50%;
+
+    background:
+        #e84b88;
+
+    box-shadow:
+        0 0 9px
+        rgba(232,75,136,.28);
+}
+
+
+.header h1 {
+
+    font-size:
+        clamp(
+            29px,
+            8vw,
+            38px
+        );
+
+    line-height:
+        1;
+
+    letter-spacing:
+        -1.4px;
+
+    font-weight:
+        800;
+
+    color:
+        #17171c;
+}
+
+
+.header h1 span {
+
+    color:
+        #e84b88;
+}
+
+
+.header p {
+
+    max-width:
+        360px;
+
+    margin:
+        12px auto 0;
+
+    color:
+        #777982;
+
+    font-size:
+        12px;
+
+    line-height:
+        1.65;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.card {
+
+    position:
+        relative;
+
+    padding:
+        18px;
+
+    margin-bottom:
+        10px;
+
+    border:
+        1px solid
+        rgba(0,0,0,.08);
+
+    border-radius:
+        20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f1f1f5
+        );
+
+    box-shadow:
+        0 15px 45px
+        rgba(0,0,0,.08);
+}
+
+
+/* =========================================================
+   LABEL
+========================================================= */
+
+.label {
+
+    display:
+        block;
+
+    margin-bottom:
+        10px;
+
+    color:
+        #777982;
+
+    font-size:
+        9px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        1.8px;
+
+    text-transform:
+        uppercase;
+}
+
+
+/* =========================================================
+   INPUT
+========================================================= */
+
+.input-wrap {
+
+    position:
+        relative;
+}
+
+
+input {
+
+    width:
+        100%;
+
+    height:
+        52px;
+
+    padding:
+        0 15px;
+
+    border:
+        1px solid
+        #ddddE3;
+
+    border-radius:
+        14px;
+
+    outline:
+        none;
+
+    background:
+        #ffffff;
+
+    color:
+        #17171c;
+
+    font-family:
+        inherit;
+
+    font-size:
+        13px;
+
+    transition:
+        border-color .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+
+input::placeholder {
+
+    color:
+        #999aa2;
+}
+
+
+input:focus {
+
+    border-color:
+        rgba(232,75,136,.42);
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(232,75,136,.07);
+}
+
+
+/* =========================================================
+   BOTÕES
+========================================================= */
+
+.buttons {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:
+        8px;
+
+    margin-top:
+        9px;
+}
+
+
+button {
+
+    min-height:
+        45px;
+
+    border-radius:
+        103px;
+
+    font-family:
+        inherit;
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        transform .2s ease,
+        border-color .2s ease,
+        background .2s ease,
+        opacity .2s ease;
+}
+
+
+button:active {
+
+    transform:
+        scale(.97);
+}
+
+
+/* =========================================================
+   BOTÃO PRINCIPAL
+========================================================= */
+
+.primary {
+
+    border:
+        1px solid
+        #e84b88;
+
+    background:
+        #e84b88;
+
+    color:
+        #ffffff;
+}
+
+
+.primary:hover {
+
+    background:
+        #ef6098;
+
+    border-color:
+        #ef6098;
+}
+
+
+/* =========================================================
+   BOTÃO SECUNDÁRIO
+========================================================= */
+
+.dark {
+
+    border:
+        1px solid
+        #ddddE3;
+
+    background:
+        #ffffff;
+
+    color:
+        #303038;
+}
+
+
+.dark:hover {
+
+    border-color:
+        #c9c9d0;
+
+    background:
+        #f5f5f8;
+}
+
+
+/* =========================================================
+   QR
+========================================================= */
+
+.qr-area {
+
+    display:
+        none;
+
+    margin-top:
+        13px;
+
+    padding:
+        18px;
+
+    border:
+        1px solid
+        #ddddE3;
+
+    border-radius:
+        17px;
+
+    background:
+        #ffffff;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    animation:
+        qrIn .3s ease both;
+
+    height:
+        300px;
+}
+
+
+.qr-area.visible {
+
+    display:
+        flex;
+}
+
+
+.qr-area img,
+.qr-area canvas {
+
+    width:
+        200px !important;
+
+    height:
+        200px !important;
+
+    max-width:
+        100%;
+}
+
+
+@keyframes qrIn {
+
+    from {
+
+        opacity:
+            0;
+    }
+
+    to {
+
+        opacity:
+            1;
+    }
+
+}
+
+
+/* =========================================================
+   AÇÕES DO QR
+========================================================= */
+
+.qr-actions {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:
+        8px;
+
+    margin-top:
+        9px;
+}
+
+
+.qr-actions button {
+
+    display:
+        none;
+}
+
+
+.qr-actions.active button {
+
+    display:
+        block;
+}
+
+
+/* =========================================================
+   HISTÓRICO
+========================================================= */
+
+.history-header {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    margin-bottom:
+        12px;
+}
+
+
+.history-header h2 {
+
+    font-size:
+        14px;
+
+    font-weight:
+        700;
+
+    color:
+        #25252b;
+}
+
+
+.history-count {
+
+    color:
+        #858791;
+
+    font-size:
+        10px;
+}
+
+
+.history {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        7px;
+
+    max-height:
+        230px;
+
+    overflow-y:
+        auto;
+
+    scrollbar-width:
+        thin;
+
+    scrollbar-color:
+        #c9c9d0
+        transparent;
+}
+
+
+.history-empty {
+
+    padding:
+        18px;
+
+    border:
+        1px dashed
+        #d5d5dc;
+
+    border-radius:
+        14px;
+
+    color:
+        #858791;
+
+    font-size:
+        11px;
+
+    text-align:
+        center;
+}
+
+
+/* =========================================================
+   ITEM
+========================================================= */
+
+.item {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    min-width:
+        0;
+
+    padding:
+        11px;
+
+    border:
+        1px solid
+        #e0e0e5;
+
+    border-radius:
+        13px;
+
+    background:
+        #ffffff;
+}
+
+
+.item-text {
+
+    flex:
+        1;
+
+    min-width:
+        0;
+
+    overflow:
+        hidden;
+
+    color:
+        #777982;
+
+    font-size:
+        11px;
+
+    white-space:
+        nowrap;
+
+    text-overflow:
+        ellipsis;
+}
+
+
+.smallBtn {
+
+    flex-shrink:
+        0;
+
+    min-height:
+        29px;
+
+    padding:
+        0 11px;
+
+    border:
+        1px solid
+        rgba(232,75,136,.20);
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(232,75,136,.07);
+
+    color:
+        #d83f7b;
+
+    font-size:
+        9px;
+}
+
+
+.smallBtn:hover {
+
+    border-color:
+        rgba(232,75,136,.32);
+
+    background:
+        rgba(232,75,136,.12);
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast {
+
+    position:
+        fixed;
+
+    left:
+        50%;
+
+    bottom:
+        calc(
+            20px +
+            env(safe-area-inset-bottom)
+        );
+
+    z-index:
+        20;
+
+    padding:
+        10px 15px;
+
+    border:
+        1px solid
+        #ddddE3;
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(255,255,255,.96);
+
+    color:
+        #303038;
+
+    font-size:
+        10px;
+
+    box-shadow:
+        0 12px 35px
+        rgba(0,0,0,.14);
+
+    transform:
+        translate(-50%, 20px);
+
+    opacity:
+        0;
+
+    pointer-events:
+        none;
+
+    transition:
+        opacity .25s ease,
+        transform .25s ease;
+}
+
+
+.toast.show {
+
+    opacity:
+        1;
+
+    transform:
+        translate(-50%, 0);
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+
+    padding-top:
+        10px;
+
+    color:
+        #858791;
+
+    font-size:
+        9px;
+
+    letter-spacing:
+        1px;
+
+    text-align:
+        center;
+
+    text-transform:
+        uppercase;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .app {
+
+        width:
+            calc(100% - 26px);
+    }
+
+
+    .card {
+
+        padding:
+            15px;
+
+        border-radius:
+            18px;
+    }
+
+
+    input {
+
+        height:
+            50px;
+    }
+
+
+    .qr-area {
+
+        padding:
+            15px;
+    }
+
+
+    .qr-area img,
+    .qr-area canvas {
+
+        width:
+            185px !important;
+
+        height:
+            185px !important;
+    }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    * {
+
+        animation-name:
+            none !important;
+    }
+
+}

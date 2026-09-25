@@ -1,0 +1,670 @@
+/* =========================================================
+   FONTE
+========================================================= */
+
+@font-face {
+    font-family: "Quicksand";
+    src: url("font.ttf") format("truetype");
+    font-weight: 400 800;
+    font-display: swap;
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+
+    margin: 0;
+
+    padding: 0;
+
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
+html,
+body {
+
+    background: #f7f7f9;
+
+    width: 100%;
+
+    min-height: 100%;
+
+}
+
+body {
+
+    width: 88%;
+
+    margin-left: 6%;
+    margin-right: 6%;
+
+    min-height: 100vh;
+
+    padding:
+        25px 0 50px;
+
+    color: #17171c;
+
+    font-family:
+        "Quicksand",
+        Arial,
+        sans-serif;
+
+    overflow-x: hidden;
+
+}
+
+
+/* =========================================================
+   ENTRADA
+========================================================= */
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.container {
+
+    width: 100%;
+
+    max-width: 680px;
+
+    margin: 0 auto;
+
+}
+
+
+/* =========================================================
+   CABEÇALHO
+========================================================= */
+
+.topo {
+
+    position: relative;
+
+    padding:
+        25px 4px 35px;
+
+}
+
+
+.topo::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 3px;
+
+    top: 5px;
+
+    width: 34px;
+
+    height: 4px;
+
+    border-radius: 999px;
+
+    background:
+        #ff3f8f;
+
+    box-shadow:
+        0 0 16px
+        rgba(255,63,143,.18);
+
+}
+
+
+h1 {
+
+    font-size:
+        clamp(
+            38px,
+            10vw,
+            58px
+        );
+
+    line-height:
+        .98;
+
+    letter-spacing:
+        -2.5px;
+
+    font-weight:
+        800;
+
+    color:
+        #17171c;
+
+}
+
+
+.descricao {
+
+    max-width:
+        550px;
+
+    margin-top:
+        15px;
+
+    color:
+        #777982;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.7;
+
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.card {
+
+    position:
+        relative;
+
+    width:
+        100%;
+
+    padding:
+        28px;
+
+    overflow:
+        hidden;
+
+    isolation:
+        isolate;
+
+    border:
+        1px solid
+        rgba(0,0,0,.08);
+
+    border-radius:
+        30px;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f1f1f5
+        );
+
+    box-shadow:
+        none;
+
+}
+
+
+/* =========================================================
+   BOLHA DECORATIVA
+========================================================= */
+
+.card::before {
+
+    content: "";
+
+    position:
+        absolute;
+
+    z-index:
+        -1;
+
+    width:
+        250px;
+
+    height:
+        250px;
+
+    top:
+        -150px;
+
+    right:
+        -120px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(255,63,143,.055);
+
+    pointer-events:
+        none;
+
+}
+
+
+/* =========================================================
+   SEGUNDA BOLHA
+========================================================= */
+
+.card::after {
+
+    content: "";
+
+    position:
+        absolute;
+
+    z-index:
+        -1;
+
+    width:
+        140px;
+
+    height:
+        140px;
+
+    left:
+        -80px;
+
+    bottom:
+        -80px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(139,92,246,.035);
+
+    filter:
+        blur(15px);
+
+    pointer-events:
+        none;
+
+}
+
+
+/* =========================================================
+   ÍCONE / NÚMERO
+========================================================= */
+
+.numero {
+
+    width:
+        46px;
+
+    height:
+        46px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    margin-bottom:
+        20px;
+
+    border:
+        1px solid
+        rgba(0,0,0,.08);
+
+    border-radius:
+        15px;
+
+    background:
+        #eeeeF2;
+
+    color:
+        #e83f7f;
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+
+}
+
+
+/* =========================================================
+   TÍTULO
+========================================================= */
+
+.card h2 {
+
+    font-size:
+        25px;
+
+    line-height:
+        1.2;
+
+    letter-spacing:
+        -.6px;
+
+    font-weight:
+        800;
+
+    color:
+        #17171c;
+
+}
+
+
+/* =========================================================
+   DESCRIÇÃO
+========================================================= */
+
+.card p {
+
+    margin-top:
+        10px;
+
+    margin-bottom:
+        25px;
+
+    color:
+        #777982;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.7;
+
+}
+
+
+/* =========================================================
+   AÇÕES
+========================================================= */
+
+.acoes {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        10px;
+
+}
+
+
+/* =========================================================
+   BOTÕES
+========================================================= */
+
+.botao {
+
+    width:
+        100%;
+
+    min-height:
+        57px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        13px 20px;
+
+    border-radius:
+        50px;
+
+    text-decoration:
+        none;
+
+    font-family:
+        "Quicksand",
+        Arial,
+        sans-serif;
+
+    font-size:
+        13px;
+
+    font-weight:
+        800;
+
+    text-align:
+        center;
+
+    transition:
+
+        transform
+        .16s ease,
+
+        background
+        .16s ease,
+
+        border-color
+        .16s ease,
+
+        box-shadow
+        .16s ease;
+
+}
+
+
+.botao:active {
+
+    transform:
+        scale(.965);
+
+}
+
+
+/* =========================================================
+   BAIXAR
+========================================================= */
+
+.baixar {
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #ff3f8f,
+            #df2e76
+        );
+
+    border:
+        1px solid
+        #ff3f8f;
+
+    color:
+        #ffffff;
+
+    box-shadow:
+
+        0 9px 25px
+        rgba(255,63,143,.13);
+
+}
+
+
+.baixar:hover {
+
+    filter:
+        brightness(1.08);
+
+}
+
+
+/* =========================================================
+   CÓDIGO NO REPOSITÓRIO
+========================================================= */
+
+.app {
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid
+        #ddddE3;
+
+    color:
+        #25252b;
+
+}
+
+
+.app:hover {
+
+    background:
+        #f5f5f8;
+
+    border-color:
+        #ccccD3;
+
+}
+
+
+/* =========================================================
+   FOCO
+========================================================= */
+
+.botao:focus-visible {
+
+    outline:
+        2px solid
+        #ff3f8f;
+
+    outline-offset:
+        3px;
+
+}
+
+
+/* =========================================================
+   RODAPÉ
+========================================================= */
+
+.rodape {
+
+    margin-top:
+        28px;
+
+    text-align:
+        center;
+
+    color:
+        #858791;
+
+    font-size:
+        10px;
+
+    line-height:
+        1.7;
+
+}
+
+
+.rodape strong {
+
+    color:
+        #62646d;
+
+}
+
+
+/* =========================================================
+   CELULARES PEQUENOS
+========================================================= */
+
+@media (max-width: 380px) {
+
+    body {
+
+        padding-top:
+            15px;
+
+    }
+
+    .topo {
+
+        padding:
+            22px 3px 28px;
+
+    }
+
+    h1 {
+
+        font-size:
+            36px;
+
+    }
+
+    .card {
+
+        padding:
+            23px;
+
+        border-radius:
+            27px;
+
+    }
+
+    .card h2 {
+
+        font-size:
+            22px;
+
+    }
+
+}
+
+
+/* =========================================================
+   TELAS MAIORES
+========================================================= */
+
+@media (min-width: 600px) {
+
+    body {
+
+        padding-top:
+            35px;
+
+    }
+
+    .card {
+
+        padding:
+            31px;
+
+    }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    * {
+
+        animation-name:
+            none !important;
+
+    }
+
+}

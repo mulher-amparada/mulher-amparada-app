@@ -256,23 +256,33 @@ ViewCompat.setOnApplyWindowInsetsListener(webView) { view, insets ->
         // =====================================================
 
         val pagina =
-            intent?.getStringExtra(
-                "pagina"
-            )
+    intent?.getStringExtra(
+        "pagina"
+    )
 
-        if (!pagina.isNullOrEmpty()) {
+val pastaUsuario =
+    if (
+        (resources.configuration.uiMode and
+            android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
+            android.content.res.Configuration.UI_MODE_NIGHT_YES
+    ) {
+        "user1"
+    } else {
+        "user2"
+    }
 
-            webView.loadUrl(
-                "file:///android_asset/user1/$pagina"
-            )
+if (!pagina.isNullOrEmpty()) {
 
-        } else {
+    webView.loadUrl(
+        "file:///android_asset/$pastaUsuario/$pagina"
+    )
 
-            webView.loadUrl(
-                "file:///android_asset/user1/index1.html"
-            )
-        }
+} else {
 
+    webView.loadUrl(
+        "file:///android_asset/$pastaUsuario/index1.html"
+    )
+}
 
         // =====================================================
         // BOTÃO VOLTAR
@@ -878,29 +888,42 @@ override fun onPageStarted(
     // CARREGAR PÁGINAS
     // =========================================================
 
-    private fun carregarWebView1() {
+    private fun obterPastaTema(): String {
 
-        webView.loadUrl(
-            "file:///android_asset/user1/index1.html"
-        )
+    return if (
+        (resources.configuration.uiMode and
+            android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
+            android.content.res.Configuration.UI_MODE_NIGHT_YES
+    ) {
+        "user1"
+    } else {
+        "user2"
     }
+}
 
 
-    private fun carregarWebView2() {
+private fun carregarWebView1() {
 
-        webView.loadUrl(
-            "file:///android_asset/user1/carteira.html"
-        )
-    }
+    webView.loadUrl(
+        "file:///android_asset/${obterPastaTema()}/index1.html"
+    )
+}
 
 
-    private fun carregarWebView4() {
+private fun carregarWebView2() {
 
-        webView.loadUrl(
-            "file:///android_asset/user1/botao.html"
-        )
-    }
+    webView.loadUrl(
+        "file:///android_asset/${obterPastaTema()}/carteira.html"
+    )
+}
 
+
+private fun carregarWebView4() {
+
+    webView.loadUrl(
+        "file:///android_asset/${obterPastaTema()}/botao.html"
+    )
+}
 
     // =========================================================
     // SENSOR / CHACOALHAR

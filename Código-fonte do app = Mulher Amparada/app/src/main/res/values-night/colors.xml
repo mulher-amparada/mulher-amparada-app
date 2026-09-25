@@ -4,7 +4,6 @@
 <color name="recorder_background">#000000</color>
 
 <color name="recorder_title">#FFFFFF</color>
-
 <color name="recorder_subtitle">#999999</color>
 
 <color name="recorder_status_text">#DDDDDD</color>
@@ -34,5 +33,9 @@
 <color name="record_item_background">#1AFFFFFF</color>
 
 <color name="record_item_stroke">#33FFFFFF</color>
+
+<color name="record_text">#FFFFFF</color>
+
+<color name="file_item_name">#FFFFFF</color>
 
 </resources>

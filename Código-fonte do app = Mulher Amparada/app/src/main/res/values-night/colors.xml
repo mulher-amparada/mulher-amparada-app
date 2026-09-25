@@ -14,6 +14,9 @@
 
 <color name="recorder_ring">#434343</color>
 
+<color name="recorder_button">#222222</color>
+<color name="recorder_button_pressed">#242424</color>
+
 <color name="file_background">#000000</color>
 
 <color name="file_title">#FFFFFF</color>

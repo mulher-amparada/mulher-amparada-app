@@ -140,8 +140,7 @@ class WebViewRenderManager(
         webView.visibility =
             View.VISIBLE
 
-        webView.isOpaque =
-            false
+        
 
         webView.setWillNotDraw(
             false
@@ -1060,8 +1059,7 @@ class WebViewRenderManager(
         webView.visibility =
             View.VISIBLE
 
-        webView.isOpaque =
-            false
+        
 
         configurarRenderer()
 

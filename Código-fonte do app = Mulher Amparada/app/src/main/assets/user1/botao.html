@@ -10,27 +10,36 @@
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
 >
 
-    <meta
-        name="description"
-        content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência."
-    >
+<meta
+    name="description"
+    content="Área protegida do Mulher Amparada."
+>
 
 <meta name="theme-color" content="#000000">
 
-<title>Meus Acessos</title>
+<title>Área protegida</title>
+
 
 <style>
 
 /* =========================================================
-   FONT
+   FONTE
 ========================================================= */
 
 @font-face {
+
     font-family: "Quicksand";
-    src: url("file:///android_asset/font.ttf") format("truetype");
+
+    src:
+        url("file:///android_asset/font.ttf")
+        format("truetype");
+
     font-weight: 400 800;
+
     font-style: normal;
+
     font-display: swap;
+
 }
 
 
@@ -40,27 +49,32 @@
 
 :root {
 
-
-    --surface: #0d0d0f;
-    --surface-2: #121216;
-    --surface-3: #18181d;
-
-    --line: #24242a;
-    --line-light: #303038;
-    
     --pink: #ff3f82;
+    --pink-light: #ff79a9;
+
+    --purple: #8b5cf6;
+    --purple-light: #b69cff;
+
+    --blue: #6285ff;
+    --cyan: #4de2ff;
+
+    --green: #53e58a;
+
+    --red: #ff526b;
+
+    --white: #ffffff;
 
     --text: #ffffff;
-    --text-soft: #a6a6ae;
-    --text-muted: #707078;
+    --text-soft: #c7c7cf;
+    --text-muted: #777781;
 
-    --blue: #7c6cff;
-    --blue-2: #9589ff;
-    --blue-dark: #5548d8;
+    --surface: rgba(18,18,22,.88);
+    --surface-light: rgba(255,255,255,.045);
 
-    --danger: #ff4f67;
+    --line: rgba(255,255,255,.075);
+    --line-strong: rgba(255,255,255,.13);
 
-    --radius: 24px;
+    --radius: 25px;
 
 }
 
@@ -70,39 +84,105 @@
 ========================================================= */
 
 * {
+
     box-sizing: border-box;
+
     margin: 0;
     padding: 0;
-    -webkit-tap-highlight-color: transparent;
-    
-        -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
 
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
+    -webkit-tap-highlight-color: transparent;
+
 }
+
+
+/* =========================================================
+   HTML
+========================================================= */
 
 html {
+
     width: 100%;
+
     min-height: 100%;
-    
+
+    background: transparent;
+
     scroll-behavior: smooth;
+
 }
 
+
+/* =========================================================
+   BODY
+========================================================= */
+
 body {
+
     width: 100%;
+
     min-height: 100vh;
 
-padding-top: 5%;
-    
+    padding-top: 18%;
+
+    padding-bottom: 70px;
+
+    overflow-x: hidden;
+
+    background: transparent;
+
     color: var(--text);
 
     font-family: "Quicksand", sans-serif;
 
-    overflow-x: hidden;
-
     -webkit-font-smoothing: antialiased;
+
     text-rendering: optimizeLegibility;
+    
+    background: #000;
+}
+
+
+/* =========================================================
+   SELEÇÃO
+========================================================= */
+
+::selection {
+
+    background: rgba(255,63,130,.35);
+
+    color: #fff;
+
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+
+    width: 4px;
+
+}
+
+::-webkit-scrollbar-track {
+
+    background: transparent;
+
+}
+
+::-webkit-scrollbar-thumb {
+
+    background:
+
+        linear-gradient(
+            180deg,
+            var(--pink),
+            var(--purple)
+        );
+
+    border-radius: 50px;
+
 }
 
 
@@ -110,69 +190,190 @@ padding-top: 5%;
    CONTAINER
 ========================================================= */
 
-
-
-
 .container {
 
     width: 100%;
+
     max-width: 720px;
 
-    margin: 0 auto;
+    margin: auto;
 
     padding:
+
         0
-        clamp(18px, 5vw, 34px)
-        60px;
+        clamp(16px, 5vw, 34px);
 
 }
 
 
 /* =========================================================
-   HERO
+   ÁREA PROTEGIDA
 ========================================================= */
 
-.hero {
+.protectedArea {
+
+    position: relative;
 
     width: 100%;
 
-    min-height: clamp(190px, 32vh, 270px);
+    margin-bottom: 34px;
+
+    padding: 22px;
+
+    overflow: hidden;
+
+    border-radius: 32px;
+
+    border:
+
+        1px solid
+        rgba(255,255,255,.10);
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.055),
+            rgba(255,255,255,.015)
+        );
+
+    box-shadow:
+
+        0 20px 55px
+        rgba(0,0,0,.20);
+
+}
+
+
+/* =========================================================
+   BRILHO DO CARTÃO PRINCIPAL
+========================================================= */
+
+.protectedArea::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 240px;
+    height: 240px;
+
+    left: -120px;
+    top: -140px;
+
+    border-radius: 50%;
+
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(255,63,130,.20),
+            transparent 68%
+        );
+
+    filter: blur(20px);
+
+    pointer-events: none;
+
+}
+
+
+.protectedArea::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 220px;
+    height: 220px;
+
+    right: -130px;
+    bottom: -140px;
+
+    border-radius: 50%;
+
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(124,58,237,.18),
+            transparent 68%
+        );
+
+    filter: blur(20px);
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   TOPO DA ÁREA PROTEGIDA
+========================================================= */
+
+.protectedTop {
+
+    position: relative;
+
+    z-index: 2;
 
     display: flex;
-    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+}
+
+
+/* =========================================================
+   CHAVE
+========================================================= */
+
+.protectedKey {
+
+    width: 62px;
+    height: 62px;
+
+    flex: 0 0 62px;
+
+    display: flex;
 
     align-items: center;
     justify-content: center;
 
-    text-align: center;
+    border-radius: 21px;
 
-    padding-top: 20px;
-    padding-bottom: 104px;
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(255,63,130,.18),
+            rgba(124,58,237,.12)
+        );
+
+    border:
+
+        1px solid
+        rgba(255,255,255,.10);
+
+    box-shadow:
+
+        inset 0 1px 1px
+        rgba(255,255,255,.08),
+
+        0 10px 30px
+        rgba(0,0,0,.20);
 
 }
 
-.heroIcon {
 
-    width: 102px;
-    height: 102px;
+.protectedKey img {
 
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    margin: 0 auto 18px;
-
-    background: #7c3aed;
-
-    border-radius: 22px;
-
-}
-
-.heroIcon img {
-
-    width: 48px;
-    height: 48px;
+    width: 35px;
+    height: 35px;
 
     display: block;
 
@@ -180,147 +381,306 @@ padding-top: 5%;
 
 }
 
+
 /* =========================================================
-   HEROTAG
-   SEM BACKGROUND
+   TEXTO PRINCIPAL
 ========================================================= */
 
-.heroTag {
+.protectedText {
 
-    width: 100%;
+    min-width: 0;
 
-    min-height: 70px;
+    flex: 1;
+
+}
+
+
+.protectedLabel {
+
+    margin-bottom: 5px;
+
+    color: #898992;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 2.2px;
+
+    text-transform: uppercase;
+
+}
+
+
+.protectedTitle {
+
+    color: #fff;
+
+    font-size: clamp(20px, 5vw, 25px);
+
+    font-weight: 800;
+
+    line-height: 1.05;
+
+}
+
+
+.protectedDescription {
+
+    margin-top: 7px;
+
+    color: #8f8f98;
+
+    font-size: 11px;
+
+    font-weight: 500;
+
+    line-height: 1.4;
+
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.protectedStatus {
+
+    position: relative;
+
+    z-index: 2;
 
     display: flex;
 
     align-items: center;
-    justify-content: center;
 
-    margin: 0 auto;
+    gap: 7px;
 
-    color: #fff;
+    margin-top: 22px;
 
-    font-family: "Quicksand", sans-serif;
+    padding-top: 16px;
 
-    font-size: clamp(27px, 8vw, 42px);
+    border-top:
+
+        1px solid
+        rgba(255,255,255,.065);
+
+}
+
+
+.statusDot {
+
+    width: 7px;
+    height: 7px;
+
+    flex: 0 0 7px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    box-shadow:
+
+        0 0 0 4px
+        rgba(83,229,138,.08),
+
+        0 0 14px
+        rgba(83,229,138,.45);
+
+}
+
+
+.statusText {
+
+    color: #9b9ba4;
+
+    font-size: 10px;
+
+    font-weight: 650;
+
+}
+
+
+.statusText strong {
+
+    color: #d5d5db;
+
+    font-weight: 750;
+
+}
+
+
+/* =========================================================
+   MINI INDICADORES
+========================================================= */
+
+.securityStats {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 7px;
+
+    margin-top: 13px;
+
+}
+
+
+.securityStat {
+
+    min-width: 0;
+
+    padding: 11px 8px;
+
+    border-radius: 15px;
+
+    background:
+
+        rgba(255,255,255,.025);
+
+    border:
+
+        1px solid
+        rgba(255,255,255,.045);
+
+}
+
+
+.securityStat span {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #676771;
+
+    font-size: 8px;
 
     font-weight: 800;
 
-    line-height: 1.1;
+    letter-spacing: .7px;
 
-    letter-spacing: -0.8px;
+    text-transform: uppercase;
 
-    text-align: center;
+}
+
+
+.securityStat strong {
+
+    display: block;
+
+    color: #bdbdc5;
+
+    font-size: 10px;
+
+    font-weight: 700;
 
 }
 
 
 /* =========================================================
-   SUBTÍTULO
-========================================================= */
-
-.heroSubtitle {
-
-    max-width: 500px;
-
-    color: #fff;
-
-    font-size: clamp(14px, 3.8vw, 17px);
-
-    font-weight: 500;
-
-    line-height: 1.5;
-
-    text-align: center;
-    
-    margin-top: -5%;
-
-}
-
-
-
-
-/* =========================================================
-   SEÇÃO
+   SEÇÕES
 ========================================================= */
 
 .section {
 
     width: 100%;
 
-
-    margin-bottom: 34px;
+    margin-bottom: 30px;
 
 }
 
+
+/* =========================================================
+   CABEÇALHO DA SEÇÃO
+========================================================= */
 
 .sectionHeader {
 
     display: flex;
 
-
     align-items: center;
+
     justify-content: space-between;
 
-    margin-bottom: 13px;
+    gap: 15px;
+
+    margin-bottom: 12px;
+
+    padding:
+
+        0
+        5px;
 
 }
 
 
 .sectionTitle {
 
-    display:
-        flex;
+    display: flex;
 
-    align-items:
-        center;
+    align-items: center;
 
-    gap:
-        9px;
+    gap: 9px;
 
-    margin-bottom: -1%;
+    color: #777780;
 
-    color:
-        var(--muted);
+    font-size: 9px;
 
-    font-size:
-        10px;
+    font-weight: 800;
 
-    font-weight:
-        800;
+    letter-spacing: 1.8px;
 
-    letter-spacing:
-        2px;
+    line-height: 1;
 
-    line-height:
-        1;
-
-    text-transform:
-        uppercase;
+    text-transform: uppercase;
 
 }
+
 
 .sectionTitle::before {
 
-    content:
-        "";
+    content: "";
 
-    width:
-        5px;
+    width: 5px;
+    height: 5px;
 
-    height:
-        5px;
+    flex: 0 0 5px;
 
-    flex:
-        0 0 5px;
-
-    border-radius:
-        50%;
+    border-radius: 50%;
 
     background:
-        var(--pink);
+
+        linear-gradient(
+            135deg,
+            var(--pink),
+            var(--purple)
+        );
+
+    box-shadow:
+
+        0 0 10px
+        rgba(255,63,130,.35);
 
 }
+
+
+.sectionCount {
+
+    color: #55555e;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+}
+
 
 /* =========================================================
    LISTA
@@ -328,13 +688,11 @@ padding-top: 5%;
 
 .list {
 
-    width: 100%;
-
     display: flex;
 
     flex-direction: column;
 
-    gap: 9px;
+    gap: 8px;
 
 }
 
@@ -343,70 +701,169 @@ padding-top: 5%;
    BOTÃO
 ========================================================= */
 
-
 .btn {
 
+    position: relative;
+
+    isolation: isolate;
+
     width: 100%;
-    height: auto;
+
+    min-height: 76px;
 
     display: flex;
+
     align-items: center;
 
-    padding: 26px;
-    
-    gap: 20px;
+    gap: 14px;
 
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
+    padding:
 
-    background: var(--surface);
-    color: #ffffff;
+        12px
+        13px;
+
+    overflow: hidden;
+
+    border:
+
+        1px solid
+        var(--line);
+
+    border-radius: 23px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.038),
+            rgba(255,255,255,.012)
+        );
+
+    color: #fff;
 
     font-family: "Quicksand", sans-serif;
+
+    text-align: left;
 
     cursor: pointer;
 
     transition:
-        transform .15s ease,
-        background .15s ease,
-        border-color .15s ease;
 
-
-padding-bottom: 15px;
-padding-top: 15px;
-
-margin-top: 1.5%;
-margin-bottom: 1.5%;
-}
-
-.btn:active {
-
-    transform: scale(.985);
-
-    background: var(--surface-2);
-
-}
-
-
-.btn:hover {
-
-    background: var(--surface-2);
-
-    border-color: var(--line-light);
+        transform .20s ease,
+        border-color .20s ease,
+        background .20s ease,
+        box-shadow .20s ease;
 
 }
 
 
 /* =========================================================
-   ÍCONE / EMOJI
+   BRILHO INTERNO
+========================================================= */
+
+.btn::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    border-radius: inherit;
+
+    background:
+
+        linear-gradient(
+            115deg,
+            rgba(255,255,255,.055),
+            transparent 34%,
+            transparent 70%,
+            rgba(124,58,237,.035)
+        );
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   LUZ LATERAL
+========================================================= */
+
+.btn::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 100px;
+    height: 100px;
+
+    right: -65px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    border-radius: 50%;
+
+    background:
+
+        rgba(124,58,237,.07);
+
+    filter: blur(25px);
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   HOVER
+========================================================= */
+
+.btn:hover {
+
+    transform: translateY(-2px);
+
+    border-color:
+
+        rgba(255,255,255,.12);
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.055),
+            rgba(124,58,237,.035)
+        );
+
+    box-shadow:
+
+        0 13px 32px
+        rgba(0,0,0,.18);
+
+}
+
+
+.btn:active {
+
+    transform: scale(.975);
+
+}
+
+
+/* =========================================================
+   ÍCONE
 ========================================================= */
 
 .emoji {
 
-    width: 44px;
-    height: 44px;
+    position: relative;
 
+    width: 49px;
+    height: 49px;
 
+    flex: 0 0 49px;
 
     display: flex;
 
@@ -415,8 +872,44 @@ margin-bottom: 1.5%;
 
     overflow: hidden;
 
-    border-radius: 14px;
+    border-radius: 17px;
 
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.075),
+            rgba(255,255,255,.02)
+        );
+
+    border:
+
+        1px solid
+        rgba(255,255,255,.065);
+
+    box-shadow:
+
+        inset 0 1px 1px
+        rgba(255,255,255,.06),
+
+        0 5px 14px
+        rgba(0,0,0,.16);
+
+    transition:
+
+        transform .20s ease,
+        border-color .20s ease;
+
+}
+
+
+.btn:hover .emoji {
+
+    transform: scale(1.04);
+
+    border-color:
+
+        rgba(255,255,255,.12);
 
 }
 
@@ -429,19 +922,16 @@ margin-bottom: 1.5%;
     display: block;
 
     object-fit: cover;
-    object-position: center;
 
 }
 
 
 .emoji svg {
 
-    width: 100%;
-    height: 100%;
+    width: 24px;
+    height: 24px;
 
-    display: block;
-
-    color: #ffffff;
+    color: #e5e5ea;
 
 }
 
@@ -462,50 +952,37 @@ margin-bottom: 1.5%;
 
     justify-content: center;
 
-    gap: 3px;
+    gap: 4px;
 
 }
 
 
 .title {
-    color: #ffffff;
 
-    font-size: 15px;
+    color: #f8f8fa;
+
+    font-size: 14px;
+
     font-weight: 750;
 
     line-height: 1.25;
 
-
-    white-space:
-        normal;
-
-    overflow:
-        hidden;
-
-    text-overflow:
-        clip;
-        
 }
+
 
 .description {
-    color: var(--text-muted);
 
-    font-size: 12px;
+    color: #73737d;
+
+    font-size: 11px;
+
     font-weight: 500;
 
-    line-height: 1.3;
-    
-    white-space:
-        normal;
+    line-height: 1.35;
 
-    overflow:
-        hidden;
-
-    text-overflow:
-        clip;
-
-    
 }
+
+
 /* =========================================================
    SETA
 ========================================================= */
@@ -522,15 +999,56 @@ margin-bottom: 1.5%;
     align-items: center;
     justify-content: center;
 
-    color: #64646d;
+    border-radius: 50%;
+
+    color: #62626b;
+
+    background:
+
+        rgba(255,255,255,.025);
+
+    border:
+
+        1px solid
+        rgba(255,255,255,.035);
+
+    transition:
+
+        transform .20s ease,
+        color .20s ease,
+        background .20s ease;
 
 }
 
 
 .arrow svg {
 
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
+
+}
+
+
+.btn:hover .arrow {
+
+    transform: translateX(3px);
+
+    color: #aaaab4;
+
+    background:
+
+        rgba(255,255,255,.055);
+
+}
+
+
+/* =========================================================
+   CARTÕES MAIORES
+========================================================= */
+
+.appCard {
+
+    min-height: 82px;
 
 }
 
@@ -539,140 +1057,252 @@ margin-bottom: 1.5%;
    EMERGÊNCIA
 ========================================================= */
 
-.emergency {
+.emergencySection {
 
-    border-color: #32171c;
-
-    background: #100a0c;
+    margin-top: 10px;
 
 }
 
 
+.emergencyWrapper {
+
+    position: relative;
+
+    padding: 1px;
+
+    border-radius: 25px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(255,82,107,.35),
+            rgba(255,82,107,.04),
+            rgba(255,255,255,.03)
+        );
+
+}
+
+
+.emergency {
+
+    border-color:
+
+        rgba(255,82,107,.12);
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(255,82,107,.08),
+            rgba(255,82,107,.018)
+        );
+
+}
+
+
+.emergency::after {
+
+    background:
+
+        rgba(255,82,107,.13);
+
+}
+
+
+.emergency .emoji {
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(255,82,107,.19),
+            rgba(255,82,107,.035)
+        );
+
+    border-color:
+
+        rgba(255,82,107,.18);
+
+}
 
 
 .emergency .title {
 
-    color: #ff6679;
-    
-    white-space:
-        normal;
-
-    overflow:
-        hidden;
-
-    text-overflow:
-        clip;
+    color: #ff7181;
 
 }
 
 
 .emergency .description {
 
-    color: #98616a;
+    color: #985d67;
 
 }
 
 
 .emergency .arrow {
 
-    color: #a94453;
+    color: #ad4b5b;
+
+    background:
+
+        rgba(255,82,107,.045);
+
+}
+
+
+.emergency:hover {
+
+    border-color:
+
+        rgba(255,82,107,.25);
+
+}
+
+
+
+/* =========================================================
+   DESTAQUES ESPECIAIS
+========================================================= */
+
+.special {
+
+    border-color:
+
+        rgba(167,139,250,.08);
+
+}
+
+
+.special .emoji {
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(167,139,250,.12),
+            rgba(124,58,237,.025)
+        );
+
+}
+
+
+.special:hover {
+
+    border-color:
+
+        rgba(167,139,250,.18);
 
 }
 
 
 /* =========================================================
-   APPS
+   ACESSIBILIDADE
 ========================================================= */
 
-.appCard {
+.btn:focus-visible {
 
-    min-height: 84px;
+    outline: none;
 
-}
+    border-color:
 
+        rgba(167,139,250,.65);
 
-.appCard .emoji {
+    box-shadow:
 
-    width: 50px;
-    height: 50px;
+        0 0 0 3px
+        rgba(124,58,237,.16),
 
-    flex-basis: 50px;
-
-    border-radius: 15px;
-
-}
-
-
-.appCard .emoji img {
-
-    object-fit: cover;
+        0 10px 30px
+        rgba(0,0,0,.20);
 
 }
 
 
 /* =========================================================
-   EMPTY STATE
+   RESPONSIVO
 ========================================================= */
 
-.emptyState {
+@media (max-width: 390px) {
 
-    display: none;
+    body {
 
-    width: 100%;
+        padding-top: 12%;
 
-    padding: 34px 20px;
+    }
 
-    border: 1px solid var(--line);
+    .protectedArea {
 
-    border-radius: 22px;
+        padding: 18px;
 
-    background: var(--surface);
+        border-radius: 27px;
 
-    text-align: center;
+    }
+
+    .protectedKey {
+
+        width: 56px;
+        height: 56px;
+
+        flex-basis: 56px;
+
+    }
+
+    .protectedKey img {
+
+        width: 31px;
+        height: 31px;
+
+    }
+
+    .securityStats {
+
+        gap: 5px;
+
+    }
+
+    .securityStat {
+
+        padding:
+
+            9px
+            6px;
+
+    }
+
+    .securityStat strong {
+
+        font-size: 9px;
+
+    }
 
 }
 
 
-.emptyIcon {
-
-    width: 46px;
-    height: 46px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    margin: 0 auto 12px;
-
-    border-radius: 14px;
-
-    background: #17171c;
-
-    color: #8b8b94;
-
-}
-
-
-.emptyIcon svg {
-
-    width: 23px;
-    height: 23px;
-
-}
-
+/* =========================================================
+   REDUÇÃO DE MOVIMENTO
+========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-    /* Procura por QUALQUER elemento que use a sua animação e a desativa */
+
+    html {
+
+        scroll-behavior: auto;
+
+    }
 
     * {
-        animation-name: none !important;
+
+        animation: none !important;
+
+        transition-duration: .01ms !important;
+
     }
+
 }
 
 </style>
-
-
 
 </head>
 
@@ -682,734 +1312,807 @@ margin-bottom: 1.5%;
 <div class="container">
 
 
-    <!-- =====================================================
-         HERO
-    ====================================================== -->
+<!-- =====================================================
+     ÁREA PROTEGIDA
+===================================================== -->
 
-<header class="hero">
+<section class="protectedArea">
 
-    <div class="heroIcon">
-        <img src="1.svg" alt="">
+    <div class="protectedTop">
+
+        <div class="protectedKey">
+
+            <img
+                src="1.svg"
+                alt="Chave"
+            >
+
+        </div>
+
+
+        <div class="protectedText">
+
+            <div class="protectedLabel">
+                Espaço privado
+            </div>
+
+            <div class="protectedTitle">
+                Área protegida
+            </div>
+
+            <div class="protectedDescription">
+                Seus recursos e ferramentas em um só lugar.
+            </div>
+
+        </div>
+
     </div>
 
-        <div class="heroTag">
-            Meus Acessos
+
+    <div class="protectedStatus">
+
+        <span class="statusDot"></span>
+
+        <div class="statusText">
+            <strong>Proteção ativa</strong>
+            · ambiente pessoal
         </div>
 
-        <div class="heroSubtitle">
-            Tudo o que você precisa, organizado em um só lugar.
-        </div>
-        
-</header>
+    </div>
 
 
+    <div class="securityStats">
 
+        <div class="securityStat">
 
-    <!-- =====================================================
-         BUSCA
-    ====================================================== -->
+            <span>Acesso</span>
 
-
-
-
-    <!-- =====================================================
-         RECURSOS DO APLICATIVO
-    ====================================================== -->
-
-    <section
-        class="section"
-        data-section
-    >
-
-        <div class="sectionHeader">
-
-            <h2 class="sectionTitle">
-                Recursos do aplicativo
-            </h2>
-
-
+            <strong>Privado</strong>
 
         </div>
 
 
-        <div class="list">
+        <div class="securityStat">
 
+            <span>Ambiente</span>
 
-            <button
-                class="btn"
-                type="button"
-                data-search="calendario menstrual ciclo"
-                onclick="ir('calendario.html')"
-            >
-
-                <div class="emoji">
-                    <img src="2.svg" alt="">
-                </div>
-
-                <div class="content">
-
-                    <div class="title">
-                        Calendário menstrual
-                    </div>
-
-                    <div class="description">
-                        Acompanhe seu ciclo
-                    </div>
-
-                </div>
-
-                <div class="arrow">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6"></path>
-                    </svg>
-                </div>
-
-            </button>
-
-
-            <button
-                class="btn"
-                type="button"
-                data-search="calendario eventos"
-                onclick="ir('calendar.html')"
-            >
-
-                <div class="emoji">
-                    <img src="3.svg" alt="">
-                </div>
-
-                <div class="content">
-
-                    <div class="title">
-                        Calendário de eventos
-                    </div>
-
-                    <div class="description">
-                        Organize seus compromissos
-                    </div>
-
-                </div>
-
-                <div class="arrow">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6"></path>
-                    </svg>
-                </div>
-
-            </button>
-
-
-            <button
-                class="btn"
-                type="button"
-                data-search="mapa região localização"
-                onclick="ir('mapa.html')"
-            >
-
-                <div class="emoji">
-                    <img src="4.svg" alt="">
-                </div>
-
-                <div class="content">
-
-                    <div class="title">
-                        Mapa da sua região
-                    </div>
-
-                    <div class="description">
-                        Visualize locais próximos
-                    </div>
-
-                </div>
-
-                <div class="arrow">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6"></path>
-                    </svg>
-                </div>
-
-            </button>
-
-
-            <button
-                class="btn"
-                type="button"
-                data-search="diário anotações caderno"
-                onclick="ir('caderno.html')"
-            >
-
-                <div class="emoji">
-                    <img src="5.svg" alt="">
-                </div>
-
-                <div class="content">
-
-                    <div class="title">
-                        Diário e anotações
-                    </div>
-
-                    <div class="description">
-                        Escreva e guarde seus registros
-                    </div>
-
-                </div>
-
-                <div class="arrow">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6"></path>
-                    </svg>
-                </div>
-
-            </button>
-
-
-            <button
-                class="btn"
-                type="button"
-                data-search="rotina gamificada treino"
-                onclick="ir('treino.html')"
-            >
-
-                <div class="emoji">
-                    <img src="6.svg" alt="">
-                </div>
-
-                <div class="content">
-
-                    <div class="title">
-                        Rotina gamificada
-                    </div>
-
-                    <div class="description">
-                        Transforme tarefas em desafios
-                    </div>
-
-                </div>
-
-                <div class="arrow">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6"></path>
-                    </svg>
-                </div>
-
-            </button>
-
-
-            <button
-                class="btn"
-                type="button"
-                data-search="relógio localização"
-                onclick="ir('daora.html')"
-            >
-
-                <div class="emoji">
-                    <img src="7.svg" alt="">
-                </div>
-
-                <div class="content">
-
-                    <div class="title">
-                        Relógio + Localização
-                    </div>
-
-                    <div class="description">
-                        Horário e posição atual
-                    </div>
-
-                </div>
-
-                <div class="arrow">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6"></path>
-                    </svg>
-                </div>
-
-            </button>
-
-
-            <button
-                class="btn"
-                type="button"
-                data-search="calculadora cálculo"
-                onclick="ir('calc.html')"
-            >
-
-                <div class="emoji">
-                    <img src="8.svg" alt="">
-                </div>
-
-                <div class="content">
-
-                    <div class="title">
-                        Calculadora
-                    </div>
-
-                    <div class="description">
-                        Faça seus cálculos rapidamente
-                    </div>
-
-                </div>
-
-                <div class="arrow">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6"></path>
-                    </svg>
-                </div>
-
-            </button>
-
-
-            <button
-                class="btn"
-                type="button"
-                data-search="tarefas lista"
-                onclick="ir('task.html')"
-            >
-
-                <div class="emoji">
-                    <img src="9.svg" alt="">
-                </div>
-
-                <div class="content">
-
-                    <div class="title">
-                        Minhas tarefas
-                    </div>
-
-                    <div class="description">
-                        Organize o que precisa fazer
-                    </div>
-
-                </div>
-
-                <div class="arrow">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6"></path>
-                    </svg>
-                </div>
-
-            </button>
-
-
-            <button
-                class="btn"
-                type="button"
-                data-search="navegador internet web"
-                onclick="ir('navegador.html')"
-            >
-
-                <div class="emoji">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                    >
-
-                        <circle
-                            cx="12"
-                            cy="12"
-                            r="9"
-                        ></circle>
-
-                        <path
-                            d="M3 12h18"
-                        ></path>
-
-                        <path
-                            d="M12 3c2.3 2.5 3.5 5.5 3.5 9S14.3 18.5 12 21"
-                        ></path>
-
-                        <path
-                            d="M12 3c-2.3 2.5-3.5 5.5-3.5 9S9.7 18.5 12 21"
-                        ></path>
-
-                    </svg>
-
-                </div>
-
-                <div class="content">
-
-                    <div class="title">
-                        Navegador
-                    </div>
-
-                    <div class="description">
-                        Acesse páginas da internet
-                    </div>
-
-                </div>
-
-                <div class="arrow">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6"></path>
-                    </svg>
-                </div>
-
-            </button>
-
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         OUTRAS FUNÇÕES
-    ====================================================== -->
-
-    <section
-        class="section"
-        data-section
-    >
-
-        <div class="sectionHeader">
-
-            <h2 class="sectionTitle">
-                Outras funções
-            </h2>
-
-
+            <strong>Pessoal</strong>
 
         </div>
 
 
-        <div class="list">
+        <div class="securityStat">
 
+            <span>Status</span>
 
-            <button
-                class="btn"
-                type="button"
-                data-search="gravador voz áudio"
-                onclick="androidCall('openRecorder')"
-            >
-
-                <div class="emoji">
-                    <img src="10.svg" alt="">
-                </div>
-
-                <div class="content">
-
-                    <div class="title">
-                        Gravador de voz
-                    </div>
-
-                    <div class="description">
-                        Grave áudios rapidamente
-                    </div>
-
-                </div>
-
-                <div class="arrow">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6"></path>
-                    </svg>
-                </div>
-
-            </button>
-
-
-            <button
-                class="btn"
-                type="button"
-                data-search="arquivos gerenciador"
-                onclick="androidCall('openFiles')"
-            >
-
-                <div class="emoji">
-                    <img src="11.svg" alt="">
-                </div>
-
-                <div class="content">
-
-                    <div class="title">
-                        Meus arquivos
-                    </div>
-
-                    <div class="description">
-                        Acesse seus arquivos
-                    </div>
-
-                </div>
-
-                <div class="arrow">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6"></path>
-                    </svg>
-                </div>
-
-            </button>
-
-
-            <button
-                class="btn"
-                type="button"
-                data-search="arquivos gerenciador"
-                onclick="ir('pesquisar.html')"
-            >
-
-                <div class="emoji">
-                    <img src="pes.svg" alt="">
-                </div>
-
-                <div class="content">
-
-                    <div class="title">
-                        Tela de aplicativos 
-                    </div>
-
-                    <div class="description">
-                        Acesse seus apps
-                    </div>
-
-                </div>
-
-                <div class="arrow">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6"></path>
-                    </svg>
-                </div>
-
-            </button>
+            <strong>Ativo</strong>
 
         </div>
 
-    </section>
+    </div>
 
-
-    <!-- =====================================================
-         EMERGÊNCIA
-    ====================================================== -->
-
-    <section
-        class="section"
-        data-section
-    >
-
-        <div class="sectionHeader">
-
-            <h2 class="sectionTitle">
-                Emergência
-            </h2>
+</section>
 
 
 
-        </div>
+<!-- =====================================================
+     RECURSOS
+===================================================== -->
+
+<section class="section">
+
+    <div class="sectionHeader">
+
+        <h2 class="sectionTitle">
+            Recursos do aplicativo
+        </h2>
+
+        <span class="sectionCount">
+            09 recursos
+        </span>
+
+    </div>
 
 
-        <div class="list">
+    <div class="list">
 
 
-            <button
-                class="btn emergency"
-                type="button"
-                data-search="bloquear dispositivo tela segurança"
-                onclick="androidCall('bloquearTela')"
-            >
+        <button
+            class="btn appCard"
+            type="button"
+            onclick="ir('calendario.html')"
+        >
 
-                <div class="emoji">
-                    <img src="11.png" alt="">
+            <div class="emoji">
+                <img src="2.svg" alt="">
+            </div>
+
+            <div class="content">
+
+                <div class="title">
+                    Calendário menstrual
                 </div>
 
-                <div class="content">
-
-                    <div class="title">
-                        Bloquear dispositivo
-                    </div>
-
-                    <div class="description">
-                        Bloqueie a tela imediatamente
-                    </div>
-
+                <div class="description">
+                    Acompanhe seu ciclo
                 </div>
 
-                <div class="arrow">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6"></path>
-                    </svg>
+            </div>
+
+            <div class="arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </div>
+
+        </button>
+
+
+        <button
+            class="btn appCard"
+            type="button"
+            onclick="ir('calendar.html')"
+        >
+
+            <div class="emoji">
+                <img src="3.svg" alt="">
+            </div>
+
+            <div class="content">
+
+                <div class="title">
+                    Calendário de eventos
                 </div>
 
-            </button>
-
-
-        </div>
-
-    </section>
-
-    <!-- =====================================================
-         Especial, só para você!
-    ====================================================== -->
-
-    <section
-        class="section"
-        data-section
-    >
-
-        <div class="sectionHeader">
-
-            <h2 class="sectionTitle">
-                Especial, só para você!
-            </h2>
-
-
-
-        </div>
-
-
-        <div class="list">
-
-
-            <button
-                class="btn"
-                type="button"
-                data-search="dia mulheres feliz"
-                onclick="ir('dia.html')"
-            >
-
-                <div class="emoji">
-
-<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M400-120v-200h-61q-21 0-33-17.5t-4-37.5l100-253q10-24 31-38t47-14q26 0 47 14t31 38l100 253q8 20-4 37.5T621-320h-61v200q0 17-11.5 28.5T520-80h-80q-17 0-28.5-11.5T400-120Zm23.5-623.5Q400-767 400-800t23.5-56.5Q447-880 480-880t56.5 23.5Q560-833 560-800t-23.5 56.5Q513-720 480-720t-56.5-23.5Z"/></svg>
-
+                <div class="description">
+                    Organize seus compromissos
                 </div>
 
-                <div class="content">
+            </div>
 
-                    <div class="title">
-                        Feliz Dia das Mulheres!
-                    </div>
+            <div class="arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </div>
 
-                    <div class="description">
-                        Um jogo gamificado 
-                    </div>
+        </button>
 
+
+        <button
+            class="btn appCard"
+            type="button"
+            onclick="ir('mapa.html')"
+        >
+
+            <div class="emoji">
+                <img src="4.svg" alt="">
+            </div>
+
+            <div class="content">
+
+                <div class="title">
+                    Mapa da sua região
                 </div>
 
-                <div class="arrow">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6"></path>
-                    </svg>
+                <div class="description">
+                    Visualize locais próximos
                 </div>
 
-            </button>
+            </div>
 
-            <button
-                class="btn"
-                type="button"
-                data-search="100 direitos"
-                onclick="ir('texto.html')"
-            >
+            <div class="arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </div>
 
-                <div class="emoji">
-                
-<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M200-200h400q17 0 28.5 11.5T640-160q0 17-11.5 28.5T600-120H200q-17 0-28.5-11.5T160-160q0-17 11.5-28.5T200-200Zm129-171L216-484q-23-23-23.5-56.5T215-597l29-29 228 226-29 29q-23 23-57 23t-57-23Zm311-197L414-796l29-29q23-23 56.5-22.5T556-824l113 113q23 23 23 57t-23 57l-29 29Zm156 380L302-682l56-56 494 494q11 11 11 28t-11 28q-11 11-28 11t-28-11Z"/></svg>
+        </button>
 
+
+        <button
+            class="btn appCard"
+            type="button"
+            onclick="ir('caderno.html')"
+        >
+
+            <div class="emoji">
+                <img src="5.svg" alt="">
+            </div>
+
+            <div class="content">
+
+                <div class="title">
+                    Diário e anotações
                 </div>
 
-                <div class="content">
+                <div class="description">
+                    Escreva e guarde seus registros
+                </div>
 
-                    <div class="title">
+            </div>
+
+            <div class="arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </div>
+
+        </button>
+
+
+        <button
+            class="btn appCard"
+            type="button"
+            onclick="ir('treino.html')"
+        >
+
+            <div class="emoji">
+                <img src="6.svg" alt="">
+            </div>
+
+            <div class="content">
+
+                <div class="title">
+                    Rotina gamificada
+                </div>
+
+                <div class="description">
+                    Transforme tarefas em desafios
+                </div>
+
+            </div>
+
+            <div class="arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </div>
+
+        </button>
+
+
+        <button
+            class="btn appCard"
+            type="button"
+            onclick="ir('daora.html')"
+        >
+
+            <div class="emoji">
+                <img src="7.svg" alt="">
+            </div>
+
+            <div class="content">
+
+                <div class="title">
+                    Relógio + localização
+                </div>
+
+                <div class="description">
+                    Horário e posição atual
+                </div>
+
+            </div>
+
+            <div class="arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </div>
+
+        </button>
+
+
+        <button
+            class="btn appCard"
+            type="button"
+            onclick="ir('calc.html')"
+        >
+
+            <div class="emoji">
+                <img src="8.svg" alt="">
+            </div>
+
+            <div class="content">
+
+                <div class="title">
+                    Calculadora
+                </div>
+
+                <div class="description">
+                    Faça seus cálculos rapidamente
+                </div>
+
+            </div>
+
+            <div class="arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </div>
+
+        </button>
+
+
+        <button
+            class="btn appCard"
+            type="button"
+            onclick="ir('task.html')"
+        >
+
+            <div class="emoji">
+                <img src="9.svg" alt="">
+            </div>
+
+            <div class="content">
+
+                <div class="title">
+                    Minhas tarefas
+                </div>
+
+                <div class="description">
+                    Organize o que precisa fazer
+                </div>
+
+            </div>
+
+            <div class="arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </div>
+
+        </button>
+
+
+        <button
+            class="btn appCard"
+            type="button"
+            onclick="ir('navegador.html')"
+        >
+
+            <div class="emoji">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+
+                    <circle cx="12" cy="12" r="9"/>
+
+                    <path d="M3 12h18"/>
+
+                    <path d="M12 3c2.3 2.5 3.5 5.5 3.5 9S14.3 18.5 12 21"/>
+
+                    <path d="M12 3c-2.3 2.5-3.5 5.5-3.5 9S9.7 18.5 12 21"/>
+
+                </svg>
+
+            </div>
+
+            <div class="content">
+
+                <div class="title">
+                    Navegador
+                </div>
+
+                <div class="description">
+                    Acesse páginas da internet
+                </div>
+
+            </div>
+
+            <div class="arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </div>
+
+        </button>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     OUTRAS FUNÇÕES
+===================================================== -->
+
+<section class="section">
+
+    <div class="sectionHeader">
+
+        <h2 class="sectionTitle">
+            Outras funções
+        </h2>
+
+        <span class="sectionCount">
+            03 recursos
+        </span>
+
+    </div>
+
+
+    <div class="list">
+
+
+        <button
+            class="btn"
+            type="button"
+            onclick="androidCall('openRecorder')"
+        >
+
+            <div class="emoji">
+                <img src="10.svg" alt="">
+            </div>
+
+            <div class="content">
+
+                <div class="title">
+                    Gravador de voz
+                </div>
+
+                <div class="description">
+                    Grave áudios rapidamente
+                </div>
+
+            </div>
+
+            <div class="arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </div>
+
+        </button>
+
+
+        <button
+            class="btn"
+            type="button"
+            onclick="androidCall('openFiles')"
+        >
+
+            <div class="emoji">
+                <img src="11.svg" alt="">
+            </div>
+
+            <div class="content">
+
+                <div class="title">
+                    Meus arquivos
+                </div>
+
+                <div class="description">
+                    Acesse seus arquivos
+                </div>
+
+            </div>
+
+            <div class="arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </div>
+
+        </button>
+
+
+        <button
+            class="btn"
+            type="button"
+            onclick="ir('pesquisar.html')"
+        >
+
+            <div class="emoji">
+                <img src="pes.svg" alt="">
+            </div>
+
+            <div class="content">
+
+                <div class="title">
+                    Tela de aplicativos
+                </div>
+
+                <div class="description">
+                    Acesse seus apps
+                </div>
+
+            </div>
+
+            <div class="arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </div>
+
+        </button>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     EMERGÊNCIA
+===================================================== -->
+
+<section class="section emergencySection">
+
+    <div class="sectionHeader">
+
+        <h2 class="sectionTitle">
+            Proteção imediata
+        </h2>
+
+    </div>
+
+
+    <div class="emergencyWrapper">
+
+
+
+        <button
+            class="btn emergency"
+            type="button"
+            onclick="androidCall('bloquearTela')"
+        >
+
+            <div class="emoji">
+
+                <img
+                    src="11.png"
+                    alt=""
+                >
+
+            </div>
+
+            <div class="content">
+
+                <div class="title">
+                    Bloquear dispositivo
+                </div>
+
+                <div class="description">
+                    Bloqueie a tela imediatamente
+                </div>
+
+            </div>
+
+            <div class="arrow">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+
+                    <path d="M9 18l6-6-6-6"/>
+
+                </svg>
+
+            </div>
+
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     ESPECIAL
+===================================================== -->
+
+<section class="section">
+
+    <div class="sectionHeader">
+
+        <h2 class="sectionTitle">
+            Especial, só para você
+        </h2>
+
+        <span class="sectionCount">
+            04 conteúdos
+        </span>
+
+    </div>
+
+
+    <div class="list">
+
+
+        <button
+            class="btn special"
+            type="button"
+            onclick="ir('dia.html')"
+        >
+
+            <div class="emoji">
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 -960 960 960"
+                    fill="currentColor"
+                >
+
+                    <path d="M400-120v-200h-61q-21 0-33-17.5t-4-37.5l100-253q10-24 31-38t47-14q26 0 47 14t31 38l100 253q8 20-4 37.5T621-320h-61v200q0 17-11.5 28.5T520-80h-80q-17 0-28.5-11.5T400-120Zm23.5-623.5Q400-767 400-800t23.5-56.5Q447-880 480-880t56.5 23.5Q560-833 560-800t-23.5 56.5Q513-720 480-720t-56.5-23.5Z"/>
+
+                </svg>
+
+            </div>
+
+            <div class="content">
+
+                <div class="title">
+                    Feliz Dia das Mulheres!
+                </div>
+
+                <div class="description">
+                    Um jogo gamificado
+                </div>
+
+            </div>
+
+            <div class="arrow">
+
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+
+            </div>
+
+        </button>
+
+
+        <button
+            class="btn special"
+            type="button"
+            onclick="ir('texto.html')"
+        >
+
+            <div class="emoji">
+
+                <svg
+                    viewBox="0 -960 960 960"
+                    fill="currentColor"
+                >
+
+                    <path d="M200-200h400q17 0 28.5 11.5T640-160q0 17-11.5 28.5T600-120H200q-17 0-28.5-11.5T160-160q0-17 11.5-28.5T200-200Zm129-171L216-484q-23-23-23.5-56.5T215-597l29-29 228 226-29 29q-23 23-57 23t-57-23Zm311-197L414-796l29-29q23-23 56.5-22.5T556-824l113 113q23 23 23 57t-23 57l-29 29Zm156 380L302-682l56-56 494 494q11 11 11 28t-11 28q-11 11-28 11t-28-11Z"/>
+
+                </svg>
+
+            </div>
+
+            <div class="content">
+
+                <div class="title">
                     100 dos seus direitos
-                    </div>
-
-                    <div class="description">
-                        seja amparada pela lei
-                    </div>
-
                 </div>
 
-                <div class="arrow">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6"></path>
-                    </svg>
+                <div class="description">
+                    Seja amparada pela lei
                 </div>
 
-            </button>
+            </div>
+
+            <div class="arrow">
+
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+
+            </div>
+
+        </button>
 
 
-            <button
-                class="btn"
-                type="button"
-                data-search="dicas financeiras"                onclick="ir('texto1.html')"
-            >
+        <button
+            class="btn special"
+            type="button"
+            onclick="ir('texto1.html')"
+        >
 
-                <div class="emoji">
+            <div class="emoji">
 
-<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M481-120q-17 0-28.5-11.5T441-160v-46q-45-10-79-35t-55-70q-7-14-.5-29.5T330-363q14-6 29 .5t23 21.5q17 30 43 45.5t64 15.5q41 0 69.5-18.5T587-356q0-35-22-55.5T463-458q-86-27-118-64.5T313-614q0-65 42-101t86-41v-44q0-17 11.5-28.5T481-840q17 0 28.5 11.5T521-800v44q38 6 66 24.5t46 45.5q9 13 3.5 29T614-634q-14 6-29 .5T557-653q-13-14-30.5-21.5T483-682q-44 0-67 19.5T393-614q0 33 30 52t104 40q69 20 104.5 63.5T667-358q0 71-42 108t-104 46v44q0 17-11.5 28.5T481-120Z"/></svg>
+                <svg
+                    viewBox="0 -960 960 960"
+                    fill="currentColor"
+                >
 
+                    <path d="M481-120q-17 0-28.5-11.5T441-160v-46q-45-10-79-35t-55-70q-7-14-.5-29.5T330-363q14-6 29 .5t23 21.5q17 30 43 45.5t64 15.5q41 0 69.5-18.5T587-356q0-35-22-55.5T463-458q-86-27-118-64.5T313-614q0-65 42-101t86-41v-44q0-17 11.5-28.5T481-840q17 0 28.5 11.5T521-800v44q38 6 66 24.5t46 45.5q9 13 3.5 29T614-634q-14 6-29 .5T557-653q-13-14-30.5-21.5T483-682q-44 0-67 19.5T393-614q0 33 30 52t104 40q69 20 104.5 63.5T667-358q0 71-42 108t-104 46v44q0 17-11.5 28.5T481-120Z"/>
+
+                </svg>
+
+            </div>
+
+            <div class="content">
+
+                <div class="title">
+                    Autonomia financeira
                 </div>
 
-                <div class="content">
-
-                    <div class="title">
-                        Dicas de como recuperar sua autonomia financeira 
-                    </div>
-
-                    <div class="description">
-                        Conhecimentos valiosos
-                    </div>
-
+                <div class="description">
+                    Conhecimentos valiosos
                 </div>
 
-                <div class="arrow">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6"></path>
-                    </svg>
+            </div>
+
+            <div class="arrow">
+
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+
+            </div>
+
+        </button>
+
+
+        <button
+            class="btn special"
+            type="button"
+            onclick="ir('texto2.html')"
+        >
+
+            <div class="emoji">
+
+                <svg
+                    viewBox="0 -960 960 960"
+                    fill="currentColor"
+                >
+
+                    <path d="M280-280q-33 0-56.5-23.5T200-360v-400q0-33 23.5-56.5T280-840h560q33 0 56.5 23.5T920-760v400q0 33-23.5 56.5T840-280H280Zm257-204L280-663v303h560v-303L583-484q-11 8-23 8t-23-8Zm23-82 280-194H280l280 194ZM120-120q-33 0-56.5-23.5T40-200v-460q0-17 11.5-28.5T80-700q17 0 28.5 11.5T120-660v460h620q17 0 28.5 11.5T780-160q0 17-11.5 28.5T740-120H120Zm720-546v-94H280v94-94h560v94Z"/>
+
+                </svg>
+
+            </div>
+
+            <div class="content">
+
+                <div class="title">
+                    Uma carta para você, mulher!
                 </div>
 
-            </button>
-
-
-            <button
-                class="btn"
-                type="button"
-                data-search="carta para você"
-                onclick="ir('texto2.html')"
-            >
-
-                <div class="emoji">
-
-<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M280-280q-33 0-56.5-23.5T200-360v-400q0-33 23.5-56.5T280-840h560q33 0 56.5 23.5T920-760v400q0 33-23.5 56.5T840-280H280Zm257-204L280-663v303h560v-303L583-484q-11 8-23 8t-23-8Zm23-82 280-194H280l280 194ZM120-120q-33 0-56.5-23.5T40-200v-460q0-17 11.5-28.5T80-700q17 0 28.5 11.5T120-660v460h620q17 0 28.5 11.5T780-160q0 17-11.5 28.5T740-120H120Zm720-546v-94H280v94-94h560v94Z"/></svg>
-
+                <div class="description">
+                    Uma mensagem especial
                 </div>
 
-                <div class="content">
+            </div>
 
-                    <div class="title">
-                        Uma carta para você, mulher!
-                    </div>
+            <div class="arrow">
 
-                    <div class="description">
-                        Uma mensagem especial
-                    </div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
 
-                </div>
+            </div>
 
-                <div class="arrow">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6"></path>
-                    </svg>
-                </div>
-
-            </button>
+        </button>
 
 
-        </div>
+    </div>
 
-    </section>
-
-
-
-        
+</section>
 
 
 </div>
 
 
+
 <script>
 
 /* =========================================================
-   NAVEGAÇÃO ENTRE PÁGINAS HTML
+   NAVEGAÇÃO
 ========================================================= */
 
 function ir(pagina) {
@@ -1418,7 +2121,9 @@ function ir(pagina) {
         typeof pagina !== "string" ||
         pagina.trim() === ""
     ) {
+
         return false;
+
     }
 
     try {
@@ -1452,16 +2157,17 @@ function androidCall(metodo) {
         typeof metodo !== "string" ||
         metodo.trim() === ""
     ) {
-        console.warn("Método Android inválido.");
+
+        console.warn(
+            "Método Android inválido."
+        );
+
         return false;
+
     }
 
 
     try {
-
-        /*
-         * Verifica se a interface Android existe.
-         */
 
         if (
             typeof Android === "undefined" ||
@@ -1477,11 +2183,6 @@ function androidCall(metodo) {
         }
 
 
-        /*
-         * Verifica se o método realmente existe
-         * no WebAppInterface.
-         */
-
         if (
             typeof Android[metodo] !== "function"
         ) {
@@ -1495,10 +2196,6 @@ function androidCall(metodo) {
 
         }
 
-
-        /*
-         * Executa o método.
-         */
 
         Android[metodo]();
 
@@ -1519,7 +2216,6 @@ function androidCall(metodo) {
 }
 
 
-
 /* =========================================================
    DESATIVAR MENU DE CONTEXTO
 ========================================================= */
@@ -1534,10 +2230,7 @@ document.addEventListener(
     false
 );
 
-
-
 </script>
-
 
 </body>
 

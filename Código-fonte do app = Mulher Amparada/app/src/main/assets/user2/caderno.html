@@ -1218,6 +1218,98 @@ textarea::placeholder {
         #d95f84;
 }
 
+/* =========================================================
+   AÇÕES DO TOPO — MODO CLARO
+========================================================= */
+
+.topo-acoes {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    flex: 0 0 auto;
+}
+
+
+/* =========================================================
+   BOTÃO BAIXAR
+========================================================= */
+
+.baixar-tudo {
+
+    width: 42px;
+    height: 42px;
+
+    flex: 0 0 42px;
+
+    display: grid;
+    place-items: center;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 14px;
+
+    background:
+        rgba(0,0,0,.045);
+
+    cursor: pointer;
+
+    transition:
+        transform .15s ease,
+        background .15s ease;
+}
+
+
+.baixar-tudo:active {
+
+    transform:
+        scale(.92);
+
+    background:
+        rgba(0,0,0,.09);
+}
+
+
+.baixar-tudo img {
+
+    width: 20px;
+    height: 20px;
+
+    object-fit: contain;
+
+    opacity: .8;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .topo-acoes {
+
+        gap: 6px;
+    }
+
+
+    .baixar-tudo {
+
+        width: 37px;
+        height: 37px;
+
+        flex: 0 0 37px;
+
+        border-radius: 50%;
+    }
+
+}
+
 
 /* =========================================================
    MOBILE
@@ -1270,33 +1362,49 @@ textarea::placeholder {
 
 <header class="topo">
 
-    <div class="diario-brand">
+<div class="diario-brand">
 
-        <div class="diario-icon">
-            ✦
+    <div class="diario-icon">
+        ✦
+    </div>
+
+    <div class="diario-info">
+
+        <div class="diario-title">
+            Meu Diário
         </div>
 
-
-        <div class="diario-info">
-
-            <div class="diario-title">
-                Meu Diário
-            </div>
-
-
-            <div class="diario-subtitle">
-                Suas idéias estão seguras
-            </div>
-
+        <div class="diario-subtitle">
+            Suas idéias estão seguras
         </div>
 
     </div>
+
+</div>
+
+
+<div class="topo-acoes">
+
+    <button
+        class="baixar-tudo"
+        onclick="baixarTodasPaginas()"
+        aria-label="Baixar todas as páginas"
+        type="button"
+    >
+
+        <img
+            src="download.svg"
+            alt=""
+        >
+
+    </button>
 
 
     <button
         class="voltar"
         onclick="limparTudo()"
         aria-label="Apagar diário"
+        type="button"
     >
 
         <img
@@ -1306,6 +1414,7 @@ textarea::placeholder {
 
     </button>
 
+</div>
 </header>
 
 <br><br>
@@ -2734,6 +2843,184 @@ document.addEventListener(
     }
 );
 
+/* =========================================================
+   BAIXAR TODAS AS PÁGINAS
+========================================================= */
+
+async function baixarTodasPaginas() {
+
+    /*
+     * Garante que o conteúdo mais recente
+     * esteja salvo antes da exportação.
+     */
+
+    try {
+
+        if (
+            criptoDisponivel() &&
+            typeof Cripto.salvar === "function"
+        ) {
+
+            Cripto.salvar(
+                "diario",
+                JSON.stringify(
+                    dados
+                )
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Erro ao salvar antes da exportação:",
+            error
+        );
+
+    }
+
+
+    /*
+     * Quantidade real de páginas.
+     */
+
+    const quantidade =
+        Math.max(
+            dados.length,
+            paginas.length,
+            1
+        );
+
+
+    /*
+     * Cria um TXT individual
+     * para cada página.
+     */
+
+    for (
+        let i = 0;
+        i < quantidade;
+        i++
+    ) {
+
+        const conteudo =
+            typeof dados[i] === "string"
+                ? dados[i]
+                : "";
+
+
+        /*
+         * Nome da página.
+         */
+
+        const numero =
+            String(
+                i + 1
+            ).padStart(
+                2,
+                "0"
+            );
+
+
+        const nomeArquivo =
+            "pagina-" +
+            numero +
+            ".txt";
+
+
+        /*
+         * Cria o arquivo TXT.
+         */
+
+        const blob =
+            new Blob(
+                [
+                    conteudo
+                ],
+                {
+                    type:
+                        "text/plain;charset=utf-8"
+                }
+            );
+
+
+        const url =
+            URL.createObjectURL(
+                blob
+            );
+
+
+        /*
+         * Cria o download.
+         */
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+
+        link.href =
+            url;
+
+
+        link.download =
+            nomeArquivo;
+
+
+        link.style.display =
+            "none";
+
+
+        document.body.appendChild(
+            link
+        );
+
+
+        link.click();
+
+
+        document.body.removeChild(
+            link
+        );
+
+
+        /*
+         * Libera a URL.
+         */
+
+        setTimeout(
+            function () {
+
+                URL.revokeObjectURL(
+                    url
+                );
+
+            },
+            100
+        );
+
+
+        /*
+         * Pequeno intervalo para o
+         * navegador não bloquear vários
+         * downloads simultâneos.
+         */
+
+        await new Promise(
+            function(resolve) {
+
+                setTimeout(
+                    resolve,
+                    150
+                );
+
+            }
+        );
+
+    }
+
+}
 </script>
 
 

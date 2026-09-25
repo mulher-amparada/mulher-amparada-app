@@ -2859,6 +2859,11 @@ document.addEventListener(
 
 async function baixarTodasPaginas() {
 
+    /*
+     * Garante que o conteúdo mais recente
+     * esteja salvo antes da exportação.
+     */
+
     try {
 
         if (
@@ -2868,57 +2873,9 @@ async function baixarTodasPaginas() {
 
             Cripto.salvar(
                 "diario",
-                JSON.stringify(dados)
-            );
-
-        }
-
-        const quantidade =
-            Math.max(
-                dados.length,
-                paginas.length,
-                1
-            );
-
-        const arquivos = [];
-
-        for (
-            let i = 0;
-            i < quantidade;
-            i++
-        ) {
-
-            arquivos.push({
-                nome:
-                    "pagina-" +
-                    String(i + 1).padStart(2, "0") +
-                    ".txt",
-
-                conteudo:
-                    typeof dados[i] === "string"
-                        ? dados[i]
-                        : ""
-            });
-
-        }
-
-        if (
-            typeof Android !== "undefined" &&
-            typeof Android.baixarPaginas === "function"
-        ) {
-
-            Android.baixarPaginas(
-                JSON.stringify(arquivos)
-            );
-
-        } else {
-
-            console.error(
-                "Interface Android não encontrada."
-            );
-
-            alert(
-                "Não foi possível iniciar o download."
+                JSON.stringify(
+                    dados
+                )
             );
 
         }
@@ -2926,13 +2883,116 @@ async function baixarTodasPaginas() {
     } catch (error) {
 
         console.error(
-            "Erro ao preparar downloads:",
+            "Erro ao salvar antes da exportação:",
             error
         );
 
     }
 
+
+    /*
+     * Quantidade real de páginas.
+     */
+
+    const quantidade =
+        Math.max(
+            dados.length,
+            paginas.length,
+            1
+        );
+
+
+    /*
+     * Prepara todos os arquivos
+     * individualmente.
+     */
+
+    const arquivos = [];
+
+
+    for (
+        let i = 0;
+        i < quantidade;
+        i++
+    ) {
+
+        const conteudo =
+            typeof dados[i] === "string"
+                ? dados[i]
+                : "";
+
+
+        /*
+         * Número da página.
+         */
+
+        const numero =
+            String(
+                i + 1
+            ).padStart(
+                2,
+                "0"
+            );
+
+
+        /*
+         * Nome do arquivo.
+         */
+
+        const nomeArquivo =
+            "pagina-" +
+            numero +
+            ".txt";
+
+
+        /*
+         * Adiciona o arquivo
+         * à lista para o Kotlin.
+         */
+
+        arquivos.push({
+
+            nome:
+                nomeArquivo,
+
+            conteudo:
+                conteudo
+
+        });
+
+    }
+
+
+    /*
+     * Envia os arquivos para
+     * a classe DownloadInterface.
+     */
+
+    if (
+        typeof Downloader !== "undefined" &&
+        typeof Downloader.baixarPaginas === "function"
+    ) {
+
+        Downloader.baixarPaginas(
+            JSON.stringify(
+                arquivos
+            )
+        );
+
+    } else {
+
+        console.error(
+            "Interface Downloader não encontrada."
+        );
+
+        alert(
+            "Não foi possível iniciar o download."
+        );
+
+    }
+
 }
+
 </script>
 
 

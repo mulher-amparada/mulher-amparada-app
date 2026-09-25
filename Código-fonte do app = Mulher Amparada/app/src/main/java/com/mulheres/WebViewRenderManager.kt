@@ -5,9 +5,10 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.Choreographer
+import android.view.View
 import android.webkit.RenderProcessGoneDetail
-import android.webkit.WebView
 import android.webkit.WebSettings
+import android.webkit.WebView
 
 class WebViewRenderManager(
     private val webView: WebView
@@ -27,13 +28,35 @@ class WebViewRenderManager(
     private var framePending = false
     private var visualStatePending = false
 
-    private var scrollControllerInjected = false
-
     private var pageVisible = false
+    private var pageCommitted = false
 
     private var lastStableFrame = 0L
 
     private var pendingAction: (() -> Unit)? = null
+
+    private var stabilizationGeneration = 0L
+
+    private var stableFrames = 0
+
+    private var visualCallbackGeneration = -1L
+
+    private var cssInjected = false
+
+    private var warmingUp = false
+
+
+    /*
+     * =========================================================
+     * CONFIGURAÇÃO
+     * =========================================================
+     */
+
+    init {
+        configurarWebView()
+        configurarRenderer()
+        aquecerComposicao()
+    }
 
 
     /*
@@ -57,17 +80,21 @@ class WebViewRenderManager(
             lastStableFrame =
                 frameTimeNanos
 
+            if (pageCommitted) {
+                stableFrames++
+            }
+
             sincronizarEstadoVisual()
         }
 
 
     /*
      * =========================================================
-     * FRAME DE OPERAÇÃO
+     * FRAME DE AÇÃO
      * =========================================================
      */
 
-    private val frameCallbackAction =
+    private val actionFrameCallback =
         Choreographer.FrameCallback {
 
             framePending = false
@@ -77,7 +104,7 @@ class WebViewRenderManager(
                 !rendererAlive
             ) {
                 pendingAction = null
-                return@FrameCallback
+                return@Choreographer.FrameCallback
             }
 
             val action =
@@ -87,38 +114,56 @@ class WebViewRenderManager(
 
             action?.invoke()
 
-            sincronizarEstadoVisual()
+            solicitarFrame()
         }
 
 
     /*
      * =========================================================
-     * INICIALIZAÇÃO
-     * =========================================================
-     */
-
-    init {
-
-        configurarWebView()
-
-        configurarPrioridadeRenderer()
-    }
-
-
-    /*
-     * =========================================================
-     * CONFIGURAÇÃO DA WEBVIEW
+     * WEBVIEW
      * =========================================================
      */
 
     private fun configurarWebView() {
 
+        /*
+         * TRANSPARÊNCIA REAL
+         */
+
         webView.setBackgroundColor(
             Color.TRANSPARENT
         )
 
+        webView.alpha =
+            1f
+
+        webView.visibility =
+            View.VISIBLE
+
+        webView.isOpaque =
+            false
+
+        webView.setWillNotDraw(
+            false
+        )
+
+
+        /*
+         * HARDWARE
+         */
+
+        webView.setLayerType(
+            View.LAYER_TYPE_HARDWARE,
+            null
+        )
+
+
+        /*
+         * COMPORTAMENTO VISUAL
+         */
+
         webView.overScrollMode =
-            WebView.OVER_SCROLL_NEVER
+            View.OVER_SCROLL_NEVER
 
         webView.isVerticalScrollBarEnabled =
             false
@@ -126,45 +171,113 @@ class WebViewRenderManager(
         webView.isHorizontalScrollBarEnabled =
             false
 
+        webView.isScrollbarFadingEnabled =
+            false
+
+        webView.scrollBarStyle =
+            View.SCROLLBARS_INSIDE_OVERLAY
+
+
+        /*
+         * FOCO
+         */
+
+        webView.isFocusable =
+            true
+
+        webView.isFocusableInTouchMode =
+            true
+
+
+        /*
+         * SETTINGS
+         */
+
         webView.settings.apply {
 
-            javaScriptEnabled = true
+            javaScriptEnabled =
+                true
 
-            domStorageEnabled = true
+            domStorageEnabled =
+                true
 
-            builtInZoomControls = false
+            databaseEnabled =
+                true
 
-            displayZoomControls = false
+            setSupportZoom(
+                false
+            )
 
-            /*
-             * Não usamos cache agressivo para tentar
-             * resolver problemas de renderização.
-             *
-             * O Chromium continua administrando
-             * seu próprio cache.
-             */
+            builtInZoomControls =
+                false
+
+            displayZoomControls =
+                false
+
+            textZoom =
+                100
+
+            defaultTextEncodingName =
+                "UTF-8"
+
+            useWideViewPort =
+                true
+
+            loadWithOverviewMode =
+                false
+
+            mediaPlaybackRequiresUserGesture =
+                false
 
             cacheMode =
                 WebSettings.LOAD_DEFAULT
 
+            allowFileAccess =
+                true
+
+            allowContentAccess =
+                false
+
+            allowFileAccessFromFileURLs =
+                false
+
+            allowUniversalAccessFromFileURLs =
+                false
+
+            mixedContentMode =
+                WebSettings.MIXED_CONTENT_NEVER_ALLOW
+
+            javaScriptCanOpenWindowsAutomatically =
+                false
+
+            setSupportMultipleWindows(
+                false
+            )
+
+
             /*
-             * Mantém a viewport controlada pela página.
+             * PRÉ-RASTERIZAÇÃO
              */
 
-            useWideViewPort = true
+            if (
+                Build.VERSION.SDK_INT >=
+                Build.VERSION_CODES.M
+            ) {
 
-            loadWithOverviewMode = false
+                offscreenPreRaster =
+                    true
+            }
         }
     }
 
 
     /*
      * =========================================================
-     * PRIORIDADE DO RENDERER
+     * RENDERER PRIORITY
      * =========================================================
      */
 
-    private fun configurarPrioridadeRenderer() {
+    private fun configurarRenderer() {
 
         if (
             Build.VERSION.SDK_INT >=
@@ -181,28 +294,58 @@ class WebViewRenderManager(
 
     /*
      * =========================================================
-     * RESTAURAR PRIORIDADE
+     * AQUECIMENTO
+     * =========================================================
+     *
+     * O objetivo é fazer o pipeline da WebView existir antes
+     * da primeira navegação real.
+     *
+     * Não colocamos conteúdo visível.
      * =========================================================
      */
 
-    fun restaurarPrioridade() {
+    private fun aquecerComposicao() {
 
         if (
             destroyed ||
-            !rendererAlive
+            !rendererAlive ||
+            warmingUp
         ) {
             return
         }
 
-        if (
-            Build.VERSION.SDK_INT >=
-            Build.VERSION_CODES.O
-        ) {
+        warmingUp =
+            true
 
-            webView.setRendererPriorityPolicy(
-                WebView.RENDERER_PRIORITY_IMPORTANT,
-                false
-            )
+        webView.setBackgroundColor(
+            Color.TRANSPARENT
+        )
+
+        webView.post {
+
+            if (
+                destroyed ||
+                !rendererAlive
+            ) {
+                return@post
+            }
+
+            webView.requestFocusFromTouch()
+
+            webView.post {
+
+                if (
+                    destroyed ||
+                    !rendererAlive
+                ) {
+                    return@post
+                }
+
+                warmingUp =
+                    false
+
+                solicitarFrame()
+            }
         }
     }
 
@@ -224,28 +367,24 @@ class WebViewRenderManager(
             return
         }
 
-        navigationGeneration++
+        iniciarNovaNavegacao()
 
         val generation =
             navigationGeneration
 
-        visualStatePending = true
-
-        pageVisible = false
-
-        scrollControllerInjected = false
-
-        agendarFrame {
+        agendarAcao {
 
             if (
                 destroyed ||
                 !rendererAlive ||
                 generation != navigationGeneration
             ) {
-                return@agendarFrame
+                return@agendarAcao
             }
 
-            webView.loadUrl(url)
+            webView.loadUrl(
+                url
+            )
         }
     }
 
@@ -271,25 +410,19 @@ class WebViewRenderManager(
             return
         }
 
-        navigationGeneration++
+        iniciarNovaNavegacao()
 
         val generation =
             navigationGeneration
 
-        visualStatePending = true
-
-        pageVisible = false
-
-        scrollControllerInjected = false
-
-        agendarFrame {
+        agendarAcao {
 
             if (
                 destroyed ||
                 !rendererAlive ||
                 generation != navigationGeneration
             ) {
-                return@agendarFrame
+                return@agendarAcao
             }
 
             webView.loadDataWithBaseURL(
@@ -305,11 +438,65 @@ class WebViewRenderManager(
 
     /*
      * =========================================================
-     * AGENDAR OPERAÇÃO NO VSYNC
+     * NOVA NAVEGAÇÃO
      * =========================================================
      */
 
-    private fun agendarFrame(
+    private fun iniciarNovaNavegacao() {
+
+        navigationGeneration++
+
+        stabilizationGeneration++
+
+        pageVisible =
+            false
+
+        pageCommitted =
+            false
+
+        visualStatePending =
+            true
+
+        visualCallbackGeneration =
+            -1L
+
+        stableFrames =
+            0
+
+        cssInjected =
+            false
+
+        /*
+         * Nunca deixamos a WebView perder a transparência.
+         */
+
+        webView.setBackgroundColor(
+            Color.TRANSPARENT
+        )
+
+        webView.alpha =
+            1f
+
+        webView.visibility =
+            View.VISIBLE
+
+        /*
+         * CSS temporário de estabilização.
+         */
+
+        prepararCSSAntiFlash()
+
+        solicitarFrame()
+    }
+
+
+    /*
+     * =========================================================
+     * AGENDAR AÇÃO NO VSYNC
+     * =========================================================
+     */
+
+    private fun agendarAcao(
         action: () -> Unit
     ) {
 
@@ -334,10 +521,11 @@ class WebViewRenderManager(
 
             if (!framePending) {
 
-                framePending = true
+                framePending =
+                    true
 
                 choreographer.postFrameCallback(
-                    frameCallbackAction
+                    actionFrameCallback
                 )
             }
         }
@@ -346,7 +534,7 @@ class WebViewRenderManager(
 
     /*
      * =========================================================
-     * PÁGINA COMEÇOU
+     * PAGE STARTED
      * =========================================================
      */
 
@@ -359,11 +547,26 @@ class WebViewRenderManager(
             return
         }
 
-        pageVisible = false
+        pageVisible =
+            false
 
-        visualStatePending = true
+        pageCommitted =
+            false
 
-        scrollControllerInjected = false
+        visualStatePending =
+            true
+
+        stableFrames =
+            0
+
+        webView.setBackgroundColor(
+            Color.TRANSPARENT
+        )
+
+        webView.alpha =
+            1f
+
+        prepararCSSAntiFlash()
 
         solicitarFrame()
     }
@@ -371,7 +574,7 @@ class WebViewRenderManager(
 
     /*
      * =========================================================
-     * PÁGINA TERMINOU
+     * PAGE FINISHED
      * =========================================================
      */
 
@@ -384,7 +587,21 @@ class WebViewRenderManager(
             return
         }
 
-        visualStatePending = true
+        visualStatePending =
+            true
+
+        /*
+         * O DOM já existe.
+         */
+
+        prepararCSSAntiFlash()
+
+        /*
+         * Espera alguns frames antes de considerar
+         * a composição estabilizada.
+         */
+
+        estabilizarFrames()
 
         solicitarFrame()
     }
@@ -392,7 +609,7 @@ class WebViewRenderManager(
 
     /*
      * =========================================================
-     * PRIMEIRO CONTEÚDO VISÍVEL
+     * PAGE COMMIT VISIBLE
      * =========================================================
      */
 
@@ -405,35 +622,275 @@ class WebViewRenderManager(
             return
         }
 
-        pageVisible = true
+        pageCommitted =
+            true
 
-        visualStatePending = true
+        visualStatePending =
+            true
 
-        solicitarFrame()
+        stableFrames =
+            0
+
+        webView.setBackgroundColor(
+            Color.TRANSPARENT
+        )
 
         /*
-         * Espera o DOM estar disponível antes
-         * de instalar o controlador.
+         * Neste ponto o Chromium já confirmou que existe
+         * conteúdo visual para a navegação.
+         */
+
+        prepararCSSAntiFlash()
+
+        solicitarFrame()
+    }
+
+
+    /*
+     * =========================================================
+     * CSS ANTI-FLASH
+     * =========================================================
+     *
+     * IMPORTANTE:
+     *
+     * Não coloca cor.
+     * Não coloca opacity.
+     * Não faz fade.
+     * Não mexe no scroll.
+     *
+     * Ele apenas estabiliza a composição inicial.
+     * =========================================================
+     */
+
+    private fun prepararCSSAntiFlash() {
+
+        if (
+            destroyed ||
+            !rendererAlive
+        ) {
+            return
+        }
+
+        val generation =
+            stabilizationGeneration
+
+        val script = """
+            (function() {
+
+                const ID =
+                    "__mulheres_render_guard";
+
+                let style =
+                    document.getElementById(ID);
+
+                if (!style) {
+
+                    style =
+                        document.createElement("style");
+
+                    style.id =
+                        ID;
+
+                    style.textContent = `
+                        html,
+                        body {
+                            background-color: transparent !important;
+                            background-image: none !important;
+                        }
+
+                        html {
+                            min-height: 100%;
+                            overscroll-behavior: none;
+                            -webkit-tap-highlight-color: transparent;
+                        }
+
+                        body {
+                            min-height: 100%;
+                            margin: 0;
+                            -webkit-tap-highlight-color: transparent;
+                            overscroll-behavior: none;
+                        }
+                    `;
+
+                    (
+                        document.head ||
+                        document.documentElement
+                    ).appendChild(style);
+                }
+
+            })();
+        """.trimIndent()
+
+        webView.evaluateJavascript(
+            script
+        ) {
+
+            if (
+                destroyed ||
+                !rendererAlive ||
+                generation != stabilizationGeneration
+            ) {
+                return@evaluateJavascript
+            }
+
+            cssInjected =
+                true
+        }
+    }
+
+
+    /*
+     * =========================================================
+     * ESTABILIZAÇÃO
+     * =========================================================
+     */
+
+    private fun estabilizarFrames() {
+
+        if (
+            destroyed ||
+            !rendererAlive
+        ) {
+            return
+        }
+
+        val generation =
+            stabilizationGeneration
+
+        stableFrames =
+            0
+
+        fun esperar() {
+
+            if (
+                destroyed ||
+                !rendererAlive ||
+                generation != stabilizationGeneration
+            ) {
+                return
+            }
+
+            if (
+                stableFrames >= 3
+            ) {
+
+                finalizarEstabilizacao(
+                    generation
+                )
+
+                return
+            }
+
+            choreographer.postFrameCallback {
+
+                if (
+                    destroyed ||
+                    !rendererAlive ||
+                    generation != stabilizationGeneration
+                ) {
+                    return@postFrameCallback
+                }
+
+                stableFrames++
+
+                esperar()
+            }
+        }
+
+        esperar()
+    }
+
+
+    /*
+     * =========================================================
+     * FINALIZAR ESTABILIZAÇÃO
+     * =========================================================
+     */
+
+    private fun finalizarEstabilizacao(
+        generation: Long
+    ) {
+
+        if (
+            destroyed ||
+            !rendererAlive ||
+            generation != stabilizationGeneration
+        ) {
+            return
+        }
+
+        pageVisible =
+            true
+
+        visualStatePending =
+            true
+
+        /*
+         * Remove apenas a folha temporária criada pelo
+         * próprio manager.
+         *
+         * Não altera CSS do usuário.
          */
 
         mainHandler.postDelayed({
 
             if (
                 destroyed ||
-                !rendererAlive
+                !rendererAlive ||
+                generation != stabilizationGeneration
             ) {
                 return@postDelayed
             }
 
-            instalarControladorScroll()
+            removerCSSGuard()
 
-        }, 16)
+        }, 48)
     }
 
 
     /*
      * =========================================================
-     * SINCRONIZAÇÃO VISUAL
+     * REMOVER CSS TEMPORÁRIO
+     * =========================================================
+     */
+
+    private fun removerCSSGuard() {
+
+        if (
+            destroyed ||
+            !rendererAlive
+        ) {
+            return
+        }
+
+        val script = """
+            (function() {
+
+                const style =
+                    document.getElementById(
+                        "__mulheres_render_guard"
+                    );
+
+                if (style) {
+                    style.remove();
+                }
+
+            })();
+        """.trimIndent()
+
+        webView.evaluateJavascript(
+            script,
+            null
+        )
+
+        cssInjected =
+            false
+    }
+
+
+    /*
+     * =========================================================
+     * VISUAL STATE CALLBACK
      * =========================================================
      */
 
@@ -452,13 +909,24 @@ class WebViewRenderManager(
             Build.VERSION_CODES.M
         ) {
 
-            visualStatePending = false
+            visualStatePending =
+                false
 
             return
         }
 
         val generation =
             navigationGeneration
+
+        if (
+            visualCallbackGeneration ==
+            generation
+        ) {
+            return
+        }
+
+        visualCallbackGeneration =
+            generation
 
         webView.postVisualStateCallback(
             generation,
@@ -486,19 +954,48 @@ class WebViewRenderManager(
 
                         if (
                             destroyed ||
-                            !rendererAlive ||
+                            !rendererAlive
+                        ) {
+                            return@postFrameCallback
+                        }
+
+                        if (
                             requestId !=
                             navigationGeneration
                         ) {
                             return@postFrameCallback
                         }
 
-                        visualStatePending = false
+                        /*
+                         * Mais um frame após a confirmação
+                         * visual do Chromium.
+                         */
 
-                        pageVisible = true
+                        choreographer.postFrameCallback {
 
-                        lastStableFrame =
-                            System.nanoTime()
+                            if (
+                                destroyed ||
+                                !rendererAlive
+                            ) {
+                                return@postFrameCallback
+                            }
+
+                            if (
+                                requestId !=
+                                navigationGeneration
+                            ) {
+                                return@postFrameCallback
+                            }
+
+                            visualStatePending =
+                                false
+
+                            pageVisible =
+                                true
+
+                            lastStableFrame =
+                                System.nanoTime()
+                        }
                     }
                 }
             }
@@ -522,7 +1019,8 @@ class WebViewRenderManager(
             return
         }
 
-        framePending = true
+        framePending =
+            true
 
         choreographer.postFrameCallback(
             frameCallback
@@ -532,568 +1030,7 @@ class WebViewRenderManager(
 
     /*
      * =========================================================
-     * CONTROLADOR AUTOMÁTICO DE SCROLL
-     *
-     * TODOS OS ELEMENTOS DO DOM.
-     *
-     * NÃO PRECISA DE:
-     *
-     * data-render-fade
-     * classes
-     * IDs
-     * alterações no HTML
-     *
-     * =========================================================
-     */
-
-    private fun instalarControladorScroll() {
-
-        if (
-            destroyed ||
-            !rendererAlive ||
-            scrollControllerInjected
-        ) {
-            return
-        }
-
-        scrollControllerInjected = true
-
-
-        val script = """
-
-            (function() {
-
-                if (
-                    window.__mulheresRenderController
-                ) {
-                    return;
-                }
-
-
-                window.__mulheresRenderController =
-                    true;
-
-
-                /*
-                 * =================================================
-                 * ESTADO
-                 * =================================================
-                 */
-
-                let ultimoY =
-                    window.scrollY;
-
-                let ultimoTempo =
-                    performance.now();
-
-                let processando =
-                    false;
-
-                let timeoutRestauracao =
-                    null;
-
-
-                /*
-                 * Guarda os estilos originais
-                 * para não destruir o CSS da página.
-                 */
-
-                const estilos =
-                    new WeakMap();
-
-
-                /*
-                 * =================================================
-                 * CAPTURA ELEMENTOS
-                 * =================================================
-                 *
-                 * Todos os elementos do documento.
-                 */
-
-                function obterElementos() {
-
-                    return Array.from(
-                        document.querySelectorAll('*')
-                    );
-
-                }
-
-
-                /*
-                 * =================================================
-                 * PREPARAR ELEMENTO
-                 * =================================================
-                 */
-
-                function prepararElemento(
-                    elemento
-                ) {
-
-                    if (
-                        !elemento ||
-                        elemento === document.documentElement ||
-                        elemento === document.body
-                    ) {
-                        return;
-                    }
-
-
-                    if (
-                        !estilos.has(elemento)
-                    ) {
-
-                        estilos.set(
-                            elemento,
-                            {
-                                opacity:
-                                    elemento.style.opacity,
-
-                                transition:
-                                    elemento.style.transition,
-
-                                willChange:
-                                    elemento.style.willChange
-                            }
-                        );
-
-                    }
-
-                }
-
-
-                /*
-                 * =================================================
-                 * APLICAR FADE
-                 * =================================================
-                 */
-
-                function aplicarFade(
-                    velocidade
-                ) {
-
-                    const velocidadeAbs =
-                        Math.abs(
-                            velocidade
-                        );
-
-
-                    /*
-                     * Scroll extremamente lento.
-                     */
-
-                    let duracao =
-                        180;
-
-
-                    /*
-                     * Conforme o scroll aumenta,
-                     * o fade fica mais rápido.
-                     */
-
-                    if (
-                        velocidadeAbs >= 300
-                    ) {
-                        duracao = 165;
-                    }
-
-                    if (
-                        velocidadeAbs >= 600
-                    ) {
-                        duracao = 140;
-                    }
-
-                    if (
-                        velocidadeAbs >= 1000
-                    ) {
-                        duracao = 110;
-                    }
-
-                    if (
-                        velocidadeAbs >= 1600
-                    ) {
-                        duracao = 85;
-                    }
-
-                    if (
-                        velocidadeAbs >= 2400
-                    ) {
-                        duracao = 65;
-                    }
-
-                    if (
-                        velocidadeAbs >= 3500
-                    ) {
-                        duracao = 50;
-                    }
-
-                    if (
-                        velocidadeAbs >= 5000
-                    ) {
-                        duracao = 35;
-                    }
-
-
-                    /*
-                     * Fade proporcional à velocidade.
-                     */
-
-                    let opacidade =
-                        0.96;
-
-
-                    if (
-                        velocidadeAbs >= 600
-                    ) {
-                        opacidade = 0.94;
-                    }
-
-                    if (
-                        velocidadeAbs >= 1200
-                    ) {
-                        opacidade = 0.91;
-                    }
-
-                    if (
-                        velocidadeAbs >= 2200
-                    ) {
-                        opacidade = 0.88;
-                    }
-
-                    if (
-                        velocidadeAbs >= 3500
-                    ) {
-                        opacidade = 0.84;
-                    }
-
-                    if (
-                        velocidadeAbs >= 5000
-                    ) {
-                        opacidade = 0.80;
-                    }
-
-
-                    /*
-                     * Todos os elementos.
-                     */
-
-                    const elementos =
-                        obterElementos();
-
-
-                    elementos.forEach(
-                        function(elemento) {
-
-                            prepararElemento(
-                                elemento
-                            );
-
-
-                            /*
-                             * Não usamos display:none,
-                             * visibility ou filtros pesados.
-                             *
-                             * Somente opacity.
-                             */
-
-                            elemento.style.transition =
-                                'opacity ' +
-                                duracao +
-                                'ms linear';
-
-
-                            elemento.style.willChange =
-                                'opacity';
-
-
-                            elemento.style.opacity =
-                                String(
-                                    opacidade
-                                );
-
-                        }
-                    );
-
-
-                    /*
-                     * Próximo frame:
-                     * começa a recuperação.
-                     */
-
-                    requestAnimationFrame(
-                        function() {
-
-                            requestAnimationFrame(
-                                function() {
-
-                                    const elementos =
-                                        obterElementos();
-
-
-                                    elementos.forEach(
-                                        function(elemento) {
-
-                                            if (
-                                                elemento ===
-                                                document.documentElement ||
-                                                elemento ===
-                                                document.body
-                                            ) {
-                                                return;
-                                            }
-
-
-                                            if (
-                                                !estilos.has(
-                                                    elemento
-                                                )
-                                            ) {
-                                                return;
-                                            }
-
-
-                                            elemento.style.opacity =
-                                                '1';
-
-                                        }
-                                    );
-
-                                }
-                            );
-
-                        }
-                    );
-
-                }
-
-
-                /*
-                 * =================================================
-                 * PROCESSAR SCROLL
-                 * =================================================
-                 */
-
-                function processarScroll() {
-
-                    processando =
-                        false;
-
-
-                    const agora =
-                        performance.now();
-
-
-                    const y =
-                        window.scrollY;
-
-
-                    const deltaY =
-                        y - ultimoY;
-
-
-                    const deltaTempo =
-                        Math.max(
-                            agora -
-                            ultimoTempo,
-                            1
-                        );
-
-
-                    /*
-                     * Pixels por segundo.
-                     */
-
-                    const velocidade =
-                        (
-                            deltaY /
-                            deltaTempo
-                        ) *
-                        1000;
-
-
-                    ultimoY =
-                        y;
-
-
-                    ultimoTempo =
-                        agora;
-
-
-                    aplicarFade(
-                        velocidade
-                    );
-
-                }
-
-
-                /*
-                 * =================================================
-                 * EVENTO SCROLL
-                 * =================================================
-                 */
-
-                window.addEventListener(
-                    'scroll',
-                    function() {
-
-                        if (
-                            processando
-                        ) {
-                            return;
-                        }
-
-
-                        processando =
-                            true;
-
-
-                        requestAnimationFrame(
-                            processarScroll
-                        );
-
-
-                        clearTimeout(
-                            timeoutRestauracao
-                        );
-
-
-                        timeoutRestauracao =
-                            setTimeout(
-                                restaurarTudo,
-                                120
-                            );
-
-                    },
-                    {
-                        passive: true
-                    }
-                );
-
-
-                /*
-                 * =================================================
-                 * RESTAURAR TUDO
-                 * =================================================
-                 */
-
-                function restaurarTudo() {
-
-                    const elementos =
-                        obterElementos();
-
-
-                    elementos.forEach(
-                        function(elemento) {
-
-                            if (
-                                elemento ===
-                                document.documentElement ||
-                                elemento ===
-                                document.body
-                            ) {
-                                return;
-                            }
-
-
-                            const original =
-                                estilos.get(
-                                    elemento
-                                );
-
-
-                            if (!original) {
-                                return;
-                            }
-
-
-                            elemento.style.transition =
-                                'opacity 180ms ease-out';
-
-
-                            elemento.style.opacity =
-                                original.opacity ||
-                                '1';
-
-
-                            elemento.style.willChange =
-                                original.willChange ||
-                                '';
-
-                        }
-                    );
-
-                }
-
-
-                /*
-                 * =================================================
-                 * RESTAURAÇÃO QUANDO A PÁGINA FICA INVISÍVEL
-                 * =================================================
-                 */
-
-                document.addEventListener(
-                    'visibilitychange',
-                    function() {
-
-                        if (
-                            document.hidden
-                        ) {
-                            restaurarTudo();
-                        }
-
-                    }
-                );
-
-
-            })();
-
-        """.trimIndent()
-
-
-        webView.evaluateJavascript(
-            script,
-            null
-        )
-    }
-
-
-    /*
-     * =========================================================
-     * REINICIALIZAR RENDERIZAÇÃO
-     * =========================================================
-     */
-
-    fun reinicializarRenderizacao() {
-
-        if (
-            destroyed ||
-            !rendererAlive
-        ) {
-            return
-        }
-
-        scrollControllerInjected =
-            false
-
-        restaurarPrioridade()
-
-        mainHandler.postDelayed({
-
-            if (
-                destroyed ||
-                !rendererAlive
-            ) {
-                return@postDelayed
-            }
-
-            instalarControladorScroll()
-
-        }, 16)
-    }
-
-
-    /*
-     * =========================================================
-     * ACTIVITY VOLTOU A FICAR ATIVA
+     * RESUME
      * =========================================================
      */
 
@@ -1106,44 +1043,67 @@ class WebViewRenderManager(
             return
         }
 
-        restaurarPrioridade()
+        webView.setBackgroundColor(
+            Color.TRANSPARENT
+        )
 
-        solicitarFrame()
+        webView.alpha =
+            1f
 
-        mainHandler.postDelayed({
+        webView.visibility =
+            View.VISIBLE
+
+        webView.isOpaque =
+            false
+
+        configurarRenderer()
+
+        /*
+         * Reaquece a composição.
+         */
+
+        webView.post {
 
             if (
                 destroyed ||
                 !rendererAlive
             ) {
-                return@postDelayed
+                return@post
             }
 
-            reinicializarRenderizacao()
+            webView.requestFocusFromTouch()
 
-        }, 16)
+            solicitarFrame()
+
+            mainHandler.postDelayed({
+
+                if (
+                    destroyed ||
+                    !rendererAlive
+                ) {
+                    return@postDelayed
+                }
+
+                if (pageVisible) {
+                    prepararCSSAntiFlash()
+                }
+
+            }, 16)
+        }
     }
 
 
     /*
      * =========================================================
-     * ACTIVITY FOI PAUSADA
+     * PAUSE
      * =========================================================
      */
 
     fun onPause() {
 
-        if (
-            destroyed
-        ) {
+        if (destroyed) {
             return
         }
-
-        /*
-         * Não destruímos o renderer.
-         *
-         * Apenas cancelamos operações pendentes.
-         */
 
         cancelPending()
     }
@@ -1163,62 +1123,37 @@ class WebViewRenderManager(
             return true
         }
 
-
         rendererAlive =
-            false;
+            false
 
+        pageVisible =
+            false
+
+        pageCommitted =
+            false
 
         visualStatePending =
-            false;
-
+            false
 
         framePending =
-            false;
-
+            false
 
         pendingAction =
-            null;
+            null
 
+        navigationGeneration++
 
-        scrollControllerInjected =
-            false;
+        stabilizationGeneration++
 
-
-        navigationGeneration++;
-
+        cssGeneration++
 
         /*
-         * O renderer antigo não pode mais receber
-         * nenhuma operação.
+         * Continua transparente mesmo durante o encerramento.
          */
 
-        mainHandler.post {
-
-            if (destroyed) {
-                return@post
-            }
-
-
-            rendererAlive =
-                true;
-
-
-            navigationGeneration++;
-
-
-            restaurarPrioridade();
-
-
-            /*
-             * O WebView pode precisar ser reconstruído
-             * pela Activity caso o renderer tenha realmente
-             * sido encerrado.
-             */
-
-            solicitarFrame();
-
-        }
-
+        webView.setBackgroundColor(
+            Color.TRANSPARENT
+        )
 
         return true
     }
@@ -1258,17 +1193,23 @@ class WebViewRenderManager(
     }
 
 
+    fun isPageCommitted():
+        Boolean {
+
+        return pageCommitted
+    }
+
+
     /*
      * =========================================================
-     * CANCELAR OPERAÇÕES
+     * CANCELAR
      * =========================================================
      */
 
     fun cancelPending() {
 
         pendingAction =
-            null;
-
+            null
 
         if (framePending) {
 
@@ -1277,22 +1218,24 @@ class WebViewRenderManager(
             )
 
             choreographer.removeFrameCallback(
-                frameCallbackAction
+                actionFrameCallback
             )
 
             framePending =
                 false
         }
 
-
         visualStatePending =
             false
+
+        visualCallbackGeneration =
+            -1L
     }
 
 
     /*
      * =========================================================
-     * DESTRUIÇÃO DEFINITIVA
+     * DESTROY
      * =========================================================
      */
 
@@ -1302,20 +1245,19 @@ class WebViewRenderManager(
             return
         }
 
-
         destroyed =
-            true;
-
+            true
 
         rendererAlive =
-            false;
+            false
 
+        navigationGeneration++
 
-        navigationGeneration++;
+        stabilizationGeneration++
 
+        cssGeneration++
 
-        cancelPending();
-
+        cancelPending()
 
         mainHandler.removeCallbacksAndMessages(
             null

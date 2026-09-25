@@ -62,7 +62,18 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.math.log10
 import kotlin.math.sqrt
-import android.webkit.RenderProcessGoneDetail
+if (!pagina.isNullOrEmpty()) {
+
+    webView.loadUrl(
+        "file:///android_asset/$pastaUsuario/$pagina"
+    )
+
+} else {
+
+    webView.loadUrl(
+        "file:///android_asset/$pastaUsuario/index1.html"
+    )
+}
 
 class MainActivity : AppCompatActivity() {
 
@@ -100,7 +111,7 @@ class MainActivity : AppCompatActivity() {
 
     private var ultimoShake: Long = 0
 
-    private lateinit var webView: StableWebView
+    private lateinit var webView: WebView
 
     private lateinit var emergencyComposeView: ComposeView
 
@@ -108,7 +119,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var selecionarContatoLauncher: ActivityResultLauncher<Intent>
     
-    private lateinit var renderManager: WebViewRenderManager
+    
 
 
     // =========================================================
@@ -198,8 +209,7 @@ controller.isAppearanceLightNavigationBars =
 
 webView = findViewById(R.id.webview)
 
-renderManager =
-    WebViewRenderManager(webView)
+
 
 locationClient =
     LocationServices
@@ -273,18 +283,7 @@ val pastaUsuario =
         "user2"
     }
 
-if (!pagina.isNullOrEmpty()) {
 
-    renderManager.loadUrl(
-        "file:///android_asset/$pastaUsuario/$pagina"
-    )
-
-} else {
-
-    renderManager.loadUrl(
-        "file:///android_asset/$pastaUsuario/index1.html"
-    )
-}
 
         // =====================================================
         // BOTÃO VOLTAR
@@ -785,43 +784,7 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
                 }
 
 
-                override fun onPageStarted(
-                    view: WebView?,
-                    url: String?,
-                    favicon: android.graphics.Bitmap?
-                ) {
 
-                    renderManager.onPageStarted()
-                }
-
-
-                override fun onPageFinished(
-                    view: WebView?,
-                    url: String?
-                ) {
-
-                    renderManager.onPageFinished()
-                }
-
-
-                override fun onPageCommitVisible(
-                    view: WebView?,
-                    url: String?
-                ) {
-
-                    renderManager.onPageCommitVisible()
-                }
-
-
-                override fun onRenderProcessGone(
-                    view: WebView?,
-                    detail: RenderProcessGoneDetail
-                ): Boolean {
-
-                    return renderManager.onRenderProcessGone(
-                        detail
-                    )
-                }
             }
             
             }
@@ -845,7 +808,7 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
 
 private fun carregarWebView1() {
 
-    renderManager.loadUrl(
+    webView.loadUrl(
         "file:///android_asset/${obterPastaTema()}/index1.html"
     )
 }
@@ -853,7 +816,7 @@ private fun carregarWebView1() {
 
 private fun carregarWebView2() {
 
-    renderManager.loadUrl(
+    webView.loadUrl(
         "file:///android_asset/${obterPastaTema()}/carteira.html"
     )
 }
@@ -861,7 +824,7 @@ private fun carregarWebView2() {
 
 private fun carregarWebView4() {
 
-    renderManager.loadUrl(
+    webView.loadUrl(
         "file:///android_asset/${obterPastaTema()}/botao.html"
     )
 }
@@ -2425,11 +2388,6 @@ override fun onDestroy() {
 
     pararSensor()
 
-    if (
-        ::renderManager.isInitialized
-    ) {
-        renderManager.destroy()
-    }
 
     super.onDestroy()
 }

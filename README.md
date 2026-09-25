@@ -10,7 +10,7 @@ Um projeto totalmente gratuito e livre de anúncios, projetado por um menino aut
 
 E saibam que o projeto é: Source-Available
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3153**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3072**
 
 # ⚠️MURAL DE AVISOS:
 
@@ -825,11 +825,7 @@ Por isso, o WebView mantém esse comportamento limitado. A exceção é a tela d
 
 ### Sobre o tema escuro, o conforto visual e a discrição:
 
-O projeto utiliza fundos escuros em todas as páginas da interface, independentemente do tipo de tela utilizado pelo dispositivo. Essa escolha busca manter uma experiência visual consistente, confortável e com menor brilho geral, evitando o uso desnecessário de grandes áreas brancas.
-
-A interface também utiliza uma variedade de cores nos elementos, em vez de depender exclusivamente do contraste entre preto e branco. Isso não significa que textos brancos sejam evitados: eles continuam presentes quando são apropriados e necessários para garantir boa legibilidade. As cores são utilizadas para criar hierarquia visual, destacar informações e tornar a interface mais equilibrada e agradável.
-
-O tema escuro também considera o contexto de uso do aplicativo. Em situações nas quais a usuária precisa pedir ajuda ou utilizar o aplicativo de forma discreta, telas muito claras e brilhantes podem chamar atenção desnecessariamente. Por isso, a interface mantém uma aparência escura, discreta e confortável, sem comprometer a legibilidade.
+O aplicativo oferece suporte a ícones monocromáticos, modo claro e modo escuro. O ícone do aplicativo também se adapta automaticamente ao tema selecionado, enquanto os sites acompanham a configuração, alterando seus fundos e elementos visuais conforme o modo ativo.
 
 ## Sobre as animações e o desempenho:
 

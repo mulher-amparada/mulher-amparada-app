@@ -10,7 +10,7 @@ Um projeto totalmente gratuito e livre de anúncios, projetado por um menino aut
 
 E saibam que o projeto é: Source-Available
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3180**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3072**
 
 # ⚠️MURAL DE AVISOS:
 
@@ -194,8 +194,6 @@ O R8 reduz o tamanho do aplicativo e aplica a ofuscação no código compilado, 
 E o fundo do icone do app é um adaptativo, em que o fundo e preto, e tem um bonequinho em cores azuis correndo, e o ic_launcher_foreground na pasta res/drawable, e os ic_launcher em cada mipmap tem o fundo transparente, eo ic_launcher_background também na pasta res/drawable é um quadrado preto
 
 e quando você clica no botão voltar na MainActivity, ele volta a página!
-
-e o fundo de todas as telas são nativamente pretas!
 
 E o workflow utiliza um keystore de assinatura armazenado de forma protegida nos GitHub Actions Secrets. As informações necessárias para acessar o keystore e selecionar a chave são fornecidas pelas variáveis KEYSTORE_BASE64, KEYSTORE_PASSWORD, KEY_ALIAS e KEY_PASSWORD.
 

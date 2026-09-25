@@ -62,6 +62,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.math.log10
 import kotlin.math.sqrt
+import android.webkit.RenderProcessGoneDetail
 
 class MainActivity : AppCompatActivity() {
 
@@ -738,7 +739,7 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
         // WEBVIEW CLIENT
         // =====================================================
 
-        webView.webViewClient =
+                webView.webViewClient =
             object : WebViewClient() {
 
                 override fun shouldOverrideUrlLoading(
@@ -783,6 +784,45 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
                     return false
                 }
 
+
+                override fun onPageStarted(
+                    view: WebView?,
+                    url: String?,
+                    favicon: android.graphics.Bitmap?
+                ) {
+
+                    renderManager.onPageStarted()
+                }
+
+
+                override fun onPageFinished(
+                    view: WebView?,
+                    url: String?
+                ) {
+
+                    renderManager.onPageFinished()
+                }
+
+
+                override fun onPageCommitVisible(
+                    view: WebView?,
+                    url: String?
+                ) {
+
+                    renderManager.onPageCommitVisible()
+                }
+
+
+                override fun onRenderProcessGone(
+                    view: WebView?,
+                    detail: RenderProcessGoneDetail
+                ): Boolean {
+
+                    return renderManager.onRenderProcessGone(
+                        detail
+                    )
+                }
+            }
     // =========================================================
     // CARREGAR PÁGINAS
     // =========================================================
@@ -2355,34 +2395,40 @@ fun marcarSolicitacaoAdministrador() {
     // CICLO DE VIDA
     // =========================================================
 
-    override fun onDestroy() {
+override fun onDestroy() {
 
-        telephonyCallback?.let {
+    telephonyCallback?.let {
 
-            if (
-                Build.VERSION.SDK_INT >=
-                Build.VERSION_CODES.S
+        if (
+            Build.VERSION.SDK_INT >=
+            Build.VERSION_CODES.S
+        ) {
+
+            try {
+
+                telephonyManager
+                    .unregisterTelephonyCallback(
+                        it
+                    )
+
+            } catch (
+                _: Exception
             ) {
-
-                try {
-
-                    telephonyManager
-                        .unregisterTelephonyCallback(
-                            it
-                        )
-
-                } catch (
-                    _: Exception
-                ) {
-                }
             }
         }
-
-        telephonyCallback =
-            null
-
-        pararSensor()
-
-        super.onDestroy()
     }
+
+    telephonyCallback =
+        null
+
+    pararSensor()
+
+    if (
+        ::renderManager.isInitialized
+    ) {
+        renderManager.destroy()
+    }
+
+    super.onDestroy()
+}
 }

@@ -2859,11 +2859,6 @@ document.addEventListener(
 
 async function baixarTodasPaginas() {
 
-    /*
-     * Garante que o conteúdo mais recente
-     * esteja salvo antes da exportação.
-     */
-
     try {
 
         if (
@@ -2873,9 +2868,57 @@ async function baixarTodasPaginas() {
 
             Cripto.salvar(
                 "diario",
-                JSON.stringify(
-                    dados
-                )
+                JSON.stringify(dados)
+            );
+
+        }
+
+        const quantidade =
+            Math.max(
+                dados.length,
+                paginas.length,
+                1
+            );
+
+        const arquivos = [];
+
+        for (
+            let i = 0;
+            i < quantidade;
+            i++
+        ) {
+
+            arquivos.push({
+                nome:
+                    "pagina-" +
+                    String(i + 1).padStart(2, "0") +
+                    ".txt",
+
+                conteudo:
+                    typeof dados[i] === "string"
+                        ? dados[i]
+                        : ""
+            });
+
+        }
+
+        if (
+            typeof Android !== "undefined" &&
+            typeof Android.baixarPaginas === "function"
+        ) {
+
+            Android.baixarPaginas(
+                JSON.stringify(arquivos)
+            );
+
+        } else {
+
+            console.error(
+                "Interface Android não encontrada."
+            );
+
+            alert(
+                "Não foi possível iniciar o download."
             );
 
         }
@@ -2883,149 +2926,8 @@ async function baixarTodasPaginas() {
     } catch (error) {
 
         console.error(
-            "Erro ao salvar antes da exportação:",
+            "Erro ao preparar downloads:",
             error
-        );
-
-    }
-
-
-    /*
-     * Quantidade real de páginas.
-     */
-
-    const quantidade =
-        Math.max(
-            dados.length,
-            paginas.length,
-            1
-        );
-
-
-    /*
-     * Cria um TXT individual
-     * para cada página.
-     */
-
-    for (
-        let i = 0;
-        i < quantidade;
-        i++
-    ) {
-
-        const conteudo =
-            typeof dados[i] === "string"
-                ? dados[i]
-                : "";
-
-
-        /*
-         * Nome da página.
-         */
-
-        const numero =
-            String(
-                i + 1
-            ).padStart(
-                2,
-                "0"
-            );
-
-
-        const nomeArquivo =
-            "pagina-" +
-            numero +
-            ".txt";
-
-
-        /*
-         * Cria o arquivo TXT.
-         */
-
-        const blob =
-            new Blob(
-                [
-                    conteudo
-                ],
-                {
-                    type:
-                        "text/plain;charset=utf-8"
-                }
-            );
-
-
-        const url =
-            URL.createObjectURL(
-                blob
-            );
-
-
-        /*
-         * Cria o download.
-         */
-
-        const link =
-            document.createElement(
-                "a"
-            );
-
-
-        link.href =
-            url;
-
-
-        link.download =
-            nomeArquivo;
-
-
-        link.style.display =
-            "none";
-
-
-        document.body.appendChild(
-            link
-        );
-
-
-        link.click();
-
-
-        document.body.removeChild(
-            link
-        );
-
-
-        /*
-         * Libera a URL.
-         */
-
-        setTimeout(
-            function () {
-
-                URL.revokeObjectURL(
-                    url
-                );
-
-            },
-            100
-        );
-
-
-        /*
-         * Pequeno intervalo para o
-         * navegador não bloquear vários
-         * downloads simultâneos.
-         */
-
-        await new Promise(
-            function(resolve) {
-
-                setTimeout(
-                    resolve,
-                    150
-                );
-
-            }
         );
 
     }

@@ -781,28 +781,85 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
                     return false
                 }
 
-
 override fun onPageStarted(
     view: WebView?,
     url: String?,
     favicon: android.graphics.Bitmap?
 ) {
-
     super.onPageStarted(
         view,
         url,
         favicon
     )
 
-    
+    view ?: return
+
+    /*
+     * A página começou a carregar.
+     * Enquanto ela estiver sendo montada,
+     * o usuário não interage com a WebView.
+     */
+
+    view.isEnabled = false
+
+    view.isClickable = false
+    view.isFocusable = false
+    view.isFocusableInTouchMode = false
+
+    /*
+     * Aplica blur nativo na própria WebView.
+     *
+     * Não é CSS.
+     * Não é JavaScript.
+     * É composição nativa do Android.
+     */
+
+    if (android.os.Build.VERSION.SDK_INT >= 31) {
+
+        view.setRenderEffect(
+            android.graphics.RenderEffect.createBlurEffect(
+                25f,
+                25f,
+                android.graphics.Shader.TileMode.CLAMP
+            )
+        )
+    }
 }
 
-                override fun onPageCommitVisible(
+override fun onPageCommitVisible(
     view: WebView?,
     url: String?
 ) {
-    super.onPageCommitVisible(view, url)
+    super.onPageCommitVisible(
+        view,
+        url
+    )
+
+    view ?: return
+
+    /*
+     * A primeira composição visual da nova página
+     * já foi comprometida.
+     */
+
+    if (android.os.Build.VERSION.SDK_INT >= 31) {
+
+        view.setRenderEffect(null)
+    }
+
+    /*
+     * Agora a WebView volta a aceitar interação.
+     */
+
+    view.isEnabled = true
+
+    view.isClickable = true
+    view.isFocusable = true
+    view.isFocusableInTouchMode = true
+
+    view.requestFocus()
 }
+                
 
 
                 override fun onPageFinished(

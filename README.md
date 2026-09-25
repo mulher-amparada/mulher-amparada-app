@@ -334,8 +334,8 @@ Sistema de pontos, com registro de comidas e bebidas boas e ruins, bem como a ad
 ###Mapa:
 Mostra um mapa da região e, quando a localização estiver disponível e autorizada, permite visualizar a posição atual.
 
-###Diário:
-Usando criptografia, a usuária poderá anotar o que quiser. Com a senha, ficará seguro e também não some, pois estará guardado.
+###Diário criptografado:
+Usando criptografia, a usuária poderá anotar o que quiser. Com a senha, ficará seguro e também não some, pois estará guardado, e é possivel baixar as páginas desse diário!
 
 ###Relógio:
 Mostra o mapa do local atual, o país e outros dados, bem como o ano, semestre, bimestre, mês, quinzena, semana, dia, hora, minuto e segundo.

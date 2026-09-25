@@ -195,7 +195,7 @@ controller.isAppearanceLightNavigationBars =
 
 
 
-webView = findViewById(R.id.webView)
+webView = findViewById(R.id.webview)
 
 renderManager =
     WebViewRenderManager(webView)

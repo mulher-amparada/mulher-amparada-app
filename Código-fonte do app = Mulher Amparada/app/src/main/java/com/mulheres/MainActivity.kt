@@ -271,6 +271,19 @@ val pastaUsuario =
         "user2"
     }
 
+if (!pagina.isNullOrEmpty()) {
+
+    webView.loadUrl(
+        "file:///android_asset/$pastaUsuario/$pagina"
+    )
+
+} else {
+
+    webView.loadUrl(
+        "file:///android_asset/$pastaUsuario/index1.html"
+    )
+}
+
 
 
         // =====================================================

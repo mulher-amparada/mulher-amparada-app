@@ -14,6 +14,8 @@ class WebViewRenderManager(
     private val webView: WebView
 ) {
 
+    private var cssGeneration = 0L
+
     private val mainHandler =
         Handler(Looper.getMainLooper())
 

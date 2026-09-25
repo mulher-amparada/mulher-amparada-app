@@ -63,119 +63,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.math.log10
 import kotlin.math.sqrt
 
-class DownloadInterface(
-    private val context: Context
-) {
-
-    @JavascriptInterface
-    fun baixarPaginas(json: String) {
-
-        try {
-
-            val array =
-                org.json.JSONArray(json)
-
-            for (i in 0 until array.length()) {
-
-                val arquivo =
-                    array.getJSONObject(i)
-
-                val nome =
-                    arquivo.getString("nome")
-
-                val conteudo =
-                    arquivo.getString("conteudo")
-
-                salvarArquivo(
-                    nome,
-                    conteudo
-                )
-            }
-
-        } catch (e: Exception) {
-
-            e.printStackTrace()
-
-        }
-
-    }
-
-
-    private fun salvarArquivo(
-        nome: String,
-        conteudo: String
-    ) {
-
-        try {
-
-            val resolver =
-                context.contentResolver
-
-            val values =
-                android.content.ContentValues().apply {
-
-                    put(
-                        android.provider.MediaStore.Downloads.DISPLAY_NAME,
-                        nome
-                    )
-
-                    put(
-                        android.provider.MediaStore.Downloads.MIME_TYPE,
-                        "text/plain"
-                    )
-
-                    put(
-                        android.provider.MediaStore.Downloads.IS_PENDING,
-                        1
-                    )
-                }
-
-
-            val uri =
-                resolver.insert(
-                    android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI,
-                    values
-                )
-                    ?: return
-
-
-            resolver.openOutputStream(uri)?.use {
-                output ->
-
-                output.write(
-                    conteudo.toByteArray(
-                        Charsets.UTF_8
-                    )
-                )
-
-            }
-
-
-            values.clear()
-
-            values.put(
-                android.provider.MediaStore.Downloads.IS_PENDING,
-                0
-            )
-
-
-            resolver.update(
-                uri,
-                values,
-                null,
-                null
-            )
-
-        } catch (e: Exception) {
-
-            e.printStackTrace()
-
-        }
-
-    }
-
-}
-
 class MainActivity : AppCompatActivity() {
 
     companion object {
@@ -611,11 +498,6 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             cripto,
             "Cripto"
         )
-
-webView.addJavascriptInterface(
-    DownloadInterface(this),
-    "Android"
-)
 
         val settings =
             webView.settings

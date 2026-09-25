@@ -62,18 +62,6 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.math.log10
 import kotlin.math.sqrt
-if (!pagina.isNullOrEmpty()) {
-
-    webView.loadUrl(
-        "file:///android_asset/$pastaUsuario/$pagina"
-    )
-
-} else {
-
-    webView.loadUrl(
-        "file:///android_asset/$pastaUsuario/index1.html"
-    )
-}
 
 class MainActivity : AppCompatActivity() {
 

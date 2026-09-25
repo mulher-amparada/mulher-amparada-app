@@ -1255,7 +1255,7 @@ textarea::placeholder {
     border-radius: 14px;
 
     background:
-        rgba(0,0,0,.045);
+        #f5f6f8;
 
     cursor: pointer;
 
@@ -1283,6 +1283,16 @@ textarea::placeholder {
     object-fit: contain;
 
     opacity: .8;
+
+    filter:
+        brightness(0)
+        saturate(100%)
+        invert(34%)
+        sepia(7%)
+        saturate(475%)
+        hue-rotate(190deg)
+        brightness(91%)
+        contrast(88%);
 }
 
 

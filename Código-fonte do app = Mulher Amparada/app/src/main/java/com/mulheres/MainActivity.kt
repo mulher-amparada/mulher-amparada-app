@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
     // VARIÁVEIS
     // =========================================================
 
-private var aguardandoAdministrador = false
+    private var aguardandoAdministrador = false
 
     private var palmasEmExecucao = false
 
@@ -101,11 +101,13 @@ private var aguardandoAdministrador = false
 
     private lateinit var webView: StableWebView
 
-private lateinit var emergencyComposeView: ComposeView
+    private lateinit var emergencyComposeView: ComposeView
 
-private var emergenciaVisivel by mutableStateOf(false)
+    private var emergenciaVisivel by mutableStateOf(false)
 
     private lateinit var selecionarContatoLauncher: ActivityResultLauncher<Intent>
+    
+    private lateinit var renderManager: WebViewRenderManager
 
 
     // =========================================================
@@ -193,10 +195,10 @@ controller.isAppearanceLightNavigationBars =
 
 
 
-webView =
-    findViewById(
-        R.id.webview
-    )
+webView = findViewById(R.id.webView)
+
+renderManager =
+    WebViewRenderManager(webView)
 
 locationClient =
     LocationServices
@@ -272,13 +274,13 @@ val pastaUsuario =
 
 if (!pagina.isNullOrEmpty()) {
 
-    webView.loadUrl(
+    renderManager.loadUrl(
         "file:///android_asset/$pastaUsuario/$pagina"
     )
 
 } else {
 
-    webView.loadUrl(
+    renderManager.loadUrl(
         "file:///android_asset/$pastaUsuario/index1.html"
     )
 }
@@ -900,7 +902,7 @@ override fun onPageCommitVisible(
 
 private fun carregarWebView1() {
 
-    webView.loadUrl(
+    renderManager.loadUrl(
         "file:///android_asset/${obterPastaTema()}/index1.html"
     )
 }
@@ -908,7 +910,7 @@ private fun carregarWebView1() {
 
 private fun carregarWebView2() {
 
-    webView.loadUrl(
+    renderManager.loadUrl(
         "file:///android_asset/${obterPastaTema()}/carteira.html"
     )
 }
@@ -916,7 +918,7 @@ private fun carregarWebView2() {
 
 private fun carregarWebView4() {
 
-    webView.loadUrl(
+    renderManager.loadUrl(
         "file:///android_asset/${obterPastaTema()}/botao.html"
     )
 }

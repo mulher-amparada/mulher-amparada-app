@@ -499,6 +499,11 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             "Cripto"
         )
 
+        webView.addJavascriptInterface(
+            DownloadInterface(this),
+            "Downloader"
+        )
+        
         val settings =
             webView.settings
 

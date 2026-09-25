@@ -14,8 +14,6 @@ class WebViewRenderManager(
     private val webView: WebView
 ) {
 
-    private var cssGeneration = 0L
-
     private val mainHandler =
         Handler(Looper.getMainLooper())
 
@@ -106,17 +104,17 @@ class WebViewRenderManager(
                 !rendererAlive
             ) {
                 pendingAction = null
-                return
+            } else {
+
+                val action =
+                    pendingAction
+
+                pendingAction = null
+
+                action?.invoke()
+
+                solicitarFrame()
             }
-
-            val action =
-                pendingAction
-
-            pendingAction = null
-
-            action?.invoke()
-
-            solicitarFrame()
         }
 
 
@@ -468,6 +466,7 @@ class WebViewRenderManager(
         cssInjected =
             false
 
+
         /*
          * Nunca deixamos a WebView perder a transparência.
          */
@@ -481,6 +480,7 @@ class WebViewRenderManager(
 
         webView.visibility =
             View.VISIBLE
+
 
         /*
          * CSS temporário de estabilização.
@@ -592,11 +592,13 @@ class WebViewRenderManager(
         visualStatePending =
             true
 
+
         /*
          * O DOM já existe.
          */
 
         prepararCSSAntiFlash()
+
 
         /*
          * Espera alguns frames antes de considerar
@@ -636,6 +638,7 @@ class WebViewRenderManager(
         webView.setBackgroundColor(
             Color.TRANSPARENT
         )
+
 
         /*
          * Neste ponto o Chromium já confirmou que existe
@@ -827,6 +830,7 @@ class WebViewRenderManager(
         visualStatePending =
             true
 
+
         /*
          * Remove apenas a folha temporária criada pelo
          * próprio manager.
@@ -968,6 +972,7 @@ class WebViewRenderManager(
                             return@postFrameCallback
                         }
 
+
                         /*
                          * Mais um frame após a confirmação
                          * visual do Chromium.
@@ -1060,6 +1065,7 @@ class WebViewRenderManager(
 
         configurarRenderer()
 
+
         /*
          * Reaquece a composição.
          */
@@ -1147,7 +1153,6 @@ class WebViewRenderManager(
 
         stabilizationGeneration++
 
-        cssGeneration++
 
         /*
          * Continua transparente mesmo durante o encerramento.
@@ -1256,8 +1261,6 @@ class WebViewRenderManager(
         navigationGeneration++
 
         stabilizationGeneration++
-
-        cssGeneration++
 
         cancelPending()
 

@@ -44,6 +44,7 @@
 <color name="recorder_ring">#7E7E7E</color>
 
 <color name="recorder_button">#585858</color>
+
 <color name="recorder_button_pressed">#696969</color>
 
 <color name="file_background">#FFFFFF</color>
@@ -57,6 +58,8 @@
 <color name="file_path">#666666</color>
 
 <color name="file_count">#666666</color>
+
+<color name="record_text">#FFFFFF</color>
 
 <color name="record_item_background">#E6E6E6</color>
 

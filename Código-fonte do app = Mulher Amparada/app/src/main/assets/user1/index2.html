@@ -20,7 +20,6 @@
 <title>Mulher Amparada</title>
 
 <style>
-
 /* =========================================================
    FONTE
 ========================================================= */
@@ -41,64 +40,64 @@
 
 
 /* =========================================================
-   VARIÁVEIS
+   VARIÁVEIS — MODO CLARO
 ========================================================= */
 
 :root {
 
     --background:
-        #050507;
+        transparent;
 
     --surface:
-        #111116;
-
-    --surface-light:
-        #18181f;
-
-    --surface-hover:
-        #20202a;
-
-    --white:
         #ffffff;
 
+    --surface-light:
+        #f8f8fa;
+
+    --surface-hover:
+        #eeeeF2;
+
+    --white:
+        #17171c;
+
     --text:
-        #eeeeF4;
+        #202027;
 
     --secondary:
-        #aaaab8;
+        #666673;
 
     --muted:
-        #70707e;
+        #858592;
 
     --border:
-        #ffffff14;
+        #00000012;
 
     --border-light:
-        #ffffff25;
+        #0000001c;
 
     --pink:
         #ff3d82;
 
     --pink-light:
-        #ff8fb5;
+        #d92d6d;
 
     --red:
-        #ff465b;
+        #e7354d;
 
     --purple:
-        #9a7cff;
+        #7658d9;
 
     --orange:
-        #ffb45e;
+        #e58b27;
 
     --cyan:
-        #54ded4;
+        #159e96;
 
     --blue:
-        #729fff;
+        #477de0;
 
     --green:
-        #69dfa1;
+        #15945c;
 
     --radius-large:
         32px;
@@ -158,7 +157,7 @@ body {
         hidden;
 
     color:
-        var(--white);
+        var(--text);
 
     background:
         var(--background);
@@ -205,7 +204,6 @@ button:focus-visible {
 /* =========================================================
    ANIMAÇÕES
 ========================================================= */
-
 
 @keyframes bubbleFloat {
 
@@ -280,8 +278,6 @@ button:focus-visible {
     gap:
         34px;
 
-    
-
 }
 
 
@@ -307,7 +303,6 @@ button:focus-visible {
         var(--border);
 
 }
-
 
 .hero-mark {
 
@@ -393,7 +388,7 @@ button:focus-visible {
         2;
 
     color:
-        var(--white);
+        var(--text);
 
     font-size:
         clamp(
@@ -478,7 +473,7 @@ button:focus-visible {
 
     border:
         1px solid
-        #ffffff18;
+        var(--border);
 
     border-radius:
         var(--radius-large);
@@ -486,9 +481,12 @@ button:focus-visible {
     background:
         linear-gradient(
             135deg,
-            #1b1823,
-            #101016
+            #ffffff 0%,
+            #f2eff8 100%
         );
+
+    box-shadow:
+        0 10px 30px #00000008;
 
 }
 
@@ -553,7 +551,7 @@ button:focus-visible {
         50%;
 
     background:
-        #ffffff06;
+        #00000005;
 
     pointer-events:
         none;
@@ -601,7 +599,7 @@ button:focus-visible {
 .overview-title {
 
     color:
-        var(--white);
+        var(--text);
 
     font-size:
         21px;
@@ -835,8 +833,9 @@ button:focus-visible {
 
 }
 
+
 /* =========================================================
-   BOTÃO DE PÂNICO — COMPLETO
+   BOTÃO DE PÂNICO
 ========================================================= */
 
 .panic {
@@ -883,11 +882,6 @@ button:focus-visible {
 
 }
 
-
-/* =========================================================
-   BOLHA SUPERIOR
-========================================================= */
-
 .panic::before {
 
     content: "";
@@ -909,11 +903,6 @@ button:focus-visible {
     z-index: -1;
 
 }
-
-
-/* =========================================================
-   BOLHA INFERIOR
-========================================================= */
 
 .panic::after {
 
@@ -937,11 +926,6 @@ button:focus-visible {
 
 }
 
-
-/* =========================================================
-   ÁREA INTERNA
-========================================================= */
-
 .panic > * {
 
     position: relative;
@@ -951,11 +935,6 @@ button:focus-visible {
     flex-shrink: 0;
 
 }
-
-
-/* =========================================================
-   ÍCONE
-========================================================= */
 
 .panic img {
 
@@ -972,11 +951,6 @@ button:focus-visible {
     pointer-events: none;
 
 }
-
-
-/* =========================================================
-   TEXTOS DO BOTÃO DE PÂNICO
-========================================================= */
 
 .panic h1,
 .panic h2,
@@ -1021,9 +995,6 @@ button:focus-visible {
 
 }
 
-
-/* Texto de apoio */
-
 .panic p,
 .panic .panic-description {
 
@@ -1050,9 +1021,6 @@ button:focus-visible {
 
 }
 
-
-/* Remove efeitos e elementos herdados */
-
 .panic h1::before,
 .panic h1::after,
 .panic h2::before,
@@ -1072,9 +1040,6 @@ button:focus-visible {
 
 }
 
-
-/* Caso o título esteja dentro de uma div */
-
 .panic > div {
 
     display: flex;
@@ -1092,6 +1057,7 @@ button:focus-visible {
 
 }
 
+
 /* =========================================================
    ÍCONES SVG EXTERNOS
 ========================================================= */
@@ -1105,7 +1071,7 @@ button:focus-visible {
 
     margin: 0;
 
-    fill: #ffffff;
+    
 
     color: #ffffff;
 
@@ -1113,12 +1079,8 @@ button:focus-visible {
 
 }
 
-svg {
-margin: 5%;
-}
-
 /* =========================================================
-   HOVER
+   HOVER / TOQUE / FOCO
 ========================================================= */
 
 @media (hover: hover) {
@@ -1131,21 +1093,11 @@ margin: 5%;
 
 }
 
-
-/* =========================================================
-   TOQUE
-========================================================= */
-
 .panic:active {
 
     transform: scale(0.985);
 
 }
-
-
-/* =========================================================
-   FOCO ACESSÍVEL
-========================================================= */
 
 .panic:focus-visible {
 
@@ -1153,11 +1105,6 @@ margin: 5%;
     outline-offset: 4px;
 
 }
-
-
-/* =========================================================
-   ESTADO DESABILITADO
-========================================================= */
 
 .panic:disabled {
 
@@ -1168,11 +1115,6 @@ margin: 5%;
     transform: none;
 
 }
-
-
-/* =========================================================
-   CORREÇÃO CONTRA ESTILOS GLOBAIS
-========================================================= */
 
 .panic h1,
 .panic h2,
@@ -1200,7 +1142,7 @@ margin: 5%;
 
 
 /* =========================================================
-   RESPONSIVIDADE
+   RESPONSIVIDADE DO PÂNICO
 ========================================================= */
 
 @media (max-width: 360px) {
@@ -1242,6 +1184,7 @@ margin: 5%;
     }
 
 }
+
 
 /* =========================================================
    CARDS DE PROTEÇÃO
@@ -1289,6 +1232,9 @@ margin: 5%;
     isolation:
         isolate;
 
+    box-shadow:
+        0 8px 25px #00000008;
+
 }
 
 .control-card + .control-card {
@@ -1322,7 +1268,7 @@ margin: 5%;
         50%;
 
     background:
-        #ffffff05;
+        #00000005;
 
     pointer-events:
         none;
@@ -1353,7 +1299,7 @@ margin: 5%;
         50%;
 
     background:
-        #ffffff04;
+        #00000004;
 
     pointer-events:
         none;
@@ -1417,7 +1363,7 @@ margin: 5%;
         320px;
 
     color:
-        var(--white);
+        var(--text);
 
     font-size:
         clamp(
@@ -1527,7 +1473,7 @@ margin: 5%;
         50%;
 
     background:
-        #555560;
+        #b7b7c0;
 
 }
 
@@ -1581,13 +1527,13 @@ margin: 5%;
 
     border:
         1px solid
-        #ffffff18;
+        #00000012;
 
     border-radius:
         22px;
 
     background:
-        #ffffff06;
+        #f2f2f5;
 
 }
 
@@ -1604,7 +1550,7 @@ margin: 5%;
 
     border:
         1px solid
-        #ffffff12;
+        #0000000d;
 
     border-radius:
         16px;
@@ -1724,13 +1670,13 @@ margin: 5%;
 
     border:
         1px solid
-        #ffffff18;
+        #00000015;
 
     border-radius:
         999px;
 
     background:
-        #292a33;
+        #d7d7de;
 
     transition:
         background .25s ease,
@@ -1762,7 +1708,10 @@ margin: 5%;
         50%;
 
     background:
-        #777986;
+        #ffffff;
+
+    box-shadow:
+        0 2px 6px #00000020;
 
     transition:
         transform .25s ease,
@@ -1820,13 +1769,10 @@ margin: 5%;
 
 }
 
+
 /* =========================================================
-   CARDS DE AÇÃO — DESIGN AVANÇADO
+   CARDS DE AÇÃO
 ========================================================= */
-
-/* ACESSO DE EMERGÊNCIA — LARANJA AMARELADO */
-
-
 
 .actionCard,
 .emergency-access-card {
@@ -1855,7 +1801,7 @@ margin: 5%;
 
     text-align: left;
 
-    color: var(--white);
+    color: var(--text);
 
     isolation: isolate;
 
@@ -1867,11 +1813,6 @@ margin: 5%;
         filter .22s ease;
 
 }
-
-
-/* =========================================================
-   LINHA COLORIDA LATERAL
-========================================================= */
 
 .actionCard > .actionIcon,
 .emergency-access-card > .emergency-access-icon {
@@ -1901,11 +1842,6 @@ margin: 5%;
 
 }
 
-
-/* =========================================================
-   BOLHA SUPERIOR
-========================================================= */
-
 .actionCard::before,
 .emergency-access-card::before {
 
@@ -1921,18 +1857,13 @@ margin: 5%;
 
     border-radius: 50%;
 
-    background: #ffffff08;
+    background: #00000006;
 
     pointer-events: none;
 
     z-index: -1;
 
 }
-
-
-/* =========================================================
-   BOLHA INFERIOR
-========================================================= */
 
 .actionCard::after,
 .emergency-access-card::after {
@@ -1949,18 +1880,13 @@ margin: 5%;
 
     border-radius: 50%;
 
-    background: #ffffff06;
+    background: #00000004;
 
     pointer-events: none;
 
     z-index: -1;
 
 }
-
-
-/* =========================================================
-   REFLEXO INTERNO
-========================================================= */
 
 .actionCard > span,
 .emergency-access-card > div {
@@ -1989,17 +1915,12 @@ margin: 5%;
 
 }
 
-
-/* =========================================================
-   INTERAÇÃO
-========================================================= */
-
 .actionCard:active,
 .emergency-access-card:active {
 
     transform: scale(.975);
 
-    filter: brightness(.88);
+    filter: brightness(.96);
 
 }
 
@@ -2008,9 +1929,9 @@ margin: 5%;
     .actionCard:hover,
     .emergency-access-card:hover {
 
-        border-color: #ffffff45;
+        border-color: #00000035;
 
-        filter: brightness(1.08);
+        filter: brightness(.98);
 
     }
 
@@ -2018,7 +1939,7 @@ margin: 5%;
 
 
 /* =========================================================
-   ÍCONE
+   ÍCONES
 ========================================================= */
 
 .actionIcon,
@@ -2034,11 +1955,11 @@ margin: 5%;
 
     position: relative;
 
-    border: 1px solid #ffffff22;
+    border: 1px solid #00000018;
 
     border-radius: 23px;
 
-    background: #ffffff08;
+    background: #f5f5f7;
 
 }
 
@@ -2051,7 +1972,7 @@ margin: 5%;
 
     inset: 6px;
 
-    border: 1px solid #ffffff12;
+    border: 1px solid #0000000d;
 
     border-radius: 18px;
 
@@ -2100,7 +2021,7 @@ margin: 5%;
 
     width: 100%;
 
-    color: #ffffff;
+    color: var(--text);
 
     font-size: 16px;
 
@@ -2119,7 +2040,7 @@ margin: 5%;
 
     width: 100%;
 
-    color: #ffffffa8;
+    color: var(--secondary);
 
     font-size: 10px;
 
@@ -2128,11 +2049,6 @@ margin: 5%;
     line-height: 1.55;
 
 }
-
-
-/* =========================================================
-   PEQUENO INDICADOR DE SERVIÇO
-========================================================= */
 
 .actionContent::after,
 .emergency-access-content::after {
@@ -2171,11 +2087,11 @@ margin: 5%;
     align-items: center;
     justify-content: center;
 
-    border: 1px solid #ffffff20;
+    border: 1px solid #00000018;
 
     border-radius: 16px;
 
-    background: #00000022;
+    background: #f2f2f5;
 
     transition:
         transform .22s ease,
@@ -2207,17 +2123,17 @@ margin: 5%;
 
 .policia {
 
-    color: var(--blue);
+    color: #477de0;
 
     background:
         linear-gradient(
             135deg,
-            #182844 0%,
-            #101a2d 55%,
-            #0d1423 100%
+            #edf3ff 0%,
+            #e4edff 55%,
+            #dbe7ff 100%
         );
 
-    border-color: #729fff50;
+    border-color: #729fff65;
 
 }
 
@@ -2237,7 +2153,7 @@ margin: 5%;
 
 .policia .actionTitle {
 
-    color: #ffffff;
+    color: #234a9b;
 
 }
 
@@ -2245,35 +2161,43 @@ margin: 5%;
 /* =========================================================
    SAMU
 ========================================================= */
+
 .samu {
 
-    color: #ff6347;
+    color: #d94b34;
 
     background:
         linear-gradient(
             135deg,
-            #3a1d19 0%,
-            #281512 55%,
-            #17100e 100%
+            #fff0ed 0%,
+            #ffe5e1 55%,
+            #ffdad5 100%
         );
 
-    border-color: #ff634750;
+    border-color: #ff634765;
 
 }
 
 .samu .actionIcon {
 
-    background: #b2222218;
-    border-color: #b2222255;
+    background: #ff634718;
+    border-color: #ff634755;
 
 }
 
 .samu .actionArrow {
 
-    background: #b2222212;
-    border-color: #b2222238;
+    background: #ff634712;
+    border-color: #ff634738;
 
 }
+
+.samu .actionTitle {
+
+    color: #a93627;
+
+}
+
 
 /* =========================================================
    CENTRAL DA MULHER
@@ -2281,17 +2205,17 @@ margin: 5%;
 
 .mulher {
 
-    color: var(--pink-light);
+    color: #d92d6d;
 
     background:
         linear-gradient(
             135deg,
-            #3c1b2c 0%,
-            #281522 55%,
-            #1a1018 100%
+            #fff0f6 0%,
+            #ffe4ef 55%,
+            #ffd9e8 100%
         );
 
-    border-color: #ff3d8250;
+    border-color: #ff3d8265;
 
 }
 
@@ -2316,17 +2240,17 @@ margin: 5%;
 
 .localizacao {
 
-    color: var(--cyan);
+    color: #159e96;
 
     background:
         linear-gradient(
             135deg,
-            #153434 0%,
-            #102727 55%,
-            #0b1b1b 100%
+            #eafbf9 0%,
+            #ddf6f3 55%,
+            #d1f0ed 100%
         );
 
-    border-color: #54ded450;
+    border-color: #54ded465;
 
 }
 
@@ -2351,17 +2275,17 @@ margin: 5%;
 
 .contato {
 
-    color: var(--purple);
+    color: #7658d9;
 
     background:
         linear-gradient(
             135deg,
-            #2d214b 0%,
-            #1e1733 55%,
-            #151024 100%
+            #f2efff 0%,
+            #e9e3ff 55%,
+            #e0d8ff 100%
         );
 
-    border-color: #9a7cff50;
+    border-color: #9a7cff65;
 
 }
 
@@ -2381,22 +2305,22 @@ margin: 5%;
 
 
 /* =========================================================
-   SOS PARA CONTATOS
+   SOS
 ========================================================= */
 
 .sos {
 
-    color: var(--red);
+    color: #d9364d;
 
     background:
         linear-gradient(
             135deg,
-            #3c1b25 0%,
-            #2b131b 55%,
-            #1c0d13 100%
+            #fff0f2 0%,
+            #ffe3e7 55%,
+            #ffd7dd 100%
         );
 
-    border-color: #ff465b50;
+    border-color: #ff465b65;
 
 }
 
@@ -2421,19 +2345,19 @@ margin: 5%;
 
 .emergency-access-card {
 
-    color: #ffcf66;
+    color: #a85d12;
 
     min-height: 128px;
 
     background:
         linear-gradient(
             135deg,
-            #432018 0%,
-            #2d1710 55%,
-            #1a0c09 100%
+            #fff3df 0%,
+            #ffe8c7 55%,
+            #ffddb0 100%
         );
 
-    border-color: #ffcf6655;
+    border-color: #e58b2765;
 
     cursor: pointer;
 
@@ -2441,27 +2365,27 @@ margin: 5%;
 
 .emergency-access-icon {
 
-    background: #ff4d1818;
-    border-color: #ff4d1855;
+    background: #ff8a1818;
+    border-color: #e58b2755;
 
 }
 
 .emergency-access-arrow {
 
-    background: #ff4d1812;
-    border-color: #ff4d1838;
+    background: #e58b2712;
+    border-color: #e58b2738;
 
 }
 
 .emergency-access-content strong {
 
-    color: #ffffff;
+    color: #87490b;
 
 }
 
 .emergency-access-content p {
 
-    color: #ffffffa8;
+    color: #7d654d;
 
 }
 
@@ -2470,6 +2394,7 @@ margin: 5%;
     content: "ACESSO EXTERNO";
 
 }
+
 
 /* =========================================================
    ESPAÇAMENTO ENTRE CARDS
@@ -2576,9 +2501,9 @@ margin: 5%;
 
 }
 
+
 /* =========================================================
    ÁREAS ESPECIAIS
-   PORTAIS DE ACESSO PROTEGIDO
 ========================================================= */
 
 .bigButton,
@@ -2607,7 +2532,7 @@ margin: 5%;
 
     border-radius: 32px;
 
-    color: #ffffff;
+    color: var(--text);
     text-align: left;
 
     isolation: isolate;
@@ -2625,7 +2550,7 @@ margin: 5%;
 
 
 /* =========================================================
-   ÁREA PROTEGIDA — IDENTIDADE VISUAL
+   ÁREA PROTEGIDA
 ========================================================= */
 
 .bigButton {
@@ -2633,9 +2558,9 @@ margin: 5%;
     background:
         linear-gradient(
             145deg,
-            #292052 0%,
-            #211a3c 45%,
-            #151329 100%
+            #f1edff 0%,
+            #e8e1ff 45%,
+            #dfd7ff 100%
         );
 
     border-color:
@@ -2645,7 +2570,7 @@ margin: 5%;
 
 
 /* =========================================================
-   ÁREA DO AMPARO — IDENTIDADE VISUAL
+   ÁREA DO AMPARO
 ========================================================= */
 
 .amparoButton {
@@ -2653,9 +2578,9 @@ margin: 5%;
     background:
         linear-gradient(
             145deg,
-            #3b2047 0%,
-            #2b1936 45%,
-            #1b1124 100%
+            #f9ebfc 0%,
+            #f1ddf6 45%,
+            #ead0f1 100%
         );
 
     border-color:
@@ -2665,7 +2590,7 @@ margin: 5%;
 
 
 /* =========================================================
-   BOLHAS ORIGINAIS — MANTIDAS
+   BOLHAS
 ========================================================= */
 
 .bigButton::before,
@@ -2683,14 +2608,13 @@ margin: 5%;
 
     border-radius: 50%;
 
-    background: #ffffff08;
+    background: #00000005;
 
     pointer-events: none;
 
     z-index: -1;
 
 }
-
 
 .bigButton::after,
 .amparoButton::after {
@@ -2713,23 +2637,21 @@ margin: 5%;
 
 }
 
-
 .bigButton::after {
 
-    background: #4b39952c;
+    background: #7658d920;
 
 }
 
-
 .amparoButton::after {
 
-    background: #a348b52c;
+    background: #a348b520;
 
 }
 
 
 /* =========================================================
-   LINHAS GEOMÉTRICAS DECORATIVAS
+   LINHAS GEOMÉTRICAS
 ========================================================= */
 
 .bigButton .protectContent::before,
@@ -2753,7 +2675,7 @@ margin: 5%;
 
 
 /* =========================================================
-   ÍCONE — MÓDULO DE ACESSO
+   ÍCONE
 ========================================================= */
 
 .protectIcon,
@@ -2780,12 +2702,9 @@ margin: 5%;
 
 }
 
-
-/* Área protegida */
-
 .protectIcon {
 
-    color: #b5a3ff;
+    color: #7658d9;
 
     border-color: #9a7cff75;
 
@@ -2793,12 +2712,9 @@ margin: 5%;
 
 }
 
-
-/* Área do amparo */
-
 .amparoIcon {
 
-    color: #e0a1f0;
+    color: #a348b5;
 
     border-color: #c36cda75;
 
@@ -2808,7 +2724,7 @@ margin: 5%;
 
 
 /* =========================================================
-   MOLDURA INTERNA DO ÍCONE
+   MOLDURA INTERNA
 ========================================================= */
 
 .protectIcon::before,
@@ -2829,11 +2745,6 @@ margin: 5%;
     pointer-events: none;
 
 }
-
-
-/* =========================================================
-   MARCA GEOMÉTRICA NO ÍCONE
-========================================================= */
 
 .protectIcon::after,
 .amparoIcon::after {
@@ -2896,6 +2807,7 @@ margin: 5%;
 
 }
 
+
 /* =========================================================
    TÍTULOS
 ========================================================= */
@@ -2905,7 +2817,7 @@ margin: 5%;
 
     display: block;
 
-    color: #ffffff;
+    color: var(--text);
 
     font-size: clamp(
         21px,
@@ -2933,7 +2845,7 @@ margin: 5%;
 
     max-width: 230px;
 
-    color: #c9c0ed;
+    color: #665c86;
 
     font-size: 10px;
 
@@ -2943,10 +2855,9 @@ margin: 5%;
 
 }
 
-
 .amparoSubtitle {
 
-    color: #d9b8e4;
+    color: #785f80;
 
 }
 
@@ -2966,7 +2877,7 @@ margin: 5%;
 
     margin-top: 2px;
 
-    color: #b9a7ff;
+    color: #7658d9;
 
     font-size: 7px;
 
@@ -2978,13 +2889,11 @@ margin: 5%;
 
 }
 
-
 .amparoMeta {
 
-    color: #e2a2f0;
+    color: #a348b5;
 
 }
-
 
 .protectMeta::before,
 .amparoMeta::before {
@@ -3004,7 +2913,7 @@ margin: 5%;
 
 
 /* =========================================================
-   SETA — PORTAL
+   SETA
 ========================================================= */
 
 .navigationArrow,
@@ -3031,12 +2940,9 @@ margin: 5%;
 
 }
 
-
-/* Área protegida */
-
 .navigationArrow {
 
-    color: #b9a7ff;
+    color: #7658d9;
 
     border-color: #9a7cff55;
 
@@ -3044,12 +2950,9 @@ margin: 5%;
 
 }
 
-
-/* Área do amparo */
-
 .amparoArrow {
 
-    color: #e2a2f0;
+    color: #a348b5;
 
     border-color: #c36cda55;
 
@@ -3059,7 +2962,7 @@ margin: 5%;
 
 
 /* =========================================================
-   DETALHE INTERNO DA SETA
+   DETALHE INTERNO
 ========================================================= */
 
 .navigationArrow::before,
@@ -3101,7 +3004,7 @@ margin: 5%;
 
 
 /* =========================================================
-   EFEITO DE INTERAÇÃO
+   INTERAÇÃO
 ========================================================= */
 
 .bigButton:active,
@@ -3109,26 +3012,25 @@ margin: 5%;
 
     transform: scale(.975);
 
-    filter: brightness(.88);
+    filter: brightness(.96);
 
 }
-
 
 @media (hover: hover) {
 
     .bigButton:hover {
 
-        border-color: #b6a4ff;
+        border-color: #7658d9;
 
-        filter: brightness(1.08);
+        filter: brightness(.98);
 
     }
 
     .amparoButton:hover {
 
-        border-color: #e19aef;
+        border-color: #a348b5;
 
-        filter: brightness(1.08);
+        filter: brightness(.98);
 
     }
 
@@ -3143,7 +3045,7 @@ margin: 5%;
 
 
 /* =========================================================
-   FOCO ACESSÍVEL
+   FOCO
 ========================================================= */
 
 .bigButton:focus-visible,
@@ -3233,6 +3135,7 @@ margin: 5%;
 
 }
 
+
 /* =========================================================
    POPUP
 ========================================================= */
@@ -3261,7 +3164,7 @@ margin: 5%;
         22px;
 
     background:
-        #000000;
+        rgba(0, 0, 0, .35);
 
     opacity:
         0;
@@ -3271,8 +3174,6 @@ margin: 5%;
 
     pointer-events:
         none;
-
-    
 
 }
 
@@ -3301,22 +3202,22 @@ margin: 5%;
 
     border:
         1px solid
-        #ffffff20;
+        #00000015;
 
     border-radius:
         28px;
 
     background:
-        #121218;
+        #ffffff;
 
-    
+    box-shadow:
+        0 20px 60px
+        #00000020;
 
     transition:
         transform .28s ease;
 
 }
-
-
 
 .custom-popup h2 {
 
@@ -3324,7 +3225,7 @@ margin: 5%;
         11px;
 
     color:
-        #ffffff;
+        var(--text);
 
     font-size:
         21px;
@@ -3340,7 +3241,7 @@ margin: 5%;
         23px;
 
     color:
-        #b7b7c4;
+        var(--secondary);
 
     font-size:
         12px;
@@ -3372,7 +3273,7 @@ margin: 5%;
         var(--pink-light);
 
     background:
-        #ff3d8218;
+        #ff3d8212;
 
     font-size:
         13px;
@@ -3384,7 +3285,7 @@ margin: 5%;
 
 
 /* =========================================================
-   RESPONSIVIDADE
+   RESPONSIVIDADE GERAL
 ========================================================= */
 
 @media (max-width: 420px) {
@@ -3526,13 +3427,13 @@ margin: 5%;
 
 }
 
+
 /* =========================================================
    ÍCONES DOS SENSORES — TAMANHO REDUZIDO
 ========================================================= */
 
 .control-visual img,
-.control-visual svg
- {
+.control-visual svg {
 
     width: 24px !important;
 
@@ -3545,8 +3446,7 @@ margin: 5%;
 }
 
 .navigationArrow svg,
-.amparoArrow svg
- {
+.amparoArrow svg {
 
     width: 18px !important;
 
@@ -3565,9 +3465,11 @@ margin: 5%;
     height: 17px !important;
 
     object-fit: contain;
+
     margin: 0 !important;
 
 }
+
 
 /* =========================================================
    CORES ATIVAS DOS SENSORES
@@ -3582,9 +3484,9 @@ margin: 5%;
     background:
         linear-gradient(
             135deg,
-            #542039 0%,
-            #3b172b 55%,
-            #24101c 100%
+            #fff0f6 0%,
+            #ffe2ee 55%,
+            #ffd5e5 100%
         );
 
     border-color:
@@ -3599,21 +3501,21 @@ margin: 5%;
 .palmas.active::before {
 
     background:
-        #ff3d8240;
+        #ff3d8225;
 
 }
 
 .palmas.active::after {
 
     background:
-        #c51d582c;
+        #c51d5818;
 
 }
 
 .palmas.active .control-visual {
 
     background:
-        #ff3d8230;
+        #ff3d8225;
 
     border-color:
         #ff3d8290;
@@ -3630,7 +3532,7 @@ margin: 5%;
 .palmas.active .control-status {
 
     color:
-        #ff8fb5;
+        #d92d6d;
 
 }
 
@@ -3644,9 +3546,9 @@ margin: 5%;
     background:
         linear-gradient(
             135deg,
-            #38275e 0%,
-            #281b47 55%,
-            #19122e 100%
+            #f3efff 0%,
+            #e9e2ff 55%,
+            #ded5ff 100%
         );
 
     border-color:
@@ -3661,21 +3563,21 @@ margin: 5%;
 .movimento.active::before {
 
     background:
-        #9a7cff40;
+        #9a7cff25;
 
 }
 
 .movimento.active::after {
 
     background:
-        #6846c72c;
+        #6846c718;
 
 }
 
 .movimento.active .control-visual {
 
     background:
-        #9a7cff30;
+        #9a7cff25;
 
     border-color:
         #9a7cff90;
@@ -3692,7 +3594,7 @@ margin: 5%;
 .movimento.active .control-status {
 
     color:
-        #b9a7ff;
+        #7658d9;
 
 }
 
@@ -3706,9 +3608,9 @@ margin: 5%;
     background:
         linear-gradient(
             135deg,
-            #594022 0%,
-            #3d2a17 55%,
-            #24190e 100%
+            #fff7e8 0%,
+            #ffedcc 55%,
+            #ffe3b3 100%
         );
 
     border-color:
@@ -3723,21 +3625,21 @@ margin: 5%;
 .brilho.active::before {
 
     background:
-        #ffb45e40;
+        #ffb45e25;
 
 }
 
 .brilho.active::after {
 
     background:
-        #c879292c;
+        #c8792918;
 
 }
 
 .brilho.active .control-visual {
 
     background:
-        #ffb45e30;
+        #ffb45e25;
 
     border-color:
         #ffb45e90;
@@ -3754,7 +3656,7 @@ margin: 5%;
 .brilho.active .control-status {
 
     color:
-        #ffd19a;
+        #b96c14;
 
 }
 
@@ -3768,9 +3670,9 @@ margin: 5%;
     background:
         linear-gradient(
             135deg,
-            #205452 0%,
-            #173c3b 55%,
-            #0e2928 100%
+            #e9fbf9 0%,
+            #daf5f2 55%,
+            #cceeea 100%
         );
 
     border-color:
@@ -3785,21 +3687,21 @@ margin: 5%;
 .proximidade.active::before {
 
     background:
-        #54ded440;
+        #54ded425;
 
 }
 
 .proximidade.active::after {
 
     background:
-        #248e892c;
+        #248e8918;
 
 }
 
 .proximidade.active .control-visual {
 
     background:
-        #54ded430;
+        #54ded425;
 
     border-color:
         #54ded490;
@@ -3816,7 +3718,7 @@ margin: 5%;
 .proximidade.active .control-status {
 
     color:
-        #9ef5ed;
+        #159e96;
 
 }
 
@@ -3845,7 +3747,30 @@ margin: 5%;
 
 }
 
+/* =========================================================
+   TODOS OS ÍCONES SVG — PRETO
+========================================================= */
 
+/* SVGs inseridos diretamente no HTML */
+svg {
+
+    fill: #000000 !important;
+
+    color: #000000 !important;
+
+    stroke: #000000 !important;
+
+}
+
+
+/* SVGs externos carregados por <img> */
+img[src$=".svg"] {
+
+    filter:
+        brightness(0)
+        saturate(100%) !important;
+
+}
 
 @media (prefers-reduced-motion: reduce) {
     /* Procura por QUALQUER elemento que use a sua animação e a desativa */
@@ -3854,6 +3779,7 @@ margin: 5%;
         animation-name: none !important;
     }
 }
+
 
 </style>
 

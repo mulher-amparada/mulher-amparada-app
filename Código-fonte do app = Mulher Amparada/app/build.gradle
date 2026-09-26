@@ -119,4 +119,6 @@ androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
 // Splash Screen
 implementation 'androidx.core:core-splashscreen:1.0.1'
 
+// DocumentFile
+implementation 'androidx.documentfile:documentfile:1.1.0'
 }

@@ -10,7 +10,7 @@ Um projeto totalmente gratuito e livre de anúncios, projetado por um menino aut
 
 E saibam que o projeto é: Source-Available
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3475**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3464**
 
 # ⚠️MURAL DE AVISOS:
 
@@ -181,8 +181,13 @@ NeoCalcActivity (compose) = Tela que contém o disfarce de calculadora
 
  HubActivity (compose) = Tela que contém o botão de pânico, proteção por palmas, balançar o celular pra pedir ajuda, escurecimento por inclinação, bloqueio por barulho, usandk o action dial, ele chama a policia, samu e o 180, enviar localização para o 180, contatos de confiança, o botão feito com compose, (aquele do emergencyoverlay), 
  
+ HomeActivity = Tela da área do amparo onde mostra as 2 carteirinhas
  
-A MainActivity e a HomeActivity são feitas com webview e são responsáveis pela área protegida e a área do amparo
+ ExigirActivity = Conteúdo da primeira carteirinha
+ 
+ GestoActivity = Conteúdo da segunda carteirinha
+ 
+ A MainActivity e a HomeActivity são feitas com webview e são responsáveis pela área protegida e a área do amparo
 
 ## Sobre como o aplicativo é compilado:
 

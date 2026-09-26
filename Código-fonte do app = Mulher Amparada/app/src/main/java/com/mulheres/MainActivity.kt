@@ -1,5 +1,10 @@
 package com.mulheres
 
+import android.net.Uri
+import android.widget.Toast
+import android.webkit.WebChromeClient
+import android.webkit.GeolocationPermissions
+import android.webkit.PermissionRequest
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat

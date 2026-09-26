@@ -1252,13 +1252,12 @@ private fun recuperarSenha(
     mostrarMensagem: (String) -> Unit
 ) {
 
-    val respostaSalva =
+    val senhaSalva =
         try {
 
             cripto.carregar(
-                CHAVE_RECUPERACAO
+                CHAVE_SENHA
             )
-                ?.lowercase()
                 ?.trim()
                 ?: ""
 
@@ -1270,6 +1269,41 @@ private fun recuperarSenha(
 
             return
         }
+
+    /*
+     * =====================================================
+     * NÃO EXISTE SENHA
+     * =====================================================
+     */
+
+    if (
+        senhaSalva.isEmpty()
+    ) {
+
+        mostrarDialogo(
+            Dialogo(
+                tipo =
+                    TipoDialogo.PROMPT,
+
+                titulo =
+                    "Criar senha",
+
+                mensagem =
+                    "Digite uma senha para proteger esta área.",
+
+                textoConfirmar =
+                    "Criar"
+            )
+        )
+
+        return
+    }
+
+    /*
+     * =====================================================
+     * JÁ EXISTE SENHA
+     * =====================================================
+     */
 
     mostrarDialogo(
         Dialogo(
@@ -1287,7 +1321,6 @@ private fun recuperarSenha(
         )
     )
 }
-
 /* =========================================================
    CONTINUAÇÃO DO PROMPT
 ========================================================= */
@@ -1302,45 +1335,21 @@ private fun continuarPrompt(
     mostrarMensagem: (String) -> Unit
 ) {
 
-    val senhaSalva =
-        try {
+    val valorLimpo =
+        valor.trim()
 
-            cripto.carregar(
-                CHAVE_SENHA
-            )
-                ?.trim()
-                ?: ""
-
-        } catch (
-            e: Exception
-        ) {
-
-            ""
-        }
-
-    val respostaSalva =
-        try {
-
-            cripto.carregar(
-                CHAVE_RECUPERACAO
-            )
-                ?.lowercase()
-                ?.trim()
-                ?: ""
-
-        } catch (
-            e: Exception
-        ) {
-
-            ""
-        }
+    /*
+     * =====================================================
+     * CRIANDO A SENHA
+     * =====================================================
+     */
 
     if (
         titulo == "Criar senha"
     ) {
 
         if (
-            valor.trim().isEmpty()
+            valorLimpo.isEmpty()
         ) {
 
             mostrarMensagem(
@@ -1352,8 +1361,12 @@ private fun continuarPrompt(
 
         cripto.salvar(
             CHAVE_SENHA,
-            valor.trim()
+            valorLimpo
         )
+
+        /*
+         * Agora pede a resposta de recuperação.
+         */
 
         mostrarDialogo(
             Dialogo(
@@ -1367,19 +1380,76 @@ private fun continuarPrompt(
                     "Como você gosta de ser chamada?",
 
                 textoConfirmar =
-                    "OK"
+                    "Salvar"
             )
         )
 
         return
     }
 
+    /*
+     * =====================================================
+     * SALVANDO A RESPOSTA DE RECUPERAÇÃO
+     * =====================================================
+     *
+     * Se ainda não existe resposta salva, significa que
+     * estamos terminando a configuração inicial.
+     */
+
+    val respostaSalva =
+        try {
+
+            cripto.carregar(
+                CHAVE_RECUPERACAO
+            )
+                ?.trim()
+                ?: ""
+
+        } catch (
+            e: Exception
+        ) {
+
+            ""
+        }
+
+    if (
+        titulo == "Recuperação" &&
+        respostaSalva.isEmpty()
+    ) {
+
+        if (
+            valorLimpo.isEmpty()
+        ) {
+
+            mostrarMensagem(
+                "Resposta inválida"
+            )
+
+            return
+        }
+
+        cripto.salvar(
+            CHAVE_RECUPERACAO,
+            valorLimpo.lowercase()
+        )
+
+        mostrarMensagem(
+            "Senha criada"
+        )
+
+        return
+    }
+
+    /*
+     * =====================================================
+     * RECUPERAÇÃO DE SENHA EXISTENTE
+     * =====================================================
+     */
+
     if (
         respostaSalva.isNotEmpty() &&
-        valor
-            .trim()
-            .lowercase() ==
-        respostaSalva
+        valorLimpo.lowercase() ==
+        respostaSalva.lowercase()
     ) {
 
         mostrarDialogo(
@@ -1394,8 +1464,41 @@ private fun continuarPrompt(
                     "Digite a nova senha",
 
                 textoConfirmar =
-                    "OK"
+                    "Salvar"
             )
+        )
+
+        return
+    }
+
+    /*
+     * =====================================================
+     * NOVA SENHA APÓS RECUPERAÇÃO
+     * =====================================================
+     */
+
+    if (
+        titulo == "Nova senha"
+    ) {
+
+        if (
+            valorLimpo.isEmpty()
+        ) {
+
+            mostrarMensagem(
+                "Senha inválida"
+            )
+
+            return
+        }
+
+        cripto.salvar(
+            CHAVE_SENHA,
+            valorLimpo
+        )
+
+        mostrarMensagem(
+            "Senha alterada"
         )
 
         return

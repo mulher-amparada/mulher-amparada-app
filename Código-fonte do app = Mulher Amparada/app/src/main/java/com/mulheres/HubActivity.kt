@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricPrompt
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.content.Context
@@ -119,6 +121,8 @@ private lateinit var shakeListener: SensorEventListener
 var protecaoMovimentoAtiva by mutableStateOf(false)
     private set
 
+
+
 private var ultimoShake: Long = 0L
 
 private lateinit var seletorContato:
@@ -152,7 +156,7 @@ private var telephonyCallback: TelephonyCallback? = null
 
 private lateinit var emergencyComposeView: ComposeView
 
-private var emergenciaVisivel by mutableStateOf(false)
+
 
 private lateinit var locationClient: FusedLocationProviderClient
 
@@ -196,6 +200,98 @@ fun ligarPara(numero: String) {
 
         e.printStackTrace()
     }
+}
+
+fun abrirAreaProtegida() {
+
+    val executor =
+        ContextCompat.getMainExecutor(this)
+
+    val biometricManager =
+        BiometricManager.from(this)
+
+    val autenticadores =
+        BiometricManager.Authenticators.BIOMETRIC_WEAK or
+        BiometricManager.Authenticators.DEVICE_CREDENTIAL
+
+    val podeAutenticar =
+        biometricManager.canAuthenticate(
+            autenticadores
+        )
+
+    if (
+        podeAutenticar !=
+        BiometricManager.BIOMETRIC_SUCCESS
+    ) {
+
+        Toast.makeText(
+            this,
+            "Configure uma biometria ou credencial do dispositivo.",
+            Toast.LENGTH_LONG
+        ).show()
+
+        return
+    }
+
+    val prompt =
+        BiometricPrompt(
+            this,
+            executor,
+            object : BiometricPrompt.AuthenticationCallback() {
+
+                override fun onAuthenticationSucceeded(
+                    result: BiometricPrompt.AuthenticationResult
+                ) {
+
+                    super.onAuthenticationSucceeded(result)
+
+                    Toast.makeText(
+                        this@HubActivity,
+                        "Acesso autorizado.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    val intent =
+                        Intent(
+                            this@HubActivity,
+                            MainActivity::class.java
+                        )
+
+                    startActivity(intent)
+                }
+
+                override fun onAuthenticationError(
+                    errorCode: Int,
+                    errString: CharSequence
+                ) {
+
+                    super.onAuthenticationError(
+                        errorCode,
+                        errString
+                    )
+                }
+
+                override fun onAuthenticationFailed() {
+
+                    super.onAuthenticationFailed()
+                }
+            }
+        )
+
+    val info =
+        BiometricPrompt.PromptInfo.Builder()
+            .setTitle(
+                "Desbloquear a área protegida"
+            )
+            .setSubtitle(
+                "🌸 Apenas a usuária cadastrada pode acessar este local"
+            )
+            .setAllowedAuthenticators(
+                autenticadores
+            )
+            .build()
+
+    prompt.authenticate(info)
 }
 
     fun verificarPermissoes() {
@@ -373,6 +469,98 @@ fun enviarLocalizacaoPara180() {
                 Toast.makeText(
                     this,
                     "Não foi possível abrir o envio de mensagem.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+}
+
+fun enviarLocalizacaoPara180() {
+
+    val permissaoPrecisa =
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+    val permissaoAproximada =
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+    if (!permissaoPrecisa && !permissaoAproximada) {
+
+        Toast.makeText(
+            this,
+            "Permissão de localização necessária.",
+            Toast.LENGTH_LONG
+        ).show()
+
+        return
+    }
+
+    val cancellationTokenSource =
+        com.google.android.gms.tasks.CancellationTokenSource()
+
+    locationClient
+        .getCurrentLocation(
+            com.google.android.gms.location.Priority
+                .PRIORITY_HIGH_ACCURACY,
+            cancellationTokenSource.token
+        )
+        .addOnSuccessListener { location ->
+
+            if (location == null) {
+
+                Toast.makeText(
+                    this,
+                    "Não foi possível obter a localização.",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                return@addOnSuccessListener
+            }
+
+            val latitude =
+                location.latitude
+
+            val longitude =
+                location.longitude
+
+            val link =
+                "https://www.google.com/maps/search/" +
+                "?api=1&query=$latitude,$longitude"
+
+            val mensagem =
+                "🚨 MULHER AMPARADA\n\n" +
+                "Preciso de ajuda.\n\n" +
+                "📍 Minha localização:\n" +
+                "$link"
+
+            val intent =
+                Intent(
+                    Intent.ACTION_VIEW
+                ).apply {
+
+                    data =
+                        Uri.parse(
+                            "https://wa.me/556196100180?text=" +
+                                Uri.encode(mensagem)
+                        )
+                }
+
+            try {
+
+                startActivity(intent)
+
+            } catch (
+                e: Exception
+            ) {
+
+                Toast.makeText(
+                    this,
+                    "Não foi possível abrir o WhatsApp.",
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -1098,34 +1286,33 @@ fun ocultarBotaoEmergencia() {
 }
 private fun criarEmergencyOverlay() {
 
-    val raiz =
-        findViewById<ViewGroup>(
-            android.R.id.content
-        )
-
-emergencyComposeView =
-    ComposeView(this).apply {
+    emergencyComposeView = ComposeView(this).apply {
 
         setViewCompositionStrategy(
-            ViewCompositionStrategy
-                .DisposeOnViewTreeLifecycleDestroyed
+            ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
         )
 
         setContent {
 
-            EmergencyOverlay(
-                visivel = emergenciaVisivel,
-                aoClicar = {
-                    compartilharLocalizacaoEmergencia()
-                }
-            )
+            MulherAmparadaTheme {
+
+                EmergencyOverlay(
+                    visivel = emergenciaVisivel,
+                    aoClicar = {
+
+                        emergenciaVisivel = !emergenciaVisivel
+
+                        if (emergenciaVisivel) {
+                            compartilharLocalizacaoEmergencia()
+                        }
+                    }
+                )
+            }
         }
     }
 
-    raiz.addView(
-
+    addContentView(
         emergencyComposeView,
-
         ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
@@ -3880,32 +4067,38 @@ private fun ProtectedArea(
     font: FontFamily
 ) {
 
+val activity =
+    LocalContext.current as? HubActivity
+    
     ActionPortal(
+    title =
+        "Área protegida",
 
-        title =
-            "Área protegida",
+    subtitle =
+        "Acesso protegido por biometria",
 
-        subtitle =
-            "Acesso protegido por biometria",
+    meta =
+        "AMBIENTE SEGURO",
 
-        meta =
-            "AMBIENTE SEGURO",
+    icon =
+        R.drawable.ic_lock,
 
-        icon =
-            R.drawable.ic_lock,
+    accent =
+        if (isSystemInDarkTheme())
+            Color(0xFFB9A7FF)
+        else
+            Color(0xFF684EC4),
 
-        accent =
-            if (isSystemInDarkTheme())
-                Color(0xFFB9A7FF)
-            else
-                Color(0xFF684EC4),
+    gradient =
+        c.protectedGradient,
 
-        gradient =
-            c.protectedGradient,
+    c = c,
+    font = font,
 
-        c = c,
-        font = font
-    )
+    onClick = {
+        activity?.abrirAreaProtegida()
+    }
+)
 }
 
 

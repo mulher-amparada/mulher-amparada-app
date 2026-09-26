@@ -129,6 +129,12 @@
             android:screenOrientation="portrait"
     android:configChanges="orientation|screenSize"
                      android:exported="false" />
+                     
+                             <activity
+            android:name=".HubActivity"
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
+                     android:exported="false" />
 
 
 

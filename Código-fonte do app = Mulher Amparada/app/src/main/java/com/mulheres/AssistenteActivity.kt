@@ -2001,6 +2001,22 @@ private fun IndicadorCard(
 ========================================================= */
 
 @Composable
+fun TesteIcone() {
+    Box(
+        modifier = Modifier
+            .size(100.dp)
+            .background(Color.Red),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = painterResource(R.drawable.batimentos1),
+            contentDescription = null,
+            modifier = Modifier.size(60.dp)
+        )
+    }
+}
+
+@Composable
 private fun BemEstar(
     valor: Float
 ) {

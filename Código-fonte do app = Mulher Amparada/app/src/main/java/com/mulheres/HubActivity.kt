@@ -88,19 +88,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import android.provider.ContactsContract
-
-
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import kotlin.math.log10
 import kotlin.math.sqrt
 
 
-class HubActivity : ComponentActivity() {
+class HubActivity : FragmentActivity() {
 
 var palmasAtivas by mutableStateOf(false)
     private set
@@ -471,101 +468,6 @@ fun abrirHomeActivity() {
     }
 }
 
-fun enviarLocalizacaoPara180() {
-
-    val permissaoPrecisa =
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-
-    val permissaoAproximada =
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-
-    if (!permissaoPrecisa && !permissaoAproximada) {
-
-        Toast.makeText(
-            this,
-            "Permissão de localização necessária.",
-            Toast.LENGTH_LONG
-        ).show()
-
-        return
-    }
-
-    val cancellationTokenSource =
-        com.google.android.gms.tasks.CancellationTokenSource()
-
-    locationClient
-        .getCurrentLocation(
-            com.google.android.gms.location.Priority
-                .PRIORITY_HIGH_ACCURACY,
-            cancellationTokenSource.token
-        )
-        .addOnSuccessListener { location ->
-
-            if (location == null) {
-
-                Toast.makeText(
-                    this,
-                    "Não foi possível obter a localização.",
-                    Toast.LENGTH_LONG
-                ).show()
-
-                return@addOnSuccessListener
-            }
-
-            val latitude =
-                location.latitude
-
-            val longitude =
-                location.longitude
-
-            val link =
-                "https://www.google.com/maps/search/" +
-                "?api=1&query=$latitude,$longitude"
-
-            val mensagem =
-                "🚨 MULHER AMPARADA\n\n" +
-                "Preciso de ajuda.\n\n" +
-                "📍 Minha localização:\n" +
-                "$link"
-
-            val intent =
-                Intent(
-                    Intent.ACTION_SENDTO
-                ).apply {
-
-                    data =
-                        Uri.parse(
-                            "smsto:180"
-                        )
-
-                    putExtra(
-                        "sms_body",
-                        mensagem
-                    )
-                }
-
-            try {
-
-                startActivity(intent)
-
-            } catch (
-                e: Exception
-            ) {
-
-                Toast.makeText(
-                    this,
-                    "Não foi possível abrir o envio de mensagem.",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        }
-}
 
 fun enviarLocalizacaoPara180() {
 

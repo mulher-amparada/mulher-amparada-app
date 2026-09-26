@@ -49,6 +49,13 @@ import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import kotlin.math.roundToInt
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.LocalOverscrollFactory
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import kotlin.random.Random
 
 /* =========================================================
    ACTIVITY
@@ -848,12 +855,11 @@ private fun Hero(
                                 .clip(
                                     CircleShape
                                 )
-                                .background(
-                                    cores.azul.copy(
-                                        alpha =
-                                            opacity
-                                    )
-                                )
+                          .background(
+    cores.azul.copy(
+        alpha = 0.8f
+    )
+)
                     )
 
 

@@ -174,28 +174,6 @@ private fun drawableToBase64(drawable: Drawable): String {
             .apply()
     }
 
-
-    @JavascriptInterface
-    fun iniciarBiometria() {
-        safeMainActivityCall {
-            it.iniciarBiometria()
-        }
-    }
-
-    @JavascriptInterface
-    fun IniciarBiometriaÁreaProtegida() {
-        safeMainActivityCall {
-            it.IniciarBiometriaÁreaProtegida()
-        }
-    }
-
-    @JavascriptInterface
-    fun iniciarBiometriaAmparo() {
-        safeMainActivityCall {
-            it.iniciarBiometriaAmparo()
-        }
-    }
-
     @JavascriptInterface
 fun openRecorder() {
     activity.startActivity(

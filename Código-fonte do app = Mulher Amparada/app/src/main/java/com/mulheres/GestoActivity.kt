@@ -2,6 +2,8 @@ package com.mulheres
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.LocalOverscrollFactory
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -131,6 +133,10 @@ private fun GestoScreen() {
             Color(0xFFF0F0F2)
         }
 
+    CompositionLocalProvider(
+    LocalOverscrollFactory provides null
+) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -139,14 +145,14 @@ private fun GestoScreen() {
                 rememberScrollState()
             )
             .padding(
-    start = 16.dp,
-    end = 16.dp,
-    top = 25.dp,
-    bottom = 70.dp
-)
-.windowInsetsPadding(
-    WindowInsets.statusBars
-)
+                start = 16.dp,
+                end = 16.dp,
+                top = 25.dp,
+                bottom = 70.dp
+            )
+            .windowInsetsPadding(
+                WindowInsets.statusBars
+            )
     ) {
 
         /*
@@ -601,7 +607,7 @@ private fun GestoScreen() {
         }
     }
 }
-
+}
 
 @Composable
 private fun GestureStep(

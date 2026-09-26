@@ -3,6 +3,8 @@ package com.mulheres
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.LocalOverscrollFactory
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
@@ -185,31 +187,24 @@ private fun CarteiraScreen(
         Color.Black.copy(alpha = 0.09f)
     }
 
+    CompositionLocalProvider(
+    LocalOverscrollFactory provides null
+) {
+
     Column(
 
         modifier = Modifier
             .fillMaxSize()
             .background(background)
-
-            /*
-             * Mantém o conteúdo afastado da barra
-             * de status e da barra de navegação.
-             */
             .windowInsetsPadding(
                 WindowInsets.statusBars
             )
             .windowInsetsPadding(
                 WindowInsets.navigationBars
             )
-
-            /*
-             * Permite que os dois cards mantenham
-             * sua altura normal em telas menores.
-             */
             .verticalScroll(
                 rememberScrollState()
             )
-
             .padding(
                 start = 16.dp,
                 end = 16.dp,
@@ -221,6 +216,8 @@ private fun CarteiraScreen(
             Arrangement.spacedBy(31.dp)
     ) {
 
+        // todo o conteúdo atual...
+    }
         /*
          * =====================================================
          * HERO
@@ -401,7 +398,7 @@ private fun CarteiraScreen(
         }
     }
 }
-
+}
 
 @Composable
 private fun CarteiraLabel(

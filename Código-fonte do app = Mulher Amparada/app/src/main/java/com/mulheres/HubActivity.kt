@@ -261,23 +261,32 @@ fun abrirAreaProtegida() {
                     )
                 }
 
-                override fun onAuthenticationError(
-                    errorCode: Int,
-                    errString: CharSequence
-                ) {
+  override fun onAuthenticationError(
+    errorCode: Int,
+    errString: CharSequence
+) {
+    super.onAuthenticationError(
+        errorCode,
+        errString
+    )
 
-                    super.onAuthenticationError(
-                        errorCode,
-                        errString
-                    )
+    if (
+        errorCode == BiometricPrompt.ERROR_USER_CANCELED ||
+        errorCode == BiometricPrompt.ERROR_CANCELED
+    ) {
+        // Usuária apertou Voltar ou cancelou o prompt.
+        // Não abre nenhuma Activity.
+        return
+    }
 
-                    startActivity(
-                        Intent(
-                            this@HubActivity,
-                            MainActivity::class.java
-                        )
-                    )
-                }
+    // Outros erros podem continuar com o comportamento desejado.
+    startActivity(
+        Intent(
+            this@HubActivity,
+            MainActivity::class.java
+        )
+    )
+}
 
                 override fun onAuthenticationFailed() {
 
@@ -362,25 +371,31 @@ fun abrirHomeActivity() {
                         )
                     )
                 }
+override fun onAuthenticationError(
+    errorCode: Int,
+    errString: CharSequence
+) {
+    super.onAuthenticationError(
+        errorCode,
+        errString
+    )
 
-                override fun onAuthenticationError(
-                    errorCode: Int,
-                    errString: CharSequence
-                ) {
+    if (
+        errorCode == BiometricPrompt.ERROR_USER_CANCELED ||
+        errorCode == BiometricPrompt.ERROR_CANCELED
+    ) {
+        // Cancelou com Voltar.
+        // Permanece na HubActivity.
+        return
+    }
 
-                    super.onAuthenticationError(
-                        errorCode,
-                        errString
-                    )
-
-                    startActivity(
-                        Intent(
-                            this@HubActivity,
-                            HomeActivity::class.java
-                        )
-                    )
-                }
-
+    startActivity(
+        Intent(
+            this@HubActivity,
+            HomeActivity::class.java
+        )
+    )
+}
                 override fun onAuthenticationFailed() {
 
                     super.onAuthenticationFailed()

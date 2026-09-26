@@ -2,6 +2,8 @@ package com.mulheres
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.LocalOverscrollFactory
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -122,6 +124,10 @@ private fun ExigirScreen() {
         if (dark) Color(0xFF0C0D11)
         else Color(0xFFF0F0F2)
 
+    CompositionLocalProvider(
+    LocalOverscrollFactory provides null
+) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -129,16 +135,19 @@ private fun ExigirScreen() {
             .verticalScroll(
                 rememberScrollState()
             )
-.padding(
-    start = 16.dp,
-    end = 16.dp,
-    top = 25.dp,
-    bottom = 70.dp
-)
-.windowInsetsPadding(
-    WindowInsets.statusBars
-)
+            .padding(
+                start = 16.dp,
+                end = 16.dp,
+                top = 25.dp,
+                bottom = 70.dp
+            )
+            .windowInsetsPadding(
+                WindowInsets.statusBars
+            )
     ) {
+
+        // todo o conteúdo atual
+    }
 
         /*
          * ================================================
@@ -642,7 +651,7 @@ private fun ExigirScreen() {
         }
     }
 }
-
+}
 
 @Composable
 private fun LawParagraph(

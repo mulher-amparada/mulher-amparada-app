@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity

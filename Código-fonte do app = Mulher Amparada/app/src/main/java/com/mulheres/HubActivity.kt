@@ -95,7 +95,7 @@ class HubActivity : ComponentActivity() {
     
     private var acelerometro: Sensor? = null
 
-    private var protecaoMovimentoAtiva by mutableStateOf(false)
+     var protecaoMovimentoAtiva by mutableStateOf(false)
 
     private var ultimoShake: Long = 0L
 
@@ -207,6 +207,38 @@ criarShakeListener()
         verificarPermissoes()
     }
 
+override fun onDestroy() {
+
+    if (::sensorManager.isInitialized) {
+
+        sensorManager.unregisterListener(
+            shakeListener
+        )
+    }
+
+    telephonyCallback?.let {
+
+        if (
+            Build.VERSION.SDK_INT >=
+            Build.VERSION_CODES.S
+        ) {
+
+            try {
+
+                telephonyManager
+                    .unregisterTelephonyCallback(it)
+
+            } catch (
+                _: Exception
+            ) {
+            }
+        }
+    }
+
+    telephonyCallback = null
+
+    super.onDestroy()
+}
 
 private fun criarShakeListener() {
 
@@ -2769,37 +2801,6 @@ private fun ActionPortal(
         }
     }
     
-    override fun onDestroy() {
-
-    if (::sensorManager.isInitialized) {
-
-        sensorManager.unregisterListener(
-            shakeListener
-        )
-    }
-
-    telephonyCallback?.let {
-
-        if (
-            Build.VERSION.SDK_INT >=
-            Build.VERSION_CODES.S
-        ) {
-
-            try {
-
-                telephonyManager
-                    .unregisterTelephonyCallback(it)
-
-            } catch (
-                _: Exception
-            ) {
-            }
-        }
-    }
-
-    telephonyCallback = null
-
-    super.onDestroy()
-}
+    
 
 }

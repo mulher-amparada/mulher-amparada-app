@@ -1,19 +1,29 @@
 package com.mulheres
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.statusBars
 import android.Manifest
 import androidx.compose.runtime.setValue
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
+import kotlin.math.sqrt
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color as AndroidColor
+import androidx.compose.runtime.CompositionLocalProvider
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.telephony.TelephonyCallback
 import android.telephony.TelephonyManager
 import android.widget.Toast
-
+import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -80,6 +90,16 @@ class HubActivity : ComponentActivity() {
         private set
 
     private lateinit var telephonyManager: TelephonyManager
+    
+    private lateinit var sensorManager: SensorManager
+    
+    private var acelerometro: Sensor? = null
+
+    private var protecaoMovimentoAtiva by mutableStateOf(false)
+
+    private var ultimoShake: Long = 0L
+
+    private lateinit var shakeListener: SensorEventListener
 
     private var telephonyCallback: TelephonyCallback? = null
 
@@ -165,6 +185,12 @@ class HubActivity : ComponentActivity() {
 
         verificarPermissoes()
 
+sensorManager =
+    getSystemService(
+        Context.SENSOR_SERVICE
+    ) as SensorManager
+
+criarShakeListener()
         setContent {
 
             MulherAmparadaTheme {
@@ -181,6 +207,142 @@ class HubActivity : ComponentActivity() {
         verificarPermissoes()
     }
 
+
+private fun criarShakeListener() {
+
+    shakeListener =
+        object : SensorEventListener {
+
+            override fun onSensorChanged(
+                event: SensorEvent
+            ) {
+
+                if (!protecaoMovimentoAtiva) {
+                    return
+                }
+
+                val x =
+                    event.values[0]
+
+                val y =
+                    event.values[1]
+
+                val z =
+                    event.values[2]
+
+                val aceleracao =
+                    sqrt(
+                        (
+                            x * x +
+                            y * y +
+                            z * z
+                        ).toDouble()
+                    )
+
+                if (aceleracao > 18.0) {
+                    executarAcaoShake()
+                }
+            }
+
+            override fun onAccuracyChanged(
+                sensor: Sensor?,
+                accuracy: Int
+            ) {
+            }
+        }
+}
+
+fun ativarProtecaoMovimento() {
+
+    if (protecaoMovimentoAtiva) {
+        return
+    }
+
+    protecaoMovimentoAtiva = true
+
+    acelerometro =
+        sensorManager.getDefaultSensor(
+            Sensor.TYPE_ACCELEROMETER
+        )
+
+    if (acelerometro == null) {
+
+        protecaoMovimentoAtiva = false
+
+        Toast.makeText(
+            this,
+            "Sensor de movimento não disponível.",
+            Toast.LENGTH_SHORT
+        ).show()
+
+        return
+    }
+
+    sensorManager.registerListener(
+        shakeListener,
+        acelerometro,
+        SensorManager.SENSOR_DELAY_GAME
+    )
+}
+
+
+fun desativarProtecaoMovimento() {
+
+    protecaoMovimentoAtiva = false
+
+    if (::sensorManager.isInitialized) {
+
+        sensorManager.unregisterListener(
+            shakeListener
+        )
+    }
+}
+
+private fun executarAcaoShake() {
+
+    if (!protecaoMovimentoAtiva) {
+        return
+    }
+
+    val agora =
+        System.currentTimeMillis()
+
+    if (
+        agora - ultimoShake <= 4000
+    ) {
+        return
+    }
+
+    ultimoShake =
+        agora
+
+    runOnUiThread {
+
+        try {
+
+            val intent =
+                Intent(
+                    Intent.ACTION_DIAL
+                ).apply {
+
+                    data =
+                        Uri.parse(
+                            "tel:180"
+                        )
+                }
+
+            startActivity(intent)
+
+            desativarProtecaoMovimento()
+
+        } catch (
+            e: Exception
+        ) {
+
+            e.printStackTrace()
+        }
+    }
+}
 
     /* =========================================================
        LIGAÇÃO DIRETA
@@ -787,27 +949,36 @@ private fun MulherAmparadaTheme(
 
     androidx.compose.runtime.SideEffect {
 
-        val window =
-            (context as ComponentActivity).window
+    val window =
+        (context as ComponentActivity).window
 
-        window.statusBarColor =
-            AndroidColor.TRANSPARENT
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        false
+    )
 
-        window.navigationBarColor =
-            AndroidColor.TRANSPARENT
+    window.statusBarColor =
+        AndroidColor.TRANSPARENT
 
-        WindowInsetsControllerCompat(
-            window,
-            window.decorView
-        ).apply {
+    window.navigationBarColor =
+        AndroidColor.TRANSPARENT
 
-            isAppearanceLightStatusBars =
-                !dark
-
-            isAppearanceLightNavigationBars =
-                !dark
-        }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        window.isNavigationBarContrastEnforced = false
     }
+
+    WindowInsetsControllerCompat(
+        window,
+        window.decorView
+    ).apply {
+
+        isAppearanceLightStatusBars =
+            !dark
+
+        isAppearanceLightNavigationBars =
+            !dark
+    }
+}
 
     MaterialTheme(
 
@@ -895,25 +1066,40 @@ private fun MulherAmparadaScreen() {
             Modifier.fillMaxSize()
     ) {
 
-        Column(
+        CompositionLocalProvider(
+    LocalOverscrollFactory provides null
+) {
 
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(c.background)
-                    .verticalScroll(
-                        rememberScrollState()
-                    )
-                    .padding(
-                        start = 14.dp,
-                        end = 14.dp,
-                        top = 20.dp,
-                        bottom = 90.dp
-                    ),
+    Column(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(c.background)
+                .verticalScroll(
+                    rememberScrollState()
+                )
+                .padding(
+                    start = 14.dp,
+                    end = 14.dp
+                )
+                .padding(
+                    top =
+                        WindowInsets.statusBars
+                            .asPaddingValues()
+                            .calculateTopPadding() + 20.dp,
 
-            verticalArrangement =
-                Arrangement.spacedBy(30.dp)
-        ) {
+                    bottom =
+                        WindowInsets.navigationBars
+                            .asPaddingValues()
+                            .calculateBottomPadding() + 90.dp
+                ),
+
+        verticalArrangement =
+            Arrangement.spacedBy(30.dp)
+    ) {
+
+        // TODO: todo o seu conteúdo atual
+   
 
             Hero(
                 c = c,
@@ -973,17 +1159,34 @@ private fun MulherAmparadaScreen() {
             )
 
             SensorCard(
-                number = "02 / MOVIMENTO",
-                title = "Proteção por\nmovimento",
-                description =
-                    "Detecta movimentos bruscos no celular e pode iniciar uma resposta de emergência.",
-                icon = R.drawable.ic_0004,
-                color = c.purple,
-                active = false,
-                onClick = {},
-                c = c,
-                font = font
-            )
+    number = "02 / MOVIMENTO",
+    title = "Proteção por movimento",
+    description =
+        "Detecta movimentos bruscos no celular e pode iniciar uma resposta de emergência.",
+    icon = R.drawable.ic_0004,
+    color = c.purple,
+    active =
+        activity?.protecaoMovimentoAtiva
+            ?: false,
+    onClick = {
+
+        activity?.let {
+
+            if (
+                it.protecaoMovimentoAtiva
+            ) {
+
+                it.desativarProtecaoMovimento()
+
+            } else {
+
+                it.ativarProtecaoMovimento()
+            }
+        }
+    },
+    c = c,
+    font = font
+)
 
             SensorCard(
                 number = "03 / VISIBILIDADE",
@@ -1167,6 +1370,7 @@ private fun MulherAmparadaScreen() {
             }
         }
     }
+}
 }
 
 
@@ -1780,7 +1984,6 @@ private fun PanicCard(
 /* =========================================================
    SENSOR
 ========================================================= */
-
 @Composable
 private fun SensorCard(
     number: String,
@@ -1795,9 +1998,7 @@ private fun SensorCard(
 ) {
 
     val background =
-
         if (active) {
-
             Brush.linearGradient(
                 listOf(
                     color.copy(.25f),
@@ -1805,9 +2006,7 @@ private fun SensorCard(
                     c.surface
                 )
             )
-
         } else {
-
             Brush.linearGradient(
                 listOf(
                     c.surface,
@@ -1817,11 +2016,10 @@ private fun SensorCard(
         }
 
     Column(
-
         modifier =
             Modifier
                 .fillMaxWidth()
-                .height(190.dp)
+                .height(210.dp)
                 .clip(
                     RoundedCornerShape(25.dp)
                 )
@@ -1846,26 +2044,28 @@ private fun SensorCard(
             Arrangement.SpaceBetween
     ) {
 
-        Row(
+        /* =================================================
+           TOPO
+        ================================================= */
 
+        Row(
             modifier =
                 Modifier.fillMaxWidth(),
-
-            horizontalArrangement =
-                Arrangement.SpaceBetween,
 
             verticalAlignment =
                 Alignment.Top
         ) {
 
             Column(
+                modifier =
+                    Modifier.weight(1f),
 
                 verticalArrangement =
-                    Arrangement.spacedBy(10.dp)
+                    Arrangement.spacedBy(8.dp)
             ) {
 
                 Text(
-                    number,
+                    text = number,
                     color = c.muted,
                     fontFamily = font,
                     fontSize = 9.sp,
@@ -1874,22 +2074,25 @@ private fun SensorCard(
                 )
 
                 Text(
-                    title,
-                    modifier =
-                        Modifier.widthIn(
-                            max = 320.dp
-                        ),
+                    text = title,
                     color = c.text,
                     fontFamily = font,
-                    fontSize = 23.sp,
+                    fontSize = 22.sp,
                     fontWeight = FontWeight.ExtraBold,
                     lineHeight = 25.sp,
-                    letterSpacing = (-.8).sp
+                    letterSpacing = (-.7).sp,
+                    modifier =
+                        Modifier.fillMaxWidth()
                 )
             }
 
-            Box(
+            Spacer(
+                Modifier.width(14.dp)
+            )
 
+            /* ÍCONE */
+
+            Box(
                 modifier =
                     Modifier
                         .size(55.dp)
@@ -1910,7 +2113,6 @@ private fun SensorCard(
             ) {
 
                 Box(
-
                     modifier =
                         Modifier
                             .size(39.dp)
@@ -1927,7 +2129,9 @@ private fun SensorCard(
                     Image(
                         painter =
                             painterResource(icon),
+
                         contentDescription = null,
+
                         modifier =
                             Modifier.size(24.dp)
                     )
@@ -1935,17 +2139,40 @@ private fun SensorCard(
             }
         }
 
+        /* =================================================
+           DESCRIÇÃO
+        ================================================= */
+
         Text(
-            description,
+            text = description,
+
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 4.dp,
+                        end = 4.dp
+                    ),
+
             color = c.secondary,
+
             fontFamily = font,
+
             fontSize = 10.sp,
-            fontWeight = FontWeight.SemiBold,
-            lineHeight = 16.sp
+
+            fontWeight =
+                FontWeight.SemiBold,
+
+            lineHeight = 16.sp,
+
+            maxLines = 3
         )
 
-        Row(
+        /* =================================================
+           RODAPÉ
+        ================================================= */
 
+        Row(
             modifier =
                 Modifier.fillMaxWidth(),
 
@@ -1962,7 +2189,6 @@ private fun SensorCard(
             ) {
 
                 Box(
-
                     modifier =
                         Modifier
                             .size(6.dp)
@@ -1980,10 +2206,11 @@ private fun SensorCard(
                 )
 
                 Text(
-                    if (active)
-                        "ATIVADO"
-                    else
-                        "DESATIVADO",
+                    text =
+                        if (active)
+                            "ATIVADO"
+                        else
+                            "DESATIVADO",
 
                     color =
                         if (active)
@@ -1992,8 +2219,12 @@ private fun SensorCard(
                             c.muted,
 
                     fontFamily = font,
+
                     fontSize = 9.sp,
-                    fontWeight = FontWeight.ExtraBold,
+
+                    fontWeight =
+                        FontWeight.ExtraBold,
+
                     letterSpacing = 1.2.sp
                 )
             }
@@ -2537,4 +2768,38 @@ private fun ActionPortal(
             )
         }
     }
+    
+    override fun onDestroy() {
+
+    if (::sensorManager.isInitialized) {
+
+        sensorManager.unregisterListener(
+            shakeListener
+        )
+    }
+
+    telephonyCallback?.let {
+
+        if (
+            Build.VERSION.SDK_INT >=
+            Build.VERSION_CODES.S
+        ) {
+
+            try {
+
+                telephonyManager
+                    .unregisterTelephonyCallback(it)
+
+            } catch (
+                _: Exception
+            ) {
+            }
+        }
+    }
+
+    telephonyCallback = null
+
+    super.onDestroy()
+}
+
 }

@@ -502,6 +502,15 @@ fun AssistenteSaude() {
                     0.dp
                 )
         ) {
+        
+        item {
+
+    TesteIcone()
+
+    Spacer(
+        modifier = Modifier.height(20.dp)
+    )
+}
 
             item {
 

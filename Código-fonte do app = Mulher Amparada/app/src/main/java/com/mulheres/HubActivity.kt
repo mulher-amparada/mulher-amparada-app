@@ -294,6 +294,98 @@ fun abrirAreaProtegida() {
     prompt.authenticate(info)
 }
 
+fun abrirHomeActivity() {
+
+    val executor =
+        ContextCompat.getMainExecutor(this)
+
+    val biometricManager =
+        BiometricManager.from(this)
+
+    val autenticadores =
+        BiometricManager.Authenticators.BIOMETRIC_WEAK or
+        BiometricManager.Authenticators.DEVICE_CREDENTIAL
+
+    val podeAutenticar =
+        biometricManager.canAuthenticate(
+            autenticadores
+        )
+
+    if (
+        podeAutenticar !=
+        BiometricManager.BIOMETRIC_SUCCESS
+    ) {
+
+        Toast.makeText(
+            this,
+            "Configure uma biometria ou credencial do dispositivo.",
+            Toast.LENGTH_LONG
+        ).show()
+
+        return
+    }
+
+    val prompt =
+        BiometricPrompt(
+            this,
+            executor,
+            object : BiometricPrompt.AuthenticationCallback() {
+
+                override fun onAuthenticationSucceeded(
+                    result: BiometricPrompt.AuthenticationResult
+                ) {
+
+                    super.onAuthenticationSucceeded(result)
+
+                    Toast.makeText(
+                        this@HubActivity,
+                        "Acesso autorizado.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    val intent =
+                        Intent(
+                            this@HubActivity,
+                            HomeActivity::class.java
+                        )
+
+                    startActivity(intent)
+                }
+
+                override fun onAuthenticationError(
+                    errorCode: Int,
+                    errString: CharSequence
+                ) {
+
+                    super.onAuthenticationError(
+                        errorCode,
+                        errString
+                    )
+                }
+
+                override fun onAuthenticationFailed() {
+
+                    super.onAuthenticationFailed()
+                }
+            }
+        )
+
+    val info =
+        BiometricPrompt.PromptInfo.Builder()
+            .setTitle(
+                "Desbloquear o espaço do amparo"
+            )
+            .setSubtitle(
+                "🌸 Acesso protegido por biometria"
+            )
+            .setAllowedAuthenticators(
+                autenticadores
+            )
+            .build()
+
+    prompt.authenticate(info)
+}
+
     fun verificarPermissoes() {
 
         val contatos =
@@ -4112,6 +4204,10 @@ private fun AmparoArea(
     font: FontFamily
 ) {
 
+onClick = {
+    activity?.abrirHomeActivity()
+}
+
     ActionPortal(
 
         title =
@@ -4137,6 +4233,10 @@ private fun AmparoArea(
 
         c = c,
         font = font
+        
+        onClick = {
+    activity?.abrirHomeActivity()
+}
     )
 }
 

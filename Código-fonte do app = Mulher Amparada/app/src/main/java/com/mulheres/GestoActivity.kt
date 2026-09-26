@@ -606,6 +606,7 @@ private fun GestoScreen() {
             }
         }
     }
+    }
 }
 
 @Composable

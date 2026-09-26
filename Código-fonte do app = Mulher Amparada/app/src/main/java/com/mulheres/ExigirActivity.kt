@@ -650,6 +650,7 @@ private fun ExigirScreen() {
         }
     }
 }
+}
 
 @Composable
 private fun LawParagraph(

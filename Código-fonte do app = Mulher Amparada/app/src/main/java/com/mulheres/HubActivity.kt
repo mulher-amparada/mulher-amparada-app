@@ -157,11 +157,6 @@ private lateinit var emergencyComposeView: ComposeView
 var emergenciaVisivel by mutableStateOf(false)
     private set
 
-var emergenciaVisivel by mutableStateOf(false)
-    private set
-
-
-
 private lateinit var locationClient: FusedLocationProviderClient
 
 // =========================================================

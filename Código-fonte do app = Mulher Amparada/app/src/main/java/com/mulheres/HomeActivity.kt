@@ -217,7 +217,7 @@ private fun CarteiraScreen(
     ) {
 
         // todo o conteúdo atual...
-    }
+    
         /*
          * =====================================================
          * HERO

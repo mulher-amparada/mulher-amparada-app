@@ -398,6 +398,7 @@ private fun CarteiraScreen(
         }
     }
 }
+}
 
 @Composable
 private fun CarteiraLabel(

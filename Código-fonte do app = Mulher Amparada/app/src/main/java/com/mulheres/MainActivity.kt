@@ -18,40 +18,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowForwardIos
-import androidx.compose.material.icons.outlined.Calculate
-import androidx.compose.material.icons.outlined.CalendarMonth
-import androidx.compose.material.icons.outlined.Description
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.Folder
-import androidx.compose.material.icons.outlined.Language
-import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Mic
-import androidx.compose.material.icons.outlined.NoteAlt
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.TaskAlt
-import androidx.compose.material.icons.outlined.Timer
-import androidx.compose.material.icons.outlined.SportsEsports
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -81,11 +59,26 @@ class MainActivity : ComponentActivity() {
 ========================================================= */
 
 private val Quicksand = FontFamily(
-    Font(R.font.quicksand, FontWeight.Normal),
-    Font(R.font.quicksand, FontWeight.Medium),
-    Font(R.font.quicksand, FontWeight.SemiBold),
-    Font(R.font.quicksand, FontWeight.Bold),
-    Font(R.font.quicksand, FontWeight.ExtraBold)
+    Font(
+        R.font.quicksand,
+        FontWeight.Normal
+    ),
+    Font(
+        R.font.quicksand,
+        FontWeight.Medium
+    ),
+    Font(
+        R.font.quicksand,
+        FontWeight.SemiBold
+    ),
+    Font(
+        R.font.quicksand,
+        FontWeight.Bold
+    ),
+    Font(
+        R.font.quicksand,
+        FontWeight.ExtraBold
+    )
 )
 
 
@@ -111,8 +104,6 @@ private val Vermelho = Color(0xFFFF5368)
 private data class Acesso(
     val titulo: String,
     val descricao: String,
-    val icone: ImageVector,
-    val corIcone: Color = Color(0xFF8B5CF6),
     val emergencia: Boolean = false
 )
 
@@ -121,140 +112,99 @@ private data class Acesso(
    TELA
 ========================================================= */
 
-@Composable
+@androidx.compose.runtime.Composable
 private fun MeusAcessos() {
 
-    val recursos = remember {
+    val recursos = listOf(
 
-        listOf(
+        Acesso(
+            titulo = "Calendário menstrual",
+            descricao = "Acompanhe seu ciclo"
+        ),
 
-            Acesso(
-                titulo = "Calendário menstrual",
-                descricao = "Acompanhe seu ciclo",
-                icone = Icons.Outlined.Favorite,
-                corIcone = Color(0xFFE83E9F)
-            ),
+        Acesso(
+            titulo = "Calendário de eventos",
+            descricao = "Organize seus compromissos"
+        ),
 
-            Acesso(
-                titulo = "Calendário de eventos",
-                descricao = "Organize seus compromissos",
-                icone = Icons.Outlined.CalendarMonth,
-                corIcone = Color(0xFF6655E8)
-            ),
+        Acesso(
+            titulo = "Mapa da sua região",
+            descricao = "Visualize locais próximos"
+        ),
 
-            Acesso(
-                titulo = "Mapa da sua região",
-                descricao = "Visualize locais próximos",
-                icone = Icons.Outlined.LocationOn,
-                corIcone = Color(0xFF28B873)
-            ),
+        Acesso(
+            titulo = "Diário e anotações",
+            descricao = "Escreva e guarde seus registros"
+        ),
 
-            Acesso(
-                titulo = "Diário e anotações",
-                descricao = "Escreva e guarde seus registros",
-                icone = Icons.Outlined.NoteAlt,
-                corIcone = Color(0xFFD94BC4)
-            ),
+        Acesso(
+            titulo = "Rotina gamificada",
+            descricao = "Transforme tarefas em desafios"
+        ),
 
-            Acesso(
-                titulo = "Rotina gamificada",
-                descricao = "Transforme tarefas em desafios",
-                icone = Icons.Outlined.SportsEsports,
-                corIcone = Color(0xFFFF9D35)
-            ),
+        Acesso(
+            titulo = "Relógio + Localização",
+            descricao = "Horário e posição atual"
+        ),
 
-            Acesso(
-                titulo = "Relógio + Localização",
-                descricao = "Horário e posição atual",
-                icone = Icons.Outlined.Timer,
-                corIcone = Color(0xFF3978EE)
-            ),
+        Acesso(
+            titulo = "Calculadora",
+            descricao = "Faça seus cálculos rapidamente"
+        ),
 
-            Acesso(
-                titulo = "Calculadora",
-                descricao = "Faça seus cálculos rapidamente",
-                icone = Icons.Outlined.Calculate,
-                corIcone = Color(0xFF28B978)
-            ),
+        Acesso(
+            titulo = "Minhas tarefas",
+            descricao = "Organize o que precisa fazer"
+        ),
 
-            Acesso(
-                titulo = "Minhas tarefas",
-                descricao = "Organize o que precisa fazer",
-                icone = Icons.Outlined.TaskAlt,
-                corIcone = Color(0xFF22AFC5)
-            ),
-
-            Acesso(
-                titulo = "Navegador",
-                descricao = "Acesse páginas da internet",
-                icone = Icons.Outlined.Language,
-                corIcone = Color(0xFF7147F4)
-            )
+        Acesso(
+            titulo = "Navegador",
+            descricao = "Acesse páginas da internet"
         )
-    }
+    )
 
 
-    val outrasFuncoes = remember {
+    val outrasFuncoes = listOf(
 
-        listOf(
+        Acesso(
+            titulo = "Gravador de voz",
+            descricao = "Grave áudios rapidamente"
+        ),
 
-            Acesso(
-                titulo = "Gravador de voz",
-                descricao = "Grave áudios rapidamente",
-                icone = Icons.Outlined.Mic,
-                corIcone = Color(0xFF7D4BD8)
-            ),
+        Acesso(
+            titulo = "Meus arquivos",
+            descricao = "Acesse seus arquivos"
+        ),
 
-            Acesso(
-                titulo = "Meus arquivos",
-                descricao = "Acesse seus arquivos",
-                icone = Icons.Outlined.Folder,
-                corIcone = Color(0xFF438AEF)
-            ),
-
-            Acesso(
-                titulo = "Tela de aplicativos",
-                descricao = "Acesse seus apps",
-                icone = Icons.Outlined.Person,
-                corIcone = Color(0xFFD72AD5)
-            )
+        Acesso(
+            titulo = "Tela de aplicativos",
+            descricao = "Acesse seus apps"
         )
-    }
+    )
 
 
-    val especiais = remember {
+    val especiais = listOf(
 
-        listOf(
+        Acesso(
+            titulo = "Feliz Dia das Mulheres!",
+            descricao = "Um jogo gamificado"
+        ),
 
-            Acesso(
-                titulo = "Feliz Dia das Mulheres!",
-                descricao = "Um jogo gamificado",
-                icone = Icons.Outlined.Favorite,
-                corIcone = Color(0xFF9B6BEA)
-            ),
+        Acesso(
+            titulo = "100 dos seus direitos",
+            descricao = "seja amparada pela lei"
+        ),
 
-            Acesso(
-                titulo = "100 dos seus direitos",
-                descricao = "seja amparada pela lei",
-                icone = Icons.Outlined.Description,
-                corIcone = Color(0xFF9B6BEA)
-            ),
+        Acesso(
+            titulo = "Dicas de como recuperar sua autonomia financeira",
+            descricao = "Conhecimentos valiosos"
+        ),
 
-            Acesso(
-                titulo = "Dicas de como recuperar sua autonomia financeira",
-                descricao = "Conhecimentos valiosos",
-                icone = Icons.Outlined.Calculate,
-                corIcone = Color(0xFF9B6BEA)
-            ),
-
-            Acesso(
-                titulo = "Uma carta para você, mulher!",
-                descricao = "Uma mensagem especial",
-                icone = Icons.Outlined.Description,
-                corIcone = Color(0xFF9B6BEA)
-            )
+        Acesso(
+            titulo = "Uma carta para você, mulher!",
+            descricao = "Uma mensagem especial"
         )
-    }
+    )
 
 
     Box(
@@ -274,8 +224,15 @@ private fun MeusAcessos() {
                 end = 18.dp,
                 top = 22.dp,
                 bottom = 70.dp
-            )
+            ),
+
+            verticalArrangement = Arrangement.spacedBy(0.dp)
         ) {
+
+
+            /* =================================================
+               HERO
+            ================================================= */
 
             item {
 
@@ -287,10 +244,14 @@ private fun MeusAcessos() {
             }
 
 
+            /* =================================================
+               RECURSOS
+            ================================================= */
+
             item {
 
                 TituloSecao(
-                    "Recursos do aplicativo"
+                    titulo = "Recursos do aplicativo"
                 )
 
                 Spacer(
@@ -301,13 +262,19 @@ private fun MeusAcessos() {
 
             items(recursos) { acesso ->
 
-                Cartao(acesso)
+                Cartao(
+                    acesso = acesso
+                )
 
                 Spacer(
                     modifier = Modifier.height(10.dp)
                 )
             }
 
+
+            /* =================================================
+               OUTRAS FUNÇÕES
+            ================================================= */
 
             item {
 
@@ -316,7 +283,7 @@ private fun MeusAcessos() {
                 )
 
                 TituloSecao(
-                    "Outras funções"
+                    titulo = "Outras funções"
                 )
 
                 Spacer(
@@ -327,7 +294,9 @@ private fun MeusAcessos() {
 
             items(outrasFuncoes) { acesso ->
 
-                Cartao(acesso)
+                Cartao(
+                    acesso = acesso
+                )
 
                 Spacer(
                     modifier = Modifier.height(10.dp)
@@ -348,6 +317,7 @@ private fun MeusAcessos() {
                     modifier = Modifier.height(28.dp)
                 )
 
+
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -363,27 +333,30 @@ private fun MeusAcessos() {
                         )
                 )
 
+
                 Spacer(
                     modifier = Modifier.height(27.dp)
                 )
 
+
                 TituloSecao(
-                    "Emergência"
+                    titulo = "Emergência"
                 )
+
 
                 Spacer(
                     modifier = Modifier.height(14.dp)
                 )
 
+
                 Cartao(
                     acesso = Acesso(
                         titulo = "Bloquear dispositivo",
                         descricao = "Bloqueie a tela imediatamente",
-                        icone = Icons.Outlined.Lock,
-                        corIcone = Vermelho,
                         emergencia = true
                     )
                 )
+
 
                 Spacer(
                     modifier = Modifier.height(32.dp)
@@ -391,10 +364,14 @@ private fun MeusAcessos() {
             }
 
 
+            /* =================================================
+               ESPECIAL
+            ================================================= */
+
             item {
 
                 TituloSecao(
-                    "Especial, só para você!"
+                    titulo = "Especial, só para você!"
                 )
 
                 Spacer(
@@ -405,7 +382,17 @@ private fun MeusAcessos() {
 
             items(especiais) { acesso ->
 
-                Cartao(acesso)
+                Cartao(
+                    acesso = acesso
+                )
+
+                Spacer(
+                    modifier = Modifier.height(10.dp)
+                )
+            }
+
+
+            item {
 
                 Spacer(
                     modifier = Modifier.height(10.dp)
@@ -420,7 +407,7 @@ private fun MeusAcessos() {
    HERO
 ========================================================= */
 
-@Composable
+@androidx.compose.runtime.Composable
 private fun Hero() {
 
     Column(
@@ -438,9 +425,8 @@ private fun Hero() {
     ) {
 
         /*
-         * ÍCONE DO HERO
-         * Também é ImageVector.
-         * Nenhum drawable.
+         * Nenhum ícone ou imagem.
+         * Apenas o bloco roxo.
          */
 
         Box(
@@ -465,21 +451,8 @@ private fun Hero() {
                     width = 1.dp,
                     color = Color.White.copy(alpha = 0.16f),
                     shape = RoundedCornerShape(30.dp)
-                ),
-
-            contentAlignment = Alignment.Center
-        ) {
-
-            Icon(
-                imageVector = Icons.Outlined.Person,
-
-                contentDescription = null,
-
-                modifier = Modifier.size(55.dp),
-
-                tint = Color.White
-            )
-        }
+                )
+        )
 
 
         Spacer(
@@ -487,7 +460,7 @@ private fun Hero() {
         )
 
 
-        Text(
+        androidx.compose.material3.Text(
             text = "Meus Acessos",
 
             color = Texto,
@@ -511,7 +484,7 @@ private fun Hero() {
         )
 
 
-        Text(
+        androidx.compose.material3.Text(
             text = "Tudo o que você precisa, organizado em um só lugar.",
 
             modifier = Modifier
@@ -537,7 +510,7 @@ private fun Hero() {
         )
 
 
-        Text(
+        androidx.compose.material3.Text(
             text = "•  ÁREA PROTEGIDA",
 
             color = Color(0xFF91889F),
@@ -558,7 +531,7 @@ private fun Hero() {
    TÍTULO DA SEÇÃO
 ========================================================= */
 
-@Composable
+@androidx.compose.runtime.Composable
 private fun TituloSecao(
     titulo: String
 ) {
@@ -584,11 +557,13 @@ private fun TituloSecao(
                 )
         )
 
+
         Spacer(
             modifier = Modifier.width(10.dp)
         )
 
-        Text(
+
+        androidx.compose.material3.Text(
             text = titulo.uppercase(),
 
             color = Color(0xFF8F8F99),
@@ -609,7 +584,7 @@ private fun TituloSecao(
    CARTÃO
 ========================================================= */
 
-@Composable
+@androidx.compose.runtime.Composable
 private fun Cartao(
     acesso: Acesso
 ) {
@@ -647,7 +622,9 @@ private fun Cartao(
             .clip(
                 RoundedCornerShape(21.dp)
             )
-            .background(fundo)
+            .background(
+                fundo
+            )
             .border(
                 width = 1.dp,
 
@@ -662,7 +639,7 @@ private fun Cartao(
             )
             .clickable {
                 /*
-                 * Por enquanto não abre nada.
+                 * Por enquanto não abre nenhuma tela.
                  */
             }
             .padding(
@@ -680,6 +657,10 @@ private fun Cartao(
                     .fillMaxWidth()
                     .height(58.dp)
             ) {
+
+                /*
+                 * Faixa vermelha lateral.
+                 */
 
                 Box(
                     modifier = Modifier
@@ -701,6 +682,7 @@ private fun Cartao(
                             )
                         )
                 )
+
 
                 ConteudoCartao(
                     acesso = acesso,
@@ -727,7 +709,7 @@ private fun Cartao(
    CONTEÚDO DO CARTÃO
 ========================================================= */
 
-@Composable
+@androidx.compose.runtime.Composable
 private fun ConteudoCartao(
     acesso: Acesso,
     modifier: Modifier
@@ -740,58 +722,19 @@ private fun ConteudoCartao(
     ) {
 
         /*
-         * ÍCONE
+         * ESPAÇO RESERVADO.
          *
-         * Não existe Image.
-         * Não existe painterResource.
-         * Não existe drawable.
+         * Não existe ícone, imagem ou drawable.
          */
 
-        Box(
-            modifier = Modifier.size(50.dp),
-
-            contentAlignment = Alignment.Center
-        ) {
-
-            Box(
-                modifier = Modifier
-                    .size(50.dp)
-                    .clip(
-                        RoundedCornerShape(14.dp)
-                    )
-                    .background(
-                        Brush.linearGradient(
-                            colors = listOf(
-                                acesso.corIcone,
-                                acesso.corIcone.copy(alpha = 0.65f)
-                            )
-                        )
-                    ),
-
-                contentAlignment = Alignment.Center
-            ) {
-
-                Icon(
-                    imageVector = acesso.icone,
-
-                    contentDescription = null,
-
-                    modifier = Modifier.size(29.dp),
-
-                    tint = Color.White
-                )
-            }
-        }
-
-
         Spacer(
-            modifier = Modifier.width(15.dp)
+            modifier = Modifier.width(4.dp)
         )
 
 
-        /*
-         * TEXTO
-         */
+        /* =================================================
+           TEXTO
+        ================================================= */
 
         Column(
             modifier = Modifier.weight(1f),
@@ -799,7 +742,7 @@ private fun ConteudoCartao(
             verticalArrangement = Arrangement.Center
         ) {
 
-            Text(
+            androidx.compose.material3.Text(
                 text = acesso.titulo,
 
                 color =
@@ -824,7 +767,7 @@ private fun ConteudoCartao(
             )
 
 
-            Text(
+            androidx.compose.material3.Text(
                 text = acesso.descricao,
 
                 color =
@@ -845,9 +788,12 @@ private fun ConteudoCartao(
         }
 
 
-        /*
-         * SETA
-         */
+        /* =================================================
+           SETA
+           
+           Feita somente com caracteres de texto.
+           Nenhum ícone.
+        ================================================= */
 
         Box(
             modifier = Modifier
@@ -864,19 +810,23 @@ private fun ConteudoCartao(
             contentAlignment = Alignment.Center
         ) {
 
-            Icon(
-                imageVector = Icons.Outlined.ArrowForwardIos,
+            androidx.compose.material3.Text(
+                text = "›",
 
-                contentDescription = null,
-
-                modifier = Modifier.size(17.dp),
-
-                tint =
+                color =
                     if (acesso.emergencia) {
                         Color(0xFFB64B5B)
                     } else {
                         Color(0xFF666671)
-                    }
+                    },
+
+                fontFamily = Quicksand,
+
+                fontSize = 25.sp,
+
+                fontWeight = FontWeight.Medium,
+
+                textAlign = TextAlign.Center
             )
         }
     }

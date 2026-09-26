@@ -10,13 +10,13 @@ Um projeto totalmente gratuito e livre de anúncios, projetado por um menino aut
 
 E saibam que o projeto é: Source-Available
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3421**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3295**
 
 # ⚠️MURAL DE AVISOS:
 
 ### Sobre como o projeto foi estruturado:
 
->Sobre as permissões: infelizmente, foi necessário configurar a MainActivity para não solicitar permissões automaticamente. Por isso, as permissões necessárias deverão ser concedidas manualmente pela usuária nas configurações do dispositivo. As permissões utilizadas por outras Activitys continuam sendo solicitadas normalmente pelo aplicativo.
+>Sobre as permissões: infelizmente, foi necessário configurar a HubActivity para não solicitar permissões automaticamente. Por isso, as permissões necessárias deverão ser concedidas manualmente pela usuária nas configurações do dispositivo. As permissões utilizadas por outras Activitys continuam sendo solicitadas normalmente pelo aplicativo.
 >
 > Ao entrar no aplicativo após sair dos disfarces, um aviso é exibido, bloqueando o acesso até que todas as permissões necessárias estejam concedidas. O aviso oferece à usuária a opção de acessar diretamente a tela de permissões do aplicativo nas configurações do dispositivo. Ao retornar ao aplicativo, as permissões são verificadas novamente. Se ainda houver alguma permissão necessária que não tenha sido concedida, o aviso continuará sendo exibido e o acesso permanecerá bloqueado. O aviso só desaparecerá quando todas as permissões necessárias estiverem concedidas.
 >
@@ -40,7 +40,7 @@ E saibam que o projeto é: Source-Available
 >
 >O aplicativo conta com uma funcionalidade exclusiva de privacidade, projetada para proteger as informações da usuária contra olhares curiosos. Ao inclinar o dispositivo, o aplicativo ativa instantaneamente um modo de disfarce visual, escurecendo a interface para simular que a tela está desligada ou que o celular está bloqueado.
 >
->### Funcionamento Exclusivo na Tela Principal (MainActivity)
+>### Funcionamento Exclusivo na Tela Principal (HubActivity)
 >
 >Por decisões estratégicas de segurança, desempenho e utilidade prática, este recurso opera **estritamente dentro da tela principal do aplicativo**, não sendo ativado nas demais telas ou no momento em que o app está abrindo. As razões para essa escolha incluem:
 >
@@ -169,6 +169,21 @@ e ele tem o jetpack compose e estilo via xml ativados!
 
 e a versão do gradle é 9.6!
 
+## Sobre as telas do aplicativo;
+
+Temos a:
+
+* EntradaActivity (compose) = Tela que contém a splashscreen 
+
+AssistenteActivity (compose) = Tela que contém o disfarce de saúde do app 
+
+NeoCalcActivity (compose) = Tela que contém o disfarce de calculadora
+
+ HubActivity (compose) = Tela que contém o botão de pânico, proteção por palmas, balançar o celular pra pedir ajuda, escurecimento por inclinação, bloqueio por barulho, usandk o action dial, ele chama a policia, samu e o 180, enviar localização para o 180, contatos de confiança, o botão feito com compose, (aquele do emergencyoverlay), 
+ 
+ 
+A MainActivity e a HomeActivity são feitas com webview e são responsáveis pela área protegida e a área do amparo
+
 ## Sobre como o aplicativo é compilado:
 
 Proteção da Activity de Entrada:
@@ -177,7 +192,7 @@ O aplicativo está configurado para iniciar pela EntradaActivity, que é a únic
 
 A MainActivity permanece com android:exported="false", impedindo que outros aplicativos iniciem essa Activity diretamente por meio de uma Intent externa. Todas as demais Activities do aplicativo também estão configuradas com android:exported="false".
 
-Dessa forma, a EntradaActivity funciona como uma camada de entrada: ela gerencia a inicialização visual do aplicativo e encaminha o usuário de forma segura para a MainActivity internamente. 
+Dessa forma, a EntradaActivity funciona como uma camada de entrada: ela gerencia a inicialização visual do aplicativo e encaminha o usuário de forma segura para a AssistenteActivity internamente. 
 
 E a EntradaActivity tem o fundo preto!
 
@@ -205,7 +220,7 @@ E também as barras tanto de status tanto de navegação são transparentes, por
 
 ### Sobre como foi escrito o texto do biometricPrompt do app:
 
-- MainActivity (tela que contém o webview):
+- HubActivity:
 
 **Título:**
 >Desbloquear a área protegida
@@ -280,7 +295,7 @@ A usuária pode escolher por qual aplicativo deseja compartilhar essas informaç
 
  O compartilhamento não é enviado automaticamente para um contato específico. O usuário precisa escolher o aplicativo e confirmar o envio.
 
-Vale lembrar que o compose é um overlay usandi a classe `EmergencyOverlay`, e a MainActivity chama essa classe!
+Vale lembrar que o compose é um overlay usandi a classe `EmergencyOverlay`, e a HubActivity chama essa classe!
 
 # 🔐Área Protegida:
 Se estiver cadastrado no celular, com Biometric Prompt junto com Device Credential e autenticação weak, pode desbloquear essa área com impressão digital, rosto, PIN, padrão, senha e outros métodos.
@@ -348,7 +363,7 @@ O sistema permite categorizar tarefas em áreas como estudos, trabalho, pessoal 
 
 As tarefas podem ser marcadas como concluídas para acompanhamento do progresso.
 
-Todas as tarefas são salvas diretamente no webview da usuária.
+Todas as tarefas são salvas diretamente na classe cripto da usuária.
 
 Os dados ficam armazenados localmente no dispositivo do usuário.
 

@@ -1,6 +1,5 @@
 package com.mulheres
 
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -389,7 +388,27 @@ private fun CarteiraCard(
         MutableInteractionSource()
     }
 
-    val pressed by interactionSource.collectIsPressedAsStateCompat()
+    var pressed by remember {
+        androidx.compose.runtime.mutableStateOf(false)
+    }
+
+    androidx.compose.runtime.LaunchedEffect(interactionSource) {
+
+        interactionSource.interactions.collect { interaction ->
+
+            when (interaction) {
+
+                is androidx.compose.foundation.interaction.PressInteraction.Press -> {
+                    pressed = true
+                }
+
+                is androidx.compose.foundation.interaction.PressInteraction.Release,
+                is androidx.compose.foundation.interaction.PressInteraction.Cancel -> {
+                    pressed = false
+                }
+            }
+        }
+    }
 
     val scale by animateFloatAsState(
         targetValue = if (pressed) 0.90f else 1f,
@@ -432,11 +451,9 @@ private fun CarteiraCard(
     }
 }
 
-
 /*
  * Compatibilidade para obter o estado de pressionamento.
  */
 @Composable
 private fun MutableInteractionSource.collectIsPressedAsStateCompat(): androidx.compose.runtime.State<Boolean> {
-    return androidx.compose.foundation.interaction.collectIsPressedAsState()
 }

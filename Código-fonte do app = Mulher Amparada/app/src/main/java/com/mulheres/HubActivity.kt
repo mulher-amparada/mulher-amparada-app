@@ -193,6 +193,41 @@ fun desativarEscurecimento() {
         startActivity(intent)
     }
 
+fun ativarFullscreen() {
+
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        false
+    )
+
+    WindowInsetsControllerCompat(
+        window,
+        window.decorView
+    ).apply {
+
+        hide(
+            androidx.core.view.WindowInsetsCompat.Type.systemBars()
+        )
+
+        systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    }
+}
+
+fun desativarFullscreen() {
+
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        false
+    )
+
+    WindowInsetsControllerCompat(
+        window,
+        window.decorView
+    ).show(
+        androidx.core.view.WindowInsetsCompat.Type.systemBars()
+    )
+}
 
     /* =========================================================
        CICLO DE VIDA

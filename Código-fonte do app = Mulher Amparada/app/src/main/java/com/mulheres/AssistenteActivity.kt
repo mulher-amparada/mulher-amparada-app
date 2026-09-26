@@ -2,6 +2,7 @@ package com.mulheres
 
 import android.os.Bundle
 import android.graphics.Color as AndroidColor
+import kotlin.random.Random
 import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent

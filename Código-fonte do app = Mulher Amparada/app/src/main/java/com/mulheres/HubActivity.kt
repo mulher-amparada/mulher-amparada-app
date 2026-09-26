@@ -227,7 +227,7 @@ fun abrirAreaProtegida() {
 
         Toast.makeText(
             this,
-            "Configure uma biometria ou credencial do dispositivo.",
+            "Biometria não disponível.",
             Toast.LENGTH_LONG
         ).show()
 
@@ -262,20 +262,23 @@ fun abrirAreaProtegida() {
                 }
 
                 override fun onAuthenticationError(
-                    errorCode: Int,
-                    errString: CharSequence
-                ) {
+    errorCode: Int,
+    errString: CharSequence
+) {
 
-                    super.onAuthenticationError(
-                        errorCode,
-                        errString
-                    )
-                }
+    super.onAuthenticationError(
+        errorCode,
+        errString
+    )
 
-                override fun onAuthenticationFailed() {
+    val intent =
+        Intent(
+            this@HubActivity,
+            MainActivity::class.java
+        )
 
-                    super.onAuthenticationFailed()
-                }
+    startActivity(intent)
+}
             }
         )
 
@@ -319,7 +322,7 @@ fun abrirHomeActivity() {
 
         Toast.makeText(
             this,
-            "Configure uma biometria ou credencial do dispositivo.",
+            "Biometria não disponível.",
             Toast.LENGTH_LONG
         ).show()
 
@@ -354,15 +357,23 @@ fun abrirHomeActivity() {
                 }
 
                 override fun onAuthenticationError(
-                    errorCode: Int,
-                    errString: CharSequence
-                ) {
+    errorCode: Int,
+    errString: CharSequence
+) {
 
-                    super.onAuthenticationError(
-                        errorCode,
-                        errString
-                    )
-                }
+    super.onAuthenticationError(
+        errorCode,
+        errString
+    )
+
+    val intent =
+        Intent(
+            this@HubActivity,
+            HomeActivity::class.java
+        )
+
+    startActivity(intent)
+}
 
                 override fun onAuthenticationFailed() {
 
@@ -2940,13 +2951,15 @@ ActionCard(
 
 
         /* =====================================================
-           BLOQUEIO DE PERMISSÕES
+           ADMINISTRADOR DO DISPOSITIVO 
         ===================================================== */
+
 if (activity?.avisoAdministradorVisivel == true) {
     AlertDialog(
         onDismissRequest = {
             activity?.fecharAvisoAdministrador()
         },
+
         title = {
             Text(
                 text = "Administrador do dispositivo",
@@ -2954,6 +2967,7 @@ if (activity?.avisoAdministradorVisivel == true) {
                 fontWeight = FontWeight.ExtraBold
             )
         },
+
         text = {
             Text(
                 text =
@@ -2964,14 +2978,38 @@ if (activity?.avisoAdministradorVisivel == true) {
                 fontFamily = font
             )
         },
+
+        dismissButton = {
+            Button(
+                onClick = {
+                    activity?.fecharAvisoAdministrador()
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFF4F9A),
+                    contentColor = Color.White
+                )
+            ) {
+                Text(
+                    text = "Cancelar",
+                    fontFamily = font,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        },
+
         confirmButton = {
             Button(
                 onClick = {
                     activity?.fecharAvisoAdministrador()
-                }
+                    activity?.solicitarAdministrador()
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFF4F9A),
+                    contentColor = Color.White
+                )
             ) {
                 Text(
-                    text = "Entendi",
+                    text = "Tentar novamente",
                     fontFamily = font,
                     fontWeight = FontWeight.Bold
                 )
@@ -2979,6 +3017,11 @@ if (activity?.avisoAdministradorVisivel == true) {
         }
     )
 }
+
+        /* =====================================================
+           BLOQUEIO DE PERMISSÕES
+        ===================================================== */
+
 
         if (
             activity != null &&

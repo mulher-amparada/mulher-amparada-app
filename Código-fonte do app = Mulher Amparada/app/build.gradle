@@ -105,7 +105,7 @@ dependencies {
 
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
-
+implementation("androidx.compose.material:material-icons-extended")
     // ZIP4J
     implementation 'net.lingala.zip4j:zip4j:2.11.5'
 

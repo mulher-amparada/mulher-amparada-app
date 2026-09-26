@@ -17,7 +17,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.mutableStateOf
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -27,6 +26,9 @@ import androidx.core.view.WindowInsetsControllerCompat
 import android.view.ViewGroup
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 
 class HomeActivity : AppCompatActivity() {
 
@@ -175,10 +177,8 @@ class HomeActivity : AppCompatActivity() {
             Color.TRANSPARENT
         )
 
-        webView.addJavascriptInterface(
-            WebAppInterface(this),
-            "Android"
-        )
+
+
 
         webView.addJavascriptInterface(
             cripto,

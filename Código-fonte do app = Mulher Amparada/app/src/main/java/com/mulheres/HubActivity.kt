@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.fragment.app.FragmentActivity
 import android.view.WindowManager
 import android.Manifest
 import android.content.BroadcastReceiver

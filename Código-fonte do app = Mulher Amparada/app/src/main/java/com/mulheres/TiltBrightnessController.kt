@@ -2,6 +2,7 @@ package com.mulheres
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.hardware.Sensor
@@ -12,7 +13,7 @@ import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.view.View
-import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import kotlin.math.log10
 import kotlin.math.sqrt
@@ -20,38 +21,28 @@ import kotlin.math.sqrt
 class TiltBrightnessController(
     private val activity: Activity,
     private val sensorManager: SensorManager,
-    private val onEnterFullscreen: (() -> Unit)? = null,
-    private val onExitFullscreen: (() -> Unit)? = null
-) : SensorEventListener {
+    private val onEnterFullscreen: () -> Unit,
+    private val onExitFullscreen: () -> Unit
+) {
 
-    private var isDark = false
-    private var enabled = false
+    private var ativo = false
 
-    private var originalBrightness: Float? = null
+    private var gravitySensor: Sensor? = null
 
-    private var protectionOverlay: View? = null
+    private var gravityListener: SensorEventListener? = null
 
-    private val gravitySensor: Sensor? =
-        sensorManager.getDefaultSensor(
-            Sensor.TYPE_GRAVITY
-        )
+    private var overlay: View? = null
 
-    // =============================================================
-    // ESTADO
-    // =============================================================
+    private var brilhoAnterior: Float? = null
 
-    val isEnabled: Boolean
-        get() = enabled
-
-    val isDarkMode: Boolean
-        get() = isDark
-
-    // =============================================================
-    // MICROFONE — FALLBACK
-    // =============================================================
+    // =========================================================
+    // MICROFONE
+    // =========================================================
 
     private var audioRecord: AudioRecord? = null
+
     private var microphoneThread: Thread? = null
+
     private var microphoneRunning = false
 
     private val sampleRate = 44100
@@ -63,165 +54,238 @@ class TiltBrightnessController(
             AudioFormat.ENCODING_PCM_16BIT
         )
 
+    /*
+     * Mesmo conceito usado na proteção por movimento.
+     */
     private val loudSoundThreshold = -50.0
 
-    // =============================================================
+
+    // =========================================================
     // INICIAR
-    // =============================================================
+    // =========================================================
 
-    fun start() {
+    fun startTiltBrightness() {
 
-        if (enabled) {
+        if (ativo) {
             return
         }
 
-        enabled = true
-        isDark = false
+        ativo = true
 
-        originalBrightness =
-            activity.window.attributes.screenBrightness
-
-        if (gravitySensor != null) {
-
-            val registered =
-                sensorManager.registerListener(
-                    this,
-                    gravitySensor,
-                    SensorManager.SENSOR_DELAY_NORMAL
-                )
-
-            if (!registered) {
-                startMicrophoneFallback()
-            }
-
-        } else {
-
-            startMicrophoneFallback()
-        }
-    }
-
-    // =============================================================
-    // CAMADA PRETA
-    // =============================================================
-
-    private fun showProtectionOverlay() {
-
-        activity.runOnUiThread {
-
-            if (protectionOverlay != null) {
-                return@runOnUiThread
-            }
-
-            val overlay = View(activity)
-
-            overlay.setBackgroundColor(
-                Color.BLACK
+        gravitySensor =
+            sensorManager.getDefaultSensor(
+                Sensor.TYPE_GRAVITY
             )
 
-            overlay.layoutParams =
-                ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-                )
+        if (gravitySensor == null) {
 
-            overlay.isClickable = true
-            overlay.isFocusable = true
+            iniciarMicrofone()
 
-            val decorView =
-                activity.window.decorView as ViewGroup
-
-            decorView.addView(overlay)
-
-            protectionOverlay = overlay
-        }
-    }
-
-    private fun hideProtectionOverlay() {
-
-        activity.runOnUiThread {
-
-            protectionOverlay?.let { overlay ->
-
-                val parent = overlay.parent
-
-                if (parent is ViewGroup) {
-                    parent.removeView(overlay)
-                }
-            }
-
-            protectionOverlay = null
-        }
-    }
-
-    // =============================================================
-    // BRILHO
-    // =============================================================
-
-    fun setDarkBrightness(value: Float) {
-        // Mantido para compatibilidade
-        // com chamadas antigas.
-    }
-
-    // =============================================================
-    // SENSOR DE GRAVIDADE
-    // =============================================================
-
-    override fun onSensorChanged(
-        event: SensorEvent
-    ) {
-
-        if (!enabled || isDark) {
             return
         }
 
-        val z = event.values[2]
+        if (gravityListener == null) {
 
-        if (z < -8f) {
-            activateProtection()
+            gravityListener =
+                object : SensorEventListener {
+
+                    override fun onSensorChanged(
+                        event: SensorEvent
+                    ) {
+
+                        if (!ativo) {
+                            return
+                        }
+
+                        val z =
+                            event.values[2]
+
+                        /*
+                         * Inclinação configurada.
+                         */
+                        if (z < -8f) {
+
+                            ativarEscurecimento()
+
+                        } else {
+
+                            desativarEscurecimento()
+                        }
+                    }
+
+                    override fun onAccuracyChanged(
+                        sensor: Sensor?,
+                        accuracy: Int
+                    ) {
+                    }
+                }
+        }
+
+        val registrado =
+            sensorManager.registerListener(
+                gravityListener,
+                gravitySensor,
+                SensorManager.SENSOR_DELAY_GAME
+            )
+
+        /*
+         * Se o acelerômetro/gravity não puder
+         * ser registrado, usa o microfone.
+         */
+        if (!registrado) {
+
+            iniciarMicrofone()
         }
     }
 
-    override fun onAccuracyChanged(
-        sensor: Sensor?,
-        accuracy: Int
-    ) {
-        // Não utilizado.
+
+    // =========================================================
+    // PARAR
+    // =========================================================
+
+    fun stopTiltBrightness() {
+
+        ativo = false
+
+        gravityListener?.let {
+
+            sensorManager.unregisterListener(
+                it
+            )
+        }
+
+        pararMicrofone()
+
+        desativarEscurecimento()
     }
 
-    // =============================================================
-    // FALLBACK DO MICROFONE
-    // =============================================================
 
-    private fun startMicrophoneFallback() {
+    fun start() {
+        startTiltBrightness()
+    }
+
+
+    fun stop() {
+        stopTiltBrightness()
+    }
+
+
+    // =========================================================
+    // ESCURECER
+    // =========================================================
+
+    private fun ativarEscurecimento() {
+
+        if (!ativo) {
+            return
+        }
+
+        if (overlay != null) {
+            return
+        }
+
+        brilhoAnterior =
+            activity.window.attributes.screenBrightness
+
+        /*
+         * Força brilho mínimo.
+         */
+        activity.window.attributes =
+            activity.window.attributes.apply {
+
+                screenBrightness = 0f
+            }
+
+        onEnterFullscreen()
+
+        val view =
+            View(activity)
+
+        view.setBackgroundColor(
+            Color.BLACK
+        )
+
+        view.alpha = 1f
+
+        overlay = view
+
+        activity.addContentView(
+            view,
+            WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT
+            )
+        )
+    }
+
+
+    // =========================================================
+    // DESFAZER ESCURECIMENTO
+    // =========================================================
+
+    private fun desativarEscurecimento() {
+
+        overlay?.let {
+
+            val parent =
+                it.parent
+
+            if (parent is android.view.ViewGroup) {
+
+                parent.removeView(it)
+            }
+        }
+
+        overlay = null
+
+        brilhoAnterior?.let {
+
+            activity.window.attributes =
+                activity.window.attributes.apply {
+
+                    screenBrightness = it
+                }
+        }
+
+        brilhoAnterior = null
+
+        onExitFullscreen()
+    }
+
+
+    // =========================================================
+    // MICROFONE
+    // =========================================================
+
+    private fun iniciarMicrofone() {
+
+        if (!ativo) {
+            return
+        }
+
+        if (microphoneRunning) {
+            return
+        }
+
+        if (
+            ContextCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+
+        if (bufferSize <= 0) {
+            return
+        }
 
         try {
-
-            if (
-                ContextCompat.checkSelfPermission(
-                    activity,
-                    Manifest.permission.RECORD_AUDIO
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                return
-            }
-
-            val taxa = 44100
-
-            val bufferSize =
-                AudioRecord.getMinBufferSize(
-                    taxa,
-                    AudioFormat.CHANNEL_IN_MONO,
-                    AudioFormat.ENCODING_PCM_16BIT
-                )
-
-            if (bufferSize <= 0) {
-                return
-            }
 
             audioRecord =
                 AudioRecord(
                     MediaRecorder.AudioSource.MIC,
-                    taxa,
+                    sampleRate,
                     AudioFormat.CHANNEL_IN_MONO,
                     AudioFormat.ENCODING_PCM_16BIT,
                     bufferSize
@@ -233,15 +297,11 @@ class TiltBrightnessController(
             ) {
 
                 audioRecord?.release()
+
                 audioRecord = null
 
                 return
             }
-
-            val buffer =
-                ShortArray(bufferSize)
-
-            audioRecord?.startRecording()
 
             microphoneRunning = true
 
@@ -250,82 +310,93 @@ class TiltBrightnessController(
 
                     try {
 
-                        while (microphoneRunning) {
+                        val buffer =
+                            ShortArray(
+                                bufferSize
+                            )
 
-                            val leitura =
+                        audioRecord?.startRecording()
+
+                        while (
+                            microphoneRunning &&
+                            ativo
+                        ) {
+
+                            val read =
                                 audioRecord?.read(
                                     buffer,
                                     0,
                                     buffer.size
                                 ) ?: 0
 
-                            if (leitura <= 0) {
-                                continue
-                            }
+                            if (read > 0) {
 
-                            var pico = 0
-
-                            for (i in 0 until leitura) {
-
-                                val valor =
-                                    kotlin.math.abs(
-                                        buffer[i].toInt()
+                                val db =
+                                    calcularDecibeis(
+                                        buffer,
+                                        read
                                     )
 
-                                pico =
-                                    maxOf(
-                                        pico,
-                                        valor
-                                    )
-                            }
+                                /*
+                                 * Mantém o mesmo
+                                 * limiar do movimento.
+                                 */
+                                if (
+                                    db >=
+                                    loudSoundThreshold
+                                ) {
 
-                            if (pico > 14000) {
+                                    activity.runOnUiThread {
 
-                                activity.runOnUiThread {
+                                        if (ativo) {
 
-                                    if (!isDark) {
-                                        activateProtection()
+                                            /*
+                                             * O microfone funciona
+                                             * como fallback para
+                                             * acionar o estado de
+                                             * escurecimento.
+                                             */
+                                            ativarEscurecimento()
+                                        }
                                     }
                                 }
-
-                                break
                             }
                         }
 
-                    } catch (e: Exception) {
-
-                        e.printStackTrace()
-
+                    } catch (
+                        _: Exception
+                    ) {
                     } finally {
 
-                        try {
-                            audioRecord?.stop()
-                        } catch (_: Exception) {
-                        }
-
-                        try {
-                            audioRecord?.release()
-                        } catch (_: Exception) {
-                        }
-
-                        audioRecord = null
-                        microphoneRunning = false
+                        pararMicrofone()
                     }
+
+                }.apply {
+
+                    name =
+                        "MulherAmparada-TiltMicrophone"
+
+                    start()
                 }
 
-            microphoneThread?.start()
+        } catch (
+            _: Exception
+        ) {
 
-        } catch (e: Exception) {
+            audioRecord?.release()
 
-            e.printStackTrace()
+            audioRecord = null
+
+            microphoneRunning = false
         }
     }
 
-    // =============================================================
-    // CALCULAR VOLUME
-    // =============================================================
 
-    private fun calculateDecibels(
+    // =========================================================
+    // DECIBÉIS
+    // =========================================================
+
+    private fun calcularDecibeis(
         buffer: ShortArray,
         length: Int
     ): Double {
@@ -334,182 +405,61 @@ class TiltBrightnessController(
             return -100.0
         }
 
-        var sum = 0.0
+        var soma = 0.0
 
         for (i in 0 until length) {
 
             val sample =
                 buffer[i].toDouble()
 
-            sum += sample * sample
+            soma +=
+                sample * sample
         }
 
         val rms =
-            sqrt(sum / length)
+            sqrt(
+                soma / length
+            )
 
         if (rms <= 0.0) {
             return -100.0
         }
 
         return 20.0 *
-                log10(rms / 32768.0)
+            log10(
+                rms / 32768.0
+            )
     }
 
-    // =============================================================
-    // PARAR MICROFONE
-    // =============================================================
 
-    private fun stopMicrophone() {
+    // =========================================================
+    // PARAR MICROFONE
+    // =========================================================
+
+    private fun pararMicrofone() {
 
         microphoneRunning = false
 
         try {
+
             audioRecord?.stop()
-        } catch (_: Exception) {
+
+        } catch (
+            _: Exception
+        ) {
         }
 
         try {
+
             audioRecord?.release()
-        } catch (_: Exception) {
+
+        } catch (
+            _: Exception
+        ) {
         }
 
         audioRecord = null
+
         microphoneThread = null
     }
-
-    // =============================================================
-    // AÇÃO DA PROTEÇÃO
-    // =============================================================
-
-    private fun activateProtection() {
-
-        if (!enabled || isDark) {
-            return
-        }
-
-        isDark = true
-        enabled = false
-
-        // ---------------------------------------------------------
-        // Parar microfone
-        // ---------------------------------------------------------
-
-        stopMicrophone()
-
-        // ---------------------------------------------------------
-        // Parar sensor
-        // ---------------------------------------------------------
-
-        sensorManager.unregisterListener(this)
-
-        activity.runOnUiThread {
-
-            // =====================================================
-            // 1. BRILHO ZERO
-            // =====================================================
-
-            setBrightness(0f)
-
-            // =====================================================
-            // 2. FULLSCREEN
-            // =====================================================
-
-            onEnterFullscreen?.invoke()
-
-            // =====================================================
-            // 3. CAMADA PRETA
-            // =====================================================
-
-            showProtectionOverlay()
-        }
-    }
-
-    // =============================================================
-    // BRILHO
-    // =============================================================
-
-    private fun setBrightness(
-        value: Float
-    ) {
-
-        val params =
-            activity.window.attributes
-
-        params.screenBrightness =
-            value.coerceIn(
-                0f,
-                1f
-            )
-
-        activity.window.attributes =
-            params
-    }
-
-    // =============================================================
-    // PARAR
-    // =============================================================
-
-    fun stop() {
-
-        enabled = false
-        isDark = false
-
-        sensorManager.unregisterListener(this)
-
-        stopMicrophone()
-
-        activity.runOnUiThread {
-
-            // -----------------------------------------------------
-            // Restaurar brilho original
-            // -----------------------------------------------------
-
-            originalBrightness?.let { brightness ->
-
-                val params =
-                    activity.window.attributes
-
-                params.screenBrightness =
-                    brightness
-
-                activity.window.attributes =
-                    params
-            }
-
-            // -----------------------------------------------------
-            // Remover camada preta
-            // -----------------------------------------------------
-
-            hideProtectionOverlay()
-
-            // -----------------------------------------------------
-            // Sair/restaurar fullscreen
-            // -----------------------------------------------------
-
-            onExitFullscreen?.invoke()
-        }
-    }
-
-    // =============================================================
-    // MÉTODOS MANTIDOS
-    // =============================================================
-    //
-    // Não são mais interfaces JavaScript.
-    // Continuam existindo para preservar a API
-    // que você já tinha.
-
-    fun startTiltBrightness() {
-        start()
-    }
-
-    fun setDarkBrightnessFromInterface(
-        value: Float
-    ) {
-        setDarkBrightness(value)
-    }
-
-    fun stopTiltBrightness() {
-        stop()
-    }
 }
-

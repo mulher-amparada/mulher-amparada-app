@@ -1,225 +1,249 @@
 package com.mulheres
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import android.widget.Toast
-import android.webkit.WebChromeClient
-import android.webkit.GeolocationPermissions
-import android.webkit.PermissionRequest
-import android.view.ViewGroup
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.view.WindowManager
+import android.webkit.GeolocationPermissions
+import android.webkit.JavascriptInterface
+import android.webkit.PermissionRequest
+import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
-import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricPrompt
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
-
-
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.runtime.mutableStateOf
+import android.os.BatteryManager
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var webView: WebView
-
-
-    override fun onCreate(
-    savedInstanceState: Bundle?
-) {
-    super.onCreate(savedInstanceState)
-
-    // =====================================================
-    // SEGURANÇA DA JANELA
-    // =====================================================
-
-    window.addFlags(
-        WindowManager.LayoutParams.FLAG_SECURE
-    )
-
-    // =====================================================
-    // CONFIGURAÇÃO DA JANELA
-    // =====================================================
-
-    WindowCompat.setDecorFitsSystemWindows(
-        window,
-        true
-    )
-
-    window.statusBarColor =
-        Color.TRANSPARENT
-
-    window.navigationBarColor =
-        Color.TRANSPARENT
-
-    // =====================================================
-    // LAYOUT
-    // =====================================================
-
-    setContentView(
-        R.layout.activity_main
-    )
-
-    webView =
-        findViewById(
-            R.id.webview
-        )
-
-    // =====================================================
-    // CONFIGURAÇÃO DA WEBVIEW
-    // =====================================================
-
-    configurarWebView()
-
-    // =====================================================
-    // BARRAS DO SISTEMA
-    // =====================================================
-
-    ViewCompat.setOnApplyWindowInsetsListener(
-        webView
-    ) { view, insets ->
-
-        val barras =
-            insets.getInsets(
-                WindowInsetsCompat.Type.systemBars()
-            )
-
-        val params =
-            view.layoutParams
-                as ViewGroup.MarginLayoutParams
-
-        params.topMargin =
-            barras.top
-
-        params.bottomMargin =
-            barras.bottom
-
-        view.layoutParams =
-            params
-
-        insets
+    companion object {
+        const val PERMISSION_CODE = 100
     }
 
-    // =====================================================
-    // PÁGINA INICIAL
-    // =====================================================
+    // =========================================================
+    // VARIÁVEIS
+    // =========================================================
+    private lateinit var cripto: Cripto
 
-    webView.loadUrl(
-        "https://www.google.com"
+    var destinoBiometria: Int = 0
+
+    
+
+    private lateinit var locationClient: FusedLocationProviderClient
+    private lateinit var webView: WebView
+
+    private lateinit var emergencyComposeView: ComposeView
+
+    private var emergenciaVisivel by mutableStateOf(false)
+
+    // =========================================================
+// =========================================================
+    // ON CREATE
+    // =========================================================
+
+    override fun onCreate(
+        savedInstanceState: Bundle?
+    ) {
+        super.onCreate(savedInstanceState)
+
+        window.addFlags(
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
+WindowCompat.setDecorFitsSystemWindows(
+    window,
+    true
+)
+
+window.statusBarColor =
+    Color.TRANSPARENT
+
+window.navigationBarColor =
+    Color.TRANSPARENT
+
+if (
+    Build.VERSION.SDK_INT >=
+    Build.VERSION_CODES.Q
+) {
+    window.isStatusBarContrastEnforced =
+        false
+
+    window.isNavigationBarContrastEnforced =
+        false
+}
+        val controller =
+            WindowInsetsControllerCompat(
+                window,
+                window.decorView
+            )
+
+        val isDark =
+    (resources.configuration.uiMode and
+        android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
+        android.content.res.Configuration.UI_MODE_NIGHT_YES
+
+controller.isAppearanceLightStatusBars =
+    !isDark
+
+controller.isAppearanceLightNavigationBars =
+    !isDark
+
+        setContentView(
+            R.layout.activity_main
+        )
+
+
+webView = findViewById(R.id.webview)
+
+
+locationClient =
+    LocationServices
+        .getFusedLocationProviderClient(
+            this
+        )
+        
+        
+
+
+ViewCompat.setOnApplyWindowInsetsListener(webView) { view, insets ->
+
+    val barras = insets.getInsets(
+        WindowInsetsCompat.Type.systemBars()
     )
 
-    // =====================================================
-    // ON BACK PRESSED
-    // =====================================================
+    val params =
+        view.layoutParams as ViewGroup.MarginLayoutParams
 
-    onBackPressedDispatcher.addCallback(
-        this,
-        object : OnBackPressedCallback(true) {
+    params.topMargin = barras.top
+    params.bottomMargin = barras.bottom
 
-            override fun handleOnBackPressed() {
+    view.layoutParams = params
 
-                val urlAtual =
-                    webView.url
+    insets
+}
+        /*
+         * Inicializa uma única instância do Cripto
+         * antes de configurar a WebView.
+         */
+        cripto =
+            Cripto(this)
 
-                if (
-                    urlAtual != null &&
-                    urlAtual.contains("google.com")
-                ) {
+        configurarWebView()
 
-                    webView.clearHistory()
 
-                    finish()
+        // =====================================================
+        // ABERTURA INICIAL
+        // =====================================================
 
-                } else {
+        val pagina =
+    intent?.getStringExtra(
+        "pagina"
+    )
 
-                    if (
-                        webView.canGoBack()
-                    ) {
+val pastaUsuario =
+    if (
+        (resources.configuration.uiMode and
+            android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
+            android.content.res.Configuration.UI_MODE_NIGHT_YES
+    ) {
+        "user1"
+    } else {
+        "user2"
+    }
 
-                        webView.goBack()
+if (!pagina.isNullOrEmpty()) {
 
-                    } else {
+    webView.loadUrl(
+        "file:///android_asset/$pastaUsuario/$pagina"
+    )
 
-                        isEnabled = false
+} else {
 
-                        onBackPressedDispatcher
-                            .onBackPressed()
-                    }
-                }
-            }
-        }
+    webView.loadUrl(
+        "file:///android_asset/$pastaUsuario/botao.html"
     )
 }
 
 
+        // =====================================================
+        // BOTÃO VOLTAR
+        // =====================================================
+
+onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+    override fun handleOnBackPressed() {
+        val urlAtual = webView.url
+
+        if (urlAtual != null && urlAtual.contains("google.com")) {
+            webView.clearHistory()
+            finish()
+        } else {
+            if (webView.canGoBack()) {
+                webView.goBack()
+            } else {
+                isEnabled = false
+                onBackPressedDispatcher.onBackPressed()
+            }
+        }
+    }
+})
+        
+        
+    }
+    
+
     // =========================================================
-    // CONFIGURAÇÃO DA WEBVIEW
+    // WEBVIEW
     // =========================================================
-private fun configurarWebView() {
+
+    private fun configurarWebView() {
 
     webView.setBackgroundColor(
         Color.TRANSPARENT
     )
 
-    webView.setDownloadListener { url, userAgent, contentDisposition, mimeType, contentLength ->
-
-    val request = android.app.DownloadManager.Request(
-        Uri.parse(url)
-    )
-
-    request.setMimeType(mimeType)
-
-    request.addRequestHeader(
-        "User-Agent",
-        userAgent
-    )
-
-    request.setDescription(
-        "Baixando arquivo..."
-    )
-
-    request.setTitle(
-        android.webkit.URLUtil.guessFileName(
-            url,
-            contentDisposition,
-            mimeType
-        )
-    )
-
-    request.setNotificationVisibility(
-        android.app.DownloadManager
-            .Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED
-    )
-
-    request.setDestinationInExternalPublicDir(
-        android.os.Environment.DIRECTORY_DOWNLOADS,
-        android.webkit.URLUtil.guessFileName(
-            url,
-            contentDisposition,
-            mimeType
-        )
-    )
-
-    val downloadManager =
-        getSystemService(
-            android.content.Context.DOWNLOAD_SERVICE
-        ) as android.app.DownloadManager
-
-    downloadManager.enqueue(request)
-
-    Toast.makeText(
-        this,
-        "Download iniciado",
-        Toast.LENGTH_SHORT
-    ).show()
-}
+    
     
 
 
+        webView.addJavascriptInterface(
+            WebAppInterface(this),
+            "Android"
+        )
 
+        
+        webView.addJavascriptInterface(
+            cripto,
+            "Cripto"
+        )
+
+        webView.addJavascriptInterface(
+            DownloadInterface(this),
+            "Downloader"
+        )
+        
         val settings =
             webView.settings
 
@@ -416,25 +440,297 @@ private fun configurarWebView() {
             }
             
             }
+    // =========================================================
+    // CARREGAR PÁGINAS
+    // =========================================================
+
+    private fun obterPastaTema(): String {
+
+    return if (
+        (resources.configuration.uiMode and
+            android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
+            android.content.res.Configuration.UI_MODE_NIGHT_YES
+    ) {
+        "user1"
+    } else {
+        "user2"
+    }
+}
+
+
+private fun carregarWebView1() {
+
+    webView.loadUrl(
+        "file:///android_asset/${obterPastaTema()}/botao.html"
+    )
+}
+
+
+private fun carregarWebView2() {
+
+    webView.loadUrl(
+        "file:///android_asset/${obterPastaTema()}/carteira.html"
+    )
+}
+
+
+private fun carregarWebView4() {
+
+    webView.loadUrl(
+        "file:///android_asset/${obterPastaTema()}/botao.html"
+    )
+}
+
+
 
     // =========================================================
-    // LIMPEZA
+    // BIOMETRIA
     // =========================================================
 
-    override fun onDestroy() {
+    @JavascriptInterface
+    fun iniciarBiometria() {
 
-        webView.stopLoading()
+        runOnUiThread {
 
-        webView.loadUrl(
-            "about:blank"
+            val biometricManager =
+                BiometricManager.from(
+                    this
+                )
+
+            val authenticators =
+                BiometricManager.Authenticators.BIOMETRIC_WEAK or
+                    BiometricManager.Authenticators.DEVICE_CREDENTIAL
+
+            val canAuth =
+                biometricManager.canAuthenticate(
+                    authenticators
+                )
+
+if (
+    canAuth !=
+    BiometricManager.BIOMETRIC_SUCCESS
+) {
+
+    Toast.makeText(
+        this,
+        "Biometria não disponível",
+        Toast.LENGTH_SHORT
+    ).show()
+
+    when (
+        destinoBiometria
+    ) {
+
+        1 ->
+            carregarWebView2()
+
+        2 ->
+            carregarWebView4()
+    }
+
+    return@runOnUiThread
+}
+
+            val biometricPrompt =
+                BiometricPrompt(
+                    this,
+                    ContextCompat.getMainExecutor(
+                        this
+                    ),
+                    object :
+                        BiometricPrompt.AuthenticationCallback() {
+
+                        override fun onAuthenticationSucceeded(
+                            result:
+                            BiometricPrompt.AuthenticationResult
+                        ) {
+
+                            super.onAuthenticationSucceeded(
+                                result
+                            )
+
+                            when (
+                                destinoBiometria
+                            ) {
+
+                                1 ->
+                                    carregarWebView2()
+
+                                2 ->
+                                    carregarWebView4()
+                            }
+                        }
+
+
+                        override fun onAuthenticationFailed() {
+
+                            super.onAuthenticationFailed()
+                        }
+
+
+                        override fun onAuthenticationError(
+                            errorCode: Int,
+                            errString: CharSequence
+                        ) {
+
+                            super.onAuthenticationError(
+                                errorCode,
+                                errString
+                            )
+                        }
+                    }
+                )
+
+            val promptInfo =
+                BiometricPrompt.PromptInfo.Builder()
+                    .setTitle(
+                        "Desbloquear a área protegida"
+                    )
+                    .setDescription(
+                        "🌸 Apenas a usuária cadastrada pode acessar este local"
+                    )
+                    .setAllowedAuthenticators(
+                        authenticators
+                    )
+                    .build()
+
+            biometricPrompt.authenticate(
+                promptInfo
+            )
+        }
+    }
+
+
+    // =========================================================
+    // BIOMETRIA — AMPARO
+    // =========================================================
+
+    @JavascriptInterface
+    fun iniciarBiometriaAmparo() {
+
+        destinoBiometria =
+            1
+
+        iniciarBiometria()
+    }
+
+
+    // =========================================================
+    // BIOMETRIA — ÁREA PROTEGIDA
+    // =========================================================
+
+    @JavascriptInterface
+    fun IniciarBiometriaÁreaProtegida() {
+
+        destinoBiometria =
+            2
+
+        iniciarBiometria()
+    }
+
+
+    // =========================================================
+    // FULLSCREEN — API MODERNA
+    // =========================================================
+
+    @JavascriptInterface
+    fun ativarFullscreen() {
+
+        val window =
+            window
+
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
         )
 
-        webView.clearHistory()
+        val controller =
+            WindowCompat.getInsetsController(
+                window,
+                window.decorView
+            )
 
-        webView.removeAllViews()
+        controller.systemBarsBehavior =
+            WindowInsetsControllerCompat
+                .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
-        webView.destroy()
-
-        super.onDestroy()
+        controller.hide(
+            WindowInsetsCompat.Type.systemBars()
+        )
     }
+
+
+    
+    // =========================================================
+    // PEGAR LOCALIZAÇÃO
+    // =========================================================
+
+    @JavascriptInterface
+    fun pegarLocalizacao() {
+
+        if (
+            ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
+
+            Toast.makeText(
+                this,
+                "Permissão de localização não concedida",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            return
+        }
+
+        locationClient.lastLocation
+            .addOnSuccessListener { location ->
+
+                if (
+                    location != null
+                ) {
+
+                    val lat =
+                        location.latitude
+
+                    val lng =
+                        location.longitude
+
+                    val js =
+                        "receberLocalizacao($lat,$lng)"
+
+                    webView.evaluateJavascript(
+                        js,
+                        null
+                    )
+
+                } else {
+
+                    Toast.makeText(
+                        this,
+                        "Não foi possível obter a localização.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            .addOnFailureListener {
+
+                Toast.makeText(
+                    this,
+                    "Erro ao obter localização.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+    }
+
+
+    // =========================================================
+    // CICLO DE VIDA
+    // =========================================================
+
+override fun onDestroy() {
+super.onDestroy()
+}
 }

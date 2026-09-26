@@ -28,113 +28,131 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onCreate(
-        savedInstanceState: Bundle?
-    ) {
-        super.onCreate(savedInstanceState)
+    savedInstanceState: Bundle?
+) {
+    super.onCreate(savedInstanceState)
 
-       // =====================================================
-        // ONBACKPRESSED
-        // =====================================================
+    // =====================================================
+    // SEGURANÇA DA JANELA
+    // =====================================================
 
-onBackPressedDispatcher.addCallback(
-    this,
-    object : OnBackPressedCallback(true) {
+    window.addFlags(
+        WindowManager.LayoutParams.FLAG_SECURE
+    )
 
-        override fun handleOnBackPressed() {
+    // =====================================================
+    // CONFIGURAÇÃO DA JANELA
+    // =====================================================
 
-            val urlAtual = webView.url
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        true
+    )
 
-            if (urlAtual != null && urlAtual.contains("google.com")) {
-                webView.clearHistory()
-                finish()
-            } else {
+    window.statusBarColor =
+        Color.TRANSPARENT
 
-                if (webView.canGoBack()) {
-                    webView.goBack()
+    window.navigationBarColor =
+        Color.TRANSPARENT
+
+    // =====================================================
+    // LAYOUT
+    // =====================================================
+
+    setContentView(
+        R.layout.activity_main
+    )
+
+    webView =
+        findViewById(
+            R.id.webview
+        )
+
+    // =====================================================
+    // CONFIGURAÇÃO DA WEBVIEW
+    // =====================================================
+
+    configurarWebView()
+
+    // =====================================================
+    // BARRAS DO SISTEMA
+    // =====================================================
+
+    ViewCompat.setOnApplyWindowInsetsListener(
+        webView
+    ) { view, insets ->
+
+        val barras =
+            insets.getInsets(
+                WindowInsetsCompat.Type.systemBars()
+            )
+
+        val params =
+            view.layoutParams
+                as ViewGroup.MarginLayoutParams
+
+        params.topMargin =
+            barras.top
+
+        params.bottomMargin =
+            barras.bottom
+
+        view.layoutParams =
+            params
+
+        insets
+    }
+
+    // =====================================================
+    // PÁGINA INICIAL
+    // =====================================================
+
+    webView.loadUrl(
+        "https://www.google.com"
+    )
+
+    // =====================================================
+    // ON BACK PRESSED
+    // =====================================================
+
+    onBackPressedDispatcher.addCallback(
+        this,
+        object : OnBackPressedCallback(true) {
+
+            override fun handleOnBackPressed() {
+
+                val urlAtual =
+                    webView.url
+
+                if (
+                    urlAtual != null &&
+                    urlAtual.contains("google.com")
+                ) {
+
+                    webView.clearHistory()
+
+                    finish()
+
                 } else {
-                    isEnabled = false
-                    onBackPressedDispatcher.onBackPressed()
+
+                    if (
+                        webView.canGoBack()
+                    ) {
+
+                        webView.goBack()
+
+                    } else {
+
+                        isEnabled = false
+
+                        onBackPressedDispatcher
+                            .onBackPressed()
+                    }
                 }
             }
         }
-    }
-)
-
-        // =====================================================
-        // SEGURANÇA DA JANELA
-        // =====================================================
-
-        window.addFlags(
-            WindowManager.LayoutParams.FLAG_SECURE
-        )
-
-
-        // =====================================================
-        // CONFIGURAÇÃO DA JANELA
-        // =====================================================
-
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            true
-        )
-
-        window.statusBarColor =
-            Color.TRANSPARENT
-
-        window.navigationBarColor =
-            Color.TRANSPARENT
-
-
-        // =====================================================
-        // WEBVIEW
-        // =====================================================
-
-        webView = WebView(this)
-
-        setContentView(webView)
-
-
-        configurarWebView()
-
-
-        // =====================================================
-        // GOOGLE — PÁGINA INICIAL
-        // =====================================================
-
-        webView.loadUrl(
-            "https://www.google.com"
-        )
-        
-                // =====================================================
-        // WEBVIEW
-        // =====================================================
-        
-        setContentView(
-    R.layout.activity_main
-)
-
-webView =
-    findViewById(
-        R.id.webview
     )
-    
-    ViewCompat.setOnApplyWindowInsetsListener(webView) { view, insets ->
-
-    val barras = insets.getInsets(
-        WindowInsetsCompat.Type.systemBars()
-    )
-
-    val params =
-        view.layoutParams as ViewGroup.MarginLayoutParams
-
-    params.topMargin = barras.top
-    params.bottomMargin = barras.bottom
-
-    view.layoutParams = params
-
-    insets
 }
-    }
 
 
     // =========================================================

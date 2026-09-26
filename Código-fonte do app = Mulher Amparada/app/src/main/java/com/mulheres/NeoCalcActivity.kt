@@ -1,5 +1,6 @@
 package com.mulheres
 
+import android.view.WindowManager
 import androidx.compose.ui.res.painterResource
 import android.content.Intent
 import android.graphics.Typeface
@@ -58,6 +59,11 @@ class NeoCalcActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+window.setFlags(
+    WindowManager.LayoutParams.FLAG_SECURE,
+    WindowManager.LayoutParams.FLAG_SECURE
+)
 
         setContent {
             NeoCalcScreen()

@@ -92,6 +92,12 @@ class HubActivity : ComponentActivity() {
     private lateinit var telephonyManager: TelephonyManager
     
     private lateinit var sensorManager: SensorManager
+
+    private lateinit var tiltBrightness: TiltBrightnessController
+
+    var escurecimentoAtivo by mutableStateOf(false)
+    
+    private set
     
     private var acelerometro: Sensor? = null
 
@@ -147,6 +153,27 @@ class HubActivity : ComponentActivity() {
             telefone
     }
 
+fun ativarEscurecimento() {
+
+    if (escurecimentoAtivo) {
+        return
+    }
+
+    escurecimentoAtivo = true
+
+    tiltBrightness.startTiltBrightness()
+}
+
+fun desativarEscurecimento() {
+
+    if (!escurecimentoAtivo) {
+        return
+    }
+
+    escurecimentoAtivo = false
+
+    tiltBrightness.stopTiltBrightness()
+}
 
     fun abrirPermissoes() {
 
@@ -190,6 +217,7 @@ sensorManager =
         Context.SENSOR_SERVICE
     ) as SensorManager
 
+
 criarShakeListener()
         setContent {
 
@@ -198,6 +226,21 @@ criarShakeListener()
                 MulherAmparadaScreen()
             }
         }
+        
+        tiltBrightness =
+    TiltBrightnessController(
+        activity = this,
+        sensorManager = sensorManager,
+
+        onEnterFullscreen = {
+            ativarFullscreen()
+        },
+
+        onExitFullscreen = {
+            desativarFullscreen()
+        }
+    )   
+    
     }
 
 
@@ -208,6 +251,11 @@ criarShakeListener()
     }
 
 override fun onDestroy() {
+
+if (::tiltBrightness.isInitialized) {
+        tiltBrightness.stop()
+    }
+
 
     if (::sensorManager.isInitialized) {
 
@@ -1221,17 +1269,31 @@ private fun MulherAmparadaScreen() {
 )
 
             SensorCard(
-                number = "03 / VISIBILIDADE",
-                title = "Escurecimento por inclinação",
-                description =
-                    "Escurece a tela automaticamente quando o dispositivo identifica a posição configurada.",
-                icon = R.drawable.ic_0005,
-                color = c.orange,
-                active = false,
-                onClick = {},
-                c = c,
-                font = font
-            )
+    number = "03 / VISIBILIDADE",
+    title = "Escurecimento por inclinação",
+    description =
+        "Escurece a tela automaticamente quando o dispositivo identifica a posição configurada.",
+    icon = R.drawable.ic_0005,
+    color = c.orange,
+    active =
+        activity?.escurecimentoAtivo
+            ?: false,
+
+    onClick = {
+
+        activity?.let {
+
+            if (it.escurecimentoAtivo) {
+                it.desativarEscurecimento()
+            } else {
+                it.ativarEscurecimento()
+            }
+        }
+    },
+
+    c = c,
+    font = font
+)
 
             SensorCard(
                 number = "04 / BLOQUEIO",

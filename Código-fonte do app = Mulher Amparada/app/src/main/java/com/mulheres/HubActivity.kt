@@ -85,17 +85,17 @@ import androidx.core.view.WindowInsetsControllerCompat
 
 class HubActivity : ComponentActivity() {
 
-    var palmasAtivas by mutableStateOf(false)
-        private set
+var palmasAtivas by mutableStateOf(false)
+    private set
 
-    private var palmasEmExecucao = false
+private var palmasEmExecucao = false
 
-    var permissoesConcedidas by mutableStateOf(false)
-        private set
+var permissoesConcedidas by mutableStateOf(false)
+    private set
 
-    private lateinit var telephonyManager: TelephonyManager
-    
-    private lateinit var sensorManager: SensorManager
+private lateinit var telephonyManager: TelephonyManager
+
+private lateinit var sensorManager: SensorManager
 
 private lateinit var shakeListener: SensorEventListener
 
@@ -105,7 +105,9 @@ var protecaoMovimentoAtiva by mutableStateOf(false)
 private var ultimoShake: Long = 0L
 
 private var shakeAudioRecord: AudioRecord? = null
+
 private var shakeMicrophoneThread: Thread? = null
+
 private var shakeMicrophoneRunning = false
 
 private val shakeSampleRate = 44100
@@ -119,22 +121,14 @@ private val shakeBufferSize =
 
 private val shakeLoudSoundThreshold = -50.0
 
-    private lateinit var tiltBrightness: TiltBrightnessController
+private lateinit var tiltBrightness: TiltBrightnessController
 
-    var escurecimentoAtivo by mutableStateOf(false)
-    
+var escurecimentoAtivo by mutableStateOf(false)
     private set
-    
-    private var acelerometro: Sensor? = null
 
-     var protecaoMovimentoAtiva by mutableStateOf(false)
+private var acelerometro: Sensor? = null
 
-    private var ultimoShake: Long = 0L
-
-    private lateinit var shakeListener: SensorEventListener
-
-    private var telephonyCallback: TelephonyCallback? = null
-
+private var telephonyCallback: TelephonyCallback? = null
 
     /* =========================================================
        PERMISSÕES

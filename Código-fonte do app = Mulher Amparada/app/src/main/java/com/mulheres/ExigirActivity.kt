@@ -146,8 +146,7 @@ private fun ExigirScreen() {
             )
     ) {
 
-        // todo o conteúdo atual
-    }
+
 
         /*
          * ================================================
@@ -650,7 +649,6 @@ private fun ExigirScreen() {
             }
         }
     }
-}
 }
 
 @Composable

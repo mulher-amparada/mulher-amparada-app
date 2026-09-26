@@ -607,7 +607,6 @@ private fun GestoScreen() {
         }
     }
 }
-}
 
 @Composable
 private fun GestureStep(

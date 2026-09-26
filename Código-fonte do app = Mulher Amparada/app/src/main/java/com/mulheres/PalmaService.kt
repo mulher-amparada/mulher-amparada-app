@@ -15,6 +15,8 @@ import kotlin.math.abs
 import kotlin.math.max
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
+import kotlin.math.log10
+import kotlin.math.sqrt
 
 class PalmaService : Service() {
 
@@ -22,6 +24,7 @@ class PalmaService : Service() {
     private var recorder: AudioRecord? = null
     private var rodando = true
     private var ultimaPalma: Long = 0
+    private val shakeLoudSoundThreshold = -50.0
 private lateinit var telephonyManager: TelephonyManager
 private var chamadaIniciada = false
 
@@ -159,6 +162,40 @@ private val listenerLigacao =
         )
     }
 
+private fun calcularDecibeis(
+    buffer: ShortArray,
+    length: Int
+): Double {
+
+    if (length <= 0) {
+        return -100.0
+    }
+
+    var soma = 0.0
+
+    for (i in 0 until length) {
+
+        val sample =
+            buffer[i].toDouble()
+
+        soma +=
+            sample * sample
+    }
+
+    val rms =
+        sqrt(
+            soma / length
+        )
+
+    if (rms <= 0.0) {
+        return -100.0
+    }
+
+    return 20.0 *
+        log10(
+            rms / 32768.0
+        )
+}
 
     private fun iniciarDeteccao() {
 
@@ -238,23 +275,14 @@ private val listenerLigacao =
                     continue
 
 
-                var pico = 0
+                val db =
+    calcularDecibeis(
+        buffer,
+        leitura
+    )
 
-
-                for (i in 0 until leitura) {
-
-                    val valor =
-                        abs(buffer[i].toInt())
-
-                    pico = max(
-                        pico,
-                        valor
-                    )
-                }
-
-
-                // Sensibilidade da palma
-                if (pico > 14000) {
+// Sensibilidade do barulho
+if (db >= shakeLoudSoundThreshold) {
 
                     val agora =
                         System.currentTimeMillis()

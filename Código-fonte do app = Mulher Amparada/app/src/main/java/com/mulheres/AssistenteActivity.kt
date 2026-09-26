@@ -2,7 +2,7 @@ package com.mulheres
 
 import android.os.Bundle
 import android.graphics.Color as AndroidColor
-
+import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 
@@ -14,7 +14,9 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -417,6 +419,8 @@ fun AssistenteSaude() {
 
     val cores =
         coresAssistente()
+        
+        val context = androidx.compose.ui.platform.LocalContext.current
 
     var estado by remember {
         mutableStateOf(
@@ -491,11 +495,16 @@ fun AssistenteSaude() {
                         cores.fundo
                     )
                     .padding(
-                        start = 15.dp,
-                        end = 15.dp,
-                        top = 25.dp,
-                        bottom = 45.dp
-                    ),
+    start = 15.dp,
+    end = 15.dp,
+    top = 25.dp
+)
+.windowInsetsPadding(
+    WindowInsets.statusBars
+)
+.padding(
+    bottom = 45.dp
+)
 
             verticalArrangement =
                 Arrangement.spacedBy(
@@ -508,10 +517,15 @@ fun AssistenteSaude() {
             item {
 
                 Cabecalho(
-                    onSecretClick = {
-                        // Ação do botão secreto.
-                    }
-                )
+    onSecretClick = {
+        context.startActivity(
+            Intent(
+                context,
+                NeoCalcActivity::class.java
+            )
+        )
+    }
+)
 
                 Spacer(
                     modifier =
@@ -555,6 +569,10 @@ fun AssistenteSaude() {
 
 
             item {
+            
+            Spacer(
+        modifier = Modifier.height(36.dp)
+    )
 
                 SecaoTitulo(
 

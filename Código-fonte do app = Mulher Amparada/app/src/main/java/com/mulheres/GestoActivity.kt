@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,13 +21,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
@@ -44,7 +44,7 @@ private val Quicksand = FontFamily(
 private val Pink = Color(0xFFFF3F82)
 private val PinkSoft = Color(0xFFFF6B9F)
 
-class ExigirActivity : ComponentActivity() {
+class GestoActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +60,7 @@ class ExigirActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.Transparent
                 ) {
-                    ExigirScreen()
+                    GestoScreen()
                 }
             }
         }
@@ -68,7 +68,7 @@ class ExigirActivity : ComponentActivity() {
 }
 
 @Composable
-private fun ExigirScreen() {
+private fun GestoScreen() {
 
     val dark =
         androidx.compose.foundation.isSystemInDarkTheme()
@@ -86,7 +86,7 @@ private fun ExigirScreen() {
         else Color(0xFFFFFFFF)
 
     val text =
-        if (dark) Color.White
+        if (dark) Color(0xFFFFFFFF)
         else Color(0xFF18181C)
 
     val soft =
@@ -97,21 +97,30 @@ private fun ExigirScreen() {
         if (dark) Color(0xFF686D79)
         else Color(0xFF777780)
 
-    val cardText =
+    val bodyText =
         if (dark) Color(0xFFB4B5BD)
         else Color(0xFF55565E)
 
     val border =
-        if (dark) Color.White.copy(alpha = 0.07f)
-        else Color.Black.copy(alpha = 0.09f)
+        if (dark) {
+            Color.White.copy(alpha = 0.07f)
+        } else {
+            Color.Black.copy(alpha = 0.09f)
+        }
 
-    val conditionsBackground =
-        if (dark) Color.White.copy(alpha = 0.02f)
-        else Color.Black.copy(alpha = 0.025f)
+    val stepBackground =
+        if (dark) {
+            Color.White.copy(alpha = 0.02f)
+        } else {
+            Color.Black.copy(alpha = 0.025f)
+        }
 
     val noticeBackground =
-        if (dark) Color(0xFF0C0D11)
-        else Color(0xFFF0F0F2)
+        if (dark) {
+            Color(0xFF0C0D11)
+        } else {
+            Color(0xFFF0F0F2)
+        }
 
     Column(
         modifier = Modifier
@@ -129,9 +138,9 @@ private fun ExigirScreen() {
     ) {
 
         /*
-         * ================================================
+         * =====================================================
          * CABEÇALHO
-         * ================================================
+         * =====================================================
          */
 
         Box(
@@ -149,7 +158,7 @@ private fun ExigirScreen() {
         )
 
         Text(
-            text = "Desembarque seguro",
+            text = "Gesto de ajuda",
 
             color = text,
 
@@ -170,10 +179,9 @@ private fun ExigirScreen() {
 
         Text(
             text =
-                "Uma forma simples de informar ao motorista que você " +
-                "deseja desembarcar em um local mais seguro, conforme " +
-                "as regras aplicáveis ao transporte coletivo urbano da " +
-                "Cidade de São Paulo.",
+                "Aprenda a reconhecer e utilizar o gesto da mão " +
+                "criado para sinalizar silenciosamente que você " +
+                "precisa de ajuda em uma situação de violência.",
 
             modifier = Modifier.fillMaxWidth(),
 
@@ -194,9 +202,9 @@ private fun ExigirScreen() {
 
 
         /*
-         * ================================================
-         * CARTEIRINHA
-         * ================================================
+         * =====================================================
+         * CARD PRINCIPAL
+         * =====================================================
          */
 
         Column(
@@ -214,7 +222,7 @@ private fun ExigirScreen() {
              */
 
             Text(
-                text = "DIREITO DA PASSAGEIRA",
+                text = "SINAL INTERNACIONAL DE AJUDA",
 
                 color = PinkSoft,
 
@@ -237,7 +245,7 @@ private fun ExigirScreen() {
              */
 
             Text(
-                text = "Solicitação de desembarque",
+                text = "O gesto da mão",
 
                 color = text,
 
@@ -247,9 +255,7 @@ private fun ExigirScreen() {
 
                 fontWeight = FontWeight.ExtraBold,
 
-                lineHeight = 31.5.sp,
-
-                letterSpacing = (-0.5).sp
+                lineHeight = 31.5.sp
             )
 
             Spacer(
@@ -258,17 +264,17 @@ private fun ExigirScreen() {
 
 
             /*
-             * TEXTO
+             * DESCRIÇÃO
              */
 
             Text(
                 text =
-                    "Apresente esta tela ao motorista quando quiser " +
-                    "solicitar o desembarque em um local mais seguro, " +
-                    "dentro das condições previstas pela legislação " +
-                    "municipal.",
+                    "O Signal for Help é um gesto simples feito com " +
+                    "uma mão. Ele foi criado para permitir que uma " +
+                    "pessoa peça ajuda de forma discreta quando não " +
+                    "consegue falar livremente.",
 
-                color = cardText,
+                color = bodyText,
 
                 fontFamily = Quicksand,
 
@@ -285,9 +291,9 @@ private fun ExigirScreen() {
 
 
             /*
-             * ============================================
-             * FRASE PARA MOSTRAR
-             * ============================================
+             * =================================================
+             * GESTO
+             * =================================================
              */
 
             Column(
@@ -303,7 +309,7 @@ private fun ExigirScreen() {
             ) {
 
                 Text(
-                    text = "PARA MOSTRAR AO MOTORISTA",
+                    text = "APRENDA O GESTO",
 
                     color = PinkSoft,
 
@@ -317,13 +323,13 @@ private fun ExigirScreen() {
                 )
 
                 Spacer(
-                    modifier = Modifier.height(11.dp)
+                    modifier = Modifier.height(17.dp)
                 )
 
                 Text(
-                    text =
-                        "“Por favor, gostaria de desembarcar " +
-                        "em um local mais seguro.”",
+                    text = "Palma aberta, polegar dobrado",
+
+                    modifier = Modifier.fillMaxWidth(),
 
                     color = text,
 
@@ -333,95 +339,35 @@ private fun ExigirScreen() {
 
                     fontWeight = FontWeight.ExtraBold,
 
-                    lineHeight = 26.25.sp
+                    lineHeight = 26.25.sp,
+
+                    textAlign = TextAlign.Center
                 )
-
-
-                /*
-                 * HORÁRIO
-                 */
 
                 Spacer(
-                    modifier = Modifier.height(16.dp)
+                    modifier = Modifier.height(9.dp)
                 )
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(
-                            RoundedCornerShape(17.dp)
-                        )
-                        .background(
-                            Color.White.copy(
-                                alpha =
-                                    if (dark) 0.03f
-                                    else 0.06f
-                            )
-                        )
-                        .padding(
-                            horizontal = 16.dp,
-                            vertical = 15.dp
-                        ),
+                Text(
+                    text =
+                        "O polegar é colocado sobre a palma e os " +
+                        "outros dedos são fechados sobre ele.",
 
-                    verticalAlignment =
-                        Alignment.CenterVertically
-                ) {
+                    modifier = Modifier.fillMaxWidth(),
 
-                    Box(
-                        modifier = Modifier
-                            .size(38.dp)
-                            .clip(
-                                RoundedCornerShape(12.dp)
-                            )
-                            .background(Pink),
+                    color = soft,
 
-                        contentAlignment =
-                            Alignment.Center
-                    ) {
+                    fontFamily = Quicksand,
 
-                        ClockIcon()
-                    }
+                    fontSize = 10.sp,
 
-                    Spacer(
-                        modifier = Modifier.width(12.dp)
-                    )
+                    fontWeight = FontWeight.SemiBold,
 
-                    Column {
+                    lineHeight = 16.sp,
 
-                        Text(
-                            text = "Das 22h às 5h",
-
-                            color = text,
-
-                            fontFamily = Quicksand,
-
-                            fontSize = 13.sp,
-
-                            fontWeight = FontWeight.Bold
-                        )
-
-                        Spacer(
-                            modifier = Modifier.height(3.dp)
-                        )
-
-                        Text(
-                            text =
-                                "Horário previsto pela legislação municipal.",
-
-                            color = soft,
-
-                            fontFamily = Quicksand,
-
-                            fontSize = 10.sp,
-
-                            fontWeight = FontWeight.SemiBold,
-
-                            lineHeight = 14.sp
-                        )
-                    }
-                }
+                    textAlign = TextAlign.Center
+                )
             }
-
 
             Spacer(
                 modifier = Modifier.height(16.dp)
@@ -429,9 +375,9 @@ private fun ExigirScreen() {
 
 
             /*
-             * ============================================
-             * FUNDAMENTAÇÃO LEGAL
-             * ============================================
+             * =================================================
+             * PASSO A PASSO
+             * =================================================
              */
 
             Column(
@@ -445,7 +391,89 @@ private fun ExigirScreen() {
             ) {
 
                 Text(
-                    text = "Fundamentação legal",
+                    text = "Como fazer",
+
+                    color = text,
+
+                    fontFamily = Quicksand,
+
+                    fontSize = 15.sp,
+
+                    fontWeight = FontWeight.ExtraBold
+                )
+
+                GestureStep(
+                    number = "PASSO 01",
+                    title = "Mostre a palma da mão",
+                    description =
+                        "Mantenha a mão aberta e voltada para " +
+                        "a pessoa que você deseja sinalizar.",
+                    textColor = text,
+                    mutedColor = muted,
+                    background = stepBackground,
+                    border = border
+                )
+
+                GestureStep(
+                    number = "PASSO 02",
+                    title = "Dobre o polegar",
+                    description =
+                        "Coloque o polegar para dentro da palma " +
+                        "da mão.",
+                    textColor = text,
+                    mutedColor = muted,
+                    background = stepBackground,
+                    border = border
+                )
+
+                GestureStep(
+                    number = "PASSO 03",
+                    title = "Feche os dedos",
+                    description =
+                        "Feche os quatro dedos sobre o polegar, " +
+                        "formando o sinal.",
+                    textColor = text,
+                    mutedColor = muted,
+                    background = stepBackground,
+                    border = border
+                )
+
+                GestureStep(
+                    number = "PASSO 04",
+                    title = "Repita",
+                    description =
+                        "Se necessário, volte ao primeiro passo " +
+                        "e repita o gesto quando for seguro.",
+                    textColor = text,
+                    mutedColor = muted,
+                    background = stepBackground,
+                    border = border
+                )
+            }
+
+            Spacer(
+                modifier = Modifier.height(16.dp)
+            )
+
+
+            /*
+             * =================================================
+             * EXPLICAÇÃO
+             * =================================================
+             */
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(
+                        RoundedCornerShape(22.dp)
+                    )
+                    .background(surface2)
+                    .padding(21.dp)
+            ) {
+
+                Text(
+                    text = "Para que serve?",
 
                     color = text,
 
@@ -457,118 +485,50 @@ private fun ExigirScreen() {
                 )
 
                 Spacer(
-                    modifier = Modifier.height(6.dp)
+                    modifier = Modifier.height(11.dp)
                 )
 
                 Text(
                     text =
-                        "LEI MUNICIPAL Nº 16.490/2016",
+                        "O gesto pode ser usado quando uma pessoa " +
+                        "precisa comunicar discretamente que está " +
+                        "em uma situação de violência ou que precisa " +
+                        "de ajuda.",
 
-                    color = PinkSoft,
+                    color = bodyText,
 
                     fontFamily = Quicksand,
 
-                    fontSize = 10.sp,
+                    fontSize = 11.sp,
 
-                    fontWeight = FontWeight.ExtraBold
+                    fontWeight = FontWeight.SemiBold,
+
+                    lineHeight = 18.15.sp
                 )
 
                 Spacer(
-                    modifier = Modifier.height(12.dp)
+                    modifier = Modifier.height(11.dp)
                 )
 
-                LawParagraph(
+                Text(
                     text =
-                        "A Lei Municipal nº 16.490/2016, da Cidade de " +
-                        "São Paulo, permite que mulheres e idosos usuários " +
-                        "do transporte coletivo urbano optem por um local " +
-                        "mais seguro e acessível para desembarque entre " +
-                        "22h e 5h, desde que o local esteja no trajeto " +
-                        "regular da linha e não seja proibida a parada " +
-                        "de veículos.",
-                    color = cardText
+                        "Ele não substitui uma conversa segura nem " +
+                        "garante uma resposta imediata. Se alguém " +
+                        "perceber o sinal, é importante procurar uma " +
+                        "forma segura de oferecer ajuda ou acionar " +
+                        "os serviços apropriados.",
+
+                    color = bodyText,
+
+                    fontFamily = Quicksand,
+
+                    fontSize = 11.sp,
+
+                    fontWeight = FontWeight.SemiBold,
+
+                    lineHeight = 18.15.sp
                 )
-
-                Spacer(
-                    modifier = Modifier.height(12.dp)
-                )
-
-                LawParagraph(
-                    text =
-                        "O Decreto nº 57.399/2016 regulamenta a lei e " +
-                        "estabelece as condições para o desembarque fora " +
-                        "dos pontos preestabelecidos. A parada deve ocorrer " +
-                        "em local adequado, com espaço suficiente e " +
-                        "observando as regras de segurança de trânsito.",
-                    color = cardText
-                )
-
-                Spacer(
-                    modifier = Modifier.height(12.dp)
-                )
-
-                LawParagraph(
-                    text =
-                        "O desembarque fora do ponto não é permitido " +
-                        "em determinadas situações, incluindo viadutos, " +
-                        "pontes, túneis e trechos especificamente previstos " +
-                        "na regulamentação.",
-                    color = cardText
-                )
-
-                Spacer(
-                    modifier = Modifier.height(12.dp)
-                )
-
-                LawParagraph(
-                    text =
-                        "Esta tela é informativa e não substitui a " +
-                        "legislação oficial nem garante que qualquer local " +
-                        "solicitado possa ser utilizado para desembarque.",
-                    color = cardText
-                )
-
-
-                /*
-                 * ========================================
-                 * CONDIÇÕES
-                 * ========================================
-                 */
-
-                Spacer(
-                    modifier = Modifier.height(17.dp)
-                )
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement =
-                        Arrangement.spacedBy(9.dp)
-                ) {
-
-                    ConditionCard(
-                        modifier = Modifier.weight(1f),
-                        title = "22h — 5h",
-                        description =
-                            "Período do desembarque noturno.",
-                        textColor = text,
-                        mutedColor = muted,
-                        background = conditionsBackground,
-                        border = border
-                    )
-
-                    ConditionCard(
-                        modifier = Modifier.weight(1f),
-                        title = "Local seguro",
-                        description =
-                            "A parada deve ser adequada e segura.",
-                        textColor = text,
-                        mutedColor = muted,
-                        background = conditionsBackground,
-                        border = border
-                    )
-                }
             }
-
 
             Spacer(
                 modifier = Modifier.height(17.dp)
@@ -576,9 +536,9 @@ private fun ExigirScreen() {
 
 
             /*
-             * ============================================
+             * =================================================
              * AVISO
-             * ============================================
+             * =================================================
              */
 
             Column(
@@ -609,12 +569,11 @@ private fun ExigirScreen() {
 
                 Text(
                     text =
-                        "A solicitação deve ser feita com antecedência. " +
-                        "O motorista deve avaliar se a parada pode ser " +
-                        "realizada com segurança e dentro das regras de " +
-                        "trânsito. Há locais onde o desembarque fora do " +
-                        "ponto não é permitido, como viadutos, pontes, " +
-                        "túneis e determinados corredores exclusivos.",
+                        "O gesto deve ser utilizado somente quando " +
+                        "for seguro fazê-lo. Se a pessoa que está " +
+                        "cometendo a violência puder perceber o " +
+                        "sinal, priorize a segurança e procure ajuda " +
+                        "de uma maneira que não aumente o risco.",
 
                     color = soft,
 
@@ -633,30 +592,8 @@ private fun ExigirScreen() {
 
 
 @Composable
-private fun LawParagraph(
-    text: String,
-    color: Color
-) {
-
-    Text(
-        text = text,
-
-        color = color,
-
-        fontFamily = Quicksand,
-
-        fontSize = 11.sp,
-
-        fontWeight = FontWeight.SemiBold,
-
-        lineHeight = 18.15.sp
-    )
-}
-
-
-@Composable
-private fun ConditionCard(
-    modifier: Modifier,
+private fun GestureStep(
+    number: String,
     title: String,
     description: String,
     textColor: Color,
@@ -666,13 +603,33 @@ private fun ConditionCard(
 ) {
 
     Column(
-        modifier = modifier
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp)
             .clip(
-                RoundedCornerShape(15.dp)
+                RoundedCornerShape(16.dp)
             )
             .background(background)
-            .padding(14.dp)
+            .padding(15.dp)
     ) {
+
+        Text(
+            text = number,
+
+            color = PinkSoft,
+
+            fontFamily = Quicksand,
+
+            fontSize = 9.sp,
+
+            fontWeight = FontWeight.ExtraBold,
+
+            letterSpacing = 1.5.sp
+        )
+
+        Spacer(
+            modifier = Modifier.height(6.dp)
+        )
 
         Text(
             text = title,
@@ -681,13 +638,13 @@ private fun ConditionCard(
 
             fontFamily = Quicksand,
 
-            fontSize = 10.sp,
+            fontSize = 11.sp,
 
             fontWeight = FontWeight.Bold
         )
 
         Spacer(
-            modifier = Modifier.height(4.dp)
+            modifier = Modifier.height(5.dp)
         )
 
         Text(
@@ -701,56 +658,7 @@ private fun ConditionCard(
 
             fontWeight = FontWeight.SemiBold,
 
-            lineHeight = 12.6.sp
-        )
-    }
-}
-
-
-@Composable
-private fun ClockIcon() {
-
-    androidx.compose.foundation.Canvas(
-        modifier = Modifier.size(19.dp)
-    ) {
-
-        val strokeWidth = 2.dp.toPx()
-
-        drawCircle(
-            color = Color.White,
-            radius = size.minDimension / 2 -
-                strokeWidth / 2,
-            style = androidx.compose.ui.graphics.drawscope.Stroke(
-                width = strokeWidth
-            )
-        )
-
-        drawLine(
-            color = Color.White,
-            start = androidx.compose.ui.geometry.Offset(
-                x = size.width / 2,
-                y = size.height * 0.25f
-            ),
-            end = androidx.compose.ui.geometry.Offset(
-                x = size.width / 2,
-                y = size.height / 2
-            ),
-            strokeWidth = strokeWidth,
-            cap = androidx.compose.ui.graphics.StrokeCap.Round
-        )
-
-        drawLine(
-            color = Color.White,
-            start = androidx.compose.ui.geometry.Offset(
-                x = size.width / 2,
-                y = size.height / 2
-            ),
-            end = androidx.compose.ui.geometry.Offset(
-                x = size.width * 0.68f,
-                y = size.height * 0.62f
-            ),
-            strokeWidth = strokeWidth,
-            cap = androidx.compose.ui.graphics.StrokeCap.Round
+            lineHeight = 13.5.sp
         )
     }
 }

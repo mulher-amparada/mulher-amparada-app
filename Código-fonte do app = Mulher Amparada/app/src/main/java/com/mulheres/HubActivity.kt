@@ -14,6 +14,10 @@ import kotlin.math.sqrt
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.media.AudioFormat
+import android.media.AudioRecord
+import android.media.MediaRecorder
+import kotlin.math.log10
 import android.content.pm.PackageManager
 import android.graphics.Color as AndroidColor
 import androidx.compose.runtime.CompositionLocalProvider
@@ -92,6 +96,28 @@ class HubActivity : ComponentActivity() {
     private lateinit var telephonyManager: TelephonyManager
     
     private lateinit var sensorManager: SensorManager
+
+private lateinit var shakeListener: SensorEventListener
+
+var protecaoMovimentoAtiva by mutableStateOf(false)
+    private set
+
+private var ultimoShake: Long = 0L
+
+private var shakeAudioRecord: AudioRecord? = null
+private var shakeMicrophoneThread: Thread? = null
+private var shakeMicrophoneRunning = false
+
+private val shakeSampleRate = 44100
+
+private val shakeBufferSize =
+    AudioRecord.getMinBufferSize(
+        shakeSampleRate,
+        AudioFormat.CHANNEL_IN_MONO,
+        AudioFormat.ENCODING_PCM_16BIT
+    )
+
+private val shakeLoudSoundThreshold = -50.0
 
     private lateinit var tiltBrightness: TiltBrightnessController
 
@@ -292,12 +318,17 @@ if (::tiltBrightness.isInitialized) {
     }
 
 
-    if (::sensorManager.isInitialized) {
+if (::sensorManager.isInitialized) {
+
+    if (::shakeListener.isInitialized) {
 
         sensorManager.unregisterListener(
             shakeListener
         )
     }
+}
+
+pararMicrofoneShake()
 
     telephonyCallback?.let {
 
@@ -382,22 +413,21 @@ fun ativarProtecaoMovimento() {
 
     if (acelerometro == null) {
 
-        protecaoMovimentoAtiva = false
-
-        Toast.makeText(
-            this,
-            "Sensor de movimento não disponível.",
-            Toast.LENGTH_SHORT
-        ).show()
+        iniciarMicrofoneShake()
 
         return
     }
 
-    sensorManager.registerListener(
-        shakeListener,
-        acelerometro,
-        SensorManager.SENSOR_DELAY_GAME
-    )
+    val registrado =
+        sensorManager.registerListener(
+            shakeListener,
+            acelerometro,
+            SensorManager.SENSOR_DELAY_GAME
+        )
+
+    if (!registrado) {
+        iniciarMicrofoneShake()
+    }
 }
 
 
@@ -405,13 +435,22 @@ fun desativarProtecaoMovimento() {
 
     protecaoMovimentoAtiva = false
 
-    if (::sensorManager.isInitialized) {
+    if (
+        ::sensorManager.isInitialized &&
+        ::shakeListener.isInitialized
+    ) {
 
         sensorManager.unregisterListener(
             shakeListener
         )
     }
+
+    pararMicrofoneShake()
 }
+
+// =========================================================
+// AÇÃO DO BALANÇAR
+// =========================================================
 
 private fun executarAcaoShake() {
 
@@ -457,6 +496,220 @@ private fun executarAcaoShake() {
             e.printStackTrace()
         }
     }
+}
+
+// =========================================================
+// DECIBÉIS
+// =========================================================
+
+private fun calcularDecibeisShake(
+    buffer: ShortArray,
+    length: Int
+): Double {
+
+    if (
+        length <= 0
+    ) {
+        return -100.0
+    }
+
+    var soma =
+        0.0
+
+    for (
+        i in 0 until length
+    ) {
+
+        val sample =
+            buffer[i].toDouble()
+
+        soma +=
+            sample * sample
+    }
+
+    val rms =
+        sqrt(
+            soma / length
+        )
+
+    if (
+        rms <= 0.0
+    ) {
+        return -100.0
+    }
+
+    return 20.0 *
+        log10(
+            rms / 32768.0
+        )
+}
+
+
+// =========================================================
+// MICROFONE — FALLBACK
+// =========================================================
+
+private fun iniciarMicrofoneShake() {
+
+    if (
+        !protecaoMovimentoAtiva ||
+        shakeMicrophoneRunning
+    ) {
+        return
+    }
+
+    if (
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.RECORD_AUDIO
+        ) !=
+        PackageManager.PERMISSION_GRANTED
+    ) {
+        return
+    }
+
+    if (
+        shakeBufferSize <= 0
+    ) {
+        return
+    }
+
+    try {
+
+        shakeAudioRecord =
+            AudioRecord(
+                MediaRecorder.AudioSource.MIC,
+                shakeSampleRate,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT,
+                shakeBufferSize
+            )
+
+        if (
+            shakeAudioRecord?.state !=
+            AudioRecord.STATE_INITIALIZED
+        ) {
+
+            shakeAudioRecord?.release()
+
+            shakeAudioRecord =
+                null
+
+            return
+        }
+
+        shakeMicrophoneRunning =
+            true
+
+        shakeMicrophoneThread =
+            Thread {
+
+                try {
+
+                    val buffer =
+                        ShortArray(
+                            shakeBufferSize
+                        )
+
+                    shakeAudioRecord?.startRecording()
+
+                    while (
+                        shakeMicrophoneRunning &&
+                        protecaoMovimentoAtiva
+                    ) {
+
+                        val read =
+                            shakeAudioRecord?.read(
+                                buffer,
+                                0,
+                                buffer.size
+                            ) ?: 0
+
+                        if (
+                            read > 0
+                        ) {
+
+                            val db =
+                                calcularDecibeisShake(
+                                    buffer,
+                                    read
+                                )
+
+                            if (
+                                db >=
+                                shakeLoudSoundThreshold
+                            ) {
+
+                                runOnUiThread {
+
+                                    executarAcaoShake()
+                                }
+                            }
+                        }
+                    }
+
+                } catch (
+                    _: Exception
+                ) {
+                } finally {
+
+                    pararMicrofoneShake()
+                }
+
+            }.apply {
+
+                name =
+                    "MulherAmparada-ShakeMicrophone"
+
+                start()
+            }
+
+    } catch (
+        _: Exception
+    ) {
+
+        shakeAudioRecord?.release()
+
+        shakeAudioRecord =
+            null
+
+        shakeMicrophoneRunning =
+            false
+    }
+}
+
+// =========================================================
+// PARAR MICROFONE
+// =========================================================
+
+private fun pararMicrofoneShake() {
+
+    shakeMicrophoneRunning =
+        false
+
+    try {
+
+        shakeAudioRecord?.stop()
+
+    } catch (
+        _: Exception
+    ) {
+    }
+
+    try {
+
+        shakeAudioRecord?.release()
+
+    } catch (
+        _: Exception
+    ) {
+    }
+
+    shakeAudioRecord =
+        null
+
+    shakeMicrophoneThread =
+        null
 }
 
     /* =========================================================

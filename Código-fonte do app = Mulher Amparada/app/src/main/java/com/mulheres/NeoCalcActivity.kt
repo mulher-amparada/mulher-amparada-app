@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,7 +45,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -68,31 +68,87 @@ class NeoCalcActivity : ComponentActivity() {
    CORES
 ========================================================= */
 
-private val Fundo = Color.Black
+private data class CoresNeoCalc(
+    val fundo: Color,
+    val botao: Color,
+    val botaoHover: Color,
+    val acao: Color,
+    val acaoHover: Color,
+    val operador: Color,
+    val operadorHover: Color,
+    val texto: Color,
+    val textoSecundario: Color
+)
 
-private val Botao =
-    Color(0xFF151515)
+private fun obterCoresNeoCalc(
+    escuro: Boolean
+): CoresNeoCalc {
 
-private val BotaoHover =
-    Color(0xFF202020)
+    return if (escuro) {
 
-private val Acao =
-    Color(0xFF6F7AFF)
+        CoresNeoCalc(
 
-private val AcaoHover =
-    Color(0xFF686DFF)
+            fundo =
+                Color.Black,
 
-private val Operador =
-    Color(0xFF3DA7FF)
+            botao =
+                Color(0xFF151515),
 
-private val OperadorHover =
-    Color(0xFF61B7FF)
+            botaoHover =
+                Color(0xFF202020),
 
-private val Texto =
-    Color.White
+            acao =
+                Color(0xFF6F7AFF),
 
-private val TextoSecundario =
-    Color(0xFFD0D0D0)
+            acaoHover =
+                Color(0xFF686DFF),
+
+            operador =
+                Color(0xFF3DA7FF),
+
+            operadorHover =
+                Color(0xFF61B7FF),
+
+            texto =
+                Color.White,
+
+            textoSecundario =
+                Color(0xFFD0D0D0)
+        )
+
+    } else {
+
+        CoresNeoCalc(
+
+            fundo =
+                Color(0xFFF7F7F7),
+
+            botao =
+                Color(0xFFE9E9E9),
+
+            botaoHover =
+                Color(0xFFDCDCDC),
+
+            acao =
+                Color(0xFF5964E8),
+
+            acaoHover =
+                Color(0xFF4F59D6),
+
+            operador =
+                Color(0xFF1976D2),
+
+            operadorHover =
+                Color(0xFF1565C0),
+
+            texto =
+                Color(0xFF111111),
+
+            textoSecundario =
+                Color(0xFF555555)
+        )
+    }
+}
 
 /* =========================================================
    CHAVES DO CRIPTO
@@ -152,6 +208,16 @@ private fun NeoCalcScreen() {
 
     val context =
         LocalContext.current
+
+    val escuro =
+        isSystemInDarkTheme()
+
+    val cores =
+        remember(escuro) {
+            obterCoresNeoCalc(
+                escuro
+            )
+        }
 
     val fonte =
         remember {
@@ -400,20 +466,20 @@ private fun NeoCalcScreen() {
     fun calcular() {
 
         val senha =
-    try {
+            try {
 
-        Cripto.carregar(
-            CHAVE_SENHA
-        )
-            ?.trim()
-            ?: ""
+                Cripto.carregar(
+                    CHAVE_SENHA
+                )
+                    ?.trim()
+                    ?: ""
 
-    } catch (
-        e: Exception
-    ) {
+            } catch (
+                e: Exception
+            ) {
 
-        ""
-    }
+                ""
+            }
 
         /*
          * SENHA ESPECIAL
@@ -437,17 +503,8 @@ private fun NeoCalcScreen() {
                 e: Exception
             ) {
 
-                /*
-                 * Caso a Activity ainda não
-                 * exista no projeto.
-                 *
-                 * Mantém a calculadora funcionando
-                 * sem quebrar o aplicativo.
-                 */
-
                 mensagemTemporaria =
                     "Acesso"
-
             }
 
             return
@@ -460,13 +517,6 @@ private fun NeoCalcScreen() {
         }
 
         try {
-
-            /*
-             * Avaliação matemática simples.
-             *
-             * A expressão é previamente construída
-             * apenas pelos botões da calculadora.
-             */
 
             val resultado =
                 avaliarExpressao(
@@ -513,7 +563,9 @@ private fun NeoCalcScreen() {
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .background(Fundo)
+                    .background(
+                        cores.fundo
+                    )
                     .padding(
                         horizontal = 20.dp
                     )
@@ -526,6 +578,7 @@ private fun NeoCalcScreen() {
                         .align(
                             Alignment.Center
                         ),
+
                 verticalArrangement =
                     Arrangement.spacedBy(
                         18.dp
@@ -564,6 +617,7 @@ private fun NeoCalcScreen() {
                             .padding(
                                 20.dp
                             ),
+
                     contentAlignment =
                         Alignment.CenterEnd
                 ) {
@@ -580,7 +634,7 @@ private fun NeoCalcScreen() {
                                 },
 
                         color =
-                            Texto,
+                            cores.texto,
 
                         fontFamily =
                             fonte,
@@ -620,6 +674,7 @@ private fun NeoCalcScreen() {
 
                     LinhaBotoes(
                         fonte = fonte,
+                        cores = cores,
 
                         botoes = listOf(
 
@@ -655,6 +710,7 @@ private fun NeoCalcScreen() {
 
                     LinhaBotoes(
                         fonte = fonte,
+                        cores = cores,
 
                         botoes = listOf(
 
@@ -687,6 +743,7 @@ private fun NeoCalcScreen() {
 
                     LinhaBotoes(
                         fonte = fonte,
+                        cores = cores,
 
                         botoes = listOf(
 
@@ -719,6 +776,7 @@ private fun NeoCalcScreen() {
 
                     LinhaBotoes(
                         fonte = fonte,
+                        cores = cores,
 
                         botoes = listOf(
 
@@ -751,6 +809,7 @@ private fun NeoCalcScreen() {
 
                     LinhaBotoes(
                         fonte = fonte,
+                        cores = cores,
 
                         botoes = listOf(
 
@@ -792,6 +851,7 @@ private fun NeoCalcScreen() {
             dialogo?.let { atual ->
 
                 AlertDialog(
+
                     onDismissRequest = {
 
                         if (
@@ -816,7 +876,7 @@ private fun NeoCalcScreen() {
                                 FontWeight.Bold,
 
                             color =
-                                Texto
+                                cores.texto
                         )
                     },
 
@@ -835,7 +895,7 @@ private fun NeoCalcScreen() {
                                     FontWeight.Bold,
 
                                 color =
-                                    TextoSecundario,
+                                    cores.textoSecundario,
 
                                 lineHeight =
                                     23.sp
@@ -872,19 +932,29 @@ private fun NeoCalcScreen() {
                                         OutlinedTextFieldDefaults.colors(
 
                                             focusedTextColor =
-                                                Texto,
+                                                cores.texto,
 
                                             unfocusedTextColor =
-                                                Texto,
+                                                cores.texto,
 
                                             focusedBorderColor =
-                                                Acao,
+                                                cores.acao,
 
                                             unfocusedBorderColor =
-                                                Color(0xFF353535),
+                                                if (
+                                                    escuro
+                                                ) {
+                                                    Color(
+                                                        0xFF353535
+                                                    )
+                                                } else {
+                                                    Color(
+                                                        0xFFBDBDBD
+                                                    )
+                                                },
 
                                             cursorColor =
-                                                Acao
+                                                cores.acao
                                         )
                                 )
                             }
@@ -894,6 +964,7 @@ private fun NeoCalcScreen() {
                     confirmButton = {
 
                         Button(
+
                             onClick = {
 
                                 val tipo =
@@ -918,17 +989,30 @@ private fun NeoCalcScreen() {
                                             null
 
                                         continuarPrompt(
-                                            valor = valor,
-                                            titulo = atual.titulo,
-                                            context = context,
-                                            fonte = fonte,
+
+                                            valor =
+                                                valor,
+
+                                            titulo =
+                                                atual.titulo,
+
+                                            context =
+                                                context,
+
+                                            fonte =
+                                                fonte,
+
                                             mostrarDialogo = {
-                                                dialogo = it
+
+                                                dialogo =
+                                                    it
 
                                                 valorDialogo =
                                                     it.valorInicial
                                             },
+
                                             mostrarMensagem = {
+
                                                 mensagemTemporaria =
                                                     it
                                             }
@@ -941,10 +1025,17 @@ private fun NeoCalcScreen() {
                                             null
 
                                         continuarConfirmacao(
-                                            context = context,
-                                            fonte = fonte,
+
+                                            context =
+                                                context,
+
+                                            fonte =
+                                                fonte,
+
                                             mostrarDialogo = {
-                                                dialogo = it
+
+                                                dialogo =
+                                                    it
 
                                                 valorDialogo =
                                                     it.valorInicial
@@ -956,8 +1047,9 @@ private fun NeoCalcScreen() {
 
                             colors =
                                 ButtonDefaults.buttonColors(
+
                                     containerColor =
-                                        Acao
+                                        cores.acao
                                 )
                         ) {
 
@@ -969,7 +1061,10 @@ private fun NeoCalcScreen() {
                                     fonte,
 
                                 fontWeight =
-                                    FontWeight.Bold
+                                    FontWeight.Bold,
+
+                                color =
+                                    Color.White
                             )
                         }
                     },
@@ -982,6 +1077,7 @@ private fun NeoCalcScreen() {
                         ) {
 
                             TextButton(
+
                                 onClick = {
 
                                     dialogo =
@@ -1000,14 +1096,14 @@ private fun NeoCalcScreen() {
                                         FontWeight.Bold,
 
                                     color =
-                                        Texto
+                                        cores.texto
                                 )
                             }
                         }
                     },
 
                     containerColor =
-                        Botao
+                        cores.botao
                 )
             }
         }
@@ -1034,6 +1130,7 @@ private data class BotaoCalculadora(
 @Composable
 private fun LinhaBotoes(
     fonte: FontFamily,
+    cores: CoresNeoCalc,
     botoes: List<BotaoCalculadora>
 ) {
 
@@ -1055,14 +1152,14 @@ private fun LinhaBotoes(
                 ) {
 
                     TipoBotao.ACAO ->
-                        Acao
+                        cores.acao
 
                     TipoBotao.OPERADOR,
                     TipoBotao.IGUAL ->
-                        Operador
+                        cores.operador
 
                     TipoBotao.NORMAL ->
-                        Botao
+                        cores.botao
                 }
 
             Box(
@@ -1089,7 +1186,7 @@ private fun LinhaBotoes(
                         botao.texto,
 
                     color =
-                        Texto,
+                        cores.texto,
 
                     fontFamily =
                         fonte,
@@ -1124,23 +1221,23 @@ private fun recuperarSenha(
 ) {
 
     val respostaSalva =
-    try {
+        try {
 
-        Cripto.carregar(
-            CHAVE_RECUPERACAO
-        )
-            ?.lowercase()
-            ?.trim()
-            ?: ""
+            Cripto.carregar(
+                CHAVE_RECUPERACAO
+            )
+                ?.lowercase()
+                ?.trim()
+                ?: ""
 
-    } catch (
-        e: Exception
-    ) {
+        } catch (
+            e: Exception
+        ) {
 
-        mostrarMensagem("Erro")
+            mostrarMensagem("Erro")
 
-        return
-    }
+            return
+        }
 
     mostrarDialogo(
         Dialogo(
@@ -1157,11 +1254,6 @@ private fun recuperarSenha(
                 "OK"
         )
     )
-
-    /*
-     * A continuação é feita por
-     * continuarPrompt().
-     */
 }
 
 /* =========================================================
@@ -1177,44 +1269,38 @@ private fun continuarPrompt(
     mostrarMensagem: (String) -> Unit
 ) {
 
-    /*
-     * Aqui tratamos a criação inicial
-     * e a recuperação de senha usando
-     * diretamente o Cripto.
-     */
-
     val senhaSalva =
-    try {
+        try {
 
-        Cripto.carregar(
-            CHAVE_SENHA
-        )
-            ?.trim()
-            ?: ""
+            Cripto.carregar(
+                CHAVE_SENHA
+            )
+                ?.trim()
+                ?: ""
 
-    } catch (
-        e: Exception
-    ) {
+        } catch (
+            e: Exception
+        ) {
 
-        ""
-    }
+            ""
+        }
 
-val respostaSalva =
-    try {
+    val respostaSalva =
+        try {
 
-        Cripto.carregar(
-            CHAVE_RECUPERACAO
-        )
-            ?.lowercase()
-            ?.trim()
-            ?: ""
+            Cripto.carregar(
+                CHAVE_RECUPERACAO
+            )
+                ?.lowercase()
+                ?.trim()
+                ?: ""
 
-    } catch (
-        e: Exception
-    ) {
+        } catch (
+            e: Exception
+        ) {
 
-        ""
-    }
+            ""
+        }
 
     if (
         titulo == "Criar senha"

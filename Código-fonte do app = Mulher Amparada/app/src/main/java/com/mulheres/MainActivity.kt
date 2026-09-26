@@ -183,7 +183,7 @@ if (!pagina.isNullOrEmpty()) {
 } else {
 
     webView.loadUrl(
-        "file:///android_asset/$pastaUsuario/index1.html"
+        "file:///android_asset/$pastaUsuario/botao.html"
     )
 }
 
@@ -461,7 +461,7 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
 private fun carregarWebView1() {
 
     webView.loadUrl(
-        "file:///android_asset/${obterPastaTema()}/index1.html"
+        "file:///android_asset/${obterPastaTema()}/botao.html"
     )
 }
 

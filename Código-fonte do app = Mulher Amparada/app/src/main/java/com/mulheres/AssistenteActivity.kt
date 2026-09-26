@@ -1,5 +1,6 @@
 package com.mulheres
 
+import android.view.WindowManager
 import android.os.Bundle
 import android.content.Intent
 import android.graphics.Color as AndroidColor
@@ -63,51 +64,63 @@ import kotlin.random.Random
 
 class AssistenteActivity : ComponentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreate(
+    savedInstanceState: Bundle?
+) {
+    super.onCreate(savedInstanceState)
 
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
+    window.setFlags(
+        WindowManager.LayoutParams.FLAG_SECURE,
+        WindowManager.LayoutParams.FLAG_SECURE
+    )
+
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        false
+    )
+
+    window.statusBarColor =
+        AndroidColor.TRANSPARENT
+
+    window.navigationBarColor =
+        AndroidColor.TRANSPARENT
+
+    if (
+        android.os.Build.VERSION.SDK_INT >= 29
+    ) {
+        window.isNavigationBarContrastEnforced =
             false
+
+        window.isStatusBarContrastEnforced =
+            false
+    }
+
+    val modoEscuro =
+        (
+            resources.configuration.uiMode and
+                android.content.res.Configuration.UI_MODE_NIGHT_MASK
+        ) ==
+            android.content.res.Configuration.UI_MODE_NIGHT_YES
+
+    val controller =
+        WindowInsetsControllerCompat(
+            window,
+            window.decorView
         )
 
-        window.statusBarColor =
-            AndroidColor.TRANSPARENT
+    controller.isAppearanceLightStatusBars =
+        !modoEscuro
 
-        window.navigationBarColor =
-            AndroidColor.TRANSPARENT
+    controller.isAppearanceLightNavigationBars =
+        !modoEscuro
 
-        if (android.os.Build.VERSION.SDK_INT >= 29) {
+    setContent {
 
-            window.isNavigationBarContrastEnforced =
-                false
-
-            window.isStatusBarContrastEnforced =
-                false
-        }
-
-        setContent {
-
-            val modoEscuro =
-                isSystemInDarkTheme()
-
-            val controller =
-                WindowInsetsControllerCompat(
-                    window,
-                    window.decorView
-                )
-
-            controller.isAppearanceLightStatusBars =
-                !modoEscuro
-
-            controller.isAppearanceLightNavigationBars =
-                !modoEscuro
-
-            AssistenteTheme {
-                AssistenteSaude()
-            }
+        AssistenteTheme {
+            AssistenteSaude()
         }
     }
+}
 }
 
 

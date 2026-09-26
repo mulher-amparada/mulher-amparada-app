@@ -896,75 +896,72 @@ fun desativarFullscreen() {
     ========================================================= */
 
     override fun onCreate(
-        savedInstanceState: Bundle?
-    ) {
-        super.onCreate(savedInstanceState)
+    savedInstanceState: Bundle?
+) {
+    super.onCreate(savedInstanceState)
 
-        enableEdgeToEdge()
+    window.setFlags(
+        WindowManager.LayoutParams.FLAG_SECURE,
+        WindowManager.LayoutParams.FLAG_SECURE
+    )
 
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
+    enableEdgeToEdge()
+
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        false
+    )
+
+    verificarPermissoes()
+
+    cripto = Cripto(this)
+
+    seletorContato =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { resultado ->
+
+            if (resultado.resultCode == RESULT_OK) {
+
+                resultado.data?.data?.let {
+                    processarContatoSelecionado(it)
+                }
+            }
+        }
+
+    locationClient =
+        LocationServices
+            .getFusedLocationProviderClient(this)
+
+    sensorManager =
+        getSystemService(
+            Context.SENSOR_SERVICE
+        ) as SensorManager
+
+    criarShakeListener()
+
+    tiltBrightness =
+        TiltBrightnessController(
+            activity = this,
+            sensorManager = sensorManager,
+            onEnterFullscreen = {
+                ativarFullscreen()
+            },
+            onExitFullscreen = {
+                desativarFullscreen()
+            }
         )
 
-        verificarPermissoes()
+    setContent {
 
-cripto = Cripto(this)
+        MulherAmparadaTheme {
 
-seletorContato =
-    registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { resultado ->
-
-        if (
-            resultado.resultCode == RESULT_OK
-        ) {
-
-            val uri =
-                resultado.data?.data
-
-            if (uri != null) {
-                processarContatoSelecionado(uri)
-            }
+            MulherAmparadaScreen()
         }
     }
-    
-locationClient =
-    LocationServices
-        .getFusedLocationProviderClient(this)
 
-criarEmergencyOverlay()
-
-sensorManager =
-    getSystemService(
-        Context.SENSOR_SERVICE
-    ) as SensorManager
-
-
-criarShakeListener()
-        setContent {
-
-            MulherAmparadaTheme {
-
-                MulherAmparadaScreen()
-            }
-        }
-        
-        tiltBrightness =
-    TiltBrightnessController(
-        activity = this,
-        sensorManager = sensorManager,
-
-        onEnterFullscreen = {
-            ativarFullscreen()
-        },
-
-        onExitFullscreen = {
-            desativarFullscreen()
-        }
-    )   
-    
-    }
+    criarEmergencyOverlay()
+}
 
 
     override fun onResume() {

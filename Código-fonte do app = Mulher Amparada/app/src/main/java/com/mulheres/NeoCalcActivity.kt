@@ -206,8 +206,14 @@ private data class Dialogo(
 @Composable
 private fun NeoCalcScreen() {
 
+
+
     val context =
         LocalContext.current
+
+val cripto = remember {
+    Cripto(context)
+}
 
     val escuro =
         isSystemInDarkTheme()
@@ -299,6 +305,7 @@ private fun NeoCalcScreen() {
             recuperarSenha(
                 context = context,
                 fonte = fonte,
+                cripto = cripto,
                 mostrarDialogo = {
                     dialogo = it
 
@@ -468,7 +475,7 @@ private fun NeoCalcScreen() {
         val senha =
             try {
 
-                Cripto.carregar(
+                cripto.carregar(
                     CHAVE_SENHA
                 )
                     ?.trim()
@@ -1002,6 +1009,7 @@ private fun NeoCalcScreen() {
                                             fonte =
                                                 fonte,
 
+cripto = Cripto
                                             mostrarDialogo = {
 
                                                 dialogo =
@@ -1215,6 +1223,7 @@ private fun LinhaBotoes(
 private fun recuperarSenha(
     context: android.content.Context,
     fonte: FontFamily,
+    cripto: Cripto,
     mostrarDialogo: (Dialogo) -> Unit,
     fecharDialogo: () -> Unit,
     mostrarMensagem: (String) -> Unit
@@ -1223,7 +1232,7 @@ private fun recuperarSenha(
     val respostaSalva =
         try {
 
-            Cripto.carregar(
+            cripto.carregar(
                 CHAVE_RECUPERACAO
             )
                 ?.lowercase()
@@ -1265,6 +1274,7 @@ private fun continuarPrompt(
     titulo: String,
     context: android.content.Context,
     fonte: FontFamily,
+    cripto: Cripto,
     mostrarDialogo: (Dialogo) -> Unit,
     mostrarMensagem: (String) -> Unit
 ) {
@@ -1272,7 +1282,7 @@ private fun continuarPrompt(
     val senhaSalva =
         try {
 
-            Cripto.carregar(
+            cripto.carregar(
                 CHAVE_SENHA
             )
                 ?.trim()
@@ -1288,7 +1298,7 @@ private fun continuarPrompt(
     val respostaSalva =
         try {
 
-            Cripto.carregar(
+            cripto.carregar(
                 CHAVE_RECUPERACAO
             )
                 ?.lowercase()
@@ -1317,7 +1327,7 @@ private fun continuarPrompt(
             return
         }
 
-        Cripto.salvar(
+        cripto.salvar(
             CHAVE_SENHA,
             valor.trim()
         )

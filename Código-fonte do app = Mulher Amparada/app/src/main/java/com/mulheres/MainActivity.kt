@@ -1,5 +1,7 @@
 package com.mulheres
 
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity

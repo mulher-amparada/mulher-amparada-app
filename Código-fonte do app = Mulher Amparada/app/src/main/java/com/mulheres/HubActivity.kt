@@ -225,11 +225,12 @@ fun abrirAreaProtegida() {
         BiometricManager.BIOMETRIC_SUCCESS
     ) {
 
-        Toast.makeText(
-            this,
-            "Biometria não disponível.",
-            Toast.LENGTH_LONG
-        ).show()
+        startActivity(
+            Intent(
+                this@HubActivity,
+                MainActivity::class.java
+            )
+        )
 
         return
     }
@@ -252,33 +253,39 @@ fun abrirAreaProtegida() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    val intent =
+                    startActivity(
                         Intent(
                             this@HubActivity,
                             MainActivity::class.java
                         )
-
-                    startActivity(intent)
+                    )
                 }
 
                 override fun onAuthenticationError(
-    errorCode: Int,
-    errString: CharSequence
-) {
+                    errorCode: Int,
+                    errString: CharSequence
+                ) {
 
-    super.onAuthenticationError(
-        errorCode,
-        errString
-    )
+                    super.onAuthenticationError(
+                        errorCode,
+                        errString
+                    )
 
-    val intent =
-        Intent(
-            this@HubActivity,
-            MainActivity::class.java
-        )
+                    startActivity(
+                        Intent(
+                            this@HubActivity,
+                            MainActivity::class.java
+                        )
+                    )
+                }
 
-    startActivity(intent)
-}
+                override fun onAuthenticationFailed() {
+
+                    super.onAuthenticationFailed()
+
+                    // Não abre a MainActivity.
+                    // O prompt continua disponível para nova tentativa.
+                }
             }
         )
 
@@ -320,11 +327,12 @@ fun abrirHomeActivity() {
         BiometricManager.BIOMETRIC_SUCCESS
     ) {
 
-        Toast.makeText(
-            this,
-            "Biometria não disponível.",
-            Toast.LENGTH_LONG
-        ).show()
+        startActivity(
+            Intent(
+                this@HubActivity,
+                HomeActivity::class.java
+            )
+        )
 
         return
     }
@@ -347,37 +355,38 @@ fun abrirHomeActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    val intent =
+                    startActivity(
                         Intent(
                             this@HubActivity,
                             HomeActivity::class.java
                         )
-
-                    startActivity(intent)
+                    )
                 }
 
                 override fun onAuthenticationError(
-    errorCode: Int,
-    errString: CharSequence
-) {
+                    errorCode: Int,
+                    errString: CharSequence
+                ) {
 
-    super.onAuthenticationError(
-        errorCode,
-        errString
-    )
+                    super.onAuthenticationError(
+                        errorCode,
+                        errString
+                    )
 
-    val intent =
-        Intent(
-            this@HubActivity,
-            HomeActivity::class.java
-        )
-
-    startActivity(intent)
-}
+                    startActivity(
+                        Intent(
+                            this@HubActivity,
+                            HomeActivity::class.java
+                        )
+                    )
+                }
 
                 override fun onAuthenticationFailed() {
 
                     super.onAuthenticationFailed()
+
+                    // A biometria não foi reconhecida.
+                    // O prompt continua aberto.
                 }
             }
         )

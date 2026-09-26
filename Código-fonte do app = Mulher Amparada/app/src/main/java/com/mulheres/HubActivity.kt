@@ -1307,7 +1307,6 @@ fun mostrarBotaoEmergencia() {
         emergenciaVisivel = !emergenciaVisivel
     }
 }
-}
 
 fun fecharAvisoAdministrador() {
     avisoAdministradorVisivel = false

@@ -2,6 +2,9 @@ package com.mulheres
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -136,11 +139,14 @@ private fun GestoScreen() {
                 rememberScrollState()
             )
             .padding(
-                start = 16.dp,
-                end = 16.dp,
-                top = 25.dp,
-                bottom = 70.dp
-            )
+    start = 16.dp,
+    end = 16.dp,
+    top = 25.dp,
+    bottom = 70.dp
+)
+.windowInsetsPadding(
+    WindowInsets.statusBars
+)
     ) {
 
         /*

@@ -33,6 +33,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import android.view.WindowManager
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.statusBars
 
 private val Quicksand = FontFamily(
     Font(R.font.quicksand, FontWeight.Normal),
@@ -126,12 +129,15 @@ private fun ExigirScreen() {
             .verticalScroll(
                 rememberScrollState()
             )
-            .padding(
-                start = 16.dp,
-                end = 16.dp,
-                top = 25.dp,
-                bottom = 70.dp
-            )
+.padding(
+    start = 16.dp,
+    end = 16.dp,
+    top = 25.dp,
+    bottom = 70.dp
+)
+.windowInsetsPadding(
+    WindowInsets.statusBars
+)
     ) {
 
         /*

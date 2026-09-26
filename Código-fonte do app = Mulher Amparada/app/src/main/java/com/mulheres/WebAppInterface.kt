@@ -597,13 +597,6 @@ fun bloquearTela(): Boolean {
     }
 
 @JavascriptInterface
-fun mostrarBotaoEmergencia() {
-    safeMainActivityCall {
-        it.mostrarBotaoEmergencia()
-    }
-}
-
-@JavascriptInterface
 fun ocultarBotaoEmergencia() {
     safeMainActivityCall {
         it.ocultarBotaoEmergencia()
@@ -655,34 +648,6 @@ fun ocultarBotaoEmergencia() {
     fun selecionarContato() {
         safeMainActivityCall {
             it.abrirContatos()
-        }
-    }
-
-    @JavascriptInterface
-    fun ativarPalmas() {
-        safeMainActivityCall {
-            it.ativarPalmas()
-        }
-    }
-
-    @JavascriptInterface
-    fun desativarPalmas() {
-        safeMainActivityCall {
-            it.desativarPalmas()
-        }
-    }
-
-    @JavascriptInterface
-    fun ativarProtecao() {
-        safeMainActivityCall {
-            it.ativarProtecao()
-        }
-    }
-
-    @JavascriptInterface
-    fun desativarProtecao() {
-        safeMainActivityCall {
-            it.desativarProtecao()
         }
     }
 
@@ -740,29 +705,6 @@ fun openRecorder() {
     )
 }
 
-@JavascriptInterface
-fun abrirPermissoes() {
-    try {
-        val intent = Intent(
-            android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-        ).apply {
-            data = Uri.parse("package:${activity.packageName}")
-        }
 
-        activity.startActivity(intent)
-
-    } catch (_: Exception) {
-    }
-}
-
-    @JavascriptInterface
-    fun ligarDireto(numero: String) {
-        val intent = Intent(Intent.ACTION_CALL).apply {
-            data = Uri.parse("tel:$numero")
-        }
-
-        activity.startActivity(intent)
-    }
-    
 
 }

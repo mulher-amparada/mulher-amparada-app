@@ -6,6 +6,7 @@ import android.graphics.Color as AndroidColor
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 
+import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -52,6 +53,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -182,7 +184,6 @@ private val CoresEscuras =
         textoMuitoEscuro =
             Color(0xFF3B3B3B),
 
-        /* PRETO NO BRANCO / BRANCO NO PRETO */
         icone =
             Color.White,
 
@@ -233,7 +234,6 @@ private val CoresClaras =
         textoMuitoEscuro =
             Color(0xFF999999),
 
-        /* PRETO NO FUNDO BRANCO */
         icone =
             Color.Black,
 
@@ -294,27 +294,28 @@ private fun coresAssistente(): CoresAssistente {
 
 
 /* =========================================================
+   COR DOS ÍCONES
+========================================================= */
+
+@Composable
+private fun corIcone(): Color {
+
+    return if (
+        isSystemInDarkTheme()
+    ) {
+        Color.White
+    } else {
+        Color.Black
+    }
+}
+
+
+/* =========================================================
    FONTE
 ========================================================= */
 
-/*
- * Fonte mais encorpada.
- *
- * Como o arquivo quicksand.ttf é uma única fonte,
- * usamos pesos maiores do Compose para dar mais presença
- * visual aos textos.
- */
 private val Quicksand =
     FontFamily(
-
-        Font(
-            resId =
-                com.mulheres.R.font.quicksand,
-
-            weight =
-                FontWeight.Normal
-        ),
-
         Font(
             resId =
                 com.mulheres.R.font.quicksand,
@@ -417,16 +418,6 @@ fun AssistenteSaude() {
     val cores =
         coresAssistente()
 
-    /*
-     * Agora o estado é observado corretamente pelo Compose.
-     *
-     * Antes:
-     * estado.bemEstar.valor = ...
-     *
-     * Isso alterava um objeto normal sem avisar o Compose.
-     *
-     * Agora substituímos DadosSaude inteiro.
-     */
     var estado by remember {
         mutableStateOf(
             DadosSaude()
@@ -487,163 +478,167 @@ fun AssistenteSaude() {
     }
 
 
-    LazyColumn(
+    CompositionLocalProvider(
+        LocalOverscrollFactory provides null
+    ) {
 
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .background(
-                    cores.fundo
+        LazyColumn(
+
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        cores.fundo
+                    )
+                    .padding(
+                        start = 15.dp,
+                        end = 15.dp,
+                        top = 25.dp,
+                        bottom = 45.dp
+                    ),
+
+            verticalArrangement =
+                Arrangement.spacedBy(
+                    0.dp
                 )
-                .padding(
-                    start = 15.dp,
-                    end = 15.dp,
-                    top = 25.dp,
-                    bottom = 45.dp
-                ),
+        ) {
 
-        verticalArrangement =
-            Arrangement.spacedBy(
-                0.dp
-            )
+            item {
 
-         ) {
+                Cabecalho(
+                    onSecretClick = {
+                        // Ação do botão secreto.
+                    }
+                )
 
-        item {
-
-            Cabecalho(
-                onSecretClick = {
-                    /*
-                     * Ação do botão secreto.
-                     */
-                }
-            )
-
-            Spacer(
-                modifier =
-                    Modifier.height(
-                        28.dp
-                    )
-            )
-        }
+                Spacer(
+                    modifier =
+                        Modifier.height(
+                            28.dp
+                        )
+                )
+            }
 
 
-        item {
+            item {
 
-            Hero(
-                bemEstar =
-                    estado.bemEstar.valor
-            )
+                Hero(
+                    bemEstar =
+                        estado.bemEstar.valor
+                )
 
-            Spacer(
-                modifier =
-                    Modifier.height(
-                        12.dp
-                    )
-            )
-        }
-
-
-        item {
-
-            Resumo(
-
-                batimentos =
-                    estado.batimentos.valor,
-
-                respiracao =
-                    estado.respiracao.valor,
-
-                temperatura =
-                    estado.temperatura.valor
-            )
-        }
+                Spacer(
+                    modifier =
+                        Modifier.height(
+                            12.dp
+                        )
+                )
+            }
 
 
-        item {
+            item {
 
-            SecaoTitulo(
-                titulo =
-                    "Indicadores",
+                Resumo(
 
-                direita =
-                    "Atualização contínua"
-            )
+                    batimentos =
+                        estado.batimentos.valor,
 
-            Spacer(
-                modifier =
-                    Modifier.height(
-                        14.dp
-                    )
-            )
+                    respiracao =
+                        estado.respiracao.valor,
 
-            Indicadores(
-                dados =
-                    estado
-            )
-        }
+                    temperatura =
+                        estado.temperatura.valor
+                )
+            }
 
 
-        item {
+            item {
 
-            Spacer(
-                modifier =
-                    Modifier.height(
-                        36.dp
-                    )
-            )
+                SecaoTitulo(
 
-            SecaoTitulo(
-                titulo =
-                    "Bem-estar",
+                    titulo =
+                        "Indicadores",
 
-                direita =
-                    "Índice geral"
-            )
+                    direita =
+                        "Atualização contínua"
+                )
 
-            Spacer(
-                modifier =
-                    Modifier.height(
-                        14.dp
-                    )
-            )
+                Spacer(
+                    modifier =
+                        Modifier.height(
+                            14.dp
+                        )
+                )
 
-            BemEstar(
-                valor =
-                    estado.bemEstar.valor
-            )
-        }
+                Indicadores(
+                    dados =
+                        estado
+                )
+            }
 
 
-        item {
+            item {
 
-            Spacer(
-                modifier =
-                    Modifier.height(
-                        36.dp
-                    )
-            )
+                Spacer(
+                    modifier =
+                        Modifier.height(
+                            36.dp
+                        )
+                )
 
-            SecaoTitulo(
-                titulo =
-                    "Atividade"
-            )
+                SecaoTitulo(
 
-            Spacer(
-                modifier =
-                    Modifier.height(
-                        14.dp
-                    )
-            )
+                    titulo =
+                        "Bem-estar",
 
-            Atividade()
+                    direita =
+                        "Índice geral"
+                )
 
-            Spacer(
-                modifier =
-                    Modifier.height(
-                        14.dp
-                    )
-            )
+                Spacer(
+                    modifier =
+                        Modifier.height(
+                            14.dp
+                        )
+                )
+
+                BemEstar(
+                    valor =
+                        estado.bemEstar.valor
+                )
+            }
+
+
+            item {
+
+                Spacer(
+                    modifier =
+                        Modifier.height(
+                            36.dp
+                        )
+                )
+
+                SecaoTitulo(
+                    titulo =
+                        "Atividade"
+                )
+
+                Spacer(
+                    modifier =
+                        Modifier.height(
+                            14.dp
+                        )
+                )
+
+                Atividade()
+
+                Spacer(
+                    modifier =
+                        Modifier.height(
+                            14.dp
+                        )
+                )
+            }
         }
     }
 }
@@ -680,36 +675,6 @@ private fun Cabecalho(
                     1f
                 )
         ) {
-
-            Text(
-
-                text =
-                    "CUIDADO E ACOMPANHAMENTO",
-
-                color =
-                    cores.textoEscuro,
-
-                fontFamily =
-                    Quicksand,
-
-                fontSize =
-                    7.sp,
-
-                fontWeight =
-                    FontWeight.Bold,
-
-                letterSpacing =
-                    1.5.sp
-            )
-
-
-            Spacer(
-                modifier =
-                    Modifier.height(
-                        8.dp
-                    )
-            )
-
 
             Text(
 
@@ -759,7 +724,7 @@ private fun Cabecalho(
                     9.sp,
 
                 fontWeight =
-                    FontWeight.Medium,
+                    FontWeight.Bold,
 
                 lineHeight =
                     14.sp,
@@ -832,7 +797,7 @@ private fun Cabecalho(
 
                     colorFilter =
                         ColorFilter.tint(
-                            cores.icone
+                            corIcone()
                         )
                 )
             }
@@ -922,7 +887,6 @@ private fun Hero(
             modifier =
                 Modifier.fillMaxSize()
         ) {
-
 
             Row(
 
@@ -1058,6 +1022,7 @@ private fun Hero(
                                 }
                             )
                             .border(
+
                                 1.dp,
 
                                 if (
@@ -1101,7 +1066,7 @@ private fun Hero(
 
                         colorFilter =
                             ColorFilter.tint(
-                                cores.icone
+                                corIcone()
                             )
                     )
                 }
@@ -1231,7 +1196,7 @@ private fun Hero(
                         8.sp,
 
                     fontWeight =
-                        FontWeight.Medium
+                        FontWeight.Bold
                 )
             }
         }
@@ -1726,6 +1691,10 @@ private fun percentual(
 }
 
 
+/* =========================================================
+   INDICADOR CARD
+========================================================= */
+
 @Composable
 private fun IndicadorCard(
 
@@ -1845,7 +1814,7 @@ private fun IndicadorCard(
 
                             colorFilter =
                                 ColorFilter.tint(
-                                    cores.icone
+                                    corIcone()
                                 )
                         )
                     }
@@ -1965,6 +1934,10 @@ private fun IndicadorCard(
             }
 
 
+            /*
+             * TRILHO DA BARRA:
+             * totalmente transparente.
+             */
             Box(
 
                 modifier =
@@ -1987,7 +1960,7 @@ private fun IndicadorCard(
                             )
                         )
                         .background(
-                            cores.linhaFundo
+                            Color.Transparent
                         )
             ) {
 
@@ -2134,7 +2107,7 @@ private fun BemEstar(
 
                             colorFilter =
                                 ColorFilter.tint(
-                                    cores.icone
+                                    corIcone()
                                 )
                         )
                     }
@@ -2192,7 +2165,7 @@ private fun BemEstar(
                                 7.sp,
 
                             fontWeight =
-                                FontWeight.Medium
+                                FontWeight.Bold
                         )
                     }
                 }
@@ -2313,6 +2286,10 @@ private fun BemEstar(
             )
 
 
+            /*
+             * TRILHO DA BARRA:
+             * totalmente transparente.
+             */
             Box(
 
                 modifier =
@@ -2327,7 +2304,7 @@ private fun BemEstar(
                             )
                         )
                         .background(
-                            cores.linhaFundo
+                            Color.Transparent
                         )
             ) {
 
@@ -2375,6 +2352,10 @@ private fun BemEstar(
     }
 }
 
+
+/* =========================================================
+   BEM-ESTAR INFO
+========================================================= */
 
 @Composable
 private fun BemEstarInfo(
@@ -2491,6 +2472,10 @@ private fun Atividade() {
     }
 }
 
+
+/* =========================================================
+   ATIVIDADE ROW
+========================================================= */
 
 @Composable
 private fun AtividadeRow(
@@ -2624,7 +2609,7 @@ private fun AtividadeRow(
                         7.sp,
 
                     fontWeight =
-                        FontWeight.Medium,
+                        FontWeight.Bold,
 
                     lineHeight =
                         10.sp,

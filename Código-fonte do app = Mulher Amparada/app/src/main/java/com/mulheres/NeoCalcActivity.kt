@@ -503,7 +503,7 @@ val cripto = remember {
                 context.startActivity(
                     Intent(
                         context,
-                        MainActivity::class.java
+                        HubActivity::class.java
                     )
                 )
 

@@ -46,6 +46,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.ui.layout.ContentScale
 
 class HubActivity : ComponentActivity() {
 
@@ -729,7 +732,7 @@ private fun SystemOverview(
                         contentDescription = null,
                         modifier = Modifier.size(32.dp),
                         contentScale =
-                            ContentScale.Contain
+                            ContentScale.Fit
                     )
                 }
             }

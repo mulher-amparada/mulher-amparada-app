@@ -502,9 +502,10 @@ fun AssistenteSaude() {
 .windowInsetsPadding(
     WindowInsets.statusBars
 )
+
 .padding(
     bottom = 45.dp
-)
+),
 
             verticalArrangement =
                 Arrangement.spacedBy(

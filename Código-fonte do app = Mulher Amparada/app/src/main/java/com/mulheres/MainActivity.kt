@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
 
     private var ultimoShake: Long = 0
 
-    private lateinit var webView: WebView
+    private lateinit var webView: StableWebView
 
     private lateinit var emergencyComposeView: ComposeView
 
@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var selecionarContatoLauncher: ActivityResultLauncher<Intent>
     
-    
+    private lateinit var renderManager: WebViewRenderManager
 
 
     // =========================================================
@@ -197,7 +197,8 @@ controller.isAppearanceLightNavigationBars =
 
 webView = findViewById(R.id.webview)
 
-
+renderManager =
+    WebViewRenderManager(webView)
 
 locationClient =
     LocationServices
@@ -273,18 +274,16 @@ val pastaUsuario =
 
 if (!pagina.isNullOrEmpty()) {
 
-    webView.loadUrl(
+    renderManager.loadUrl(
         "file:///android_asset/$pastaUsuario/$pagina"
     )
 
 } else {
 
-    webView.loadUrl(
+    renderManager.loadUrl(
         "file:///android_asset/$pastaUsuario/index1.html"
     )
 }
-
-
 
         // =====================================================
         // BOTÃO VOLTAR
@@ -739,7 +738,7 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
         // WEBVIEW CLIENT
         // =====================================================
 
-                webView.webViewClient =
+        webView.webViewClient =
             object : WebViewClient() {
 
                 override fun shouldOverrideUrlLoading(
@@ -784,11 +783,105 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
                     return false
                 }
 
+override fun onPageStarted(
+    view: WebView?,
+    url: String?,
+    favicon: android.graphics.Bitmap?
+) {
+    super.onPageStarted(
+        view,
+        url,
+        favicon
+    )
+
+    view ?: return
+
+    /*
+     * A página começou a carregar.
+     * Enquanto ela estiver sendo montada,
+     * o usuário não interage com a WebView.
+     */
+
+    view.isEnabled = false
+
+    view.isClickable = false
+    view.isFocusable = false
+    view.isFocusableInTouchMode = false
+
+    /*
+     * Aplica blur nativo na própria WebView.
+     *
+     * Não é CSS.
+     * Não é JavaScript.
+     * É composição nativa do Android.
+     */
+
+    if (android.os.Build.VERSION.SDK_INT >= 31) {
+
+        view.setRenderEffect(
+            android.graphics.RenderEffect.createBlurEffect(
+                25f,
+                25f,
+                android.graphics.Shader.TileMode.CLAMP
+            )
+        )
+    }
+}
+
+override fun onPageCommitVisible(
+    view: WebView?,
+    url: String?
+) {
+    super.onPageCommitVisible(
+        view,
+        url
+    )
+
+    view ?: return
+
+    /*
+     * A primeira composição visual da nova página
+     * já foi comprometida.
+     */
+
+    if (android.os.Build.VERSION.SDK_INT >= 31) {
+
+        view.setRenderEffect(null)
+    }
+
+    /*
+     * Agora a WebView volta a aceitar interação.
+     */
+
+    view.isEnabled = true
+
+    view.isClickable = true
+    view.isFocusable = true
+    view.isFocusableInTouchMode = true
+
+    view.requestFocus()
+}
+                
 
 
+                override fun onPageFinished(
+                    view: WebView?,
+                    url: String?
+                ) {
+
+                    super.onPageFinished(
+                        view,
+                        url
+                    )
+
+                    
+
+                    verificarPermissoesParaJS()
+                }
             }
-            
-            }
+    }
+
+
     // =========================================================
     // CARREGAR PÁGINAS
     // =========================================================
@@ -809,7 +902,7 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
 
 private fun carregarWebView1() {
 
-    webView.loadUrl(
+    renderManager.loadUrl(
         "file:///android_asset/${obterPastaTema()}/index1.html"
     )
 }
@@ -817,7 +910,7 @@ private fun carregarWebView1() {
 
 private fun carregarWebView2() {
 
-    webView.loadUrl(
+    renderManager.loadUrl(
         "file:///android_asset/${obterPastaTema()}/carteira.html"
     )
 }
@@ -825,7 +918,7 @@ private fun carregarWebView2() {
 
 private fun carregarWebView4() {
 
-    webView.loadUrl(
+    renderManager.loadUrl(
         "file:///android_asset/${obterPastaTema()}/botao.html"
     )
 }
@@ -2361,35 +2454,34 @@ fun marcarSolicitacaoAdministrador() {
     // CICLO DE VIDA
     // =========================================================
 
-override fun onDestroy() {
+    override fun onDestroy() {
 
-    telephonyCallback?.let {
+        telephonyCallback?.let {
 
-        if (
-            Build.VERSION.SDK_INT >=
-            Build.VERSION_CODES.S
-        ) {
-
-            try {
-
-                telephonyManager
-                    .unregisterTelephonyCallback(
-                        it
-                    )
-
-            } catch (
-                _: Exception
+            if (
+                Build.VERSION.SDK_INT >=
+                Build.VERSION_CODES.S
             ) {
+
+                try {
+
+                    telephonyManager
+                        .unregisterTelephonyCallback(
+                            it
+                        )
+
+                } catch (
+                    _: Exception
+                ) {
+                }
             }
         }
+
+        telephonyCallback =
+            null
+
+        pararSensor()
+
+        super.onDestroy()
     }
-
-    telephonyCallback =
-        null
-
-    pararSensor()
-
-
-    super.onDestroy()
-}
 }

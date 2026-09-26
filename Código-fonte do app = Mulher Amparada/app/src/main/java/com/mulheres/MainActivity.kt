@@ -1,11 +1,12 @@
 package com.mulheres
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import android.os.Bundle
 import android.view.WindowManager
+
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,19 +20,25 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
+
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -231,7 +238,6 @@ private fun MeusAcessos() {
             verticalArrangement = Arrangement.spacedBy(0.dp)
         ) {
 
-
             /* =================================================
                HERO
             ================================================= */
@@ -427,8 +433,7 @@ private fun Hero() {
     ) {
 
         /*
-         * Nenhum ícone ou imagem.
-         * Apenas o bloco roxo.
+         * Quadrado roxo usando ic_8.xml.
          */
 
         Box(
@@ -453,8 +458,23 @@ private fun Hero() {
                     width = 1.dp,
                     color = Color.White.copy(alpha = 0.16f),
                     shape = RoundedCornerShape(30.dp)
-                )
-        )
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+
+            Image(
+                painter = androidx.compose.ui.res.painterResource(
+                    id = R.drawable.ic_8
+                ),
+
+                contentDescription = null,
+
+                modifier = Modifier
+                    .size(50.dp),
+
+                contentScale = ContentScale.Fit
+            )
+        }
 
 
         Spacer(
@@ -614,6 +634,13 @@ private fun Cartao(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+
+            /*
+             * Não existe mais height(82.dp) ou height(88.dp).
+             *
+             * O card pode crescer livremente conforme
+             * o conteúdo precisar.
+             */
             .height(
                 if (acesso.emergencia) {
                     88.dp
@@ -621,12 +648,15 @@ private fun Cartao(
                     82.dp
                 }
             )
+
             .clip(
                 RoundedCornerShape(21.dp)
             )
+
             .background(
                 fundo
             )
+
             .border(
                 width = 1.dp,
 
@@ -639,11 +669,13 @@ private fun Cartao(
 
                 shape = RoundedCornerShape(21.dp)
             )
+
             .clickable {
                 /*
                  * Por enquanto não abre nenhuma tela.
                  */
             }
+
             .padding(
                 horizontal = 16.dp,
                 vertical = 15.dp
@@ -657,12 +689,10 @@ private fun Cartao(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(58.dp)
+                    .padding(
+                        vertical = 0.dp
+                    )
             ) {
-
-                /*
-                 * Faixa vermelha lateral.
-                 */
 
                 Box(
                     modifier = Modifier
@@ -722,12 +752,6 @@ private fun ConteudoCartao(
 
         verticalAlignment = Alignment.CenterVertically
     ) {
-
-        /*
-         * ESPAÇO RESERVADO.
-         *
-         * Não existe ícone, imagem ou drawable.
-         */
 
         Spacer(
             modifier = Modifier.width(4.dp)
@@ -793,8 +817,8 @@ private fun ConteudoCartao(
         /* =================================================
            SETA
            
-           Feita somente com caracteres de texto.
-           Nenhum ícone.
+           Somente caractere de texto.
+           Nenhum ImageVector ou drawable.
         ================================================= */
 
         Box(

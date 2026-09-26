@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
+import android.view.WindowManager
 
 private val Quicksand = FontFamily(
     Font(R.font.quicksand, FontWeight.Normal),
@@ -49,6 +50,11 @@ class GestoActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+window.setFlags(
+        WindowManager.LayoutParams.FLAG_SECURE,
+        WindowManager.LayoutParams.FLAG_SECURE
+    )
+    
         WindowCompat.setDecorFitsSystemWindows(
             window,
             false

@@ -2,40 +2,40 @@ package com.mulheres
 
 import android.content.Intent
 import android.os.Bundle
-
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-
 import androidx.compose.animation.core.animateFloatAsState
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.isSystemInDarkTheme
-
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,7 +49,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import android.view.WindowManager
 import androidx.core.view.WindowCompat
 
 
@@ -93,6 +93,11 @@ class HomeActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
 
+window.setFlags(
+        WindowManager.LayoutParams.FLAG_SECURE,
+        WindowManager.LayoutParams.FLAG_SECURE
+    )
+    
         WindowCompat.setDecorFitsSystemWindows(
             window,
             false
@@ -144,87 +149,77 @@ private fun CarteiraScreen(
 
     val dark = isSystemInDarkTheme()
 
-
     val background = if (dark) {
-
         Color(0xFF000000)
-
     } else {
-
         Color(0xFFFFFFFF)
     }
 
-
     val text = if (dark) {
-
         Color(0xFFF5F5F7)
-
     } else {
-
         Color(0xFF18181C)
     }
 
-
     val soft = if (dark) {
-
         Color(0xFFB4B4BD)
-
     } else {
-
         Color(0xFF686870)
     }
 
-
     val muted = if (dark) {
-
         Color(0xFF9999A3)
-
     } else {
-
         Color(0xFF777780)
     }
 
-
     val cardBackground = if (dark) {
-
         Color(0xFF18181C)
-
     } else {
-
         Color.White
     }
 
-
     val border = if (dark) {
-
-        Color.White.copy(
-            alpha = 0.08f
-        )
-
+        Color.White.copy(alpha = 0.08f)
     } else {
-
-        Color.Black.copy(
-            alpha = 0.09f
-        )
+        Color.Black.copy(alpha = 0.09f)
     }
-
 
     Column(
 
         modifier = Modifier
             .fillMaxSize()
             .background(background)
+
+            /*
+             * Mantém o conteúdo afastado da barra
+             * de status e da barra de navegação.
+             */
+            .windowInsetsPadding(
+                WindowInsets.statusBars
+            )
+            .windowInsetsPadding(
+                WindowInsets.navigationBars
+            )
+
+            /*
+             * Permite que os dois cards mantenham
+             * sua altura normal em telas menores.
+             */
+            .verticalScroll(
+                rememberScrollState()
+            )
+
             .padding(
                 start = 16.dp,
                 end = 16.dp,
                 top = 24.dp,
-                bottom = 100.dp
+                bottom = 32.dp
             ),
 
         verticalArrangement =
             Arrangement.spacedBy(31.dp)
     ) {
-
 
         /*
          * =====================================================
@@ -253,11 +248,9 @@ private fun CarteiraScreen(
                     .background(Pink)
             )
 
-
             Spacer(
                 modifier = Modifier.height(18.dp)
             )
-
 
             Text(
 
@@ -277,20 +270,16 @@ private fun CarteiraScreen(
                 letterSpacing = (-1.6).sp
             )
 
-
             Spacer(
                 modifier = Modifier.height(14.dp)
             )
-
 
             Text(
 
                 text =
                     "Suas carteirinhas reunidas em um só lugar.",
 
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .width(410.dp),
+                modifier = Modifier.fillMaxWidth(),
 
                 color = soft,
 
@@ -306,23 +295,19 @@ private fun CarteiraScreen(
                 letterSpacing = 0.15.sp
             )
 
-
             Spacer(
                 modifier = Modifier.height(8.dp)
             )
 
-
             Text(
 
                 text =
-                    "Recurso informativo do aplicativo para apresentação ás equipes de trabsportes e combate a violência" +
-                    "Estas carteirinhas não são " +
-                    "um documento governamental nem são emitidas por " +
-                    "órgãos públicos.",
+                    "Recurso informativo do aplicativo para apresentação " +
+                    "às equipes de transportes e combate à violência. " +
+                    "Estas carteirinhas não são um documento governamental " +
+                    "nem são emitidas por órgãos públicos.",
 
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .width(410.dp),
+                modifier = Modifier.fillMaxWidth(),
 
                 color = soft,
 
@@ -358,11 +343,9 @@ private fun CarteiraScreen(
                 color = muted
             )
 
-
             Spacer(
                 modifier = Modifier.height(13.dp)
             )
-
 
             CarteiraCard(
 
@@ -398,11 +381,9 @@ private fun CarteiraScreen(
                 color = muted
             )
 
-
             Spacer(
                 modifier = Modifier.height(13.dp)
             )
-
 
             CarteiraCard(
 
@@ -444,11 +425,9 @@ private fun CarteiraLabel(
                 .background(Pink)
         )
 
-
         Spacer(
             modifier = Modifier.width(9.dp)
         )
-
 
         Text(
 
@@ -493,12 +472,10 @@ private fun CarteiraCard(
             MutableInteractionSource()
         }
 
-
     val pressed =
         remember {
             mutableStateOf(false)
         }
-
 
     LaunchedEffect(
         interactionSource
@@ -518,7 +495,6 @@ private fun CarteiraCard(
                         pressed.value = true
                     }
 
-
                     is androidx.compose.foundation
                         .interaction
                         .PressInteraction
@@ -526,7 +502,6 @@ private fun CarteiraCard(
 
                         pressed.value = false
                     }
-
 
                     is androidx.compose.foundation
                         .interaction
@@ -539,7 +514,6 @@ private fun CarteiraCard(
             }
     }
 
-
     val scale by animateFloatAsState(
 
         targetValue =
@@ -551,7 +525,6 @@ private fun CarteiraCard(
 
         label = "cardScale"
     )
-
 
     Box(
 
@@ -596,6 +569,10 @@ private fun CarteiraCard(
                     RoundedCornerShape(27.dp)
                 ),
 
+            /*
+             * Mantém a proporção original da
+             * imagem em vez de comprimir o card.
+             */
             contentScale =
                 ContentScale.FillWidth
         )

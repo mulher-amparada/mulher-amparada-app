@@ -1,37 +1,31 @@
 package com.mulheres
 
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.statusBars
 import android.Manifest
-import androidx.compose.runtime.setValue
+import android.app.admin.DevicePolicyManager
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Color as AndroidColor
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import kotlin.math.sqrt
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
-import kotlin.math.log10
-import android.content.pm.PackageManager
-import android.graphics.Color as AndroidColor
-import androidx.compose.runtime.CompositionLocalProvider
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.telephony.TelephonyCallback
 import android.telephony.TelephonyManager
 import android.widget.Toast
-import androidx.compose.foundation.LocalOverscrollFactory
+
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -42,12 +36,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
@@ -57,12 +55,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -81,6 +81,9 @@ import androidx.compose.ui.zIndex
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
+
+import kotlin.math.log10
+import kotlin.math.sqrt
 
 
 class HubActivity : ComponentActivity() {
@@ -130,9 +133,47 @@ private var acelerometro: Sensor? = null
 
 private var telephonyCallback: TelephonyCallback? = null
 
+// =========================================================
+// 04 / BLOQUEIO POR BARULHO
+// =========================================================
+
+var bloqueioPorBarulhoAtivo by mutableStateOf(false)
+    private set
+
+private var bloqueioRodando = false
+
+private var bloqueioRecorder: MediaRecorder? = null
+
+private var bloqueioThread: Thread? = null
+
+private val bloqueioAmplitudeMinima = 18000
+
     /* =========================================================
        PERMISSÕES
     ========================================================= */
+
+fun ligarPara(numero: String) {
+
+    try {
+
+        val intent =
+            Intent(
+                Intent.ACTION_DIAL
+            ).apply {
+
+                data =
+                    Uri.parse(
+                        "tel:$numero"
+                    )
+            }
+
+        startActivity(intent)
+
+    } catch (e: Exception) {
+
+        e.printStackTrace()
+    }
+}
 
     fun verificarPermissoes() {
 
@@ -172,6 +213,344 @@ private var telephonyCallback: TelephonyCallback? = null
             microfone &&
             telefone
     }
+    
+    fun solicitarAdministrador() {
+
+    try {
+
+        val dpm =
+            getSystemService(
+                Context.DEVICE_POLICY_SERVICE
+            ) as DevicePolicyManager
+
+        val component =
+            ComponentName(
+                this,
+                MyDeviceAdminReceiver::class.java
+            )
+
+        if (dpm.isAdminActive(component)) {
+            return
+        }
+
+        val intent =
+            Intent(
+                DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN
+            ).apply {
+
+                putExtra(
+                    DevicePolicyManager.EXTRA_DEVICE_ADMIN,
+                    component
+                )
+
+                putExtra(
+                    DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                    "Este aplicativo precisa da permissão de Administrador do dispositivo."
+                )
+            }
+
+        startActivityForResult(
+            intent,
+            1001
+        )
+
+    } catch (e: Exception) {
+
+        e.printStackTrace()
+    }
+}
+
+fun bloquearTela(): Boolean {
+
+    return try {
+
+        val dpm =
+            getSystemService(
+                Context.DEVICE_POLICY_SERVICE
+            ) as DevicePolicyManager
+
+        val component =
+            ComponentName(
+                this,
+                MyDeviceAdminReceiver::class.java
+            )
+
+        if (!dpm.isAdminActive(component)) {
+
+            solicitarAdministrador()
+
+            return false
+        }
+
+        dpm.lockNow()
+
+        true
+
+    } catch (e: Exception) {
+
+        e.printStackTrace()
+
+        false
+    }
+}
+
+fun ativarBloqueioPorBarulho() {
+
+    if (bloqueioRodando) {
+        return
+    }
+
+    /*
+     * Solicita o Administrador.
+     *
+     * O detector pode ser iniciado, mas o bloqueio
+     * somente acontecerá se o Administrador estiver ativo.
+     */
+    solicitarAdministrador()
+
+    /*
+     * Verifica o microfone.
+     */
+    if (
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.RECORD_AUDIO
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+
+        bloqueioPorBarulhoAtivo = false
+
+        Toast.makeText(
+            this,
+            "Permissão do microfone necessária.",
+            Toast.LENGTH_SHORT
+        ).show()
+
+        return
+    }
+
+    try {
+
+        val arquivoTemporario =
+            java.io.File(
+                cacheDir,
+                "temp_bloqueio.3gp"
+            )
+
+        try {
+
+            if (arquivoTemporario.exists()) {
+                arquivoTemporario.delete()
+            }
+
+        } catch (_: Exception) {
+        }
+
+        val gravador =
+            MediaRecorder()
+
+        gravador.setAudioSource(
+            MediaRecorder.AudioSource.MIC
+        )
+
+        gravador.setOutputFormat(
+            MediaRecorder.OutputFormat.THREE_GPP
+        )
+
+        gravador.setAudioEncoder(
+            MediaRecorder.AudioEncoder.AMR_NB
+        )
+
+        gravador.setOutputFile(
+            arquivoTemporario.absolutePath
+        )
+
+        gravador.prepare()
+
+        gravador.start()
+
+        bloqueioRecorder =
+            gravador
+
+        bloqueioRodando =
+            true
+
+        bloqueioPorBarulhoAtivo =
+            true
+
+        bloqueioThread =
+            Thread {
+
+                try {
+
+                    while (
+                        bloqueioRodando
+                    ) {
+
+                        val amplitude =
+                            try {
+
+                                gravador.maxAmplitude
+
+                            } catch (_: Exception) {
+
+                                0
+                            }
+
+                        /*
+                         * Barulho alto detectado.
+                         */
+                        if (
+                            amplitude >=
+                            bloqueioAmplitudeMinima
+                        ) {
+
+                            /*
+                             * Encerra primeiro
+                             * o detector.
+                             */
+                            bloqueioRodando =
+                                false
+
+                            bloqueioPorBarulhoAtivo =
+                                false
+
+                            try {
+                                gravador.stop()
+                            } catch (_: Exception) {
+                            }
+
+                            try {
+                                gravador.release()
+                            } catch (_: Exception) {
+                            }
+
+                            bloqueioRecorder =
+                                null
+
+                            /*
+                             * Solicita o bloqueio.
+                             */
+                            runOnUiThread {
+
+                                bloquearTela()
+                            }
+
+                            break
+                        }
+
+                        Thread.sleep(100)
+                    }
+
+                } catch (_: Exception) {
+
+                    /*
+                     * Qualquer erro encerra
+                     * o detector.
+                     */
+
+                } finally {
+
+                    try {
+
+                        bloqueioRecorder?.release()
+
+                    } catch (_: Exception) {
+                    }
+
+                    bloqueioRecorder =
+                        null
+
+                    bloqueioThread =
+                        null
+                }
+
+            }.apply {
+
+                name =
+                    "MulherAmparada-BloqueioPorBarulho"
+
+                start()
+            }
+
+    } catch (e: Exception) {
+
+        e.printStackTrace()
+
+        bloqueioRodando =
+            false
+
+        bloqueioPorBarulhoAtivo =
+            false
+
+        try {
+
+            bloqueioRecorder?.release()
+
+        } catch (_: Exception) {
+        }
+
+        bloqueioRecorder =
+            null
+
+        bloqueioThread =
+            null
+    }
+}
+
+fun desativarBloqueioPorBarulho() {
+
+    bloqueioRodando =
+        false
+
+    bloqueioPorBarulhoAtivo =
+        false
+
+    try {
+
+        bloqueioRecorder?.stop()
+
+    } catch (_: Exception) {
+    }
+
+    try {
+
+        bloqueioRecorder?.reset()
+
+    } catch (_: Exception) {
+    }
+
+    try {
+
+        bloqueioRecorder?.release()
+
+    } catch (_: Exception) {
+    }
+
+    bloqueioRecorder =
+        null
+
+    bloqueioThread =
+        null
+
+    /*
+     * Remove o arquivo temporário.
+     */
+    try {
+
+        val arquivo =
+            java.io.File(
+                cacheDir,
+                "temp_bloqueio.3gp"
+            )
+
+        if (arquivo.exists()) {
+            arquivo.delete()
+        }
+
+    } catch (_: Exception) {
+    }
+}
 
 fun ativarEscurecimento() {
 
@@ -323,6 +702,8 @@ if (::sensorManager.isInitialized) {
 }
 
 pararMicrofoneShake()
+
+desativarBloqueioPorBarulho()
 
     telephonyCallback?.let {
 
@@ -1578,59 +1959,84 @@ private fun MulherAmparadaScreen() {
 )
 
             SensorCard(
-                number = "04 / BLOQUEIO",
-                title = "Bloqueio por barulho",
-                description =
-                    "Detecta sons altos e bloqueia o celular automaticamente quando ativado.",
-                icon = R.drawable.ic_0006,
-                color = c.cyan,
-                active = false,
-                onClick = {},
-                c = c,
-                font = font
-            )
+    number = "04 / PROTEÇÃO",
+    title = "Bloqueio por barulho",
+    description =
+        "Bloqueia a tela automaticamente quando um som alto é detectado.",
+    icon = R.drawable.ic_0006,
+    color = c.red,
+    active =
+        activity?.bloqueioPorBarulhoAtivo
+            ?: false,
+    onClick = {
 
+        activity?.let {
+
+            if (
+                it.bloqueioPorBarulhoAtivo
+            ) {
+
+                it.desativarBloqueioPorBarulho()
+
+            } else {
+
+                it.ativarBloqueioPorBarulho()
+            }
+        }
+    },
+    c = c,
+    font = font
+)
             SectionTitle(
                 text = "Serviços de emergência",
                 c = c,
                 font = font
             )
 
-            ActionCard(
-                title = "Polícia — 190",
-                description =
-                    "Emergência policial e atendimento imediato",
-                icon = R.drawable.ic_0007,
-                arrow = R.drawable.ic_arrow,
-                gradient = c.actionBlueGradient,
-                accent = c.blue,
-                c = c,
-                font = font
-            )
+ActionCard(
+    title = "Polícia — 190",
+    description =
+        "Emergência policial e atendimento imediato",
+    icon = R.drawable.ic_0007,
+    arrow = R.drawable.ic_arrow,
+    gradient = c.actionBlueGradient,
+    accent = c.blue,
+    c = c,
+    font = font,
+    onClick = {
+        activity?.ligarPara("190")
+    }
+)
 
-            ActionCard(
-                title = "SAMU — 192",
-                description =
-                    "Atendimento médico de emergência",
-                icon = R.drawable.ic_0008,
-                arrow = R.drawable.ic_arrow,
-                gradient = c.actionOrangeGradient,
-                accent = c.orange,
-                c = c,
-                font = font
-            )
+ActionCard(
+    title = "SAMU — 192",
+    description =
+        "Atendimento médico de emergência",
+    icon = R.drawable.ic_0008,
+    arrow = R.drawable.ic_arrow,
+    gradient = c.actionOrangeGradient,
+    accent = c.orange,
+    c = c,
+    font = font,
+    onClick = {
+        activity?.ligarPara("192")
+    }
+)
 
-            ActionCard(
-                title = "Central da Mulher — 180",
-                description =
-                    "Orientação, acolhimento e atendimento",
-                icon = R.drawable.ic_0009,
-                arrow = R.drawable.ic_arrow,
-                gradient = c.actionPinkGradient,
-                accent = c.pinkLight,
-                c = c,
-                font = font
-            )
+ActionCard(
+    title = "Central da Mulher — 180",
+    description =
+        "Orientação, acolhimento e atendimento",
+    icon = R.drawable.ic_0009,
+    arrow = R.drawable.ic_arrow,
+    gradient = c.actionPinkGradient,
+    accent = c.pinkLight,
+    c = c,
+    font = font,
+    onClick = {
+        activity?.ligarPara("180")
+    }
+)
 
             SectionTitle(
                 text = "Recursos de apoio",
@@ -2686,32 +3092,35 @@ private fun ActionCard(
     gradient: List<Color>,
     accent: Color,
     c: AppColors,
-    font: FontFamily
+    font: FontFamily,
+    onClick: () -> Unit = {}
 ) {
 
     Row(
 
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .height(128.dp)
-                .clip(
-                    RoundedCornerShape(27.dp)
-                )
-                .background(
-                    Brush.linearGradient(gradient)
-                )
-                .border(
-                    1.dp,
-                    accent.copy(.31f),
-                    RoundedCornerShape(27.dp)
-                )
-                .padding(20.dp),
+    modifier =
+        Modifier
+            .fillMaxWidth()
+            .height(128.dp)
+            .clip(
+                RoundedCornerShape(27.dp)
+            )
+            .background(
+                Brush.linearGradient(gradient)
+            )
+            .border(
+                1.dp,
+                accent.copy(.31f),
+                RoundedCornerShape(27.dp)
+            )
+            .clickable {
+                onClick()
+            }
+            .padding(20.dp),
 
-        verticalAlignment =
-            Alignment.CenterVertically
-    ) {
-
+    verticalAlignment =
+        Alignment.CenterVertically
+) {
         Box(
 
             modifier =

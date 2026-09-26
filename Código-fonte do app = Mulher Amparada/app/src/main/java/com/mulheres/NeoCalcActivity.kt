@@ -1027,6 +1027,7 @@ val cripto = remember {
             it
     }
 )
+}
 
                                     TipoDialogo.CONFIRMACAO -> {
 

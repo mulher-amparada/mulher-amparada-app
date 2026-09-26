@@ -20,6 +20,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color as AndroidColor
 import android.hardware.Sensor
+import androidx.compose.material3.AlertDialog
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
@@ -119,7 +120,8 @@ private lateinit var shakeListener: SensorEventListener
 var protecaoMovimentoAtiva by mutableStateOf(false)
     private set
 
-
+var avisoAdministradorVisivel by mutableStateOf(false)
+    private set
 
 private var ultimoShake: Long = 0L
 
@@ -470,6 +472,39 @@ fun abrirHomeActivity() {
     }
 }
 
+override fun onActivityResult(
+    requestCode: Int,
+    resultCode: Int,
+    data: Intent?
+) {
+    super.onActivityResult(
+        requestCode,
+        resultCode,
+        data
+    )
+
+    if (requestCode == 1001) {
+
+        val dpm =
+            getSystemService(
+                Context.DEVICE_POLICY_SERVICE
+            ) as DevicePolicyManager
+
+        val component =
+            ComponentName(
+                this,
+                MyDeviceAdminReceiver::class.java
+            )
+
+        val administradorAtivo =
+            dpm.isAdminActive(component)
+
+        if (!administradorAtivo) {
+
+            avisoAdministradorVisivel = true
+        }
+    }
+}
 
 fun enviarLocalizacaoPara180() {
 
@@ -1269,8 +1304,13 @@ fun mostrarBotaoEmergencia() {
 
     runOnUiThread {
 
-        emergenciaVisivel = true
+        emergenciaVisivel = !emergenciaVisivel
     }
+}
+}
+
+fun fecharAvisoAdministrador() {
+    avisoAdministradorVisivel = false
 }
 
 fun ocultarBotaoEmergencia() {
@@ -2903,6 +2943,43 @@ ActionCard(
         /* =====================================================
            BLOQUEIO DE PERMISSÕES
         ===================================================== */
+if (activity?.avisoAdministradorVisivel == true) {
+    AlertDialog(
+        onDismissRequest = {
+            activity?.fecharAvisoAdministrador()
+        },
+        title = {
+            Text(
+                text = "Administrador do dispositivo",
+                fontFamily = font,
+                fontWeight = FontWeight.ExtraBold
+            )
+        },
+        text = {
+            Text(
+                text =
+                    "Se você negar essa permissão, alguns recursos de proteção não funcionarão.\n\n" +
+                    "• O bloqueio por barulho não funcionará.\n" +
+                    "• O bloqueio da tela na área protegida não funcionará.\n\n" +
+                    "Os demais recursos do aplicativo continuarão disponíveis.",
+                fontFamily = font
+            )
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    activity?.fecharAvisoAdministrador()
+                }
+            ) {
+                Text(
+                    text = "Entendi",
+                    fontFamily = font,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    )
+}
 
         if (
             activity != null &&

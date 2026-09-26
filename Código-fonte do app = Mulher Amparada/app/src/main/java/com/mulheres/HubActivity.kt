@@ -85,7 +85,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import androidx.core.content.ContextCompat
+
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import android.provider.ContactsContract
@@ -106,6 +106,8 @@ private var palmasEmExecucao = false
 
 var permissoesConcedidas by mutableStateOf(false)
     private set
+
+private lateinit var cripto: Cripto
 
 private lateinit var telephonyManager: TelephonyManager
 

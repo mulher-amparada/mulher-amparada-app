@@ -124,8 +124,6 @@ locationClient =
         .getFusedLocationProviderClient(
             this
         )
-
-criarEmergencyOverlay()
         
         
 

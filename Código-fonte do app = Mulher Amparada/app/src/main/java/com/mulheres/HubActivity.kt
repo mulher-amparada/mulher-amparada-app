@@ -1,6 +1,7 @@
 package com.mulheres
 
 import android.Manifest
+import androidx.compose.runtime.setValue
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent

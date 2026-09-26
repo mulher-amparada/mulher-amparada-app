@@ -997,35 +997,36 @@ val cripto = remember {
 
                                         continuarPrompt(
 
-                                            valor =
-                                                valor,
+    valor =
+        valor,
 
-                                            titulo =
-                                                atual.titulo,
+    titulo =
+        atual.titulo,
 
-                                            context =
-                                                context,
+    context =
+        context,
 
-                                            fonte =
-                                                fonte,
+    fonte =
+        fonte,
 
-cripto = Cripto
-                                            mostrarDialogo = {
+    cripto =
+        cripto,
 
-                                                dialogo =
-                                                    it
+    mostrarDialogo = {
 
-                                                valorDialogo =
-                                                    it.valorInicial
-                                            },
+        dialogo =
+            it
 
-                                            mostrarMensagem = {
+        valorDialogo =
+            it.valorInicial
+    },
 
-                                                mensagemTemporaria =
-                                                    it
-                                            }
-                                        )
-                                    }
+    mostrarMensagem = {
+
+        mensagemTemporaria =
+            it
+    }
+)
 
                                     TipoDialogo.CONFIRMACAO -> {
 

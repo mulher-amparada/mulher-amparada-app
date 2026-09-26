@@ -51,6 +51,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
+import kotlin.math.roundToInt
 
 class NeoCalcActivity : ComponentActivity() {
 
@@ -399,20 +400,20 @@ private fun NeoCalcScreen() {
     fun calcular() {
 
         val senha =
-            try {
+    try {
 
-                String(
-                    Cripto.carregar(
-                        CHAVE_SENHA
-                    ) ?: ""
-                ).trim()
+        Cripto.carregar(
+            CHAVE_SENHA
+        )
+            ?.trim()
+            ?: ""
 
-            } catch (
-                e: Exception
-            ) {
+    } catch (
+        e: Exception
+    ) {
 
-                ""
-            }
+        ""
+    }
 
         /*
          * SENHA ESPECIAL
@@ -428,7 +429,7 @@ private fun NeoCalcScreen() {
                 context.startActivity(
                     Intent(
                         context,
-                        User1Activity::class.java
+                        MainActivity::class.java
                     )
                 )
 
@@ -1123,24 +1124,23 @@ private fun recuperarSenha(
 ) {
 
     val respostaSalva =
-        try {
+    try {
 
-            String(
-                Cripto.carregar(
-                    CHAVE_RECUPERACAO
-                ) ?: ""
-            )
-                .lowercase()
-                .trim()
+        Cripto.carregar(
+            CHAVE_RECUPERACAO
+        )
+            ?.lowercase()
+            ?.trim()
+            ?: ""
 
-        } catch (
-            e: Exception
-        ) {
+    } catch (
+        e: Exception
+    ) {
 
-            mostrarMensagem("Erro")
+        mostrarMensagem("Erro")
 
-            return
-        }
+        return
+    }
 
     mostrarDialogo(
         Dialogo(
@@ -1184,38 +1184,37 @@ private fun continuarPrompt(
      */
 
     val senhaSalva =
-        try {
+    try {
 
-            String(
-                Cripto.carregar(
-                    CHAVE_SENHA
-                ) ?: ""
-            ).trim()
+        Cripto.carregar(
+            CHAVE_SENHA
+        )
+            ?.trim()
+            ?: ""
 
-        } catch (
-            e: Exception
-        ) {
+    } catch (
+        e: Exception
+    ) {
 
-            ""
-        }
+        ""
+    }
 
-    val respostaSalva =
-        try {
+val respostaSalva =
+    try {
 
-            String(
-                Cripto.carregar(
-                    CHAVE_RECUPERACAO
-                ) ?: ""
-            )
-                .lowercase()
-                .trim()
+        Cripto.carregar(
+            CHAVE_RECUPERACAO
+        )
+            ?.lowercase()
+            ?.trim()
+            ?: ""
 
-        } catch (
-            e: Exception
-        ) {
+    } catch (
+        e: Exception
+    ) {
 
-            ""
-        }
+        ""
+    }
 
     if (
         titulo == "Criar senha"

@@ -1,736 +1,883 @@
 package com.mulheres
 
-import android.Manifest
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Color
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
-import android.view.View
 import android.view.WindowManager
-import android.webkit.GeolocationPermissions
-import android.webkit.JavascriptInterface
-import android.webkit.PermissionRequest
-import android.webkit.WebChromeClient
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
-import androidx.biometric.BiometricManager
-import androidx.biometric.BiometricPrompt
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import android.view.ViewGroup
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.runtime.mutableStateOf
-import android.os.BatteryManager
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-class MainActivity : AppCompatActivity() {
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowForwardIos
+import androidx.compose.material.icons.outlined.Calculate
+import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.Folder
+import androidx.compose.material.icons.outlined.Language
+import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Mic
+import androidx.compose.material.icons.outlined.NoteAlt
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.TaskAlt
+import androidx.compose.material.icons.outlined.Timer
+import androidx.compose.material.icons.outlined.SportsEsports
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
-    companion object {
-        const val PERMISSION_CODE = 100
-    }
 
-    // =========================================================
-    // VARIÁVEIS
-    // =========================================================
-    private lateinit var cripto: Cripto
+class MainActivity : ComponentActivity() {
 
-    var destinoBiometria: Int = 0
-
-    
-
-    private lateinit var locationClient: FusedLocationProviderClient
-    private lateinit var webView: WebView
-
-    private lateinit var emergencyComposeView: ComposeView
-
-    private var emergenciaVisivel by mutableStateOf(false)
-
-    // =========================================================
-// =========================================================
-    // ON CREATE
-    // =========================================================
-
-    override fun onCreate(
-        savedInstanceState: Bundle?
-    ) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         window.addFlags(
             WindowManager.LayoutParams.FLAG_SECURE
         )
-WindowCompat.setDecorFitsSystemWindows(
-    window,
-    true
+
+        setContent {
+            MeusAcessos()
+        }
+    }
+}
+
+
+/* =========================================================
+   FONTE
+========================================================= */
+
+private val Quicksand = FontFamily(
+    Font(R.font.quicksand, FontWeight.Normal),
+    Font(R.font.quicksand, FontWeight.Medium),
+    Font(R.font.quicksand, FontWeight.SemiBold),
+    Font(R.font.quicksand, FontWeight.Bold),
+    Font(R.font.quicksand, FontWeight.ExtraBold)
 )
 
-window.statusBarColor =
-    Color.TRANSPARENT
 
-window.navigationBarColor =
-    Color.TRANSPARENT
+/* =========================================================
+   CORES
+========================================================= */
 
-if (
-    Build.VERSION.SDK_INT >=
-    Build.VERSION_CODES.Q
-) {
-    window.isStatusBarContrastEnforced =
-        false
+private val Fundo = Color.Black
 
-    window.isNavigationBarContrastEnforced =
-        false
-}
-        val controller =
-            WindowInsetsControllerCompat(
-                window,
-                window.decorView
+private val Texto = Color.White
+private val TextoSuave = Color(0xFFB7B7C0)
+private val TextoMuted = Color(0xFF777782)
+
+private val Rosa = Color(0xFFFF3F82)
+
+private val Vermelho = Color(0xFFFF5368)
+
+
+/* =========================================================
+   MODELO
+========================================================= */
+
+private data class Acesso(
+    val titulo: String,
+    val descricao: String,
+    val icone: ImageVector,
+    val corIcone: Color = Color(0xFF8B5CF6),
+    val emergencia: Boolean = false
+)
+
+
+/* =========================================================
+   TELA
+========================================================= */
+
+@Composable
+private fun MeusAcessos() {
+
+    val recursos = remember {
+
+        listOf(
+
+            Acesso(
+                titulo = "Calendário menstrual",
+                descricao = "Acompanhe seu ciclo",
+                icone = Icons.Outlined.Favorite,
+                corIcone = Color(0xFFE83E9F)
+            ),
+
+            Acesso(
+                titulo = "Calendário de eventos",
+                descricao = "Organize seus compromissos",
+                icone = Icons.Outlined.CalendarMonth,
+                corIcone = Color(0xFF6655E8)
+            ),
+
+            Acesso(
+                titulo = "Mapa da sua região",
+                descricao = "Visualize locais próximos",
+                icone = Icons.Outlined.LocationOn,
+                corIcone = Color(0xFF28B873)
+            ),
+
+            Acesso(
+                titulo = "Diário e anotações",
+                descricao = "Escreva e guarde seus registros",
+                icone = Icons.Outlined.NoteAlt,
+                corIcone = Color(0xFFD94BC4)
+            ),
+
+            Acesso(
+                titulo = "Rotina gamificada",
+                descricao = "Transforme tarefas em desafios",
+                icone = Icons.Outlined.SportsEsports,
+                corIcone = Color(0xFFFF9D35)
+            ),
+
+            Acesso(
+                titulo = "Relógio + Localização",
+                descricao = "Horário e posição atual",
+                icone = Icons.Outlined.Timer,
+                corIcone = Color(0xFF3978EE)
+            ),
+
+            Acesso(
+                titulo = "Calculadora",
+                descricao = "Faça seus cálculos rapidamente",
+                icone = Icons.Outlined.Calculate,
+                corIcone = Color(0xFF28B978)
+            ),
+
+            Acesso(
+                titulo = "Minhas tarefas",
+                descricao = "Organize o que precisa fazer",
+                icone = Icons.Outlined.TaskAlt,
+                corIcone = Color(0xFF22AFC5)
+            ),
+
+            Acesso(
+                titulo = "Navegador",
+                descricao = "Acesse páginas da internet",
+                icone = Icons.Outlined.Language,
+                corIcone = Color(0xFF7147F4)
             )
-
-        val isDark =
-    (resources.configuration.uiMode and
-        android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
-        android.content.res.Configuration.UI_MODE_NIGHT_YES
-
-controller.isAppearanceLightStatusBars =
-    !isDark
-
-controller.isAppearanceLightNavigationBars =
-    !isDark
-
-        setContentView(
-            R.layout.activity_main
         )
-
-
-webView = findViewById(R.id.webview)
-
-
-locationClient =
-    LocationServices
-        .getFusedLocationProviderClient(
-            this
-        )
-        
-        
-
-
-ViewCompat.setOnApplyWindowInsetsListener(webView) { view, insets ->
-
-    val barras = insets.getInsets(
-        WindowInsetsCompat.Type.systemBars()
-    )
-
-    val params =
-        view.layoutParams as ViewGroup.MarginLayoutParams
-
-    params.topMargin = barras.top
-    params.bottomMargin = barras.bottom
-
-    view.layoutParams = params
-
-    insets
-}
-        /*
-         * Inicializa uma única instância do Cripto
-         * antes de configurar a WebView.
-         */
-        cripto =
-            Cripto(this)
-
-        configurarWebView()
-
-
-        // =====================================================
-        // ABERTURA INICIAL
-        // =====================================================
-
-        val pagina =
-    intent?.getStringExtra(
-        "pagina"
-    )
-
-val pastaUsuario =
-    if (
-        (resources.configuration.uiMode and
-            android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
-            android.content.res.Configuration.UI_MODE_NIGHT_YES
-    ) {
-        "user1"
-    } else {
-        "user2"
     }
 
-if (!pagina.isNullOrEmpty()) {
 
-    webView.loadUrl(
-        "file:///android_asset/$pastaUsuario/$pagina"
-    )
+    val outrasFuncoes = remember {
 
-} else {
+        listOf(
 
-    webView.loadUrl(
-        "file:///android_asset/$pastaUsuario/botao.html"
-    )
-}
+            Acesso(
+                titulo = "Gravador de voz",
+                descricao = "Grave áudios rapidamente",
+                icone = Icons.Outlined.Mic,
+                corIcone = Color(0xFF7D4BD8)
+            ),
 
+            Acesso(
+                titulo = "Meus arquivos",
+                descricao = "Acesse seus arquivos",
+                icone = Icons.Outlined.Folder,
+                corIcone = Color(0xFF438AEF)
+            ),
 
-        // =====================================================
-        // BOTÃO VOLTAR
-        // =====================================================
-
-onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-    override fun handleOnBackPressed() {
-        val urlAtual = webView.url
-
-        if (urlAtual != null && urlAtual.contains("google.com")) {
-            webView.clearHistory()
-            finish()
-        } else {
-            if (webView.canGoBack()) {
-                webView.goBack()
-            } else {
-                isEnabled = false
-                onBackPressedDispatcher.onBackPressed()
-            }
-        }
+            Acesso(
+                titulo = "Tela de aplicativos",
+                descricao = "Acesse seus apps",
+                icone = Icons.Outlined.Person,
+                corIcone = Color(0xFFD72AD5)
+            )
+        )
     }
-})
-        
-        
+
+
+    val especiais = remember {
+
+        listOf(
+
+            Acesso(
+                titulo = "Feliz Dia das Mulheres!",
+                descricao = "Um jogo gamificado",
+                icone = Icons.Outlined.Favorite,
+                corIcone = Color(0xFF9B6BEA)
+            ),
+
+            Acesso(
+                titulo = "100 dos seus direitos",
+                descricao = "seja amparada pela lei",
+                icone = Icons.Outlined.Description,
+                corIcone = Color(0xFF9B6BEA)
+            ),
+
+            Acesso(
+                titulo = "Dicas de como recuperar sua autonomia financeira",
+                descricao = "Conhecimentos valiosos",
+                icone = Icons.Outlined.Calculate,
+                corIcone = Color(0xFF9B6BEA)
+            ),
+
+            Acesso(
+                titulo = "Uma carta para você, mulher!",
+                descricao = "Uma mensagem especial",
+                icone = Icons.Outlined.Description,
+                corIcone = Color(0xFF9B6BEA)
+            )
+        )
     }
-    
 
-    // =========================================================
-    // WEBVIEW
-    // =========================================================
 
-    private fun configurarWebView() {
-
-    webView.setBackgroundColor(
-        Color.TRANSPARENT
-    )
-
-    
-    
-
-
-        webView.addJavascriptInterface(
-            WebAppInterface(this),
-            "Android"
-        )
-
-        
-        webView.addJavascriptInterface(
-            cripto,
-            "Cripto"
-        )
-
-        webView.addJavascriptInterface(
-            DownloadInterface(this),
-            "Downloader"
-        )
-        
-        val settings =
-            webView.settings
-
-        settings.cacheMode =
-            android.webkit.WebSettings.LOAD_DEFAULT
-
-        settings.loadsImagesAutomatically =
-            true
-
-        settings.blockNetworkImage =
-            false
-
-        settings.databaseEnabled =
-            true
-
-        settings.displayZoomControls =
-            false
-
-        settings.builtInZoomControls =
-            false
-
-        settings.setSupportZoom(
-            false
-        )
-
-        settings.textZoom =
-            100
-
-        settings.defaultTextEncodingName =
-            "UTF-8"
-
-        settings.mixedContentMode =
-            android.webkit.WebSettings
-                .MIXED_CONTENT_NEVER_ALLOW
-
-        webView.overScrollMode =
-            View.OVER_SCROLL_NEVER
-
-        webView.isVerticalScrollBarEnabled =
-            false
-
-        webView.isFocusable =
-            true
-
-        webView.isFocusableInTouchMode =
-            true
-
-        webView.setOnFocusChangeListener {
-                _, _ ->
-        }
-
-        webView.isHorizontalScrollBarEnabled =
-            false
-
-        webView.scrollBarStyle =
-            View.SCROLLBARS_INSIDE_OVERLAY
-
-        settings.javaScriptEnabled =
-            true
-
-        settings.mediaPlaybackRequiresUserGesture =
-            false
-
-        settings.domStorageEnabled =
-            true
-
-        settings.setGeolocationEnabled(
-            true
-        )
-
-        settings.allowFileAccess =
-            true
-
-        settings.allowContentAccess =
-            false
-
-        settings.allowFileAccessFromFileURLs =
-            false
-
-        settings.allowUniversalAccessFromFileURLs =
-            false
-
-        settings.javaScriptCanOpenWindowsAutomatically =
-            false
-
-        settings.setSupportMultipleWindows(
-            false
-        )
-
-
-        // =====================================================
-        // WEB CHROME CLIENT
-        // =====================================================
-
-        webView.webChromeClient =
-            object : WebChromeClient() {
-
-                override fun onGeolocationPermissionsShowPrompt(
-                    origin: String?,
-                    callback:
-                    GeolocationPermissions.Callback?
-                ) {
-
-                    callback?.invoke(
-                        origin,
-                        true,
-                        false
-                    )
-                }
-
-
-                override fun onPermissionRequest(
-                    request: PermissionRequest
-                ) {
-
-                    runOnUiThread {
-
-                        val resources =
-                            request.resources
-
-                        if (
-                            resources.contains(
-                                PermissionRequest
-                                    .RESOURCE_AUDIO_CAPTURE
-                            )
-                        ) {
-
-                            request.grant(
-                                arrayOf(
-                                    PermissionRequest
-                                        .RESOURCE_AUDIO_CAPTURE
-                                )
-                            )
-
-                        } else {
-
-                            request.deny()
-                        }
-                    }
-                }
-            }
-
-
-        // =====================================================
-        // WEBVIEW CLIENT
-        // =====================================================
-
-                webView.webViewClient =
-            object : WebViewClient() {
-
-                override fun shouldOverrideUrlLoading(
-                    view: WebView?,
-                    request: WebResourceRequest?
-                ): Boolean {
-
-                    val url =
-                        request?.url?.toString()
-                            ?: return false
-
-                    if (
-                        url.startsWith("tel:")
-                    ) {
-
-                        startActivity(
-                            Intent(
-                                Intent.ACTION_DIAL,
-                                Uri.parse(url)
-                            )
-                        )
-
-                        return true
-                    }
-
-                    if (
-                        url.startsWith(
-                            "https://wa.me"
-                        )
-                    ) {
-
-                        startActivity(
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse(url)
-                            )
-                        )
-
-                        return true
-                    }
-
-                    return false
-                }
-
-
-            }
-            
-            }
-    // =========================================================
-    // CARREGAR PÁGINAS
-    // =========================================================
-
-    private fun obterPastaTema(): String {
-
-    return if (
-        (resources.configuration.uiMode and
-            android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
-            android.content.res.Configuration.UI_MODE_NIGHT_YES
-    ) {
-        "user1"
-    } else {
-        "user2"
-    }
-}
-
-
-private fun carregarWebView1() {
-
-    webView.loadUrl(
-        "file:///android_asset/${obterPastaTema()}/botao.html"
-    )
-}
-
-
-private fun carregarWebView2() {
-
-    webView.loadUrl(
-        "file:///android_asset/${obterPastaTema()}/carteira.html"
-    )
-}
-
-
-private fun carregarWebView4() {
-
-    webView.loadUrl(
-        "file:///android_asset/${obterPastaTema()}/botao.html"
-    )
-}
-
-
-
-    // =========================================================
-    // BIOMETRIA
-    // =========================================================
-
-    @JavascriptInterface
-    fun iniciarBiometria() {
-
-        runOnUiThread {
-
-            val biometricManager =
-                BiometricManager.from(
-                    this
-                )
-
-            val authenticators =
-                BiometricManager.Authenticators.BIOMETRIC_WEAK or
-                    BiometricManager.Authenticators.DEVICE_CREDENTIAL
-
-            val canAuth =
-                biometricManager.canAuthenticate(
-                    authenticators
-                )
-
-if (
-    canAuth !=
-    BiometricManager.BIOMETRIC_SUCCESS
-) {
-
-    Toast.makeText(
-        this,
-        "Biometria não disponível",
-        Toast.LENGTH_SHORT
-    ).show()
-
-    when (
-        destinoBiometria
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Fundo)
+            .windowInsetsPadding(
+                WindowInsets.safeDrawing
+            )
     ) {
 
-        1 ->
-            carregarWebView2()
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
 
-        2 ->
-            carregarWebView4()
-    }
-
-    return@runOnUiThread
-}
-
-            val biometricPrompt =
-                BiometricPrompt(
-                    this,
-                    ContextCompat.getMainExecutor(
-                        this
-                    ),
-                    object :
-                        BiometricPrompt.AuthenticationCallback() {
-
-                        override fun onAuthenticationSucceeded(
-                            result:
-                            BiometricPrompt.AuthenticationResult
-                        ) {
-
-                            super.onAuthenticationSucceeded(
-                                result
-                            )
-
-                            when (
-                                destinoBiometria
-                            ) {
-
-                                1 ->
-                                    carregarWebView2()
-
-                                2 ->
-                                    carregarWebView4()
-                            }
-                        }
-
-
-                        override fun onAuthenticationFailed() {
-
-                            super.onAuthenticationFailed()
-                        }
-
-
-                        override fun onAuthenticationError(
-                            errorCode: Int,
-                            errString: CharSequence
-                        ) {
-
-                            super.onAuthenticationError(
-                                errorCode,
-                                errString
-                            )
-                        }
-                    }
-                )
-
-            val promptInfo =
-                BiometricPrompt.PromptInfo.Builder()
-                    .setTitle(
-                        "Desbloquear a área protegida"
-                    )
-                    .setDescription(
-                        "🌸 Apenas a usuária cadastrada pode acessar este local"
-                    )
-                    .setAllowedAuthenticators(
-                        authenticators
-                    )
-                    .build()
-
-            biometricPrompt.authenticate(
-                promptInfo
+            contentPadding = PaddingValues(
+                start = 18.dp,
+                end = 18.dp,
+                top = 22.dp,
+                bottom = 70.dp
             )
-        }
-    }
-
-
-    // =========================================================
-    // BIOMETRIA — AMPARO
-    // =========================================================
-
-    @JavascriptInterface
-    fun iniciarBiometriaAmparo() {
-
-        destinoBiometria =
-            1
-
-        iniciarBiometria()
-    }
-
-
-    // =========================================================
-    // BIOMETRIA — ÁREA PROTEGIDA
-    // =========================================================
-
-    @JavascriptInterface
-    fun IniciarBiometriaÁreaProtegida() {
-
-        destinoBiometria =
-            2
-
-        iniciarBiometria()
-    }
-
-
-    // =========================================================
-    // FULLSCREEN — API MODERNA
-    // =========================================================
-
-    @JavascriptInterface
-    fun ativarFullscreen() {
-
-        val window =
-            window
-
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
-        )
-
-        val controller =
-            WindowCompat.getInsetsController(
-                window,
-                window.decorView
-            )
-
-        controller.systemBarsBehavior =
-            WindowInsetsControllerCompat
-                .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-
-        controller.hide(
-            WindowInsetsCompat.Type.systemBars()
-        )
-    }
-
-
-    
-    // =========================================================
-    // PEGAR LOCALIZAÇÃO
-    // =========================================================
-
-    @JavascriptInterface
-    fun pegarLocalizacao() {
-
-        if (
-            ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) !=
-            PackageManager.PERMISSION_GRANTED
         ) {
 
-            Toast.makeText(
-                this,
-                "Permissão de localização não concedida",
-                Toast.LENGTH_SHORT
-            ).show()
+            item {
 
-            return
+                Hero()
+
+                Spacer(
+                    modifier = Modifier.height(10.dp)
+                )
+            }
+
+
+            item {
+
+                TituloSecao(
+                    "Recursos do aplicativo"
+                )
+
+                Spacer(
+                    modifier = Modifier.height(14.dp)
+                )
+            }
+
+
+            items(recursos) { acesso ->
+
+                Cartao(acesso)
+
+                Spacer(
+                    modifier = Modifier.height(10.dp)
+                )
+            }
+
+
+            item {
+
+                Spacer(
+                    modifier = Modifier.height(32.dp)
+                )
+
+                TituloSecao(
+                    "Outras funções"
+                )
+
+                Spacer(
+                    modifier = Modifier.height(14.dp)
+                )
+            }
+
+
+            items(outrasFuncoes) { acesso ->
+
+                Cartao(acesso)
+
+                Spacer(
+                    modifier = Modifier.height(10.dp)
+                )
+            }
+
+
+            /* =================================================
+               EMERGÊNCIA
+               
+               SOMENTE BLOQUEAR DISPOSITIVO.
+               NÃO EXISTE DESLIGAR.
+            ================================================= */
+
+            item {
+
+                Spacer(
+                    modifier = Modifier.height(28.dp)
+                )
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(
+                            Brush.horizontalGradient(
+                                listOf(
+                                    Color.Transparent,
+                                    Vermelho.copy(alpha = 0.18f),
+                                    Color.Transparent
+                                )
+                            )
+                        )
+                )
+
+                Spacer(
+                    modifier = Modifier.height(27.dp)
+                )
+
+                TituloSecao(
+                    "Emergência"
+                )
+
+                Spacer(
+                    modifier = Modifier.height(14.dp)
+                )
+
+                Cartao(
+                    acesso = Acesso(
+                        titulo = "Bloquear dispositivo",
+                        descricao = "Bloqueie a tela imediatamente",
+                        icone = Icons.Outlined.Lock,
+                        corIcone = Vermelho,
+                        emergencia = true
+                    )
+                )
+
+                Spacer(
+                    modifier = Modifier.height(32.dp)
+                )
+            }
+
+
+            item {
+
+                TituloSecao(
+                    "Especial, só para você!"
+                )
+
+                Spacer(
+                    modifier = Modifier.height(14.dp)
+                )
+            }
+
+
+            items(especiais) { acesso ->
+
+                Cartao(acesso)
+
+                Spacer(
+                    modifier = Modifier.height(10.dp)
+                )
+            }
+        }
+    }
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+@Composable
+private fun Hero() {
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(310.dp)
+            .padding(
+                top = 20.dp,
+                bottom = 70.dp
+            ),
+
+        horizontalAlignment = Alignment.CenterHorizontally,
+
+        verticalArrangement = Arrangement.Center
+    ) {
+
+        /*
+         * ÍCONE DO HERO
+         * Também é ImageVector.
+         * Nenhum drawable.
+         */
+
+        Box(
+            modifier = Modifier
+                .size(104.dp)
+                .shadow(
+                    elevation = 20.dp,
+                    shape = RoundedCornerShape(30.dp)
+                )
+                .clip(
+                    RoundedCornerShape(30.dp)
+                )
+                .background(
+                    Brush.linearGradient(
+                        colors = listOf(
+                            Color(0xFF8B5CF6),
+                            Color(0xFF6425D9)
+                        )
+                    )
+                )
+                .border(
+                    width = 1.dp,
+                    color = Color.White.copy(alpha = 0.16f),
+                    shape = RoundedCornerShape(30.dp)
+                ),
+
+            contentAlignment = Alignment.Center
+        ) {
+
+            Icon(
+                imageVector = Icons.Outlined.Person,
+
+                contentDescription = null,
+
+                modifier = Modifier.size(55.dp),
+
+                tint = Color.White
+            )
         }
 
-        locationClient.lastLocation
-            .addOnSuccessListener { location ->
 
-                if (
-                    location != null
-                ) {
+        Spacer(
+            modifier = Modifier.height(24.dp)
+        )
 
-                    val lat =
-                        location.latitude
 
-                    val lng =
-                        location.longitude
+        Text(
+            text = "Meus Acessos",
 
-                    val js =
-                        "receberLocalizacao($lat,$lng)"
+            color = Texto,
 
-                    webView.evaluateJavascript(
-                        js,
-                        null
-                    )
+            fontFamily = Quicksand,
 
-                } else {
+            fontSize = 38.sp,
 
-                    Toast.makeText(
-                        this,
-                        "Não foi possível obter a localização.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-            .addOnFailureListener {
+            fontWeight = FontWeight.ExtraBold,
 
-                Toast.makeText(
-                    this,
-                    "Erro ao obter localização.",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+            letterSpacing = (-1.2).sp,
+
+            lineHeight = 40.sp,
+
+            textAlign = TextAlign.Center
+        )
+
+
+        Spacer(
+            modifier = Modifier.height(15.dp)
+        )
+
+
+        Text(
+            text = "Tudo o que você precisa, organizado em um só lugar.",
+
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp),
+
+            color = TextoSuave,
+
+            fontFamily = Quicksand,
+
+            fontSize = 15.sp,
+
+            fontWeight = FontWeight.Medium,
+
+            lineHeight = 23.sp,
+
+            textAlign = TextAlign.Center
+        )
+
+
+        Spacer(
+            modifier = Modifier.height(16.dp)
+        )
+
+
+        Text(
+            text = "•  ÁREA PROTEGIDA",
+
+            color = Color(0xFF91889F),
+
+            fontFamily = Quicksand,
+
+            fontSize = 10.sp,
+
+            fontWeight = FontWeight.Bold,
+
+            letterSpacing = 1.7.sp
+        )
+    }
+}
+
+
+/* =========================================================
+   TÍTULO DA SEÇÃO
+========================================================= */
+
+@Composable
+private fun TituloSecao(
+    titulo: String
+) {
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 4.dp),
+
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Box(
+            modifier = Modifier
+                .size(6.dp)
+                .shadow(
+                    elevation = 5.dp,
+                    shape = CircleShape
+                )
+                .background(
+                    Rosa,
+                    CircleShape
+                )
+        )
+
+        Spacer(
+            modifier = Modifier.width(10.dp)
+        )
+
+        Text(
+            text = titulo.uppercase(),
+
+            color = Color(0xFF8F8F99),
+
+            fontFamily = Quicksand,
+
+            fontSize = 10.sp,
+
+            fontWeight = FontWeight.ExtraBold,
+
+            letterSpacing = 1.8.sp
+        )
+    }
+}
+
+
+/* =========================================================
+   CARTÃO
+========================================================= */
+
+@Composable
+private fun Cartao(
+    acesso: Acesso
+) {
+
+    val fundo = if (acesso.emergencia) {
+
+        Brush.linearGradient(
+            colors = listOf(
+                Color(0x16FF5368),
+                Color(0x06FF5368)
+            )
+        )
+
+    } else {
+
+        Brush.linearGradient(
+            colors = listOf(
+                Color(0x09FFFFFF),
+                Color(0x03FFFFFF)
+            )
+        )
     }
 
 
-    // =========================================================
-    // CICLO DE VIDA
-    // =========================================================
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(
+                if (acesso.emergencia) {
+                    88.dp
+                } else {
+                    82.dp
+                }
+            )
+            .clip(
+                RoundedCornerShape(21.dp)
+            )
+            .background(fundo)
+            .border(
+                width = 1.dp,
 
-override fun onDestroy() {
-super.onDestroy()
+                color =
+                    if (acesso.emergencia) {
+                        Color(0x38FF5368)
+                    } else {
+                        Color.White.copy(alpha = 0.075f)
+                    },
+
+                shape = RoundedCornerShape(21.dp)
+            )
+            .clickable {
+                /*
+                 * Por enquanto não abre nada.
+                 */
+            }
+            .padding(
+                horizontal = 16.dp,
+                vertical = 15.dp
+            ),
+
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        if (acesso.emergencia) {
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(58.dp)
+            ) {
+
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .width(3.dp)
+                        .height(58.dp)
+                        .clip(
+                            RoundedCornerShape(
+                                topEnd = 8.dp,
+                                bottomEnd = 8.dp
+                            )
+                        )
+                        .background(
+                            Brush.verticalGradient(
+                                listOf(
+                                    Color(0xFFFF5368),
+                                    Color(0xFFFF304D)
+                                )
+                            )
+                        )
+                )
+
+                ConteudoCartao(
+                    acesso = acesso,
+
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 12.dp)
+                )
+            }
+
+        } else {
+
+            ConteudoCartao(
+                acesso = acesso,
+
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
 }
+
+
+/* =========================================================
+   CONTEÚDO DO CARTÃO
+========================================================= */
+
+@Composable
+private fun ConteudoCartao(
+    acesso: Acesso,
+    modifier: Modifier
+) {
+
+    Row(
+        modifier = modifier,
+
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        /*
+         * ÍCONE
+         *
+         * Não existe Image.
+         * Não existe painterResource.
+         * Não existe drawable.
+         */
+
+        Box(
+            modifier = Modifier.size(50.dp),
+
+            contentAlignment = Alignment.Center
+        ) {
+
+            Box(
+                modifier = Modifier
+                    .size(50.dp)
+                    .clip(
+                        RoundedCornerShape(14.dp)
+                    )
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(
+                                acesso.corIcone,
+                                acesso.corIcone.copy(alpha = 0.65f)
+                            )
+                        )
+                    ),
+
+                contentAlignment = Alignment.Center
+            ) {
+
+                Icon(
+                    imageVector = acesso.icone,
+
+                    contentDescription = null,
+
+                    modifier = Modifier.size(29.dp),
+
+                    tint = Color.White
+                )
+            }
+        }
+
+
+        Spacer(
+            modifier = Modifier.width(15.dp)
+        )
+
+
+        /*
+         * TEXTO
+         */
+
+        Column(
+            modifier = Modifier.weight(1f),
+
+            verticalArrangement = Arrangement.Center
+        ) {
+
+            Text(
+                text = acesso.titulo,
+
+                color =
+                    if (acesso.emergencia) {
+                        Color(0xFFFF6C7D)
+                    } else {
+                        Color(0xFFF8F8FA)
+                    },
+
+                fontFamily = Quicksand,
+
+                fontSize = 15.sp,
+
+                fontWeight = FontWeight.Bold,
+
+                lineHeight = 19.sp
+            )
+
+
+            Spacer(
+                modifier = Modifier.height(5.dp)
+            )
+
+
+            Text(
+                text = acesso.descricao,
+
+                color =
+                    if (acesso.emergencia) {
+                        Color(0xFFA7656E)
+                    } else {
+                        TextoMuted
+                    },
+
+                fontFamily = Quicksand,
+
+                fontSize = 12.sp,
+
+                fontWeight = FontWeight.Medium,
+
+                lineHeight = 16.sp
+            )
+        }
+
+
+        /*
+         * SETA
+         */
+
+        Box(
+            modifier = Modifier
+                .size(34.dp)
+                .clip(CircleShape)
+                .background(
+                    if (acesso.emergencia) {
+                        Color(0x10FF5368)
+                    } else {
+                        Color.White.copy(alpha = 0.025f)
+                    }
+                ),
+
+            contentAlignment = Alignment.Center
+        ) {
+
+            Icon(
+                imageVector = Icons.Outlined.ArrowForwardIos,
+
+                contentDescription = null,
+
+                modifier = Modifier.size(17.dp),
+
+                tint =
+                    if (acesso.emergencia) {
+                        Color(0xFFB64B5B)
+                    } else {
+                        Color(0xFF666671)
+                    }
+            )
+        }
+    }
 }

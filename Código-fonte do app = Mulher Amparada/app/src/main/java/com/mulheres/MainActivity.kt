@@ -6,6 +6,7 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 
+import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,11 +18,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
@@ -59,7 +58,13 @@ class MainActivity : ComponentActivity() {
         )
 
         setContent {
-            MeusAcessos()
+
+            androidx.compose.runtime.CompositionLocalProvider(
+                LocalOverscrollFactory provides null
+            ) {
+
+                MeusAcessos()
+            }
         }
     }
 }
@@ -100,10 +105,15 @@ private val Quicksand = FontFamily(
 private val Fundo = Color.Black
 
 private val Texto = Color.White
-private val TextoSuave = Color(0xFFB7B7C0)
-private val TextoMuted = Color(0xFF777782)
 
-private val Rosa = Color(0xFFFF3F82)
+private val TextoSuave =
+    Color(0xFFB7B7C0)
+
+private val TextoMuted =
+    Color(0xFF777782)
+
+private val Rosa =
+    Color(0xFFFF3F82)
 
 
 /* =========================================================
@@ -126,48 +136,48 @@ private fun MeusAcessos() {
     val recursos = listOf(
 
         Acesso(
-            titulo = "Calendário menstrual",
-            descricao = "Acompanhe seu ciclo"
+            "Calendário menstrual",
+            "Acompanhe seu ciclo"
         ),
 
         Acesso(
-            titulo = "Calendário de eventos",
-            descricao = "Organize seus compromissos"
+            "Calendário de eventos",
+            "Organize seus compromissos"
         ),
 
         Acesso(
-            titulo = "Mapa da sua região",
-            descricao = "Visualize locais próximos"
+            "Mapa da sua região",
+            "Visualize locais próximos"
         ),
 
         Acesso(
-            titulo = "Diário e anotações",
-            descricao = "Escreva e guarde seus registros"
+            "Diário e anotações",
+            "Escreva e guarde seus registros"
         ),
 
         Acesso(
-            titulo = "Rotina gamificada",
-            descricao = "Transforme tarefas em desafios"
+            "Rotina gamificada",
+            "Transforme tarefas em desafios"
         ),
 
         Acesso(
-            titulo = "Relógio + Localização",
-            descricao = "Horário e posição atual"
+            "Relógio + Localização",
+            "Horário e posição atual"
         ),
 
         Acesso(
-            titulo = "Calculadora",
-            descricao = "Faça seus cálculos rapidamente"
+            "Calculadora",
+            "Faça seus cálculos rapidamente"
         ),
 
         Acesso(
-            titulo = "Minhas tarefas",
-            descricao = "Organize o que precisa fazer"
+            "Minhas tarefas",
+            "Organize o que precisa fazer"
         ),
 
         Acesso(
-            titulo = "Navegador",
-            descricao = "Acesse páginas da internet"
+            "Navegador",
+            "Acesse páginas da internet"
         )
     )
 
@@ -175,18 +185,18 @@ private fun MeusAcessos() {
     val outrasFuncoes = listOf(
 
         Acesso(
-            titulo = "Gravador de voz",
-            descricao = "Grave áudios rapidamente"
+            "Gravador de voz",
+            "Grave áudios rapidamente"
         ),
 
         Acesso(
-            titulo = "Meus arquivos",
-            descricao = "Acesse seus arquivos"
+            "Meus arquivos",
+            "Acesse seus arquivos"
         ),
 
         Acesso(
-            titulo = "Tela de aplicativos",
-            descricao = "Acesse seus apps"
+            "Tela de aplicativos",
+            "Acesse seus apps"
         )
     )
 
@@ -194,23 +204,23 @@ private fun MeusAcessos() {
     val especiais = listOf(
 
         Acesso(
-            titulo = "Feliz Dia das Mulheres!",
-            descricao = "Um jogo gamificado"
+            "Feliz Dia das Mulheres!",
+            "Um jogo gamificado"
         ),
 
         Acesso(
-            titulo = "100 dos seus direitos",
-            descricao = "seja amparada pela lei"
+            "100 dos seus direitos",
+            "seja amparada pela lei"
         ),
 
         Acesso(
-            titulo = "Dicas de como recuperar sua autonomia financeira",
-            descricao = "Conhecimentos valiosos"
+            "Dicas de como recuperar sua autonomia financeira",
+            "Conhecimentos valiosos"
         ),
 
         Acesso(
-            titulo = "Uma carta para você, mulher!",
-            descricao = "Uma mensagem especial"
+            "Uma carta para você, mulher!",
+            "Uma mensagem especial"
         )
     )
 
@@ -234,7 +244,8 @@ private fun MeusAcessos() {
                 bottom = 70.dp
             ),
 
-            verticalArrangement = Arrangement.spacedBy(0.dp)
+            verticalArrangement =
+                Arrangement.spacedBy(10.dp)
         ) {
 
             /* =================================================
@@ -246,7 +257,7 @@ private fun MeusAcessos() {
                 Hero()
 
                 Spacer(
-                    modifier = Modifier.height(10.dp)
+                    modifier = Modifier.height(0.dp)
                 )
             }
 
@@ -258,24 +269,21 @@ private fun MeusAcessos() {
             item {
 
                 TituloSecao(
-                    titulo = "Recursos do aplicativo"
+                    "Recursos do aplicativo"
                 )
 
                 Spacer(
-                    modifier = Modifier.height(14.dp)
+                    modifier = Modifier.height(4.dp)
                 )
             }
 
 
-            items(recursos) { acesso ->
+            items(
+                items = recursos,
+                key = { it.titulo }
+            ) { acesso ->
 
-                Cartao(
-                    acesso = acesso
-                )
-
-                Spacer(
-                    modifier = Modifier.height(10.dp)
-                )
+                Cartao(acesso)
             }
 
 
@@ -286,28 +294,25 @@ private fun MeusAcessos() {
             item {
 
                 Spacer(
-                    modifier = Modifier.height(32.dp)
+                    modifier = Modifier.height(22.dp)
                 )
 
                 TituloSecao(
-                    titulo = "Outras funções"
+                    "Outras funções"
                 )
 
                 Spacer(
-                    modifier = Modifier.height(14.dp)
+                    modifier = Modifier.height(4.dp)
                 )
             }
 
 
-            items(outrasFuncoes) { acesso ->
+            items(
+                items = outrasFuncoes,
+                key = { it.titulo }
+            ) { acesso ->
 
-                Cartao(
-                    acesso = acesso
-                )
-
-                Spacer(
-                    modifier = Modifier.height(10.dp)
-                )
+                Cartao(acesso)
             }
 
 
@@ -318,28 +323,25 @@ private fun MeusAcessos() {
             item {
 
                 Spacer(
-                    modifier = Modifier.height(32.dp)
+                    modifier = Modifier.height(22.dp)
                 )
 
                 TituloSecao(
-                    titulo = "Especial, só para você!"
+                    "Especial, só para você!"
                 )
 
                 Spacer(
-                    modifier = Modifier.height(14.dp)
+                    modifier = Modifier.height(4.dp)
                 )
             }
 
 
-            items(especiais) { acesso ->
+            items(
+                items = especiais,
+                key = { it.titulo }
+            ) { acesso ->
 
-                Cartao(
-                    acesso = acesso
-                )
-
-                Spacer(
-                    modifier = Modifier.height(10.dp)
-                )
+                Cartao(acesso)
             }
 
 
@@ -370,20 +372,18 @@ private fun Hero() {
                 bottom = 70.dp
             ),
 
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment =
+            Alignment.CenterHorizontally,
 
-        verticalArrangement = Arrangement.Center
+        verticalArrangement =
+            Arrangement.Center
     ) {
-
-        /*
-         * Quadrado roxo usando ic_lock.xml.
-         */
 
         Box(
             modifier = Modifier
                 .size(104.dp)
                 .shadow(
-                    elevation = 20.dp,
+                    elevation = 14.dp,
                     shape = RoundedCornerShape(30.dp)
                 )
                 .clip(
@@ -391,7 +391,7 @@ private fun Hero() {
                 )
                 .background(
                     Brush.linearGradient(
-                        colors = listOf(
+                        listOf(
                             Color(0xFF8B5CF6),
                             Color(0xFF6425D9)
                         )
@@ -399,24 +399,30 @@ private fun Hero() {
                 )
                 .border(
                     width = 1.dp,
-                    color = Color.White.copy(alpha = 0.16f),
+                    color = Color.White.copy(
+                        alpha = 0.16f
+                    ),
                     shape = RoundedCornerShape(30.dp)
                 ),
 
-            contentAlignment = Alignment.Center
+            contentAlignment =
+                Alignment.Center
         ) {
 
             Image(
-                painter = androidx.compose.ui.res.painterResource(
-                    id = R.drawable.ic_lock
-                ),
+                painter =
+                    androidx.compose.ui.res
+                        .painterResource(
+                            id = R.drawable.ic_lock
+                        ),
 
                 contentDescription = null,
 
-                modifier = Modifier
-                    .size(50.dp),
+                modifier =
+                    Modifier.size(50.dp),
 
-                contentScale = ContentScale.Fit
+                contentScale =
+                    ContentScale.Fit
             )
         }
 
@@ -435,13 +441,16 @@ private fun Hero() {
 
             fontSize = 38.sp,
 
-            fontWeight = FontWeight.ExtraBold,
+            fontWeight =
+                FontWeight.ExtraBold,
 
-            letterSpacing = (-1.2).sp,
+            letterSpacing =
+                (-1.2).sp,
 
             lineHeight = 40.sp,
 
-            textAlign = TextAlign.Center
+            textAlign =
+                TextAlign.Center
         )
 
 
@@ -451,7 +460,8 @@ private fun Hero() {
 
 
         androidx.compose.material3.Text(
-            text = "Tudo o que você precisa, organizado em um só lugar.",
+            text =
+                "Tudo o que você precisa, organizado em um só lugar.",
 
             modifier = Modifier
                 .fillMaxWidth()
@@ -463,11 +473,13 @@ private fun Hero() {
 
             fontSize = 15.sp,
 
-            fontWeight = FontWeight.Medium,
+            fontWeight =
+                FontWeight.Medium,
 
             lineHeight = 23.sp,
 
-            textAlign = TextAlign.Center
+            textAlign =
+                TextAlign.Center
         )
 
 
@@ -479,15 +491,18 @@ private fun Hero() {
         androidx.compose.material3.Text(
             text = "•  ÁREA PROTEGIDA",
 
-            color = Color(0xFF91889F),
+            color =
+                Color(0xFF91889F),
 
             fontFamily = Quicksand,
 
             fontSize = 10.sp,
 
-            fontWeight = FontWeight.Bold,
+            fontWeight =
+                FontWeight.Bold,
 
-            letterSpacing = 1.7.sp
+            letterSpacing =
+                1.7.sp
         )
     }
 }
@@ -507,16 +522,13 @@ private fun TituloSecao(
             .fillMaxWidth()
             .padding(horizontal = 4.dp),
 
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment =
+            Alignment.CenterVertically
     ) {
 
         Box(
             modifier = Modifier
                 .size(6.dp)
-                .shadow(
-                    elevation = 5.dp,
-                    shape = CircleShape
-                )
                 .background(
                     Rosa,
                     CircleShape
@@ -532,15 +544,18 @@ private fun TituloSecao(
         androidx.compose.material3.Text(
             text = titulo.uppercase(),
 
-            color = Color(0xFF8F8F99),
+            color =
+                Color(0xFF8F8F99),
 
             fontFamily = Quicksand,
 
             fontSize = 10.sp,
 
-            fontWeight = FontWeight.ExtraBold,
+            fontWeight =
+                FontWeight.ExtraBold,
 
-            letterSpacing = 1.8.sp
+            letterSpacing =
+                1.8.sp
         )
     }
 }
@@ -560,35 +575,33 @@ private fun Cartao(
             .fillMaxWidth()
 
             /*
-             * Não existe altura fixa.
+             * Sem IntrinsicSize.
              *
-             * O card cresce conforme o conteúdo.
+             * O tamanho é determinado diretamente
+             * pelo conteúdo.
              */
-            .height(IntrinsicSize.Min)
-
             .clip(
                 RoundedCornerShape(21.dp)
             )
 
             .background(
-                Brush.linearGradient(
-                    colors = listOf(
-                        Color(0x09FFFFFF),
-                        Color(0x03FFFFFF)
-                    )
-                )
+                Color(0x080FFFFFF)
             )
 
             .border(
                 width = 1.dp,
-                color = Color.White.copy(alpha = 0.075f),
-                shape = RoundedCornerShape(21.dp)
+
+                color =
+                    Color.White.copy(
+                        alpha = 0.06f
+                    ),
+
+                shape =
+                    RoundedCornerShape(21.dp)
             )
 
             .clickable {
-                /*
-                 * Por enquanto não abre nenhuma tela.
-                 */
+                // Ainda não abre nenhuma tela.
             }
 
             .padding(
@@ -596,12 +609,14 @@ private fun Cartao(
                 vertical = 15.dp
             ),
 
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment =
+            Alignment.CenterVertically
     ) {
 
         ConteudoCartao(
             acesso = acesso,
-            modifier = Modifier.fillMaxWidth()
+            modifier =
+                Modifier.fillMaxWidth()
         )
     }
 }
@@ -620,7 +635,8 @@ private fun ConteudoCartao(
     Row(
         modifier = modifier,
 
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment =
+            Alignment.CenterVertically
     ) {
 
         Spacer(
@@ -628,26 +644,23 @@ private fun ConteudoCartao(
         )
 
 
-        /* =================================================
-           TEXTOS
-        ================================================= */
-
         Column(
-            modifier = Modifier.weight(1f),
-
-            verticalArrangement = Arrangement.Center
+            modifier =
+                Modifier.weight(1f)
         ) {
 
             androidx.compose.material3.Text(
                 text = acesso.titulo,
 
-                color = Color(0xFFF8F8FA),
+                color =
+                    Color(0xFFF8F8FA),
 
                 fontFamily = Quicksand,
 
                 fontSize = 15.sp,
 
-                fontWeight = FontWeight.Bold,
+                fontWeight =
+                    FontWeight.Bold,
 
                 lineHeight = 19.sp
             )
@@ -667,7 +680,8 @@ private fun ConteudoCartao(
 
                 fontSize = 12.sp,
 
-                fontWeight = FontWeight.Medium,
+                fontWeight =
+                    FontWeight.Medium,
 
                 lineHeight = 16.sp
             )
@@ -679,33 +693,35 @@ private fun ConteudoCartao(
         )
 
 
-        /* =================================================
-           SETA
-        ================================================= */
-
         Box(
             modifier = Modifier
                 .size(34.dp)
                 .clip(CircleShape)
                 .background(
-                    Color.White.copy(alpha = 0.025f)
+                    Color.White.copy(
+                        alpha = 0.025f
+                    )
                 ),
 
-            contentAlignment = Alignment.Center
+            contentAlignment =
+                Alignment.Center
         ) {
 
             androidx.compose.material3.Text(
                 text = "›",
 
-                color = Color(0xFF666671),
+                color =
+                    Color(0xFF666671),
 
                 fontFamily = Quicksand,
 
                 fontSize = 25.sp,
 
-                fontWeight = FontWeight.Medium,
+                fontWeight =
+                    FontWeight.Medium,
 
-                textAlign = TextAlign.Center
+                textAlign =
+                    TextAlign.Center
             )
         }
     }

@@ -228,7 +228,7 @@ fun abrirAreaProtegida() {
         startActivity(
             Intent(
                 this@HubActivity,
-                MainActivity::class.java
+                ProtectActivity::class.java
             )
         )
 
@@ -256,7 +256,7 @@ fun abrirAreaProtegida() {
                     startActivity(
                         Intent(
                             this@HubActivity,
-                            MainActivity::class.java
+                            ProtectActivity::class.java
                         )
                     )
                 }
@@ -274,7 +274,7 @@ fun abrirAreaProtegida() {
                     startActivity(
                         Intent(
                             this@HubActivity,
-                            MainActivity::class.java
+                            ProtectActivity::class.java
                         )
                     )
                 }
@@ -283,7 +283,7 @@ fun abrirAreaProtegida() {
 
                     super.onAuthenticationFailed()
 
-                    // Não abre a MainActivity.
+                    // Não abre a ProtectActivity.
                     // O prompt continua disponível para nova tentativa.
                 }
             }

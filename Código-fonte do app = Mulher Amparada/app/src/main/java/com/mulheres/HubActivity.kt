@@ -154,6 +154,12 @@ private var telephonyCallback: TelephonyCallback? = null
 
 private lateinit var emergencyComposeView: ComposeView
 
+var emergenciaVisivel by mutableStateOf(false)
+    private set
+
+var emergenciaVisivel by mutableStateOf(false)
+    private set
+
 
 
 private lateinit var locationClient: FusedLocationProviderClient
@@ -4101,15 +4107,18 @@ val activity =
    ÁREA DO AMPARO
 ========================================================= */
 
+/* =========================================================
+   ÁREA DO AMPARO
+========================================================= */
+
 @Composable
 private fun AmparoArea(
     c: AppColors,
     font: FontFamily
 ) {
 
-onClick = {
-    activity?.abrirHomeActivity()
-}
+    val activity =
+        LocalContext.current as? HubActivity
 
     ActionPortal(
 
@@ -4135,11 +4144,12 @@ onClick = {
             c.amparoGradient,
 
         c = c,
-        font = font
-        
+
+        font = font,
+
         onClick = {
-    activity?.abrirHomeActivity()
-}
+            activity?.abrirHomeActivity()
+        }
     )
 }
 

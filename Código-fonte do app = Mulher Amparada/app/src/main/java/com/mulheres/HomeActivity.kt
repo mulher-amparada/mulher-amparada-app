@@ -180,15 +180,6 @@ class HomeActivity : AppCompatActivity() {
 
 
 
-        webView.addJavascriptInterface(
-            cripto,
-            "Cripto"
-        )
-
-        webView.addJavascriptInterface(
-            DownloadInterface(this),
-            "Downloader"
-        )
 
         val settings =
             webView.settings

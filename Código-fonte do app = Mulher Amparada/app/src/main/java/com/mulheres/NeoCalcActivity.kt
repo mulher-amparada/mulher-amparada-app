@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.compose.ui.res.painterResource
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -693,11 +694,12 @@ val cripto = remember {
                             },
 
                             BotaoCalculadora(
-                                texto = "⌫",
-                                tipo = TipoBotao.ACAO
-                            ) {
-                                apagar()
-                            },
+    texto = "",
+    tipo = TipoBotao.ACAO,
+    icone = R.drawable.ic_erase
+) {
+    apagar()
+},
 
                             BotaoCalculadora(
                                 texto = "%",

@@ -1,6 +1,7 @@
 package com.mulheres
 
 import android.os.Bundle
+import android.graphics.Color as AndroidColor
 
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,33 +14,33 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -47,37 +48,93 @@ import androidx.compose.runtime.setValue
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 import kotlinx.coroutines.delay
 
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
+
+/* =========================================================
+   ACTIVITY
+========================================================= */
+
 class AssistenteActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        /*
+         * Conteúdo desenhado por trás das barras do sistema.
+         */
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
+
+        /*
+         * Barras totalmente transparentes.
+         */
+        window.statusBarColor =
+            AndroidColor.TRANSPARENT
+
+        window.navigationBarColor =
+            AndroidColor.TRANSPARENT
+
+        /*
+         * Remove o contraste automático
+         * da navigation bar/status bar.
+         */
+        if (android.os.Build.VERSION.SDK_INT >= 29) {
+
+            window.isNavigationBarContrastEnforced = false
+
+            window.isStatusBarContrastEnforced = false
+        }
+
         setContent {
-            MaterialTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = Color.Black
-                ) {
-                    AssistenteSaude()
-                }
+
+            val modoEscuro =
+                isSystemInDarkTheme()
+
+            /*
+             * Controla a cor dos ícones das
+             * barras do sistema.
+             *
+             * Escuro:
+             *   ícones claros
+             *
+             * Claro:
+             *   ícones escuros
+             */
+            val controller =
+                WindowInsetsControllerCompat(
+                    window,
+                    window.decorView
+                )
+
+            controller.isAppearanceLightStatusBars =
+                !modoEscuro
+
+            controller.isAppearanceLightNavigationBars =
+                !modoEscuro
+
+            AssistenteTheme {
+                AssistenteSaude()
             }
         }
     }
@@ -85,47 +142,205 @@ class AssistenteActivity : ComponentActivity() {
 
 
 /* =========================================================
-   CORES
+   CORES DO APLICATIVO
 ========================================================= */
 
-private val Fundo = Color.Black
-private val Card = Color(0xFF050505)
-private val CardSecundario = Color(0xFF040404)
+data class CoresAssistente(
 
-private val Borda = Color(0xFF181818)
-private val BordaClara = Color(0xFF1D1D1D)
+    val fundo: Color,
 
-private val TextoPrincipal = Color(0xFFF5F5F5)
-private val TextoSecundario = Color(0xFF999999)
-private val TextoEscuro = Color(0xFF454545)
-private val TextoMuitoEscuro = Color(0xFF3B3B3B)
+    val card: Color,
 
-private val Azul = Color(0xFF5666FF)
-private val AzulClaro = Color(0xFF6070FF)
+    val cardSecundario: Color,
+
+    val borda: Color,
+
+    val bordaForte: Color,
+
+    val textoPrincipal: Color,
+
+    val textoSecundario: Color,
+
+    val textoEscuro: Color,
+
+    val textoMuitoEscuro: Color,
+
+    val icone: Color,
+
+    val fundoIcone: Color,
+
+    val bordaIcone: Color,
+
+    val azul: Color,
+
+    val azulClaro: Color,
+
+    val linhaFundo: Color
+)
+
+
+private val CoresEscuras =
+    CoresAssistente(
+
+        fundo =
+            Color.Black,
+
+        card =
+            Color(0xFF050505),
+
+        cardSecundario =
+            Color(0xFF040404),
+
+        borda =
+            Color(0xFF181818),
+
+        bordaForte =
+            Color(0xFF1D1D1D),
+
+        textoPrincipal =
+            Color(0xFFF5F5F5),
+
+        textoSecundario =
+            Color(0xFF999999),
+
+        textoEscuro =
+            Color(0xFF454545),
+
+        textoMuitoEscuro =
+            Color(0xFF3B3B3B),
+
+        icone =
+            Color.White,
+
+        fundoIcone =
+            Color(0xFF0C0C0C),
+
+        bordaIcone =
+            Color(0xFF202020),
+
+        azul =
+            Color(0xFF5666FF),
+
+        azulClaro =
+            Color(0xFF6070FF),
+
+        linhaFundo =
+            Color(0xFF111111)
+    )
+
+
+private val CoresClaras =
+    CoresAssistente(
+
+        fundo =
+            Color(0xFFF7F7F7),
+
+        card =
+            Color.White,
+
+        cardSecundario =
+            Color(0xFFF2F2F2),
+
+        borda =
+            Color(0xFFE2E2E2),
+
+        bordaForte =
+            Color(0xFFD7D7D7),
+
+        textoPrincipal =
+            Color(0xFF111111),
+
+        textoSecundario =
+            Color(0xFF777777),
+
+        textoEscuro =
+            Color(0xFF777777),
+
+        textoMuitoEscuro =
+            Color(0xFF999999),
+
+        icone =
+            Color.Black,
+
+        fundoIcone =
+            Color(0xFFF1F1F1),
+
+        bordaIcone =
+            Color(0xFFDCDCDC),
+
+        azul =
+            Color(0xFF5666FF),
+
+        azulClaro =
+            Color(0xFF6070FF),
+
+        linhaFundo =
+            Color(0xFFE8E8E8)
+    )
+
+
+private val LocalCoresAssistente =
+    compositionLocalOf<CoresAssistente> {
+        CoresEscuras
+    }
+
+
+/* =========================================================
+   TEMA
+========================================================= */
+
+@Composable
+private fun AssistenteTheme(
+    content: @Composable () -> Unit
+) {
+
+    val modoEscuro =
+        isSystemInDarkTheme()
+
+    val cores =
+        if (modoEscuro) {
+            CoresEscuras
+        } else {
+            CoresClaras
+        }
+
+    androidx.compose.runtime.CompositionLocalProvider(
+        LocalCoresAssistente provides cores
+    ) {
+        content()
+    }
+}
+
+
+@Composable
+private fun coresAssistente(): CoresAssistente {
+    return LocalCoresAssistente.current
+}
 
 
 /* =========================================================
    FONTE
 ========================================================= */
 
-/*
- * Coloque sua font.ttf em:
- *
- * app/src/main/res/font/quicksand.ttf
- *
- * Se o arquivo tiver outro nome, altere aqui.
- */
+private val Quicksand =
+    FontFamily(
 
-private val Quicksand = FontFamily(
-    Font(
-        resId = com.mulheres.R.font.quicksand,
-        weight = FontWeight.Normal
-    ),
-    Font(
-        resId = com.mulheres.R.font.quicksand,
-        weight = FontWeight.Bold
+        Font(
+            resId =
+                com.mulheres.R.font.quicksand,
+
+            weight =
+                FontWeight.Normal
+        ),
+
+        Font(
+            resId =
+                com.mulheres.R.font.quicksand,
+
+            weight =
+                FontWeight.Bold
+        )
     )
-)
 
 
 /* =========================================================
@@ -133,47 +348,58 @@ private val Quicksand = FontFamily(
 ========================================================= */
 
 data class Indicador(
+
     var valor: Float,
+
     val min: Float,
+
     val max: Float,
+
     val passo: Float
 )
 
+
 data class DadosSaude(
-    var batimentos: Indicador = Indicador(
-        72f,
-        65f,
-        82f,
-        2f
-    ),
 
-    var respiracao: Indicador = Indicador(
-        16f,
-        12f,
-        20f,
-        .5f
-    ),
+    var batimentos: Indicador =
+        Indicador(
+            72f,
+            65f,
+            82f,
+            2f
+        ),
 
-    var temperatura: Indicador = Indicador(
-        36.5f,
-        36.1f,
-        36.9f,
-        .05f
-    ),
+    var respiracao: Indicador =
+        Indicador(
+            16f,
+            12f,
+            20f,
+            .5f
+        ),
 
-    var hidratacao: Indicador = Indicador(
-        68f,
-        55f,
-        82f,
-        1f
-    ),
+    var temperatura: Indicador =
+        Indicador(
+            36.5f,
+            36.1f,
+            36.9f,
+            .05f
+        ),
 
-    var bemEstar: Indicador = Indicador(
-        72f,
-        60f,
-        88f,
-        2f
-    )
+    var hidratacao: Indicador =
+        Indicador(
+            68f,
+            55f,
+            82f,
+            1f
+        ),
+
+    var bemEstar: Indicador =
+        Indicador(
+            72f,
+            60f,
+            88f,
+            2f
+        )
 )
 
 
@@ -186,8 +412,9 @@ private fun variar(
 ): Float {
 
     val variacao =
-        (Random.nextFloat() * 2f - 1f) *
-                indicador.passo
+        (
+            Random.nextFloat() * 2f - 1f
+        ) * indicador.passo
 
     return (
         indicador.valor + variacao
@@ -205,13 +432,18 @@ private fun variar(
 @Composable
 fun AssistenteSaude() {
 
+    val cores =
+        coresAssistente()
+
     var dados by remember {
         mutableFloatStateOf(72f)
     }
 
-    val estado = remember {
-        DadosSaude()
-    }
+    val estado =
+        remember {
+            DadosSaude()
+        }
+
 
     LaunchedEffect(Unit) {
 
@@ -220,45 +452,53 @@ fun AssistenteSaude() {
             delay(3000)
 
             estado.batimentos.valor =
-                variar(estado.batimentos)
+                variar(
+                    estado.batimentos
+                )
 
             estado.respiracao.valor =
-                variar(estado.respiracao)
+                variar(
+                    estado.respiracao
+                )
 
             estado.temperatura.valor =
-                variar(estado.temperatura)
+                variar(
+                    estado.temperatura
+                )
 
             estado.hidratacao.valor =
-                variar(estado.hidratacao)
+                variar(
+                    estado.hidratacao
+                )
 
             estado.bemEstar.valor =
-                variar(estado.bemEstar)
+                variar(
+                    estado.bemEstar
+                )
 
-            /*
-             * Força recomposição.
-             */
-            dados = estado.bemEstar.valor
+            dados =
+                estado.bemEstar.valor
         }
     }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Fundo)
-            .windowInsetsPadding(
-                WindowInsets.statusBars
-            )
-            .windowInsetsPadding(
-                WindowInsets.navigationBars
-            )
-            .padding(
-                start = 15.dp,
-                end = 15.dp,
-                top = 25.dp,
-                bottom = 45.dp
-            ),
 
-        verticalArrangement = Arrangement.spacedBy(0.dp)
+    LazyColumn(
+
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(
+                    cores.fundo
+                )
+                .padding(
+                    start = 15.dp,
+                    end = 15.dp,
+                    top = 25.dp,
+                    bottom = 45.dp
+                ),
+
+        verticalArrangement =
+            Arrangement.spacedBy(0.dp)
     ) {
 
         item {
@@ -266,18 +506,14 @@ fun AssistenteSaude() {
             Cabecalho(
                 onSecretClick = {
                     /*
-                     * Equivalente ao:
-                     *
-                     * window.location.href =
-                     * "index11.html"
-                     *
-                     * Aqui você pode abrir outra Activity.
+                     * Ação do botão secreto.
                      */
                 }
             )
 
             Spacer(
-                modifier = Modifier.height(28.dp)
+                modifier =
+                    Modifier.height(28.dp)
             )
         }
 
@@ -285,11 +521,13 @@ fun AssistenteSaude() {
         item {
 
             Hero(
-                bemEstar = estado.bemEstar.valor
+                bemEstar =
+                    estado.bemEstar.valor
             )
 
             Spacer(
-                modifier = Modifier.height(12.dp)
+                modifier =
+                    Modifier.height(12.dp)
             )
         }
 
@@ -297,9 +535,15 @@ fun AssistenteSaude() {
         item {
 
             Resumo(
-                batimentos = estado.batimentos.valor,
-                respiracao = estado.respiracao.valor,
-                temperatura = estado.temperatura.valor
+
+                batimentos =
+                    estado.batimentos.valor,
+
+                respiracao =
+                    estado.respiracao.valor,
+
+                temperatura =
+                    estado.temperatura.valor
             )
         }
 
@@ -312,7 +556,8 @@ fun AssistenteSaude() {
             )
 
             Spacer(
-                modifier = Modifier.height(14.dp)
+                modifier =
+                    Modifier.height(14.dp)
             )
 
             Indicadores(
@@ -324,7 +569,8 @@ fun AssistenteSaude() {
         item {
 
             Spacer(
-                modifier = Modifier.height(36.dp)
+                modifier =
+                    Modifier.height(36.dp)
             )
 
             SecaoTitulo(
@@ -333,11 +579,13 @@ fun AssistenteSaude() {
             )
 
             Spacer(
-                modifier = Modifier.height(14.dp)
+                modifier =
+                    Modifier.height(14.dp)
             )
 
             BemEstar(
-                valor = estado.bemEstar.valor
+                valor =
+                    estado.bemEstar.valor
             )
         }
 
@@ -345,7 +593,8 @@ fun AssistenteSaude() {
         item {
 
             Spacer(
-                modifier = Modifier.height(36.dp)
+                modifier =
+                    Modifier.height(36.dp)
             )
 
             SecaoTitulo(
@@ -353,13 +602,15 @@ fun AssistenteSaude() {
             )
 
             Spacer(
-                modifier = Modifier.height(14.dp)
+                modifier =
+                    Modifier.height(14.dp)
             )
 
             Atividade()
 
             Spacer(
-                modifier = Modifier.height(14.dp)
+                modifier =
+                    Modifier.height(14.dp)
             )
         }
     }
@@ -375,93 +626,166 @@ private fun Cabecalho(
     onSecretClick: () -> Unit
 ) {
 
+    val cores =
+        coresAssistente()
+
+
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+
+        modifier =
+            Modifier.fillMaxWidth(),
+
+        verticalAlignment =
+            Alignment.CenterVertically,
+
+        horizontalArrangement =
+            Arrangement.SpaceBetween
     ) {
 
         Column(
-            modifier = Modifier.weight(1f)
+            modifier =
+                Modifier.weight(1f)
         ) {
 
             Text(
-                text = "CUIDADO E ACOMPANHAMENTO",
-                color = Color(0xFF4B4B4B),
-                fontFamily = Quicksand,
-                fontSize = 7.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 1.5.sp
+
+                text =
+                    "CUIDADO E ACOMPANHAMENTO",
+
+                color =
+                    cores.textoEscuro,
+
+                fontFamily =
+                    Quicksand,
+
+                fontSize =
+                    7.sp,
+
+                fontWeight =
+                    FontWeight.Bold,
+
+                letterSpacing =
+                    1.5.sp
             )
+
 
             Spacer(
-                modifier = Modifier.height(8.dp)
+                modifier =
+                    Modifier.height(8.dp)
             )
 
+
             Text(
-                text = "Assistente de Saúde",
-                color = TextoPrincipal,
-                fontFamily = Quicksand,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = (-1.1).sp,
-                lineHeight = 25.sp
+
+                text =
+                    "Assistente de Saúde",
+
+                color =
+                    cores.textoPrincipal,
+
+                fontFamily =
+                    Quicksand,
+
+                fontSize =
+                    24.sp,
+
+                fontWeight =
+                    FontWeight.Bold,
+
+                letterSpacing =
+                    (-1.1).sp,
+
+                lineHeight =
+                    25.sp
             )
+
 
             Spacer(
-                modifier = Modifier.height(9.dp)
+                modifier =
+                    Modifier.height(9.dp)
             )
 
+
             Text(
-                text = "Um espaço para acompanhar seu bem-estar.",
-                color = Color(0xFF4B4B4B),
-                fontFamily = Quicksand,
-                fontSize = 9.sp,
-                lineHeight = 14.sp,
-                maxLines = 2
+
+                text =
+                    "Um espaço para acompanhar seu bem-estar.",
+
+                color =
+                    cores.textoEscuro,
+
+                fontFamily =
+                    Quicksand,
+
+                fontSize =
+                    9.sp,
+
+                lineHeight =
+                    14.sp,
+
+                maxLines =
+                    2
             )
         }
 
 
         Spacer(
-            modifier = Modifier.width(20.dp)
+            modifier =
+                Modifier.width(20.dp)
         )
 
 
         Card(
-            onClick = onSecretClick,
 
-            modifier = Modifier.size(42.dp),
+            onClick =
+                onSecretClick,
 
-            shape = RoundedCornerShape(14.dp),
+            modifier =
+                Modifier.size(42.dp),
 
-            colors = CardDefaults.cardColors(
-                containerColor = Color(0xFF080808)
-            ),
+            shape =
+                RoundedCornerShape(14.dp),
 
-            border = androidx.compose.foundation.BorderStroke(
-                1.dp,
-                Color(0xFF1E1E1E)
-            )
+            colors =
+                CardDefaults.cardColors(
+                    containerColor =
+                        cores.fundoIcone
+                ),
+
+            border =
+                BorderStroke(
+                    1.dp,
+                    cores.bordaIcone
+                )
         ) {
 
             Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+
+                modifier =
+                    Modifier.fillMaxSize(),
+
+                contentAlignment =
+                    Alignment.Center
             ) {
 
-                /*
-                 * Coloque o SVG 8.svg em drawable
-                 * e altere para R.drawable.oito
-                 */
-
-                /*
                 Image(
-                    painter = painterResource(R.drawable.oito),
-                    contentDescription = null,
-                    modifier = Modifier.size(19.dp)
+
+                    painter =
+                        painterResource(
+                            R.drawable.ic_8
+                        ),
+
+                    contentDescription =
+                        null,
+
+                    modifier =
+                        Modifier.size(19.dp),
+
+                    colorFilter =
+                        ColorFilter.tint(
+                            cores.icone
+                        )
                 )
-                */
             }
         }
     }
@@ -477,43 +801,76 @@ private fun Hero(
     bemEstar: Float
 ) {
 
-    var opacity by remember {
-    mutableFloatStateOf(0.4f)
-}
+    val cores =
+        coresAssistente()
 
-LaunchedEffect(Unit) {
-    while (true) {
 
-        opacity = 1f
+    /*
+     * Pulsação suave do ponto azul.
+     */
+    val transicao =
+        rememberInfiniteTransition(
+            label = "ponto-ativo"
+        )
 
-        delay(1000)
 
-        opacity = 0.4f
+    val opacity by
+        transicao.animateFloat(
 
-        delay(1000)
-    }
-}
+            initialValue =
+                0.35f,
+
+            targetValue =
+                1f,
+
+            animationSpec =
+                infiniteRepeatable(
+
+                    animation =
+                        tween(
+
+                            durationMillis =
+                                1400,
+
+                            easing =
+                                LinearEasing
+                        ),
+
+                    repeatMode =
+                        RepeatMode.Reverse
+                ),
+
+            label =
+                "opacidade-ponto"
+        )
 
 
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(315.dp),
 
-        shape = RoundedCornerShape(26.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(315.dp),
 
-        colors = CardDefaults.cardColors(
-            containerColor = Card
-        ),
+        shape =
+            RoundedCornerShape(26.dp),
 
-        border = androidx.compose.foundation.BorderStroke(
-            1.dp,
-            BordaClara
-        )
+        colors =
+            CardDefaults.cardColors(
+                containerColor =
+                    cores.card
+            ),
+
+        border =
+            BorderStroke(
+                1.dp,
+                cores.bordaForte
+            )
     ) {
 
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier =
+                Modifier.fillMaxSize()
         ) {
 
 
@@ -522,13 +879,15 @@ LaunchedEffect(Unit) {
             ----------------------------------------- */
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        top = 19.dp,
-                        start = 21.dp,
-                        end = 21.dp
-                    ),
+
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = 19.dp,
+                            start = 21.dp,
+                            end = 21.dp
+                        ),
 
                 horizontalArrangement =
                     Arrangement.SpaceBetween,
@@ -538,40 +897,72 @@ LaunchedEffect(Unit) {
             ) {
 
                 Text(
-                    text = "ESTADO GERAL",
-                    color = Color(0xFF494949),
-                    fontFamily = Quicksand,
-                    fontSize = 7.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 1.2.sp
+
+                    text =
+                        "ESTADO GERAL",
+
+                    color =
+                        cores.textoEscuro,
+
+                    fontFamily =
+                        Quicksand,
+
+                    fontSize =
+                        7.sp,
+
+                    fontWeight =
+                        FontWeight.Bold,
+
+                    letterSpacing =
+                        1.2.sp
                 )
 
 
                 Row(
+
                     verticalAlignment =
                         Alignment.CenterVertically
                 ) {
 
                     Box(
-                        modifier = Modifier
-                            .size(5.dp)
-                            .clip(CircleShape)
-                            .background(
-                                Azul.copy(alpha = opacity)
-                            )
+
+                        modifier =
+                            Modifier
+                                .size(5.dp)
+                                .clip(CircleShape)
+                                .background(
+                                    cores.azul.copy(
+                                        alpha = opacity
+                                    )
+                                )
                     )
+
 
                     Spacer(
-                        modifier = Modifier.width(6.dp)
+                        modifier =
+                            Modifier.width(6.dp)
                     )
 
+
                     Text(
-                        text = "ATIVO",
-                        color = Color(0xFF494949),
-                        fontFamily = Quicksand,
-                        fontSize = 7.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = .8.sp
+
+                        text =
+                            "ATIVO",
+
+                        color =
+                            cores.textoEscuro,
+
+                        fontFamily =
+                            Quicksand,
+
+                        fontSize =
+                            7.sp,
+
+                        fontWeight =
+                            FontWeight.Bold,
+
+                        letterSpacing =
+                            .8.sp
                     )
                 }
             }
@@ -582,80 +973,139 @@ LaunchedEffect(Unit) {
             ----------------------------------------- */
 
             Column(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(top = 5.dp),
+
+                modifier =
+                    Modifier
+                        .align(
+                            Alignment.Center
+                        )
+                        .padding(
+                            top = 5.dp
+                        ),
 
                 horizontalAlignment =
                     Alignment.CenterHorizontally
             ) {
 
                 Box(
-                    modifier = Modifier
-                        .size(62.dp)
-                        .clip(
-                            RoundedCornerShape(20.dp)
-                        )
-                        .background(
-                            Color(0xFF0B0D17)
-                        )
-                        .border(
-                            1.dp,
-                            Color(0xFF282B40),
-                            RoundedCornerShape(20.dp)
-                        ),
+
+                    modifier =
+                        Modifier
+                            .size(62.dp)
+                            .clip(
+                                RoundedCornerShape(
+                                    20.dp
+                                )
+                            )
+                            .background(
+                                if (
+                                    isSystemInDarkTheme()
+                                ) {
+                                    Color(0xFF0B0D17)
+                                } else {
+                                    Color(0xFFF0F1F8)
+                                }
+                            )
+                            .border(
+                                1.dp,
+                                if (
+                                    isSystemInDarkTheme()
+                                ) {
+                                    Color(0xFF282B40)
+                                } else {
+                                    Color(0xFFD9DBE8)
+                                },
+                                RoundedCornerShape(
+                                    20.dp
+                                )
+                            ),
 
                     contentAlignment =
                         Alignment.Center
                 ) {
 
-                    /*
                     Image(
+
                         painter =
                             painterResource(
                                 R.drawable.assistente1
                             ),
-                        contentDescription = null,
+
+                        contentDescription =
+                            null,
+
                         modifier =
-                            Modifier.size(30.dp)
+                            Modifier.size(30.dp),
+
+                        contentScale =
+                            ContentScale.Fit,
+
+                        colorFilter =
+                            ColorFilter.tint(
+                                cores.icone
+                            )
                     )
-                    */
                 }
 
 
                 Spacer(
-                    modifier = Modifier.height(17.dp)
+                    modifier =
+                        Modifier.height(17.dp)
                 )
 
 
                 Row(
+
                     verticalAlignment =
                         Alignment.Bottom
                 ) {
 
                     Text(
+
                         text =
                             bemEstar
                                 .roundToInt()
                                 .toString(),
 
-                        color = Color.White,
-                        fontFamily = Quicksand,
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = (-1.2).sp
+                        color =
+                            cores.textoPrincipal,
+
+                        fontFamily =
+                            Quicksand,
+
+                        fontSize =
+                            30.sp,
+
+                        fontWeight =
+                            FontWeight.Bold,
+
+                        letterSpacing =
+                            (-1.2).sp
                     )
+
 
                     Spacer(
-                        modifier = Modifier.width(4.dp)
+                        modifier =
+                            Modifier.width(4.dp)
                     )
 
+
                     Text(
-                        text = "/ 100",
-                        color = Color(0xFF454545),
-                        fontFamily = Quicksand,
-                        fontSize = 8.sp,
-                        fontWeight = FontWeight.SemiBold
+
+                        text =
+                            "/ 100",
+
+                        color =
+                            cores.textoEscuro,
+
+                        fontFamily =
+                            Quicksand,
+
+                        fontSize =
+                            8.sp,
+
+                        fontWeight =
+                            FontWeight.SemiBold
                     )
                 }
             }
@@ -666,31 +1116,58 @@ LaunchedEffect(Unit) {
             ----------------------------------------- */
 
             Column(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 30.dp),
+
+                modifier =
+                    Modifier
+                        .align(
+                            Alignment.BottomCenter
+                        )
+                        .padding(
+                            bottom = 30.dp
+                        ),
 
                 horizontalAlignment =
                     Alignment.CenterHorizontally
             ) {
 
                 Text(
-                    text = "Tudo tranquilo.",
-                    color = Color(0xFFEDEDED),
-                    fontFamily = Quicksand,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold
+
+                    text =
+                        "Tudo tranquilo.",
+
+                    color =
+                        cores.textoPrincipal,
+
+                    fontFamily =
+                        Quicksand,
+
+                    fontSize =
+                        15.sp,
+
+                    fontWeight =
+                        FontWeight.Bold
                 )
+
 
                 Spacer(
-                    modifier = Modifier.height(6.dp)
+                    modifier =
+                        Modifier.height(6.dp)
                 )
 
+
                 Text(
-                    text = "Acompanhamento em andamento",
-                    color = Color(0xFF494949),
-                    fontFamily = Quicksand,
-                    fontSize = 8.sp
+
+                    text =
+                        "Acompanhamento em andamento",
+
+                    color =
+                        cores.textoEscuro,
+
+                    fontFamily =
+                        Quicksand,
+
+                    fontSize =
+                        8.sp
                 )
             }
         }
@@ -704,36 +1181,74 @@ LaunchedEffect(Unit) {
 
 @Composable
 private fun Resumo(
+
     batimentos: Float,
+
     respiracao: Float,
+
     temperatura: Float
 ) {
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
+
+        modifier =
+            Modifier.fillMaxWidth(),
+
         horizontalArrangement =
             Arrangement.spacedBy(10.dp)
     ) {
 
         ResumoItem(
-            modifier = Modifier.weight(1f),
-            label = "BATIMENTOS",
-            value = batimentos.roundToInt().toString(),
-            unit = "bpm"
+
+            modifier =
+                Modifier.weight(1f),
+
+            label =
+                "BATIMENTOS",
+
+            value =
+                batimentos
+                    .roundToInt()
+                    .toString(),
+
+            unit =
+                "bpm"
         )
 
-        ResumoItem(
-            modifier = Modifier.weight(1f),
-            label = "RESPIRAÇÃO",
-            value = "%.1f".format(respiracao),
-            unit = "rpm"
-        )
 
         ResumoItem(
-            modifier = Modifier.weight(1f),
-            label = "TEMPERATURA",
-            value = "%.1f".format(temperatura),
-            unit = "°C"
+
+            modifier =
+                Modifier.weight(1f),
+
+            label =
+                "RESPIRAÇÃO",
+
+            value =
+                "%.1f".format(
+                    respiracao
+                ),
+
+            unit =
+                "rpm"
+        )
+
+
+        ResumoItem(
+
+            modifier =
+                Modifier.weight(1f),
+
+            label =
+                "TEMPERATURA",
+
+            value =
+                "%.1f".format(
+                    temperatura
+                ),
+
+            unit =
+                "°C"
         )
     }
 }
@@ -741,68 +1256,118 @@ private fun Resumo(
 
 @Composable
 private fun ResumoItem(
+
     modifier: Modifier,
+
     label: String,
+
     value: String,
+
     unit: String
 ) {
 
+    val cores =
+        coresAssistente()
+
+
     Card(
-        modifier = modifier.height(79.dp),
 
-        shape = RoundedCornerShape(17.dp),
+        modifier =
+            modifier.height(79.dp),
 
-        colors = CardDefaults.cardColors(
-            containerColor = Card
-        ),
+        shape =
+            RoundedCornerShape(17.dp),
 
-        border = androidx.compose.foundation.BorderStroke(
-            1.dp,
-            Borda
-        )
+        colors =
+            CardDefaults.cardColors(
+                containerColor =
+                    cores.card
+            ),
+
+        border =
+            BorderStroke(
+                1.dp,
+                cores.borda
+            )
     ) {
 
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(13.dp),
+
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(13.dp),
 
             verticalArrangement =
                 Arrangement.SpaceBetween
         ) {
 
             Text(
-                text = label,
-                color = Color(0xFF444444),
-                fontFamily = Quicksand,
-                fontSize = 7.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = .7.sp
+
+                text =
+                    label,
+
+                color =
+                    cores.textoEscuro,
+
+                fontFamily =
+                    Quicksand,
+
+                fontSize =
+                    7.sp,
+
+                fontWeight =
+                    FontWeight.Bold,
+
+                letterSpacing =
+                    .7.sp
             )
 
 
             Row(
+
                 verticalAlignment =
                     Alignment.Bottom
             ) {
 
                 Text(
-                    text = value,
-                    color = Color(0xFFEEEEEE),
-                    fontFamily = Quicksand,
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold
+
+                    text =
+                        value,
+
+                    color =
+                        cores.textoPrincipal,
+
+                    fontFamily =
+                        Quicksand,
+
+                    fontSize =
+                        17.sp,
+
+                    fontWeight =
+                        FontWeight.Bold
                 )
+
 
                 Spacer(
-                    modifier = Modifier.width(4.dp)
+                    modifier =
+                        Modifier.width(4.dp)
                 )
 
+
                 Text(
-                    text = unit,
-                    color = Color(0xFF444444),
-                    fontFamily = Quicksand,
-                    fontSize = 7.sp
+
+                    text =
+                        unit,
+
+                    color =
+                        cores.textoEscuro,
+
+                    fontFamily =
+                        Quicksand,
+
+                    fontSize =
+                        7.sp
                 )
             }
         }
@@ -816,17 +1381,25 @@ private fun ResumoItem(
 
 @Composable
 private fun SecaoTitulo(
+
     titulo: String,
+
     direita: String? = null
 ) {
 
+    val cores =
+        coresAssistente()
+
+
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                start = 3.dp,
-                end = 3.dp
-            ),
+
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = 3.dp,
+                    end = 3.dp
+                ),
 
         verticalAlignment =
             Alignment.CenterVertically,
@@ -836,24 +1409,48 @@ private fun SecaoTitulo(
     ) {
 
         Text(
-            text = titulo,
-            color = Color(0xFFE9E9E9),
-            fontFamily = Quicksand,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Bold,
-            letterSpacing = (-.25).sp
+
+            text =
+                titulo,
+
+            color =
+                cores.textoPrincipal,
+
+            fontFamily =
+                Quicksand,
+
+            fontSize =
+                14.sp,
+
+            fontWeight =
+                FontWeight.Bold,
+
+            letterSpacing =
+                (-.25).sp
         )
 
 
         if (direita != null) {
 
             Text(
-                text = direita,
-                color = Color(0xFF3E3E3E),
-                fontFamily = Quicksand,
-                fontSize = 7.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = .7.sp
+
+                text =
+                    direita,
+
+                color =
+                    cores.textoEscuro,
+
+                fontFamily =
+                    Quicksand,
+
+                fontSize =
+                    7.sp,
+
+                fontWeight =
+                    FontWeight.Bold,
+
+                letterSpacing =
+                    .7.sp
             )
         }
     }
@@ -870,82 +1467,143 @@ private fun Indicadores(
 ) {
 
     Column(
+
         verticalArrangement =
             Arrangement.spacedBy(11.dp)
     ) {
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
+
+            modifier =
+                Modifier.fillMaxWidth(),
+
             horizontalArrangement =
                 Arrangement.spacedBy(11.dp)
         ) {
 
             IndicadorCard(
-                modifier = Modifier.weight(1f),
-                numero = "01",
-                nome = "Batimentos",
+
+                modifier =
+                    Modifier.weight(1f),
+
+                numero =
+                    "01",
+
+                nome =
+                    "Batimentos",
+
                 valor =
                     dados.batimentos.valor
                         .roundToInt()
                         .toString(),
-                unidade = "bpm",
+
+                unidade =
+                    "bpm",
+
                 percentual =
                     percentual(
                         dados.batimentos
-                    )
+                    ),
+
+                icone =
+                    R.drawable.batimentos1
             )
 
+
             IndicadorCard(
-                modifier = Modifier.weight(1f),
-                numero = "02",
-                nome = "Respiração",
+
+                modifier =
+                    Modifier.weight(1f),
+
+                numero =
+                    "02",
+
+                nome =
+                    "Respiração",
+
                 valor =
                     "%.1f".format(
                         dados.respiracao.valor
                     ),
-                unidade = "rpm",
+
+                unidade =
+                    "rpm",
+
                 percentual =
                     percentual(
                         dados.respiracao
-                    )
+                    ),
+
+                icone =
+                    R.drawable.respiracao1
             )
         }
 
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
+
+            modifier =
+                Modifier.fillMaxWidth(),
+
             horizontalArrangement =
                 Arrangement.spacedBy(11.dp)
         ) {
 
             IndicadorCard(
-                modifier = Modifier.weight(1f),
-                numero = "03",
-                nome = "Temperatura",
+
+                modifier =
+                    Modifier.weight(1f),
+
+                numero =
+                    "03",
+
+                nome =
+                    "Temperatura",
+
                 valor =
                     "%.1f".format(
                         dados.temperatura.valor
                     ),
-                unidade = "°C",
+
+                unidade =
+                    "°C",
+
                 percentual =
                     percentual(
                         dados.temperatura
-                    )
+                    ),
+
+                icone =
+                    R.drawable.temperatura1
             )
 
+
             IndicadorCard(
-                modifier = Modifier.weight(1f),
-                numero = "04",
-                nome = "Hidratação",
+
+                modifier =
+                    Modifier.weight(1f),
+
+                numero =
+                    "04",
+
+                nome =
+                    "Hidratação",
+
                 valor =
                     dados.hidratacao.valor
                         .roundToInt()
                         .toString(),
-                unidade = "%",
+
+                unidade =
+                    "%",
+
                 percentual =
                     percentual(
                         dados.hidratacao
-                    )
+                    ),
+
+                icone =
+                    R.drawable.hidratacao1
             )
         }
     }
@@ -957,50 +1615,80 @@ private fun percentual(
 ): Float {
 
     return (
+
         (indicador.valor - indicador.min) /
-                (indicador.max - indicador.min)
+                (
+                    indicador.max -
+                            indicador.min
+                    )
+
+        ).coerceIn(
+            0f,
+            1f
         )
-        .coerceIn(0f, 1f)
 }
 
 
 @Composable
 private fun IndicadorCard(
+
     modifier: Modifier,
+
     numero: String,
+
     nome: String,
+
     valor: String,
+
     unidade: String,
-    percentual: Float
+
+    percentual: Float,
+
+    icone: Int
 ) {
 
+    val cores =
+        coresAssistente()
+
+
     Card(
-        modifier = modifier.height(148.dp),
 
-        shape = RoundedCornerShape(20.dp),
+        modifier =
+            modifier.height(148.dp),
 
-        colors = CardDefaults.cardColors(
-            containerColor = Card
-        ),
+        shape =
+            RoundedCornerShape(20.dp),
 
-        border = androidx.compose.foundation.BorderStroke(
-            1.dp,
-            Borda
-        )
+        colors =
+            CardDefaults.cardColors(
+                containerColor =
+                    cores.card
+            ),
+
+        border =
+            BorderStroke(
+                1.dp,
+                cores.borda
+            )
     ) {
 
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier =
+                Modifier.fillMaxSize()
         ) {
 
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
+
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
             ) {
 
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+
+                    modifier =
+                        Modifier.fillMaxWidth(),
 
                     horizontalArrangement =
                         Arrangement.SpaceBetween,
@@ -1010,55 +1698,113 @@ private fun IndicadorCard(
                 ) {
 
                     Box(
-                        modifier = Modifier
-                            .size(38.dp)
-                            .clip(
-                                RoundedCornerShape(12.dp)
-                            )
-                            .background(
-                                Color(0xFF0C0C0C)
-                            )
-                            .border(
-                                1.dp,
-                                Color(0xFF202020),
-                                RoundedCornerShape(12.dp)
-                            )
-                    )
+
+                        modifier =
+                            Modifier
+                                .size(38.dp)
+                                .clip(
+                                    RoundedCornerShape(
+                                        12.dp
+                                    )
+                                )
+                                .background(
+                                    cores.fundoIcone
+                                )
+                                .border(
+                                    1.dp,
+                                    cores.bordaIcone,
+                                    RoundedCornerShape(
+                                        12.dp
+                                    )
+                                ),
+
+                        contentAlignment =
+                            Alignment.Center
+                    ) {
+
+                        Image(
+
+                            painter =
+                                painterResource(
+                                    icone
+                                ),
+
+                            contentDescription =
+                                null,
+
+                            modifier =
+                                Modifier.size(21.dp),
+
+                            contentScale =
+                                ContentScale.Fit,
+
+                            colorFilter =
+                                ColorFilter.tint(
+                                    cores.icone
+                                )
+                        )
+                    }
 
 
                     Text(
-                        text = numero,
-                        color = Color(0xFF383838),
-                        fontFamily = Quicksand,
-                        fontSize = 7.sp,
-                        fontWeight = FontWeight.Bold
+
+                        text =
+                            numero,
+
+                        color =
+                            cores.textoMuitoEscuro,
+
+                        fontFamily =
+                            Quicksand,
+
+                        fontSize =
+                            7.sp,
+
+                        fontWeight =
+                            FontWeight.Bold
                     )
                 }
 
 
                 Spacer(
-                    modifier = Modifier.height(15.dp)
+                    modifier =
+                        Modifier.height(15.dp)
                 )
 
 
                 Text(
-                    text = nome,
-                    color = Color(0xFF666666),
-                    fontFamily = Quicksand,
-                    fontSize = 9.sp,
-                    fontWeight = FontWeight.SemiBold
+
+                    text =
+                        nome,
+
+                    color =
+                        cores.textoSecundario,
+
+                    fontFamily =
+                        Quicksand,
+
+                    fontSize =
+                        9.sp,
+
+                    fontWeight =
+                        FontWeight.SemiBold
                 )
 
 
                 Spacer(
-                    modifier = Modifier.weight(1f)
+                    modifier =
+                        Modifier.weight(1f)
                 )
 
 
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp),
+
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                bottom = 8.dp
+                            ),
 
                     horizontalArrangement =
                         Arrangement.SpaceBetween,
@@ -1068,55 +1814,98 @@ private fun IndicadorCard(
                 ) {
 
                     Text(
-                        text = valor,
-                        color = TextoPrincipal,
-                        fontFamily = Quicksand,
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = (-.8).sp
+
+                        text =
+                            valor,
+
+                        color =
+                            cores.textoPrincipal,
+
+                        fontFamily =
+                            Quicksand,
+
+                        fontSize =
+                            22.sp,
+
+                        fontWeight =
+                            FontWeight.Bold,
+
+                        letterSpacing =
+                            (-.8).sp
                     )
 
 
                     Text(
-                        text = unidade,
-                        color = Color(0xFF444444),
-                        fontFamily = Quicksand,
-                        fontSize = 8.sp,
-                        fontWeight = FontWeight.SemiBold
+
+                        text =
+                            unidade,
+
+                        color =
+                            cores.textoEscuro,
+
+                        fontFamily =
+                            Quicksand,
+
+                        fontSize =
+                            8.sp,
+
+                        fontWeight =
+                            FontWeight.SemiBold
                     )
                 }
             }
 
 
-            /* Linha inferior */
+            /* -----------------------------------------
+               LINHA INFERIOR
+            ----------------------------------------- */
 
             Box(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .padding(
-                        start = 16.dp,
-                        end = 16.dp,
-                        bottom = 10.dp
-                    )
-                    .height(2.dp)
-                    .clip(RoundedCornerShape(999.dp))
-                    .background(Color(0xFF111111))
-            ) {
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(
-                            percentual
-                                .coerceIn(.08f, 1f)
+                modifier =
+                    Modifier
+                        .align(
+                            Alignment.BottomCenter
+                        )
+                        .fillMaxWidth()
+                        .padding(
+                            start = 16.dp,
+                            end = 16.dp,
+                            bottom = 10.dp
                         )
                         .height(2.dp)
                         .clip(
-                            RoundedCornerShape(999.dp)
+                            RoundedCornerShape(
+                                999.dp
+                            )
                         )
                         .background(
-                            Azul.copy(alpha = .5f)
+                            cores.linhaFundo
                         )
+            ) {
+
+                Box(
+
+                    modifier =
+                        Modifier
+                            .fillMaxWidth(
+                                percentual
+                                    .coerceIn(
+                                        .08f,
+                                        1f
+                                    )
+                            )
+                            .height(2.dp)
+                            .clip(
+                                RoundedCornerShape(
+                                    999.dp
+                                )
+                            )
+                            .background(
+                                cores.azul.copy(
+                                    alpha = .5f
+                                )
+                            )
                 )
             }
         }
@@ -1133,29 +1922,43 @@ private fun BemEstar(
     valor: Float
 ) {
 
+    val cores =
+        coresAssistente()
+
+
     Card(
-        modifier = Modifier.fillMaxWidth(),
 
-        shape = RoundedCornerShape(22.dp),
+        modifier =
+            Modifier.fillMaxWidth(),
 
-        colors = CardDefaults.cardColors(
-            containerColor = Card
-        ),
+        shape =
+            RoundedCornerShape(22.dp),
 
-        border = androidx.compose.foundation.BorderStroke(
-            1.dp,
-            Color(0xFF1A1A1A)
-        )
+        colors =
+            CardDefaults.cardColors(
+                containerColor =
+                    cores.card
+            ),
+
+        border =
+            BorderStroke(
+                1.dp,
+                cores.borda
+            )
     ) {
 
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp)
+
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp)
         ) {
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
+
+                modifier =
+                    Modifier.fillMaxWidth(),
 
                 horizontalArrangement =
                     Arrangement.SpaceBetween,
@@ -1165,158 +1968,262 @@ private fun BemEstar(
             ) {
 
                 Row(
-                    modifier = Modifier.weight(1f),
+
+                    modifier =
+                        Modifier.weight(1f),
 
                     verticalAlignment =
                         Alignment.CenterVertically
                 ) {
 
                     Box(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(
-                                RoundedCornerShape(13.dp)
-                            )
-                            .background(
-                                Color(0xFF0C0C0C)
-                            )
-                            .border(
-                                1.dp,
-                                Color(0xFF202020),
-                                RoundedCornerShape(13.dp)
-                            )
-                    )
+
+                        modifier =
+                            Modifier
+                                .size(40.dp)
+                                .clip(
+                                    RoundedCornerShape(
+                                        13.dp
+                                    )
+                                )
+                                .background(
+                                    cores.fundoIcone
+                                )
+                                .border(
+                                    1.dp,
+                                    cores.bordaIcone,
+                                    RoundedCornerShape(
+                                        13.dp
+                                    )
+                                ),
+
+                        contentAlignment =
+                            Alignment.Center
+                    ) {
+
+                        Image(
+
+                            painter =
+                                painterResource(
+                                    R.drawable.bemestar1
+                                ),
+
+                            contentDescription =
+                                null,
+
+                            modifier =
+                                Modifier.size(22.dp),
+
+                            colorFilter =
+                                ColorFilter.tint(
+                                    cores.icone
+                                )
+                        )
+                    }
 
 
                     Spacer(
-                        modifier = Modifier.width(12.dp)
+                        modifier =
+                            Modifier.width(12.dp)
                     )
 
 
                     Column {
 
                         Text(
-                            text = "Estado geral",
-                            color = Color(0xFFDDDDDD),
-                            fontFamily = Quicksand,
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Bold
+
+                            text =
+                                "Estado geral",
+
+                            color =
+                                cores.textoPrincipal,
+
+                            fontFamily =
+                                Quicksand,
+
+                            fontSize =
+                                10.sp,
+
+                            fontWeight =
+                                FontWeight.Bold
                         )
+
 
                         Spacer(
-                            modifier = Modifier.height(6.dp)
+                            modifier =
+                                Modifier.height(6.dp)
                         )
 
+
                         Text(
-                            text = "Estimativa demonstrativa",
-                            color = Color(0xFF454545),
-                            fontFamily = Quicksand,
-                            fontSize = 7.sp
+
+                            text =
+                                "Estimativa demonstrativa",
+
+                            color =
+                                cores.textoEscuro,
+
+                            fontFamily =
+                                Quicksand,
+
+                            fontSize =
+                                7.sp
                         )
                     }
                 }
 
 
                 Row(
+
                     verticalAlignment =
                         Alignment.Bottom
                 ) {
 
                     Text(
-                        text =
-                            valor.roundToInt().toString(),
 
-                        color = Color(0xFFF3F3F3),
-                        fontFamily = Quicksand,
-                        fontSize = 27.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = (-1.2).sp
+                        text =
+                            valor
+                                .roundToInt()
+                                .toString(),
+
+                        color =
+                            cores.textoPrincipal,
+
+                        fontFamily =
+                            Quicksand,
+
+                        fontSize =
+                            27.sp,
+
+                        fontWeight =
+                            FontWeight.Bold,
+
+                        letterSpacing =
+                            (-1.2).sp
                     )
+
 
                     Spacer(
-                        modifier = Modifier.width(3.dp)
+                        modifier =
+                            Modifier.width(3.dp)
                     )
 
+
                     Text(
-                        text = "/100",
-                        color = Color(0xFF444444),
-                        fontFamily = Quicksand,
-                        fontSize = 8.sp
+
+                        text =
+                            "/100",
+
+                        color =
+                            cores.textoEscuro,
+
+                        fontFamily =
+                            Quicksand,
+
+                        fontSize =
+                            8.sp
                     )
                 }
             }
 
 
             Spacer(
-                modifier = Modifier.height(25.dp)
+                modifier =
+                    Modifier.height(25.dp)
             )
 
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
+
+                modifier =
+                    Modifier.fillMaxWidth(),
 
                 horizontalArrangement =
                     Arrangement.SpaceBetween
             ) {
 
                 BemEstarInfo(
-                    "MÍNIMO",
-                    "60"
+                    titulo = "MÍNIMO",
+                    valor = "60"
                 )
 
-                BemEstarInfo(
-                    "ATUAL",
-                    valor.roundToInt().toString()
-                )
 
                 BemEstarInfo(
-                    "MÁXIMO",
-                    "88"
+
+                    titulo = "ATUAL",
+
+                    valor =
+                        valor
+                            .roundToInt()
+                            .toString()
+                )
+
+
+                BemEstarInfo(
+                    titulo = "MÁXIMO",
+                    valor = "88"
                 )
             }
 
 
             Spacer(
-                modifier = Modifier.height(19.dp)
+                modifier =
+                    Modifier.height(19.dp)
             )
 
 
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(5.dp)
-                    .clip(
-                        RoundedCornerShape(999.dp)
-                    )
-                    .background(
-                        Color(0xFF111111)
-                    )
+
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(5.dp)
+                        .clip(
+                            RoundedCornerShape(
+                                999.dp
+                            )
+                        )
+                        .background(
+                            cores.linhaFundo
+                        )
             ) {
 
                 val progresso =
                     animateFloatAsState(
+
                         targetValue =
                             (valor / 100f)
-                                .coerceIn(0f, 1f),
+                                .coerceIn(
+                                    0f,
+                                    1f
+                                ),
 
                         animationSpec =
                             tween(
                                 800
                             ),
 
-                        label = "bem-estar"
+                        label =
+                            "bem-estar"
                     )
 
+
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth(
-                            progresso.value
-                        )
-                        .height(5.dp)
-                        .clip(
-                            RoundedCornerShape(999.dp)
-                        )
-                        .background(AzulClaro)
+
+                    modifier =
+                        Modifier
+                            .fillMaxWidth(
+                                progresso.value
+                            )
+                            .height(5.dp)
+                            .clip(
+                                RoundedCornerShape(
+                                    999.dp
+                                )
+                            )
+                            .background(
+                                cores.azulClaro
+                            )
                 )
             }
         }
@@ -1326,29 +2233,57 @@ private fun BemEstar(
 
 @Composable
 private fun BemEstarInfo(
+
     titulo: String,
+
     valor: String
 ) {
 
+    val cores =
+        coresAssistente()
+
+
     Column(
+
         verticalArrangement =
             Arrangement.spacedBy(5.dp)
     ) {
 
         Text(
-            text = titulo,
-            color = Color(0xFF3B3B3B),
-            fontFamily = Quicksand,
-            fontSize = 7.sp,
-            fontWeight = FontWeight.SemiBold
+
+            text =
+                titulo,
+
+            color =
+                cores.textoMuitoEscuro,
+
+            fontFamily =
+                Quicksand,
+
+            fontSize =
+                7.sp,
+
+            fontWeight =
+                FontWeight.SemiBold
         )
 
+
         Text(
-            text = valor,
-            color = Color(0xFF999999),
-            fontFamily = Quicksand,
-            fontSize = 9.sp,
-            fontWeight = FontWeight.Bold
+
+            text =
+                valor,
+
+            color =
+                cores.textoSecundario,
+
+            fontFamily =
+                Quicksand,
+
+            fontSize =
+                9.sp,
+
+            fontWeight =
+                FontWeight.Bold
         )
     }
 }
@@ -1362,29 +2297,47 @@ private fun BemEstarInfo(
 private fun Atividade() {
 
     Column(
+
         verticalArrangement =
             Arrangement.spacedBy(9.dp)
     ) {
 
         AtividadeRow(
-            titulo = "Indicadores atualizados",
+
+            titulo =
+                "Indicadores atualizados",
+
             descricao =
                 "Dados renovados automaticamente",
-            tempo = "agora"
+
+            tempo =
+                "agora"
         )
 
+
         AtividadeRow(
-            titulo = "Bem-estar recalculado",
+
+            titulo =
+                "Bem-estar recalculado",
+
             descricao =
                 "Índice atualizado",
-            tempo = "3 min"
+
+            tempo =
+                "3 min"
         )
 
+
         AtividadeRow(
-            titulo = "Monitoramento iniciado",
+
+            titulo =
+                "Monitoramento iniciado",
+
             descricao =
                 "Sessão atual do assistente",
-            tempo = "hoje"
+
+            tempo =
+                "hoje"
         )
     }
 }
@@ -1392,79 +2345,129 @@ private fun Atividade() {
 
 @Composable
 private fun AtividadeRow(
+
     titulo: String,
+
     descricao: String,
+
     tempo: String
 ) {
 
+    val cores =
+        coresAssistente()
+
+
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(65.dp),
 
-        shape = RoundedCornerShape(17.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(65.dp),
 
-        colors = CardDefaults.cardColors(
-            containerColor = CardSecundario
-        ),
+        shape =
+            RoundedCornerShape(17.dp),
 
-        border = androidx.compose.foundation.BorderStroke(
-            1.dp,
-            Color(0xFF171717)
-        )
+        colors =
+            CardDefaults.cardColors(
+                containerColor =
+                    cores.cardSecundario
+            ),
+
+        border =
+            BorderStroke(
+                1.dp,
+                cores.borda
+            )
     ) {
 
         Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    horizontal = 14.dp,
-                    vertical = 12.dp
-                ),
+
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(
+                        horizontal = 14.dp,
+                        vertical = 12.dp
+                    ),
 
             verticalAlignment =
                 Alignment.CenterVertically
         ) {
 
             Box(
-                modifier = Modifier
-                    .size(7.dp)
-                    .clip(CircleShape)
-                    .background(Azul)
+
+                modifier =
+                    Modifier
+                        .size(7.dp)
+                        .clip(CircleShape)
+                        .background(
+                            cores.azul
+                        )
             )
 
 
             Spacer(
-                modifier = Modifier.width(13.dp)
+                modifier =
+                    Modifier.width(13.dp)
             )
 
 
             Column(
-                modifier = Modifier.weight(1f)
+                modifier =
+                    Modifier.weight(1f)
             ) {
 
                 Text(
-                    text = titulo,
-                    color = Color(0xFF7F7F7F),
-                    fontFamily = Quicksand,
-                    fontSize = 9.sp,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
+
+                    text =
+                        titulo,
+
+                    color =
+                        cores.textoSecundario,
+
+                    fontFamily =
+                        Quicksand,
+
+                    fontSize =
+                        9.sp,
+
+                    fontWeight =
+                        FontWeight.Bold,
+
+                    maxLines =
+                        1,
+
                     overflow =
                         TextOverflow.Ellipsis
                 )
 
+
                 Spacer(
-                    modifier = Modifier.height(5.dp)
+                    modifier =
+                        Modifier.height(5.dp)
                 )
 
+
                 Text(
-                    text = descricao,
-                    color = TextoMuitoEscuro,
-                    fontFamily = Quicksand,
-                    fontSize = 7.sp,
-                    lineHeight = 10.sp,
-                    maxLines = 1,
+
+                    text =
+                        descricao,
+
+                    color =
+                        cores.textoMuitoEscuro,
+
+                    fontFamily =
+                        Quicksand,
+
+                    fontSize =
+                        7.sp,
+
+                    lineHeight =
+                        10.sp,
+
+                    maxLines =
+                        1,
+
                     overflow =
                         TextOverflow.Ellipsis
                 )
@@ -1472,16 +2475,27 @@ private fun AtividadeRow(
 
 
             Spacer(
-                modifier = Modifier.width(13.dp)
+                modifier =
+                    Modifier.width(13.dp)
             )
 
 
             Text(
-                text = tempo,
-                color = TextoMuitoEscuro,
-                fontFamily = Quicksand,
-                fontSize = 7.sp,
-                fontWeight = FontWeight.SemiBold
+
+                text =
+                    tempo,
+
+                color =
+                    cores.textoMuitoEscuro,
+
+                fontFamily =
+                    Quicksand,
+
+                fontSize =
+                    7.sp,
+
+                fontWeight =
+                    FontWeight.SemiBold
             )
         }
     }

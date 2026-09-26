@@ -21,7 +21,7 @@ class EntradaActivity : ComponentActivity() {
         startActivity(
             Intent(
                 this,
-                MainActivity::class.java
+                AssistenteActivity::class.java
             )
         )
 

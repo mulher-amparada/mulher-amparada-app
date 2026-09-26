@@ -2,7 +2,6 @@ package com.mulheres
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.hardware.Sensor
@@ -54,9 +53,6 @@ class TiltBrightnessController(
             AudioFormat.ENCODING_PCM_16BIT
         )
 
-    /*
-     * Mesmo conceito usado na proteção por movimento.
-     */
     private val loudSoundThreshold = -50.0
 
 
@@ -97,19 +93,21 @@ class TiltBrightnessController(
                             return
                         }
 
+                        /*
+                         * Uma vez que o estado de escurecimento
+                         * foi ativado, ele permanece até o
+                         * controller ser parado.
+                         */
+                        if (overlay != null) {
+                            return
+                        }
+
                         val z =
                             event.values[2]
 
-                        /*
-                         * Inclinação configurada.
-                         */
                         if (z < -8f) {
 
                             ativarEscurecimento()
-
-                        } else {
-
-                            desativarEscurecimento()
                         }
                     }
 
@@ -129,8 +127,8 @@ class TiltBrightnessController(
             )
 
         /*
-         * Se o acelerômetro/gravity não puder
-         * ser registrado, usa o microfone.
+         * Se o sensor não puder ser registrado,
+         * utiliza o microfone como fallback.
          */
         if (!registrado) {
 
@@ -156,6 +154,13 @@ class TiltBrightnessController(
 
         pararMicrofone()
 
+        /*
+         * Aqui sim o preto é removido.
+         *
+         * Portanto, ele só sai quando o controller
+         * é realmente parado, normalmente quando
+         * a Activity é destruída/encerrada.
+         */
         desativarEscurecimento()
     }
 
@@ -180,15 +185,21 @@ class TiltBrightnessController(
             return
         }
 
+        /*
+         * Já está preto.
+         */
         if (overlay != null) {
             return
         }
 
+        /*
+         * Guarda o brilho original somente uma vez.
+         */
         brilhoAnterior =
             activity.window.attributes.screenBrightness
 
         /*
-         * Força brilho mínimo.
+         * Brilho físico da janela no mínimo.
          */
         activity.window.attributes =
             activity.window.attributes.apply {
@@ -196,16 +207,31 @@ class TiltBrightnessController(
                 screenBrightness = 0f
             }
 
+        /*
+         * Entra em fullscreen.
+         */
         onEnterFullscreen()
 
+        /*
+         * Camada preta cobrindo absolutamente
+         * toda a janela.
+         */
         val view =
-            View(activity)
+            View(activity).apply {
 
-        view.setBackgroundColor(
-            Color.BLACK
-        )
+                setBackgroundColor(
+                    Color.BLACK
+                )
 
-        view.alpha = 1f
+                alpha = 1f
+
+                /*
+                 * Impede que os elementos abaixo
+                 * recebam toques.
+                 */
+                isClickable = true
+                isFocusable = true
+            }
 
         overlay = view
 
@@ -322,6 +348,14 @@ class TiltBrightnessController(
                             ativo
                         ) {
 
+                            /*
+                             * Se já escureceu pelo sensor,
+                             * não precisa mais analisar áudio.
+                             */
+                            if (overlay != null) {
+                                break
+                            }
+
                             val read =
                                 audioRecord?.read(
                                     buffer,
@@ -337,10 +371,6 @@ class TiltBrightnessController(
                                         read
                                     )
 
-                                /*
-                                 * Mantém o mesmo
-                                 * limiar do movimento.
-                                 */
                                 if (
                                     db >=
                                     loudSoundThreshold
@@ -348,14 +378,11 @@ class TiltBrightnessController(
 
                                     activity.runOnUiThread {
 
-                                        if (ativo) {
+                                        if (
+                                            ativo &&
+                                            overlay == null
+                                        ) {
 
-                                            /*
-                                             * O microfone funciona
-                                             * como fallback para
-                                             * acionar o estado de
-                                             * escurecimento.
-                                             */
                                             ativarEscurecimento()
                                         }
                                     }

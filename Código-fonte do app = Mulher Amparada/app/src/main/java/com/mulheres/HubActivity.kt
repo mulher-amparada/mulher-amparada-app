@@ -4,6 +4,13 @@ import android.Manifest
 import android.content.BroadcastReceiver
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
+import android.os.BatteryManager
+import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -21,7 +28,6 @@ import android.os.Bundle
 import android.telephony.TelephonyCallback
 import android.telephony.TelephonyManager
 import android.widget.Toast
-
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -82,7 +88,11 @@ import androidx.compose.ui.zIndex
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import android.provider.ContactsContract
 
+
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import kotlin.math.log10
 import kotlin.math.sqrt
 
@@ -108,6 +118,9 @@ var protecaoMovimentoAtiva by mutableStateOf(false)
 
 private var ultimoShake: Long = 0L
 
+private lateinit var seletorContato:
+    ActivityResultLauncher<Intent>
+    
 private var shakeAudioRecord: AudioRecord? = null
 
 private var shakeMicrophoneThread: Thread? = null
@@ -133,6 +146,12 @@ var escurecimentoAtivo by mutableStateOf(false)
 private var acelerometro: Sensor? = null
 
 private var telephonyCallback: TelephonyCallback? = null
+
+private lateinit var emergencyComposeView: ComposeView
+
+private var emergenciaVisivel by mutableStateOf(false)
+
+private lateinit var locationClient: FusedLocationProviderClient
 
 // =========================================================
 // 04 / BLOQUEIO POR BARULHO
@@ -259,6 +278,247 @@ fun ligarPara(numero: String) {
 
         e.printStackTrace()
     }
+}
+
+fun enviarLocalizacaoPara180() {
+
+    val permissaoPrecisa =
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+    val permissaoAproximada =
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+    if (!permissaoPrecisa && !permissaoAproximada) {
+
+        Toast.makeText(
+            this,
+            "Permissão de localização necessária.",
+            Toast.LENGTH_LONG
+        ).show()
+
+        return
+    }
+
+    val cancellationTokenSource =
+        com.google.android.gms.tasks.CancellationTokenSource()
+
+    locationClient
+        .getCurrentLocation(
+            com.google.android.gms.location.Priority
+                .PRIORITY_HIGH_ACCURACY,
+            cancellationTokenSource.token
+        )
+        .addOnSuccessListener { location ->
+
+            if (location == null) {
+
+                Toast.makeText(
+                    this,
+                    "Não foi possível obter a localização.",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                return@addOnSuccessListener
+            }
+
+            val latitude =
+                location.latitude
+
+            val longitude =
+                location.longitude
+
+            val link =
+                "https://www.google.com/maps/search/" +
+                "?api=1&query=$latitude,$longitude"
+
+            val mensagem =
+                "🚨 MULHER AMPARADA\n\n" +
+                "Preciso de ajuda.\n\n" +
+                "📍 Minha localização:\n" +
+                "$link"
+
+            val intent =
+                Intent(
+                    Intent.ACTION_SENDTO
+                ).apply {
+
+                    data =
+                        Uri.parse(
+                            "smsto:180"
+                        )
+
+                    putExtra(
+                        "sms_body",
+                        mensagem
+                    )
+                }
+
+            try {
+
+                startActivity(intent)
+
+            } catch (
+                e: Exception
+            ) {
+
+                Toast.makeText(
+                    this,
+                    "Não foi possível abrir o envio de mensagem.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+}
+
+fun enviarSosParaContato() {
+
+    val contato =
+        obterContatoConfianca()
+
+    if (contato == null) {
+
+        Toast.makeText(
+            this,
+            "Nenhum contato de confiança foi cadastrado.",
+            Toast.LENGTH_LONG
+        ).show()
+
+        return
+    }
+
+    val nome =
+        contato.first
+
+    val numero =
+        contato.second
+
+    val permissaoPrecisa =
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+    val permissaoAproximada =
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+    if (!permissaoPrecisa && !permissaoAproximada) {
+
+        Toast.makeText(
+            this,
+            "Permissão de localização necessária.",
+            Toast.LENGTH_LONG
+        ).show()
+
+        return
+    }
+
+    val cancellationTokenSource =
+        com.google.android.gms.tasks.CancellationTokenSource()
+
+    locationClient
+        .getCurrentLocation(
+            com.google.android.gms.location.Priority
+                .PRIORITY_HIGH_ACCURACY,
+            cancellationTokenSource.token
+        )
+        .addOnSuccessListener { location ->
+
+            if (location == null) {
+
+                Toast.makeText(
+                    this,
+                    "Não foi possível obter sua localização.",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                return@addOnSuccessListener
+            }
+
+            val latitude =
+                location.latitude
+
+            val longitude =
+                location.longitude
+
+            val precisao =
+                location.accuracy
+
+            val dataHora =
+                java.text.SimpleDateFormat(
+                    "dd/MM/yyyy HH:mm:ss",
+                    java.util.Locale.getDefault()
+                ).format(
+                    java.util.Date()
+                )
+
+            val link =
+                "https://www.google.com/maps/search/" +
+                "?api=1&query=$latitude,$longitude"
+
+            val mensagem =
+                """
+                🚨 MULHER AMPARADA
+
+                Olá, $nome.
+
+                Preciso de ajuda.
+
+                📍 Minha localização atual:
+                $link
+
+                Latitude: $latitude
+                Longitude: $longitude
+                Precisão: ${precisao}m
+
+                🕒 $dataHora
+                """.trimIndent()
+
+            val intent =
+                Intent(
+                    Intent.ACTION_SENDTO
+                ).apply {
+
+                    data =
+                        Uri.parse(
+                            "smsto:${Uri.encode(numero)}"
+                        )
+
+                    putExtra(
+                        "sms_body",
+                        mensagem
+                    )
+                }
+
+            try {
+
+                startActivity(intent)
+
+            } catch (e: Exception) {
+
+                Toast.makeText(
+                    this,
+                    "Não foi possível abrir o aplicativo de mensagens.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+        .addOnFailureListener {
+
+            Toast.makeText(
+                this,
+                "Erro ao obter a localização.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
 }
 
 fun bloquearTela(): Boolean {
@@ -647,6 +907,32 @@ fun desativarFullscreen() {
 
         verificarPermissoes()
 
+cripto = Cripto(this)
+
+seletorContato =
+    registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { resultado ->
+
+        if (
+            resultado.resultCode == RESULT_OK
+        ) {
+
+            val uri =
+                resultado.data?.data
+
+            if (uri != null) {
+                processarContatoSelecionado(uri)
+            }
+        }
+    }
+    
+locationClient =
+    LocationServices
+        .getFusedLocationProviderClient(this)
+
+criarEmergencyOverlay()
+
 sensorManager =
     getSystemService(
         Context.SENSOR_SERVICE
@@ -684,6 +970,304 @@ criarShakeListener()
 
         verificarPermissoes()
     }
+
+fun abrirContatos() {
+
+    val intent =
+        Intent(
+            Intent.ACTION_PICK,
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI
+        )
+
+    seletorContato.launch(intent)
+}
+
+private fun processarContatoSelecionado(
+    uri: Uri
+) {
+
+    val cursor =
+        contentResolver.query(
+            uri,
+            arrayOf(
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                ContactsContract.CommonDataKinds.Phone.NUMBER
+            ),
+            null,
+            null,
+            null
+        )
+
+    cursor?.use {
+
+        if (it.moveToFirst()) {
+
+            val indiceNome =
+                it.getColumnIndex(
+                    ContactsContract
+                        .CommonDataKinds
+                        .Phone
+                        .DISPLAY_NAME
+                )
+
+            val indiceNumero =
+                it.getColumnIndex(
+                    ContactsContract
+                        .CommonDataKinds
+                        .Phone
+                        .NUMBER
+                )
+
+            if (
+                indiceNome >= 0 &&
+                indiceNumero >= 0
+            ) {
+
+                val nome =
+                    it.getString(indiceNome)
+
+                val numero =
+                    it.getString(indiceNumero)
+
+                salvarContatoConfianca(
+                    nome,
+                    numero
+                )
+            }
+        }
+    }
+}
+
+private fun salvarContatoConfianca(
+    nome: String,
+    numero: String
+) {
+
+    cripto.salvar(
+        "contato_nome",
+        nome
+    )
+
+    cripto.salvar(
+        "contato_numero",
+        numero
+    )
+
+    Toast.makeText(
+        this,
+        "Contato de confiança salvo.",
+        Toast.LENGTH_SHORT
+    ).show()
+}
+
+fun obterContatoConfianca(): Pair<String, String>? {
+
+    val nome =
+        cripto.carregar("contato_nome")
+
+    val numero =
+        cripto.carregar("contato_numero")
+
+    if (
+        nome.isNullOrBlank() ||
+        numero.isNullOrBlank()
+    ) {
+        return null
+    }
+
+    return Pair(
+        nome,
+        numero
+    )
+}
+
+fun mostrarBotaoEmergencia() {
+
+    runOnUiThread {
+
+        emergenciaVisivel = true
+    }
+}
+
+fun ocultarBotaoEmergencia() {
+
+    runOnUiThread {
+
+        emergenciaVisivel = false
+    }
+}
+private fun criarEmergencyOverlay() {
+
+    val raiz =
+        findViewById<ViewGroup>(
+            android.R.id.content
+        )
+
+emergencyComposeView =
+    ComposeView(this).apply {
+
+        setViewCompositionStrategy(
+            ViewCompositionStrategy
+                .DisposeOnViewTreeLifecycleDestroyed
+        )
+
+        setContent {
+
+            EmergencyOverlay(
+                visivel = emergenciaVisivel,
+                aoClicar = {
+                    compartilharLocalizacaoEmergencia()
+                }
+            )
+        }
+    }
+
+    raiz.addView(
+
+        emergencyComposeView,
+
+        ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+    )
+}
+
+private fun compartilharLocalizacaoEmergencia() {
+
+    val permissaoPrecisa =
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+    val permissaoAproximada =
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+    if (!permissaoPrecisa && !permissaoAproximada) {
+
+        Toast.makeText(
+            this,
+            "Permissão de localização necessária.",
+            Toast.LENGTH_LONG
+        ).show()
+
+        return
+    }
+
+    val cancellationTokenSource =
+    com.google.android.gms.tasks.CancellationTokenSource()
+
+locationClient
+    .getCurrentLocation(
+        com.google.android.gms.location.Priority
+            .PRIORITY_HIGH_ACCURACY,
+        cancellationTokenSource.token
+    )
+
+        .addOnSuccessListener { location ->
+
+            if (location != null) {
+
+                val latitude =
+                    location.latitude
+
+                val longitude =
+                    location.longitude
+
+                val precisao =
+                    location.accuracy
+
+                val dataHora =
+                    java.text.SimpleDateFormat(
+                        "dd/MM/yyyy HH:mm:ss",
+                        java.util.Locale.getDefault()
+                    ).format(
+                        java.util.Date()
+                    )
+
+                val dispositivo =
+                    "${Build.MANUFACTURER} ${Build.MODEL}"
+
+                val android =
+                    "Android ${Build.VERSION.RELEASE} " +
+                    "(API ${Build.VERSION.SDK_INT})"
+
+                val bateria =
+                    (getSystemService(
+                        BATTERY_SERVICE
+                    ) as BatteryManager)
+                        .getIntProperty(
+                            BatteryManager
+                                .BATTERY_PROPERTY_CAPACITY
+                        )
+
+                val link =
+                    "https://www.google.com/maps/search/" +
+                    "?api=1&query=$latitude,$longitude"
+
+                val mensagem = """
+                    🚨 MULHER AMPARADA
+
+                    📍 LOCALIZAÇÃO DE EMERGÊNCIA
+
+                    Latitude: $latitude
+                    Longitude: $longitude
+                    Precisão: $precisao metros
+
+                    🌐 Google Maps:
+                    $link
+
+                    🕒 Data e hora:
+                    $dataHora
+
+                    📱 Dispositivo:
+                    $dispositivo
+
+                    🤖 Sistema:
+                    $android
+
+                    🔋 Bateria:
+                    $bateria%
+
+                """.trimIndent()
+
+                val intent =
+                    Intent(Intent.ACTION_SEND).apply {
+
+                        type = "text/plain"
+
+                        putExtra(
+                            Intent.EXTRA_SUBJECT,
+                            "🚨 Localização — Mulher Amparada"
+                        )
+
+                        putExtra(
+                            Intent.EXTRA_TEXT,
+                            mensagem
+                        )
+                    }
+
+                startActivity(
+                    Intent.createChooser(
+                        intent,
+                        "Compartilhar localização"
+                    )
+                )
+
+            } else {
+
+                Toast.makeText(
+                    this,
+                    "Não foi possível obter localização.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+}
 
 override fun onDestroy() {
 
@@ -2046,16 +2630,19 @@ ActionCard(
             )
 
             ActionCard(
-                title = "Enviar localização",
-                description =
-                    "Compartilhe sua localização atual",
-                icon = R.drawable.ic_0010,
-                arrow = R.drawable.ic_arrow,
-                gradient = c.actionCyanGradient,
-                accent = c.cyan,
-                c = c,
-                font = font
-            )
+    title = "Enviar localização",
+    description =
+        "Compartilhe sua localização atual",
+    icon = R.drawable.ic_0010,
+    arrow = R.drawable.ic_arrow,
+    gradient = c.actionCyanGradient,
+    accent = c.cyan,
+    c = c,
+    font = font,
+    onClick = {
+        activity?.enviarLocalizacaoPara180()
+    }
+)
 
             SectionTitle(
                 text = "Contatos de confiança",
@@ -2064,28 +2651,34 @@ ActionCard(
             )
 
             ActionCard(
-                title = "Adicionar contato",
-                description =
-                    "Escolha uma pessoa de confiança",
-                icon = R.drawable.ic_0011,
-                arrow = R.drawable.ic_arrow,
-                gradient = c.actionPurpleGradient,
-                accent = c.purple,
-                c = c,
-                font = font
-            )
+    title = "Adicionar contato",
+    description =
+        "Escolha uma pessoa de confiança",
+    icon = R.drawable.ic_0011,
+    arrow = R.drawable.ic_arrow,
+    gradient = c.actionPurpleGradient,
+    accent = c.purple,
+    c = c,
+    font = font,
+    onClick = {
+        activity?.abrirContatos()
+    }
+)
 
-            ActionCard(
-                title = "SOS para contatos",
-                description =
-                    "Envie um alerta para pessoas de confiança",
-                icon = R.drawable.ic_0012,
-                arrow = R.drawable.ic_arrow,
-                gradient = c.actionRedGradient,
-                accent = c.red,
-                c = c,
-                font = font
-            )
+ActionCard(
+    title = "SOS para contatos",
+    description =
+        "Envie um alerta para pessoas de confiança",
+    icon = R.drawable.ic_0012,
+    arrow = R.drawable.ic_arrow,
+    gradient = c.actionRedGradient,
+    accent = c.red,
+    c = c,
+    font = font,
+    onClick = {
+        activity?.enviarSosParaContato()
+    }
+)
 
             SectionTitle(
                 text = "Acesso rápido",
@@ -3256,35 +3849,26 @@ private fun EmergencyAccess(
     c: AppColors,
     font: FontFamily
 ) {
+    val activity = LocalContext.current as? HubActivity
 
     ActionPortal(
-
-        title =
-            "Acesso de emergência",
-
-        subtitle =
-            "Exiba o botão flutuante para pedir ajuda mesmo fora do aplicativo.",
-
-        meta =
-            "ACESSO EXTERNO",
-
-        icon =
-            R.drawable.ic_0013,
-
+        title = "Acesso de emergência",
+        subtitle = "Exiba o botão flutuante para pedir ajuda mesmo fora do aplicativo.",
+        meta = "ACESSO EXTERNO",
+        icon = R.drawable.ic_0013,
         accent =
             if (isSystemInDarkTheme())
                 Color(0xFFFFCF66)
             else
                 Color(0xFFB87900),
-
-        gradient =
-            c.emergencyGradient,
-
+        gradient = c.emergencyGradient,
         c = c,
-        font = font
+        font = font,
+        onClick = {
+            activity?.mostrarBotaoEmergencia()
+        }
     )
 }
-
 
 /* =========================================================
    ÁREA PROTEGIDA
@@ -3377,7 +3961,8 @@ private fun ActionPortal(
     accent: Color,
     gradient: List<Color>,
     c: AppColors,
-    font: FontFamily
+    font: FontFamily,
+    onClick: () -> Unit = {}
 ) {
 
     Row(
@@ -3397,6 +3982,9 @@ private fun ActionPortal(
                     accent.copy(.43f),
                     RoundedCornerShape(28.dp)
                 )
+                .clickable {
+    onClick()
+}
                 .padding(20.dp),
 
         verticalAlignment =

@@ -1,398 +1,441 @@
 package com.mulheres
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Color
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.view.View
-import android.view.WindowManager
-import android.webkit.GeolocationPermissions
-import android.webkit.PermissionRequest
-import android.webkit.WebChromeClient
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import android.view.ViewGroup
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 
-class HomeActivity : AppCompatActivity() {
+private val Quicksand = FontFamily(
+    Font(
+        resId = R.font.quicksand,
+        weight = FontWeight.Normal
+    ),
+    Font(
+        resId = R.font.quicksand,
+        weight = FontWeight.Medium
+    ),
+    Font(
+        resId = R.font.quicksand,
+        weight = FontWeight.SemiBold
+    ),
+    Font(
+        resId = R.font.quicksand,
+        weight = FontWeight.Bold
+    ),
+    Font(
+        resId = R.font.quicksand,
+        weight = FontWeight.ExtraBold
+    )
+)
 
-    private lateinit var cripto: Cripto
-    private lateinit var locationClient: FusedLocationProviderClient
-    private lateinit var webView: WebView
+private val Pink = Color(0xFFFF3F82)
 
-    private var emergenciaVisivel by mutableStateOf(false)
+class HomeActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.addFlags(
-            WindowManager.LayoutParams.FLAG_SECURE
-        )
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            true
-        )
+        setContent {
 
-        window.statusBarColor = Color.TRANSPARENT
-        window.navigationBarColor = Color.TRANSPARENT
+            MaterialTheme {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            window.isStatusBarContrastEnforced = false
-            window.isNavigationBarContrastEnforced = false
-        }
-
-        val controller =
-            WindowInsetsControllerCompat(
-                window,
-                window.decorView
-            )
-
-        val isDark =
-            (resources.configuration.uiMode and
-                android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
-                android.content.res.Configuration.UI_MODE_NIGHT_YES
-
-        controller.isAppearanceLightStatusBars = !isDark
-        controller.isAppearanceLightNavigationBars = !isDark
-
-        setContentView(
-            R.layout.activity_main
-        )
-
-        webView =
-            findViewById(
-                R.id.webview
-            )
-
-        locationClient =
-            LocationServices
-                .getFusedLocationProviderClient(
-                    this
-                )
-
-        cripto =
-            Cripto(this)
-
-        configurarWebView()
-
-        ViewCompat.setOnApplyWindowInsetsListener(
-            webView
-        ) { view, insets ->
-
-            val barras =
-                insets.getInsets(
-                    WindowInsetsCompat.Type.systemBars()
-                )
-
-            val params =
-                view.layoutParams as ViewGroup.MarginLayoutParams
-
-            params.topMargin =
-                barras.top
-
-            params.bottomMargin =
-                barras.bottom
-
-            view.layoutParams =
-                params
-
-            insets
-        }
-
-        // =====================================================
-        // ABRE DIRETAMENTE A CARTEIRA
-        // =====================================================
-
-        webView.loadUrl(
-            "file:///android_asset/${obterPastaTema()}/carteira.html"
-        )
-
-        // =====================================================
-        // BOTÃO VOLTAR
-        // =====================================================
-
-        onBackPressedDispatcher.addCallback(
-            this,
-            object : androidx.activity.OnBackPressedCallback(true) {
-
-                override fun handleOnBackPressed() {
-
-                    if (webView.canGoBack()) {
-
-                        webView.goBack()
-
-                    } else {
-
-                        isEnabled = false
-
-                        onBackPressedDispatcher
-                            .onBackPressed()
-                    }
-                }
-            }
-        )
-    }
-
-    // =========================================================
-    // TEMA / PASTA
-    // =========================================================
-
-    private fun obterPastaTema(): String {
-
-        return if (
-            (resources.configuration.uiMode and
-                android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
-                android.content.res.Configuration.UI_MODE_NIGHT_YES
-        ) {
-            "user1"
-        } else {
-            "user2"
-        }
-    }
-
-    // =========================================================
-    // WEBVIEW
-    // =========================================================
-
-    private fun configurarWebView() {
-
-        webView.setBackgroundColor(
-            Color.TRANSPARENT
-        )
-
-
-
-
-
-        val settings =
-            webView.settings
-
-        settings.cacheMode =
-            android.webkit.WebSettings.LOAD_DEFAULT
-
-        settings.loadsImagesAutomatically = true
-        settings.blockNetworkImage = false
-        settings.databaseEnabled = true
-
-        settings.displayZoomControls = false
-        settings.builtInZoomControls = false
-        settings.setSupportZoom(false)
-
-        settings.textZoom = 100
-        settings.defaultTextEncodingName = "UTF-8"
-
-        settings.mixedContentMode =
-            android.webkit.WebSettings.MIXED_CONTENT_NEVER_ALLOW
-
-        settings.javaScriptEnabled = true
-        settings.mediaPlaybackRequiresUserGesture = false
-        settings.domStorageEnabled = true
-
-        settings.setGeolocationEnabled(true)
-
-        settings.allowFileAccess = true
-        settings.allowContentAccess = false
-
-        settings.allowFileAccessFromFileURLs = false
-        settings.allowUniversalAccessFromFileURLs = false
-
-        settings.javaScriptCanOpenWindowsAutomatically = false
-        settings.setSupportMultipleWindows(false)
-
-        webView.overScrollMode =
-            View.OVER_SCROLL_NEVER
-
-        webView.isVerticalScrollBarEnabled = false
-        webView.isHorizontalScrollBarEnabled = false
-
-        webView.isFocusable = true
-        webView.isFocusableInTouchMode = true
-
-        webView.scrollBarStyle =
-            View.SCROLLBARS_INSIDE_OVERLAY
-
-        // =====================================================
-        // WEB CHROME CLIENT
-        // =====================================================
-
-        webView.webChromeClient =
-            object : WebChromeClient() {
-
-                override fun onGeolocationPermissionsShowPrompt(
-                    origin: String?,
-                    callback: GeolocationPermissions.Callback?
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = Color.Transparent
                 ) {
 
-                    callback?.invoke(
-                        origin,
-                        true,
-                        false
-                    )
-                }
+                    CarteiraScreen(
+                        onExigirClick = {
 
-                override fun onPermissionRequest(
-                    request: PermissionRequest
-                ) {
-
-                    runOnUiThread {
-
-                        val resources =
-                            request.resources
-
-                        if (
-                            resources.contains(
-                                PermissionRequest
-                                    .RESOURCE_AUDIO_CAPTURE
-                            )
-                        ) {
-
-                            request.grant(
-                                arrayOf(
-                                    PermissionRequest
-                                        .RESOURCE_AUDIO_CAPTURE
+                            startActivity(
+                                Intent(
+                                    this,
+                                    ExigirActivity::class.java
                                 )
                             )
 
-                        } else {
+                        },
 
-                            request.deny()
+                        onGestoClick = {
+
+                            startActivity(
+                                Intent(
+                                    this,
+                                    GestoActivity::class.java
+                                )
+                            )
+
                         }
-                    }
+                    )
                 }
             }
+        }
+    }
+}
 
-        // =====================================================
-        // WEBVIEW CLIENT
-        // =====================================================
 
-        webView.webViewClient =
-            object : WebViewClient() {
+@Composable
+private fun CarteiraScreen(
+    onExigirClick: () -> Unit,
+    onGestoClick: () -> Unit
+) {
 
-                override fun shouldOverrideUrlLoading(
-                    view: WebView?,
-                    request: WebResourceRequest?
-                ): Boolean {
+    val dark = androidx.compose.foundation.isSystemInDarkTheme()
 
-                    val url =
-                        request?.url?.toString()
-                            ?: return false
-
-                    if (
-                        url.startsWith("tel:")
-                    ) {
-
-                        startActivity(
-                            Intent(
-                                Intent.ACTION_DIAL,
-                                Uri.parse(url)
-                            )
-                        )
-
-                        return true
-                    }
-
-                    if (
-                        url.startsWith("https://wa.me")
-                    ) {
-
-                        startActivity(
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse(url)
-                            )
-                        )
-
-                        return true
-                    }
-
-                    return false
-                }
-            }
+    val background = if (dark) {
+        Color(0xFF000000)
+    } else {
+        Color(0xFFFFFFFF)
     }
 
-    // =========================================================
-    // LOCALIZAÇÃO
-    // =========================================================
+    val text = if (dark) {
+        Color(0xFFF5F5F7)
+    } else {
+        Color(0xFF18181C)
+    }
 
-    fun pegarLocalizacao() {
+    val soft = if (dark) {
+        Color(0xFFB4B4BD)
+    } else {
+        Color(0xFF686870)
+    }
 
-        if (
-            ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
+    val muted = if (dark) {
+        Color(0xFF9999A3)
+    } else {
+        Color(0xFF777780)
+    }
+
+    val cardBackground = if (dark) {
+        Color(0xFF18181C)
+    } else {
+        Color.White
+    }
+
+    val border = if (dark) {
+        Color.White.copy(alpha = 0.08f)
+    } else {
+        Color.Black.copy(alpha = 0.09f)
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(background)
+            .padding(
+                start = 16.dp,
+                end = 16.dp,
+                top = 24.dp,
+                bottom = 100.dp
+            ),
+        verticalArrangement = Arrangement.spacedBy(31.dp)
+    ) {
+
+        /*
+         * =====================================================
+         * HERO
+         * =====================================================
+         */
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = 4.dp,
+                    end = 4.dp
+                )
         ) {
 
-            Toast.makeText(
-                this,
-                "Permissão de localização não concedida",
-                Toast.LENGTH_SHORT
-            ).show()
+            Box(
+                modifier = Modifier
+                    .width(43.dp)
+                    .height(3.dp)
+                    .clip(
+                        RoundedCornerShape(999.dp)
+                    )
+                    .background(Pink)
+            )
 
-            return
+            Spacer(
+                modifier = Modifier.height(18.dp)
+            )
+
+            Text(
+                text = "Carteira",
+
+                color = text,
+
+                fontFamily = Quicksand,
+
+                fontSize = 44.sp,
+
+                fontWeight = FontWeight.ExtraBold,
+
+                lineHeight = 43.sp,
+
+                letterSpacing = (-1.6).sp
+            )
+
+            Spacer(
+                modifier = Modifier.height(14.dp)
+            )
+
+            Text(
+                text =
+                    "Suas carteirinhas reunidas em um só lugar.",
+
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .width(410.dp),
+
+                color = soft,
+
+                fontFamily = Quicksand,
+
+                fontSize = 11.sp,
+
+                fontWeight = FontWeight.SemiBold,
+
+                lineHeight = 16.sp,
+
+                letterSpacing = 0.15.sp
+            )
+
+            Spacer(
+                modifier = Modifier.height(8.dp)
+            )
+
+            Text(
+                text =
+                    "Recurso informativo do aplicativo para apresentação " +
+                    "à equipe de transporte. Estas carteirinhas não são " +
+                    "um documento governamental nem são emitidas por " +
+                    "órgãos públicos.",
+
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .width(410.dp),
+
+                color = soft,
+
+                fontFamily = Quicksand,
+
+                fontSize = 11.sp,
+
+                fontWeight = FontWeight.SemiBold,
+
+                lineHeight = 16.sp,
+
+                letterSpacing = 0.15.sp
+            )
         }
 
-        locationClient.lastLocation
-            .addOnSuccessListener { location ->
 
-                if (location != null) {
+        /*
+         * =====================================================
+         * PRIMEIRA SEÇÃO
+         * =====================================================
+         */
 
-                    val lat =
-                        location.latitude
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
 
-                    val lng =
-                        location.longitude
+            CarteiraLabel(
+                text = "Exigindo seus direitos no transporte",
+                color = muted
+            )
 
-                    val js =
-                        "receberLocalizacao($lat,$lng)"
+            Spacer(
+                modifier = Modifier.height(13.dp)
+            )
 
-                    webView.evaluateJavascript(
-                        js,
-                        null
-                    )
+            CarteiraCard(
+                image = R.drawable.cartao,
+                contentDescription = "Carteirinha sobre transporte",
+                background = cardBackground,
+                border = border,
+                onClick = onExigirClick
+            )
+        }
 
-                } else {
 
-                    Toast.makeText(
-                        this,
-                        "Não foi possível obter a localização.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-            .addOnFailureListener {
+        /*
+         * =====================================================
+         * SEGUNDA SEÇÃO
+         * =====================================================
+         */
 
-                Toast.makeText(
-                    this,
-                    "Erro ao obter localização.",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+
+            CarteiraLabel(
+                text = "Sobre o gesto de combate da violência",
+                color = muted
+            )
+
+            Spacer(
+                modifier = Modifier.height(13.dp)
+            )
+
+            CarteiraCard(
+                image = R.drawable.cartao1,
+                contentDescription = "Carteirinha sobre o gesto",
+                background = cardBackground,
+                border = border,
+                onClick = onGestoClick
+            )
+        }
+    }
+}
+
+
+@Composable
+private fun CarteiraLabel(
+    text: String,
+    color: Color
+) {
+
+    androidx.compose.foundation.layout.Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Box(
+            modifier = Modifier
+                .width(5.dp)
+                .height(5.dp)
+                .clip(
+                    RoundedCornerShape(50)
+                )
+                .background(Pink)
+        )
+
+        Spacer(
+            modifier = Modifier.width(9.dp)
+        )
+
+        Text(
+            text = text.uppercase(),
+
+            color = color,
+
+            fontFamily = Quicksand,
+
+            fontSize = 10.sp,
+
+            fontWeight = FontWeight.ExtraBold,
+
+            letterSpacing = 2.sp,
+
+            maxLines = 1,
+
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+
+@Composable
+private fun CarteiraCard(
+    image: Int,
+    contentDescription: String,
+    background: Color,
+    border: Color,
+    onClick: () -> Unit
+) {
+
+    val interactionSource = remember {
+        MutableInteractionSource()
     }
 
+    val pressed by interactionSource.collectIsPressedAsStateCompat()
 
+    val scale by animateFloatAsState(
+        targetValue = if (pressed) 0.90f else 1f,
+        label = "cardScale"
+    )
 
-    override fun onDestroy() {
-        webView.stopLoading()
-        webView.destroy()
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .scale(scale)
+            .clip(
+                RoundedCornerShape(27.dp)
+            )
+            .background(background)
+            .border(
+                width = 1.dp,
+                color = border,
+                shape = RoundedCornerShape(27.dp)
+            )
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick
+            )
+    ) {
 
-        super.onDestroy()
+        Image(
+            painter = painterResource(image),
+
+            contentDescription = contentDescription,
+
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(
+                    RoundedCornerShape(27.dp)
+                ),
+
+            contentScale = ContentScale.FillWidth
+        )
     }
+}
+
+
+/*
+ * Compatibilidade para obter o estado de pressionamento.
+ */
+@Composable
+private fun MutableInteractionSource.collectIsPressedAsStateCompat(): androidx.compose.runtime.State<Boolean> {
+    return androidx.compose.foundation.interaction.collectIsPressedAsState()
 }

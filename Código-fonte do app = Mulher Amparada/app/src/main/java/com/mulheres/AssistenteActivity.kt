@@ -483,23 +483,24 @@ fun AssistenteSaude() {
 
 
     LazyColumn(
+    modifier =
+        Modifier
+            .fillMaxSize()
+            .background(
+                cores.fundo
+            )
+            .padding(
+                start = 15.dp,
+                end = 15.dp,
+                top = 25.dp,
+                bottom = 45.dp
+            ),
 
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .background(
-                    cores.fundo
-                )
-                .padding(
-                    start = 15.dp,
-                    end = 15.dp,
-                    top = 25.dp,
-                    bottom = 45.dp
-                ),
+    verticalArrangement =
+        Arrangement.spacedBy(0.dp),
 
-        verticalArrangement =
-            Arrangement.spacedBy(0.dp)
-    ) {
+    overscrollEffect = null
+) {
 
         item {
 

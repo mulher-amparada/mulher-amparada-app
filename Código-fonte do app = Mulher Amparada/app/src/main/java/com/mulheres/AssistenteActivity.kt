@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -40,9 +41,10 @@ import androidx.compose.material3.Text
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
@@ -64,6 +66,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 
 import kotlin.math.roundToInt
 import kotlin.random.Random
@@ -78,32 +81,24 @@ class AssistenteActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        /*
-         * Conteúdo desenhado por trás das barras do sistema.
-         */
         WindowCompat.setDecorFitsSystemWindows(
             window,
             false
         )
 
-        /*
-         * Barras totalmente transparentes.
-         */
         window.statusBarColor =
             AndroidColor.TRANSPARENT
 
         window.navigationBarColor =
             AndroidColor.TRANSPARENT
 
-        /*
-         * Remove o contraste automático
-         * da navigation bar/status bar.
-         */
         if (android.os.Build.VERSION.SDK_INT >= 29) {
 
-            window.isNavigationBarContrastEnforced = false
+            window.isNavigationBarContrastEnforced =
+                false
 
-            window.isStatusBarContrastEnforced = false
+            window.isStatusBarContrastEnforced =
+                false
         }
 
         setContent {
@@ -111,16 +106,6 @@ class AssistenteActivity : ComponentActivity() {
             val modoEscuro =
                 isSystemInDarkTheme()
 
-            /*
-             * Controla a cor dos ícones das
-             * barras do sistema.
-             *
-             * Escuro:
-             *   ícones claros
-             *
-             * Claro:
-             *   ícones escuros
-             */
             val controller =
                 WindowInsetsControllerCompat(
                     window,
@@ -142,39 +127,28 @@ class AssistenteActivity : ComponentActivity() {
 
 
 /* =========================================================
-   CORES DO APLICATIVO
+   CORES
 ========================================================= */
 
 data class CoresAssistente(
 
     val fundo: Color,
-
     val card: Color,
-
     val cardSecundario: Color,
-
     val borda: Color,
-
     val bordaForte: Color,
 
     val textoPrincipal: Color,
-
     val textoSecundario: Color,
-
     val textoEscuro: Color,
-
     val textoMuitoEscuro: Color,
 
     val icone: Color,
-
     val fundoIcone: Color,
-
     val bordaIcone: Color,
 
     val azul: Color,
-
     val azulClaro: Color,
-
     val linhaFundo: Color
 )
 
@@ -209,6 +183,7 @@ private val CoresEscuras =
         textoMuitoEscuro =
             Color(0xFF3B3B3B),
 
+        /* PRETO NO BRANCO / BRANCO NO PRETO */
         icone =
             Color.White,
 
@@ -259,6 +234,7 @@ private val CoresClaras =
         textoMuitoEscuro =
             Color(0xFF999999),
 
+        /* PRETO NO FUNDO BRANCO */
         icone =
             Color.Black,
 
@@ -304,7 +280,7 @@ private fun AssistenteTheme(
             CoresClaras
         }
 
-    androidx.compose.runtime.CompositionLocalProvider(
+    CompositionLocalProvider(
         LocalCoresAssistente provides cores
     ) {
         content()
@@ -322,6 +298,13 @@ private fun coresAssistente(): CoresAssistente {
    FONTE
 ========================================================= */
 
+/*
+ * Fonte mais encorpada.
+ *
+ * Como o arquivo quicksand.ttf é uma única fonte,
+ * usamos pesos maiores do Compose para dar mais presença
+ * visual aos textos.
+ */
 private val Quicksand =
     FontFamily(
 
@@ -349,7 +332,7 @@ private val Quicksand =
 
 data class Indicador(
 
-    var valor: Float,
+    val valor: Float,
 
     val min: Float,
 
@@ -361,7 +344,7 @@ data class Indicador(
 
 data class DadosSaude(
 
-    var batimentos: Indicador =
+    val batimentos: Indicador =
         Indicador(
             72f,
             65f,
@@ -369,7 +352,7 @@ data class DadosSaude(
             2f
         ),
 
-    var respiracao: Indicador =
+    val respiracao: Indicador =
         Indicador(
             16f,
             12f,
@@ -377,7 +360,7 @@ data class DadosSaude(
             .5f
         ),
 
-    var temperatura: Indicador =
+    val temperatura: Indicador =
         Indicador(
             36.5f,
             36.1f,
@@ -385,7 +368,7 @@ data class DadosSaude(
             .05f
         ),
 
-    var hidratacao: Indicador =
+    val hidratacao: Indicador =
         Indicador(
             68f,
             55f,
@@ -393,7 +376,7 @@ data class DadosSaude(
             1f
         ),
 
-    var bemEstar: Indicador =
+    val bemEstar: Indicador =
         Indicador(
             72f,
             60f,
@@ -435,72 +418,104 @@ fun AssistenteSaude() {
     val cores =
         coresAssistente()
 
-    var dados by remember {
-        mutableFloatStateOf(72f)
-    }
-
-    val estado =
-        remember {
+    /*
+     * Agora o estado é observado corretamente pelo Compose.
+     *
+     * Antes:
+     * estado.bemEstar.valor = ...
+     *
+     * Isso alterava um objeto normal sem avisar o Compose.
+     *
+     * Agora substituímos DadosSaude inteiro.
+     */
+    var estado by remember {
+        mutableStateOf(
             DadosSaude()
-        }
+        )
+    }
 
 
     LaunchedEffect(Unit) {
 
-        while (true) {
+        while (isActive) {
 
             delay(3000)
 
-            estado.batimentos.valor =
-                variar(
-                    estado.batimentos
-                )
+            estado =
+                estado.copy(
 
-            estado.respiracao.valor =
-                variar(
-                    estado.respiracao
-                )
+                    batimentos =
+                        estado.batimentos.copy(
+                            valor =
+                                variar(
+                                    estado.batimentos
+                                )
+                        ),
 
-            estado.temperatura.valor =
-                variar(
-                    estado.temperatura
-                )
+                    respiracao =
+                        estado.respiracao.copy(
+                            valor =
+                                variar(
+                                    estado.respiracao
+                                )
+                        ),
 
-            estado.hidratacao.valor =
-                variar(
-                    estado.hidratacao
-                )
+                    temperatura =
+                        estado.temperatura.copy(
+                            valor =
+                                variar(
+                                    estado.temperatura
+                                )
+                        ),
 
-            estado.bemEstar.valor =
-                variar(
-                    estado.bemEstar
-                )
+                    hidratacao =
+                        estado.hidratacao.copy(
+                            valor =
+                                variar(
+                                    estado.hidratacao
+                                )
+                        ),
 
-            dados =
-                estado.bemEstar.valor
+                    bemEstar =
+                        estado.bemEstar.copy(
+                            valor =
+                                variar(
+                                    estado.bemEstar
+                                )
+                        )
+                )
         }
     }
 
 
     LazyColumn(
-    modifier =
-        Modifier
-            .fillMaxSize()
-            .background(
-                cores.fundo
-            )
-            .padding(
-                start = 15.dp,
-                end = 15.dp,
-                top = 25.dp,
-                bottom = 45.dp
+
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(
+                    cores.fundo
+                )
+                .padding(
+                    start = 15.dp,
+                    end = 15.dp,
+                    top = 25.dp,
+                    bottom = 45.dp
+                ),
+
+        verticalArrangement =
+            Arrangement.spacedBy(
+                0.dp
             ),
 
-    verticalArrangement =
-        Arrangement.spacedBy(0.dp),
-
-    overscrollEffect = null
-) {
+        contentWindowInsets =
+            WindowInsets(
+                0,
+                0,
+                0,
+                0
+            )
+    ) {
 
         item {
 
@@ -514,7 +529,9 @@ fun AssistenteSaude() {
 
             Spacer(
                 modifier =
-                    Modifier.height(28.dp)
+                    Modifier.height(
+                        28.dp
+                    )
             )
         }
 
@@ -528,7 +545,9 @@ fun AssistenteSaude() {
 
             Spacer(
                 modifier =
-                    Modifier.height(12.dp)
+                    Modifier.height(
+                        12.dp
+                    )
             )
         }
 
@@ -552,17 +571,23 @@ fun AssistenteSaude() {
         item {
 
             SecaoTitulo(
-                titulo = "Indicadores",
-                direita = "Atualização contínua"
+                titulo =
+                    "Indicadores",
+
+                direita =
+                    "Atualização contínua"
             )
 
             Spacer(
                 modifier =
-                    Modifier.height(14.dp)
+                    Modifier.height(
+                        14.dp
+                    )
             )
 
             Indicadores(
-                dados = estado
+                dados =
+                    estado
             )
         }
 
@@ -571,17 +596,24 @@ fun AssistenteSaude() {
 
             Spacer(
                 modifier =
-                    Modifier.height(36.dp)
+                    Modifier.height(
+                        36.dp
+                    )
             )
 
             SecaoTitulo(
-                titulo = "Bem-estar",
-                direita = "Índice geral"
+                titulo =
+                    "Bem-estar",
+
+                direita =
+                    "Índice geral"
             )
 
             Spacer(
                 modifier =
-                    Modifier.height(14.dp)
+                    Modifier.height(
+                        14.dp
+                    )
             )
 
             BemEstar(
@@ -595,23 +627,30 @@ fun AssistenteSaude() {
 
             Spacer(
                 modifier =
-                    Modifier.height(36.dp)
+                    Modifier.height(
+                        36.dp
+                    )
             )
 
             SecaoTitulo(
-                titulo = "Atividade"
+                titulo =
+                    "Atividade"
             )
 
             Spacer(
                 modifier =
-                    Modifier.height(14.dp)
+                    Modifier.height(
+                        14.dp
+                    )
             )
 
             Atividade()
 
             Spacer(
                 modifier =
-                    Modifier.height(14.dp)
+                    Modifier.height(
+                        14.dp
+                    )
             )
         }
     }
@@ -645,7 +684,9 @@ private fun Cabecalho(
 
         Column(
             modifier =
-                Modifier.weight(1f)
+                Modifier.weight(
+                    1f
+                )
         ) {
 
             Text(
@@ -672,7 +713,9 @@ private fun Cabecalho(
 
             Spacer(
                 modifier =
-                    Modifier.height(8.dp)
+                    Modifier.height(
+                        8.dp
+                    )
             )
 
 
@@ -703,7 +746,9 @@ private fun Cabecalho(
 
             Spacer(
                 modifier =
-                    Modifier.height(9.dp)
+                    Modifier.height(
+                        9.dp
+                    )
             )
 
 
@@ -721,6 +766,9 @@ private fun Cabecalho(
                 fontSize =
                     9.sp,
 
+                fontWeight =
+                    FontWeight.Medium,
+
                 lineHeight =
                     14.sp,
 
@@ -732,7 +780,9 @@ private fun Cabecalho(
 
         Spacer(
             modifier =
-                Modifier.width(20.dp)
+                Modifier.width(
+                    20.dp
+                )
         )
 
 
@@ -742,10 +792,14 @@ private fun Cabecalho(
                 onSecretClick,
 
             modifier =
-                Modifier.size(42.dp),
+                Modifier.size(
+                    42.dp
+                ),
 
             shape =
-                RoundedCornerShape(14.dp),
+                RoundedCornerShape(
+                    14.dp
+                ),
 
             colors =
                 CardDefaults.cardColors(
@@ -780,7 +834,9 @@ private fun Cabecalho(
                         null,
 
                     modifier =
-                        Modifier.size(19.dp),
+                        Modifier.size(
+                            19.dp
+                        ),
 
                     colorFilter =
                         ColorFilter.tint(
@@ -806,12 +862,10 @@ private fun Hero(
         coresAssistente()
 
 
-    /*
-     * Pulsação suave do ponto azul.
-     */
     val transicao =
         rememberInfiniteTransition(
-            label = "ponto-ativo"
+            label =
+                "ponto-ativo"
         )
 
 
@@ -829,7 +883,6 @@ private fun Hero(
 
                     animation =
                         tween(
-
                             durationMillis =
                                 1400,
 
@@ -851,10 +904,14 @@ private fun Hero(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .height(315.dp),
+                .height(
+                    315.dp
+                ),
 
         shape =
-            RoundedCornerShape(26.dp),
+            RoundedCornerShape(
+                26.dp
+            ),
 
         colors =
             CardDefaults.cardColors(
@@ -874,10 +931,6 @@ private fun Hero(
                 Modifier.fillMaxSize()
         ) {
 
-
-            /* -----------------------------------------
-               TOPO
-            ----------------------------------------- */
 
             Row(
 
@@ -930,10 +983,13 @@ private fun Hero(
                         modifier =
                             Modifier
                                 .size(5.dp)
-                                .clip(CircleShape)
+                                .clip(
+                                    CircleShape
+                                )
                                 .background(
                                     cores.azul.copy(
-                                        alpha = opacity
+                                        alpha =
+                                            opacity
                                     )
                                 )
                     )
@@ -941,7 +997,9 @@ private fun Hero(
 
                     Spacer(
                         modifier =
-                            Modifier.width(6.dp)
+                            Modifier.width(
+                                6.dp
+                            )
                     )
 
 
@@ -968,10 +1026,6 @@ private fun Hero(
                 }
             }
 
-
-            /* -----------------------------------------
-               CENTRO
-            ----------------------------------------- */
 
             Column(
 
@@ -1002,20 +1056,30 @@ private fun Hero(
                                 if (
                                     isSystemInDarkTheme()
                                 ) {
-                                    Color(0xFF0B0D17)
+                                    Color(
+                                        0xFF0B0D17
+                                    )
                                 } else {
-                                    Color(0xFFF0F1F8)
+                                    Color(
+                                        0xFFF0F1F8
+                                    )
                                 }
                             )
                             .border(
                                 1.dp,
+
                                 if (
                                     isSystemInDarkTheme()
                                 ) {
-                                    Color(0xFF282B40)
+                                    Color(
+                                        0xFF282B40
+                                    )
                                 } else {
-                                    Color(0xFFD9DBE8)
+                                    Color(
+                                        0xFFD9DBE8
+                                    )
                                 },
+
                                 RoundedCornerShape(
                                     20.dp
                                 )
@@ -1036,7 +1100,9 @@ private fun Hero(
                             null,
 
                         modifier =
-                            Modifier.size(30.dp),
+                            Modifier.size(
+                                30.dp
+                            ),
 
                         contentScale =
                             ContentScale.Fit,
@@ -1051,7 +1117,9 @@ private fun Hero(
 
                 Spacer(
                     modifier =
-                        Modifier.height(17.dp)
+                        Modifier.height(
+                            17.dp
+                        )
                 )
 
 
@@ -1087,7 +1155,9 @@ private fun Hero(
 
                     Spacer(
                         modifier =
-                            Modifier.width(4.dp)
+                            Modifier.width(
+                                4.dp
+                            )
                     )
 
 
@@ -1106,15 +1176,11 @@ private fun Hero(
                             8.sp,
 
                         fontWeight =
-                            FontWeight.SemiBold
+                            FontWeight.Bold
                     )
                 }
             }
 
-
-            /* -----------------------------------------
-               STATUS
-            ----------------------------------------- */
 
             Column(
 
@@ -1152,7 +1218,9 @@ private fun Hero(
 
                 Spacer(
                     modifier =
-                        Modifier.height(6.dp)
+                        Modifier.height(
+                            6.dp
+                        )
                 )
 
 
@@ -1168,7 +1236,10 @@ private fun Hero(
                         Quicksand,
 
                     fontSize =
-                        8.sp
+                        8.sp,
+
+                    fontWeight =
+                        FontWeight.Medium
                 )
             }
         }
@@ -1196,13 +1267,17 @@ private fun Resumo(
             Modifier.fillMaxWidth(),
 
         horizontalArrangement =
-            Arrangement.spacedBy(10.dp)
+            Arrangement.spacedBy(
+                10.dp
+            )
     ) {
 
         ResumoItem(
 
             modifier =
-                Modifier.weight(1f),
+                Modifier.weight(
+                    1f
+                ),
 
             label =
                 "BATIMENTOS",
@@ -1220,7 +1295,9 @@ private fun Resumo(
         ResumoItem(
 
             modifier =
-                Modifier.weight(1f),
+                Modifier.weight(
+                    1f
+                ),
 
             label =
                 "RESPIRAÇÃO",
@@ -1238,7 +1315,9 @@ private fun Resumo(
         ResumoItem(
 
             modifier =
-                Modifier.weight(1f),
+                Modifier.weight(
+                    1f
+                ),
 
             label =
                 "TEMPERATURA",
@@ -1274,10 +1353,14 @@ private fun ResumoItem(
     Card(
 
         modifier =
-            modifier.height(79.dp),
+            modifier.height(
+                79.dp
+            ),
 
         shape =
-            RoundedCornerShape(17.dp),
+            RoundedCornerShape(
+                17.dp
+            ),
 
         colors =
             CardDefaults.cardColors(
@@ -1297,7 +1380,9 @@ private fun ResumoItem(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(13.dp),
+                    .padding(
+                        13.dp
+                    ),
 
             verticalArrangement =
                 Arrangement.SpaceBetween
@@ -1352,7 +1437,9 @@ private fun ResumoItem(
 
                 Spacer(
                     modifier =
-                        Modifier.width(4.dp)
+                        Modifier.width(
+                            4.dp
+                        )
                 )
 
 
@@ -1368,7 +1455,10 @@ private fun ResumoItem(
                         Quicksand,
 
                     fontSize =
-                        7.sp
+                        7.sp,
+
+                    fontWeight =
+                        FontWeight.Bold
                 )
             }
         }
@@ -1377,7 +1467,7 @@ private fun ResumoItem(
 
 
 /* =========================================================
-   TÍTULO DE SEÇÃO
+   TÍTULO
 ========================================================= */
 
 @Composable
@@ -1470,7 +1560,9 @@ private fun Indicadores(
     Column(
 
         verticalArrangement =
-            Arrangement.spacedBy(11.dp)
+            Arrangement.spacedBy(
+                11.dp
+            )
     ) {
 
         Row(
@@ -1479,13 +1571,17 @@ private fun Indicadores(
                 Modifier.fillMaxWidth(),
 
             horizontalArrangement =
-                Arrangement.spacedBy(11.dp)
+                Arrangement.spacedBy(
+                    11.dp
+                )
         ) {
 
             IndicadorCard(
 
                 modifier =
-                    Modifier.weight(1f),
+                    Modifier.weight(
+                        1f
+                    ),
 
                 numero =
                     "01",
@@ -1514,7 +1610,9 @@ private fun Indicadores(
             IndicadorCard(
 
                 modifier =
-                    Modifier.weight(1f),
+                    Modifier.weight(
+                        1f
+                    ),
 
                 numero =
                     "02",
@@ -1547,13 +1645,17 @@ private fun Indicadores(
                 Modifier.fillMaxWidth(),
 
             horizontalArrangement =
-                Arrangement.spacedBy(11.dp)
+                Arrangement.spacedBy(
+                    11.dp
+                )
         ) {
 
             IndicadorCard(
 
                 modifier =
-                    Modifier.weight(1f),
+                    Modifier.weight(
+                        1f
+                    ),
 
                 numero =
                     "03",
@@ -1582,7 +1684,9 @@ private fun Indicadores(
             IndicadorCard(
 
                 modifier =
-                    Modifier.weight(1f),
+                    Modifier.weight(
+                        1f
+                    ),
 
                 numero =
                     "04",
@@ -1618,10 +1722,10 @@ private fun percentual(
     return (
 
         (indicador.valor - indicador.min) /
-                (
-                    indicador.max -
-                            indicador.min
-                    )
+            (
+                indicador.max -
+                    indicador.min
+            )
 
         ).coerceIn(
             0f,
@@ -1655,10 +1759,14 @@ private fun IndicadorCard(
     Card(
 
         modifier =
-            modifier.height(148.dp),
+            modifier.height(
+                148.dp
+            ),
 
         shape =
-            RoundedCornerShape(20.dp),
+            RoundedCornerShape(
+                20.dp
+            ),
 
         colors =
             CardDefaults.cardColors(
@@ -1683,7 +1791,9 @@ private fun IndicadorCard(
                 modifier =
                     Modifier
                         .fillMaxSize()
-                        .padding(16.dp)
+                        .padding(
+                            16.dp
+                        )
             ) {
 
                 Row(
@@ -1734,7 +1844,9 @@ private fun IndicadorCard(
                                 null,
 
                             modifier =
-                                Modifier.size(21.dp),
+                                Modifier.size(
+                                    21.dp
+                                ),
 
                             contentScale =
                                 ContentScale.Fit,
@@ -1769,7 +1881,9 @@ private fun IndicadorCard(
 
                 Spacer(
                     modifier =
-                        Modifier.height(15.dp)
+                        Modifier.height(
+                            15.dp
+                        )
                 )
 
 
@@ -1788,13 +1902,15 @@ private fun IndicadorCard(
                         9.sp,
 
                     fontWeight =
-                        FontWeight.SemiBold
+                        FontWeight.Bold
                 )
 
 
                 Spacer(
                     modifier =
-                        Modifier.weight(1f)
+                        Modifier.weight(
+                            1f
+                        )
                 )
 
 
@@ -1851,15 +1967,11 @@ private fun IndicadorCard(
                             8.sp,
 
                         fontWeight =
-                            FontWeight.SemiBold
+                            FontWeight.Bold
                     )
                 }
             }
 
-
-            /* -----------------------------------------
-               LINHA INFERIOR
-            ----------------------------------------- */
 
             Box(
 
@@ -1874,7 +1986,9 @@ private fun IndicadorCard(
                             end = 16.dp,
                             bottom = 10.dp
                         )
-                        .height(2.dp)
+                        .height(
+                            2.dp
+                        )
                         .clip(
                             RoundedCornerShape(
                                 999.dp
@@ -1896,7 +2010,9 @@ private fun IndicadorCard(
                                         1f
                                     )
                             )
-                            .height(2.dp)
+                            .height(
+                                2.dp
+                            )
                             .clip(
                                 RoundedCornerShape(
                                     999.dp
@@ -1904,7 +2020,8 @@ private fun IndicadorCard(
                             )
                             .background(
                                 cores.azul.copy(
-                                    alpha = .5f
+                                    alpha =
+                                        .5f
                                 )
                             )
                 )
@@ -1933,7 +2050,9 @@ private fun BemEstar(
             Modifier.fillMaxWidth(),
 
         shape =
-            RoundedCornerShape(22.dp),
+            RoundedCornerShape(
+                22.dp
+            ),
 
         colors =
             CardDefaults.cardColors(
@@ -1953,7 +2072,9 @@ private fun BemEstar(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(20.dp)
+                    .padding(
+                        20.dp
+                    )
         ) {
 
             Row(
@@ -1971,7 +2092,9 @@ private fun BemEstar(
                 Row(
 
                     modifier =
-                        Modifier.weight(1f),
+                        Modifier.weight(
+                            1f
+                        ),
 
                     verticalAlignment =
                         Alignment.CenterVertically
@@ -2013,7 +2136,9 @@ private fun BemEstar(
                                 null,
 
                             modifier =
-                                Modifier.size(22.dp),
+                                Modifier.size(
+                                    22.dp
+                                ),
 
                             colorFilter =
                                 ColorFilter.tint(
@@ -2025,7 +2150,9 @@ private fun BemEstar(
 
                     Spacer(
                         modifier =
-                            Modifier.width(12.dp)
+                            Modifier.width(
+                                12.dp
+                            )
                     )
 
 
@@ -2052,7 +2179,9 @@ private fun BemEstar(
 
                         Spacer(
                             modifier =
-                                Modifier.height(6.dp)
+                                Modifier.height(
+                                    6.dp
+                                )
                         )
 
 
@@ -2068,7 +2197,10 @@ private fun BemEstar(
                                 Quicksand,
 
                             fontSize =
-                                7.sp
+                                7.sp,
+
+                            fontWeight =
+                                FontWeight.Medium
                         )
                     }
                 }
@@ -2106,7 +2238,9 @@ private fun BemEstar(
 
                     Spacer(
                         modifier =
-                            Modifier.width(3.dp)
+                            Modifier.width(
+                                3.dp
+                            )
                     )
 
 
@@ -2122,7 +2256,10 @@ private fun BemEstar(
                             Quicksand,
 
                         fontSize =
-                            8.sp
+                            8.sp,
+
+                        fontWeight =
+                            FontWeight.Bold
                     )
                 }
             }
@@ -2130,7 +2267,9 @@ private fun BemEstar(
 
             Spacer(
                 modifier =
-                    Modifier.height(25.dp)
+                    Modifier.height(
+                        25.dp
+                    )
             )
 
 
@@ -2144,14 +2283,18 @@ private fun BemEstar(
             ) {
 
                 BemEstarInfo(
-                    titulo = "MÍNIMO",
-                    valor = "60"
+                    titulo =
+                        "MÍNIMO",
+
+                    valor =
+                        "60"
                 )
 
 
                 BemEstarInfo(
 
-                    titulo = "ATUAL",
+                    titulo =
+                        "ATUAL",
 
                     valor =
                         valor
@@ -2161,15 +2304,20 @@ private fun BemEstar(
 
 
                 BemEstarInfo(
-                    titulo = "MÁXIMO",
-                    valor = "88"
+                    titulo =
+                        "MÁXIMO",
+
+                    valor =
+                        "88"
                 )
             }
 
 
             Spacer(
                 modifier =
-                    Modifier.height(19.dp)
+                    Modifier.height(
+                        19.dp
+                    )
             )
 
 
@@ -2178,7 +2326,9 @@ private fun BemEstar(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .height(5.dp)
+                        .height(
+                            5.dp
+                        )
                         .clip(
                             RoundedCornerShape(
                                 999.dp
@@ -2216,7 +2366,9 @@ private fun BemEstar(
                             .fillMaxWidth(
                                 progresso.value
                             )
-                            .height(5.dp)
+                            .height(
+                                5.dp
+                            )
                             .clip(
                                 RoundedCornerShape(
                                     999.dp
@@ -2247,7 +2399,9 @@ private fun BemEstarInfo(
     Column(
 
         verticalArrangement =
-            Arrangement.spacedBy(5.dp)
+            Arrangement.spacedBy(
+                5.dp
+            )
     ) {
 
         Text(
@@ -2265,7 +2419,7 @@ private fun BemEstarInfo(
                 7.sp,
 
             fontWeight =
-                FontWeight.SemiBold
+                FontWeight.Bold
         )
 
 
@@ -2300,7 +2454,9 @@ private fun Atividade() {
     Column(
 
         verticalArrangement =
-            Arrangement.spacedBy(9.dp)
+            Arrangement.spacedBy(
+                9.dp
+            )
     ) {
 
         AtividadeRow(
@@ -2363,10 +2519,14 @@ private fun AtividadeRow(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .height(65.dp),
+                .height(
+                    65.dp
+                ),
 
         shape =
-            RoundedCornerShape(17.dp),
+            RoundedCornerShape(
+                17.dp
+            ),
 
         colors =
             CardDefaults.cardColors(
@@ -2400,7 +2560,9 @@ private fun AtividadeRow(
                 modifier =
                     Modifier
                         .size(7.dp)
-                        .clip(CircleShape)
+                        .clip(
+                            CircleShape
+                        )
                         .background(
                             cores.azul
                         )
@@ -2409,13 +2571,17 @@ private fun AtividadeRow(
 
             Spacer(
                 modifier =
-                    Modifier.width(13.dp)
+                    Modifier.width(
+                        13.dp
+                    )
             )
 
 
             Column(
                 modifier =
-                    Modifier.weight(1f)
+                    Modifier.weight(
+                        1f
+                    )
             ) {
 
                 Text(
@@ -2445,7 +2611,9 @@ private fun AtividadeRow(
 
                 Spacer(
                     modifier =
-                        Modifier.height(5.dp)
+                        Modifier.height(
+                            5.dp
+                        )
                 )
 
 
@@ -2463,6 +2631,9 @@ private fun AtividadeRow(
                     fontSize =
                         7.sp,
 
+                    fontWeight =
+                        FontWeight.Medium,
+
                     lineHeight =
                         10.sp,
 
@@ -2477,7 +2648,9 @@ private fun AtividadeRow(
 
             Spacer(
                 modifier =
-                    Modifier.width(13.dp)
+                    Modifier.width(
+                        13.dp
+                    )
             )
 
 
@@ -2496,7 +2669,7 @@ private fun AtividadeRow(
                     7.sp,
 
                 fontWeight =
-                    FontWeight.SemiBold
+                    FontWeight.Bold
             )
         }
     }

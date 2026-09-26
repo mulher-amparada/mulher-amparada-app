@@ -17,9 +17,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
@@ -103,8 +105,6 @@ private val TextoMuted = Color(0xFF777782)
 
 private val Rosa = Color(0xFFFF3F82)
 
-private val Vermelho = Color(0xFFFF5368)
-
 
 /* =========================================================
    MODELO
@@ -112,8 +112,7 @@ private val Vermelho = Color(0xFFFF5368)
 
 private data class Acesso(
     val titulo: String,
-    val descricao: String,
-    val emergencia: Boolean = false
+    val descricao: String
 )
 
 
@@ -313,70 +312,14 @@ private fun MeusAcessos() {
 
 
             /* =================================================
-               EMERGÊNCIA
-               
-               SOMENTE BLOQUEAR DISPOSITIVO.
-               NÃO EXISTE DESLIGAR.
-            ================================================= */
-
-            item {
-
-                Spacer(
-                    modifier = Modifier.height(28.dp)
-                )
-
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(
-                            Brush.horizontalGradient(
-                                listOf(
-                                    Color.Transparent,
-                                    Vermelho.copy(alpha = 0.18f),
-                                    Color.Transparent
-                                )
-                            )
-                        )
-                )
-
-
-                Spacer(
-                    modifier = Modifier.height(27.dp)
-                )
-
-
-                TituloSecao(
-                    titulo = "Emergência"
-                )
-
-
-                Spacer(
-                    modifier = Modifier.height(14.dp)
-                )
-
-
-                Cartao(
-                    acesso = Acesso(
-                        titulo = "Bloquear dispositivo",
-                        descricao = "Bloqueie a tela imediatamente",
-                        emergencia = true
-                    )
-                )
-
-
-                Spacer(
-                    modifier = Modifier.height(32.dp)
-                )
-            }
-
-
-            /* =================================================
                ESPECIAL
             ================================================= */
 
             item {
+
+                Spacer(
+                    modifier = Modifier.height(32.dp)
+                )
 
                 TituloSecao(
                     titulo = "Especial, só para você!"
@@ -433,7 +376,7 @@ private fun Hero() {
     ) {
 
         /*
-         * Quadrado roxo usando ic_8.xml.
+         * Quadrado roxo usando ic_lock.xml.
          */
 
         Box(
@@ -459,12 +402,13 @@ private fun Hero() {
                     color = Color.White.copy(alpha = 0.16f),
                     shape = RoundedCornerShape(30.dp)
                 ),
+
             contentAlignment = Alignment.Center
         ) {
 
             Image(
                 painter = androidx.compose.ui.res.painterResource(
-                    id = R.drawable.ic_8
+                    id = R.drawable.ic_lock
                 ),
 
                 contentDescription = null,
@@ -611,62 +555,33 @@ private fun Cartao(
     acesso: Acesso
 ) {
 
-    val fundo = if (acesso.emergencia) {
-
-        Brush.linearGradient(
-            colors = listOf(
-                Color(0x16FF5368),
-                Color(0x06FF5368)
-            )
-        )
-
-    } else {
-
-        Brush.linearGradient(
-            colors = listOf(
-                Color(0x09FFFFFF),
-                Color(0x03FFFFFF)
-            )
-        )
-    }
-
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
 
             /*
-             * Não existe mais height(82.dp) ou height(88.dp).
+             * Não existe altura fixa.
              *
-             * O card pode crescer livremente conforme
-             * o conteúdo precisar.
+             * O card cresce conforme o conteúdo.
              */
-            .height(
-                if (acesso.emergencia) {
-                    88.dp
-                } else {
-                    82.dp
-                }
-            )
+            .height(IntrinsicSize.Min)
 
             .clip(
                 RoundedCornerShape(21.dp)
             )
 
             .background(
-                fundo
+                Brush.linearGradient(
+                    colors = listOf(
+                        Color(0x09FFFFFF),
+                        Color(0x03FFFFFF)
+                    )
+                )
             )
 
             .border(
                 width = 1.dp,
-
-                color =
-                    if (acesso.emergencia) {
-                        Color(0x38FF5368)
-                    } else {
-                        Color.White.copy(alpha = 0.075f)
-                    },
-
+                color = Color.White.copy(alpha = 0.075f),
                 shape = RoundedCornerShape(21.dp)
             )
 
@@ -684,55 +599,10 @@ private fun Cartao(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        if (acesso.emergencia) {
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        vertical = 0.dp
-                    )
-            ) {
-
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .width(3.dp)
-                        .height(58.dp)
-                        .clip(
-                            RoundedCornerShape(
-                                topEnd = 8.dp,
-                                bottomEnd = 8.dp
-                            )
-                        )
-                        .background(
-                            Brush.verticalGradient(
-                                listOf(
-                                    Color(0xFFFF5368),
-                                    Color(0xFFFF304D)
-                                )
-                            )
-                        )
-                )
-
-
-                ConteudoCartao(
-                    acesso = acesso,
-
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 12.dp)
-                )
-            }
-
-        } else {
-
-            ConteudoCartao(
-                acesso = acesso,
-
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
+        ConteudoCartao(
+            acesso = acesso,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 
@@ -759,7 +629,7 @@ private fun ConteudoCartao(
 
 
         /* =================================================
-           TEXTO
+           TEXTOS
         ================================================= */
 
         Column(
@@ -771,12 +641,7 @@ private fun ConteudoCartao(
             androidx.compose.material3.Text(
                 text = acesso.titulo,
 
-                color =
-                    if (acesso.emergencia) {
-                        Color(0xFFFF6C7D)
-                    } else {
-                        Color(0xFFF8F8FA)
-                    },
+                color = Color(0xFFF8F8FA),
 
                 fontFamily = Quicksand,
 
@@ -796,12 +661,7 @@ private fun ConteudoCartao(
             androidx.compose.material3.Text(
                 text = acesso.descricao,
 
-                color =
-                    if (acesso.emergencia) {
-                        Color(0xFFA7656E)
-                    } else {
-                        TextoMuted
-                    },
+                color = TextoMuted,
 
                 fontFamily = Quicksand,
 
@@ -814,11 +674,13 @@ private fun ConteudoCartao(
         }
 
 
+        Spacer(
+            modifier = Modifier.width(10.dp)
+        )
+
+
         /* =================================================
            SETA
-           
-           Somente caractere de texto.
-           Nenhum ImageVector ou drawable.
         ================================================= */
 
         Box(
@@ -826,11 +688,7 @@ private fun ConteudoCartao(
                 .size(34.dp)
                 .clip(CircleShape)
                 .background(
-                    if (acesso.emergencia) {
-                        Color(0x10FF5368)
-                    } else {
-                        Color.White.copy(alpha = 0.025f)
-                    }
+                    Color.White.copy(alpha = 0.025f)
                 ),
 
             contentAlignment = Alignment.Center
@@ -839,12 +697,7 @@ private fun ConteudoCartao(
             androidx.compose.material3.Text(
                 text = "›",
 
-                color =
-                    if (acesso.emergencia) {
-                        Color(0xFFB64B5B)
-                    } else {
-                        Color(0xFF666671)
-                    },
+                color = Color(0xFF666671),
 
                 fontFamily = Quicksand,
 

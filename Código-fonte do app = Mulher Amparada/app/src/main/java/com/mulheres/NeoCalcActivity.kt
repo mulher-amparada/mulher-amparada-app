@@ -1136,6 +1136,7 @@ private enum class TipoBotao {
 private data class BotaoCalculadora(
     val texto: String,
     val tipo: TipoBotao = TipoBotao.NORMAL,
+      val icone: Int? = null,
     val acao: () -> Unit
 )
 
@@ -1193,28 +1194,40 @@ private fun LinhaBotoes(
                     Alignment.Center
             ) {
 
-                Text(
-                    text =
-                        botao.texto,
+                if (botao.icone != null) {
 
-                    color =
-                        cores.texto,
+    androidx.compose.foundation.Image(
+        painter =
+            painterResource(
+                id = botao.icone
+            ),
 
-                    fontFamily =
-                        fonte,
+        contentDescription =
+            "Apagar",
 
-                    fontWeight =
-                        FontWeight.Bold,
+        modifier =
+            Modifier.size(28.dp)
+    )
 
-                    fontSize =
-                        if (
-                            botao.texto == "⌫"
-                        ) {
-                            28.sp
-                        } else {
-                            25.sp
-                        }
-                )
+} else {
+
+    Text(
+        text =
+            botao.texto,
+
+        color =
+            cores.texto,
+
+        fontFamily =
+            fonte,
+
+        fontWeight =
+            FontWeight.Bold,
+
+        fontSize =
+            25.sp
+    )
+}
             }
         }
     }

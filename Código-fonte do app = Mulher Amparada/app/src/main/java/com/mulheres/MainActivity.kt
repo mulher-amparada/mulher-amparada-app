@@ -1,45 +1,25 @@
 package com.mulheres
 
-import android.widget.TextView
-import android.app.admin.DevicePolicyManager
-import android.content.ComponentName
 import android.Manifest
-import android.app.DownloadManager
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
-import android.media.AudioFormat
-import android.media.AudioRecord
-import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.ContactsContract
 import android.provider.Settings
-import android.telephony.TelephonyCallback
-import android.telephony.TelephonyManager
 import android.view.View
 import android.view.WindowManager
 import android.webkit.GeolocationPermissions
 import android.webkit.JavascriptInterface
 import android.webkit.PermissionRequest
-import android.webkit.URLUtil
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
@@ -50,7 +30,6 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.runtime.mutableStateOf
@@ -59,10 +38,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlin.math.log10
-import kotlin.math.sqrt
-
 class MainActivity : AppCompatActivity() {
 
     companion object {
@@ -72,17 +47,6 @@ class MainActivity : AppCompatActivity() {
     // =========================================================
     // VARIÁVEIS
     // =========================================================
-
-    private var aguardandoAdministrador = false
-
-    private var palmasEmExecucao = false
-
-    private lateinit var telephonyManager: TelephonyManager
-
-    private var telephonyCallback: TelephonyCallback? = null
-
-    private var acelerometro: Sensor? = null
-
     private lateinit var cripto: Cripto
 
     var destinoBiometria: Int = 0
@@ -90,50 +54,14 @@ class MainActivity : AppCompatActivity() {
     
 
     private lateinit var locationClient: FusedLocationProviderClient
-
-    private var protecaoAtiva = false
-
-    private lateinit var sensorManager: SensorManager
-
-    private lateinit var shakeListener: SensorEventListener
-
-    private var ultimoShake: Long = 0
-
     private lateinit var webView: WebView
 
     private lateinit var emergencyComposeView: ComposeView
 
     private var emergenciaVisivel by mutableStateOf(false)
 
-    private lateinit var selecionarContatoLauncher: ActivityResultLauncher<Intent>
-    
-    
-
-
     // =========================================================
-    // MICROFONE — FALLBACK DO CHACOALHAR
-    // =========================================================
-
-    private var shakeAudioRecord: AudioRecord? = null
-
-    private var shakeMicrophoneThread: Thread? = null
-
-    @Volatile
-    private var shakeMicrophoneRunning = false
-
-    private val shakeSampleRate = 44100
-
-    private val shakeBufferSize =
-        AudioRecord.getMinBufferSize(
-            shakeSampleRate,
-            AudioFormat.CHANNEL_IN_MONO,
-            AudioFormat.ENCODING_PCM_16BIT
-        )
-
-    private val shakeLoudSoundThreshold = -50.0
-
-
-    // =========================================================
+// =========================================================
     // ON CREATE
     // =========================================================
 
@@ -145,12 +73,6 @@ class MainActivity : AppCompatActivity() {
         window.addFlags(
             WindowManager.LayoutParams.FLAG_SECURE
         )
-
-        sensorManager =
-            getSystemService(
-                Context.SENSOR_SERVICE
-            ) as SensorManager
-
 WindowCompat.setDecorFitsSystemWindows(
     window,
     true
@@ -194,9 +116,7 @@ controller.isAppearanceLightNavigationBars =
         )
 
 
-
 webView = findViewById(R.id.webview)
-
 
 
 locationClient =
@@ -208,7 +128,6 @@ locationClient =
 criarEmergencyOverlay()
         
         
-
 
 
 ViewCompat.setOnApplyWindowInsetsListener(webView) { view, insets ->
@@ -227,21 +146,12 @@ ViewCompat.setOnApplyWindowInsetsListener(webView) { view, insets ->
 
     insets
 }
-
-        
-
-        criarShakeListener()
-
-  
-
         /*
          * Inicializa uma única instância do Cripto
          * antes de configurar a WebView.
          */
         cripto =
             Cripto(this)
-
-        registrarSelecionadorDeContato()
 
         configurarWebView()
 
@@ -280,7 +190,6 @@ if (!pagina.isNullOrEmpty()) {
 }
 
 
-
         // =====================================================
         // BOTÃO VOLTAR
         // =====================================================
@@ -311,135 +220,10 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
     // SELEÇÃO DE CONTATO — ACTIVITY RESULT API
     // =========================================================
 
-    private fun registrarSelecionadorDeContato() {
-
-        selecionarContatoLauncher =
-            registerForActivityResult(
-                ActivityResultContracts.StartActivityForResult()
-            ) { result ->
-
-                if (
-                    result.resultCode != RESULT_OK
-                ) {
-                    return@registerForActivityResult
-                }
-
-                val data =
-                    result.data
-                        ?: return@registerForActivityResult
-
-                val uri =
-                    data.data
-                        ?: return@registerForActivityResult
-
-                processarContatoSelecionado(uri)
-            }
-    }
-
-
-    private fun processarContatoSelecionado(
-        uri: Uri
-    ) {
-
-        try {
-
-            contentResolver.query(
-                uri,
-                arrayOf(
-                    ContactsContract.CommonDataKinds.Phone.NUMBER
-                ),
-                null,
-                null,
-                null
-            )?.use { cursor ->
-
-                if (cursor.moveToFirst()) {
-
-                    val numero =
-                        cursor.getString(
-                            cursor.getColumnIndexOrThrow(
-                                ContactsContract
-                                    .CommonDataKinds
-                                    .Phone
-                                    .NUMBER
-                            )
-                        )
-
-                    cripto.salvar(
-                        "contatos_lista",
-                        numero
-                    )
-
-                    Toast.makeText(
-                        this,
-                        "Contato cadastrado",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-
-        } catch (e: Exception) {
-
-            e.printStackTrace()
-
-            Toast.makeText(
-                this,
-                "Não foi possível salvar o contato",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-
 
     // =========================================================
     // SMS
     // =========================================================
-
-    private fun abrirIntentSMS(
-        mensagem: String
-    ) {
-
-        val lista =
-            cripto.carregar(
-                "contatos_lista"
-            )
-
-        if (
-            lista.trim().isEmpty()
-        ) {
-
-            Toast.makeText(
-                this,
-                "Nenhum contato cadastrado",
-                Toast.LENGTH_SHORT
-            ).show()
-
-            return
-        }
-
-        val intent =
-            Intent(
-                Intent.ACTION_SENDTO
-            ).apply {
-
-                data =
-                    Uri.parse(
-                        "smsto:"
-                    )
-
-                putExtra(
-                    "address",
-                    lista
-                )
-
-                putExtra(
-                    "sms_body",
-                    mensagem
-                )
-            }
-
-        startActivity(intent)
-    }
 
 
     // =========================================================
@@ -477,7 +261,6 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
 
     
     
-
 
 
         webView.addJavascriptInterface(
@@ -587,91 +370,6 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
 
 
         // =====================================================
-        // DOWNLOAD
-        // =====================================================
-
-        webView.setDownloadListener {
-                url,
-                userAgent,
-                contentDisposition,
-                mimeType,
-                _ ->
-
-            try {
-
-                val fileName =
-                    URLUtil.guessFileName(
-                        url,
-                        contentDisposition,
-                        mimeType
-                    )
-
-                val request =
-                    DownloadManager.Request(
-                        Uri.parse(url)
-                    ).apply {
-
-                        setMimeType(
-                            mimeType
-                        )
-
-                        addRequestHeader(
-                            "User-Agent",
-                            userAgent
-                        )
-
-                        setDescription(
-                            "Baixando arquivo..."
-                        )
-
-                        setTitle(
-                            fileName
-                        )
-
-                        setNotificationVisibility(
-                            DownloadManager
-                                .Request
-                                .VISIBILITY_VISIBLE_NOTIFY_COMPLETED
-                        )
-
-                        setDestinationInExternalPublicDir(
-                            Environment
-                                .DIRECTORY_DOWNLOADS,
-                            fileName
-                        )
-                    }
-
-                val downloadManager =
-                    getSystemService(
-                        Context.DOWNLOAD_SERVICE
-                    ) as DownloadManager
-
-                downloadManager.enqueue(
-                    request
-                )
-
-                Toast.makeText(
-                    this,
-                    "Download iniciado",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-            } catch (
-                e: Exception
-            ) {
-
-                Toast.makeText(
-                    this,
-                    "Não foi possível iniciar o download",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                e.printStackTrace()
-            }
-        }
-
-
-        // =====================================================
         // WEB CHROME CLIENT
         // =====================================================
 
@@ -774,7 +472,6 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
                 }
 
 
-
             }
             
             }
@@ -820,602 +517,14 @@ private fun carregarWebView4() {
 }
 
     // =========================================================
-    // SENSOR / CHACOALHAR
-    // =========================================================
-
-    private fun iniciarSensor() {
-
-        acelerometro =
-            sensorManager.getDefaultSensor(
-                Sensor.TYPE_ACCELEROMETER
-            )
-
-        if (
-            acelerometro != null
-        ) {
-
-            val registrado =
-                sensorManager.registerListener(
-                    shakeListener,
-                    acelerometro,
-                    SensorManager.SENSOR_DELAY_GAME
-                )
-
-            if (
-                !registrado
-            ) {
-
-                iniciarMicrofoneShake()
-            }
-
-        } else {
-
-            iniciarMicrofoneShake()
-        }
-    }
-
-
-    // =========================================================
-    // LISTENER DO ACELERÔMETRO
-    // =========================================================
-
-    private fun criarShakeListener() {
-
-        shakeListener =
-            object : SensorEventListener {
-
-                override fun onSensorChanged(
-                    event: SensorEvent
-                ) {
-
-                    if (
-                        !protecaoAtiva
-                    ) {
-                        return
-                    }
-
-                    val x =
-                        event.values[0]
-
-                    val y =
-                        event.values[1]
-
-                    val z =
-                        event.values[2]
-
-                    val aceleracao =
-                        sqrt(
-                            (
-                                x * x +
-                                y * y +
-                                z * z
-                            ).toDouble()
-                        )
-
-                    if (
-                        aceleracao > 18.0
-                    ) {
-
-                        executarAcaoShake()
-                    }
-                }
-
-
-                override fun onAccuracyChanged(
-                    sensor: Sensor?,
-                    accuracy: Int
-                ) {
-                }
-            }
-    }
-
-
-    // =========================================================
-    // AÇÃO DO BALANÇAR
-    // =========================================================
-
-    private fun executarAcaoShake() {
-
-        if (!protecaoAtiva) {
-            return
-        }
-
-        val agora =
-            System.currentTimeMillis()
-
-        if (
-            agora - ultimoShake <= 4000
-        ) {
-            return
-        }
-
-        ultimoShake =
-            agora
-
-        try {
-
-            val intent =
-                Intent(
-                    Intent.ACTION_DIAL
-                ).apply {
-
-                    data =
-                        Uri.parse(
-                            "tel:180"
-                        )
-                }
-
-            startActivity(intent)
-
-            protecaoAtiva =
-                false
-
-            pararSensor()
-
-            avisarEstadoAoHtml(
-                "movimento",
-                false
-            )
-
-        } catch (
-            e: Exception
-        ) {
-
-            e.printStackTrace()
-        }
-    }
-
-
-    // =========================================================
-    // MICROFONE — FALLBACK
-    // =========================================================
-
-    private fun iniciarMicrofoneShake() {
-
-        if (
-            !protecaoAtiva ||
-            shakeMicrophoneRunning
-        ) {
-            return
-        }
-
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.RECORD_AUDIO
-            ) !=
-            PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-
-        if (
-            shakeBufferSize <= 0
-        ) {
-            return
-        }
-
-        try {
-
-            shakeAudioRecord =
-                AudioRecord(
-                    MediaRecorder.AudioSource.MIC,
-                    shakeSampleRate,
-                    AudioFormat.CHANNEL_IN_MONO,
-                    AudioFormat.ENCODING_PCM_16BIT,
-                    shakeBufferSize
-                )
-
-            if (
-                shakeAudioRecord?.state !=
-                AudioRecord.STATE_INITIALIZED
-            ) {
-
-                shakeAudioRecord?.release()
-
-                shakeAudioRecord =
-                    null
-
-                return
-            }
-
-            shakeMicrophoneRunning =
-                true
-
-            shakeMicrophoneThread =
-                Thread {
-
-                    try {
-
-                        val buffer =
-                            ShortArray(
-                                shakeBufferSize
-                            )
-
-                        shakeAudioRecord?.startRecording()
-
-                        while (
-                            shakeMicrophoneRunning &&
-                            protecaoAtiva
-                        ) {
-
-                            val read =
-                                shakeAudioRecord?.read(
-                                    buffer,
-                                    0,
-                                    buffer.size
-                                ) ?: 0
-
-                            if (
-                                read > 0
-                            ) {
-
-                                val db =
-                                    calcularDecibeisShake(
-                                        buffer,
-                                        read
-                                    )
-
-                                if (
-                                    db >=
-                                    shakeLoudSoundThreshold
-                                ) {
-
-                                    runOnUiThread {
-
-                                        executarAcaoShake()
-                                    }
-                                }
-                            }
-                        }
-
-                    } catch (
-                        _: Exception
-                    ) {
-                    } finally {
-
-                        pararMicrofoneShake()
-                    }
-
-                }.apply {
-
-                    name =
-                        "MulherAmparada-ShakeMicrophone"
-
-                    start()
-                }
-
-        } catch (
-            _: Exception
-        ) {
-
-            shakeAudioRecord?.release()
-
-            shakeAudioRecord =
-                null
-
-            shakeMicrophoneRunning =
-                false
-        }
-    }
-
-
-    // =========================================================
-    // DECIBÉIS
-    // =========================================================
-
-    private fun calcularDecibeisShake(
-        buffer: ShortArray,
-        length: Int
-    ): Double {
-
-        if (
-            length <= 0
-        ) {
-            return -100.0
-        }
-
-        var soma =
-            0.0
-
-        for (
-            i in 0 until length
-        ) {
-
-            val sample =
-                buffer[i].toDouble()
-
-            soma +=
-                sample * sample
-        }
-
-        val rms =
-            sqrt(
-                soma / length
-            )
-
-        if (
-            rms <= 0.0
-        ) {
-            return -100.0
-        }
-
-        return 20.0 *
-            log10(
-                rms / 32768.0
-            )
-    }
-
-
-    // =========================================================
-    // PARAR MICROFONE
-    // =========================================================
-
-    private fun pararMicrofoneShake() {
-
-        shakeMicrophoneRunning =
-            false
-
-        try {
-
-            shakeAudioRecord?.stop()
-
-        } catch (
-            _: Exception
-        ) {
-        }
-
-        try {
-
-            shakeAudioRecord?.release()
-
-        } catch (
-            _: Exception
-        ) {
-        }
-
-        shakeAudioRecord =
-            null
-
-        shakeMicrophoneThread =
-            null
-    }
-
-
-    // =========================================================
-    // PARAR SENSOR
-    // =========================================================
-
-    private fun pararSensor() {
-
-        if (
-            ::sensorManager.isInitialized &&
-            ::shakeListener.isInitialized
-        ) {
-
-            sensorManager.unregisterListener(
-                shakeListener
-            )
-        }
-
-        pararMicrofoneShake()
-    }
-
-
     // =========================================================
     // CONTATOS
     // =========================================================
-
-    @JavascriptInterface
-    fun abrirContatos() {
-
-        val intent =
-            Intent(
-                Intent.ACTION_PICK,
-                ContactsContract
-                    .CommonDataKinds
-                    .Phone
-                    .CONTENT_URI
-            )
-
-        selecionarContatoLauncher.launch(
-            intent
-        )
-    }
-
-
-    // =========================================================
-    // TELEFONIA — API MODERNA
-    // =========================================================
-
-    private fun monitorarFimDaLigacao() {
-
-        if (
-            !::telephonyManager.isInitialized
-        ) {
-
-            telephonyManager =
-                getSystemService(
-                    Context.TELEPHONY_SERVICE
-                ) as TelephonyManager
-        }
-
-        if (
-            Build.VERSION.SDK_INT <
-            Build.VERSION_CODES.S
-        ) {
-            return
-        }
-
-        /*
-         * Evita registrar vários callbacks
-         * simultaneamente.
-         */
-        telephonyCallback?.let {
-
-            try {
-
-                telephonyManager.unregisterTelephonyCallback(
-                    it
-                )
-
-            } catch (
-                _: Exception
-            ) {
-            }
-        }
-
-        val callback =
-            object :
-                TelephonyCallback(),
-                TelephonyCallback.CallStateListener {
-
-                override fun onCallStateChanged(
-                    state: Int
-                ) {
-
-                    if (
-                        state ==
-                        TelephonyManager.CALL_STATE_OFFHOOK
-                    ) {
-
-                        palmasEmExecucao =
-                            true
-                    }
-
-                    if (
-                        state ==
-                        TelephonyManager.CALL_STATE_IDLE &&
-                        palmasEmExecucao
-                    ) {
-
-                        palmasEmExecucao =
-                            false
-
-                        avisarPalmasConcluidas()
-
-                        telephonyCallback?.let {
-
-                            try {
-
-                                telephonyManager
-                                    .unregisterTelephonyCallback(
-                                        it
-                                    )
-
-                            } catch (
-                                _: Exception
-                            ) {
-                            }
-                        }
-
-                        telephonyCallback =
-                            null
-                    }
-                }
-            }
-
-        telephonyCallback =
-            callback
-
-        try {
-
-            telephonyManager.registerTelephonyCallback(
-                mainExecutor,
-                callback
-            )
-
-        } catch (
-            e: Exception
-        ) {
-
-            e.printStackTrace()
-
-            telephonyCallback =
-                null
-        }
-    }
-
-
-    // =========================================================
-    // PROTEÇÃO POR CHACOALHAR
-    // =========================================================
-
-    @JavascriptInterface
-    fun ativarProtecao() {
-
-        if (!protecaoAtiva) {
-
-            protecaoAtiva =
-                true
-
-            iniciarSensor()
-
-            avisarEstadoAoHtml(
-                "movimento",
-                true
-            )
-        }
-    }
-
-
-    @JavascriptInterface
-    fun desativarProtecao() {
-
-        protecaoAtiva =
-            false
-
-        pararSensor()
-
-        avisarEstadoAoHtml(
-            "movimento",
-            false
-        )
-    }
 
 
     // =========================================================
     // SOS
     // =========================================================
-
-    @JavascriptInterface
-    fun enviarSOS() {
-
-        if (
-            ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) !=
-            PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-
-        locationClient.lastLocation
-            .addOnSuccessListener { location ->
-
-                if (
-                    location != null
-                ) {
-
-                    val lat =
-                        location.latitude
-
-                    val lng =
-                        location.longitude
-
-                    val link =
-                        "https://maps.google.com/?q=$lat,$lng"
-
-                    val mensagem =
-                        "🚨 SOCORRO! Estou aqui: $link"
-
-                    abrirIntentSMS(
-                        mensagem
-                    )
-                }
-            }
-    }
 
 
     // =========================================================
@@ -1664,24 +773,6 @@ window.navigationBarColor =
         }
     }
 
-
-    private fun avisarPalmasConcluidas() {
-
-        webView.post {
-
-            webView.evaluateJavascript(
-                """
-                if (
-                    typeof window.palmasConcluidas ===
-                    "function"
-                ) {
-                    window.palmasConcluidas();
-                }
-                """.trimIndent(),
-                null
-            )
-        }
-    }
     
     fun mostrarBotaoEmergencia() {
 
@@ -1698,221 +789,6 @@ fun ocultarBotaoEmergencia() {
         emergenciaVisivel = false
     }
 }
-
-    // =========================================================
-    // PERMISSÕES
-    // =========================================================
-
-    @JavascriptInterface
-    fun verificarPermissoes() {
-
-        verificarPermissoesParaJS()
-    }
-
-
-    private fun verificarPermissoesParaJS() {
-
-        val faltando =
-            mutableListOf<String>()
-
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_CONTACTS
-            ) !=
-            PackageManager.PERMISSION_GRANTED
-        ) {
-
-            faltando.add(
-                Manifest.permission.READ_CONTACTS
-            )
-        }
-
-        val localizacaoFine =
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) ==
-            PackageManager.PERMISSION_GRANTED
-
-        val localizacaoCoarse =
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) ==
-            PackageManager.PERMISSION_GRANTED
-
-        if (
-            !localizacaoFine &&
-            !localizacaoCoarse
-        ) {
-
-            faltando.add(
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-        }
-
-
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.RECORD_AUDIO
-            ) !=
-            PackageManager.PERMISSION_GRANTED
-        ) {
-
-            faltando.add(
-                Manifest.permission.RECORD_AUDIO
-            )
-        }
-
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.CALL_PHONE
-            ) !=
-            PackageManager.PERMISSION_GRANTED
-        ) {
-
-            faltando.add(
-                Manifest.permission.CALL_PHONE
-            )
-        }
-
-        webView.post {
-
-            if (
-                faltando.isNotEmpty()
-            ) {
-
-                val json =
-                    faltando.joinToString(
-                        prefix = "[\"",
-                        postfix = "\"]",
-                        separator = "\",\""
-                    )
-
-                webView.evaluateJavascript(
-                    """
-                    window.dispatchEvent(
-                        new CustomEvent(
-                            "permissoesFaltando",
-                            {
-                                detail: {
-                                    permissoes: $json
-                                }
-                            }
-                        )
-                    );
-                    """.trimIndent(),
-                    null
-                )
-
-            } else {
-
-                webView.evaluateJavascript(
-                    """
-                    window.dispatchEvent(
-                        new CustomEvent(
-                            "todasPermissoesOK"
-                        )
-                    );
-                    """.trimIndent(),
-                    null
-                )
-            }
-        }
-    }
-
-
-    // =========================================================
-    // VERIFICAR PERMISSÕES AO VOLTAR PARA O APP
-    // =========================================================
-
-fun solicitarAdministradorNovamente() {
-    WebAppInterface(this).solicitarAdministrador()
-}
-
-private fun aplicarFonteDialogo(
-    dialog: android.app.Dialog
-) {
-
-    val fonte = android.graphics.Typeface.createFromAsset(
-        assets,
-        "font.ttf"
-    )
-
-    val decorView = dialog.window?.decorView
-        ?: return
-
-    fun aplicarRecursivamente(view: View) {
-
-        if (view is TextView) {
-            view.typeface = fonte
-        }
-
-        if (view is ViewGroup) {
-
-            for (i in 0 until view.childCount) {
-                aplicarRecursivamente(
-                    view.getChildAt(i)
-                )
-            }
-        }
-    }
-
-    aplicarRecursivamente(decorView)
-}
-
-    override fun onResume() {
-
-    super.onResume()
-
-    if (aguardandoAdministrador) {
-
-        aguardandoAdministrador = false
-
-        val dpm =
-            getSystemService(
-                Context.DEVICE_POLICY_SERVICE
-            ) as DevicePolicyManager
-
-        val component =
-            ComponentName(
-                this,
-                MyDeviceAdminReceiver::class.java
-            )
-
-        if (!dpm.isAdminActive(component)) {
-
-         val dialog =
-    MaterialAlertDialogBuilder(this)
-        .setTitle("Administrador necessário:")
-        .setMessage(
-            "Sem essa permissão, recursos que bloqueiam a tela não funcionarão, como por exemplo o bloqueio por barulho ou bloquear a tela pela área protegida"
-        )
-        .setNegativeButton("Cancelar", null)
-        .setPositiveButton("Tentar novamente") { _, _ ->
-
-            WebAppInterface(this)
-                .solicitarAdministrador()
-        }
-        .create()
-
-dialog.show()
-
-aplicarFonteDialogo(dialog)
-        }
-    }
-
-    if (
-        ::webView.isInitialized &&
-        webView.url != null
-    ) {
-        verificarPermissoesParaJS()
-    }
-}
-
 private fun criarEmergencyOverlay() {
 
     val raiz =
@@ -2150,43 +1026,12 @@ locationClient
             }
     }
 
-fun marcarSolicitacaoAdministrador() {
-    aguardandoAdministrador = true
-}
 
     // =========================================================
     // CICLO DE VIDA
     // =========================================================
 
 override fun onDestroy() {
-
-    telephonyCallback?.let {
-
-        if (
-            Build.VERSION.SDK_INT >=
-            Build.VERSION_CODES.S
-        ) {
-
-            try {
-
-                telephonyManager
-                    .unregisterTelephonyCallback(
-                        it
-                    )
-
-            } catch (
-                _: Exception
-            ) {
-            }
-        }
-    }
-
-    telephonyCallback =
-        null
-
-    pararSensor()
-
-
-    super.onDestroy()
+super.onDestroy()
 }
 }

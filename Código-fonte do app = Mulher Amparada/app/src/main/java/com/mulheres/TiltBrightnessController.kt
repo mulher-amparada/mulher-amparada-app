@@ -13,8 +13,6 @@ import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.JavascriptInterface
-import android.webkit.WebView
 import androidx.core.content.ContextCompat
 import kotlin.math.log10
 import kotlin.math.sqrt
@@ -22,7 +20,8 @@ import kotlin.math.sqrt
 class TiltBrightnessController(
     private val activity: Activity,
     private val sensorManager: SensorManager,
-    private val webView: WebView
+    private val onEnterFullscreen: (() -> Unit)? = null,
+    private val onExitFullscreen: (() -> Unit)? = null
 ) : SensorEventListener {
 
     private var isDark = false
@@ -33,7 +32,19 @@ class TiltBrightnessController(
     private var protectionOverlay: View? = null
 
     private val gravitySensor: Sensor? =
-        sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)
+        sensorManager.getDefaultSensor(
+            Sensor.TYPE_GRAVITY
+        )
+
+    // =============================================================
+    // ESTADO
+    // =============================================================
+
+    val isEnabled: Boolean
+        get() = enabled
+
+    val isDarkMode: Boolean
+        get() = isDark
 
     // =============================================================
     // MICROFONE — FALLBACK
@@ -60,7 +71,9 @@ class TiltBrightnessController(
 
     fun start() {
 
-        if (enabled) return
+        if (enabled) {
+            return
+        }
 
         enabled = true
         isDark = false
@@ -101,7 +114,9 @@ class TiltBrightnessController(
 
             val overlay = View(activity)
 
-            overlay.setBackgroundColor(Color.BLACK)
+            overlay.setBackgroundColor(
+                Color.BLACK
+            )
 
             overlay.layoutParams =
                 ViewGroup.LayoutParams(
@@ -143,15 +158,17 @@ class TiltBrightnessController(
     // =============================================================
 
     fun setDarkBrightness(value: Float) {
-        // Mantido somente para compatibilidade
-        // com o JavaScript.
+        // Mantido para compatibilidade
+        // com chamadas antigas.
     }
 
     // =============================================================
     // SENSOR DE GRAVIDADE
     // =============================================================
 
-    override fun onSensorChanged(event: SensorEvent) {
+    override fun onSensorChanged(
+        event: SensorEvent
+    ) {
 
         if (!enabled || isDark) {
             return
@@ -397,31 +414,13 @@ class TiltBrightnessController(
             // 2. FULLSCREEN
             // =====================================================
 
-            if (activity is MainActivity) {
-                activity.ativarFullscreen()
-            }
+            onEnterFullscreen?.invoke()
 
             // =====================================================
-            // 3. CAMADA PRETA SOBRE TODA A ACTIVITY
+            // 3. CAMADA PRETA
             // =====================================================
 
             showProtectionOverlay()
-
-            // =====================================================
-            // 4. AVISAR O JAVASCRIPT
-            // =====================================================
-
-            webView.evaluateJavascript(
-                """
-                window.dispatchEvent(
-                    new CustomEvent(
-                        'tiltbrightness',
-                        { detail: 'dark' }
-                    )
-                );
-                """.trimIndent(),
-                null
-            )
         }
     }
 
@@ -429,13 +428,18 @@ class TiltBrightnessController(
     // BRILHO
     // =============================================================
 
-    private fun setBrightness(value: Float) {
+    private fun setBrightness(
+        value: Float
+    ) {
 
         val params =
             activity.window.attributes
 
         params.screenBrightness =
-            value.coerceIn(0f, 1f)
+            value.coerceIn(
+                0f,
+                1f
+            )
 
         activity.window.attributes =
             params
@@ -479,52 +483,33 @@ class TiltBrightnessController(
             hideProtectionOverlay()
 
             // -----------------------------------------------------
-            // FULLSCREEN
+            // Sair/restaurar fullscreen
             // -----------------------------------------------------
 
-            if (activity is MainActivity) {
-                activity.ativarFullscreen()
-            }
-
-            // -----------------------------------------------------
-            // Avisar JavaScript
-            // -----------------------------------------------------
-
-            webView.evaluateJavascript(
-                """
-                window.dispatchEvent(
-                    new CustomEvent(
-                        'tiltbrightness',
-                        { detail: 'normal' }
-                    )
-                );
-                """.trimIndent(),
-                null
-            )
+            onExitFullscreen?.invoke()
         }
     }
 
     // =============================================================
-    // JAVASCRIPT INTERFACE
+    // MÉTODOS MANTIDOS
     // =============================================================
+    //
+    // Não são mais interfaces JavaScript.
+    // Continuam existindo para preservar a API
+    // que você já tinha.
 
-    class WebAppInterface(
-        private val controller: TiltBrightnessController
+    fun startTiltBrightness() {
+        start()
+    }
+
+    fun setDarkBrightnessFromInterface(
+        value: Float
     ) {
+        setDarkBrightness(value)
+    }
 
-        @JavascriptInterface
-        fun startTiltBrightness() {
-            controller.start()
-        }
-
-        @JavascriptInterface
-        fun setDarkBrightness(value: Float) {
-            controller.setDarkBrightness(value)
-        }
-
-        @JavascriptInterface
-        fun stopTiltBrightness() {
-            controller.stop()
-        }
+    fun stopTiltBrightness() {
+        stop()
     }
 }
+

@@ -157,6 +157,15 @@ class ProtectActivity : ComponentActivity() {
                         )
                     },
 
+abrirTarefa = {
+    startActivity(
+        Intent(
+            this,
+            TarefaActivity::class.java
+        )
+    )
+},
+
                     abrirRotina = {
     startActivity(
         Intent(
@@ -395,6 +404,8 @@ private fun MeusAcessos(
 
     abrirRotina: () -> Unit,
 
+abrirTarefa: () -> Unit,
+
     abrirApps: () -> Unit,
 
     abrirDia: () -> Unit,
@@ -615,6 +626,10 @@ private fun MeusAcessos(
     "Calculadora" -> {
         abrirCalculadora()
     }
+    
+    "Minhas tarefas" -> {
+    abrirTarefa()
+}
 
     "Navegador" -> {
         abrirNavegador()

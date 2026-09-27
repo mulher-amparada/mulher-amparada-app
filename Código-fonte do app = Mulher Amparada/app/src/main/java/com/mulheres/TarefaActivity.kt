@@ -1833,64 +1833,103 @@ private fun TaskDialog(
             Column {
 
                 TextField(
-                    value = text,
-                    onValueChange = {
-                        text = it
-                        error = false
-                    },
-                    modifier =
-                        Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    placeholder = {
-                        Text(
-                            "O que você precisa fazer?",
-                            fontFamily = Quicksand,
-                            fontSize = 13.sp
-                        )
-                    },
-                    textStyle = TextStyle(
-                        fontFamily = Quicksand,
-                        fontSize = 13.sp
-                    ),
-                    keyboardOptions =
-                        KeyboardOptions(
-                            imeAction =
-                                ImeAction.Done
-                        ),
-                    keyboardActions =
-                        KeyboardActions(
-                            onDone = {
+    value = text,
+    onValueChange = {
+        text = it
+        error = false
+    },
+    modifier =
+        Modifier.fillMaxWidth(),
+    singleLine = true,
 
-                                if (text.trim().isNotEmpty()) {
+    placeholder = {
+        Text(
+            "O que você precisa fazer?",
+            color =
+                if (dark)
+                    Color.White.copy(.45f)
+                else
+                    LightText.copy(.55f),
+            fontFamily = Quicksand,
+            fontSize = 13.sp
+        )
+    },
 
-                                    onSave(
-                                        text.trim(),
-                                        category,
-                                        priority
-                                    )
-                                } else {
-                                    error = true
-                                }
-                            }
-                        ),
-                    colors =
-                        TextFieldDefaults.colors(
-                            focusedContainerColor =
-                                Color.Transparent,
-                            unfocusedContainerColor =
-                                Color.Transparent,
-                            focusedIndicatorColor =
-                                Accent,
-                            unfocusedIndicatorColor =
-                                if (dark)
-                                    DarkBorder
-                                else
-                                    LightBorder,
-                            cursorColor =
-                                Accent
-                        )
-                )
+    textStyle = TextStyle(
+        color =
+            if (dark)
+                Color.White
+            else
+                LightText,
+        fontFamily = Quicksand,
+        fontSize = 13.sp
+    ),
 
+    keyboardOptions =
+        KeyboardOptions(
+            imeAction = ImeAction.Done
+        ),
+
+    keyboardActions =
+        KeyboardActions(
+            onDone = {
+                if (text.trim().isNotEmpty()) {
+                    onSave(
+                        text.trim(),
+                        category,
+                        priority
+                    )
+                } else {
+                    error = true
+                }
+            }
+        ),
+
+    colors =
+        TextFieldDefaults.colors(
+            focusedContainerColor =
+                if (dark)
+                    Color.Black
+                else
+                    Color.White,
+
+            unfocusedContainerColor =
+                if (dark)
+                    Color.Black
+                else
+                    Color.White,
+
+            disabledContainerColor =
+                if (dark)
+                    Color.Black
+                else
+                    Color.White,
+
+            focusedTextColor =
+                if (dark)
+                    Color.White
+                else
+                    LightText,
+
+            unfocusedTextColor =
+                if (dark)
+                    Color.White
+                else
+                    LightText,
+
+            cursorColor =
+                Accent,
+
+            focusedIndicatorColor =
+                Accent,
+
+            unfocusedIndicatorColor =
+                if (dark)
+                    DarkBorder
+                else
+                    LightBorder
+        )
+)
                 if (error) {
 
                     Text(
@@ -2056,12 +2095,12 @@ private fun PlannerDropdown(
                     .clip(
                         RoundedCornerShape(14.dp)
                     )
-                    .background(
-                        if (dark)
-                            Color.Black.copy(.35f)
-                        else
-                            Color(0xFFF4F4F6)
-                    )
+.background(
+    if (dark)
+        Color.Black
+    else
+        Color.White
+)
                     .border(
                         1.dp,
                         if (expanded)

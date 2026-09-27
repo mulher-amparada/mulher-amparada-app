@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.graphics.Color as AndroidColor
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.compose.ui.text.TextStyle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
@@ -67,6 +68,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
@@ -980,20 +982,22 @@ private fun Header(
             Alignment.CenterHorizontally
     ) {
 
-        Text(
-            text = "História das Mulheres",
-            fontFamily = Quicksand,
-            fontWeight = FontWeight.ExtraBold,
-            fontSize = 32.sp,
-            textAlign = TextAlign.Center,
-            brush = Brush.horizontalGradient(
-                listOf(
-                    pink,
-                    purple,
-                    pink
-                )
+Text(
+    text = "História das Mulheres",
+    style = TextStyle(
+        fontFamily = Quicksand,
+        fontWeight = FontWeight.ExtraBold,
+        fontSize = 32.sp,
+        textAlign = TextAlign.Center,
+        brush = Brush.horizontalGradient(
+            listOf(
+                pink,
+                purple,
+                pink
             )
         )
+    )
+)
 
         Spacer(
             Modifier.height(8.dp)
@@ -1982,17 +1986,17 @@ private fun SourcesCard(
 
         sources.forEach { source ->
 
-            Text(
-                text = source,
-                color = blue,
-                fontFamily = Quicksand,
-                fontSize = 11.sp,
-                lineHeight = 17.sp,
-                modifier = Modifier.padding(
-                    bottom = 8.dp
-                )
-            )
-        }
+    Text(
+        text = source.toString(),
+        color = blue,
+        fontFamily = Quicksand,
+        fontSize = 11.sp,
+        lineHeight = 17.sp,
+        modifier = Modifier.padding(
+            bottom = 8.dp
+        )
+    )
+}
     }
 }
 

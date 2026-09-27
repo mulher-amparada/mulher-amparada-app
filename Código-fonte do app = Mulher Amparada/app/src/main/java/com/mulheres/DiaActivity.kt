@@ -1,6 +1,7 @@
 package com.mulheres
 
 import android.content.Context
+import androidx.compose.foundation.layout.ColumnScope
 import android.content.SharedPreferences
 import android.graphics.Color as AndroidColor
 import android.os.Bundle

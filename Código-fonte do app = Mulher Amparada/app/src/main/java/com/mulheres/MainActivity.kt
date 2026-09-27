@@ -1,1439 +1,440 @@
 package com.mulheres
 
-import android.Manifest
-import android.content.Context
-import android.content.pm.PackageManager
-import android.graphics.Color as AndroidColor
-import android.graphics.drawable.GradientDrawable
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
+import android.webkit.WebChromeClient
+import android.webkit.GeolocationPermissions
+import android.webkit.PermissionRequest
+import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
-
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
-
-import androidx.compose.foundation.LocalOverscrollFactory
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
-
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
-
-import androidx.core.content.ContextCompat
-
-import com.google.android.gms.location.LocationServices
-
-import kotlinx.coroutines.delay
-
-import org.osmdroid.config.Configuration
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.Marker
-import org.osmdroid.views.overlay.Polygon
+import android.webkit.WebResourceRequest
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
 
 
-private val Quicksand =
-    FontFamily(
-        Font(R.font.quicksand, FontWeight.Normal),
-        Font(R.font.quicksand, FontWeight.Medium),
-        Font(R.font.quicksand, FontWeight.SemiBold),
-        Font(R.font.quicksand, FontWeight.Bold),
-        Font(R.font.quicksand, FontWeight.ExtraBold)
-    )
+class MainActivity : AppCompatActivity() {
 
+    private lateinit var webView: WebView
 
-private val FundoEscuro =
-    Color(0xFF050507)
-
-private val FundoClaro =
-    Color(0xFFF7F7FA)
-
-private val CartaoEscuro =
-    Color(0xD90A0A0D)
-
-private val CartaoClaro =
-    Color(0xFFFDFDFE)
-
-private val TextoEscuro =
-    Color(0xFFF7F7FA)
-
-private val TextoClaro =
-    Color(0xFF17171B)
-
-private val TextoSuaveEscuro =
-    Color(0xFF9B9BA5)
-
-private val TextoSuaveClaro =
-    Color(0xFF686873)
-
-private val Rosa =
-    Color(0xFFFF8FC7)
-
-private val Azul =
-    Color(0xFF6EB5FF)
-
-private val Verde =
-    Color(0xFF7DFFB2)
-
-
-private val CentroPadrao =
-    GeoPoint(
-        -23.5505,
-        -46.6333
-    )
-
-private const val ZOOM_PADRAO =
-    12.0
-
-
-class MapaActivity : ComponentActivity() {
 
     override fun onCreate(
-        savedInstanceState: Bundle?
-    ) {
-
-        super.onCreate(
-            savedInstanceState
-        )
-
-        window.addFlags(
-            WindowManager.LayoutParams.FLAG_SECURE
-        )
-
-        Configuration
-            .getInstance()
-            .load(
-                this,
-                getSharedPreferences(
-                    "osmdroid",
-                    MODE_PRIVATE
-                )
-            )
-
-        Configuration
-            .getInstance()
-            .userAgentValue =
-            packageName
-
-        setContent {
-
-            CompositionLocalProvider(
-                LocalOverscrollFactory provides null
-            ) {
-
-                MapaApp()
-            }
-        }
-    }
-}
-
-
-@Composable
-private fun MapaApp() {
-
-    val dark =
-        isSystemInDarkTheme()
-
-    val fundo =
-        if (dark)
-            FundoEscuro
-        else
-            FundoClaro
-
-    CompositionLocalProvider(
-
-        androidx.compose.material3.LocalTextStyle provides
-            MaterialTheme.typography.bodyMedium.copy(
-                fontFamily = Quicksand
-            )
-
-    ) {
-
-        Surface(
-            modifier =
-                Modifier.fillMaxSize(),
-
-            color =
-                fundo
-
-        ) {
-
-            MapaTela(
-                dark = dark
-            )
-        }
-    }
-}
-
-
-@Composable
-private fun MapaTela(
-    dark: Boolean
+    savedInstanceState: Bundle?
 ) {
+    super.onCreate(savedInstanceState)
 
-    val context =
-        androidx.compose.ui.platform.LocalContext.current
+    // =====================================================
+    // SEGURANÇA DA JANELA
+    // =====================================================
 
-    var mapView by remember {
-        mutableStateOf<MapView?>(null)
-    }
+    window.addFlags(
+        WindowManager.LayoutParams.FLAG_SECURE
+    )
 
-    var toast by remember {
-        mutableStateOf<String?>(null)
-    }
+    // =====================================================
+    // CONFIGURAÇÃO DA JANELA
+    // =====================================================
 
-    var userMarker by remember {
-        mutableStateOf<Marker?>(null)
-    }
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        true
+    )
 
-    var userAccuracy by remember {
-        mutableStateOf<Polygon?>(null)
-    }
+    window.statusBarColor =
+        Color.TRANSPARENT
 
-    val locationClient =
-        remember(context) {
+    window.navigationBarColor =
+        Color.TRANSPARENT
 
-            LocationServices
-                .getFusedLocationProviderClient(
-                    context
-                )
-        }
+    // =====================================================
+    // LAYOUT
+    // =====================================================
 
+    setContentView(
+        R.layout.activity_main
+    )
 
-    val permissionLauncher =
-        rememberLauncherForActivityResult(
+    webView =
+        findViewById(
+            R.id.webview
+        )
 
-            ActivityResultContracts
-                .RequestMultiplePermissions()
+    // =====================================================
+    // CONFIGURAÇÃO DA WEBVIEW
+    // =====================================================
 
-        ) { permissions ->
+    configurarWebView()
 
-            val granted =
-                permissions[
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ] == true ||
+    // =====================================================
+    // BARRAS DO SISTEMA
+    // =====================================================
 
-                    permissions[
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    ] == true
+    ViewCompat.setOnApplyWindowInsetsListener(
+        webView
+    ) { view, insets ->
 
-
-            if (granted) {
-
-                mapView?.let { map ->
-
-                    localizarUsuario(
-
-                        context = context,
-
-                        map = map,
-
-                        locationClient =
-                            locationClient,
-
-                        onMarkerChanged = {
-                            marker ->
-                            userMarker =
-                                marker
-                        },
-
-                        onAccuracyChanged = {
-                            accuracy ->
-                            userAccuracy =
-                                accuracy
-                        },
-
-                        onToast = {
-                            mensagem ->
-                            toast =
-                                mensagem
-                        }
-                    )
-                }
-
-            } else {
-
-                toast =
-                    "Permissão de localização negada."
-            }
-        }
-
-
-    fun localizar() {
-
-        val permissaoPrecisa =
-            ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-
-        val permissaoAproximada =
-            ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-
-
-        if (
-            permissaoPrecisa ||
-            permissaoAproximada
-        ) {
-
-            mapView?.let { map ->
-
-                localizarUsuario(
-
-                    context = context,
-
-                    map = map,
-
-                    locationClient =
-                        locationClient,
-
-                    onMarkerChanged = {
-                        marker ->
-                        userMarker =
-                            marker
-                    },
-
-                    onAccuracyChanged = {
-                        accuracy ->
-                        userAccuracy =
-                            accuracy
-                    },
-
-                    onToast = {
-                        mensagem ->
-                        toast =
-                            mensagem
-                    }
-                )
-            }
-
-        } else {
-
-            permissionLauncher.launch(
-
-                arrayOf(
-
-                    Manifest.permission
-                        .ACCESS_FINE_LOCATION,
-
-                    Manifest.permission
-                        .ACCESS_COARSE_LOCATION
-                )
+        val barras =
+            insets.getInsets(
+                WindowInsetsCompat.Type.systemBars()
             )
-        }
+
+        val params =
+            view.layoutParams
+                as ViewGroup.MarginLayoutParams
+
+        params.topMargin =
+            barras.top
+
+        params.bottomMargin =
+            barras.bottom
+
+        view.layoutParams =
+            params
+
+        insets
     }
 
+    // =====================================================
+    // PÁGINA INICIAL
+    // =====================================================
 
-    LaunchedEffect(toast) {
+    webView.loadUrl(
+        "https://www.google.com"
+    )
 
-        if (toast != null) {
+    // =====================================================
+    // ON BACK PRESSED
+    // =====================================================
 
-            delay(2500)
+    onBackPressedDispatcher.addCallback(
+        this,
+        object : OnBackPressedCallback(true) {
 
-            toast = null
+            override fun handleOnBackPressed() {
+
+                val urlAtual =
+                    webView.url
+
+                if (
+                    urlAtual != null &&
+                    urlAtual.contains("google.com")
+                ) {
+
+                    webView.clearHistory()
+
+                    finish()
+
+                } else {
+
+                    if (
+                        webView.canGoBack()
+                    ) {
+
+                        webView.goBack()
+
+                    } else {
+
+                        isEnabled = false
+
+                        onBackPressedDispatcher
+                            .onBackPressed()
+                    }
+                }
+            }
         }
-    }
+    )
+}
 
 
-    Box(
+    // =========================================================
+    // CONFIGURAÇÃO DA WEBVIEW
+    // =========================================================
+private fun configurarWebView() {
 
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .background(
-                    if (dark)
-                        FundoEscuro
-                    else
-                        FundoClaro
-                )
-                .windowInsetsPadding(
-                    androidx.compose
-                        .foundation
-                        .layout
-                        .WindowInsets
-                        .safeDrawing
-                )
+    webView.setBackgroundColor(
+        Color.TRANSPARENT
+    )
 
-    ) {
+    webView.setDownloadListener { url, userAgent, contentDisposition, mimeType, contentLength ->
 
+    val request = android.app.DownloadManager.Request(
+        Uri.parse(url)
+    )
 
-        AndroidView(
+    request.setMimeType(mimeType)
 
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        start = 10.dp,
-                        end = 10.dp,
-                        top = 92.dp,
-                        bottom = 22.dp
-                    )
-                    .clip(
-                        RoundedCornerShape(
-                            22.dp
-                        )
-                    )
-                    .border(
-                        1.dp,
+    request.addRequestHeader(
+        "User-Agent",
+        userAgent
+    )
 
-                        if (dark)
-                            Color.White.copy(
-                                alpha = .07f
-                            )
-                        else
-                            Color.Black.copy(
-                                alpha = .07f
-                            ),
+    request.setDescription(
+        "Baixando arquivo..."
+    )
 
-                        RoundedCornerShape(
-                            22.dp
-                        )
-                    ),
+    request.setTitle(
+        android.webkit.URLUtil.guessFileName(
+            url,
+            contentDisposition,
+            mimeType
+        )
+    )
 
-            factory = { ctx ->
+    request.setNotificationVisibility(
+        android.app.DownloadManager
+            .Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED
+    )
 
-                MapView(ctx).apply {
+    request.setDestinationInExternalPublicDir(
+        android.os.Environment.DIRECTORY_DOWNLOADS,
+        android.webkit.URLUtil.guessFileName(
+            url,
+            contentDisposition,
+            mimeType
+        )
+    )
 
-                    mapView =
-                        this
+    val downloadManager =
+        getSystemService(
+            android.content.Context.DOWNLOAD_SERVICE
+        ) as android.app.DownloadManager
 
+    downloadManager.enqueue(request)
 
-                    setTileSource(
-                        TileSourceFactory.MAPNIK
-                    )
+    Toast.makeText(
+        this,
+        "Download iniciado",
+        Toast.LENGTH_SHORT
+    ).show()
+}
+    
 
 
-                    setMultiTouchControls(
-                        true
-                    )
+
+        val settings =
+            webView.settings
+
+        settings.cacheMode =
+            android.webkit.WebSettings.LOAD_DEFAULT
+
+        settings.loadsImagesAutomatically =
+            true
+
+        settings.blockNetworkImage =
+            false
+
+        settings.databaseEnabled =
+            true
+
+        settings.displayZoomControls =
+            false
+
+        settings.builtInZoomControls =
+            false
+
+        settings.setSupportZoom(
+            false
+        )
+
+        settings.textZoom =
+            100
+
+        settings.defaultTextEncodingName =
+            "UTF-8"
+
+        settings.mixedContentMode =
+            android.webkit.WebSettings
+                .MIXED_CONTENT_NEVER_ALLOW
+
+        webView.overScrollMode =
+            View.OVER_SCROLL_NEVER
+
+        webView.isVerticalScrollBarEnabled =
+            false
+
+        webView.isFocusable =
+            true
+
+        webView.isFocusableInTouchMode =
+            true
+
+        webView.setOnFocusChangeListener {
+                _, _ ->
+        }
+
+        webView.isHorizontalScrollBarEnabled =
+            false
+
+        webView.scrollBarStyle =
+            View.SCROLLBARS_INSIDE_OVERLAY
+
+        settings.javaScriptEnabled =
+            true
+
+        settings.mediaPlaybackRequiresUserGesture =
+            false
+
+        settings.domStorageEnabled =
+            true
+
+        settings.setGeolocationEnabled(
+            true
+        )
+
+        settings.allowFileAccess =
+            true
+
+        settings.allowContentAccess =
+            false
+
+        settings.allowFileAccessFromFileURLs =
+            false
+
+        settings.allowUniversalAccessFromFileURLs =
+            false
+
+        settings.javaScriptCanOpenWindowsAutomatically =
+            false
+
+        settings.setSupportMultipleWindows(
+            false
+        )
 
 
-                    minZoomLevel =
-                        3.0
+        // =====================================================
+        // WEB CHROME CLIENT
+        // =====================================================
 
-                    maxZoomLevel =
-                        19.0
+        webView.webChromeClient =
+            object : WebChromeClient() {
 
+                override fun onGeolocationPermissionsShowPrompt(
+                    origin: String?,
+                    callback:
+                    GeolocationPermissions.Callback?
+                ) {
 
-                    controller.setZoom(
-                        ZOOM_PADRAO
-                    )
-
-
-                    controller.setCenter(
-                        CentroPadrao
-                    )
-
-
-                    isTilesScaledToDpi =
-                        true
-
-
-                    setBuiltInZoomControls(
+                    callback?.invoke(
+                        origin,
+                        true,
                         false
                     )
-
-
-                    adicionarPontos(
-                        this
-                    )
                 }
-            },
-
-            update = { view ->
-
-                mapView =
-                    view
-            }
-        )
 
 
-        CabecalhoMapa(
+                override fun onPermissionRequest(
+                    request: PermissionRequest
+                ) {
 
-            dark = dark,
+                    runOnUiThread {
 
-            aoLocalizar = {
-                localizar()
-            }
-        )
+                        val resources =
+                            request.resources
 
-
-        ControlesMapa(
-
-            dark = dark,
-
-            aoZoomIn = {
-
-                mapView
-                    ?.controller
-                    ?.zoomIn()
-            },
-
-            aoZoomOut = {
-
-                mapView
-                    ?.controller
-                    ?.zoomOut()
-            },
-
-            aoLocalizar = {
-                localizar()
-            }
-        )
-
-
-        toast?.let { mensagem ->
-
-            Box(
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-            ) {
-
-                ToastMapa(
-
-                    mensagem =
-                        mensagem,
-
-                    dark =
-                        dark,
-
-                    modifier =
-                        Modifier
-                            .align(
-                                Alignment.BottomStart
+                        if (
+                            resources.contains(
+                                PermissionRequest
+                                    .RESOURCE_AUDIO_CAPTURE
                             )
-                            .padding(
-                                start = 22.dp,
-                                bottom = 22.dp
+                        ) {
+
+                            request.grant(
+                                arrayOf(
+                                    PermissionRequest
+                                        .RESOURCE_AUDIO_CAPTURE
+                                )
                             )
-                )
+
+                        } else {
+
+                            request.deny()
+                        }
+                    }
+                }
             }
-        }
-    }
 
 
-    DisposableEffect(Unit) {
+        // =====================================================
+        // WEBVIEW CLIENT
+        // =====================================================
 
-        onDispose {
+                webView.webViewClient =
+            object : WebViewClient() {
 
-            mapView?.onPause()
+                override fun shouldOverrideUrlLoading(
+                    view: WebView?,
+                    request: WebResourceRequest?
+                ): Boolean {
 
-            mapView?.onDetach()
-        }
-    }
-}
+                    val url =
+                        request?.url?.toString()
+                            ?: return false
 
+                    if (
+                        url.startsWith("tel:")
+                    ) {
 
-@Composable
-private fun CabecalhoMapa(
-
-    dark: Boolean,
-
-    aoLocalizar: () -> Unit
-) {
-
-    val card =
-        if (dark)
-            CartaoEscuro
-        else
-            CartaoClaro
-
-
-    val texto =
-        if (dark)
-            TextoEscuro
-        else
-            TextoClaro
-
-
-    val suave =
-        if (dark)
-            TextoSuaveEscuro
-        else
-            TextoSuaveClaro
-
-
-    Row(
-
-        modifier =
-            Modifier
-                .fillMaxWidth()
-
-                .padding(
-                    start = 12.dp,
-                    top = 10.dp,
-                    end = 12.dp,
-                    bottom = 0.dp
-                )
-
-                .clip(
-                    RoundedCornerShape(
-                        17.dp
-                    )
-                )
-
-                .background(
-                    card
-                )
-
-                .border(
-                    1.dp,
-
-                    if (dark)
-                        Color.White.copy(
-                            alpha = .10f
-                        )
-                    else
-                        Color.Black.copy(
-                            alpha = .08f
-                        ),
-
-                    RoundedCornerShape(
-                        17.dp
-                    )
-                )
-
-                .padding(
-                    start = 13.dp,
-                    end = 8.dp,
-                    top = 7.dp,
-                    bottom = 7.dp
-                ),
-
-        verticalAlignment =
-            Alignment.CenterVertically
-
-    ) {
-
-
-        Box(
-
-            modifier =
-                Modifier
-                    .size(34.dp)
-                    .clip(
-                        RoundedCornerShape(
-                            11.dp
-                        )
-                    )
-                    .background(
-                        Rosa.copy(
-                            alpha = .10f
-                        )
-                    )
-                    .border(
-                        1.dp,
-
-                        Rosa.copy(
-                            alpha = .16f
-                        ),
-
-                        RoundedCornerShape(
-                            11.dp
-                        )
-                    ),
-
-            contentAlignment =
-                Alignment.Center
-
-        ) {
-
-            Icon(
-
-                painter =
-                    painterResource(
-                        R.drawable.ic_location
-                    ),
-
-                contentDescription =
-                    null,
-
-                tint =
-                    Rosa,
-
-                modifier =
-                    Modifier.size(
-                        21.dp
-                    )
-            )
-        }
-
-
-        Spacer(
-            modifier =
-                Modifier.width(
-                    9.dp
-                )
-        )
-
-
-        Column(
-
-            modifier =
-                Modifier.weight(
-                    1f
-                )
-
-        ) {
-
-            Text(
-
-                text =
-                    "Mapa",
-
-                color =
-                    texto,
-
-                fontFamily =
-                    Quicksand,
-
-                fontWeight =
-                    FontWeight.Bold,
-
-                fontSize =
-                    16.sp
-            )
-
-
-            Row(
-
-                verticalAlignment =
-                    Alignment.CenterVertically
-
-            ) {
-
-                Box(
-
-                    modifier =
-                        Modifier
-                            .size(6.dp)
-                            .clip(
-                                CircleShape
+                        startActivity(
+                            Intent(
+                                Intent.ACTION_DIAL,
+                                Uri.parse(url)
                             )
-                            .background(
-                                Verde
+                        )
+
+                        return true
+                    }
+
+                    if (
+                        url.startsWith(
+                            "https://wa.me"
+                        )
+                    ) {
+
+                        startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse(url)
                             )
-                )
-
-
-                Spacer(
-
-                    modifier =
-                        Modifier.width(
-                            5.dp
                         )
-                )
+
+                        return true
+                    }
+
+                    return false
+                }
 
 
-                Text(
-
-                    text =
-                        "Mapa online",
-
-                    color =
-                        suave,
-
-                    fontFamily =
-                        Quicksand,
-
-                    fontWeight =
-                        FontWeight.Medium,
-
-                    fontSize =
-                        10.sp
-                )
             }
-        }
-
-
-        BotaoMapa(
-
-            dark =
-                dark,
-
-            icone =
-                R.drawable.ic_map,
-
-            descricao =
-                "Minha localização",
-
-            aoClicar =
-                aoLocalizar
-        )
-    }
-}
-
-
-@Composable
-private fun ControlesMapa(
-
-    dark: Boolean,
-
-    aoZoomIn: () -> Unit,
-
-    aoZoomOut: () -> Unit,
-
-    aoLocalizar: () -> Unit
-
-) {
-
-    Box(
-
-        modifier =
-            Modifier.fillMaxSize()
-
-    ) {
-
-        Column(
-
-            modifier =
-                Modifier
-                    .align(
-                        Alignment.BottomEnd
-                    )
-                    .padding(
-                        end = 14.dp,
-                        bottom = 16.dp
-                    ),
-
-            verticalArrangement =
-                Arrangement.spacedBy(
-                    8.dp
-                ),
-
-            horizontalAlignment =
-                Alignment.CenterHorizontally
-
-        ) {
-
-
-            BotaoMapa(
-
-                dark =
-                    dark,
-
-                icone =
-                    R.drawable.ic_add,
-
-                descricao =
-                    "Aumentar zoom",
-
-                aoClicar =
-                    aoZoomIn
-            )
-
-
-            BotaoMapa(
-
-                dark =
-                    dark,
-
-                icone =
-                    R.drawable.ic_remove,
-
-                descricao =
-                    "Diminuir zoom",
-
-                aoClicar =
-                    aoZoomOut
-            )
-
-
-            BotaoMapa(
-
-                dark =
-                    dark,
-
-                icone =
-                    R.drawable.ic_my_location,
-
-                descricao =
-                    "Encontrar localização",
-
-                aoClicar =
-                    aoLocalizar
-            )
-        }
-    }
-}
-
-
-@Composable
-private fun BotaoMapa(
-
-    dark: Boolean,
-
-    icone: Int,
-
-    descricao: String,
-
-    aoClicar: () -> Unit
-
-) {
-
-    Box(
-
-        modifier =
-            Modifier
-                .size(44.dp)
-
-                .clip(
-                    RoundedCornerShape(
-                        14.dp
-                    )
-                )
-
-                .background(
-
-                    if (dark)
-
-                        Color(
-                            0xD60A0A0D
-                        )
-
-                    else
-
-                        Color.White.copy(
-                            alpha = .94f
-                        )
-                )
-
-                .border(
-
-                    1.dp,
-
-                    if (dark)
-
-                        Color.White.copy(
-                            alpha = .10f
-                        )
-
-                    else
-
-                        Color.Black.copy(
-                            alpha = .08f
-                        ),
-
-                    RoundedCornerShape(
-                        14.dp
-                    )
-                )
-
-                .clickable {
-                    aoClicar()
-                },
-
-        contentAlignment =
-            Alignment.Center
-
-    ) {
-
-        Icon(
-
-            painter =
-                painterResource(
-                    icone
-                ),
-
-            contentDescription =
-                descricao,
-
-            tint =
-
-                if (dark)
-
-                    Color.White
-
-                else
-
-                    TextoClaro,
-
-            modifier =
-                Modifier.size(
-                    22.dp
-                )
-        )
-    }
-}
-
-
-@Composable
-private fun ToastMapa(
-
-    mensagem: String,
-
-    dark: Boolean,
-
-    modifier: Modifier
-
-) {
-
-    Box(
-
-        modifier =
-            modifier
-
-                .clip(
-                    RoundedCornerShape(
-                        13.dp
-                    )
-                )
-
-                .background(
-
-                    if (dark)
-
-                        Color(
-                            0xE60C0C0F
-                        )
-
-                    else
-
-                        Color(
-                            0xE62A2A2F
-                        )
-                )
-
-                .border(
-
-                    1.dp,
-
-                    Color.White.copy(
-                        alpha = .10f
-                    ),
-
-                    RoundedCornerShape(
-                        13.dp
-                    )
-                )
-
-                .padding(
-                    horizontal = 16.dp,
-                    vertical = 11.dp
-                )
-
-    ) {
-
-        Text(
-
-            text =
-                mensagem,
-
-            color =
-                Color.White,
-
-            fontFamily =
-                Quicksand,
-
-            fontWeight =
-                FontWeight.Medium,
-
-            fontSize =
-                12.sp
-        )
-    }
-}
-
-
-private fun adicionarPontos(
-    map: MapView
-) {
-
-    val pontos =
-
-        listOf(
-
-            GeoPoint(
-                -23.5505,
-                -46.6333
-            ),
-
-            GeoPoint(
-                -23.5600,
-                -46.6200
-            ),
-
-            GeoPoint(
-                -23.5400,
-                -46.6500
-            )
-        )
-
-
-    pontos.forEachIndexed {
-        index,
-        ponto ->
-
-        val marker =
-            Marker(map)
-
-
-        marker.position =
-            ponto
-
-
-        marker.setAnchor(
-
-            Marker.ANCHOR_CENTER,
-
-            Marker.ANCHOR_CENTER
-        )
-
-
-        marker.icon =
-            criarMarcadorRosa(
-                map.context
-            )
-
-
-        marker.title =
-            "Ponto ${index + 1}"
-
-
-        map.overlays.add(
-            marker
-        )
-    }
-
-
-    map.invalidate()
-}
-
-
-private fun criarMarcadorRosa(
-
-    context: Context
-
-): android.graphics.drawable.Drawable {
-
-    val drawable =
-        GradientDrawable()
-
-
-    drawable.shape =
-        GradientDrawable.OVAL
-
-
-    drawable.setColor(
-
-        AndroidColor.rgb(
-            255,
-            105,
-            180
-        )
-    )
-
-
-    drawable.setStroke(
-
-        2,
-
-        AndroidColor.WHITE
-    )
-
-
-    drawable.setSize(
-        18,
-        18
-    )
-
-
-    return drawable
-}
-
-
-@Suppress("MissingPermission")
-private fun localizarUsuario(
-
-    context: Context,
-
-    map: MapView,
-
-    locationClient:
-        com.google.android.gms.location
-            .FusedLocationProviderClient,
-
-    onMarkerChanged:
-        (Marker) -> Unit,
-
-    onAccuracyChanged:
-        (Polygon) -> Unit,
-
-    onToast:
-        (String) -> Unit
-
-) {
-
-    onToast(
-        "Obtendo sua localização..."
-    )
-
-
-    locationClient
-
-        .getCurrentLocation(
-
-            com.google.android.gms.location
-                .Priority
-                .PRIORITY_HIGH_ACCURACY,
-
-            null
-        )
-
-        .addOnSuccessListener { location ->
-
-
-            if (location == null) {
-
-                onToast(
-                    "Localização indisponível."
-                )
-
-                return@addOnSuccessListener
+            
             }
 
+    // =========================================================
+    // LIMPEZA
+    // =========================================================
 
-            val ponto =
-                GeoPoint(
+    override fun onDestroy() {
 
-                    location.latitude,
+        webView.stopLoading()
 
-                    location.longitude
-                )
-
-
-            val marker =
-                Marker(map)
-
-
-            marker.position =
-                ponto
-
-
-            marker.setAnchor(
-
-                Marker.ANCHOR_CENTER,
-
-                Marker.ANCHOR_CENTER
-            )
-
-
-            marker.icon =
-                criarMarcadorUsuario(
-                    context
-                )
-
-
-            marker.title =
-                "Minha localização"
-
-
-            map.overlays.removeAll {
-
-                it is Marker &&
-                    it.title ==
-                    "Minha localização"
-            }
-
-
-            map.overlays.add(
-                marker
-            )
-
-
-            val raio =
-                Polygon(map)
-
-
-            val circulo =
-                Polygon.pointsAsCircle(
-
-                    ponto,
-
-                    location
-                        .accuracy
-                        .toDouble()
-                )
-
-
-            raio.points =
-                circulo
-
-
-            raio.fillColor =
-
-                AndroidColor.argb(
-
-                    15,
-
-                    110,
-
-                    181,
-
-                    255
-                )
-
-
-            raio.strokeColor =
-
-                AndroidColor.argb(
-
-                    90,
-
-                    110,
-
-                    181,
-
-                    255
-                )
-
-
-            raio.strokeWidth =
-                1f
-
-
-            map.overlays.removeAll {
-
-                it is Polygon
-            }
-
-
-            map.overlays.add(
-                raio
-            )
-
-
-            onMarkerChanged(
-                marker
-            )
-
-
-            onAccuracyChanged(
-                raio
-            )
-
-
-            map.controller.animateTo(
-                ponto
-            )
-
-
-            map.controller.setZoom(
-
-                maxOf(
-
-                    map.zoomLevelDouble,
-
-                    15.0
-                )
-            )
-
-
-            map.invalidate()
-
-
-            onToast(
-                "Localização encontrada."
-            )
-
-        }
-
-        .addOnFailureListener {
-
-            onToast(
-                "Não foi possível obter sua localização."
-            )
-        }
-}
-
-
-private fun criarMarcadorUsuario(
-
-    context: Context
-
-): android.graphics.drawable.Drawable {
-
-    val drawable =
-        GradientDrawable()
-
-
-    drawable.shape =
-        GradientDrawable.OVAL
-
-
-    drawable.setColor(
-
-        AndroidColor.rgb(
-
-            110,
-
-            181,
-
-            255
+        webView.loadUrl(
+            "about:blank"
         )
-    )
 
+        webView.clearHistory()
 
-    drawable.setStroke(
+        webView.removeAllViews()
 
-        3,
+        webView.destroy()
 
-        AndroidColor.WHITE
-    )
-
-
-    drawable.setSize(
-
-        18,
-
-        18
-    )
-
-
-    return drawable
+        super.onDestroy()
+    }
 }

@@ -11,7 +11,7 @@ Um projeto totalmente gratuito e livre de anúncios, projetado por um menino aut
 
 e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, onde nem tinha os recursos, ja programei ele num app de A-IDE, num A05, e eu ja perdi vários projetos porque o celular nao aguentava, matava o projeto porque matou o processo de compilação!, e uma vez eu fiz o projeto do mulher amparada e eu mesmo fiz o app do mulher amparada (primeiro eu refiz, depois na 2 vez que perdi portei tudo do apk compilado para descompilado, e depois perdi denovo mas ai eu ja tinha o código-fonte!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3665**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3491**
 
 # ⚠️MURAL DE AVISOS:
 
@@ -153,7 +153,7 @@ e a versão do gradle é 9.6!
 
 ## Sobre as telas do aplicativo;
 
-Temos a:
+Temos elas (está organizado conforme foi adicionado, de forma cronológica):
 
 * EntradaActivity (compose) = Tela que contém a splashscreen 
 
@@ -180,6 +180,16 @@ NeoCalcActivity (compose) = Tela que contém o disfarce de calculadora
  DiarioActivity (compose) = Recurso do diário criptografado da área protegida 
  
  DireitosActivity (compose) = Recurso dos 100 direitos das mulheres da área protegida 
+ 
+ FinancasActivity (compose) = Recurso de dicas de financas para as usuárias na área protegida 
+ 
+ AboutActivity (compose) = Recurso da carta de acolhimento e apoio para as usuárias na área protegida 
+ 
+ RotinaActivity (compose) = Recurso da rotina gamificada na área protegida 
+ 
+ CicloActivity (compose) = Recurso do calendário menstrual da área protegida 
+ 
+ TarefaActivity (compose) = Recurso das tarefas da área protegida 
  
  A MainActivity é a única que é feita com webview!, e representa o recurso de navegador da área protegida
  

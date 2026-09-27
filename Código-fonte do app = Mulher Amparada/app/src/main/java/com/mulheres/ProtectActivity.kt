@@ -497,8 +497,8 @@ private fun MeusAcessos(
 
         LazyColumn(
 
-            modifier =
-                Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize(),
         .overscroll(null),
             contentPadding =
                 PaddingValues(

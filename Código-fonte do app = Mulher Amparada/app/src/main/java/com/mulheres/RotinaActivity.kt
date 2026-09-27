@@ -1089,40 +1089,43 @@ private fun ProgressoCard(
             modifier =
                 Modifier.height(17.dp)
         )
+Row(
 
+    modifier =
+        Modifier.fillMaxWidth(),
 
-        Row(
+    horizontalArrangement =
+        Arrangement.spacedBy(
+            10.dp
+        )
+) {
 
-            modifier =
-                Modifier.fillMaxWidth(),
+    Estatistica(
+        titulo = xp.toString(),
+        legenda = "XP",
+        dark = dark,
+        modifier =
+            Modifier.weight(1f)
+    )
 
-            horizontalArrangement =
-                Arrangement.spacedBy(
-                    10.dp
-                )
-        ) {
+    Estatistica(
+        titulo = nivel.toString(),
+        legenda = "Nível",
+        dark = dark,
+        modifier =
+            Modifier.weight(1f)
+    )
 
-            Estatistica(
-                titulo = xp.toString(),
-                legenda = "XP",
-                dark = dark
-            )
-
-            Estatistica(
-                titulo = nivel.toString(),
-                legenda = "Nível",
-                dark = dark
-            )
-
-            Estatistica(
-                titulo = streak.toString(),
-                legenda = "Streak",
-                dark = dark
-            )
-        }
+    Estatistica(
+        titulo = streak.toString(),
+        legenda = "Streak",
+        dark = dark,
+        modifier =
+            Modifier.weight(1f)
+    )
+}
     }
 }
-
 
 @Composable
 private fun Estatistica(
@@ -1155,8 +1158,8 @@ private fun Estatistica(
     Box(
 
         modifier =
-            Modifier
-               
+            modifier
+                .fillMaxWidth()
                 .clip(
                     RoundedCornerShape(
                         17.dp
@@ -1223,7 +1226,6 @@ private fun Estatistica(
         }
     }
 }
-
 
 /* =========================================================
    TREINO

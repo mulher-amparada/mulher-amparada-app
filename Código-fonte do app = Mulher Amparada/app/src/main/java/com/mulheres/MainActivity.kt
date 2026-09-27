@@ -1,20 +1,16 @@
 package com.mulheres
 
 import android.Manifest
-import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
-import android.location.Geocoder
+import android.graphics.Color as AndroidColor
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,27 +21,22 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,70 +44,62 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.ActivityCompat
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.delay
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
+import org.osmdroid.config.Configuration
+import org.osmdroid.events.MapEventsReceiver
+import org.osmdroid.events.MapListener
+import org.osmdroid.events.ScrollEvent
+import org.osmdroid.events.ZoomEvent
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.Polygon
+import org.osmdroid.views.overlay.infowindow.InfoWindow
 import java.util.Locale
-import java.util.TimeZone
-import java.util.concurrent.TimeUnit
 
 private val Quicksand = FontFamily(
-    Font(
-        R.font.quicksand,
-        FontWeight.Normal
-    ),
-    Font(
-        R.font.quicksand,
-        FontWeight.Medium
-    ),
-    Font(
-        R.font.quicksand,
-        FontWeight.SemiBold
-    ),
-    Font(
-        R.font.quicksand,
-        FontWeight.Bold
-    ),
-    Font(
-        R.font.quicksand,
-        FontWeight.ExtraBold
-    )
+    Font(R.font.quicksand, FontWeight.Normal),
+    Font(R.font.quicksand, FontWeight.Medium),
+    Font(R.font.quicksand, FontWeight.SemiBold),
+    Font(R.font.quicksand, FontWeight.Bold),
+    Font(R.font.quicksand, FontWeight.ExtraBold)
 )
 
-private val Rosa = Color(0xFFFF8FAB)
-private val Rosa2 = Color(0xFFFF4F78)
-private val Rosa3 = Color(0xFFFFC2D1)
-
-private val Verde = Color(0xFF63F59A)
-private val VerdeTexto = Color(0xFF9DFFBD)
-
-private val FundoEscuro = Color(0xFF08080A)
-private val CartaoEscuro = Color(0xFF111115)
-private val CartaoEscuro2 = Color(0xFF151519)
-
-private val TextoEscuro = Color.White
-private val TextoSuaveEscuro = Color(0xFF9E9EA8)
-private val TextoMutedEscuro = Color(0xFF777782)
-
+private val FundoEscuro = Color(0xFF050507)
 private val FundoClaro = Color(0xFFF7F7FA)
-private val CartaoClaro = Color.White
+
+private val CartaoEscuro = Color(0xD90A0A0D)
+private val CartaoClaro = Color(0xFFFDFDFE)
+
+private val TextoEscuro = Color(0xFFF7F7FA)
 private val TextoClaro = Color(0xFF17171B)
+
+private val TextoSuaveEscuro = Color(0xFF9B9BA5)
 private val TextoSuaveClaro = Color(0xFF686873)
-private val TextoMutedClaro = Color(0xFF92929D)
+
+private val Rosa = Color(0xFFFF8FC7)
+private val Azul = Color(0xFF6EB5FF)
+private val Verde = Color(0xFF7DFFB2)
+
+private val CentroPadrao =
+    GeoPoint(
+        -23.5505,
+        -46.6333
+    )
+
+private const val ZOOM_PADRAO = 12.0
 
 class MainActivity : ComponentActivity() {
 
@@ -127,40 +110,41 @@ class MainActivity : ComponentActivity() {
             WindowManager.LayoutParams.FLAG_SECURE
         )
 
+        Configuration.getInstance()
+            .load(
+                this,
+                getSharedPreferences(
+                    "osmdroid",
+                    MODE_PRIVATE
+                )
+            )
+
+        Configuration.getInstance().userAgentValue =
+            packageName
+
         setContent {
-            CompositionLocalProvider(
+
+            androidx.compose.runtime.CompositionLocalProvider(
                 LocalOverscrollFactory provides null
             ) {
-                RelogioApp()
+
+                MapaApp()
             }
         }
     }
 }
 
-data class DadosRelogio(
-    val hora: String,
-    val minuto: String,
-    val segundo: String,
-    val data: String,
-    val fuso: String,
-    val ano: Int,
-    val semestre: String,
-    val mes: String,
-    val semana: Int,
-    val bimestre: String,
-    val quinzena: String,
-    val diaDoAno: Int,
-    val utc: String,
-    val progresso: Float
-)
-
 @Composable
-private fun RelogioApp() {
+private fun MapaApp() {
 
-    val dark = isSystemInDarkTheme()
+    val dark =
+        isSystemInDarkTheme()
 
     val fundo =
-        if (dark) FundoEscuro else FundoClaro
+        if (dark)
+            FundoEscuro
+        else
+            FundoClaro
 
     CompositionLocalProvider(
         androidx.compose.material3.LocalTextStyle provides
@@ -170,893 +154,282 @@ private fun RelogioApp() {
     ) {
 
         Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = fundo
+            modifier =
+                Modifier.fillMaxSize(),
+
+            color =
+                fundo
         ) {
 
-            RelogioTela(
-                dark = dark,
-                fundo = fundo
+            MapaTela(
+                dark = dark
             )
         }
     }
 }
 
 @Composable
-private fun RelogioTela(
-    dark: Boolean,
-    fundo: Color
-) {
-
-    /*
-     * IMPORTANTE:
-     * LocalContext.current precisa ser obtido diretamente
-     * dentro de uma função @Composable.
-     */
-    val context =
-        androidx.compose.ui.platform.LocalContext.current
-
-    val fusedLocationClient =
-        remember(context) {
-            LocationServices.getFusedLocationProviderClient(
-                context
-            )
-        }
-
-    var dados by remember {
-        mutableStateOf(
-            obterDadosRelogio()
-        )
-    }
-
-    var pais by remember {
-        mutableStateOf("Localização atual")
-    }
-
-    var cidade by remember {
-        mutableStateOf("Obtendo localização...")
-    }
-
-    var statusLocalizacao by remember {
-        mutableStateOf("Detectando localização")
-    }
-
-    var textoStatus by remember {
-        mutableStateOf(
-            "O relógio usa somente o horário da sua localização atual."
-        )
-    }
-
-    var carregandoLocalizacao by remember {
-        mutableStateOf(false)
-    }
-
-    var mostrarToast by remember {
-        mutableStateOf(false)
-    }
-
-    val permissaoLauncher =
-        rememberLauncherForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { concedida ->
-
-            if (concedida) {
-
-                obterLocalizacao(
-                    context = context,
-                    fusedLocationClient = fusedLocationClient,
-                    onLoading = {
-                        carregandoLocalizacao = true
-                    },
-                    onResult = { novoPais, novaCidade ->
-
-                        pais = novoPais
-                        cidade = novaCidade
-
-                        statusLocalizacao =
-                            "Localização detectada"
-
-                        textoStatus =
-                            "O relógio está usando somente o horário desta localização."
-
-                        carregandoLocalizacao = false
-                        mostrarToast = true
-                    },
-                    onError = {
-
-                        pais = "Localização atual"
-                        cidade = "GPS detectado"
-
-                        statusLocalizacao =
-                            "GPS ativo"
-
-                        textoStatus =
-                            "A localização foi detectada, mas o nome da cidade não pôde ser obtido."
-
-                        carregandoLocalizacao = false
-                    }
-                )
-
-            } else {
-
-                pais =
-                    "Localização não autorizada"
-
-                cidade =
-                    "Ative o acesso à localização"
-
-                statusLocalizacao =
-                    "Permissão necessária"
-
-                textoStatus =
-                    "Permita o acesso à localização para identificar sua cidade."
-
-                carregandoLocalizacao = false
-            }
-        }
-
-    LaunchedEffect(Unit) {
-
-        while (true) {
-
-            dados =
-                obterDadosRelogio()
-
-            delay(1000)
-        }
-    }
-
-    LaunchedEffect(Unit) {
-
-        if (
-            ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-
-            obterLocalizacao(
-                context = context,
-                fusedLocationClient = fusedLocationClient,
-                onLoading = {
-                    carregandoLocalizacao = true
-                },
-                onResult = { novoPais, novaCidade ->
-
-                    pais = novoPais
-                    cidade = novaCidade
-
-                    statusLocalizacao =
-                        "Localização detectada"
-
-                    textoStatus =
-                        "O relógio está usando somente o horário desta localização."
-
-                    carregandoLocalizacao = false
-                },
-                onError = {
-
-                    pais = "Localização atual"
-                    cidade = "GPS detectado"
-
-                    statusLocalizacao =
-                        "GPS ativo"
-
-                    textoStatus =
-                        "A localização foi detectada, mas o nome da cidade não pôde ser obtido."
-
-                    carregandoLocalizacao = false
-                }
-            )
-
-        } else {
-
-            permissaoLauncher.launch(
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-        }
-    }
-
-    LaunchedEffect(mostrarToast) {
-
-        if (mostrarToast) {
-
-            delay(2500)
-
-            mostrarToast = false
-        }
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(fundo)
-            .windowInsetsPadding(WindowInsets.safeDrawing)
-    ) {
-
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding =
-                androidx.compose.foundation.layout.PaddingValues(
-                    start = 14.dp,
-                    end = 14.dp,
-                    top = 20.dp,
-                    bottom = 30.dp
-                ),
-            verticalArrangement =
-                Arrangement.spacedBy(0.dp)
-        ) {
-
-            item {
-
-                Topo(
-                    dark = dark,
-                    aoAtualizar = {
-
-                        if (
-                            ActivityCompat.checkSelfPermission(
-                                context,
-                                Manifest.permission.ACCESS_FINE_LOCATION
-                            ) ==
-                            PackageManager.PERMISSION_GRANTED
-                        ) {
-
-                            obterLocalizacao(
-                                context = context,
-                                fusedLocationClient = fusedLocationClient,
-                                onLoading = {
-                                    carregandoLocalizacao = true
-                                },
-                                onResult = { novoPais, novaCidade ->
-
-                                    pais = novoPais
-                                    cidade = novaCidade
-
-                                    statusLocalizacao =
-                                        "Localização detectada"
-
-                                    textoStatus =
-                                        "O relógio está usando somente o horário desta localização."
-
-                                    carregandoLocalizacao = false
-                                    mostrarToast = true
-                                },
-                                onError = {
-
-                                    statusLocalizacao =
-                                        "GPS ativo"
-
-                                    textoStatus =
-                                        "A localização foi detectada, mas o nome da cidade não pôde ser obtido."
-
-                                    carregandoLocalizacao = false
-                                }
-                            )
-
-                        } else {
-
-                            permissaoLauncher.launch(
-                                Manifest.permission.ACCESS_FINE_LOCATION
-                            )
-                        }
-                    }
-                )
-
-                Spacer(
-                    modifier = Modifier.height(18.dp)
-                )
-            }
-
-            item {
-
-                HeroRelogio(
-                    dados = dados,
-                    pais = pais,
-                    cidade = cidade,
-                    status = statusLocalizacao,
-                    dark = dark
-                )
-
-                Spacer(
-                    modifier = Modifier.height(22.dp)
-                )
-            }
-
-            item {
-
-                Text(
-                    text = "Informações de hoje",
-                    color =
-                        if (dark)
-                            TextoEscuro
-                        else
-                            TextoClaro,
-                    fontFamily = Quicksand,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 17.sp,
-                    modifier = Modifier.padding(
-                        start = 2.dp,
-                        bottom = 11.dp
-                    )
-                )
-            }
-
-            item {
-
-                Informacoes(
-                    dados = dados,
-                    dark = dark
-                )
-
-                Spacer(
-                    modifier = Modifier.height(18.dp)
-                )
-            }
-
-            item {
-
-                StatusCard(
-                    texto = textoStatus,
-                    dark = dark,
-                    carregando = carregandoLocalizacao,
-                    aoAtualizar = {
-
-                        if (
-                            ActivityCompat.checkSelfPermission(
-                                context,
-                                Manifest.permission.ACCESS_FINE_LOCATION
-                            ) ==
-                            PackageManager.PERMISSION_GRANTED
-                        ) {
-
-                            obterLocalizacao(
-                                context = context,
-                                fusedLocationClient = fusedLocationClient,
-                                onLoading = {
-                                    carregandoLocalizacao = true
-                                },
-                                onResult = { novoPais, novaCidade ->
-
-                                    pais = novoPais
-                                    cidade = novaCidade
-
-                                    statusLocalizacao =
-                                        "Localização detectada"
-
-                                    textoStatus =
-                                        "O relógio está usando somente o horário desta localização."
-
-                                    carregandoLocalizacao = false
-                                    mostrarToast = true
-                                },
-                                onError = {
-
-                                    carregandoLocalizacao = false
-                                }
-                            )
-
-                        } else {
-
-                            permissaoLauncher.launch(
-                                Manifest.permission.ACCESS_FINE_LOCATION
-                            )
-                        }
-                    }
-                )
-            }
-        }
-
-        if (mostrarToast) {
-
-            ToastRelogio(
-                dark = dark,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(
-                        bottom = 24.dp,
-                        start = 15.dp,
-                        end = 15.dp
-                    )
-            )
-        }
-    }
-}
-
-@Composable
-private fun Topo(
-    dark: Boolean,
-    aoAtualizar: () -> Unit
-) {
-
-    val texto =
-        if (dark) TextoEscuro else TextoClaro
-
-    val suave =
-        if (dark)
-            TextoSuaveEscuro
-        else
-            TextoSuaveClaro
-
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement =
-            Arrangement.SpaceBetween
-    ) {
-
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-
-            Text(
-                text = "Meu Relógio",
-                fontFamily = Quicksand,
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 34.sp,
-                letterSpacing = (-2).sp,
-                color = texto
-            )
-
-            Spacer(
-                modifier = Modifier.height(6.dp)
-            )
-
-            Text(
-                text = "Horário da sua localização atual",
-                fontFamily = Quicksand,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 11.sp,
-                color = suave
-            )
-        }
-
-        Spacer(
-            modifier = Modifier.width(10.dp)
-        )
-
-        Box(
-            modifier = Modifier
-                .size(45.dp)
-                .clip(
-                    RoundedCornerShape(15.dp)
-                )
-                .background(
-                    if (dark)
-                        CartaoEscuro
-                    else
-                        CartaoClaro
-                )
-                .border(
-                    width = 1.dp,
-                    color =
-                        if (dark)
-                            Color.White.copy(alpha = .09f)
-                        else
-                            Color.Black.copy(alpha = .07f),
-                    shape =
-                        RoundedCornerShape(15.dp)
-                )
-                .clickable {
-                    aoAtualizar()
-                },
-            contentAlignment = Alignment.Center
-        ) {
-
-            androidx.compose.material3.Icon(
-                imageVector = Icons.Default.Refresh,
-                contentDescription = "Atualizar localização",
-                tint =
-                    if (dark)
-                        Color.White
-                    else
-                        TextoClaro,
-                modifier = Modifier.size(21.dp)
-            )
-        }
-    }
-}
-
-@Composable
-private fun HeroRelogio(
-    dados: DadosRelogio,
-    pais: String,
-    cidade: String,
-    status: String,
+private fun MapaTela(
     dark: Boolean
 ) {
 
-    val card =
-        if (dark)
-            CartaoEscuro
-        else
-            CartaoClaro
+    val context =
+        androidx.compose.ui.platform.LocalContext.current
 
-    val texto =
-        if (dark)
-            TextoEscuro
-        else
-            TextoClaro
+    var mapView by remember {
+        mutableStateOf<MapView?>(null)
+    }
 
-    val suave =
-        if (dark)
-            TextoSuaveEscuro
-        else
-            TextoSuaveClaro
+    var toast by remember {
+        mutableStateOf<String?>(null)
+    }
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(
-                RoundedCornerShape(32.dp)
-            )
-            .background(card)
-            .border(
-                width = 1.dp,
-                color =
-                    if (dark)
-                        Color.White.copy(alpha = .09f)
-                    else
-                        Color.Black.copy(alpha = .07f),
-                shape =
-                    RoundedCornerShape(32.dp)
-            )
-    ) {
+    var userMarker by remember {
+        mutableStateOf<Marker?>(null)
+    }
 
-        Box(
-            modifier = Modifier
-                .size(190.dp)
-                .align(Alignment.TopEnd)
-                .clip(CircleShape)
-                .background(
-                    Rosa.copy(alpha = .07f)
+    var userAccuracy by remember {
+        mutableStateOf<Polygon?>(null)
+    }
+
+    val locationClient =
+        remember(context) {
+            LocationServices
+                .getFusedLocationProviderClient(
+                    context
                 )
-        )
+        }
 
-        Column(
-            modifier = Modifier.padding(25.dp)
-        ) {
+    val permissionLauncher =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment =
-                    Alignment.Top,
-                horizontalArrangement =
-                    Arrangement.SpaceBetween
-            ) {
+            val granted =
+                permissions[
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ] == true ||
+                    permissions[
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ] == true
 
-                Column(
-                    modifier = Modifier.weight(1f)
-                ) {
+            if (granted) {
 
-                    Text(
-                        text = pais,
-                        color = texto,
-                        fontFamily = Quicksand,
-                        fontWeight = FontWeight.ExtraBold,
-                        fontSize = 21.sp,
-                        lineHeight = 23.sp
-                    )
-
-                    Spacer(
-                        modifier = Modifier.height(4.dp)
-                    )
-
-                    Text(
-                        text = cidade,
-                        color = suave,
-                        fontFamily = Quicksand,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 13.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-
-                    Spacer(
-                        modifier = Modifier.height(7.dp)
-                    )
-
-                    Text(
-                        text = status,
-                        color =
-                            if (dark)
-                                TextoMutedEscuro
-                            else
-                                TextoMutedClaro,
-                        fontFamily = Quicksand,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 9.sp
+                mapView?.let {
+                    localizarUsuario(
+                        context = context,
+                        map = it,
+                        locationClient = locationClient,
+                        onMarkerChanged = { marker ->
+                            userMarker = marker
+                        },
+                        onAccuracyChanged = { accuracy ->
+                            userAccuracy = accuracy
+                        },
+                        onToast = { mensagem ->
+                            toast = mensagem
+                        }
                     )
                 }
 
-                LiveBadge()
+            } else {
+
+                toast =
+                    "Permissão de localização negada."
+            }
+        }
+
+    fun localizar() {
+
+        if (
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+
+            mapView?.let {
+                localizarUsuario(
+                    context = context,
+                    map = it,
+                    locationClient = locationClient,
+                    onMarkerChanged = { marker ->
+                        userMarker = marker
+                    },
+                    onAccuracyChanged = { accuracy ->
+                        userAccuracy = accuracy
+                    },
+                    onToast = { mensagem ->
+                        toast = mensagem
+                    }
+                )
             }
 
-            Spacer(
-                modifier = Modifier.height(28.dp)
-            )
+        } else {
 
-            Row(
-                verticalAlignment = Alignment.Bottom
-            ) {
-
-                Text(
-                    text =
-                        "${dados.hora}:${dados.minuto}",
-                    color = texto,
-                    fontFamily = Quicksand,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 67.sp,
-                    letterSpacing = (-4).sp,
-                    maxLines = 1
+            permissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
                 )
+            )
+        }
+    }
 
-                Text(
-                    text = ":${dados.segundo}",
-                    color = Rosa3,
-                    fontFamily = Quicksand,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 67.sp,
-                    letterSpacing = (-4).sp,
-                    maxLines = 1
+    LaunchedEffect(toast) {
+
+        if (toast != null) {
+
+            delay(2500)
+
+            toast = null
+        }
+    }
+
+    Box(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(fundo)
+                .windowInsetsPadding(
+                    androidx.compose.foundation.layout.WindowInsets.safeDrawing
                 )
-            }
+    ) {
 
-            Spacer(
-                modifier = Modifier.height(15.dp)
-            )
+        AndroidView(
 
-            Text(
-                text = dados.data,
-                color = suave,
-                fontFamily = Quicksand,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 13.sp
-            )
-
-            Spacer(
-                modifier = Modifier.height(11.dp)
-            )
-
-            Box(
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .background(
-                        if (dark)
-                            CartaoEscuro2
-                        else
-                            Color(0xFFF0F0F4)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 10.dp,
+                        end = 10.dp,
+                        top = 92.dp,
+                        bottom = 22.dp
+                    )
+                    .clip(
+                        RoundedCornerShape(22.dp)
                     )
                     .border(
                         1.dp,
                         if (dark)
                             Color.White.copy(alpha = .07f)
                         else
-                            Color.Black.copy(alpha = .06f),
-                        CircleShape
-                    )
-                    .padding(
-                        horizontal = 11.dp,
-                        vertical = 7.dp
-                    )
-            ) {
+                            Color.Black.copy(alpha = .07f),
+                        RoundedCornerShape(22.dp)
+                    ),
 
-                Text(
-                    text =
-                        "${dados.fuso} · ${dados.utc}",
-                    color = suave,
-                    fontFamily = Quicksand,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 10.sp
-                )
+            factory = { ctx ->
+
+                MapView(ctx).apply {
+
+                    mapView = this
+
+                    setTileSource(
+                        TileSourceFactory.MAPNIK
+                    )
+
+                    setMultiTouchControls(
+                        true
+                    )
+
+                    minZoomLevel =
+                        3.0
+
+                    maxZoomLevel =
+                        19.0
+
+                    controller.setZoom(
+                        ZOOM_PADRAO
+                    )
+
+                    controller.setCenter(
+                        CentroPadrao
+                    )
+
+                    isTilesScaledToDpi =
+                        true
+
+                    setBuiltInZoomControls(
+                        false
+                    )
+
+                    setMultiTouchControls(
+                        true
+                    )
+
+                    adicionarPontos(
+                        this
+                    )
+                }
+            },
+
+            update = {
+                mapView = it
             }
+        )
 
-            Spacer(
-                modifier = Modifier.height(23.dp)
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement =
-                    Arrangement.SpaceBetween
-            ) {
-
-                Text(
-                    text = "Progresso do dia",
-                    color =
-                        if (dark)
-                            TextoMutedEscuro
-                        else
-                            TextoMutedClaro,
-                    fontFamily = Quicksand,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 10.sp
-                )
-
-                Text(
-                    text =
-                        "${String.format(Locale.US, "%.1f", dados.progresso)}%",
-                    color =
-                        if (dark)
-                            TextoMutedEscuro
-                        else
-                            TextoMutedClaro,
-                    fontFamily = Quicksand,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 10.sp
-                )
+        CabecalhoMapa(
+            dark = dark,
+            aoLocalizar = {
+                localizar()
             }
+        )
 
-            Spacer(
-                modifier = Modifier.height(8.dp)
-            )
+        ControlesMapa(
+            dark = dark,
+            aoZoomIn = {
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(7.dp)
-                    .clip(CircleShape)
-                    .background(
-                        if (dark)
-                            Color(0xFF202025)
-                        else
-                            Color(0xFFE4E4E9)
-                    )
-            ) {
+                mapView?.controller?.zoomIn()
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(
-                            dados.progresso / 100f
+            },
+            aoZoomOut = {
+
+                mapView?.controller?.zoomOut()
+
+            },
+            aoLocalizar = {
+                localizar()
+            }
+        )
+
+        toast?.let {
+
+            ToastMapa(
+                mensagem = it,
+                dark = dark,
+                modifier =
+                    Modifier
+                        .align(
+                            Alignment.BottomStart
                         )
-                        .height(7.dp)
-                        .clip(CircleShape)
-                        .background(
-                            Brush.horizontalGradient(
-                                listOf(
-                                    Rosa,
-                                    Rosa2
-                                )
-                            )
+                        .padding(
+                            start = 22.dp,
+                            bottom = 22.dp
                         )
-                )
-            }
+            )
+        }
+    }
+
+    DisposableEffect(Unit) {
+
+        onDispose {
+
+            mapView?.onPause()
+
+            mapView?.onDetach()
         }
     }
 }
 
 @Composable
-private fun LiveBadge() {
-
-    val infinite =
-        rememberInfiniteTransition(
-            label = "live"
-        )
-
-    val scale by infinite.animateFloat(
-        initialValue = 1f,
-        targetValue = 1.4f,
-        animationSpec =
-            infiniteRepeatable(
-                animation =
-                    tween(750),
-                repeatMode =
-                    RepeatMode.Reverse
-            ),
-        label = "liveScale"
-    )
-
-    val alpha by infinite.animateFloat(
-        initialValue = 1f,
-        targetValue = .55f,
-        animationSpec =
-            infiniteRepeatable(
-                animation =
-                    tween(750),
-                repeatMode =
-                    RepeatMode.Reverse
-            ),
-        label = "liveAlpha"
-    )
-
-    Row(
-        modifier = Modifier
-            .clip(CircleShape)
-            .background(
-                Color(0xFF101B15)
-            )
-            .border(
-                1.dp,
-                Verde.copy(alpha = .14f),
-                CircleShape
-            )
-            .padding(
-                horizontal = 9.dp,
-                vertical = 6.dp
-            ),
-        verticalAlignment =
-            Alignment.CenterVertically
-    ) {
-
-        Box(
-            modifier = Modifier
-                .size(7.dp)
-                .scale(scale)
-                .alpha(alpha)
-                .clip(CircleShape)
-                .background(Verde)
-        )
-
-        Spacer(
-            modifier = Modifier.width(7.dp)
-        )
-
-        Text(
-            text = "AO VIVO",
-            color = VerdeTexto,
-            fontFamily = Quicksand,
-            fontWeight = FontWeight.ExtraBold,
-            fontSize = 9.sp
-        )
-    }
-}
-
-@Composable
-private fun Informacoes(
-    dados: DadosRelogio,
-    dark: Boolean
-) {
-
-    val itens =
-        listOf(
-            "ANO" to dados.ano.toString(),
-            "SEMESTRE" to dados.semestre,
-            "MÊS" to dados.mes,
-            "SEMANA" to dados.semana.toString(),
-            "BIMESTRE" to dados.bimestre,
-            "QUINZENA" to dados.quinzena,
-            "DIA DO ANO" to dados.diaDoAno.toString(),
-            "UTC" to dados.utc
-        )
-
-    Column(
-        verticalArrangement =
-            Arrangement.spacedBy(9.dp)
-    ) {
-
-        for (linha in 0 until 4) {
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement =
-                    Arrangement.spacedBy(9.dp)
-            ) {
-
-                InfoCard(
-                    label = itens[linha * 2].first,
-                    value = itens[linha * 2].second,
-                    dark = dark,
-                    modifier =
-                        Modifier.weight(1f)
-                )
-
-                InfoCard(
-                    label = itens[linha * 2 + 1].first,
-                    value = itens[linha * 2 + 1].second,
-                    dark = dark,
-                    modifier =
-                        Modifier.weight(1f)
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun InfoCard(
-    label: String,
-    value: String,
+private fun CabecalhoMapa(
     dark: Boolean,
-    modifier: Modifier = Modifier
+    aoLocalizar: () -> Unit
 ) {
 
     val card =
@@ -1071,132 +444,90 @@ private fun InfoCard(
         else
             TextoClaro
 
-    val muted =
-        if (dark)
-            TextoMutedEscuro
-        else
-            TextoMutedClaro
-
-    Box(
-        modifier = modifier
-            .height(77.dp)
-            .clip(
-                RoundedCornerShape(20.dp)
-            )
-            .background(card)
-            .border(
-                1.dp,
-                if (dark)
-                    Color.White.copy(alpha = .09f)
-                else
-                    Color.Black.copy(alpha = .07f),
-                RoundedCornerShape(20.dp)
-            )
-    ) {
-
-        Box(
-            modifier = Modifier
-                .size(45.dp)
-                .align(Alignment.BottomEnd)
-                .offset(
-                    x = 25.dp,
-                    y = 25.dp
-                )
-                .clip(CircleShape)
-                .background(
-                    Rosa.copy(alpha = .06f)
-                )
-        )
-
-        Column(
-            modifier = Modifier.padding(
-                horizontal = 12.dp,
-                vertical = 12.dp
-            )
-        ) {
-
-            Text(
-                text = label,
-                color = muted,
-                fontFamily = Quicksand,
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 8.sp
-            )
-
-            Spacer(
-                modifier = Modifier.height(4.dp)
-            )
-
-            Text(
-                text = value,
-                color = texto,
-                fontFamily = Quicksand,
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 14.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-    }
-}
-
-@Composable
-private fun StatusCard(
-    texto: String,
-    dark: Boolean,
-    carregando: Boolean,
-    aoAtualizar: () -> Unit
-) {
-
-    val card =
-        if (dark)
-            CartaoEscuro
-        else
-            CartaoClaro
-
-    val textoPrincipal =
-        if (dark)
-            TextoEscuro
-        else
-            TextoClaro
-
     val suave =
         if (dark)
             TextoSuaveEscuro
         else
             TextoSuaveClaro
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(
-                RoundedCornerShape(23.dp)
-            )
-            .background(card)
-            .border(
-                1.dp,
-                if (dark)
-                    Color.White.copy(alpha = .09f)
-                else
-                    Color.Black.copy(alpha = .07f),
-                RoundedCornerShape(23.dp)
-            )
-            .padding(18.dp)
+    Row(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = 12.dp,
+                    top = 10.dp
+                )
+                .clip(
+                    RoundedCornerShape(17.dp)
+                )
+                .background(card)
+                .border(
+                    1.dp,
+                    if (dark)
+                        Color.White.copy(alpha = .10f)
+                    else
+                        Color.Black.copy(alpha = .08f),
+                    RoundedCornerShape(17.dp)
+                )
+                .padding(
+                    start = 13.dp,
+                    end = 8.dp,
+                    top = 7.dp,
+                    bottom = 7.dp
+                ),
+
+        verticalAlignment =
+            Alignment.CenterVertically
     ) {
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement =
-                Arrangement.SpaceBetween
+        Box(
+            modifier =
+                Modifier
+                    .size(34.dp)
+                    .clip(
+                        RoundedCornerShape(11.dp)
+                    )
+                    .background(
+                        Rosa.copy(alpha = .10f)
+                    )
+                    .border(
+                        1.dp,
+                        Rosa.copy(alpha = .16f),
+                        RoundedCornerShape(11.dp)
+                    ),
+            contentAlignment =
+                Alignment.Center
+        ) {
+
+            Icon(
+                painter =
+                    painterResource(
+                        R.drawable.ic_location
+                    ),
+                contentDescription = null,
+                tint = Rosa,
+                modifier =
+                    Modifier.size(21.dp)
+            )
+        }
+
+        Spacer(
+            modifier =
+                Modifier.width(9.dp)
+        )
+
+        Column(
+            modifier =
+                Modifier.weight(1f)
         ) {
 
             Text(
-                text = "Sua localização",
-                color = textoPrincipal,
+                text = "Mapa",
+                color = texto,
                 fontFamily = Quicksand,
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 14.sp
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp
             )
 
             Row(
@@ -1205,275 +536,270 @@ private fun StatusCard(
             ) {
 
                 Box(
-                    modifier = Modifier
-                        .size(7.dp)
-                        .clip(CircleShape)
-                        .background(Verde)
+                    modifier =
+                        Modifier
+                            .size(6.dp)
+                            .clip(CircleShape)
+                            .background(Verde)
                 )
 
                 Spacer(
-                    modifier = Modifier.width(6.dp)
+                    modifier =
+                        Modifier.width(5.dp)
                 )
 
                 Text(
-                    text = "ATIVA",
-                    color = VerdeTexto,
+                    text = "Mapa online",
+                    color = suave,
                     fontFamily = Quicksand,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 9.sp
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 10.sp
                 )
             }
         }
 
-        Spacer(
-            modifier = Modifier.height(7.dp)
+        BotaoMapa(
+            dark = dark,
+            icone = R.drawable.ic_map,
+            descricao = "Minha localização",
+            aoClicar = aoLocalizar
         )
-
-        Text(
-            text = texto,
-            color = suave,
-            fontFamily = Quicksand,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 10.sp,
-            lineHeight = 15.sp
-        )
-
-        Spacer(
-            modifier = Modifier.height(13.dp)
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(45.dp)
-                .clip(CircleShape)
-                .background(
-                    Brush.linearGradient(
-                        listOf(
-                            Rosa,
-                            Rosa2
-                        )
-                    )
-                )
-                .clickable {
-                    aoAtualizar()
-                },
-            contentAlignment = Alignment.Center
-        ) {
-
-            Text(
-                text =
-                    if (carregando)
-                        "Obtendo localização..."
-                    else
-                        "Atualizar localização",
-                color = Color.White,
-                fontFamily = Quicksand,
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 11.sp
-            )
-        }
     }
 }
 
 @Composable
-private fun ToastRelogio(
+private fun ControlesMapa(
+    dark: Boolean,
+    aoZoomIn: () -> Unit,
+    aoZoomOut: () -> Unit,
+    aoLocalizar: () -> Unit
+) {
+
+    Column(
+        modifier =
+            Modifier
+                .align(Alignment.BottomEnd)
+                .padding(
+                    end = 14.dp,
+                    bottom = 16.dp
+                ),
+        verticalArrangement =
+            Arrangement.spacedBy(8.dp),
+        horizontalAlignment =
+            Alignment.CenterHorizontally
+    ) {
+
+        BotaoMapa(
+            dark = dark,
+            icone = R.drawable.ic_add,
+            descricao = "Aumentar zoom",
+            aoClicar = aoZoomIn
+        )
+
+        BotaoMapa(
+            dark = dark,
+            icone = R.drawable.ic_remove,
+            descricao = "Diminuir zoom",
+            aoClicar = aoZoomOut
+        )
+
+        BotaoMapa(
+            dark = dark,
+            icone = R.drawable.ic_my_location,
+            descricao = "Encontrar localização",
+            aoClicar = aoLocalizar
+        )
+    }
+}
+
+@Composable
+private fun BotaoMapa(
+    dark: Boolean,
+    icone: Int,
+    descricao: String,
+    aoClicar: () -> Unit
+) {
+
+    Box(
+        modifier =
+            Modifier
+                .size(44.dp)
+                .clip(
+                    RoundedCornerShape(14.dp)
+                )
+                .background(
+                    if (dark)
+                        Color(0xD60A0A0D)
+                    else
+                        Color.White.copy(alpha = .94f)
+                )
+                .border(
+                    1.dp,
+                    if (dark)
+                        Color.White.copy(alpha = .10f)
+                    else
+                        Color.Black.copy(alpha = .08f),
+                    RoundedCornerShape(14.dp)
+                )
+                .clickable {
+                    aoClicar()
+                },
+        contentAlignment =
+            Alignment.Center
+    ) {
+
+        Icon(
+            painter =
+                painterResource(icone),
+            contentDescription =
+                descricao,
+            tint =
+                if (dark)
+                    Color.White
+                else
+                    TextoClaro,
+            modifier =
+                Modifier.size(22.dp)
+        )
+    }
+}
+
+@Composable
+private fun ToastMapa(
+    mensagem: String,
     dark: Boolean,
     modifier: Modifier
 ) {
 
     Box(
-        modifier = modifier
-            .clip(CircleShape)
-            .background(
-                if (dark)
-                    Color(0xFF19191D)
-                else
-                    Color(0xFF27272D)
-            )
-            .border(
-                1.dp,
-                Color.White.copy(alpha = .10f),
-                CircleShape
-            )
-            .padding(
-                horizontal = 15.dp,
-                vertical = 11.dp
-            )
+        modifier =
+            modifier
+                .clip(
+                    RoundedCornerShape(13.dp)
+                )
+                .background(
+                    if (dark)
+                        Color(0xE60C0C0F)
+                    else
+                        Color(0xE62A2A2F)
+                )
+                .border(
+                    1.dp,
+                    Color.White.copy(alpha = .10f),
+                    RoundedCornerShape(13.dp)
+                )
+                .padding(
+                    horizontal = 16.dp,
+                    vertical = 11.dp
+                )
     ) {
 
         Text(
-            text = "📍 Localização atualizada",
+            text = mensagem,
             color = Color.White,
             fontFamily = Quicksand,
-            fontWeight = FontWeight.Bold,
-            fontSize = 10.sp
+            fontWeight = FontWeight.Medium,
+            fontSize = 12.sp
         )
     }
 }
 
-private fun obterDadosRelogio(): DadosRelogio {
-
-    val agora = Date()
-
-    val zona =
-        TimeZone.getDefault()
-
-    val calendar =
-        Calendar.getInstance(zona).apply {
-            time = agora
-        }
-
-    val hora =
-        SimpleDateFormat(
-            "HH",
-            Locale.getDefault()
-        ).format(agora)
-
-    val minuto =
-        SimpleDateFormat(
-            "mm",
-            Locale.getDefault()
-        ).format(agora)
-
-    val segundo =
-        SimpleDateFormat(
-            "ss",
-            Locale.getDefault()
-        ).format(agora)
-
-    var data =
-        SimpleDateFormat(
-            "EEEE, dd 'de' MMMM 'de' yyyy",
-            Locale("pt", "BR")
-        ).format(agora)
-
-    data =
-        data.replaceFirstChar {
-            it.uppercase()
-        }
-
-    val ano =
-        calendar.get(Calendar.YEAR)
-
-    val mesNumero =
-        calendar.get(Calendar.MONTH) + 1
-
-    val dia =
-        calendar.get(Calendar.DAY_OF_MONTH)
-
-    val mes =
-        SimpleDateFormat(
-            "MMMM",
-            Locale("pt", "BR")
-        ).format(agora)
-            .replaceFirstChar {
-                it.uppercase()
-            }
-
-    val semana =
-        calendar.get(
-            Calendar.WEEK_OF_YEAR
-        )
-
-    val semestre =
-        if (mesNumero <= 6)
-            "1º"
-        else
-            "2º"
-
-    val bimestre =
-        "${((mesNumero - 1) / 2) + 1}º"
-
-    val quinzena =
-        if (dia <= 15)
-            "1ª"
-        else
-            "2ª"
-
-    val diaDoAno =
-        calendar.get(
-            Calendar.DAY_OF_YEAR
-        )
-
-    val offsetMillis =
-        zona.getOffset(agora.time)
-
-    val sinal =
-        if (offsetMillis >= 0)
-            "+"
-        else
-            "-"
-
-    val totalMinutos =
-        kotlin.math.abs(
-            TimeUnit.MILLISECONDS
-                .toMinutes(
-                    offsetMillis.toLong()
-                )
-        )
-
-    val horasUtc =
-        totalMinutos / 60
-
-    val minutosUtc =
-        totalMinutos % 60
-
-    val utc =
-        if (minutosUtc == 0L) {
-            "UTC${sinal}${horasUtc}"
-        } else {
-            "UTC${sinal}${horasUtc}:${
-                String.format(
-                    Locale.US,
-                    "%02d",
-                    minutosUtc
-                )
-            }"
-        }
-
-    val fuso =
-        zona.id
-
-    val segundosDoDia =
-        calendar.get(Calendar.HOUR_OF_DAY) * 3600 +
-            calendar.get(Calendar.MINUTE) * 60 +
-            calendar.get(Calendar.SECOND)
-
-    val progresso =
-        segundosDoDia / 86400f
-
-    return DadosRelogio(
-        hora = hora,
-        minuto = minuto,
-        segundo = segundo,
-        data = data,
-        fuso = fuso,
-        ano = ano,
-        semestre = semestre,
-        mes = mes,
-        semana = semana,
-        bimestre = bimestre,
-        quinzena = quinzena,
-        diaDoAno = diaDoAno,
-        utc = utc,
-        progresso = progresso
-    )
-}
-
-@SuppressLint("MissingPermission")
-private fun obterLocalizacao(
-    context: android.content.Context,
-    fusedLocationClient:
-        com.google.android.gms.location.FusedLocationProviderClient,
-    onLoading: () -> Unit,
-    onResult: (String, String) -> Unit,
-    onError: () -> Unit
+private fun adicionarPontos(
+    map: MapView
 ) {
 
-    onLoading()
+    val pontos =
+        listOf(
+            GeoPoint(
+                -23.5505,
+                -46.6333
+            ),
+            GeoPoint(
+                -23.5600,
+                -46.6200
+            ),
+            GeoPoint(
+                -23.5400,
+                -46.6500
+            )
+        )
 
-    fusedLocationClient
+    pontos.forEachIndexed { index, ponto ->
+
+        val marker =
+            Marker(map)
+
+        marker.position =
+            ponto
+
+        marker.setAnchor(
+            Marker.ANCHOR_CENTER,
+            Marker.ANCHOR_CENTER
+        )
+
+        marker.icon =
+            criarMarcadorRosa(
+                map.context
+            )
+
+        marker.title =
+            "Ponto ${index + 1}"
+
+        map.overlays.add(
+            marker
+        )
+    }
+
+    map.invalidate()
+}
+
+private fun criarMarcadorRosa(
+    context: Context
+): android.graphics.drawable.Drawable {
+
+    val drawable =
+        GradientDrawable()
+
+    drawable.shape =
+        GradientDrawable.OVAL
+
+    drawable.setColor(
+        AndroidColor.rgb(
+            255,
+            105,
+            180
+        )
+    )
+
+    drawable.setStroke(
+        2,
+        AndroidColor.WHITE
+    )
+
+    drawable.setSize(
+        18,
+        18
+    )
+
+    return drawable
+}
+
+@Suppress("MissingPermission")
+private fun localizarUsuario(
+    context: Context,
+    map: MapView,
+    locationClient:
+        com.google.android.gms.location.FusedLocationProviderClient,
+    onMarkerChanged: (Marker) -> Unit,
+    onAccuracyChanged: (Polygon) -> Unit,
+    onToast: (String) -> Unit
+) {
+
+    onToast(
+        "Obtendo sua localização..."
+    )
+
+    locationClient
         .getCurrentLocation(
             com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY,
             null
@@ -1482,86 +808,146 @@ private fun obterLocalizacao(
 
             if (location == null) {
 
-                onError()
+                onToast(
+                    "Localização indisponível."
+                )
+
                 return@addOnSuccessListener
             }
 
-            try {
+            val ponto =
+                GeoPoint(
+                    location.latitude,
+                    location.longitude
+                )
 
-                val geocoder =
-                    Geocoder(
-                        context,
-                        Locale("pt", "BR")
-                    )
+            val marker =
+                Marker(map)
 
-                if (
-                    android.os.Build.VERSION.SDK_INT >=
-                    android.os.Build.VERSION_CODES.TIRAMISU
-                ) {
+            marker.position =
+                ponto
 
-                    geocoder.getFromLocation(
-                        location.latitude,
-                        location.longitude,
-                        1
-                    ) { enderecos ->
+            marker.setAnchor(
+                Marker.ANCHOR_CENTER,
+                Marker.ANCHOR_CENTER
+            )
 
-                        val endereco =
-                            enderecos.firstOrNull()
+            marker.icon =
+                criarMarcadorUsuario(
+                    context
+                )
 
-                        val pais =
-                            endereco?.countryName
-                                ?: "País não identificado"
+            marker.title =
+                "Minha localização"
 
-                        val cidade =
-                            endereco?.locality
-                                ?: endereco?.subAdminArea
-                                ?: endereco?.adminArea
-                                ?: "Localização atual"
-
-                        onResult(
-                            pais,
-                            cidade
-                        )
-                    }
-
-                } else {
-
-                    @Suppress("DEPRECATION")
-                    val enderecos =
-                        geocoder.getFromLocation(
-                            location.latitude,
-                            location.longitude,
-                            1
-                        )
-
-                    val endereco =
-                        enderecos?.firstOrNull()
-
-                    val pais =
-                        endereco?.countryName
-                            ?: "País não identificado"
-
-                    val cidade =
-                        endereco?.locality
-                            ?: endereco?.subAdminArea
-                            ?: endereco?.adminArea
-                            ?: "Localização atual"
-
-                    onResult(
-                        pais,
-                        cidade
-                    )
-                }
-
-            } catch (
-                exception: Exception
-            ) {
-
-                onError()
+            map.overlays.removeAll {
+                it is Marker &&
+                    it.title == "Minha localização"
             }
+
+            map.overlays.add(
+                marker
+            )
+
+            val raio =
+                Polygon(map)
+
+            val circulo =
+                Polygon.pointsAsCircle(
+                    ponto,
+                    location.accuracy.toDouble()
+                )
+
+            raio.points =
+                circulo
+
+            raio.fillColor =
+                AndroidColor.argb(
+                    15,
+                    110,
+                    181,
+                    255
+                )
+
+            raio.strokeColor =
+                AndroidColor.argb(
+                    90,
+                    110,
+                    181,
+                    255
+                )
+
+            raio.strokeWidth =
+                1f
+
+            map.overlays.removeAll {
+                it is Polygon
+            }
+
+            map.overlays.add(
+                raio
+            )
+
+            onMarkerChanged(
+                marker
+            )
+
+            onAccuracyChanged(
+                raio
+            )
+
+            map.controller.animateTo(
+                ponto
+            )
+
+            map.controller.setZoom(
+                maxOf(
+                    map.zoomLevelDouble,
+                    15.0
+                )
+            )
+
+            map.invalidate()
+
+            onToast(
+                "Localização encontrada."
+            )
         }
         .addOnFailureListener {
 
-            onError()
+            onToast(
+                "Não foi possível obter sua localização."
+            )
         }
+}
+
+private fun criarMarcadorUsuario(
+    context: Context
+): android.graphics.drawable.Drawable {
+
+    val drawable =
+        GradientDrawable()
+
+    drawable.shape =
+        GradientDrawable.OVAL
+
+    drawable.setColor(
+        AndroidColor.rgb(
+            110,
+            181,
+            255
+        )
+    )
+
+    drawable.setStroke(
+        3,
+        AndroidColor.WHITE
+    )
+
+    drawable.setSize(
+        18,
+        18
+    )
+
+    return drawable
 }

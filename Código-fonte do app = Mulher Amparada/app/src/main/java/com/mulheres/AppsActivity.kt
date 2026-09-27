@@ -3,7 +3,7 @@ package com.mulheres
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
+
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -58,8 +58,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -68,7 +66,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.drawable.toBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -586,18 +583,15 @@ private fun AppsTela() {
         ================================================= */
 
         BarraPesquisa(
-
-            value =
-                pesquisa,
-
-            onValueChange = {
-                pesquisa = it
-            },
-
-            dark =
-                dark
-        )
-
+    value = pesquisa,
+    onValueChange = {
+        pesquisa = it
+    },
+    dark = dark,
+    modifier = Modifier.align(
+        Alignment.BottomCenter
+    )
+)
 
         /* =================================================
            STATUS
@@ -975,30 +969,7 @@ private fun IconeApp(
     drawable: Drawable
 ) {
 
-    val bitmap =
-        remember(
-            drawable
-        ) {
-
-            drawable.toBitmap(
-                width = 68,
-                height = 68,
-                config =
-                    Bitmap.Config.ARGB_8888
-            )
-        }
-
-
-    Image(
-
-        bitmap =
-            bitmap.asImageBitmap(),
-
-        contentDescription =
-            null,
-
-        contentScale =
-            ContentScale.Fit,
+    androidx.compose.foundation.Canvas(
 
         modifier =
             Modifier
@@ -1008,7 +979,20 @@ private fun IconeApp(
                         17.dp
                     )
                 )
-    )
+
+    ) {
+
+        drawable.setBounds(
+            0,
+            0,
+            size.width.toInt(),
+            size.height.toInt()
+        )
+
+        drawable.draw(
+            drawContext.canvas.nativeCanvas
+        )
+    }
 }
 
 
@@ -1023,24 +1007,26 @@ private fun BarraPesquisa(
 
     onValueChange: (String) -> Unit,
 
-    dark: Boolean
+    dark: Boolean,
+
+    modifier: Modifier = Modifier
 
 ) {
 
     Box(
 
         modifier =
-            Modifier
+            modifier
                 .fillMaxWidth()
                 .navigationBarsPadding()
                 .padding(
                     start = 16.dp,
                     end = 16.dp,
-                    bottom = 20.dp
+                    bottom = 18.dp
                 ),
 
         contentAlignment =
-            Alignment.BottomCenter
+            Alignment.Center
     ) {
 
         OutlinedTextField(

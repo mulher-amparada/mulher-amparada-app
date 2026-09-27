@@ -227,7 +227,7 @@ private val SecaoClaro =
     Color(0xFF74747E)
 
 private val CartaoClaro =
-    Color(0xFFFFFFFF)
+    Color.BLACK
 
 private val BordaCartaoClaro =
     Color(0x14000000)

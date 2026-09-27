@@ -3,7 +3,10 @@ package com.mulheres
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
-
+import android.graphics.Bitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.core.graphics.drawable.toBitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -969,7 +972,34 @@ private fun IconeApp(
     drawable: Drawable
 ) {
 
-    androidx.compose.foundation.Canvas(
+    val bitmap =
+        remember(drawable) {
+
+            val largura =
+                drawable.intrinsicWidth
+                    .coerceAtLeast(1)
+
+            val altura =
+                drawable.intrinsicHeight
+                    .coerceAtLeast(1)
+
+            drawable.toBitmap(
+                width = largura,
+                height = altura,
+                config = Bitmap.Config.ARGB_8888
+            )
+        }
+
+    Image(
+
+        bitmap =
+            bitmap.asImageBitmap(),
+
+        contentDescription =
+            null,
+
+        contentScale =
+            ContentScale.Fit,
 
         modifier =
             Modifier
@@ -979,20 +1009,7 @@ private fun IconeApp(
                         17.dp
                     )
                 )
-
-    ) {
-
-        drawable.setBounds(
-            0,
-            0,
-            size.width.toInt(),
-            size.height.toInt()
-        )
-
-        drawable.draw(
-            drawContext.canvas.nativeCanvas
-        )
-    }
+    )
 }
 
 

@@ -170,13 +170,12 @@ private val Quicksand = FontFamily(
     )
 )
 
-
 /* =========================================================
    CORES — ESCURO
 ========================================================= */
 
 private val FundoEscuro =
-    Color(0xFF050507)
+    Color(0xFF000000)
 
 private val TextoEscuro =
     Color(0xFFF8F8FA)
@@ -191,7 +190,7 @@ private val SecaoEscuro =
     Color(0xFF8F8F99)
 
 private val CartaoEscuro =
-    Color(0x080FFFFFF)
+    Color(0xFF000000)
 
 private val BordaCartaoEscuro =
     Color.White.copy(
@@ -227,7 +226,7 @@ private val SecaoClaro =
     Color(0xFF74747E)
 
 private val CartaoClaro =
-    Color.BLACK
+    Color(0xFFFFFFFF)
 
 private val BordaCartaoClaro =
     Color(0x14000000)
@@ -254,8 +253,7 @@ private val RoxoInicio =
 
 private val RoxoFim =
     Color(0xFF6425D9)
-
-
+    
 /* =========================================================
    MODELO
 ========================================================= */

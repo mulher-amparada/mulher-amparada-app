@@ -1,8 +1,8 @@
 package com.mulheres
 
 import android.content.Context
-import androidx.compose.foundation.layout.ColumnScope
 import android.content.SharedPreferences
+import androidx.compose.foundation.isSystemInDarkTheme
 import android.graphics.Color as AndroidColor
 import android.os.Bundle
 import android.view.WindowManager
@@ -40,8 +40,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -52,7 +50,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -354,8 +351,7 @@ private fun DiaApp() {
     val context = LocalContext.current
     val storage = remember { DiaStorage(context) }
 
-    var darkMode by rememberSaveable {
-        mutableStateOf(true)
+    val darkMode = isSystemInDarkTheme()     mutableStateOf(true)
     }
 
     val background =
@@ -407,9 +403,7 @@ private fun DiaApp() {
 
     DiaScreen(
         darkMode = darkMode,
-        onDarkModeChange = {
-            darkMode = it
-        },
+        
         storage = storage,
         card = card,
         card2 = card2,
@@ -463,7 +457,6 @@ private fun windowStatusBars(
 @Composable
 private fun DiaScreen(
     darkMode: Boolean,
-    onDarkModeChange: (Boolean) -> Unit,
     storage: DiaStorage,
     card: Color,
     card2: Color,
@@ -596,13 +589,12 @@ private fun DiaScreen(
             )
 
             Header(
-                text = text,
-                muted = muted,
-                darkMode = darkMode,
-                onDarkModeChange = onDarkModeChange,
-                pink = pink,
-                purple = purple
-            )
+    text = text,
+    muted = muted,
+    darkMode = darkMode,
+    pink = pink,
+    purple = purple
+)
         }
 
         item {
@@ -972,7 +964,6 @@ private fun Header(
     text: Color,
     muted: Color,
     darkMode: Boolean,
-    onDarkModeChange: (Boolean) -> Unit,
     pink: Color,
     purple: Color
 ) {
@@ -1020,56 +1011,6 @@ Text(
             Modifier.height(12.dp)
         )
 
-        Row(
-            modifier = Modifier
-                .clip(RoundedCornerShape(16.dp))
-                .background(
-                    if (darkMode)
-                        Color.White.copy(.04f)
-                    else
-                        Color.Black.copy(.04f)
-                )
-                .padding(
-                    horizontal = 12.dp,
-                    vertical = 6.dp
-                ),
-            verticalAlignment =
-                Alignment.CenterVertically
-        ) {
-
-            Text(
-                text =
-                    if (darkMode)
-                        "Modo escuro"
-                    else
-                        "Modo claro",
-                color = muted,
-                fontFamily = Quicksand,
-                fontWeight = FontWeight.Bold,
-                fontSize = 12.sp
-            )
-
-            Spacer(
-                Modifier.width(8.dp)
-            )
-
-            Switch(
-                checked = darkMode,
-                onCheckedChange =
-                    onDarkModeChange,
-                colors =
-                    SwitchDefaults.colors(
-                        checkedThumbColor =
-                            Color.White,
-                        checkedTrackColor =
-                            purple,
-                        uncheckedThumbColor =
-                            Color.White,
-                        uncheckedTrackColor =
-                            Color(0xFF777777)
-                    )
-            )
-        }
     }
 }
 

@@ -398,10 +398,7 @@ private fun MeusAcessos(
             "Acompanhe seu ciclo"
         ),
 
-        Acesso(
-            "Calendário de eventos",
-            "Organize seus compromissos"
-        ),
+        
 
         Acesso(
             "Mapa da sua região",

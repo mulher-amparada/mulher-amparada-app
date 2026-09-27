@@ -6,49 +6,41 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.vector.PathParser
-import androidx.compose.ui.graphics.vector.addPath
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -57,8 +49,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import kotlinx.coroutines.delay
-import kotlin.math.min
+import kotlinx.coroutines.launch
+import java.math.RoundingMode
 
+
+/* =========================================================
+   ACTIVITY
+========================================================= */
 
 class MainActivity : ComponentActivity() {
 
@@ -66,18 +63,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         /*
-         * Impede screenshots e gravação da tela,
-         * caso você queira manter o mesmo comportamento
-         * do restante do seu aplicativo.
+         * Impede screenshots e gravação da tela.
          */
         window.addFlags(
             WindowManager.LayoutParams.FLAG_SECURE
         )
 
         /*
-         * Não desenha atrás da status bar.
-         *
-         * Isso faz o Compose respeitar as barras do sistema.
+         * O Compose respeita as barras do sistema.
          */
         WindowCompat.setDecorFitsSystemWindows(
             window,
@@ -95,19 +88,42 @@ class MainActivity : ComponentActivity() {
    CORES
 ========================================================= */
 
-private val DarkBackground = Color(0xFF000000)
-private val DarkDisplay = Color(0xFF000000)
-private val DarkButton = Color(0xFF202020)
-private val DarkFunction = Color(0xFF2B2B2B)
-private val DarkOperator = Color(0xFF252525)
-private val DarkEqual = Color(0xFFFFFFFF)
+private val DarkBackground =
+    Color(0xFF000000)
 
-private val LightBackground = Color(0xFFF5F5F5)
-private val LightDisplay = Color(0xFFFFFFFF)
-private val LightButton = Color(0xFFE1E1E1)
-private val LightFunction = Color(0xFFD5D5D5)
-private val LightOperator = Color(0xFFDCDCDC)
-private val LightEqual = Color(0xFF111111)
+private val DarkDisplay =
+    Color(0xFF000000)
+
+private val DarkButton =
+    Color(0xFF202020)
+
+private val DarkFunction =
+    Color(0xFF2B2B2B)
+
+private val DarkOperator =
+    Color(0xFF252525)
+
+private val DarkEqual =
+    Color(0xFFFFFFFF)
+
+
+private val LightBackground =
+    Color(0xFFF5F5F5)
+
+private val LightDisplay =
+    Color(0xFFFFFFFF)
+
+private val LightButton =
+    Color(0xFFE1E1E1)
+
+private val LightFunction =
+    Color(0xFFD5D5D5)
+
+private val LightOperator =
+    Color(0xFFDCDCDC)
+
+private val LightEqual =
+    Color(0xFF111111)
 
 
 /* =========================================================
@@ -115,19 +131,23 @@ private val LightEqual = Color(0xFF111111)
 ========================================================= */
 
 @Composable
-fun CalculadoraApp() {
+private fun CalculadoraApp() {
 
     val dark =
-        androidx.compose.foundation.isSystemInDarkTheme()
+        isSystemInDarkTheme()
 
     val background =
-        if (dark) DarkBackground
-        else LightBackground
+        if (dark) {
+            DarkBackground
+        } else {
+            LightBackground
+        }
 
     /*
-     * Overscroll totalmente desativado.
+     * Remove completamente o efeito de overscroll
+     * do Compose.
      */
-    androidx.compose.runtime.CompositionLocalProvider(
+    CompositionLocalProvider(
         LocalOverscrollFactory provides null
     ) {
 
@@ -169,17 +189,37 @@ private fun Calculadora(
         mutableStateOf(false)
     }
 
+    /*
+     * Scope correto para executar delay()
+     * após o erro.
+     */
+    val scope =
+        rememberCoroutineScope()
+
+
     val background =
-        if (dark) DarkBackground
-        else LightBackground
+        if (dark) {
+            DarkBackground
+        } else {
+            LightBackground
+        }
+
 
     val displayBackground =
-        if (dark) DarkDisplay
-        else LightDisplay
+        if (dark) {
+            DarkDisplay
+        } else {
+            LightDisplay
+        }
+
 
     val displayText =
-        if (dark) Color.White
-        else Color(0xFF111111)
+        if (dark) {
+            Color.White
+        } else {
+            Color(0xFF111111)
+        }
+
 
     val historyText =
         if (dark) {
@@ -188,20 +228,200 @@ private fun Calculadora(
             Color.Black.copy(alpha = .40f)
         }
 
+
     /*
-     * Toda a tela fica dentro de safeDrawingPadding().
-     *
-     * Isso impede que a calculadora fique colada
-     * na status bar ou na barra de navegação.
+     * Teclado físico.
      */
+    val processKey: (androidx.compose.ui.input.key.KeyEvent) -> Unit =
+        remember(
+            expression,
+            acabouDeCalcular
+        ) {
+            {
+
+                event ->
+
+                if (
+                    event.type != KeyEventType.KeyDown
+                ) {
+                    return@remember
+                }
+
+
+                when {
+
+                    /*
+                     * Números
+                     */
+                    event.utf16CodePoint
+                        in 48..57 -> {
+
+                        var novo =
+                            expression
+
+                        if (acabouDeCalcular) {
+
+                            novo = ""
+
+                            history = ""
+
+                            acabouDeCalcular = false
+                        }
+
+                        novo +=
+                            event.utf16CodePoint
+                                .toChar()
+
+                        expression = novo
+                    }
+
+
+                    /*
+                     * + - * /
+                     */
+                    event.key == Key.Plus -> {
+
+                        expression =
+                            adicionarOperador(
+                                expression,
+                                "+"
+                            )
+
+                        acabouDeCalcular = false
+                    }
+
+
+                    event.key == Key.Minus -> {
+
+                        expression =
+                            adicionarOperador(
+                                expression,
+                                "-"
+                            )
+
+                        acabouDeCalcular = false
+                    }
+
+
+                    event.key == Key.Asterisk -> {
+
+                        expression =
+                            adicionarOperador(
+                                expression,
+                                "*"
+                            )
+
+                        acabouDeCalcular = false
+                    }
+
+
+                    event.key == Key.Slash -> {
+
+                        expression =
+                            adicionarOperador(
+                                expression,
+                                "/"
+                            )
+
+                        acabouDeCalcular = false
+                    }
+
+
+                    /*
+                     * Ponto
+                     */
+                    event.key == Key.Period ||
+                            event.key == Key.Comma -> {
+
+                        expression =
+                            adicionarDecimal(
+                                expression
+                            )
+                    }
+
+
+                    /*
+                     * Backspace
+                     */
+                    event.key == Key.Backspace -> {
+
+                        expression =
+                            expression.dropLast(1)
+
+                        acabouDeCalcular = false
+                    }
+
+
+                    /*
+                     * Enter
+                     */
+                    event.key == Key.Enter -> {
+
+                        val result =
+                            calcularExpressao(
+                                expression
+                            )
+
+                        if (result == null) {
+
+                            erro = true
+
+                            scope.launch {
+
+                                delay(700)
+
+                                expression = ""
+                                history = ""
+                                acabouDeCalcular = false
+                                erro = false
+                            }
+
+                        } else {
+
+                            history =
+                                "$expression ="
+
+                            expression =
+                                result
+
+                            acabouDeCalcular = true
+                        }
+                    }
+
+
+                    /*
+                     * Escape
+                     */
+                    event.key == Key.Escape -> {
+
+                        expression = ""
+
+                        history = ""
+
+                        acabouDeCalcular = false
+
+                        erro = false
+                    }
+                }
+            }
+        }
+
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .safeDrawingPadding()
-            .navigationBarsPadding(),
+            .navigationBarsPadding()
+            .background(background)
+            .then(
+                Modifier
+            ),
         contentAlignment = Alignment.Center
     ) {
 
+        /*
+         * Container principal.
+         */
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -209,176 +429,320 @@ private fun Calculadora(
                     horizontal = 10.dp,
                     vertical = 12.dp
                 ),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment =
+                Alignment.CenterHorizontally
         ) {
 
             /*
+             * =================================================
              * DISPLAY
+             * =================================================
              */
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp)
+                    .height(
+                        when {
+                            /*
+                             * Altura menor em telas pequenas.
+                             */
+                            expression.length > 0 &&
+                                    expression.length > 12 ->
+                                160.dp
+
+                            else ->
+                                150.dp
+                        }
+                    )
                     .background(
                         color = displayBackground,
-                        shape = RoundedCornerShape(28.dp)
+                        shape = RoundedCornerShape(
+                            28.dp
+                        )
                     )
                     .padding(
                         horizontal = 18.dp,
                         vertical = 18.dp
                     ),
-                contentAlignment = Alignment.BottomEnd
+                contentAlignment =
+                    Alignment.BottomEnd
             ) {
 
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.End,
-                    verticalArrangement = Arrangement.Bottom
+                    modifier =
+                        Modifier.fillMaxWidth(),
+
+                    horizontalAlignment =
+                        Alignment.End,
+
+                    verticalArrangement =
+                        Arrangement.Bottom
                 ) {
 
-                    if (history.isNotEmpty()) {
+                    /*
+                     * Histórico.
+                     */
+                    if (
+                        history.isNotEmpty()
+                    ) {
 
                         Text(
                             text = history,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 7.dp),
-                            color = historyText,
-                            fontSize = 14.sp,
-                            lineHeight = 17.sp,
-                            textAlign = TextAlign.End,
+
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(
+                                        bottom = 7.dp
+                                    ),
+
+                            color =
+                                historyText,
+
+                            fontSize =
+                                14.sp,
+
+                            lineHeight =
+                                17.sp,
+
+                            textAlign =
+                                TextAlign.End,
+
                             maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+
+                            overflow =
+                                TextOverflow.Ellipsis
                         )
                     }
 
+
+                    /*
+                     * Resultado / expressão.
+                     */
                     Text(
                         text =
-                            if (erro) "Erro"
-                            else expression.ifEmpty { "0" },
-
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .then(
-                                if (erro) {
-                                    Modifier.shake()
-                                } else {
-                                    Modifier
+                            if (erro) {
+                                "Erro"
+                            } else {
+                                expression.ifEmpty {
+                                    "0"
                                 }
-                            ),
+                            },
 
-                        color = displayText,
+                        modifier =
+                            if (erro) {
+                                Modifier
+                                    .fillMaxWidth()
+                                    .shake()
+                            } else {
+                                Modifier
+                                    .fillMaxWidth()
+                            },
+
+                        color =
+                            displayText,
 
                         fontSize =
                             when {
-                                expression.length > 14 -> 38.sp
-                                expression.length > 10 -> 46.sp
-                                else -> 58.sp
+
+                                expression.length > 16 ->
+                                    34.sp
+
+                                expression.length > 13 ->
+                                    40.sp
+
+                                expression.length > 10 ->
+                                    46.sp
+
+                                else ->
+                                    58.sp
                             },
 
-                        fontWeight = FontWeight.SemiBold,
+                        fontWeight =
+                            FontWeight.SemiBold,
 
-                        lineHeight = 1.sp,
+                        lineHeight =
+                            58.sp,
 
-                        textAlign = TextAlign.End,
+                        textAlign =
+                            TextAlign.End,
 
                         maxLines = 1,
 
-                        overflow = TextOverflow.Ellipsis
+                        overflow =
+                            TextOverflow.Ellipsis
                     )
                 }
             }
 
 
-            Spacer(
-                modifier = Modifier.height(16.dp)
+            /*
+             * Espaçamento entre display e botões.
+             */
+            androidx.compose.foundation.layout.Spacer(
+                modifier =
+                    Modifier.height(16.dp)
             )
 
 
             /*
+             * =================================================
              * BOTÕES
+             * =================================================
              */
 
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-
-                val rows = listOf(
+            val rows =
+                listOf(
 
                     listOf(
-                        ButtonData("C", ButtonType.FUNCTION),
-                        ButtonData("back", ButtonType.FUNCTION),
-                        ButtonData("%", ButtonType.FUNCTION),
-                        ButtonData("÷", ButtonType.OPERATOR)
+                        ButtonData(
+                            "C",
+                            ButtonType.FUNCTION
+                        ),
+
+                        ButtonData(
+                            "back",
+                            ButtonType.FUNCTION
+                        ),
+
+                        ButtonData(
+                            "%",
+                            ButtonType.FUNCTION
+                        ),
+
+                        ButtonData(
+                            "÷",
+                            ButtonType.OPERATOR
+                        )
                     ),
+
 
                     listOf(
                         ButtonData("7"),
                         ButtonData("8"),
                         ButtonData("9"),
-                        ButtonData("×", ButtonType.OPERATOR)
+
+                        ButtonData(
+                            "×",
+                            ButtonType.OPERATOR
+                        )
                     ),
+
 
                     listOf(
                         ButtonData("4"),
                         ButtonData("5"),
                         ButtonData("6"),
-                        ButtonData("−", ButtonType.OPERATOR)
+
+                        ButtonData(
+                            "−",
+                            ButtonType.OPERATOR
+                        )
                     ),
+
 
                     listOf(
                         ButtonData("1"),
                         ButtonData("2"),
                         ButtonData("3"),
-                        ButtonData("+", ButtonType.OPERATOR)
+
+                        ButtonData(
+                            "+",
+                            ButtonType.OPERATOR
+                        )
                     ),
 
+
                     listOf(
-                        ButtonData("=", ButtonType.EQUAL),
+                        ButtonData(
+                            "=",
+                            ButtonType.EQUAL
+                        ),
+
                         ButtonData("()"),
+
                         ButtonData(","),
+
                         ButtonData("0")
                     )
                 )
 
+
+            Column(
+                modifier =
+                    Modifier.fillMaxWidth(),
+
+                verticalArrangement =
+                    Arrangement.spacedBy(
+                        10.dp
+                    )
+            ) {
+
                 rows.forEach { row ->
 
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier =
+                            Modifier.fillMaxWidth(),
+
                         horizontalArrangement =
-                            Arrangement.spacedBy(10.dp)
+                            Arrangement.spacedBy(
+                                10.dp
+                            )
                     ) {
 
                         row.forEach { button ->
 
                             CalculatorButton(
                                 data = button,
+
                                 dark = dark,
-                                modifier = Modifier.weight(1f),
+
+                                modifier =
+                                    Modifier.weight(
+                                        1f
+                                    ),
+
                                 onClick = {
 
-                                    when (button.value) {
+                                    when (
+                                        button.value
+                                    ) {
 
+                                        /*
+                                         * C
+                                         */
                                         "C" -> {
 
                                             expression = ""
+
                                             history = ""
-                                            acabouDeCalcular = false
+
+                                            acabouDeCalcular =
+                                                false
+
                                             erro = false
                                         }
 
 
+                                        /*
+                                         * Apagar
+                                         */
                                         "back" -> {
 
                                             expression =
-                                                expression.dropLast(1)
+                                                expression.dropLast(
+                                                    1
+                                                )
 
-                                            acabouDeCalcular = false
+                                            acabouDeCalcular =
+                                                false
                                         }
 
 
+                                        /*
+                                         * Igual
+                                         */
                                         "=" -> {
 
                                             val result =
@@ -386,37 +750,49 @@ private fun Calculadora(
                                                     expression
                                                 )
 
-                                            if (result == null) {
+                                            if (
+                                                result == null
+                                            ) {
 
                                                 erro = true
 
-                                                /*
-                                                 * Remove o estado
-                                                 * de erro depois de 700 ms.
-                                                 */
-                                                kotlinx.coroutines.MainScope()
-                                                    .launch {
-                                                        delay(700)
+                                                scope.launch {
 
-                                                        expression = ""
-                                                        history = ""
-                                                        acabouDeCalcular = false
-                                                        erro = false
-                                                    }
+                                                    delay(700)
+
+                                                    expression =
+                                                        ""
+
+                                                    history =
+                                                        ""
+
+                                                    acabouDeCalcular =
+                                                        false
+
+                                                    erro =
+                                                        false
+                                                }
 
                                             } else {
 
                                                 history =
                                                     "$expression ="
 
-                                                expression = result
+                                                expression =
+                                                    result
 
-                                                acabouDeCalcular = true
-                                                erro = false
+                                                acabouDeCalcular =
+                                                    true
+
+                                                erro =
+                                                    false
                                             }
                                         }
 
 
+                                        /*
+                                         * Parênteses
+                                         */
                                         "()" -> {
 
                                             expression =
@@ -425,128 +801,121 @@ private fun Calculadora(
                                                     acabouDeCalcular
                                                 )
 
-                                            acabouDeCalcular = false
+                                            acabouDeCalcular =
+                                                false
                                         }
 
 
+                                        /*
+                                         * Decimal
+                                         */
                                         "," -> {
 
-                                            var novo =
-                                                expression
+                                            if (
+                                                acabouDeCalcular
+                                            ) {
 
-                                            if (acabouDeCalcular) {
+                                                expression =
+                                                    ""
 
-                                                novo = ""
+                                                history =
+                                                    ""
 
-                                                history = ""
-
-                                                acabouDeCalcular = false
+                                                acabouDeCalcular =
+                                                    false
                                             }
 
-                                            val partes =
-                                                novo.split(
-                                                    Regex("[+\\-*/()]")
+                                            expression =
+                                                adicionarDecimal(
+                                                    expression
                                                 )
-
-                                            val atual =
-                                                partes.lastOrNull()
-                                                    ?: ""
-
-                                            if (!atual.contains(".")) {
-
-                                                if (
-                                                    novo.isEmpty() ||
-                                                    "+-*/(".contains(
-                                                        novo.last()
-                                                    )
-                                                ) {
-                                                    novo += "0"
-                                                }
-
-                                                novo += "."
-                                            }
-
-                                            expression = novo
                                         }
 
 
+                                        /*
+                                         * Porcentagem
+                                         */
                                         "%" -> {
 
                                             if (
                                                 expression.isNotEmpty() &&
-                                                Regex("[0-9)]$")
-                                                    .containsMatchIn(expression)
+                                                expression.last()
+                                                    .isDigit() ||
+                                                expression.endsWith(
+                                                    ")"
+                                                )
                                             ) {
 
-                                                expression += "%"
+                                                expression +=
+                                                    "%"
                                             }
                                         }
 
 
+                                        /*
+                                         * Operadores.
+                                         */
                                         "+",
                                         "−",
                                         "×",
                                         "÷" -> {
 
                                             val operator =
-                                                when (button.value) {
-                                                    "−" -> "-"
-                                                    "×" -> "*"
-                                                    "÷" -> "/"
-                                                    else -> button.value
-                                                }
-
-                                            var novo =
-                                                expression
-
-                                            acabouDeCalcular = false
-
-                                            if (novo.isEmpty()) {
-
-                                                if (operator == "-") {
-                                                    novo = "-"
-                                                }
-
-                                            } else {
-
-                                                if (
-                                                    "+-*/".contains(
-                                                        novo.last()
-                                                    )
+                                                when (
+                                                    button.value
                                                 ) {
 
-                                                    novo =
-                                                        novo.dropLast(1)
+                                                    "−" ->
+                                                        "-"
+
+                                                    "×" ->
+                                                        "*"
+
+                                                    "÷" ->
+                                                        "/"
+
+                                                    else ->
+                                                        "+"
                                                 }
 
-                                                novo += operator
-                                            }
+                                            expression =
+                                                adicionarOperador(
+                                                    expression,
+                                                    operator
+                                                )
 
-                                            expression = novo
+                                            acabouDeCalcular =
+                                                false
                                         }
 
 
+                                        /*
+                                         * Números.
+                                         */
                                         else -> {
-
-                                            /*
-                                             * Números.
-                                             */
 
                                             var novo =
                                                 expression
 
-                                            if (acabouDeCalcular) {
+                                            if (
+                                                acabouDeCalcular
+                                            ) {
 
-                                                novo = ""
+                                                novo =
+                                                    ""
 
-                                                history = ""
+                                                history =
+                                                    ""
 
-                                                acabouDeCalcular = false
+                                                acabouDeCalcular =
+                                                    false
                                             }
 
-                                            novo += button.value
+                                            novo +=
+                                                button.value
 
-                                            expression = novo
+                                            expression =
+                                                novo
                                         }
                                     }
                                 }
@@ -561,24 +930,30 @@ private fun Calculadora(
 
 
 /* =========================================================
-   DADOS DOS BOTÕES
+   BOTÃO
 ========================================================= */
 
 private data class ButtonData(
     val value: String,
-    val type: ButtonType = ButtonType.NUMBER
+    val type: ButtonType =
+        ButtonType.NUMBER
 )
 
+
 private enum class ButtonType {
+
     NUMBER,
+
     FUNCTION,
+
     OPERATOR,
+
     EQUAL
 }
 
 
 /* =========================================================
-   BOTÃO
+   BOTÃO COMPOSE
 ========================================================= */
 
 @Composable
@@ -593,34 +968,55 @@ private fun CalculatorButton(
         when (data.type) {
 
             ButtonType.FUNCTION ->
-                if (dark) DarkFunction
-                else LightFunction
+                if (dark) {
+                    DarkFunction
+                } else {
+                    LightFunction
+                }
+
 
             ButtonType.OPERATOR ->
-                if (dark) DarkOperator
-                else LightOperator
+                if (dark) {
+                    DarkOperator
+                } else {
+                    LightOperator
+                }
+
 
             ButtonType.EQUAL ->
-                if (dark) DarkEqual
-                else LightEqual
+                if (dark) {
+                    DarkEqual
+                } else {
+                    LightEqual
+                }
+
 
             ButtonType.NUMBER ->
-                if (dark) DarkButton
-                else LightButton
+                if (dark) {
+                    DarkButton
+                } else {
+                    LightButton
+                }
         }
+
 
     val textColor =
         when (data.type) {
 
             ButtonType.EQUAL ->
-                if (dark) Color.Black
-                else Color.White
+                if (dark) {
+                    Color.Black
+                } else {
+                    Color.White
+                }
 
-            ButtonType.FUNCTION,
-            ButtonType.OPERATOR,
-            ButtonType.NUMBER ->
-                if (dark) Color.White
-                else Color(0xFF111111)
+
+            else ->
+                if (dark) {
+                    Color.White
+                } else {
+                    Color(0xFF111111)
+                }
         }
 
 
@@ -633,46 +1029,76 @@ private fun CalculatorButton(
             )
             .clickable(
                 indication = null,
-                interactionSource = remember {
-                    androidx.compose.foundation.interaction.MutableInteractionSource()
-                },
+                interactionSource =
+                    remember {
+                        MutableInteractionSource()
+                    },
                 onClick = onClick
             ),
-        contentAlignment = Alignment.Center
+        contentAlignment =
+            Alignment.Center
     ) {
 
-        if (data.value == "back") {
+        if (
+            data.value == "back"
+        ) {
 
-            androidx.compose.foundation.Image(
-                painter = rememberVectorPainter(
-                    image = BackspaceIcon
-                ),
-                contentDescription = "Apagar",
-                modifier = Modifier
-                    .fillMaxWidth(.35f)
-                    .aspectRatio(1f)
+            /*
+             * Ícone de apagar.
+             *
+             * Não usa ImageVector/addPath,
+             * portanto não depende de
+             * material-icons.
+             */
+            Text(
+                text = "⌫",
+
+                color =
+                    textColor,
+
+                fontSize =
+                    29.sp,
+
+                fontWeight =
+                    FontWeight.Normal,
+
+                textAlign =
+                    TextAlign.Center
             )
 
         } else {
 
             Text(
-                text = data.value,
-                color = textColor,
+                text =
+                    data.value,
+
+                color =
+                    textColor,
 
                 fontSize =
-                    when (data.value) {
-                        "=",
-                        "×",
-                        "÷",
-                        "−",
-                        "+" -> 26.sp
+                    when {
 
-                        else -> 23.sp
+                        data.value == "=" ->
+                            27.sp
+
+                        data.value in
+                                listOf(
+                                    "+",
+                                    "−",
+                                    "×",
+                                    "÷"
+                                ) ->
+                            27.sp
+
+                        else ->
+                            23.sp
                     },
 
-                fontWeight = FontWeight.SemiBold,
+                fontWeight =
+                    FontWeight.SemiBold,
 
-                textAlign = TextAlign.Center
+                textAlign =
+                    TextAlign.Center
             )
         }
     }
@@ -680,29 +1106,95 @@ private fun CalculatorButton(
 
 
 /* =========================================================
-   ÍCONE APAGAR
+   ADICIONAR OPERADOR
 ========================================================= */
 
-private val BackspaceIcon: ImageVector
-    get() =
-        ImageVector.Builder(
-            name = "Backspace",
-            defaultWidth = 24.dp,
-            defaultHeight = 24.dp,
-            viewportWidth = 960f,
-            viewportHeight = 960f
+private fun adicionarOperador(
+    expression: String,
+    operator: String
+): String {
+
+    if (
+        expression.isEmpty()
+    ) {
+
+        return if (
+            operator == "-"
+        ) {
+            "-"
+        } else {
+            expression
+        }
+    }
+
+
+    var result =
+        expression
+
+
+    val last =
+        result.last()
+
+
+    if (
+        "+-*/".contains(last)
+    ) {
+
+        result =
+            result.dropLast(1)
+    }
+
+
+    return result + operator
+}
+
+
+/* =========================================================
+   ADICIONAR DECIMAL
+========================================================= */
+
+private fun adicionarDecimal(
+    expression: String
+): String {
+
+    val partes =
+        expression.split(
+            Regex("[+\\-*/()]")
         )
-            .addPath(
-                pathData = PathParser()
-                    .parsePathString(
-                        "m560-424 76 76q11 11 28 11t28-11q11-11 11-28t-11-28l-76-76 76-76q11-11 11-28t-11-28q-11-11-28-11t-28 11l-76 76-76-76q-11-11-28-11t-28 11q-11 11-11 28t11 28l76 76-76 76q-11 11-11 28t11 28q11 11 28 11t28-11l76-76ZM360-160q-19 0-36-8.5T296-192L116-432q-16-21-16-48t16-48l180-240q11-15 28-23.5t36-8.5h440q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H360Zm0-80h440v-480H360L180-480l180 240Zm130-240Z"
-                    )
-                    .toNodes(),
-                fill = androidx.compose.ui.graphics.SolidColor(
-                    Color.White
-                )
-            )
-            .build()
+
+
+    val atual =
+        partes.lastOrNull()
+            ?: ""
+
+
+    if (
+        atual.contains(".")
+    ) {
+
+        return expression
+    }
+
+
+    var result =
+        expression
+
+
+    if (
+        result.isEmpty() ||
+        "+-*/(".contains(
+            result.last()
+        )
+    ) {
+
+        result += "0"
+    }
+
+
+    result += "."
+
+    return result
+}
 
 
 /* =========================================================
@@ -715,21 +1207,39 @@ private fun adicionarParenteses(
 ): String {
 
     var expr =
-        if (acabouDeCalcular) ""
-        else expression
+        if (acabouDeCalcular) {
+            ""
+        } else {
+            expression
+        }
+
 
     val ultimo =
-        expr.lastOrNull()?.toString() ?: ""
+        expr.lastOrNull()
+            ?.toString()
+            ?: ""
+
 
     val abertos =
-        expr.count { it == '(' }
+        expr.count {
+            it == '('
+        }
+
 
     val fechados =
-        expr.count { it == ')' }
+        expr.count {
+            it == ')'
+        }
 
+
+    /*
+     * Começa um parêntese.
+     */
     if (
         expr.isEmpty() ||
-        "+-*/(".contains(ultimo)
+        "+-*/(".contains(
+            ultimo
+        )
     ) {
 
         expr += "("
@@ -737,10 +1247,19 @@ private fun adicionarParenteses(
         return expr
     }
 
-    if (abertos > fechados) {
+
+    /*
+     * Fecha um parêntese
+     * se ainda houver algum aberto.
+     */
+    if (
+        abertos > fechados
+    ) {
 
         if (
-            !"+-*/(".contains(ultimo)
+            !"+-*/(".contains(
+                ultimo
+            )
         ) {
 
             expr += ")"
@@ -749,6 +1268,11 @@ private fun adicionarParenteses(
         return expr
     }
 
+
+    /*
+     * Caso contrário,
+     * começa uma multiplicação.
+     */
     expr += "*("
 
     return expr
@@ -764,83 +1288,137 @@ private fun prepararPorcentagem(
 ): String {
 
     return expression.replace(
-        Regex("(\\d+(?:\\.\\d+)?)%"),
+        Regex(
+            "(\\d+(?:\\.\\d+)?)%"
+        ),
         "($1/100)"
     )
 }
 
 
 /* =========================================================
-   CALCULADOR
+   CALCULAR EXPRESSÃO
 ========================================================= */
 
 private fun calcularExpressao(
     original: String
 ): String? {
 
-    if (original.isEmpty()) {
+    if (
+        original.isEmpty()
+    ) {
+
         return null
     }
+
 
     try {
 
         var expression =
-            original.replace(",", ".")
+            original.replace(
+                ",",
+                "."
+            )
 
+
+        /*
+         * Último caractere.
+         */
         val ultimo =
             expression.lastOrNull()
 
+
         if (
             ultimo != null &&
-            "+-*/(".contains(ultimo)
+            "+-*/(".contains(
+                ultimo
+            )
         ) {
+
             return null
         }
 
-        val abertos =
-            expression.count { it == '(' }
-
-        val fechados =
-            expression.count { it == ')' }
-
-        if (abertos != fechados) {
-            return null
-        }
 
         /*
-         * Aceita somente caracteres
-         * matemáticos esperados.
+         * Parênteses.
+         */
+        val abertos =
+            expression.count {
+                it == '('
+            }
+
+
+        val fechados =
+            expression.count {
+                it == ')'
+            }
+
+
+        if (
+            abertos != fechados
+        ) {
+
+            return null
+        }
+
+
+        /*
+         * Só permite caracteres matemáticos.
          */
         if (
             !Regex(
                 "^[0-9+\\-*/().%\\s]+$"
-            ).matches(expression)
+            ).matches(
+                expression
+            )
         ) {
+
             return null
         }
 
-        expression =
-            prepararPorcentagem(expression)
 
+        /*
+         * Porcentagens.
+         */
+        expression =
+            prepararPorcentagem(
+                expression
+            )
+
+
+        /*
+         * Parser nativo.
+         */
         val resultado =
             SimpleExpressionParser(
                 expression
             ).parse()
 
-        if (!resultado.isFinite()) {
+
+        if (
+            !resultado.isFinite()
+        ) {
+
             return null
         }
 
+
+        /*
+         * Mesmo comportamento aproximado
+         * do toFixed(10) do JavaScript.
+         */
         return resultado
             .toBigDecimal()
             .setScale(
                 10,
-                java.math.RoundingMode.HALF_UP
+                RoundingMode.HALF_UP
             )
             .stripTrailingZeros()
             .toPlainString()
 
-    } catch (_: Exception) {
+    } catch (
+        _: Exception
+    ) {
 
         return null
     }
@@ -855,7 +1433,8 @@ private class SimpleExpressionParser(
     private val text: String
 ) {
 
-    private var position = 0
+    private var position =
+        0
 
 
     fun parse(): Double {
@@ -863,32 +1442,49 @@ private class SimpleExpressionParser(
         val result =
             parseExpression()
 
+
         skipSpaces()
 
-        if (position != text.length) {
+
+        if (
+            position != text.length
+        ) {
+
             throw IllegalArgumentException()
         }
+
 
         return result
     }
 
 
+    /*
+     * Soma e subtração.
+     */
     private fun parseExpression(): Double {
 
         var value =
             parseTerm()
 
+
         while (true) {
 
             skipSpaces()
 
-            if (match('+')) {
 
-                value += parseTerm()
+            if (
+                match('+')
+            ) {
 
-            } else if (match('-')) {
+                value +=
+                    parseTerm()
 
-                value -= parseTerm()
+            } else if (
+                match('-')
+            ) {
+
+                value -=
+                    parseTerm()
 
             } else {
 
@@ -896,26 +1492,50 @@ private class SimpleExpressionParser(
             }
         }
 
+
         return value
     }
 
 
+    /*
+     * Multiplicação e divisão.
+     */
     private fun parseTerm(): Double {
 
         var value =
             parseFactor()
 
+
         while (true) {
 
             skipSpaces()
 
-            if (match('*')) {
 
-                value *= parseFactor()
+            if (
+                match('*')
+            ) {
 
-            } else if (match('/')) {
+                value *=
+                    parseFactor()
 
-                value /= parseFactor()
+            } else if (
+                match('/')
+            ) {
+
+                val divisor =
+                    parseFactor()
+
+
+                if (
+                    divisor == 0.0
+                ) {
+
+                    throw ArithmeticException()
+                }
+
+
+                value /=
+                    divisor
 
             } else {
 
@@ -923,44 +1543,70 @@ private class SimpleExpressionParser(
             }
         }
 
+
         return value
     }
 
 
+    /*
+     * Números, sinais e parênteses.
+     */
     private fun parseFactor(): Double {
 
         skipSpaces()
 
-        if (match('+')) {
+
+        if (
+            match('+')
+        ) {
+
             return parseFactor()
         }
 
-        if (match('-')) {
+
+        if (
+            match('-')
+        ) {
+
             return -parseFactor()
         }
 
-        if (match('(')) {
+
+        if (
+            match('(')
+        ) {
 
             val value =
                 parseExpression()
 
-            if (!match(')')) {
+
+            if (
+                !match(')')
+            ) {
+
                 throw IllegalArgumentException()
             }
 
+
             return value
         }
+
 
         return parseNumber()
     }
 
 
+    /*
+     * Número.
+     */
     private fun parseNumber(): Double {
 
         skipSpaces()
 
+
         val start =
             position
+
 
         while (
             position < text.length &&
@@ -973,21 +1619,33 @@ private class SimpleExpressionParser(
             position++
         }
 
-        if (start == position) {
+
+        if (
+            start == position
+        ) {
+
             throw IllegalArgumentException()
         }
 
+
         return text
-            .substring(start, position)
+            .substring(
+                start,
+                position
+            )
             .toDouble()
     }
 
 
+    /*
+     * Verifica caractere.
+     */
     private fun match(
         character: Char
     ): Boolean {
 
         skipSpaces()
+
 
         if (
             position < text.length &&
@@ -999,10 +1657,14 @@ private class SimpleExpressionParser(
             return true
         }
 
+
         return false
     }
 
 
+    /*
+     * Ignora espaços.
+     */
     private fun skipSpaces() {
 
         while (
@@ -1023,26 +1685,37 @@ private class SimpleExpressionParser(
 @Composable
 private fun Modifier.shake(): Modifier {
 
-    var scale by remember {
+    var scaleValue by remember {
         mutableStateOf(1f)
     }
 
+
     LaunchedEffect(Unit) {
 
-        scale = .97f
+        scaleValue =
+            0.97f
 
         delay(70)
 
-        scale = 1.03f
+
+        scaleValue =
+            1.03f
 
         delay(70)
 
-        scale = .98f
+
+        scaleValue =
+            0.98f
 
         delay(70)
 
-        scale = 1f
+
+        scaleValue =
+            1f
     }
 
-    return this.scale(scale)
+
+    return this.scale(
+        scaleValue
+    )
 }

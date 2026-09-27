@@ -11,7 +11,7 @@ Um projeto totalmente gratuito e livre de anúncios, projetado por um menino aut
 
 e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, onde nem tinha os recursos, ja programei ele num app de A-IDE, num A05, e eu ja perdi vários projetos porque o celular nao aguentava, matava o projeto porque matou o processo de compilação!, e uma vez eu fiz o projeto do mulher amparada e eu mesmo fiz o app do mulher amparada (primeiro eu refiz, depois na 2 vez que perdi portei tudo do apk compilado para descompilado, e depois perdi denovo mas ai eu ja tinha o código-fonte!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3694**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3491**
 
 # ⚠️MURAL DE AVISOS:
 
@@ -616,20 +616,6 @@ O prestígio permite trocar parte do progresso atual por uma vantagem permanente
 Quando o jogador alcança o requisito, a página informa quantos pontos de Legado serão recebidos. Depois da confirmação, os níveis das melhorias normais são zerados e os Pontos de História voltam para zero.
 
 O Legado, entretanto, deve permanecer caso a intenção seja que ele seja realmente permanente.
-
-Salvamento
-
-O progresso é armazenado pelo navegador usando "localStorage". A classe "cripto" é responsável por salvar, carregar e apagar os dados da página.
-
-Dessa maneira, os pontos, melhorias, Legado e outras informações do jogo podem permanecer salvos quando a página é fechada e aberta novamente.
-
-Interface e efeitos
-
-A página possui animações para os cliques, números de pontos que aparecem na tela, combos, desbloqueios, melhorias e prestígio. O prestígio possui ainda um efeito especial com brilho, texto e partículas.
-
-O sistema também utiliza mecanismos para evitar atualizações desnecessárias da interface e limitar a quantidade de elementos visuais criados simultaneamente, ajudando a manter a página mais fluida.
-
-Em conjunto, a página transforma o aprendizado sobre a história das mulheres em uma experiência de progressão: o usuário acumula Pontos de História, melhora sua produção, desbloqueia novos períodos históricos e utiliza o sistema de prestígio para construir um Legado Permanente.
 ```
 
 ### Navegador: 

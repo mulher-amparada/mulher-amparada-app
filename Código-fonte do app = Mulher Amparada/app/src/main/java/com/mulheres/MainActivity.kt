@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,12 +37,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.type
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -52,875 +47,719 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
 
-
 /* =========================================================
-   ACTIVITY
+ACTIVITY
 ========================================================= */
 
 class MainActivity : ComponentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-        /*
-         * Impede screenshots e gravação da tela.
-         */
-        window.addFlags(
-            WindowManager.LayoutParams.FLAG_SECURE
-        )
+    /*
+     * Impede screenshots e gravação da tela.
+     */
+    window.addFlags(
+        WindowManager.LayoutParams.FLAG_SECURE
+    )
 
-        /*
-         * O Compose respeita as barras do sistema.
-         */
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            true
-        )
+    /*
+     * Faz o conteúdo respeitar as barras do sistema.
+     */
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        true
+    )
 
-        setContent {
-            CalculadoraApp()
-        }
+    setContent {
+        CalculadoraApp()
     }
 }
 
+}
 
 /* =========================================================
-   CORES
+CORES — MODO ESCURO
 ========================================================= */
 
 private val DarkBackground =
-    Color(0xFF000000)
+Color(0xFF000000)
 
 private val DarkDisplay =
-    Color(0xFF000000)
+Color(0xFF000000)
 
 private val DarkButton =
-    Color(0xFF202020)
+Color(0xFF202020)
 
 private val DarkFunction =
-    Color(0xFF2B2B2B)
+Color(0xFF2B2B2B)
 
 private val DarkOperator =
-    Color(0xFF252525)
+Color(0xFF252525)
 
 private val DarkEqual =
-    Color(0xFFFFFFFF)
-
-
-private val LightBackground =
-    Color(0xFFF5F5F5)
-
-private val LightDisplay =
-    Color(0xFFFFFFFF)
-
-private val LightButton =
-    Color(0xFFE1E1E1)
-
-private val LightFunction =
-    Color(0xFFD5D5D5)
-
-private val LightOperator =
-    Color(0xFFDCDCDC)
-
-private val LightEqual =
-    Color(0xFF111111)
-
+Color(0xFFFFFFFF)
 
 /* =========================================================
-   APP
+CORES — MODO CLARO
+========================================================= */
+
+private val LightBackground =
+Color(0xFFF5F5F5)
+
+private val LightDisplay =
+Color(0xFFFFFFFF)
+
+private val LightButton =
+Color(0xFFE1E1E1)
+
+private val LightFunction =
+Color(0xFFD5D5D5)
+
+private val LightOperator =
+Color(0xFFDCDCDC)
+
+private val LightEqual =
+Color(0xFF111111)
+
+/* =========================================================
+APP
 ========================================================= */
 
 @Composable
 private fun CalculadoraApp() {
 
-    val dark =
-        isSystemInDarkTheme()
+val dark =
+    isSystemInDarkTheme()
 
-    val background =
-        if (dark) {
-            DarkBackground
-        } else {
-            LightBackground
-        }
+val background =
+    if (dark) {
+        DarkBackground
+    } else {
+        LightBackground
+    }
 
-    /*
-     * Remove completamente o efeito de overscroll
-     * do Compose.
-     */
-    CompositionLocalProvider(
-        LocalOverscrollFactory provides null
+/*
+ * Overscroll completamente desativado.
+ */
+CompositionLocalProvider(
+    LocalOverscrollFactory provides null
+) {
+
+    Surface(
+        modifier =
+            Modifier.fillMaxSize(),
+
+        color =
+            background
     ) {
 
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = background
-        ) {
-
-            Calculadora(
-                dark = dark
-            )
-        }
+        Calculadora(
+            dark = dark
+        )
     }
 }
 
+}
 
 /* =========================================================
-   CALCULADORA
+CALCULADORA
 ========================================================= */
 
 @Composable
 private fun Calculadora(
-    dark: Boolean
+dark: Boolean
 ) {
 
-    var expression by remember {
-        mutableStateOf("")
+var expression by remember {
+    mutableStateOf("")
+}
+
+var history by remember {
+    mutableStateOf("")
+}
+
+var acabouDeCalcular by remember {
+    mutableStateOf(false)
+}
+
+var erro by remember {
+    mutableStateOf(false)
+}
+
+/*
+ * Coroutine usada somente para
+ * remover a mensagem de erro.
+ */
+val scope =
+    rememberCoroutineScope()
+
+
+val background =
+    if (dark) {
+        DarkBackground
+    } else {
+        LightBackground
     }
 
-    var history by remember {
-        mutableStateOf("")
+
+val displayBackground =
+    if (dark) {
+        DarkDisplay
+    } else {
+        LightDisplay
     }
 
-    var acabouDeCalcular by remember {
-        mutableStateOf(false)
+
+val displayText =
+    if (dark) {
+        Color.White
+    } else {
+        Color(0xFF111111)
     }
 
-    var erro by remember {
-        mutableStateOf(false)
+
+val historyText =
+    if (dark) {
+        Color.White.copy(
+            alpha = .35f
+        )
+    } else {
+        Color.Black.copy(
+            alpha = .40f
+        )
     }
 
-    /*
-     * Scope correto para executar delay()
-     * após o erro.
-     */
-    val scope =
-        rememberCoroutineScope()
 
-
-    val background =
-        if (dark) {
-            DarkBackground
-        } else {
-            LightBackground
-        }
-
-
-    val displayBackground =
-        if (dark) {
-            DarkDisplay
-        } else {
-            LightDisplay
-        }
-
-
-    val displayText =
-        if (dark) {
-            Color.White
-        } else {
-            Color(0xFF111111)
-        }
-
-
-    val historyText =
-        if (dark) {
-            Color.White.copy(alpha = .35f)
-        } else {
-            Color.Black.copy(alpha = .40f)
-        }
-
-
-    /*
-     * Teclado físico.
-     */
-    val processKey: (androidx.compose.ui.input.key.KeyEvent) -> Unit =
-        remember(
-            expression,
-            acabouDeCalcular
-        ) {
-            {
-
-                event ->
-
-                if (
-                    event.type != KeyEventType.KeyDown
-                ) {
-                    return@remember
-                }
-
-
-                when {
-
-                    /*
-                     * Números
-                     */
-                    event.utf16CodePoint
-                        in 48..57 -> {
-
-                        var novo =
-                            expression
-
-                        if (acabouDeCalcular) {
-
-                            novo = ""
-
-                            history = ""
-
-                            acabouDeCalcular = false
-                        }
-
-                        novo +=
-                            event.utf16CodePoint
-                                .toChar()
-
-                        expression = novo
-                    }
-
-
-                    /*
-                     * + - * /
-                     */
-                    event.key == Key.Plus -> {
-
-                        expression =
-                            adicionarOperador(
-                                expression,
-                                "+"
-                            )
-
-                        acabouDeCalcular = false
-                    }
-
-
-                    event.key == Key.Minus -> {
-
-                        expression =
-                            adicionarOperador(
-                                expression,
-                                "-"
-                            )
-
-                        acabouDeCalcular = false
-                    }
-
-
-                    event.key == Key.Asterisk -> {
-
-                        expression =
-                            adicionarOperador(
-                                expression,
-                                "*"
-                            )
-
-                        acabouDeCalcular = false
-                    }
-
-
-                    event.key == Key.Slash -> {
-
-                        expression =
-                            adicionarOperador(
-                                expression,
-                                "/"
-                            )
-
-                        acabouDeCalcular = false
-                    }
-
-
-                    /*
-                     * Ponto
-                     */
-                    event.key == Key.Period ||
-                            event.key == Key.Comma -> {
-
-                        expression =
-                            adicionarDecimal(
-                                expression
-                            )
-                    }
-
-
-                    /*
-                     * Backspace
-                     */
-                    event.key == Key.Backspace -> {
-
-                        expression =
-                            expression.dropLast(1)
-
-                        acabouDeCalcular = false
-                    }
-
-
-                    /*
-                     * Enter
-                     */
-                    event.key == Key.Enter -> {
-
-                        val result =
-                            calcularExpressao(
-                                expression
-                            )
-
-                        if (result == null) {
-
-                            erro = true
-
-                            scope.launch {
-
-                                delay(700)
-
-                                expression = ""
-                                history = ""
-                                acabouDeCalcular = false
-                                erro = false
-                            }
-
-                        } else {
-
-                            history =
-                                "$expression ="
-
-                            expression =
-                                result
-
-                            acabouDeCalcular = true
-                        }
-                    }
-
-
-                    /*
-                     * Escape
-                     */
-                    event.key == Key.Escape -> {
-
-                        expression = ""
-
-                        history = ""
-
-                        acabouDeCalcular = false
-
-                        erro = false
-                    }
-                }
-            }
-        }
-
-
-    Box(
-        modifier = Modifier
+Box(
+    modifier =
+        Modifier
             .fillMaxSize()
             .safeDrawingPadding()
             .navigationBarsPadding()
-            .background(background)
-            .then(
-                Modifier
+            .background(
+                background
             ),
-        contentAlignment = Alignment.Center
-    ) {
 
-        /*
-         * Container principal.
-         */
-        Column(
-            modifier = Modifier
+    contentAlignment =
+        Alignment.Center
+) {
+
+    Column(
+        modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(
                     horizontal = 10.dp,
                     vertical = 12.dp
                 ),
-            horizontalAlignment =
-                Alignment.CenterHorizontally
-        ) {
 
-            /*
-             * =================================================
-             * DISPLAY
-             * =================================================
-             */
+        horizontalAlignment =
+            Alignment.CenterHorizontally
+    ) {
 
-            Box(
-                modifier = Modifier
+
+        /* =================================================
+           DISPLAY
+        ================================================= */
+
+        Box(
+            modifier =
+                Modifier
                     .fillMaxWidth()
                     .height(
-                        when {
-                            /*
-                             * Altura menor em telas pequenas.
-                             */
-                            expression.length > 0 &&
-                                    expression.length > 12 ->
-                                160.dp
-
-                            else ->
-                                150.dp
-                        }
+                        150.dp
                     )
                     .background(
-                        color = displayBackground,
-                        shape = RoundedCornerShape(
-                            28.dp
-                        )
+                        color =
+                            displayBackground,
+
+                        shape =
+                            RoundedCornerShape(
+                                28.dp
+                            )
                     )
                     .padding(
                         horizontal = 18.dp,
                         vertical = 18.dp
                     ),
-                contentAlignment =
-                    Alignment.BottomEnd
-            ) {
 
-                Column(
-                    modifier =
-                        Modifier.fillMaxWidth(),
-
-                    horizontalAlignment =
-                        Alignment.End,
-
-                    verticalArrangement =
-                        Arrangement.Bottom
-                ) {
-
-                    /*
-                     * Histórico.
-                     */
-                    if (
-                        history.isNotEmpty()
-                    ) {
-
-                        Text(
-                            text = history,
-
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        bottom = 7.dp
-                                    ),
-
-                            color =
-                                historyText,
-
-                            fontSize =
-                                14.sp,
-
-                            lineHeight =
-                                17.sp,
-
-                            textAlign =
-                                TextAlign.End,
-
-                            maxLines = 1,
-
-                            overflow =
-                                TextOverflow.Ellipsis
-                        )
-                    }
-
-
-                    /*
-                     * Resultado / expressão.
-                     */
-                    Text(
-                        text =
-                            if (erro) {
-                                "Erro"
-                            } else {
-                                expression.ifEmpty {
-                                    "0"
-                                }
-                            },
-
-                        modifier =
-                            if (erro) {
-                                Modifier
-                                    .fillMaxWidth()
-                                    .shake()
-                            } else {
-                                Modifier
-                                    .fillMaxWidth()
-                            },
-
-                        color =
-                            displayText,
-
-                        fontSize =
-                            when {
-
-                                expression.length > 16 ->
-                                    34.sp
-
-                                expression.length > 13 ->
-                                    40.sp
-
-                                expression.length > 10 ->
-                                    46.sp
-
-                                else ->
-                                    58.sp
-                            },
-
-                        fontWeight =
-                            FontWeight.SemiBold,
-
-                        lineHeight =
-                            58.sp,
-
-                        textAlign =
-                            TextAlign.End,
-
-                        maxLines = 1,
-
-                        overflow =
-                            TextOverflow.Ellipsis
-                    )
-                }
-            }
-
-
-            /*
-             * Espaçamento entre display e botões.
-             */
-            androidx.compose.foundation.layout.Spacer(
-                modifier =
-                    Modifier.height(16.dp)
-            )
-
-
-            /*
-             * =================================================
-             * BOTÕES
-             * =================================================
-             */
-
-            val rows =
-                listOf(
-
-                    listOf(
-                        ButtonData(
-                            "C",
-                            ButtonType.FUNCTION
-                        ),
-
-                        ButtonData(
-                            "back",
-                            ButtonType.FUNCTION
-                        ),
-
-                        ButtonData(
-                            "%",
-                            ButtonType.FUNCTION
-                        ),
-
-                        ButtonData(
-                            "÷",
-                            ButtonType.OPERATOR
-                        )
-                    ),
-
-
-                    listOf(
-                        ButtonData("7"),
-                        ButtonData("8"),
-                        ButtonData("9"),
-
-                        ButtonData(
-                            "×",
-                            ButtonType.OPERATOR
-                        )
-                    ),
-
-
-                    listOf(
-                        ButtonData("4"),
-                        ButtonData("5"),
-                        ButtonData("6"),
-
-                        ButtonData(
-                            "−",
-                            ButtonType.OPERATOR
-                        )
-                    ),
-
-
-                    listOf(
-                        ButtonData("1"),
-                        ButtonData("2"),
-                        ButtonData("3"),
-
-                        ButtonData(
-                            "+",
-                            ButtonType.OPERATOR
-                        )
-                    ),
-
-
-                    listOf(
-                        ButtonData(
-                            "=",
-                            ButtonType.EQUAL
-                        ),
-
-                        ButtonData("()"),
-
-                        ButtonData(","),
-
-                        ButtonData("0")
-                    )
-                )
-
+            contentAlignment =
+                Alignment.BottomEnd
+        ) {
 
             Column(
                 modifier =
                     Modifier.fillMaxWidth(),
 
+                horizontalAlignment =
+                    Alignment.End,
+
                 verticalArrangement =
-                    Arrangement.spacedBy(
-                        10.dp
-                    )
+                    Arrangement.Bottom
             ) {
 
-                rows.forEach { row ->
+                /*
+                 * Histórico.
+                 */
+                if (
+                    history.isNotEmpty()
+                ) {
 
-                    Row(
+                    Text(
+                        text =
+                            history,
+
                         modifier =
-                            Modifier.fillMaxWidth(),
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    bottom = 7.dp
+                                ),
 
-                        horizontalArrangement =
-                            Arrangement.spacedBy(
-                                10.dp
-                            )
-                    ) {
+                        color =
+                            historyText,
 
-                        row.forEach { button ->
+                        fontSize =
+                            14.sp,
 
-                            CalculatorButton(
-                                data = button,
+                        lineHeight =
+                            17.sp,
 
-                                dark = dark,
+                        textAlign =
+                            TextAlign.End,
 
-                                modifier =
-                                    Modifier.weight(
-                                        1f
-                                    ),
+                        maxLines =
+                            1,
 
-                                onClick = {
-
-                                    when (
-                                        button.value
-                                    ) {
-
-                                        /*
-                                         * C
-                                         */
-                                        "C" -> {
-
-                                            expression = ""
-
-                                            history = ""
-
-                                            acabouDeCalcular =
-                                                false
-
-                                            erro = false
-                                        }
+                        overflow =
+                            TextOverflow.Ellipsis
+                    )
+                }
 
 
-                                        /*
-                                         * Apagar
-                                         */
-                                        "back" -> {
+                /*
+                 * Display principal.
+                 */
+                Text(
+                    text =
+                        if (erro) {
+                            "Erro"
+                        } else {
+                            expression.ifEmpty {
+                                "0"
+                            }
+                        },
 
-                                            expression =
-                                                expression.dropLast(
-                                                    1
+                    modifier =
+                        if (erro) {
+                            Modifier
+                                .fillMaxWidth()
+                                .shake()
+                        } else {
+                            Modifier
+                                .fillMaxWidth()
+                        },
+
+                    color =
+                        displayText,
+
+                    fontSize =
+                        when {
+
+                            expression.length > 16 ->
+                                34.sp
+
+                            expression.length > 13 ->
+                                40.sp
+
+                            expression.length > 10 ->
+                                46.sp
+
+                            else ->
+                                58.sp
+                        },
+
+                    fontWeight =
+                        FontWeight.SemiBold,
+
+                    lineHeight =
+                        58.sp,
+
+                    textAlign =
+                        TextAlign.End,
+
+                    maxLines =
+                        1,
+
+                    overflow =
+                        TextOverflow.Ellipsis
+                )
+            }
+        }
+
+
+        Spacer(
+            modifier =
+                Modifier.height(
+                    16.dp
+                )
+        )
+
+
+        /* =================================================
+           BOTÕES
+        ================================================= */
+
+        val rows =
+            listOf(
+
+                listOf(
+                    ButtonData(
+                        "C",
+                        ButtonType.FUNCTION
+                    ),
+
+                    ButtonData(
+                        "back",
+                        ButtonType.FUNCTION
+                    ),
+
+                    ButtonData(
+                        "%",
+                        ButtonType.FUNCTION
+                    ),
+
+                    ButtonData(
+                        "÷",
+                        ButtonType.OPERATOR
+                    )
+                ),
+
+                listOf(
+                    ButtonData("7"),
+                    ButtonData("8"),
+                    ButtonData("9"),
+
+                    ButtonData(
+                        "×",
+                        ButtonType.OPERATOR
+                    )
+                ),
+
+                listOf(
+                    ButtonData("4"),
+                    ButtonData("5"),
+                    ButtonData("6"),
+
+                    ButtonData(
+                        "−",
+                        ButtonType.OPERATOR
+                    )
+                ),
+
+                listOf(
+                    ButtonData("1"),
+                    ButtonData("2"),
+                    ButtonData("3"),
+
+                    ButtonData(
+                        "+",
+                        ButtonType.OPERATOR
+                    )
+                ),
+
+                listOf(
+                    ButtonData(
+                        "=",
+                        ButtonType.EQUAL
+                    ),
+
+                    ButtonData("()"),
+                    ButtonData(","),
+                    ButtonData("0")
+                )
+            )
+
+
+        Column(
+            modifier =
+                Modifier.fillMaxWidth(),
+
+            verticalArrangement =
+                Arrangement.spacedBy(
+                    10.dp
+                )
+        ) {
+
+            rows.forEach { row ->
+
+                Row(
+                    modifier =
+                        Modifier.fillMaxWidth(),
+
+                    horizontalArrangement =
+                        Arrangement.spacedBy(
+                            10.dp
+                        )
+                ) {
+
+                    row.forEach { button ->
+
+                        CalculatorButton(
+                            data =
+                                button,
+
+                            dark =
+                                dark,
+
+                            modifier =
+                                Modifier.weight(
+                                    1f
+                                ),
+
+                            onClick = {
+
+                                when (
+                                    button.value
+                                ) {
+
+
+                                    /* =====================
+                                       LIMPAR
+                                    ===================== */
+
+                                    "C" -> {
+
+                                        expression =
+                                            ""
+
+                                        history =
+                                            ""
+
+                                        acabouDeCalcular =
+                                            false
+
+                                        erro =
+                                            false
+                                    }
+
+
+                                    /* =====================
+                                       APAGAR
+                                    ===================== */
+
+                                    "back" -> {
+
+                                        expression =
+                                            expression.dropLast(
+                                                1
+                                            )
+
+                                        acabouDeCalcular =
+                                            false
+                                    }
+
+
+                                    /* =====================
+                                       IGUAL
+                                    ===================== */
+
+                                    "=" -> {
+
+                                        val result =
+                                            calcularExpressao(
+                                                expression
+                                            )
+
+
+                                        if (
+                                            result == null
+                                        ) {
+
+                                            erro =
+                                                true
+
+
+                                            scope.launch {
+
+                                                delay(
+                                                    700
                                                 )
 
-                                            acabouDeCalcular =
-                                                false
-                                        }
-
-
-                                        /*
-                                         * Igual
-                                         */
-                                        "=" -> {
-
-                                            val result =
-                                                calcularExpressao(
-                                                    expression
-                                                )
-
-                                            if (
-                                                result == null
-                                            ) {
-
-                                                erro = true
-
-                                                scope.launch {
-
-                                                    delay(700)
-
-                                                    expression =
-                                                        ""
-
-                                                    history =
-                                                        ""
-
-                                                    acabouDeCalcular =
-                                                        false
-
-                                                    erro =
-                                                        false
-                                                }
-
-                                            } else {
-
-                                                history =
-                                                    "$expression ="
 
                                                 expression =
-                                                    result
+                                                    ""
+
+                                                history =
+                                                    ""
 
                                                 acabouDeCalcular =
-                                                    true
+                                                    false
 
                                                 erro =
                                                     false
                                             }
-                                        }
 
+                                        } else {
 
-                                        /*
-                                         * Parênteses
-                                         */
-                                        "()" -> {
+                                            history =
+                                                "$expression ="
 
                                             expression =
-                                                adicionarParenteses(
-                                                    expression,
-                                                    acabouDeCalcular
-                                                )
+                                                result
 
                                             acabouDeCalcular =
+                                                true
+
+                                            erro =
                                                 false
-                                        }
-
-
-                                        /*
-                                         * Decimal
-                                         */
-                                        "," -> {
-
-                                            if (
-                                                acabouDeCalcular
-                                            ) {
-
-                                                expression =
-                                                    ""
-
-                                                history =
-                                                    ""
-
-                                                acabouDeCalcular =
-                                                    false
-                                            }
-
-                                            expression =
-                                                adicionarDecimal(
-                                                    expression
-                                                )
-                                        }
-
-
-                                        /*
-                                         * Porcentagem
-                                         */
-                                        "%" -> {
-
-                                            if (
-                                                expression.isNotEmpty() &&
-                                                expression.last()
-                                                    .isDigit() ||
-                                                expression.endsWith(
-                                                    ")"
-                                                )
-                                            ) {
-
-                                                expression +=
-                                                    "%"
-                                            }
-                                        }
-
-
-                                        /*
-                                         * Operadores.
-                                         */
-                                        "+",
-                                        "−",
-                                        "×",
-                                        "÷" -> {
-
-                                            val operator =
-                                                when (
-                                                    button.value
-                                                ) {
-
-                                                    "−" ->
-                                                        "-"
-
-                                                    "×" ->
-                                                        "*"
-
-                                                    "÷" ->
-                                                        "/"
-
-                                                    else ->
-                                                        "+"
-                                                }
-
-                                            expression =
-                                                adicionarOperador(
-                                                    expression,
-                                                    operator
-                                                )
-
-                                            acabouDeCalcular =
-                                                false
-                                        }
-
-
-                                        /*
-                                         * Números.
-                                         */
-                                        else -> {
-
-                                            var novo =
-                                                expression
-
-                                            if (
-                                                acabouDeCalcular
-                                            ) {
-
-                                                novo =
-                                                    ""
-
-                                                history =
-                                                    ""
-
-                                                acabouDeCalcular =
-                                                    false
-                                            }
-
-                                            novo +=
-                                                button.value
-
-                                            expression =
-                                                novo
                                         }
                                     }
+
+
+                                    /* =====================
+                                       PARENTÊSES
+                                    ===================== */
+
+                                    "()" -> {
+
+                                        expression =
+                                            adicionarParenteses(
+                                                expression,
+                                                acabouDeCalcular
+                                            )
+
+                                        acabouDeCalcular =
+                                            false
+                                    }
+
+
+                                    /* =====================
+                                       VÍRGULA
+                                    ===================== */
+
+                                    "," -> {
+
+                                        if (
+                                            acabouDeCalcular
+                                        ) {
+
+                                            expression =
+                                                ""
+
+                                            history =
+                                                ""
+
+                                            acabouDeCalcular =
+                                                false
+                                        }
+
+
+                                        expression =
+                                            adicionarDecimal(
+                                                expression
+                                            )
+                                    }
+
+
+                                    /* =====================
+                                       PORCENTAGEM
+                                    ===================== */
+
+                                    "%" -> {
+
+                                        if (
+                                            expression.isNotEmpty() &&
+                                            (
+                                                expression.last()
+                                                    .isDigit() ||
+                                                    expression.endsWith(
+                                                        ")"
+                                                    )
+                                            )
+                                        ) {
+
+                                            expression +=
+                                                "%"
+                                        }
+                                    }
+
+
+                                    /* =====================
+                                       OPERADORES
+                                    ===================== */
+
+                                    "+",
+                                    "−",
+                                    "×",
+                                    "÷" -> {
+
+                                        val operator =
+                                            when (
+                                                button.value
+                                            ) {
+
+                                                "−" ->
+                                                    "-"
+
+                                                "×" ->
+                                                    "*"
+
+                                                "÷" ->
+                                                    "/"
+
+                                                else ->
+                                                    "+"
+                                            }
+
+
+                                        expression =
+                                            adicionarOperador(
+                                                expression,
+                                                operator
+                                            )
+
+                                        acabouDeCalcular =
+                                            false
+                                    }
+
+
+                                    /* =====================
+                                       NÚMEROS
+                                    ===================== */
+
+                                    else -> {
+
+                                        var novo =
+                                            expression
+
+
+                                        if (
+                                            acabouDeCalcular
+                                        ) {
+
+                                            novo =
+                                                ""
+
+                                            history =
+                                                ""
+
+                                            acabouDeCalcular =
+                                                false
+                                        }
+
+
+                                        novo +=
+                                            button.value
+
+
+                                        expression =
+                                            novo
+                                    }
                                 }
-                            )
-                        }
+                            }
+                        )
                     }
                 }
             }
@@ -928,630 +767,555 @@ private fun Calculadora(
     }
 }
 
+}
 
 /* =========================================================
-   BOTÃO
+DADOS DOS BOTÕES
 ========================================================= */
 
 private data class ButtonData(
-    val value: String,
-    val type: ButtonType =
-        ButtonType.NUMBER
-)
+val value: String,
 
+val type: ButtonType =
+    ButtonType.NUMBER
+
+)
 
 private enum class ButtonType {
 
-    NUMBER,
+NUMBER,
 
-    FUNCTION,
+FUNCTION,
 
-    OPERATOR,
+OPERATOR,
 
-    EQUAL
+EQUAL
+
 }
 
-
 /* =========================================================
-   BOTÃO COMPOSE
+BOTÃO
 ========================================================= */
 
 @Composable
 private fun CalculatorButton(
-    data: ButtonData,
-    dark: Boolean,
-    modifier: Modifier,
-    onClick: () -> Unit
+data: ButtonData,
+dark: Boolean,
+modifier: Modifier,
+onClick: () -> Unit
 ) {
 
-    val background =
-        when (data.type) {
+val background =
+    when (data.type) {
 
-            ButtonType.FUNCTION ->
-                if (dark) {
-                    DarkFunction
-                } else {
-                    LightFunction
-                }
+        ButtonType.FUNCTION ->
+            if (dark) {
+                DarkFunction
+            } else {
+                LightFunction
+            }
 
+        ButtonType.OPERATOR ->
+            if (dark) {
+                DarkOperator
+            } else {
+                LightOperator
+            }
 
-            ButtonType.OPERATOR ->
-                if (dark) {
-                    DarkOperator
-                } else {
-                    LightOperator
-                }
+        ButtonType.EQUAL ->
+            if (dark) {
+                DarkEqual
+            } else {
+                LightEqual
+            }
 
-
-            ButtonType.EQUAL ->
-                if (dark) {
-                    DarkEqual
-                } else {
-                    LightEqual
-                }
-
-
-            ButtonType.NUMBER ->
-                if (dark) {
-                    DarkButton
-                } else {
-                    LightButton
-                }
-        }
+        ButtonType.NUMBER ->
+            if (dark) {
+                DarkButton
+            } else {
+                LightButton
+            }
+    }
 
 
-    val textColor =
-        when (data.type) {
+val textColor =
+    when (data.type) {
 
-            ButtonType.EQUAL ->
-                if (dark) {
-                    Color.Black
-                } else {
-                    Color.White
-                }
+        ButtonType.EQUAL ->
+            if (dark) {
+                Color.Black
+            } else {
+                Color.White
+            }
+
+        else ->
+            if (dark) {
+                Color.White
+            } else {
+                Color(0xFF111111)
+            }
+    }
 
 
-            else ->
-                if (dark) {
-                    Color.White
-                } else {
-                    Color(0xFF111111)
-                }
-        }
-
-
-    Box(
-        modifier = modifier
+Box(
+    modifier =
+        modifier
             .aspectRatio(1f)
             .background(
-                color = background,
-                shape = CircleShape
+                color =
+                    background,
+
+                shape =
+                    CircleShape
             )
             .clickable(
-                indication = null,
+                indication =
+                    null,
+
                 interactionSource =
                     remember {
                         MutableInteractionSource()
                     },
-                onClick = onClick
+
+                onClick =
+                    onClick
             ),
-        contentAlignment =
-            Alignment.Center
+
+    contentAlignment =
+        Alignment.Center
+) {
+
+    if (
+        data.value == "back"
     ) {
 
-        if (
-            data.value == "back"
-        ) {
+        /*
+         * Ícone de apagar sem
+         * ImageVector/addPath.
+         */
+        Text(
+            text =
+                "⌫",
 
-            /*
-             * Ícone de apagar.
-             *
-             * Não usa ImageVector/addPath,
-             * portanto não depende de
-             * material-icons.
-             */
-            Text(
-                text = "⌫",
+            color =
+                textColor,
 
-                color =
-                    textColor,
+            fontSize =
+                29.sp,
 
-                fontSize =
-                    29.sp,
+            fontWeight =
+                FontWeight.Normal,
 
-                fontWeight =
-                    FontWeight.Normal,
+            textAlign =
+                TextAlign.Center
+        )
 
-                textAlign =
-                    TextAlign.Center
-            )
+    } else {
 
-        } else {
+        Text(
+            text =
+                data.value,
 
-            Text(
-                text =
-                    data.value,
+            color =
+                textColor,
 
-                color =
-                    textColor,
+            fontSize =
+                when {
 
-                fontSize =
-                    when {
+                    data.value == "=" ->
+                        27.sp
 
-                        data.value == "=" ->
-                            27.sp
+                    data.value in
+                            listOf(
+                                "+",
+                                "−",
+                                "×",
+                                "÷"
+                            ) ->
+                        27.sp
 
-                        data.value in
-                                listOf(
-                                    "+",
-                                    "−",
-                                    "×",
-                                    "÷"
-                                ) ->
-                            27.sp
+                    else ->
+                        23.sp
+                },
 
-                        else ->
-                            23.sp
-                    },
+            fontWeight =
+                FontWeight.SemiBold,
 
-                fontWeight =
-                    FontWeight.SemiBold,
-
-                textAlign =
-                    TextAlign.Center
-            )
-        }
+            textAlign =
+                TextAlign.Center
+        )
     }
 }
 
+}
 
 /* =========================================================
-   ADICIONAR OPERADOR
+OPERADOR
 ========================================================= */
 
 private fun adicionarOperador(
-    expression: String,
-    operator: String
+expression: String,
+operator: String
 ): String {
 
-    if (
-        expression.isEmpty()
+if (
+    expression.isEmpty()
+) {
+
+    return if (
+        operator == "-"
     ) {
-
-        return if (
-            operator == "-"
-        ) {
-            "-"
-        } else {
-            expression
-        }
-    }
-
-
-    var result =
+        "-"
+    } else {
         expression
-
-
-    val last =
-        result.last()
-
-
-    if (
-        "+-*/".contains(last)
-    ) {
-
-        result =
-            result.dropLast(1)
     }
-
-
-    return result + operator
 }
 
 
+var result =
+    expression
+
+
+val last =
+    result.last()
+
+
+if (
+    "+-*/".contains(last)
+) {
+
+    result =
+        result.dropLast(
+            1
+        )
+}
+
+
+return result + operator
+
+}
+
 /* =========================================================
-   ADICIONAR DECIMAL
+DECIMAL
 ========================================================= */
 
 private fun adicionarDecimal(
-    expression: String
+expression: String
 ): String {
 
-    val partes =
-        expression.split(
-            Regex("[+\\-*/()]")
+val partes =
+    expression.split(
+        Regex(
+            "[+\\-*/()]"
         )
+    )
 
 
-    val atual =
-        partes.lastOrNull()
-            ?: ""
+val atual =
+    partes.lastOrNull()
+        ?: ""
 
 
-    if (
-        atual.contains(".")
-    ) {
+if (
+    atual.contains(".")
+) {
 
-        return expression
-    }
-
-
-    var result =
-        expression
-
-
-    if (
-        result.isEmpty() ||
-        "+-*/(".contains(
-            result.last()
-        )
-    ) {
-
-        result += "0"
-    }
-
-
-    result += "."
-
-    return result
+    return expression
 }
 
 
+var result =
+    expression
+
+
+if (
+    result.isEmpty() ||
+    "+-*/(".contains(
+        result.last()
+    )
+) {
+
+    result +=
+        "0"
+}
+
+
+result +=
+    "."
+
+
+return result
+
+}
+
 /* =========================================================
-   PARENTÊSES
+PARENTÊSES
 ========================================================= */
 
 private fun adicionarParenteses(
-    expression: String,
-    acabouDeCalcular: Boolean
+expression: String,
+acabouDeCalcular: Boolean
 ): String {
 
-    var expr =
-        if (acabouDeCalcular) {
-            ""
-        } else {
-            expression
-        }
-
-
-    val ultimo =
-        expr.lastOrNull()
-            ?.toString()
-            ?: ""
-
-
-    val abertos =
-        expr.count {
-            it == '('
-        }
-
-
-    val fechados =
-        expr.count {
-            it == ')'
-        }
-
-
-    /*
-     * Começa um parêntese.
-     */
+var expr =
     if (
-        expr.isEmpty() ||
-        "+-*/(".contains(
-            ultimo
-        )
+        acabouDeCalcular
     ) {
-
-        expr += "("
-
-        return expr
+        ""
+    } else {
+        expression
     }
 
 
-    /*
-     * Fecha um parêntese
-     * se ainda houver algum aberto.
-     */
-    if (
-        abertos > fechados
-    ) {
+val ultimo =
+    expr.lastOrNull()
+        ?.toString()
+        ?: ""
 
-        if (
-            !"+-*/(".contains(
-                ultimo
-            )
-        ) {
 
-            expr += ")"
-        }
-
-        return expr
+val abertos =
+    expr.count {
+        it == '('
     }
 
 
-    /*
-     * Caso contrário,
-     * começa uma multiplicação.
-     */
-    expr += "*("
+val fechados =
+    expr.count {
+        it == ')'
+    }
+
+
+if (
+    expr.isEmpty() ||
+    "+-*/(".contains(
+        ultimo
+    )
+) {
+
+    expr +=
+        "("
 
     return expr
 }
 
 
+if (
+    abertos > fechados
+) {
+
+    if (
+        !"+-*/(".contains(
+            ultimo
+        )
+    ) {
+
+        expr +=
+            ")"
+    }
+
+    return expr
+}
+
+
+expr +=
+    "*("
+
+
+return expr
+
+}
+
 /* =========================================================
-   PORCENTAGEM
+PORCENTAGEM
 ========================================================= */
 
 private fun prepararPorcentagem(
-    expression: String
+expression: String
 ): String {
 
-    return expression.replace(
-        Regex(
-            "(\\d+(?:\\.\\d+)?)%"
-        ),
-        "($1/100)"
-    )
+return expression.replace(
+    Regex(
+        "(\\d+(?:\\.\\d+)?)%"
+    ),
+    "($1/100)"
+)
+
 }
 
-
 /* =========================================================
-   CALCULAR EXPRESSÃO
+CALCULAR EXPRESSÃO
 ========================================================= */
 
 private fun calcularExpressao(
-    original: String
+original: String
 ): String? {
 
-    if (
-        original.isEmpty()
-    ) {
+if (
+    original.isEmpty()
+) {
 
-        return null
-    }
-
-
-    try {
-
-        var expression =
-            original.replace(
-                ",",
-                "."
-            )
-
-
-        /*
-         * Último caractere.
-         */
-        val ultimo =
-            expression.lastOrNull()
-
-
-        if (
-            ultimo != null &&
-            "+-*/(".contains(
-                ultimo
-            )
-        ) {
-
-            return null
-        }
-
-
-        /*
-         * Parênteses.
-         */
-        val abertos =
-            expression.count {
-                it == '('
-            }
-
-
-        val fechados =
-            expression.count {
-                it == ')'
-            }
-
-
-        if (
-            abertos != fechados
-        ) {
-
-            return null
-        }
-
-
-        /*
-         * Só permite caracteres matemáticos.
-         */
-        if (
-            !Regex(
-                "^[0-9+\\-*/().%\\s]+$"
-            ).matches(
-                expression
-            )
-        ) {
-
-            return null
-        }
-
-
-        /*
-         * Porcentagens.
-         */
-        expression =
-            prepararPorcentagem(
-                expression
-            )
-
-
-        /*
-         * Parser nativo.
-         */
-        val resultado =
-            SimpleExpressionParser(
-                expression
-            ).parse()
-
-
-        if (
-            !resultado.isFinite()
-        ) {
-
-            return null
-        }
-
-
-        /*
-         * Mesmo comportamento aproximado
-         * do toFixed(10) do JavaScript.
-         */
-        return resultado
-            .toBigDecimal()
-            .setScale(
-                10,
-                RoundingMode.HALF_UP
-            )
-            .stripTrailingZeros()
-            .toPlainString()
-
-    } catch (
-        _: Exception
-    ) {
-
-        return null
-    }
+    return null
 }
 
 
+try {
+
+    var expression =
+        original.replace(
+            ",",
+            "."
+        )
+
+
+    /*
+     * Não permite terminar com
+     * operador ou parêntese aberto.
+     */
+    val ultimo =
+        expression.lastOrNull()
+
+
+    if (
+        ultimo != null &&
+        "+-*/(".contains(
+            ultimo
+        )
+    ) {
+
+        return null
+    }
+
+
+    /*
+     * Verifica parênteses.
+     */
+    val abertos =
+        expression.count {
+            it == '('
+        }
+
+
+    val fechados =
+        expression.count {
+            it == ')'
+        }
+
+
+    if (
+        abertos != fechados
+    ) {
+
+        return null
+    }
+
+
+    /*
+     * Segurança:
+     * somente caracteres matemáticos.
+     */
+    if (
+        !Regex(
+            "^[0-9+\\-*/().%\\s]+$"
+        ).matches(
+            expression
+        )
+    ) {
+
+        return null
+    }
+
+
+    /*
+     * Converte porcentagens.
+     */
+    expression =
+        prepararPorcentagem(
+            expression
+        )
+
+
+    /*
+     * Parser matemático nativo.
+     */
+    val resultado =
+        SimpleExpressionParser(
+            expression
+        ).parse()
+
+
+    if (
+        !resultado.isFinite()
+    ) {
+
+        return null
+    }
+
+
+    /*
+     * Limita a 10 casas decimais,
+     * como o HTML original.
+     */
+    return resultado
+        .toBigDecimal()
+        .setScale(
+            10,
+            RoundingMode.HALF_UP
+        )
+        .stripTrailingZeros()
+        .toPlainString()
+
+} catch (
+    _: Exception
+) {
+
+    return null
+}
+
+}
+
 /* =========================================================
-   PARSER MATEMÁTICO
+PARSER MATEMÁTICO
 ========================================================= */
 
 private class SimpleExpressionParser(
-    private val text: String
+private val text: String
 ) {
 
-    private var position =
-        0
+private var position =
+    0
 
 
-    fun parse(): Double {
+fun parse(): Double {
 
-        val result =
-            parseExpression()
-
-
-        skipSpaces()
+    val result =
+        parseExpression()
 
 
-        if (
-            position != text.length
-        ) {
-
-            throw IllegalArgumentException()
-        }
+    skipSpaces()
 
 
-        return result
+    if (
+        position != text.length
+    ) {
+
+        throw IllegalArgumentException()
     }
 
 
-    /*
-     * Soma e subtração.
-     */
-    private fun parseExpression(): Double {
-
-        var value =
-            parseTerm()
+    return result
+}
 
 
-        while (true) {
+/*
+ * Soma e subtração.
+ */
+private fun parseExpression(): Double {
 
-            skipSpaces()
-
-
-            if (
-                match('+')
-            ) {
-
-                value +=
-                    parseTerm()
-
-            } else if (
-                match('-')
-            ) {
-
-                value -=
-                    parseTerm()
-
-            } else {
-
-                break
-            }
-        }
+    var value =
+        parseTerm()
 
 
-        return value
-    }
-
-
-    /*
-     * Multiplicação e divisão.
-     */
-    private fun parseTerm(): Double {
-
-        var value =
-            parseFactor()
-
-
-        while (true) {
-
-            skipSpaces()
-
-
-            if (
-                match('*')
-            ) {
-
-                value *=
-                    parseFactor()
-
-            } else if (
-                match('/')
-            ) {
-
-                val divisor =
-                    parseFactor()
-
-
-                if (
-                    divisor == 0.0
-                ) {
-
-                    throw ArithmeticException()
-                }
-
-
-                value /=
-                    divisor
-
-            } else {
-
-                break
-            }
-        }
-
-
-        return value
-    }
-
-
-    /*
-     * Números, sinais e parênteses.
-     */
-    private fun parseFactor(): Double {
+    while (true) {
 
         skipSpaces()
 
@@ -1560,162 +1324,247 @@ private class SimpleExpressionParser(
             match('+')
         ) {
 
-            return parseFactor()
-        }
+            value +=
+                parseTerm()
 
-
-        if (
+        } else if (
             match('-')
         ) {
 
-            return -parseFactor()
+            value -=
+                parseTerm()
+
+        } else {
+
+            break
         }
-
-
-        if (
-            match('(')
-        ) {
-
-            val value =
-                parseExpression()
-
-
-            if (
-                !match(')')
-            ) {
-
-                throw IllegalArgumentException()
-            }
-
-
-            return value
-        }
-
-
-        return parseNumber()
     }
 
 
-    /*
-     * Número.
-     */
-    private fun parseNumber(): Double {
+    return value
+}
+
+
+/*
+ * Multiplicação e divisão.
+ */
+private fun parseTerm(): Double {
+
+    var value =
+        parseFactor()
+
+
+    while (true) {
 
         skipSpaces()
 
 
-        val start =
-            position
-
-
-        while (
-            position < text.length &&
-            (
-                text[position].isDigit() ||
-                text[position] == '.'
-            )
+        if (
+            match('*')
         ) {
 
-            position++
+            value *=
+                parseFactor()
+
+        } else if (
+            match('/')
+        ) {
+
+            val divisor =
+                parseFactor()
+
+
+            if (
+                divisor == 0.0
+            ) {
+
+                throw ArithmeticException()
+            }
+
+
+            value /=
+                divisor
+
+        } else {
+
+            break
         }
+    }
+
+
+    return value
+}
+
+
+/*
+ * Sinais, números e parênteses.
+ */
+private fun parseFactor(): Double {
+
+    skipSpaces()
+
+
+    if (
+        match('+')
+    ) {
+
+        return parseFactor()
+    }
+
+
+    if (
+        match('-')
+    ) {
+
+        return -parseFactor()
+    }
+
+
+    if (
+        match('(')
+    ) {
+
+        val value =
+            parseExpression()
 
 
         if (
-            start == position
+            !match(')')
         ) {
 
             throw IllegalArgumentException()
         }
 
 
-        return text
-            .substring(
-                start,
-                position
-            )
-            .toDouble()
+        return value
     }
 
 
-    /*
-     * Verifica caractere.
-     */
-    private fun match(
-        character: Char
-    ): Boolean {
-
-        skipSpaces()
-
-
-        if (
-            position < text.length &&
-            text[position] == character
-        ) {
-
-            position++
-
-            return true
-        }
-
-
-        return false
-    }
-
-
-    /*
-     * Ignora espaços.
-     */
-    private fun skipSpaces() {
-
-        while (
-            position < text.length &&
-            text[position].isWhitespace()
-        ) {
-
-            position++
-        }
-    }
+    return parseNumber()
 }
 
 
+/*
+ * Número.
+ */
+private fun parseNumber(): Double {
+
+    skipSpaces()
+
+
+    val start =
+        position
+
+
+    while (
+        position < text.length &&
+        (
+            text[position].isDigit() ||
+            text[position] == '.'
+        )
+    ) {
+
+        position++
+    }
+
+
+    if (
+        start == position
+    ) {
+
+        throw IllegalArgumentException()
+    }
+
+
+    return text
+        .substring(
+            start,
+            position
+        )
+        .toDouble()
+}
+
+
+/*
+ * Verifica um caractere.
+ */
+private fun match(
+    character: Char
+): Boolean {
+
+    skipSpaces()
+
+
+    if (
+        position < text.length &&
+        text[position] == character
+    ) {
+
+        position++
+
+        return true
+    }
+
+
+    return false
+}
+
+
+/*
+ * Ignora espaços.
+ */
+private fun skipSpaces() {
+
+    while (
+        position < text.length &&
+        text[position].isWhitespace()
+    ) {
+
+        position++
+    }
+}
+
+}
+
 /* =========================================================
-   ANIMAÇÃO DE ERRO
+ANIMAÇÃO DE ERRO
 ========================================================= */
 
 @Composable
 private fun Modifier.shake(): Modifier {
 
-    var scaleValue by remember {
-        mutableStateOf(1f)
-    }
+var scaleValue by remember {
+    mutableStateOf(1f)
+}
 
 
-    LaunchedEffect(Unit) {
+LaunchedEffect(Unit) {
 
-        scaleValue =
-            0.97f
+    scaleValue =
+        0.97f
 
-        delay(70)
-
-
-        scaleValue =
-            1.03f
-
-        delay(70)
+    delay(70)
 
 
-        scaleValue =
-            0.98f
+    scaleValue =
+        1.03f
 
-        delay(70)
-
-
-        scaleValue =
-            1f
-    }
+    delay(70)
 
 
-    return this.scale(
-        scaleValue
-    )
+    scaleValue =
+        0.98f
+
+    delay(70)
+
+
+    scaleValue =
+        1f
+}
+
+
+return this.scale(
+    scaleValue
+)
+
 }

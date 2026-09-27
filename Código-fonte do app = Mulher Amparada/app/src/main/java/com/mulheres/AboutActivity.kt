@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.compose.foundation.layout.offset
 import android.graphics.Color as AndroidColor
 import android.os.Bundle
 import android.view.WindowManager
@@ -94,24 +95,11 @@ private fun AboutTheme(
             Color(0xFFF7F7FA)
         }
 
-    val texto =
-        if (dark) {
-            Color.White
-        } else {
-            Color(0xFF17171B)
-        }
-
-    val secundario =
-        if (dark) {
-            Color(0xFF85858C)
-        } else {
-            Color(0xFF65656D)
-        }
-
-    val roxo = Color(0xFF9B5CFF)
+    val view = androidx.compose.ui.platform.LocalView.current
 
     SideEffect {
-        val window = (androidx.compose.ui.platform.LocalView.current.context as android.app.Activity).window
+        val window =
+            (view.context as android.app.Activity).window
 
         window.statusBarColor =
             if (dark) {
@@ -1214,33 +1202,23 @@ private fun TituloSecundario(
 }
 
 @Composable
-private fun TituloTerciario(
+private fun Paragrafo(
     texto: String,
     cor: Color
 ) {
-    Text(
-        text = texto,
-        modifier = Modifier.padding(
-            top = 30.dp,
-            bottom = 12.dp
-        ),
-        color = cor,
-        fontFamily = Quicksand,
-        fontSize = 18.sp,
-        fontWeight = FontWeight.Bold,
-        lineHeight = 24.sp,
-        letterSpacing = (-0.3).sp
+    Paragrafo(
+        texto = AnnotatedString(texto),
+        cor = cor
     )
 }
 
 @Composable
 private fun Paragrafo(
-    texto: String,
-    cor: Color,
-    extra: AnnotatedString? = null
+    texto: AnnotatedString,
+    cor: Color
 ) {
     Text(
-        text = extra ?: AnnotatedString(texto),
+        text = texto,
         modifier = Modifier
             .fillMaxWidth()
             .padding(

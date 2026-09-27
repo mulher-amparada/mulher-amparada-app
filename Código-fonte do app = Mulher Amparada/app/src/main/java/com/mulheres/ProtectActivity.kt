@@ -47,172 +47,178 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.activity.enableEdgeToEdge
 
 
 class ProtectActivity : ComponentActivity() {
-override fun onCreate(
-    savedInstanceState: Bundle?
-) {
-        enableEdgeToEdge()
-    super.onCreate(savedInstanceState)
 
-    window.addFlags(
-        WindowManager.LayoutParams.FLAG_SECURE
-    )
+    override fun onCreate(
+        savedInstanceState: Bundle?
+    ) {
+        super.onCreate(savedInstanceState)
 
-    WindowCompat.setDecorFitsSystemWindows(
-        window,
-        false
-    )
-
-    window.statusBarColor =
-        AndroidColor.TRANSPARENT
-
-    WindowCompat.getInsetsController(
-        window,
-        window.decorView
-    ).isAppearanceLightStatusBars = false
-
-    setContent {
-
-        MeusAcessos(
-
-            abrirCiclo = {
-                startActivity(
-                    Intent(
-                        this,
-                        CicloActivity::class.java
-                    )
-                )
-            },
-
-            abrirNavegador = {
-                startActivity(
-                    Intent(
-                        this,
-                        MainActivity::class.java
-                    )
-                )
-            },
-
-            abrirMapa = {
-                startActivity(
-                    Intent(
-                        this,
-                        MapaActivity::class.java
-                    )
-                )
-            },
-
-            abrirDiario = {
-                startActivity(
-                    Intent(
-                        this,
-                        DiarioActivity::class.java
-                    )
-                )
-            },
-
-            abrirCalculadora = {
-                startActivity(
-                    Intent(
-                        this,
-                        CalcActivity::class.java
-                    )
-                )
-            },
-
-            abrirTarefa = {
-                startActivity(
-                    Intent(
-                        this,
-                        TarefaActivity::class.java
-                    )
-                )
-            },
-
-            abrirRotina = {
-                startActivity(
-                    Intent(
-                        this,
-                        RotinaActivity::class.java
-                    )
-                )
-            },
-
-            abrirRelogio = {
-                startActivity(
-                    Intent(
-                        this,
-                        RelogioActivity::class.java
-                    )
-                )
-            },
-
-            abrirGravador = {
-                startActivity(
-                    Intent(
-                        this,
-                        GravarActivity::class.java
-                    )
-                )
-            },
-
-            abrirArquivos = {
-                startActivity(
-                    Intent(
-                        this,
-                        FileActivity::class.java
-                    )
-                )
-            },
-
-            abrirApps = {
-                startActivity(
-                    Intent(
-                        this,
-                        AppsActivity::class.java
-                    )
-                )
-            },
-
-            abrirDia = {
-                startActivity(
-                    Intent(
-                        this,
-                        DiaActivity::class.java
-                    )
-                )
-            },
-
-            abrirDireitos = {
-                startActivity(
-                    Intent(
-                        this,
-                        DireitosActivity::class.java
-                    )
-                )
-            },
-
-            abrirFinancas = {
-                startActivity(
-                    Intent(
-                        this,
-                        FinancasActivity::class.java
-                    )
-                )
-            },
-
-            abrirAbout = {
-                startActivity(
-                    Intent(
-                        this,
-                        AboutActivity::class.java
-                    )
-                )
-            }
+        window.addFlags(
+            WindowManager.LayoutParams.FLAG_SECURE
         )
+
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            true
+        )
+
+        window.statusBarColor =
+            AndroidColor.BLACK
+
+        window.navigationBarColor =
+            AndroidColor.BLACK
+
+        WindowCompat.getInsetsController(
+            window,
+            window.decorView
+        ).apply {
+            isAppearanceLightStatusBars = false
+            isAppearanceLightNavigationBars = false
+        }
+
+        setContent {
+
+            MeusAcessos(
+
+                abrirCiclo = {
+                    startActivity(
+                        Intent(
+                            this,
+                            CicloActivity::class.java
+                        )
+                    )
+                },
+
+                abrirNavegador = {
+                    startActivity(
+                        Intent(
+                            this,
+                            MainActivity::class.java
+                        )
+                    )
+                },
+
+                abrirMapa = {
+                    startActivity(
+                        Intent(
+                            this,
+                            MapaActivity::class.java
+                        )
+                    )
+                },
+
+                abrirDiario = {
+                    startActivity(
+                        Intent(
+                            this,
+                            DiarioActivity::class.java
+                        )
+                    )
+                },
+
+                abrirCalculadora = {
+                    startActivity(
+                        Intent(
+                            this,
+                            CalcActivity::class.java
+                        )
+                    )
+                },
+
+                abrirTarefa = {
+                    startActivity(
+                        Intent(
+                            this,
+                            TarefaActivity::class.java
+                        )
+                    )
+                },
+
+                abrirRotina = {
+                    startActivity(
+                        Intent(
+                            this,
+                            RotinaActivity::class.java
+                        )
+                    )
+                },
+
+                abrirRelogio = {
+                    startActivity(
+                        Intent(
+                            this,
+                            RelogioActivity::class.java
+                        )
+                    )
+                },
+
+                abrirGravador = {
+                    startActivity(
+                        Intent(
+                            this,
+                            GravarActivity::class.java
+                        )
+                    )
+                },
+
+                abrirArquivos = {
+                    startActivity(
+                        Intent(
+                            this,
+                            FileActivity::class.java
+                        )
+                    )
+                },
+
+                abrirApps = {
+                    startActivity(
+                        Intent(
+                            this,
+                            AppsActivity::class.java
+                        )
+                    )
+                },
+
+                abrirDia = {
+                    startActivity(
+                        Intent(
+                            this,
+                            DiaActivity::class.java
+                        )
+                    )
+                },
+
+                abrirDireitos = {
+                    startActivity(
+                        Intent(
+                            this,
+                            DireitosActivity::class.java
+                        )
+                    )
+                },
+
+                abrirFinancas = {
+                    startActivity(
+                        Intent(
+                            this,
+                            FinancasActivity::class.java
+                        )
+                    )
+                },
+
+                abrirAbout = {
+                    startActivity(
+                        Intent(
+                            this,
+                            AboutActivity::class.java
+                        )
+                    )
+                }
+            )
+        }
     }
 }
 
@@ -248,6 +254,7 @@ private val Quicksand = FontFamily(
         FontWeight.ExtraBold
     )
 )
+
 
 /* =========================================================
    CORES — ESCURO
@@ -332,7 +339,8 @@ private val RoxoInicio =
 
 private val RoxoFim =
     Color(0xFF6425D9)
-    
+
+
 /* =========================================================
    MODELO
 ========================================================= */
@@ -400,8 +408,6 @@ private fun MeusAcessos(
             "Acompanhe seu ciclo"
         ),
 
-        
-
         Acesso(
             "Mapa da sua região",
             "Visualize locais próximos"
@@ -460,26 +466,26 @@ private fun MeusAcessos(
 
     val especiais = listOf(
 
-    Acesso(
-        "Feliz Dia das Mulheres!",
-        "Um jogo gamificado"
-    ),
+        Acesso(
+            "Feliz Dia das Mulheres!",
+            "Um jogo gamificado"
+        ),
 
-    Acesso(
-        "100 dos seus direitos",
-        "Seja amparada pela lei"
-    ),
+        Acesso(
+            "100 dos seus direitos",
+            "Seja amparada pela lei"
+        ),
 
-    Acesso(
-        "Dicas de como recuperar sua autonomia financeira",
-        "Conhecimentos valiosos"
-    ),
+        Acesso(
+            "Dicas de como recuperar sua autonomia financeira",
+            "Conhecimentos valiosos"
+        ),
 
-    Acesso(
-        "Uma carta para você, mulher!",
-        "Uma mensagem especial"
+        Acesso(
+            "Uma carta para você, mulher!",
+            "Uma mensagem especial"
+        )
     )
-)
 
 
     Box(
@@ -497,9 +503,11 @@ private fun MeusAcessos(
 
         LazyColumn(
 
-            modifier = Modifier
-                .fillMaxSize()
-        .overscroll(null),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .overscroll(null),
+
             contentPadding =
                 PaddingValues(
                     start = 18.dp,
@@ -564,38 +572,38 @@ private fun MeusAcessos(
 
                         when (acesso.titulo) {
 
-    "Calendário menstrual" -> {
-        abrirCiclo()
-    }
+                            "Calendário menstrual" -> {
+                                abrirCiclo()
+                            }
 
-    "Mapa da sua região" -> {
-        abrirMapa()
-    }
+                            "Mapa da sua região" -> {
+                                abrirMapa()
+                            }
 
-    "Diário e anotações" -> {
-        abrirDiario()
-    }
+                            "Diário e anotações" -> {
+                                abrirDiario()
+                            }
 
-    "Rotina gamificada" -> {
-        abrirRotina()
-    }
+                            "Rotina gamificada" -> {
+                                abrirRotina()
+                            }
 
-    "Relógio + Localização" -> {
-        abrirRelogio()
-    }
+                            "Relógio + Localização" -> {
+                                abrirRelogio()
+                            }
 
-    "Calculadora" -> {
-        abrirCalculadora()
-    }
-    
-    "Minhas tarefas" -> {
-    abrirTarefa()
-}
+                            "Calculadora" -> {
+                                abrirCalculadora()
+                            }
 
-    "Navegador" -> {
-        abrirNavegador()
-    }
-}
+                            "Minhas tarefas" -> {
+                                abrirTarefa()
+                            }
+
+                            "Navegador" -> {
+                                abrirNavegador()
+                            }
+                        }
                     }
                 )
             }
@@ -651,10 +659,10 @@ private fun MeusAcessos(
                             "Meus arquivos" -> {
                                 abrirArquivos()
                             }
-                            
-                                                        "Tela de aplicativos" -> {
-    abrirApps()
-}
+
+                            "Tela de aplicativos" -> {
+                                abrirApps()
+                            }
                         }
                     }
                 )
@@ -696,32 +704,32 @@ private fun MeusAcessos(
 
                 Cartao(
 
-    acesso = acesso,
+                    acesso = acesso,
 
-    dark = dark,
+                    dark = dark,
 
-    onClick = {
+                    onClick = {
 
-        when (acesso.titulo) {
+                        when (acesso.titulo) {
 
-    "Feliz Dia das Mulheres!" -> {
-        abrirDia()
-    }
+                            "Feliz Dia das Mulheres!" -> {
+                                abrirDia()
+                            }
 
-    "100 dos seus direitos" -> {
-        abrirDireitos()
-    }
+                            "100 dos seus direitos" -> {
+                                abrirDireitos()
+                            }
 
-    "Dicas de como recuperar sua autonomia financeira" -> {
-        abrirFinancas()
-    }
+                            "Dicas de como recuperar sua autonomia financeira" -> {
+                                abrirFinancas()
+                            }
 
-    "Uma carta para você, mulher!" -> {
-        abrirAbout()
-    }
-}
-    }
-)
+                            "Uma carta para você, mulher!" -> {
+                                abrirAbout()
+                            }
+                        }
+                    }
+                )
             }
 
 
@@ -1239,36 +1247,37 @@ private fun ConteudoCartao(
 
 
         Box(
-    modifier =
-        Modifier
-            .size(34.dp)
-            .clip(
-                CircleShape
+
+            modifier =
+                Modifier
+                    .size(34.dp)
+                    .clip(
+                        CircleShape
+                    )
+                    .background(
+                        circulo
+                    ),
+
+            contentAlignment =
+                Alignment.Center
+        ) {
+
+            Icon(
+
+                painter =
+                    painterResource(
+                        R.drawable.ic_arrow
+                    ),
+
+                contentDescription =
+                    null,
+
+                tint =
+                    seta,
+
+                modifier =
+                    Modifier.size(18.dp)
             )
-            .background(
-                circulo
-            ),
-
-    contentAlignment =
-        Alignment.Center
-) {
-
-    Icon(
-        painter =
-            painterResource(
-                R.drawable.ic_arrow
-            ),
-
-        contentDescription =
-            null,
-
-        tint =
-            seta,
-
-        modifier =
-            Modifier.size(18.dp)
-    )
+        }
     }
-}
-}
 }

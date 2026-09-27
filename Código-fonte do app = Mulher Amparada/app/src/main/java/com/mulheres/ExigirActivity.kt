@@ -1,6 +1,7 @@
 package com.mulheres
 
 import android.os.Bundle
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.runtime.CompositionLocalProvider
@@ -64,6 +65,11 @@ window.setFlags(
     window.statusBarColor = android.graphics.Color.BLACK
 window.navigationBarColor = android.graphics.Color.BLACK
         
+        WindowCompat.setDecorFitsSystemWindows(
+    window,
+    true
+)
+
         setContent {
             MaterialTheme {
                 Surface(

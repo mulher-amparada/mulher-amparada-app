@@ -207,11 +207,13 @@ private fun JSONObject.toCicloRegistro(): CicloRegistro {
 }
 
 
-private fun carregarCiclo(): List<CicloRegistro> {
+private fun carregarCiclo(context: Context): List<CicloRegistro> {
     return try {
-        val bruto = Cripto.carregar("ciclo")
+        val cripto = Cripto(context)
 
-        if (bruto.isNullOrBlank()) {
+        val bruto = cripto.carregar("ciclo")
+
+        if (bruto.isBlank()) {
             emptyList()
         } else {
             val array = JSONArray(bruto)
@@ -231,18 +233,20 @@ private fun carregarCiclo(): List<CicloRegistro> {
     }
 }
 
-
 private fun salvarCiclo(
+    context: Context,
     registros: List<CicloRegistro>
 ) {
     try {
+        val cripto = Cripto(context)
+
         val array = JSONArray()
 
         registros.forEach {
             array.put(it.toJson())
         }
 
-        Cripto.salvar(
+        cripto.salvar(
             "ciclo",
             array.toString()
         )
@@ -250,14 +254,14 @@ private fun salvarCiclo(
     }
 }
 
-
-private fun apagarCiclo() {
+private fun apagarCiclo(context: Context) {
     try {
-        Cripto.remover("ciclo")
+        val cripto = Cripto(context)
+
+        cripto.remover("ciclo")
     } catch (_: Exception) {
     }
 }
-
 
 private fun formatarData(
     data: String
@@ -355,7 +359,7 @@ class CicloActivity : ComponentActivity() {
 @Composable
 private fun CicloApp() {
 
-    val context = LocalContext.current
+    val ctx = LocalContext.current
 
     val dark =
         androidx.compose.foundation
@@ -1951,7 +1955,7 @@ private fun NovoRegistroDialog(
 
 
         DatePickerDialog(
-            context,
+    ctx,
             { _, a, m, d ->
 
                 data =

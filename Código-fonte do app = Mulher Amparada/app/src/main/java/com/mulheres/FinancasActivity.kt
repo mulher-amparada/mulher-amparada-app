@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.compose.foundation.layout.width
 import android.app.Activity
 import android.graphics.Color as AndroidColor
 import android.os.Bundle

@@ -744,25 +744,24 @@ private fun Destaque(
                 secundario
             )
 
-            Paragrafo(
-                "E tenho certeza que chegam até vocês casos extremamente violentos, né? " +
-                    "Casos pesados. Então, para mim, vocês representam uma força emocional " +
-                    "extremamente determinada — maior que ",
-                secundario,
-                buildAnnotatedString {
-                    append("E tenho certeza que chegam até vocês casos extremamente violentos, né? " +
-                        "Casos pesados. Então, para mim, vocês representam uma força emocional " +
-                        "extremamente determinada — maior que ")
+Paragrafo(
+    buildAnnotatedString {
+        append(
+            "E tenho certeza que chegam até vocês casos extremamente violentos, né? " +
+                "Casos pesados. Então, para mim, vocês representam uma força emocional " +
+                "extremamente determinada — maior que "
+        )
 
-                    withStyle(
-                        SpanStyle(fontWeight = FontWeight.Bold)
-                    ) {
-                        append("10¹⁰⁰")
-                    }
+        withStyle(
+            SpanStyle(fontWeight = FontWeight.Bold)
+        ) {
+            append("10¹⁰⁰")
+        }
 
-                    append(".")
-                }
-            )
+        append(".")
+    },
+    secundario
+)
 
             Paragrafo(
                 buildAnnotatedString {

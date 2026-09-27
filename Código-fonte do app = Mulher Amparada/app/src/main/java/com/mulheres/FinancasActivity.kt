@@ -1,6 +1,7 @@
 package com.mulheres
 
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import android.app.Activity
 import android.graphics.Color as AndroidColor
 import android.os.Bundle
@@ -559,7 +560,7 @@ private fun Destaque(
            CARTÃO
         ===================================================== */
 
-        TituloSecao(
+        TituloGrande(
             texto =
                 "🚨 E se o agressor estiver com o seu cartão?",
 

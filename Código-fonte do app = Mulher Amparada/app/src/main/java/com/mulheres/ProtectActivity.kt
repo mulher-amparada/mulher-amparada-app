@@ -352,7 +352,7 @@ private fun MeusAcessos(
 
     abrirAbout: () -> Unit
 
-)
+) {
 
     val dark =
         isSystemInDarkTheme()

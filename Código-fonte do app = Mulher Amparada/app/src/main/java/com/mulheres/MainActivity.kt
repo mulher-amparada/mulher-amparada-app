@@ -1,736 +1,1048 @@
 package com.mulheres
 
-import android.Manifest
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Color
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
-import android.view.View
 import android.view.WindowManager
-import android.webkit.GeolocationPermissions
-import android.webkit.JavascriptInterface
-import android.webkit.PermissionRequest
-import android.webkit.WebChromeClient
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
-import androidx.biometric.BiometricManager
-import androidx.biometric.BiometricPrompt
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import android.view.ViewGroup
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.runtime.mutableStateOf
-import android.os.BatteryManager
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.LocalOverscrollFactory
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-class MainActivity : AppCompatActivity() {
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.PathParser
+import androidx.compose.ui.graphics.vector.addPath
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
+import kotlinx.coroutines.delay
+import kotlin.math.min
 
-    companion object {
-        const val PERMISSION_CODE = 100
-    }
 
-    // =========================================================
-    // VARIÁVEIS
-    // =========================================================
-    private lateinit var cripto: Cripto
+class MainActivity : ComponentActivity() {
 
-    var destinoBiometria: Int = 0
-
-    
-
-    private lateinit var locationClient: FusedLocationProviderClient
-    private lateinit var webView: WebView
-
-    private lateinit var emergencyComposeView: ComposeView
-
-    private var emergenciaVisivel by mutableStateOf(false)
-
-    // =========================================================
-// =========================================================
-    // ON CREATE
-    // =========================================================
-
-    override fun onCreate(
-        savedInstanceState: Bundle?
-    ) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        /*
+         * Impede screenshots e gravação da tela,
+         * caso você queira manter o mesmo comportamento
+         * do restante do seu aplicativo.
+         */
         window.addFlags(
             WindowManager.LayoutParams.FLAG_SECURE
         )
-WindowCompat.setDecorFitsSystemWindows(
-    window,
-    true
-)
 
-window.statusBarColor =
-    Color.TRANSPARENT
-
-window.navigationBarColor =
-    Color.TRANSPARENT
-
-if (
-    Build.VERSION.SDK_INT >=
-    Build.VERSION_CODES.Q
-) {
-    window.isStatusBarContrastEnforced =
-        false
-
-    window.isNavigationBarContrastEnforced =
-        false
-}
-        val controller =
-            WindowInsetsControllerCompat(
-                window,
-                window.decorView
-            )
-
-        val isDark =
-    (resources.configuration.uiMode and
-        android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
-        android.content.res.Configuration.UI_MODE_NIGHT_YES
-
-controller.isAppearanceLightStatusBars =
-    !isDark
-
-controller.isAppearanceLightNavigationBars =
-    !isDark
-
-        setContentView(
-            R.layout.activity_main
-        )
-
-
-webView = findViewById(R.id.webview)
-
-
-locationClient =
-    LocationServices
-        .getFusedLocationProviderClient(
-            this
-        )
-        
-        
-
-
-ViewCompat.setOnApplyWindowInsetsListener(webView) { view, insets ->
-
-    val barras = insets.getInsets(
-        WindowInsetsCompat.Type.systemBars()
-    )
-
-    val params =
-        view.layoutParams as ViewGroup.MarginLayoutParams
-
-    params.topMargin = barras.top
-    params.bottomMargin = barras.bottom
-
-    view.layoutParams = params
-
-    insets
-}
         /*
-         * Inicializa uma única instância do Cripto
-         * antes de configurar a WebView.
+         * Não desenha atrás da status bar.
+         *
+         * Isso faz o Compose respeitar as barras do sistema.
          */
-        cripto =
-            Cripto(this)
-
-        configurarWebView()
-
-
-        // =====================================================
-        // ABERTURA INICIAL
-        // =====================================================
-
-        val pagina =
-    intent?.getStringExtra(
-        "pagina"
-    )
-
-val pastaUsuario =
-    if (
-        (resources.configuration.uiMode and
-            android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
-            android.content.res.Configuration.UI_MODE_NIGHT_YES
-    ) {
-        "user1"
-    } else {
-        "user2"
-    }
-
-if (!pagina.isNullOrEmpty()) {
-
-    webView.loadUrl(
-        "file:///android_asset/$pastaUsuario/$pagina"
-    )
-
-} else {
-
-    webView.loadUrl(
-        "file:///android_asset/$pastaUsuario/botao.html"
-    )
-}
-
-
-        // =====================================================
-        // BOTÃO VOLTAR
-        // =====================================================
-
-onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-    override fun handleOnBackPressed() {
-        val urlAtual = webView.url
-
-        if (urlAtual != null && urlAtual.contains("google.com")) {
-            webView.clearHistory()
-            finish()
-        } else {
-            if (webView.canGoBack()) {
-                webView.goBack()
-            } else {
-                isEnabled = false
-                onBackPressedDispatcher.onBackPressed()
-            }
-        }
-    }
-})
-        
-        
-    }
-    
-
-    // =========================================================
-    // WEBVIEW
-    // =========================================================
-
-    private fun configurarWebView() {
-
-    webView.setBackgroundColor(
-        Color.TRANSPARENT
-    )
-
-    
-    
-
-
-        webView.addJavascriptInterface(
-            WebAppInterface(this),
-            "Android"
-        )
-
-        
-        webView.addJavascriptInterface(
-            cripto,
-            "Cripto"
-        )
-
-        webView.addJavascriptInterface(
-            DownloadInterface(this),
-            "Downloader"
-        )
-        
-        val settings =
-            webView.settings
-
-        settings.cacheMode =
-            android.webkit.WebSettings.LOAD_DEFAULT
-
-        settings.loadsImagesAutomatically =
-            true
-
-        settings.blockNetworkImage =
-            false
-
-        settings.databaseEnabled =
-            true
-
-        settings.displayZoomControls =
-            false
-
-        settings.builtInZoomControls =
-            false
-
-        settings.setSupportZoom(
-            false
-        )
-
-        settings.textZoom =
-            100
-
-        settings.defaultTextEncodingName =
-            "UTF-8"
-
-        settings.mixedContentMode =
-            android.webkit.WebSettings
-                .MIXED_CONTENT_NEVER_ALLOW
-
-        webView.overScrollMode =
-            View.OVER_SCROLL_NEVER
-
-        webView.isVerticalScrollBarEnabled =
-            false
-
-        webView.isFocusable =
-            true
-
-        webView.isFocusableInTouchMode =
-            true
-
-        webView.setOnFocusChangeListener {
-                _, _ ->
-        }
-
-        webView.isHorizontalScrollBarEnabled =
-            false
-
-        webView.scrollBarStyle =
-            View.SCROLLBARS_INSIDE_OVERLAY
-
-        settings.javaScriptEnabled =
-            true
-
-        settings.mediaPlaybackRequiresUserGesture =
-            false
-
-        settings.domStorageEnabled =
-            true
-
-        settings.setGeolocationEnabled(
-            true
-        )
-
-        settings.allowFileAccess =
-            true
-
-        settings.allowContentAccess =
-            false
-
-        settings.allowFileAccessFromFileURLs =
-            false
-
-        settings.allowUniversalAccessFromFileURLs =
-            false
-
-        settings.javaScriptCanOpenWindowsAutomatically =
-            false
-
-        settings.setSupportMultipleWindows(
-            false
-        )
-
-
-        // =====================================================
-        // WEB CHROME CLIENT
-        // =====================================================
-
-        webView.webChromeClient =
-            object : WebChromeClient() {
-
-                override fun onGeolocationPermissionsShowPrompt(
-                    origin: String?,
-                    callback:
-                    GeolocationPermissions.Callback?
-                ) {
-
-                    callback?.invoke(
-                        origin,
-                        true,
-                        false
-                    )
-                }
-
-
-                override fun onPermissionRequest(
-                    request: PermissionRequest
-                ) {
-
-                    runOnUiThread {
-
-                        val resources =
-                            request.resources
-
-                        if (
-                            resources.contains(
-                                PermissionRequest
-                                    .RESOURCE_AUDIO_CAPTURE
-                            )
-                        ) {
-
-                            request.grant(
-                                arrayOf(
-                                    PermissionRequest
-                                        .RESOURCE_AUDIO_CAPTURE
-                                )
-                            )
-
-                        } else {
-
-                            request.deny()
-                        }
-                    }
-                }
-            }
-
-
-        // =====================================================
-        // WEBVIEW CLIENT
-        // =====================================================
-
-                webView.webViewClient =
-            object : WebViewClient() {
-
-                override fun shouldOverrideUrlLoading(
-                    view: WebView?,
-                    request: WebResourceRequest?
-                ): Boolean {
-
-                    val url =
-                        request?.url?.toString()
-                            ?: return false
-
-                    if (
-                        url.startsWith("tel:")
-                    ) {
-
-                        startActivity(
-                            Intent(
-                                Intent.ACTION_DIAL,
-                                Uri.parse(url)
-                            )
-                        )
-
-                        return true
-                    }
-
-                    if (
-                        url.startsWith(
-                            "https://wa.me"
-                        )
-                    ) {
-
-                        startActivity(
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse(url)
-                            )
-                        )
-
-                        return true
-                    }
-
-                    return false
-                }
-
-
-            }
-            
-            }
-    // =========================================================
-    // CARREGAR PÁGINAS
-    // =========================================================
-
-    private fun obterPastaTema(): String {
-
-    return if (
-        (resources.configuration.uiMode and
-            android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
-            android.content.res.Configuration.UI_MODE_NIGHT_YES
-    ) {
-        "user1"
-    } else {
-        "user2"
-    }
-}
-
-
-private fun carregarWebView1() {
-
-    webView.loadUrl(
-        "file:///android_asset/${obterPastaTema()}/botao.html"
-    )
-}
-
-
-private fun carregarWebView2() {
-
-    webView.loadUrl(
-        "file:///android_asset/${obterPastaTema()}/carteira.html"
-    )
-}
-
-
-private fun carregarWebView4() {
-
-    webView.loadUrl(
-        "file:///android_asset/${obterPastaTema()}/botao.html"
-    )
-}
-
-
-
-    // =========================================================
-    // BIOMETRIA
-    // =========================================================
-
-    @JavascriptInterface
-    fun iniciarBiometria() {
-
-        runOnUiThread {
-
-            val biometricManager =
-                BiometricManager.from(
-                    this
-                )
-
-            val authenticators =
-                BiometricManager.Authenticators.BIOMETRIC_WEAK or
-                    BiometricManager.Authenticators.DEVICE_CREDENTIAL
-
-            val canAuth =
-                biometricManager.canAuthenticate(
-                    authenticators
-                )
-
-if (
-    canAuth !=
-    BiometricManager.BIOMETRIC_SUCCESS
-) {
-
-    Toast.makeText(
-        this,
-        "Biometria não disponível",
-        Toast.LENGTH_SHORT
-    ).show()
-
-    when (
-        destinoBiometria
-    ) {
-
-        1 ->
-            carregarWebView2()
-
-        2 ->
-            carregarWebView4()
-    }
-
-    return@runOnUiThread
-}
-
-            val biometricPrompt =
-                BiometricPrompt(
-                    this,
-                    ContextCompat.getMainExecutor(
-                        this
-                    ),
-                    object :
-                        BiometricPrompt.AuthenticationCallback() {
-
-                        override fun onAuthenticationSucceeded(
-                            result:
-                            BiometricPrompt.AuthenticationResult
-                        ) {
-
-                            super.onAuthenticationSucceeded(
-                                result
-                            )
-
-                            when (
-                                destinoBiometria
-                            ) {
-
-                                1 ->
-                                    carregarWebView2()
-
-                                2 ->
-                                    carregarWebView4()
-                            }
-                        }
-
-
-                        override fun onAuthenticationFailed() {
-
-                            super.onAuthenticationFailed()
-                        }
-
-
-                        override fun onAuthenticationError(
-                            errorCode: Int,
-                            errString: CharSequence
-                        ) {
-
-                            super.onAuthenticationError(
-                                errorCode,
-                                errString
-                            )
-                        }
-                    }
-                )
-
-            val promptInfo =
-                BiometricPrompt.PromptInfo.Builder()
-                    .setTitle(
-                        "Desbloquear a área protegida"
-                    )
-                    .setDescription(
-                        "🌸 Apenas a usuária cadastrada pode acessar este local"
-                    )
-                    .setAllowedAuthenticators(
-                        authenticators
-                    )
-                    .build()
-
-            biometricPrompt.authenticate(
-                promptInfo
-            )
-        }
-    }
-
-
-    // =========================================================
-    // BIOMETRIA — AMPARO
-    // =========================================================
-
-    @JavascriptInterface
-    fun iniciarBiometriaAmparo() {
-
-        destinoBiometria =
-            1
-
-        iniciarBiometria()
-    }
-
-
-    // =========================================================
-    // BIOMETRIA — ÁREA PROTEGIDA
-    // =========================================================
-
-    @JavascriptInterface
-    fun IniciarBiometriaÁreaProtegida() {
-
-        destinoBiometria =
-            2
-
-        iniciarBiometria()
-    }
-
-
-    // =========================================================
-    // FULLSCREEN — API MODERNA
-    // =========================================================
-
-    @JavascriptInterface
-    fun ativarFullscreen() {
-
-        val window =
-            window
-
         WindowCompat.setDecorFitsSystemWindows(
             window,
-            false
+            true
         )
 
-        val controller =
-            WindowCompat.getInsetsController(
-                window,
-                window.decorView
-            )
-
-        controller.systemBarsBehavior =
-            WindowInsetsControllerCompat
-                .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-
-        controller.hide(
-            WindowInsetsCompat.Type.systemBars()
-        )
+        setContent {
+            CalculadoraApp()
+        }
     }
+}
 
 
-    
-    // =========================================================
-    // PEGAR LOCALIZAÇÃO
-    // =========================================================
+/* =========================================================
+   CORES
+========================================================= */
 
-    @JavascriptInterface
-    fun pegarLocalizacao() {
+private val DarkBackground = Color(0xFF000000)
+private val DarkDisplay = Color(0xFF000000)
+private val DarkButton = Color(0xFF202020)
+private val DarkFunction = Color(0xFF2B2B2B)
+private val DarkOperator = Color(0xFF252525)
+private val DarkEqual = Color(0xFFFFFFFF)
 
-        if (
-            ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) !=
-            PackageManager.PERMISSION_GRANTED
+private val LightBackground = Color(0xFFF5F5F5)
+private val LightDisplay = Color(0xFFFFFFFF)
+private val LightButton = Color(0xFFE1E1E1)
+private val LightFunction = Color(0xFFD5D5D5)
+private val LightOperator = Color(0xFFDCDCDC)
+private val LightEqual = Color(0xFF111111)
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+@Composable
+fun CalculadoraApp() {
+
+    val dark =
+        androidx.compose.foundation.isSystemInDarkTheme()
+
+    val background =
+        if (dark) DarkBackground
+        else LightBackground
+
+    /*
+     * Overscroll totalmente desativado.
+     */
+    androidx.compose.runtime.CompositionLocalProvider(
+        LocalOverscrollFactory provides null
+    ) {
+
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = background
         ) {
 
-            Toast.makeText(
-                this,
-                "Permissão de localização não concedida",
-                Toast.LENGTH_SHORT
-            ).show()
+            Calculadora(
+                dark = dark
+            )
+        }
+    }
+}
 
-            return
+
+/* =========================================================
+   CALCULADORA
+========================================================= */
+
+@Composable
+private fun Calculadora(
+    dark: Boolean
+) {
+
+    var expression by remember {
+        mutableStateOf("")
+    }
+
+    var history by remember {
+        mutableStateOf("")
+    }
+
+    var acabouDeCalcular by remember {
+        mutableStateOf(false)
+    }
+
+    var erro by remember {
+        mutableStateOf(false)
+    }
+
+    val background =
+        if (dark) DarkBackground
+        else LightBackground
+
+    val displayBackground =
+        if (dark) DarkDisplay
+        else LightDisplay
+
+    val displayText =
+        if (dark) Color.White
+        else Color(0xFF111111)
+
+    val historyText =
+        if (dark) {
+            Color.White.copy(alpha = .35f)
+        } else {
+            Color.Black.copy(alpha = .40f)
         }
 
-        locationClient.lastLocation
-            .addOnSuccessListener { location ->
+    /*
+     * Toda a tela fica dentro de safeDrawingPadding().
+     *
+     * Isso impede que a calculadora fique colada
+     * na status bar ou na barra de navegação.
+     */
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .safeDrawingPadding()
+            .navigationBarsPadding(),
+        contentAlignment = Alignment.Center
+    ) {
 
-                if (
-                    location != null
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = 10.dp,
+                    vertical = 12.dp
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            /*
+             * DISPLAY
+             */
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
+                    .background(
+                        color = displayBackground,
+                        shape = RoundedCornerShape(28.dp)
+                    )
+                    .padding(
+                        horizontal = 18.dp,
+                        vertical = 18.dp
+                    ),
+                contentAlignment = Alignment.BottomEnd
+            ) {
+
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.Bottom
                 ) {
 
-                    val lat =
-                        location.latitude
+                    if (history.isNotEmpty()) {
 
-                    val lng =
-                        location.longitude
+                        Text(
+                            text = history,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 7.dp),
+                            color = historyText,
+                            fontSize = 14.sp,
+                            lineHeight = 17.sp,
+                            textAlign = TextAlign.End,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
 
-                    val js =
-                        "receberLocalizacao($lat,$lng)"
+                    Text(
+                        text =
+                            if (erro) "Erro"
+                            else expression.ifEmpty { "0" },
 
-                    webView.evaluateJavascript(
-                        js,
-                        null
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .then(
+                                if (erro) {
+                                    Modifier.shake()
+                                } else {
+                                    Modifier
+                                }
+                            ),
+
+                        color = displayText,
+
+                        fontSize =
+                            when {
+                                expression.length > 14 -> 38.sp
+                                expression.length > 10 -> 46.sp
+                                else -> 58.sp
+                            },
+
+                        fontWeight = FontWeight.SemiBold,
+
+                        lineHeight = 1.sp,
+
+                        textAlign = TextAlign.End,
+
+                        maxLines = 1,
+
+                        overflow = TextOverflow.Ellipsis
                     )
-
-                } else {
-
-                    Toast.makeText(
-                        this,
-                        "Não foi possível obter a localização.",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
             }
-            .addOnFailureListener {
 
-                Toast.makeText(
-                    this,
-                    "Erro ao obter localização.",
-                    Toast.LENGTH_SHORT
-                ).show()
+
+            Spacer(
+                modifier = Modifier.height(16.dp)
+            )
+
+
+            /*
+             * BOTÕES
+             */
+
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+
+                val rows = listOf(
+
+                    listOf(
+                        ButtonData("C", ButtonType.FUNCTION),
+                        ButtonData("back", ButtonType.FUNCTION),
+                        ButtonData("%", ButtonType.FUNCTION),
+                        ButtonData("÷", ButtonType.OPERATOR)
+                    ),
+
+                    listOf(
+                        ButtonData("7"),
+                        ButtonData("8"),
+                        ButtonData("9"),
+                        ButtonData("×", ButtonType.OPERATOR)
+                    ),
+
+                    listOf(
+                        ButtonData("4"),
+                        ButtonData("5"),
+                        ButtonData("6"),
+                        ButtonData("−", ButtonType.OPERATOR)
+                    ),
+
+                    listOf(
+                        ButtonData("1"),
+                        ButtonData("2"),
+                        ButtonData("3"),
+                        ButtonData("+", ButtonType.OPERATOR)
+                    ),
+
+                    listOf(
+                        ButtonData("=", ButtonType.EQUAL),
+                        ButtonData("()"),
+                        ButtonData(","),
+                        ButtonData("0")
+                    )
+                )
+
+                rows.forEach { row ->
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement =
+                            Arrangement.spacedBy(10.dp)
+                    ) {
+
+                        row.forEach { button ->
+
+                            CalculatorButton(
+                                data = button,
+                                dark = dark,
+                                modifier = Modifier.weight(1f),
+                                onClick = {
+
+                                    when (button.value) {
+
+                                        "C" -> {
+
+                                            expression = ""
+                                            history = ""
+                                            acabouDeCalcular = false
+                                            erro = false
+                                        }
+
+
+                                        "back" -> {
+
+                                            expression =
+                                                expression.dropLast(1)
+
+                                            acabouDeCalcular = false
+                                        }
+
+
+                                        "=" -> {
+
+                                            val result =
+                                                calcularExpressao(
+                                                    expression
+                                                )
+
+                                            if (result == null) {
+
+                                                erro = true
+
+                                                /*
+                                                 * Remove o estado
+                                                 * de erro depois de 700 ms.
+                                                 */
+                                                kotlinx.coroutines.MainScope()
+                                                    .launch {
+                                                        delay(700)
+
+                                                        expression = ""
+                                                        history = ""
+                                                        acabouDeCalcular = false
+                                                        erro = false
+                                                    }
+
+                                            } else {
+
+                                                history =
+                                                    "$expression ="
+
+                                                expression = result
+
+                                                acabouDeCalcular = true
+                                                erro = false
+                                            }
+                                        }
+
+
+                                        "()" -> {
+
+                                            expression =
+                                                adicionarParenteses(
+                                                    expression,
+                                                    acabouDeCalcular
+                                                )
+
+                                            acabouDeCalcular = false
+                                        }
+
+
+                                        "," -> {
+
+                                            var novo =
+                                                expression
+
+                                            if (acabouDeCalcular) {
+
+                                                novo = ""
+
+                                                history = ""
+
+                                                acabouDeCalcular = false
+                                            }
+
+                                            val partes =
+                                                novo.split(
+                                                    Regex("[+\\-*/()]")
+                                                )
+
+                                            val atual =
+                                                partes.lastOrNull()
+                                                    ?: ""
+
+                                            if (!atual.contains(".")) {
+
+                                                if (
+                                                    novo.isEmpty() ||
+                                                    "+-*/(".contains(
+                                                        novo.last()
+                                                    )
+                                                ) {
+                                                    novo += "0"
+                                                }
+
+                                                novo += "."
+                                            }
+
+                                            expression = novo
+                                        }
+
+
+                                        "%" -> {
+
+                                            if (
+                                                expression.isNotEmpty() &&
+                                                Regex("[0-9)]$")
+                                                    .containsMatchIn(expression)
+                                            ) {
+
+                                                expression += "%"
+                                            }
+                                        }
+
+
+                                        "+",
+                                        "−",
+                                        "×",
+                                        "÷" -> {
+
+                                            val operator =
+                                                when (button.value) {
+                                                    "−" -> "-"
+                                                    "×" -> "*"
+                                                    "÷" -> "/"
+                                                    else -> button.value
+                                                }
+
+                                            var novo =
+                                                expression
+
+                                            acabouDeCalcular = false
+
+                                            if (novo.isEmpty()) {
+
+                                                if (operator == "-") {
+                                                    novo = "-"
+                                                }
+
+                                            } else {
+
+                                                if (
+                                                    "+-*/".contains(
+                                                        novo.last()
+                                                    )
+                                                ) {
+
+                                                    novo =
+                                                        novo.dropLast(1)
+                                                }
+
+                                                novo += operator
+                                            }
+
+                                            expression = novo
+                                        }
+
+
+                                        else -> {
+
+                                            /*
+                                             * Números.
+                                             */
+
+                                            var novo =
+                                                expression
+
+                                            if (acabouDeCalcular) {
+
+                                                novo = ""
+
+                                                history = ""
+
+                                                acabouDeCalcular = false
+                                            }
+
+                                            novo += button.value
+
+                                            expression = novo
+                                        }
+                                    }
+                                }
+                            )
+                        }
+                    }
+                }
             }
+        }
+    }
+}
+
+
+/* =========================================================
+   DADOS DOS BOTÕES
+========================================================= */
+
+private data class ButtonData(
+    val value: String,
+    val type: ButtonType = ButtonType.NUMBER
+)
+
+private enum class ButtonType {
+    NUMBER,
+    FUNCTION,
+    OPERATOR,
+    EQUAL
+}
+
+
+/* =========================================================
+   BOTÃO
+========================================================= */
+
+@Composable
+private fun CalculatorButton(
+    data: ButtonData,
+    dark: Boolean,
+    modifier: Modifier,
+    onClick: () -> Unit
+) {
+
+    val background =
+        when (data.type) {
+
+            ButtonType.FUNCTION ->
+                if (dark) DarkFunction
+                else LightFunction
+
+            ButtonType.OPERATOR ->
+                if (dark) DarkOperator
+                else LightOperator
+
+            ButtonType.EQUAL ->
+                if (dark) DarkEqual
+                else LightEqual
+
+            ButtonType.NUMBER ->
+                if (dark) DarkButton
+                else LightButton
+        }
+
+    val textColor =
+        when (data.type) {
+
+            ButtonType.EQUAL ->
+                if (dark) Color.Black
+                else Color.White
+
+            ButtonType.FUNCTION,
+            ButtonType.OPERATOR,
+            ButtonType.NUMBER ->
+                if (dark) Color.White
+                else Color(0xFF111111)
+        }
+
+
+    Box(
+        modifier = modifier
+            .aspectRatio(1f)
+            .background(
+                color = background,
+                shape = CircleShape
+            )
+            .clickable(
+                indication = null,
+                interactionSource = remember {
+                    androidx.compose.foundation.interaction.MutableInteractionSource()
+                },
+                onClick = onClick
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+
+        if (data.value == "back") {
+
+            androidx.compose.foundation.Image(
+                painter = rememberVectorPainter(
+                    image = BackspaceIcon
+                ),
+                contentDescription = "Apagar",
+                modifier = Modifier
+                    .fillMaxWidth(.35f)
+                    .aspectRatio(1f)
+            )
+
+        } else {
+
+            Text(
+                text = data.value,
+                color = textColor,
+
+                fontSize =
+                    when (data.value) {
+                        "=",
+                        "×",
+                        "÷",
+                        "−",
+                        "+" -> 26.sp
+
+                        else -> 23.sp
+                    },
+
+                fontWeight = FontWeight.SemiBold,
+
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+}
+
+
+/* =========================================================
+   ÍCONE APAGAR
+========================================================= */
+
+private val BackspaceIcon: ImageVector
+    get() =
+        ImageVector.Builder(
+            name = "Backspace",
+            defaultWidth = 24.dp,
+            defaultHeight = 24.dp,
+            viewportWidth = 960f,
+            viewportHeight = 960f
+        )
+            .addPath(
+                pathData = PathParser()
+                    .parsePathString(
+                        "m560-424 76 76q11 11 28 11t28-11q11-11 11-28t-11-28l-76-76 76-76q11-11 11-28t-11-28q-11-11-28-11t-28 11l-76 76-76-76q-11-11-28-11t-28 11q-11 11-11 28t11 28l76 76-76 76q-11 11-11 28t11 28q11 11 28 11t28-11l76-76ZM360-160q-19 0-36-8.5T296-192L116-432q-16-21-16-48t16-48l180-240q11-15 28-23.5t36-8.5h440q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H360Zm0-80h440v-480H360L180-480l180 240Zm130-240Z"
+                    )
+                    .toNodes(),
+                fill = androidx.compose.ui.graphics.SolidColor(
+                    Color.White
+                )
+            )
+            .build()
+
+
+/* =========================================================
+   PARENTÊSES
+========================================================= */
+
+private fun adicionarParenteses(
+    expression: String,
+    acabouDeCalcular: Boolean
+): String {
+
+    var expr =
+        if (acabouDeCalcular) ""
+        else expression
+
+    val ultimo =
+        expr.lastOrNull()?.toString() ?: ""
+
+    val abertos =
+        expr.count { it == '(' }
+
+    val fechados =
+        expr.count { it == ')' }
+
+    if (
+        expr.isEmpty() ||
+        "+-*/(".contains(ultimo)
+    ) {
+
+        expr += "("
+
+        return expr
+    }
+
+    if (abertos > fechados) {
+
+        if (
+            !"+-*/(".contains(ultimo)
+        ) {
+
+            expr += ")"
+        }
+
+        return expr
+    }
+
+    expr += "*("
+
+    return expr
+}
+
+
+/* =========================================================
+   PORCENTAGEM
+========================================================= */
+
+private fun prepararPorcentagem(
+    expression: String
+): String {
+
+    return expression.replace(
+        Regex("(\\d+(?:\\.\\d+)?)%"),
+        "($1/100)"
+    )
+}
+
+
+/* =========================================================
+   CALCULADOR
+========================================================= */
+
+private fun calcularExpressao(
+    original: String
+): String? {
+
+    if (original.isEmpty()) {
+        return null
+    }
+
+    try {
+
+        var expression =
+            original.replace(",", ".")
+
+        val ultimo =
+            expression.lastOrNull()
+
+        if (
+            ultimo != null &&
+            "+-*/(".contains(ultimo)
+        ) {
+            return null
+        }
+
+        val abertos =
+            expression.count { it == '(' }
+
+        val fechados =
+            expression.count { it == ')' }
+
+        if (abertos != fechados) {
+            return null
+        }
+
+        /*
+         * Aceita somente caracteres
+         * matemáticos esperados.
+         */
+        if (
+            !Regex(
+                "^[0-9+\\-*/().%\\s]+$"
+            ).matches(expression)
+        ) {
+            return null
+        }
+
+        expression =
+            prepararPorcentagem(expression)
+
+        val resultado =
+            SimpleExpressionParser(
+                expression
+            ).parse()
+
+        if (!resultado.isFinite()) {
+            return null
+        }
+
+        return resultado
+            .toBigDecimal()
+            .setScale(
+                10,
+                java.math.RoundingMode.HALF_UP
+            )
+            .stripTrailingZeros()
+            .toPlainString()
+
+    } catch (_: Exception) {
+
+        return null
+    }
+}
+
+
+/* =========================================================
+   PARSER MATEMÁTICO
+========================================================= */
+
+private class SimpleExpressionParser(
+    private val text: String
+) {
+
+    private var position = 0
+
+
+    fun parse(): Double {
+
+        val result =
+            parseExpression()
+
+        skipSpaces()
+
+        if (position != text.length) {
+            throw IllegalArgumentException()
+        }
+
+        return result
     }
 
 
-    // =========================================================
-    // CICLO DE VIDA
-    // =========================================================
+    private fun parseExpression(): Double {
 
-override fun onDestroy() {
-super.onDestroy()
+        var value =
+            parseTerm()
+
+        while (true) {
+
+            skipSpaces()
+
+            if (match('+')) {
+
+                value += parseTerm()
+
+            } else if (match('-')) {
+
+                value -= parseTerm()
+
+            } else {
+
+                break
+            }
+        }
+
+        return value
+    }
+
+
+    private fun parseTerm(): Double {
+
+        var value =
+            parseFactor()
+
+        while (true) {
+
+            skipSpaces()
+
+            if (match('*')) {
+
+                value *= parseFactor()
+
+            } else if (match('/')) {
+
+                value /= parseFactor()
+
+            } else {
+
+                break
+            }
+        }
+
+        return value
+    }
+
+
+    private fun parseFactor(): Double {
+
+        skipSpaces()
+
+        if (match('+')) {
+            return parseFactor()
+        }
+
+        if (match('-')) {
+            return -parseFactor()
+        }
+
+        if (match('(')) {
+
+            val value =
+                parseExpression()
+
+            if (!match(')')) {
+                throw IllegalArgumentException()
+            }
+
+            return value
+        }
+
+        return parseNumber()
+    }
+
+
+    private fun parseNumber(): Double {
+
+        skipSpaces()
+
+        val start =
+            position
+
+        while (
+            position < text.length &&
+            (
+                text[position].isDigit() ||
+                text[position] == '.'
+            )
+        ) {
+
+            position++
+        }
+
+        if (start == position) {
+            throw IllegalArgumentException()
+        }
+
+        return text
+            .substring(start, position)
+            .toDouble()
+    }
+
+
+    private fun match(
+        character: Char
+    ): Boolean {
+
+        skipSpaces()
+
+        if (
+            position < text.length &&
+            text[position] == character
+        ) {
+
+            position++
+
+            return true
+        }
+
+        return false
+    }
+
+
+    private fun skipSpaces() {
+
+        while (
+            position < text.length &&
+            text[position].isWhitespace()
+        ) {
+
+            position++
+        }
+    }
 }
+
+
+/* =========================================================
+   ANIMAÇÃO DE ERRO
+========================================================= */
+
+@Composable
+private fun Modifier.shake(): Modifier {
+
+    var scale by remember {
+        mutableStateOf(1f)
+    }
+
+    LaunchedEffect(Unit) {
+
+        scale = .97f
+
+        delay(70)
+
+        scale = 1.03f
+
+        delay(70)
+
+        scale = .98f
+
+        delay(70)
+
+        scale = 1f
+    }
+
+    return this.scale(scale)
 }

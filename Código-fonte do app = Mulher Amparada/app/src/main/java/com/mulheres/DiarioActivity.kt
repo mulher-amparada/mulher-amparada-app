@@ -835,7 +835,7 @@ private fun DiarioTopBar(
 
         Row(
             horizontalArrangement =
-                Arrangement.spacedBy(6.dp)
+                Arrangement.spacedBy(18.dp)
         ) {
 
             DiarioTopButton(
@@ -1165,7 +1165,7 @@ private fun CurrentPage(
                 Modifier
                     .fillMaxSize()
                     .padding(
-                        top = 25.dp
+                        top = 65.dp
                     ),
 
             textStyle =

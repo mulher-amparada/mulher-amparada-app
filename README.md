@@ -8,7 +8,8 @@
 
 Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!
 
-E saibam que o projeto é: Source-Available
+
+e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, onde nem tinha os recursos, ja programei ele num app de A-IDE, num A05, e eu ja perdi vários projetos porque o celular nao aguentava, matava o projeto porque matou o processo de compilação!, e uma vez eu fiz o projeto do mulher amparada e eu mesmo fiz o app do mulher amparada (primeiro eu refiz, depois na 2 vez que perdi portei tudo do apk compilado para descompilado, e depois perdi denovo mas ai eu ja tinha o código-fonte!)
 
 **Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3491**
 
@@ -535,6 +536,8 @@ Ao tocar neste botão, o app mostrará um site dentro do app que lista todos os 
 
 ### História das Mulheres:
 
+É compose!:
+
 ```
 A página “História das Mulheres” é uma experiência interativa que combina conteúdo histórico com um sistema de progressão. O usuário acumula Pontos de História, desbloqueia cinco períodos históricos, compra melhorias para aumentar sua produção e pode realizar prestígios para obter Legado Permanente.
 
@@ -620,14 +623,6 @@ A página possui animações para os cliques, números de pontos que aparecem na
 O sistema também utiliza mecanismos para evitar atualizações desnecessárias da interface e limitar a quantidade de elementos visuais criados simultaneamente, ajudando a manter a página mais fluida.
 
 Em conjunto, a página transforma o aprendizado sobre a história das mulheres em uma experiência de progressão: o usuário acumula Pontos de História, melhora sua produção, desbloqueia novos períodos históricos e utiliza o sistema de prestígio para construir um Legado Permanente.
-
-e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, onde nem tinha os recursos, ja programei ele num app de A-IDE, num A05, e eu ja perdi vários projetos porque o celular nao aguentava, matava o projeto porque matou o processo de compilação!, e uma vez eu fiz o projeto do mulher amparada e eu mesmo fiz o app do mulher amparada (primeiro eu refiz, depois na 2 vez que perdi portei tudo do apk compilado para descompilado, e depois perdi denovo mas ai eu ja tinha o código-fonte!)
-
-e a calculadora de disfarce realmente faz contas, se digitar:
-
-2 + 2, aparece 4!
-
-e se digitar a senha ele desbloqueia...
 ```
 
 ### Navegador: 

@@ -2,7 +2,6 @@ package com.mulheres
 
 import android.Manifest
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.foundation.layout.align
 import androidx.compose.foundation.layout.padding
 import android.content.Context
 import android.content.pm.PackageManager
@@ -81,19 +80,25 @@ private val Quicksand = FontFamily(
 )
 
 private val FundoEscuro = Color(0xFF050507)
+
 private val FundoClaro = Color(0xFFF7F7FA)
 
 private val CartaoEscuro = Color(0xD90A0A0D)
+
 private val CartaoClaro = Color(0xFFFDFDFE)
 
 private val TextoEscuro = Color(0xFFF7F7FA)
+
 private val TextoClaro = Color(0xFF17171B)
 
 private val TextoSuaveEscuro = Color(0xFF9B9BA5)
+
 private val TextoSuaveClaro = Color(0xFF686873)
 
 private val Rosa = Color(0xFFFF8FC7)
+
 private val Azul = Color(0xFF6EB5FF)
+
 private val Verde = Color(0xFF7DFFB2)
 
 private val CentroPadrao =
@@ -297,7 +302,7 @@ private fun MapaTela(
         modifier =
             Modifier
                 .fillMaxSize()
-                .background(fundo)
+                .background(Fundo)
                 .windowInsetsPadding(
                     androidx.compose.foundation.layout.WindowInsets.safeDrawing
                 )

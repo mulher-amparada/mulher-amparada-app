@@ -226,6 +226,18 @@
     android:configChanges="orientation|screenSize"
                      android:exported="false" />
                      
+                                                               <activity
+            android:name=".DiaActivity"
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
+                     android:exported="false" />
+                     
+                                                               <activity
+            android:name=".TarefaActivity"
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
+                     android:exported="false" />
+                     
 <!-- ================================================= -->
         <!-- SD FILE PROVIDER -->
         <!-- ================================================= -->

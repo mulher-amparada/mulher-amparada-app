@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.compose.foundation.layout.WindowInsets
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager

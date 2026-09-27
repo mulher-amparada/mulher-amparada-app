@@ -2999,7 +2999,7 @@ if (activity?.avisoAdministradorVisivel == true) {
                 text =
                     "Se você negar essa permissão, alguns recursos de proteção não funcionarão.\n\n" +
                     "• O bloqueio por barulho não funcionará.\n" +
-                    "• O bloqueio da tela na área protegida não funcionará.\n\n" +
+                    "• Mas você pode reativar ele aceitando essa permissão sempre que quiser, ou deixar desativado quando quiser, mas ele não funcionará sem essa permissão\n\n" +
                     "Os demais recursos do aplicativo continuarão disponíveis.",
                 fontFamily = font
             )

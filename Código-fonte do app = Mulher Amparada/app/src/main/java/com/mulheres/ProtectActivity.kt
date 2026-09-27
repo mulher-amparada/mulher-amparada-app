@@ -145,13 +145,22 @@ class ProtectActivity : ComponentActivity() {
                     },
 
                     abrirApps = {
-                        startActivity(
-                            Intent(
-                                this,
-                                AppsActivity::class.java
-                            )
-                        )
-                    }
+    startActivity(
+        Intent(
+            this,
+            AppsActivity::class.java
+        )
+    )
+},
+
+abrirDireitos = {
+    startActivity(
+        Intent(
+            this,
+            DireitosActivity::class.java
+        )
+    )
+}
                 )
             }
         }
@@ -306,9 +315,12 @@ private fun MeusAcessos(
 
     abrirRelogio: () -> Unit,
 
-    abrirApps: () -> Unit
+    abrirApps: () -> Unit,
+
+    abrirDireitos: () -> Unit
 
 ) {
+
     val dark =
         isSystemInDarkTheme()
 
@@ -617,12 +629,21 @@ private fun MeusAcessos(
 
                 Cartao(
 
-                    acesso = acesso,
+    acesso = acesso,
 
-                    dark = dark,
+    dark = dark,
 
-                    onClick = {}
-                )
+    onClick = {
+
+        when (acesso.titulo) {
+
+            "100 dos seus direitos" -> {
+                abrirDireitos()
+            }
+
+        }
+    }
+)
             }
 
 

@@ -835,7 +835,7 @@ private fun DiarioTopBar(
 
         Row(
             horizontalArrangement =
-                Arrangement.spacedBy(18.dp)
+                Arrangement.spacedBy(12.dp)
         ) {
 
             DiarioTopButton(

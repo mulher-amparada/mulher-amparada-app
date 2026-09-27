@@ -1169,7 +1169,6 @@ private fun ConteudoCartao(
         modifier =
             Modifier.size(18.dp)
     )
-}
     }
 }
 }

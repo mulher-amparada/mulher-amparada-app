@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.compose.material3.Icon
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager

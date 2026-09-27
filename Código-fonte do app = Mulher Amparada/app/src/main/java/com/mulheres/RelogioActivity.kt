@@ -1,5 +1,7 @@
 package com.mulheres
 
+import android.graphics.Color as AndroidColor
+import androidx.core.view.WindowCompat
 import androidx.compose.material3.Icon
 import android.Manifest
 import android.annotation.SuppressLint
@@ -120,21 +122,38 @@ private val TextoMutedClaro = Color(0xFF92929D)
 
 class RelogioActivity : ComponentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreate(
+    savedInstanceState: Bundle?
+) {
+    super.onCreate(
+        savedInstanceState
+    )
 
-        window.addFlags(
-            WindowManager.LayoutParams.FLAG_SECURE
-        )
+    window.addFlags(
+        WindowManager.LayoutParams.FLAG_SECURE
+    )
 
-        setContent {
-            CompositionLocalProvider(
-                LocalOverscrollFactory provides null
-            ) {
-                RelogioApp()
-            }
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        false
+    )
+
+    window.statusBarColor =
+        AndroidColor.TRANSPARENT
+
+    WindowCompat.getInsetsController(
+        window,
+        window.decorView
+    ).isAppearanceLightStatusBars = false
+
+    setContent {
+        CompositionLocalProvider(
+            LocalOverscrollFactory provides null
+        ) {
+            RelogioApp()
         }
     }
+}
 }
 
 data class DadosRelogio(

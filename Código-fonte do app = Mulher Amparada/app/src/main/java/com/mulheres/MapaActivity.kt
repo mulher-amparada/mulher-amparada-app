@@ -529,14 +529,14 @@ private fun MapaTela(
                         dark,
 
                     modifier =
-                        Modifier
-                            .align(
-                                Alignment.BottomStart
-                            )
-                            .padding(
-                                start = 22.dp,
-                                bottom = 22.dp
-                            )
+    Modifier
+        .align(
+            Alignment.BottomStart
+        )
+        .padding(
+            start = 10.dp,
+            bottom = 22.dp
+        )
                 )
             }
         }

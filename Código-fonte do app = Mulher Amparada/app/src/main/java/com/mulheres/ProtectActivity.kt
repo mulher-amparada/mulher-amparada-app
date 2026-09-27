@@ -1,5 +1,7 @@
 package com.mulheres
 
+import android.graphics.Color as AndroidColor
+import androidx.core.view.WindowCompat
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
@@ -50,89 +52,100 @@ import androidx.compose.ui.unit.sp
 class ProtectActivity : ComponentActivity() {
 
     override fun onCreate(
-        savedInstanceState: Bundle?
-    ) {
+    savedInstanceState: Bundle?
+) {
+    super.onCreate(
+        savedInstanceState
+    )
 
-        super.onCreate(
-            savedInstanceState
-        )
+    window.addFlags(
+        WindowManager.LayoutParams.FLAG_SECURE
+    )
 
-        window.addFlags(
-            WindowManager.LayoutParams.FLAG_SECURE
-        )
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        false
+    )
 
-        setContent {
+    window.statusBarColor =
+        AndroidColor.TRANSPARENT
 
-            androidx.compose.runtime.CompositionLocalProvider(
-                LocalOverscrollFactory provides null
-            ) {
+    WindowCompat.getInsetsController(
+        window,
+        window.decorView
+    ).isAppearanceLightStatusBars = false
 
-                MeusAcessos(
+    setContent {
 
-    abrirNavegador = {
-        startActivity(
-            Intent(
-                this,
-                MainActivity::class.java
+        androidx.compose.runtime.CompositionLocalProvider(
+            LocalOverscrollFactory provides null
+        ) {
+
+            MeusAcessos(
+
+                abrirNavegador = {
+                    startActivity(
+                        Intent(
+                            this,
+                            MainActivity::class.java
+                        )
+                    )
+                },
+
+                abrirMapa = {
+                    startActivity(
+                        Intent(
+                            this,
+                            MapaActivity::class.java
+                        )
+                    )
+                },
+
+                abrirCalculadora = {
+                    startActivity(
+                        Intent(
+                            this,
+                            CalcActivity::class.java
+                        )
+                    )
+                },
+
+                abrirRelogio = {
+                    startActivity(
+                        Intent(
+                            this,
+                            RelogioActivity::class.java
+                        )
+                    )
+                },
+
+                abrirGravador = {
+                    startActivity(
+                        Intent(
+                            this,
+                            GravarActivity::class.java
+                        )
+                    )
+                },
+
+                abrirArquivos = {
+                    startActivity(
+                        Intent(
+                            this,
+                            FileActivity::class.java
+                        )
+                    )
+                },
+
+                abrirApps = {
+                    startActivity(
+                        Intent(
+                            this,
+                            AppsActivity::class.java
+                        )
+                    )
+                }
             )
-        )
-    },
-
-    abrirMapa = {
-        startActivity(
-            Intent(
-                this,
-                MapaActivity::class.java
-            )
-        )
-    },
-
-    abrirCalculadora = {
-        startActivity(
-            Intent(
-                this,
-                CalcActivity::class.java
-            )
-        )
-    },
-
-    abrirRelogio = {
-        startActivity(
-            Intent(
-                this,
-                RelogioActivity::class.java
-            )
-        )
-    },
-
-    abrirGravador = {
-        startActivity(
-            Intent(
-                this,
-                GravarActivity::class.java
-            )
-        )
-    },
-
-    abrirArquivos = {
-        startActivity(
-            Intent(
-                this,
-                FileActivity::class.java
-            )
-        )
-    },
-
-    abrirApps = {
-        startActivity(
-            Intent(
-                this,
-                AppsActivity::class.java
-            )
-        )
-    }
-)
-            }
         }
     }
 }

@@ -75,7 +75,13 @@ import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 
+    /* =========================================================
+       CONSTANTE
+    ========================================================= */
 
+    private const val APPS_CRIPTO_KEY =
+        "apps_cache_v2"
+        
 /* =========================================================
    ACTIVITY
 ========================================================= */
@@ -203,12 +209,7 @@ class AppsActivity : ComponentActivity() {
         Color(0xFF18181A)
 
 
-    /* =========================================================
-       CONSTANTE
-    ========================================================= */
 
-    private const val APPS_CRIPTO_KEY =
-        "apps_cache_v2"
 
 
     /* =========================================================

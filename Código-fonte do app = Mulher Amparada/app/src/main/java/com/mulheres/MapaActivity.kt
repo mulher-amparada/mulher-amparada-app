@@ -1,5 +1,8 @@
 package com.mulheres
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.systemBars
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
@@ -369,19 +372,19 @@ private fun MapaTela(
 
 
     Box(
-
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .background(
-                    if (dark)
-                        FundoEscuro
-                    else
-                        FundoClaro
-                )
-                
-
-    ) {
+    modifier =
+        Modifier
+            .fillMaxSize()
+            .background(
+                if (dark)
+                    FundoEscuro
+                else
+                    FundoClaro
+            )
+            .windowInsetsPadding(
+                WindowInsets.systemBars
+            )
+) {
 
 
         AndroidView(
@@ -819,10 +822,10 @@ private fun ControlesMapa(
                     .align(
                         Alignment.BottomEnd
                     )
-                    .padding(
-                        end = 14.dp,
-                        bottom = 16.dp
-                    ),
+.padding(
+    end = 14.dp,
+    bottom = 24.dp
+),
 
             verticalArrangement =
                 Arrangement.spacedBy(

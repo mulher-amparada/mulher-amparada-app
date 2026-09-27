@@ -3,6 +3,8 @@ package com.mulheres
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.compose.material3.Icon
+import androidx.compose.ui.res.painterResource
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -10,6 +12,7 @@ import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +39,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -46,8 +50,13 @@ import androidx.compose.ui.unit.sp
 
 class ProtectActivity : ComponentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreate(
+        savedInstanceState: Bundle?
+    ) {
+
+        super.onCreate(
+            savedInstanceState
+        )
 
         window.addFlags(
             WindowManager.LayoutParams.FLAG_SECURE
@@ -105,6 +114,15 @@ class ProtectActivity : ComponentActivity() {
                             )
                         )
                     },
+                    
+                    abrirApps = {
+    startActivity(
+        Intent(
+            this,
+            AppsActivity::class.java
+        )
+    )
+},
 
                     abrirArquivos = {
                         startActivity(
@@ -155,23 +173,88 @@ private val Quicksand = FontFamily(
 
 
 /* =========================================================
-   CORES
+   CORES — ESCURO
 ========================================================= */
 
-private val Fundo =
-    Color.Black
+private val FundoEscuro =
+    Color(0xFF050507)
 
-private val Texto =
-    Color.White
+private val TextoEscuro =
+    Color(0xFFF8F8FA)
 
-private val TextoSuave =
+private val TextoSuaveEscuro =
     Color(0xFFB7B7C0)
 
-private val TextoMuted =
+private val TextoMutedEscuro =
     Color(0xFF777782)
+
+private val SecaoEscuro =
+    Color(0xFF8F8F99)
+
+private val CartaoEscuro =
+    Color(0x080FFFFFF)
+
+private val BordaCartaoEscuro =
+    Color.White.copy(
+        alpha = 0.06f
+    )
+
+private val CirculoEscuro =
+    Color.White.copy(
+        alpha = 0.025f
+    )
+
+private val SetaEscuro =
+    Color(0xFF666671)
+
+
+/* =========================================================
+   CORES — CLARO
+========================================================= */
+
+private val FundoClaro =
+    Color(0xFFF7F7FA)
+
+private val TextoClaro =
+    Color(0xFF17171B)
+
+private val TextoSuaveClaro =
+    Color(0xFF666671)
+
+private val TextoMutedClaro =
+    Color(0xFF85858F)
+
+private val SecaoClaro =
+    Color(0xFF74747E)
+
+private val CartaoClaro =
+    Color(0xFFFFFFFF)
+
+private val BordaCartaoClaro =
+    Color(0x14000000)
+
+private val CirculoClaro =
+    Color(0x08000000)
+
+private val SetaClaro =
+    Color(0xFF8A8A94)
+
+
+/* =========================================================
+   CORES GERAIS
+========================================================= */
 
 private val Rosa =
     Color(0xFFFF3F82)
+
+private val RosaClaro =
+    Color(0xFFFF3F82)
+
+private val RoxoInicio =
+    Color(0xFF8B5CF6)
+
+private val RoxoFim =
+    Color(0xFF6425D9)
 
 
 /* =========================================================
@@ -190,13 +273,31 @@ private data class Acesso(
 
 @androidx.compose.runtime.Composable
 private fun MeusAcessos(
+
     abrirNavegador: () -> Unit,
+
     abrirMapa: () -> Unit,
+
     abrirGravador: () -> Unit,
+
     abrirArquivos: () -> Unit,
+
     abrirCalculadora: () -> Unit,
+
     abrirRelogio: () -> Unit
+abrirApps: () -> Unit
 ) {
+
+    val dark =
+        isSystemInDarkTheme()
+
+
+    val fundo =
+        if (dark)
+            FundoEscuro
+        else
+            FundoClaro
+
 
     val recursos = listOf(
 
@@ -291,12 +392,16 @@ private fun MeusAcessos(
 
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Fundo)
-            .windowInsetsPadding(
-                WindowInsets.safeDrawing
-            )
+
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(
+                    fundo
+                )
+                .windowInsetsPadding(
+                    WindowInsets.safeDrawing
+                )
     ) {
 
         LazyColumn(
@@ -313,7 +418,9 @@ private fun MeusAcessos(
                 ),
 
             verticalArrangement =
-                Arrangement.spacedBy(10.dp)
+                Arrangement.spacedBy(
+                    10.dp
+                )
         ) {
 
             /* =================================================
@@ -322,7 +429,9 @@ private fun MeusAcessos(
 
             item {
 
-                Hero()
+                Hero(
+                    dark = dark
+                )
             }
 
 
@@ -333,7 +442,8 @@ private fun MeusAcessos(
             item {
 
                 TituloSecao(
-                    "Recursos"
+                    titulo = "Recursos",
+                    dark = dark
                 )
 
                 Spacer(
@@ -344,12 +454,20 @@ private fun MeusAcessos(
 
 
             items(
+
                 items = recursos,
-                key = { it.titulo }
+
+                key = {
+                    it.titulo
+                }
+
             ) { acesso ->
 
                 Cartao(
+
                     acesso = acesso,
+
+                    dark = dark,
 
                     onClick = {
 
@@ -370,6 +488,11 @@ private fun MeusAcessos(
                             "Navegador" -> {
                                 abrirNavegador()
                             }
+                            
+                            
+                            "Tela de aplicativos" -> {
+    abrirApps()
+}
                         }
                     }
                 )
@@ -388,7 +511,8 @@ private fun MeusAcessos(
                 )
 
                 TituloSecao(
-                    "Outras funções"
+                    titulo = "Outras funções",
+                    dark = dark
                 )
 
                 Spacer(
@@ -399,12 +523,20 @@ private fun MeusAcessos(
 
 
             items(
+
                 items = outrasFuncoes,
-                key = { it.titulo }
+
+                key = {
+                    it.titulo
+                }
+
             ) { acesso ->
 
                 Cartao(
+
                     acesso = acesso,
+
+                    dark = dark,
 
                     onClick = {
 
@@ -435,7 +567,8 @@ private fun MeusAcessos(
                 )
 
                 TituloSecao(
-                    "Especial, só para você!"
+                    titulo = "Especial, só para você!",
+                    dark = dark
                 )
 
                 Spacer(
@@ -446,12 +579,22 @@ private fun MeusAcessos(
 
 
             items(
+
                 items = especiais,
-                key = { it.titulo }
+
+                key = {
+                    it.titulo
+                }
+
             ) { acesso ->
 
                 Cartao(
-                    acesso = acesso
+
+                    acesso = acesso,
+
+                    dark = dark,
+
+                    onClick = {}
                 )
             }
 
@@ -473,17 +616,41 @@ private fun MeusAcessos(
 ========================================================= */
 
 @androidx.compose.runtime.Composable
-private fun Hero() {
+private fun Hero(
+    dark: Boolean
+) {
+
+    val texto =
+        if (dark)
+            TextoEscuro
+        else
+            TextoClaro
+
+
+    val textoSuave =
+        if (dark)
+            TextoSuaveEscuro
+        else
+            TextoSuaveClaro
+
+
+    val selo =
+        if (dark)
+            Color(0xFF91889F)
+        else
+            Color(0xFF77717F)
+
 
     Column(
 
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(310.dp)
-            .padding(
-                top = 20.dp,
-                bottom = 70.dp
-            ),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(310.dp)
+                .padding(
+                    top = 20.dp,
+                    bottom = 70.dp
+                ),
 
         horizontalAlignment =
             Alignment.CenterHorizontally,
@@ -494,33 +661,46 @@ private fun Hero() {
 
         Box(
 
-            modifier = Modifier
-                .size(104.dp)
-                .shadow(
-                    elevation = 14.dp,
-                    shape =
-                        RoundedCornerShape(30.dp)
-                )
-                .clip(
-                    RoundedCornerShape(30.dp)
-                )
-                .background(
-                    Brush.linearGradient(
-                        listOf(
-                            Color(0xFF8B5CF6),
-                            Color(0xFF6425D9)
+            modifier =
+                Modifier
+                    .size(104.dp)
+                    .shadow(
+                        elevation = 14.dp,
+                        shape =
+                            RoundedCornerShape(
+                                30.dp
+                            )
+                    )
+                    .clip(
+                        RoundedCornerShape(
+                            30.dp
                         )
                     )
-                )
-                .border(
-                    width = 1.dp,
-                    color =
-                        Color.White.copy(
-                            alpha = 0.16f
-                        ),
-                    shape =
-                        RoundedCornerShape(30.dp)
-                ),
+                    .background(
+                        Brush.linearGradient(
+                            listOf(
+                                RoxoInicio,
+                                RoxoFim
+                            )
+                        )
+                    )
+                    .border(
+                        width = 1.dp,
+
+                        color =
+                            Color.White.copy(
+                                alpha =
+                                    if (dark)
+                                        0.16f
+                                    else
+                                        0.30f
+                            ),
+
+                        shape =
+                            RoundedCornerShape(
+                                30.dp
+                            )
+                    ),
 
             contentAlignment =
                 Alignment.Center
@@ -529,17 +709,18 @@ private fun Hero() {
             Image(
 
                 painter =
-                    androidx.compose.ui.res
-                        .painterResource(
-                            id =
-                                R.drawable.ic_lock
-                        ),
+                    painterResource(
+                        id =
+                            R.drawable.ic_lock
+                    ),
 
                 contentDescription =
                     null,
 
                 modifier =
-                    Modifier.size(50.dp),
+                    Modifier.size(
+                        50.dp
+                    ),
 
                 contentScale =
                     ContentScale.Fit
@@ -559,7 +740,7 @@ private fun Hero() {
                 "Meus Acessos",
 
             color =
-                Texto,
+                texto,
 
             fontFamily =
                 Quicksand,
@@ -600,7 +781,7 @@ private fun Hero() {
                     ),
 
             color =
-                TextoSuave,
+                textoSuave,
 
             fontFamily =
                 Quicksand,
@@ -631,7 +812,7 @@ private fun Hero() {
                 "•  ÁREA PROTEGIDA",
 
             color =
-                Color(0xFF91889F),
+                selo,
 
             fontFamily =
                 Quicksand,
@@ -655,8 +836,19 @@ private fun Hero() {
 
 @androidx.compose.runtime.Composable
 private fun TituloSecao(
-    titulo: String
+
+    titulo: String,
+
+    dark: Boolean
+
 ) {
+
+    val corTexto =
+        if (dark)
+            SecaoEscuro
+        else
+            SecaoClaro
+
 
     Row(
 
@@ -695,7 +887,7 @@ private fun TituloSecao(
                 titulo.uppercase(),
 
             color =
-                Color(0xFF8F8F99),
+                corTexto,
 
             fontFamily =
                 Quicksand,
@@ -719,33 +911,62 @@ private fun TituloSecao(
 
 @androidx.compose.runtime.Composable
 private fun Cartao(
+
     acesso: Acesso,
+
+    dark: Boolean,
+
     onClick: () -> Unit = {}
+
 ) {
+
+    val fundoCartao =
+        if (dark)
+            CartaoEscuro
+        else
+            CartaoClaro
+
+
+    val borda =
+        if (dark)
+            BordaCartaoEscuro
+        else
+            BordaCartaoClaro
+
 
     Row(
 
         modifier =
             Modifier
                 .fillMaxWidth()
+
                 .clip(
-                    RoundedCornerShape(21.dp)
+                    RoundedCornerShape(
+                        21.dp
+                    )
                 )
+
                 .background(
-                    Color(0x08FFFFFF)
+                    fundoCartao
                 )
+
                 .border(
+
                     width = 1.dp,
+
                     color =
-                        Color.White.copy(
-                            alpha = 0.06f
-                        ),
+                        borda,
+
                     shape =
-                        RoundedCornerShape(21.dp)
+                        RoundedCornerShape(
+                            21.dp
+                        )
                 )
+
                 .clickable {
                     onClick()
                 }
+
                 .padding(
                     horizontal = 16.dp,
                     vertical = 15.dp
@@ -760,6 +981,9 @@ private fun Cartao(
             acesso =
                 acesso,
 
+            dark =
+                dark,
+
             modifier =
                 Modifier.fillMaxWidth()
         )
@@ -773,9 +997,42 @@ private fun Cartao(
 
 @androidx.compose.runtime.Composable
 private fun ConteudoCartao(
+
     acesso: Acesso,
+
+    dark: Boolean,
+
     modifier: Modifier
+
 ) {
+
+    val texto =
+        if (dark)
+            TextoEscuro
+        else
+            TextoClaro
+
+
+    val descricao =
+        if (dark)
+            TextoMutedEscuro
+        else
+            TextoMutedClaro
+
+
+    val circulo =
+        if (dark)
+            CirculoEscuro
+        else
+            CirculoClaro
+
+
+    val seta =
+        if (dark)
+            SetaEscuro
+        else
+            SetaClaro
+
 
     Row(
 
@@ -804,7 +1061,7 @@ private fun ConteudoCartao(
                     acesso.titulo,
 
                 color =
-                    Color(0xFFF8F8FA),
+                    texto,
 
                 fontFamily =
                     Quicksand,
@@ -832,7 +1089,7 @@ private fun ConteudoCartao(
                     acesso.descricao,
 
                 color =
-                    TextoMuted,
+                    descricao,
 
                 fontFamily =
                     Quicksand,
@@ -856,41 +1113,36 @@ private fun ConteudoCartao(
 
 
         Box(
-
-            modifier =
-                Modifier
-                    .size(34.dp)
-                    .clip(CircleShape)
-                    .background(
-                        Color.White.copy(
-                            alpha = 0.025f
-                        )
-                    ),
-
-            contentAlignment =
-                Alignment.Center
-        ) {
-
-            androidx.compose.material3.Text(
-
-                text =
-                    "›",
-
-                color =
-                    Color(0xFF666671),
-
-                fontFamily =
-                    Quicksand,
-
-                fontSize =
-                    25.sp,
-
-                fontWeight =
-                    FontWeight.Medium,
-
-                textAlign =
-                    TextAlign.Center
+    modifier =
+        Modifier
+            .size(34.dp)
+            .clip(
+                CircleShape
             )
-        }
+            .background(
+                circulo
+            ),
+
+    contentAlignment =
+        Alignment.Center
+) {
+
+    Icon(
+        painter =
+            painterResource(
+                R.drawable.ic_arrow
+            ),
+
+        contentDescription =
+            null,
+
+        tint =
+            seta,
+
+        modifier =
+            Modifier.size(18.dp)
+    )
+}
     }
 }
+

@@ -39,7 +39,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -70,69 +69,69 @@ class ProtectActivity : ComponentActivity() {
 
                 MeusAcessos(
 
-                    abrirNavegador = {
-                        startActivity(
-                            Intent(
-                                this,
-                                MainActivity::class.java
-                            )
-                        )
-                    },
-
-                    abrirMapa = {
-                        startActivity(
-                            Intent(
-                                this,
-                                MapaActivity::class.java
-                            )
-                        )
-                    },
-
-                    abrirCalculadora = {
-                        startActivity(
-                            Intent(
-                                this,
-                                CalcActivity::class.java
-                            )
-                        )
-                    },
-
-                    abrirRelogio = {
-                        startActivity(
-                            Intent(
-                                this,
-                                RelogioActivity::class.java
-                            )
-                        )
-                    },
-
-                    abrirGravador = {
-                        startActivity(
-                            Intent(
-                                this,
-                                GravarActivity::class.java
-                            )
-                        )
-                    },
-                    
-                    abrirApps = {
-    startActivity(
-        Intent(
-            this,
-            AppsActivity::class.java
+    abrirNavegador = {
+        startActivity(
+            Intent(
+                this,
+                MainActivity::class.java
+            )
         )
-    )
-},
+    },
 
-                    abrirArquivos = {
-                        startActivity(
-                            Intent(
-                                this,
-                                FileActivity::class.java
-                            )
-                        )
-                    }
-                )
+    abrirMapa = {
+        startActivity(
+            Intent(
+                this,
+                MapaActivity::class.java
+            )
+        )
+    },
+
+    abrirCalculadora = {
+        startActivity(
+            Intent(
+                this,
+                CalcActivity::class.java
+            )
+        )
+    },
+
+    abrirRelogio = {
+        startActivity(
+            Intent(
+                this,
+                RelogioActivity::class.java
+            )
+        )
+    },
+
+    abrirGravador = {
+        startActivity(
+            Intent(
+                this,
+                GravarActivity::class.java
+            )
+        )
+    },
+
+    abrirArquivos = {
+        startActivity(
+            Intent(
+                this,
+                FileActivity::class.java
+            )
+        )
+    },
+
+    abrirApps = {
+        startActivity(
+            Intent(
+                this,
+                AppsActivity::class.java
+            )
+        )
+    }
+)
             }
         }
     }
@@ -284,10 +283,11 @@ private fun MeusAcessos(
 
     abrirCalculadora: () -> Unit,
 
-    abrirRelogio: () -> Unit
-abrirApps: () -> Unit
-) {
+    abrirRelogio: () -> Unit,
 
+    abrirApps: () -> Unit
+
+) {
     val dark =
         isSystemInDarkTheme()
 
@@ -490,9 +490,7 @@ abrirApps: () -> Unit
                             }
                             
                             
-                            "Tela de aplicativos" -> {
-    abrirApps()
-}
+
                         }
                     }
                 )
@@ -549,6 +547,10 @@ abrirApps: () -> Unit
                             "Meus arquivos" -> {
                                 abrirArquivos()
                             }
+                            
+                                                        "Tela de aplicativos" -> {
+    abrirApps()
+}
                         }
                     }
                 )

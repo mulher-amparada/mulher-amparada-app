@@ -1162,12 +1162,9 @@ fun desativarFullscreen() {
         WindowManager.LayoutParams.FLAG_SECURE
     )
 
-    enableEdgeToEdge()
+    
 
-    WindowCompat.setDecorFitsSystemWindows(
-        window,
-        false
-    )
+    
 
     verificarPermissoes()
 

@@ -35,7 +35,6 @@ import android.telephony.TelephonyManager
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
@@ -2534,42 +2533,61 @@ private fun MulherAmparadaTheme(
 
     androidx.compose.runtime.SideEffect {
 
-    val window =
-        (context as ComponentActivity).window
+        val window =
+            (context as ComponentActivity).window
 
-    WindowCompat.setDecorFitsSystemWindows(
-        window,
-        false
-    )
+        /*
+         * NÃO usar edge-to-edge.
+         *
+         * O conteúdo fica separado das barras
+         * do sistema.
+         */
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            true
+        )
 
-    window.statusBarColor =
-    if (dark)
-        AndroidColor.BLACK
-    else
-        AndroidColor.WHITE
+        /*
+         * BARRA DE STATUS
+         */
+        window.statusBarColor =
+            AndroidColor.BLACK
 
-window.navigationBarColor =
-    if (dark)
-        AndroidColor.BLACK
-    else
-        AndroidColor.WHITE
+        /*
+         * BARRA DE NAVEGAÇÃO
+         */
+        window.navigationBarColor =
+            AndroidColor.BLACK
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        window.isNavigationBarContrastEnforced = false
+        /*
+         * Impede o Android de aplicar contraste
+         * automático na barra de navegação.
+         */
+        if (
+            Build.VERSION.SDK_INT >=
+            Build.VERSION_CODES.Q
+        ) {
+
+            window.isNavigationBarContrastEnforced =
+                false
+        }
+
+        /*
+         * ÍCONES das duas barras sempre claros,
+         * porque o fundo das barras é preto.
+         */
+        WindowInsetsControllerCompat(
+            window,
+            window.decorView
+        ).apply {
+
+            isAppearanceLightStatusBars =
+                false
+
+            isAppearanceLightNavigationBars =
+                false
+        }
     }
-
-    WindowInsetsControllerCompat(
-        window,
-        window.decorView
-    ).apply {
-
-        isAppearanceLightStatusBars =
-            !dark
-
-        isAppearanceLightNavigationBars =
-            !dark
-    }
-}
 
     MaterialTheme(
 
@@ -2594,7 +2612,6 @@ window.navigationBarColor =
         content = content
     )
 }
-
 
 /* =========================================================
    FONTE

@@ -1,6 +1,8 @@
 package com.mulheres
 
 import android.graphics.Color as AndroidColor
+import androidx.compose.foundation.LocalOverscrollFactory
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.core.view.WindowCompat
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +12,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.overscroll
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -488,262 +489,264 @@ private fun MeusAcessos(
     )
 
 
-    Box(
-
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .background(
-                    fundo
-                )
-                .windowInsetsPadding(
-                    WindowInsets.safeDrawing
-                )
+    CompositionLocalProvider(
+        LocalOverscrollFactory provides null
     ) {
 
-        LazyColumn(
-
+        Box(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .overscroll(null),
-
-            contentPadding =
-                PaddingValues(
-                    start = 18.dp,
-                    end = 18.dp,
-                    top = 22.dp,
-                    bottom = 70.dp
-                ),
-
-            verticalArrangement =
-                Arrangement.spacedBy(
-                    10.dp
-                )
+                    .background(
+                        fundo
+                    )
+                    .windowInsetsPadding(
+                        WindowInsets.safeDrawing
+                    )
         ) {
 
-            /* =================================================
-               HERO
-            ================================================= */
+            LazyColumn(
 
-            item {
+                modifier =
+                    Modifier
+                        .fillMaxSize(),
 
-                Hero(
-                    dark = dark
-                )
-            }
+                contentPadding =
+                    PaddingValues(
+                        start = 18.dp,
+                        end = 18.dp,
+                        top = 22.dp,
+                        bottom = 70.dp
+                    ),
 
+                verticalArrangement =
+                    Arrangement.spacedBy(
+                        10.dp
+                    )
+            ) {
 
-            /* =================================================
-               RECURSOS
-            ================================================= */
+                /* =================================================
+                   HERO
+                ================================================= */
 
-            item {
+                item {
 
-                TituloSecao(
-                    titulo = "Recursos",
-                    dark = dark
-                )
-
-                Spacer(
-                    modifier =
-                        Modifier.height(4.dp)
-                )
-            }
-
-
-            items(
-
-                items = recursos,
-
-                key = {
-                    it.titulo
+                    Hero(
+                        dark = dark
+                    )
                 }
 
-            ) { acesso ->
 
-                Cartao(
+                /* =================================================
+                   RECURSOS
+                ================================================= */
 
-                    acesso = acesso,
+                item {
 
-                    dark = dark,
+                    TituloSecao(
+                        titulo = "Recursos",
+                        dark = dark
+                    )
 
-                    onClick = {
-
-                        when (acesso.titulo) {
-
-                            "Calendário menstrual" -> {
-                                abrirCiclo()
-                            }
-
-                            "Mapa da sua região" -> {
-                                abrirMapa()
-                            }
-
-                            "Diário e anotações" -> {
-                                abrirDiario()
-                            }
-
-                            "Rotina gamificada" -> {
-                                abrirRotina()
-                            }
-
-                            "Relógio + Localização" -> {
-                                abrirRelogio()
-                            }
-
-                            "Calculadora" -> {
-                                abrirCalculadora()
-                            }
-
-                            "Minhas tarefas" -> {
-                                abrirTarefa()
-                            }
-
-                            "Navegador" -> {
-                                abrirNavegador()
-                            }
-                        }
-                    }
-                )
-            }
-
-
-            /* =================================================
-               OUTRAS FUNÇÕES
-            ================================================= */
-
-            item {
-
-                Spacer(
-                    modifier =
-                        Modifier.height(22.dp)
-                )
-
-                TituloSecao(
-                    titulo = "Outras funções",
-                    dark = dark
-                )
-
-                Spacer(
-                    modifier =
-                        Modifier.height(4.dp)
-                )
-            }
-
-
-            items(
-
-                items = outrasFuncoes,
-
-                key = {
-                    it.titulo
+                    Spacer(
+                        modifier =
+                            Modifier.height(4.dp)
+                    )
                 }
 
-            ) { acesso ->
 
-                Cartao(
+                items(
 
-                    acesso = acesso,
+                    items = recursos,
 
-                    dark = dark,
+                    key = {
+                        it.titulo
+                    }
 
-                    onClick = {
+                ) { acesso ->
 
-                        when (acesso.titulo) {
+                    Cartao(
 
-                            "Gravador de voz" -> {
-                                abrirGravador()
-                            }
+                        acesso = acesso,
 
-                            "Meus arquivos" -> {
-                                abrirArquivos()
-                            }
+                        dark = dark,
 
-                            "Tela de aplicativos" -> {
-                                abrirApps()
+                        onClick = {
+
+                            when (acesso.titulo) {
+
+                                "Calendário menstrual" -> {
+                                    abrirCiclo()
+                                }
+
+                                "Mapa da sua região" -> {
+                                    abrirMapa()
+                                }
+
+                                "Diário e anotações" -> {
+                                    abrirDiario()
+                                }
+
+                                "Rotina gamificada" -> {
+                                    abrirRotina()
+                                }
+
+                                "Relógio + Localização" -> {
+                                    abrirRelogio()
+                                }
+
+                                "Calculadora" -> {
+                                    abrirCalculadora()
+                                }
+
+                                "Minhas tarefas" -> {
+                                    abrirTarefa()
+                                }
+
+                                "Navegador" -> {
+                                    abrirNavegador()
+                                }
                             }
                         }
-                    }
-                )
-            }
-
-
-            /* =================================================
-               ESPECIAL
-            ================================================= */
-
-            item {
-
-                Spacer(
-                    modifier =
-                        Modifier.height(22.dp)
-                )
-
-                TituloSecao(
-                    titulo = "Especial, só para você!",
-                    dark = dark
-                )
-
-                Spacer(
-                    modifier =
-                        Modifier.height(4.dp)
-                )
-            }
-
-
-            items(
-
-                items = especiais,
-
-                key = {
-                    it.titulo
+                    )
                 }
 
-            ) { acesso ->
 
-                Cartao(
+                /* =================================================
+                   OUTRAS FUNÇÕES
+                ================================================= */
 
-                    acesso = acesso,
+                item {
 
-                    dark = dark,
+                    Spacer(
+                        modifier =
+                            Modifier.height(22.dp)
+                    )
 
-                    onClick = {
+                    TituloSecao(
+                        titulo = "Outras funções",
+                        dark = dark
+                    )
 
-                        when (acesso.titulo) {
+                    Spacer(
+                        modifier =
+                            Modifier.height(4.dp)
+                    )
+                }
 
-                            "Feliz Dia das Mulheres!" -> {
-                                abrirDia()
-                            }
 
-                            "100 dos seus direitos" -> {
-                                abrirDireitos()
-                            }
+                items(
 
-                            "Dicas de como recuperar sua autonomia financeira" -> {
-                                abrirFinancas()
-                            }
+                    items = outrasFuncoes,
 
-                            "Uma carta para você, mulher!" -> {
-                                abrirAbout()
+                    key = {
+                        it.titulo
+                    }
+
+                ) { acesso ->
+
+                    Cartao(
+
+                        acesso = acesso,
+
+                        dark = dark,
+
+                        onClick = {
+
+                            when (acesso.titulo) {
+
+                                "Gravador de voz" -> {
+                                    abrirGravador()
+                                }
+
+                                "Meus arquivos" -> {
+                                    abrirArquivos()
+                                }
+
+                                "Tela de aplicativos" -> {
+                                    abrirApps()
+                                }
                             }
                         }
+                    )
+                }
+
+
+                /* =================================================
+                   ESPECIAL
+                ================================================= */
+
+                item {
+
+                    Spacer(
+                        modifier =
+                            Modifier.height(22.dp)
+                    )
+
+                    TituloSecao(
+                        titulo = "Especial, só para você!",
+                        dark = dark
+                    )
+
+                    Spacer(
+                        modifier =
+                            Modifier.height(4.dp)
+                    )
+                }
+
+
+                items(
+
+                    items = especiais,
+
+                    key = {
+                        it.titulo
                     }
-                )
-            }
+
+                ) { acesso ->
+
+                    Cartao(
+
+                        acesso = acesso,
+
+                        dark = dark,
+
+                        onClick = {
+
+                            when (acesso.titulo) {
+
+                                "Feliz Dia das Mulheres!" -> {
+                                    abrirDia()
+                                }
+
+                                "100 dos seus direitos" -> {
+                                    abrirDireitos()
+                                }
+
+                                "Dicas de como recuperar sua autonomia financeira" -> {
+                                    abrirFinancas()
+                                }
+
+                                "Uma carta para você, mulher!" -> {
+                                    abrirAbout()
+                                }
+                            }
+                        }
+                    )
+                }
 
 
-            item {
+                item {
 
-                Spacer(
-                    modifier =
-                        Modifier.height(10.dp)
-                )
+                    Spacer(
+                        modifier =
+                            Modifier.height(10.dp)
+                    )
+                }
             }
         }
     }
 }
-
 
 /* =========================================================
    HERO

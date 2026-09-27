@@ -79,7 +79,37 @@ class ProtectActivity : ComponentActivity() {
                 LocalOverscrollFactory provides null
             ) {
 
-                MeusAcessos(
+                private fun MeusAcessos(
+
+    abrirCiclo: () -> Unit,
+
+    abrirNavegador: () -> Unit,
+
+    abrirMapa: () -> Unit,
+
+    abrirDiario: () -> Unit,
+
+    abrirGravador: () -> Unit,
+
+    abrirArquivos: () -> Unit,
+
+    abrirCalculadora: () -> Unit,
+
+    abrirRelogio: () -> Unit,
+
+    abrirRotina: () -> Unit,
+
+    abrirApps: () -> Unit,
+
+    abrirDia: () -> Unit,
+
+    abrirDireitos: () -> Unit,
+
+    abrirFinancas: () -> Unit,
+
+    abrirAbout: () -> Unit
+
+) {(
 
     abrirCiclo = {
         startActivity(
@@ -168,6 +198,15 @@ abrirRelogio = {
         Intent(
             this,
             AppsActivity::class.java
+        )
+    )
+},
+
+abrirDia = {
+    startActivity(
+        Intent(
+            this,
+            DiaActivity::class.java
         )
     )
 },
@@ -357,6 +396,8 @@ private fun MeusAcessos(
     abrirRotina: () -> Unit,
 
     abrirApps: () -> Unit,
+
+    abrirDia: () -> Unit,
 
     abrirDireitos: () -> Unit,
 
@@ -686,6 +727,10 @@ private fun MeusAcessos(
     onClick = {
 
         when (acesso.titulo) {
+
+    "Feliz Dia das Mulheres!" -> {
+        abrirDia()
+    }
 
     "100 dos seus direitos" -> {
         abrirDireitos()

@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -298,15 +297,20 @@ private fun MapaTela(
         }
     }
 
-    Box(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .background(Fundo)
-                .windowInsetsPadding(
-                    androidx.compose.foundation.layout.WindowInsets.safeDrawing
-                )
-    ) {
+Box(
+    modifier =
+        Modifier
+            .fillMaxSize()
+            .background(
+                if (dark)
+                    FundoEscuro
+                else
+                    FundoClaro
+            )
+            .windowInsetsPadding(
+                androidx.compose.foundation.layout.WindowInsets.safeDrawing
+            )
+) {
 
         AndroidView(
 
@@ -479,11 +483,11 @@ private fun CabecalhoMapa(
                     RoundedCornerShape(17.dp)
                 )
                 .padding(
-                    start = 13.dp,
-                    end = 8.dp,
-                    top = 7.dp,
-                    bottom = 7.dp
-                ),
+    start = 12.dp,
+    top = 10.dp,
+    end = 12.dp,
+    bottom = 0.dp
+)
 
         verticalAlignment =
             Alignment.CenterVertically

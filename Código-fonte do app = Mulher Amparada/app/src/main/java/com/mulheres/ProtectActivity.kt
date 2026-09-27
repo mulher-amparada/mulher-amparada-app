@@ -47,12 +47,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.activity.enableEdgeToEdge
 
 
 class ProtectActivity : ComponentActivity() {
 override fun onCreate(
     savedInstanceState: Bundle?
 ) {
+        enableEdgeToEdge()
     super.onCreate(savedInstanceState)
 
     window.addFlags(

@@ -74,6 +74,7 @@ import java.util.Date
 import java.util.Locale
 import kotlin.math.max
 import kotlin.math.min
+import androidx.activity.enableEdgeToEdge
 
 /* =========================================================
    CORES
@@ -132,6 +133,7 @@ private val Quicksand = FontFamily(
 class DiarioActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         window.addFlags(

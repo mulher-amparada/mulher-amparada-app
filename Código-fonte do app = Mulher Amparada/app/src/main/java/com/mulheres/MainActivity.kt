@@ -20,6 +20,7 @@ import android.webkit.WebViewClient
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import androidx.activity.enableEdgeToEdge
 
 
 class MainActivity : AppCompatActivity() {
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(
     savedInstanceState: Bundle?
 ) {
+        enableEdgeToEdge()
     super.onCreate(savedInstanceState)
 
     // =====================================================

@@ -1155,6 +1155,7 @@ fun desativarFullscreen() {
     override fun onCreate(
     savedInstanceState: Bundle?
 ) {
+        enableEdgeToEdge()
     super.onCreate(savedInstanceState)
 
     window.setFlags(

@@ -78,6 +78,7 @@ import kotlinx.coroutines.delay
 import org.json.JSONArray
 import org.json.JSONObject
 import kotlin.math.max
+import androidx.activity.enableEdgeToEdge
 
 
 /* =========================================================
@@ -153,6 +154,7 @@ data class Tarefa(
 class TarefaActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         /*

@@ -38,6 +38,7 @@ import android.view.WindowManager
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.statusBars
+import androidx.activity.enableEdgeToEdge
 
 private val Quicksand = FontFamily(
     Font(R.font.quicksand, FontWeight.Normal),
@@ -53,6 +54,7 @@ private val PinkSoft = Color(0xFFFF6B9F)
 class ExigirActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
 window.setFlags(

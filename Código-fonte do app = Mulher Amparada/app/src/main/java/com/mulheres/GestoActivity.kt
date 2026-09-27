@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import android.view.WindowManager
+import androidx.activity.enableEdgeToEdge
 
 private val Quicksand = FontFamily(
     Font(R.font.quicksand, FontWeight.Normal),
@@ -53,6 +54,7 @@ private val PinkSoft = Color(0xFFFF6B9F)
 class GestoActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
 window.setFlags(

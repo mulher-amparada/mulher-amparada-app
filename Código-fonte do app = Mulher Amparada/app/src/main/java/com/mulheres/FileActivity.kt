@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView
 import java.io.File
 import java.text.Collator
 import java.util.Locale
+import androidx.activity.enableEdgeToEdge
 
 private class StorageCircleDrawable(
     private var color: Int
@@ -199,6 +200,7 @@ class FileActivity : AppCompatActivity() {
     override fun onCreate(
         savedInstanceState: Bundle?
     ) {
+        enableEdgeToEdge()
 
         super.onCreate(
             savedInstanceState
@@ -276,11 +278,11 @@ pathText.overScrollMode = View.OVER_SCROLL_NEVER
             false
         )
 
-        window.statusBarColor =
-            Color.TRANSPARENT
+       window.statusBarColor =
+    Color.BLACK
 
-        window.navigationBarColor =
-            Color.TRANSPARENT
+window.navigationBarColor =
+    Color.BLACK
 
         if (
             Build.VERSION.SDK_INT >=

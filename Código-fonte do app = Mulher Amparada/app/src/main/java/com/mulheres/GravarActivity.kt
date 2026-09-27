@@ -49,6 +49,7 @@ import java.util.Locale
 import java.util.TimeZone
 
 import kotlin.math.sqrt
+import androidx.activity.enableEdgeToEdge
 
 
 class GravarActivity : AppCompatActivity(),
@@ -130,6 +131,7 @@ class GravarActivity : AppCompatActivity(),
     override fun onCreate(
         savedInstanceState: Bundle?
     ) {
+        enableEdgeToEdge()
 
         super.onCreate(savedInstanceState)
 

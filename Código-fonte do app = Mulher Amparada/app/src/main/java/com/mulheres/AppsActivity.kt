@@ -74,6 +74,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
+import androidx.activity.enableEdgeToEdge
 
     /* =========================================================
        CONSTANTE
@@ -91,6 +92,7 @@ class AppsActivity : ComponentActivity() {
     override fun onCreate(
         savedInstanceState: Bundle?
     ) {
+        enableEdgeToEdge()
 
         super.onCreate(
             savedInstanceState

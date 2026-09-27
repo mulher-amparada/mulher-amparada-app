@@ -75,6 +75,7 @@ import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 import java.util.concurrent.TimeUnit
+import androidx.activity.enableEdgeToEdge
 
 private val Quicksand = FontFamily(
     Font(
@@ -125,6 +126,7 @@ class RelogioActivity : ComponentActivity() {
     override fun onCreate(
     savedInstanceState: Bundle?
 ) {
+        enableEdgeToEdge()
     super.onCreate(
         savedInstanceState
     )

@@ -53,6 +53,7 @@ import java.math.RoundingMode
 import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
+import androidx.activity.enableEdgeToEdge
 
 /* =========================================================
    FONTE
@@ -70,6 +71,7 @@ private val Quicksand = FontFamily(
 class CalcActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         /*

@@ -69,6 +69,7 @@ import java.util.Locale
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
+import androidx.activity.enableEdgeToEdge
 
 
 private val Quicksand = FontFamily(
@@ -319,6 +320,7 @@ class CicloActivity : ComponentActivity() {
     override fun onCreate(
         savedInstanceState: Bundle?
     ) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         window.addFlags(

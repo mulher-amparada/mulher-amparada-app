@@ -57,6 +57,7 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import kotlin.random.Random
+import androidx.activity.enableEdgeToEdge
 
 /* =========================================================
    ACTIVITY
@@ -67,6 +68,7 @@ class AssistenteActivity : ComponentActivity() {
     override fun onCreate(
     savedInstanceState: Bundle?
 ) {
+        enableEdgeToEdge()
     super.onCreate(savedInstanceState)
 
     window.setFlags(

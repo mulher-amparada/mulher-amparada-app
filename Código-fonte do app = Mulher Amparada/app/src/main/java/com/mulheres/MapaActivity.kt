@@ -63,6 +63,7 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polygon
+import androidx.activity.enableEdgeToEdge
 
 
 private val Quicksand =
@@ -124,6 +125,7 @@ class MapaActivity : ComponentActivity() {
     override fun onCreate(
         savedInstanceState: Bundle?
     ) {
+        enableEdgeToEdge()
 
         super.onCreate(
             savedInstanceState

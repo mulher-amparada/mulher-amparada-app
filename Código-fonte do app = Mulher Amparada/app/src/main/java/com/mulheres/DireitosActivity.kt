@@ -47,6 +47,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
+import androidx.activity.enableEdgeToEdge
 
 /* =========================================================
    CORES
@@ -101,6 +102,7 @@ class DireitosActivity : ComponentActivity() {
     override fun onCreate(
         savedInstanceState: Bundle?
     ) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         /* =====================================================

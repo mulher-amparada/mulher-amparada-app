@@ -94,6 +94,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sqrt
+import androidx.activity.enableEdgeToEdge
 
 
 private val Quicksand = FontFamily(
@@ -453,6 +454,7 @@ class DiaActivity : ComponentActivity() {
     override fun onCreate(
         savedInstanceState: Bundle?
     ) {
+        enableEdgeToEdge()
 
         super.onCreate(
             savedInstanceState

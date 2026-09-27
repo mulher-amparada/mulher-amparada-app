@@ -52,100 +52,108 @@ import androidx.compose.ui.unit.sp
 class ProtectActivity : ComponentActivity() {
 
     override fun onCreate(
-    savedInstanceState: Bundle?
-) {
-    super.onCreate(
-        savedInstanceState
-    )
+        savedInstanceState: Bundle?
+    ) {
+        super.onCreate(savedInstanceState)
 
-    window.addFlags(
-        WindowManager.LayoutParams.FLAG_SECURE
-    )
+        window.addFlags(
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
 
-    WindowCompat.setDecorFitsSystemWindows(
-        window,
-        false
-    )
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
 
-    window.statusBarColor =
-        AndroidColor.TRANSPARENT
+        window.statusBarColor =
+            AndroidColor.TRANSPARENT
 
-    WindowCompat.getInsetsController(
-        window,
-        window.decorView
-    ).isAppearanceLightStatusBars = false
+        WindowCompat.getInsetsController(
+            window,
+            window.decorView
+        ).isAppearanceLightStatusBars = false
 
-    setContent {
+        setContent {
 
-        androidx.compose.runtime.CompositionLocalProvider(
-            LocalOverscrollFactory provides null
-        ) {
+            androidx.compose.runtime.CompositionLocalProvider(
+                LocalOverscrollFactory provides null
+            ) {
 
-            MeusAcessos(
+                MeusAcessos(
 
-                abrirNavegador = {
-                    startActivity(
-                        Intent(
-                            this,
-                            MainActivity::class.java
+                    abrirNavegador = {
+                        startActivity(
+                            Intent(
+                                this,
+                                MainActivity::class.java
+                            )
                         )
-                    )
-                },
+                    },
 
-                abrirMapa = {
-                    startActivity(
-                        Intent(
-                            this,
-                            MapaActivity::class.java
+                    abrirMapa = {
+                        startActivity(
+                            Intent(
+                                this,
+                                MapaActivity::class.java
+                            )
                         )
-                    )
-                },
+                    },
 
-                abrirCalculadora = {
-                    startActivity(
-                        Intent(
-                            this,
-                            CalcActivity::class.java
+                    abrirDiario = {
+                        startActivity(
+                            Intent(
+                                this,
+                                DiarioActivity::class.java
+                            )
                         )
-                    )
-                },
+                    },
 
-                abrirRelogio = {
-                    startActivity(
-                        Intent(
-                            this,
-                            RelogioActivity::class.java
+                    abrirCalculadora = {
+                        startActivity(
+                            Intent(
+                                this,
+                                CalcActivity::class.java
+                            )
                         )
-                    )
-                },
+                    },
 
-                abrirGravador = {
-                    startActivity(
-                        Intent(
-                            this,
-                            GravarActivity::class.java
+                    abrirRelogio = {
+                        startActivity(
+                            Intent(
+                                this,
+                                RelogioActivity::class.java
+                            )
                         )
-                    )
-                },
+                    },
 
-                abrirArquivos = {
-                    startActivity(
-                        Intent(
-                            this,
-                            FileActivity::class.java
+                    abrirGravador = {
+                        startActivity(
+                            Intent(
+                                this,
+                                GravarActivity::class.java
+                            )
                         )
-                    )
-                },
+                    },
 
-                abrirApps = {
-                    startActivity(
-                        Intent(
-                            this,
-                            AppsActivity::class.java
+                    abrirArquivos = {
+                        startActivity(
+                            Intent(
+                                this,
+                                FileActivity::class.java
+                            )
                         )
-                    )
-                }
-            )
+                    },
+
+                    abrirApps = {
+                        startActivity(
+                            Intent(
+                                this,
+                                AppsActivity::class.java
+                            )
+                        )
+                    }
+                )
+            }
         }
     }
 }
@@ -287,6 +295,8 @@ private fun MeusAcessos(
     abrirNavegador: () -> Unit,
 
     abrirMapa: () -> Unit,
+
+    abrirDiario: () -> Unit,
 
     abrirGravador: () -> Unit,
 
@@ -487,6 +497,10 @@ private fun MeusAcessos(
                             "Mapa da sua região" -> {
                                 abrirMapa()
                             }
+                            
+                            "Diário e anotações" -> {
+    abrirDiario()
+}
 
                             "Relógio + Localização" -> {
                                 abrirRelogio()

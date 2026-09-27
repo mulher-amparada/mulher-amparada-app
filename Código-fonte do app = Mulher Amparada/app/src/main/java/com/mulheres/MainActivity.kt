@@ -1,6 +1,9 @@
 package com.mulheres
 
 import android.Manifest
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.foundation.layout.align
+import androidx.compose.foundation.layout.padding
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color as AndroidColor

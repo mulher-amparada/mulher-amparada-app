@@ -8,7 +8,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -174,49 +173,35 @@ class TarefaActivity : ComponentActivity() {
 
         setContent {
 
-            val dark =
-                androidx.compose.foundation.isSystemInDarkTheme()
+    val dark =
+        androidx.compose.foundation.isSystemInDarkTheme()
 
-            /*
-             * Barra de status.
-             */
-            window.statusBarColor =
-                if (dark) {
-                    AndroidColor.BLACK
-                } else {
-                    AndroidColor.WHITE
-                }
+    window.statusBarColor =
+        if (dark) {
+            AndroidColor.BLACK
+        } else {
+            AndroidColor.WHITE
+        }
 
-            /*
-             * Barra de navegação.
-             */
-            window.navigationBarColor =
-                if (dark) {
-                    AndroidColor.BLACK
-                } else {
-                    AndroidColor.WHITE
-                }
+    window.navigationBarColor =
+        if (dark) {
+            AndroidColor.BLACK
+        } else {
+            AndroidColor.WHITE
+        }
 
-            /*
-             * Ícones das barras:
-             * escuro = brancos
-             * claro = pretos
-             */
-            WindowCompat.getInsetsController(
-                window,
-                window.decorView
-            ).isAppearanceLightStatusBars = !dark
+    WindowCompat.getInsetsController(
+        window,
+        window.decorView
+    ).isAppearanceLightStatusBars = !dark
 
-            WindowCompat.getInsetsController(
-                window,
-                window.decorView
-            ).isAppearanceLightNavigationBars = !dark
+    WindowCompat.getInsetsController(
+        window,
+        window.decorView
+    ).isAppearanceLightNavigationBars = !dark
 
-            CompositionLocalProvider(
-                LocalOverscrollFactory provides null
-            ) {
-                TarefaScreen()
-            }
+    TarefaScreen()
+}
         }
     }
 }

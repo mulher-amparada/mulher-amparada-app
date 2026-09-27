@@ -10,7 +10,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.LocalOverscrollFactory
+import androidx.compose.foundation.overscroll
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -499,7 +499,7 @@ private fun MeusAcessos(
 
             modifier =
                 Modifier.fillMaxSize(),
-
+        .overscroll(null),
             contentPadding =
                 PaddingValues(
                     start = 18.dp,

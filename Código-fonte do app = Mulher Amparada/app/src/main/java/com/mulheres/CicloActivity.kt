@@ -352,7 +352,7 @@ private fun CicloApp() {
         if (dark) {
             Color.Black
         } else {
-            Color(0xFFF7F7F9)
+            Color(0xFFFFFFFF)
         }
 
     val texto =

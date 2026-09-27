@@ -466,10 +466,12 @@ private fun CabecalhoMapa(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .padding(
-                    horizontal = 12.dp,
-                    top = 10.dp
-                )
+.padding(
+    start = 12.dp,
+    top = 10.dp,
+    end = 12.dp,
+    bottom = 0.dp
+)
                 .clip(
                     RoundedCornerShape(17.dp)
                 )

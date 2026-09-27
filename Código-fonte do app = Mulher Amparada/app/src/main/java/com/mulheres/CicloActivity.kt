@@ -1038,14 +1038,7 @@ private fun ResumoCard(
             .clip(
                 RoundedCornerShape(22.dp)
             )
-            .background(
-                Brush.linearGradient(
-                    listOf(
-                        card,
-                        card.copy(alpha = .45f)
-                    )
-                )
-            )
+       .background(card)
             .border(
                 1.dp,
                 borda,

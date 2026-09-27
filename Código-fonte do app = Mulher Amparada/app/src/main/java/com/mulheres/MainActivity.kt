@@ -1,31 +1,47 @@
 package com.mulheres
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ProvideTextStyle
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -33,1564 +49,1510 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.view.WindowCompat
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.math.RoundingMode
-
-/* =========================================================
-   FONTE
-========================================================= */
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
+import java.util.concurrent.TimeUnit
 
 private val Quicksand = FontFamily(
-    Font(R.font.quicksand)
+    Font(
+        R.font.quicksand,
+        FontWeight.Normal
+    ),
+    Font(
+        R.font.quicksand,
+        FontWeight.Medium
+    ),
+    Font(
+        R.font.quicksand,
+        FontWeight.SemiBold
+    ),
+    Font(
+        R.font.quicksand,
+        FontWeight.Bold
+    ),
+    Font(
+        R.font.quicksand,
+        FontWeight.ExtraBold
+    )
 )
 
+private val Rosa = Color(0xFFFF8FAB)
+private val Rosa2 = Color(0xFFFF4F78)
+private val Rosa3 = Color(0xFFFFC2D1)
 
-/* =========================================================
-   ACTIVITY
-========================================================= */
+private val Verde = Color(0xFF63F59A)
+private val VerdeTexto = Color(0xFF9DFFBD)
+
+private val FundoEscuro = Color(0xFF08080A)
+private val CartaoEscuro = Color(0xFF111115)
+private val CartaoEscuro2 = Color(0xFF151519)
+
+private val TextoEscuro = Color.White
+private val TextoSuaveEscuro = Color(0xFF9E9EA8)
+private val TextoMutedEscuro = Color(0xFF777782)
+
+private val FundoClaro = Color(0xFFF7F7FA)
+private val CartaoClaro = Color.White
+private val TextoClaro = Color(0xFF17171B)
+private val TextoSuaveClaro = Color(0xFF686873)
+private val TextoMutedClaro = Color(0xFF92929D)
 
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        /*
-         * Impede screenshots e gravação da tela.
-         */
         window.addFlags(
             WindowManager.LayoutParams.FLAG_SECURE
         )
 
-        /*
-         * Faz o conteúdo respeitar as barras do sistema.
-         */
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            true
-        )
-
         setContent {
-            CalculadoraApp()
-        }
-    }
-}
-
-
-/* =========================================================
-   CORES — MODO ESCURO
-========================================================= */
-
-private val DarkBackground =
-    Color(0xFF000000)
-
-private val DarkDisplay =
-    Color(0xFF000000)
-
-private val DarkButton =
-    Color(0xFF202020)
-
-private val DarkFunction =
-    Color(0xFF2B2B2B)
-
-private val DarkOperator =
-    Color(0xFF252525)
-
-private val DarkEqual =
-    Color(0xFFFFFFFF)
-
-
-/* =========================================================
-   CORES — MODO CLARO
-========================================================= */
-
-private val LightBackground =
-    Color(0xFFF5F5F5)
-
-private val LightDisplay =
-    Color(0xFFFFFFFF)
-
-private val LightButton =
-    Color(0xFFE1E1E1)
-
-private val LightFunction =
-    Color(0xFFD5D5D5)
-
-private val LightOperator =
-    Color(0xFFDCDCDC)
-
-private val LightEqual =
-    Color(0xFF111111)
-
-
-/* =========================================================
-   APP
-========================================================= */
-
-@Composable
-private fun CalculadoraApp() {
-
-    val dark =
-        isSystemInDarkTheme()
-
-    val background =
-        if (dark) {
-            DarkBackground
-        } else {
-            LightBackground
-        }
-
-
-    /*
-     * Overscroll completamente desativado.
-     *
-     * A fonte Quicksand também é aplicada
-     * de uma única vez a todos os Text abaixo.
-     */
-    CompositionLocalProvider(
-        LocalOverscrollFactory provides null
-    ) {
-
-        ProvideTextStyle(
-            value =
-                LocalTextStyle.current.copy(
-                    fontFamily = Quicksand
-                )
-        ) {
-
-            Surface(
-                modifier =
-                    Modifier.fillMaxSize(),
-
-                color =
-                    background
+            CompositionLocalProvider(
+                LocalOverscrollFactory provides null
             ) {
-
-                Calculadora(
-                    dark = dark
-                )
+                RelogioApp()
             }
         }
     }
 }
 
-
-/* =========================================================
-   CALCULADORA
-========================================================= */
+data class DadosRelogio(
+    val hora: String,
+    val minuto: String,
+    val segundo: String,
+    val data: String,
+    val fuso: String,
+    val ano: Int,
+    val semestre: String,
+    val mes: String,
+    val semana: Int,
+    val bimestre: String,
+    val quinzena: String,
+    val diaDoAno: Int,
+    val utc: String,
+    val progresso: Float
+)
 
 @Composable
-private fun Calculadora(
+private fun RelogioApp() {
+
+    val dark = isSystemInDarkTheme()
+
+    val fundo =
+        if (dark) FundoEscuro else FundoClaro
+
+    CompositionLocalProvider(
+        androidx.compose.material3.LocalTextStyle provides
+            MaterialTheme.typography.bodyMedium.copy(
+                fontFamily = Quicksand
+            )
+    ) {
+
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = fundo
+        ) {
+
+            RelogioTela(
+                dark = dark
+            )
+        }
+    }
+}
+
+@Composable
+private fun RelogioTela(
     dark: Boolean
 ) {
 
-    var expression by remember {
-        mutableStateOf("")
+    val fusedLocationClient =
+        remember {
+            LocationServices.getFusedLocationProviderClient(
+                androidx.compose.ui.platform.LocalContext.current
+            )
+        }
+
+    val context =
+        androidx.compose.ui.platform.LocalContext.current
+
+    var dados by remember {
+        mutableStateOf(
+            obterDadosRelogio()
+        )
     }
 
-    var history by remember {
-        mutableStateOf("")
+    var pais by remember {
+        mutableStateOf("Localização atual")
     }
 
-    var acabouDeCalcular by remember {
+    var cidade by remember {
+        mutableStateOf("Obtendo localização...")
+    }
+
+    var statusLocalizacao by remember {
+        mutableStateOf("Detectando localização")
+    }
+
+    var textoStatus by remember {
+        mutableStateOf(
+            "O relógio usa somente o horário da sua localização atual."
+        )
+    }
+
+    var carregandoLocalizacao by remember {
         mutableStateOf(false)
     }
 
-    var erro by remember {
+    var mostrarToast by remember {
         mutableStateOf(false)
     }
 
-
-    /*
-     * Coroutine usada somente para
-     * remover a mensagem de erro.
-     */
-    val scope =
-        rememberCoroutineScope()
-
-
-    val background =
-        if (dark) {
-            DarkBackground
-        } else {
-            LightBackground
-        }
-
-
-    val displayBackground =
-        if (dark) {
-            DarkDisplay
-        } else {
-            LightDisplay
-        }
-
-
-    val displayText =
-        if (dark) {
-            Color.White
-        } else {
-            Color(0xFF111111)
-        }
-
-
-    val historyText =
-        if (dark) {
-            Color.White.copy(
-                alpha = .35f
-            )
-        } else {
-            Color.Black.copy(
-                alpha = .40f
-            )
-        }
-
-
-    Box(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .safeDrawingPadding()
-                .navigationBarsPadding()
-                .background(
-                    background
-                ),
-
-        contentAlignment =
-            Alignment.Center
-    ) {
-
-        Column(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = 10.dp,
-                        vertical = 12.dp
-                    ),
-
-            horizontalAlignment =
-                Alignment.CenterHorizontally
-        ) {
-
-
-            /* =================================================
-               DISPLAY
-            ================================================= */
-
-            Box(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .height(
-                            150.dp
-                        )
-                        .background(
-                            color =
-                                displayBackground,
-
-                            shape =
-                                RoundedCornerShape(
-                                    28.dp
-                                )
-                        )
-                        .padding(
-                            horizontal = 18.dp,
-                            vertical = 18.dp
-                        ),
-
-                contentAlignment =
-                    Alignment.BottomEnd
-            ) {
-
-                Column(
-                    modifier =
-                        Modifier.fillMaxWidth(),
-
-                    horizontalAlignment =
-                        Alignment.End,
-
-                    verticalArrangement =
-                        Arrangement.Bottom
-                ) {
-
-                    /*
-                     * Histórico.
-                     */
-                    if (
-                        history.isNotEmpty()
-                    ) {
-
-                        Text(
-                            text =
-                                history,
-
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        bottom = 7.dp
-                                    ),
-
-                            color =
-                                historyText,
-
-                            fontSize =
-                                14.sp,
-
-                            lineHeight =
-                                17.sp,
-
-                            textAlign =
-                                TextAlign.End,
-
-                            maxLines =
-                                1,
-
-                            overflow =
-                                TextOverflow.Ellipsis
-                        )
-                    }
-
-
-                    /*
-                     * Display principal.
-                     */
-                    Text(
-                        text =
-                            if (erro) {
-                                "Erro"
-                            } else {
-                                expression.ifEmpty {
-                                    "0"
-                                }
-                            },
-
-                        modifier =
-                            if (erro) {
-                                Modifier
-                                    .fillMaxWidth()
-                                    .shake()
-                            } else {
-                                Modifier
-                                    .fillMaxWidth()
-                            },
-
-                        color =
-                            displayText,
-
-                        fontSize =
-                            when {
-
-                                expression.length > 16 ->
-                                    34.sp
-
-                                expression.length > 13 ->
-                                    40.sp
-
-                                expression.length > 10 ->
-                                    46.sp
-
-                                else ->
-                                    58.sp
-                            },
-
-                        fontWeight =
-                            FontWeight.SemiBold,
-
-                        lineHeight =
-                            58.sp,
-
-                        textAlign =
-                            TextAlign.End,
-
-                        maxLines =
-                            1,
-
-                        overflow =
-                            TextOverflow.Ellipsis
-                    )
-                }
-            }
-
-
-            Spacer(
-                modifier =
-                    Modifier.height(
-                        16.dp
-                    )
-            )
-
-
-            /* =================================================
-               BOTÕES
-            ================================================= */
-
-            val rows =
-                listOf(
-
-                    listOf(
-                        ButtonData(
-                            "C",
-                            ButtonType.FUNCTION
-                        ),
-
-                        ButtonData(
-                            "back",
-                            ButtonType.FUNCTION
-                        ),
-
-                        ButtonData(
-                            "%",
-                            ButtonType.FUNCTION
-                        ),
-
-                        ButtonData(
-                            "÷",
-                            ButtonType.OPERATOR
-                        )
-                    ),
-
-                    listOf(
-                        ButtonData("7"),
-                        ButtonData("8"),
-                        ButtonData("9"),
-
-                        ButtonData(
-                            "×",
-                            ButtonType.OPERATOR
-                        )
-                    ),
-
-                    listOf(
-                        ButtonData("4"),
-                        ButtonData("5"),
-                        ButtonData("6"),
-
-                        ButtonData(
-                            "−",
-                            ButtonType.OPERATOR
-                        )
-                    ),
-
-                    listOf(
-                        ButtonData("1"),
-                        ButtonData("2"),
-                        ButtonData("3"),
-
-                        ButtonData(
-                            "+",
-                            ButtonType.OPERATOR
-                        )
-                    ),
-
-                    listOf(
-                        ButtonData(
-                            "=",
-                            ButtonType.EQUAL
-                        ),
-
-                        ButtonData("()"),
-                        ButtonData(","),
-                        ButtonData("0")
-                    )
-                )
-
-
-            Column(
-                modifier =
-                    Modifier.fillMaxWidth(),
-
-                verticalArrangement =
-                    Arrangement.spacedBy(
-                        10.dp
-                    )
-            ) {
-
-                rows.forEach { row ->
-
-                    Row(
-                        modifier =
-                            Modifier.fillMaxWidth(),
-
-                        horizontalArrangement =
-                            Arrangement.spacedBy(
-                                10.dp
-                            )
-                    ) {
-
-                        row.forEach { button ->
-
-                            CalculatorButton(
-                                data =
-                                    button,
-
-                                dark =
-                                    dark,
-
-                                modifier =
-                                    Modifier.weight(
-                                        1f
-                                    ),
-
-                                onClick = {
-
-                                    when (
-                                        button.value
-                                    ) {
-
-
-                                        /* =====================
-                                           LIMPAR
-                                        ===================== */
-
-                                        "C" -> {
-
-                                            expression =
-                                                ""
-
-                                            history =
-                                                ""
-
-                                            acabouDeCalcular =
-                                                false
-
-                                            erro =
-                                                false
-                                        }
-
-
-                                        /* =====================
-                                           APAGAR
-                                        ===================== */
-
-                                        "back" -> {
-
-                                            expression =
-                                                expression.dropLast(
-                                                    1
-                                                )
-
-                                            acabouDeCalcular =
-                                                false
-                                        }
-
-
-                                        /* =====================
-                                           IGUAL
-                                        ===================== */
-
-                                        "=" -> {
-
-                                            val result =
-                                                calcularExpressao(
-                                                    expression
-                                                )
-
-
-                                            if (
-                                                result == null
-                                            ) {
-
-                                                erro =
-                                                    true
-
-
-                                                scope.launch {
-
-                                                    delay(
-                                                        700
-                                                    )
-
-
-                                                    expression =
-                                                        ""
-
-                                                    history =
-                                                        ""
-
-                                                    acabouDeCalcular =
-                                                        false
-
-                                                    erro =
-                                                        false
-                                                }
-
-                                            } else {
-
-                                                history =
-                                                    "$expression ="
-
-                                                expression =
-                                                    result
-
-                                                acabouDeCalcular =
-                                                    true
-
-                                                erro =
-                                                    false
-                                            }
-                                        }
-
-
-                                        /* =====================
-                                           PARENTÊSES
-                                        ===================== */
-
-                                        "()" -> {
-
-                                            expression =
-                                                adicionarParenteses(
-                                                    expression,
-                                                    acabouDeCalcular
-                                                )
-
-                                            acabouDeCalcular =
-                                                false
-                                        }
-
-
-                                        /* =====================
-                                           VÍRGULA
-                                        ===================== */
-
-                                        "," -> {
-
-                                            if (
-                                                acabouDeCalcular
-                                            ) {
-
-                                                expression =
-                                                    ""
-
-                                                history =
-                                                    ""
-
-                                                acabouDeCalcular =
-                                                    false
-                                            }
-
-
-                                            expression =
-                                                adicionarDecimal(
-                                                    expression
-                                                )
-                                        }
-
-
-                                        /* =====================
-                                           PORCENTAGEM
-                                        ===================== */
-
-                                        "%" -> {
-
-                                            if (
-                                                expression.isNotEmpty() &&
-                                                (
-                                                    expression.last()
-                                                        .isDigit() ||
-                                                    expression.endsWith(
-                                                        ")"
-                                                    )
-                                                )
-                                            ) {
-
-                                                expression +=
-                                                    "%"
-                                            }
-                                        }
-
-
-                                        /* =====================
-                                           OPERADORES
-                                        ===================== */
-
-                                        "+",
-                                        "−",
-                                        "×",
-                                        "÷" -> {
-
-                                            val operator =
-                                                when (
-                                                    button.value
-                                                ) {
-
-                                                    "−" ->
-                                                        "-"
-
-                                                    "×" ->
-                                                        "*"
-
-                                                    "÷" ->
-                                                        "/"
-
-                                                    else ->
-                                                        "+"
-                                                }
-
-
-                                            expression =
-                                                adicionarOperador(
-                                                    expression,
-                                                    operator
-                                                )
-
-                                            acabouDeCalcular =
-                                                false
-                                        }
-
-
-                                        /* =====================
-                                           NÚMEROS
-                                        ===================== */
-
-                                        else -> {
-
-                                            var novo =
-                                                expression
-
-
-                                            if (
-                                                acabouDeCalcular
-                                            ) {
-
-                                                novo =
-                                                    ""
-
-                                                history =
-                                                    ""
-
-                                                acabouDeCalcular =
-                                                    false
-                                            }
-
-
-                                            novo +=
-                                                button.value
-
-
-                                            expression =
-                                                novo
-                                        }
-                                    }
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-
-/* =========================================================
-   DADOS DOS BOTÕES
-========================================================= */
-
-private data class ButtonData(
-    val value: String,
-
-    val type: ButtonType =
-        ButtonType.NUMBER
-)
-
-
-private enum class ButtonType {
-
-    NUMBER,
-
-    FUNCTION,
-
-    OPERATOR,
-
-    EQUAL
-}
-
-
-/* =========================================================
-   BOTÃO
-========================================================= */
-
-@Composable
-private fun CalculatorButton(
-    data: ButtonData,
-    dark: Boolean,
-    modifier: Modifier,
-    onClick: () -> Unit
-) {
-
-    val background =
-        when (data.type) {
-
-            ButtonType.FUNCTION ->
-                if (dark) {
-                    DarkFunction
-                } else {
-                    LightFunction
-                }
-
-            ButtonType.OPERATOR ->
-                if (dark) {
-                    DarkOperator
-                } else {
-                    LightOperator
-                }
-
-            ButtonType.EQUAL ->
-                if (dark) {
-                    DarkEqual
-                } else {
-                    LightEqual
-                }
-
-            ButtonType.NUMBER ->
-                if (dark) {
-                    DarkButton
-                } else {
-                    LightButton
-                }
-        }
-
-
-    val textColor =
-        when (data.type) {
-
-            ButtonType.EQUAL ->
-                if (dark) {
-                    Color.Black
-                } else {
-                    Color.White
-                }
-
-            else ->
-                if (dark) {
-                    Color.White
-                } else {
-                    Color(0xFF111111)
-                }
-        }
-
-
-    Box(
-        modifier =
-            modifier
-                .aspectRatio(1f)
-                .background(
-                    color =
-                        background,
-
-                    shape =
-                        CircleShape
-                )
-                .clickable(
-                    indication =
-                        null,
-
-                    interactionSource =
-                        remember {
-                            MutableInteractionSource()
-                        },
-
-                    onClick =
-                        onClick
-                ),
-
-        contentAlignment =
-            Alignment.Center
-    ) {
-
-        if (
-            data.value == "back"
-        ) {
-
-            /*
-             * Ícone de apagar sem
-             * ImageVector/addPath.
-             */
-            Text(
-                text =
-                    "⌫",
-
-                color =
-                    textColor,
-
-                fontSize =
-                    29.sp,
-
-                fontWeight =
-                    FontWeight.Normal,
-
-                textAlign =
-                    TextAlign.Center
-            )
-
-        } else {
-
-            Text(
-                text =
-                    data.value,
-
-                color =
-                    textColor,
-
-                fontSize =
-                    when {
-
-                        data.value == "=" ->
-                            27.sp
-
-                        data.value in
-                                listOf(
-                                    "+",
-                                    "−",
-                                    "×",
-                                    "÷"
-                                ) ->
-                            27.sp
-
-                        else ->
-                            23.sp
+    val permissaoLauncher =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { concedida ->
+
+            if (concedida) {
+
+                obterLocalizacao(
+                    context = context,
+                    fusedLocationClient = fusedLocationClient,
+                    onLoading = {
+                        carregandoLocalizacao = true
                     },
+                    onResult = { novoPais, novaCidade ->
 
-                fontWeight =
-                    FontWeight.SemiBold,
+                        pais = novoPais
+                        cidade = novaCidade
 
-                textAlign =
-                    TextAlign.Center
-            )
-        }
-    }
-}
+                        statusLocalizacao =
+                            "Localização detectada"
 
+                        textoStatus =
+                            "O relógio está usando somente o horário desta localização."
 
-/* =========================================================
-   OPERADOR
-========================================================= */
+                        carregandoLocalizacao = false
+                        mostrarToast = true
+                    },
+                    onError = {
 
-private fun adicionarOperador(
-    expression: String,
-    operator: String
-): String {
+                        pais = "Localização atual"
+                        cidade = "GPS detectado"
 
-    if (
-        expression.isEmpty()
-    ) {
+                        statusLocalizacao =
+                            "GPS ativo"
 
-        return if (
-            operator == "-"
-        ) {
-            "-"
-        } else {
-            expression
-        }
-    }
+                        textoStatus =
+                            "A localização foi detectada, mas o nome da cidade não pôde ser obtido."
 
-
-    var result =
-        expression
-
-
-    val last =
-        result.last()
-
-
-    if (
-        "+-*/".contains(last)
-    ) {
-
-        result =
-            result.dropLast(
-                1
-            )
-    }
-
-
-    return result + operator
-}
-
-
-/* =========================================================
-   DECIMAL
-========================================================= */
-
-private fun adicionarDecimal(
-    expression: String
-): String {
-
-    val partes =
-        expression.split(
-            Regex(
-                "[+\\-*/()]"
-            )
-        )
-
-
-    val atual =
-        partes.lastOrNull()
-            ?: ""
-
-
-    if (
-        atual.contains(".")
-    ) {
-
-        return expression
-    }
-
-
-    var result =
-        expression
-
-
-    if (
-        result.isEmpty() ||
-        "+-*/(".contains(
-            result.last()
-        )
-    ) {
-
-        result +=
-            "0"
-    }
-
-
-    result +=
-        "."
-
-
-    return result
-}
-
-
-/* =========================================================
-   PARENTÊSES
-========================================================= */
-
-private fun adicionarParenteses(
-    expression: String,
-    acabouDeCalcular: Boolean
-): String {
-
-    var expr =
-        if (
-            acabouDeCalcular
-        ) {
-            ""
-        } else {
-            expression
-        }
-
-
-    val ultimo =
-        expr.lastOrNull()
-            ?.toString()
-            ?: ""
-
-
-    val abertos =
-        expr.count {
-            it == '('
-        }
-
-
-    val fechados =
-        expr.count {
-            it == ')'
-        }
-
-
-    if (
-        expr.isEmpty() ||
-        "+-*/(".contains(
-            ultimo
-        )
-    ) {
-
-        expr +=
-            "("
-
-        return expr
-    }
-
-
-    if (
-        abertos > fechados
-    ) {
-
-        if (
-            !"+-*/(".contains(
-                ultimo
-            )
-        ) {
-
-            expr +=
-                ")"
-        }
-
-        return expr
-    }
-
-
-    expr +=
-        "*("
-
-
-    return expr
-}
-
-
-/* =========================================================
-   PORCENTAGEM
-========================================================= */
-
-private fun prepararPorcentagem(
-    expression: String
-): String {
-
-    return expression.replace(
-        Regex(
-            "(\\d+(?:\\.\\d+)?)%"
-        ),
-        "($1/100)"
-    )
-}
-
-
-/* =========================================================
-   CALCULAR EXPRESSÃO
-========================================================= */
-
-private fun calcularExpressao(
-    original: String
-): String? {
-
-    if (
-        original.isEmpty()
-    ) {
-
-        return null
-    }
-
-
-    try {
-
-        var expression =
-            original.replace(
-                ",",
-                "."
-            )
-
-
-        /*
-         * Não permite terminar com
-         * operador ou parêntese aberto.
-         */
-        val ultimo =
-            expression.lastOrNull()
-
-
-        if (
-            ultimo != null &&
-            "+-*/(".contains(
-                ultimo
-            )
-        ) {
-
-            return null
-        }
-
-
-        /*
-         * Verifica parênteses.
-         */
-        val abertos =
-            expression.count {
-                it == '('
-            }
-
-
-        val fechados =
-            expression.count {
-                it == ')'
-            }
-
-
-        if (
-            abertos != fechados
-        ) {
-
-            return null
-        }
-
-
-        /*
-         * Segurança:
-         * somente caracteres matemáticos.
-         */
-        if (
-            !Regex(
-                "^[0-9+\\-*/().%\\s]+$"
-            ).matches(
-                expression
-            )
-        ) {
-
-            return null
-        }
-
-
-        /*
-         * Converte porcentagens.
-         */
-        expression =
-            prepararPorcentagem(
-                expression
-            )
-
-
-        /*
-         * Parser matemático nativo.
-         */
-        val resultado =
-            SimpleExpressionParser(
-                expression
-            ).parse()
-
-
-        if (
-            !resultado.isFinite()
-        ) {
-
-            return null
-        }
-
-
-        /*
-         * Limita a 10 casas decimais.
-         */
-        return resultado
-            .toBigDecimal()
-            .setScale(
-                10,
-                RoundingMode.HALF_UP
-            )
-            .stripTrailingZeros()
-            .toPlainString()
-
-    } catch (
-        _: Exception
-    ) {
-
-        return null
-    }
-}
-
-
-/* =========================================================
-   PARSER MATEMÁTICO
-========================================================= */
-
-private class SimpleExpressionParser(
-    private val text: String
-) {
-
-    private var position =
-        0
-
-
-    fun parse(): Double {
-
-        val result =
-            parseExpression()
-
-
-        skipSpaces()
-
-
-        if (
-            position != text.length
-        ) {
-
-            throw IllegalArgumentException()
-        }
-
-
-        return result
-    }
-
-
-    /*
-     * Soma e subtração.
-     */
-    private fun parseExpression(): Double {
-
-        var value =
-            parseTerm()
-
-
-        while (true) {
-
-            skipSpaces()
-
-
-            if (
-                match('+')
-            ) {
-
-                value +=
-                    parseTerm()
-
-            } else if (
-                match('-')
-            ) {
-
-                value -=
-                    parseTerm()
+                        carregandoLocalizacao = false
+                    }
+                )
 
             } else {
 
-                break
+                pais =
+                    "Localização não autorizada"
+
+                cidade =
+                    "Ative o acesso à localização"
+
+                statusLocalizacao =
+                    "Permissão necessária"
+
+                textoStatus =
+                    "Permita o acesso à localização para identificar sua cidade."
+
+                carregandoLocalizacao = false
             }
         }
-
-
-        return value
-    }
-
-
-    /*
-     * Multiplicação e divisão.
-     */
-    private fun parseTerm(): Double {
-
-        var value =
-            parseFactor()
-
-
-        while (true) {
-
-            skipSpaces()
-
-
-            if (
-                match('*')
-            ) {
-
-                value *=
-                    parseFactor()
-
-            } else if (
-                match('/')
-            ) {
-
-                val divisor =
-                    parseFactor()
-
-
-                if (
-                    divisor == 0.0
-                ) {
-
-                    throw ArithmeticException()
-                }
-
-
-                value /=
-                    divisor
-
-            } else {
-
-                break
-            }
-        }
-
-
-        return value
-    }
-
-
-    /*
-     * Sinais, números e parênteses.
-     */
-    private fun parseFactor(): Double {
-
-        skipSpaces()
-
-
-        if (
-            match('+')
-        ) {
-
-            return parseFactor()
-        }
-
-
-        if (
-            match('-')
-        ) {
-
-            return -parseFactor()
-        }
-
-
-        if (
-            match('(')
-        ) {
-
-            val value =
-                parseExpression()
-
-
-            if (
-                !match(')')
-            ) {
-
-                throw IllegalArgumentException()
-            }
-
-
-            return value
-        }
-
-
-        return parseNumber()
-    }
-
-
-    /*
-     * Número.
-     */
-    private fun parseNumber(): Double {
-
-        skipSpaces()
-
-
-        val start =
-            position
-
-
-        while (
-            position < text.length &&
-            (
-                text[position].isDigit() ||
-                text[position] == '.'
-            )
-        ) {
-
-            position++
-        }
-
-
-        if (
-            start == position
-        ) {
-
-            throw IllegalArgumentException()
-        }
-
-
-        return text
-            .substring(
-                start,
-                position
-            )
-            .toDouble()
-    }
-
-
-    /*
-     * Verifica um caractere.
-     */
-    private fun match(
-        character: Char
-    ): Boolean {
-
-        skipSpaces()
-
-
-        if (
-            position < text.length &&
-            text[position] == character
-        ) {
-
-            position++
-
-            return true
-        }
-
-
-        return false
-    }
-
-
-    /*
-     * Ignora espaços.
-     */
-    private fun skipSpaces() {
-
-        while (
-            position < text.length &&
-            text[position].isWhitespace()
-        ) {
-
-            position++
-        }
-    }
-}
-
-
-/* =========================================================
-   ANIMAÇÃO DE ERRO
-========================================================= */
-
-@Composable
-private fun Modifier.shake(): Modifier {
-
-    var scaleValue by remember {
-        mutableStateOf(1f)
-    }
-
 
     LaunchedEffect(Unit) {
 
-        scaleValue =
-            0.97f
+        while (true) {
 
-        delay(70)
+            dados =
+                obterDadosRelogio()
 
-
-        scaleValue =
-            1.03f
-
-        delay(70)
-
-
-        scaleValue =
-            0.98f
-
-        delay(70)
-
-
-        scaleValue =
-            1f
+            delay(1000)
+        }
     }
 
+    LaunchedEffect(Unit) {
 
-    return this.scale(
-        scaleValue
+        if (
+            ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+
+            obterLocalizacao(
+                context = context,
+                fusedLocationClient = fusedLocationClient,
+                onLoading = {
+                    carregandoLocalizacao = true
+                },
+                onResult = { novoPais, novaCidade ->
+
+                    pais = novoPais
+                    cidade = novaCidade
+
+                    statusLocalizacao =
+                        "Localização detectada"
+
+                    textoStatus =
+                        "O relógio está usando somente o horário desta localização."
+
+                    carregandoLocalizacao = false
+                },
+                onError = {
+
+                    pais = "Localização atual"
+                    cidade = "GPS detectado"
+
+                    statusLocalizacao =
+                        "GPS ativo"
+
+                    textoStatus =
+                        "A localização foi detectada, mas o nome da cidade não pôde ser obtido."
+
+                    carregandoLocalizacao = false
+                }
+            )
+
+        } else {
+
+            permissaoLauncher.launch(
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        }
+    }
+
+    LaunchedEffect(mostrarToast) {
+
+        if (mostrarToast) {
+
+            delay(2500)
+
+            mostrarToast = false
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(fundo)
+            .windowInsetsPadding(WindowInsets.safeDrawing)
+    ) {
+
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = androidx.compose.foundation.layout.PaddingValues(
+                start = 14.dp,
+                end = 14.dp,
+                top = 20.dp,
+                bottom = 30.dp
+            ),
+            verticalArrangement =
+                Arrangement.spacedBy(0.dp)
+        ) {
+
+            item {
+
+                Topo(
+                    dark = dark,
+                    aoAtualizar = {
+
+                        if (
+                            ActivityCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                            ) ==
+                            PackageManager.PERMISSION_GRANTED
+                        ) {
+
+                            obterLocalizacao(
+                                context = context,
+                                fusedLocationClient = fusedLocationClient,
+                                onLoading = {
+                                    carregandoLocalizacao = true
+                                },
+                                onResult = { novoPais, novaCidade ->
+
+                                    pais = novoPais
+                                    cidade = novaCidade
+
+                                    statusLocalizacao =
+                                        "Localização detectada"
+
+                                    textoStatus =
+                                        "O relógio está usando somente o horário desta localização."
+
+                                    carregandoLocalizacao = false
+                                    mostrarToast = true
+                                },
+                                onError = {
+
+                                    statusLocalizacao =
+                                        "GPS ativo"
+
+                                    textoStatus =
+                                        "A localização foi detectada, mas o nome da cidade não pôde ser obtido."
+
+                                    carregandoLocalizacao = false
+                                }
+                            )
+
+                        } else {
+
+                            permissaoLauncher.launch(
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                            )
+                        }
+                    }
+                )
+
+                Spacer(
+                    modifier = Modifier.height(18.dp)
+                )
+            }
+
+            item {
+
+                HeroRelogio(
+                    dados = dados,
+                    pais = pais,
+                    cidade = cidade,
+                    status = statusLocalizacao,
+                    dark = dark
+                )
+
+                Spacer(
+                    modifier = Modifier.height(22.dp)
+                )
+            }
+
+            item {
+
+                Text(
+                    text = "Informações de hoje",
+                    color =
+                        if (dark)
+                            TextoEscuro
+                        else
+                            TextoClaro,
+                    fontFamily = Quicksand,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 17.sp,
+                    modifier = Modifier.padding(
+                        start = 2.dp,
+                        bottom = 11.dp
+                    )
+                )
+            }
+
+            item {
+
+                Informacoes(
+                    dados = dados,
+                    dark = dark
+                )
+
+                Spacer(
+                    modifier = Modifier.height(18.dp)
+                )
+            }
+
+            item {
+
+                StatusCard(
+                    texto = textoStatus,
+                    dark = dark,
+                    carregando = carregandoLocalizacao,
+                    aoAtualizar = {
+
+                        if (
+                            ActivityCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                            ) ==
+                            PackageManager.PERMISSION_GRANTED
+                        ) {
+
+                            obterLocalizacao(
+                                context = context,
+                                fusedLocationClient = fusedLocationClient,
+                                onLoading = {
+                                    carregandoLocalizacao = true
+                                },
+                                onResult = { novoPais, novaCidade ->
+
+                                    pais = novoPais
+                                    cidade = novaCidade
+
+                                    statusLocalizacao =
+                                        "Localização detectada"
+
+                                    textoStatus =
+                                        "O relógio está usando somente o horário desta localização."
+
+                                    carregandoLocalizacao = false
+                                    mostrarToast = true
+                                },
+                                onError = {
+
+                                    carregandoLocalizacao = false
+                                }
+                            )
+
+                        } else {
+
+                            permissaoLauncher.launch(
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                            )
+                        }
+                    }
+                )
+            }
+        }
+
+        if (mostrarToast) {
+
+            ToastRelogio(
+                dark = dark,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(
+                        bottom = 24.dp,
+                        start = 15.dp,
+                        end = 15.dp
+                    )
+            )
+        }
+    }
+}
+
+@Composable
+private fun Topo(
+    dark: Boolean,
+    aoAtualizar: () -> Unit
+) {
+
+    val texto =
+        if (dark) TextoEscuro else TextoClaro
+
+    val suave =
+        if (dark)
+            TextoSuaveEscuro
+        else
+            TextoSuaveClaro
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement =
+            Arrangement.SpaceBetween
+    ) {
+
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+
+            Text(
+                text = "Meu Relógio",
+                fontFamily = Quicksand,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 34.sp,
+                letterSpacing = (-2).sp,
+                color = texto
+            )
+
+            Spacer(
+                modifier = Modifier.height(6.dp)
+            )
+
+            Text(
+                text = "Horário da sua localização atual",
+                fontFamily = Quicksand,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 11.sp,
+                color = suave
+            )
+        }
+
+        Spacer(
+            modifier = Modifier.width(10.dp)
+        )
+
+        Box(
+            modifier = Modifier
+                .size(45.dp)
+                .clip(
+                    RoundedCornerShape(15.dp)
+                )
+                .background(
+                    if (dark)
+                        CartaoEscuro
+                    else
+                        CartaoClaro
+                )
+                .border(
+                    width = 1.dp,
+                    color =
+                        if (dark)
+                            Color.White.copy(alpha = .09f)
+                        else
+                            Color.Black.copy(alpha = .07f),
+                    shape =
+                        RoundedCornerShape(15.dp)
+                )
+                .clickable {
+                    aoAtualizar()
+                },
+            contentAlignment = Alignment.Center
+        ) {
+
+            androidx.compose.material3.Icon(
+                imageVector = Icons.Default.Refresh,
+                contentDescription = "Atualizar localização",
+                tint =
+                    if (dark)
+                        Color.White
+                    else
+                        TextoClaro,
+                modifier = Modifier.size(21.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun HeroRelogio(
+    dados: DadosRelogio,
+    pais: String,
+    cidade: String,
+    status: String,
+    dark: Boolean
+) {
+
+    val card =
+        if (dark)
+            CartaoEscuro
+        else
+            CartaoClaro
+
+    val texto =
+        if (dark)
+            TextoEscuro
+        else
+            TextoClaro
+
+    val suave =
+        if (dark)
+            TextoSuaveEscuro
+        else
+            TextoSuaveClaro
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(
+                RoundedCornerShape(32.dp)
+            )
+            .background(card)
+            .border(
+                width = 1.dp,
+                color =
+                    if (dark)
+                        Color.White.copy(alpha = .09f)
+                    else
+                        Color.Black.copy(alpha = .07f),
+                shape =
+                    RoundedCornerShape(32.dp)
+            )
+    ) {
+
+        Box(
+            modifier = Modifier
+                .size(190.dp)
+                .align(Alignment.TopEnd)
+                .clip(CircleShape)
+                .background(
+                    Rosa.copy(alpha = .07f)
+                )
+        )
+
+        Column(
+            modifier = Modifier.padding(25.dp)
+        ) {
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment =
+                    Alignment.Top,
+                horizontalArrangement =
+                    Arrangement.SpaceBetween
+            ) {
+
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+
+                    Text(
+                        text = pais,
+                        color = texto,
+                        fontFamily = Quicksand,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 21.sp,
+                        lineHeight = 23.sp
+                    )
+
+                    Spacer(
+                        modifier = Modifier.height(4.dp)
+                    )
+
+                    Text(
+                        text = cidade,
+                        color = suave,
+                        fontFamily = Quicksand,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 13.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    Spacer(
+                        modifier = Modifier.height(7.dp)
+                    )
+
+                    Text(
+                        text = status,
+                        color =
+                            if (dark)
+                                TextoMutedEscuro
+                            else
+                                TextoMutedClaro,
+                        fontFamily = Quicksand,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 9.sp
+                    )
+                }
+
+                LiveBadge()
+            }
+
+            Spacer(
+                modifier = Modifier.height(28.dp)
+            )
+
+            Row(
+                verticalAlignment = Alignment.Bottom
+            ) {
+
+                Text(
+                    text =
+                        "${dados.hora}:${dados.minuto}",
+                    color = texto,
+                    fontFamily = Quicksand,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 67.sp,
+                    letterSpacing = (-4).sp,
+                    maxLines = 1
+                )
+
+                Text(
+                    text = ":${dados.segundo}",
+                    color = Rosa3,
+                    fontFamily = Quicksand,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 67.sp,
+                    letterSpacing = (-4).sp,
+                    maxLines = 1
+                )
+            }
+
+            Spacer(
+                modifier = Modifier.height(15.dp)
+            )
+
+            Text(
+                text = dados.data,
+                color = suave,
+                fontFamily = Quicksand,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 13.sp
+            )
+
+            Spacer(
+                modifier = Modifier.height(11.dp)
+            )
+
+            Box(
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .background(
+                        if (dark)
+                            CartaoEscuro2
+                        else
+                            Color(0xFFF0F0F4)
+                    )
+                    .border(
+                        1.dp,
+                        if (dark)
+                            Color.White.copy(alpha = .07f)
+                        else
+                            Color.Black.copy(alpha = .06f),
+                        CircleShape
+                    )
+                    .padding(
+                        horizontal = 11.dp,
+                        vertical = 7.dp
+                    )
+            ) {
+
+                Text(
+                    text =
+                        "${dados.fuso} · ${dados.utc}",
+                    color = suave,
+                    fontFamily = Quicksand,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 10.sp
+                )
+            }
+
+            Spacer(
+                modifier = Modifier.height(23.dp)
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement =
+                    Arrangement.SpaceBetween
+            ) {
+
+                Text(
+                    text = "Progresso do dia",
+                    color =
+                        if (dark)
+                            TextoMutedEscuro
+                        else
+                            TextoMutedClaro,
+                    fontFamily = Quicksand,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 10.sp
+                )
+
+                Text(
+                    text =
+                        "${String.format(Locale.US, "%.1f", dados.progresso)}%",
+                    color =
+                        if (dark)
+                            TextoMutedEscuro
+                        else
+                            TextoMutedClaro,
+                    fontFamily = Quicksand,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 10.sp
+                )
+            }
+
+            Spacer(
+                modifier = Modifier.height(8.dp)
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(7.dp)
+                    .clip(CircleShape)
+                    .background(
+                        if (dark)
+                            Color(0xFF202025)
+                        else
+                            Color(0xFFE4E4E9)
+                    )
+            ) {
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(
+                            dados.progresso / 100f
+                        )
+                        .height(7.dp)
+                        .clip(CircleShape)
+                        .background(
+                            Brush.horizontalGradient(
+                                listOf(
+                                    Rosa,
+                                    Rosa2
+                                )
+                            )
+                        )
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun LiveBadge() {
+
+    val infinite =
+        rememberInfiniteTransition(
+            label = "live"
+        )
+
+    val scale by infinite.animateFloat(
+        initialValue = 1f,
+        targetValue = 1.4f,
+        animationSpec =
+            infiniteRepeatable(
+                animation =
+                    tween(750),
+                repeatMode =
+                    RepeatMode.Reverse
+            ),
+        label = "liveScale"
     )
+
+    val alpha by infinite.animateFloat(
+        initialValue = 1f,
+        targetValue = .55f,
+        animationSpec =
+            infiniteRepeatable(
+                animation =
+                    tween(750),
+                repeatMode =
+                    RepeatMode.Reverse
+            ),
+        label = "liveAlpha"
+    )
+
+    Row(
+        modifier = Modifier
+            .clip(CircleShape)
+            .background(
+                Color(0xFF101B15)
+            )
+            .border(
+                1.dp,
+                Verde.copy(alpha = .14f),
+                CircleShape
+            )
+            .padding(
+                horizontal = 9.dp,
+                vertical = 6.dp
+            ),
+        verticalAlignment =
+            Alignment.CenterVertically
+    ) {
+
+        Box(
+            modifier = Modifier
+                .size(7.dp)
+                .scale(scale)
+                .alpha(alpha)
+                .clip(CircleShape)
+                .background(Verde)
+        )
+
+        Spacer(
+            modifier = Modifier.width(7.dp)
+        )
+
+        Text(
+            text = "AO VIVO",
+            color = VerdeTexto,
+            fontFamily = Quicksand,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = 9.sp
+        )
+    }
+}
+
+@Composable
+private fun Informacoes(
+    dados: DadosRelogio,
+    dark: Boolean
+) {
+
+    val itens =
+        listOf(
+            "ANO" to dados.ano.toString(),
+            "SEMESTRE" to dados.semestre,
+            "MÊS" to dados.mes,
+            "SEMANA" to dados.semana.toString(),
+            "BIMESTRE" to dados.bimestre,
+            "QUINZENA" to dados.quinzena,
+            "DIA DO ANO" to dados.diaDoAno.toString(),
+            "UTC" to dados.utc
+        )
+
+    Column(
+        verticalArrangement =
+            Arrangement.spacedBy(9.dp)
+    ) {
+
+        for (linha in 0 until 4) {
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement =
+                    Arrangement.spacedBy(9.dp)
+            ) {
+
+                InfoCard(
+                    label = itens[linha * 2].first,
+                    value = itens[linha * 2].second,
+                    dark = dark,
+                    modifier =
+                        Modifier.weight(1f)
+                )
+
+                InfoCard(
+                    label = itens[linha * 2 + 1].first,
+                    value = itens[linha * 2 + 1].second,
+                    dark = dark,
+                    modifier =
+                        Modifier.weight(1f)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun InfoCard(
+    label: String,
+    value: String,
+    dark: Boolean,
+    modifier: Modifier = Modifier
+) {
+
+    val card =
+        if (dark)
+            CartaoEscuro
+        else
+            CartaoClaro
+
+    val texto =
+        if (dark)
+            TextoEscuro
+        else
+            TextoClaro
+
+    val muted =
+        if (dark)
+            TextoMutedEscuro
+        else
+            TextoMutedClaro
+
+    Box(
+        modifier = modifier
+            .height(77.dp)
+            .clip(
+                RoundedCornerShape(20.dp)
+            )
+            .background(card)
+            .border(
+                1.dp,
+                if (dark)
+                    Color.White.copy(alpha = .09f)
+                else
+                    Color.Black.copy(alpha = .07f),
+                RoundedCornerShape(20.dp)
+            )
+    ) {
+
+        Box(
+            modifier = Modifier
+                .size(45.dp)
+                .align(Alignment.BottomEnd)
+                .offset(
+                    x = 25.dp,
+                    y = 25.dp
+                )
+                .clip(CircleShape)
+                .background(
+                    Rosa.copy(alpha = .06f)
+                )
+        )
+
+        Column(
+            modifier = Modifier.padding(
+                horizontal = 12.dp,
+                vertical = 12.dp
+            )
+        ) {
+
+            Text(
+                text = label,
+                color = muted,
+                fontFamily = Quicksand,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 8.sp
+            )
+
+            Spacer(
+                modifier = Modifier.height(4.dp)
+            )
+
+            Text(
+                text = value,
+                color = texto,
+                fontFamily = Quicksand,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 14.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}
+
+@Composable
+private fun StatusCard(
+    texto: String,
+    dark: Boolean,
+    carregando: Boolean,
+    aoAtualizar: () -> Unit
+) {
+
+    val card =
+        if (dark)
+            CartaoEscuro
+        else
+            CartaoClaro
+
+    val textoPrincipal =
+        if (dark)
+            TextoEscuro
+        else
+            TextoClaro
+
+    val suave =
+        if (dark)
+            TextoSuaveEscuro
+        else
+            TextoSuaveClaro
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(
+                RoundedCornerShape(23.dp)
+            )
+            .background(card)
+            .border(
+                1.dp,
+                if (dark)
+                    Color.White.copy(alpha = .09f)
+                else
+                    Color.Black.copy(alpha = .07f),
+                RoundedCornerShape(23.dp)
+            )
+            .padding(18.dp)
+    ) {
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement =
+                Arrangement.SpaceBetween
+        ) {
+
+            Text(
+                text = "Sua localização",
+                color = textoPrincipal,
+                fontFamily = Quicksand,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 14.sp
+            )
+
+            Row(
+                verticalAlignment =
+                    Alignment.CenterVertically
+            ) {
+
+                Box(
+                    modifier = Modifier
+                        .size(7.dp)
+                        .clip(CircleShape)
+                        .background(Verde)
+                )
+
+                Spacer(
+                    modifier = Modifier.width(6.dp)
+                )
+
+                Text(
+                    text = "ATIVA",
+                    color = VerdeTexto,
+                    fontFamily = Quicksand,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 9.sp
+                )
+            }
+        }
+
+        Spacer(
+            modifier = Modifier.height(7.dp)
+        )
+
+        Text(
+            text = texto,
+            color = suave,
+            fontFamily = Quicksand,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 10.sp,
+            lineHeight = 15.sp
+        )
+
+        Spacer(
+            modifier = Modifier.height(13.dp)
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(45.dp)
+                .clip(CircleShape)
+                .background(
+                    Brush.linearGradient(
+                        listOf(
+                            Rosa,
+                            Rosa2
+                        )
+                    )
+                )
+                .clickable {
+                    aoAtualizar()
+                },
+            contentAlignment = Alignment.Center
+        ) {
+
+            Text(
+                text =
+                    if (carregando)
+                        "Obtendo localização..."
+                    else
+                        "Atualizar localização",
+                color = Color.White,
+                fontFamily = Quicksand,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 11.sp
+            )
+        }
+    }
+}
+
+@Composable
+private fun ToastRelogio(
+    dark: Boolean,
+    modifier: Modifier
+) {
+
+    Box(
+        modifier = modifier
+            .clip(CircleShape)
+            .background(
+                if (dark)
+                    Color(0xFF19191D)
+                else
+                    Color(0xFF27272D)
+            )
+            .border(
+                1.dp,
+                Color.White.copy(alpha = .10f),
+                CircleShape
+            )
+            .padding(
+                horizontal = 15.dp,
+                vertical = 11.dp
+            )
+    ) {
+
+        Text(
+            text = "📍 Localização atualizada",
+            color = Color.White,
+            fontFamily = Quicksand,
+            fontWeight = FontWeight.Bold,
+            fontSize = 10.sp
+        )
+    }
+}
+
+private fun obterDadosRelogio(): DadosRelogio {
+
+    val agora = Date()
+
+    val zona =
+        TimeZone.getDefault()
+
+    val calendar =
+        Calendar.getInstance(zona).apply {
+            time = agora
+        }
+
+    val hora =
+        SimpleDateFormat(
+            "HH",
+            Locale.getDefault()
+        ).format(agora)
+
+    val minuto =
+        SimpleDateFormat(
+            "mm",
+            Locale.getDefault()
+        ).format(agora)
+
+    val segundo =
+        SimpleDateFormat(
+            "ss",
+            Locale.getDefault()
+        ).format(agora)
+
+    var data =
+        SimpleDateFormat(
+            "EEEE, dd 'de' MMMM 'de' yyyy",
+            Locale("pt", "BR")
+        ).format(agora)
+
+    data =
+        data.replaceFirstChar {
+            it.uppercase()
+        }
+
+    val ano =
+        calendar.get(Calendar.YEAR)
+
+    val mesNumero =
+        calendar.get(Calendar.MONTH) + 1
+
+    val dia =
+        calendar.get(Calendar.DAY_OF_MONTH)
+
+    val mes =
+        SimpleDateFormat(
+            "MMMM",
+            Locale("pt", "BR")
+        ).format(agora)
+            .replaceFirstChar {
+                it.uppercase()
+            }
+
+    val semana =
+        calendar.get(
+            Calendar.WEEK_OF_YEAR
+        )
+
+    val semestre =
+        if (mesNumero <= 6)
+            "1º"
+        else
+            "2º"
+
+    val bimestre =
+        "${((mesNumero - 1) / 2) + 1}º"
+
+    val quinzena =
+        if (dia <= 15)
+            "1ª"
+        else
+            "2ª"
+
+    val diaDoAno =
+        calendar.get(
+            Calendar.DAY_OF_YEAR
+        )
+
+    val offsetMillis =
+        zona.getOffset(agora.time)
+
+    val sinal =
+        if (offsetMillis >= 0)
+            "+"
+        else
+            "-"
+
+    val totalMinutos =
+        kotlin.math.abs(
+            TimeUnit.MILLISECONDS
+                .toMinutes(
+                    offsetMillis.toLong()
+                )
+        )
+
+    val horasUtc =
+        totalMinutos / 60
+
+    val minutosUtc =
+        totalMinutos % 60
+
+    val utc =
+        if (minutosUtc == 0L) {
+            "UTC${sinal}${horasUtc}"
+        } else {
+            "UTC${sinal}${horasUtc}:${
+                String.format(
+                    Locale.US,
+                    "%02d",
+                    minutosUtc
+                )
+            }"
+        }
+
+    val fuso =
+        zona.id
+
+    val segundosDoDia =
+        calendar.get(Calendar.HOUR_OF_DAY) * 3600 +
+            calendar.get(Calendar.MINUTE) * 60 +
+            calendar.get(Calendar.SECOND)
+
+    val progresso =
+        segundosDoDia / 86400f
+
+    return DadosRelogio(
+        hora = hora,
+        minuto = minuto,
+        segundo = segundo,
+        data = data,
+        fuso = fuso,
+        ano = ano,
+        semestre = semestre,
+        mes = mes,
+        semana = semana,
+        bimestre = bimestre,
+        quinzena = quinzena,
+        diaDoAno = diaDoAno,
+        utc = utc,
+        progresso = progresso
+    )
+}
+
+@SuppressLint("MissingPermission")
+private fun obterLocalizacao(
+    context: android.content.Context,
+    fusedLocationClient:
+        com.google.android.gms.location.FusedLocationProviderClient,
+    onLoading: () -> Unit,
+    onResult: (String, String) -> Unit,
+    onError: () -> Unit
+) {
+
+    onLoading()
+
+    fusedLocationClient
+        .getCurrentLocation(
+            com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY,
+            null
+        )
+        .addOnSuccessListener { location ->
+
+            if (location == null) {
+
+                onError()
+                return@addOnSuccessListener
+            }
+
+            try {
+
+                val geocoder =
+                    Geocoder(
+                        context,
+                        Locale("pt", "BR")
+                    )
+
+                if (
+                    android.os.Build.VERSION.SDK_INT >=
+                    android.os.Build.VERSION_CODES.TIRAMISU
+                ) {
+
+                    geocoder.getFromLocation(
+                        location.latitude,
+                        location.longitude,
+                        1
+                    ) { enderecos ->
+
+                        val endereco =
+                            enderecos.firstOrNull()
+
+                        val pais =
+                            endereco?.countryName
+                                ?: "País não identificado"
+
+                        val cidade =
+                            endereco?.locality
+                                ?: endereco?.subAdminArea
+                                ?: endereco?.adminArea
+                                ?: "Localização atual"
+
+                        onResult(
+                            pais,
+                            cidade
+                        )
+                    }
+
+                } else {
+
+                    @Suppress("DEPRECATION")
+                    val enderecos =
+                        geocoder.getFromLocation(
+                            location.latitude,
+                            location.longitude,
+                            1
+                        )
+
+                    val endereco =
+                        enderecos?.firstOrNull()
+
+                    val pais =
+                        endereco?.countryName
+                            ?: "País não identificado"
+
+                    val cidade =
+                        endereco?.locality
+                            ?: endereco?.subAdminArea
+                            ?: endereco?.adminArea
+                            ?: "Localização atual"
+
+                    onResult(
+                        pais,
+                        cidade
+                    )
+                }
+
+            } catch (
+                exception: Exception
+            ) {
+
+                onError()
+            }
+        }
+        .addOnFailureListener {
+
+            onError()
+        }
 }

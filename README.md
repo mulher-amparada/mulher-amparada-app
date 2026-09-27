@@ -10,7 +10,7 @@ Um projeto totalmente gratuito e livre de anúncios, projetado por um menino aut
 
 E saibam que o projeto é: Source-Available
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3632**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3491**
 
 # ⚠️MURAL DE AVISOS:
 
@@ -28,39 +28,20 @@ E saibam que o projeto é: Source-Available
 
 ### Sobre as funções do projeto:
 
->Ao utilizar a função de baixar o histórico de ajuda, o aplicativo gera um único arquivo no formato JSON. Os dados utilizados para gerar esse histórico são obtidos por meio das APIs protegidas do Android, que controlam o acesso ao histórico de chamadas por meio das permissões do sistema. Por isso, o aplicativo não aplica a classe "Cripto" novamente durante a exportação. O arquivo JSON exportado, entretanto, não é um arquivo criptografado. Ele é salvo como um arquivo comum na área de downloads do dispositivo. A proteção de acesso fornecida pelo Android ao histórico de chamadas não significa que o arquivo exportado permaneça criptografado. O arquivo também contém hashes SHA-256, utilizados para verificação de integridade dos dados. SHA-256 não é um mecanismo de criptografia e não substitui a criptografia para proteção do conteúdo.
-
 >ATENÇÃO: Reforço que as proteções que utilizam sensores podem não funcionar corretamente em alguns aparelhos, dependendo das limitações ou características do hardware da usuária.
 
->Botão de pânico: caso o aplicativo não possua a permissão necessária para realizar chamadas diretamente, ele utiliza o "ACTION_DIAL" como alternativa, abrindo o discador com o número de emergência. Dessa forma, o recurso continua disponível mesmo sem a permissão de chamada.
 
 > Sobre as proteções por movimento e escurecimento: caso ocorra alguma falha ou o aparelho da usuária não possua o sensor necessário, o aplicativo utiliza o microfone como alternativa. Ao detectar um barulho alto, a proteção é acionada.
 
 > **Recurso de Privacidade: Escurecimento por Inclinação (Disfarce Rápido)**
 >
 >O aplicativo conta com uma funcionalidade exclusiva de privacidade, projetada para proteger as informações da usuária contra olhares curiosos. Ao inclinar o dispositivo, o aplicativo ativa instantaneamente um modo de disfarce visual, escurecendo a interface para simular que a tela está desligada ou que o celular está bloqueado.
->
->### Funcionamento Exclusivo na Tela Principal (HubActivity)
->
->Por decisões estratégicas de segurança, desempenho e utilidade prática, este recurso opera **estritamente dentro da tela principal do aplicativo**, não sendo ativado nas demais telas ou no momento em que o app está abrindo. As razões para essa escolha incluem:
->
->* **Velocidade Máxima no Socorro:** A tela de entrada do aplicativo precisa abrir o app o mais rápido possível. Ligar os sensores de movimento do celular logo na inicialização causaria um atraso na abertura, o que comprometeria o pedido de ajuda em situações de urgência extrema.
->* **Economia Extrema de Bateria:** Os sensores de inclinação consomem energia do dispositivo. Ao restringir o uso do sensor apenas para a tela principal (onde a usuária passa a maior parte do tempo), o aplicativo evita o desgaste desnecessário da bateria e impede que o sensor continue rodando quando o aplicativo for fechado ou minimizado.
->* **Proteção Focada onde Importa:** A tela principal é o local que concentra as informações realmente sensíveis do projeto (como finanças e anotações). Telas de transição ou de carregamento não exibem dados confidenciais, eliminando a necessidade de um disfarce visual nessas etapas.
 
 >Aviso — O recurso de “Desembarque seguro” do Mulher Amparada é informativo e atualmente apresenta a legislação aplicável à Cidade de São Paulo, especialmente a Lei Municipal nº 16.490/2016 e sua regulamentação. Essa legislação não deve ser interpretada como uma regra válida em todo o Brasil. As regras sobre desembarque fora dos pontos podem variar conforme o município, o estado e o tipo de transporte. A carteirinha apresentada pelo aplicativo não é um documento oficial e não substitui a legislação vigente, regulamentações, orientações das empresas de transporte ou autoridades competentes. E antes de utilizar esse recurso em outra localidade, verifique a legislação específica aplicável ao local.
 
->Sobre a proteção por palmas/barulho: Nota de Segurança: Uma vez ativada, a proteção permanecerá vigilante e reativará o microfone automaticamente após cada detecção e ligação pro 180. Isso garante que o aplicativo continue te protegendo caso a situação de risco persista. Para desligá-la por completo, você deve fazer isso manualmente no aplicativo após o término da situação de risco.
 
 > Sobre as funções por sensores (bloquear a tela por barulho, proteção por barulho que liga pro 180, balançar o celular para pedir ajuda e escurecimento por inclinação): A função Bloquear a tela por Barulho foi projetada com uma medida adicional de segurança: depois de ser ativada e funcionar de fato, ela permanece ativa até que o usuário decida desativá-la pelo próprio aplicativo. Para evitar que o estado da função seja perdido ao sair e retornar à página, o aplicativo salva seu estado de ativação utilizando a classe Cripto. Dessa forma, ao retornar à página, o aplicativo recupera o estado salvo e exibe corretamente se a função está ATIVADA ou DESATIVADA. Essa persistência permite que a interface continue refletindo o estado real configurado pelo usuário, mesmo após a navegação entre as páginas do aplicativo. Mas quando a usuária desativar ou a função ser concluída, na página ele mostra como desativado!
 
->O Gerenciador de Arquivos (que apenas visualiza) não acessa os arquivos internos do Gravador de Voz do Mulher Amparada nem os dados ou recursos internos de outras funcionalidades do aplicativo. Ele trabalha com arquivos que já estão disponíveis nos armazenamentos do dispositivo e que podem ser acessados pelos mecanismos de armazenamento autorizados pelo Android.
-
->Porém, quando eu digo que o Gerenciador de arquivos apenas visualiza, eu quero dizer que ele nao faz operações de arquivos, mas quando clica em um arquivo, ele abre um seletor de apps, ajudando muito para a coleta de evidências!, porém, se a usuária selecionar um app por esse seletor e perder os dados, o desenvolvedor não se responsabiliza!
-
->O aplicativo possui um navegador interno. A navegação para o Google é feita diretamente pelo código usando window location replace(), sem disponibilizar o endereço como um link na interface. O aplicativo também não implementa um sistema próprio de registro de histórico de navegação, (ou pelo ou menos eu não coloquei na página)
-
-> Caso a usuária nege a permissão de Administrador do dispositivo, o aplicativo exibe uma caixa de diálogo informando quais funções poderão não funcionar!
 
 ### Estrutura de Telas Secretas (Acesso Biométrico):
 
@@ -181,15 +162,31 @@ NeoCalcActivity (compose) = Tela que contém o disfarce de calculadora
 
  HubActivity (compose) = Tela que contém o botão de pânico, proteção por palmas, balançar o celular pra pedir ajuda, escurecimento por inclinação, bloqueio por barulho, usandk o action dial, ele chama a policia, samu e o 180, enviar localização para o 180, contatos de confiança, o botão feito com compose, (aquele do emergencyoverlay), 
  
- HomeActivity = Tela da área do amparo onde mostra as 2 carteirinhas
+ HomeActivity (compose) = Tela da área do amparo onde mostra as 2 carteirinhas
  
- ExigirActivity = Conteúdo da primeira carteirinha
+ ExigirActivity (compose) = Conteúdo da primeira carteirinha
  
- GestoActivity = Conteúdo da segunda carteirinha
+ GestoActivity (compose) = Conteúdo da segunda carteirinha
  
- A MainActivity e a HomeActivity são feitas com webview e são responsáveis pela área protegida e a área do amparo
-
-## Sobre como o aplicativo é compilado:
+ CalcActivity (compose) = Tela do recurso da calculadora da área protegida ProtectActivity = Primeira tela da área protegida
+ 
+ RelogioActivity (compose) = Recurso do relógio da área protegida 
+ 
+ MapaActivity (compose) = Recurso do mapa da área protegida 
+ 
+ AppsActivity (compose) = Recurso da tela de aplicativos da área protegida 
+ 
+ DiarioActivity (compose) = Recurso do diário criptografado da área protegida 
+ 
+ DireitosActivity (compose) = Recurso dos 100 direitos das mulheres da área protegida 
+ 
+ A MainActivity é a única que é feita com webview!, e representa o recurso de navegador da área protegida
+ 
+ GravarActivity (xml) = Recurso do gravador de voz da área protegida
+ 
+ FileActivity (xml) = Recurso de Gerenciador de arquivos da área protegida (mas ele apenas visualiza!)
+ 
+ # Sobre como o aplicativo é compilado:
 
 Proteção da Activity de Entrada:
 
@@ -227,13 +224,29 @@ E também as barras tanto de status tanto de navegação são transparentes, por
 
 - HubActivity:
 
+
+####Área protegida:
+
 **Título:**
 >Desbloquear a área protegida
 
 **Descrição:**
 >🌸 Apenas a usuária cadastrada pode acessar este local
 
+####Área do amparo:
+
+**Título:**
+
+>Desbloquear o espaço do amparo
+
+**Descrição:**
+
+>🌸 Acesso protegido por biometria
+
+####E nos dois tem embaixo (Use sua impressão digital., Usar o reconhecimento facial.)
+
 O método de autenticação é definido pelo próprio Android de acordo com os autenticadores disponíveis no dispositivo, utilizando "BIOMETRIC_WEAK" e "DEVICE_CREDENTIAL".
+
 
 # ⚒️Todas as funções do aplicativo!:
 
@@ -250,19 +263,23 @@ O aplicativo possui suporte aos ícones temáticos do Android (Themed Icons), pe
 O Impacto Visual: O ícone deixa de depender exclusivamente de suas cores originais e passa a responder à personalização visual do sistema. Isso proporciona uma apresentação mais discreta e consistente com a interface do dispositivo, sem que o aplicativo precise criar manualmente uma versão diferente para cada paleta de cores.
 
 ### Disfarce do app (assistente de saúde falso!):
-tutorial: ao entrar no app, clique no canto superior direito com o icone de calculadora. e ai quando ele for iniciado, ele pedirá para criar uma senha (e salva em uma classe kt de criptografia), assim so acessa com a senha informada, para resetar essa senha (dê 5 toques em menos de 2 segundos, e digite como você gosta de ser chamada, e digite sua nova senha!), mas antes dessa tela, tem outra tipo uma gaveta de apps..., porém, agora no mulher amparada, ele já vem com o icone de calculadora e o nome calculadora, só dá para mudar o icone, ou seja, o app ja vem com icone de (Assistente de saúde), uma tela genérica de elementos de medição de saúde (bpm e etc), e vale lembrar que:
+tutorial: ao entrar no app, clique no canto superior direito com o icone de calculadora. e ai quando ele for iniciado, voce precisará tocar no visor 5 vezes para cadastrar a senha e a pergunta de recuperação (e ele salva em uma classe kt de criptografia), assim so acessa com a senha informada, para resetar essa senha (dê 5 toques em menos de 2 segundos, e digite como você gosta de ser chamada, e digite sua nova senha!), mas antes dessa tela, tem outra tipo uma gaveta de apps..., porém, agora no mulher amparada, ele já vem com o icone de calculadora e o nome calculadora, só dá para mudar o icone, ou seja, o app ja vem com icone de (Assistente de saúde), uma tela genérica de elementos de medição de saúde (bpm e etc), e vale lembrar que:
 
-Os dados da primeira página do app são meramente fictícios e não representam informações reais!
+Os dados da primeira página do app (disfarce do assistente de saúde) são meramente fictícios e não representam informações reais!
 
 e tambem, reforcando que no canto superior direito tem um icone de calculadora que quando clica vai pra uma calculadora e aparece o disfarce de calculadora 
 
 ### Botão de Pânico:
 Botão de Pânico, com ligação ao 180 de forma direta no primeiro clique.
 
+>Botão de pânico: caso o aplicativo não possua a permissão necessária para realizar chamadas diretamente, ele utiliza o "ACTION_DIAL" como alternativa, abrindo o discador com o número de emergência. Dessa forma, o recurso continua disponível mesmo sem a permissão de chamada.
+
 ### Proteção por Barulho:
 Ative a proteção, faça barulho alto e ele liga para o 180.
 
 caso ocorra alguma falha ou o aparelho da usuária não possua o sensor necessário, o aplicativo utiliza o microfone como alternativa. Ao detectar um barulho alto, a proteção é acionada.
+
+>Sobre a proteção por palmas/barulho: Nota de Segurança: Uma vez ativada, a proteção permanecerá vigilante e reativará o microfone automaticamente após cada detecção e ligação pro 180. Isso garante que o aplicativo continue te protegendo caso a situação de risco persista. Para desligá-la por completo, você deve fazer isso manualmente no aplicativo após o término da situação de risco.
 
 ### Balançar o Celular para Pedir Ajuda:
 Ative e, ao chacoalhar o celular, ele liga para o 180.
@@ -508,8 +525,10 @@ O acesso varia de acordo com o tipo de armazenamento:
 - Armazenamento interno e cartão SD: utilizam a permissão de Acesso a todos os arquivos, quando concedida pelo Android.
 - Dispositivos externos, como pendrives conectados por USB OTG: utilizam o SAF (Storage Access Framework), mecanismo oficial do Android para acesso a documentos e dispositivos de armazenamento externos autorizados pela usuária.
 
-###Bloquear a tela do celular:
-Ao tocar neste botão, o aplicativo solicitará a permissão de Administrador do dispositivo, caso ela ainda não tenha sido concedida. Quando essa permissão estiver ativa, o aplicativo poderá bloquear imediatamente a tela do dispositivo, (aviso: depois que a tela é bloqueada pelo sistema, o Android pode exigir novamente o método de credencial do dispositivo antes de permitir determinadas formas de autenticação biométrica.)
+
+>O Gerenciador de Arquivos (que apenas visualiza) não acessa os arquivos internos do Gravador de Voz do Mulher Amparada nem os dados ou recursos internos de outras funcionalidades do aplicativo. Ele trabalha com arquivos que já estão disponíveis nos armazenamentos do dispositivo e que podem ser acessados pelos mecanismos de armazenamento autorizados pelo Android.
+
+>Porém, quando eu digo que o Gerenciador de arquivos apenas visualiza, eu quero dizer que ele nao faz operações de arquivos, mas quando clica em um arquivo, ele abre um seletor de apps, ajudando muito para a coleta de evidências!, porém, se a usuária selecionar um app por esse seletor e perder os dados, o desenvolvedor não se responsabiliza!
 
 ###Tela de aplicativos:
 Ao tocar neste botão, o app mostrará um site dentro do app que lista todos os outros apps com a permissão query all packpages...
@@ -615,6 +634,15 @@ e se digitar a senha ele desbloqueia...
 
 A navegação para o Google é feita diretamente pelo código usando window location replace(), sem disponibilizar o endereço como um link na interface. O aplicativo também não implementa um sistema próprio de registro de histórico de navegação, (ou pelo ou menos eu não coloquei na página)
 
+
+>O aplicativo possui um navegador interno. A navegação para o Google é feita diretamente pelo código usando link na MainActivity sem disponibilizar o endereço como um link na interface. O aplicativo também não implementa um sistema próprio de registro de histórico de navegação, (ou pelo ou menos eu não coloquei na página)
+>
+>MainActivity > Google > pesquisa/link do Google
+>
+>Voltar > fecha a MainActivity
+> Caso a usuária nege a permissão de Administrador do dispositivo, o aplicativo exibe uma caixa de diálogo informando quais funções poderão não funcionar!
+
+
 ## Considerações finais:
 
 e os audios do gravador de voz também são criptografados com a classe Cripto
@@ -661,9 +689,7 @@ o app guarda os dados usando criptografia..., mas isso não garante que xss acon
 
 ### Sobre o WebView do app:
 
-e TODAS AS PÁGINAS EM HTML, estão dentro da pasta assets (menos o navegador que usa o Google, mas aí eu não controlo e é com eles lá!)
-
-E o webview do app está assim!:
+e APENAS A FUNÇÃO DE NAVEGADOR, AS OUTRAS SÃO OU FEITAS COM COMPOSE OU FEITAS COM XML, usa este webview:
 
 ```kotlin
 

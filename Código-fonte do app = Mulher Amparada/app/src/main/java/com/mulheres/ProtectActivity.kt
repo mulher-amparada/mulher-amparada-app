@@ -81,22 +81,32 @@ class ProtectActivity : ComponentActivity() {
 
                 MeusAcessos(
 
-                    abrirNavegador = {
-                        startActivity(
-                            Intent(
-                                this,
-                                MainActivity::class.java
-                            )
-                        )
-                    },
+    abrirCiclo = {
+        startActivity(
+            Intent(
+                this,
+                CicloActivity::class.java
+            )
+        )
+    },
 
-                    abrirMapa = {
-                        startActivity(
-                            Intent(
-                                this,
-                                MapaActivity::class.java
-                            )
-                        )
+    abrirNavegador = {
+        startActivity(
+            Intent(
+                this,
+                MainActivity::class.java
+            )
+        )
+    },
+
+    abrirMapa = {
+        startActivity(
+            Intent(
+                this,
+                MapaActivity::class.java
+            )
+        )
+    
                     },
 
                     abrirDiario = {
@@ -328,6 +338,8 @@ private data class Acesso(
 @androidx.compose.runtime.Composable
 private fun MeusAcessos(
 
+    abrirCiclo: () -> Unit,
+
     abrirNavegador: () -> Unit,
 
     abrirMapa: () -> Unit,
@@ -539,33 +551,34 @@ private fun MeusAcessos(
 
                         when (acesso.titulo) {
 
-                            "Mapa da sua região" -> {
-                                abrirMapa()
-                            }
-                            
-                            "Diário e anotações" -> {
-    abrirDiario()
+    "Calendário menstrual" -> {
+        abrirCiclo()
+    }
+
+    "Mapa da sua região" -> {
+        abrirMapa()
+    }
+
+    "Diário e anotações" -> {
+        abrirDiario()
+    }
+
+    "Rotina gamificada" -> {
+        abrirRotina()
+    }
+
+    "Relógio + Localização" -> {
+        abrirRelogio()
+    }
+
+    "Calculadora" -> {
+        abrirCalculadora()
+    }
+
+    "Navegador" -> {
+        abrirNavegador()
+    }
 }
-
-                     "Rotina gamificada" -> {
-    abrirRotina()
-}
-
-"Relógio + Localização" -> {
-    abrirRelogio()
-}
-
-                            "Calculadora" -> {
-                                abrirCalculadora()
-                            }
-
-                            "Navegador" -> {
-                                abrirNavegador()
-                            }
-                            
-                            
-
-                        }
                     }
                 )
             }

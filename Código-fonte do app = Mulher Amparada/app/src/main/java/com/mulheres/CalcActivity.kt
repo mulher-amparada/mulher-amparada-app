@@ -122,7 +122,7 @@ private val DarkEqual =
 ========================================================= */
 
 private val LightBackground =
-    Color(0xFFF5F5F5)
+    Color(0xFFFFFFFF)
 
 private val LightDisplay =
     Color(0xFFFFFFFF)

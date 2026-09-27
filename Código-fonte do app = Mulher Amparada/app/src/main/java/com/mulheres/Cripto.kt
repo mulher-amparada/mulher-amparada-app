@@ -259,7 +259,7 @@ fun descriptografarArquivo(
         )
     }
 
-    @JavascriptInterface
+    
     fun salvar(chave: String, valor: String) {
 
         val valorCriptografado = criptografar(valor)
@@ -269,7 +269,7 @@ fun descriptografarArquivo(
             .apply()
     }
 
-    @JavascriptInterface
+    
     fun carregar(chave: String): String {
 
         val valorCriptografado = prefs.getString(chave, null)
@@ -282,7 +282,7 @@ fun descriptografarArquivo(
         }
     }
 
-    @JavascriptInterface
+    
     fun remover(chave: String) {
 
         prefs.edit()
@@ -290,7 +290,7 @@ fun descriptografarArquivo(
             .apply()
     }
 
-    @JavascriptInterface
+    
     fun limparTudo() {
 
         prefs.edit()

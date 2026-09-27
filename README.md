@@ -11,7 +11,7 @@ Um projeto totalmente gratuito e livre de anúncios, projetado por um menino aut
 
 e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, onde nem tinha os recursos, ja programei ele num app de A-IDE, num A05, e eu ja perdi vários projetos porque o celular nao aguentava, matava o projeto porque matou o processo de compilação!, e uma vez eu fiz o projeto do mulher amparada e eu mesmo fiz o app do mulher amparada (primeiro eu refiz, depois na 2 vez que perdi portei tudo do apk compilado para descompilado, e depois perdi denovo mas ai eu ja tinha o código-fonte!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3725**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3699**
 
 # ⚠️MURAL DE AVISOS:
 
@@ -871,3 +871,11 @@ E o site do github pages usa essa estrutura (os nomes dos arquivos podem varias)
 Todas as páginas sob controle do projeto implementam suporte a `prefers-reduced-motion`, permitindo que as animações sejam desativadas automaticamente quando essa preferência estiver habilitada no dispositivo. A página `navegador.html` é uma exceção, pois utiliza `window.replace` e pode carregar páginas externas que não são controladas pelo projeto.
 
 Além disso, as animações foram amplamente reduzidas, principalmente as animações de entrada. O projeto prioriza transições rápidas e discretas, mantendo apenas algumas animações pontuais quando elas contribuem para a experiência de uso. Dessa forma, a interface permanece visualmente agradável sem comprometer a agilidade e a responsividade do aplicativo.
+
+### Sobre as cores das barras:
+
+Eu decidi colocar a HubActivity com barraa transparentes por causa do escurecimento por inclinação 
+
+E todas da área do amparo porque pode ser que a usuária mostre para outra pessoa
+
+e ai TODAS AS OUTRAS TELAS estão com as barras pretas porque um layou já estava com essas barras por causa da espécie (é tipo um container sabe!), e ai nao ficava atrás das barras, e ai eu decidi fazer nos outros também para parecer que são todas assim...

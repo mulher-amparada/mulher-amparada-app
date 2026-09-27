@@ -2,6 +2,7 @@ package com.mulheres
 
 import android.graphics.Color as AndroidColor
 import android.os.Bundle
+import androidx.compose.foundation.layout.ColumnScope
 import android.view.WindowManager
 import android.content.Context
 import androidx.activity.ComponentActivity
@@ -201,49 +202,51 @@ private fun RotinaTheme(
         else
             Color(0xFFFF4F88)
 
-    androidx.compose.runtime.SideEffect {
+    val view =
+    androidx.compose.ui.platform.LocalView.current
 
-        val window =
-            (androidx.compose.ui.platform.LocalView.current.context
-                as ComponentActivity).window
+val window =
+    (view.context as ComponentActivity).window
 
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            true
-        )
+androidx.compose.runtime.SideEffect {
 
-        window.statusBarColor =
-            if (dark)
-                AndroidColor.BLACK
-            else
-                AndroidColor.WHITE
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        true
+    )
 
-        window.navigationBarColor =
-            if (dark)
-                AndroidColor.BLACK
-            else
-                AndroidColor.WHITE
+    window.statusBarColor =
+        if (dark)
+            AndroidColor.BLACK
+        else
+            AndroidColor.WHITE
 
-        if (
-            android.os.Build.VERSION.SDK_INT >=
-            android.os.Build.VERSION_CODES.Q
-        ) {
-            window.isNavigationBarContrastEnforced =
-                false
-        }
+    window.navigationBarColor =
+        if (dark)
+            AndroidColor.BLACK
+        else
+            AndroidColor.WHITE
 
-        WindowInsetsControllerCompat(
-            window,
-            window.decorView
-        ).apply {
-
-            isAppearanceLightStatusBars =
-                !dark
-
-            isAppearanceLightNavigationBars =
-                !dark
-        }
+    if (
+        android.os.Build.VERSION.SDK_INT >=
+        android.os.Build.VERSION_CODES.Q
+    ) {
+        window.isNavigationBarContrastEnforced =
+            false
     }
+
+    WindowInsetsControllerCompat(
+        window,
+        window.decorView
+    ).apply {
+
+        isAppearanceLightStatusBars =
+            !dark
+
+        isAppearanceLightNavigationBars =
+            !dark
+    }
+}
 
     MaterialTheme(
 
@@ -1128,7 +1131,9 @@ private fun Estatistica(
 
     legenda: String,
 
-    dark: Boolean
+    dark: Boolean,
+
+    modifier: Modifier = Modifier
 
 ) {
 
@@ -1151,7 +1156,7 @@ private fun Estatistica(
 
         modifier =
             Modifier
-                .weight(1f)
+               
                 .clip(
                     RoundedCornerShape(
                         17.dp

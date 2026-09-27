@@ -1353,6 +1353,7 @@ fun ocultarBotaoEmergencia() {
         emergenciaVisivel = false
     }
 }
+
 private fun criarEmergencyOverlay() {
 
     emergencyComposeView = ComposeView(this).apply {
@@ -1368,12 +1369,7 @@ private fun criarEmergencyOverlay() {
                 EmergencyOverlay(
                     visivel = emergenciaVisivel,
                     aoClicar = {
-
-                        emergenciaVisivel = !emergenciaVisivel
-
-                        if (emergenciaVisivel) {
-                            compartilharLocalizacaoEmergencia()
-                        }
+                        compartilharLocalizacaoEmergencia()
                     }
                 )
             }

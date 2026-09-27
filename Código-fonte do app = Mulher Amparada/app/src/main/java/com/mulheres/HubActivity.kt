@@ -2545,10 +2545,16 @@ private fun MulherAmparadaTheme(
     )
 
     window.statusBarColor =
-        AndroidColor.TRANSPARENT
+    if (dark)
+        AndroidColor.BLACK
+    else
+        AndroidColor.WHITE
 
-    window.navigationBarColor =
-        AndroidColor.TRANSPARENT
+window.navigationBarColor =
+    if (dark)
+        AndroidColor.BLACK
+    else
+        AndroidColor.WHITE
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         window.isNavigationBarContrastEnforced = false

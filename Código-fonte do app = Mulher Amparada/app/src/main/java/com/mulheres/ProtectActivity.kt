@@ -160,6 +160,24 @@ abrirDireitos = {
             DireitosActivity::class.java
         )
     )
+},
+
+abrirFinancas = {
+    startActivity(
+        Intent(
+            this,
+            FinancasActivity::class.java
+        )
+    )
+},
+
+abrirAbout = {
+    startActivity(
+        Intent(
+            this,
+            AboutActivity::class.java
+        )
+    )
 }
                 )
             }
@@ -317,7 +335,11 @@ private fun MeusAcessos(
 
     abrirApps: () -> Unit,
 
-    abrirDireitos: () -> Unit
+    abrirDireitos: () -> Unit,
+
+abrirFinancas: () -> Unit,
+
+abrirAbout: () -> Unit
 
 ) {
 
@@ -402,26 +424,26 @@ private fun MeusAcessos(
 
     val especiais = listOf(
 
-        Acesso(
-            "Feliz Dia das Mulheres!",
-            "Um jogo gamificado"
-        ),
+    Acesso(
+        "Feliz Dia das Mulheres!",
+        "Um jogo gamificado"
+    ),
 
-        Acesso(
-            "100 dos seus direitos",
-            "Seja amparada pela lei"
-        ),
+    Acesso(
+        "100 dos seus direitos",
+        "Seja amparada pela lei"
+    ),
 
-        Acesso(
-            "Dicas de como recuperar sua autonomia financeira",
-            "Conhecimentos valiosos"
-        ),
+    Acesso(
+        "Dicas de como recuperar sua autonomia financeira",
+        "Conhecimentos valiosos"
+    ),
 
-        Acesso(
-            "Uma carta para você, mulher!",
-            "Uma mensagem especial"
-        )
+    Acesso(
+        "Uma carta para você, mulher!",
+        "Uma mensagem especial"
     )
+)
 
 
     Box(
@@ -637,11 +659,18 @@ private fun MeusAcessos(
 
         when (acesso.titulo) {
 
-            "100 dos seus direitos" -> {
-                abrirDireitos()
-            }
+    "100 dos seus direitos" -> {
+        abrirDireitos()
+    }
 
-        }
+    "Dicas de como recuperar sua autonomia financeira" -> {
+        abrirFinancas()
+    }
+
+    "Uma carta para você, mulher!" -> {
+        abrirAbout()
+    }
+}
     }
 )
             }

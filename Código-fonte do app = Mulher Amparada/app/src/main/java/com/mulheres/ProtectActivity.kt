@@ -50,205 +50,167 @@ import androidx.compose.ui.unit.sp
 
 
 class ProtectActivity : ComponentActivity() {
+override fun onCreate(
+    savedInstanceState: Bundle?
+) {
+    super.onCreate(savedInstanceState)
 
-    override fun onCreate(
-        savedInstanceState: Bundle?
-    ) {
-        super.onCreate(savedInstanceState)
-
-        window.addFlags(
-            WindowManager.LayoutParams.FLAG_SECURE
-        )
-
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
-        )
-
-        window.statusBarColor =
-            AndroidColor.TRANSPARENT
-
-        WindowCompat.getInsetsController(
-            window,
-            window.decorView
-        ).isAppearanceLightStatusBars = false
-
-        setContent {
-
-            androidx.compose.runtime.CompositionLocalProvider(
-                LocalOverscrollFactory provides null
-            ) {
-
-                private fun MeusAcessos(
-
-    abrirCiclo: () -> Unit,
-
-    abrirNavegador: () -> Unit,
-
-    abrirMapa: () -> Unit,
-
-    abrirDiario: () -> Unit,
-
-    abrirGravador: () -> Unit,
-
-    abrirArquivos: () -> Unit,
-
-    abrirCalculadora: () -> Unit,
-
-    abrirRelogio: () -> Unit,
-
-    abrirRotina: () -> Unit,
-
-    abrirApps: () -> Unit,
-
-    abrirDia: () -> Unit,
-
-    abrirDireitos: () -> Unit,
-
-    abrirFinancas: () -> Unit,
-
-    abrirAbout: () -> Unit
-
-) {(
-
-    abrirCiclo = {
-        startActivity(
-            Intent(
-                this,
-                CicloActivity::class.java
-            )
-        )
-    },
-
-    abrirNavegador = {
-        startActivity(
-            Intent(
-                this,
-                MainActivity::class.java
-            )
-        )
-    },
-
-    abrirMapa = {
-        startActivity(
-            Intent(
-                this,
-                MapaActivity::class.java
-            )
-        )
-    
-                    },
-
-                    abrirDiario = {
-                        startActivity(
-                            Intent(
-                                this,
-                                DiarioActivity::class.java
-                            )
-                        )
-                    },
-
-                    abrirCalculadora = {
-                        startActivity(
-                            Intent(
-                                this,
-                                CalcActivity::class.java
-                            )
-                        )
-                    },
-
-abrirTarefa = {
-    startActivity(
-        Intent(
-            this,
-            TarefaActivity::class.java
-        )
+    window.addFlags(
+        WindowManager.LayoutParams.FLAG_SECURE
     )
-},
 
-                    abrirRotina = {
-    startActivity(
-        Intent(
-            this,
-            RotinaActivity::class.java
-        )
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        false
     )
-},
 
-abrirRelogio = {
-    startActivity(
-        Intent(
-            this,
-            RelogioActivity::class.java
-        )
-    )
-},
+    window.statusBarColor =
+        AndroidColor.TRANSPARENT
 
-                    abrirGravador = {
-                        startActivity(
-                            Intent(
-                                this,
-                                GravarActivity::class.java
-                            )
-                        )
-                    },
+    WindowCompat.getInsetsController(
+        window,
+        window.decorView
+    ).isAppearanceLightStatusBars = false
 
-                    abrirArquivos = {
-                        startActivity(
-                            Intent(
-                                this,
-                                FileActivity::class.java
-                            )
-                        )
-                    },
+    setContent {
 
-                    abrirApps = {
-    startActivity(
-        Intent(
-            this,
-            AppsActivity::class.java
-        )
-    )
-},
+        MeusAcessos(
 
-abrirDia = {
-    startActivity(
-        Intent(
-            this,
-            DiaActivity::class.java
-        )
-    )
-},
+            abrirCiclo = {
+                startActivity(
+                    Intent(
+                        this,
+                        CicloActivity::class.java
+                    )
+                )
+            },
 
-abrirDireitos = {
-    startActivity(
-        Intent(
-            this,
-            DireitosActivity::class.java
-        )
-    )
-},
+            abrirNavegador = {
+                startActivity(
+                    Intent(
+                        this,
+                        MainActivity::class.java
+                    )
+                )
+            },
 
-abrirFinancas = {
-    startActivity(
-        Intent(
-            this,
-            FinancasActivity::class.java
-        )
-    )
-},
+            abrirMapa = {
+                startActivity(
+                    Intent(
+                        this,
+                        MapaActivity::class.java
+                    )
+                )
+            },
 
-abrirAbout = {
-    startActivity(
-        Intent(
-            this,
-            AboutActivity::class.java
-        )
-    )
-}
+            abrirDiario = {
+                startActivity(
+                    Intent(
+                        this,
+                        DiarioActivity::class.java
+                    )
+                )
+            },
+
+            abrirCalculadora = {
+                startActivity(
+                    Intent(
+                        this,
+                        CalcActivity::class.java
+                    )
+                )
+            },
+
+            abrirTarefa = {
+                startActivity(
+                    Intent(
+                        this,
+                        TarefaActivity::class.java
+                    )
+                )
+            },
+
+            abrirRotina = {
+                startActivity(
+                    Intent(
+                        this,
+                        RotinaActivity::class.java
+                    )
+                )
+            },
+
+            abrirRelogio = {
+                startActivity(
+                    Intent(
+                        this,
+                        RelogioActivity::class.java
+                    )
+                )
+            },
+
+            abrirGravador = {
+                startActivity(
+                    Intent(
+                        this,
+                        GravarActivity::class.java
+                    )
+                )
+            },
+
+            abrirArquivos = {
+                startActivity(
+                    Intent(
+                        this,
+                        FileActivity::class.java
+                    )
+                )
+            },
+
+            abrirApps = {
+                startActivity(
+                    Intent(
+                        this,
+                        AppsActivity::class.java
+                    )
+                )
+            },
+
+            abrirDia = {
+                startActivity(
+                    Intent(
+                        this,
+                        DiaActivity::class.java
+                    )
+                )
+            },
+
+            abrirDireitos = {
+                startActivity(
+                    Intent(
+                        this,
+                        DireitosActivity::class.java
+                    )
+                )
+            },
+
+            abrirFinancas = {
+                startActivity(
+                    Intent(
+                        this,
+                        FinancasActivity::class.java
+                    )
+                )
+            },
+
+            abrirAbout = {
+                startActivity(
+                    Intent(
+                        this,
+                        AboutActivity::class.java
+                    )
                 )
             }
-        }
+        )
     }
 }
 
@@ -404,7 +366,7 @@ private fun MeusAcessos(
 
     abrirRotina: () -> Unit,
 
-abrirTarefa: () -> Unit,
+    abrirTarefa: () -> Unit,
 
     abrirApps: () -> Unit,
 

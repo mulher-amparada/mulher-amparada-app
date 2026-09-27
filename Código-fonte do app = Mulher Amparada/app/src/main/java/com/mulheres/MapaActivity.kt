@@ -1,6 +1,5 @@
 package com.mulheres
 
-import androidx.compose.foundation.layout.WindowInsets
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
@@ -8,12 +7,10 @@ import android.graphics.Color as AndroidColor
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.WindowManager
-
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,16 +26,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
-
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
@@ -47,7 +40,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,13 +51,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-
 import androidx.core.content.ContextCompat
-
 import com.google.android.gms.location.LocationServices
-
 import kotlinx.coroutines.delay
-
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -391,13 +379,7 @@ private fun MapaTela(
                     else
                         FundoClaro
                 )
-                .windowInsetsPadding(
-                    androidx.compose
-                        .foundation
-                        .layout
-                        .WindowInsets
-                        .safeDrawing
-                )
+                
 
     ) {
 

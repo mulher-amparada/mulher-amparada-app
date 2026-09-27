@@ -1,5 +1,6 @@
 package com.mulheres
 
+import android.app.Activity
 import android.graphics.Color as AndroidColor
 import android.os.Bundle
 import android.view.WindowManager
@@ -37,6 +38,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -45,7 +47,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
-
 
 class FinancasActivity : ComponentActivity() {
 
@@ -85,6 +86,12 @@ private fun FinancasTheme() {
 
     val dark =
         isSystemInDarkTheme()
+
+    val view =
+        LocalView.current
+
+    val window =
+        (view.context as Activity).window
 
     SideEffect {
 
@@ -134,7 +141,6 @@ private fun FinancasTheme() {
         )
     }
 }
-
 
 /* =========================================================
    FONTE

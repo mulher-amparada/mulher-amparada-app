@@ -117,14 +117,23 @@ class ProtectActivity : ComponentActivity() {
                         )
                     },
 
-                    abrirRelogio = {
-                        startActivity(
-                            Intent(
-                                this,
-                                RelogioActivity::class.java
-                            )
-                        )
-                    },
+                    abrirRotina = {
+    startActivity(
+        Intent(
+            this,
+            RotinaActivity::class.java
+        )
+    )
+},
+
+abrirRelogio = {
+    startActivity(
+        Intent(
+            this,
+            RelogioActivity::class.java
+        )
+    )
+},
 
                     abrirGravador = {
                         startActivity(
@@ -333,15 +342,17 @@ private fun MeusAcessos(
 
     abrirRelogio: () -> Unit,
 
+    abrirRotina: () -> Unit,
+
     abrirApps: () -> Unit,
 
     abrirDireitos: () -> Unit,
 
-abrirFinancas: () -> Unit,
+    abrirFinancas: () -> Unit,
 
-abrirAbout: () -> Unit
+    abrirAbout: () -> Unit
 
-) {
+)
 
     val dark =
         isSystemInDarkTheme()
@@ -536,9 +547,13 @@ abrirAbout: () -> Unit
     abrirDiario()
 }
 
-                            "Relógio + Localização" -> {
-                                abrirRelogio()
-                            }
+                     "Rotina gamificada" -> {
+    abrirRotina()
+}
+
+"Relógio + Localização" -> {
+    abrirRelogio()
+}
 
                             "Calculadora" -> {
                                 abrirCalculadora()

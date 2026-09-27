@@ -749,7 +749,7 @@ private fun Destaque(
                     "Casos pesados. Então, para mim, vocês representam uma força emocional " +
                     "extremamente determinada — maior que ",
                 secundario,
-                extra = buildAnnotatedString {
+                buildAnnotatedString {
                     append("E tenho certeza que chegam até vocês casos extremamente violentos, né? " +
                         "Casos pesados. Então, para mim, vocês representam uma força emocional " +
                         "extremamente determinada — maior que ")
@@ -1157,6 +1157,27 @@ private fun Destaque(
             Bolhas(roxo)
         }
     }
+}
+
+@Composable
+private fun TituloTerciario(
+    texto: String,
+    cor: Color
+) {
+    Text(
+        text = texto,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 24.dp,
+                bottom = 12.dp
+            ),
+        color = cor,
+        fontFamily = Quicksand,
+        fontSize = 17.sp,
+        fontWeight = FontWeight.Bold,
+        lineHeight = 24.sp
+    )
 }
 
 @Composable

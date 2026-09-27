@@ -79,23 +79,29 @@ class MainActivity : AppCompatActivity() {
     // =====================================================
 
     ViewCompat.setOnApplyWindowInsetsListener(
-    webView
-) { view, insets ->
+        webView
+    ) { view, insets ->
 
-    val barras =
-        insets.getInsets(
-            WindowInsetsCompat.Type.systemBars()
-        )
+        val barras =
+            insets.getInsets(
+                WindowInsetsCompat.Type.systemBars()
+            )
 
-    view.setPadding(
-        0,
-        barras.top,
-        0,
-        barras.bottom
-    )
+        val params =
+            view.layoutParams
+                as ViewGroup.MarginLayoutParams
 
-    insets
-}
+        params.topMargin =
+            barras.top
+
+        params.bottomMargin =
+            barras.bottom
+
+        view.layoutParams =
+            params
+
+        insets
+    }
 
     // =====================================================
     // PÁGINA INICIAL

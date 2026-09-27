@@ -62,7 +62,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalOverscrollFactory
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -398,34 +397,29 @@ private fun DiaApp() {
         onDispose { }
     }
 
-    CompositionLocalProvider(
-        LocalOverscrollFactory provides null
-    ) {
+    Surface(
+    modifier = Modifier.fillMaxSize(),
+    color = background
+) {
 
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = background
-        ) {
-
-            DiaScreen(
-                darkMode = darkMode,
-                onDarkModeChange = {
-                    darkMode = it
-                },
-                storage = storage,
-                card = card,
-                card2 = card2,
-                background = background,
-                text = text,
-                muted = muted,
-                border = border,
-                pink = pink,
-                pinkLight = pinkLight,
-                purple = purple,
-                purpleDark = purpleDark
-            )
-        }
-    }
+    DiaScreen(
+        darkMode = darkMode,
+        onDarkModeChange = {
+            darkMode = it
+        },
+        storage = storage,
+        card = card,
+        card2 = card2,
+        background = background,
+        text = text,
+        muted = muted,
+        border = border,
+        pink = pink,
+        pinkLight = pinkLight,
+        purple = purple,
+        purpleDark = purpleDark
+    )
+}
 }
 
 private fun windowStatusBars(

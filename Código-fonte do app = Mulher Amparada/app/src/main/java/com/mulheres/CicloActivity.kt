@@ -1,6 +1,7 @@
 package com.mulheres
 
 import android.app.DatePickerDialog
+import androidx.compose.ui.graphics.Path
 import android.content.Context
 import android.graphics.Color as AndroidColor
 import android.os.Bundle
@@ -9,7 +10,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -37,7 +37,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,7 +46,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Path
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -339,10 +337,6 @@ class CicloActivity : ComponentActivity() {
 }
 
 
-@OptIn(
-    ExperimentalFoundationApi::class,
-    ExperimentalMaterial3Api::class
-)
 @Composable
 private fun CicloApp() {
 
@@ -446,9 +440,7 @@ private fun CicloApp() {
         colorScheme = scheme
     ) {
 
-        CompositionLocalProvider(
-            LocalOverscrollFactory provides null
-        ) {
+        
 
             var registros by remember {
                 mutableStateOf(
@@ -683,8 +675,6 @@ private fun CicloApp() {
             }
         }
     }
-}
-
 
 private fun windowColor(
     window: CicloActivity,
@@ -1510,6 +1500,8 @@ private fun NovoRegistroDialog(
     onFechar: () -> Unit,
     onSalvar: (CicloRegistro) -> Unit
 ) {
+
+val ctx = LocalContext.current
 
     var data by remember {
         mutableStateOf(

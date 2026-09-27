@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
@@ -174,7 +175,8 @@ private fun RelogioApp() {
         ) {
 
             RelogioTela(
-                dark = dark
+                dark = dark,
+                fundo = fundo
             )
         }
     }
@@ -182,18 +184,24 @@ private fun RelogioApp() {
 
 @Composable
 private fun RelogioTela(
-    dark: Boolean
+    dark: Boolean,
+    fundo: Color
 ) {
 
-    val fusedLocationClient =
-        remember {
-            LocationServices.getFusedLocationProviderClient(
-                androidx.compose.ui.platform.LocalContext.current
-            )
-        }
-
+    /*
+     * IMPORTANTE:
+     * LocalContext.current precisa ser obtido diretamente
+     * dentro de uma função @Composable.
+     */
     val context =
         androidx.compose.ui.platform.LocalContext.current
+
+    val fusedLocationClient =
+        remember(context) {
+            LocationServices.getFusedLocationProviderClient(
+                context
+            )
+        }
 
     var dados by remember {
         mutableStateOf(
@@ -368,12 +376,13 @@ private fun RelogioTela(
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(
-                start = 14.dp,
-                end = 14.dp,
-                top = 20.dp,
-                bottom = 30.dp
-            ),
+            contentPadding =
+                androidx.compose.foundation.layout.PaddingValues(
+                    start = 14.dp,
+                    end = 14.dp,
+                    top = 20.dp,
+                    bottom = 30.dp
+                ),
             verticalArrangement =
                 Arrangement.spacedBy(0.dp)
         ) {

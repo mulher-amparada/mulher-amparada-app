@@ -310,51 +310,6 @@ private fun FinancasScreen(
                     Modifier.height(18.dp)
             )
 
-
-            /* =================================================
-               FINAL
-            ================================================= */
-
-            Spacer(
-                modifier =
-                    Modifier.height(15.dp)
-            )
-
-            Text(
-                text =
-                    "Conhecimento financeiro também é uma forma de proteção. 🌷",
-
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            horizontal = 10.dp,
-                            vertical = 20.dp
-                        ),
-
-                color =
-                    texto,
-
-                fontFamily =
-                    Quicksand,
-
-                fontSize =
-                    16.sp,
-
-                fontWeight =
-                    FontWeight.Bold,
-
-                lineHeight =
-                    24.sp,
-
-                textAlign =
-                    TextAlign.Center
-            )
-
-            Spacer(
-                modifier =
-                    Modifier.height(40.dp)
-            )
         }
     }
 }

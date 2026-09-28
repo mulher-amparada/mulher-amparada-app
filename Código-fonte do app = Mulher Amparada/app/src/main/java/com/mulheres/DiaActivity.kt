@@ -1,6 +1,8 @@
 package com.mulheres
 
 import android.content.Context
+import androidx.compose.foundation.LocalOverscrollFactory
+import androidx.compose.runtime.CompositionLocalProvider
 import android.content.SharedPreferences
 import android.graphics.Color as AndroidColor
 import android.os.Bundle
@@ -471,8 +473,14 @@ class DiaActivity : ComponentActivity() {
         )
 
         setContent {
-            DiaApp()
-        }
+
+    CompositionLocalProvider(
+        LocalOverscrollFactory provides null
+    ) {
+
+        DiaApp()
+    }
+}
     }
 }
 

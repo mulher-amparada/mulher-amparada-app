@@ -1163,11 +1163,16 @@ private fun SortDropdown(
         }
 
         DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = {
-                expanded = false
-            }
-        ) {
+    expanded = expanded,
+    onDismissRequest = {
+        expanded = false
+    },
+    containerColor =
+        if (dark)
+            Color(0xFF2A2A2E)
+        else
+            Color.White
+) {
 
             labels.forEach { (value, label) ->
 
@@ -2160,11 +2165,17 @@ private fun PlannerDropdown(
             }
 
             DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = {
-                    expanded = false
-                }
-            ) {
+    DropdownMenu(
+    expanded = expanded,
+    onDismissRequest = {
+        expanded = false
+    },
+    containerColor =
+        if (dark)
+            Color(0xFF2A2A2E)
+        else
+            Color.White
+) {
 
                 options.forEach { option ->
 

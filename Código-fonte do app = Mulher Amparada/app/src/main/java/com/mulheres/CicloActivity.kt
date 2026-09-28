@@ -1933,74 +1933,69 @@ private fun CheckSection(
                 linha ->
 
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp),
-                    horizontalArrangement =
-                        Arrangement.spacedBy(8.dp)
-                ) {
+    modifier = Modifier
+        .fillMaxWidth()
+        .height(IntrinsicSize.Min)
+        .padding(bottom = 8.dp),
+    horizontalArrangement =
+        Arrangement.spacedBy(8.dp)
+) {
 
-                    linha.forEachIndexed {
-                        colunaIndex,
-                        item ->
+    linha.forEachIndexed { colunaIndex, item ->
 
-                        val indice =
-                            linhaIndex * 2 +
-                                colunaIndex
+        val indice =
+            linhaIndex * 2 + colunaIndex
 
-                        Row(
-                            modifier = Modifier
-                                .weight(1f)
-                                .clip(
-                                    RoundedCornerShape(15.dp)
-                                )
-                                .background(card)
-                                .border(
-                                    1.dp,
-                                    borda,
-                                    RoundedCornerShape(15.dp)
-                                )
-                                .clickable {
-
-                                    onChange(
-                                        indice,
-                                        !item.second
-                                    )
-                                }
-                                .padding(
-                                    horizontal = 7.dp,
-                                    vertical = 5.dp
-                                ),
-                            verticalAlignment =
-                                Alignment.CenterVertically
-                        ) {
-
-                            Checkbox(
-                                checked = item.second,
-                                onCheckedChange = {
-                                    onChange(
-                                        indice,
-                                        it
-                                    )
-                                }
-                            )
-
-                            Text(
-                                text = item.first,
-                                fontFamily = Quicksand,
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                color = texto
-                            )
-                        }
-                    }
-
-                    if (linha.size == 1) {
-                        Spacer(
-                            Modifier.weight(1f)
-                        )
-                    }
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .clip(
+                    RoundedCornerShape(15.dp)
+                )
+                .background(card)
+                .border(
+                    1.dp,
+                    borda,
+                    RoundedCornerShape(15.dp)
+                )
+                .clickable {
+                    onChange(
+                        indice,
+                        !item.second
+                    )
                 }
+                .padding(
+                    horizontal = 7.dp,
+                    vertical = 5.dp
+                ),
+            verticalAlignment =
+                Alignment.CenterVertically
+        ) {
+
+            Checkbox(
+                checked = item.second,
+                onCheckedChange = {
+                    onChange(indice, it)
+                }
+            )
+
+            Text(
+                text = item.first,
+                fontFamily = Quicksand,
+                fontSize = 10.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = texto
+            )
+        }
+    }
+
+    if (linha.size == 1) {
+        Spacer(
+            modifier = Modifier.weight(1f)
+        )
+    }
+}
             }
     }
 }

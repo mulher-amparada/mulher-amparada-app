@@ -2,6 +2,7 @@ package com.mulheres
 
 import android.content.ContentValues
 import android.content.Context
+import android.widget.Toast
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -446,12 +447,22 @@ private fun DiarioScreen() {
                     dark = dark,
                     onDownload = {
 
-                        exportAllPages(
-                            context = context,
-                            pages = pages
-                        )
+    val baixou =
+        exportAllPages(
+            context = context,
+            pages = pages
+        )
 
-                    },
+    Toast.makeText(
+        context,
+        if (baixou)
+            "Diário baixado"
+        else
+            "Não foi possível baixar o diário",
+        Toast.LENGTH_SHORT
+    ).show()
+
+},
                     onDelete = {
 
                         showDeleteDialog = true

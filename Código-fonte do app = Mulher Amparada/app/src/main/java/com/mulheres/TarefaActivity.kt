@@ -1167,47 +1167,47 @@ private fun SortDropdown(
     onDismissRequest = {
         expanded = false
     },
-    containerColor =
+    modifier = Modifier.background(
         if (dark)
             Color(0xFF2A2A2E)
         else
             Color.White
+    )
 ) {
 
-            labels.forEach { (value, label) ->
+    labels.forEach { (value, label) ->
 
-                DropdownMenuItem(
-                    text = {
+        DropdownMenuItem(
+            text = {
 
-                        Text(
-                            text = label,
-                            fontFamily = Quicksand,
-                            fontSize = 11.sp,
-                            color =
-                                if (value == current) {
-                                    Accent
-                                } else {
-                                    if (dark)
-                                        Color.White
-                                    else
-                                        LightText
-                                },
-                            fontWeight =
-                                if (value == current)
-                                    FontWeight.Bold
-                                else
-                                    FontWeight.Normal
-                        )
-                    },
-
-                    onClick = {
-
-                        onChange(value)
-                        expanded = false
-                    }
+                Text(
+                    text = label,
+                    fontFamily = Quicksand,
+                    fontSize = 11.sp,
+                    color =
+                        if (value == current) {
+                            Accent
+                        } else if (dark) {
+                            Color.White
+                        } else {
+                            LightText
+                        },
+                    fontWeight =
+                        if (value == current)
+                            FontWeight.Bold
+                        else
+                            FontWeight.Normal
                 )
+            },
+
+            onClick = {
+
+                onChange(value)
+                expanded = false
             }
-        }
+        )
+    }
+}
     }
 }
 
@@ -2100,12 +2100,12 @@ private fun PlannerDropdown(
                     .clip(
                         RoundedCornerShape(14.dp)
                     )
-.background(
-    if (dark)
-        Color.Black
-    else
-        Color.White
-)
+                    .background(
+                        if (dark)
+                            Color.Black
+                        else
+                            Color.White
+                    )
                     .border(
                         1.dp,
                         if (expanded)
@@ -2165,17 +2165,17 @@ private fun PlannerDropdown(
             }
 
             DropdownMenu(
-    DropdownMenu(
-    expanded = expanded,
-    onDismissRequest = {
-        expanded = false
-    },
-    containerColor =
-        if (dark)
-            Color(0xFF2A2A2E)
-        else
-            Color.White
-) {
+                expanded = expanded,
+                onDismissRequest = {
+                    expanded = false
+                },
+                modifier = Modifier.background(
+                    if (dark)
+                        Color(0xFF2A2A2E)
+                    else
+                        Color.White
+                )
+            ) {
 
                 options.forEach { option ->
 
@@ -2187,18 +2187,16 @@ private fun PlannerDropdown(
                                 fontFamily = Quicksand,
                                 fontSize = 13.sp,
                                 color =
-                                    if (
-                                        option == value
-                                    ) {
+                                    if (option == value) {
                                         Accent
+                                    } else if (dark) {
+                                        Color.White
                                     } else {
-                                        if (dark)
-                                            Color.White
-                                        else
-                                            LightText
+                                        LightText
                                     }
                             )
                         },
+
                         onClick = {
 
                             onChange(option)

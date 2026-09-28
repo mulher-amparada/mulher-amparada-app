@@ -840,10 +840,10 @@ private fun RotinaScreen(
                         ),
 
                     colors =
-                        ButtonDefaults.buttonColors(
-                            containerColor =
-                                Vermelho
-                        )
+    ButtonDefaults.buttonColors(
+        containerColor = Vermelho,
+        contentColor = Color.White
+    )
                 ) {
 
                     Text(

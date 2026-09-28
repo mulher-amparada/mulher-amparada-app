@@ -67,10 +67,10 @@ class ProtectActivity : ComponentActivity() {
         )
 
         window.statusBarColor =
-            AndroidColor.BLACK
+            AndroidColor.TRANSPARENT
 
         window.navigationBarColor =
-            AndroidColor.BLACK
+            AndroidColor.TRANSPARENT
 
         WindowCompat.getInsetsController(
             window,

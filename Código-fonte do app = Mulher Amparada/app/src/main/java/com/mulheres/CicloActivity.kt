@@ -88,7 +88,7 @@ private val Quicksand = FontFamily(
 )
 
 private val Rosa = Color(0xFFFF7F9F)
-private val Rosa2 = Color(0xFFFF4F78)
+private val Rosa2 = Color(0xFFFFFFFF)
 private val Rosa3 = Color(0xFFFFB1C4)
 
 private data class CicloRegistro(

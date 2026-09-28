@@ -1,18 +1,18 @@
 package com.mulheres
 
 import android.app.DatePickerDialog
-import androidx.compose.ui.graphics.Path
 import android.content.Context
 import android.graphics.Color as AndroidColor
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,34 +21,17 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
@@ -69,8 +52,6 @@ import java.util.Locale
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
-import androidx.activity.enableEdgeToEdge
-
 
 private val Quicksand = FontFamily(
     Font(R.font.quicksand)
@@ -80,19 +61,16 @@ private val Rosa = Color(0xFFFF7F9F)
 private val Rosa2 = Color(0xFFFF4F78)
 private val Rosa3 = Color(0xFFFFB1C4)
 
-
 private data class CicloRegistro(
     val data: String,
     val dor: Int,
     val humor: String,
-
     val agua: Boolean,
     val cafe: Boolean,
     val chocolate: Boolean,
     val exercicio: Boolean,
     val sonoRuim: Boolean,
     val apetite: Boolean,
-
     val cansaco: Boolean,
     val irritacao: Boolean,
     val ansiedade: Boolean,
@@ -103,7 +81,6 @@ private data class CicloRegistro(
     val nausea: Boolean,
     val tontura: Boolean,
     val energiaBaixa: Boolean,
-
     val estresse: Boolean,
     val tristeza: Boolean,
     val felicidade: Boolean,
@@ -112,13 +89,11 @@ private data class CicloRegistro(
     val libido: Boolean
 )
 
-
 private enum class Ordem {
     NOVO,
     ANTIGO,
     DOR
 }
-
 
 private fun CicloRegistro.toJson(): JSONObject {
     return JSONObject().apply {
@@ -153,11 +128,9 @@ private fun CicloRegistro.toJson(): JSONObject {
     }
 }
 
-
 private fun JSONObject.bool(nome: String): Boolean {
     return optBoolean(nome, false)
 }
-
 
 private fun JSONObject.toCicloRegistro(): CicloRegistro {
     return CicloRegistro(
@@ -192,11 +165,11 @@ private fun JSONObject.toCicloRegistro(): CicloRegistro {
     )
 }
 
-
-private fun carregarCiclo(context: Context): List<CicloRegistro> {
+private fun carregarCiclo(
+    context: Context
+): List<CicloRegistro> {
     return try {
         val cripto = Cripto(context)
-
         val bruto = cripto.carregar("ciclo")
 
         if (bruto.isBlank()) {
@@ -225,7 +198,6 @@ private fun salvarCiclo(
 ) {
     try {
         val cripto = Cripto(context)
-
         val array = JSONArray()
 
         registros.forEach {
@@ -240,10 +212,11 @@ private fun salvarCiclo(
     }
 }
 
-private fun apagarCiclo(context: Context) {
+private fun apagarCiclo(
+    context: Context
+) {
     try {
         val cripto = Cripto(context)
-
         cripto.remover("ciclo")
     } catch (_: Exception) {
     }
@@ -252,7 +225,6 @@ private fun apagarCiclo(context: Context) {
 private fun formatarData(
     data: String
 ): String {
-
     if (data.isBlank()) {
         return "—"
     }
@@ -266,11 +238,9 @@ private fun formatarData(
     return "${partes[2]}/${partes[1]}/${partes[0]}"
 }
 
-
 private fun emojiHumor(
     humor: String
 ): String {
-
     return when (humor) {
         "feliz" -> "😊"
         "neutro" -> "😐"
@@ -280,11 +250,9 @@ private fun emojiHumor(
     }
 }
 
-
 private fun nomeHumor(
     humor: String
 ): String {
-
     return when (humor) {
         "feliz" -> "Feliz"
         "neutro" -> "Neutro"
@@ -294,9 +262,7 @@ private fun nomeHumor(
     }
 }
 
-
 private fun hojeISO(): String {
-
     val formato = SimpleDateFormat(
         "yyyy-MM-dd",
         Locale.getDefault()
@@ -307,13 +273,11 @@ private fun hojeISO(): String {
     )
 }
 
-
 private fun booleanValue(
     v: Boolean
 ): Float {
     return if (v) 1f else 0f
 }
-
 
 class CicloActivity : ComponentActivity() {
 
@@ -338,21 +302,17 @@ class CicloActivity : ComponentActivity() {
     }
 }
 
-
 @Composable
 private fun CicloApp() {
 
     val ctx = LocalContext.current
-
-    val dark =
-        androidx.compose.foundation
-            .isSystemInDarkTheme()
+    val dark = isSystemInDarkTheme()
 
     val fundo =
         if (dark) {
             Color.Black
         } else {
-            Color(0xFFFFFFFF)
+            Color.White
         }
 
     val texto =
@@ -397,9 +357,7 @@ private fun CicloApp() {
             Color(0xFFF0F0F3)
         }
 
-
     SideEffect {
-
         val corBarra =
             if (dark) {
                 AndroidColor.BLACK
@@ -408,16 +366,14 @@ private fun CicloApp() {
             }
 
         windowColor(
-    window = ctx as CicloActivity,
-    color = corBarra,
-    dark = dark
-)
+            window = ctx as CicloActivity,
+            color = corBarra,
+            dark = dark
+        )
     }
-
 
     val scheme =
         if (dark) {
-
             darkColorScheme(
                 primary = Rosa,
                 background = fundo,
@@ -425,9 +381,7 @@ private fun CicloApp() {
                 onBackground = texto,
                 onSurface = texto
             )
-
         } else {
-
             lightColorScheme(
                 primary = Rosa2,
                 background = fundo,
@@ -437,246 +391,234 @@ private fun CicloApp() {
             )
         }
 
-
     MaterialTheme(
         colorScheme = scheme
     ) {
 
-        
+        var registros by remember {
+            mutableStateOf(
+                carregarCiclo(ctx)
+            )
+        }
 
-            var registros by remember {
-                mutableStateOf(
-                    carregarCiclo(ctx)
-                )
-            }
+        var ordem by remember {
+            mutableStateOf(
+                Ordem.NOVO
+            )
+        }
 
-            var ordem by remember {
-                mutableStateOf(
-                    Ordem.NOVO
-                )
-            }
+        var pesquisa by remember {
+            mutableStateOf("")
+        }
 
-            var pesquisa by remember {
-                mutableStateOf("")
-            }
+        var telaDetalhes by remember {
+            mutableStateOf<CicloRegistro?>(null)
+        }
 
-            var telaDetalhes by remember {
-                mutableStateOf<CicloRegistro?>(null)
-            }
+        var mostrarNovo by remember {
+            mutableStateOf(false)
+        }
 
-            var mostrarNovo by remember {
-                mutableStateOf(false)
-            }
+        var confirmarApagar by remember {
+            mutableStateOf(false)
+        }
 
-            var confirmarApagar by remember {
-                mutableStateOf(false)
-            }
-
-
-            val filtrados =
-                remember(
-                    registros,
-                    pesquisa,
-                    ordem
-                ) {
-
-                    var lista =
-                        registros.filter { registro ->
-
-                            if (pesquisa.isBlank()) {
-                                true
-                            } else {
-
-                                val textoBusca =
-                                    listOf(
-                                        registro.data,
-                                        registro.humor,
-                                        registro.dor.toString()
-                                    )
-                                        .joinToString(" ")
-                                        .lowercase()
-
-                                textoBusca.contains(
-                                    pesquisa.lowercase()
-                                )
-                            }
-                        }
-
-
-                    lista =
-                        when (ordem) {
-
-                            Ordem.NOVO ->
-                                lista.sortedByDescending {
-                                    it.data
-                                }
-
-                            Ordem.ANTIGO ->
-                                lista.sortedBy {
-                                    it.data
-                                }
-
-                            Ordem.DOR ->
-                                lista.sortedByDescending {
-                                    it.dor
-                                }
-                        }
-
-                    lista
-                }
-
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(fundo)
-                    .safeDrawingPadding()
+        val filtrados =
+            remember(
+                registros,
+                pesquisa,
+                ordem
             ) {
 
-                if (telaDetalhes != null) {
+                var lista =
+                    registros.filter { registro ->
 
-                    TelaDetalhes(
-                        registro = telaDetalhes!!,
-                        dark = dark,
-                        texto = texto,
-                        texto2 = texto2,
-                        texto3 = texto3,
-                        borda = borda,
-                        card = card,
-                        onBack = {
-                            telaDetalhes = null
+                        if (pesquisa.isBlank()) {
+                            true
+                        } else {
+
+                            val textoBusca =
+                                listOf(
+                                    registro.data,
+                                    registro.humor,
+                                    registro.dor.toString()
+                                )
+                                    .joinToString(" ")
+                                    .lowercase()
+
+                            textoBusca.contains(
+                                pesquisa.lowercase()
+                            )
                         }
-                    )
+                    }
 
-                } else {
+                lista =
+                    when (ordem) {
 
-                    TelaLista(
-                        registros = registros,
-                        filtrados = filtrados,
-                        pesquisa = pesquisa,
-                        ordem = ordem,
-                        dark = dark,
-                        texto = texto,
-                        texto2 = texto2,
-                        texto3 = texto3,
-                        borda = borda,
-                        card = card,
-                        card2 = card2,
-                        onPesquisa = {
-                            pesquisa = it
-                        },
-                        onOrdem = {
-                            ordem = it
-                        },
-                        onAdicionar = {
-                            mostrarNovo = true
-                        },
-                        onApagar = {
-                            if (registros.isNotEmpty()) {
-                                confirmarApagar = true
+                        Ordem.NOVO ->
+                            lista.sortedByDescending {
+                                it.data
                             }
-                        },
-                        onAbrir = {
-                            telaDetalhes = it
+
+                        Ordem.ANTIGO ->
+                            lista.sortedBy {
+                                it.data
+                            }
+
+                        Ordem.DOR ->
+                            lista.sortedByDescending {
+                                it.dor
+                            }
+                    }
+
+                lista
+            }
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(fundo)
+                .safeDrawingPadding()
+        ) {
+
+            if (telaDetalhes != null) {
+
+                TelaDetalhes(
+                    registro = telaDetalhes!!,
+                    dark = dark,
+                    texto = texto,
+                    texto2 = texto2,
+                    texto3 = texto3,
+                    borda = borda,
+                    card = card,
+                    onBack = {
+                        telaDetalhes = null
+                    }
+                )
+
+            } else {
+
+                TelaLista(
+                    registros = registros,
+                    filtrados = filtrados,
+                    pesquisa = pesquisa,
+                    ordem = ordem,
+                    dark = dark,
+                    texto = texto,
+                    texto2 = texto2,
+                    texto3 = texto3,
+                    borda = borda,
+                    card = card,
+                    card2 = card2,
+                    onPesquisa = {
+                        pesquisa = it
+                    },
+                    onOrdem = {
+                        ordem = it
+                    },
+                    onAdicionar = {
+                        mostrarNovo = true
+                    },
+                    onApagar = {
+                        if (registros.isNotEmpty()) {
+                            confirmarApagar = true
                         }
-                    )
-                }
+                    },
+                    onAbrir = {
+                        telaDetalhes = it
+                    }
+                )
+            }
 
+            if (mostrarNovo) {
 
-                if (mostrarNovo) {
+                NovoRegistroDialog(
+                    dark = dark,
+                    texto = texto,
+                    texto2 = texto2,
+                    borda = borda,
+                    card = card,
+                    onFechar = {
+                        mostrarNovo = false
+                    },
+                    onSalvar = { novo ->
 
-                    NovoRegistroDialog(
-                        dark = dark,
-                        texto = texto,
-                        texto2 = texto2,
-                        borda = borda,
-                        card = card,
-                        onFechar = {
-                            mostrarNovo = false
-                        },
-                        onSalvar = { novo ->
+                        val novaLista =
+                            registros + novo
 
-                            val novaLista =
-                                registros + novo
-
-                            salvarCiclo(
+                        salvarCiclo(
                             ctx,
-                                novaLista
-                            )
+                            novaLista
+                        )
 
-                            registros =
-                                novaLista
+                        registros = novaLista
+                        mostrarNovo = false
+                    }
+                )
+            }
 
-                            mostrarNovo = false
-                        }
-                    )
-                }
+            if (confirmarApagar) {
 
+                AlertDialog(
+                    onDismissRequest = {
+                        confirmarApagar = false
+                    },
+                    title = {
 
-                if (confirmarApagar) {
+                        Text(
+                            text = "Apagar registros",
+                            fontFamily = Quicksand,
+                            fontWeight = FontWeight.ExtraBold
+                        )
+                    },
+                    text = {
 
-                    AlertDialog(
-                        onDismissRequest = {
-                            confirmarApagar = false
-                        },
-                        title = {
+                        Text(
+                            text =
+                                "Apagar todos os registros?\n\nEssa ação não pode ser desfeita.",
+                            fontFamily = Quicksand
+                        )
+                    },
+                    confirmButton = {
+
+                        TextButton(
+                            onClick = {
+
+                                apagarCiclo(ctx)
+
+                                registros = emptyList()
+
+                                confirmarApagar = false
+                            }
+                        ) {
 
                             Text(
-                                text = "Apagar registros",
+                                text = "Apagar",
+                                color = Rosa2,
                                 fontFamily = Quicksand,
-                                fontWeight = FontWeight.ExtraBold
+                                fontWeight = FontWeight.Bold
                             )
-                        },
-                        text = {
+                        }
+                    },
+                    dismissButton = {
+
+                        TextButton(
+                            onClick = {
+                                confirmarApagar = false
+                            }
+                        ) {
 
                             Text(
-                                text =
-                                    "Apagar todos os registros?\n\nEssa ação não pode ser desfeita.",
+                                text = "Cancelar",
                                 fontFamily = Quicksand
                             )
-                        },
-                        confirmButton = {
-
-                            TextButton(
-                                onClick = {
-
-                                    apagarCiclo(ctx)
-
-                                    registros =
-                                        emptyList()
-
-                                    confirmarApagar =
-                                        false
-                                }
-                            ) {
-
-                                Text(
-                                    text = "Apagar",
-                                    color = Rosa2,
-                                    fontFamily = Quicksand,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        },
-                        dismissButton = {
-
-                            TextButton(
-                                onClick = {
-                                    confirmarApagar = false
-                                }
-                            ) {
-
-                                Text(
-                                    text = "Cancelar",
-                                    fontFamily = Quicksand
-                                )
-                            }
                         }
-                    )
-                }
+                    }
+                )
             }
         }
     }
+}
 
 private fun windowColor(
     window: CicloActivity,
@@ -693,11 +635,9 @@ private fun windowColor(
     ).apply {
 
         isAppearanceLightStatusBars = !dark
-
         isAppearanceLightNavigationBars = !dark
     }
 }
-
 
 @Composable
 private fun TelaLista(
@@ -722,9 +662,7 @@ private fun TelaLista(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(
-                horizontal = 12.dp
-            ),
+            .padding(horizontal = 12.dp),
         verticalArrangement =
             Arrangement.spacedBy(10.dp)
     ) {
@@ -776,7 +714,6 @@ private fun TelaLista(
             )
         }
 
-
         if (filtrados.isEmpty()) {
 
             item {
@@ -812,7 +749,6 @@ private fun TelaLista(
             }
         }
 
-
         item {
 
             Spacer(
@@ -821,7 +757,6 @@ private fun TelaLista(
         }
     }
 }
-
 
 @Composable
 private fun TopoCiclo(
@@ -843,9 +778,7 @@ private fun TopoCiclo(
                 else
                     Color.White
             )
-            .padding(
-                horizontal = 8.dp
-            ),
+            .padding(horizontal = 8.dp),
         verticalAlignment =
             Alignment.CenterVertically,
         horizontalArrangement =
@@ -874,7 +807,6 @@ private fun TopoCiclo(
                 color = texto3
             )
         }
-
 
         Row(
             horizontalArrangement =
@@ -906,7 +838,6 @@ private fun TopoCiclo(
                     modifier = Modifier.size(28.dp)
                 )
             }
-
 
             IconButton(
                 onClick = onApagar,
@@ -943,7 +874,6 @@ private fun TopoCiclo(
     }
 }
 
-
 @Composable
 private fun Resumo(
     registros: List<CicloRegistro>,
@@ -964,7 +894,6 @@ private fun Resumo(
                 registros.size
         }
 
-
     val ultimo =
         registros
             .maxByOrNull {
@@ -974,7 +903,6 @@ private fun Resumo(
             ?.let(::formatarData)
             ?: "—"
 
-
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement =
@@ -982,8 +910,7 @@ private fun Resumo(
     ) {
 
         ResumoCard(
-            modifier =
-                Modifier.weight(1f),
+            modifier = Modifier.weight(1f),
             label = "Registros",
             valor = registros.size.toString(),
             detalhe = "registrados",
@@ -994,8 +921,7 @@ private fun Resumo(
         )
 
         ResumoCard(
-            modifier =
-                Modifier.weight(1f),
+            modifier = Modifier.weight(1f),
             label = "Dor média",
             valor = "%.1f".format(media),
             detalhe = "de 10",
@@ -1006,8 +932,7 @@ private fun Resumo(
         )
 
         ResumoCard(
-            modifier =
-                Modifier.weight(1f),
+            modifier = Modifier.weight(1f),
             label = "Último",
             valor = ultimo,
             detalhe = "registro",
@@ -1019,7 +944,6 @@ private fun Resumo(
         )
     }
 }
-
 
 @Composable
 private fun ResumoCard(
@@ -1040,7 +964,7 @@ private fun ResumoCard(
             .clip(
                 RoundedCornerShape(22.dp)
             )
-       .background(card)
+            .background(card)
             .border(
                 1.dp,
                 borda,
@@ -1084,7 +1008,6 @@ private fun ResumoCard(
     }
 }
 
-
 @Composable
 private fun Controles(
     pesquisa: String,
@@ -1101,7 +1024,6 @@ private fun Controles(
     var aberto by remember {
         mutableStateOf(false)
     }
-
 
     Column(
         verticalArrangement =
@@ -1134,7 +1056,6 @@ private fun Controles(
             shape = RoundedCornerShape(999.dp)
         )
 
-
         Box {
 
             Surface(
@@ -1152,19 +1073,16 @@ private fun Controles(
                     else
                         Color.White,
                 border =
-                    androidx.compose.foundation
-                        .BorderStroke(
-                            1.dp,
-                            borda
-                        )
+                    BorderStroke(
+                        1.dp,
+                        borda
+                    )
             ) {
 
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(
-                            horizontal = 15.dp
-                        ),
+                        .padding(horizontal = 15.dp),
                     verticalAlignment =
                         Alignment.CenterVertically,
                     horizontalArrangement =
@@ -1189,7 +1107,6 @@ private fun Controles(
                         color = texto
                     )
 
-
                     Icon(
                         painter = painterResource(
                             R.drawable.ic_expand_more
@@ -1200,7 +1117,6 @@ private fun Controles(
                     )
                 }
             }
-
 
             DropdownMenu(
                 expanded = aberto,
@@ -1213,7 +1129,6 @@ private fun Controles(
 
                 DropdownMenuItem(
                     text = {
-
                         Text(
                             "Mais recentes",
                             fontFamily = Quicksand
@@ -1221,17 +1136,13 @@ private fun Controles(
                     },
                     onClick = {
 
-                        onOrdem(
-                            Ordem.NOVO
-                        )
-
+                        onOrdem(Ordem.NOVO)
                         aberto = false
                     }
                 )
 
                 DropdownMenuItem(
                     text = {
-
                         Text(
                             "Mais antigos",
                             fontFamily = Quicksand
@@ -1239,17 +1150,13 @@ private fun Controles(
                     },
                     onClick = {
 
-                        onOrdem(
-                            Ordem.ANTIGO
-                        )
-
+                        onOrdem(Ordem.ANTIGO)
                         aberto = false
                     }
                 )
 
                 DropdownMenuItem(
                     text = {
-
                         Text(
                             "Maior dor",
                             fontFamily = Quicksand
@@ -1257,10 +1164,7 @@ private fun Controles(
                     },
                     onClick = {
 
-                        onOrdem(
-                            Ordem.DOR
-                        )
-
+                        onOrdem(Ordem.DOR)
                         aberto = false
                     }
                 )
@@ -1268,7 +1172,6 @@ private fun Controles(
         }
     }
 }
-
 
 @Composable
 private fun Vazio(
@@ -1341,7 +1244,6 @@ private fun Vazio(
     }
 }
 
-
 @Composable
 private fun RegistroCard(
     registro: CicloRegistro,
@@ -1405,11 +1307,9 @@ private fun RegistroCard(
             )
         }
 
-
         Spacer(
             Modifier.width(14.dp)
         )
-
 
         Column(
             modifier = Modifier.weight(1f)
@@ -1438,7 +1338,6 @@ private fun RegistroCard(
             )
         }
 
-
         Column(
             horizontalAlignment =
                 Alignment.End,
@@ -1450,9 +1349,7 @@ private fun RegistroCard(
                 modifier = Modifier
                     .clip(CircleShape)
                     .background(
-                        texto.copy(
-                            alpha = .08f
-                        )
+                        texto.copy(alpha = .08f)
                     )
                     .padding(
                         horizontal = 9.dp,
@@ -1474,7 +1371,6 @@ private fun RegistroCard(
     }
 }
 
-
 private fun texto2Safe(
     texto: Color
 ): Color {
@@ -1482,7 +1378,6 @@ private fun texto2Safe(
         alpha = .75f
     )
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -1496,12 +1391,10 @@ private fun NovoRegistroDialog(
     onSalvar: (CicloRegistro) -> Unit
 ) {
 
-val ctx = LocalContext.current
+    val ctx = LocalContext.current
 
     var data by remember {
-        mutableStateOf(
-            hojeISO()
-        )
+        mutableStateOf(hojeISO())
     }
 
     var dor by remember {
@@ -1512,102 +1405,34 @@ val ctx = LocalContext.current
         mutableStateOf("feliz")
     }
 
+    var agua by remember { mutableStateOf(false) }
+    var cafe by remember { mutableStateOf(false) }
+    var chocolate by remember { mutableStateOf(false) }
+    var exercicio by remember { mutableStateOf(false) }
+    var sonoRuim by remember { mutableStateOf(false) }
+    var apetite by remember { mutableStateOf(false) }
 
-    var agua by remember {
-        mutableStateOf(false)
-    }
+    var cansaco by remember { mutableStateOf(false) }
+    var irritacao by remember { mutableStateOf(false) }
+    var ansiedade by remember { mutableStateOf(false) }
+    var colica by remember { mutableStateOf(false) }
+    var dorCabeca by remember { mutableStateOf(false) }
+    var inchaco by remember { mutableStateOf(false) }
+    var acne by remember { mutableStateOf(false) }
+    var nausea by remember { mutableStateOf(false) }
+    var tontura by remember { mutableStateOf(false) }
+    var energiaBaixa by remember { mutableStateOf(false) }
 
-    var cafe by remember {
-        mutableStateOf(false)
-    }
-
-    var chocolate by remember {
-        mutableStateOf(false)
-    }
-
-    var exercicio by remember {
-        mutableStateOf(false)
-    }
-
-    var sonoRuim by remember {
-        mutableStateOf(false)
-    }
-
-    var apetite by remember {
-        mutableStateOf(false)
-    }
-
-
-    var cansaco by remember {
-        mutableStateOf(false)
-    }
-
-    var irritacao by remember {
-        mutableStateOf(false)
-    }
-
-    var ansiedade by remember {
-        mutableStateOf(false)
-    }
-
-    var colica by remember {
-        mutableStateOf(false)
-    }
-
-    var dorCabeca by remember {
-        mutableStateOf(false)
-    }
-
-    var inchaco by remember {
-        mutableStateOf(false)
-    }
-
-    var acne by remember {
-        mutableStateOf(false)
-    }
-
-    var nausea by remember {
-        mutableStateOf(false)
-    }
-
-    var tontura by remember {
-        mutableStateOf(false)
-    }
-
-    var energiaBaixa by remember {
-        mutableStateOf(false)
-    }
-
-
-    var estresse by remember {
-        mutableStateOf(false)
-    }
-
-    var tristeza by remember {
-        mutableStateOf(false)
-    }
-
-    var felicidade by remember {
-        mutableStateOf(false)
-    }
-
-    var sensibilidade by remember {
-        mutableStateOf(false)
-    }
-
-    var concentracao by remember {
-        mutableStateOf(false)
-    }
-
-    var libido by remember {
-        mutableStateOf(false)
-    }
-
+    var estresse by remember { mutableStateOf(false) }
+    var tristeza by remember { mutableStateOf(false) }
+    var felicidade by remember { mutableStateOf(false) }
+    var sensibilidade by remember { mutableStateOf(false) }
+    var concentracao by remember { mutableStateOf(false) }
+    var libido by remember { mutableStateOf(false) }
 
     var mostrarData by remember {
         mutableStateOf(false)
     }
-
 
     AlertDialog(
         onDismissRequest = onFechar,
@@ -1629,7 +1454,6 @@ val ctx = LocalContext.current
                     fontSize = 21.sp
                 )
 
-
                 IconButton(
                     onClick = onFechar
                 ) {
@@ -1638,8 +1462,7 @@ val ctx = LocalContext.current
                         painter = painterResource(
                             R.drawable.ic_close
                         ),
-                        contentDescription =
-                            "Fechar",
+                        contentDescription = "Fechar",
                         tint = texto
                     )
                 }
@@ -1650,9 +1473,7 @@ val ctx = LocalContext.current
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(
-                        max = 620.dp
-                    )
+                    .heightIn(max = 620.dp)
                     .verticalScroll(
                         rememberScrollState()
                     ),
@@ -1669,10 +1490,8 @@ val ctx = LocalContext.current
                         value = formatarData(data),
                         onValueChange = {},
                         readOnly = true,
-                        modifier =
-                            Modifier.weight(1f),
+                        modifier = Modifier.weight(1f),
                         label = {
-
                             Text(
                                 "Data",
                                 fontFamily = Quicksand
@@ -1689,8 +1508,7 @@ val ctx = LocalContext.current
                                 Icon(
                                     painter =
                                         painterResource(
-                                            R.drawable
-                                                .ic_calendar_month
+                                            R.drawable.ic_calendar_month
                                         ),
                                     contentDescription =
                                         "Escolher data",
@@ -1700,14 +1518,12 @@ val ctx = LocalContext.current
                         }
                     )
 
-
                     OutlinedTextField(
                         value = dor.toString(),
                         onValueChange = {
 
                             val novo =
-                                it.toIntOrNull()
-                                    ?: 0
+                                it.toIntOrNull() ?: 0
 
                             dor =
                                 novo.coerceIn(
@@ -1715,10 +1531,8 @@ val ctx = LocalContext.current
                                     10
                                 )
                         },
-                        modifier =
-                            Modifier.weight(1f),
+                        modifier = Modifier.weight(1f),
                         label = {
-
                             Text(
                                 "Dor — 0 a 10",
                                 fontFamily = Quicksand
@@ -1733,16 +1547,13 @@ val ctx = LocalContext.current
                     )
                 }
 
-
                 Text(
                     text = "Como você se sentiu?",
                     fontFamily = Quicksand,
                     fontSize = 11.sp,
-                    fontWeight =
-                        FontWeight.SemiBold,
+                    fontWeight = FontWeight.SemiBold,
                     color = texto2
                 )
-
 
                 HumorOpcoes(
                     selecionado = humor,
@@ -1753,7 +1564,6 @@ val ctx = LocalContext.current
                     card = card,
                     texto = texto
                 )
-
 
                 CheckSection(
                     titulo = "Hábitos",
@@ -1768,7 +1578,6 @@ val ctx = LocalContext.current
                     onChange = { index, value ->
 
                         when (index) {
-
                             0 -> agua = value
                             1 -> cafe = value
                             2 -> chocolate = value
@@ -1781,7 +1590,6 @@ val ctx = LocalContext.current
                     card = card,
                     texto = texto
                 )
-
 
                 CheckSection(
                     titulo = "Sintomas",
@@ -1800,7 +1608,6 @@ val ctx = LocalContext.current
                     onChange = { index, value ->
 
                         when (index) {
-
                             0 -> cansaco = value
                             1 -> irritacao = value
                             2 -> ansiedade = value
@@ -1818,7 +1625,6 @@ val ctx = LocalContext.current
                     texto = texto
                 )
 
-
                 CheckSection(
                     titulo =
                         "Emocional e concentração",
@@ -1833,7 +1639,6 @@ val ctx = LocalContext.current
                     onChange = { index, value ->
 
                         when (index) {
-
                             0 -> estresse = value
                             1 -> tristeza = value
                             2 -> felicidade = value
@@ -1893,19 +1698,16 @@ val ctx = LocalContext.current
                 Text(
                     text = "Salvar registro",
                     fontFamily = Quicksand,
-                    fontWeight =
-                        FontWeight.ExtraBold
+                    fontWeight = FontWeight.ExtraBold
                 )
             }
         },
         dismissButton = null
     )
 
-
     if (mostrarData) {
 
-        val partes =
-            data.split("-")
+        val partes = data.split("-")
 
         val ano =
             partes
@@ -1928,9 +1730,8 @@ val ctx = LocalContext.current
                 ?.toIntOrNull()
                 ?: 1
 
-
         DatePickerDialog(
-    ctx,
+            ctx,
             { _, a, m, d ->
 
                 data =
@@ -1955,7 +1756,6 @@ val ctx = LocalContext.current
     }
 }
 
-
 @Composable
 private fun HumorOpcoes(
     selecionado: String,
@@ -1973,7 +1773,6 @@ private fun HumorOpcoes(
             "triste" to "😢 Triste"
         )
 
-
     Column(
         verticalArrangement =
             Arrangement.spacedBy(8.dp)
@@ -1982,18 +1781,16 @@ private fun HumorOpcoes(
         opcoes.chunked(2).forEach { linha ->
 
             Row(
-                modifier =
-                    Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement =
                     Arrangement.spacedBy(8.dp)
             ) {
 
                 linha.forEach {
-                        (valor, nome) ->
+                    (valor, nome) ->
 
                     val ativa =
                         selecionado == valor
-
 
                     Row(
                         modifier = Modifier
@@ -2003,18 +1800,14 @@ private fun HumorOpcoes(
                             )
                             .background(
                                 if (ativa)
-                                    Rosa.copy(
-                                        alpha = .16f
-                                    )
+                                    Rosa.copy(alpha = .16f)
                                 else
                                     card
                             )
                             .border(
                                 1.dp,
                                 if (ativa)
-                                    Rosa.copy(
-                                        alpha = .5f
-                                    )
+                                    Rosa.copy(alpha = .5f)
                                 else
                                     borda,
                                 RoundedCornerShape(17.dp)
@@ -2039,22 +1832,18 @@ private fun HumorOpcoes(
                             fontSize = 19.sp
                         )
 
-
                         Spacer(
                             Modifier.width(7.dp)
                         )
-
 
                         Text(
                             text =
                                 nome.substring(3),
                             fontFamily = Quicksand,
                             fontSize = 11.sp,
-                            fontWeight =
-                                FontWeight.Bold,
+                            fontWeight = FontWeight.Bold,
                             color = texto
                         )
-
 
                         if (ativa) {
 
@@ -2076,9 +1865,7 @@ private fun HumorOpcoes(
                     }
                 }
 
-
                 if (linha.size == 1) {
-
                     Spacer(
                         Modifier.weight(1f)
                     )
@@ -2087,7 +1874,6 @@ private fun HumorOpcoes(
         }
     }
 }
-
 
 @Composable
 private fun CheckSection(
@@ -2105,38 +1891,33 @@ private fun CheckSection(
             text = titulo,
             fontFamily = Quicksand,
             fontSize = 11.sp,
-            fontWeight =
-                FontWeight.SemiBold,
+            fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(
                 bottom = 8.dp
             )
         )
 
-
         items
             .chunked(2)
             .forEachIndexed {
-                    linhaIndex,
-                    linha ->
+                linhaIndex,
+                linha ->
 
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(
-                            bottom = 8.dp
-                        ),
+                        .padding(bottom = 8.dp),
                     horizontalArrangement =
                         Arrangement.spacedBy(8.dp)
                 ) {
 
                     linha.forEachIndexed {
-                            colunaIndex,
-                            item ->
+                        colunaIndex,
+                        item ->
 
                         val indice =
                             linhaIndex * 2 +
                                 colunaIndex
-
 
                         Row(
                             modifier = Modifier
@@ -2166,8 +1947,7 @@ private fun CheckSection(
                         ) {
 
                             Checkbox(
-                                checked =
-                                    item.second,
+                                checked = item.second,
                                 onCheckedChange = {
                                     onChange(
                                         indice,
@@ -2176,21 +1956,17 @@ private fun CheckSection(
                                 }
                             )
 
-
                             Text(
                                 text = item.first,
                                 fontFamily = Quicksand,
                                 fontSize = 10.sp,
-                                fontWeight =
-                                    FontWeight.SemiBold,
+                                fontWeight = FontWeight.SemiBold,
                                 color = texto
                             )
                         }
                     }
 
-
                     if (linha.size == 1) {
-
                         Spacer(
                             Modifier.weight(1f)
                         )
@@ -2199,7 +1975,6 @@ private fun CheckSection(
             }
     }
 }
-
 
 @Composable
 private fun TelaDetalhes(
@@ -2216,9 +1991,7 @@ private fun TelaDetalhes(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(
-                horizontal = 12.dp
-            ),
+            .padding(horizontal = 12.dp),
         verticalArrangement =
             Arrangement.spacedBy(12.dp)
     ) {
@@ -2228,7 +2001,6 @@ private fun TelaDetalhes(
             Spacer(
                 Modifier.height(4.dp)
             )
-
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -2258,18 +2030,15 @@ private fun TelaDetalhes(
                             painterResource(
                                 R.drawable.ic_arrow_back
                             ),
-                        contentDescription =
-                            "Voltar",
+                        contentDescription = "Voltar",
                         tint = texto,
                         modifier = Modifier.size(22.dp)
                     )
                 }
 
-
                 Spacer(
                     Modifier.width(12.dp)
                 )
-
 
                 Column {
 
@@ -2280,11 +2049,9 @@ private fun TelaDetalhes(
                             ),
                         fontFamily = Quicksand,
                         fontSize = 20.sp,
-                        fontWeight =
-                            FontWeight.ExtraBold,
+                        fontWeight = FontWeight.ExtraBold,
                         color = texto
                     )
-
 
                     Text(
                         text =
@@ -2301,7 +2068,6 @@ private fun TelaDetalhes(
             }
         }
 
-
         item {
 
             DorDestaque(
@@ -2312,7 +2078,6 @@ private fun TelaDetalhes(
                 borda = borda
             )
         }
-
 
         item {
 
@@ -2338,7 +2103,6 @@ private fun TelaDetalhes(
                 )
             }
         }
-
 
         item {
 
@@ -2369,7 +2133,6 @@ private fun TelaDetalhes(
             }
         }
 
-
         item {
 
             GraficoCard(
@@ -2399,7 +2162,6 @@ private fun TelaDetalhes(
             }
         }
 
-
         item {
 
             GraficoCard(
@@ -2428,7 +2190,6 @@ private fun TelaDetalhes(
                 )
             }
         }
-
 
         item {
 
@@ -2467,7 +2228,6 @@ private fun TelaDetalhes(
             }
         }
 
-
         item {
 
             Spacer(
@@ -2476,7 +2236,6 @@ private fun TelaDetalhes(
         }
     }
 }
-
 
 @Composable
 private fun DorDestaque(
@@ -2523,7 +2282,6 @@ private fun DorDestaque(
                 color = texto2
             )
 
-
             Text(
                 text = dor.toString(),
                 fontFamily = Quicksand,
@@ -2532,7 +2290,6 @@ private fun DorDestaque(
                 color = texto
             )
 
-
             Text(
                 text = "de 10",
                 fontFamily = Quicksand,
@@ -2540,7 +2297,6 @@ private fun DorDestaque(
                 color = texto3
             )
         }
-
 
         Box(
             modifier = Modifier
@@ -2577,7 +2333,6 @@ private fun DorDestaque(
     }
 }
 
-
 @Composable
 private fun GraficoCard(
     titulo: String,
@@ -2606,21 +2361,17 @@ private fun GraficoCard(
             text = titulo,
             fontFamily = Quicksand,
             fontSize = 12.sp,
-            fontWeight =
-                FontWeight.ExtraBold,
+            fontWeight = FontWeight.ExtraBold,
             color = texto
         )
-
 
         Spacer(
             Modifier.height(8.dp)
         )
 
-
         content()
     }
 }
-
 
 @Composable
 private fun DonutChart(
@@ -2636,7 +2387,6 @@ private fun DonutChart(
             Rosa3
         )
 
-
     Column {
 
         Canvas(
@@ -2651,30 +2401,31 @@ private fun DonutChart(
                     size.height / 2f
                 )
 
-
             val diametro =
                 min(
                     size.width,
                     size.height
                 ) * .58f
 
-
             var inicio = -90f
-
 
             val total =
                 valores.count {
                     it
                 }
 
-
             if (total == 0) {
 
                 drawCircle(
                     color =
-                        Color.White.copy(
-                            alpha = .10f
-                        ),
+                        if (dark)
+                            Color.White.copy(
+                                alpha = .10f
+                            )
+                        else
+                            Color.Black.copy(
+                                alpha = .10f
+                            ),
                     radius =
                         diametro / 2f,
                     center = centro,
@@ -2687,16 +2438,14 @@ private fun DonutChart(
             } else {
 
                 valores.forEachIndexed {
-                        index,
-                        ativo ->
+                    index,
+                    ativo ->
 
                     if (ativo) {
 
                         drawArc(
-                            color =
-                                cores[index],
-                            startAngle =
-                                inicio,
+                            color = cores[index],
+                            startAngle = inicio,
                             sweepAngle =
                                 360f / total,
                             useCenter = false,
@@ -2720,14 +2469,12 @@ private fun DonutChart(
                                 )
                         )
 
-
                         inicio +=
                             360f / total
                     }
                 }
             }
         }
-
 
         Row(
             modifier =
@@ -2737,8 +2484,8 @@ private fun DonutChart(
         ) {
 
             labels.forEachIndexed {
-                    index,
-                    label ->
+                index,
+                label ->
 
                 Row(
                     verticalAlignment =
@@ -2754,11 +2501,9 @@ private fun DonutChart(
                             )
                     )
 
-
                     Spacer(
                         Modifier.width(4.dp)
                     )
-
 
                     Text(
                         text = label,
@@ -2770,7 +2515,6 @@ private fun DonutChart(
         }
     }
 }
-
 
 @Composable
 private fun BarChart(
@@ -2788,10 +2532,9 @@ private fun BarChart(
         val largura =
             size.width / valores.size
 
-
         valores.forEachIndexed {
-                index,
-                valor ->
+            index,
+            valor ->
 
             val altura =
                 if (valor)
@@ -2799,19 +2542,16 @@ private fun BarChart(
                 else
                     size.height * .05f
 
-
             val x =
                 index * largura +
                     largura * .22f
-
 
             drawRoundRect(
                 color = Rosa2,
                 topLeft =
                     Offset(
                         x,
-                        size.height -
-                            altura
+                        size.height - altura
                     ),
                 size =
                     Size(
@@ -2819,15 +2559,13 @@ private fun BarChart(
                         altura
                     ),
                 cornerRadius =
-                    androidx.compose.ui.geometry
-                        .CornerRadius(
-                            8f,
-                            8f
-                        )
+                    CornerRadius(
+                        8f,
+                        8f
+                    )
             )
         }
     }
-
 
     Row(
         modifier =
@@ -2850,7 +2588,6 @@ private fun BarChart(
         }
     }
 }
-
 
 @Composable
 private fun RadarChart(
@@ -2871,17 +2608,14 @@ private fun RadarChart(
                 size.height / 2f
             )
 
-
         val raio =
             min(
                 size.width,
                 size.height
             ) * .32f
 
-
         val quantidade =
             valores.size
-
 
         repeat(3) { nivel ->
 
@@ -2889,34 +2623,29 @@ private fun RadarChart(
                 raio *
                     ((nivel + 1) / 3f)
 
-
-            val path =
-                Path()
-
+            val path = Path()
 
             repeat(quantidade) { i ->
 
                 val angulo =
                     -Math.PI / 2 +
                         i *
-                        (Math.PI * 2 /
-                            quantidade)
-
+                        (
+                            Math.PI * 2 /
+                                quantidade
+                        )
 
                 val p =
                     Offset(
                         centro.x +
                             cos(
                                 angulo
-                            ).toFloat() *
-                            r,
+                            ).toFloat() * r,
                         centro.y +
                             sin(
                                 angulo
-                            ).toFloat() *
-                            r
+                            ).toFloat() * r
                     )
-
 
                 if (i == 0) {
 
@@ -2934,9 +2663,7 @@ private fun RadarChart(
                 }
             }
 
-
             path.close()
-
 
             drawPath(
                 path = path,
@@ -2951,21 +2678,19 @@ private fun RadarChart(
             )
         }
 
-
-        val dados =
-            Path()
-
+        val dados = Path()
 
         valores.forEachIndexed {
-                index,
-                valor ->
+            index,
+            valor ->
 
             val angulo =
                 -Math.PI / 2 +
                     index *
-                    (Math.PI * 2 /
-                        quantidade)
-
+                    (
+                        Math.PI * 2 /
+                            quantidade
+                    )
 
             val r =
                 raio *
@@ -2974,21 +2699,17 @@ private fun RadarChart(
                     else
                         .08f
 
-
             val p =
                 Offset(
                     centro.x +
                         cos(
                             angulo
-                        ).toFloat() *
-                        r,
+                        ).toFloat() * r,
                     centro.y +
                         sin(
                             angulo
-                        ).toFloat() *
-                        r
+                        ).toFloat() * r
                 )
-
 
             if (index == 0) {
 
@@ -3006,9 +2727,7 @@ private fun RadarChart(
             }
         }
 
-
         dados.close()
-
 
         drawPath(
             path = dados,
@@ -3017,7 +2736,6 @@ private fun RadarChart(
                     alpha = .18f
                 )
         )
-
 
         drawPath(
             path = dados,
@@ -3028,7 +2746,6 @@ private fun RadarChart(
                 )
         )
     }
-
 
     Row(
         modifier =
@@ -3052,7 +2769,6 @@ private fun RadarChart(
     }
 }
 
-
 @Composable
 private fun PolarChart(
     valores: List<Boolean>,
@@ -3072,21 +2788,18 @@ private fun PolarChart(
                 size.height / 2
             )
 
-
         val raio =
             min(
                 size.width,
                 size.height
             ) * .35f
 
-
         val quantidade =
             valores.size
 
-
         valores.forEachIndexed {
-                index,
-                valor ->
+            index,
+            valor ->
 
             val inicio =
                 index *
@@ -3094,10 +2807,7 @@ private fun PolarChart(
                     quantidade -
                     35f
 
-
-            val sweep =
-                60f
-
+            val sweep = 60f
 
             val r =
                 raio *
@@ -3105,7 +2815,6 @@ private fun PolarChart(
                         1f
                     else
                         .35f
-
 
             drawArc(
                 color =
@@ -3133,7 +2842,6 @@ private fun PolarChart(
         }
     }
 
-
     Row(
         modifier =
             Modifier.fillMaxWidth(),
@@ -3156,7 +2864,6 @@ private fun PolarChart(
     }
 }
 
-
 @Composable
 private fun LineChart(
     valores: List<Float>,
@@ -3174,48 +2881,37 @@ private fun LineChart(
             return@Canvas
         }
 
-
         val margemX =
             size.width * .07f
 
-
         val margemY =
             size.height * .12f
-
 
         val largura =
             size.width -
                 margemX * 2
 
-
         val altura =
             size.height -
                 margemY * 2
 
-
-        val path =
-            Path()
-
+        val path = Path()
 
         valores.forEachIndexed {
-                index,
-                valor ->
+            index,
+            valor ->
 
             val x =
                 margemX +
                     largura *
                     index /
-                    (
-                        valores.lastIndex
-                            .coerceAtLeast(1)
-                    )
-
+                    valores.lastIndex
+                        .coerceAtLeast(1)
 
             val y =
                 margemY +
                     altura *
                     (1f - valor)
-
 
             if (index == 0) {
 
@@ -3233,7 +2929,6 @@ private fun LineChart(
             }
         }
 
-
         drawPath(
             path = path,
             color = Rosa2,
@@ -3244,26 +2939,21 @@ private fun LineChart(
                 )
         )
 
-
         valores.forEachIndexed {
-                index,
-                valor ->
+            index,
+            valor ->
 
             val x =
                 margemX +
                     largura *
                     index /
-                    (
-                        valores.lastIndex
-                            .coerceAtLeast(1)
-                    )
-
+                    valores.lastIndex
+                        .coerceAtLeast(1)
 
             val y =
                 margemY +
                     altura *
                     (1f - valor)
-
 
             drawCircle(
                 color = Rosa,
@@ -3276,7 +2966,6 @@ private fun LineChart(
             )
         }
     }
-
 
     Row(
         modifier =

@@ -88,7 +88,7 @@ private val Quicksand = FontFamily(
 )
 
 private val Rosa = Color(0xFFFF7F9F)
-private val Rosa2 = Color(0xFFFFFFFF)
+private val Rosa2 = Color(0xFFFF7F9F)
 private val Rosa3 = Color(0xFFFFB1C4)
 
 private data class CicloRegistro(
@@ -1686,51 +1686,50 @@ private fun NovoRegistroDialog(
         confirmButton = {
 
             Button(
-                onClick = {
-
-                    onSalvar(
-                        CicloRegistro(
-                            data = data,
-                            dor = dor,
-                            humor = humor,
-
-                            agua = agua,
-                            cafe = cafe,
-                            chocolate = chocolate,
-                            exercicio = exercicio,
-                            sonoRuim = sonoRuim,
-                            apetite = apetite,
-
-                            cansaco = cansaco,
-                            irritacao = irritacao,
-                            ansiedade = ansiedade,
-                            colica = colica,
-                            dorCabeca = dorCabeca,
-                            inchaco = inchaco,
-                            acne = acne,
-                            nausea = nausea,
-                            tontura = tontura,
-                            energiaBaixa = energiaBaixa,
-
-                            estresse = estresse,
-                            tristeza = tristeza,
-                            felicidade = felicidade,
-                            sensibilidade = sensibilidade,
-                            concentracao = concentracao,
-                            libido = libido
-                        )
-                    )
-                },
-                modifier = Modifier.fillMaxWidth(),
-                shape = CircleShape
-            ) {
-
-                Text(
-                    text = "Salvar registro",
-                    fontFamily = Quicksand,
-                    fontWeight = FontWeight.ExtraBold
-                )
-            }
+    onClick = {
+        onSalvar(
+            CicloRegistro(
+                data = data,
+                dor = dor,
+                humor = humor,
+                agua = agua,
+                cafe = cafe,
+                chocolate = chocolate,
+                exercicio = exercicio,
+                sonoRuim = sonoRuim,
+                apetite = apetite,
+                cansaco = cansaco,
+                irritacao = irritacao,
+                ansiedade = ansiedade,
+                colica = colica,
+                dorCabeca = dorCabeca,
+                inchaco = inchaco,
+                acne = acne,
+                nausea = nausea,
+                tontura = tontura,
+                energiaBaixa = energiaBaixa,
+                estresse = estresse,
+                tristeza = tristeza,
+                felicidade = felicidade,
+                sensibilidade = sensibilidade,
+                concentracao = concentracao,
+                libido = libido
+            )
+        )
+    },
+    modifier = Modifier.fillMaxWidth(),
+    shape = CircleShape,
+    colors = ButtonDefaults.buttonColors(
+        containerColor = Rosa2,
+        contentColor = Color.White
+    )
+) {
+    Text(
+        text = "Salvar registro",
+        fontFamily = Quicksand,
+        fontWeight = FontWeight.ExtraBold
+    )
+}
         },
         dismissButton = null
     )

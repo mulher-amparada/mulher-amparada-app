@@ -1539,9 +1539,13 @@ private fun NovoRegistroDialog(
                                 }
                             ) {
 
-                                Text(
-                                    text = "📅",
-                                    fontSize = 20.sp
+                                Icon(
+                                    painter = painterResource(
+                                        R.drawable.ic_calendar_month
+                                    ),
+                                    contentDescription = "Selecionar data",
+                                    tint = texto,
+                                    modifier = Modifier.size(20.dp)
                                 )
                             }
                         },
@@ -1811,104 +1815,81 @@ private fun HumorOpcoes(
         )
 
     Column(
-        verticalArrangement =
-            Arrangement.spacedBy(8.dp)
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
 
-        opcoes.chunked(2).forEach { linha ->
+        opcoes.forEach { (valor, nome) ->
+
+            val ativa =
+                selecionado == valor
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(IntrinsicSize.Min),
-                horizontalArrangement =
-                    Arrangement.spacedBy(8.dp)
+                    .clip(
+                        RoundedCornerShape(17.dp)
+                    )
+                    .background(
+                        if (ativa)
+                            Rosa.copy(alpha = .16f)
+                        else
+                            card
+                    )
+                    .border(
+                        1.dp,
+                        if (ativa)
+                            Rosa.copy(alpha = .5f)
+                        else
+                            borda,
+                        RoundedCornerShape(17.dp)
+                    )
+                    .clickable {
+                        onSelecionar(valor)
+                    }
+                    .padding(
+                        horizontal = 10.dp,
+                        vertical = 9.dp
+                    ),
+                verticalAlignment =
+                    Alignment.CenterVertically
             ) {
 
-                linha.forEach {
-                    (valor, nome) ->
+                Text(
+                    text = nome.substring(
+                        0,
+                        2
+                    ),
+                    fontSize = 19.sp
+                )
 
-                    val ativa =
-                        selecionado == valor
+                Spacer(
+                    Modifier.width(7.dp)
+                )
 
-                    Row(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight()
-                            .clip(
-                                RoundedCornerShape(17.dp)
-                            )
-                            .background(
-                                if (ativa)
-                                    Rosa.copy(alpha = .16f)
-                                else
-                                    card
-                            )
-                            .border(
-                                1.dp,
-                                if (ativa)
-                                    Rosa.copy(alpha = .5f)
-                                else
-                                    borda,
-                                RoundedCornerShape(17.dp)
-                            )
-                            .clickable {
-                                onSelecionar(valor)
-                            }
-                            .padding(
-                                horizontal = 10.dp,
-                                vertical = 9.dp
-                            ),
-                        verticalAlignment =
-                            Alignment.CenterVertically
-                    ) {
+                Text(
+                    text = nome.substring(3),
+                    fontFamily = Quicksand,
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = texto
+                )
 
-                        Text(
-                            text =
-                                nome.substring(
-                                    0,
-                                    2
-                                ),
-                            fontSize = 19.sp
-                        )
-
-                        Spacer(
-                            Modifier.width(7.dp)
-                        )
-
-                        Text(
-                            text =
-                                nome.substring(3),
-                            fontFamily = Quicksand,
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = texto
-                        )
-
-                        if (ativa) {
-
-                            Spacer(
-                                Modifier.weight(1f)
-                            )
-
-                            Icon(
-                                painter =
-                                    painterResource(
-                                        R.drawable.ic_check
-                                    ),
-                                contentDescription = null,
-                                tint = Rosa2,
-                                modifier =
-                                    Modifier.size(18.dp)
-                            )
-                        }
-                    }
-                }
-
-                if (linha.size == 1) {
+                if (ativa) {
 
                     Spacer(
                         Modifier.weight(1f)
+                    )
+
+                    Icon(
+                        painter =
+                            painterResource(
+                                R.drawable.ic_check
+                            ),
+                        contentDescription = null,
+                        tint = Rosa2,
+                        modifier =
+                            Modifier.size(18.dp)
                     )
                 }
             }
@@ -1938,88 +1919,57 @@ private fun CheckSection(
             )
         )
 
-        items
-            .chunked(2)
-            .forEachIndexed {
-                linhaIndex,
-                linha ->
+        items.forEachIndexed { indice, item ->
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(IntrinsicSize.Min)
-                        .padding(bottom = 8.dp),
-                    horizontalArrangement =
-                        Arrangement.spacedBy(8.dp)
-                ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Min)
+                    .padding(bottom = 8.dp)
+                    .clip(
+                        RoundedCornerShape(15.dp)
+                    )
+                    .background(card)
+                    .border(
+                        1.dp,
+                        borda,
+                        RoundedCornerShape(15.dp)
+                    )
+                    .clickable {
 
-                    linha.forEachIndexed {
-                        colunaIndex,
-                        item ->
-
-                        val indice =
-                            linhaIndex * 2 +
-                                colunaIndex
-
-                        Row(
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxHeight()
-                                .clip(
-                                    RoundedCornerShape(15.dp)
-                                )
-                                .background(card)
-                                .border(
-                                    1.dp,
-                                    borda,
-                                    RoundedCornerShape(15.dp)
-                                )
-                                .clickable {
-
-                                    onChange(
-                                        indice,
-                                        !item.second
-                                    )
-                                }
-                                .padding(
-                                    horizontal = 7.dp,
-                                    vertical = 5.dp
-                                ),
-                            verticalAlignment =
-                                Alignment.CenterVertically
-                        ) {
-
-                            Checkbox(
-                                checked =
-                                    item.second,
-                                onCheckedChange = {
-                                    onChange(
-                                        indice,
-                                        it
-                                    )
-                                }
-                            )
-
-                            Text(
-                                text = item.first,
-                                fontFamily = Quicksand,
-                                fontSize = 10.sp,
-                                fontWeight =
-                                    FontWeight.SemiBold,
-                                color = texto
-                            )
-                        }
-                    }
-
-                    if (linha.size == 1) {
-
-                        Spacer(
-                            modifier =
-                                Modifier.weight(1f)
+                        onChange(
+                            indice,
+                            !item.second
                         )
                     }
-                }
+                    .padding(
+                        horizontal = 7.dp,
+                        vertical = 5.dp
+                    ),
+                verticalAlignment =
+                    Alignment.CenterVertically
+            ) {
+
+                Checkbox(
+                    checked = item.second,
+                    onCheckedChange = {
+                        onChange(
+                            indice,
+                            it
+                        )
+                    }
+                )
+
+                Text(
+                    text = item.first,
+                    fontFamily = Quicksand,
+                    fontSize = 10.sp,
+                    fontWeight =
+                        FontWeight.SemiBold,
+                    color = texto
+                )
             }
+        }
     }
 }
 

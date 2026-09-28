@@ -2,6 +2,8 @@ package com.mulheres
 
 import android.content.Context
 import android.graphics.Color as AndroidColor
+import androidx.compose.foundation.LocalOverscrollFactory
+import androidx.compose.runtime.CompositionLocalProvider
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
@@ -331,6 +333,9 @@ private fun TarefaScreen() {
             "Tudo em dia"
         }
 
+CompositionLocalProvider(
+    LocalOverscrollFactory provides null
+) {
     Scaffold(
         containerColor = background,
 
@@ -662,7 +667,7 @@ private fun TarefaScreen() {
         )
     }
 }
-
+}
 
 /* =========================================================
    HEADER

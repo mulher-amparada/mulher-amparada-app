@@ -1471,48 +1471,6 @@ private fun NovoRegistroDialog(
         title = {
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement =
-                    Arrangement.SpaceBetween,
-                verticalAlignment =
-                    Alignment.CenterVertically
-            ) {
-
-                Text(
-                    text = "Novo registro",
-                    fontFamily = Quicksand,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 21.sp
-                )
-
-                IconButton(
-                    onClick = onFechar
-                ) {
-
-                    Icon(
-                        painter = painterResource(
-                            R.drawable.ic_close
-                        ),
-                        contentDescription = "Fechar",
-                        tint = texto
-                    )
-                }
-            }
-        },
-        text = {
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 620.dp)
-                    .verticalScroll(
-                        rememberScrollState()
-                    ),
-                verticalArrangement =
-                    Arrangement.spacedBy(14.dp)
-            ) {
-
-                Row(
     modifier = Modifier
         .fillMaxWidth()
         .height(IntrinsicSize.Min),
@@ -1520,7 +1478,7 @@ private fun NovoRegistroDialog(
 ) {
 
     OutlinedTextField(
-        value = dataFormatada,
+        value = formatarData(data),
         onValueChange = {},
         readOnly = true,
         modifier = Modifier
@@ -1535,14 +1493,12 @@ private fun NovoRegistroDialog(
         trailingIcon = {
             IconButton(
                 onClick = {
-                    mostrarCalendario = true
+                    mostrarData = true
                 }
             ) {
-                Icon(
-                    painter = painterResource(
-                        R.drawable.ic_calendar
-                    ),
-                    contentDescription = null
+                Text(
+                    text = "📅",
+                    fontSize = 20.sp
                 )
             }
         },
@@ -1551,9 +1507,13 @@ private fun NovoRegistroDialog(
 
     OutlinedTextField(
         value = dor.toString(),
-        onValueChange = {
-            dor = it.filter { c -> c.isDigit() }
-                .take(2)
+        onValueChange = { valor ->
+
+            dor = valor
+                .filter { it.isDigit() }
+                .toIntOrNull()
+                ?.coerceIn(0, 10)
+                ?: 0
         },
         modifier = Modifier
             .weight(1f)

@@ -85,7 +85,7 @@ private val Pink = Color(0xFFFF8EAF)
 private val PinkLight = Color(0xFFFFC1D2)
 private val PinkDark = Color(0xFFE96D92)
 
-private val DarkBackground = Color(0xFF09090D)
+private val DarkBackground = Color(0xFF000000)
 private val DarkSurface = Color(0xFF101014)
 private val DarkSurface2 = Color(0xFF111116)
 private val DarkBorder = Color(0x1AFFFFFF)
@@ -147,10 +147,10 @@ class DiarioActivity : ComponentActivity() {
         )
 
         window.statusBarColor =
-            android.graphics.Color.TRANSPARENT
+            android.graphics.Color.BLACK
 
         window.navigationBarColor =
-            android.graphics.Color.TRANSPARENT
+            android.graphics.Color.BLACK
 
         setContent {
             DiarioTheme {

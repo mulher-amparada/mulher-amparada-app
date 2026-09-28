@@ -58,11 +58,13 @@ Esta licença não deve ser interpretada como uma transferência de propriedade,
 
 ----
 
-> 🚫 **RESTRIÇÃO GOVERNAMENTAL ABSOLUTA:**
->
-> É proibido a qualquer órgão, entidade ou agente governamental utilizar, copiar, modificar, adaptar, incorporar ou derivar qualquer parte deste projeto, incluindo seu código-fonte, estrutura, recursos, funcionalidades ou documentação, com a finalidade de criar, desenvolver ou distribuir outro software, sistema, produto ou serviço a partir deste projeto.
->
-> O fato de o código-fonte estar disponível para consulta não concede autorização para que o Governo ou qualquer entidade governamental utilize este projeto como base para a criação de outro projeto.
+«🚫 RESTRIÇÃO DE USO E AUTORIZAÇÃO:
+
+É proibido a qualquer pessoa jurídica, entidade, organização, empresa, ONG, instituto, órgão público ou agente governamental, identificada ou não por CNPJ, utilizar, copiar, reproduzir, modificar, adaptar, distribuir, incorporar, integrar, disponibilizar, explorar ou criar obras, softwares, sistemas, produtos ou serviços derivados de qualquer parte deste projeto, incluindo seu código-fonte, estrutura, recursos, funcionalidades, elementos visuais, documentação ou demais componentes, sem autorização expressa do responsável pelo projeto.
+
+A disponibilidade do código-fonte para consulta não constitui, por si só, autorização para utilizar o projeto ou qualquer de seus componentes como base, total ou parcialmente, para a criação, desenvolvimento, modificação ou distribuição de outro projeto, software, sistema, produto ou serviço.
+
+Somente entidades expressamente autorizadas pelo responsável pelo projeto poderão utilizar, modificar, reproduzir, incorporar, adaptar ou derivar qualquer parte deste projeto, nos limites da autorização concedida.»
 
 ----
 

@@ -1513,70 +1513,63 @@ private fun NovoRegistroDialog(
             ) {
 
                 Row(
-                    horizontalArrangement =
-                        Arrangement.spacedBy(10.dp)
-                ) {
+    modifier = Modifier
+        .fillMaxWidth()
+        .height(IntrinsicSize.Min),
+    horizontalArrangement = Arrangement.spacedBy(10.dp)
+) {
 
-                    OutlinedTextField(
-                        value = formatarData(data),
-                        onValueChange = {},
-                        readOnly = true,
-                        modifier = Modifier.weight(1f),
-                        label = {
-                            Text(
-                                "Data",
-                                fontFamily = Quicksand
-                            )
-                        },
-                        trailingIcon = {
-
-                            IconButton(
-                                onClick = {
-                                    mostrarData = true
-                                }
-                            ) {
-
-                                Icon(
-                                    painter =
-                                        painterResource(
-                                            R.drawable.ic_calendar_month
-                                        ),
-                                    contentDescription =
-                                        "Escolher data",
-                                    tint = texto
-                                )
-                            }
-                        }
-                    )
-
-                    OutlinedTextField(
-                        value = dor.toString(),
-                        onValueChange = {
-
-                            val novo =
-                                it.toIntOrNull() ?: 0
-
-                            dor =
-                                novo.coerceIn(
-                                    0,
-                                    10
-                                )
-                        },
-                        modifier = Modifier.weight(1f),
-                        label = {
-                            Text(
-                                "Dor — 0 a 10",
-                                fontFamily = Quicksand
-                            )
-                        },
-                        singleLine = true,
-                        keyboardOptions =
-                            KeyboardOptions(
-                                keyboardType =
-                                    KeyboardType.Number
-                            )
-                    )
+    OutlinedTextField(
+        value = dataFormatada,
+        onValueChange = {},
+        readOnly = true,
+        modifier = Modifier
+            .weight(1f)
+            .fillMaxHeight(),
+        label = {
+            Text(
+                "Data",
+                fontFamily = Quicksand
+            )
+        },
+        trailingIcon = {
+            IconButton(
+                onClick = {
+                    mostrarCalendario = true
                 }
+            ) {
+                Icon(
+                    painter = painterResource(
+                        R.drawable.ic_calendar
+                    ),
+                    contentDescription = null
+                )
+            }
+        },
+        shape = RoundedCornerShape(17.dp)
+    )
+
+    OutlinedTextField(
+        value = dor.toString(),
+        onValueChange = {
+            dor = it.filter { c -> c.isDigit() }
+                .take(2)
+        },
+        modifier = Modifier
+            .weight(1f)
+            .fillMaxHeight(),
+        label = {
+            Text(
+                "Dor — 0 a 10",
+                fontFamily = Quicksand
+            )
+        },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number
+        ),
+        shape = RoundedCornerShape(17.dp)
+    )
+}
 
                 Text(
                     text = "Como você se sentiu?",

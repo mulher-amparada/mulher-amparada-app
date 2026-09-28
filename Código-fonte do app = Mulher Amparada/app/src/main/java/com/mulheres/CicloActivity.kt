@@ -1468,68 +1468,113 @@ private fun NovoRegistroDialog(
     AlertDialog(
         onDismissRequest = onFechar,
         modifier = Modifier.fillMaxWidth(),
+
         title = {
 
             Row(
-    modifier = Modifier
-        .fillMaxWidth()
-        .height(IntrinsicSize.Min),
-    horizontalArrangement = Arrangement.spacedBy(10.dp)
-) {
-
-    OutlinedTextField(
-        value = formatarData(data),
-        onValueChange = {},
-        readOnly = true,
-        modifier = Modifier
-            .weight(1f)
-            .fillMaxHeight(),
-        label = {
-            Text(
-                "Data",
-                fontFamily = Quicksand
-            )
-        },
-        trailingIcon = {
-            IconButton(
-                onClick = {
-                    mostrarData = true
-                }
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
+
                 Text(
-                    text = "📅",
-                    fontSize = 20.sp
+                    text = "Novo registro",
+                    fontFamily = Quicksand,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 21.sp
                 )
+
+                IconButton(
+                    onClick = onFechar
+                ) {
+
+                    Icon(
+                        painter = painterResource(
+                            R.drawable.ic_close
+                        ),
+                        contentDescription = "Fechar",
+                        tint = texto
+                    )
+                }
             }
         },
-        shape = RoundedCornerShape(17.dp)
-    )
 
-    OutlinedTextField(
-        value = dor.toString(),
-        onValueChange = { valor ->
+        text = {
 
-            dor = valor
-                .filter { it.isDigit() }
-                .toIntOrNull()
-                ?.coerceIn(0, 10)
-                ?: 0
-        },
-        modifier = Modifier
-            .weight(1f)
-            .fillMaxHeight(),
-        label = {
-            Text(
-                "Dor — 0 a 10",
-                fontFamily = Quicksand
-            )
-        },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Number
-        ),
-        shape = RoundedCornerShape(17.dp)
-    )
-}
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 620.dp)
+                    .verticalScroll(
+                        rememberScrollState()
+                    ),
+                verticalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(IntrinsicSize.Min),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+
+                    OutlinedTextField(
+                        value = formatarData(data),
+                        onValueChange = {},
+                        readOnly = true,
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight(),
+                        label = {
+                            Text(
+                                "Data",
+                                fontFamily = Quicksand
+                            )
+                        },
+                        trailingIcon = {
+
+                            IconButton(
+                                onClick = {
+                                    mostrarData = true
+                                }
+                            ) {
+
+                                Text(
+                                    text = "📅",
+                                    fontSize = 20.sp
+                                )
+                            }
+                        },
+                        shape = RoundedCornerShape(17.dp)
+                    )
+
+                    OutlinedTextField(
+                        value = dor.toString(),
+                        onValueChange = { valor ->
+
+                            dor =
+                                valor
+                                    .filter { it.isDigit() }
+                                    .toIntOrNull()
+                                    ?.coerceIn(0, 10)
+                                    ?: 0
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight(),
+                        label = {
+
+                            Text(
+                                "Dor — 0 a 10",
+                                fontFamily = Quicksand
+                            )
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number
+                        ),
+                        shape = RoundedCornerShape(17.dp)
+                    )
+                }
 
                 Text(
                     text = "Como você se sentiu?",
@@ -1610,8 +1655,7 @@ private fun NovoRegistroDialog(
                 )
 
                 CheckSection(
-                    titulo =
-                        "Emocional e concentração",
+                    titulo = "Emocional e concentração",
                     items = listOf(
                         "⚡ Estresse" to estresse,
                         "🌧️ Tristeza" to tristeza,
@@ -1637,54 +1681,64 @@ private fun NovoRegistroDialog(
                 )
             }
         },
+
         confirmButton = {
 
             Button(
-    onClick = {
-        onSalvar(
-            CicloRegistro(
-                data = data,
-                dor = dor,
-                humor = humor,
-                agua = agua,
-                cafe = cafe,
-                chocolate = chocolate,
-                exercicio = exercicio,
-                sonoRuim = sonoRuim,
-                apetite = apetite,
-                cansaco = cansaco,
-                irritacao = irritacao,
-                ansiedade = ansiedade,
-                colica = colica,
-                dorCabeca = dorCabeca,
-                inchaco = inchaco,
-                acne = acne,
-                nausea = nausea,
-                tontura = tontura,
-                energiaBaixa = energiaBaixa,
-                estresse = estresse,
-                tristeza = tristeza,
-                felicidade = felicidade,
-                sensibilidade = sensibilidade,
-                concentracao = concentracao,
-                libido = libido
-            )
-        )
-    },
-    modifier = Modifier.fillMaxWidth(),
-    shape = CircleShape,
-    colors = ButtonDefaults.buttonColors(
-        containerColor = Rosa2,
-        contentColor = Color.White
-    )
-) {
-    Text(
-        text = "Salvar registro",
-        fontFamily = Quicksand,
-        fontWeight = FontWeight.ExtraBold
-    )
-}
+                onClick = {
+
+                    onSalvar(
+                        CicloRegistro(
+                            data = data,
+                            dor = dor,
+                            humor = humor,
+
+                            agua = agua,
+                            cafe = cafe,
+                            chocolate = chocolate,
+                            exercicio = exercicio,
+                            sonoRuim = sonoRuim,
+                            apetite = apetite,
+
+                            cansaco = cansaco,
+                            irritacao = irritacao,
+                            ansiedade = ansiedade,
+                            colica = colica,
+                            dorCabeca = dorCabeca,
+                            inchaco = inchaco,
+                            acne = acne,
+                            nausea = nausea,
+                            tontura = tontura,
+                            energiaBaixa = energiaBaixa,
+
+                            estresse = estresse,
+                            tristeza = tristeza,
+                            felicidade = felicidade,
+                            sensibilidade = sensibilidade,
+                            concentracao = concentracao,
+                            libido = libido
+                        )
+                    )
+                },
+
+                modifier = Modifier.fillMaxWidth(),
+
+                shape = CircleShape,
+
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Rosa2,
+                    contentColor = Color.White
+                )
+            ) {
+
+                Text(
+                    text = "Salvar registro",
+                    fontFamily = Quicksand,
+                    fontWeight = FontWeight.ExtraBold
+                )
+            }
         },
+
         dismissButton = null
     )
 

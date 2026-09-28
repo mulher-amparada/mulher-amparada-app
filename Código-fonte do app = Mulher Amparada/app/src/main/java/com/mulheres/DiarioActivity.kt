@@ -1250,10 +1250,12 @@ private fun CurrentPage(
 private fun exportAllPages(
     context: Context,
     pages: List<String>
-) {
+): Boolean {
 
     val resolver =
         context.contentResolver
+
+    var algumDownload = false
 
     pages.forEachIndexed { index, content ->
 
@@ -1307,6 +1309,8 @@ private fun exportAllPages(
                         )
                     }
 
+                algumDownload = true
+
             } catch (_: Exception) {
 
                 resolver.delete(
@@ -1317,4 +1321,7 @@ private fun exportAllPages(
             }
         }
     }
+
+    return algumDownload
+}
 }

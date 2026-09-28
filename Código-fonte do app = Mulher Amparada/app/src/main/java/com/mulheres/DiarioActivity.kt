@@ -91,7 +91,7 @@ private val DarkBorder = Color(0x1AFFFFFF)
 private val DarkText = Color.White
 private val DarkMuted = Color(0x7AFFFFFF)
 
-private val LightBackground = Color(0xFFF7F4F5)
+private val LightBackground = Color(0xFFFFFFFF)
 private val LightSurface = Color.White
 private val LightBorder = Color(0x18000000)
 private val LightText = Color(0xFF292127)

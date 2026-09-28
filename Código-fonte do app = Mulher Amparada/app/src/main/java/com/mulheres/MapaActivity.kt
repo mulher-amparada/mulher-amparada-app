@@ -80,7 +80,7 @@ private val FundoEscuro =
     Color(0xFF050507)
 
 private val FundoClaro =
-    Color(0xFFF7F7FA)
+    Color(0xFFFFFFFF)
 
 private val CartaoEscuro =
     Color(0xD90A0A0D)

@@ -507,7 +507,7 @@ private fun DiaApp() {
         if (darkMode)
             Color(0xFF050507)
         else
-            Color(0xFFF5F5F7)
+            Color(0xFFFFFFFF)
 
     val card =
         if (darkMode)

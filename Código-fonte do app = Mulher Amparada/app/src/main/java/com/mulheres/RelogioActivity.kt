@@ -115,7 +115,7 @@ private val TextoEscuro = Color.White
 private val TextoSuaveEscuro = Color(0xFF9E9EA8)
 private val TextoMutedEscuro = Color(0xFF777782)
 
-private val FundoClaro = Color(0xFFF7F7FA)
+private val FundoClaro = Color(0xFFFFFFFF)
 private val CartaoClaro = Color.White
 private val TextoClaro = Color(0xFF17171B)
 private val TextoSuaveClaro = Color(0xFF686873)

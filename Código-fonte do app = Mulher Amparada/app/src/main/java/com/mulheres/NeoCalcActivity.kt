@@ -130,7 +130,7 @@ private fun obterCoresNeoCalc(
         CoresNeoCalc(
 
             fundo =
-                Color(0xFFF7F7F7),
+                Color(0xFFFFFFFF),
 
             botao =
                 Color(0xFFE9E9E9),

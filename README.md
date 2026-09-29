@@ -130,8 +130,6 @@ depois uma página com imagens dos apks de todas as versões do app (só as imag
 
 o nome verdadeiro do app = Mulher Amparada Pela Liberdade Feminina 
 
-uma página dos canais oficiais do projeto = Medium, Instagram, TikTok, Comunidade do WhatsApp
-
 E uma página mostrando o trabalho de uma mulher empoderada (e eu estava mostrando sobre as vendas dela, para dizer que todas as mulheres podem crescer!, e ela não tem relação com a questão do projeto ser gratuito, essa página é algo separado, o app ainda é totalmente grátis!)
 
 e as páginas desse site estão indexadas no google search console também!

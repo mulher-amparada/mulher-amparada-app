@@ -174,6 +174,8 @@ private var bloqueioThread: Thread? = null
 
 private val bloqueioAmplitudeMinima = 18000
 
+private var aguardandoRetornoAcessibilidade = false
+
     /* =========================================================
        PERMISSÕES
     ========================================================= */
@@ -555,6 +557,21 @@ fun enviarLocalizacaoPara180() {
         }
 }
 
+private fun abrirConfiguracoesAcessibilidade() {
+    aguardandoRetornoAcessibilidade = true
+
+    try {
+        startActivity(
+            Intent(
+                android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS
+            )
+        )
+    } catch (e: Exception) {
+        aguardandoRetornoAcessibilidade = false
+        e.printStackTrace()
+    }
+}
+
 fun enviarSosParaContato() {
 
     val contato =
@@ -711,13 +728,10 @@ fun ativarBloqueioPorBarulho() {
         return
     }
 
-    /*
-     * Solicita o Administrador.
-     *
-     * O detector pode ser iniciado, mas o bloqueio
-     * somente acontecerá se o Administrador estiver ativo.
-     */
-    if (!MyDeviceAdminReceiver.estaAtivo()) {
+if (!acessibilidadeEstaAtiva()) {
+    abrirConfiguracoesAcessibilidade()
+    return
+}
 
     Toast.makeText(
         this,
@@ -1133,12 +1147,17 @@ fun desativarFullscreen() {
 
 
     override fun onResume() {
-
     super.onResume()
 
     verificarPermissoes()
 
-    verificarServicoAcessibilidade()
+    if (aguardandoRetornoAcessibilidade) {
+        aguardandoRetornoAcessibilidade = false
+
+        if (!acessibilidadeEstaAtiva()) {
+            avisoAdministradorVisivel = true
+        }
+    }
 }
 
 private fun acessibilidadeEstaAtiva(): Boolean {
@@ -1156,7 +1175,7 @@ private fun acessibilidadeEstaAtiva(): Boolean {
     val serviceName =
         ComponentName(
             this,
-            MyAccessibilityService::class.java
+            MyDeviceAdminReceiver::class.java
         ).flattenToString()
 
     return enabledServices

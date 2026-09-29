@@ -1,6 +1,7 @@
 package com.mulheres
 
 import androidx.fragment.app.FragmentActivity
+import android.content.ComponentName
 import android.view.WindowManager
 import android.Manifest
 import android.content.BroadcastReceiver
@@ -1132,10 +1133,49 @@ fun desativarFullscreen() {
 
 
     override fun onResume() {
-        super.onResume()
 
-        verificarPermissoes()
+    super.onResume()
+
+    verificarPermissoes()
+
+    verificarServicoAcessibilidade()
+}
+
+private fun acessibilidadeEstaAtiva(): Boolean {
+
+    val enabledServices =
+        android.provider.Settings.Secure.getString(
+            contentResolver,
+            android.provider.Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+        )
+
+    if (enabledServices.isNullOrBlank()) {
+        return false
     }
+
+    val serviceName =
+        ComponentName(
+            this,
+            MyAccessibilityService::class.java
+        ).flattenToString()
+
+    return enabledServices
+        .split(":")
+        .any {
+            it.equals(
+                serviceName,
+                ignoreCase = true
+            )
+        }
+}
+
+private fun verificarServicoAcessibilidade() {
+
+    if (!acessibilidadeEstaAtiva()) {
+
+        avisoAdministradorVisivel = true
+    }
+}
 
 fun abrirContatos() {
 

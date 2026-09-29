@@ -351,7 +351,7 @@ class Cripto(context: Context) {
     }
 
 
-    @JavascriptInterface
+    
     fun salvar(
         chave: String,
         valor: String
@@ -379,7 +379,7 @@ class Cripto(context: Context) {
     }
 
 
-    @JavascriptInterface
+    
     fun carregar(
         chave: String
     ): String {
@@ -414,7 +414,7 @@ class Cripto(context: Context) {
     }
 
 
-    @JavascriptInterface
+    
     fun remover(
         chave: String
     ) {
@@ -431,7 +431,7 @@ class Cripto(context: Context) {
     }
 
 
-    @JavascriptInterface
+    
     fun limparTudo() {
 
         runBlocking(Dispatchers.IO) {

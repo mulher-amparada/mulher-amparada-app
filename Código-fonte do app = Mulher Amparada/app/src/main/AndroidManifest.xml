@@ -71,38 +71,36 @@
 
         </activity>
 
-        <activity
-            android:name=".EntradaActivity"
-            android:screenOrientation="portrait"
+<activity
+    android:name=".EntradaActivity"
+    android:screenOrientation="portrait"
     android:configChanges="orientation|screenSize"
     android:exported="true"
-    
     android:theme="@style/Theme.App.Splash">
-    
-            android:exported="true"
-            android:autoVerify="true">
 
-<intent-filter>
+    <!-- Abrir o aplicativo normalmente -->
+    <intent-filter>
 
-    <action android:name="android.intent.action.VIEW" />
+        <action android:name="android.intent.action.MAIN" />
 
-    <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.LAUNCHER" />
 
-    <category android:name="android.intent.category.BROWSABLE" />
+    </intent-filter>
 
+    <!-- Deep Link: com.mulheres://abrir -->
+    <intent-filter>
 
-                <action
-                    android:name="android.intent.action.MAIN" />
+        <action android:name="android.intent.action.VIEW" />
 
-                <category
-                    android:name="android.intent.category.LAUNCHER" />
-                    
-    <data android:scheme="com.mulheres" />
+        <category android:name="android.intent.category.DEFAULT" />
 
-</intent-filter>
+        <category android:name="android.intent.category.BROWSABLE" />
 
-        </activity>
+        <data android:scheme="com.mulheres" />
 
+    </intent-filter>
+
+</activity>
 
 
         <!-- ================================================= -->

@@ -12,7 +12,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3849**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3834**
 
 # ⚠️MURAL DE AVISOS:
 
@@ -928,3 +928,21 @@ Eu decidi colocar a HubActivity com o padrão `edge to edge` por causa do escure
 E todas da área do amparo porque pode ser que a usuária mostre para outra pessoa
 
 e ai TODAS AS OUTRAS TELAS estão com as barras pretas porque um layou já estava com essas barras por causa da espécie (é tipo um container sabe!), e ai nao ficava atrás das barras, e ai eu decidi fazer nos outros também para parecer que são todas assim...
+
+# 🔗 Deep Link do aplicativo:
+
+O aplicativo utiliza um Deep Link personalizado para permitir que o Android abra diretamente o Mulher Amparada:
+
+com.mulheres://abrir
+
+Esse endereço utiliza o identificador do aplicativo ("com.mulheres") como esquema de URI. Ao acessar o link em um dispositivo Android que possui o aplicativo instalado, o sistema pode encaminhar a abertura diretamente para o aplicativo, sem a necessidade de um site ou domínio externo.
+
+O esquema é registrado no "AndroidManifest.xml" por meio de um "intent-filter":
+
+<data android:scheme="com.mulheres" />
+
+Assim, o endereço:
+
+com.mulheres://abrir
+
+funciona como uma forma direta de solicitar a abertura do aplicativo Mulher Amparada.

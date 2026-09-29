@@ -12,7 +12,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3822**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3810**
 
 # ⚠️MURAL DE AVISOS:
 
@@ -22,7 +22,7 @@ E vale lembrar que antes todas as páginas eram html com webview, agora não sã
 >
 > Ao entrar no aplicativo após sair dos disfarces, um aviso é exibido, bloqueando o acesso até que todas as permissões necessárias estejam concedidas. O aviso oferece à usuária a opção de acessar diretamente a tela de permissões do aplicativo nas configurações do dispositivo. Ao retornar ao aplicativo, as permissões são verificadas novamente. Se ainda houver alguma permissão necessária que não tenha sido concedida, o aviso continuará sendo exibido e o acesso permanecerá bloqueado. O aviso só desaparecerá quando todas as permissões necessárias estiverem concedidas.
 >
-> (mas a permissão de Administrador do dispositivo a acitvity pede normalmente!).
+> (mas a permissão de Serviço de acessibilidade a acitvity pede normalmente!).
  
 >Vale lembrar que o projeto não substitui serviços oficiais do governo e também não garante segurança imediata, bem como as funções dependem do estado e hardware de cada aparelho!
 
@@ -162,7 +162,7 @@ AssistenteActivity (compose) = Tela que contém o disfarce de saúde do app
 
 NeoCalcActivity (compose) = Tela que contém o disfarce de calculadora
 
- HubActivity (compose) = Tela que contém o botão de pânico, proteção por palmas, balançar o celular pra pedir ajuda, escurecimento por inclinação, bloqueio por barulho, usandk o action dial, ele chama a policia, samu e o 180, enviar localização para o 180, contatos de confiança, o botão feito com compose, (aquele do emergencyoverlay), 
+ HubActivity (compose) = Tela que contém o botão de pânico, proteção por palmas, balançar o celular pra pedir ajuda, escurecimento por inclinação, bloqueio por barulho, usando o action dial, ele chama a policia, samu e o 180, enviar localização para o 180, contatos de confiança, o botão feito com compose, (aquele do emergencyoverlay), 
  
  HomeActivity (compose) = Tela da área do amparo onde mostra as 2 carteirinhas
  
@@ -232,6 +232,80 @@ Em:
 
 E também as barras tanto de status tanto de navegação são transparentes, porém o fundo atrás do WebView e preto, espaçado dos lados e de cima e com um raio de borda!, e o webview não fica mais embaixo das duas barras, ele respeita elas!
 
+----
+
+### Serviço de Acessibilidade:
+
+O Mulher Amparada utiliza um "AccessibilityService" do Android para executar uma função específica de proteção: bloquear a tela do dispositivo quando o recurso de bloqueio por barulho é acionado.
+
+Como funciona:
+
+Quando o usuário ativa o bloqueio por barulho, o aplicativo monitora o recurso de detecção de som.
+
+Ao detectar o gatilho configurado, o aplicativo solicita ao serviço de acessibilidade que execute a ação de bloqueio da tela fornecida pelo próprio Android.
+
+O serviço não precisa acessar o conteúdo da tela, ler textos, controlar outros aplicativos ou realizar ações arbitrárias.
+
+Tecnologia usada:
+
+Android AccessibilityService
+
+A API AccessibilityService permite que um serviço autorizado pelo usuário execute determinadas ações de acessibilidade fornecidas pelo sistema.
+
+Neste aplicativo, ela é utilizada especificamente para executar:
+
+GLOBAL_ACTION_LOCK_SCREEN
+
+Ativação:
+
+O serviço não é ativado automaticamente pelo aplicativo.
+
+O Android exige que o próprio usuário autorize o serviço nas configurações de Acessibilidade.
+
+Fluxo:
+
+Aplicativo
+↓
+Configurações de Acessibilidade
+↓
+Mulher Amparada
+↓
+Usuário ativa o serviço
+↓
+Android inicia o AccessibilityService
+↓
+Recurso de proteção pode utilizar o bloqueio da tela
+
+Por que o Google Play Protect pode apresentar um aviso?
+
+O Google Play Protect verifica aplicativos instalados tanto pela Google Play quanto por outras fontes.
+
+Recursos como AccessibilityService são considerados sensíveis porque, quando utilizados de forma indevida, podem permitir interações com o dispositivo que representam riscos à privacidade e à segurança.
+
+Por isso, um aplicativo distribuído fora da Google Play pode receber verificações ou avisos adicionais. Isso não significa, por si só, que o aplicativo seja malware.
+
+O Play Protect também possui mecanismos específicos para aplicativos instalados por sideload e pode bloquear instalações quando identifica riscos associados ao aplicativo ou às permissões solicitadas.
+
+Política do Google Play:
+
+O uso de AccessibilityService não é proibido de forma geral.
+
+Para aplicativos que não são ferramentas de acessibilidade destinadas principalmente a pessoas com deficiência, o Google Play exige declaração do uso da API, divulgação clara dentro do aplicativo e consentimento do usuário.
+
+O uso também precisa ter uma finalidade específica e compreensível. A política não permite utilizar a API para contornar controles de segurança ou privacidade do Android nem para realizar ações autônomas de forma indevida.
+
+O Google confirma que a API de acessibilidade pode ser usada por uma variedade de aplicativos, mas estabelece requisitos de declaração e consentimento para usos que não são ferramentas de acessibilidade.
+
+No Mulher Amparada:
+
+O serviço é opcional.
+
+O usuário precisa ativá-lo manualmente nas configurações do Android.
+
+A finalidade declarada é o bloqueio da tela como parte do recurso de proteção por barulho.
+
+O aplicativo não utiliza o serviço para ler o conteúdo da tela ou controlar aplicativos de terceiros.
+
 ### Sobre como foi escrito o texto do biometricPrompt do app:
 
 - HubActivity:
@@ -300,7 +374,7 @@ Ative e, ao chacoalhar o celular, ele liga para o 180.
 com isso, voce pode controlar o brilho da tela clicando em um botão..., porém, e tipo como se fosse o menor brilho do celular, e ai depois ele deixa a tela preta (nao com brilho e sim colocando a cor), (honestamente, antes aparecia as duas barras, agora elas se escondem!), e o efeito e vitalicio ate fechar e abrir o app!
 
 ###Bloquear a tela do celular pelo barulho:
-ao ativado, ao fazer barulho alto, ele usa o administrador do dispositivo e bloqueia a tela do celular!
+ao ativado, ao fazer barulho alto, ele usa o  e bloqueia a tela do celular!
 
 ###Emergência:
 Saindo dessa área, existem botões que abrem o aplicativo nativo do telefone nos números 190, 192 e 180.
@@ -334,42 +408,44 @@ Vale lembrar que o compose é um overlay usandi a classe `EmergencyOverlay`, e a
 # 🔐Área Protegida:
 Se estiver cadastrado no celular, com Biometric Prompt junto com Device Credential e autenticação weak, pode desbloquear essa área com impressão digital, rosto, PIN, padrão, senha e outros métodos.
 
+Sistema Cripto (Segurança do App)
 
-### Sistema Cripto (Segurança do App):
-Este sistema salva dados de forma segura usando criptografia nativa do Android.
+O aplicativo possui um sistema próprio de armazenamento seguro que utiliza criptografia nativa do Android para proteger os dados armazenados.
 
-```
 Como funciona:
-Quando você salva um dado no app, ele não fica em texto normal no celular. Ele é automaticamente criptografado antes de ser armazenado.
 
-Isso significa que mesmo acessando os arquivos do dispositivo, os dados aparecem como códigos ilegíveis.
-```
+Quando um dado é salvo no app, ele é criptografado antes de ser armazenado.
 
-```
-Tecnologia usada:
+O conteúdo armazenado não permanece em texto simples. Para recuperar o dado, o aplicativo utiliza a chave de criptografia protegida pelo Android e descriptografa o conteúdo somente quando necessário.
 
-AES-256 (criptografia forte)
+Tecnologias usadas:
 
-Android Keystore (chave protegida pelo sistema)
+AES-256
+Criptografia simétrica utilizada para proteger os dados.
 
-EncryptedSharedPreferences
-```
+Android Keystore
+Sistema do Android utilizado para proteger as chaves criptográficas.
 
-```
+Jetpack DataStore Preferences
+Sistema utilizado para armazenar as informações persistentes do aplicativo.
+
 O que cada função faz:
 
-salvar(chave, valor) → guarda o dado de forma criptografada
+salvar(chave, valor) → criptografa e armazena o dado
 
-carregar(chave) → recupera o dado original
+carregar(chave) → recupera e descriptografa o dado
 
-remover(chave) → apaga um dado específico
+remover(chave) → remove um dado específico
 
-limparTudo() → remove todos os dados salvos
-```
-```
+limparTudo() → remove todos os dados armazenados
+
 Segurança:
-Os dados são protegidos por uma chave segura do próprio Android e não ficam visíveis diretamente no armazenamento do aparelho.
-```
+
+Os dados não são armazenados diretamente em texto simples.
+
+A criptografia utiliza uma chave protegida pelo Android Keystore, enquanto o armazenamento persistente é realizado pelo Jetpack DataStore.
+
+Dessa forma, o conteúdo protegido não fica diretamente legível no armazenamento do aparelho.
 
 ###Calendário Menstrual:
 Registre como dói cada dia e, com isso, o aplicativo monta um calendário.
@@ -629,7 +705,7 @@ A navegação para o Google é feita diretamente pelo código usando window loca
 >MainActivity > Google > pesquisa/link do Google
 >
 >Voltar > fecha a MainActivity
-> Caso a usuária nege a permissão de Administrador do dispositivo, o aplicativo exibe uma caixa de diálogo informando quais funções poderão não funcionar!
+> Caso a usuária nege a permissão de Serviço de acessibilidade, o aplicativo exibe uma caixa de diálogo informando quais funções poderão não funcionar!
 
 
 ## Considerações finais:
@@ -819,30 +895,6 @@ Essa escolha também foi pensada como uma forma de incentivar uma vistoria seque
 é tipo assim:
 
 armazenamento interno, para trocar para cartao sd, clica no botão e troca o icone, mas aí para voltar atrás, tem passar pelo cartao sd e pelo pendrive para só então voltar para o armazenamento interno
-
-### Por que usei a permissão de Administrador do dispositivo e não um Serviço de acessibilidade?
-
-Optei pelo Administrador do dispositivo em vez de um Serviço de acessibilidade porque, para a função específica que o aplicativo precisa realizar — bloquear imediatamente a tela do celular — o Administrador do dispositivo oferece um mecanismo próprio do Android para essa finalidade, por meio do "DevicePolicyManager.lockNow()".
-
-No caso de um Serviço de acessibilidade, é necessário habilitar o serviço nas configurações de Acessibilidade do Android, seguindo o fluxo de permissões e confirmações exigido pelo sistema. Além disso, o uso de Acessibilidade envolve requisitos e políticas próprios dessa plataforma.
-
-Já o Administrador do dispositivo possui um fluxo específico para sua ativação: o usuário concede a função de administrador ao aplicativo e, depois disso, o aplicativo pode utilizar as capacidades de administração que foram concedidas.
-
-É importante esclarecer uma diferença: as chamadas “permissões restritas” do Android não são simplesmente uma consequência de usar Administrador do dispositivo. Elas são um mecanismo separado do sistema. Dependendo da versão do Android e da forma como o aplicativo foi instalado, determinadas configurações podem aparecer durante o gerenciamento ou a desinstalação do aplicativo.
-
-E o fato de o Administrador do dispositivo estar sendo descontinuado?
-
-É verdade que várias funcionalidades tradicionais do Device Administrator foram descontinuadas ou deixaram de ser recomendadas pelo Android. Porém, isso não significa que toda a API tenha sido removida.
-
-A função utilizada pelo aplicativo para essa finalidade é:
-
-"DevicePolicyManager.lockNow()"
-
-Ela é destinada a bloquear imediatamente o dispositivo, e não a desligá-lo.
-
-Portanto, a documentação do projeto não deve dizer que “o Administrador do dispositivo está totalmente deprecated”. O correto é explicar que algumas capacidades tradicionais do Device Administrator foram descontinuadas/restritas, enquanto o bloqueio imediato da tela utilizado pelo aplicativo continua sendo uma capacidade disponível do Android.
-
-O aplicativo utiliza somente a capacidade necessária para o seu mecanismo de proteção, sem depender das funções administrativas antigas, como alteração de senha ou outras políticas que foram descontinuadas.
 
 ### Por que o WebView do app não trata "intent" para abrir outros aplicativos?
 

@@ -1,80 +1,97 @@
-# CONTRATO DE LICENÇA DE SOFTWARE — ALGUNS DIREITOS RESERVADOS
+# CONTRATO DE LICENÇA DE SOFTWARE — TODOS OS DIREITOS RESERVADOS
 
 # Copyright © 2026 — Projeto desenvolvido por mulheramparada@gmail.com / Mulher Amparada.
 
 Este projeto, incluindo seu código-fonte, estrutura, arquivos, recursos, funcionalidades, documentação e demais componentes, é protegido por direitos autorais e leis de propriedade intelectual, permanecendo de propriedade exclusiva de seu respectivo autor.
 
-**1. CONCESSÃO DE USO**
-
-O autor concede uma licença de uso gratuita e não exclusiva deste projeto, permitindo que terceiros utilizem, estudem, auditem, modifiquem, adaptem, executem e distribuam o projeto e suas versões modificadas, desde que sejam integralmente respeitadas as condições estabelecidas neste contrato.
-
-Esta licença não transfere a propriedade intelectual do projeto nem concede ao usuário qualquer direito de reivindicar autoria sobre o projeto original.
-
-**2. CONDIÇÕES OBRIGATÓRIAS**
-
-A autorização de uso, distribuição e modificação está estritamente condicionada ao cumprimento das seguintes regras:
-
-**1. É expressamente proibida a venda ou cobrança direta do projeto às usuárias finais.**
-**2. O projeto deve permanecer completamente livre de anúncios, não podendo ser inseridos banners, pop-ups, sistemas de publicidade ou scripts de rastreamento comercial dentro do aplicativo.**
-**3. É permitido obter ganhos financeiros por outros meios indiretos (como serviços de suporte, customização técnica para entidades ou doações), desde que isso não resulte na venda ou cobrança direta das usuárias finais e não viole as demais condições desta licença.**
-**4. Qualquer versão distribuída, modificada ou adaptada deverá manter os devidos créditos ao autor original e ao projeto Mulher Amparada.**
-**5. Não é permitido remover, ocultar ou alterar os avisos de copyright, assinaturas de código e atribuição existentes no projeto com a finalidade de retirar ou ocultar sua autoria original.**
-**6. Modificações e versões derivadas podem ser realizadas, desde que não sejam apresentadas, divulgadas ou comercializadas como sendo a versão oficial original desenvolvida pelo autor.**
-
-**3. CRÉDITOS E ATRIBUIÇÃO**
-
-Toda distribuição, publicação ou disponibilização pública do projeto ou de versões derivadas deverá preservar uma atribuição equivalente a:
-
-“Projeto originalmente desenvolvido por mulheramparada@gmail.com / Mulher Amparada.”
-
-Os créditos devem permanecer visíveis (em menus "Sobre", rodapés ou documentação) e não podem ser apresentados de maneira que sugira que o autor original endossa, patrocina ou é responsável por uma versão modificada sem sua autorização expressa.
-
-**4. RESPONSABILIDADE PELO USO**
-
-O projeto é disponibilizado "no estado em que se encontra" (AS IS), sem garantias de que sua utilização será ininterrupta, livre de erros ou adequada a todas as finalidades ou situações de emergência.
-
-O autor original não se responsabiliza por danos, prejuízos, perdas de dados, falhas de comunicação com serviços públicos de emergência (180, 190, 192), incidentes de segurança, crimes, infrações, violações de direitos ou quaisquer consequências decorrentes do uso, modificação, distribuição ou utilização indevida do projeto por terceiros, na medida permitida pela legislação aplicável.
-
-A responsabilidade civil e penal pelo uso do projeto, incluindo suas modificações, instalações e aplicações específicas, pertence exclusivamente à pessoa, organização ou entidade que realizou esse uso ou distribuição.
-
-Nenhuma disposição desta licença autoriza a utilização do projeto para fins ilegais ou para violar direitos de terceiros.
-
-**5. VERSÕES MODIFICADAS (EFEITO VITALÍCIO)**
-
-Quem modificar o projeto poderá distribuir sua própria versão, desde que a nova versão seja obrigatoriamente distribuída sob os termos desta mesma licença, garantindo que o código derivado também:
-
-- Mantenha os créditos do projeto original;
-- Respeite todas as condições e restrições desta licença;
-- Não seja apresentado como sendo a versão oficial original;
-- Não tenha seus avisos de copyright removidos ou alterados;
-- Permaneça completamente livre de anúncios;
-- Não seja vendido ou cobrado diretamente das usuárias finais.
-
-**6. RESERVA DE DIREITOS E RESCISÃO**
-
-Salvo os direitos expressamente concedidos por esta licença, todos os demais direitos permanecem estritamente reservados ao autor.
-
-Esta licença não deve ser interpretada como uma transferência de propriedade, cessão definitiva de direitos autorais ou renúncia aos direitos morais do autor sobre o projeto.
 
 ----
 
-«🚫 RESTRIÇÃO DE USO E AUTORIZAÇÃO:
+1. Autor e projeto
 
-É proibido a qualquer pessoa jurídica, entidade, organização, empresa, ONG, instituto, órgão público ou agente governamental, identificada ou não por CNPJ, utilizar, copiar, reproduzir, modificar, adaptar, distribuir, incorporar, integrar, disponibilizar, explorar ou criar obras, softwares, sistemas, produtos ou serviços derivados de qualquer parte deste projeto, incluindo seu código-fonte, estrutura, recursos, funcionalidades, elementos visuais, documentação ou demais componentes, sem autorização expressa do responsável pelo projeto.
+Este projeto foi desenvolvido por seu autor, que é o responsável pelo desenvolvimento e manutenção do projeto Mulher Amparada.
 
-A disponibilidade do código-fonte para consulta não constitui, por si só, autorização para utilizar o projeto ou qualquer de seus componentes como base, total ou parcialmente, para a criação, desenvolvimento, modificação ou distribuição de outro projeto, software, sistema, produto ou serviço.
+O fato de o projeto ser disponibilizado publicamente ou possuir seu código-fonte acessível não significa que qualquer pessoa, empresa, instituto, ONG ou órgão público tenha autorização para utilizá-lo, modificá-lo, incorporá-lo, adaptá-lo ou criar outro projeto a partir dele.
 
-Somente entidades expressamente autorizadas pelo responsável pelo projeto poderão utilizar, modificar, reproduzir, incorporar, adaptar ou derivar qualquer parte deste projeto, nos limites da autorização concedida.»
+2. Colaboração
 
-----
+Anteriormente, era permitida a colaboração de terceiros no projeto.
 
-**7. ACEITAÇÃO DA LICENÇA**
+Essa permissão foi encerrada.
 
-Ao utilizar, copiar, modificar ou distribuir este projeto, o usuário declara que leu, compreendeu e concorda em cumprir integralmente os termos desta licença.
+A partir desta licença, nenhuma pessoa, organização, empresa, instituto, ONG ou entidade possui autorização para colaborar diretamente no desenvolvimento, modificar, adaptar, incorporar, derivar ou reutilizar o projeto, salvo autorização expressa e específica do autor.
 
-O descumprimento de qualquer uma das condições estabelecidas nesta licença resultará na revogação automática e imediata da autorização concedida para utilização e distribuição do projeto, sujeitando o infrator às sanções civis e penais cabíveis conforme a legislação de direitos autorais vigente.
+3. Uso por empresas, institutos e organizações
+
+É proibido a qualquer pessoa jurídica, incluindo, mas não se limitando a:
+
+- empresas;
+- institutos;
+- ONGs;
+- associações;
+- fundações;
+- organizações privadas;
+- organizações sem fins lucrativos;
+
+utilizar, copiar, modificar, adaptar, incorporar, derivar, redistribuir ou utilizar qualquer parte deste projeto para criar, desenvolver, manter ou distribuir outro software, sistema, produto ou serviço.
+
+4. Órgãos e entidades governamentais
+
+É expressamente proibido a qualquer órgão, entidade ou agente governamental utilizar, copiar, modificar, adaptar, incorporar, derivar, redistribuir ou utilizar qualquer parte deste projeto, incluindo seu código-fonte, estrutura, recursos, funcionalidades ou documentação, para qualquer finalidade de desenvolvimento, criação, manutenção ou distribuição de software, sistema, produto ou serviço.
+
+O projeto não autoriza sua utilização, integração ou incorporação por órgãos governamentais.
+
+5. Institutos e ONGs
+
+Institutos e organizações não governamentais também estão expressamente excluídos da autorização de uso do projeto.
+
+O fato de uma organização possuir finalidade social, assistencial ou sem fins lucrativos não concede qualquer autorização adicional para utilização do projeto.
+
+6. Divulgação
+
+A única utilização de terceiros expressamente permitida sem autorização individual do autor é a divulgação do projeto.
+
+É permitido divulgar a existência do Mulher Amparada, seus canais oficiais e suas informações públicas, desde que a divulgação:
+
+- não implique que a pessoa ou organização seja autora do projeto;
+- não implique parceria, apoio ou vínculo oficial inexistente;
+- não modifique o projeto;
+- não redistribua versões modificadas;
+- não incorpore o projeto em outro produto ou serviço;
+- não utilize o projeto como base para outro software.
+
+7. Proibição de derivação
+
+Não é permitido utilizar o código, estrutura, lógica, recursos, componentes, funcionalidades, documentação ou qualquer parte substancial deste projeto como base para desenvolver outro software, aplicativo, sistema, plataforma ou serviço.
+
+Isso inclui modificações, adaptações, forks, cópias, integrações e obras derivadas.
+
+8. Autorização
+
+Qualquer utilização que não esteja expressamente permitida nesta licença depende de autorização prévia e expressa do autor.
+
+A disponibilização pública do repositório, do código-fonte ou do aplicativo não constitui autorização implícita para qualquer outra forma de utilização.
+
+9. Divulgação não significa licença de uso
+
+A permissão para divulgar o projeto não concede qualquer licença sobre seu código-fonte, arquitetura, identidade visual, funcionalidades, recursos ou demais componentes.
+
+Divulgar é permitido. Utilizar, modificar, copiar, incorporar ou derivar não é.
+
+10. Alterações desta licença
+
+O autor poderá alterar os termos desta licença para versões futuras do projeto.
+
+A versão da licença aplicável será aquela que acompanhar a versão correspondente do projeto.
 
 ---
+
+Mulher Amparada
+Projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência.
+
+Todos os direitos não expressamente concedidos nesta licença são reservados ao autor.
+
+----
 
 DISPOSIÇÕES ESPECIAIS PARA PESSOAS JURÍDICAS, AGENTES PÚBLICOS E PARTIDOS POLÍTICOS
 

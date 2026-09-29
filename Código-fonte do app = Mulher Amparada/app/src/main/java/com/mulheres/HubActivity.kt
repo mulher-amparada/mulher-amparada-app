@@ -1,5 +1,6 @@
 package com.mulheres
 
+import android.provider.Settings
 import androidx.fragment.app.FragmentActivity
 import android.content.ComponentName
 import android.view.WindowManager
@@ -732,29 +733,6 @@ if (!acessibilidadeEstaAtiva()) {
     abrirConfiguracoesAcessibilidade()
     return
 }
-
-    Toast.makeText(
-        this,
-        "Ative o serviço de acessibilidade do Mulher Amparada.",
-        Toast.LENGTH_LONG
-    ).show()
-
-    try {
-
-        startActivity(
-            Intent(
-                android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS
-            )
-        )
-
-    } catch (e: Exception) {
-
-        e.printStackTrace()
-    }
-
-    return
-}
-
     /*
      * Verifica o microfone.
      */

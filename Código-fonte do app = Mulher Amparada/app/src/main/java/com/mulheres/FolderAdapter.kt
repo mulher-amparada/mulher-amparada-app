@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import androidx.core.content.ContextCompat
+import java.text.Collator
 
 class FolderAdapter(
     private val onClick: (StorageItem) -> Unit
@@ -225,11 +226,29 @@ holder.name.setTextColor(
     }
 
     fun update(
-        newList: List<StorageItem>
-    ) {
+    newList: List<StorageItem>
+) {
 
-        list = newList
+    val collator =
+        Collator.getInstance(Locale("pt", "BR"))
 
-        notifyDataSetChanged()
-    }
+    list =
+        newList.sortedWith(
+            compareBy(
+                collator
+            ) {
+
+                when (it) {
+
+                    is StorageItem.Local ->
+                        it.file.name
+
+                    is StorageItem.Document ->
+                        it.document.name ?: "Sem nome"
+                }
+            }
+        )
+
+    notifyDataSetChanged()
+}
 }

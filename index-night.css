@@ -2397,6 +2397,182 @@ svg {
 
 }
 
+.deep-link-card {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+
+    min-height: 118px;
+
+    padding: 24px;
+
+    box-sizing: border-box;
+
+    border: 1px solid rgba(255, 61, 130, .28);
+
+    border-radius: 30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 61, 130, .16),
+            rgba(255, 61, 130, .055) 48%,
+            var(--surface) 100%
+        );
+
+    color: var(--text);
+
+    text-decoration: none;
+
+    overflow: hidden;
+
+    isolation: isolate;
+
+    transition:
+        transform .18s ease,
+        border-color .18s ease;
+
+}
+
+
+.deep-link-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 210px;
+
+    height: 210px;
+
+    right: -105px;
+
+    top: -105px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 61, 130, .13);
+
+    border: 1px solid rgba(255, 61, 130, .12);
+
+    z-index: -1;
+
+}
+
+
+.deep-link-card::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 70px;
+
+    height: 70px;
+
+    left: 34px;
+
+    bottom: -43px;
+
+    border-radius: 22px;
+
+    border: 1px solid rgba(255, 61, 130, .18);
+
+    transform: rotate(45deg);
+
+    z-index: -1;
+
+}
+
+
+.deep-link-card:active {
+
+    transform: scale(.975);
+
+    border-color: rgba(255, 61, 130, .65);
+
+}
+
+
+.deep-link-card-content {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    flex: 1;
+
+    min-width: 0;
+
+}
+
+
+.deep-link-card-title {
+
+    font-size: 20px;
+
+    font-weight: 750;
+
+    line-height: 1.2;
+
+    letter-spacing: -.45px;
+
+    color: var(--text);
+
+}
+
+
+.deep-link-card-description {
+
+    max-width: 230px;
+
+    font-size: 13px;
+
+    line-height: 1.45;
+
+    color: var(--soft);
+
+}
+
+
+.deep-link-card-arrow {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 46px;
+
+    height: 46px;
+
+    margin-left: 18px;
+
+    border-radius: 16px;
+
+    border: 1px solid rgba(255, 61, 130, .28);
+
+    background: rgba(255, 61, 130, .10);
+
+    color: var(--pink);
+
+    font-size: 30px;
+
+    font-weight: 300;
+
+    line-height: 1;
+
+}
+
 @media (prefers-reduced-motion: reduce) {
     /* Procura por QUALQUER elemento que use a sua animação e a desativa */
 

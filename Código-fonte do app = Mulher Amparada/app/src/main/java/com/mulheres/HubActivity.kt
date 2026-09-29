@@ -4,8 +4,6 @@ import androidx.fragment.app.FragmentActivity
 import android.view.WindowManager
 import android.Manifest
 import android.content.BroadcastReceiver
-import android.app.admin.DevicePolicyManager
-import android.content.ComponentName
 import android.os.BatteryManager
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
@@ -461,86 +459,8 @@ fun abrirHomeActivity() {
             microfone &&
             telefone
     }
-    
-    fun solicitarAdministrador() {
 
-    try {
 
-        val dpm =
-            getSystemService(
-                Context.DEVICE_POLICY_SERVICE
-            ) as DevicePolicyManager
-
-        val component =
-            ComponentName(
-                this,
-                MyDeviceAdminReceiver::class.java
-            )
-
-        if (dpm.isAdminActive(component)) {
-            return
-        }
-
-        val intent =
-            Intent(
-                DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN
-            ).apply {
-
-                putExtra(
-                    DevicePolicyManager.EXTRA_DEVICE_ADMIN,
-                    component
-                )
-
-                putExtra(
-                    DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                    "Este aplicativo precisa da permissão de Administrador do dispositivo."
-                )
-            }
-
-        startActivityForResult(
-            intent,
-            1001
-        )
-
-    } catch (e: Exception) {
-
-        e.printStackTrace()
-    }
-}
-
-override fun onActivityResult(
-    requestCode: Int,
-    resultCode: Int,
-    data: Intent?
-) {
-    super.onActivityResult(
-        requestCode,
-        resultCode,
-        data
-    )
-
-    if (requestCode == 1001) {
-
-        val dpm =
-            getSystemService(
-                Context.DEVICE_POLICY_SERVICE
-            ) as DevicePolicyManager
-
-        val component =
-            ComponentName(
-                this,
-                MyDeviceAdminReceiver::class.java
-            )
-
-        val administradorAtivo =
-            dpm.isAdminActive(component)
-
-        if (!administradorAtivo) {
-
-            avisoAdministradorVisivel = true
-        }
-    }
-}
 
 fun enviarLocalizacaoPara180() {
 
@@ -781,36 +701,7 @@ fun enviarSosParaContato() {
 
 fun bloquearTela(): Boolean {
 
-    return try {
-
-        val dpm =
-            getSystemService(
-                Context.DEVICE_POLICY_SERVICE
-            ) as DevicePolicyManager
-
-        val component =
-            ComponentName(
-                this,
-                MyDeviceAdminReceiver::class.java
-            )
-
-        if (!dpm.isAdminActive(component)) {
-
-            solicitarAdministrador()
-
-            return false
-        }
-
-        dpm.lockNow()
-
-        true
-
-    } catch (e: Exception) {
-
-        e.printStackTrace()
-
-        false
-    }
+    return MyDeviceAdminReceiver.bloquearTela()
 }
 
 fun ativarBloqueioPorBarulho() {
@@ -825,7 +716,29 @@ fun ativarBloqueioPorBarulho() {
      * O detector pode ser iniciado, mas o bloqueio
      * somente acontecerá se o Administrador estiver ativo.
      */
-    solicitarAdministrador()
+    if (!MyDeviceAdminReceiver.estaAtivo()) {
+
+    Toast.makeText(
+        this,
+        "Ative o serviço de acessibilidade do Mulher Amparada.",
+        Toast.LENGTH_LONG
+    ).show()
+
+    try {
+
+        startActivity(
+            Intent(
+                android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS
+            )
+        )
+
+    } catch (e: Exception) {
+
+        e.printStackTrace()
+    }
+
+    return
+}
 
     /*
      * Verifica o microfone.
@@ -3041,23 +2954,28 @@ if (activity?.avisoAdministradorVisivel == true) {
         },
 
         confirmButton = {
-            Button(
-                onClick = {
-                    activity?.fecharAvisoAdministrador()
-                    activity?.solicitarAdministrador()
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFF4F9A),
-                    contentColor = Color.White
+    Button(
+        onClick = {
+            activity?.fecharAvisoAdministrador()
+
+            activity?.startActivity(
+                Intent(
+                    android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS
                 )
-            ) {
-                Text(
-                    text = "Tentar novamente",
-                    fontFamily = font,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
+            )
+        },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color(0xFFFF4F9A),
+            contentColor = Color.White
+        )
+    ) {
+        Text(
+            text = "Tentar novamente",
+            fontFamily = font,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
     )
 }
 

@@ -1,38 +1,48 @@
 package com.mulheres
 
-import android.app.admin.DeviceAdminReceiver
-import android.app.admin.DevicePolicyManager
-import android.content.Context
-import android.content.Intent
+import android.accessibilityservice.AccessibilityService
+import android.view.accessibility.AccessibilityEvent
 
-class MyDeviceAdminReceiver : DeviceAdminReceiver() {
+class MyDeviceAdminReceiver : AccessibilityService() {
 
-    override fun onReceive(
-        context: Context,
-        intent: Intent
+    companion object {
+
+        private var instancia: MyDeviceAdminReceiver? = null
+
+        fun bloquearTela(): Boolean {
+
+            return instancia?.performGlobalAction(
+                GLOBAL_ACTION_LOCK_SCREEN
+            ) ?: false
+        }
+
+        fun estaAtivo(): Boolean {
+
+            return instancia != null
+        }
+    }
+
+    override fun onServiceConnected() {
+
+        super.onServiceConnected()
+
+        instancia = this
+    }
+
+    override fun onAccessibilityEvent(
+        event: AccessibilityEvent?
     ) {
-        super.onReceive(context, intent)
+    }
 
-        if (intent.action != "com.mulheres.BLOQUEAR_CELULAR") {
-            return
+    override fun onInterrupt() {
+    }
+
+    override fun onDestroy() {
+
+        if (instancia === this) {
+            instancia = null
         }
 
-        val devicePolicyManager =
-            context.getSystemService(
-                Context.DEVICE_POLICY_SERVICE
-            ) as DevicePolicyManager
-
-        val adminComponent =
-            android.content.ComponentName(
-                context,
-                MyDeviceAdminReceiver::class.java
-            )
-
-        // Só pode bloquear se o administrador
-        // do dispositivo estiver ativado.
-        if (devicePolicyManager.isAdminActive(adminComponent)) {
-
-            devicePolicyManager.lockNow()
-        }
+        super.onDestroy()
     }
 }

@@ -2397,6 +2397,48 @@ svg {
 
 }
 
+footer {
+
+  width: 100%;
+  margin-top: 50px;
+  padding: 28px 20px;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--soft);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+footer p {
+  margin: 6px 0;
+  color: var(--soft);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+footer a {
+  color: var(--pink);
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity .2s ease;
+}
+
+footer a:hover {
+  opacity: .75;
+  text-decoration: underline;
+}
+
+footer strong {
+  color: var(--text);
+}
+
+footer small {
+  display: block;
+  margin-top: 12px;
+  color: var(--muted-2);
+  font-size: 12px;
+}
+
 @media (prefers-reduced-motion: reduce) {
     /* Procura por QUALQUER elemento que use a sua animação e a desativa */
 

@@ -2582,6 +2582,46 @@ svg {
 
 }
 
+footer {
+  width: 100%;
+  margin-top: 50px;
+  padding: 28px 20px;
+  border-top: 1px solid #e1e1e6;
+  background: #ffffff;
+  color: #777982;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+footer p {
+  margin: 6px 0;
+  color: #777982;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+footer a {
+  color: #ff3f82;
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity .2s ease;
+}
+
+footer a:hover {
+  opacity: .75;
+  text-decoration: underline;
+}
+
+footer strong {
+  color: #17171b;
+}
+
+footer small {
+  display: block;
+  margin-top: 12px;
+  color: #9698a1;
+  font-size: 12px;
+}
 
 /* =========================================================
    REDUÇÃO DE MOVIMENTO

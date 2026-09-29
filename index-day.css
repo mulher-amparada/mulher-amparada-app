@@ -2604,7 +2604,7 @@ footer {
         var(--line);
 
     background:
-        var(--surface);
+        transparent;
 
     color:
         var(--soft);

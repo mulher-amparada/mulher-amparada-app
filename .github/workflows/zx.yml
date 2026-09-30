@@ -1,7 +1,13 @@
+name: Sincronizar README com Paper.wf
+
+on:
+  workflow_dispatch:
+
+jobs:
+
   sincronizar-paperwf:
     name: Sincronizar README com Paper.wf
     runs-on: ubuntu-latest
-    needs: atualizar-commits
 
     steps:
       - name: Baixar código atualizado
@@ -22,6 +28,7 @@
           import urllib.error
 
           BASE = "https://paper.wf"
+
           USERNAME = os.environ["PAPERWF_USERNAME"]
           PASSWORD = os.environ["PAPERWF_PASSWORD"]
 
@@ -53,6 +60,10 @@
               try:
                   with urllib.request.urlopen(request) as response:
                       body = response.read().decode("utf-8")
+
+                      if not body:
+                          return {}
+
                       return json.loads(body)
 
               except urllib.error.HTTPError as error:
@@ -65,7 +76,8 @@
                   print(body)
                   raise
 
-          # LOGIN
+          print("Autenticando no Paper.wf...")
+
           login_payload = json.dumps({
               "alias": USERNAME,
               "pass": PASSWORD
@@ -77,8 +89,6 @@
               data=login_payload
           )
 
-          # Aceita diferentes nomes caso a instância
-          # devolva o token com outro campo.
           token = (
               login.get("token")
               or login.get("access_token")
@@ -95,7 +105,6 @@
                       "token",
                       "access_token",
                       "accesstoken",
-                      "accessToken".lower(),
                       "password",
                       "pass",
                       "session"
@@ -114,7 +123,8 @@
 
           print("Login realizado com sucesso.")
 
-          # LOCALIZA O POST EXISTENTE
+          print("Localizando publicação existente...")
+
           post = api(
               f"{BASE}/api/collections/{COLLECTION}/posts/{SLUG}",
               method="GET",
@@ -130,11 +140,12 @@
 
           print(f"Post encontrado: {post_id}")
 
-          # ATUALIZA O MESMO POST
           payload = json.dumps({
               "title": "Projeto Mulher Amparada",
               "body": readme
           }).encode("utf-8")
+
+          print("Atualizando publicação...")
 
           api(
               f"{BASE}/api/posts/{post_id}",
@@ -144,4 +155,3 @@
           )
 
           print("README sincronizado com o Paper.wf.")
-          PY

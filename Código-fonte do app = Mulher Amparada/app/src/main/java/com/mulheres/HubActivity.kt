@@ -1,6 +1,5 @@
 package com.mulheres
 
-import android.app.KeyguardManager
 import androidx.fragment.app.FragmentActivity
 import android.view.WindowManager
 import android.Manifest
@@ -153,23 +152,6 @@ var emergenciaVisivel by mutableStateOf(false)
     private set
 
 private lateinit var locationClient: FusedLocationProviderClient
-
-// =========================================================
-// 04 / BLOQUEIO POR BARULHO
-// =========================================================
-
-private lateinit var confirmacaoKeyguard: ActivityResultLauncher<Intent>
-
-var bloqueioPorBarulhoAtivo by mutableStateOf(false)
-    private set
-
-private var bloqueioRodando = false
-
-private var bloqueioRecorder: MediaRecorder? = null
-
-private var bloqueioThread: Thread? = null
-
-private val bloqueioAmplitudeMinima = 18000
 
     /* =========================================================
        PERMISSÕES
@@ -697,287 +679,6 @@ fun enviarSosParaContato() {
         }
 }
 
-fun bloquearTela(): Boolean {
-
-    val keyguardManager =
-        getSystemService(
-            Context.KEYGUARD_SERVICE
-        ) as KeyguardManager
-
-    if (!keyguardManager.isKeyguardSecure) {
-
-        Toast.makeText(
-            this,
-            "Configure um PIN, padrão ou senha no dispositivo.",
-            Toast.LENGTH_LONG
-        ).show()
-
-        return false
-    }
-
-    val intent =
-        keyguardManager.createConfirmDeviceCredentialIntent(
-            "Proteger dispositivo",
-            "Confirme o bloqueio do dispositivo."
-        )
-
-    if (intent == null) {
-        return false
-    }
-
-    confirmacaoKeyguard.launch(intent)
-
-    return true
-}
-
-fun ativarBloqueioPorBarulho() {
-
-    if (bloqueioRodando) {
-        return
-    }
-
-    if (
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.RECORD_AUDIO
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-
-        bloqueioPorBarulhoAtivo = false
-
-        Toast.makeText(
-            this,
-            "Permissão do microfone necessária.",
-            Toast.LENGTH_SHORT
-        ).show()
-
-        return
-    }
-
-
-
-    try {
-
-        val arquivoTemporario =
-            java.io.File(
-                cacheDir,
-                "temp_bloqueio.3gp"
-            )
-
-        try {
-
-            if (arquivoTemporario.exists()) {
-                arquivoTemporario.delete()
-            }
-
-        } catch (_: Exception) {
-        }
-
-        val gravador =
-            MediaRecorder()
-
-        gravador.setAudioSource(
-            MediaRecorder.AudioSource.MIC
-        )
-
-        gravador.setOutputFormat(
-            MediaRecorder.OutputFormat.THREE_GPP
-        )
-
-        gravador.setAudioEncoder(
-            MediaRecorder.AudioEncoder.AMR_NB
-        )
-
-        gravador.setOutputFile(
-            arquivoTemporario.absolutePath
-        )
-
-        gravador.prepare()
-
-        gravador.start()
-
-        bloqueioRecorder =
-            gravador
-
-        bloqueioRodando =
-            true
-
-        bloqueioPorBarulhoAtivo =
-            true
-
-        bloqueioThread =
-            Thread {
-
-                try {
-
-                    while (
-                        bloqueioRodando
-                    ) {
-
-                        val amplitude =
-                            try {
-
-                                gravador.maxAmplitude
-
-                            } catch (_: Exception) {
-
-                                0
-                            }
-
-                        /*
-                         * Barulho alto detectado.
-                         */
-                        if (
-                            amplitude >=
-                            bloqueioAmplitudeMinima
-                        ) {
-
-                            /*
-                             * Encerra primeiro
-                             * o detector.
-                             */
-                            bloqueioRodando =
-                                false
-
-                            bloqueioPorBarulhoAtivo =
-                                false
-
-                            try {
-                                gravador.stop()
-                            } catch (_: Exception) {
-                            }
-
-                            try {
-                                gravador.release()
-                            } catch (_: Exception) {
-                            }
-
-                            bloqueioRecorder =
-                                null
-
-                            /*
-                             * Solicita o bloqueio.
-                             */
-                            runOnUiThread {
-
-                                bloquearTela()
-                            }
-
-                            break
-                        }
-
-                        Thread.sleep(100)
-                    }
-
-                } catch (_: Exception) {
-
-                    /*
-                     * Qualquer erro encerra
-                     * o detector.
-                     */
-
-                } finally {
-
-                    try {
-
-                        bloqueioRecorder?.release()
-
-                    } catch (_: Exception) {
-                    }
-
-                    bloqueioRecorder =
-                        null
-
-                    bloqueioThread =
-                        null
-                }
-
-            }.apply {
-
-                name =
-                    "MulherAmparada-BloqueioPorBarulho"
-
-                start()
-            }
-
-    } catch (e: Exception) {
-
-        e.printStackTrace()
-
-        bloqueioRodando =
-            false
-
-        bloqueioPorBarulhoAtivo =
-            false
-
-        try {
-
-            bloqueioRecorder?.release()
-
-        } catch (_: Exception) {
-        }
-
-        bloqueioRecorder =
-            null
-
-        bloqueioThread =
-            null
-    }
-}
-
-fun desativarBloqueioPorBarulho() {
-
-    bloqueioRodando =
-        false
-
-    bloqueioPorBarulhoAtivo =
-        false
-
-    try {
-
-        bloqueioRecorder?.stop()
-
-    } catch (_: Exception) {
-    }
-
-    try {
-
-        bloqueioRecorder?.reset()
-
-    } catch (_: Exception) {
-    }
-
-    try {
-
-        bloqueioRecorder?.release()
-
-    } catch (_: Exception) {
-    }
-
-    bloqueioRecorder =
-        null
-
-    bloqueioThread =
-        null
-
-    /*
-     * Remove o arquivo temporário.
-     */
-    try {
-
-        val arquivo =
-            java.io.File(
-                cacheDir,
-                "temp_bloqueio.3gp"
-            )
-
-        if (arquivo.exists()) {
-            arquivo.delete()
-        }
-
-    } catch (_: Exception) {
-    }
-}
 
 fun ativarEscurecimento() {
 
@@ -1077,21 +778,6 @@ fun desativarFullscreen() {
     verificarPermissoes()
 
     cripto = Cripto(this)
-
-confirmacaoKeyguard =
-    registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { resultado ->
-
-        if (resultado.resultCode == RESULT_OK) {
-
-            Toast.makeText(
-                this,
-                "Tela protegida.",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
     
     seletorContato =
         registerForActivityResult(
@@ -1461,7 +1147,6 @@ if (::sensorManager.isInitialized) {
 
 pararMicrofoneShake()
 
-desativarBloqueioPorBarulho()
 
     telephonyCallback?.let {
 
@@ -2740,35 +2425,7 @@ private fun MulherAmparadaScreen() {
     font = font
 )
 
-            SensorCard(
-    number = "04 / PROTEÇÃO",
-    title = "Bloqueio por barulho",
-    description =
-        "Bloqueia a tela automaticamente quando um som alto é detectado.",
-    icon = R.drawable.ic_0006,
-    color = c.red,
-    active =
-        activity?.bloqueioPorBarulhoAtivo
-            ?: false,
-    onClick = {
-
-        activity?.let {
-
-            if (
-                it.bloqueioPorBarulhoAtivo
-            ) {
-
-                it.desativarBloqueioPorBarulho()
-
-            } else {
-
-                it.ativarBloqueioPorBarulho()
-            }
-        }
-    },
-    c = c,
-    font = font
-)
+            
             SectionTitle(
                 text = "Serviços de emergência",
                 c = c,

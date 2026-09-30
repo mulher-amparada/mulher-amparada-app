@@ -23,6 +23,7 @@ jobs:
           import json
           import os
           import urllib.request
+          import urllib.error
 
           query = """
           query {
@@ -43,20 +44,30 @@ jobs:
               method="POST",
               headers={
                   "Content-Type": "application/json",
-                  "Authorization": os.environ["HASHNODE_TOKEN"]
+                  "Authorization": "Bearer " + os.environ["HASHNODE_TOKEN"]
               }
           )
 
-          with urllib.request.urlopen(requisicao) as resposta:
+          try:
 
-              resultado = json.load(resposta)
+              with urllib.request.urlopen(requisicao) as resposta:
+                  resultado = json.load(resposta)
 
-          print(
-              json.dumps(
-                  resultado,
-                  indent=2,
-                  ensure_ascii=False
+              print(
+                  json.dumps(
+                      resultado,
+                      indent=2,
+                      ensure_ascii=False
+                  )
               )
-          )
+
+          except urllib.error.HTTPError as erro:
+
+              corpo = erro.read().decode("utf-8")
+
+              print(f"HTTP: {erro.code}")
+              print(corpo)
+
+              raise
 
           PY

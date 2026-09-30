@@ -6,7 +6,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3920**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3916**
 
 # ⚠️MURAL DE AVISOS:
 
@@ -102,7 +102,7 @@ Para acessar o conteúdo completo sobre finanças, consulte a [Carta do desenvol
 
 ### Sobre como eu automatizo o projeto:
 
-e os apps são compilados com o workflow, gera o código sha-256 e o zip com o app, envia para a release pela tag correspondente, e atualiza o link da página de download, o código SHA-256, e o tamanho do apk dessas páginas!, e depois ele publica as alterações no site, e depois altera o valor donúmero de commits que é informado no readme e atualiza o conteúdo do post do devto usando o readme via api!, (tudo isso em um único workflow!)
+e os apps são compilados com o workflow, gera o código sha-256 e o zip com o app, envia para a release pela tag correspondente, e atualiza o link da página de download, o código SHA-256, e o tamanho do apk dessas páginas!, e depois ele publica as alterações no site, e depois altera o valor donúmero de commits que é informado no readme e atualiza o conteúdo do post do devto e o paperwf usando o readme via api!, (tudo isso em um único workflow!)
 
 E eu também já consegui configurar um ssh na conta, e 2fa nela tambem, e com o ssh, eu consegui mover pastas inteiras para o repositório, e transformei 4 em 1, e mais de 100 commits em 1,
 

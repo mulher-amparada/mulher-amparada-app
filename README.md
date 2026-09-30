@@ -12,7 +12,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3896**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3866**
 
 # ⚠️MURAL DE AVISOS:
 
@@ -21,9 +21,7 @@ E vale lembrar que antes todas as páginas eram html com webview, agora não sã
 >Sobre as permissões: infelizmente, foi necessário configurar a HubActivity para não solicitar permissões automaticamente. Por isso, as permissões necessárias deverão ser concedidas manualmente pela usuária nas configurações do dispositivo. As permissões utilizadas por outras Activitys continuam sendo solicitadas normalmente pelo aplicativo.
 >
 > Ao entrar no aplicativo após sair dos disfarces, um aviso é exibido, bloqueando o acesso até que todas as permissões necessárias estejam concedidas. O aviso oferece à usuária a opção de acessar diretamente a tela de permissões do aplicativo nas configurações do dispositivo. Ao retornar ao aplicativo, as permissões são verificadas novamente. Se ainda houver alguma permissão necessária que não tenha sido concedida, o aviso continuará sendo exibido e o acesso permanecerá bloqueado. O aviso só desaparecerá quando todas as permissões necessárias estiverem concedidas.
->
-> (mas a permissão de Serviço de acessibilidade a acitvity pede normalmente!).
- 
+
 >Vale lembrar que o projeto não substitui serviços oficiais do governo e também não garante segurança imediata, bem como as funções dependem do estado e hardware de cada aparelho!
 
 > Vale lembrar: o Gerenciador de Arquivos do Mulher Amparada funciona principalmente como um visualizador de arquivos. O nome “Gerenciador de Arquivos” também faz parte do disfarce do aplicativo. Ele foi projetado dessa forma por uma questão de segurança: o aplicativo não oferece funções próprias para excluir, mover, copiar ou renomear arquivos, reduzindo o risco de apagar ou alterar acidentalmente algum arquivo importante — inclusive possíveis registros que a usuária queira preservar.
@@ -41,9 +39,7 @@ E vale lembrar que antes todas as páginas eram html com webview, agora não sã
 
 >Aviso — O recurso de “Desembarque seguro” do Mulher Amparada é informativo e atualmente apresenta a legislação aplicável à Cidade de São Paulo, especialmente a Lei Municipal nº 16.490/2016 e sua regulamentação. Essa legislação não deve ser interpretada como uma regra válida em todo o Brasil. As regras sobre desembarque fora dos pontos podem variar conforme o município, o estado e o tipo de transporte. A carteirinha apresentada pelo aplicativo não é um documento oficial e não substitui a legislação vigente, regulamentações, orientações das empresas de transporte ou autoridades competentes. E antes de utilizar esse recurso em outra localidade, verifique a legislação específica aplicável ao local.
 
-
-> Sobre as funções por sensores (bloquear a tela por barulho, proteção por barulho que liga pro 180, balançar o celular para pedir ajuda e escurecimento por inclinação): A função Bloquear a tela por Barulho foi projetada com uma medida adicional de segurança: depois de ser ativada e funcionar de fato, ela permanece ativa até que o usuário decida desativá-la pelo próprio aplicativo. Para evitar que o estado da função seja perdido ao sair e retornar à página, o aplicativo salva seu estado de ativação utilizando a classe Cripto. Dessa forma, ao retornar à página, o aplicativo recupera o estado salvo e exibe corretamente se a função está ATIVADA ou DESATIVADA. Essa persistência permite que a interface continue refletindo o estado real configurado pelo usuário, mesmo após a navegação entre as páginas do aplicativo. Mas quando a usuária desativar ou a função ser concluída, na página ele mostra como desativado!
-
+> Sobre as funções por sensores (proteção por barulho que liga para o 180, balançar o celular para pedir ajuda e escurecimento por inclinação): essas proteções podem ser ativadas e desativadas pela usuária diretamente no aplicativo. O funcionamento pode variar conforme os sensores e as características de hardware do dispositivo. Em caso de falha ou ausência do sensor necessário, algumas proteções podem utilizar o microfone como alternativa, quando aplicável.
 
 ### Estrutura de Telas Secretas (Acesso Biométrico):
 
@@ -232,78 +228,6 @@ E também as barras tanto de status tanto de navegação são transparentes, por
 
 ----
 
-### Serviço de Acessibilidade:
-
-O Mulher Amparada utiliza um "AccessibilityService" do Android para executar uma função específica de proteção: bloquear a tela do dispositivo quando o recurso de bloqueio por barulho é acionado.
-
-Como funciona:
-
-Quando o usuário ativa o bloqueio por barulho, o aplicativo monitora o recurso de detecção de som.
-
-Ao detectar o gatilho configurado, o aplicativo solicita ao serviço de acessibilidade que execute a ação de bloqueio da tela fornecida pelo próprio Android.
-
-O serviço não precisa acessar o conteúdo da tela, ler textos, controlar outros aplicativos ou realizar ações arbitrárias.
-
-Tecnologia usada:
-
-Android AccessibilityService
-
-A API AccessibilityService permite que um serviço autorizado pelo usuário execute determinadas ações de acessibilidade fornecidas pelo sistema.
-
-Neste aplicativo, ela é utilizada especificamente para executar:
-
-GLOBAL_ACTION_LOCK_SCREEN
-
-Ativação:
-
-O serviço não é ativado automaticamente pelo aplicativo.
-
-O Android exige que o próprio usuário autorize o serviço nas configurações de Acessibilidade.
-
-Fluxo:
-
-Aplicativo
-↓
-Configurações de Acessibilidade
-↓
-Mulher Amparada
-↓
-Usuário ativa o serviço
-↓
-Android inicia o AccessibilityService
-↓
-Recurso de proteção pode utilizar o bloqueio da tela
-
-Por que o Google Play Protect pode apresentar um aviso?
-
-O Google Play Protect verifica aplicativos instalados tanto pela Google Play quanto por outras fontes.
-
-Recursos como AccessibilityService são considerados sensíveis porque, quando utilizados de forma indevida, podem permitir interações com o dispositivo que representam riscos à privacidade e à segurança.
-
-Por isso, um aplicativo distribuído fora da Google Play pode receber verificações ou avisos adicionais. Isso não significa, por si só, que o aplicativo seja malware.
-
-O Play Protect também possui mecanismos específicos para aplicativos instalados por sideload e pode bloquear instalações quando identifica riscos associados ao aplicativo ou às permissões solicitadas.
-
-Política do Google Play:
-
-O uso de AccessibilityService não é proibido de forma geral.
-
-Para aplicativos que não são ferramentas de acessibilidade destinadas principalmente a pessoas com deficiência, o Google Play exige declaração do uso da API, divulgação clara dentro do aplicativo e consentimento do usuário.
-
-O uso também precisa ter uma finalidade específica e compreensível. A política não permite utilizar a API para contornar controles de segurança ou privacidade do Android nem para realizar ações autônomas de forma indevida.
-
-O Google confirma que a API de acessibilidade pode ser usada por uma variedade de aplicativos, mas estabelece requisitos de declaração e consentimento para usos que não são ferramentas de acessibilidade.
-
-No Mulher Amparada:
-
-O serviço é opcional.
-
-O usuário precisa ativá-lo manualmente nas configurações do Android.
-
-A finalidade declarada é o bloqueio da tela como parte do recurso de proteção por barulho.
-
-O aplicativo não utiliza o serviço para ler o conteúdo da tela ou controlar aplicativos de terceiros.
-
 ### Sobre como foi escrito o texto do biometricPrompt do app:
 
 - HubActivity:
@@ -370,9 +294,6 @@ Ative e, ao chacoalhar o celular, ele liga para o 180.
 
 ### Escurecimento por inclinação:
 com isso, voce pode controlar o brilho da tela clicando em um botão..., porém, e tipo como se fosse o menor brilho do celular, e ai depois ele deixa a tela preta (nao com brilho e sim colocando a cor), (honestamente, antes aparecia as duas barras, agora elas se escondem!), e o efeito e vitalicio ate fechar e abrir o app!
-
-###Bloquear a tela do celular pelo barulho:
-ao ativado, ao fazer barulho alto, ele usa o  e bloqueia a tela do celular!
 
 ###Emergência:
 Saindo dessa área, existem botões que abrem o aplicativo nativo do telefone nos números 190, 192 e 180.
@@ -703,7 +624,6 @@ A navegação para o Google é feita diretamente pelo código usando window loca
 >MainActivity > Google > pesquisa/link do Google
 >
 >Voltar > fecha a MainActivity
-> Caso a usuária nege a permissão de Serviço de acessibilidade, o aplicativo exibe uma caixa de diálogo informando quais funções poderão não funcionar!
 
 
 ## Considerações finais:

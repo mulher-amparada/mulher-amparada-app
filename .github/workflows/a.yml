@@ -1,0 +1,62 @@
+name: Testar Hashnode
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  testar-hashnode:
+
+    name: Testar conexão com Hashnode
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Consultar Hashnode
+        env:
+          HASHNODE_TOKEN: ${{ secrets.HASHNODE_TOKEN }}
+        run: |
+
+          python3 - <<'PY'
+
+          import json
+          import os
+          import urllib.request
+
+          query = """
+          query {
+            me {
+              id
+              username
+            }
+          }
+          """
+
+          dados = json.dumps({
+              "query": query
+          }).encode("utf-8")
+
+          requisicao = urllib.request.Request(
+              "https://gql.hashnode.com/",
+              data=dados,
+              method="POST",
+              headers={
+                  "Content-Type": "application/json",
+                  "Authorization": os.environ["HASHNODE_TOKEN"]
+              }
+          )
+
+          with urllib.request.urlopen(requisicao) as resposta:
+
+              resultado = json.load(resposta)
+
+          print(
+              json.dumps(
+                  resultado,
+                  indent=2,
+                  ensure_ascii=False
+              )
+          )
+
+          PY

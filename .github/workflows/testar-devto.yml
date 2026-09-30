@@ -1,0 +1,25 @@
+name: Testar DEV.to
+
+on:
+  workflow_dispatch:
+
+jobs:
+  buscar-artigo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Buscar artigo do Mulher Amparada
+        env:
+          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+        run: |
+          curl -sS \
+            -H "api-key: $DEVTO_API_KEY" \
+            "https://dev.to/api/articles/mulher_amparada/projeto-mulher-amparada-1c49" \
+            -o artigo.json
+
+          echo "Resposta da API:"
+          cat artigo.json
+
+          echo ""
+          echo "ID do artigo:"
+          python -c "import json; print(json.load(open('artigo.json'))['id'])"

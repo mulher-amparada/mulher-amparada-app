@@ -901,7 +901,7 @@ jobs:
           fetch-depth: 1
           ref: main
 
-      - name: Atualizar publicação existente no Paper.wf
+      - name: Autenticar e atualizar publicação
         env:
           PAPERWF_USERNAME: ${{ secrets.PAPERWF_USERNAME }}
           PAPERWF_PASSWORD: ${{ secrets.PAPERWF_PASSWORD }}
@@ -913,16 +913,17 @@ jobs:
           import urllib.error
 
           BASE = "https://paper.wf"
+
           USERNAME = os.environ["PAPERWF_USERNAME"]
           PASSWORD = os.environ["PAPERWF_PASSWORD"]
 
           COLLECTION = "mulheramparada"
           SLUG = "projeto-mulher-amparada"
 
-          with open("README.md", "r", encoding="utf-8") as arquivo:
-              readme = arquivo.read()
+          with open("README.md", "r", encoding="utf-8") as f:
+              readme = f.read()
 
-          def requisicao(url, method="GET", data=None, token=None):
+          def api(url, method="GET", data=None, token=None):
               headers = {
                   "Accept": "application/json",
                   "User-Agent": "Mulher-Amparada-GitHub-Action"
@@ -943,82 +944,102 @@ jobs:
 
               try:
                   with urllib.request.urlopen(request) as response:
-                      corpo = response.read().decode("utf-8")
+                      body = response.read().decode("utf-8")
 
-                      try:
-                          return json.loads(corpo)
-                      except json.JSONDecodeError:
-                          return corpo
+                      if not body:
+                          return {}
 
-              except urllib.error.HTTPError as erro:
-                  corpo = erro.read().decode(
+                      return json.loads(body)
+
+              except urllib.error.HTTPError as error:
+                  body = error.read().decode(
                       "utf-8",
                       errors="replace"
                   )
 
-                  print(f"HTTP {erro.code}")
-                  print(corpo)
+                  print(f"HTTP {error.code}")
+                  print(body)
                   raise
 
-          # LOGIN
-          login_data = json.dumps({
+          print("Autenticando no Paper.wf...")
+
+          login_payload = json.dumps({
               "alias": USERNAME,
               "pass": PASSWORD
           }).encode("utf-8")
 
-          login = requisicao(
+          login = api(
               f"{BASE}/api/auth/login",
               method="POST",
-              data=login_data
+              data=login_payload
           )
 
-          token = login.get("token")
+          token = (
+              login.get("data", {}).get("access_token")
+              or login.get("access_token")
+              or login.get("token")
+              or login.get("data", {}).get("token")
+          )
 
           if not token:
               raise RuntimeError(
-                  "O Paper.wf não retornou o token de sessão."
+                  "O Paper.wf não retornou um token de acesso."
               )
 
           print("Login realizado com sucesso.")
 
-          # LOCALIZAR O POST EXISTENTE
-          post = requisicao(
+          print("Localizando publicação existente...")
+
+          post = api(
               f"{BASE}/api/collections/{COLLECTION}/posts/{SLUG}",
               method="GET",
               token=token
           )
 
-          post_id = post.get("id")
+          post_data = post.get("data", post)
+
+          if isinstance(post_data, list):
+              if not post_data:
+                  raise RuntimeError(
+                      "O Paper.wf retornou uma lista de posts vazia."
+                  )
+
+              post_data = post_data[0]
+
+          if not isinstance(post_data, dict):
+              raise RuntimeError(
+                  "Resposta inesperada ao localizar o post."
+              )
+
+          post_id = (
+              post_data.get("id")
+              or (
+                  post_data.get("post", {}).get("id")
+                  if isinstance(post_data.get("post"), dict)
+                  else None
+              )
+          )
 
           if not post_id:
               raise RuntimeError(
-                  "Não foi possível encontrar o ID do post "
-                  f"{COLLECTION}/{SLUG}."
+                  "Não foi possível encontrar o ID do post existente."
               )
 
           print(f"Post encontrado: {post_id}")
 
-          # ATUALIZAR O MESMO POST
-          update_data = json.dumps({
+          payload = json.dumps({
               "title": "Projeto Mulher Amparada",
               "body": readme
           }).encode("utf-8")
 
-          atualizado = requisicao(
+          print("Atualizando publicação...")
+
+          api(
               f"{BASE}/api/posts/{post_id}",
               method="POST",
-              data=update_data,
+              data=payload,
               token=token
           )
 
-          print("Post existente atualizado com sucesso.")
-          print(
-              json.dumps(
-                  atualizado,
-                  ensure_ascii=False,
-                  indent=2
-              )
-          )
+          print("README sincronizado com o Paper.wf.")
           PY
-          
-              

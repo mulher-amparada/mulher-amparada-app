@@ -814,3 +814,77 @@ jobs:
           fi
 
 
+  # =========================================================
+  # SINCRONIZAR README COM DEV.TO
+  # =========================================================
+
+  sincronizar-devto:
+
+    name: Sincronizar README com DEV.to
+
+    runs-on: ubuntu-latest
+
+    needs: atualizar-commits
+
+    steps:
+
+      - name: Baixar código atualizado
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          ref: main
+
+      - name: Atualizar artigo no DEV.to
+        env:
+          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+        run: |
+
+          python3 - <<'PY'
+
+          import json
+          import os
+          import urllib.request
+
+          README = "README.md"
+          ARTICLE_ID = 4771914
+
+          with open(README, "r", encoding="utf-8") as arquivo:
+              markdown = arquivo.read()
+
+          dados = json.dumps({
+              "article": {
+                  "body_markdown": markdown
+              }
+          }).encode("utf-8")
+
+          requisicao = urllib.request.Request(
+              f"https://dev.to/api/articles/{ARTICLE_ID}",
+              data=dados,
+              method="PUT",
+              headers={
+                  "Content-Type": "application/json",
+                  "api-key": os.environ["DEVTO_API_KEY"],
+                  "User-Agent": "Mulher-Amparada-GitHub-Action"
+              }
+          )
+
+          try:
+
+              with urllib.request.urlopen(requisicao) as resposta:
+
+                  resultado = resposta.read().decode("utf-8")
+
+                  print("DEV.to atualizado com sucesso.")
+                  print(resultado)
+
+          except urllib.error.HTTPError as erro:
+
+              corpo = erro.read().decode("utf-8")
+
+              print("ERRO ao atualizar o DEV.to.")
+              print(f"HTTP: {erro.code}")
+              print(corpo)
+
+              raise
+
+          PY

@@ -1,8 +1,7 @@
 package com.mulheres
 
-import android.provider.Settings
+import android.app.KeyguardManager
 import androidx.fragment.app.FragmentActivity
-import android.content.ComponentName
 import android.view.WindowManager
 import android.Manifest
 import android.content.BroadcastReceiver
@@ -20,7 +19,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color as AndroidColor
 import android.hardware.Sensor
-import androidx.compose.material3.AlertDialog
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
@@ -97,7 +95,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import kotlin.math.log10
 import kotlin.math.sqrt
 
-
 class HubActivity : FragmentActivity() {
 
 var palmasAtivas by mutableStateOf(false)
@@ -117,9 +114,6 @@ private lateinit var sensorManager: SensorManager
 private lateinit var shakeListener: SensorEventListener
 
 var protecaoMovimentoAtiva by mutableStateOf(false)
-    private set
-
-var avisoAdministradorVisivel by mutableStateOf(false)
     private set
 
 private var ultimoShake: Long = 0L
@@ -164,6 +158,8 @@ private lateinit var locationClient: FusedLocationProviderClient
 // 04 / BLOQUEIO POR BARULHO
 // =========================================================
 
+private lateinit var confirmacaoKeyguard: ActivityResultLauncher<Intent>
+
 var bloqueioPorBarulhoAtivo by mutableStateOf(false)
     private set
 
@@ -174,8 +170,6 @@ private var bloqueioRecorder: MediaRecorder? = null
 private var bloqueioThread: Thread? = null
 
 private val bloqueioAmplitudeMinima = 18000
-
-private var aguardandoRetornoAcessibilidade = false
 
     /* =========================================================
        PERMISSÕES
@@ -558,21 +552,6 @@ fun enviarLocalizacaoPara180() {
         }
 }
 
-private fun abrirConfiguracoesAcessibilidade() {
-    aguardandoRetornoAcessibilidade = true
-
-    try {
-        startActivity(
-            Intent(
-                android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS
-            )
-        )
-    } catch (e: Exception) {
-        aguardandoRetornoAcessibilidade = false
-        e.printStackTrace()
-    }
-}
-
 fun enviarSosParaContato() {
 
     val contato =
@@ -720,7 +699,35 @@ fun enviarSosParaContato() {
 
 fun bloquearTela(): Boolean {
 
-    return MyDeviceAdminReceiver.bloquearTela()
+    val keyguardManager =
+        getSystemService(
+            Context.KEYGUARD_SERVICE
+        ) as KeyguardManager
+
+    if (!keyguardManager.isKeyguardSecure) {
+
+        Toast.makeText(
+            this,
+            "Configure um PIN, padrão ou senha no dispositivo.",
+            Toast.LENGTH_LONG
+        ).show()
+
+        return false
+    }
+
+    val intent =
+        keyguardManager.createConfirmDeviceCredentialIntent(
+            "Proteger dispositivo",
+            "Confirme o bloqueio do dispositivo."
+        )
+
+    if (intent == null) {
+        return false
+    }
+
+    confirmacaoKeyguard.launch(intent)
+
+    return true
 }
 
 fun ativarBloqueioPorBarulho() {
@@ -729,13 +736,6 @@ fun ativarBloqueioPorBarulho() {
         return
     }
 
-if (!acessibilidadeEstaAtiva()) {
-    abrirConfiguracoesAcessibilidade()
-    return
-}
-    /*
-     * Verifica o microfone.
-     */
     if (
         ContextCompat.checkSelfPermission(
             this,
@@ -753,6 +753,8 @@ if (!acessibilidadeEstaAtiva()) {
 
         return
     }
+
+
 
     try {
 
@@ -1076,6 +1078,21 @@ fun desativarFullscreen() {
 
     cripto = Cripto(this)
 
+confirmacaoKeyguard =
+    registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { resultado ->
+
+        if (resultado.resultCode == RESULT_OK) {
+
+            Toast.makeText(
+                this,
+                "Tela protegida.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+    
     seletorContato =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -1129,49 +1146,7 @@ fun desativarFullscreen() {
 
     verificarPermissoes()
 
-    if (aguardandoRetornoAcessibilidade) {
-        aguardandoRetornoAcessibilidade = false
-
-        if (!acessibilidadeEstaAtiva()) {
-            avisoAdministradorVisivel = true
-        }
-    }
-}
-
-private fun acessibilidadeEstaAtiva(): Boolean {
-
-    val enabledServices =
-        android.provider.Settings.Secure.getString(
-            contentResolver,
-            android.provider.Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
-        )
-
-    if (enabledServices.isNullOrBlank()) {
-        return false
-    }
-
-    val serviceName =
-        ComponentName(
-            this,
-            MyDeviceAdminReceiver::class.java
-        ).flattenToString()
-
-    return enabledServices
-        .split(":")
-        .any {
-            it.equals(
-                serviceName,
-                ignoreCase = true
-            )
-        }
-}
-
-private fun verificarServicoAcessibilidade() {
-
-    if (!acessibilidadeEstaAtiva()) {
-
-        avisoAdministradorVisivel = true
-    }
+    
 }
 
 fun abrirContatos() {
@@ -1290,10 +1265,6 @@ fun mostrarBotaoEmergencia() {
 
         emergenciaVisivel = !emergenciaVisivel
     }
-}
-
-fun fecharAvisoAdministrador() {
-    avisoAdministradorVisivel = false
 }
 
 fun ocultarBotaoEmergencia() {
@@ -2943,79 +2914,7 @@ ActionCard(
         }
 
 
-        /* =====================================================
-           ADMINISTRADOR DO DISPOSITIVO 
-        ===================================================== */
-
-if (activity?.avisoAdministradorVisivel == true) {
-    AlertDialog(
-        onDismissRequest = {
-            activity?.fecharAvisoAdministrador()
-        },
-
-        title = {
-            Text(
-                text = "Administrador do dispositivo",
-                fontFamily = font,
-                fontWeight = FontWeight.ExtraBold
-            )
-        },
-
-        text = {
-            Text(
-                text =
-                    "Se você negar essa permissão, alguns recursos de proteção não funcionarão.\n\n" +
-                    "• O bloqueio por barulho não funcionará.\n" +
-                    "• Mas você pode reativar ele aceitando essa permissão sempre que quiser, ou deixar desativado quando quiser, mas ele não funcionará sem essa permissão\n\n" +
-                    "Os demais recursos do aplicativo continuarão disponíveis.",
-                fontFamily = font
-            )
-        },
-
-        dismissButton = {
-            Button(
-                onClick = {
-                    activity?.fecharAvisoAdministrador()
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFF4F9A),
-                    contentColor = Color.White
-                )
-            ) {
-                Text(
-                    text = "Cancelar",
-                    fontFamily = font,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        },
-
-        confirmButton = {
-    Button(
-        onClick = {
-            activity?.fecharAvisoAdministrador()
-
-            activity?.startActivity(
-                Intent(
-                    android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS
-                )
-            )
-        },
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFFF4F9A),
-            contentColor = Color.White
-        )
-    ) {
-        Text(
-            text = "Tentar novamente",
-            fontFamily = font,
-            fontWeight = FontWeight.Bold
-        )
-    }
-}
-    )
-}
-
+     
         /* =====================================================
            BLOQUEIO DE PERMISSÕES
         ===================================================== */

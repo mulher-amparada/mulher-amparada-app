@@ -1,0 +1,147 @@
+  sincronizar-paperwf:
+    name: Sincronizar README com Paper.wf
+    runs-on: ubuntu-latest
+    needs: atualizar-commits
+
+    steps:
+      - name: Baixar código atualizado
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          ref: main
+
+      - name: Autenticar e atualizar publicação
+        env:
+          PAPERWF_USERNAME: ${{ secrets.PAPERWF_USERNAME }}
+          PAPERWF_PASSWORD: ${{ secrets.PAPERWF_PASSWORD }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import urllib.request
+          import urllib.error
+
+          BASE = "https://paper.wf"
+          USERNAME = os.environ["PAPERWF_USERNAME"]
+          PASSWORD = os.environ["PAPERWF_PASSWORD"]
+
+          COLLECTION = "mulheramparada"
+          SLUG = "projeto-mulher-amparada"
+
+          with open("README.md", "r", encoding="utf-8") as f:
+              readme = f.read()
+
+          def api(url, method="GET", data=None, token=None):
+              headers = {
+                  "Accept": "application/json",
+                  "User-Agent": "Mulher-Amparada-GitHub-Action"
+              }
+
+              if data is not None:
+                  headers["Content-Type"] = "application/json"
+
+              if token:
+                  headers["Authorization"] = f"Token {token}"
+
+              request = urllib.request.Request(
+                  url,
+                  data=data,
+                  method=method,
+                  headers=headers
+              )
+
+              try:
+                  with urllib.request.urlopen(request) as response:
+                      body = response.read().decode("utf-8")
+                      return json.loads(body)
+
+              except urllib.error.HTTPError as error:
+                  body = error.read().decode(
+                      "utf-8",
+                      errors="replace"
+                  )
+
+                  print(f"HTTP {error.code}")
+                  print(body)
+                  raise
+
+          # LOGIN
+          login_payload = json.dumps({
+              "alias": USERNAME,
+              "pass": PASSWORD
+          }).encode("utf-8")
+
+          login = api(
+              f"{BASE}/api/auth/login",
+              method="POST",
+              data=login_payload
+          )
+
+          # Aceita diferentes nomes caso a instância
+          # devolva o token com outro campo.
+          token = (
+              login.get("token")
+              or login.get("access_token")
+              or login.get("accessToken")
+          )
+
+          if not token:
+              print("Resposta do login:")
+
+              segura = dict(login)
+
+              for chave in list(segura):
+                  if chave.lower() in {
+                      "token",
+                      "access_token",
+                      "accesstoken",
+                      "accessToken".lower(),
+                      "password",
+                      "pass",
+                      "session"
+                  }:
+                      segura[chave] = "[OCULTO]"
+
+              print(json.dumps(
+                  segura,
+                  ensure_ascii=False,
+                  indent=2
+              ))
+
+              raise RuntimeError(
+                  "O Paper.wf não retornou um token de acesso."
+              )
+
+          print("Login realizado com sucesso.")
+
+          # LOCALIZA O POST EXISTENTE
+          post = api(
+              f"{BASE}/api/collections/{COLLECTION}/posts/{SLUG}",
+              method="GET",
+              token=token
+          )
+
+          post_id = post.get("id")
+
+          if not post_id:
+              raise RuntimeError(
+                  "Não foi possível encontrar o ID do post existente."
+              )
+
+          print(f"Post encontrado: {post_id}")
+
+          # ATUALIZA O MESMO POST
+          payload = json.dumps({
+              "title": "Projeto Mulher Amparada",
+              "body": readme
+          }).encode("utf-8")
+
+          api(
+              f"{BASE}/api/posts/{post_id}",
+              method="POST",
+              data=payload,
+              token=token
+          )
+
+          print("README sincronizado com o Paper.wf.")
+          PY

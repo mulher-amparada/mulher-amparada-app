@@ -5,17 +5,18 @@ on:
 
 jobs:
 
-  testar-hashnode:
+  buscar-artigo:
 
-    name: Testar conexão com Hashnode
+    name: Buscar artigo do Hashnode
 
     runs-on: ubuntu-latest
 
     steps:
 
-      - name: Consultar Hashnode
+      - name: Buscar artigo
         env:
           HASHNODE_TOKEN: ${{ secrets.HASHNODE_TOKEN }}
+
         run: |
 
           python3 - <<'PY'
@@ -27,9 +28,13 @@ jobs:
 
           query = """
           query {
-            me {
-              id
-              username
+            publication(host: "mulher-amparada.hashnode.dev") {
+              post(slug: "projeto-mulher-amparada") {
+                id
+                title
+                slug
+                url
+              }
             }
           }
           """
@@ -39,12 +44,13 @@ jobs:
           }).encode("utf-8")
 
           requisicao = urllib.request.Request(
-              "https://gql.hashnode.com/",
+              "https://gql.hashnode.com",
               data=dados,
               method="POST",
               headers={
                   "Content-Type": "application/json",
-                  "Authorization": "Bearer " + os.environ["HASHNODE_TOKEN"]
+                  "Accept": "application/json",
+                  "Authorization": os.environ["HASHNODE_TOKEN"]
               }
           )
 

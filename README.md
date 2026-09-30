@@ -1,10 +1,4 @@
-<div align="center">
-  <img src="user1.png" alt="Logo Mulher Amparada" width="200" height="200">
-</div>
-
-<div align="center">
-  <h1>Mulher Amparada</h1>
-  </div>
+#Mulher Amparada
 
 Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!
 
@@ -12,7 +6,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3910**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3866**
 
 # ⚠️MURAL DE AVISOS:
 

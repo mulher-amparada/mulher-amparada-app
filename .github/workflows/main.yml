@@ -889,7 +889,7 @@ jobs:
 
           PY
           
-            sincronizar-paperwf:
+  sincronizar-paperwf:
     name: Sincronizar README com Paper.wf
     runs-on: ubuntu-latest
     needs: atualizar-commits
@@ -901,11 +901,10 @@ jobs:
           fetch-depth: 1
           ref: main
 
-      - name: Atualizar publicação existente
+      - name: Atualizar publicação existente no Paper.wf
         env:
           PAPERWF_USERNAME: ${{ secrets.PAPERWF_USERNAME }}
           PAPERWF_PASSWORD: ${{ secrets.PAPERWF_PASSWORD }}
-          PAPERWF_POST_ID: ${{ secrets.PAPERWF_POST_ID }}
         run: |
           python3 - <<'PY'
           import json
@@ -914,15 +913,16 @@ jobs:
           import urllib.error
 
           BASE = "https://paper.wf"
+          USERNAME = os.environ["PAPERWF_USERNAME"]
+          PASSWORD = os.environ["PAPERWF_PASSWORD"]
 
-          username = os.environ["PAPERWF_USERNAME"]
-          password = os.environ["PAPERWF_PASSWORD"]
-          post_id = os.environ["PAPERWF_POST_ID"]
+          COLLECTION = "mulheramparada"
+          SLUG = "projeto-mulher-amparada"
 
-          with open("README.md", "r", encoding="utf-8") as f:
-              readme = f.read()
+          with open("README.md", "r", encoding="utf-8") as arquivo:
+              readme = arquivo.read()
 
-          def request(url, method="GET", data=None, token=None):
+          def requisicao(url, method="GET", data=None, token=None):
               headers = {
                   "Accept": "application/json",
                   "User-Agent": "Mulher-Amparada-GitHub-Action"
@@ -934,7 +934,7 @@ jobs:
               if token:
                   headers["Authorization"] = f"Token {token}"
 
-              req = urllib.request.Request(
+              request = urllib.request.Request(
                   url,
                   data=data,
                   method=method,
@@ -942,30 +942,31 @@ jobs:
               )
 
               try:
-                  with urllib.request.urlopen(req) as response:
-                      body = response.read().decode("utf-8")
-                      try:
-                          return json.loads(body)
-                      except json.JSONDecodeError:
-                          return body
+                  with urllib.request.urlopen(request) as response:
+                      corpo = response.read().decode("utf-8")
 
-              except urllib.error.HTTPError as error:
-                  body = error.read().decode(
+                      try:
+                          return json.loads(corpo)
+                      except json.JSONDecodeError:
+                          return corpo
+
+              except urllib.error.HTTPError as erro:
+                  corpo = erro.read().decode(
                       "utf-8",
                       errors="replace"
                   )
 
-                  print(f"HTTP {error.code}")
-                  print(body)
+                  print(f"HTTP {erro.code}")
+                  print(corpo)
                   raise
 
-          # Login
+          # LOGIN
           login_data = json.dumps({
-              "alias": username,
-              "pass": password
+              "alias": USERNAME,
+              "pass": PASSWORD
           }).encode("utf-8")
 
-          login = request(
+          login = requisicao(
               f"{BASE}/api/auth/login",
               method="POST",
               data=login_data
@@ -975,41 +976,49 @@ jobs:
 
           if not token:
               raise RuntimeError(
-                  "O Paper.wf não retornou um token de acesso."
+                  "O Paper.wf não retornou o token de sessão."
               )
 
-          print("Login realizado.")
+          print("Login realizado com sucesso.")
 
-          # Busca o post existente.
-          post = request(
-              f"{BASE}/api/posts/{post_id}",
+          # LOCALIZAR O POST EXISTENTE
+          post = requisicao(
+              f"{BASE}/api/collections/{COLLECTION}/posts/{SLUG}",
               method="GET",
               token=token
           )
 
-          # Atualiza somente se o README realmente mudou.
-          corpo_atual = post.get("body", "")
+          post_id = post.get("id")
 
-          if corpo_atual == readme:
-              print("README já está sincronizado.")
-              raise SystemExit(0)
+          if not post_id:
+              raise RuntimeError(
+                  "Não foi possível encontrar o ID do post "
+                  f"{COLLECTION}/{SLUG}."
+              )
 
+          print(f"Post encontrado: {post_id}")
+
+          # ATUALIZAR O MESMO POST
           update_data = json.dumps({
-              "body": readme,
-              "title": "Projeto = Mulher Amparada"
+              "title": "Projeto Mulher Amparada",
+              "body": readme
           }).encode("utf-8")
 
-          atualizado = request(
+          atualizado = requisicao(
               f"{BASE}/api/posts/{post_id}",
               method="POST",
               data=update_data,
               token=token
           )
 
-          print("Publicação existente atualizada com sucesso.")
-          print(json.dumps(
-              atualizado,
-              ensure_ascii=False,
-              indent=2
-          ))
+          print("Post existente atualizado com sucesso.")
+          print(
+              json.dumps(
+                  atualizado,
+                  ensure_ascii=False,
+                  indent=2
+              )
+          )
           PY
+          
+              

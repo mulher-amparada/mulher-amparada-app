@@ -1768,14 +1768,12 @@ private fun formatarNumero(
     numero: Double
 ): String {
 
-    if (
-        numero == numero.roundToInt().toDouble()
-    ) {
-
-        return numero
-            .roundToInt()
-            .toString()
+    if (!numero.isFinite()) {
+        return "Erro"
     }
 
-    return numero.toString()
+    return numero
+        .toBigDecimal()
+        .stripTrailingZeros()
+        .toPlainString()
 }

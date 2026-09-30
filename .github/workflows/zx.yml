@@ -47,7 +47,7 @@ jobs:
                   headers["Content-Type"] = "application/json"
 
               if token:
-                  headers["Authorization"] = f"Bearer {token}"
+                  headers["Authorization"] = f"Token {token}"
 
               request = urllib.request.Request(
                   url,
@@ -59,6 +59,8 @@ jobs:
               try:
                   with urllib.request.urlopen(request) as response:
                       body = response.read().decode("utf-8")
+
+                      print(f"HTTP {response.status}")
 
                       if not body:
                           return {}
@@ -75,6 +77,10 @@ jobs:
                   print(body)
                   raise
 
+          # ============================================================
+          # LOGIN
+          # ============================================================
+
           print("Autenticando no Paper.wf...")
 
           login_payload = json.dumps({
@@ -88,8 +94,6 @@ jobs:
               data=login_payload
           )
 
-          # O Paper.wf retorna o token dentro de:
-          # data.access_token
           token = (
               login.get("data", {}).get("access_token")
               or login.get("access_token")
@@ -98,46 +102,15 @@ jobs:
           )
 
           if not token:
-              print("Resposta do login:")
-
-              segura = dict(login)
-
-              if "data" in segura and isinstance(segura["data"], dict):
-                  segura["data"] = dict(segura["data"])
-
-                  for chave in list(segura["data"]):
-                      if chave.lower() in {
-                          "token",
-                          "access_token",
-                          "accesstoken",
-                          "password",
-                          "pass",
-                          "session"
-                      }:
-                          segura["data"][chave] = "[OCULTO]"
-
-              for chave in list(segura):
-                  if chave.lower() in {
-                      "token",
-                      "access_token",
-                      "accesstoken",
-                      "password",
-                      "pass",
-                      "session"
-                  }:
-                      segura[chave] = "[OCULTO]"
-
-              print(json.dumps(
-                  segura,
-                  ensure_ascii=False,
-                  indent=2
-              ))
-
               raise RuntimeError(
                   "O Paper.wf não retornou um token de acesso."
               )
 
           print("Login realizado com sucesso.")
+
+          # ============================================================
+          # LOCALIZAR POST EXISTENTE
+          # ============================================================
 
           print("Localizando publicação existente...")
 
@@ -147,7 +120,65 @@ jobs:
               token=token
           )
 
-          post_id = post.get("id")
+          print("Resposta da publicação:")
+
+          resposta_post = dict(post)
+
+          # Não exibir possíveis tokens na resposta.
+          def ocultar_tokens(obj):
+              if isinstance(obj, dict):
+                  resultado = {}
+
+                  for chave, valor in obj.items():
+                      if chave.lower() in {
+                          "token",
+                          "access_token",
+                          "accesstoken",
+                          "password",
+                          "pass",
+                          "session",
+                          "modify_token"
+                      }:
+                          resultado[chave] = "[OCULTO]"
+                      else:
+                          resultado[chave] = ocultar_tokens(valor)
+
+                  return resultado
+
+              if isinstance(obj, list):
+                  return [ocultar_tokens(item) for item in obj]
+
+              return obj
+
+          print(json.dumps(
+              ocultar_tokens(resposta_post),
+              ensure_ascii=False,
+              indent=2
+          ))
+
+          # O WriteFreely normalmente coloca o objeto do post
+          # dentro de "data".
+          post_data = post.get("data", post)
+
+          if isinstance(post_data, list):
+              if not post_data:
+                  raise RuntimeError(
+                      "O Paper.wf retornou uma lista de posts vazia."
+                  )
+
+              post_data = post_data[0]
+
+          if not isinstance(post_data, dict):
+              raise RuntimeError(
+                  "Resposta inesperada ao localizar o post."
+              )
+
+          post_id = (
+              post_data.get("id")
+              or post_data.get("post", {}).get("id")
+              if isinstance(post_data.get("post"), dict)
+              else post_data.get("id")
+          )
 
           if not post_id:
               raise RuntimeError(
@@ -156,6 +187,10 @@ jobs:
 
           print(f"Post encontrado: {post_id}")
 
+          # ============================================================
+          # ATUALIZAR O MESMO POST
+          # ============================================================
+
           payload = json.dumps({
               "title": "Projeto Mulher Amparada",
               "body": readme
@@ -163,12 +198,20 @@ jobs:
 
           print("Atualizando publicação...")
 
-          api(
+          atualizado = api(
               f"{BASE}/api/posts/{post_id}",
               method="POST",
               data=payload,
               token=token
           )
+
+          print("Resposta da atualização:")
+
+          print(json.dumps(
+              ocultar_tokens(atualizado),
+              ensure_ascii=False,
+              indent=2
+          ))
 
           print("README sincronizado com o Paper.wf.")
           PY

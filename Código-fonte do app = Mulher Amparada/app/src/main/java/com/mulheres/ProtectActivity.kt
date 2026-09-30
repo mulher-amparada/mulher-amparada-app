@@ -174,14 +174,7 @@ class ProtectActivity : ComponentActivity() {
                     )
                 },
 
-                abrirApps = {
-                    startActivity(
-                        Intent(
-                            this,
-                            AppsActivity::class.java
-                        )
-                    )
-                },
+                
 
                 abrirDia = {
                     startActivity(
@@ -379,7 +372,7 @@ private fun MeusAcessos(
 
     abrirTarefa: () -> Unit,
 
-    abrirApps: () -> Unit,
+    
 
     abrirDia: () -> Unit,
 
@@ -458,10 +451,7 @@ private fun MeusAcessos(
             "Acesse seus arquivos"
         ),
 
-        Acesso(
-            "Tela de aplicativos",
-            "Acesse seus apps"
-        )
+        
     )
 
 
@@ -663,9 +653,7 @@ private fun MeusAcessos(
                                     abrirArquivos()
                                 }
 
-                                "Tela de aplicativos" -> {
-                                    abrirApps()
-                                }
+                                
                             }
                         }
                     )

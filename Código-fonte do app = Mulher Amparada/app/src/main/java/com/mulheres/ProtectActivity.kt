@@ -69,10 +69,9 @@ window.statusBarColor =
 window.navigationBarColor =
     AndroidColor.TRANSPARENT
 
-WindowCompat.setNavigationBarContrastEnforced(
-    window,
-    false
-)
+if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+    window.isNavigationBarContrastEnforced = false
+}
 
 WindowCompat.getInsetsController(
     window,

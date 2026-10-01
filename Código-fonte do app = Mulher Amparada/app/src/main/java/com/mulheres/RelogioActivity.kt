@@ -399,8 +399,10 @@ private fun RelogioTela(
         .fillMaxSize()
         .background(fundo)
 ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.safeDrawing),
             contentPadding =
                 androidx.compose.foundation.layout.PaddingValues(
                     start = 14.dp,

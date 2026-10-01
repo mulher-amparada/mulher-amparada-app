@@ -562,16 +562,18 @@ private fun RotinaScreen(
     modifier =
         Modifier
             .fillMaxSize()
-            .windowInsetsPadding(
-                WindowInsets.safeDrawing
-            )
             .background(fundo)
 ) {
 
-        LazyColumn(
+    LazyColumn(
 
-            modifier =
-                Modifier.fillMaxSize(),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(
+                    WindowInsets.safeDrawing
+                ),
+
 
             contentPadding =
                 PaddingValues(
@@ -906,6 +908,7 @@ private fun RotinaScreen(
                     }
                 }
             )
+        }
         }
     }
 }

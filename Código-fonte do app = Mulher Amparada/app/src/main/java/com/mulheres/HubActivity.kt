@@ -2173,7 +2173,7 @@ private fun BottomAreaSelector(
 
         val offsetX =
     if (areaProtegidaSelecionada)
-        innerWidth - thumbSize + 5.dp
+        innerWidth - thumbSize + 6.dp
     else
         0.dp
 

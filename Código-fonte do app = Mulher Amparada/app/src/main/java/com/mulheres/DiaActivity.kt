@@ -1,5 +1,8 @@
 package com.mulheres
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import android.content.Context
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.runtime.CompositionLocalProvider
@@ -785,19 +788,20 @@ private fun DiaScreen(
     val listState =
         rememberLazyListState()
 
+    Box(
+    modifier =
+        Modifier
+            .fillMaxSize()
+            .background(fundo)
+) {
     LazyColumn(
-
         modifier =
             Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .background(background)
-                .padding(
-                    start = 17.dp,
-                    end = 17.dp
-                ),
-
+                .windowInsetsPadding(
+                    WindowInsets.safeDrawing
+                )
+    ) {
         state =
             listState,
 
@@ -1383,7 +1387,7 @@ private fun DiaScreen(
         )
     }
 }
-
+}
 
 @Composable
 private fun Header(

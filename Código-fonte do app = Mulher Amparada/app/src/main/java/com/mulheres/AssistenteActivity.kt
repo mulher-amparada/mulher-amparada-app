@@ -65,11 +65,11 @@ class AssistenteActivity : ComponentActivity() {
     override fun onCreate(
     savedInstanceState: Bundle?
 ) {
-        enableEdgeToEdge()
     super.onCreate(savedInstanceState)
 
-    window.setFlags(
-        WindowManager.LayoutParams.FLAG_SECURE,
+    enableEdgeToEdge()
+
+    window.addFlags(
         WindowManager.LayoutParams.FLAG_SECURE
     )
 
@@ -84,14 +84,9 @@ class AssistenteActivity : ComponentActivity() {
     window.navigationBarColor =
         AndroidColor.TRANSPARENT
 
-    if (
-        android.os.Build.VERSION.SDK_INT >= 29
-    ) {
-        window.isNavigationBarContrastEnforced =
-            false
-
-        window.isStatusBarContrastEnforced =
-            false
+    if (android.os.Build.VERSION.SDK_INT >= 29) {
+        window.isNavigationBarContrastEnforced = false
+        window.isStatusBarContrastEnforced = false
     }
 
     val modoEscuro =
@@ -114,7 +109,6 @@ class AssistenteActivity : ComponentActivity() {
         !modoEscuro
 
     setContent {
-
         AssistenteTheme {
             AssistenteSaude()
         }
@@ -435,12 +429,10 @@ fun AssistenteSaude() {
                         cores.fundo
                     )
                     .padding(
-                        start = 15.dp,
+                        start = 24.dp,
                         end = 15.dp
-                    )
-                    .padding(
-                        bottom = 45.dp
                     ),
+                   
 
             verticalArrangement =
                 Arrangement.spacedBy(
@@ -623,6 +615,16 @@ fun AssistenteSaude() {
                         Modifier.height(
                             14.dp
                         )
+                        
+                        item {
+
+    Spacer(
+        modifier =
+            Modifier.height(
+                60.dp
+            )
+    )
+}
                 )
             }
         }

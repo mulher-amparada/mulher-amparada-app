@@ -38,7 +38,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.SideEffect
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -755,12 +755,12 @@ private fun TelaLista(
 
         } else {
 
-            items(
-                items = filtrados,
-                key = {
-                    "${it.data}_${it.dor}_${it.humor}_${filtrados.indexOf(it)}"
-                }
-            ) { registro ->
+            itemsIndexed(
+    items = filtrados,
+    key = { indice, registro ->
+        "${registro.data}_${registro.dor}_${registro.humor}_$indice"
+    }
+) { _, registro ->
 
                 RegistroCard(
                     registro = registro,

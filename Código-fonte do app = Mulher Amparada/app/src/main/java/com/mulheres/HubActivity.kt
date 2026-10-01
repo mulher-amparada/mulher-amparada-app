@@ -2134,168 +2134,142 @@ private fun colors(): AppColors {
 @Composable
 private fun BottomAreaSelector(
     c: AppColors,
-    font: FontFamily,
     areaProtegidaSelecionada: Boolean,
     onSelecionarConteudo: () -> Unit,
     onSelecionarProtegidas: () -> Unit
 ) {
-    val isDark = isSystemInDarkTheme()
 
-    val shape = RoundedCornerShape(34.dp)
+    val isDark =
+        isSystemInDarkTheme()
+
+    val shape =
+        RoundedCornerShape(22.dp)
 
     BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                start = 14.dp,
-                end = 14.dp,
-                bottom = WindowInsets.navigationBars
-                    .asPaddingValues()
-                    .calculateBottomPadding() + 10.dp
-            )
-            .height(68.dp)
-            .clip(shape)
-            .background(
-                if (isDark)
-                    Color(0xFF17171A)
-                else
-                    Color.White
-            )
-            .border(
-                1.dp,
-                c.borderLight,
-                shape
-            )
-            .padding(5.dp)
+
+        modifier =
+            Modifier
+                .fillMaxWidth(0.5f)
+                .height(34.dp)
+                .clip(shape)
+                .background(
+                    if (isDark)
+                        Color(0xFF17171A)
+                    else
+                        Color.White
+                )
+                .border(
+                    1.dp,
+                    c.borderLight,
+                    shape
+                )
+                .padding(3.dp)
     ) {
 
-        val thumbSize = 56.dp
-
-        val horizontalPadding = 0.dp
+        val thumbSize =
+            26.dp
 
         val maxOffset =
-            maxWidth - thumbSize - horizontalPadding
+            maxWidth - thumbSize - 6.dp
 
         val offsetX by animateDpAsState(
+
             targetValue =
                 if (areaProtegidaSelecionada)
                     maxOffset
                 else
-                    horizontalPadding,
+                    0.dp,
 
-            animationSpec = tween(
-                durationMillis = 280,
-                easing = FastOutSlowInEasing
-            ),
+            animationSpec =
+                tween(
+                    durationMillis = 280,
+                    easing = FastOutSlowInEasing
+                ),
 
-            label = "deslizamento_alavanca"
+            label =
+                "deslizamento_alavanca"
         )
 
         /*
          * Áreas clicáveis.
-         *
-         * A bolinha fica por cima delas.
+         * Não possuem texto.
          */
         Row(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier.fillMaxSize()
         ) {
 
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .clip(
-                        RoundedCornerShape(29.dp)
-                    )
-                    .clickable {
-                        onSelecionarConteudo()
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-
-                Text(
-                    text = "Conteúdo",
-
-                    color =
-                        if (!areaProtegidaSelecionada)
-                            c.text
-                        else
-                            c.secondary,
-
-                    fontFamily = font,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .clickable {
+                            onSelecionarConteudo()
+                        }
+            )
 
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .clip(
-                        RoundedCornerShape(29.dp)
-                    )
-                    .clickable {
-                        onSelecionarProtegidas()
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-
-                Text(
-                    text = "Áreas protegidas",
-
-                    color =
-                        if (areaProtegidaSelecionada)
-                            c.pink
-                        else
-                            c.secondary,
-
-                    fontFamily = font,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .clickable {
+                            onSelecionarProtegidas()
+                        }
+            )
         }
 
         /*
-         * Alavanca animada.
-         *
-         * Somente o ícone fica dentro da bolinha.
+         * Bolinha animada.
          */
         Box(
-            modifier = Modifier
-                .offset(x = offsetX)
-                .size(thumbSize)
-                .clip(CircleShape)
-                .background(
-                    if (areaProtegidaSelecionada)
-                        c.pink
-                    else
-                        c.surfaceLight
-                )
-                .clickable {
-                    if (areaProtegidaSelecionada) {
-                        onSelecionarConteudo()
-                    } else {
-                        onSelecionarProtegidas()
-                    }
-                },
-            contentAlignment = Alignment.Center
+
+            modifier =
+                Modifier
+                    .offset(
+                        x = offsetX
+                    )
+                    .size(thumbSize)
+                    .clip(CircleShape)
+                    .background(
+                        if (areaProtegidaSelecionada)
+                            c.pink
+                        else
+                            c.surfaceLight
+                    )
+                    .clickable {
+
+                        if (
+                            areaProtegidaSelecionada
+                        ) {
+                            onSelecionarConteudo()
+                        } else {
+                            onSelecionarProtegidas()
+                        }
+                    },
+
+            contentAlignment =
+                Alignment.Center
         ) {
 
             Image(
-                painter = painterResource(
-                    if (areaProtegidaSelecionada)
-                        R.drawable.ic_secret
-                    else
-                        R.drawable.ic_protecoes
-                ),
 
-                contentDescription = null,
+                painter =
+                    painterResource(
+                        if (
+                            areaProtegidaSelecionada
+                        )
+                            R.drawable.ic_secret
+                        else
+                            R.drawable.ic_protecoes
+                    ),
 
-                modifier = Modifier.size(25.dp)
+                contentDescription =
+                    null,
+
+                modifier =
+                    Modifier.size(15.dp)
             )
         }
     }
@@ -2731,29 +2705,34 @@ ActionCard(
                 font = font
             )
 
-            SectionTitle(
-                text = "Espaços protegidos",
-                purple = true,
-                c = c,
-                font = font
-            )
+if (
+    activity?.areaProtegidaSelecionada == true
+) {
 
-            ProtectedArea(
-                c = c,
-                font = font
-            )
+    SectionTitle(
+        text = "Espaços protegidos",
+        purple = true,
+        c = c,
+        font = font
+    )
 
-            SectionTitle(
-                text = "Espaço de acolhimento",
-                purple = true,
-                c = c,
-                font = font
-            )
+    ProtectedArea(
+        c = c,
+        font = font
+    )
 
-            AmparoArea(
-                c = c,
-                font = font
-            )
+    SectionTitle(
+        text = "Espaço de acolhimento",
+        purple = true,
+        c = c,
+        font = font
+    )
+
+    AmparoArea(
+        c = c,
+        font = font
+    )
+}
         }
 
 BottomAreaSelector(

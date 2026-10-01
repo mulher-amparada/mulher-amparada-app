@@ -808,7 +808,7 @@ private fun DiaScreen(
         verticalArrangement =
             Arrangement.spacedBy(
                 14.dp
-            )
+            
     ) {
 
         item {

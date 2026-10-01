@@ -714,10 +714,6 @@ private fun DiaScreen(
     val scope =
         rememberCoroutineScope()
 
-    /*
-     * PRODUÇÃO AUTOMÁTICA
-     */
-
     LaunchedEffect(Unit) {
 
         while (true) {
@@ -739,10 +735,6 @@ private fun DiaScreen(
             }
         }
     }
-
-    /*
-     * EXPIRAÇÃO DO COMBO
-     */
 
     LaunchedEffect(
         game.combo,
@@ -769,10 +761,6 @@ private fun DiaScreen(
         }
     }
 
-    /*
-     * VOLTA O BOTÃO AO TAMANHO NORMAL
-     */
-
     LaunchedEffect(
         buttonScale
     ) {
@@ -789,604 +777,606 @@ private fun DiaScreen(
         rememberLazyListState()
 
     Box(
-    modifier =
-        Modifier
-            .fillMaxSize()
-            .background(fundo)
-) {
-    LazyColumn(
         modifier =
             Modifier
                 .fillMaxSize()
-                .windowInsetsPadding(
-                    WindowInsets.safeDrawing
-                )
-    ) {
-        state =
-            listState,
-
-        verticalArrangement =
-            Arrangement.spacedBy(
-                14.dp
-            
+                .background(background)
     ) {
 
-        item {
+        LazyColumn(
 
-            Spacer(
-                Modifier.height(
-                    18.dp
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .windowInsetsPadding(
+                        WindowInsets.safeDrawing
+                    ),
+
+            state =
+                listState,
+
+            verticalArrangement =
+                Arrangement.spacedBy(
+                    14.dp
                 )
-            )
 
-            Header(
-                text =
-                    text,
-                muted =
-                    muted,
-                darkMode =
-                    darkMode,
-                pink =
-                    pink,
-                purple =
-                    purple
-            )
-        }
+        ) {
 
-        item {
+            item {
 
-            ScoreCard(
-                game =
-                    game,
-                card =
-                    card,
-                border =
-                    border,
-                text =
-                    text,
-                muted =
-                    muted,
-                pink =
-                    pink,
-                purple =
-                    purple
-            )
-        }
+                Spacer(
+                    Modifier.height(
+                        18.dp
+                    )
+                )
 
-        item {
+                Header(
+                    text =
+                        text,
+                    muted =
+                        muted,
+                    darkMode =
+                        darkMode,
+                    pink =
+                        pink,
+                    purple =
+                        purple
+                )
+            }
 
-            LegacyCard(
-                game =
-                    game,
-                card =
-                    card,
-                border =
-                    border,
-                text =
-                    text,
-                muted =
-                    muted,
-                pink =
-                    pink,
-                purple =
-                    purple,
-                onPrestige = {
+            item {
 
-                    if (
-                        game.points >=
-                        getPrestigeRequirement(
-                            game
-                        )
-                    ) {
+                ScoreCard(
+                    game =
+                        game,
+                    card =
+                        card,
+                    border =
+                        border,
+                    text =
+                        text,
+                    muted =
+                        muted,
+                    pink =
+                        pink,
+                    purple =
+                        purple
+                )
+            }
 
-                        showPrestigeDialog =
-                            true
-                    }
-                }
-            )
-        }
+            item {
 
-        item {
+                LegacyCard(
+                    game =
+                        game,
+                    card =
+                        card,
+                    border =
+                        border,
+                    text =
+                        text,
+                    muted =
+                        muted,
+                    pink =
+                        pink,
+                    purple =
+                        purple,
+                    onPrestige = {
 
-            ClickArea(
-                scale =
-                    animatedButtonScale,
-                game =
-                    game,
-                pink =
-                    pink,
-                purple =
-                    purple,
-                pinkLight =
-                    pinkLight,
-                onClick = {
-
-                    val now =
-                        System.currentTimeMillis()
-
-                    val newCombo =
                         if (
-                            now -
-                            game.lastClick <
-                            1000
+                            game.points >=
+                            getPrestigeRequirement(
+                                game
+                            )
                         ) {
 
-                            game.combo + 1
-
-                        } else {
-
-                            1
+                            showPrestigeDialog =
+                                true
                         }
+                    }
+                )
+            }
 
-                    val comboMultiplier =
-                        min(
-                            1 +
-                                    (
-                                        newCombo *
-                                                .02
-                                    ),
-                            2.0
+            item {
+
+                ClickArea(
+                    scale =
+                        animatedButtonScale,
+                    game =
+                        game,
+                    pink =
+                        pink,
+                    purple =
+                        purple,
+                    pinkLight =
+                        pinkLight,
+                    onClick = {
+
+                        val now =
+                            System.currentTimeMillis()
+
+                        val newCombo =
+                            if (
+                                now -
+                                game.lastClick <
+                                1000
+                            ) {
+
+                                game.combo + 1
+
+                            } else {
+
+                                1
+                            }
+
+                        val comboMultiplier =
+                            min(
+                                1 +
+                                        (
+                                            newCombo *
+                                                    .02
+                                        ),
+                                2.0
+                            )
+
+                        val amount =
+                            getPerClick(game) *
+                                    getMultiplier(game) *
+                                    comboMultiplier
+
+                        game =
+                            game.copy(
+
+                                points =
+                                    game.points +
+                                            amount,
+
+                                combo =
+                                    newCombo,
+
+                                lastClick =
+                                    now
+                            )
+
+                        floatingAmount =
+                            amount
+
+                        showFloating =
+                            true
+
+                        buttonScale =
+                            .92f
+
+                        storage.save(
+                            game
                         )
 
-                    val amount =
-                        getPerClick(game) *
-                                getMultiplier(game) *
-                                comboMultiplier
+                        scope.launch {
+
+                            delay(800)
+
+                            showFloating =
+                                false
+                        }
+                    }
+                )
+            }
+
+            item {
+
+                PhaseCard(
+                    game =
+                        game,
+                    phase =
+                        phases[currentPhase],
+                    phaseIndex =
+                        currentPhase,
+                    card =
+                        card,
+                    border =
+                        border,
+                    text =
+                        text,
+                    muted =
+                        muted,
+                    pink =
+                        pink,
+                    purple =
+                        purple
+                )
+            }
+
+            item {
+
+                SectionTitle(
+                    title =
+                        "Melhorias",
+                    text =
+                        text
+                )
+            }
+
+            itemsIndexed(
+                upgrades.chunked(2)
+            ) { _, rowItems ->
+
+                Row(
+
+                    modifier =
+                        Modifier.fillMaxWidth(),
+
+                    horizontalArrangement =
+                        Arrangement.spacedBy(
+                            12.dp
+                        )
+
+                ) {
+
+                    rowItems.forEach { upgrade ->
+
+                        UpgradeCard(
+
+                            modifier =
+                                Modifier.weight(
+                                    1f
+                                ),
+
+                            upgrade =
+                                upgrade,
+
+                            game =
+                                game,
+
+                            card =
+                                card,
+
+                            card2 =
+                                card2,
+
+                            border =
+                                border,
+
+                            text =
+                                text,
+
+                            muted =
+                                muted,
+
+                            pink =
+                                pink,
+
+                            pinkLight =
+                                pinkLight,
+
+                            purple =
+                                purple,
+
+                            onBuy = {
+
+                                val price =
+                                    getUpgradePrice(
+                                        game,
+                                        upgrade
+                                    )
+
+                                if (
+                                    game.points >=
+                                    price
+                                ) {
+
+                                    game =
+                                        buyUpgrade(
+                                            game,
+                                            upgrade
+                                        )
+
+                                    storage.save(
+                                        game
+                                    )
+                                }
+                            }
+                        )
+                    }
+
+                    if (
+                        rowItems.size == 1
+                    ) {
+
+                        Spacer(
+                            Modifier.weight(
+                                1f
+                            )
+                        )
+                    }
+                }
+            }
+
+            item {
+
+                SectionTitle(
+                    title =
+                        "As cinco fases",
+                    text =
+                        text
+                )
+            }
+
+            itemsIndexed(
+                phases
+            ) { index, phase ->
+
+                StoryCard(
+
+                    phase =
+                        phase,
+
+                    index =
+                        index,
+
+                    unlocked =
+                        game.points >=
+                                phase.unlock,
+
+                    card =
+                        card,
+
+                    border =
+                        border,
+
+                    text =
+                        text,
+
+                    muted =
+                        muted,
+
+                    pink =
+                        pink,
+
+                    pinkLight =
+                        pinkLight,
+
+                    purple =
+                        purple
+                )
+            }
+
+            item {
+
+                SourcesCard(
+
+                    card =
+                        card,
+
+                    border =
+                        border,
+
+                    text =
+                        text,
+
+                    muted =
+                        muted,
+
+                    blue =
+                        Color(0xFF4D8DFF)
+                )
+            }
+
+            item {
+
+                Button(
+
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                top = 8.dp,
+                                bottom = 20.dp
+                            ),
+
+                    onClick = {
+
+                        showResetDialog =
+                            true
+                    },
+
+                    shape =
+                        RoundedCornerShape(
+                            15.dp
+                        ),
+
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor =
+                                Color.Transparent,
+                            contentColor =
+                                muted
+                        ),
+
+                    border =
+                        BorderStroke(
+                            1.dp,
+                            border
+                        )
+
+                ) {
+
+                    Text(
+                        text =
+                            "Reiniciar progresso",
+                        fontFamily =
+                            Quicksand,
+                        fontWeight =
+                            FontWeight.Bold
+                    )
+                }
+            }
+        }
+
+        AnimatedVisibility(
+            visible =
+                showFloating
+        ) {
+
+            Box(
+
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .statusBarsPadding()
+                        .navigationBarsPadding(),
+
+                contentAlignment =
+                    Alignment.Center
+
+            ) {
+
+                Text(
+
+                    text =
+                        "+" +
+                                formatNumber(
+                                    floatingAmount
+                                ),
+
+                    color =
+                        Color.White,
+
+                    fontFamily =
+                        Quicksand,
+
+                    fontWeight =
+                        FontWeight.ExtraBold,
+
+                    fontSize =
+                        23.sp
+                )
+            }
+        }
+
+        if (showPrestigeDialog) {
+
+            val reward =
+                getPrestigeReward(
+                    game
+                )
+
+            ConfirmDialog(
+
+                title =
+                    "Realizar o prestígio?",
+
+                message =
+                    "Pontos atuais: " +
+                            formatNumber(
+                                game.points
+                            ) +
+                            "\n\n" +
+                            "Os upgrades normais serão resetados.\n\n" +
+                            "O Legado permanecerá.\n\n" +
+                            "Recompensa: +" +
+                            reward +
+                            " Legado.",
+
+                confirmText =
+                    "Prestigiar",
+
+                onDismiss = {
+
+                    showPrestigeDialog =
+                        false
+                },
+
+                onConfirm = {
 
                     game =
-                        game.copy(
+                        GameState(
 
                             points =
-                                game.points +
-                                        amount,
+                                0.0,
 
-                            combo =
-                                newCombo,
-
-                            lastClick =
-                                now
+                            legacy =
+                                game.legacy +
+                                        reward
                         )
-
-                    floatingAmount =
-                        amount
-
-                    showFloating =
-                        true
-
-                    buttonScale =
-                        .92f
 
                     storage.save(
                         game
                     )
 
-                    scope.launch {
-
-                        delay(800)
-
-                        showFloating =
-                            false
-                    }
-                }
-            )
-        }
-
-        item {
-
-            PhaseCard(
-                game =
-                    game,
-                phase =
-                    phases[currentPhase],
-                phaseIndex =
-                    currentPhase,
-                card =
-                    card,
-                border =
-                    border,
-                text =
-                    text,
-                muted =
-                    muted,
-                pink =
-                    pink,
-                purple =
-                    purple
-            )
-        }
-
-        item {
-
-            SectionTitle(
-                title =
-                    "Melhorias",
-                text =
-                    text
-            )
-        }
-
-        itemsIndexed(
-            upgrades.chunked(2)
-        ) { _, rowItems ->
-
-            Row(
-
-                modifier =
-                    Modifier.fillMaxWidth(),
-
-                horizontalArrangement =
-                    Arrangement.spacedBy(
-                        12.dp
-                    )
-            ) {
-
-                rowItems.forEach { upgrade ->
-
-                    UpgradeCard(
-
-                        modifier =
-                            Modifier.weight(
-                                1f
-                            ),
-
-                        upgrade =
-                            upgrade,
-
-                        game =
-                            game,
-
-                        card =
-                            card,
-
-                        card2 =
-                            card2,
-
-                        border =
-                            border,
-
-                        text =
-                            text,
-
-                        muted =
-                            muted,
-
-                        pink =
-                            pink,
-
-                        pinkLight =
-                            pinkLight,
-
-                        purple =
-                            purple,
-
-                        onBuy = {
-
-                            val price =
-                                getUpgradePrice(
-                                    game,
-                                    upgrade
-                                )
-
-                            if (
-                                game.points >=
-                                price
-                            ) {
-
-                                game =
-                                    buyUpgrade(
-                                        game,
-                                        upgrade
-                                    )
-
-                                storage.save(
-                                    game
-                                )
-                            }
-                        }
-                    )
-                }
-
-                if (
-                    rowItems.size == 1
-                ) {
-
-                    Spacer(
-                        Modifier.weight(
-                            1f
-                        )
-                    )
-                }
-            }
-        }
-
-        item {
-
-            SectionTitle(
-                title =
-                    "As cinco fases",
-                text =
-                    text
-            )
-        }
-
-        itemsIndexed(
-            phases
-        ) { index, phase ->
-
-            StoryCard(
-
-                phase =
-                    phase,
-
-                index =
-                    index,
-
-                unlocked =
-                    game.points >=
-                            phase.unlock,
-
-                card =
-                    card,
-
-                border =
-                    border,
-
-                text =
-                    text,
-
-                muted =
-                    muted,
-
-                pink =
-                    pink,
-
-                pinkLight =
-                    pinkLight,
-
-                purple =
-                    purple
-            )
-        }
-
-        item {
-
-            SourcesCard(
-
-                card =
-                    card,
-
-                border =
-                    border,
-
-                text =
-                    text,
-
-                muted =
-                    muted,
-
-                blue =
-                    Color(0xFF4D8DFF)
-            )
-        }
-
-        item {
-
-            Button(
-
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = 8.dp,
-                            bottom = 20.dp
-                        ),
-
-                onClick = {
-                    showResetDialog =
-                        true
+                    showPrestigeDialog =
+                        false
                 },
 
-                shape =
-                    RoundedCornerShape(
-                        15.dp
-                    ),
+                pink =
+                    pink,
 
-                colors =
-                    ButtonDefaults.buttonColors(
-                        containerColor =
-                            Color.Transparent,
-                        contentColor =
-                            muted
-                    ),
+                purple =
+                    purple,
 
-                border =
-                    BorderStroke(
-                        1.dp,
-                        border
-                    )
-            ) {
+                card =
+                    card,
 
-                Text(
-                    text =
-                        "Reiniciar progresso",
-                    fontFamily =
-                        Quicksand,
-                    fontWeight =
-                        FontWeight.Bold
-                )
-            }
-        }
-    }
-
-    /*
-     * NÚMERO FLUTUANTE
-     */
-
-    AnimatedVisibility(
-        visible =
-            showFloating
-    ) {
-
-        Box(
-
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .statusBarsPadding()
-                    .navigationBarsPadding(),
-
-            contentAlignment =
-                Alignment.Center
-        ) {
-
-            Text(
                 text =
-                    "+" +
-                            formatNumber(
-                                floatingAmount
-                            ),
-                color =
-                    Color.White,
-                fontFamily =
-                    Quicksand,
-                fontWeight =
-                    FontWeight.ExtraBold,
-                fontSize =
-                    23.sp
+                    text,
+
+                muted =
+                    muted
+            )
+        }
+
+        if (showResetDialog) {
+
+            ConfirmDialog(
+
+                title =
+                    "Reiniciar progresso",
+
+                message =
+                    "Reiniciar todo o progresso?\n\n" +
+                            "Isso apagará:\n" +
+                            "• Pontos\n" +
+                            "• Upgrades\n" +
+                            "• Legado\n" +
+                            "• Bônus permanentes\n\n" +
+                            "Esta ação não pode ser desfeita.",
+
+                confirmText =
+                    "Reiniciar",
+
+                onDismiss = {
+
+                    showResetDialog =
+                        false
+                },
+
+                onConfirm = {
+
+                    storage.clear()
+
+                    game =
+                        GameState()
+
+                    showResetDialog =
+                        false
+                },
+
+                pink =
+                    pink,
+
+                purple =
+                    purple,
+
+                card =
+                    card,
+
+                text =
+                    text,
+
+                muted =
+                    muted
             )
         }
     }
-
-    /*
-     * PRESTÍGIO
-     */
-
-    if (showPrestigeDialog) {
-
-        val reward =
-            getPrestigeReward(
-                game
-            )
-
-        ConfirmDialog(
-
-            title =
-                "Realizar o prestígio?",
-
-            message =
-                "Pontos atuais: " +
-                        formatNumber(
-                            game.points
-                        ) +
-                        "\n\n" +
-                        "Os upgrades normais serão resetados.\n\n" +
-                        "O Legado permanecerá.\n\n" +
-                        "Recompensa: +" +
-                        reward +
-                        " Legado.",
-
-            confirmText =
-                "Prestigiar",
-
-            onDismiss = {
-                showPrestigeDialog =
-                    false
-            },
-
-            onConfirm = {
-
-                game =
-                    GameState(
-
-                        points =
-                            0.0,
-
-                        legacy =
-                            game.legacy +
-                                    reward
-                    )
-
-                storage.save(
-                    game
-                )
-
-                showPrestigeDialog =
-                    false
-            },
-
-            pink =
-                pink,
-
-            purple =
-                purple,
-
-            card =
-                card,
-
-            text =
-                text,
-
-            muted =
-                muted
-        )
-    }
-
-    /*
-     * RESET
-     */
-
-    if (showResetDialog) {
-
-        ConfirmDialog(
-
-            title =
-                "Reiniciar progresso",
-
-            message =
-                "Reiniciar todo o progresso?\n\n" +
-                        "Isso apagará:\n" +
-                        "• Pontos\n" +
-                        "• Upgrades\n" +
-                        "• Legado\n" +
-                        "• Bônus permanentes\n\n" +
-                        "Esta ação não pode ser desfeita.",
-
-            confirmText =
-                "Reiniciar",
-
-            onDismiss = {
-                showResetDialog =
-                    false
-            },
-
-            onConfirm = {
-
-                storage.clear()
-
-                game =
-                    GameState()
-
-                showResetDialog =
-                    false
-            },
-
-            pink =
-                pink,
-
-            purple =
-                purple,
-
-            card =
-                card,
-
-            text =
-                text,
-
-            muted =
-                muted
-        )
-    }
-}
 }
 
 @Composable

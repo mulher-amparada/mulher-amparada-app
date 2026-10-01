@@ -501,10 +501,10 @@ private fun DiaApp() {
         isSystemInDarkTheme()
 
     val background =
-        if (darkMode)
-            Color(0xFF050507)
-        else
-            Color(0xFFFFFFFF)
+    if (darkMode)
+        Color.Transparent
+    else
+        Color.Transparent
 
     val card =
         if (darkMode)

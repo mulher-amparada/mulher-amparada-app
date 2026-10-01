@@ -2146,7 +2146,7 @@ private fun BottomAreaSelector(
         modifier =
             Modifier
                 .fillMaxWidth(0.5f)
-                .height(68.dp)
+                .height(66.dp)
                 .clip(shape)
                 .background(
                     if (isDark)

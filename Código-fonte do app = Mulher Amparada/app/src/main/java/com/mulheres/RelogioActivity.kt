@@ -198,20 +198,14 @@ private fun RelogioApp() {
     ) {
 
         Surface(
-    modifier =
-        Modifier
-            .fillMaxSize()
-            .windowInsetsPadding(
-                WindowInsets.safeDrawing
-            ),
+    modifier = Modifier.fillMaxSize(),
     color = fundo
 ) {
-
-            RelogioTela(
-                dark = dark,
-                fundo = fundo
-            )
-        }
+    RelogioTela(
+        dark = dark,
+        fundo = fundo
+    )
+}
     }
 }
 

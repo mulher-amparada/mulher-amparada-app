@@ -178,11 +178,11 @@ private fun RotinaTheme(
     val dark =
         isSystemInDarkTheme()
 
-    val background =
-        if (dark)
-            Color.Black
-        else
-            Color(0xFFF7F7FA)
+    val fundo =
+    if (dark)
+        Color.Transparent
+    else
+        Color.Transparent
 
     val surface =
         if (dark)

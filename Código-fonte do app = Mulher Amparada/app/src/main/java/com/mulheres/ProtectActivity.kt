@@ -139,24 +139,6 @@ WindowCompat.getInsetsController(
                     )
                 },
 
-                abrirRotina = {
-                    startActivity(
-                        Intent(
-                            this,
-                            RotinaActivity::class.java
-                        )
-                    )
-                },
-
-                abrirRelogio = {
-                    startActivity(
-                        Intent(
-                            this,
-                            RelogioActivity::class.java
-                        )
-                    )
-                },
-
                 abrirGravador = {
                     startActivity(
                         Intent(
@@ -175,16 +157,7 @@ WindowCompat.getInsetsController(
                     )
                 },
 
-                
-
-                abrirDia = {
-                    startActivity(
-                        Intent(
-                            this,
-                            DiaActivity::class.java
-                        )
-                    )
-                },
+               
 
                 abrirDireitos = {
                     startActivity(
@@ -367,15 +340,13 @@ private fun MeusAcessos(
 
     abrirCalculadora: () -> Unit,
 
-    abrirRelogio: () -> Unit,
 
-    abrirRotina: () -> Unit,
 
     abrirTarefa: () -> Unit,
 
     
 
-    abrirDia: () -> Unit,
+
 
     abrirDireitos: () -> Unit,
 
@@ -413,15 +384,7 @@ private fun MeusAcessos(
             "Escreva e guarde seus registros"
         ),
 
-        Acesso(
-            "Rotina gamificada",
-            "Transforme tarefas em desafios"
-        ),
 
-        Acesso(
-            "Relógio + Localização",
-            "Horário e posição atual"
-        ),
 
         Acesso(
             "Calculadora",
@@ -458,10 +421,7 @@ private fun MeusAcessos(
 
     val especiais = listOf(
 
-        Acesso(
-            "Feliz Dia das Mulheres!",
-            "Um jogo gamificado"
-        ),
+
 
         Acesso(
             "100 dos seus direitos",

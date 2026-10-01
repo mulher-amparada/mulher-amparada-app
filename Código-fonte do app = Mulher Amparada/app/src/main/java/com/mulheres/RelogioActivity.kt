@@ -398,8 +398,7 @@ private fun RelogioTela(
     modifier = Modifier
         .fillMaxSize()
         .background(fundo)
-)=
-
+)
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding =

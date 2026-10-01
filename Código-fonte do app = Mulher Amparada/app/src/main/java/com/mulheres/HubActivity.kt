@@ -1,6 +1,7 @@
 package com.mulheres
 
 import androidx.fragment.app.FragmentActivity
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -2287,7 +2288,7 @@ private fun BottomAreaSelector(
             Image(
                 painter = painterResource(
                     if (areaProtegidaSelecionada)
-                        R.drawable.ic_area_protegida
+                        R.drawable.ic_secret
                     else
                         R.drawable.ic_protecoes
                 ),

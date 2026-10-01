@@ -3,6 +3,7 @@ package com.mulheres
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.activity.compose.setContent

@@ -141,10 +141,7 @@ class DiarioActivity : ComponentActivity() {
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-WindowCompat.setNavigationBarContrastEnforced(
-    window,
-    false
-)
+window.isNavigationBarContrastEnforced = false
         window.statusBarColor =
             android.graphics.Color.TRANSPARENT
 

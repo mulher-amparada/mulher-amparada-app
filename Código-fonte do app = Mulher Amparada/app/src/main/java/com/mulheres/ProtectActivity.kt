@@ -492,9 +492,7 @@ private fun MeusAcessos(
                     .background(
                         fundo
                     )
-                    .windowInsetsPadding(
-                        WindowInsets.safeDrawing
-                    )
+
         ) {
 
             LazyColumn(

@@ -325,10 +325,7 @@ class CicloActivity : ComponentActivity() {
 
     WindowCompat.setDecorFitsSystemWindows(window, false)
 
-WindowCompat.setNavigationBarContrastEnforced(
-    window,
-    false
-)
+window.isNavigationBarContrastEnforced = false
 
 
     setContent {

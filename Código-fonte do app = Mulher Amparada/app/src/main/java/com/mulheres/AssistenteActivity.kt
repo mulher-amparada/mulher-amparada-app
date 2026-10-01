@@ -430,53 +430,64 @@ fun AssistenteSaude() {
 
         LazyColumn(
 
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(
-                        cores.fundo
-                    )
-                    .padding(
-    start = 15.dp,
-    end = 15.dp,
-    top = 25.dp
-)
-.windowInsetsPadding(
-    WindowInsets.statusBars
-)
+    modifier =
+        Modifier
+            .fillMaxSize()
+            .background(
+                cores.fundo
+            )
+            .padding(
+                start = 15.dp,
+                end = 15.dp
+            )
+            .padding(
+                bottom = 45.dp
+            ),
 
-.padding(
-    bottom = 45.dp
-),
-
-            verticalArrangement =
-                Arrangement.spacedBy(
-                    0.dp
-                )
-        ) {
+    verticalArrangement =
+        Arrangement.spacedBy(
+            0.dp
+        )
+) {
         
        
 
             item {
 
-                Cabecalho(
-    onSecretClick = {
-        context.startActivity(
-            Intent(
-                context,
-                NeoCalcActivity::class.java
-            )
-        )
-    }
-)
+                item {
 
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            28.dp
-                        )
+    Spacer(
+        modifier =
+            Modifier.windowInsetsTopHeight(
+                WindowInsets.statusBars
+            )
+    )
+
+    Spacer(
+        modifier =
+            Modifier.height(
+                25.dp
+            )
+    )
+
+    Cabecalho(
+        onSecretClick = {
+            context.startActivity(
+                Intent(
+                    context,
+                    NeoCalcActivity::class.java
                 )
-            }
+            )
+        }
+    )
+
+    Spacer(
+        modifier =
+            Modifier.height(
+                28.dp
+            )
+    )
+}
 
 
             item {

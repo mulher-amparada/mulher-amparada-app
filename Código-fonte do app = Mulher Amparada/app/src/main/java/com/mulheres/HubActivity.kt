@@ -1,6 +1,11 @@
 package com.mulheres
 
 import androidx.fragment.app.FragmentActivity
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.animation.core.tween
 import android.view.WindowManager
 import android.Manifest
 import android.content.BroadcastReceiver
@@ -152,6 +157,17 @@ var emergenciaVisivel by mutableStateOf(false)
     private set
 
 private lateinit var locationClient: FusedLocationProviderClient
+
+var areaProtegidaSelecionada by mutableStateOf(false)
+    private set
+
+fun selecionarConteudo() {
+    areaProtegidaSelecionada = false
+}
+
+fun selecionarAreasProtegidas() {
+    areaProtegidaSelecionada = true
+}
 
     /* =========================================================
        PERMISSÕES
@@ -2114,6 +2130,175 @@ private fun colors(): AppColors {
     }
 }
 
+@Composable
+private fun BottomAreaSelector(
+    c: AppColors,
+    font: FontFamily,
+    areaProtegidaSelecionada: Boolean,
+    onSelecionarConteudo: () -> Unit,
+    onSelecionarProtegidas: () -> Unit
+) {
+    val isDark = isSystemInDarkTheme()
+
+    val shape = RoundedCornerShape(34.dp)
+
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                start = 14.dp,
+                end = 14.dp,
+                bottom = WindowInsets.navigationBars
+                    .asPaddingValues()
+                    .calculateBottomPadding() + 10.dp
+            )
+            .height(68.dp)
+            .clip(shape)
+            .background(
+                if (isDark)
+                    Color(0xFF17171A)
+                else
+                    Color.White
+            )
+            .border(
+                1.dp,
+                c.borderLight,
+                shape
+            )
+            .padding(5.dp)
+    ) {
+
+        val thumbSize = 56.dp
+
+        val horizontalPadding = 0.dp
+
+        val maxOffset =
+            maxWidth - thumbSize - horizontalPadding
+
+        val offsetX by animateDpAsState(
+            targetValue =
+                if (areaProtegidaSelecionada)
+                    maxOffset
+                else
+                    horizontalPadding,
+
+            animationSpec = tween(
+                durationMillis = 280,
+                easing = FastOutSlowInEasing
+            ),
+
+            label = "deslizamento_alavanca"
+        )
+
+        /*
+         * Áreas clicáveis.
+         *
+         * A bolinha fica por cima delas.
+         */
+        Row(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .clip(
+                        RoundedCornerShape(29.dp)
+                    )
+                    .clickable {
+                        onSelecionarConteudo()
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+
+                Text(
+                    text = "Conteúdo",
+
+                    color =
+                        if (!areaProtegidaSelecionada)
+                            c.text
+                        else
+                            c.secondary,
+
+                    fontFamily = font,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .clip(
+                        RoundedCornerShape(29.dp)
+                    )
+                    .clickable {
+                        onSelecionarProtegidas()
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+
+                Text(
+                    text = "Áreas protegidas",
+
+                    color =
+                        if (areaProtegidaSelecionada)
+                            c.pink
+                        else
+                            c.secondary,
+
+                    fontFamily = font,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+
+        /*
+         * Alavanca animada.
+         *
+         * Somente o ícone fica dentro da bolinha.
+         */
+        Box(
+            modifier = Modifier
+                .offset(x = offsetX)
+                .size(thumbSize)
+                .clip(CircleShape)
+                .background(
+                    if (areaProtegidaSelecionada)
+                        c.pink
+                    else
+                        c.surfaceLight
+                )
+                .clickable {
+                    if (areaProtegidaSelecionada) {
+                        onSelecionarConteudo()
+                    } else {
+                        onSelecionarProtegidas()
+                    }
+                },
+            contentAlignment = Alignment.Center
+        ) {
+
+            Image(
+                painter = painterResource(
+                    if (areaProtegidaSelecionada)
+                        R.drawable.ic_area_protegida
+                    else
+                        R.drawable.ic_protecoes
+                ),
+
+                contentDescription = null,
+
+                modifier = Modifier.size(25.dp)
+            )
+        }
+    }
+}
 
 /* =========================================================
    TEMA
@@ -2570,7 +2755,20 @@ ActionCard(
             )
         }
 
+BottomAreaSelector(
+    c = c,
+    font = font,
+    areaProtegidaSelecionada =
+        activity?.areaProtegidaSelecionada ?: false,
 
+    onSelecionarConteudo = {
+        activity?.selecionarConteudo()
+    },
+
+    onSelecionarProtegidas = {
+        activity?.selecionarAreasProtegidas()
+    }
+)
      
         /* =====================================================
            BLOQUEIO DE PERMISSÕES

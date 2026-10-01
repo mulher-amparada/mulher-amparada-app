@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -95,17 +94,28 @@ class HomeActivity : ComponentActivity() {
     ) {
         enableEdgeToEdge()
 
-        super.onCreate(savedInstanceState)
+super.onCreate(savedInstanceState)
 
 window.setFlags(
-        WindowManager.LayoutParams.FLAG_SECURE,
-        WindowManager.LayoutParams.FLAG_SECURE
-    )
-    
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
-        )
+    WindowManager.LayoutParams.FLAG_SECURE,
+    WindowManager.LayoutParams.FLAG_SECURE
+)
+
+WindowCompat.setDecorFitsSystemWindows(
+    window,
+    false
+)
+
+window.statusBarColor =
+    android.graphics.Color.TRANSPARENT
+
+window.navigationBarColor =
+    android.graphics.Color.TRANSPARENT
+
+if (android.os.Build.VERSION.SDK_INT >= 29) {
+    window.isStatusBarContrastEnforced = false
+    window.isNavigationBarContrastEnforced = false
+}
 
         setContent {
 
@@ -193,32 +203,38 @@ private fun CarteiraScreen(
     LocalOverscrollFactory provides null
 ) {
 
-    Column(
 
-        modifier = Modifier
-            .fillMaxSize()
-            .background(background)
-            .windowInsetsPadding(
+Column(
+
+    modifier = Modifier
+        .fillMaxSize()
+        .background(background)
+        .verticalScroll(
+            rememberScrollState()
+        )
+        .padding(
+            start = 16.dp,
+            end = 16.dp,
+            bottom = 32.dp
+        ),
+
+    verticalArrangement =
+        Arrangement.spacedBy(31.dp)
+) {
+
+    Spacer(
+        modifier =
+            Modifier.windowInsetsTopHeight(
                 WindowInsets.statusBars
             )
-            .windowInsetsPadding(
-                WindowInsets.navigationBars
-            )
-            .verticalScroll(
-                rememberScrollState()
-            )
-            .padding(
-                start = 16.dp,
-                end = 16.dp,
-                top = 24.dp,
-                bottom = 32.dp
-            ),
+    )
 
-        verticalArrangement =
-            Arrangement.spacedBy(31.dp)
-    ) {
-
-        // todo o conteúdo atual...
+    Spacer(
+        modifier =
+            Modifier.height(
+                24.dp
+            )
+    )
     
         /*
          * =====================================================

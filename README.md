@@ -6,7 +6,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3968**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 3928**
 
 # ⚠️MURAL DE AVISOS:
 
@@ -834,14 +834,6 @@ E o site do github pages usa essa estrutura (os nomes dos arquivos podem varias)
 ## Sobre as animações e o desempenho:
 
 Além disso, as animações foram amplamente reduzidas, principalmente as animações de entrada. O projeto prioriza transições rápidas e discretas, mantendo apenas algumas animações pontuais quando elas contribuem para a experiência de uso. Dessa forma, a interface permanece visualmente agradável sem comprometer a agilidade e a responsividade do aplicativo.
-
-### Sobre as cores das barras:
-
-Eu decidi colocar a HubActivity com o padrão `edge to edge` por causa do escurecimento por inclinação 
-
-E todas da área do amparo porque pode ser que a usuária mostre para outra pessoa
-
-e ai TODAS AS OUTRAS TELAS estão com as barras pretas porque um layou já estava com essas barras por causa da espécie (é tipo um container sabe!), e ai nao ficava atrás das barras, e ai eu decidi fazer nos outros também para parecer que são todas assim...
 
 # 🔗 Deep Link do aplicativo:
 

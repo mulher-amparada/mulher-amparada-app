@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.compose.foundation.layout.asPaddingValues
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -233,27 +234,19 @@ Column(
          */
 
         Column(
-
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    start = 4.dp,
-                    end = 4.dp
-                )
+    modifier = Modifier
+        .fillMaxWidth()
+        .padding(
+            start = 4.dp,
+            end = 4.dp,
+            top = WindowInsets.statusBars
+                .asPaddingValues()
+                .calculateTopPadding(),
+            bottom = WindowInsets.navigationBars
+                .asPaddingValues()
+                .calculateBottomPadding()
         )
-        
-         .padding(
-    top =
-        WindowInsets.statusBars
-            .asPaddingValues()
-            .calculateTopPadding(),
-
-    bottom =
-        WindowInsets.navigationBars
-            .asPaddingValues()
-            .calculateBottomPadding()
-)
- {
+) {
 
             Box(
 

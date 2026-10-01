@@ -536,13 +536,7 @@ private fun MeusAcessos(
                                     abrirDiario()
                                 }
 
-                                "Rotina gamificada" -> {
-                                    abrirRotina()
-                                }
-
-                                "Relógio + Localização" -> {
-                                    abrirRelogio()
-                                }
+                                
 
                                 "Calculadora" -> {
                                     abrirCalculadora()
@@ -661,10 +655,6 @@ private fun MeusAcessos(
                         onClick = {
 
                             when (acesso.titulo) {
-
-                                "Feliz Dia das Mulheres!" -> {
-                                    abrirDia()
-                                }
 
                                 "100 dos seus direitos" -> {
                                     abrirDireitos()

@@ -175,12 +175,6 @@
             android:screenOrientation="portrait"
     android:configChanges="orientation|screenSize"
                      android:exported="false" />
-        
-        <activity
-            android:name=".RelogioActivity"
-            android:screenOrientation="portrait"
-    android:configChanges="orientation|screenSize"
-                     android:exported="false" />
                      
                              <activity
             android:name=".MapaActivity"
@@ -212,23 +206,14 @@
     android:configChanges="orientation|screenSize"
                      android:exported="false" />
                      
-                     <activity
-            android:name=".RotinaActivity"
-            android:screenOrientation="portrait"
-    android:configChanges="orientation|screenSize"
-                     android:exported="false" />
-                     
+
                                           <activity
             android:name=".CicloActivity"
             android:screenOrientation="portrait"
     android:configChanges="orientation|screenSize"
                      android:exported="false" />
                      
-                                                               <activity
-            android:name=".DiaActivity"
-            android:screenOrientation="portrait"
-    android:configChanges="orientation|screenSize"
-                     android:exported="false" />
+                                                               
                      
                                                                <activity
             android:name=".TarefaActivity"

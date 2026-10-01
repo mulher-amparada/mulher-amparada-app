@@ -312,25 +312,26 @@ private fun booleanValue(
 
 class CicloActivity : ComponentActivity() {
 
-    override fun onCreate(
-        savedInstanceState: Bundle?
-    ) {
-        enableEdgeToEdge()
-        super.onCreate(savedInstanceState)
+  override fun onCreate(
+    savedInstanceState: Bundle?
+) {
+    super.onCreate(savedInstanceState)
 
-        window.addFlags(
-            WindowManager.LayoutParams.FLAG_SECURE
-        )
+    enableEdgeToEdge()
 
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            true
-        )
+    window.addFlags(
+        WindowManager.LayoutParams.FLAG_SECURE
+    )
 
-        setContent {
-            CicloApp()
-        }
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        false
+    )
+
+    setContent {
+        CicloApp()
     }
+}
 }
 
 @Composable
@@ -389,19 +390,11 @@ private fun CicloApp() {
         }
 
     SideEffect {
-        val corBarra =
-            if (dark) {
-                AndroidColor.BLACK
-            } else {
-                AndroidColor.WHITE
-            }
-
-        windowColor(
-            window = ctx as CicloActivity,
-            color = corBarra,
-            dark = dark
-        )
-    }
+    windowColor(
+        window = ctx as CicloActivity,
+        dark = dark
+    )
+}
 
     val scheme =
         if (dark) {
@@ -509,7 +502,7 @@ private fun CicloApp() {
             modifier = Modifier
                 .fillMaxSize()
                 .background(fundo)
-                .safeDrawingPadding()
+                
         ) {
 
             if (telaDetalhes != null) {
@@ -653,12 +646,14 @@ private fun CicloApp() {
 
 private fun windowColor(
     window: CicloActivity,
-    color: Int,
     dark: Boolean
 ) {
 
-    window.window.statusBarColor = color
-    window.window.navigationBarColor = color
+    window.window.statusBarColor =
+        AndroidColor.TRANSPARENT
+
+    window.window.navigationBarColor =
+        AndroidColor.TRANSPARENT
 
     WindowCompat.getInsetsController(
         window.window,
@@ -701,7 +696,7 @@ private fun TelaLista(
         item {
 
             Spacer(
-                Modifier.height(4.dp)
+                Modifier.height(24.dp)
             )
 
             TopoCiclo(

@@ -15,15 +15,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -416,13 +413,14 @@ fun AssistenteSaude() {
 
     val cores =
         coresAssistente()
-        
-        val context = androidx.compose.ui.platform.LocalContext.current
 
-    val estado = remember {
-    DadosSaude()
-}
+    val context =
+        androidx.compose.ui.platform.LocalContext.current
 
+    val estado =
+        remember {
+            DadosSaude()
+        }
 
     CompositionLocalProvider(
         LocalOverscrollFactory provides null
@@ -430,66 +428,65 @@ fun AssistenteSaude() {
 
         LazyColumn(
 
-    modifier =
-        Modifier
-            .fillMaxSize()
-            .background(
-                cores.fundo
-            )
-            .padding(
-                start = 15.dp,
-                end = 15.dp
-            )
-            .padding(
-                bottom = 45.dp
-            ),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        cores.fundo
+                    )
+                    .padding(
+                        start = 15.dp,
+                        end = 15.dp
+                    )
+                    .padding(
+                        bottom = 45.dp
+                    ),
 
-    verticalArrangement =
-        Arrangement.spacedBy(
-            0.dp
-        )
-) {
-        
-       
+            verticalArrangement =
+                Arrangement.spacedBy(
+                    0.dp
+                )
+        ) {
 
+            /*
+             * PRIMEIRO ITEM
+             *
+             * O espaço de 25.dp fica somente
+             * entre a barra de status e o cabeçalho.
+             */
             item {
 
-                item {
-
-    Spacer(
-        modifier =
-            Modifier.windowInsetsTopHeight(
-                WindowInsets.statusBars
-            )
-    )
-
-    Spacer(
-        modifier =
-            Modifier.height(
-                25.dp
-            )
-    )
-
-    Cabecalho(
-        onSecretClick = {
-            context.startActivity(
-                Intent(
-                    context,
-                    NeoCalcActivity::class.java
+                Spacer(
+                    modifier =
+                        Modifier.height(
+                            25.dp
+                        )
                 )
-            )
-        }
-    )
 
-    Spacer(
-        modifier =
-            Modifier.height(
-                28.dp
-            )
-    )
-}
+                Cabecalho(
+                    onSecretClick = {
+
+                        context.startActivity(
+                            Intent(
+                                context,
+                                NeoCalcActivity::class.java
+                            )
+                        )
+                    }
+                )
+
+                Spacer(
+                    modifier =
+                        Modifier.height(
+                            28.dp
+                        )
+                )
+            }
 
 
+            /*
+             * HERO
+             */
             item {
 
                 Hero(
@@ -506,6 +503,9 @@ fun AssistenteSaude() {
             }
 
 
+            /*
+             * RESUMO
+             */
             item {
 
                 Resumo(
@@ -522,11 +522,17 @@ fun AssistenteSaude() {
             }
 
 
+            /*
+             * INDICADORES
+             */
             item {
-            
-            Spacer(
-        modifier = Modifier.height(36.dp)
-    )
+
+                Spacer(
+                    modifier =
+                        Modifier.height(
+                            36.dp
+                        )
+                )
 
                 SecaoTitulo(
 
@@ -551,6 +557,9 @@ fun AssistenteSaude() {
             }
 
 
+            /*
+             * BEM-ESTAR
+             */
             item {
 
                 Spacer(
@@ -583,6 +592,9 @@ fun AssistenteSaude() {
             }
 
 
+            /*
+             * ATIVIDADE
+             */
             item {
 
                 Spacer(
@@ -616,7 +628,6 @@ fun AssistenteSaude() {
         }
     }
 }
-
 
 /* =========================================================
    CABEÇALHO

@@ -176,6 +176,12 @@ class TarefaActivity : ComponentActivity() {
         window,
         false
     )
+    
+
+WindowCompat.setNavigationBarContrastEnforced(
+    window,
+    false
+)
 
     setContent {
 

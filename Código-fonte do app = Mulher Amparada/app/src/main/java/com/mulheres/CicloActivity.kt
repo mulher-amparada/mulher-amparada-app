@@ -323,10 +323,13 @@ class CicloActivity : ComponentActivity() {
         WindowManager.LayoutParams.FLAG_SECURE
     )
 
-    WindowCompat.setDecorFitsSystemWindows(
-        window,
-        false
-    )
+    WindowCompat.setDecorFitsSystemWindows(window, false)
+
+WindowCompat.setNavigationBarContrastEnforced(
+    window,
+    false
+)
+
 
     setContent {
         CicloApp()

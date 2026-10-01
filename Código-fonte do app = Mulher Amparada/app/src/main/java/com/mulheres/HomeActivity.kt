@@ -240,7 +240,20 @@ Column(
                     start = 4.dp,
                     end = 4.dp
                 )
-        ) {
+        )
+        
+         .padding(
+    top =
+        WindowInsets.statusBars
+            .asPaddingValues()
+            .calculateTopPadding(),
+
+    bottom =
+        WindowInsets.navigationBars
+            .asPaddingValues()
+            .calculateBottomPadding()
+)
+ {
 
             Box(
 

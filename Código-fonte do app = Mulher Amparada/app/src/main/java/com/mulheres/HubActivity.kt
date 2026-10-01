@@ -2,9 +2,6 @@ package com.mulheres
 
 import androidx.fragment.app.FragmentActivity
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.BoxWithConstraints
 import android.view.WindowManager
 import android.Manifest
@@ -2149,7 +2146,7 @@ private fun BottomAreaSelector(
         modifier =
             Modifier
                 .fillMaxWidth(0.5f)
-                .height(58.dp)
+                .height(68.dp)
                 .clip(shape)
                 .background(
                     if (isDark)
@@ -2174,32 +2171,19 @@ private fun BottomAreaSelector(
     ) {
 
         val thumbSize =
-            50.dp
+            60.dp
 
         val maxOffset =
             maxWidth - thumbSize - 8.dp
 
-        val offsetX by animateDpAsState(
-
-            targetValue =
-                if (areaProtegidaSelecionada)
-                    maxOffset
-                else
-                    0.dp,
-
-            animationSpec =
-                tween(
-                    durationMillis = 300,
-                    easing = FastOutSlowInEasing
-                ),
-
-            label =
-                "deslizamento_alavanca"
-        )
+        val offsetX =
+            if (areaProtegidaSelecionada)
+                maxOffset
+            else
+                0.dp
 
         /*
          * Áreas de toque ocupam TODO o seletor.
-         * A bolinha apenas acompanha visualmente.
          */
         Row(
             modifier =
@@ -2228,10 +2212,10 @@ private fun BottomAreaSelector(
         }
 
         /*
-         * BOLINHA
+         * BOLINHA — SEM ANIMAÇÃO.
          *
-         * Agora ocupa praticamente toda a altura
-         * do seletor e continua sendo circular.
+         * O offset muda imediatamente conforme
+         * o estado selecionado.
          */
         Box(
 
@@ -2266,7 +2250,7 @@ private fun BottomAreaSelector(
                 contentDescription = null,
 
                 modifier =
-                    Modifier.size(25.dp)
+                    Modifier.size(29.dp)
             )
         }
     }

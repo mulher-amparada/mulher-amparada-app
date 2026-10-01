@@ -20,16 +20,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
+
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.AlertDialog
@@ -130,12 +128,12 @@ private val Quicksand = FontFamily(
 /* =========================================================
    ACTIVITY
 ========================================================= */
-
 class DiarioActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+
+        enableEdgeToEdge()
 
         window.addFlags(
             WindowManager.LayoutParams.FLAG_SECURE
@@ -143,14 +141,14 @@ class DiarioActivity : ComponentActivity() {
 
         WindowCompat.setDecorFitsSystemWindows(
             window,
-            true
+            false
         )
 
         window.statusBarColor =
-            android.graphics.Color.BLACK
+            android.graphics.Color.TRANSPARENT
 
         window.navigationBarColor =
-            android.graphics.Color.BLACK
+            android.graphics.Color.TRANSPARENT
 
         setContent {
             DiarioTheme {
@@ -159,7 +157,6 @@ class DiarioActivity : ComponentActivity() {
         }
     }
 }
-
 /* =========================================================
    TEMA
 ========================================================= */
@@ -432,9 +429,7 @@ private fun DiarioScreen() {
                 modifier =
                     Modifier
                         .fillMaxSize()
-                        .windowInsetsPadding(
-                            WindowInsets.safeDrawing
-                        )
+                        
                         .padding(
                             horizontal = 11.dp,
                             vertical = 10.dp
@@ -442,6 +437,10 @@ private fun DiarioScreen() {
                 horizontalAlignment =
                     Alignment.CenterHorizontally
             ) {
+
+Spacer(
+    modifier = Modifier.height(24.dp)
+)
 
                 DiarioTopBar(
                     dark = dark,

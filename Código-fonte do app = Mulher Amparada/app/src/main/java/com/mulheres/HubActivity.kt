@@ -2129,6 +2129,7 @@ private fun colors(): AppColors {
         )
     }
 }
+
 @Composable
 private fun BottomAreaSelector(
     c: AppColors,
@@ -2141,14 +2142,14 @@ private fun BottomAreaSelector(
         isSystemInDarkTheme()
 
     val shape =
-        RoundedCornerShape(22.dp)
+        RoundedCornerShape(30.dp)
 
     BoxWithConstraints(
 
         modifier =
             Modifier
                 .fillMaxWidth(0.5f)
-                .height(55.dp)
+                .height(58.dp)
                 .clip(shape)
                 .background(
                     if (isDark)
@@ -2161,14 +2162,22 @@ private fun BottomAreaSelector(
                     c.borderLight,
                     shape
                 )
-                .padding(3.dp)
+                .padding(4.dp)
+                .clickable {
+
+                    if (areaProtegidaSelecionada) {
+                        onSelecionarConteudo()
+                    } else {
+                        onSelecionarProtegidas()
+                    }
+                }
     ) {
 
         val thumbSize =
-            26.dp
+            50.dp
 
         val maxOffset =
-            maxWidth - thumbSize - 6.dp
+            maxWidth - thumbSize - 8.dp
 
         val offsetX by animateDpAsState(
 
@@ -2180,7 +2189,7 @@ private fun BottomAreaSelector(
 
             animationSpec =
                 tween(
-                    durationMillis = 280,
+                    durationMillis = 300,
                     easing = FastOutSlowInEasing
                 ),
 
@@ -2188,6 +2197,10 @@ private fun BottomAreaSelector(
                 "deslizamento_alavanca"
         )
 
+        /*
+         * Áreas de toque ocupam TODO o seletor.
+         * A bolinha apenas acompanha visualmente.
+         */
         Row(
             modifier =
                 Modifier.fillMaxSize()
@@ -2214,6 +2227,12 @@ private fun BottomAreaSelector(
             )
         }
 
+        /*
+         * BOLINHA
+         *
+         * Agora ocupa praticamente toda a altura
+         * do seletor e continua sendo circular.
+         */
         Box(
 
             modifier =
@@ -2228,15 +2247,7 @@ private fun BottomAreaSelector(
                             c.pink
                         else
                             c.surfaceLight
-                    )
-                    .clickable {
-
-                        if (areaProtegidaSelecionada) {
-                            onSelecionarConteudo()
-                        } else {
-                            onSelecionarProtegidas()
-                        }
-                    },
+                    ),
 
             contentAlignment =
                 Alignment.Center
@@ -2255,7 +2266,7 @@ private fun BottomAreaSelector(
                 contentDescription = null,
 
                 modifier =
-                    Modifier.size(15.dp)
+                    Modifier.size(25.dp)
             )
         }
     }
@@ -2453,43 +2464,63 @@ private fun MulherAmparadaScreen() {
                 verticalArrangement =
                     Arrangement.spacedBy(30.dp)
             ) {
+if (
+    activity?.areaProtegidaSelecionada == true
+) {
 
-                if (
-                    activity?.areaProtegidaSelecionada == true
-                ) {
+    /*
+     * =========================================
+     * CABEÇALHO DAS ÁREAS
+     * =========================================
+     */
 
-                    /*
-                     * =========================================
-                     * SOMENTE AS ÁREAS PROTEGIDAS
-                     * =========================================
-                     */
+    Hero(
+        c = c,
+        font = font
+    )
 
-                    SectionTitle(
-                        text = "Espaços protegidos",
-                        c = c,
-                        font = font,
-                        purple = true
-                    )
+    /*
+     * =========================================
+     * CENTRAL DE PROTEÇÃO
+     * =========================================
+     */
 
-                    ProtectedArea(
-                        c = c,
-                        font = font
-                    )
+    SystemOverview(
+        c = c,
+        font = font
+    )
 
-                    SectionTitle(
-                        text = "Espaço de acolhimento",
-                        c = c,
-                        font = font,
-                        purple = true
-                    )
+    /*
+     * =========================================
+     * ÁREAS PROTEGIDAS
+     * =========================================
+     */
 
-                    AmparoArea(
-                        c = c,
-                        font = font
-                    )
+    SectionTitle(
+        text = "Espaços protegidos",
+        c = c,
+        font = font,
+        purple = true
+    )
 
-                } else {
+    ProtectedArea(
+        c = c,
+        font = font
+    )
 
+    SectionTitle(
+        text = "Espaço de acolhimento",
+        c = c,
+        font = font,
+        purple = true
+    )
+
+    AmparoArea(
+        c = c,
+        font = font
+    )
+
+} else {
                     /*
                      * =========================================
                      * CONTEÚDO NORMAL

@@ -196,7 +196,11 @@ class TarefaActivity : ComponentActivity() {
 
         window.navigationBarColor =
             AndroidColor.TRANSPARENT
-
+            
+WindowCompat.setDecorFitsSystemWindows(
+    window,
+    true
+)
         /*
          * Ícones das barras conforme o tema.
          */

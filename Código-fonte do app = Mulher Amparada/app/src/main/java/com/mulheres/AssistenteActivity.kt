@@ -451,7 +451,7 @@ fun AssistenteSaude() {
                 Spacer(
                     modifier =
                         Modifier.height(
-                            24.dp
+                            34.dp
                         )
                 )
 

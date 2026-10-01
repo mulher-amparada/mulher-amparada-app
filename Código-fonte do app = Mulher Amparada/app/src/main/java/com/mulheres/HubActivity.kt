@@ -2130,7 +2130,6 @@ private fun colors(): AppColors {
         )
     }
 }
-
 @Composable
 private fun BottomAreaSelector(
     c: AppColors,
@@ -2190,10 +2189,6 @@ private fun BottomAreaSelector(
                 "deslizamento_alavanca"
         )
 
-        /*
-         * Áreas clicáveis.
-         * Não possuem texto.
-         */
         Row(
             modifier =
                 Modifier.fillMaxSize()
@@ -2220,9 +2215,6 @@ private fun BottomAreaSelector(
             )
         }
 
-        /*
-         * Bolinha animada.
-         */
         Box(
 
             modifier =
@@ -2240,9 +2232,7 @@ private fun BottomAreaSelector(
                     )
                     .clickable {
 
-                        if (
-                            areaProtegidaSelecionada
-                        ) {
+                        if (areaProtegidaSelecionada) {
                             onSelecionarConteudo()
                         } else {
                             onSelecionarProtegidas()
@@ -2257,16 +2247,13 @@ private fun BottomAreaSelector(
 
                 painter =
                     painterResource(
-                        if (
-                            areaProtegidaSelecionada
-                        )
+                        if (areaProtegidaSelecionada)
                             R.drawable.ic_secret
                         else
                             R.drawable.ic_protecoes
                     ),
 
-                contentDescription =
-                    null,
+                contentDescription = null,
 
                 modifier =
                     Modifier.size(15.dp)
@@ -2735,21 +2722,35 @@ if (
 }
         }
 
-BottomAreaSelector(
-    c = c,
-    
-    areaProtegidaSelecionada =
-        activity?.areaProtegidaSelecionada ?: false,
+Box(
+    modifier =
+        Modifier
+            .fillMaxWidth()
+            .align(Alignment.BottomCenter)
+            .padding(
+                bottom =
+                    WindowInsets.navigationBars
+                        .asPaddingValues()
+                        .calculateBottomPadding() + 8.dp
+            ),
+    contentAlignment = Alignment.Center
+) {
 
-    onSelecionarConteudo = {
-        activity?.selecionarConteudo()
-    },
+    BottomAreaSelector(
+        c = c,
 
-    onSelecionarProtegidas = {
-        activity?.selecionarAreasProtegidas()
-    }
-)
-     
+        areaProtegidaSelecionada =
+            activity?.areaProtegidaSelecionada ?: false,
+
+        onSelecionarConteudo = {
+            activity?.selecionarConteudo()
+        },
+
+        onSelecionarProtegidas = {
+            activity?.selecionarAreasProtegidas()
+        }
+    )
+}
         /* =====================================================
            BLOQUEIO DE PERMISSÕES
         ===================================================== */

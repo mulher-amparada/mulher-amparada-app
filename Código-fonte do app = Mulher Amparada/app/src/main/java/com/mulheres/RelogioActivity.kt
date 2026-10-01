@@ -123,7 +123,7 @@ private val TextoMutedClaro = Color(0xFF92929D)
 
 class RelogioActivity : ComponentActivity() {
 
-    override fun onCreate(
+ override fun onCreate(
     savedInstanceState: Bundle?
 ) {
     super.onCreate(savedInstanceState)
@@ -134,20 +134,27 @@ class RelogioActivity : ComponentActivity() {
         WindowManager.LayoutParams.FLAG_SECURE
     )
 
+    window.statusBarColor =
+        AndroidColor.TRANSPARENT
+
+    window.navigationBarColor =
+        AndroidColor.TRANSPARENT
+
+    window.isNavigationBarContrastEnforced = false
+
     WindowCompat.setDecorFitsSystemWindows(
-    window,
-    false
-)
+        window,
+        false
+    )
 
-window.isNavigationBarContrastEnforced = false
+    WindowCompat.getInsetsController(
+        window,
+        window.decorView
+    ).apply {
+        isAppearanceLightStatusBars = false
+        isAppearanceLightNavigationBars = false
+    }
 
-WindowCompat.getInsetsController(
-    window,
-    window.decorView
-).apply {
-    isAppearanceLightStatusBars = false
-    isAppearanceLightNavigationBars = false
-}
     setContent {
         CompositionLocalProvider(
             LocalOverscrollFactory provides null

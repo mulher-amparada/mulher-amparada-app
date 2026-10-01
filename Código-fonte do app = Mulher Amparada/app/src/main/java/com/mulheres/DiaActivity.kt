@@ -438,20 +438,15 @@ class DiaActivity : ComponentActivity() {
     override fun onCreate(
         savedInstanceState: Bundle?
     ) {
-        enableEdgeToEdge()
-
         super.onCreate(
             savedInstanceState
         )
 
+        enableEdgeToEdge()
+
         window.setFlags(
             WindowManager.LayoutParams.FLAG_SECURE,
             WindowManager.LayoutParams.FLAG_SECURE
-        )
-
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
         )
 
         window.statusBarColor =
@@ -470,6 +465,11 @@ class DiaActivity : ComponentActivity() {
             window.isNavigationBarContrastEnforced =
                 false
         }
+
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
 
         setContent {
 

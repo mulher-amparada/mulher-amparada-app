@@ -87,11 +87,6 @@ class RotinaActivity : ComponentActivity() {
         WindowManager.LayoutParams.FLAG_SECURE
     )
 
-    WindowCompat.setDecorFitsSystemWindows(
-        window,
-        false
-    )
-
     window.statusBarColor = AndroidColor.TRANSPARENT
     window.navigationBarColor = AndroidColor.TRANSPARENT
 

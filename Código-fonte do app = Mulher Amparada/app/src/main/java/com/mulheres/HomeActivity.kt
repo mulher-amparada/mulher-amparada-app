@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.asPaddingValues
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.activity.compose.setContent
@@ -96,28 +95,28 @@ class HomeActivity : ComponentActivity() {
     ) {
         enableEdgeToEdge()
 
-super.onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState)
 
-window.setFlags(
-    WindowManager.LayoutParams.FLAG_SECURE,
-    WindowManager.LayoutParams.FLAG_SECURE
-)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_SECURE,
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
 
-WindowCompat.setDecorFitsSystemWindows(
-    window,
-    true
-)
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            true
+        )
 
-window.statusBarColor =
-    android.graphics.Color.TRANSPARENT
+        window.statusBarColor =
+            android.graphics.Color.TRANSPARENT
 
-window.navigationBarColor =
-    android.graphics.Color.TRANSPARENT
+        window.navigationBarColor =
+            android.graphics.Color.TRANSPARENT
 
-if (android.os.Build.VERSION.SDK_INT >= 29) {
-    window.isStatusBarContrastEnforced = false
-    window.isNavigationBarContrastEnforced = false
-}
+        if (android.os.Build.VERSION.SDK_INT >= 29) {
+            window.isStatusBarContrastEnforced = false
+            window.isNavigationBarContrastEnforced = false
+        }
 
         setContent {
 
@@ -202,217 +201,196 @@ private fun CarteiraScreen(
     }
 
     CompositionLocalProvider(
-    LocalOverscrollFactory provides null
-) {
-
-
-Column(
-
-    modifier = Modifier
-        .fillMaxSize()
-        .background(background)
-        .verticalScroll(
-            rememberScrollState()
-        )
-        .padding(
-            start = 16.dp,
-            end = 16.dp,
-            bottom = 32.dp
-        ),
-
-    verticalArrangement =
-        Arrangement.spacedBy(31.dp)
-) {
-
-    
-    
-    
-        /*
-         * =====================================================
-         * HERO
-         * =====================================================
-         */
+        LocalOverscrollFactory provides null
+    ) {
 
         Column(
-    modifier = Modifier
-        .fillMaxWidth()
-        .padding(
-            start = 4.dp,
-            end = 4.dp,
-            top = WindowInsets.statusBars
-                .asPaddingValues()
-                .calculateTopPadding(),
-            bottom = WindowInsets.navigationBars
-                .asPaddingValues()
-                .calculateBottomPadding()
-        )
-) {
 
-            Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(background)
+                .verticalScroll(
+                    rememberScrollState()
+                )
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    bottom = 32.dp
+                )
+                .padding(
+                    top = WindowInsets.statusBars
+                        .asPaddingValues()
+                        .calculateTopPadding(),
+                    bottom = WindowInsets.navigationBars
+                        .asPaddingValues()
+                        .calculateBottomPadding()
+                ),
 
+            verticalArrangement =
+                Arrangement.spacedBy(31.dp)
+        ) {
+
+            Column(
                 modifier = Modifier
-                    .width(43.dp)
-                    .height(3.dp)
-                    .clip(
-                        RoundedCornerShape(999.dp)
+                    .fillMaxWidth()
+                    .padding(
+                        start = 4.dp,
+                        end = 4.dp
                     )
-                    .background(Pink)
-            )
+            ) {
 
-            Spacer(
-                modifier = Modifier.height(18.dp)
-            )
+                Box(
 
-            Text(
+                    modifier = Modifier
+                        .width(43.dp)
+                        .height(3.dp)
+                        .clip(
+                            RoundedCornerShape(999.dp)
+                        )
+                        .background(Pink)
+                )
 
-                text = "Carteira",
+                Spacer(
+                    modifier = Modifier.height(18.dp)
+                )
 
-                color = text,
+                Text(
 
-                fontFamily = Quicksand,
+                    text = "Carteira",
 
-                fontSize = 44.sp,
+                    color = text,
 
-                fontWeight =
-                    FontWeight.ExtraBold,
+                    fontFamily = Quicksand,
 
-                lineHeight = 43.sp,
+                    fontSize = 44.sp,
 
-                letterSpacing = (-1.6).sp
-            )
+                    fontWeight =
+                        FontWeight.ExtraBold,
 
-            Spacer(
-                modifier = Modifier.height(14.dp)
-            )
+                    lineHeight = 43.sp,
 
-            Text(
+                    letterSpacing = (-1.6).sp
+                )
 
-                text =
-                    "Suas carteirinhas reunidas em um só lugar.",
+                Spacer(
+                    modifier = Modifier.height(14.dp)
+                )
 
-                modifier = Modifier.fillMaxWidth(),
+                Text(
 
-                color = soft,
+                    text =
+                        "Suas carteirinhas reunidas em um só lugar.",
 
-                fontFamily = Quicksand,
+                    modifier = Modifier.fillMaxWidth(),
 
-                fontSize = 11.sp,
+                    color = soft,
 
-                fontWeight =
-                    FontWeight.SemiBold,
+                    fontFamily = Quicksand,
 
-                lineHeight = 16.sp,
+                    fontSize = 11.sp,
 
-                letterSpacing = 0.15.sp
-            )
+                    fontWeight =
+                        FontWeight.SemiBold,
 
-            Spacer(
-                modifier = Modifier.height(8.dp)
-            )
+                    lineHeight = 16.sp,
 
-            Text(
+                    letterSpacing = 0.15.sp
+                )
 
-                text =
-                    "Recurso informativo do aplicativo para apresentação " +
-                    "às equipes de transportes e combate à violência. " +
-                    "Estas carteirinhas não são um documento governamental " +
-                    "nem são emitidas por órgãos públicos.",
+                Spacer(
+                    modifier = Modifier.height(8.dp)
+                )
 
-                modifier = Modifier.fillMaxWidth(),
+                Text(
 
-                color = soft,
+                    text =
+                        "Recurso informativo do aplicativo para apresentação " +
+                        "às equipes de transportes e combate à violência. " +
+                        "Estas carteirinhas não são um documento governamental " +
+                        "nem são emitidas por órgãos públicos.",
 
-                fontFamily = Quicksand,
+                    modifier = Modifier.fillMaxWidth(),
 
-                fontSize = 11.sp,
+                    color = soft,
 
-                fontWeight =
-                    FontWeight.SemiBold,
+                    fontFamily = Quicksand,
 
-                lineHeight = 16.sp,
+                    fontSize = 11.sp,
 
-                letterSpacing = 0.15.sp
-            )
-        }
+                    fontWeight =
+                        FontWeight.SemiBold,
 
+                    lineHeight = 16.sp,
 
-        /*
-         * =====================================================
-         * PRIMEIRA SEÇÃO
-         * =====================================================
-         */
+                    letterSpacing = 0.15.sp
+                )
+            }
 
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
 
-            CarteiraLabel(
+                CarteiraLabel(
 
-                text =
-                    "Exigindo seus direitos no transporte",
+                    text =
+                        "Exigindo seus direitos no transporte",
 
-                color = muted
-            )
+                    color = muted
+                )
 
-            Spacer(
-                modifier = Modifier.height(13.dp)
-            )
+                Spacer(
+                    modifier = Modifier.height(13.dp)
+                )
 
-            CarteiraCard(
+                CarteiraCard(
 
-                image = R.drawable.cartao,
+                    image = R.drawable.cartao,
 
-                contentDescription =
-                    "Carteirinha sobre transporte",
+                    contentDescription =
+                        "Carteirinha sobre transporte",
 
-                background = cardBackground,
+                    background = cardBackground,
 
-                border = border,
+                    border = border,
 
-                onClick = onExigirClick
-            )
-        }
+                    onClick = onExigirClick
+                )
+            }
 
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
 
-        /*
-         * =====================================================
-         * SEGUNDA SEÇÃO
-         * =====================================================
-         */
+                CarteiraLabel(
 
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
+                    text =
+                        "Sobre o gesto de combate da violência",
 
-            CarteiraLabel(
+                    color = muted
+                )
 
-                text =
-                    "Sobre o gesto de combate da violência",
+                Spacer(
+                    modifier = Modifier.height(13.dp)
+                )
 
-                color = muted
-            )
+                CarteiraCard(
 
-            Spacer(
-                modifier = Modifier.height(13.dp)
-            )
+                    image = R.drawable.cartao1,
 
-            CarteiraCard(
+                    contentDescription =
+                        "Carteirinha sobre o gesto",
 
-                image = R.drawable.cartao1,
+                    background = cardBackground,
 
-                contentDescription =
-                    "Carteirinha sobre o gesto",
+                    border = border,
 
-                background = cardBackground,
-
-                border = border,
-
-                onClick = onGestoClick
-            )
+                    onClick = onGestoClick
+                )
+            }
         }
     }
 }
-}
+
 
 @Composable
 private fun CarteiraLabel(
@@ -580,10 +558,6 @@ private fun CarteiraCard(
                     RoundedCornerShape(27.dp)
                 ),
 
-            /*
-             * Mantém a proporção original da
-             * imagem em vez de comprimir o card.
-             */
             contentScale =
                 ContentScale.FillWidth
         )

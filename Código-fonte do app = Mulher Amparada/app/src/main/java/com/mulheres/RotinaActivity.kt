@@ -245,7 +245,7 @@ SideEffect {
 
                 darkColorScheme(
                     primary = primary,
-                    background = background,
+                    background = fundo,
                     surface = surface,
                     onBackground = text,
                     onSurface = text
@@ -255,7 +255,7 @@ SideEffect {
 
                 lightColorScheme(
                     primary = primary,
-                    background = background,
+                    background = fundo,
                     surface = surface,
                     onBackground = text,
                     onSurface = text

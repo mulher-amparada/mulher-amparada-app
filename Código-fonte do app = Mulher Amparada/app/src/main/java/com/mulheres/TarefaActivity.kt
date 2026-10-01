@@ -156,57 +156,59 @@ data class Tarefa(
 class TarefaActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
-        super.onCreate(savedInstanceState)
+    super.onCreate(savedInstanceState)
+
+    enableEdgeToEdge()
+
+    /*
+     * Impede capturas de tela.
+     */
+    window.addFlags(
+        WindowManager.LayoutParams.FLAG_SECURE
+    )
+
+    /*
+     * Edge-to-edge real:
+     * o conteúdo pode ocupar a área atrás
+     * das barras do sistema.
+     */
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        false
+    )
+
+    setContent {
+
+        val dark =
+            androidx.compose.foundation.isSystemInDarkTheme()
+
+        val controller =
+            WindowCompat.getInsetsController(
+                window,
+                window.decorView
+            )
 
         /*
-         * Impede capturas de tela.
+         * As duas barras permanecem transparentes.
          */
-        window.addFlags(
-            WindowManager.LayoutParams.FLAG_SECURE
-        )
+        window.statusBarColor =
+            AndroidColor.TRANSPARENT
+
+        window.navigationBarColor =
+            AndroidColor.TRANSPARENT
 
         /*
-         * Não usa edge-to-edge.
-         * O conteúdo fica separado das duas barras do sistema.
+         * Ícones das barras conforme o tema.
          */
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            true
-        )
+        controller.isAppearanceLightStatusBars =
+            !dark
 
-        setContent {
+        controller.isAppearanceLightNavigationBars =
+            !dark
 
-    val dark =
-        androidx.compose.foundation.isSystemInDarkTheme()
-
-    window.statusBarColor =
-        if (dark) {
-            AndroidColor.BLACK
-        } else {
-            AndroidColor.WHITE
-        }
-
-    window.navigationBarColor =
-        if (dark) {
-            AndroidColor.BLACK
-        } else {
-            AndroidColor.WHITE
-        }
-
-    WindowCompat.getInsetsController(
-        window,
-        window.decorView
-    ).isAppearanceLightStatusBars = !dark
-
-    WindowCompat.getInsetsController(
-        window,
-        window.decorView
-    ).isAppearanceLightNavigationBars = !dark
-
-    TarefaScreen()
+        TarefaScreen()
+    }
 }
-        }
     }
 
 
@@ -337,41 +339,39 @@ CompositionLocalProvider(
     LocalOverscrollFactory provides null
 ) {
     Scaffold(
-        containerColor = background,
+    containerColor = Color.Transparent,
 
-        floatingActionButton = {
-
-            FloatingActionButton(
-                onClick = {
-                    editingIndex = -1
-                    showTaskDialog = true
-                },
-                modifier = Modifier
-                    .padding(
-                        end = 8.dp,
-                        bottom = 8.dp
-                    )
-                    .size(58.dp),
-                shape = RoundedCornerShape(20.dp),
-                containerColor = Accent,
-                contentColor = Color.Black
-            ) {
-
-                Text(
-                    text = "+",
-                    fontFamily = Quicksand,
-                    fontSize = 28.sp,
-                    fontWeight = FontWeight.Medium
-                )
-            }
-        }
-    ) { innerPadding ->
-
-        Box(
+    floatingActionButton = {
+        FloatingActionButton(
+            onClick = {
+                editingIndex = -1
+                showTaskDialog = true
+            },
             modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
+                .padding(
+                    end = 8.dp,
+                    bottom = 8.dp
+                )
+                .size(58.dp),
+            shape = RoundedCornerShape(20.dp),
+            containerColor = Accent,
+            contentColor = Color.Black
         ) {
+            Text(
+                text = "+",
+                fontFamily = Quicksand,
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Medium
+            )
+        }
+    }
+) {
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(background)
+    ) {
 
             Column(
                 modifier = Modifier
@@ -383,7 +383,7 @@ CompositionLocalProvider(
                     .padding(
                         start = 13.dp,
                         end = 13.dp,
-                        top = 8.dp,
+                        top = 24.dp,
                         bottom = 110.dp
                     )
             ) {

@@ -451,7 +451,7 @@ fun AssistenteSaude() {
                 Spacer(
                     modifier =
                         Modifier.height(
-                            25.dp
+                            24.dp
                         )
                 )
 
@@ -584,39 +584,45 @@ fun AssistenteSaude() {
             }
 
 
-            /*
-             * ATIVIDADE
-             */
-            item {
+/*
+ * ATIVIDADE
+ */
+item {
 
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            36.dp
-                        )
-                )
+    Spacer(
+        modifier =
+            Modifier.height(
+                36.dp
+            )
+    )
 
-                SecaoTitulo(
-                    titulo =
-                        "Atividade"
-                )
+    SecaoTitulo(
+        titulo =
+            "Atividade"
+    )
 
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            14.dp
-                        )
-                )
+    Spacer(
+        modifier =
+            Modifier.height(
+                14.dp
+            )
+    )
 
-                Atividade()
+    Atividade()
 
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            14.dp
-                        )
-                        
-                        item {
+    Spacer(
+        modifier =
+            Modifier.height(
+                14.dp
+            )
+    )
+}
+
+
+/*
+ * ESPAÇO FINAL
+ */
+item {
 
     Spacer(
         modifier =

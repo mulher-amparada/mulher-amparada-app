@@ -2737,7 +2737,7 @@ if (
 
 BottomAreaSelector(
     c = c,
-    font = font,
+    
     areaProtegidaSelecionada =
         activity?.areaProtegidaSelecionada ?: false,
 

@@ -6,7 +6,6 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.animation.core.tween
 import android.view.WindowManager
 import android.Manifest
 import android.content.BroadcastReceiver
@@ -2149,7 +2148,7 @@ private fun BottomAreaSelector(
         modifier =
             Modifier
                 .fillMaxWidth(0.5f)
-                .height(34.dp)
+                .height(55.dp)
                 .clip(shape)
                 .background(
                     if (isDark)
@@ -2424,366 +2423,384 @@ private fun MulherAmparadaScreen() {
     ) {
 
         CompositionLocalProvider(
-    LocalOverscrollFactory provides null
-) {
-
-    Column(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .background(c.background)
-                .verticalScroll(
-                    rememberScrollState()
-                )
-                .padding(
-                    start = 14.dp,
-                    end = 14.dp
-                )
-                .padding(
-                    top =
-                        WindowInsets.statusBars
-                            .asPaddingValues()
-                            .calculateTopPadding() + 20.dp,
-
-                    bottom =
-                        WindowInsets.navigationBars
-                            .asPaddingValues()
-                            .calculateBottomPadding() + 90.dp
-                ),
-
-        verticalArrangement =
-            Arrangement.spacedBy(30.dp)
-    ) {
-
-        // TODO: todo o seu conteúdo atual
-   
-
-            Hero(
-                c = c,
-                font = font
-            )
-
-            SystemOverview(
-                c = c,
-                font = font
-            )
-
-            SectionTitle(
-                text = "Resposta imediata",
-                c = c,
-                font = font
-            )
-
-            PanicCard(
-                c = c,
-                font = font
-            )
-
-            SectionTitle(
-                text = "Proteções automáticas",
-                c = c,
-                font = font
-            )
-
-            SensorCard(
-                number = "01 / ÁUDIO",
-                title = "Proteção por barulho",
-                description =
-                    "Detecta sons altos e situações suspeitas para acionar os mecanismos de proteção.",
-                icon = R.drawable.ic_0003,
-                color = c.pink,
-                active =
-                    activity?.palmasAtivas
-                        ?: false,
-                onClick = {
-
-                    activity?.let {
-
-                        if (
-                            it.palmasAtivas
-                        ) {
-
-                            it.desativarPalmas()
-
-                        } else {
-
-                            it.ativarPalmas()
-                        }
-                    }
-                },
-                c = c,
-                font = font
-            )
-
-            SensorCard(
-    number = "02 / MOVIMENTO",
-    title = "Proteção por movimento",
-    description =
-        "Detecta movimentos bruscos no celular e pode iniciar uma resposta de emergência.",
-    icon = R.drawable.ic_0004,
-    color = c.purple,
-    active =
-        activity?.protecaoMovimentoAtiva
-            ?: false,
-    onClick = {
-
-        activity?.let {
-
-            if (
-                it.protecaoMovimentoAtiva
-            ) {
-
-                it.desativarProtecaoMovimento()
-
-            } else {
-
-                it.ativarProtecaoMovimento()
-            }
-        }
-    },
-    c = c,
-    font = font
-)
-
-            SensorCard(
-    number = "03 / VISIBILIDADE",
-    title = "Escurecimento por inclinação",
-    description =
-        "Escurece a tela automaticamente quando o dispositivo identifica a posição configurada.",
-    icon = R.drawable.ic_0005,
-    color = c.orange,
-    active =
-        activity?.escurecimentoAtivo
-            ?: false,
-
-    onClick = {
-
-        activity?.let {
-
-            if (it.escurecimentoAtivo) {
-                it.desativarEscurecimento()
-            } else {
-                it.ativarEscurecimento()
-            }
-        }
-    },
-
-    c = c,
-    font = font
-)
-
-            
-            SectionTitle(
-                text = "Serviços de emergência",
-                c = c,
-                font = font
-            )
-
-ActionCard(
-    title = "Polícia — 190",
-    description =
-        "Emergência policial e atendimento imediato",
-    icon = R.drawable.ic_0007,
-    arrow = R.drawable.ic_arrow,
-    gradient = c.actionBlueGradient,
-    accent = c.blue,
-    c = c,
-    font = font,
-    onClick = {
-        activity?.ligarPara("190")
-    }
-)
-
-ActionCard(
-    title = "SAMU — 192",
-    description =
-        "Atendimento médico de emergência",
-    icon = R.drawable.ic_0008,
-    arrow = R.drawable.ic_arrow,
-    gradient = c.actionOrangeGradient,
-    accent = c.orange,
-    c = c,
-    font = font,
-    onClick = {
-        activity?.ligarPara("192")
-    }
-)
-
-ActionCard(
-    title = "Central da Mulher — 180",
-    description =
-        "Orientação, acolhimento e atendimento",
-    icon = R.drawable.ic_0009,
-    arrow = R.drawable.ic_arrow,
-    gradient = c.actionPinkGradient,
-    accent = c.pinkLight,
-    c = c,
-    font = font,
-    onClick = {
-        activity?.ligarPara("180")
-    }
-)
-
-            SectionTitle(
-                text = "Recursos de apoio",
-                c = c,
-                font = font
-            )
-
-            ActionCard(
-    title = "Enviar localização",
-    description =
-        "Compartilhe sua localização atual",
-    icon = R.drawable.ic_0010,
-    arrow = R.drawable.ic_arrow,
-    gradient = c.actionCyanGradient,
-    accent = c.cyan,
-    c = c,
-    font = font,
-    onClick = {
-        activity?.enviarLocalizacaoPara180()
-    }
-)
-
-            SectionTitle(
-                text = "Contatos de confiança",
-                c = c,
-                font = font
-            )
-
-            ActionCard(
-    title = "Adicionar contato",
-    description =
-        "Escolha uma pessoa de confiança",
-    icon = R.drawable.ic_0011,
-    arrow = R.drawable.ic_arrow,
-    gradient = c.actionPurpleGradient,
-    accent = c.purple,
-    c = c,
-    font = font,
-    onClick = {
-        activity?.abrirContatos()
-    }
-)
-
-ActionCard(
-    title = "SOS para contatos",
-    description =
-        "Envie um alerta para pessoas de confiança",
-    icon = R.drawable.ic_0012,
-    arrow = R.drawable.ic_arrow,
-    gradient = c.actionRedGradient,
-    accent = c.red,
-    c = c,
-    font = font,
-    onClick = {
-        activity?.enviarSosParaContato()
-    }
-)
-
-            SectionTitle(
-                text = "Acesso rápido",
-                c = c,
-                font = font
-            )
-
-            EmergencyAccess(
-                c = c,
-                font = font
-            )
-
-if (
-    activity?.areaProtegidaSelecionada == true
-) {
-
-    SectionTitle(
-        text = "Espaços protegidos",
-        purple = true,
-        c = c,
-        font = font
-    )
-
-    ProtectedArea(
-        c = c,
-        font = font
-    )
-
-    SectionTitle(
-        text = "Espaço de acolhimento",
-        purple = true,
-        c = c,
-        font = font
-    )
-
-    AmparoArea(
-        c = c,
-        font = font
-    )
-}
-        }
-
-Box(
-    modifier =
-        Modifier
-            .fillMaxWidth()
-            .align(Alignment.BottomCenter)
-            .padding(
-                bottom =
-                    WindowInsets.navigationBars
-                        .asPaddingValues()
-                        .calculateBottomPadding() + 8.dp
-            ),
-    contentAlignment = Alignment.Center
-) {
-
-    BottomAreaSelector(
-        c = c,
-
-        areaProtegidaSelecionada =
-            activity?.areaProtegidaSelecionada ?: false,
-
-        onSelecionarConteudo = {
-            activity?.selecionarConteudo()
-        },
-
-        onSelecionarProtegidas = {
-            activity?.selecionarAreasProtegidas()
-        }
-    )
-}
-        /* =====================================================
-           BLOQUEIO DE PERMISSÕES
-        ===================================================== */
-
-
-        if (
-            activity != null &&
-            !activity.permissoesConcedidas
+            LocalOverscrollFactory provides null
         ) {
 
-            Box(
-
+            Column(
                 modifier =
                     Modifier
                         .fillMaxSize()
-                        .background(Color.Black)
-                        .zIndex(100f),
+                        .background(c.background)
+                        .verticalScroll(
+                            rememberScrollState()
+                        )
+                        .padding(
+                            start = 14.dp,
+                            end = 14.dp
+                        )
+                        .padding(
+                            top =
+                                WindowInsets.statusBars
+                                    .asPaddingValues()
+                                    .calculateTopPadding() + 20.dp,
 
+                            bottom =
+                                WindowInsets.navigationBars
+                                    .asPaddingValues()
+                                    .calculateBottomPadding() + 90.dp
+                        ),
+
+                verticalArrangement =
+                    Arrangement.spacedBy(30.dp)
+            ) {
+
+                if (
+                    activity?.areaProtegidaSelecionada == true
+                ) {
+
+                    /*
+                     * =========================================
+                     * SOMENTE AS ÁREAS PROTEGIDAS
+                     * =========================================
+                     */
+
+                    SectionTitle(
+                        text = "Espaços protegidos",
+                        c = c,
+                        font = font,
+                        purple = true
+                    )
+
+                    ProtectedArea(
+                        c = c,
+                        font = font
+                    )
+
+                    SectionTitle(
+                        text = "Espaço de acolhimento",
+                        c = c,
+                        font = font,
+                        purple = true
+                    )
+
+                    AmparoArea(
+                        c = c,
+                        font = font
+                    )
+
+                } else {
+
+                    /*
+                     * =========================================
+                     * CONTEÚDO NORMAL
+                     * =========================================
+                     */
+
+                    Hero(
+                        c = c,
+                        font = font
+                    )
+
+                    SystemOverview(
+                        c = c,
+                        font = font
+                    )
+
+                    SectionTitle(
+                        text = "Resposta imediata",
+                        c = c,
+                        font = font
+                    )
+
+                    PanicCard(
+                        c = c,
+                        font = font
+                    )
+
+                    SectionTitle(
+                        text = "Proteções automáticas",
+                        c = c,
+                        font = font
+                    )
+
+                    SensorCard(
+                        number = "01 / ÁUDIO",
+                        title = "Proteção por barulho",
+                        description =
+                            "Detecta sons altos e situações suspeitas para acionar os mecanismos de proteção.",
+                        icon = R.drawable.ic_0003,
+                        color = c.pink,
+                        active =
+                            activity?.palmasAtivas
+                                ?: false,
+                        onClick = {
+
+                            activity?.let {
+
+                                if (
+                                    it.palmasAtivas
+                                ) {
+
+                                    it.desativarPalmas()
+
+                                } else {
+
+                                    it.ativarPalmas()
+                                }
+                            }
+                        },
+                        c = c,
+                        font = font
+                    )
+
+                    SensorCard(
+                        number = "02 / MOVIMENTO",
+                        title = "Proteção por movimento",
+                        description =
+                            "Detecta movimentos bruscos no celular e pode iniciar uma resposta de emergência.",
+                        icon = R.drawable.ic_0004,
+                        color = c.purple,
+                        active =
+                            activity?.protecaoMovimentoAtiva
+                                ?: false,
+                        onClick = {
+
+                            activity?.let {
+
+                                if (
+                                    it.protecaoMovimentoAtiva
+                                ) {
+
+                                    it.desativarProtecaoMovimento()
+
+                                } else {
+
+                                    it.ativarProtecaoMovimento()
+                                }
+                            }
+                        },
+                        c = c,
+                        font = font
+                    )
+
+                    SensorCard(
+                        number = "03 / VISIBILIDADE",
+                        title = "Escurecimento por inclinação",
+                        description =
+                            "Escurece a tela automaticamente quando o dispositivo identifica a posição configurada.",
+                        icon = R.drawable.ic_0005,
+                        color = c.orange,
+                        active =
+                            activity?.escurecimentoAtivo
+                                ?: false,
+                        onClick = {
+
+                            activity?.let {
+
+                                if (
+                                    it.escurecimentoAtivo
+                                ) {
+                                    it.desativarEscurecimento()
+                                } else {
+                                    it.ativarEscurecimento()
+                                }
+                            }
+                        },
+                        c = c,
+                        font = font
+                    )
+
+                    SectionTitle(
+                        text = "Serviços de emergência",
+                        c = c,
+                        font = font
+                    )
+
+                    ActionCard(
+                        title = "Polícia — 190",
+                        description =
+                            "Emergência policial e atendimento imediato",
+                        icon = R.drawable.ic_0007,
+                        arrow = R.drawable.ic_arrow,
+                        gradient = c.actionBlueGradient,
+                        accent = c.blue,
+                        c = c,
+                        font = font,
+                        onClick = {
+                            activity?.ligarPara("190")
+                        }
+                    )
+
+                    ActionCard(
+                        title = "SAMU — 192",
+                        description =
+                            "Atendimento médico de emergência",
+                        icon = R.drawable.ic_0008,
+                        arrow = R.drawable.ic_arrow,
+                        gradient = c.actionOrangeGradient,
+                        accent = c.orange,
+                        c = c,
+                        font = font,
+                        onClick = {
+                            activity?.ligarPara("192")
+                        }
+                    )
+
+                    ActionCard(
+                        title = "Central da Mulher — 180",
+                        description =
+                            "Orientação, acolhimento e atendimento",
+                        icon = R.drawable.ic_0009,
+                        arrow = R.drawable.ic_arrow,
+                        gradient = c.actionPinkGradient,
+                        accent = c.pinkLight,
+                        c = c,
+                        font = font,
+                        onClick = {
+                            activity?.ligarPara("180")
+                        }
+                    )
+
+                    SectionTitle(
+                        text = "Recursos de apoio",
+                        c = c,
+                        font = font
+                    )
+
+                    ActionCard(
+                        title = "Enviar localização",
+                        description =
+                            "Compartilhe sua localização atual",
+                        icon = R.drawable.ic_0010,
+                        arrow = R.drawable.ic_arrow,
+                        gradient = c.actionCyanGradient,
+                        accent = c.cyan,
+                        c = c,
+                        font = font,
+                        onClick = {
+                            activity?.enviarLocalizacaoPara180()
+                        }
+                    )
+
+                    SectionTitle(
+                        text = "Contatos de confiança",
+                        c = c,
+                        font = font
+                    )
+
+                    ActionCard(
+                        title = "Adicionar contato",
+                        description =
+                            "Escolha uma pessoa de confiança",
+                        icon = R.drawable.ic_0011,
+                        arrow = R.drawable.ic_arrow,
+                        gradient = c.actionPurpleGradient,
+                        accent = c.purple,
+                        c = c,
+                        font = font,
+                        onClick = {
+                            activity?.abrirContatos()
+                        }
+                    )
+
+                    ActionCard(
+                        title = "SOS para contatos",
+                        description =
+                            "Envie um alerta para pessoas de confiança",
+                        icon = R.drawable.ic_0012,
+                        arrow = R.drawable.ic_arrow,
+                        gradient = c.actionRedGradient,
+                        accent = c.red,
+                        c = c,
+                        font = font,
+                        onClick = {
+                            activity?.enviarSosParaContato()
+                        }
+                    )
+
+                    SectionTitle(
+                        text = "Acesso rápido",
+                        c = c,
+                        font = font
+                    )
+
+                    EmergencyAccess(
+                        c = c,
+                        font = font
+                    )
+                }
+            }
+
+            /*
+             * =========================================
+             * SELETOR FIXO NO FUNDO
+             * =========================================
+             */
+
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .padding(
+                            bottom =
+                                WindowInsets.navigationBars
+                                    .asPaddingValues()
+                                    .calculateBottomPadding() + 8.dp
+                        ),
                 contentAlignment =
                     Alignment.Center
             ) {
 
-                PermissionCard(
-                    onAbrirPermissoes = {
-                        activity.abrirPermissoes()
+                BottomAreaSelector(
+                    c = c,
+
+                    areaProtegidaSelecionada =
+                        activity?.areaProtegidaSelecionada
+                            ?: false,
+
+                    onSelecionarConteudo = {
+                        activity?.selecionarConteudo()
+                    },
+
+                    onSelecionarProtegidas = {
+                        activity?.selecionarAreasProtegidas()
                     }
                 )
+            }
+
+            /*
+             * =========================================
+             * BLOQUEIO DE PERMISSÕES
+             * =========================================
+             */
+
+            if (
+                activity != null &&
+                !activity.permissoesConcedidas
+            ) {
+
+                Box(
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .background(Color.Black)
+                            .zIndex(100f),
+
+                    contentAlignment =
+                        Alignment.Center
+                ) {
+
+                    PermissionCard(
+                        onAbrirPermissoes = {
+                            activity.abrirPermissoes()
+                        }
+                    )
+                }
             }
         }
     }
 }
-}
-
 
 /* =========================================================
    POPUP DE PERMISSÕES

@@ -654,6 +654,8 @@ private fun windowColor(
 
     window.window.navigationBarColor =
         AndroidColor.TRANSPARENT
+        
+        window.window.setNavigationBarContrastEnforced(false)
 
     WindowCompat.getInsetsController(
         window.window,

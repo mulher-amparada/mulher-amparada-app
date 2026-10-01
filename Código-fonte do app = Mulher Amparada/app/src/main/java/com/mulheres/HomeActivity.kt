@@ -104,7 +104,7 @@ window.setFlags(
 
 WindowCompat.setDecorFitsSystemWindows(
     window,
-    false
+    true
 )
 
 window.statusBarColor =
@@ -223,11 +223,7 @@ Column(
         Arrangement.spacedBy(31.dp)
 ) {
 
-    Spacer(
-        modifier =
-            Modifier.windowInsetsTopHeight(
-                WindowInsets.statusBars
-            )
+    
     )
 
     

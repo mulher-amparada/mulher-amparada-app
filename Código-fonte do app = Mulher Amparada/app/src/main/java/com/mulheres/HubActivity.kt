@@ -2173,7 +2173,7 @@ private fun BottomAreaSelector(
 
         val offsetX =
     if (areaProtegidaSelecionada)
-        innerWidth - thumbSize + 4.dp
+        innerWidth - thumbSize + 5.dp
     else
         0.dp
 
@@ -2237,10 +2237,7 @@ private fun BottomAreaSelector(
                     .size(thumbSize)
                     .clip(CircleShape)
                     .background(
-                        if (areaProtegidaSelecionada)
-                            c.pink
-                        else
-                            c.surfaceLight
+                    c.pink
                     ),
 
             contentAlignment =

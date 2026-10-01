@@ -1,32 +1,32 @@
-# Mulher Amparada App Code of Conduct
+Código de Conduta do Mulher Amparada App
 
-Like the technical community as a whole, the Mulher Amparada App team and community is made up of a mixture of professionals and volunteers from all over the world, working on every aspect of the mission - including mentorship, teaching, and connecting people.
+Assim como a comunidade técnica em geral, a equipe e a comunidade do Mulher Amparada App são formadas por uma mistura de profissionais e voluntários de diferentes lugares, trabalhando em todos os aspectos da missão — incluindo mentoria, ensino e conexão entre pessoas.
 
-Diversity is one of our huge strengths, but it can also lead to communication issues and unhappiness. To that end, we have a few ground rules that we ask people to adhere to. This code applies equally to founders, mentors and those seeking help and guidance.
+A diversidade é uma de nossas grandes forças, mas também pode gerar problemas de comunicação e desentendimentos. Por isso, temos algumas regras básicas que pedimos que todas as pessoas sigam. Este código se aplica igualmente a fundadores, mentores e pessoas que buscam ajuda e orientação.
 
-This isn’t an exhaustive list of things that you can’t do. Rather, take it in the spirit in which it’s intended - a guide to make it easier to enrich all of us and the technical communities in which we participate.
+Esta não é uma lista completa de tudo o que não pode ser feito. Em vez disso, deve ser compreendido no espírito em que foi criado: como um guia para tornar mais fácil enriquecer a todos nós e as comunidades técnicas das quais participamos.
 
-This code of conduct applies to all spaces managed by the Mulher Amparada App project or . This includes IRC, the mailing lists, the issue tracker, DSF events, and any other forums created by the project team which the community uses for communication. In addition, violations of this code outside these spaces may affect a person's ability to participate within them.
+Este código de conduta se aplica a todos os espaços administrados pelo projeto Mulher Amparada App. Isso inclui canais de comunicação, listas de discussão, sistema de issues e quaisquer outros fóruns criados pela equipe do projeto que sejam utilizados pela comunidade para comunicação. Além disso, violações deste código fora desses espaços podem afetar a capacidade de uma pessoa de participar deles.
 
-If you believe someone is violating the code of conduct, we ask that you report it by emailing [mulheramparada@gmail.com](mailto:mulheramparada@gmail.com). For more details please see our 
+Se você acredita que alguém está violando o código de conduta, pedimos que denuncie enviando um e-mail para "mulheramparada@gmail.com" (mailto:mulheramparada@gmail.com).
 
-- **Be friendly and patient.**
-- **Be welcoming.** We strive to be a community that welcomes and supports people of all backgrounds and identities. This includes, but is not limited to members of any race, ethnicity, culture, national origin, colour, immigration status, social and economic class, educational level, sex, sexual orientation, gender identity and expression, age, size, family status, political belief, religion, and mental and physical ability.
-- **Be considerate.** Your work will be used by other people, and you in turn will depend on the work of others. Any decision you take will affect users and colleagues, and you should take those consequences into account when making decisions. Remember that we're a world-wide community, so you might not be communicating in someone else's primary language.
-- **Be respectful.** Not all of us will agree all the time, but disagreement is no excuse for poor behavior and poor manners. We might all experience some frustration now and then, but we cannot allow that frustration to turn into a personal attack. It’s important to remember that a community where people feel uncomfortable or threatened is not a productive one. Members of the Mulher Amparada App community should be respectful when dealing with other members as well as with people outside the Mulher Amparada App community.
-- **Be careful in the words that you choose.** We are a community of professionals, and we conduct ourselves professionally. Be kind to others. Do not insult or put down other participants. Harassment and other exclusionary behavior aren't acceptable. This includes, but is not limited to: 
- - Violent threats or language directed against another person.
- - Discriminatory jokes and language.
- - Posting sexually explicit or violent material.
- - Posting (or threatening to post) other people's personally identifying information ("doxing").
- - Personal insults, especially those using racist or sexist terms.
- - Unwelcome sexual attention.
- - Advocating for, or encouraging, any of the above behavior.
- - Repeated harassment of others. In general, if someone asks you to stop, then stop.
-- **When we disagree, try to understand why.** Disagreements, both social and technical, happen all the time and Mulher Amparada App is no exception. It is important that we resolve disagreements and differing views constructively. Remember that we’re different. The strength of Mulher Amparada App comes from its varied community, people from a wide range of backgrounds. Different people have different perspectives on issues. Being unable to understand why someone holds a viewpoint doesn’t mean that they’re wrong. Don’t forget that it is human to err and blaming each other doesn’t get us anywhere. Instead, focus on helping to resolve issues and learning from mistakes.
+- Seja amigável e paciente.
+- Seja acolhedor. Buscamos construir uma comunidade que receba e apoie pessoas de diferentes origens e identidades. Isso inclui, entre outros, membros de qualquer raça, etnia, cultura, nacionalidade, cor, situação migratória, classe social e econômica, nível educacional, sexo, orientação sexual, identidade e expressão de gênero, idade, tamanho corporal, situação familiar, posicionamento político, religião e capacidades mentais e físicas.
+- Seja atencioso. Seu trabalho será utilizado por outras pessoas e, por sua vez, você dependerá do trabalho de outras pessoas. Qualquer decisão que você tomar poderá afetar usuárias e colegas, e você deve considerar essas consequências ao tomar decisões. Lembre-se de que somos uma comunidade mundial, portanto, você pode estar se comunicando com alguém cuja língua principal seja diferente da sua.
+- Seja respeitoso. Nem sempre concordaremos uns com os outros, mas discordâncias não são uma justificativa para comportamentos inadequados ou falta de educação. Todos podemos sentir alguma frustração de vez em quando, mas não podemos permitir que essa frustração se transforme em ataques pessoais. É importante lembrar que uma comunidade na qual as pessoas se sintam desconfortáveis ou ameaçadas não é produtiva. Os membros da comunidade do Mulher Amparada App devem agir com respeito ao lidar tanto com outros membros quanto com pessoas de fora da comunidade.
+- Tenha cuidado com as palavras que escolher. Somos uma comunidade de pessoas que trabalham com tecnologia e devemos agir de maneira profissional. Seja gentil com os outros. Não insulte nem menospreze outros participantes. Assédio e outros comportamentos de exclusão não são aceitáveis. Isso inclui, entre outros:
+  - Ameaças ou linguagem violenta direcionadas a outra pessoa.
+  - Piadas ou linguagem discriminatória.
+  - Publicação de material sexualmente explícito ou violento.
+  - Publicação ou ameaça de publicação de informações pessoais que permitam identificar outras pessoas ("doxing").
+  - Insultos pessoais, especialmente aqueles que utilizem termos racistas ou sexistas.
+  - Atenção ou abordagem sexual indesejada.
+  - Defender, incentivar ou estimular qualquer um dos comportamentos acima.
+  - Assédio repetido contra outras pessoas. Em geral, se alguém pedir que você pare, pare.
+- Quando houver discordâncias, tente entender o motivo. Discordâncias, tanto sociais quanto técnicas, acontecem o tempo todo, e o Mulher Amparada App não é uma exceção. É importante resolver divergências e diferentes pontos de vista de maneira construtiva. Lembre-se de que somos diferentes. A força do Mulher Amparada App vem de sua comunidade diversificada, formada por pessoas de diferentes origens. Pessoas diferentes possuem perspectivas diferentes sobre os assuntos. Não conseguir entender por que alguém possui determinado ponto de vista não significa que essa pessoa esteja errada. Não se esqueça de que errar faz parte da natureza humana, e culpar uns aos outros não nos leva a lugar algum. Em vez disso, concentre-se em ajudar a resolver os problemas e aprender com os erros.
 
-Original text courtesy of the [Speak Up! project](http://web.archive.org/web/20141109123859/http://speakup.io/coc.html).
+Texto original inspirado no "projeto Speak Up!" (http://web.archive.org/web/20141109123859/http://speakup.io/coc.html).
 
-## Questions?
+Dúvidas?
 
-If you have questions, please see . If that doesn't answer your questions, feel free to [contact us](mailto:mulheramparada@gmail.com).
+Se você tiver dúvidas sobre este código de conduta, entre em contato conosco pelo e-mail "mulheramparada@gmail.com" (mailto:mulheramparada@gmail.com).

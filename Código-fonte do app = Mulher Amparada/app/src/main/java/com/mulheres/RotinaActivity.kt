@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.compose.runtime.SideEffect
 import android.graphics.Color as AndroidColor
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.safeDrawing

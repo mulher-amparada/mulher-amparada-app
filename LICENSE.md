@@ -905,51 +905,17 @@ A violação desta seção poderá ensejar, conforme o caso e a legislação apl
 
 A existência de uma violação e suas consequências não serão presumidas exclusivamente pela alegação do desenvolvedor, devendo ser analisadas conforme os fatos, as provas e o direito aplicável.
 
-**23. RESPONSÁVEL LEGAL E AUTORIZAÇÕES**
+Autonomia do projeto e ausência de autorização por vínculo familiar
 
-O desenvolvedor conta com pessoa responsável legal, cuja identidade não é divulgada publicamente por razões de privacidade e segurança.
+O presente projeto é de autoria e administração exclusiva de seu titular. O vínculo familiar, parentesco, convivência doméstica ou qualquer outra relação pessoal com o titular não confere, por si só, qualquer direito, autorização, participação, representação, administração, propriedade ou licença adicional sobre o projeto.
 
-A existência dessa pessoa responsável e sua concordância com a participação do desenvolvedor na criação, manutenção e desenvolvimento do projeto poderão ser demonstradas por documentação ou outros meios de prova juridicamente admissíveis.
+Nenhum familiar, parente ou terceiro poderá se apresentar como proprietário, administrador, representante, mantenedor, autor ou responsável pelo projeto sem autorização expressa e verificável do titular.
 
-Entre os elementos eventualmente preservados para essa finalidade encontra-se registro de áudio relacionado à manifestação de concordância da responsável legal.
+Também não é concedida autorização especial a familiares para copiar, modificar, incorporar, redistribuir, publicar versões derivadas, registrar marcas ou domínios relacionados, utilizar a identidade do projeto ou praticar qualquer ato em nome do projeto.
 
-A identidade da responsável legal não integra esta licença e não deverá ser divulgada publicamente sem fundamento legítimo ou autorização adequada.
+Qualquer autorização eventualmente concedida deverá ser expressa e poderá estabelecer condições específicas. O simples parentesco não será considerado autorização.
 
-A existência de responsável legal não transfere automaticamente a autoria do projeto, os direitos autorais ou o controle do desenvolvimento para essa pessoa. Eventuais atos de representação, assistência ou autorização serão interpretados de acordo com a legislação aplicável e com os instrumentos efetivamente existentes.
-
-Esta disposição tem finalidade documental e de preservação de direitos, não constituindo declaração antecipada sobre a validade ou o resultado de eventual procedimento judicial ou administrativo.
-
-**24. TRANSIÇÃO DA RESPONSABILIDADE DO PROJETO APÓS A MAIORIDADE DO DESENVOLVEDOR**
-
-**24.1. Responsabilidade durante a menoridade**
-Enquanto o desenvolvedor principal for menor de 18 (dezoito) anos, a participação de seu responsável legal observará a representação ou assistência exigida pela legislação aplicável, conforme a natureza de cada ato.
-
-**24.2. Transição após a maioridade**
-A partir do momento em que o desenvolvedor principal atingir a maioridade civil, sua intenção é assumir diretamente a responsabilidade pela administração, direção, manutenção e representação do projeto, observadas as formalidades jurídicas eventualmente necessárias.
-
-**24.3. Alteração da função do responsável legal**
-Com a aquisição da maioridade pelo desenvolvedor, a pessoa que anteriormente exercia a função de responsável legal poderá passar a atuar exclusivamente como colaboradora do projeto, salvo se houver instrumento posterior estabelecendo função diferente.
-
-**24.4. Preservação da autoria**
-A transição da responsabilidade não constitui transferência de autoria nem alteração da titularidade dos direitos autorais do projeto. A pessoa que colaborou durante a fase anterior continuará sendo reconhecida de acordo com sua efetiva participação.
-
-**24.5. Colaboração voluntária**
-A permanência da antiga responsável legal como colaboradora dependerá de sua concordância e não implicará, por si só, poder de administração, representação ou controle sobre o projeto.
-
-**24.6. Administração pelo desenvolvedor maior**
-Após atingir a maioridade, o desenvolvedor principal poderá assumir diretamente as decisões relativas ao desenvolvimento, manutenção, distribuição, documentação, licenciamento, organização e continuidade do projeto, respeitados os direitos eventualmente pertencentes a terceiros.
-
-**24.7. Formalização**
-Quando necessário, a mudança de função poderá ser registrada por documento escrito, atualização de registros, contratos, procurações, termos de colaboração ou outros instrumentos juridicamente adequados.
-
-**24.8. Ausência de retroatividade**
-A aquisição da maioridade não apaga atos regularmente praticados durante a menoridade nem modifica automaticamente direitos ou obrigações já constituídos.
-
-**24.9. Regra de continuidade**
-A transição deverá preservar a continuidade do projeto, sua documentação, seu histórico de desenvolvimento, seus registros de autoria e os direitos de seus colaboradores.
-
-**24.10. Limitação jurídica**
-Esta cláusula expressa a organização pretendida pelo projeto e não substitui os atos formais que a legislação eventualmente exigir para produzir efeitos perante terceiros.
+Esta cláusula não pretende restringir direitos que a legislação aplicável não permita restringir, nem impedir o exercício de direitos legalmente assegurados a terceiros.
 
 **25. USO PÚBLICO DO NOME “MULHER AMPARADA OFICIAL, OU QUALQUER OUTRO NOME PARECIDO”**
 

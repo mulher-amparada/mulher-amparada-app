@@ -1,6 +1,9 @@
 package com.mulheres
 
 import android.graphics.Color as AndroidColor
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import android.os.Bundle
 import androidx.compose.foundation.layout.ColumnScope
 import android.view.WindowManager
@@ -74,54 +77,43 @@ import androidx.activity.enableEdgeToEdge
 
 class RotinaActivity : ComponentActivity() {
 
-    override fun onCreate(
-        savedInstanceState: Bundle?
+    override fun onCreate(savedInstanceState: Bundle?) {
+    enableEdgeToEdge()
+    super.onCreate(savedInstanceState)
+
+    window.addFlags(
+        WindowManager.LayoutParams.FLAG_SECURE
+    )
+
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        false
+    )
+
+    window.statusBarColor =
+        AndroidColor.TRANSPARENT
+
+    window.navigationBarColor =
+        AndroidColor.TRANSPARENT
+
+    if (
+        android.os.Build.VERSION.SDK_INT >=
+        android.os.Build.VERSION_CODES.Q
     ) {
-        enableEdgeToEdge()
-        super.onCreate(savedInstanceState)
+        window.isStatusBarContrastEnforced = false
+        window.isNavigationBarContrastEnforced = false
+    }
 
-        /*
-         * Impede capturas de tela.
-         */
-        window.addFlags(
-            WindowManager.LayoutParams.FLAG_SECURE
-        )
-
-        
-WindowCompat.setDecorFitsSystemWindows(
-    window,
-    false
-)
-
-window.statusBarColor =
-    AndroidColor.TRANSPARENT
-
-window.navigationBarColor =
-    AndroidColor.TRANSPARENT
-
-if (
-    android.os.Build.VERSION.SDK_INT >=
-    android.os.Build.VERSION_CODES.Q
-) {
-    window.isStatusBarContrastEnforced = false
-    window.isNavigationBarContrastEnforced = false
-}
-
-        setContent {
-
-            CompositionLocalProvider(
-                LocalOverscrollFactory provides null
-            ) {
-
-                RotinaTheme {
-
-                    RotinaScreen(
-                        context = this
-                    )
-                }
+    setContent {
+        CompositionLocalProvider(
+            LocalOverscrollFactory provides null
+        ) {
+            RotinaTheme {
+                RotinaScreen(context = this)
             }
         }
     }
+}
 }
 
 
@@ -217,43 +209,33 @@ private fun RotinaTheme(
 val window =
     (view.context as ComponentActivity).window
 
-androidx.compose.runtime.SideEffect {
+SideEffect {
 
     WindowCompat.setDecorFitsSystemWindows(
         window,
-        true
+        false
     )
 
     window.statusBarColor =
-        if (dark)
-            AndroidColor.BLACK
-        else
-            AndroidColor.WHITE
+        AndroidColor.TRANSPARENT
 
     window.navigationBarColor =
-        if (dark)
-            AndroidColor.BLACK
-        else
-            AndroidColor.WHITE
+        AndroidColor.TRANSPARENT
 
     if (
         android.os.Build.VERSION.SDK_INT >=
         android.os.Build.VERSION_CODES.Q
     ) {
-        window.isNavigationBarContrastEnforced =
-            false
+        window.isStatusBarContrastEnforced = false
+        window.isNavigationBarContrastEnforced = false
     }
 
     WindowInsetsControllerCompat(
         window,
         window.decorView
     ).apply {
-
-        isAppearanceLightStatusBars =
-            !dark
-
-        isAppearanceLightNavigationBars =
-            !dark
+        isAppearanceLightStatusBars = !dark
+        isAppearanceLightNavigationBars = !dark
     }
 }
 
@@ -578,12 +560,14 @@ private fun RotinaScreen(
 
 
     Box(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .background(fundo)
-                
-    ) {
+    modifier =
+        Modifier
+            .fillMaxSize()
+            .windowInsetsPadding(
+                WindowInsets.safeDrawing
+            )
+            .background(fundo)
+) {
 
         LazyColumn(
 

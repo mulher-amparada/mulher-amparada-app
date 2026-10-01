@@ -1,6 +1,8 @@
 package com.mulheres
 
 import android.graphics.Color as AndroidColor
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.core.view.WindowCompat
 import androidx.compose.material3.Icon
 import android.Manifest
@@ -197,9 +199,14 @@ private fun RelogioApp() {
     ) {
 
         Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = fundo
-        ) {
+    modifier =
+        Modifier
+            .fillMaxSize()
+            .windowInsetsPadding(
+                WindowInsets.safeDrawing
+            ),
+    color = fundo
+) {
 
             RelogioTela(
                 dark = dark,

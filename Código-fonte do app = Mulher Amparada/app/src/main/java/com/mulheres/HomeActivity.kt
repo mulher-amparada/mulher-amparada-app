@@ -216,7 +216,7 @@ private fun CarteiraScreen(
                     start = 16.dp,
                     end = 16.dp,
                     bottom = 32.dp,
-                    top = 6.dp
+                    top = 20.dp
                 )
                 .padding(
                     top = WindowInsets.statusBars

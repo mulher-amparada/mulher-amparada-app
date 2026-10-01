@@ -2160,30 +2160,30 @@ private fun BottomAreaSelector(
                     shape
                 )
                 .padding(4.dp)
-                .clickable {
-
-                    if (areaProtegidaSelecionada) {
-                        onSelecionarConteudo()
-                    } else {
-                        onSelecionarProtegidas()
-                    }
-                }
     ) {
 
         val thumbSize =
-            60.dp
+            58.dp
 
-        val maxOffset =
-            maxWidth - thumbSize - 10.dp
+        val innerWidth =
+            maxWidth - 8.dp
+
+        val halfWidth =
+            innerWidth / 2
 
         val offsetX =
             if (areaProtegidaSelecionada)
-                maxOffset
+                innerWidth - thumbSize
             else
                 0.dp
 
         /*
-         * Áreas de toque ocupam TODO o seletor.
+         * ÁREAS DE TOQUE.
+         *
+         * Cada metade ocupa exatamente 50% do
+         * espaço interno do seletor.
+         *
+         * Sem clickable no container inteiro.
          */
         Row(
             modifier =
@@ -2195,7 +2195,12 @@ private fun BottomAreaSelector(
                     Modifier
                         .weight(1f)
                         .fillMaxHeight()
-                        .clickable {
+                        .clickable(
+                            indication = null,
+                            interactionSource =
+                                androidx.compose.foundation.interaction
+                                    .MutableInteractionSource()
+                        ) {
                             onSelecionarConteudo()
                         }
             )
@@ -2205,17 +2210,22 @@ private fun BottomAreaSelector(
                     Modifier
                         .weight(1f)
                         .fillMaxHeight()
-                        .clickable {
+                        .clickable(
+                            indication = null,
+                            interactionSource =
+                                androidx.compose.foundation.interaction
+                                    .MutableInteractionSource()
+                        ) {
                             onSelecionarProtegidas()
                         }
             )
         }
 
         /*
-         * BOLINHA — SEM ANIMAÇÃO.
+         * BOLINHA.
          *
-         * O offset muda imediatamente conforme
-         * o estado selecionado.
+         * Fica completamente dentro do seletor.
+         * O tamanho ocupa praticamente toda a altura.
          */
         Box(
 

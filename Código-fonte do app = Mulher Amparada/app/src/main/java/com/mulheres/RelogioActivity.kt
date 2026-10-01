@@ -135,27 +135,19 @@ class RelogioActivity : ComponentActivity() {
     )
 
     WindowCompat.setDecorFitsSystemWindows(
-        window,
-        true
-    )
+    window,
+    false
+)
 
-    window.statusBarColor =
-        AndroidColor.TRANSPARENT
+window.isNavigationBarContrastEnforced = false
 
-    window.navigationBarColor =
-        AndroidColor.TRANSPARENT
-
-    window.isNavigationBarContrastEnforced =
-        false
-
-    WindowCompat.getInsetsController(
-        window,
-        window.decorView
-    ).apply {
-        isAppearanceLightStatusBars = false
-        isAppearanceLightNavigationBars = false
-    }
-
+WindowCompat.getInsetsController(
+    window,
+    window.decorView
+).apply {
+    isAppearanceLightStatusBars = false
+    isAppearanceLightNavigationBars = false
+}
     setContent {
         CompositionLocalProvider(
             LocalOverscrollFactory provides null

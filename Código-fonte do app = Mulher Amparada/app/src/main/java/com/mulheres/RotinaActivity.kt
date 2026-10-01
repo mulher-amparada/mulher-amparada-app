@@ -1,6 +1,5 @@
 package com.mulheres
 
-import androidx.compose.runtime.SideEffect
 import android.graphics.Color as AndroidColor
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.safeDrawing
@@ -79,8 +78,9 @@ import androidx.activity.enableEdgeToEdge
 class RotinaActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-    enableEdgeToEdge()
     super.onCreate(savedInstanceState)
+
+    enableEdgeToEdge()
 
     window.addFlags(
         WindowManager.LayoutParams.FLAG_SECURE
@@ -91,18 +91,20 @@ class RotinaActivity : ComponentActivity() {
         false
     )
 
-    window.statusBarColor =
-        AndroidColor.TRANSPARENT
+    window.statusBarColor = AndroidColor.TRANSPARENT
+    window.navigationBarColor = AndroidColor.TRANSPARENT
 
-    window.navigationBarColor =
-        AndroidColor.TRANSPARENT
-
-    if (
-        android.os.Build.VERSION.SDK_INT >=
-        android.os.Build.VERSION_CODES.Q
-    ) {
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
         window.isStatusBarContrastEnforced = false
         window.isNavigationBarContrastEnforced = false
+    }
+
+    WindowInsetsControllerCompat(
+        window,
+        window.decorView
+    ).apply {
+        isAppearanceLightStatusBars = false
+        isAppearanceLightNavigationBars = false
     }
 
     setContent {

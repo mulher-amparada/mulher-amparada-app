@@ -1,5 +1,7 @@
 package com.mulheres
 
+import androidx.compose.foundation.LocalOverscrollFactory
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.Checkbox
@@ -329,8 +331,12 @@ window.isNavigationBarContrastEnforced = false
 
 
     setContent {
+    CompositionLocalProvider(
+        LocalOverscrollFactory provides null
+    ) {
         CicloApp()
     }
+}
 }
 }
 

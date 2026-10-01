@@ -2139,7 +2139,7 @@ private fun BottomAreaSelector(
         isSystemInDarkTheme()
 
     val shape =
-        RoundedCornerShape(30.dp)
+        RoundedCornerShape(50.dp)
 
     BoxWithConstraints(
 
@@ -2174,7 +2174,7 @@ private fun BottomAreaSelector(
             60.dp
 
         val maxOffset =
-            maxWidth - thumbSize - 8.dp
+            maxWidth - thumbSize - 10.dp
 
         val offsetX =
             if (areaProtegidaSelecionada)

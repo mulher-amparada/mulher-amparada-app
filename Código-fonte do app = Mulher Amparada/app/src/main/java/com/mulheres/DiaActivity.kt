@@ -7,21 +7,17 @@ import android.content.SharedPreferences
 import android.graphics.Color as AndroidColor
 import android.os.Bundle
 import android.view.WindowManager
-
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,21 +33,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -60,44 +52,34 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
 import androidx.compose.ui.window.DialogProperties
-
 import androidx.core.view.WindowCompat
-
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
 import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sqrt
 import androidx.activity.enableEdgeToEdge
-
 
 private val Quicksand = FontFamily(
 
@@ -469,21 +451,36 @@ class DiaActivity : ComponentActivity() {
 
         WindowCompat.setDecorFitsSystemWindows(
             window,
-            true
+            false
         )
+
+        window.statusBarColor =
+            AndroidColor.TRANSPARENT
+
+        window.navigationBarColor =
+            AndroidColor.TRANSPARENT
+
+        if (
+            android.os.Build.VERSION.SDK_INT >=
+            android.os.Build.VERSION_CODES.Q
+        ) {
+            window.isStatusBarContrastEnforced =
+                false
+
+            window.isNavigationBarContrastEnforced =
+                false
+        }
 
         setContent {
 
-    CompositionLocalProvider(
-        LocalOverscrollFactory provides null
-    ) {
-
-        DiaApp()
+            CompositionLocalProvider(
+                LocalOverscrollFactory provides null
+            ) {
+                DiaApp()
+            }
+        }
     }
 }
-    }
-}
-
 
 @Composable
 private fun DiaApp() {
@@ -555,28 +552,9 @@ private fun DiaApp() {
     val purpleDark =
         Color(0xFF7044C7)
 
-    val statusBarColor =
-        if (darkMode)
-            Color.Black
-        else
-            Color.White
+    
 
-    DisposableEffect(
-        darkMode
-    ) {
-
-        windowStatusBars(
-            activity =
-                context as ComponentActivity,
-            color =
-                statusBarColor,
-            darkIcons =
-                !darkMode
-        )
-
-        onDispose { }
-    }
-
+    
     Surface(
         modifier =
             Modifier.fillMaxSize(),

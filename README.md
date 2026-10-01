@@ -160,8 +160,6 @@ NeoCalcActivity (compose) = Tela que contém o disfarce de calculadora
  
  CalcActivity (compose) = Tela do recurso da calculadora da área protegida ProtectActivity = Primeira tela da área protegida
  
- RelogioActivity (compose) = Recurso do relógio da área protegida 
- 
  MapaActivity (compose) = Recurso do mapa da área protegida 
  
  AppsActivity (compose) = Recurso da tela de aplicativos da área protegida 
@@ -173,8 +171,6 @@ NeoCalcActivity (compose) = Tela que contém o disfarce de calculadora
  FinancasActivity (compose) = Recurso de dicas de financas para as usuárias na área protegida 
  
  AboutActivity (compose) = Recurso da carta de acolhimento e apoio para as usuárias na área protegida 
- 
- RotinaActivity (compose) = Recurso da rotina gamificada na área protegida 
  
  CicloActivity (compose) = Recurso do calendário menstrual da área protegida 
  
@@ -365,17 +361,11 @@ Dessa forma, o conteúdo protegido não fica diretamente legível no armazenamen
 ###Calendário Menstrual:
 Registre como dói cada dia e, com isso, o aplicativo monta um calendário.
 
-###Rotina:
-Sistema de pontos, com registro de comidas e bebidas boas e ruins, bem como a adição de registro de exercícios físicos fáceis, médios ou difíceis e contagem de tempo de cada um deles, além de sistema de nível e conquistas.
-
 ###Mapa:
 Mostra um mapa da região e, quando a localização estiver disponível e autorizada, permite visualizar a posição atual.
 
 ###Diário criptografado:
 Usando criptografia, a usuária poderá anotar o que quiser. Com a senha, ficará seguro e também não some, pois estará guardado, e é possivel baixar as páginas desse diário!
-
-###Relógio:
-Mostra o mapa do local atual, o país e outros dados, bem como o ano, semestre, bimestre, mês, quinzena, semana, dia, hora, minuto e segundo.
 
 ###Calculadora:
 A calculadora pode ser usada para cálculos rápidos do dia a dia.
@@ -533,82 +523,6 @@ O acesso varia de acordo com o tipo de armazenamento:
 ###Tela de aplicativos:
 Ao tocar neste botão, o app mostrará um site dentro do app que lista todos os outros apps com a permissão query all packpages...
 
-### História das Mulheres:
-
-É compose!:
-
-```
-A página “História das Mulheres” é uma experiência interativa que combina conteúdo histórico com um sistema de progressão. O usuário acumula Pontos de História, desbloqueia cinco períodos históricos, compra melhorias para aumentar sua produção e pode realizar prestígios para obter Legado Permanente.
-
-Pontos de História
-
-Os Pontos de História são o recurso principal da página. O usuário pode obtê-los clicando no botão “+ HISTÓRIA” ou por meio da produção automática.
-
-Cada clique começa concedendo 1 ponto, mas esse valor pode aumentar com as melhorias. O sistema também possui um combo: quando vários cliques são realizados em sequência, o ganho recebe um bônus adicional, limitado a 2x.
-
-Melhorias
-
-A página possui seis melhorias, cada uma com uma função diferente:
-
-✊ Voz coletiva
-Aumenta diretamente a quantidade de pontos recebidos por clique. Cada nível acrescenta +1 ao valor base de cada clique. Quanto maior o nível, mais pontos o usuário recebe manualmente.
-
-⚡ Movimento
-Cria produção automática de Pontos de História. Cada nível aumenta a quantidade de pontos produzidos por segundo. Assim, o usuário não precisa clicar continuamente para continuar acumulando pontos.
-
-📚 Educação
-Aumenta todos os ganhos em 10% por nível. Esse bônus funciona como um multiplicador geral, afetando tanto os pontos obtidos por clique quanto a produção automática.
-
-💼 Organização
-Aumenta especificamente a produção automática. Cada nível acrescenta 15% à quantidade de pontos produzidos por segundo pelo “Movimento”.
-
-📰 Imprensa
-Aumenta o valor base dos cliques. Cada nível acrescenta +5 pontos ao valor de cada clique antes da aplicação dos multiplicadores.
-
-💎 Memória histórica
-Aumenta todos os ganhos em 25% por nível. Assim como “Educação”, funciona como um multiplicador geral e fortalece tanto os cliques quanto a produção automática.
-
-As melhorias possuem preços que aumentam a cada compra. Isso faz com que os primeiros níveis sejam mais acessíveis e os níveis seguintes exijam cada vez mais Pontos de História.
-
-As cinco fases
-
-A página apresenta cinco grandes períodos históricos:
-
-Fase 1 — Antiguidade
-Apresenta a participação das mulheres nas sociedades antigas, incluindo suas funções econômicas, familiares, religiosas e culturais.
-
-Fase 2 — Idade Média
-Aborda a participação feminina na agricultura, comércio, artesanato, religião, administração de propriedades e outras atividades.
-
-Fase 3 — Idade Moderna
-Mostra transformações entre os séculos XV e XVIII, incluindo a expansão da imprensa, da educação e das discussões sobre a capacidade e os direitos das mulheres.
-
-Fase 4 — Revolução Industrial
-Apresenta as mudanças provocadas pela industrialização, incluindo o crescimento do trabalho feminino assalariado e dos movimentos por direitos trabalhistas, educação e participação política.
-
-Fase 5 — Século XX e XXI
-Mostra transformações relacionadas ao direito ao voto, educação, profissões, ciência, política, movimentos sociais e debates contemporâneos sobre igualdade e direitos.
-
-Cada fase possui uma história própria, um destaque e uma linha do tempo com informações relacionadas ao período.
-
-Legado Permanente
-
-O Legado Permanente é o sistema de progressão que permanece depois de um prestígio.
-
-Para realizar um prestígio, é necessário atingir uma quantidade específica de Pontos de História. O primeiro requisito é de 100 mil pontos. Depois de cada prestígio, o requisito para o próximo aumenta.
-
-Ao realizar o prestígio, os pontos e as melhorias normais são reiniciados, mas o usuário recebe Legado.
-
-Cada ponto de Legado acrescenta 10% ao multiplicador geral dos ganhos. Portanto, o Legado funciona como um bônus permanente que torna as próximas progressões mais eficientes.
-
-Prestígio
-
-O prestígio permite trocar parte do progresso atual por uma vantagem permanente.
-
-Quando o jogador alcança o requisito, a página informa quantos pontos de Legado serão recebidos. Depois da confirmação, os níveis das melhorias normais são zerados e os Pontos de História voltam para zero.
-
-O Legado, entretanto, deve permanecer caso a intenção seja que ele seja realmente permanente.
-```
 
 ### Navegador: 
 

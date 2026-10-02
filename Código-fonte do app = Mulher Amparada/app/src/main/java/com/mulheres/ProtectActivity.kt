@@ -159,32 +159,6 @@ WindowCompat.getInsetsController(
 
                
 
-                abrirDireitos = {
-                    startActivity(
-                        Intent(
-                            this,
-                            DireitosActivity::class.java
-                        )
-                    )
-                },
-
-                abrirFinancas = {
-                    startActivity(
-                        Intent(
-                            this,
-                            FinancasActivity::class.java
-                        )
-                    )
-                },
-
-                abrirAbout = {
-                    startActivity(
-                        Intent(
-                            this,
-                            AboutActivity::class.java
-                        )
-                    )
-                }
             )
         }
     }
@@ -348,12 +322,6 @@ private fun MeusAcessos(
 
 
 
-    abrirDireitos: () -> Unit,
-
-    abrirFinancas: () -> Unit,
-
-    abrirAbout: () -> Unit
-
 ) {
 
     val dark =
@@ -419,26 +387,7 @@ private fun MeusAcessos(
     )
 
 
-    val especiais = listOf(
-
-
-
-        Acesso(
-            "100 dos seus direitos",
-            "Seja amparada pela lei"
-        ),
-
-        Acesso(
-            "Dicas de como recuperar sua autonomia financeira",
-            "Conhecimentos valiosos"
-        ),
-
-        Acesso(
-            "Uma carta para você, mulher!",
-            "Uma mensagem especial"
-        )
-    )
-
+    
 
     CompositionLocalProvider(
         LocalOverscrollFactory provides null
@@ -613,64 +562,6 @@ private fun MeusAcessos(
                 }
 
 
-                /* =================================================
-                   ESPECIAL
-                ================================================= */
-
-                item {
-
-                    Spacer(
-                        modifier =
-                            Modifier.height(22.dp)
-                    )
-
-                    TituloSecao(
-                        titulo = "Especial, só para você!",
-                        dark = dark
-                    )
-
-                    Spacer(
-                        modifier =
-                            Modifier.height(4.dp)
-                    )
-                }
-
-
-                items(
-
-                    items = especiais,
-
-                    key = {
-                        it.titulo
-                    }
-
-                ) { acesso ->
-
-                    Cartao(
-
-                        acesso = acesso,
-
-                        dark = dark,
-
-                        onClick = {
-
-                            when (acesso.titulo) {
-
-                                "100 dos seus direitos" -> {
-                                    abrirDireitos()
-                                }
-
-                                "Dicas de como recuperar sua autonomia financeira" -> {
-                                    abrirFinancas()
-                                }
-
-                                "Uma carta para você, mulher!" -> {
-                                    abrirAbout()
-                                }
-                            }
-                        }
-                    )
-                }
 
 
                 item {

@@ -8,6 +8,8 @@ E vale lembrar que antes todas as páginas eram html com webview, agora não sã
 
 **Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4084**
 
+E o projeto é = Open-source! (aderido no dia 02/10/2026)
+
 # ⚠️MURAL DE AVISOS:
 
 ### Sobre como o projeto foi estruturado:

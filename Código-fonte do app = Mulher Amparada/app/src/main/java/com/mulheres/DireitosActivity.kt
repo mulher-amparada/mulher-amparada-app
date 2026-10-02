@@ -260,7 +260,7 @@ private fun DireitosScreen() {
             LazyColumn(
                 modifier =
                     Modifier
-                        .fillMaxSize()
+                        .fillMaxSize(),
                         
                         
 

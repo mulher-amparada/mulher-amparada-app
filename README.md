@@ -6,7 +6,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4053**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4037**
 
 # ⚠️MURAL DE AVISOS:
 
@@ -54,13 +54,6 @@ E vale lembrar que antes todas as páginas eram html com webview, agora não sã
 >Quando não existe biometria cadastrada, mas o dispositivo possui uma credencial de segurança configurada, como PIN, padrão ou senha, o Android pode utilizar essa credencial como alternativa.
 >
 >Caso o dispositivo não possua nenhum dos métodos de autenticação aceitos configurado, não existe um método válido para desbloquear a área protegida. Nesse cenário, o aplicativo não deve considerar a autenticação como concluída nem liberar a área protegida simplesmente porque a biometria não está disponível.
-
-### Documentação e conteúdo:
-
->O conteúdo dos arquivos `about.md`, `LEIS.md` e `FINANÇAS.md` está disponível tanto no site publicado pelo GitHub Pages quanto dentro da área protegida do aplicativo.
->
->Dessa forma, essas informações podem ser consultadas diretamente pelo site ou pelo próprio aplicativo, mantendo o conteúdo acessível nos dois ambientes.
-
 
 # 🔗Seção de links e paginas:
 
@@ -165,12 +158,6 @@ NeoCalcActivity (compose) = Tela que contém o disfarce de calculadora
  AppsActivity (compose) = Recurso da tela de aplicativos da área protegida 
  
  DiarioActivity (compose) = Recurso do diário criptografado da área protegida 
- 
- DireitosActivity (compose) = Recurso dos 100 direitos das mulheres da área protegida 
- 
- FinancasActivity (compose) = Recurso de dicas de financas para as usuárias na área protegida 
- 
- AboutActivity (compose) = Recurso da carta de acolhimento e apoio para as usuárias na área protegida 
  
  CicloActivity (compose) = Recurso do calendário menstrual da área protegida 
  

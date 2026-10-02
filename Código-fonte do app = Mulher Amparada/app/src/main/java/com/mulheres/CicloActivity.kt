@@ -1998,7 +1998,7 @@ private fun TelaDetalhes(
         item {
 
             Spacer(
-                Modifier.height(4.dp)
+                Modifier.height(48.dp)
             )
 
             Row(
@@ -2336,7 +2336,7 @@ private fun GraficoCard(
                 borda,
                 RoundedCornerShape(25.dp)
             )
-            .padding(48.dp)
+            .padding(14.dp)
     ) {
 
         Text(

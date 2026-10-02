@@ -119,7 +119,7 @@ class DireitosActivity : ComponentActivity() {
 
         WindowCompat.setDecorFitsSystemWindows(
             window,
-            true
+            false
         )
 
         window.statusBarColor =
@@ -261,9 +261,8 @@ private fun DireitosScreen() {
                 modifier =
                     Modifier
                         .fillMaxSize()
-                        .windowInsetsPadding(
-                            WindowInsets.safeDrawing
-                        ),
+                        
+                        
 
                 contentPadding =
                     PaddingValues(

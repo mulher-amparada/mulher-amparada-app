@@ -104,17 +104,7 @@ private fun FinancasTheme() {
             false
         )
 
-        window.statusBarColor =
-            if (dark)
-                AndroidColor.BLACK
-            else
-                AndroidColor.WHITE
-
-        window.navigationBarColor =
-            if (dark)
-                AndroidColor.BLACK
-            else
-                AndroidColor.WHITE
+        
 
         if (
             android.os.Build.VERSION.SDK_INT >=
@@ -259,9 +249,7 @@ private fun FinancasScreen(
             Modifier
                 .fillMaxSize()
                 .background(fundo)
-                .windowInsetsPadding(
-                    WindowInsets.safeDrawing
-                )
+                
     ) {
 
         Column(

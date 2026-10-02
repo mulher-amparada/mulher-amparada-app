@@ -103,19 +103,7 @@ private fun AboutTheme(
         val window =
             (view.context as android.app.Activity).window
 
-        window.statusBarColor =
-            if (dark) {
-                AndroidColor.BLACK
-            } else {
-                AndroidColor.WHITE
-            }
-
-        window.navigationBarColor =
-            if (dark) {
-                AndroidColor.BLACK
-            } else {
-                AndroidColor.WHITE
-            }
+        
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
             window.isNavigationBarContrastEnforced = false

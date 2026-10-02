@@ -454,7 +454,8 @@ Spacer(
     val baixou =
         exportAllPages(
             context = context,
-            pages = pages
+            pages = pages,
+            dates = dates
         )
 
     Toast.makeText(
@@ -1253,7 +1254,8 @@ private fun CurrentPage(
 
 private fun exportAllPages(
     context: Context,
-    pages: List<String>
+    pages: List<String>,
+    dates: List<String?>
 ): Boolean {
 
     val resolver =
@@ -1270,8 +1272,20 @@ private fun exportAllPages(
                 index + 1
             )
 
+        val date =
+            dates.getOrNull(index)
+                ?: "Sem data"
+
+        val safeDate =
+            date
+                .replace("/", "-")
+                .replace("\\", "-")
+
         val fileName =
-            "pagina-$number.txt"
+            "pagina-$number = $safeDate.txt"
+
+        val fileContent =
+            "Dia ($date):\n\n$content"
 
         val values =
             ContentValues().apply {
@@ -1307,7 +1321,7 @@ private fun exportAllPages(
                     ?.use { output ->
 
                         output.write(
-                            content.toByteArray(
+                            fileContent.toByteArray(
                                 Charsets.UTF_8
                             )
                         )

@@ -2336,7 +2336,7 @@ private fun GraficoCard(
                 borda,
                 RoundedCornerShape(25.dp)
             )
-            .padding(14.dp)
+            .padding(48.dp)
     ) {
 
         Text(

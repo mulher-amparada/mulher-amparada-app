@@ -21,7 +21,7 @@ body {
     min-height: 100vh;
     min-height: 100dvh;
     background: #ffffff;
-    color: #000000;
+    color: #171717;
     font-family: "Quicksand", sans-serif;
 }
 
@@ -56,7 +56,7 @@ h1 {
 .description {
     max-width: 560px;
     margin: 24px 0 0;
-    color: #666666;
+    color: #6f6f6f;
     font-size: 17px;
     line-height: 1.6;
     font-weight: 500;
@@ -73,10 +73,7 @@ h1 {
     display: block;
     width: fit-content;
     margin: 0 auto 18px;
-    background: #ff8fb5;
-    color: #ffffff;
-    padding: 5px 10px;
-    border-radius: 200px;
+    color: #e62f70;
     font-size: 16px;
     line-height: 1.5;
     font-weight: 700;
@@ -84,11 +81,12 @@ h1 {
 }
 
 .license span {
+    margin-left: 5px;
     font-size: 20px;
 }
 
 .license:focus-visible {
-    outline: 3px solid rgba(255, 143, 181, 0.35);
+    outline: 3px solid rgba(230, 47, 112, 0.25);
     outline-offset: 5px;
     border-radius: 5px;
 }
@@ -107,7 +105,7 @@ h1 {
 }
 
 .button:focus-visible {
-    outline: 3px solid rgba(255, 63, 130, 0.35);
+    outline: 3px solid rgba(255, 63, 130, 0.25);
     outline-offset: 4px;
 }
 

@@ -1,8 +1,5 @@
 package com.mulheres
 
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.windowInsetsPadding
 import android.content.ContentValues
 import android.content.Context
 import android.widget.Toast
@@ -423,10 +420,8 @@ private fun DiarioScreen() {
         Surface(
     modifier =
         Modifier
-            .fillMaxSize()
-            .windowInsetsPadding(
-                WindowInsets.safeDrawing
-            ),
+            .fillMaxSize(),
+
     color =
         if (dark)
             DarkBackground

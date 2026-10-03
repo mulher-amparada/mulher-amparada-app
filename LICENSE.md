@@ -1124,6 +1124,53 @@ O sistema Cripto utiliza AES-256, Android Keystore e Jetpack DataStore Preferenc
 
 ---
 
+Raio Seguro:
+
+O Raio Seguro é um recurso de georreferenciamento do Mulher Amparada que permite definir uma área considerada segura e verificar se a usuária permanece dentro dela.
+
+Como funciona
+
+1. A usuária abre o Raio Seguro e concede ao aplicativo a permissão de localização.
+2. O aplicativo identifica a localização atual do dispositivo.
+3. A usuária define o tamanho do raio seguro.
+4. A localização atual pode ser utilizada como centro da área segura.
+5. Ao tocar em Atualizar, a área definida é salva de forma criptografada.
+6. Enquanto o recurso estiver ativo, a localização atual é comparada com o centro da área.
+7. Se a usuária permanecer dentro do raio definido, nenhuma ação de alerta é apresentada.
+8. Caso a localização ultrapasse o limite estabelecido, o aplicativo informa que a usuária saiu da área segura e disponibiliza a opção Pedir ajuda.
+
+Georreferenciamento
+
+O recurso utiliza coordenadas geográficas do dispositivo:
+
+- Latitude: representa a posição norte-sul.
+- Longitude: representa a posição leste-oeste.
+- Raio: determina a distância máxima permitida a partir do centro da área segura.
+
+A distância entre a localização atual e o centro da área é utilizada para determinar se a usuária está dentro ou fora do raio.
+
+Mapa
+
+A visualização cartográfica utiliza o OpenStreetMap por meio do "osmdroid".
+
+O mapa permite visualizar a localização e a área segura de forma gráfica, sem depender do Google Maps.
+
+«O carregamento dos mapas do OpenStreetMap requer conexão com a internet.»
+
+Privacidade
+
+O recurso foi projetado para verificar a permanência dentro de uma área definida, e não para criar um histórico de trajetos.
+
+A área segura configurada é armazenada de forma criptografada pelo aplicativo.
+
+O recurso não utiliza um servidor próprio do Mulher Amparada para armazenar um histórico de localização da usuária.
+
+Importante
+
+O Raio Seguro é um recurso de apoio e não substitui serviços oficiais de emergência, sistemas de localização ou acompanhamento profissional. A precisão da localização pode variar conforme o dispositivo, o sinal de GPS, o ambiente e as condições de rede.
+
+---
+
 Mulher Amparada 💜
 
 Este aplicativo opera com foco em privacidade, transparência, segurança e controle da própria usuária.

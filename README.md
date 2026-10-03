@@ -6,7 +6,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4147**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4084**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
@@ -357,6 +357,22 @@ Registre como dói cada dia e, com isso, o aplicativo monta um calendário.
 ###Mapa:
 Mostra um mapa da região e, quando a localização estiver disponível e autorizada, permite visualizar a posição atual.
 
+### Raio Seguro
+
+Recurso de georreferenciamento que permite definir uma área segura e verificar se a usuária permanece dentro do raio estabelecido.
+
+- 📌 Define a sua localização como centro da área segura e isso é fixo.
+- 📏 Permite configurar o raio em metros.
+- 🗺️ Utiliza OpenStreetMap para visualização do mapa.
+- 📍 Compara a localização atual com a área definida.
+- ⚠️ Em caso de saída do raio, exibe um alerta.
+- 🆘 Disponibiliza a opção Pedir ajuda.
+- 🔐 Os dados da área segura são armazenados de forma criptografada.
+- 🚫 Não cria histórico de trajetos no aplicativo.
+- 🌐 O carregamento dos mapas depende de conexão com a internet.
+
+O recurso foi desenvolvido como uma ferramenta de apoio à segurança, permitindo que a própria usuária estabeleça os limites da área que considera segura.
+
 ###Diário criptografado:
 Usando criptografia, a usuária poderá anotar o que quiser. Com a senha, ficará seguro e também não some, pois estará guardado, e é possivel baixar as páginas desse diário!
 
@@ -516,22 +532,6 @@ O acesso varia de acordo com o tipo de armazenamento:
 ### Arquivo seguro:
 
 Ao tocar neste botão, o app te leva para uma activity que você pode adicionar arquivos usando o storage acess framework (S.A.F) e ele criptografa com a classe cripto, e você pode descriptografar ou excluir!
-
-### Raio Seguro
-
-Recurso de georreferenciamento que permite definir uma área segura e verificar se a usuária permanece dentro do raio estabelecido.
-
-- 📌 Define a sua localização como centro da área segura e isso é fixo.
-- 📏 Permite configurar o raio em metros.
-- 🗺️ Utiliza OpenStreetMap para visualização do mapa.
-- 📍 Compara a localização atual com a área definida.
-- ⚠️ Em caso de saída do raio, exibe um alerta.
-- 🆘 Disponibiliza a opção Pedir ajuda.
-- 🔐 Os dados da área segura são armazenados de forma criptografada.
-- 🚫 Não cria histórico de trajetos no aplicativo.
-- 🌐 O carregamento dos mapas depende de conexão com a internet.
-
-O recurso foi desenvolvido como uma ferramenta de apoio à segurança, permitindo que a própria usuária estabeleça os limites da área que considera segura.
 
 ### Navegador: 
 

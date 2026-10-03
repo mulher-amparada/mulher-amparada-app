@@ -1,6 +1,5 @@
 package com.mulheres
 
-import android.content.Intent
 import android.graphics.Color as AndroidColor
 import android.net.Uri
 import android.os.Bundle
@@ -33,14 +32,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -56,7 +55,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.DataInputStream
 import java.io.DataOutputStream
@@ -265,7 +267,10 @@ private fun ArquivoSeguro() {
             processando = true
             mensagem = null
 
-            kotlinx.coroutines.MainScope().launch {
+            CoroutineScope(
+                SupervisorJob() +
+                    Dispatchers.Main.immediate
+            ).launch {
 
                 val resultado =
                     withContext(
@@ -278,6 +283,9 @@ private fun ArquivoSeguro() {
                         var quantidade = 0
 
                         uris.forEach { uri ->
+
+                            var temporario: File? = null
+                            var pacote: File? = null
 
                             try {
 
@@ -292,31 +300,37 @@ private fun ArquivoSeguro() {
                                         .getType(uri)
                                         ?: "application/octet-stream"
 
-                                val temporario =
+                                temporario =
                                     File(
                                         context.cacheDir,
                                         "arquivo_${UUID.randomUUID()}.tmp"
                                     )
 
-                                val pacote =
+                                pacote =
                                     File(
                                         context.cacheDir,
                                         "pacote_${UUID.randomUUID()}.tmp"
                                     )
 
-                                context.contentResolver
-                                    .openInputStream(uri)
-                                    ?.use { input ->
+                                val input =
+                                    context.contentResolver
+                                        .openInputStream(uri)
 
-                                        temporario
-                                            .outputStream()
-                                            .use { output ->
+                                if (input == null) {
+                                    return@forEach
+                                }
 
-                                                input.copyTo(
-                                                    output
-                                                )
-                                            }
-                                    }
+                                input.use { entrada ->
+
+                                    temporario
+                                        .outputStream()
+                                        .use { output ->
+
+                                            entrada.copyTo(
+                                                output
+                                            )
+                                        }
+                                }
 
                                 DataOutputStream(
                                     pacote.outputStream()
@@ -332,16 +346,29 @@ private fun ArquivoSeguro() {
 
                                     temporario
                                         .inputStream()
-                                        .use { input ->
+                                        .use { inputStream ->
 
-                                        input.copyTo(
-                                            output
-                                        )
-                                    }
+                                            inputStream.copyTo(
+                                                output
+                                            )
+                                        }
                                 }
 
+                                val nomeLimpo =
+                                    nomeOriginal
+                                        .replace(
+                                            Regex(
+                                                """[\\/:*?"<>|]"""
+                                            ),
+                                            "_"
+                                        )
+                                        .take(180)
+                                        .ifBlank {
+                                            "Arquivo"
+                                        }
+
                                 val nomeSeguro =
-                                    "${UUID.randomUUID()}__${nomeOriginal}.seguro"
+                                    "${UUID.randomUUID()}__${nomeLimpo}.seguro"
 
                                 val arquivoSeguro =
                                     File(
@@ -354,15 +381,18 @@ private fun ArquivoSeguro() {
                                     arquivoSeguro
                                 )
 
-                                temporario.delete()
-                                pacote.delete()
-
                                 quantidade++
 
                             } catch (
                                 e: Exception
                             ) {
+
                                 e.printStackTrace()
+
+                            } finally {
+
+                                temporario?.delete()
+                                pacote?.delete()
                             }
                         }
 
@@ -374,10 +404,16 @@ private fun ArquivoSeguro() {
                 processando = false
 
                 mensagem =
-                    if (resultado == 1)
-                        "Arquivo protegido com sucesso."
-                    else
-                        "$resultado arquivos protegidos com sucesso."
+                    when {
+                        resultado == 0 ->
+                            "Não foi possível proteger os arquivos."
+
+                        resultado == 1 ->
+                            "Arquivo protegido com sucesso."
+
+                        else ->
+                            "$resultado arquivos protegidos com sucesso."
+                    }
             }
         }
 
@@ -402,63 +438,81 @@ private fun ArquivoSeguro() {
             processando = true
             mensagem = null
 
-            kotlinx.coroutines.MainScope().launch {
+            CoroutineScope(
+                SupervisorJob() +
+                    Dispatchers.Main.immediate
+            ).launch {
 
-                withContext(
-                    Dispatchers.IO
-                ) {
-
-                    val cripto =
-                        Cripto(context)
-
-                    val temporario =
-                        File(
-                            context.cacheDir,
-                            "descriptografado_${UUID.randomUUID()}.tmp"
-                        )
-
-                    try {
-
-                        cripto.descriptografarArquivo(
-                            item.arquivo,
-                            temporario
-                        )
-
-                        DataInputStream(
-                            temporario.inputStream()
-                        ).use { input ->
-
-                            input.readUTF()
-                            input.readUTF()
-
-                            context.contentResolver
-                                .openOutputStream(uri)
-                                ?.use { output ->
-
-                                input.copyTo(
-                                    output
-                                )
-                            }
-                        }
-
-                        temporario.delete()
-
-                        mensagem =
-                            "Arquivo exportado com sucesso."
-
-                    } catch (
-                        e: Exception
+                val resultado =
+                    withContext(
+                        Dispatchers.IO
                     ) {
 
-                        temporario.delete()
+                        val cripto =
+                            Cripto(context)
 
-                        mensagem =
-                            "Não foi possível exportar o arquivo."
+                        val temporario =
+                            File(
+                                context.cacheDir,
+                                "descriptografado_${UUID.randomUUID()}.tmp"
+                            )
+
+                        try {
+
+                            cripto.descriptografarArquivo(
+                                item.arquivo,
+                                temporario
+                            )
+
+                            DataInputStream(
+                                temporario.inputStream()
+                            ).use { input ->
+
+                                input.readUTF()
+                                input.readUTF()
+
+                                val output =
+                                    context.contentResolver
+                                        .openOutputStream(uri)
+
+                                if (output == null) {
+                                    throw IllegalStateException(
+                                        "Não foi possível criar o arquivo."
+                                    )
+                                }
+
+                                output.use { destino ->
+
+                                    input.copyTo(
+                                        destino
+                                    )
+                                }
+                            }
+
+                            true
+
+                        } catch (
+                            e: Exception
+                        ) {
+
+                            e.printStackTrace()
+
+                            false
+
+                        } finally {
+
+                            temporario.delete()
+                        }
                     }
 
-                    arquivoParaExportar = null
-                    processando = false
-                }
+                arquivoParaExportar = null
+                processando = false
+
+                mensagem =
+                    if (resultado)
+                        "Arquivo exportado com sucesso."
+                    else
+                        "Não foi possível exportar o arquivo."
             }
         }
 

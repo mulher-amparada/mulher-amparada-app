@@ -565,10 +565,9 @@ abrirArquivoSeguro: () -> Unit,
                                     abrirArquivos()
                                 }
 
-Acesso(
-    "Arquivo seguro",
+    "Arquivo seguro", -> {
     "Acesse seus arquivos protegidos"
-),
+}
                                 
                             }
                         }

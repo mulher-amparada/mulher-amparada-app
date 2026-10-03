@@ -6,7 +6,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4113**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4084**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
@@ -170,6 +170,8 @@ NeoCalcActivity (compose) = Tela que contém o disfarce de calculadora
  GravarActivity (xml) = Recurso do gravador de voz da área protegida
  
  FileActivity (xml) = Recurso de Gerenciador de arquivos da área protegida (mas ele apenas visualiza!)
+ 
+ Arquivo Activity = (compose) Tela da funcao de arquivo seguro da área protegida!
  
  # Sobre como o aplicativo é compilado:
 
@@ -509,9 +511,9 @@ O acesso varia de acordo com o tipo de armazenamento:
 
 >Porém, quando eu digo que o Gerenciador de arquivos apenas visualiza, eu quero dizer que ele nao faz operações de arquivos, mas quando clica em um arquivo, ele abre um seletor de apps, ajudando muito para a coleta de evidências!, porém, se a usuária selecionar um app por esse seletor e perder os dados, o desenvolvedor não se responsabiliza!
 
-###Tela de aplicativos:
-Ao tocar neste botão, o app mostrará um site dentro do app que lista todos os outros apps com a permissão query all packpages...
+### Arquivo seguro:
 
+Ao tocar neste botão, o app te leva para uma activity que você pode adicionar arquivos usando o storage acess framework (S.A.F) e ele criptografa com a classe cripto, e você pode descriptografar ou excluir!
 
 ### Navegador: 
 

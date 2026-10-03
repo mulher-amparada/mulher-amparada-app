@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.compose.foundation.layout.statusBarsPadding
 import android.content.ContentValues
 import android.content.Context
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -434,7 +435,7 @@ private fun DiarioScreen() {
                 modifier =
                     Modifier
                         .fillMaxSize()
-                        
+                          .statusBarsPadding()
                         .padding(
                             horizontal = 11.dp,
                             vertical = 10.dp

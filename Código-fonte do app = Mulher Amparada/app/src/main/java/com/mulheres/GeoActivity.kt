@@ -1,6 +1,5 @@
 package com.mulheres
 
-import androidx.compose.ui.viewinterop.AndroidView
 import android.Manifest
 import android.content.Context
 import android.content.Intent
@@ -11,7 +10,6 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -53,14 +51,13 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import kotlinx.coroutines.delay
+import org.json.JSONObject
 import org.osmdroid.config.Configuration
-import org.osmdroid.events.MapListener
-import org.osmdroid.events.ScrollEvent
-import org.osmdroid.events.ZoomEvent
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -68,13 +65,10 @@ import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polygon
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
-import org.json.JSONObject
 import java.util.Locale
 import kotlin.math.roundToInt
 
-private val Pink = Color(0xFFFF8EAF)
 private val PinkDark = Color(0xFFE96D92)
-private val Black = Color.Black
 private val White = Color.White
 private val Surface = Color(0xF5000000)
 private val Muted = Color(0xB3FFFFFF)
@@ -115,6 +109,8 @@ class GeoActivity : ComponentActivity() {
 
     private var lastLocation: Location? = null
 
+    private var centeredOnLocation = false
+
     private val permissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
@@ -124,7 +120,9 @@ class GeoActivity : ComponentActivity() {
             }
         }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(
+        savedInstanceState: Bundle?
+    ) {
         super.onCreate(savedInstanceState)
 
         window.addFlags(
@@ -142,8 +140,12 @@ class GeoActivity : ComponentActivity() {
         window.navigationBarColor =
             AndroidColor.TRANSPARENT
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-            window.isNavigationBarContrastEnforced = false
+        if (
+            android.os.Build.VERSION.SDK_INT >=
+                android.os.Build.VERSION_CODES.Q
+        ) {
+            window.isNavigationBarContrastEnforced =
+                false
         }
 
         WindowInsetsControllerCompat(
@@ -188,6 +190,7 @@ class GeoActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
+
         mapView?.onResume()
 
         if (hasLocationPermission()) {
@@ -254,13 +257,15 @@ class GeoActivity : ComponentActivity() {
                 LocationManager.GPS_PROVIDER
             )
         ) {
-
-            locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                3000L,
-                5f,
-                listener
-            )
+            try {
+                locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    3000L,
+                    5f,
+                    listener
+                )
+            } catch (_: SecurityException) {
+            }
         }
 
         if (
@@ -268,13 +273,15 @@ class GeoActivity : ComponentActivity() {
                 LocationManager.NETWORK_PROVIDER
             )
         ) {
-
-            locationManager.requestLocationUpdates(
-                LocationManager.NETWORK_PROVIDER,
-                5000L,
-                10f,
-                listener
-            )
+            try {
+                locationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER,
+                    5000L,
+                    10f,
+                    listener
+                )
+            } catch (_: SecurityException) {
+            }
         }
 
         val lastGps =
@@ -297,16 +304,17 @@ class GeoActivity : ComponentActivity() {
 
         val initial =
             when {
-
                 lastGps != null &&
-                    lastNetwork != null ->
+                    lastNetwork != null -> {
                     if (
                         lastGps.time >=
                             lastNetwork.time
-                    )
+                    ) {
                         lastGps
-                    else
+                    } else {
                         lastNetwork
+                    }
+                }
 
                 lastGps != null ->
                     lastGps
@@ -360,18 +368,18 @@ class GeoActivity : ComponentActivity() {
                     location.longitude
                 )
 
-            myLocationOverlay
-                ?.enableMyLocation()
-
-            if (
-                !map.overlays.contains(
-                    myLocationOverlay
-                )
-            ) {
-
-                myLocationOverlay?.let {
+            myLocationOverlay?.let {
+                if (!map.overlays.contains(it)) {
                     map.overlays.add(it)
                 }
+
+                it.enableMyLocation()
+            }
+
+            if (!centeredOnLocation) {
+                map.controller.setZoom(17.0)
+                map.controller.animateTo(point)
+                centeredOnLocation = true
             }
 
             map.invalidate()
@@ -402,17 +410,9 @@ class GeoActivity : ComponentActivity() {
 
         runOnUiThread {
 
-            val root =
-                currentGeoState
-
-            root?.outsideSafeArea =
-                outside
-
-            root?.distance =
-                distance[0]
-
-            root?.let {
-                currentGeoState = it
+            currentGeoState?.let {
+                it.outsideSafeArea = outside
+                it.distance = distance[0]
             }
         }
     }
@@ -425,11 +425,8 @@ class GeoActivity : ComponentActivity() {
 
     private fun loadSafeArea(): SafeArea? {
 
-        val cripto =
-            Cripto(this)
-
         val saved =
-            cripto.carregar(
+            Cripto(this).carregar(
                 "geo_area_segura"
             )
 
@@ -496,6 +493,10 @@ class GeoActivity : ComponentActivity() {
             latitude,
             longitude,
             radius
+        )
+
+        checkSafeRadius(
+            lastLocation ?: return
         )
     }
 
@@ -591,15 +592,12 @@ class GeoActivity : ComponentActivity() {
 
         try {
 
-            val intent =
+            startActivity(
                 Intent(
                     Intent.ACTION_DIAL,
-                    Uri.parse(
-                        "tel:190"
-                    )
+                    Uri.parse("tel:190")
                 )
-
-            startActivity(intent)
+            )
 
         } catch (_: Exception) {
         }
@@ -672,6 +670,12 @@ class GeoActivity : ComponentActivity() {
                             true
                         )
 
+                        zoomController.setVisibility(
+                            org.osmdroid.views
+                                .CustomZoomButtonsController
+                                .Visibility.NEVER
+                        )
+
                         controller.setZoom(
                             17.0
                         )
@@ -700,23 +704,6 @@ class GeoActivity : ComponentActivity() {
                                 it.radius
                             )
                         }
-
-                        addMapListener(
-                            object : MapListener {
-
-                                override fun onScroll(
-                                    event: ScrollEvent?
-                                ): Boolean {
-                                    return false
-                                }
-
-                                override fun onZoom(
-                                    event: ZoomEvent?
-                                ): Boolean {
-                                    return false
-                                }
-                            }
-                        )
                     }
                 },
                 modifier =
@@ -731,8 +718,8 @@ class GeoActivity : ComponentActivity() {
                         )
                         .navigationBarsPadding()
                         .padding(
-                            horizontal = 14.dp,
-                            vertical = 10.dp
+                            horizontal = 6.dp,
+                            vertical = 6.dp
                         ),
                 horizontalAlignment =
                     Alignment.CenterHorizontally
@@ -746,14 +733,14 @@ class GeoActivity : ComponentActivity() {
                                 .fillMaxWidth()
                                 .clip(
                                     RoundedCornerShape(
-                                        22.dp
+                                        20.dp
                                     )
                                 )
                                 .background(
                                     Surface
                                 )
                                 .padding(
-                                    16.dp
+                                    14.dp
                                 ),
                         horizontalAlignment =
                             Alignment.CenterHorizontally
@@ -777,7 +764,10 @@ class GeoActivity : ComponentActivity() {
                         Text(
                             text =
                                 String.format(
-                                    Locale("pt", "BR"),
+                                    Locale(
+                                        "pt",
+                                        "BR"
+                                    ),
                                     "Distância: %.0f m",
                                     distance
                                 ),
@@ -788,7 +778,7 @@ class GeoActivity : ComponentActivity() {
 
                         Spacer(
                             modifier =
-                                Modifier.size(10.dp)
+                                Modifier.size(8.dp)
                         )
 
                         Button(
@@ -817,14 +807,13 @@ class GeoActivity : ComponentActivity() {
 
                     Spacer(
                         modifier =
-                            Modifier.size(8.dp)
+                            Modifier.size(6.dp)
                     )
                 }
 
                 Row(
                     modifier =
                         Modifier
-                            .fillMaxWidth()
                             .clip(
                                 RoundedCornerShape(
                                     999.dp
@@ -834,7 +823,8 @@ class GeoActivity : ComponentActivity() {
                                 Surface
                             )
                             .padding(
-                                7.dp
+                                horizontal = 5.dp,
+                                vertical = 4.dp
                             ),
                     horizontalArrangement =
                         Arrangement.Center,
@@ -856,7 +846,6 @@ class GeoActivity : ComponentActivity() {
                                         radius
                                 )
                             }
-
                         }
                     ) {
 
@@ -870,7 +859,7 @@ class GeoActivity : ComponentActivity() {
 
                     Spacer(
                         modifier =
-                            Modifier.width(8.dp)
+                            Modifier.width(6.dp)
                     )
 
                     Button(

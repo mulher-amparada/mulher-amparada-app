@@ -904,20 +904,17 @@ val mutedColor =
             if (showRadiusDialog) {
 
                 AlertDialog(
-                    onDismissRequest = {
-                        showRadiusDialog = false
-                    },
-                    title = {
-
-                        Text(
-                            text =
-                                "Raio da área segura",
-                            fontFamily =
-                                Quicksand,
-                            fontWeight =
-                                FontWeight.Bold
-                        )
-                    },
+    onDismissRequest = {
+        showRadiusDialog = false
+    },
+    containerColor = surfaceColor,
+    title = {
+        Text(
+            text = "Raio da área segura",
+            fontFamily = Quicksand,
+            fontWeight = FontWeight.Bold
+        )
+    },
                     text = {
 
                         Column {

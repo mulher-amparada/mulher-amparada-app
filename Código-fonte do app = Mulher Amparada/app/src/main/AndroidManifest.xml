@@ -203,6 +203,12 @@
     android:configChanges="orientation|screenSize"
                      android:exported="false" />
                      
+                             <activity
+            android:name=".ArquivoActivity"
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
+                     android:exported="false" />
+                     
 <!-- ================================================= -->
         <!-- SD FILE PROVIDER -->
         <!-- ================================================= -->

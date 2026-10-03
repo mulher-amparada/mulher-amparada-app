@@ -381,20 +381,23 @@ abrirArquivoSeguro: () -> Unit,
     )
 
 
-    val outrasFuncoes = listOf(
+val outrasFuncoes = listOf(
 
-        Acesso(
-            "Gravador de voz",
-            "Grave áudios rapidamente"
-        ),
+    Acesso(
+        "Gravador de voz",
+        "Grave áudios rapidamente"
+    ),
 
-        Acesso(
-            "Meus arquivos",
-            "Acesse seus arquivos"
-        ),
+    Acesso(
+        "Meus arquivos",
+        "Acesse seus arquivos"
+    ),
 
-        
+    Acesso(
+        "Arquivo seguro",
+        "Acesse seus arquivos protegidos"
     )
+)
 
 
     
@@ -565,8 +568,8 @@ abrirArquivoSeguro: () -> Unit,
                                     abrirArquivos()
                                 }
 
-    "Arquivo seguro", -> {
-    "Acesse seus arquivos protegidos"
+"Arquivo seguro" -> {
+    abrirArquivoSeguro()
 }
                                 
                             }

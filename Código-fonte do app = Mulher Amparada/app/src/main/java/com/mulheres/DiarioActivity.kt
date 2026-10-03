@@ -134,29 +134,46 @@ private val Quicksand = FontFamily(
 class DiarioActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    super.onCreate(savedInstanceState)
 
-        enableEdgeToEdge()
+    enableEdgeToEdge()
 
-        window.addFlags(
-            WindowManager.LayoutParams.FLAG_SECURE
-        )
+    window.addFlags(
+        WindowManager.LayoutParams.FLAG_SECURE
+    )
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        false
+    )
 
-window.isNavigationBarContrastEnforced = false
-        window.statusBarColor =
-            android.graphics.Color.TRANSPARENT
+    window.statusBarColor =
+        android.graphics.Color.TRANSPARENT
 
-        window.navigationBarColor =
-            android.graphics.Color.TRANSPARENT
+    window.navigationBarColor =
+        android.graphics.Color.TRANSPARENT
 
-        setContent {
-            DiarioTheme {
-                DiarioScreen()
-            }
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+        window.isNavigationBarContrastEnforced = false
+    }
+
+    WindowCompat.getInsetsController(
+        window,
+        window.decorView
+    ).apply {
+        isAppearanceLightStatusBars =
+            !isSystemInDarkTheme()
+
+        isAppearanceLightNavigationBars =
+            !isSystemInDarkTheme()
+    }
+
+    setContent {
+        DiarioTheme {
+            DiarioScreen()
         }
     }
+}
 }
 /* =========================================================
    TEMA

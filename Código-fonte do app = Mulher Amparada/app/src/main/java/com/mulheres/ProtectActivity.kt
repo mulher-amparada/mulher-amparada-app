@@ -94,6 +94,16 @@ WindowCompat.getInsetsController(
                     )
                 },
 
+// no setContent / MeusAcessos
+abrirArquivoSeguro = {
+    startActivity(
+        Intent(
+            this,
+            ArquivoActivity::class.java
+        )
+    )
+},
+
                 abrirNavegador = {
                     startActivity(
                         Intent(
@@ -314,7 +324,7 @@ private fun MeusAcessos(
 
     abrirCalculadora: () -> Unit,
 
-
+abrirArquivoSeguro: () -> Unit,
 
     abrirTarefa: () -> Unit,
 
@@ -413,7 +423,7 @@ private fun MeusAcessos(
                     PaddingValues(
                         start = 18.dp,
                         end = 18.dp,
-                        top = 22.dp,
+                        top = 24.dp,
                         bottom = 70.dp
                     ),
 
@@ -555,6 +565,10 @@ private fun MeusAcessos(
                                     abrirArquivos()
                                 }
 
+Acesso(
+    "Arquivo seguro",
+    "Acesse seus arquivos protegidos"
+),
                                 
                             }
                         }

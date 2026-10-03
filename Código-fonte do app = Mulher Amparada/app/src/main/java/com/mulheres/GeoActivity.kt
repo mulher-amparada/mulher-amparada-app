@@ -907,7 +907,7 @@ val mutedColor =
     onDismissRequest = {
         showRadiusDialog = false
     },
-    containerColor = surfaceColor,
+    containerColor = SurfaceColor,
     title = {
         Text(
             text = "Raio da área segura",

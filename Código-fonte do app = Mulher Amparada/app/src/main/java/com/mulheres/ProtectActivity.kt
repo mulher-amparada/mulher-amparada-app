@@ -426,7 +426,7 @@ val outrasFuncoes = listOf(
                     PaddingValues(
                         start = 18.dp,
                         end = 18.dp,
-                        top = 24.dp,
+                        top = 48.dp,
                         bottom = 70.dp
                     ),
 

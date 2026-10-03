@@ -535,7 +535,7 @@ private fun ArquivoSeguro() {
                     PaddingValues(
                         start = 18.dp,
                         end = 18.dp,
-                        top = 22.dp,
+                        top = 24.dp,
                         bottom = 60.dp
                     ),
 

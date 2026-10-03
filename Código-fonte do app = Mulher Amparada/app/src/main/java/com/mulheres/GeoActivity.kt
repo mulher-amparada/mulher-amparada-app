@@ -911,6 +911,7 @@ val mutedColor =
     title = {
         Text(
             text = "Raio da área segura",
+            color = contentColor,
             fontFamily = Quicksand,
             fontWeight = FontWeight.Bold
         )
@@ -922,6 +923,7 @@ val mutedColor =
                             Text(
                                 text =
                                     "${radius.roundToInt()} metros",
+                                    color = contentColor,
                                 fontFamily =
                                     Quicksand
                             )

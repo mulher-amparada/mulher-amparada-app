@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import android.Manifest
 import android.content.Context
 import android.content.Intent
@@ -69,9 +70,7 @@ import java.util.Locale
 import kotlin.math.roundToInt
 
 private val PinkDark = Color(0xFFE96D92)
-private val White = Color.White
-private val Surface = Color(0xF5000000)
-private val Muted = Color(0xB3FFFFFF)
+
 private val Danger = Color(0xFFE53935)
 
 private val Quicksand = FontFamily(
@@ -608,6 +607,21 @@ class GeoActivity : ComponentActivity() {
 
         val context =
             LocalContext.current
+            
+            val darkTheme = isSystemInDarkTheme()
+
+val surfaceColor =
+    if (darkTheme) Color.Black else Color.White
+
+val contentColor =
+    if (darkTheme) Color.White else Color.Black
+
+val mutedColor =
+    if (darkTheme) {
+        Color(0xB3FFFFFF)
+    } else {
+        Color(0xB3000000)
+    }
 
         var showRadiusDialog by remember {
             mutableStateOf(false)
@@ -749,7 +763,7 @@ class GeoActivity : ComponentActivity() {
                         Text(
                             text =
                                 "Você saiu da área segura",
-                            color = White,
+                            color = contentColor,
                             fontFamily = Quicksand,
                             fontWeight =
                                 FontWeight.Bold,
@@ -771,7 +785,7 @@ class GeoActivity : ComponentActivity() {
                                     "Distância: %.0f m",
                                     distance
                                 ),
-                            color = Muted,
+                            color = mutedColor,
                             fontFamily = Quicksand,
                             fontSize = 11.sp
                         )
@@ -820,7 +834,7 @@ class GeoActivity : ComponentActivity() {
                                 )
                             )
                             .background(
-                                Surface
+                                SurfaceColor
                             )
                             .padding(
                                 horizontal = 5.dp,

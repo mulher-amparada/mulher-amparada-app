@@ -2,6 +2,7 @@ package com.mulheres
 
 import android.content.ContentValues
 import android.content.Context
+import androidx.compose.foundation.layout.navigationBarsPadding
 import android.widget.Toast
 import android.os.Bundle
 import android.os.Environment
@@ -475,19 +476,20 @@ Spacer(
                 )
 
                 Spacer(
-                    modifier =
-                        Modifier.height(14.dp)
-                )
+    modifier =
+        Modifier.height(14.dp)
+)
 
-                Box(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .pointerInput(
-                                currentPage,
-                                pages.size
-                            ) {
+Box(
+    modifier =
+        Modifier
+            .fillMaxWidth()
+            .weight(1f)
+            .navigationBarsPadding()
+            .pointerInput(
+                currentPage,
+                pages.size
+            ) {
 
                                 detectHorizontalDragGestures(
 

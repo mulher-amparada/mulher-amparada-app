@@ -375,6 +375,8 @@ O recurso foi desenvolvido como uma ferramenta de apoio à segurança, permitind
 
 > Só funciona dentro da GeoActivity!
 
+> e quando ele detecta que a usuária saiu da área segura, ele mostra um popup com um botão vermelho, e ao clicar ele leva pro telefone nativo do sistema com o 190 já discado!
+
 ###Diário criptografado:
 Usando criptografia, a usuária poderá anotar o que quiser. Com a senha, ficará seguro e também não some, pois estará guardado, e é possivel baixar as páginas desse diário!
 

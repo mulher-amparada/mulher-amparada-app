@@ -614,25 +614,9 @@ Spacer(
                     )
                 }
 
-                Spacer(
-                    modifier =
-                        Modifier.height(10.dp)
-                )
+                
 
-                Text(
-                    text =
-                        if (saving)
-                            "Salvo"
-                        else
-                            "Deslize para mudar de página",
-                    color =
-                        if (dark)
-                            DarkMuted
-                        else
-                            LightMuted,
-                    fontFamily = Quicksand,
-                    fontSize = 9.sp
-                )
+
             }
         }
     }

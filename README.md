@@ -6,7 +6,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4145**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4084**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
@@ -521,7 +521,7 @@ Ao tocar neste botão, o app te leva para uma activity que você pode adicionar 
 
 Recurso de georreferenciamento que permite definir uma área segura e verificar se a usuária permanece dentro do raio estabelecido.
 
-- 📌 Define uma localização como centro da área segura.
+- 📌 Define a sua localização como centro da área segura e isso é fixo.
 - 📏 Permite configurar o raio em metros.
 - 🗺️ Utiliza OpenStreetMap para visualização do mapa.
 - 📍 Compara a localização atual com a área definida.

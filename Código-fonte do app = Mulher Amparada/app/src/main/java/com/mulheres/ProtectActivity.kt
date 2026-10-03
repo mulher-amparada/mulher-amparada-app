@@ -167,7 +167,14 @@ abrirArquivoSeguro = {
                     )
                 },
 
-               
+               abrirGeo = {
+    startActivity(
+        Intent(
+            this,
+            GeoActivity::class.java
+        )
+    )
+}
 
             )
         }
@@ -328,7 +335,7 @@ abrirArquivoSeguro: () -> Unit,
 
     abrirTarefa: () -> Unit,
 
-    
+    abrirGeo: () -> Unit,
 
 
 
@@ -356,6 +363,11 @@ abrirArquivoSeguro: () -> Unit,
             "Mapa da sua região",
             "Visualize locais próximos"
         ),
+        
+        Acesso(
+    "Raio seguro",
+    "Defina e acompanhe sua área segura"
+),
 
         Acesso(
             "Diário e anotações",
@@ -511,6 +523,11 @@ val outrasFuncoes = listOf(
                                 "Navegador" -> {
                                     abrirNavegador()
                                 }
+                                
+                                "Raio seguro" -> {
+    abrirGeo()
+}
+                                
                             }
                         }
                     )

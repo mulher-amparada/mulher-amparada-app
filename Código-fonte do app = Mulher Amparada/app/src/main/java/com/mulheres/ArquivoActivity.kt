@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.compose.foundation.layout.navigationBarsPadding
 import android.graphics.Color as AndroidColor
 import android.net.Uri
 import android.os.Bundle
@@ -204,6 +205,10 @@ private fun ArquivoSeguro() {
         mutableStateOf(false)
     }
 
+    var textoProcessando by remember {
+        mutableStateOf("Protegendo arquivo…")
+    }
+
     var mensagem by remember {
         mutableStateOf<String?>(null)
     }
@@ -265,6 +270,7 @@ private fun ArquivoSeguro() {
             }
 
             processando = true
+            textoProcessando = "Protegendo arquivo…"
             mensagem = null
 
             CoroutineScope(
@@ -436,6 +442,7 @@ private fun ArquivoSeguro() {
             }
 
             processando = true
+            textoProcessando = "Baixando arquivo…"
             mensagem = null
 
             CoroutineScope(
@@ -646,10 +653,15 @@ private fun ArquivoSeguro() {
                                 Color.Black.copy(
                                     alpha = 0.30f
                                 )
-                            ),
+                            )
+                            .padding(
+                                horizontal = 18.dp,
+                                vertical = 18.dp
+                            )
+                            .navigationBarsPadding(),
 
                     contentAlignment =
-                        Alignment.Center
+                        Alignment.BottomCenter
                 ) {
 
                     Box(
@@ -674,7 +686,7 @@ private fun ArquivoSeguro() {
 
                         Text(
                             text =
-                                "Protegendo arquivo…",
+                                textoProcessando,
 
                             color =
                                 if (dark)

@@ -610,7 +610,7 @@ class GeoActivity : ComponentActivity() {
             
             val darkTheme = isSystemInDarkTheme()
 
-val surfaceColor =
+val SurfaceColor =
     if (darkTheme) Color.Black else Color.White
 
 val contentColor =
@@ -751,7 +751,7 @@ val mutedColor =
                                     )
                                 )
                                 .background(
-                                    Surface
+                                    SurfaceColor
                                 )
                                 .padding(
                                     14.dp

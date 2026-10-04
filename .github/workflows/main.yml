@@ -738,7 +738,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     needs: build-site
 
@@ -754,7 +754,7 @@ jobs:
 
   atualizar-commits:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     needs: build
 
@@ -822,7 +822,7 @@ jobs:
 
     name: Sincronizar README com DEV.to
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     needs: atualizar-commits
 
@@ -891,7 +891,7 @@ jobs:
           
   sincronizar-paperwf:
     name: Sincronizar README com Paper.wf
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: atualizar-commits
 
     steps:
@@ -1046,7 +1046,7 @@ jobs:
           
   sitemap:
     name: Gerar Sitemap
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -1058,16 +1058,17 @@ jobs:
 
   indexnow:
     name: IndexNow
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: IndexNow Action
         uses: bojieyang/indexnow-action@v3.0.0
         with:
           sitemap-location: https://mulher-amparada.github.io/mulher-amparada-app/sitemap.xml
+          key: ${{ secrets.INDEXNOW_KEY }}
 
   search-engines:
     name: Search Engines
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: search-engines-urls-push
         uses: 3Alan/search-engines-urls-push@v0.2.3

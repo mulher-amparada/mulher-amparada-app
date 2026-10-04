@@ -758,7 +758,6 @@ jobs:
 
     needs:
   - build
-  - atualizar-commits
   - sincronizar-devto
   - sincronizar-paperwf
   - sitemap

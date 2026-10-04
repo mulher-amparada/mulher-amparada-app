@@ -435,7 +435,13 @@ E eu também já consegui configurar um ssh na conta, e 2fa nela tambem, e com o
 
 e os contatos de confiança, quando são cadrastados eles também são criptografados!
 
-## Sobre o site que está hospedado pelo github pages:
+### Exemplo de nosso workflow:
+
+<p align="center">
+  <img src="https://mulher-amparada.github.io/mulher-amparada-app/workflow.png" alt="Mulher Amparada" width="500">
+</p>
+
+### Sobre o site que está hospedado pelo github pages:
 
 Na primeira página do site, tem 3 botoes que ligam para (180, 190 e 192), e usam o tel: do navegador para abrir o telefone nativo do celular com esses números já discados de acordo com o que você escolheu!
 

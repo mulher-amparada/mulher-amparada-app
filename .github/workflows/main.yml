@@ -1131,7 +1131,7 @@ jobs:
             https://mulher-amparada.github.io/mulher-amparada-app/
           uploadArtifacts: true
           
-    snake:
+  snake:
     name: Gerar Snake das contribuições
     runs-on: ubuntu-24.04
     needs: build

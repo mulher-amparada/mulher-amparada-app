@@ -1,0 +1,7 @@
+version: 2
+
+updates:
+  - package-ecosystem: "gradle"
+    directory: "/Código-fonte do app = Mulher Amparada"
+    schedule:
+      interval: "weekly"

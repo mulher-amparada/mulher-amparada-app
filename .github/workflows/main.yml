@@ -1073,45 +1073,6 @@ jobs:
             git push origin main
           fi
 
-  build-site:
-    name: Build do site
-    runs-on: ubuntu-24.04
-    needs:
-      - build
-      - sitemap
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v6
-
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
-        with:
-          source: ./
-          destination: ./_site
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v5
-        with:
-          path: ./_site
-
-  deploy:
-    name: Publicar GitHub Pages
-    runs-on: ubuntu-24.04
-    needs: build-site
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
   indexnow:
     name: IndexNow
     runs-on: ubuntu-24.04

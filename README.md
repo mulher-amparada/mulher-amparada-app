@@ -410,6 +410,19 @@ Publicar GitHub Pages
 Dessa forma, uma alteração enviada para a "main" pode disparar automaticamente praticamente todo o ciclo de atualização do Mulher Amparada, desde a compilação do aplicativo até a publicação do site e verificações de SEO.
 ```
 
+E temos esse dependabot (.github/dependabot yml):
+```
+version: 2
+
+updates:
+  - package-ecosystem: "gradle"
+    directory: "/Código-fonte do app = Mulher Amparada"
+    schedule:
+      interval: "weekly"
+      
+      
+```
+      
 E eu também já consegui configurar um ssh na conta, e 2fa nela tambem, e com o ssh, eu consegui mover pastas inteiras para o repositório, e transformei 4 em 1, e mais de 100 commits em 1,
 
 e os contatos de confiança, quando são cadrastados eles também são criptografados!

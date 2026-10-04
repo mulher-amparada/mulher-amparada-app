@@ -438,7 +438,7 @@ e os contatos de confiança, quando são cadrastados eles também são criptogra
 ### Exemplo de nosso workflow:
 
 <p align="center">
-  <img src="https://mulher-amparada.github.io/mulher-amparada-app/workflow.png" alt="Mulher Amparada" width="500">
+  <img src="https://github.com/mulher-amparada/mulher-amparada-app/blob/main/workflow.png" alt="Mulher Amparada" width="500">
 </p>
 
 ### Sobre o site que está hospedado pelo github pages:

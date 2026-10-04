@@ -6,7 +6,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4199**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4168**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
@@ -97,7 +97,318 @@ Para acessar o conteúdo completo sobre finanças, consulte a [Carta do desenvol
 
 ### Sobre como eu automatizo o projeto:
 
-e os apps são compilados com o workflow, gera o código sha-256 e o zip com o app, envia para a release pela tag correspondente, e atualiza o link da página de download, o código SHA-256, e o tamanho do apk dessas páginas!, e depois ele publica as alterações no site, e depois altera o valor donúmero de commits que é informado no readme e atualiza o conteúdo do post do devto e o paperwf usando o readme via api!, (tudo isso em um único workflow!)
+```
+Automações do Mulher Amparada
+
+O workflow Automações do Mulher Amparada automatiza a compilação, assinatura, publicação, atualização e verificação do projeto.
+
+Ele é executado automaticamente quando há um "push" na branch "main" e também pode ser executado manualmente através do "workflow_dispatch".
+
+⚙️ O que ele faz
+
+📱 Compilação do APK
+
+O workflow:
+
+- Baixa o código do repositório.
+- Verifica se o projeto Android está presente.
+- Configura Java 17 Temurin.
+- Verifica a disponibilidade do Android SDK 37.
+- Dá permissão de execução ao Gradle.
+- Compila o APK usando Gradle.
+- Localiza o APK gerado.
+- Assina o APK usando "apksigner".
+- Verifica a assinatura do APK.
+- Remove o keystore temporário utilizado durante a assinatura.
+
+🔐 Assinatura
+
+A assinatura utiliza os seguintes Secrets do GitHub:
+
+- "KEYSTORE_BASE64"
+- "KEYSTORE_PASSWORD"
+- "KEY_ALIAS"
+- "KEY_PASSWORD"
+
+O keystore é reconstruído temporariamente durante a execução e removido depois da assinatura.
+
+📦 Artifact
+
+O APK assinado é enviado como um GitHub Actions Artifact utilizando:
+
+"actions/upload-artifact@v6"
+
+📏 Tamanho e SHA-256
+
+O workflow calcula automaticamente:
+
+- tamanho real do APK em bytes;
+- tamanho em MB;
+- hash SHA-256.
+
+Essas informações são utilizadas posteriormente na Release e no "download.html".
+
+📂 Atualização do APK no repositório
+
+O APK assinado é copiado automaticamente para:
+
+"Código-fonte do app = Mulher Amparada/app-release.apk"
+
+Se houver alteração, o workflow cria um commit e envia o arquivo para a branch "main".
+
+🚀 GitHub Release
+
+O workflow utiliza a Release:
+
+"app"
+
+Ele:
+
+1. Verifica se a Release existe.
+2. Procura o APK antigo.
+3. Remove o APK antigo.
+4. Envia o novo APK.
+5. Atualiza as notas da Release com o SHA-256 da compilação.
+
+🌐 Atualização do "download.html"
+
+O workflow atualiza automaticamente no "download.html":
+
+- link de download do APK;
+- tamanho real do APK;
+- SHA-256.
+
+Depois, se houver alteração, o arquivo é enviado para a branch "main".
+
+---
+
+🌐 GitHub Pages
+
+O site é construído e publicado automaticamente.
+
+Build do site
+
+Utiliza:
+
+- "actions/checkout@v6"
+- "actions/configure-pages@v6"
+- "actions/jekyll-build-pages@v1"
+- "actions/upload-pages-artifact@v5"
+
+O conteúdo do repositório é transformado em um artifact do GitHub Pages.
+
+Deploy
+
+A publicação é feita através de:
+
+"actions/deploy-pages@v5"
+
+Assim, o site é atualizado automaticamente após uma nova compilação.
+
+---
+
+🔢 Atualização do contador de commits
+
+O workflow calcula a quantidade total de commits existentes no histórico do projeto.
+
+Ele:
+
+1. Baixa todo o histórico Git.
+2. Conta os commits.
+3. Localiza o número no "README.md".
+4. Atualiza o valor.
+5. Cria um commit somente quando existe alteração.
+
+---
+
+📝 Sincronização com DEV.to
+
+O README é utilizado como fonte de conteúdo para o artigo do projeto no DEV.to.
+
+O workflow:
+
+- baixa o README atualizado;
+- autentica utilizando "DEVTO_API_KEY";
+- envia o conteúdo através da API do DEV.to;
+- atualiza automaticamente o artigo.
+
+---
+
+📰 Sincronização com Paper.wf
+
+O README também é sincronizado com a publicação do projeto no Paper.wf.
+
+O workflow:
+
+1. Autentica na API do Paper.wf.
+2. Localiza a publicação existente.
+3. Obtém o ID da publicação.
+4. Atualiza o título e o conteúdo.
+5. Utiliza o README como conteúdo principal.
+
+São utilizados os Secrets:
+
+- "PAPERWF_USERNAME"
+- "PAPERWF_PASSWORD"
+
+---
+
+🗺️ Sitemap
+
+O workflow gera automaticamente o "sitemap.xml" utilizando:
+
+"cicirello/generate-sitemap@v1"
+
+O sitemap utiliza como endereço-base:
+
+"https://mulher-amparada.github.io/mulher-amparada-app/"
+
+Depois de gerado, ele é salvo no próprio repositório.
+
+---
+
+🔎 IndexNow
+
+O sitemap é enviado ao IndexNow utilizando:
+
+"bojieyang/indexnow-action@v3"
+
+A autenticação utiliza o Secret:
+
+"INDEXNOW_KEY"
+
+O objetivo é comunicar aos mecanismos de busca compatíveis que existem URLs atualizadas para serem rastreadas.
+
+---
+
+🔍 Auditoria SEO
+
+O workflow executa uma auditoria SEO completa utilizando:
+
+"@nurkamol/seo-audit"
+
+A ferramenta analisa o site e gera um relatório:
+
+"seo-audit.md"
+
+O relatório é armazenado como artifact do GitHub Actions.
+
+A auditoria permite verificar problemas relacionados a aspectos como:
+
+- SEO técnico;
+- metadados;
+- indexabilidade;
+- links;
+- imagens;
+- canonical;
+- Open Graph;
+- dados estruturados;
+- sitemap.
+
+---
+
+🔗 Verificação de links quebrados
+
+O workflow utiliza:
+
+"ScholliYT/Broken-Links-Crawler-Action@v3"
+
+para rastrear o site e verificar se existem links que não funcionam.
+
+Ele analisa o endereço:
+
+"https://mulher-amparada.github.io/mulher-amparada-app/"
+
+e seus links internos.
+
+---
+
+🚦 Lighthouse
+
+O workflow utiliza:
+
+"treosh/lighthouse-ci-action@v12"
+
+para executar uma auditoria Lighthouse na página inicial:
+
+"https://mulher-amparada.github.io/mulher-amparada-app/"
+
+Os resultados são enviados como artifacts através de:
+
+"uploadArtifacts: true"
+
+O Lighthouse permite analisar aspectos como:
+
+- desempenho;
+- acessibilidade;
+- boas práticas;
+- SEO;
+- experiência geral da página.
+
+---
+
+🔐 Principais Secrets utilizados
+
+Secret| Finalidade
+"KEYSTORE_BASE64"| Keystore Android codificado em Base64
+"KEYSTORE_PASSWORD"| Senha do keystore
+"KEY_ALIAS"| Alias da chave de assinatura
+"KEY_PASSWORD"| Senha da chave
+"DEVTO_API_KEY"| Autenticação da API do DEV.to
+"PAPERWF_USERNAME"| Usuário do Paper.wf
+"PAPERWF_PASSWORD"| Senha do Paper.wf
+"INDEXNOW_KEY"| Chave utilizada pelo IndexNow
+
+---
+
+🧩 Tecnologias e serviços utilizados
+
+O workflow integra:
+
+- GitHub Actions
+- GitHub Pages
+- GitHub Releases
+- Gradle
+- Android SDK 37
+- Java 17 Temurin
+- apksigner
+- Jekyll
+- DEV.to API
+- Paper.wf API
+- IndexNow
+- Lighthouse
+- SEO Audit
+- Broken Links Crawler
+- Git
+
+🔄 Fluxo geral
+
+Push na main
+      │
+      ▼
+Compilar APK
+      │
+      ├──► Assinar APK
+      │
+      ├──► Calcular SHA-256
+      │
+      ├──► Publicar Release
+      │
+      └──► Atualizar download.html
+      │
+      ▼
+Construir GitHub Pages
+      │
+      ▼
+Publicar GitHub Pages
+      │
+      ├──► IndexNow
+      ├──► Auditoria SEO
+      ├──► Links quebrados
+      └──► Lighthouse
+
+Dessa forma, uma alteração enviada para a "main" pode disparar automaticamente praticamente todo o ciclo de atualização do Mulher Amparada, desde a compilação do aplicativo até a publicação do site e verificações de SEO.
+```
 
 E eu também já consegui configurar um ssh na conta, e 2fa nela tambem, e com o ssh, eu consegui mover pastas inteiras para o repositório, e transformei 4 em 1, e mais de 100 commits em 1,
 

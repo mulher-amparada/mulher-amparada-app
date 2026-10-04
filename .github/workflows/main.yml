@@ -1077,6 +1077,7 @@ jobs:
   indexnow:
     name: IndexNow
     runs-on: ubuntu-24.04
+    needs: sitemap
 
     steps:
       - name: IndexNow Action
@@ -1088,6 +1089,7 @@ jobs:
   gsc:
     name: Google Search Console
     runs-on: ubuntu-24.04
+    needs: sitemap
 
     steps:
       - name: Checkout

@@ -6,7 +6,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4270**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4168**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
@@ -434,14 +434,6 @@ updates:
 E eu também já consegui configurar um ssh na conta, e 2fa nela tambem, e com o ssh, eu consegui mover pastas inteiras para o repositório, e transformei 4 em 1, e mais de 100 commits em 1,
 
 e os contatos de confiança, quando são cadrastados eles também são criptografados!
-
-### Exemplo do workflow do projeto:
-
-<p align="center">
-  <img src="https://github.com/mulher-amparada/mulher-amparada-app/blob/main/workflow.png" alt="Mulher Amparada" width="500">
-</p>
-
-> Vale lembrar que ele pode puxar todas as branches do projeto, mesmo com esse nome no workflow!
 
 ### Sobre o site que está hospedado pelo github pages:
 

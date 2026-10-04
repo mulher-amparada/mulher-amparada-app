@@ -1044,10 +1044,9 @@ jobs:
           print("README sincronizado com o Paper.wf.")
           PY
           
-            sitemap:
+  sitemap:
     name: Gerar Sitemap
     runs-on: ubuntu-latest
-
     steps:
       - name: Generate sitemap
         uses: cicirello/generate-sitemap@v1
@@ -1057,7 +1056,6 @@ jobs:
   indexnow:
     name: IndexNow
     runs-on: ubuntu-latest
-
     steps:
       - name: IndexNow Action
         uses: bojieyang/indexnow-action@v3.0.0
@@ -1065,7 +1063,6 @@ jobs:
   search-engines:
     name: Search Engines
     runs-on: ubuntu-latest
-
     steps:
       - name: search-engines-urls-push
         uses: 3Alan/search-engines-urls-push@v0.2.3

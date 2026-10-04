@@ -756,7 +756,9 @@ jobs:
 
     runs-on: ubuntu-24.04
 
-    needs: Lighthouse
+    needs:
+  - sincronizar-devto
+  - sincronizar-paperwf
 
     steps:
 

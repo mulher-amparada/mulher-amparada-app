@@ -1045,20 +1045,39 @@ jobs:
           PY
           
   sitemap:
-    name: Gerar Sitemap
+    name: Gerar e salvar Sitemap
     runs-on: ubuntu-24.04
+
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          ref: main
 
       - name: Generate sitemap
         uses: cicirello/generate-sitemap@v1
         with:
           base-url-path: https://mulher-amparada.github.io/mulher-amparada-app/
 
+      - name: Salvar sitemap no repositório
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add sitemap.xml
+
+          if git diff --cached --quiet; then
+            echo "sitemap.xml já está atualizado."
+          else
+            git commit -m "Atualizar sitemap [skip ci]"
+            git push origin main
+          fi
+
   indexnow:
     name: IndexNow
     runs-on: ubuntu-24.04
+
     steps:
       - name: IndexNow Action
         uses: bojieyang/indexnow-action@v3.0.0
@@ -1066,9 +1085,19 @@ jobs:
           sitemap-location: https://mulher-amparada.github.io/mulher-amparada-app/sitemap.xml
           key: ${{ secrets.INDEXNOW_KEY }}
 
-  search-engines:
-    name: Search Engines
+  gsc:
+    name: Google Search Console
     runs-on: ubuntu-24.04
+
     steps:
-      - name: search-engines-urls-push
-        uses: 3Alan/search-engines-urls-push@v0.2.3
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Google Search Console
+        uses: toolsura/gsc-indexer@v1
+        with:
+          service_account_json: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+          sitemap: https://mulher-amparada.github.io/mulher-amparada-app/sitemap.xml
+          site: https://mulher-amparada.github.io/mulher-amparada-app/
+          delay: "10s"
+          quiet: "true"

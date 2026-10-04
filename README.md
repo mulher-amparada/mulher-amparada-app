@@ -441,6 +441,8 @@ e os contatos de confiança, quando são cadrastados eles também são criptogra
   <img src="https://github.com/mulher-amparada/mulher-amparada-app/blob/main/workflow.png" alt="Mulher Amparada" width="500">
 </p>
 
+> Vale lembrar que ele pode puxar todas as branches do projeto, mesmo com esse nome no workflow!
+
 ### Sobre o site que está hospedado pelo github pages:
 
 Na primeira página do site, tem 3 botoes que ligam para (180, 190 e 192), e usam o tel: do navegador para abrir o telefone nativo do celular com esses números já discados de acordo com o que você escolheu!

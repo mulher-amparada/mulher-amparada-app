@@ -756,7 +756,13 @@ jobs:
 
     runs-on: ubuntu-24.04
 
-    needs: build
+needs:
+  - build
+  - atualizar-commits
+  - sincronizar-devto
+  - sincronizar-paperwf
+  - sitemap
+  - snake
 
     steps:
 

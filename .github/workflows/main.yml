@@ -1086,7 +1086,7 @@ jobs:
   seo-audit:
     name: Auditoria SEO completa
     runs-on: ubuntu-24.04
-    needs: deploy
+    needs: atualizar-commits
 
     steps:
       - name: Auditoria SEO completa
@@ -1107,7 +1107,7 @@ jobs:
   broken-links:
     name: Verificar Links Quebrados
     runs-on: ubuntu-24.04
-    needs: deploy
+    needs: atualizar-commits
     steps:
       - name: Verificar links
         uses: ScholliYT/Broken-Links-Crawler-Action@v3
@@ -1123,7 +1123,7 @@ jobs:
   lighthouse:
     name: Lighthouse
     runs-on: ubuntu-24.04
-    needs: deploy
+    needs: atualizar-commits
     steps:
       - name: Lighthouse
         uses: treosh/lighthouse-ci-action@v12

@@ -1075,7 +1075,7 @@ jobs:
   indexnow:
     name: IndexNow
     runs-on: ubuntu-24.04
-    needs: atualizar-commits
+    needs: broken-links
     steps:
       - name: Enviar Sitemap ao IndexNow
         uses: bojieyang/indexnow-action@v3
@@ -1086,7 +1086,7 @@ jobs:
   seo-audit:
     name: Auditoria SEO completa
     runs-on: ubuntu-24.04
-    needs: atualizar-commits
+    needs: indexnow
 
     steps:
       - name: Auditoria SEO completa
@@ -1107,7 +1107,7 @@ jobs:
   broken-links:
     name: Verificar Links Quebrados
     runs-on: ubuntu-24.04
-    needs: atualizar-commits
+    needs: lighthouse
     steps:
       - name: Verificar links
         uses: ScholliYT/Broken-Links-Crawler-Action@v3

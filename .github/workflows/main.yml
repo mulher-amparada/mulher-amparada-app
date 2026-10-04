@@ -826,7 +826,7 @@ jobs:
 
     runs-on: ubuntu-24.04
 
-    needs: atualizar-commits
+    needs: deploy
 
     steps:
 
@@ -894,7 +894,7 @@ jobs:
   sincronizar-paperwf:
     name: Sincronizar README com Paper.wf
     runs-on: ubuntu-24.04
-    needs: atualizar-commits
+    needs: deploy
 
     steps:
       - name: Baixar código atualizado

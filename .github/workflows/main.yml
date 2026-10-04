@@ -1145,7 +1145,7 @@ jobs:
           name: seo-audit
           path: seo-audit.md
            
-    broken-links:
+  broken-links:
     name: Verificar Links Quebrados
     runs-on: ubuntu-24.04
     needs: deploy
@@ -1161,7 +1161,7 @@ jobs:
           max_retries: 5
           max_depth: -1
           
-      lighthouse:
+  lighthouse:
     name: Lighthouse
     runs-on: ubuntu-24.04
     needs: deploy

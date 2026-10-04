@@ -751,14 +751,11 @@ jobs:
   # =========================================================
   # ATUALIZAR TOTAL DE COMMITS
   # =========================================================
-
   atualizar-commits:
 
     runs-on: ubuntu-24.04
 
-    needs:
-  - sincronizar-devto
-  - sincronizar-paperwf
+    needs: lighthouse
 
     steps:
 

@@ -1095,7 +1095,7 @@ jobs:
           npx @nurkamol/seo-audit@1.40.1 \
             https://mulher-amparada.github.io/mulher-amparada-app/ \
             --sitemap https://mulher-amparada.github.io/mulher-amparada-app/sitemap.xml \
-            --exclude "google2d4f4bcc4021d81b.html" \
+            --exclude "**/google2d4f4bcc4021d81b.html" \
             --md seo-audit.md
 
       - name: Salvar relatório SEO

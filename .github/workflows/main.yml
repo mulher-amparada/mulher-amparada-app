@@ -1047,7 +1047,7 @@ jobs:
   sitemap:
     name: Gerar e salvar Sitemap
     runs-on: ubuntu-24.04
-
+    needs: build
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -1055,16 +1055,15 @@ jobs:
           fetch-depth: 1
           ref: main
 
-      - name: Generate sitemap
+      - name: Gerar Sitemap
         uses: cicirello/generate-sitemap@v1
         with:
           base-url-path: https://mulher-amparada.github.io/mulher-amparada-app/
 
-      - name: Salvar sitemap no repositório
+      - name: Salvar Sitemap no repositório
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
           git add sitemap.xml
 
           if git diff --cached --quiet; then
@@ -1074,32 +1073,102 @@ jobs:
             git push origin main
           fi
 
-  indexnow:
-    name: IndexNow
+  build-site:
+    name: Build do site
     runs-on: ubuntu-24.04
-    needs: sitemap
-
-    steps:
-      - name: IndexNow Action
-        uses: bojieyang/indexnow-action@v3.0.0
-        with:
-          sitemap-location: https://mulher-amparada.github.io/mulher-amparada-app/sitemap.xml
-          key: ${{ secrets.INDEXNOW_KEY }}
-
-  gsc:
-    name: Google Search Console
-    runs-on: ubuntu-24.04
-    needs: deploy
-
+    needs:
+      - build
+      - sitemap
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Google Search Console
-        uses: toolsura/gsc-indexer@v1
+      - name: Setup Pages
+        uses: actions/configure-pages@v6
+
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
         with:
-          service_account_json: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
-          sitemap: https://mulher-amparada.github.io/mulher-amparada-app/sitemap.xml
-          site: https://mulher-amparada.github.io/mulher-amparada-app/
-          delay: "10s"
-          quiet: "true"
+          source: ./
+          destination: ./_site
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./_site
+
+  deploy:
+    name: Publicar GitHub Pages
+    runs-on: ubuntu-24.04
+    needs: build-site
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  indexnow:
+    name: IndexNow
+    runs-on: ubuntu-24.04
+    needs: deploy
+    steps:
+      - name: Enviar Sitemap ao IndexNow
+        uses: bojieyang/indexnow-action@v3
+        with:
+          sitemap-location: https://mulher-amparada.github.io/mulher-amparada-app/sitemap.xml
+          key: ${{ secrets.INDEXNOW_KEY }}
+
+  seo-audit:
+    name: Auditoria SEO completa
+    runs-on: ubuntu-24.04
+    needs: deploy
+    steps:
+      - name: Configurar Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Executar auditoria SEO
+        run: |
+          npx @nurkamol/seo-audit@1.40.1 \
+            https://mulher-amparada.github.io/mulher-amparada-app/ \
+            --md seo-audit.md
+
+      - name: Salvar relatório SEO
+        uses: actions/upload-artifact@v5
+        with:
+          name: seo-audit
+          path: seo-audit.md
+           
+    broken-links:
+    name: Verificar Links Quebrados
+    runs-on: ubuntu-24.04
+    needs: deploy
+    steps:
+      - name: Verificar links
+        uses: ScholliYT/Broken-Links-Crawler-Action@v3
+        with:
+          website_url: https://mulher-amparada.github.io/mulher-amparada-app/
+          include_url_prefix: https://mulher-amparada.github.io/mulher-amparada-app/
+          resolve_before_filtering: 'true'
+          verbose: 'true'
+          max_retry_time: 30
+          max_retries: 5
+          max_depth: -1
+          
+      lighthouse:
+    name: Lighthouse
+    runs-on: ubuntu-24.04
+    needs: deploy
+    steps:
+      - name: Lighthouse
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            https://mulher-amparada.github.io/mulher-amparada-app/
+          uploadArtifacts: true

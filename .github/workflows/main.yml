@@ -1084,7 +1084,7 @@ jobs:
           sitemap-location: https://mulher-amparada.github.io/mulher-amparada-app/sitemap.xml
           key: ${{ secrets.INDEXNOW_KEY }}
 
- seo-audit:
+  seo-audit:
   name: Auditoria SEO completa
   runs-on: ubuntu-24.04
   needs: deploy

@@ -1085,24 +1085,24 @@ jobs:
           key: ${{ secrets.INDEXNOW_KEY }}
 
     seo-audit:
-    name: Auditoria SEO completa
-    runs-on: ubuntu-24.04
-    needs: deploy
+  name: Auditoria SEO completa
+  runs-on: ubuntu-24.04
+  needs: deploy
 
-    steps:
-      - name: Auditoria SEO completa
-        run: |
-          npx @nurkamol/seo-audit@1.40.1 \
-            https://mulher-amparada.github.io/mulher-amparada-app/ \
-            --sitemap https://mulher-amparada.github.io/mulher-amparada-app/sitemap.xml \
-            --md seo-audit.md
+  steps:
+    - name: Auditoria SEO completa
+      run: |
+        npx @nurkamol/seo-audit@1.40.1 \
+          https://mulher-amparada.github.io/mulher-amparada-app/ \
+          --sitemap https://mulher-amparada.github.io/mulher-amparada-app/sitemap.xml \
+          --md seo-audit.md
 
-      - name: Salvar relatório SEO
-        uses: actions/upload-artifact@v5
-        with:
-          name: seo-audit
-          path: seo-audit.md
-           
+    - name: Salvar relatório SEO
+      uses: actions/upload-artifact@v5
+      with:
+        name: seo-audit
+        path: seo-audit.md
+        
   broken-links:
     name: Verificar Links Quebrados
     runs-on: ubuntu-24.04

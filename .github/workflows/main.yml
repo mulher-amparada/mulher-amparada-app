@@ -1089,7 +1089,7 @@ jobs:
   gsc:
     name: Google Search Console
     runs-on: ubuntu-24.04
-    needs: sitemap
+    needs: deploy
 
     steps:
       - name: Checkout

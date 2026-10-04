@@ -1130,3 +1130,37 @@ jobs:
           urls: |
             https://mulher-amparada.github.io/mulher-amparada-app/
           uploadArtifacts: true
+          
+    snake:
+    name: Gerar Snake das contribuições
+    runs-on: ubuntu-24.04
+    needs: build
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v6
+
+      - name: Gerar Snake
+        uses: Platane/snk@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/github-contribution-grid-snake.svg
+            dist/github-contribution-grid-snake.gif
+
+      - name: Publicar Snake no repositório
+        run: |
+          cp dist/github-contribution-grid-snake.svg "Código-fonte do app = Mulher Amparada/snake.svg"
+          cp dist/github-contribution-grid-snake.gif "Código-fonte do app = Mulher Amparada/snake.gif"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add "Código-fonte do app = Mulher Amparada/snake.svg" "Código-fonte do app = Mulher Amparada/snake.gif"
+
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteração na Snake."
+          else
+            git commit -m "chore: atualizar snake [skip ci]"
+            git push
+          fi

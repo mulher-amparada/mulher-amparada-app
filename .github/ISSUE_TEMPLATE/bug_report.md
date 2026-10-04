@@ -1,38 +1,47 @@
 ---
-name: Bug report
-about: Create a report to help us improve
+
+name: Relatório de bug
+about: Crie um relatório para nos ajudar a melhorar o projeto
 title: ''
 labels: ''
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+Descreva o bug
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+Descreva de forma clara e objetiva qual é o problema encontrado.
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+Como reproduzir
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+Descreva os passos necessários para reproduzir o problema:
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+1. Acesse '...'
+2. Clique em '...'
+3. Role a tela até '...'
+4. O erro será exibido
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+Comportamento esperado
 
-**Additional context**
-Add any other context about the problem here.
+Descreva o que deveria acontecer normalmente.
+
+Capturas de tela
+
+Se aplicável, adicione capturas de tela para ajudar a explicar o problema.
+
+Computador (preencha as informações abaixo):
+
+- Sistema operacional: [ex.: Windows 11]
+- Navegador: [ex.: Chrome, Firefox, Edge]
+- Versão: [ex.: 22]
+
+Smartphone (preencha as informações abaixo):
+
+- Dispositivo: [ex.: Samsung A16 5G]
+- Sistema operacional: [ex.: Android 16]
+- Navegador: [ex.: Chrome]
+- Versão: [ex.: 22]
+
+Contexto adicional
+
+Adicione qualquer outra informação que possa ajudar na análise e resolução do problema.

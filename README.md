@@ -12,7 +12,7 @@ E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
 # 👾Nossas contribuições!:
 
-*Gerado pelo workflow e uma action do marketplace do github!*
+*Gerado pelo workflow do projeto junto com uma action do marketplace do github!*
 
 ![Snake das contribuições](Código-fonte%20do%20app%20%3D%20Mulher%20Amparada/snake.gif)
 

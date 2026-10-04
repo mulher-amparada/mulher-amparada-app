@@ -435,7 +435,7 @@ E eu também já consegui configurar um ssh na conta, e 2fa nela tambem, e com o
 
 e os contatos de confiança, quando são cadrastados eles também são criptografados!
 
-### Exemplo de nosso workflow:
+### Exemplo do workflow do projeto:
 
 <p align="center">
   <img src="https://github.com/mulher-amparada/mulher-amparada-app/blob/main/workflow.png" alt="Mulher Amparada" width="500">

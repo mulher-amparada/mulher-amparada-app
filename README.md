@@ -10,6 +10,10 @@ E vale lembrar que antes todas as páginas eram html com webview, agora não sã
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
+### Nossas contribuições!:
+
+![Snake das contribuições](Código-fonte%20do%20app%20%3D%20Mulher%20Amparada/snake.gif)
+
 # ⚠️MURAL DE AVISOS:
 
 ### Sobre como o projeto foi estruturado:

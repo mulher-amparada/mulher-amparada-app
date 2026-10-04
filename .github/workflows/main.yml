@@ -3,7 +3,7 @@ name: Automações do Mulher Amparada
 on:
   push:
     branches:
-      - main
+      - '**'
 
   workflow_dispatch:
 
@@ -764,7 +764,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-          ref: main
+          
 
 
       - name: Atualizar total de commits

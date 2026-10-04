@@ -808,6 +808,9 @@ jobs:
 
             git commit -m "Atualizar total de commits [skip ci]"
 
+            git fetch origin main
+            git rebase origin/main
+
             git push origin main
 
           fi

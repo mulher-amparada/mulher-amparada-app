@@ -1,2 +1,12 @@
-- name: search-engines-urls-push
-  uses: 3Alan/search-engines-urls-push@v0.2.3
+name: Search Engines
+
+on:
+  workflow_dispatch:
+
+jobs:
+  push-urls:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: search-engines-urls-push
+        uses: 3Alan/search-engines-urls-push@v0.2.3

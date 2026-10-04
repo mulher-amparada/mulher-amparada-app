@@ -8,7 +8,9 @@ assignees: ''
 
 ---
 
-Sua solicitação de recurso está relacionada a algum problema? Descreva.
+Sua solicitação de recurso está relacionada a algum problema? 
+
+Descreva.
 
 Descreva de forma clara e objetiva qual é o problema. Por exemplo: "Fico frustrado quando [...]"
 

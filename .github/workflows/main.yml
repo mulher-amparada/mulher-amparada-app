@@ -755,7 +755,7 @@ jobs:
 
     runs-on: ubuntu-24.04
 
-    needs: snake
+    needs: sitemap
 
     steps:
 
@@ -1046,7 +1046,7 @@ jobs:
   sitemap:
     name: Gerar e salvar Sitemap
     runs-on: ubuntu-24.04
-    needs: build
+    needs: deploy
     steps:
       - name: Checkout
         uses: actions/checkout@v6

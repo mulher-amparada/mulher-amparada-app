@@ -756,7 +756,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    needs: deploy
+    needs: build
 
     steps:
 

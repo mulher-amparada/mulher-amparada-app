@@ -2840,6 +2840,29 @@ if (
              * BLOQUEIO DE PERMISSÕES
              * =========================================
              */
+if (
+    activity != null &&
+    !activity.permissoesConcedidas
+) {
+
+    Box(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Color.Black)
+                .zIndex(100f),
+
+        contentAlignment =
+            Alignment.Center
+    ) {
+
+        PermissionCard(
+            onAbrirPermissoes = {
+                activity.solicitarPermissoes()
+            }
+        )
+    }
+}
 
         }
     }

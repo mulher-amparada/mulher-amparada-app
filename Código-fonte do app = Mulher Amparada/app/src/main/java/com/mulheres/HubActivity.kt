@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.BoxWithConstraints
 import android.view.WindowManager
 import android.Manifest
+import androidx.core.app.ActivityCompat
+import androidx.compose.runtime.LaunchedEffect
 import android.content.BroadcastReceiver
 import android.os.BatteryManager
 import android.view.ViewGroup
@@ -453,7 +455,58 @@ fun abrirHomeActivity() {
             telefone
     }
 
+fun solicitarPermissoes() {
 
+    val permissoes = mutableListOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.READ_CONTACTS,
+        Manifest.permission.CALL_PHONE,
+        Manifest.permission.RECORD_AUDIO
+    )
+
+    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+        permissoes.add(
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+        permissoes.add(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+    }
+
+    val faltantes =
+        permissoes.filter {
+            ContextCompat.checkSelfPermission(
+                this,
+                it
+            ) != PackageManager.PERMISSION_GRANTED
+        }
+
+    if (faltantes.isNotEmpty()) {
+
+        ActivityCompat.requestPermissions(
+            this,
+            faltantes.toTypedArray(),
+            1001
+        )
+    }
+}
+
+override fun onRequestPermissionsResult(
+    requestCode: Int,
+    permissions: Array<out String>,
+    grantResults: IntArray
+) {
+    super.onRequestPermissionsResult(
+        requestCode,
+        permissions,
+        grantResults
+    )
+
+    if (requestCode == 1001) {
+        verificarPermissoes()
+    }
+}
 
 fun enviarLocalizacaoPara180() {
 
@@ -2796,30 +2849,35 @@ if (
              * BLOQUEIO DE PERMISSÕES
              * =========================================
              */
+if (
+    activity != null &&
+    !activity.permissoesConcedidas
+) {
 
-            if (
-                activity != null &&
-                !activity.permissoesConcedidas
-            ) {
+    LaunchedEffect(activity.permissoesConcedidas) {
+        if (!activity.permissoesConcedidas) {
+            activity.solicitarPermissoes()
+        }
+    }
 
-                Box(
-                    modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .background(Color.Black)
-                            .zIndex(100f),
+    Box(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Color.Black)
+                .zIndex(100f),
 
-                    contentAlignment =
-                        Alignment.Center
-                ) {
+        contentAlignment =
+            Alignment.Center
+    ) {
 
-                    PermissionCard(
-                        onAbrirPermissoes = {
-                            activity.abrirPermissoes()
-                        }
-                    )
-                }
+        PermissionCard(
+            onAbrirPermissoes = {
+                activity.abrirPermissoes()
             }
+        )
+    }
+}
         }
     }
 }
@@ -2833,11 +2891,9 @@ private fun PermissionCard(
     onAbrirPermissoes: () -> Unit
 ) {
 
-    val font =
-        quicksand()
+    val font = quicksand()
 
     Column(
-
         modifier =
             Modifier
                 .fillMaxWidth()
@@ -2868,7 +2924,6 @@ private fun PermissionCard(
     ) {
 
         Box(
-
             modifier =
                 Modifier
                     .width(42.dp)
@@ -2900,8 +2955,7 @@ private fun PermissionCard(
         Text(
             text =
                 "Para aproveitar todos os recursos do Mulher Amparada, " +
-                "verifique as permissões do aplicativo nas configurações " +
-                "do Android.",
+                "conceda as permissões necessárias ao aplicativo.",
             color = Color(0xFF85858E),
             fontFamily = font,
             fontSize = 11.sp,
@@ -2914,30 +2968,23 @@ private fun PermissionCard(
         )
 
         Button(
-
-            onClick =
-                onAbrirPermissoes,
-
+            onClick = onAbrirPermissoes,
             modifier =
                 Modifier
                     .fillMaxWidth()
                     .height(52.dp),
-
             shape =
                 RoundedCornerShape(17.dp),
-
             colors =
                 ButtonDefaults.buttonColors(
                     containerColor =
                         Color(0xFFFF3F82)
                 ),
-
             contentPadding =
                 PaddingValues(0.dp)
         ) {
 
             Box(
-
                 modifier =
                     Modifier
                         .fillMaxSize()
@@ -2949,7 +2996,6 @@ private fun PermissionCard(
                                 )
                             )
                         ),
-
                 contentAlignment =
                     Alignment.Center
             ) {
@@ -2965,7 +3011,6 @@ private fun PermissionCard(
         }
     }
 }
-
 
 /* =========================================================
    HERO

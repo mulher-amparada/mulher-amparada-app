@@ -2271,7 +2271,7 @@ private fun BottomAreaSelector(
                 Text(
                     text =
                         if (areaProtegidaSelecionada)
-                            "Protegida"
+                            "Áreas"
                         else
                             "Proteções",
                     color =

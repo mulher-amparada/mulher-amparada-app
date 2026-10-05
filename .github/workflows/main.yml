@@ -1138,7 +1138,7 @@ jobs:
   snake:
     name: Gerar Snake das contribuições
     runs-on: ubuntu-24.04
-    needs: lighthouse
+    needs: deploy
 
     steps:
       - name: Baixar repositório
@@ -1167,4 +1167,10 @@ jobs:
           else
             git commit -m "chore: atualizar snake [skip ci]"
             git push
+            
+            
+            git fetch origin main
+            git rebase origin/main
+
+            git push origin main
           fi

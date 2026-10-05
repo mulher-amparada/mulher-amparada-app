@@ -418,23 +418,13 @@ fun abrirHomeActivity() {
 
 fun solicitarPermissoes() {
 
-    val permissoes = mutableListOf(
+    val permissoes = listOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.READ_CONTACTS,
         Manifest.permission.CALL_PHONE,
         Manifest.permission.RECORD_AUDIO
     )
-
-    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-        permissoes.add(
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        )
-
-        permissoes.add(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
-    }
 
     val faltantes =
         permissoes.filter {
@@ -444,13 +434,16 @@ fun solicitarPermissoes() {
             ) != PackageManager.PERMISSION_GRANTED
         }
 
-    if (faltantes.isNotEmpty()) {
-        ActivityCompat.requestPermissions(
-            this,
-            faltantes.toTypedArray(),
-            1001
-        )
+    if (faltantes.isEmpty()) {
+        verificarPermissoes()
+        return
     }
+
+    ActivityCompat.requestPermissions(
+        this,
+        faltantes.toTypedArray(),
+        1001
+    )
 }
 
 fun verificarPermissoes() {

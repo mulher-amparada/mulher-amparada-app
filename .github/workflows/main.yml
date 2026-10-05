@@ -1078,7 +1078,7 @@ jobs:
   indexnow:
     name: IndexNow
     runs-on: ubuntu-24.04
-    needs: broken-links
+    needs: sitemap
     steps:
       - name: Enviar Sitemap ao IndexNow
         uses: bojieyang/indexnow-action@v3

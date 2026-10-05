@@ -416,45 +416,6 @@ fun abrirHomeActivity() {
     prompt.authenticate(info)
 }
 
-    fun verificarPermissoes() {
-
-        val contatos =
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_CONTACTS
-            ) == PackageManager.PERMISSION_GRANTED
-
-        val localizacaoFine =
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-
-        val localizacaoCoarse =
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-
-        val microfone =
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.RECORD_AUDIO
-            ) == PackageManager.PERMISSION_GRANTED
-
-        val telefone =
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.CALL_PHONE
-            ) == PackageManager.PERMISSION_GRANTED
-
-        permissoesConcedidas =
-            contatos &&
-            (localizacaoFine || localizacaoCoarse) &&
-            microfone &&
-            telefone
-    }
-
 fun solicitarPermissoes() {
 
     val permissoes = mutableListOf(
@@ -491,6 +452,29 @@ fun solicitarPermissoes() {
         )
     }
 }
+
+var permissoesConcedidas by mutableStateOf(false)
+    private set
+
+fun verificarPermissoes() {
+
+    val permissoes = listOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.READ_CONTACTS,
+        Manifest.permission.CALL_PHONE,
+        Manifest.permission.RECORD_AUDIO
+    )
+
+    permissoesConcedidas =
+        permissoes.all {
+            ContextCompat.checkSelfPermission(
+                this,
+                it
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+}
+
 
 override fun onRequestPermissionsResult(
     requestCode: Int,
@@ -2199,7 +2183,7 @@ private fun BottomAreaSelector(
     ) {
 
         val thumbSize =
-            98.dp
+            90.dp
 
         val innerWidth =
             maxWidth - 8.dp

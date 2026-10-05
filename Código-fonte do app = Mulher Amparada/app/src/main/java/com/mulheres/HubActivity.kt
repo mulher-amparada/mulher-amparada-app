@@ -2199,7 +2199,7 @@ private fun BottomAreaSelector(
     ) {
 
         val thumbSize =
-            80.dp
+            98.dp
 
         val innerWidth =
             maxWidth - 8.dp

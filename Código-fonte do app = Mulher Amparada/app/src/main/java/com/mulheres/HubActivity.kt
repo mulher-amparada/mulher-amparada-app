@@ -2181,8 +2181,8 @@ private fun BottomAreaSelector(
 
         modifier =
             Modifier
-                .fillMaxWidth(0.5f)
-                .height(66.dp)
+                .fillMaxWidth(0.55f)
+                .height(76.dp)
                 .clip(shape)
                 .background(
                     if (isDark)
@@ -2199,7 +2199,7 @@ private fun BottomAreaSelector(
     ) {
 
         val thumbSize =
-            78.dp
+            68.dp
 
         val innerWidth =
             maxWidth - 8.dp
@@ -2267,7 +2267,11 @@ private fun BottomAreaSelector(
 
             Column(
                 horizontalAlignment =
-                    Alignment.CenterHorizontally
+                    Alignment.CenterHorizontally,
+                verticalArrangement =
+                    Arrangement.spacedBy(
+                        (-2).dp
+                    )
             ) {
 
                 Image(
@@ -2278,9 +2282,7 @@ private fun BottomAreaSelector(
                             else
                                 R.drawable.ic_protecoes
                         ),
-
                     contentDescription = null,
-
                     modifier =
                         Modifier.size(29.dp)
                 )
@@ -2288,19 +2290,15 @@ private fun BottomAreaSelector(
                 Text(
                     text =
                         if (areaProtegidaSelecionada)
-                            "Ajuda"
+                            "Protegida"
                         else
                             "Proteções",
-
                     color =
                         Color.White,
-
                     fontFamily =
                         quicksand(),
-
                     fontSize =
                         9.sp,
-
                     fontWeight =
                         FontWeight.Bold
                 )
@@ -2846,12 +2844,6 @@ if (
     activity != null &&
     !activity.permissoesConcedidas
 ) {
-
-    LaunchedEffect(activity.permissoesConcedidas) {
-        if (!activity.permissoesConcedidas) {
-            activity.solicitarPermissoes()
-        }
-    }
 
     Box(
         modifier =

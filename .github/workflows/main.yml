@@ -1135,7 +1135,7 @@ jobs:
             https://mulher-amparada.github.io/mulher-amparada-app/
           uploadArtifacts: true
           
-  snake:
+    snake:
     name: Gerar Snake das contribuições
     runs-on: ubuntu-24.04
     needs: deploy
@@ -1143,6 +1143,9 @@ jobs:
     steps:
       - name: Baixar repositório
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: main
 
       - name: Gerar Snake
         uses: Platane/snk@v3
@@ -1154,23 +1157,29 @@ jobs:
 
       - name: Publicar Snake no repositório
         run: |
-          cp dist/github-contribution-grid-snake.svg "Código-fonte do app = Mulher Amparada/snake.svg"
-          cp dist/github-contribution-grid-snake.gif "Código-fonte do app = Mulher Amparada/snake.gif"
+          set -e
+
+          cp dist/github-contribution-grid-snake.svg \
+            "Código-fonte do app = Mulher Amparada/snake.svg"
+
+          cp dist/github-contribution-grid-snake.gif \
+            "Código-fonte do app = Mulher Amparada/snake.gif"
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add "Código-fonte do app = Mulher Amparada/snake.svg" "Código-fonte do app = Mulher Amparada/snake.gif"
+          git add \
+            "Código-fonte do app = Mulher Amparada/snake.svg" \
+            "Código-fonte do app = Mulher Amparada/snake.gif"
 
           if git diff --cached --quiet; then
             echo "Nenhuma alteração na Snake."
-          else
-            git commit -m "chore: atualizar snake [skip ci]"
-            git push
-            
-            
-            git fetch origin main
-            git rebase origin/main
-
-            git push origin main
+            exit 0
           fi
+
+          git commit -m "chore: atualizar snake [skip ci]"
+
+          git fetch origin main
+          git rebase origin/main
+
+          git push origin HEAD:main

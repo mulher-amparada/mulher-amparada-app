@@ -1138,7 +1138,7 @@ jobs:
   snake:
     name: Gerar Snake das contribuições
     runs-on: ubuntu-24.04
-    needs: deploy
+    needs: atualizar-commits
 
     steps:
       - name: Baixar repositório

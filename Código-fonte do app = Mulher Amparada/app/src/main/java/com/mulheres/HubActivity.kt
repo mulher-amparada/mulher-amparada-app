@@ -768,24 +768,7 @@ fun desativarEscurecimento() {
     tiltBrightness.stopTiltBrightness()
 }
 
-    fun abrirPermissoes() {
-
-        val intent =
-            Intent(
-                android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-            ).apply {
-
-                data =
-                    Uri.fromParts(
-                        "package",
-                        packageName,
-                        null
-                    )
-            }
-
-        startActivity(intent)
-    }
-
+ 
 fun ativarFullscreen() {
 
     WindowCompat.setDecorFitsSystemWindows(
@@ -2216,7 +2199,7 @@ private fun BottomAreaSelector(
     ) {
 
         val thumbSize =
-            58.dp
+            78.dp
 
         val innerWidth =
             maxWidth - 8.dp
@@ -2225,19 +2208,11 @@ private fun BottomAreaSelector(
             innerWidth / 2
 
         val offsetX =
-    if (areaProtegidaSelecionada)
-        innerWidth - thumbSize + 7.dp
-    else
-        0.dp
+            if (areaProtegidaSelecionada)
+                innerWidth - thumbSize + 7.dp
+            else
+                0.dp
 
-        /*
-         * ÁREAS DE TOQUE.
-         *
-         * Cada metade ocupa exatamente 50% do
-         * espaço interno do seletor.
-         *
-         * Sem clickable no container inteiro.
-         */
         Row(
             modifier =
                 Modifier.fillMaxSize()
@@ -2274,14 +2249,7 @@ private fun BottomAreaSelector(
             )
         }
 
-        /*
-         * BOLINHA.
-         *
-         * Fica completamente dentro do seletor.
-         * O tamanho ocupa praticamente toda a altura.
-         */
         Box(
-
             modifier =
                 Modifier
                     .offset(
@@ -2290,28 +2258,53 @@ private fun BottomAreaSelector(
                     .size(thumbSize)
                     .clip(CircleShape)
                     .background(
-                    c.pink
+                        c.pink
                     ),
 
             contentAlignment =
                 Alignment.Center
         ) {
 
-            Image(
+            Column(
+                horizontalAlignment =
+                    Alignment.CenterHorizontally
+            ) {
 
-                painter =
-                    painterResource(
+                Image(
+                    painter =
+                        painterResource(
+                            if (areaProtegidaSelecionada)
+                                R.drawable.ic_secret
+                            else
+                                R.drawable.ic_protecoes
+                        ),
+
+                    contentDescription = null,
+
+                    modifier =
+                        Modifier.size(29.dp)
+                )
+
+                Text(
+                    text =
                         if (areaProtegidaSelecionada)
-                            R.drawable.ic_secret
+                            "Ajuda"
                         else
-                            R.drawable.ic_protecoes
-                    ),
+                            "Proteções",
 
-                contentDescription = null,
+                    color =
+                        Color.White,
 
-                modifier =
-                    Modifier.size(29.dp)
-            )
+                    fontFamily =
+                        quicksand(),
+
+                    fontSize =
+                        9.sp,
+
+                    fontWeight =
+                        FontWeight.Bold
+                )
+            }
         }
     }
 }
@@ -2873,7 +2866,7 @@ if (
 
         PermissionCard(
             onAbrirPermissoes = {
-                activity.abrirPermissoes()
+                activity.solicitarPermissoes()
             }
         )
     }

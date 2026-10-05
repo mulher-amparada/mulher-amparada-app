@@ -35,11 +35,11 @@
     --text: #ffffff;
 
     --soft: #858791;
-    --muted: #62646d;
-    --muted-2: #484a52;
+    --muted: #fff;
+    --muted-2: #fff;
 
     --text-soft: #a6a6ae;
-    --text-muted: #707078;
+    --text-muted: #fff;
 
     --pink:
         #ff3f82;
@@ -419,7 +419,7 @@ a:focus-visible {
 .section-label span {
 
     color:
-        #494950;
+        #fff;
 
     font-size:
         9px;

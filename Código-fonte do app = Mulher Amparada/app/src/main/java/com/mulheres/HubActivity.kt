@@ -439,6 +439,56 @@ fun solicitarPermissoes() {
         return
     }
 
+    val bloqueadas =
+        faltantes.filter {
+            !ActivityCompat.shouldShowRequestPermissionRationale(
+                this,
+                it
+            )
+        }
+
+    if (bloqueadas.isNotEmpty()) {
+
+        val preferencias =
+            getSharedPreferences(
+                "permissoes",
+                Context.MODE_PRIVATE
+            )
+
+        val jaSolicitou =
+            preferencias.getBoolean(
+                "ja_solicitou",
+                false
+            )
+
+        if (jaSolicitou) {
+
+            startActivity(
+                Intent(
+                    android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                ).apply {
+                    data =
+                        Uri.parse(
+                            "package:$packageName"
+                        )
+                }
+            )
+
+            return
+        }
+    }
+
+    getSharedPreferences(
+        "permissoes",
+        Context.MODE_PRIVATE
+    )
+        .edit()
+        .putBoolean(
+            "ja_solicitou",
+            true
+        )
+        .apply()
+
     ActivityCompat.requestPermissions(
         this,
         faltantes.toTypedArray(),

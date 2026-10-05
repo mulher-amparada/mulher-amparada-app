@@ -453,9 +453,6 @@ fun solicitarPermissoes() {
     }
 }
 
-var permissoesConcedidas by mutableStateOf(false)
-    private set
-
 fun verificarPermissoes() {
 
     val permissoes = listOf(

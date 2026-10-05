@@ -1097,7 +1097,6 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: "24"
-          cache: npm
 
       - name: Auditoria SEO completa
         run: |

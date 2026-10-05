@@ -707,7 +707,7 @@ jobs:
 
     runs-on: ubuntu-24.04
 
-    needs: build
+    
 
     steps:
 
@@ -755,7 +755,7 @@ jobs:
 
     runs-on: ubuntu-24.04
 
-    needs: sitemap
+    needs: build
 
     steps:
 

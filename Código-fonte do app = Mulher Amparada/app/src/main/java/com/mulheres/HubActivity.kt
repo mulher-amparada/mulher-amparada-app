@@ -469,6 +469,7 @@ fun solicitarPermissoes() {
         permissoes.add(
             Manifest.permission.READ_EXTERNAL_STORAGE
         )
+
         permissoes.add(
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
@@ -483,7 +484,6 @@ fun solicitarPermissoes() {
         }
 
     if (faltantes.isNotEmpty()) {
-
         ActivityCompat.requestPermissions(
             this,
             faltantes.toTypedArray(),
@@ -2199,7 +2199,7 @@ private fun BottomAreaSelector(
     ) {
 
         val thumbSize =
-            68.dp
+            80.dp
 
         val innerWidth =
             maxWidth - 8.dp
@@ -2840,29 +2840,7 @@ if (
              * BLOQUEIO DE PERMISSÕES
              * =========================================
              */
-if (
-    activity != null &&
-    !activity.permissoesConcedidas
-) {
 
-    Box(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .background(Color.Black)
-                .zIndex(100f),
-
-        contentAlignment =
-            Alignment.Center
-    ) {
-
-        PermissionCard(
-            onAbrirPermissoes = {
-                activity.solicitarPermissoes()
-            }
-        )
-    }
-}
         }
     }
 }

@@ -1110,7 +1110,7 @@ jobs:
   broken-links:
     name: Verificar Links Quebrados
     runs-on: ubuntu-24.04
-    needs: lighthouse
+    needs:  seo-audit
     steps:
       - name: Verificar links
         uses: ScholliYT/Broken-Links-Crawler-Action@v3

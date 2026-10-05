@@ -6,7 +6,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4324**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4320**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
@@ -594,8 +594,6 @@ e tambem, reforcando que no canto superior direito tem um icone de calculadora q
 
 ### Botão de Pânico:
 Botão de Pânico, com ligação ao 180 de forma direta no primeiro clique.
-
->Botão de pânico: caso o aplicativo não possua a permissão necessária para realizar chamadas diretamente, ele utiliza o "ACTION_DIAL" como alternativa, abrindo o discador com o número de emergência. Dessa forma, o recurso continua disponível mesmo sem a permissão de chamada.
 
 ### Proteção por Barulho:
 Ative a proteção, faça barulho alto e ele liga para o 180.

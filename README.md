@@ -6,7 +6,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4443**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4362**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
@@ -485,8 +485,6 @@ NeoCalcActivity (compose) = Tela que contém o disfarce de calculadora
  
  GestoActivity (compose) = Conteúdo da segunda carteirinha
  
- CalcActivity (compose) = Tela do recurso da calculadora da área protegida ProtectActivity = Primeira tela da área protegida
- 
  MapaActivity (compose) = Recurso do mapa da área protegida 
  
  AppsActivity (compose) = Recurso da tela de aplicativos da área protegida 
@@ -710,8 +708,7 @@ O recurso foi desenvolvido como uma ferramenta de apoio à segurança, permitind
 ###Diário criptografado:
 Usando criptografia, a usuária poderá anotar o que quiser. Com a senha, ficará seguro e também não some, pois estará guardado, e é possivel baixar as páginas desse diário!
 
-###Calculadora:
-A calculadora pode ser usada para cálculos rápidos do dia a dia.
+
 
 ###Tarefas:
 O sistema permite categorizar tarefas em áreas como estudos, trabalho, pessoal e saúde.

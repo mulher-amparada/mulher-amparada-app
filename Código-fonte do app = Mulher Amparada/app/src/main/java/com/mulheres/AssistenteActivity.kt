@@ -430,7 +430,7 @@ fun AssistenteSaude() {
                     )
                     .padding(
                         start = 24.dp,
-                        end = 15.dp
+                        end = 24.dp
                     ),
                    
 

@@ -132,14 +132,7 @@ abrirArquivoSeguro = {
                     )
                 },
 
-                abrirCalculadora = {
-                    startActivity(
-                        Intent(
-                            this,
-                            CalcActivity::class.java
-                        )
-                    )
-                },
+                
 
                 abrirTarefa = {
                     startActivity(
@@ -330,7 +323,6 @@ private fun MeusAcessos(
 
     abrirArquivos: () -> Unit,
 
-    abrirCalculadora: () -> Unit,
 
 abrirArquivoSeguro: () -> Unit,
 
@@ -377,10 +369,7 @@ abrirArquivoSeguro: () -> Unit,
 
 
 
-        Acesso(
-            "Calculadora",
-            "Faça seus cálculos rapidamente"
-        ),
+        
 
         Acesso(
             "Minhas tarefas",
@@ -513,9 +502,7 @@ val outrasFuncoes = listOf(
 
                                 
 
-                                "Calculadora" -> {
-                                    abrirCalculadora()
-                                }
+
 
                                 "Minhas tarefas" -> {
                                     abrirTarefa()

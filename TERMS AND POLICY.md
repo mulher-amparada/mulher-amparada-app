@@ -1,4 +1,4 @@
-# Licença do Projeto Mulher Amparada.
+# Termos e politicas do projeto = Mulher Amparada.
 
 ---
 

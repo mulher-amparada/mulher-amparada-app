@@ -1,1210 +1,221 @@
-# Licença do Projeto Mulher Amparada.
+Next: GNU Free Documentation License, Previous: The GNU Project and GNU/Linux, Up: Introduction   [Contents][Index]
 
----
+GNU General Public License
+Version 3, 29 June 2007
+Copyright © 2007 Free Software Foundation, Inc. https://www.fsf.org
 
-1. Finalidade do Aplicativo
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+Preamble
+The GNU General Public License is a free, copyleft license for software and other kinds of works.
 
-Cláusula 1.1: Este aplicativo foi desenvolvido com objetivo de oferecer suporte, acolhimento e auxílio para mulheres em situações de risco, vulnerabilidade, ameaça ou violência.
+The licenses for most software and other practical works are designed to take away your freedom to share and change the works. By contrast, the GNU General Public License is intended to guarantee your freedom to share and change all versions of a program–to make sure it remains free software for all its users. We, the Free Software Foundation, use the GNU General Public License for most of our software; it applies also to any other work released this way by its authors. You can apply it to your programs, too.
 
-Cláusula 1.2: O aplicativo atua como ferramenta complementar de apoio pessoal e segurança digital.
+When we speak of free software, we are referring to freedom, not price. Our General Public Licenses are designed to make sure that you have the freedom to distribute copies of free software (and charge for them if you wish), that you receive source code or can get it if you want it, that you can change the software or use pieces of it in new free programs, and that you know you can do these things.
 
-Cláusula 1.3: O aplicativo disponibiliza funcionalidades emergenciais, contatos rápidos, proteção de acesso, recursos de localização e ferramentas de segurança.
+To protect your rights, we need to prevent others from denying you these rights or asking you to surrender the rights. Therefore, you have certain responsibilities if you distribute copies of the software, or if you modify it: responsibilities to respect the freedom of others.
 
-Cláusula 1.4: O uso do aplicativo é gratuito e voluntário.
+For example, if you distribute copies of such a program, whether gratis or for a fee, you must pass on to the recipients the same freedoms that you received. You must make sure that they, too, receive or can get the source code. And you must show them these terms so they know their rights.
 
-Cláusula 1.5: Ao utilizar o aplicativo, a usuária declara estar ciente e concordar com os presentes Termos de Uso e Política de Privacidade.
+Developers that use the GNU GPL protect your rights with two steps: (1) assert copyright on the software, and (2) offer you this License giving you legal permission to copy, distribute and/or modify it.
 
-Cláusula 1.6: O aplicativo não utiliza a permissão de sensores corporais ou de saúde do Android para coleta, monitoramento ou processamento de dados de saúde.
+For the developers’ and authors’ protection, the GPL clearly explains that there is no warranty for this free software. For both users’ and authors’ sake, the GPL requires that modified versions be marked as changed, so that their problems will not be attributed erroneously to authors of previous versions.
 
-Cláusula 1.7: O aplicativo utiliza um Serviço de Acessibilidade exclusivamente para a funcionalidade de bloqueio da tela, mediante ativação manual da própria usuária nas configurações de Acessibilidade do Android.
+Some devices are designed to deny users access to install or run modified versions of the software inside them, although the manufacturer can do so. This is fundamentally incompatible with the aim of protecting users’ freedom to change the software. The systematic pattern of such abuse occurs in the area of products for individuals to use, which is precisely where it is most unacceptable. Therefore, we have designed this version of the GPL to prohibit the practice for those products. If such problems arise substantially in other domains, we stand ready to extend this provision to those domains in future versions of the GPL, as needed to protect the freedom of users.
 
----
+Finally, every program is threatened constantly by software patents. States should not allow patents to restrict development and use of software on general-purpose computers, but in those that do, we wish to avoid the special danger that patents applied to a free program could make it effectively proprietary. To prevent this, the GPL assures that patents cannot be used to render the program non-free.
 
-2. Público-Alvo
+The precise terms and conditions for copying, distribution and modification follow.
 
-Cláusula 2.1: O aplicativo foi direcionado principalmente para mulheres em situação de violência, risco ou vulnerabilidade.
+TERMS AND CONDITIONS
+Definitions.
+“This License” refers to version 3 of the GNU General Public License.
 
-Cláusula 2.2: Qualquer pessoa que utilize o aplicativo deverá respeitar integralmente estes termos.
+“Copyright” also means copyright-like laws that apply to other kinds of works, such as semiconductor masks.
 
-Cláusula 2.3: O aplicativo não realiza discriminação de gênero, raça, religião, nacionalidade ou qualquer outra condição pessoal.
+“The Program” refers to any copyrightable work licensed under this License. Each licensee is addressed as “you”. “Licensees” and “recipients” may be individuals or organizations.
 
----
+To “modify” a work means to copy from or adapt all or part of the work in a fashion requiring copyright permission, other than the making of an exact copy. The resulting work is called a “modified version” of the earlier work or a work “based on” the earlier work.
 
-3. Permissões Utilizadas
+A “covered work” means either the unmodified Program or a work based on the Program.
 
-Cláusula 3.1: O aplicativo solicita apenas permissões e acessos especiais necessários para funcionalidades específicas.
+To “propagate” a work means to do anything with it that, without permission, would make you directly or secondarily liable for infringement under applicable copyright law, except executing it on a computer or modifying a private copy. Propagation includes copying, distribution (with or without modification), making available to the public, and in some countries other activities as well.
 
-Cláusula 3.2: A permissão de telefone poderá ser utilizada para iniciar chamadas através do aplicativo padrão do Android.
+To “convey” a work means any kind of propagation that enables other parties to make or receive copies. Mere interaction with a user through a computer network, with no transfer of a copy, is not conveying.
 
-Cláusula 3.3: A permissão de contatos poderá ser utilizada para seleção manual de contatos de emergência.
+An interactive user interface displays “Appropriate Legal Notices” to the extent that it includes a convenient and prominently visible feature that (1) displays an appropriate copyright notice, and (2) tells the user that there is no warranty for the work (except to the extent that warranties are provided), that licensees may convey the work under this License, and how to view a copy of this License. If the interface presents a list of user commands or options, such as a menu, a prominent item in the list meets this criterion.
 
-Cláusula 3.4: A permissão de localização poderá ser utilizada em funcionalidades relacionadas a emergência e compartilhamento de localização.
+Source Code.
+The “source code” for a work means the preferred form of the work for making modifications to it. “Object code” means any non-source form of a work.
 
-Cláusula 3.5: A permissão especial de Acesso a todos os arquivos poderá ser utilizada para o serviço de visualização de arquivos da área protegida.
+A “Standard Interface” means an interface that either is an official standard defined by a recognized standards body, or, in the case of interfaces specified for a particular programming language, one that is widely used among developers working in that language.
 
-Cláusula 3.6: A permissão de acesso à lista de aplicativos instalados poderá ser utilizada pela função destinada a listar aplicativos dentro da área protegida, conforme as informações disponibilizadas pelo Android.
+The “System Libraries” of an executable work include anything, other than the work as a whole, that (a) is included in the normal form of packaging a Major Component, but which is not part of that Major Component, and (b) serves only to enable use of the work with that Major Component, or to implement a Standard Interface for which an implementation is available to the public in source code form. A “Major Component”, in this context, means a major essential component (kernel, window system, and so on) of the specific operating system (if any) on which the executable work runs, or a compiler used to produce the work, or an object code interpreter used to run it.
 
-Cláusula 3.7: O aplicativo utiliza um Serviço de Acessibilidade para realizar o bloqueio da tela quando a funcionalidade correspondente estiver ativada.
+The “Corresponding Source” for a work in object code form means all the source code needed to generate, install, and (for an executable work) run the object code and to modify the work, including scripts to control those activities. However, it does not include the work’s System Libraries, or general-purpose tools or generally available free programs which are used unmodified in performing those activities but which are not part of the work. For example, Corresponding Source includes interface definition files associated with source files for the work, and the source code for shared libraries and dynamically linked subprograms that the work is specifically designed to require, such as by intimate data communication or control flow between those subprograms and other parts of the work.
 
-Cláusula 3.8: O Serviço de Acessibilidade não é ativado automaticamente pelo aplicativo. A usuária precisa autorizar manualmente sua utilização nas configurações de Acessibilidade do Android.
+The Corresponding Source need not include anything that users can regenerate automatically from other parts of the Corresponding Source.
 
-Cláusula 3.9: O Serviço de Acessibilidade é utilizado especificamente para solicitar o bloqueio da tela por meio dos recursos oficiais disponibilizados pelo Android.
+The Corresponding Source for a work in source code form is that same work.
 
-Cláusula 3.10: O aplicativo não utiliza o Serviço de Acessibilidade para ler o conteúdo de outras telas, controlar arbitrariamente outros aplicativos ou acessar conteúdo das janelas de outros aplicativos.
+Basic Permissions.
+All rights granted under this License are granted for the term of copyright on the Program, and are irrevocable provided the stated conditions are met. This License explicitly affirms your unlimited permission to run the unmodified Program. The output from running a covered work is covered by this License only if the output, given its content, constitutes a covered work. This License acknowledges your rights of fair use or other equivalent, as provided by copyright law.
 
-Cláusula 3.11: O aplicativo não utiliza mais o mecanismo de Administrador do dispositivo ("DeviceAdminReceiver") para realizar o bloqueio da tela.
+You may make, run and propagate covered works that you do not convey, without conditions so long as your license otherwise remains in force. You may convey covered works to others for the sole purpose of having them make modifications exclusively for you, or provide you with facilities for running those works, provided that you comply with the terms of this License in conveying all material for which you do not control copyright. Those thus making or running the covered works for you must do so exclusively on your behalf, under your direction and control, on terms that prohibit them from making any copies of your copyrighted material outside their relationship with you.
 
-Cláusula 3.12: A classe responsável pelo Serviço de Acessibilidade permanece denominada "MyDeviceAdminReceiver" por compatibilidade com a estrutura existente do projeto, porém ela atualmente estende "AccessibilityService" e não é um Administrador do dispositivo.
+Conveying under any other circumstances is permitted solely under the conditions stated below. Sublicensing is not allowed; section 10 makes it unnecessary.
 
-Cláusula 3.13: O bloqueio da tela utiliza a ação oficial "GLOBAL_ACTION_LOCK_SCREEN" disponibilizada pelo Serviço de Acessibilidade do Android.
+Protecting Users’ Legal Rights From Anti-Circumvention Law.
+No covered work shall be deemed part of an effective technological measure under any applicable law fulfilling obligations under article 11 of the WIPO copyright treaty adopted on 20 December 1996, or similar laws prohibiting or restricting circumvention of such measures.
 
-Cláusula 3.14: A ativação, desativação e gerenciamento do Serviço de Acessibilidade são controlados pelo sistema Android e pela própria usuária.
+When you convey a covered work, you waive any legal power to forbid circumvention of technological measures to the extent such circumvention is effected by exercising rights under this License with respect to the covered work, and you disclaim any intention to limit operation or modification of the work as a means of enforcing, against the work’s users, your or third parties’ legal rights to forbid circumvention of technological measures.
 
-Cláusula 3.15: O microfone poderá ser utilizado para funcionalidades de detecção sonora e proteção por barulho, mediante autorização da usuária.
+Conveying Verbatim Copies.
+You may convey verbatim copies of the Program’s source code as you receive it, in any medium, provided that you conspicuously and appropriately publish on each copy an appropriate copyright notice; keep intact all notices stating that this License and any non-permissive terms added in accord with section 7 apply to the code; keep intact all notices of the absence of any warranty; and give all recipients a copy of this License along with the Program.
 
-Cláusula 3.16: A execução de determinados recursos poderá ocorrer em segundo plano quando a própria usuária tiver ativado a respectiva funcionalidade.
+You may charge any price or no price for each copy that you convey, and you may offer support or warranty protection for a fee.
 
-Cláusula 3.17: Todas as permissões e acessos especiais dependem de consentimento da usuária, conforme os mecanismos disponibilizados pelo Android.
+Conveying Modified Source Versions.
+You may convey a work based on the Program, or the modifications to produce it from the Program, in the form of source code under the terms of section 4, provided that you also meet all of these conditions:
 
-Cláusula 3.18: As permissões podem ser revogadas a qualquer momento nas configurações do Android.
+The work must carry prominent notices stating that you modified it, and giving a relevant date.
+The work must carry prominent notices stating that it is released under this License and any conditions added under section 7. This requirement modifies the requirement in section 4 to “keep intact all notices”.
+You must license the entire work, as a whole, under this License to anyone who comes into possession of a copy. This License will therefore apply, along with any applicable section 7 additional terms, to the whole of the work, and all its parts, regardless of how they are packaged. This License gives no permission to license the work in any other way, but it does not invalidate such permission if you have separately received it.
+If the work has interactive user interfaces, each must display Appropriate Legal Notices; however, if the Program has interactive interfaces that do not display Appropriate Legal Notices, your work need not make them do so.
+A compilation of a covered work with other separate and independent works, which are not by their nature extensions of the covered work, and which are not combined with it such as to form a larger program, in or on a volume of a storage or distribution medium, is called an “aggregate” if the compilation and its resulting copyright are not used to limit the access or legal rights of the compilation’s users beyond what the individual works permit. Inclusion of a covered work in an aggregate does not cause this License to apply to the other parts of the aggregate.
 
-Cláusula 3.19: O aplicativo não contorna, burla ou oculta as permissões e mecanismos de segurança do sistema Android.
+Conveying Non-Source Forms.
+You may convey a covered work in object code form under the terms of sections 4 and 5, provided that you also convey the machine-readable Corresponding Source under the terms of this License, in one of these ways:
 
----
+Convey the object code in, or embodied in, a physical product (including a physical distribution medium), accompanied by the Corresponding Source fixed on a durable physical medium customarily used for software interchange.
+Convey the object code in, or embodied in, a physical product (including a physical distribution medium), accompanied by a written offer, valid for at least three years and valid for as long as you offer spare parts or customer support for that product model, to give anyone who possesses the object code either (1) a copy of the Corresponding Source for all the software in the product that is covered by this License, on a durable physical medium customarily used for software interchange, for a price no more than your reasonable cost of physically performing this conveying of source, or (2) access to copy the Corresponding Source from a network server at no charge.
+Convey individual copies of the object code with a copy of the written offer to provide the Corresponding Source. This alternative is allowed only occasionally and noncommercially, and only if you received the object code with such an offer, in accord with subsection 6b.
+Convey the object code by offering access from a designated place (gratis or for a charge), and offer equivalent access to the Corresponding Source in the same way through the same place at no further charge. You need not require recipients to copy the Corresponding Source along with the object code. If the place to copy the object code is a network server, the Corresponding Source may be on a different server (operated by you or a third party) that supports equivalent copying facilities, provided you maintain clear directions next to the object code saying where to find the Corresponding Source. Regardless of what server hosts the Corresponding Source, you remain obligated to ensure that it is available for as long as needed to satisfy these requirements.
+Convey the object code using peer-to-peer transmission, provided you inform other peers where the object code and Corresponding Source of the work are being offered to the general public at no charge under subsection 6d.
+A separable portion of the object code, whose source code is excluded from the Corresponding Source as a System Library, need not be included in conveying the object code work.
 
-4. Uso de Contatos
+A “User Product” is either (1) a “consumer product”, which means any tangible personal property which is normally used for personal, family, or household purposes, or (2) anything designed or sold for incorporation into a dwelling. In determining whether a product is a consumer product, doubtful cases shall be resolved in favor of coverage. For a particular product received by a particular user, “normally used” refers to a typical or common use of that class of product, regardless of the status of the particular user or of the way in which the particular user actually uses, or expects or is expected to use, the product. A product is a consumer product regardless of whether the product has substantial commercial, industrial or non-consumer uses, unless such uses represent the only significant mode of use of the product.
 
-Cláusula 4.1: O acesso aos contatos ocorre apenas mediante ação manual da própria usuária.
+“Installation Information” for a User Product means any methods, procedures, authorization keys, or other information required to install and execute modified versions of a covered work in that User Product from a modified version of its Corresponding Source. The information must suffice to ensure that the continued functioning of the modified object code is in no case prevented or interfered with solely because modification has been made.
 
-Cláusula 4.2: O aplicativo poderá acessar nome e telefone de contatos selecionados pela usuária.
+If you convey an object code work under this section in, or with, or specifically for use in, a User Product, and the conveying occurs as part of a transaction in which the right of possession and use of the User Product is transferred to the recipient in perpetuity or for a fixed term (regardless of how the transaction is characterized), the Corresponding Source conveyed under this section must be accompanied by the Installation Information. But this requirement does not apply if neither you nor any third party retains the ability to install modified object code on the User Product (for example, the work has been installed in ROM).
 
-Cláusula 4.3: Os contatos poderão ser armazenados localmente no dispositivo.
+The requirement to provide Installation Information does not include a requirement to continue to provide support service, warranty, or updates for a work that has been modified or installed by the recipient, or for the User Product in which it has been modified or installed. Access to a network may be denied when the modification itself materially and adversely affects the operation of the network or violates the rules and protocols for communication across the network.
 
-Cláusula 4.4: O aplicativo não sincroniza automaticamente toda a agenda do aparelho.
+Corresponding Source conveyed, and Installation Information provided, in accord with this section must be in a format that is publicly documented (and with an implementation available to the public in source code form), and must require no special password or key for unpacking, reading or copying.
 
-Cláusula 4.5: Os contatos não são vendidos nem utilizados para marketing.
+Additional Terms.
+“Additional permissions” are terms that supplement the terms of this License by making exceptions from one or more of its conditions. Additional permissions that are applicable to the entire Program shall be treated as though they were included in this License, to the extent that they are valid under applicable law. If additional permissions apply only to part of the Program, that part may be used separately under those permissions, but the entire Program remains governed by this License without regard to the additional permissions.
 
----
+When you convey a copy of a covered work, you may at your option remove any additional permissions from that copy, or from any part of it. (Additional permissions may be written to require their own removal in certain cases when you modify the work.) You may place additional permissions on material, added by you to a covered work, for which you have or can give appropriate copyright permission.
 
-5. Uso de Localização
+Notwithstanding any other provision of this License, for material you add to a covered work, you may (if authorized by the copyright holders of that material) supplement the terms of this License with terms:
 
-Cláusula 5.1: A localização é utilizada mediante ação da usuária e conforme as funcionalidades que dependem desse recurso.
+Disclaiming warranty or limiting liability differently from the terms of sections 15 and 16 of this License; or
+Requiring preservation of specified reasonable legal notices or author attributions in that material or in the Appropriate Legal Notices displayed by works containing it; or
+Prohibiting misrepresentation of the origin of that material, or requiring that modified versions of such material be marked in reasonable ways as different from the original version; or
+Limiting the use for publicity purposes of names of licensors or authors of the material; or
+Declining to grant rights under trademark law for use of some trade names, trademarks, or service marks; or
+Requiring indemnification of licensors and authors of that material by anyone who conveys the material (or modified versions of it) with contractual assumptions of liability to the recipient, for any liability that these contractual assumptions directly impose on those licensors and authors.
+All other non-permissive additional terms are considered “further restrictions” within the meaning of section 10. If the Program as you received it, or any part of it, contains a notice stating that it is governed by this License along with a term that is a further restriction, you may remove that term. If a license document contains a further restriction but permits relicensing or conveying under this License, you may add to a covered work material governed by the terms of that license document, provided that the further restriction does not survive such relicensing or conveying.
 
-Cláusula 5.2: O aplicativo não realiza rastreamento contínuo da usuária para fins de monitoramento oculto.
+If you add terms to a covered work in accord with this section, you must place, in the relevant source files, a statement of the additional terms that apply to those files, or a notice indicating where to find the applicable terms.
 
-Cláusula 5.3: O aplicativo poderá utilizar a última localização disponível do dispositivo quando tecnicamente necessário para determinada funcionalidade.
+Additional terms, permissive or non-permissive, may be stated in the form of a separately written license, or stated as exceptions; the above requirements apply either way.
 
-Cláusula 5.4: Informações de localização poderão ser compartilhadas manualmente pela usuária em funcionalidades emergenciais.
+Termination.
+You may not propagate or modify a covered work except as expressly provided under this License. Any attempt otherwise to propagate or modify it is void, and will automatically terminate your rights under this License (including any patent licenses granted under the third paragraph of section 11).
 
----
+However, if you cease all violation of this License, then your license from a particular copyright holder is reinstated (a) provisionally, unless and until the copyright holder explicitly and finally terminates your license, and (b) permanently, if the copyright holder fails to notify you of the violation by some reasonable means prior to 60 days after the cessation.
 
-6. Botão de Emergência
+Moreover, your license from a particular copyright holder is reinstated permanently if the copyright holder notifies you of the violation by some reasonable means, this is the first time you have received notice of violation of this License (for any work) from that copyright holder, and you cure the violation prior to 30 days after your receipt of the notice.
 
-Cláusula 6.1: O aplicativo poderá disponibilizar funcionalidades emergenciais para agilizar pedidos de ajuda.
+Termination of your rights under this section does not terminate the licenses of parties who have received copies or rights from you under this License. If your rights have been terminated and not permanently reinstated, you do not qualify to receive new licenses for the same material under section 10.
 
-Cláusula 6.2: Chamadas poderão ser realizadas através do aplicativo padrão de telefone do Android.
+Acceptance Not Required for Having Copies.
+You are not required to accept this License in order to receive or run a copy of the Program. Ancillary propagation of a covered work occurring solely as a consequence of using peer-to-peer transmission to receive a copy likewise does not require acceptance. However, nothing other than this License grants you permission to propagate or modify any covered work. These actions infringe copyright if you do not accept this License. Therefore, by modifying or propagating a covered work, you indicate your acceptance of this License to do so.
 
-Cláusula 6.3: Quando a funcionalidade não puder iniciar diretamente uma chamada, o aplicativo poderá abrir o discador nativo do Android com o número correspondente já preenchido.
+Automatic Licensing of Downstream Recipients.
+Each time you convey a covered work, the recipient automatically receives a license from the original licensors, to run, modify and propagate that work, subject to this License. You are not responsible for enforcing compliance by third parties with this License.
 
-Cláusula 6.4: O funcionamento poderá variar conforme fabricante, permissões e versão do Android.
+An “entity transaction” is a transaction transferring control of an organization, or substantially all assets of one, or subdividing an organization, or merging organizations. If propagation of a covered work results from an entity transaction, each party to that transaction who receives a copy of the work also receives whatever licenses to the work the party’s predecessor in interest had or could give under the previous paragraph, plus a right to possession of the Corresponding Source of the work from the predecessor in interest, if the predecessor has it or can get it with reasonable efforts.
 
-Cláusula 6.5: O aplicativo não garante resposta imediata ou atendimento oficial.
+You may not impose any further restrictions on the exercise of the rights granted or affirmed under this License. For example, you may not impose a license fee, royalty, or other charge for exercise of rights granted under this License, and you may not initiate litigation (including a cross-claim or counterclaim in a lawsuit) alleging that any patent claim is infringed by making, using, selling, offering for sale, or importing the Program or any portion of it.
 
----
+Patents.
+A “contributor” is a copyright holder who authorizes use under this License of the Program or a work on which the Program is based. The work thus licensed is called the contributor’s “contributor version”.
 
-7. Proteção por Movimento
+A contributor’s “essential patent claims” are all patent claims owned or controlled by the contributor, whether already acquired or hereafter acquired, that would be infringed by some manner, permitted by this License, of making, using, or selling its contributor version, but do not include claims that would be infringed only as a consequence of further modification of the contributor version. For purposes of this definition, “control” includes the right to grant patent sublicenses in a manner consistent with the requirements of this License.
 
-Cláusula 7.1: O recurso de proteção por movimento utiliza o sensor de acelerômetro do dispositivo Android.
+Each contributor grants you a non-exclusive, worldwide, royalty-free patent license under the contributor’s essential patent claims, to make, use, sell, offer for sale, import and otherwise run, modify and propagate the contents of its contributor version.
 
-Cláusula 7.2: O acelerômetro é um sensor interno do aparelho utilizado para detectar movimentações físicas.
+In the following three paragraphs, a “patent license” is any express agreement or commitment, however denominated, not to enforce a patent (such as an express permission to practice a patent or covenant not to sue for patent infringement). To “grant” such a patent license to a party means to make such an agreement or commitment not to enforce a patent against the party.
 
-Cláusula 7.3: O aplicativo poderá acessar dados do acelerômetro enquanto a proteção por movimento estiver ativada.
+If you convey a covered work, knowingly relying on a patent license, and the Corresponding Source of the work is not available for anyone to copy, free of charge and under the terms of this License, through a publicly available network server or other readily accessible means, then you must either (1) cause the Corresponding Source to be so available, or (2) arrange to deprive yourself of the benefit of the patent license for this particular work, or (3) arrange, in a manner consistent with the requirements of this License, to extend the patent license to downstream recipients. “Knowingly relying” means you have actual knowledge that, but for the patent license, your conveying the covered work in a country, or your recipient’s use of the covered work in a country, would infringe one or more identifiable patents in that country that you have reason to believe are valid.
 
-Cláusula 7.4: O acesso ao acelerômetro ocorre exclusivamente para funcionamento da detecção de movimentos emergenciais.
+If, pursuant to or in connection with a single transaction or arrangement, you convey, or propagate by procuring conveyance of, a covered work, and grant a patent license to some of the parties receiving the covered work authorizing them to use, propagate, modify or convey a specific copy of the covered work, then the patent license you grant is automatically extended to all recipients of the covered work and works based on it.
 
-Cláusula 7.5: O acelerômetro é um componente interno do Android e não exige permissão separada específica no sistema.
+A patent license is “discriminatory” if it does not include within the scope of its coverage, prohibits the exercise of, or is conditioned on the non-exercise of one or more of the rights that are specifically granted under this License. You may not convey a covered work if you are a party to an arrangement with a third party that is in the business of distributing software, under which you make payment to the third party based on the extent of your activity of conveying the work, and under which the third party grants, to any of the parties who would receive the covered work from you, a discriminatory patent license (a) in connection with copies of the covered work conveyed by you (or copies made from those copies), or (b) primarily for and in connection with specific products or compilations that contain the covered work, unless you entered into that arrangement, or that patent license was granted, prior to 28 March 2007.
 
-Cláusula 7.6: O funcionamento poderá variar conforme fabricante, sensores disponíveis e versão do Android.
+Nothing in this License shall be construed as excluding or limiting any implied license or other defenses to infringement that may otherwise be available to you under applicable patent law.
 
-Cláusula 7.7: Alguns dispositivos poderão limitar sensores devido a economia de bateria ou restrições do sistema.
+No Surrender of Others’ Freedom.
+If conditions are imposed on you (whether by court order, agreement or otherwise) that contradict the conditions of this License, they do not excuse you from the conditions of this License. If you cannot convey a covered work so as to satisfy simultaneously your obligations under this License and any other pertinent obligations, then as a consequence you may not convey it at all. For example, if you agree to terms that obligate you to collect a royalty for further conveying from those to whom you convey the Program, the only way you could satisfy both those terms and this License would be to refrain entirely from conveying the Program.
 
-Cláusula 7.8: Dispositivos sem acelerômetro poderão não executar corretamente a funcionalidade.
+Use with the GNU Affero General Public License.
+Notwithstanding any other provision of this License, you have permission to link or combine any covered work with a work licensed under version 3 of the GNU Affero General Public License into a single combined work, and to convey the resulting work. The terms of this License will continue to apply to the part which is the covered work, but the special requirements of the GNU Affero General Public License, section 13, concerning interaction through a network will apply to the combination as such.
 
-Cláusula 7.9: Vibrações, impactos ou movimentos involuntários poderão ativar o recurso automaticamente.
+Revised Versions of this License.
+The Free Software Foundation may publish revised and/or new versions of the GNU General Public License from time to time. Such new versions will be similar in spirit to the present version, but may differ in detail to address new problems or concerns.
 
-Cláusula 7.10: O recurso poderá iniciar automaticamente uma ligação telefônica quando movimentos compatíveis forem detectados.
+Each version is given a distinguishing version number. If the Program specifies that a certain numbered version of the GNU General Public License “or any later version” applies to it, you have the option of following the terms and conditions either of that numbered version or of any later version published by the Free Software Foundation. If the Program does not specify a version number of the GNU General Public License, you may choose any version ever published by the Free Software Foundation.
 
-Cláusula 7.11: A ligação automática depende da permissão de chamadas telefônicas concedida pela usuária.
+If the Program specifies that a proxy can decide which future versions of the GNU General Public License can be used, that proxy’s public statement of acceptance of a version permanently authorizes you to choose that version for the Program.
 
-Cláusula 7.12: Sem permissão de chamadas, a funcionalidade poderá não operar corretamente.
+Later license versions may give you additional or different permissions. However, no additional obligations are imposed on any author or copyright holder as a result of your choosing to follow a later version.
 
-Cláusula 7.13: O funcionamento depende da operadora, rede móvel e disponibilidade do dispositivo.
+Disclaimer of Warranty.
+THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM “AS IS” WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
 
-Cláusula 7.14: O recurso pode ser ativado ou desativado manualmente pela usuária.
+Limitation of Liability.
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
----
+Interpretation of Sections 15 and 16.
+If the disclaimer of warranty and limitation of liability provided above cannot be given local legal effect according to their terms, reviewing courts shall apply local law that most closely approximates an absolute waiver of all civil liability in connection with the Program, unless a warranty or assumption of liability accompanies a copy of the Program in return for a fee.
 
-8. Segurança de acesso da área protegida
+END OF TERMS AND CONDITIONS
+How to Apply These Terms to Your New Programs
+If you develop a new program, and you want it to be of the greatest possible use to the public, the best way to achieve this is to make it free software which everyone can redistribute and change under these terms.
 
-Cláusula 8.1: O aplicativo poderá utilizar mecanismos de segurança do próprio Android.
+To do so, attach the following notices to the program. It is safest to attach them to the start of each source file to most effectively state the exclusion of warranty; and each file should have at least the “copyright” line and a pointer to where the full notice is found.
 
-Cláusula 8.2: O aplicativo poderá utilizar PIN, senha, padrão ou biometria do sistema.
+one line to give the program's name and a brief idea of what it does.  
+Copyright (C) year name of author
 
-Cláusula 8.3: Dados biométricos permanecem sob gerenciamento exclusivo do Android.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or (at
+your option) any later version.
 
-Cláusula 8.4: O aplicativo não armazena impressões digitais, rosto ou informações biométricas.
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
 
----
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see https://www.gnu.org/licenses/.
+Also add information on how to contact you by electronic and paper mail.
 
-9. Conteúdo Protegido
+If the program does terminal interaction, make it output a short notice like this when it starts in an interactive mode:
 
-Cláusula 9.1: O recurso de conteúdo protegido depende das configurações de segurança do aparelho.
+program Copyright (C) year name of author 
+This program comes with ABSOLUTELY NO WARRANTY; for details type ‘show w’.
+This is free software, and you are welcome to redistribute it
+under certain conditions; type ‘show c’ for details.
+The hypothetical commands ‘show w’ and ‘show c’ should show the appropriate parts of the General Public License. Of course, your program’s commands might be different; for a GUI interface, you would use an “about box”.
 
-Cláusula 9.2: O dispositivo deverá possuir autenticação configurada para funcionamento adequado.
+You should also get your employer (if you work as a programmer) or school, if any, to sign a “copyright disclaimer” for the program, if necessary. For more information on this, and how to apply and follow the GNU GPL, see https://www.gnu.org/licenses/.
 
-Cláusula 9.3: Sem autenticação configurada, determinadas telas poderão abrir sem solicitação de biometria ou senha.
+The GNU General Public License does not permit incorporating your program into proprietary programs. If your program is a subroutine library, you may consider it more useful to permit linking proprietary applications with the library. If this is what you want to do, use the GNU Lesser General Public License instead of this License. But first, please read https://www.gnu.org/licenses/why-not-lgpl.html.
 
----
-
-10. Armazenamento Local
-
-Cláusula 10.1: Dados utilizados pelo aplicativo poderão ser armazenados localmente no dispositivo.
-
-Cláusula 10.2: Dados protegidos pelo sistema Cripto são armazenados localmente utilizando criptografia AES-256, Android Keystore e Jetpack DataStore Preferences.
-
-Cláusula 10.3: O aplicativo não realiza venda de dados pessoais.
-
----
-
-11. Ausência de Monitoramento Oculto
-
-Cláusula 11.1: O aplicativo não utiliza spyware.
-
-Cláusula 11.2: O aplicativo não realiza monitoramento oculto contínuo.
-
-Cláusula 11.3: Nenhuma funcionalidade sensível opera sem as permissões ou acessos necessários do Android e sem a ativação correspondente pela usuária.
-
----
-
-12. Compatibilidade
-
-Cláusula 12.1: Determinadas funcionalidades poderão variar conforme fabricante e versão do Android.
-
-Cláusula 12.2: Recursos poderão não funcionar corretamente em dispositivos modificados.
-
----
-
-13. LGPD e Privacidade
-
-Cláusula 13.1: O aplicativo busca respeitar a Lei Geral de Proteção de Dados.
-
-Cláusula 13.2: As permissões possuem finalidade limitada às funcionalidades do aplicativo.
-
-Cláusula 13.3: A usuária poderá revogar permissões diretamente no Android.
-
----
-
-14. Limitações
-
-Cláusula 14.1: O aplicativo não substitui serviços oficiais de emergência.
-
-Cláusula 14.2: Não existe garantia de funcionamento contínuo.
-
-Cláusula 14.3: O funcionamento depende de internet, sensores, permissões e serviços do Android.
-
----
-
-15. Responsabilidade da Usuária
-
-Cláusula 15.1: A usuária é responsável pelo uso adequado do aplicativo.
-
-Cláusula 15.2: A usuária é responsável pelas permissões concedidas ao aplicativo.
-
----
-
-16. Instalação Fora da Play Store
-
-Cláusula 16.1: O aplicativo poderá ser distribuído fora da Google Play Store.
-
-Cláusula 16.2: A instalação dependerá de autorização manual da própria usuária no Android.
-
-Cláusula 16.3: A usuária é responsável por instalar o aplicativo apenas através de fontes confiáveis.
-
-Cláusula 16.4: O aplicativo poderá recomendar verificações de segurança do Android e Google Play Protect.
-
----
-
-17. Atualizações do Aplicativo
-
-Cláusula 17.1: O aplicativo poderá receber atualizações destinadas a melhorias de desempenho, estabilidade e segurança.
-
-Cláusula 17.2: Funcionalidades poderão ser alteradas, adicionadas ou removidas futuramente.
-
-Cláusula 17.3: Atualizações poderão modificar elementos visuais, permissões ou comportamento interno do aplicativo.
-
-Cláusula 17.4: O uso contínuo do aplicativo após atualizações representa concordância com eventuais alterações.
-
----
-
-18. Alterações nos Termos
-
-Cláusula 18.1: Estes Termos de Uso poderão ser atualizados futuramente.
-
-Cláusula 18.2: Alterações poderão ocorrer por motivos legais, técnicos, operacionais ou de segurança.
-
-Cláusula 18.3: A versão mais recente dos termos poderá substituir versões anteriores.
-
-Cláusula 18.4: O uso contínuo do aplicativo representa concordância com os termos atualizados.
-
----
-
-19. Uso Responsável
-
-Cláusula 19.1: A usuária concorda em utilizar o aplicativo de forma ética e compatível com a legislação.
-
-Cláusula 19.2: O aplicativo não deve ser utilizado para perseguição, assédio, fraude ou atividades ilegais.
-
-Cláusula 19.3: O uso indevido do aplicativo poderá resultar em limitações de funcionalidades.
-
-Cláusula 19.4: A usuária é responsável pelas ações realizadas através do próprio dispositivo.
-
----
-
-20. Dependência de Serviços Externos
-
-Cláusula 20.1: Algumas funcionalidades dependem de aplicativos externos instalados no dispositivo.
-
-Cláusula 20.2: Serviços externos poderão incluir telefone, SMS, mapas, GPS ou aplicativos de comunicação.
-
-Cláusula 20.3: O funcionamento poderá variar conforme disponibilidade desses aplicativos.
-
-Cláusula 20.4: O aplicativo não possui controle sobre falhas de serviços externos.
-
----
-
-21. Uso Offline
-
-Cláusula 21.1: Algumas funcionalidades poderão operar parcialmente sem internet.
-
-Cláusula 21.2: Recursos relacionados a mapas, localização em tempo real ou comunicação poderão exigir conexão ativa.
-
-Cláusula 21.3: O funcionamento offline poderá variar conforme o dispositivo.
-
----
-
-22. Segurança do Dispositivo
-
-Cláusula 22.1: A segurança do aplicativo também depende das práticas de segurança da própria usuária.
-
-Cláusula 22.2: Recomenda-se utilização de senha, PIN ou biometria no dispositivo.
-
-Cláusula 22.3: Recomenda-se manter o Android atualizado.
-
-Cláusula 22.4: Recomenda-se instalar apenas aplicativos confiáveis.
-
----
-
-23. Exclusão de Dados
-
-Cláusula 23.1: A usuária poderá remover dados locais apagando os dados do aplicativo nas configurações do Android.
-
-Cláusula 23.2: A desinstalação poderá remover informações armazenadas localmente.
-
-Cláusula 23.3: Alguns dados removidos poderão não ser recuperáveis.
-
----
-
-24. Transparência
-
-Cláusula 24.1: O aplicativo busca operar com foco em transparência e privacidade.
-
-Cláusula 24.2: Nenhuma funcionalidade sensível é executada sem as permissões ou acessos necessários do Android e sem a ativação correspondente pela usuária.
-
-Cláusula 24.3: O aplicativo não executa ações ocultas em segundo plano fora das funcionalidades informadas.
-
-Cláusula 24.4: A usuária poderá revisar permissões e acessos diretamente nas configurações do sistema.
-
----
-
-26. Compatibilidade de Sensores
-
-Cláusula 26.1: Recursos relacionados ao acelerômetro dependem da disponibilidade do sensor no aparelho.
-
-Cláusula 26.2: Sensores poderão apresentar diferenças de precisão entre fabricantes.
-
-Cláusula 26.3: O Android poderá suspender sensores em economia de bateria.
-
-Cláusula 26.4: Restrições do fabricante poderão limitar funcionalidades relacionadas a movimento.
-
----
-
-27. Chamadas Automáticas
-
-Cláusula 27.1: O recurso de chamadas automáticas depende da permissão de telefone concedida pela usuária.
-
-Cláusula 27.2: Sem permissão adequada, chamadas automáticas poderão não funcionar.
-
-Cláusula 27.3: O aplicativo poderá utilizar o discador padrão do Android.
-
-Cláusula 27.4: O funcionamento depende da operadora e disponibilidade de rede.
-
----
-
-28. Falhas Técnicas
-
-Cláusula 28.2: Funcionalidades poderão ser afetadas por atualizações do Android.
-
-Cláusula 28.3: Sensores e permissões poderão apresentar comportamento diferente entre aparelhos.
-
-Cláusula 28.4: O desenvolvedor poderá corrigir falhas futuramente através de atualizações.
-
----
-
-29. Limitação de Responsabilidade
-
-Cláusula 29.1: O aplicativo é uma ferramenta complementar de apoio.
-
-Cláusula 29.2: O aplicativo não substitui polícia, bombeiros, SAMU ou autoridades oficiais.
-
-Cláusula 29.3: Não existe garantia absoluta de proteção ou prevenção de riscos.
-
-Cláusula 29.4: O desenvolvedor não se responsabiliza por indisponibilidades externas.
-
----
-
-30. Aceitação dos Termos
-
-Cláusula 30.1: Ao continuar utilizando o aplicativo, a usuária declara concordar com estes termos.
-
-Cláusula 30.2: Caso não concorde com os termos, recomenda-se interromper o uso do aplicativo.
-
-Cláusula 30.3: Estes termos possuem finalidade informativa, operacional e de transparência.
-
----
-
-31. Proteção por barulhos
-
-Cláusula 31.1: O recurso "Proteção por barulhos" poderá utilizar o microfone do dispositivo para detectar sons em segundo plano.
-
-Cláusula 31.2: Quando ativado pela própria usuária, o aplicativo poderá monitorar padrões sonoros relacionados a múltiplos barulhos consecutivos.
-
-Cláusula 31.3: A funcionalidade poderá iniciar automaticamente ações emergenciais previamente configuradas pela usuária.
-
-Cláusula 31.4: O processamento de áudio ocorre localmente no dispositivo Android.
-
-Cláusula 31.5: O aplicativo não possui finalidade de gravação contínua, armazenamento permanente ou compartilhamento de conversas privadas por meio dessa funcionalidade.
-
-Cláusula 31.6: Sons ambientes, ruídos externos ou variações acústicas poderão causar ativações involuntárias ou falhas de detecção.
-
-Cláusula 31.7: O funcionamento poderá variar conforme fabricante, hardware, versão do Android, permissões concedidas e restrições do sistema operacional.
-
-Cláusula 31.8: O recurso poderá utilizar serviços em segundo plano enquanto estiver ativado pela usuária.
-
-Cláusula 31.9: O uso contínuo do microfone poderá aumentar o consumo de bateria do dispositivo.
-
-Cláusula 31.10: A funcionalidade poderá ser ativada ou desativada manualmente pela própria usuária a qualquer momento dentro do aplicativo.
-
-Cláusula 31.11: O aplicativo não garante detecção perfeita, funcionamento contínuo ou resposta imediata em todas as situações.
-
----
-
-32. Uso Responsável da Plataforma
-
-Cláusula 32.1: O usuário compromete-se a utilizar o aplicativo e o site de maneira ética, responsável e conforme a legislação vigente.
-
----
-
-33. Proibição de Conteúdo Ofensivo
-
-Cláusula 33.1: É proibida a publicação, envio ou compartilhamento de conteúdos ofensivos, discriminatórios, violentos ou ilegais dentro da plataforma.
-
----
-
-34. Integridade das Informações
-
-Cláusula 34.1: O usuário declara que as informações fornecidas no cadastro e durante o uso da plataforma devem ser verdadeiras e atualizadas.
-
----
-
-35. Suspensão de Acesso
-
-Cláusula 35.1: O Mulher Amparada poderá suspender temporariamente usuários que apresentem comportamento suspeito ou violem estes termos.
-
----
-
-36. Encerramento de Conta
-
-Cláusula 36.1: O usuário poderá solicitar o encerramento de sua conta a qualquer momento pelos canais oficiais disponibilizados.
-
----
-
-37. Segurança de Dados
-
-Cláusula 37.1: A plataforma adota medidas técnicas e administrativas para proteger os dados dos usuários contra acessos não autorizados.
-
----
-
-38. Atualizações do Sistema
-
-Cláusula 38.1: O aplicativo poderá receber atualizações periódicas para melhorias de segurança, estabilidade e desempenho.
-
----
-
-39. Disponibilidade do Serviço
-
-Cláusula 39.1: O funcionamento da plataforma poderá sofrer interrupções temporárias para manutenção técnica ou atualização.
-
----
-
-40. Responsabilidade do Usuário
-
-Cláusula 40.1: O usuário é responsável pelas atividades realizadas em sua conta e pela proteção de seus dados de acesso.
-
----
-
-42. Proteção Contra Fraudes
-
-Cláusula 42.1: O Mulher Amparada poderá utilizar mecanismos automatizados para identificar atividades suspeitas e prevenir fraudes.
-
----
-
-43. Direitos Autorais
-
-Cláusula 43.1: Os elementos visuais, textos, marcas e funcionalidades da plataforma são protegidos pela legislação de direitos autorais.
-
----
-
-44. Uso Indevido da Marca
-
-Cláusula 44.1: É proibida a utilização da marca Mulher Amparada sem autorização prévia e expressa.
-
----
-
-45. Privacidade do Usuário
-
-Cláusula 45.1: A plataforma respeita a privacidade dos usuários e busca limitar a coleta de dados ao mínimo necessário.
-
----
-
-46. Dados de Navegação
-
-Cláusula 46.1: Informações técnicas de navegação poderão ser utilizadas para melhorar a experiência e o desempenho do sistema.
-
----
-
-47. Consentimento do Usuário
-
-Cláusula 47.1: Ao utilizar a plataforma, o usuário declara estar ciente e concordar com estes termos.
-
----
-
-48. Alterações nos Termos
-
-Cláusula 48.1: Estes termos poderão ser modificados a qualquer momento para adequação legal ou melhoria dos serviços.
-
----
-
-49. Continuidade do Serviço
-
-Cláusula 49.1: O Mulher Amparada poderá alterar funcionalidades ou encerrar partes do serviço mediante aviso prévio quando possível.
-
----
-
-50. Uso Permitido
-
-Cláusula 50.1: O uso da plataforma deve ocorrer exclusivamente para finalidades lícitas e compatíveis com os objetivos do aplicativo.
-
-Cláusula 50.2: É proibido compartilhar, copiar ou distribuir indevidamente mecanismos internos da plataforma sem autorização.
-
----
-
-51. Compartilhamento Não Autorizado
-
-Cláusula 51.1: É proibido compartilhar contas, acessos ou mecanismos internos da plataforma sem autorização.
-
----
-
-52. Tentativas de Invasão
-
-Cláusula 52.1: Qualquer tentativa de invasão, exploração de falhas ou comprometimento do sistema poderá resultar em bloqueio imediato.
-
----
-
-53. Backup e Estabilidade
-
-Cláusula 53.1: A plataforma poderá realizar procedimentos internos de backup visando maior segurança operacional.
-
----
-
-54. Compatibilidade
-
-Cláusula 54.1: Algumas funcionalidades podem variar conforme o dispositivo, sistema operacional ou versão utilizada.
-
----
-
-55. Conexão com a Internet
-
-Cláusula 55.1: O funcionamento do aplicativo depende de acesso à internet em determinadas funcionalidades.
-
----
-
-56. Uso de Recursos do Dispositivo
-
-Cláusula 56.1: O aplicativo poderá utilizar recursos essenciais do dispositivo apenas quando necessários ao funcionamento da plataforma.
-
----
-
-58. Responsabilidade Técnica
-
-Cláusula 58.1: A equipe responsável poderá implementar medidas técnicas para preservar a integridade do serviço.
-
----
-
-59. Acesso Seguro
-
-Cláusula 59.1: Recomenda-se que o usuário mantenha mecanismos de segurança ativos em seu dispositivo.
-
----
-
-60. Encerramento de Serviços
-
-Cláusula 60.1: Serviços específicos poderão ser descontinuados ou substituídos conforme necessidade operacional.
-
----
-
-61. Informações do código
-
-Cláusula 61.1: Todas as informações dos códigos são passíveis de visualização pelos arquivos Markdown do repositório do GitHub do projeto, além de todo o código-fonte estar disponível no mesmo.
-
----
-
-62. Conduta do Usuário
-
-Cláusula 62.1: O usuário deverá respeitar os demais participantes e utilizar a plataforma de maneira adequada.
-
----
-
-63. Estabilidade Operacional
-
-Cláusula 63.1: Poderão ocorrer ajustes internos para garantir estabilidade, desempenho e segurança dos sistemas.
-
----
-
-64. Proteção da Plataforma
-
-Cláusula 64.1: Medidas automáticas poderão ser adotadas para impedir acessos abusivos ou automatizados.
-
----
-
-65. Limitação de Responsabilidade
-
-Cláusula 65.1: A plataforma não se responsabiliza por falhas causadas por fatores externos ao seu controle.
-
----
-
-66. Serviços de Terceiros
-
-Cláusula 66.1: Alguns recursos poderão depender de serviços externos fornecidos por terceiros.
-
----
-
-67. Atualização de Recursos
-
-Cláusula 67.1: Funcionalidades poderão ser alteradas, expandidas ou removidas para melhoria contínua da plataforma.
-
----
-
-68. Proteção do Ambiente Digital
-
-Cláusula 68.1: O Mulher Amparada poderá aplicar medidas preventivas para proteger seus sistemas e usuários.
-
----
-
-69. Registro de Atividades Técnicas
-
-Cláusula 69.1: Registros técnicos poderão ser mantidos temporariamente para fins de segurança e diagnóstico.
-
----
-
-70. Conformidade Legal
-
-Cláusula 70.1: O funcionamento da plataforma busca respeitar a legislação aplicável e princípios de proteção de dados.
-
----
-
-71. Ambiente Seguro
-
-Cláusula 71.1: A plataforma procura manter um ambiente digital seguro e adequado aos usuários.
-
----
-
-72. Integridade do Sistema
-
-Cláusula 72.1: Qualquer uso que comprometa a integridade do sistema poderá resultar em restrições de acesso.
-
----
-
-73. Cooperação Técnica
-
-Cláusula 73.1: O usuário poderá colaborar relatando falhas ou problemas encontrados na plataforma.
-
----
-
-74. Correções e Melhorias
-
-Cláusula 74.1: Correções técnicas poderão ser aplicadas sem aviso prévio para garantir estabilidade e segurança.
-
----
-
-75. Compatibilidade Futura
-
-Cláusula 75.1: Nem todos os dispositivos antigos poderão suportar futuras versões do aplicativo.
-
----
-
-76. Segurança do usuário
-
-Cláusula 76.1: O usuário deve manter seus métodos de autenticação protegidos contra acessos indevidos.
-
----
-
-77. Utilização Adequada
-
-Cláusula 77.1: A utilização da plataforma deve ocorrer de forma compatível com sua finalidade social e tecnológica.
-
----
-
-78. Atualizações Automáticas
-
-Cláusula 78.1: Algumas atualizações poderão ocorrer automaticamente conforme as configurações do dispositivo e da loja de aplicativos.
-
----
-
-79. Disponibilidade Parcial
-
-Cláusula 79.1: Certas funcionalidades poderão variar conforme a versão do aplicativo, dispositivo utilizado ou disponibilidade regional.
-
----
-
-80. Dados Temporários
-
-Cláusula 80.1: O sistema poderá utilizar dados temporários estritamente necessários ao funcionamento técnico da plataforma.
-
----
-
-81. Uso Ético
-
-Cláusula 81.1: O usuário compromete-se a utilizar o aplicativo e o site de forma ética, respeitosa e conforme a legislação vigente.
-
----
-
-82. Medidas Preventivas
-
-Cláusula 82.1: O Mulher Amparada poderá aplicar medidas preventivas para preservar a segurança e estabilidade da plataforma.
-
----
-
-83. Identificação de Problemas
-
-Cláusula 83.1: Informações técnicas poderão ser utilizadas exclusivamente para diagnóstico de falhas e melhorias internas.
-
----
-
-84. Funcionamento do Aplicativo
-
-Cláusula 84.1: O desempenho do aplicativo poderá variar conforme o dispositivo, conexão e ambiente de utilização.
-
----
-
-85. Continuidade Técnica
-
-Cláusula 85.1: Procedimentos internos poderão ser realizados para garantir estabilidade, manutenção e continuidade dos serviços.
-
----
-
-86. Respeito às Normas
-
-Cláusula 86.1: Todos os usuários devem respeitar estes termos e as normas aplicáveis durante a utilização da plataforma.
-
----
-
-87. Segurança Operacional
-
-Cláusula 87.1: O sistema poderá utilizar mecanismos técnicos de proteção contra atividades abusivas ou maliciosas.
-
----
-
-88. Melhorias Contínuas
-
-Cláusula 88.1: O Mulher Amparada poderá implementar melhorias contínuas em recursos, desempenho e estabilidade.
-
----
-
-89. Recursos Essenciais
-
-Cláusula 89.1: O aplicativo busca utilizar apenas recursos essenciais ao funcionamento básico da plataforma.
-
----
-
-90. Comunicação de Atualizações
-
-Cláusula 90.1: Alterações relevantes poderão ser comunicadas por meios oficiais disponibilizados pela plataforma.
-
----
-
-91. Integridade das Funcionalidades
-
-Cláusula 91.1: Não é permitido tentar alterar, comprometer ou prejudicar o funcionamento interno da plataforma.
-
----
-
-92. Uso de Tecnologias de Segurança
-
-Cláusula 92.1: Tecnologias de proteção poderão ser utilizadas para reduzir riscos operacionais e preservar a integridade do sistema.
-
----
-
-93. Estabilidade dos Serviços
-
-Cláusula 93.1: A equipe técnica poderá realizar ajustes preventivos visando manter estabilidade e desempenho dos serviços.
-
----
-
-94. Responsabilidade sobre o Dispositivo
-
-Cláusula 94.1: O usuário é responsável pela segurança e conservação do dispositivo utilizado para acessar a plataforma.
-
----
-
-95. Recursos de Proteção
-
-Cláusula 95.1: O aplicativo poderá utilizar mecanismos internos de proteção contra uso indevido ou abusivo.
-
-O serviço de palmas pode impactar a privacidade da usuária, pois funciona em segundo plano e, em alguns casos, também em primeiro plano. Por esse motivo, o recurso foi desenvolvido com ativação e desativação manual pela própria usuária.
-
-Cláusula 95.2: O recurso de relógio e localização utiliza APIs do dispositivo e depende das permissões concedidas voluntariamente pela usuária para seu funcionamento adequado.
-
-Cláusula 95.3: Nenhum recurso é executado sem consentimento prévio da usuária, e as permissões podem ser revogadas a qualquer momento nas configurações do dispositivo.
-
-Cláusula 95.4: Os dados utilizados pelos recursos são acessados apenas para possibilitar as funcionalidades descritas, respeitando as permissões autorizadas pela usuária.
-
-Cláusula 95.5: A funcionalidade de detecção por palmas foi projetada para operar apenas quando habilitada manualmente, garantindo maior controle e transparência sobre sua utilização.
-
-Cláusula 95.6: Os serviços de localização e horário podem utilizar recursos nativos do sistema operacional para fornecer informações em tempo real de maneira eficiente.
-
-Cláusula 95.7: O aplicativo não realiza compartilhamento indevido de informações pessoais obtidas através das permissões concedidas pela usuária.
-
-Cláusula 95.8: A usuária possui controle sobre a ativação dos recursos relacionados a monitoramento, localização e execução em segundo plano.
-
----
-
-96. Consentimento Contínuo
-
-Cláusula 96.1: A continuidade da utilização da plataforma representa concordância com eventuais atualizações destes termos.
-
----
-
-97. Compatibilidade Técnica
-
-Cláusula 97.1: Algumas funcionalidades poderão depender de permissões técnicas específicas do dispositivo.
-
----
-
-98. Transparência Operacional
-
-Cláusula 98.1: O Mulher Amparada busca atuar com clareza quanto às funcionalidades e limitações da plataforma.
-
----
-
-99. Proteção da Experiência do Usuário
-
-Cláusula 99.1: Medidas técnicas poderão ser aplicadas para melhorar segurança, estabilidade e experiência de utilização.
-
----
-
-100. Dados de Saúde, Condição Física e Bem-Estar
-
-Cláusula 100.1: Segundo o desenvolvedor responsável pelo projeto Mulher Amparada, durante a criação do aplicativo não foi utilizada qualquer permissão relacionada a saúde, condição física, atividades corporais ou bem-estar do usuário.
-
-Cláusula 100.2: O aplicativo não realiza coleta, armazenamento, monitoramento ou processamento de informações médicas, frequência cardíaca, exercícios físicos, sono, calorias ou dados semelhantes.
-
-Cláusula 100.3: Caso o sistema operacional Android apresente referências técnicas relacionadas a permissões de saúde ou bem-estar, isso poderá ocorrer devido a componentes padrão do sistema, bibliotecas externas ou requisitos internos do ambiente Android, sem utilização prática pelo Mulher Amparada.
-
-Cláusula 100.4: O Mulher Amparada reafirma seu compromisso com a privacidade, proteção de dados e utilização apenas das permissões estritamente necessárias para o funcionamento essencial da plataforma.
-
----
-
-101. Aceitação dos Termos
-
-Cláusula 101.1: Ao continuar utilizando o aplicativo, a usuária declara concordar com estes termos.
-
-Cláusula 101.2: Caso não concorde com os termos, recomenda-se interromper o uso do aplicativo.
-
-Cláusula 101.3: Estes termos possuem finalidade informativa, operacional e de transparência.
-
-Cláusula 101.4: Autenticação biométrica.
-
-Cláusula 101.5: Ao utilizar recursos protegidos por biometria, o aplicativo poderá emitir sinais visuais e sonoros locais para indicar sucesso, falha ou bloqueio de acesso.
-
-Cláusula 101.6: Os dados biométricos não são acessados diretamente pelo aplicativo, sendo processados exclusivamente pelo sistema de segurança do dispositivo Android.
-
-Cláusula 101.7: Sons e feedbacks do aplicativo.
-
-Cláusula 101.8: O aplicativo poderá reproduzir efeitos sonoros locais durante determinadas ações da interface, incluindo autenticação biométrica, bloqueio de áreas protegidas, navegação entre páginas e encerramento de sessões internas.
-
-Cláusula 101.9: Esses sons possuem finalidade exclusivamente informativa e de experiência de uso, sendo reproduzidos apenas no próprio dispositivo da usuária.
-
-Cláusula 101.10: Nenhum áudio do ambiente é gravado ou enviado a servidores em razão desses efeitos sonoros.
-
----
-
-Mulher Amparada 💜
-
-Este aplicativo opera com foco em privacidade, transparência, segurança e controle da própria usuária.
-
-Nenhuma funcionalidade sensível é executada sem as permissões ou acessos necessários do Android e sem a ativação correspondente pela usuária.
-
-O aplicativo não realiza monitoramento oculto, espionagem, rastreamento contínuo ou ações secretas em segundo plano.
-
-Algumas funcionalidades podem depender de internet, permissões do Android, acessos especiais, disponibilidade do aparelho, sensores internos, operadora móvel e aplicativos externos.
-
-O recurso de proteção por movimento depende do acelerômetro disponível no dispositivo Android.
-
-O aplicativo não substitui serviços oficiais de emergência, autoridades públicas, atendimento médico ou proteção policial.
-
-Em situações reais de risco imediato, procure imediatamente ajuda especializada e serviços oficiais.
-
-O uso contínuo do microfone em segundo plano pode aumentar o consumo de bateria.
-
----
-
-Sistema Cripto (Segurança do App)
-
-O sistema Cripto protege os dados armazenados pelo aplicativo utilizando criptografia AES-256 e o Android Keystore, com armazenamento realizado por meio do Jetpack DataStore Preferences.
-
-Como funciona
-
-Quando você salva um dado no app, ele não é armazenado diretamente em texto normal. O sistema Cripto criptografa o conteúdo antes de armazená-lo.
-
-A chave de criptografia é protegida pelo Android Keystore, reduzindo o risco de acesso direto à chave por outros aplicativos.
-
-Os dados criptografados são armazenados pelo Jetpack DataStore Preferences. Assim, informações como contatos confiáveis e outros dados protegidos não ficam disponíveis em texto simples no armazenamento do aplicativo.
-
-O sistema também permite salvar, carregar, remover dados específicos e limpar todos os dados armazenados.
-
-Tecnologia usada
-
-- AES-256 (criptografia)
-- Android Keystore (proteção das chaves)
-- Jetpack DataStore Preferences (armazenamento)
-
-O que cada função faz
-
-"salvar(chave, valor)" → guarda o dado de forma criptografada.
-
-"carregar(chave)" → recupera o dado original.
-
-"remover(chave)" → apaga um dado específico.
-
-"limparTudo()" → remove todos os dados salvos.
-
-Segurança
-
-Os dados são protegidos por uma chave segura do próprio Android e não ficam visíveis diretamente no armazenamento do aparelho.
-
----
-
-102. Função de calculadora e minhas tarefas
-
-Cláusula 102.1: Este aplicativo possui funcionalidades auxiliares de calculadora e organização de tarefas pessoais, estudos e trabalho, oferecendo ferramentas de planejamento simples e organização local.
-
-Cláusula 102.2: O usuário é totalmente responsável pelas informações inseridas, incluindo tarefas, categorias, prioridades e qualquer dado armazenado localmente no dispositivo.
-
-Cláusula 102.3: As informações dessas funcionalidades são destinadas ao uso pessoal, educacional e organizacional.
-
-Cláusula 102.4: O aplicativo não substitui ferramentas profissionais de gestão de projetos.
-
-Cláusula 102.5: A funcionalidade de cálculo presente no sistema tem caráter apenas auxiliar, não devendo ser utilizada como única fonte para decisões críticas, financeiras ou profissionais de alta precisão.
-
-Cláusula 102.6: O modo Pomodoro é uma ferramenta de apoio à produtividade, e seus tempos e alertas podem variar conforme o dispositivo ou ambiente utilizado.
-
-Cláusula 102.7: O sistema não garante armazenamento permanente dos dados, podendo ocorrer perda de informações em caso de limpeza de dados do aplicativo, navegador ou armazenamento local.
-
-Cláusula 102.8: O usuário pode personalizar cores e preferências visuais, sendo estas alterações aplicadas localmente no dispositivo.
-
-Cláusula 102.9: O desenvolvedor não se responsabiliza por uso inadequado, interpretação incorreta ou dependência excessiva da ferramenta para organização pessoal.
-
-Cláusula 102.10: Este aplicativo pode ser atualizado, modificado ou aprimorado a qualquer momento.
-
-Cláusula 102.11: O uso contínuo do sistema implica aceitação destes termos e condições de uso.
-
----
-
-103. Registro de áudio e armazenamento local
-
-Cláusula 103.1: O sistema permite a gravação e reprodução de áudio diretamente no dispositivo do usuário, utilizando o microfone mediante permissão concedida.
-
-Cláusula 103.2: Os arquivos de áudio são processados e armazenados localmente no dispositivo conforme o funcionamento da funcionalidade de gravação.
-
-Cláusula 103.3: O usuário é responsável por gerenciar, excluir ou manter as gravações conforme sua necessidade.
-
-Cláusula 103.4: As gravações podem ser utilizadas como registros pessoais de situações, lembretes, anotações ou documentação de eventos, de acordo com a decisão do usuário.
-
-Cláusula 103.5: O aplicativo não garante validade jurídica automática de qualquer gravação, sendo esta dependente de fatores externos como contexto, legislação e forma de obtenção.
-
-Cláusula 103.6: O sistema não realiza edição, verificação ou autenticação do conteúdo gravado, atuando como ferramenta de captura, armazenamento e reprodução de áudio.
-
-Cláusula 103.7: O uso da função de gravação para fins de registro de acontecimentos ou possíveis evidências é de responsabilidade exclusiva do usuário, respeitando as leis vigentes.
-
-Cláusula 103.8: O aplicativo não incentiva ou orienta o uso indevido da gravação de áudio.
-
-Cláusula 103.9: O usuário deve respeitar a privacidade de terceiros ao utilizar a função de gravação, conforme as leis aplicáveis em sua região.
-
-Cláusula 103.10: O desenvolvedor não se responsabiliza por qualquer uso inadequado ou consequências decorrentes das gravações realizadas pelo usuário.
-
----
-
-105. Mapa
-
-Cláusula 105.1: Este módulo exibe um mapa interativo baseado em OpenStreetMap, permitindo visualização da região da usuária.
-
-Cláusula 105.2: O mapa pode mostrar pontos de interesse representados por marcadores circulares.
-
-Cláusula 105.3: A localização exibida depende das permissões e da interação da usuária com o sistema.
-
-Cláusula 105.4: Este recurso tem finalidade informativa e de apoio visual, não devendo ser utilizado como sistema de navegação profissional.
-
----
-
-106. Visualizador de arquivos
-
-Cláusula 106.1: Este aplicativo possui uma funcionalidade de visualização de arquivos locais do dispositivo, permitindo ao usuário navegar por pastas e abrir arquivos compatíveis com o sistema.
-
-Cláusula 106.2: O acesso aos arquivos é realizado no dispositivo do usuário, conforme as permissões e mecanismos de armazenamento disponibilizados pelo Android.
-
-Cláusula 106.3: O aplicativo não se responsabiliza por arquivos corrompidos, excluídos ou modificados pelo próprio usuário ou por outros aplicativos do sistema.
-
-Cláusula 106.4: O usuário é o único responsável pelo conteúdo acessado ou aberto através do visualizador de arquivos.
-
-Cláusula 106.5: O aplicativo pode solicitar acesso ao armazenamento apenas para viabilizar a leitura de arquivos locais quando necessário.
-
-Cláusula 106.6: O aplicativo não realiza backup automático dos arquivos acessados.
-
-Cláusula 106.7: O aplicativo não altera arquivos sem ação direta do usuário.
-
-Cláusula 106.8: O aplicativo pode exibir arquivos apenas quando permitido pelo sistema operacional.
-
-Cláusula 106.9: O aplicativo não garante compatibilidade com todos os tipos de arquivos existentes.
-
-Cláusula 106.10: Arquivos protegidos pelo sistema podem não ser acessíveis.
-
-Cláusula 106.11: O desempenho do carregamento de arquivos depende do dispositivo do usuário.
-
-Cláusula 106.12: Arquivos muito grandes podem apresentar lentidão ou falhas na abertura.
-
-Cláusula 106.13: O aplicativo não modifica permissões do sistema.
-
-Cláusula 106.14: O usuário pode revogar permissões a qualquer momento nas configurações do sistema.
-
-Cláusula 106.15: O aplicativo respeita as políticas de armazenamento do Android.
-
-Cláusula 106.16: O aplicativo não acessa arquivos ocultos sem autorização do sistema.
-
-Cláusula 106.17: O conteúdo dos arquivos não é analisado ou processado externamente.
-
-Cláusula 106.18: O aplicativo não envia dados de arquivos para a internet como parte normal do funcionamento do visualizador.
-
-Cláusula 106.19: Não há sincronização automática dos arquivos com nuvem.
-
-Cláusula 106.20: O usuário pode visualizar apenas arquivos disponíveis ao aplicativo conforme as permissões e APIs do Android.
-
-Cláusula 106.21: O aplicativo não possui sistema de monitoramento contínuo de arquivos.
-
-Cláusula 106.22: O acesso a arquivos depende do acesso ao armazenamento concedido pelo usuário e permitido pelo sistema.
-
-Cláusula 106.23: O aplicativo não interfere em outros gerenciadores de arquivos.
-
-Cláusula 106.24: O usuário pode utilizar outros aplicativos simultaneamente sem que o visualizador tenha controle sobre eles.
-
-Cláusula 106.25: O aplicativo não realiza compartilhamento automático de arquivos.
-
-Cláusula 106.26: O usuário é responsável por abrir arquivos de origem desconhecida.
-
-Cláusula 106.27: O aplicativo não verifica vírus ou ameaças em arquivos.
-
-Cláusula 106.28: O uso do aplicativo não substitui antivírus.
-
-Cláusula 106.29: O aplicativo não possui acesso root ao sistema.
-
-Cláusula 106.30: Todas as ações são executadas dentro das permissões e APIs disponibilizadas pelo Android.
-
-Cláusula 106.31: O aplicativo pode solicitar atualização de permissões conforme novas versões do Android.
-
-Cláusula 106.32: O funcionamento pode variar entre dispositivos diferentes.
-
-Cláusula 106.33: O aplicativo não garante funcionamento em dispositivos modificados ou com root.
-
-Cláusula 106.34: O usuário é responsável por manter o sistema atualizado.
-
-Cláusula 106.35: O aplicativo pode apresentar falhas em sistemas desatualizados.
-
-Cláusula 106.36: O aplicativo não coleta dados pessoais através de arquivos para envio externo.
-
-Cláusula 106.37: O conteúdo acessado pelo visualizador não é armazenado automaticamente em servidores externos.
-
-Cláusula 106.38: O aplicativo não exige login para uso do visualizador.
-
-Cláusula 106.39: A funcionalidade de visualização de arquivos foi projetada para uso local.
-
-Cláusula 106.40: O aplicativo não rastreia a atividade de navegação de arquivos.
-
-Cláusula 106.41: O usuário pode remover o aplicativo a qualquer momento.
-
-Cláusula 106.42: A remoção do aplicativo não tem como finalidade excluir arquivos pessoais do armazenamento externo do dispositivo.
-
-Cláusula 106.43: O aplicativo não cria cópias automáticas de segurança dos arquivos.
-
-Cláusula 106.44: O usuário deve manter backup próprio se necessário.
-
-Cláusula 106.45: O aplicativo não possui função geral de recuperação de arquivos.
-
-Cláusula 106.46: O uso indevido do aplicativo é de responsabilidade do usuário.
-
-Cláusula 106.47: O aplicativo não incentiva modificação de arquivos críticos do sistema.
-
-Cláusula 106.48: O aplicativo não acessa partições protegidas fora das possibilidades concedidas pelo Android.
-
-Cláusula 106.49: O acesso é limitado ao armazenamento permitido pelo sistema.
-
-Cláusula 106.50: O aplicativo segue os mecanismos de segurança e armazenamento disponibilizados pelo Android.
-
-Cláusula 106.51: O aplicativo não executa arquivos automaticamente.
-
-Cláusula 106.52: A abertura de determinados arquivos poderá depender de aplicativos externos compatíveis.
-
-Cláusula 106.53: O aplicativo não altera permissões de outros aplicativos.
-
-Cláusula 106.54: O usuário controla as ações de abertura de arquivos.
-
-Cláusula 106.55: O aplicativo não mantém histórico permanente de arquivos abertos.
-
-Cláusula 106.56: Não há registro permanente de atividade de navegação de arquivos.
-
-Cláusula 106.57: O aplicativo não compartilha automaticamente dados dos arquivos com terceiros.
-
-Cláusula 106.58: O uso é limitado às permissões concedidas e aos recursos disponibilizados pelo sistema.
-
-Cláusula 106.59: O aplicativo pode ser atualizado a qualquer momento para melhorias de desempenho e segurança.
-
-Cláusula 106.60: Ao abrir o seletor de aplicativos do Android para abrir determinado arquivo, a ação subsequente passa a depender do aplicativo escolhido pela própria usuária. O desenvolvedor do Mulher Amparada não controla o comportamento, processamento ou armazenamento realizado por aplicativos externos.
-
----
-
-Informações adicionais
-
-Aviso: dentro da área protegida existe uma função de gravador de voz. A tela de gravação é separada das demais telas e o funcionamento do recurso depende das permissões concedidas pela usuária.
-
-Aviso: Os sons de bloqueio e desbloqueio da área segura permanecem como definidos pelo aplicativo, conforme a implementação adotada a partir de 20/05/2026.
-
-Aviso: O rastreamento pode variar conforme o navegador utilizado. Em alguns casos, o próprio navegador pode exibir avisos sobre coleta de dados. No aplicativo, não há finalidade de rastreamento de usuários, porém algumas funções podem utilizar dados essenciais para funcionamento, como a localização. Fora essas funcionalidades e o uso do navegador, não há coleta de dados para fins de rastreamento.
-
-Aviso: O aplicativo não utiliza mais a permissão de notificações.
-
-A função "Meus Arquivos", dentro da área protegida, utiliza as APIs e informações de armazenamento disponibilizadas pelo sistema Android para identificar o tipo de armazenamento acessível e realizar a leitura das pastas e arquivos permitidos pelo sistema.
-
-O botão vermelho de SOS, exibido como primeiro botão ao entrar no aplicativo, utiliza a telefonia do dispositivo. Quando não é possível iniciar diretamente a chamada, o aplicativo poderá abrir o telefone nativo do celular com o número 180 já discado para que a própria usuária realize a chamada.
-
-O Serviço de Acessibilidade utilizado pelo aplicativo precisa ser ativado manualmente pela usuária nas configurações de Acessibilidade do Android. O aplicativo não ativa esse serviço sozinho.
-
-O Serviço de Acessibilidade é utilizado especificamente para o recurso de bloqueio da tela e não é utilizado para leitura do conteúdo de outras telas ou para controle arbitrário de outros aplicativos.
-
-O aplicativo não utiliza mais o mecanismo de Administrador do dispositivo para realizar o bloqueio da tela.
-
-O sistema Cripto utiliza AES-256, Android Keystore e Jetpack DataStore Preferences para proteger e armazenar dados locais destinados às funcionalidades que utilizam esse sistema.
-
----
-
-Raio Seguro:
-
-O Raio Seguro é um recurso de georreferenciamento do Mulher Amparada que permite definir uma área considerada segura e verificar se a usuária permanece dentro dela.
-
-Como funciona
-
-1. A usuária abre o Raio Seguro e concede ao aplicativo a permissão de localização.
-2. O aplicativo identifica a localização atual do dispositivo.
-3. A usuária define o tamanho do raio seguro.
-4. A localização atual pode ser utilizada como centro da área segura.
-5. Ao tocar em Atualizar, a área definida é salva de forma criptografada.
-6. Enquanto o recurso estiver ativo, a localização atual é comparada com o centro da área.
-7. Se a usuária permanecer dentro do raio definido, nenhuma ação de alerta é apresentada.
-8. Caso a localização ultrapasse o limite estabelecido, o aplicativo informa que a usuária saiu da área segura e disponibiliza a opção Pedir ajuda.
-
-Georreferenciamento
-
-O recurso utiliza coordenadas geográficas do dispositivo:
-
-- Latitude: representa a posição norte-sul.
-- Longitude: representa a posição leste-oeste.
-- Raio: determina a distância máxima permitida a partir do centro da área segura.
-
-A distância entre a localização atual e o centro da área é utilizada para determinar se a usuária está dentro ou fora do raio.
-
-Mapa
-
-A visualização cartográfica utiliza o OpenStreetMap por meio do "osmdroid".
-
-O mapa permite visualizar a localização e a área segura de forma gráfica, sem depender do Google Maps.
-
-«O carregamento dos mapas do OpenStreetMap requer conexão com a internet.»
-
-Privacidade
-
-O recurso foi projetado para verificar a permanência dentro de uma área definida, e não para criar um histórico de trajetos.
-
-A área segura configurada é armazenada de forma criptografada pelo aplicativo.
-
-O recurso não utiliza um servidor próprio do Mulher Amparada para armazenar um histórico de localização da usuária.
-
-Importante
-
-O Raio Seguro é um recurso de apoio e não substitui serviços oficiais de emergência, sistemas de localização ou acompanhamento profissional. A precisão da localização pode variar conforme o dispositivo, o sinal de GPS, o ambiente e as condições de rede.
-
----
-
-Mulher Amparada 💜
-
-Este aplicativo opera com foco em privacidade, transparência, segurança e controle da própria usuária.
-
-Nenhuma funcionalidade sensível é executada sem as permissões ou acessos necessários do Android e sem a ativação correspondente.
-
-O aplicativo não realiza monitoramento oculto, espionagem, rastreamento contínuo ou ações secretas em segundo plano.
-
-Algumas funcionalidades podem depender de internet, permissões do Android, acessos especiais, disponibilidade do aparelho, sensores internos, operadora móvel e aplicativos externos.
-
-O recurso de proteção por movimento depende do acelerômetro disponível no dispositivo Android.
-
-O aplicativo não substitui serviços oficiais de emergência, autoridades públicas, atendimento médico ou proteção policial.
-
-Em situações reais de risco imediato, procure imediatamente ajuda especializada e serviços oficiais.
-
-O uso contínuo do microfone em segundo plano pode aumentar o consumo de bateria.
-
-Aviso: dentro da área protegida existe uma função de gravador de voz. A tela de gravação é separada das demais telas e o funcionamento do recurso depende das permissões concedidas pela usuária.
-
-Aviso: Os sons de bloqueio e desbloqueio da área segura permanecem como definidos pelo aplicativo, conforme a implementação adotada a partir de 20/05/2026.
-
-Aviso: O rastreamento pode variar conforme o navegador utilizado. Em alguns casos, o próprio navegador pode exibir avisos sobre coleta de dados. No aplicativo, não há finalidade de rastreamento de usuários, porém algumas funções podem utilizar dados essenciais para funcionamento, como a localização. Fora essas funcionalidades e o uso do navegador, não há coleta de dados para fins de rastreamento.
-
-Aviso: O aplicativo não utiliza mais a permissão de notificações.
-
-A função "Meus Arquivos", dentro da área protegida, utiliza as APIs e informações de armazenamento disponibilizadas pelo sistema Android para identificar o tipo de armazenamento acessível e realizar a leitura das pastas e arquivos permitidos pelo sistema.
-
-O botão vermelho de SOS, exibido como primeiro botão ao entrar no aplicativo, utiliza a telefonia do dispositivo. Quando não é possível iniciar diretamente a chamada, o aplicativo poderá abrir o telefone nativo do celular com o número 180 já discado para que a própria usuária realize a chamada.
-
-O Serviço de Acessibilidade utilizado pelo aplicativo precisa ser ativado manualmente pela usuária nas configurações de Acessibilidade do Android. O aplicativo não ativa esse serviço sozinho.
-
-O Serviço de Acessibilidade é utilizado especificamente para o recurso de bloqueio da tela e não é utilizado para leitura do conteúdo de outras telas ou para controle arbitrário de outros aplicativos.
-
-O aplicativo não utiliza mais o mecanismo de Administrador do dispositivo para realizar o bloqueio da tela.
-
-O sistema Cripto utiliza AES-256, Android Keystore e Jetpack DataStore Preferences para proteger e armazenar dados locais destinados às funcionalidades que utilizam esse sistema.
+Next: GNU Free Documentation License, Previous: The GNU Project and GNU/Linux, Up: Introduction   [Contents][Index]

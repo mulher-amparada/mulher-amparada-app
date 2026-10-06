@@ -6,7 +6,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4481**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4478**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
@@ -1108,3 +1108,29 @@ com.mulheres://abrir
 funciona como uma forma direta de solicitar a abertura do aplicativo Mulher Amparada.
 
 e temos um botão no index.html no site do github pages que leva pro app usando esse link também!
+
+# 📢 Divulgação:
+
+Acompanhe as referências e publicações relacionadas ao projeto **Mulher Amparada** na página oficial de divulgação da Wiki.
+
+🔗 **[Acessar a página de divulgação](https://github.com/mulher-amparada/mulher-amparada-app/wiki/Divulga%C3%A7%C3%A3o-do-projeto-=-Mulher-Amparada)**
+
+# 📦Packpage do repositório no github:
+
+ele é um packpage focado para quem quiser divulgar o projeto!
+
+### ele contém:
+
+pngs de divulgação com link, texto e qr do site do giithub pages;
+
+o proprio qr do site do giithub pages;
+
+banners do projeto, tanto png, tanto um código para html;
+
+icones para sites e para usos no geral, tanto o do mulher amparada tanto o ic_launcher do app, versão normal e monocromático;
+
+>Ao indicar o projeto para uma mulher em situação de risco, **priorize o compartilhamento do QR Code impresso ou na tela**, em vez de enviar links de texto por mensagens (como WhatsApp ou SMS). 
+>
+**Por que o QR Code?** Links de texto deixam rastros fáceis de serem interceptados por agressores que monitoram o celular da vítima. 
+>
+>**Como agir:** Se for imprimir cartazes ou banners, certifique-se de que o QR Code está visível e em alta resolução. Isso permite que a usuária aponte a câmera e acesse o projeto diretamente, minimizando o histórico de digitação e mensagens trocadas.

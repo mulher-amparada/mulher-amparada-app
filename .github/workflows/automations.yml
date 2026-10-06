@@ -1192,7 +1192,7 @@ jobs:
           
           
   # =========================================================
-  # PUBLICAR KIT DE DIVULGAÇÃO NO GITHUB PACKAGES
+  # PUBLICAR KIT DE DIVULGAÇÃO NO GITHUB RELEASE
   # =========================================================
 
   publicar-divulgacao:
@@ -1200,11 +1200,9 @@ jobs:
     name: Publicar Kit de Divulgação
 
     runs-on: ubuntu-24.04
-    needs: deploy
-    
+
     permissions:
-      contents: read
-      packages: write
+      contents: write
 
     steps:
 
@@ -1218,14 +1216,17 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24
-          registry-url: https://npm.pkg.github.com
 
-      - name: Atualizar versão do pacote
+      - name: Criar pacote de divulgação
         working-directory: divulgacao
-        run: npm version patch --no-git-tag-version
+        run: npm pack
 
-      - name: Publicar Kit de Divulgação
-        working-directory: divulgacao
-        run: npm publish
+      - name: Publicar pacote no GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: divulgacao
+          name: Kit de Divulgação
+          files: divulgacao/*.tgz
+          fail_on_unmatched_files: true
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

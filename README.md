@@ -6,7 +6,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4524**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4478**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
@@ -1140,3 +1140,5 @@ icones para sites e para usos no geral, tanto o do mulher amparada tanto o ic_la
 >**Como agir:** Se for imprimir cartazes ou banners, certifique-se de que o QR Code está visível e em alta resolução. Isso permite que a usuária aponte a câmera e acesse o projeto diretamente, minimizando o histórico de digitação e mensagens trocadas.
 
 a pessoa instala pelo github releases!
+
+e quem publica e atualiza essa release é o proprio workflow!

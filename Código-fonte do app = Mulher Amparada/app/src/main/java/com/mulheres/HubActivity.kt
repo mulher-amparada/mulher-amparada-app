@@ -2559,7 +2559,7 @@ if (
         text = "Espaços protegidos",
         c = c,
         font = font,
-        purple = true
+        purple = true,
         compactBottom = true
     )
 
@@ -2572,7 +2572,7 @@ if (
         text = "Espaço de acolhimento",
         c = c,
         font = font,
-        purple = true
+        purple = true,
         compactBottom = true
     )
 

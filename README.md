@@ -592,7 +592,7 @@ Os dados da primeira página do app (disfarce do assistente de saúde) são mera
 
 e tambem, reforcando que no canto superior direito tem um icone de calculadora que quando clica vai pra uma calculadora e aparece o disfarce de calculadora 
 
-> no disfarce de calculadora, caso a usuaria esqueça tudo, existe um popup que usa o BiometricPrompt que poderá resetar tanto a senha tanto a pergunta de recuperação (e ele usa APENAS o device credencial!)
+> no disfarce de calculadora, caso a usuaria esqueça tudo, existe um popup que usa o BiometricPrompt que poderá resetar tanto a senha tanto a pergunta de recuperação (e ele usa APENAS o device credencial!), porém, quando utiliza o BiometricPrompt e é validado, ele pergunta repetidamente a pergunta de recuperação e a senha, eu preferi deixar assim porque ai a usuaria pode errar quantas vezes ela quiser!
 
 ### Botão de Pânico:
 Botão de Pânico, com ligação ao 180 de forma direta no primeiro clique.
@@ -1133,7 +1133,7 @@ banners do projeto, tanto png, tanto um código para html;
 
 icones para sites e para usos no geral, tanto o do mulher amparada tanto o ic_launcher do app, versão normal e monocromático;
 
->Ao indicar o projeto para uma mulher em situação de risco, **priorize o compartilhamento do QR Code impresso ou na tela**, em vez de enviar links de texto por mensagens (como WhatsApp ou SMS). 
+>APENAS PARA AS USUÁRIAS!: Ao indicar o projeto para uma mulher em situação de risco, **priorize o compartilhamento do QR Code impresso ou na tela**, em vez de enviar links de texto por mensagens (como WhatsApp ou SMS). 
 >
 **Por que o QR Code?** Links de texto deixam rastros fáceis de serem interceptados por agressores que monitoram o celular da vítima. 
 >

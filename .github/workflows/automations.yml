@@ -1202,7 +1202,7 @@ jobs:
 
     runs-on: ubuntu-24.04
 
-    needs: broken-links
+    
 
     permissions:
       contents: read

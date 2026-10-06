@@ -6,7 +6,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4532**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4478**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
@@ -566,7 +566,7 @@ Os dados da primeira página do app (disfarce do assistente de saúde) são mera
 
 e tambem, reforcando que no canto superior direito tem um icone de calculadora que quando clica vai pra uma calculadora e aparece o disfarce de calculadora 
 
-> no disfarce de calculadora, caso a usuaria esqueça tudo, existe um popup que usa o BiometricPrompt que poderá resetar tanto a senha tanto a pergunta de recuperação (e ele usa APENAS o device credencial!), porém, quando utiliza o BiometricPrompt e é validado, ele pergunta repetidamente a pergunta de recuperação e a senha, eu preferi deixar assim porque ai a usuaria pode errar quantas vezes ela quiser!
+> no disfarce de calculadora, caso a usuaria esqueça tudo, existe um popup que usa o BiometricPrompt que poderá resetar tanto a senha tanto a pergunta de recuperação (e ele usa APENAS o device credencial!), porém, quando utiliza o BiometricPrompt e é validado, ele pergunta repetidamente a pergunta de recuperação e a senha, eu preferi deixar assim porque ai a usuaria pode errar quantas vezes ela quiser!, e eu preferi que o BiometricPrompt use só apenas o device credential, porque senão o agressor que tiver com acesso físico ao aparelho pode ou se cadastrar ou coagir a usuária a desbloquear!
 
 ### Botão de Pânico:
 Botão de Pânico, com ligação ao 180 de forma direta no primeiro clique.

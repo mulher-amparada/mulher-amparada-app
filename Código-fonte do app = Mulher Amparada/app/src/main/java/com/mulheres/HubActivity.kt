@@ -3373,7 +3373,7 @@ private fun SectionTitle(
         verticalAlignment =
             Alignment.CenterVertically,
 
-        modifier =
+        
     
     ) {
 

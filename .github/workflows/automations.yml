@@ -1132,7 +1132,7 @@ jobs:
   lighthouse:
     name: Lighthouse
     runs-on: ubuntu-24.04
-    needs: snake
+    needs: broken-links
     steps:
       - name: Lighthouse
         uses: treosh/lighthouse-ci-action@v12
@@ -1196,14 +1196,12 @@ jobs:
   # PUBLICAR KIT DE DIVULGAÇÃO NO GITHUB PACKAGES
   # =========================================================
 
-  publicar-divulgacao:
+    publicar-divulgacao:
 
     name: Publicar Kit de Divulgação
 
     runs-on: ubuntu-24.04
-
-    
-
+    needs: deploy
     permissions:
       contents: read
       packages: write
@@ -1221,6 +1219,10 @@ jobs:
         with:
           node-version: 24
           registry-url: https://npm.pkg.github.com
+
+      - name: Atualizar versão do pacote
+        working-directory: divulgacao
+        run: npm version patch --no-git-tag-version
 
       - name: Publicar Kit de Divulgação
         working-directory: divulgacao

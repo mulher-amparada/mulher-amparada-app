@@ -1061,11 +1061,11 @@ private fun ToastMapa(
 
                 if (dark)
 
-                    Color.Black
+                    Color.White
 
                 else
 
-                    Color.White,
+                    Color.Black,
 
             fontFamily =
                 Quicksand,

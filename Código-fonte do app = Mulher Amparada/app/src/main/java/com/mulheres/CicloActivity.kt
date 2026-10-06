@@ -2196,7 +2196,7 @@ private fun TelaDetalhes(
         item {
 
             Spacer(
-                Modifier.height(30.dp)
+                Modifier.height(48.dp)
             )
         }
     }

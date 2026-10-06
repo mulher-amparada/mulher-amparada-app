@@ -366,7 +366,7 @@ private fun Calculadora(
                                 1,
 
                             overflow =
-                                TextOverflow.Ellipsis
+                                TextOverflow.Clip
                         )
                     }
 
@@ -426,7 +426,7 @@ private fun Calculadora(
                             1,
 
                         overflow =
-                            TextOverflow.Ellipsis
+                            TextOverflow.Clip
                     )
                 }
             }

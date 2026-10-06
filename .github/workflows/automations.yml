@@ -1086,37 +1086,10 @@ jobs:
           sitemap-location: https://mulher-amparada.github.io/mulher-amparada-app/sitemap.xml
           key: ${{ secrets.INDEXNOW_KEY }}
 
-  seo-audit:
-    name: Auditoria SEO completa
-    runs-on: ubuntu-24.04
-    needs: indexnow
-
-    steps:
-
-      - name: Configurar Node.js 24
-        uses: actions/setup-node@v6
-        with:
-          node-version: "24"
-
-      - name: Auditoria SEO completa
-        run: |
-          npx @nurkamol/seo-audit@1.40.1 \
-            https://mulher-amparada.github.io/mulher-amparada-app/ \
-            --sitemap https://mulher-amparada.github.io/mulher-amparada-app/sitemap.xml \
-            --exclude "**/google2d4f4bcc4021d81b.html" \
-            --md seo-audit.md
-
-      - name: Salvar relatório SEO
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: seo-audit
-          path: seo-audit.md
-
   broken-links:
     name: Verificar Links Quebrados
     runs-on: ubuntu-24.04
-    needs:  seo-audit
+    needs:  indexnow
     steps:
       - name: Verificar links
         uses: ScholliYT/Broken-Links-Crawler-Action@v3

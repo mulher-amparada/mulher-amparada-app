@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.compose.ui.graphics.ColorFilter
 import android.graphics.Color as AndroidColor
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.runtime.CompositionLocalProvider
@@ -705,24 +706,31 @@ private fun Hero(
         ) {
 
             Image(
+    painter =
+        painterResource(
+            id =
+                R.drawable.ic_lock
+        ),
 
-                painter =
-                    painterResource(
-                        id =
-                            R.drawable.ic_lock
-                    ),
+    contentDescription =
+        null,
 
-                contentDescription =
-                    null,
+    modifier =
+        Modifier.size(
+            50.dp
+        ),
 
-                modifier =
-                    Modifier.size(
-                        50.dp
-                    ),
+    colorFilter =
+        ColorFilter.tint(
+            if (dark)
+                Color.White
+            else
+                Color.Black
+        ),
 
-                contentScale =
-                    ContentScale.Fit
-            )
+    contentScale =
+        ContentScale.Fit
+)
         }
 
 

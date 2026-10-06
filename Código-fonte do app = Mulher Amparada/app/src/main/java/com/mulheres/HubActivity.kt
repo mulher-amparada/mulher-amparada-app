@@ -2560,6 +2560,7 @@ if (
         c = c,
         font = font,
         purple = true
+        compactBottom = true
     )
 
     ProtectedArea(
@@ -2572,6 +2573,7 @@ if (
         c = c,
         font = font,
         purple = true
+        compactBottom = true
     )
 
     AmparoArea(
@@ -2600,6 +2602,7 @@ if (
                         text = "Resposta imediata",
                         c = c,
                         font = font
+                        compactBottom = true
                     )
 
                     PanicCard(
@@ -2611,6 +2614,7 @@ if (
                         text = "Proteções automáticas",
                         c = c,
                         font = font
+                        compactBottom = true
                     )
 
                     SensorCard(
@@ -2704,6 +2708,7 @@ if (
                         text = "Serviços de emergência",
                         c = c,
                         font = font
+                        compactBottom = true
                     )
 
                     ActionCard(
@@ -2755,6 +2760,7 @@ if (
                         text = "Recursos de apoio",
                         c = c,
                         font = font
+                        compactBottom = true
                     )
 
                     ActionCard(
@@ -2776,6 +2782,7 @@ if (
                         text = "Contatos de confiança",
                         c = c,
                         font = font
+                        compactBottom = true
                     )
 
                     ActionCard(
@@ -2812,6 +2819,7 @@ if (
                         text = "Acesso rápido",
                         c = c,
                         font = font
+                        compactBottom = true
                     )
 
                     EmergencyAccess(
@@ -3299,22 +3307,27 @@ private fun SectionTitle(
     text: String,
     c: AppColors,
     font: FontFamily,
-    purple: Boolean = false
+    purple: Boolean = false,
+    compactBottom: Boolean = false
 ) {
 
     Row(
-
         verticalAlignment =
             Alignment.CenterVertically,
 
         modifier =
-            Modifier.padding(
-                start = 3.dp
-            )
+            Modifier
+                .padding(
+                    start = 3.dp,
+                    bottom =
+                        if (compactBottom)
+                            15.dp
+                        else
+                            0.dp
+                )
     ) {
 
         Box(
-
             modifier =
                 Modifier
                     .size(7.dp)
@@ -4042,11 +4055,6 @@ val activity =
     }
 )
 }
-
-
-/* =========================================================
-   ÁREA DO AMPARO
-========================================================= */
 
 /* =========================================================
    ÁREA DO AMPARO

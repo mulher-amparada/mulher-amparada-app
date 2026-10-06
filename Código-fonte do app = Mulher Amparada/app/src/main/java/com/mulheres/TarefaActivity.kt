@@ -390,7 +390,7 @@ CompositionLocalProvider(
                     .padding(
                         start = 13.dp,
                         end = 13.dp,
-                        top = 24.dp,
+                        top = 30.dp,
                         bottom = 110.dp
                     )
             ) {

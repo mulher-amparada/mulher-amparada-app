@@ -2015,7 +2015,7 @@ private fun TelaDetalhes(
                             if (dark)
                                 Color.White.copy(alpha = .075f)
                             else
-                                Color.Black.copy(alpha = .055f)
+                                Color.White
                         )
                 ) {
 
@@ -2196,7 +2196,7 @@ private fun TelaDetalhes(
         item {
 
             Spacer(
-                Modifier.height(20.dp)
+                Modifier.height(30.dp)
             )
         }
     }

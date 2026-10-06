@@ -922,7 +922,7 @@ private fun BotaoAdicionar(
             Icon(
                 painter =
                     painterResource(
-                        R.drawable.ic_arrow
+                        R.drawable.library
                     ),
 
                 contentDescription =

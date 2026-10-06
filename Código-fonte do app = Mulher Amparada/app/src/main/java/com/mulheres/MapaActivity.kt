@@ -989,7 +989,6 @@ private fun BotaoMapa(
     }
 }
 
-
 @Composable
 private fun ToastMapa(
 
@@ -1017,23 +1016,29 @@ private fun ToastMapa(
                     if (dark)
 
                         Color(
-                            0xE60C0C0F
+                            0xFF0C0C0F
                         )
 
                     else
 
-                        Color(
-                            0xE62A2A2F
-                        )
+                        Color.White
                 )
 
                 .border(
 
                     1.dp,
 
-                    Color.White.copy(
-                        alpha = .10f
-                    ),
+                    if (dark)
+
+                        Color.White.copy(
+                            alpha = .10f
+                        )
+
+                    else
+
+                        Color.Black.copy(
+                            alpha = .08f
+                        ),
 
                     RoundedCornerShape(
                         13.dp
@@ -1053,7 +1058,14 @@ private fun ToastMapa(
                 mensagem,
 
             color =
-                Color.White,
+
+                if (dark)
+
+                    Color.Black
+
+                else
+
+                    Color.White,
 
             fontFamily =
                 Quicksand,
@@ -1066,7 +1078,6 @@ private fun ToastMapa(
         )
     }
 }
-
 
 private fun adicionarPontos(
     map: MapView

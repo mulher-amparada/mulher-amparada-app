@@ -1200,7 +1200,8 @@ jobs:
     name: Publicar Kit de Divulgação
 
     runs-on: ubuntu-24.04
-
+    needs: deploy
+    
     permissions:
       contents: read
       packages: write

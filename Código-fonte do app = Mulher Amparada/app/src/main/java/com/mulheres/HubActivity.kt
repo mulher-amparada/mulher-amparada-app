@@ -2601,7 +2601,7 @@ if (
                     SectionTitle(
                         text = "Resposta imediata",
                         c = c,
-                        font = font
+                        font = font,
                         compactBottom = true
                     )
 
@@ -2613,7 +2613,7 @@ if (
                     SectionTitle(
                         text = "Proteções automáticas",
                         c = c,
-                        font = font
+                        font = font,
                         compactBottom = true
                     )
 
@@ -2707,7 +2707,7 @@ if (
                     SectionTitle(
                         text = "Serviços de emergência",
                         c = c,
-                        font = font
+                        font = font,
                         compactBottom = true
                     )
 
@@ -2759,7 +2759,7 @@ if (
                     SectionTitle(
                         text = "Recursos de apoio",
                         c = c,
-                        font = font
+                        font = font,
                         compactBottom = true
                     )
 
@@ -2781,7 +2781,7 @@ if (
                     SectionTitle(
                         text = "Contatos de confiança",
                         c = c,
-                        font = font
+                        font = font,
                         compactBottom = true
                     )
 
@@ -2818,7 +2818,7 @@ if (
                     SectionTitle(
                         text = "Acesso rápido",
                         c = c,
-                        font = font
+                        font = font,
                         compactBottom = true
                     )
 

@@ -91,16 +91,6 @@ Você não precisa saber tudo de uma vez. Conhecimento também é uma forma de p
 
 Para acessar o conteúdo completo sobre finanças, consulte a [Carta do desenvolvedor](ABOUT.md).
 
-### Bibliografia
-
-- https://www.metmuseum.org/-/media/files/learn/for-educators/publications-for-educators/the-art-of-ancient-egypt.pdf
-
-- https://www.britishmuseum.org/blog/mary-beards-top-five-powerful-women-ancient-greece-and-rome
-
-- https://www.worldhistory.org/trans/pt/2-2081/mulheres-na-antiga-mesopotamia/
-
-- https://www.worldhistory.org/trans/pt/2-927/as-mulheres-na-grecia-antiga/
-
 # 🏗Estrutura do projeto:
 
 ### Sobre como eu automatizo o projeto:
@@ -545,6 +535,18 @@ E também as barras tanto de status tanto de navegação são transparentes, por
 
 - HubActivity:
 
+#### Disfarce da calculadora:
+
+**Título:**
+> Confirmar identidade
+
+**Subtítulo:**
+> Use o bloqueio de tela do dispositivo
+
+**Descrição:**
+> Confirme sua identidade para redefinir a senha.
+
+**Método:** somente `DEVICE_CREDENTIAL`.
 
 ####Área protegida:
 

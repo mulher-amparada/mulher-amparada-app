@@ -6,7 +6,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4527**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4478**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
@@ -276,32 +276,6 @@ A autenticação utiliza o Secret:
 "INDEXNOW_KEY"
 
 O objetivo é comunicar aos mecanismos de busca compatíveis que existem URLs atualizadas para serem rastreadas.
-
----
-
-🔍 Auditoria SEO
-
-O workflow executa uma auditoria SEO completa utilizando:
-
-"@nurkamol/seo-audit"
-
-A ferramenta analisa o site e gera um relatório:
-
-"seo-audit.md"
-
-O relatório é armazenado como artifact do GitHub Actions.
-
-A auditoria permite verificar problemas relacionados a aspectos como:
-
-- SEO técnico;
-- metadados;
-- indexabilidade;
-- links;
-- imagens;
-- canonical;
-- Open Graph;
-- dados estruturados;
-- sitemap.
 
 ---
 

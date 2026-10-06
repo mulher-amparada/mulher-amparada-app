@@ -1189,3 +1189,41 @@ jobs:
           git rebase origin/main
 
           git push origin HEAD:main
+          
+          
+
+    # =========================================================
+  # PUBLICAR KIT DE DIVULGAÇÃO NO GITHUB PACKAGES
+  # =========================================================
+
+  publicar-divulgacao:
+
+    name: Publicar Kit de Divulgação
+
+    runs-on: ubuntu-24.04
+
+    needs: deploy
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+
+      - name: Baixar repositório
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          ref: main
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://npm.pkg.github.com
+
+      - name: Publicar Kit de Divulgação
+        working-directory: divulgacao
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

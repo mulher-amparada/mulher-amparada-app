@@ -9,7 +9,7 @@ import androidx.compose.ui.res.painterResource
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
-import androidx.activity.ComponentActivity
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
@@ -57,29 +57,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
-import kotlin.math.roundToInt
-import androidx.activity.enableEdgeToEdge
 
 class NeoCalcActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         enableEdgeToEdge()
+
         super.onCreate(savedInstanceState)
 
-window.setFlags(
-    WindowManager.LayoutParams.FLAG_SECURE,
-    WindowManager.LayoutParams.FLAG_SECURE
-)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_SECURE,
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
 
         setContent {
             NeoCalcScreen()
         }
     }
 }
-
-/* =========================================================
-   CORES
-========================================================= */
 
 private data class CoresNeoCalc(
     val fundo: Color,
@@ -100,82 +96,38 @@ private fun obterCoresNeoCalc(
     return if (escuro) {
 
         CoresNeoCalc(
-
-            fundo =
-                Color.Black,
-
-            botao =
-                Color(0xFF151515),
-
-            botaoHover =
-                Color(0xFF202020),
-
-            acao =
-                Color(0xFF6F7AFF),
-
-            acaoHover =
-                Color(0xFF686DFF),
-
-            operador =
-                Color(0xFF3DA7FF),
-
-            operadorHover =
-                Color(0xFF61B7FF),
-
-            texto =
-                Color.White,
-
-            textoSecundario =
-                Color(0xFFD0D0D0)
+            fundo = Color.Black,
+            botao = Color(0xFF151515),
+            botaoHover = Color(0xFF202020),
+            acao = Color(0xFF6F7AFF),
+            acaoHover = Color(0xFF686DFF),
+            operador = Color(0xFF3DA7FF),
+            operadorHover = Color(0xFF61B7FF),
+            texto = Color.White,
+            textoSecundario = Color(0xFFD0D0D0)
         )
 
     } else {
 
         CoresNeoCalc(
-
-            fundo =
-                Color(0xFFFFFFFF),
-
-            botao =
-                Color(0xFFE9E9E9),
-
-            botaoHover =
-                Color(0xFFDCDCDC),
-
-            acao =
-                Color(0xFF5964E8),
-
-            acaoHover =
-                Color(0xFF4F59D6),
-
-            operador =
-                Color(0xFF1976D2),
-
-            operadorHover =
-                Color(0xFF1565C0),
-
-            texto =
-                Color(0xFF111111),
-
-            textoSecundario =
-                Color(0xFF555555)
+            fundo = Color(0xFFFFFFFF),
+            botao = Color(0xFFE9E9E9),
+            botaoHover = Color(0xFFDCDCDC),
+            acao = Color(0xFF5964E8),
+            acaoHover = Color(0xFF4F59D6),
+            operador = Color(0xFF1976D2),
+            operadorHover = Color(0xFF1565C0),
+            texto = Color(0xFF111111),
+            textoSecundario = Color(0xFF555555)
         )
     }
 }
-
-/* =========================================================
-   CHAVES DO CRIPTO
-========================================================= */
 
 private const val CHAVE_SENHA =
     "senha"
 
 private const val CHAVE_RECUPERACAO =
     "nome_recuperacao"
-
-/* =========================================================
-   FONTE
-========================================================= */
 
 private fun carregarQuicksand(
     context: android.content.Context
@@ -194,10 +146,6 @@ private fun carregarQuicksand(
     )
 }
 
-/* =========================================================
-   TIPOS DE DIÁLOGO
-========================================================= */
-
 private enum class TipoDialogo {
     ALERTA,
     PROMPT,
@@ -213,21 +161,16 @@ private data class Dialogo(
     val textoConfirmar: String = "OK"
 )
 
-/* =========================================================
-   TELA
-========================================================= */
-
 @Composable
 private fun NeoCalcScreen() {
-
-
 
     val context =
         LocalContext.current
 
-val cripto = remember {
-    Cripto(context)
-}
+    val cripto =
+        remember {
+            Cripto(context)
+        }
 
     val escuro =
         isSystemInDarkTheme()
@@ -241,7 +184,9 @@ val cripto = remember {
 
     val fonte =
         remember {
-            carregarQuicksand(context)
+            carregarQuicksand(
+                context
+            )
         }
 
     var expr by remember {
@@ -271,12 +216,6 @@ val cripto = remember {
     val visorScroll =
         rememberScrollState()
 
-    /*
-     * =====================================================
-     * VISOR
-     * =====================================================
-     */
-
     LaunchedEffect(
         expr,
         mensagemTemporaria
@@ -289,12 +228,6 @@ val cripto = remember {
         )
     }
 
-    /*
-     * =====================================================
-     * CINCO TOQUES
-     * =====================================================
-     */
-
     fun registrarToque() {
 
         val agora =
@@ -303,6 +236,7 @@ val cripto = remember {
         if (
             agora - ultimoToque > 2000
         ) {
+
             contadorToques = 0
         }
 
@@ -321,37 +255,28 @@ val cripto = remember {
                 fonte = fonte,
                 cripto = cripto,
                 mostrarDialogo = {
+
                     dialogo = it
 
                     valorDialogo =
                         it.valorInicial
                 },
                 fecharDialogo = {
+
                     dialogo = null
                 },
                 mostrarMensagem = {
+
                     mensagemTemporaria = it
                 }
             )
         }
     }
 
-    /*
-     * =====================================================
-     * ATUALIZAR VISOR
-     * =====================================================
-     */
-
     fun atualizar() {
 
         mensagemTemporaria = null
     }
-
-    /*
-     * =====================================================
-     * ADICIONAR
-     * =====================================================
-     */
 
     fun adicionar(
         valor: String
@@ -373,6 +298,7 @@ val cripto = remember {
             if (
                 parteAtual.contains(".")
             ) {
+
                 return
             }
         }
@@ -382,19 +308,17 @@ val cripto = remember {
         atualizar()
     }
 
-    /*
-     * =====================================================
-     * OPERAÇÃO
-     * =====================================================
-     */
-
     fun operacao(
         op: String
     ) {
 
-        if (expr.isEmpty()) {
+        if (
+            expr.isEmpty()
+        ) {
 
-            if (op == "-") {
+            if (
+                op == "-"
+            ) {
 
                 expr = "-"
 
@@ -423,34 +347,25 @@ val cripto = remember {
         atualizar()
     }
 
-    /*
-     * =====================================================
-     * PORCENTAGEM
-     * =====================================================
-     */
-
     fun porcentagem() {
 
         if (
             expr.isEmpty()
         ) {
+
             return
         }
 
         expr =
             expr.replace(
-                Regex("(\\d+(?:\\.\\d+)?)$"),
+                Regex(
+                    "(\\d+(?:\\.\\d+)?)$"
+                ),
                 "($1/100)"
             )
 
         atualizar()
     }
-
-    /*
-     * =====================================================
-     * LIMPAR
-     * =====================================================
-     */
 
     fun limpar() {
 
@@ -458,12 +373,6 @@ val cripto = remember {
 
         atualizar()
     }
-
-    /*
-     * =====================================================
-     * APAGAR
-     * =====================================================
-     */
 
     fun apagar() {
 
@@ -477,12 +386,6 @@ val cripto = remember {
             atualizar()
         }
     }
-
-    /*
-     * =====================================================
-     * CALCULAR
-     * =====================================================
-     */
 
     fun calcular() {
 
@@ -501,10 +404,6 @@ val cripto = remember {
 
                 ""
             }
-
-        /*
-         * SENHA ESPECIAL
-         */
 
         if (
             expr.trim().isNotEmpty() &&
@@ -534,6 +433,7 @@ val cripto = remember {
         if (
             expr.trim().isEmpty()
         ) {
+
             return
         }
 
@@ -570,12 +470,6 @@ val cripto = remember {
         expr = ""
     }
 
-    /*
-     * =====================================================
-     * COMPOSE
-     * =====================================================
-     */
-
     androidx.compose.runtime.CompositionLocalProvider(
         LocalOverscrollFactory provides null
     ) {
@@ -605,12 +499,6 @@ val cripto = remember {
                         18.dp
                     )
             ) {
-
-                /*
-                 * =========================================
-                 * VISOR
-                 * =========================================
-                 */
 
                 Box(
                     modifier =
@@ -677,12 +565,6 @@ val cripto = remember {
                     )
                 }
 
-                /*
-                 * =========================================
-                 * TECLADO
-                 * =========================================
-                 */
-
                 Column(
                     modifier =
                         Modifier.fillMaxWidth(),
@@ -703,21 +585,25 @@ val cripto = remember {
                                 texto = "AC",
                                 tipo = TipoBotao.ACAO
                             ) {
+
                                 limpar()
                             },
 
                             BotaoCalculadora(
-    texto = "",
-    tipo = TipoBotao.ACAO,
-    icone = R.drawable.ic_erase
-) {
-    apagar()
-},
+                                texto = "",
+                                tipo = TipoBotao.ACAO,
+                                icone =
+                                    R.drawable.ic_erase
+                            ) {
+
+                                apagar()
+                            },
 
                             BotaoCalculadora(
                                 texto = "%",
                                 tipo = TipoBotao.ACAO
                             ) {
+
                                 porcentagem()
                             },
 
@@ -725,6 +611,7 @@ val cripto = remember {
                                 texto = "÷",
                                 tipo = TipoBotao.OPERADOR
                             ) {
+
                                 operacao("/")
                             }
                         )
@@ -739,18 +626,21 @@ val cripto = remember {
                             BotaoCalculadora(
                                 texto = "7"
                             ) {
+
                                 adicionar("7")
                             },
 
                             BotaoCalculadora(
                                 texto = "8"
                             ) {
+
                                 adicionar("8")
                             },
 
                             BotaoCalculadora(
                                 texto = "9"
                             ) {
+
                                 adicionar("9")
                             },
 
@@ -758,6 +648,7 @@ val cripto = remember {
                                 texto = "×",
                                 tipo = TipoBotao.OPERADOR
                             ) {
+
                                 operacao("*")
                             }
                         )
@@ -772,18 +663,21 @@ val cripto = remember {
                             BotaoCalculadora(
                                 texto = "4"
                             ) {
+
                                 adicionar("4")
                             },
 
                             BotaoCalculadora(
                                 texto = "5"
                             ) {
+
                                 adicionar("5")
                             },
 
                             BotaoCalculadora(
                                 texto = "6"
                             ) {
+
                                 adicionar("6")
                             },
 
@@ -791,6 +685,7 @@ val cripto = remember {
                                 texto = "−",
                                 tipo = TipoBotao.OPERADOR
                             ) {
+
                                 operacao("-")
                             }
                         )
@@ -805,18 +700,21 @@ val cripto = remember {
                             BotaoCalculadora(
                                 texto = "1"
                             ) {
+
                                 adicionar("1")
                             },
 
                             BotaoCalculadora(
                                 texto = "2"
                             ) {
+
                                 adicionar("2")
                             },
 
                             BotaoCalculadora(
                                 texto = "3"
                             ) {
+
                                 adicionar("3")
                             },
 
@@ -824,6 +722,7 @@ val cripto = remember {
                                 texto = "+",
                                 tipo = TipoBotao.OPERADOR
                             ) {
+
                                 operacao("+")
                             }
                         )
@@ -838,18 +737,21 @@ val cripto = remember {
                             BotaoCalculadora(
                                 texto = "()"
                             ) {
+
                                 adicionar("(")
                             },
 
                             BotaoCalculadora(
                                 texto = "0"
                             ) {
+
                                 adicionar("0")
                             },
 
                             BotaoCalculadora(
                                 texto = "."
                             ) {
+
                                 adicionar(".")
                             },
 
@@ -857,18 +759,13 @@ val cripto = remember {
                                 texto = "=",
                                 tipo = TipoBotao.IGUAL
                             ) {
+
                                 calcular()
                             }
                         )
                     )
                 }
             }
-
-            /*
-             * =================================================
-             * DIÁLOGOS
-             * =================================================
-             */
 
             dialogo?.let { atual ->
 
@@ -878,7 +775,7 @@ val cripto = remember {
 
                         if (
                             atual.tipo !=
-                                TipoDialogo.ALERTA
+                            TipoDialogo.ALERTA
                         ) {
 
                             dialogo = null
@@ -925,7 +822,9 @@ val cripto = remember {
 
                             if (
                                 atual.tipo ==
-                                    TipoDialogo.PROMPT
+                                TipoDialogo.PROMPT ||
+                                atual.tipo ==
+                                TipoDialogo.RECUPERACAO
                             ) {
 
                                 Spacer(
@@ -940,6 +839,7 @@ val cripto = remember {
                                         valorDialogo,
 
                                     onValueChange = {
+
                                         valorDialogo =
                                             it
                                     },
@@ -989,17 +889,46 @@ val cripto = remember {
 
                             onClick = {
 
-                                val tipo =
-                                    atual.tipo
-
                                 when (
-                                    tipo
+                                    atual.tipo
                                 ) {
 
                                     TipoDialogo.ALERTA -> {
 
-                                        dialogo =
-                                            null
+                                        if (
+                                            atual.titulo ==
+                                            "Esqueci tudo"
+                                        ) {
+
+                                            dialogo =
+                                                null
+
+                                            autenticarParaRedefinir(
+
+                                                activity =
+                                                    context as FragmentActivity,
+
+                                                mostrarDialogo = {
+
+                                                    dialogo =
+                                                        it
+
+                                                    valorDialogo =
+                                                        it.valorInicial
+                                                },
+
+                                                mostrarMensagem = {
+
+                                                    mensagemTemporaria =
+                                                        it
+                                                }
+                                            )
+
+                                        } else {
+
+                                            dialogo =
+                                                null
+                                        }
                                     }
 
                                     TipoDialogo.PROMPT -> {
@@ -1012,37 +941,37 @@ val cripto = remember {
 
                                         continuarPrompt(
 
-    valor =
-        valor,
+                                            valor =
+                                                valor,
 
-    titulo =
-        atual.titulo,
+                                            titulo =
+                                                atual.titulo,
 
-    context =
-        context,
+                                            context =
+                                                context,
 
-    fonte =
-        fonte,
+                                            fonte =
+                                                fonte,
 
-    cripto =
-        cripto,
+                                            cripto =
+                                                cripto,
 
-    mostrarDialogo = {
+                                            mostrarDialogo = {
 
-        dialogo =
-            it
+                                                dialogo =
+                                                    it
 
-        valorDialogo =
-            it.valorInicial
-    },
+                                                valorDialogo =
+                                                    it.valorInicial
+                                            },
 
-    mostrarMensagem = {
+                                            mostrarMensagem = {
 
-        mensagemTemporaria =
-            it
-    }
-)
-}
+                                                mensagemTemporaria =
+                                                    it
+                                            }
+                                        )
+                                    }
 
                                     TipoDialogo.CONFIRMACAO -> {
 
@@ -1057,6 +986,9 @@ val cripto = remember {
                                             fonte =
                                                 fonte,
 
+                                            cripto =
+                                                cripto,
+
                                             mostrarDialogo = {
 
                                                 dialogo =
@@ -1067,12 +999,50 @@ val cripto = remember {
                                             }
                                         )
                                     }
+
+                                    TipoDialogo.RECUPERACAO -> {
+
+                                        val valor =
+                                            valorDialogo
+
+                                        dialogo =
+                                            null
+
+                                        continuarRecuperacao(
+
+                                            valor =
+                                                valor,
+
+                                            context =
+                                                context,
+
+                                            fonte =
+                                                fonte,
+
+                                            cripto =
+                                                cripto,
+
+                                            mostrarDialogo = {
+
+                                                dialogo =
+                                                    it
+
+                                                valorDialogo =
+                                                    it.valorInicial
+                                            },
+
+                                            mostrarMensagem = {
+
+                                                mensagemTemporaria =
+                                                    it
+                                            }
+                                        )
+                                    }
                                 }
                             },
 
                             colors =
                                 ButtonDefaults.buttonColors(
-
                                     containerColor =
                                         cores.acao
                                 )
@@ -1096,34 +1066,78 @@ val cripto = remember {
 
                     dismissButton = {
 
-                        if (
-                            atual.tipo !=
-                                TipoDialogo.ALERTA
+                        when (
+                            atual.tipo
                         ) {
 
-                            TextButton(
+                            TipoDialogo.RECUPERACAO -> {
 
-                                onClick = {
+                                TextButton(
 
-                                    dialogo =
-                                        null
+                                    onClick = {
+
+                                        dialogo =
+                                            Dialogo(
+                                                tipo =
+                                                    TipoDialogo.ALERTA,
+
+                                                titulo =
+                                                    "Esqueci tudo",
+
+                                                mensagem =
+                                                    "Use o bloqueio de tela do dispositivo para confirmar sua identidade e permitir a redefinição da senha.",
+
+                                                textoConfirmar =
+                                                    "Continuar"
+                                            )
+                                    }
+                                ) {
+
+                                    Text(
+                                        text =
+                                            "Esqueci tudo",
+
+                                        fontFamily =
+                                            fonte,
+
+                                        fontWeight =
+                                            FontWeight.Bold,
+
+                                        color =
+                                            cores.texto
+                                    )
                                 }
-                            ) {
-
-                                Text(
-                                    text =
-                                        "Cancelar",
-
-                                    fontFamily =
-                                        fonte,
-
-                                    fontWeight =
-                                        FontWeight.Bold,
-
-                                    color =
-                                        cores.texto
-                                )
                             }
+
+                            TipoDialogo.PROMPT,
+                            TipoDialogo.CONFIRMACAO -> {
+
+                                TextButton(
+
+                                    onClick = {
+
+                                        dialogo =
+                                            null
+                                    }
+                                ) {
+
+                                    Text(
+                                        text =
+                                            "Cancelar",
+
+                                        fontFamily =
+                                            fonte,
+
+                                        fontWeight =
+                                            FontWeight.Bold,
+
+                                        color =
+                                            cores.texto
+                                    )
+                                }
+                            }
+
+                            TipoDialogo.ALERTA -> Unit
                         }
                     },
 
@@ -1135,10 +1149,6 @@ val cripto = remember {
     }
 }
 
-/* =========================================================
-   BOTÃO
-========================================================= */
-
 private enum class TipoBotao {
     NORMAL,
     ACAO,
@@ -1149,7 +1159,7 @@ private enum class TipoBotao {
 private data class BotaoCalculadora(
     val texto: String,
     val tipo: TipoBotao = TipoBotao.NORMAL,
-      val icone: Int? = null,
+    val icone: Int? = null,
     val acao: () -> Unit
 )
 
@@ -1207,48 +1217,49 @@ private fun LinhaBotoes(
                     Alignment.Center
             ) {
 
-                if (botao.icone != null) {
+                if (
+                    botao.icone != null
+                ) {
 
-    androidx.compose.foundation.Image(
-        painter =
-            painterResource(
-                id = botao.icone
-            ),
+                    androidx.compose.foundation.Image(
+                        painter =
+                            painterResource(
+                                id =
+                                    botao.icone
+                            ),
 
-        contentDescription =
-            "Apagar",
+                        contentDescription =
+                            "Apagar",
 
-        modifier =
-            Modifier.size(28.dp)
-    )
+                        modifier =
+                            Modifier.size(
+                                28.dp
+                            )
+                    )
 
-} else {
+                } else {
 
-    Text(
-        text =
-            botao.texto,
+                    Text(
+                        text =
+                            botao.texto,
 
-        color =
-            cores.texto,
+                        color =
+                            cores.texto,
 
-        fontFamily =
-            fonte,
+                        fontFamily =
+                            fonte,
 
-        fontWeight =
-            FontWeight.Bold,
+                        fontWeight =
+                            FontWeight.Bold,
 
-        fontSize =
-            25.sp
-    )
-}
+                        fontSize =
+                            25.sp
+                    )
+                }
             }
         }
     }
 }
-
-/* =========================================================
-   RECUPERAÇÃO
-========================================================= */
 
 private fun recuperarSenha(
     context: android.content.Context,
@@ -1261,22 +1272,41 @@ private fun recuperarSenha(
 
     val senhaSalva =
         try {
-            cripto.carregar(CHAVE_SENHA)
+
+            cripto.carregar(
+                CHAVE_SENHA
+            )
                 ?.trim()
                 ?: ""
-        } catch (e: Exception) {
-            mostrarMensagem("Erro")
+
+        } catch (
+            e: Exception
+        ) {
+
+            mostrarMensagem(
+                "Erro"
+            )
+
             return
         }
 
-    if (senhaSalva.isEmpty()) {
+    if (
+        senhaSalva.isEmpty()
+    ) {
 
         mostrarDialogo(
             Dialogo(
-                tipo = TipoDialogo.PROMPT,
-                titulo = "Criar senha",
-                mensagem = "Digite uma senha para proteger esta área.",
-                textoConfirmar = "Criar"
+                tipo =
+                    TipoDialogo.PROMPT,
+
+                titulo =
+                    "Criar senha",
+
+                mensagem =
+                    "Digite uma senha para proteger esta área.",
+
+                textoConfirmar =
+                    "Criar"
             )
         )
 
@@ -1285,17 +1315,20 @@ private fun recuperarSenha(
 
     mostrarDialogo(
         Dialogo(
-            tipo = TipoDialogo.RECUPERACAO,
-            titulo = "Recuperar senha",
-            mensagem = "Como você gosta de ser chamada?",
-            textoConfirmar = "OK"
+            tipo =
+                TipoDialogo.RECUPERACAO,
+
+            titulo =
+                "Recuperar senha",
+
+            mensagem =
+                "Como você gosta de ser chamada?",
+
+            textoConfirmar =
+                "OK"
         )
     )
 }
-    
-/* =========================================================
-   CONTINUAÇÃO DO PROMPT
-========================================================= */
 
 private fun continuarPrompt(
     valor: String,
@@ -1309,12 +1342,6 @@ private fun continuarPrompt(
 
     val valorLimpo =
         valor.trim()
-
-    /*
-     * =====================================================
-     * CRIANDO A SENHA
-     * =====================================================
-     */
 
     if (
         titulo == "Criar senha"
@@ -1336,10 +1363,6 @@ private fun continuarPrompt(
             valorLimpo
         )
 
-        /*
-         * Agora pede a resposta de recuperação.
-         */
-
         mostrarDialogo(
             Dialogo(
                 tipo =
@@ -1358,15 +1381,6 @@ private fun continuarPrompt(
 
         return
     }
-
-    /*
-     * =====================================================
-     * SALVANDO A RESPOSTA DE RECUPERAÇÃO
-     * =====================================================
-     *
-     * Se ainda não existe resposta salva, significa que
-     * estamos terminando a configuração inicial.
-     */
 
     val respostaSalva =
         try {
@@ -1412,43 +1426,6 @@ private fun continuarPrompt(
         return
     }
 
-    /*
-     * =====================================================
-     * RECUPERAÇÃO DE SENHA EXISTENTE
-     * =====================================================
-     */
-
-    if (
-        respostaSalva.isNotEmpty() &&
-        valorLimpo.lowercase() ==
-        respostaSalva.lowercase()
-    ) {
-
-        mostrarDialogo(
-            Dialogo(
-                tipo =
-                    TipoDialogo.PROMPT,
-
-                titulo =
-                    "Nova senha",
-
-                mensagem =
-                    "Digite a nova senha",
-
-                textoConfirmar =
-                    "Salvar"
-            )
-        )
-
-        return
-    }
-
-    /*
-     * =====================================================
-     * NOVA SENHA APÓS RECUPERAÇÃO
-     * =====================================================
-     */
-
     if (
         titulo == "Nova senha"
     ) {
@@ -1469,6 +1446,70 @@ private fun continuarPrompt(
             valorLimpo
         )
 
+        mostrarDialogo(
+            Dialogo(
+                tipo =
+                    TipoDialogo.PROMPT,
+
+                titulo =
+                    "Nova recuperação",
+
+                mensagem =
+                    "Como você gosta de ser chamada?",
+
+                textoConfirmar =
+                    "Salvar"
+            )
+        )
+
+        return
+    }
+
+    if (
+        respostaSalva.isNotEmpty() &&
+        valorLimpo.lowercase() ==
+        respostaSalva.lowercase()
+    ) {
+
+        mostrarDialogo(
+            Dialogo(
+                tipo =
+                    TipoDialogo.PROMPT,
+
+                titulo =
+                    "Nova senha",
+
+                mensagem =
+                    "Digite a nova senha.",
+
+                textoConfirmar =
+                    "Salvar"
+            )
+        )
+
+        return
+    }
+
+    if (
+        titulo == "Nova recuperação"
+    ) {
+
+        if (
+            valorLimpo.isEmpty()
+        ) {
+
+            mostrarMensagem(
+                "Resposta inválida"
+            )
+
+            return
+        }
+
+        cripto.salvar(
+            CHAVE_RECUPERACAO,
+            valorLimpo.lowercase()
+        )
+
         mostrarMensagem(
             "Senha alterada"
         )
@@ -1481,26 +1522,69 @@ private fun continuarPrompt(
     )
 }
 
-/* =========================================================
-   CONFIRMAÇÃO
-========================================================= */
-
-private fun continuarConfirmacao(
+private fun continuarRecuperacao(
+    valor: String,
     context: android.content.Context,
     fonte: FontFamily,
-    mostrarDialogo: (Dialogo) -> Unit
+    cripto: Cripto,
+    mostrarDialogo: (Dialogo) -> Unit,
+    mostrarMensagem: (String) -> Unit
 ) {
+
+    val valorLimpo =
+        valor.trim()
+
+    val respostaSalva =
+        try {
+
+            cripto.carregar(
+                CHAVE_RECUPERACAO
+            )
+                ?.trim()
+                ?: ""
+
+        } catch (
+            e: Exception
+        ) {
+
+            ""
+        }
+
+    if (
+        respostaSalva.isNotEmpty() &&
+        valorLimpo.lowercase() ==
+        respostaSalva.lowercase()
+    ) {
+
+        mostrarDialogo(
+            Dialogo(
+                tipo =
+                    TipoDialogo.PROMPT,
+
+                titulo =
+                    "Nova senha",
+
+                mensagem =
+                    "Digite a nova senha.",
+
+                textoConfirmar =
+                    "Salvar"
+            )
+        )
+
+        return
+    }
 
     mostrarDialogo(
         Dialogo(
             tipo =
-                TipoDialogo.PROMPT,
+                TipoDialogo.ALERTA,
 
             titulo =
-                "Nova resposta",
+                "Resposta incorreta",
 
             mensagem =
-                "Como você gosta de ser chamada?",
+                "A resposta de recuperação não corresponde à cadastrada.",
 
             textoConfirmar =
                 "OK"
@@ -1508,9 +1592,136 @@ private fun continuarConfirmacao(
     )
 }
 
-/* =========================================================
-   AVALIADOR
-========================================================= */
+private fun autenticarParaRedefinir(
+    activity: FragmentActivity,
+    mostrarDialogo: (Dialogo) -> Unit,
+    mostrarMensagem: (String) -> Unit
+) {
+
+    val executor =
+        ContextCompat.getMainExecutor(
+            activity
+        )
+
+    val prompt =
+        BiometricPrompt(
+            activity,
+            executor,
+            object :
+                BiometricPrompt.AuthenticationCallback() {
+
+                override fun onAuthenticationSucceeded(
+                    result:
+                        BiometricPrompt.AuthenticationResult
+                ) {
+
+                    super.onAuthenticationSucceeded(
+                        result
+                    )
+
+                    mostrarDialogo(
+                        Dialogo(
+                            tipo =
+                                TipoDialogo.CONFIRMACAO,
+
+                            titulo =
+                                "Redefinir senha",
+
+                            mensagem =
+                                "Deseja redefinir a senha e a pergunta de recuperação?",
+
+                            textoConfirmar =
+                                "Redefinir"
+                        )
+                    )
+                }
+
+                override fun onAuthenticationError(
+                    errorCode: Int,
+                    errString: CharSequence
+                ) {
+
+                    super.onAuthenticationError(
+                        errorCode,
+                        errString
+                    )
+
+                    if (
+                        errorCode !=
+                        BiometricPrompt.ERROR_USER_CANCELED
+                    ) {
+
+                        mostrarMensagem(
+                            "Autenticação não concluída"
+                        )
+                    }
+                }
+
+                override fun onAuthenticationFailed() {
+
+                    super.onAuthenticationFailed()
+
+                    mostrarMensagem(
+                        "Autenticação não concluída"
+                    )
+                }
+            }
+        )
+
+    val promptInfo =
+        BiometricPrompt.PromptInfo.Builder()
+            .setTitle(
+                "Confirmar identidade"
+            )
+            .setSubtitle(
+                "Use o bloqueio de tela do dispositivo"
+            )
+            .setDescription(
+                "Confirme sua identidade para redefinir a senha."
+            )
+            .setAllowedAuthenticators(
+                BiometricManager.Authenticators.DEVICE_CREDENTIAL
+            )
+            .build()
+
+    prompt.authenticate(
+        promptInfo
+    )
+}
+
+private fun continuarConfirmacao(
+    context: android.content.Context,
+    fonte: FontFamily,
+    cripto: Cripto,
+    mostrarDialogo: (Dialogo) -> Unit
+) {
+
+    cripto.salvar(
+        CHAVE_SENHA,
+        ""
+    )
+
+    cripto.salvar(
+        CHAVE_RECUPERACAO,
+        ""
+    )
+
+    mostrarDialogo(
+        Dialogo(
+            tipo =
+                TipoDialogo.PROMPT,
+
+            titulo =
+                "Nova senha",
+
+            mensagem =
+                "Digite a nova senha.",
+
+            textoConfirmar =
+                "Salvar"
+        )
+    )
+}
 
 private fun avaliarExpressao(
     expressao: String
@@ -1538,7 +1749,9 @@ private fun avaliarExpressao(
                 numero.isNotEmpty()
             ) {
 
-                tokens.add(numero)
+                tokens.add(
+                    numero
+                )
 
                 numero = ""
             }
@@ -1553,7 +1766,9 @@ private fun avaliarExpressao(
         numero.isNotEmpty()
     ) {
 
-        tokens.add(numero)
+        tokens.add(
+            numero
+        )
     }
 
     val valores =
@@ -1570,10 +1785,12 @@ private fun avaliarExpressao(
             operador
         ) {
 
-            '+', '-' ->
+            '+',
+            '-' ->
                 1
 
-            '*', '/' ->
+            '*',
+            '/' ->
                 2
 
             else ->
@@ -1587,6 +1804,7 @@ private fun avaliarExpressao(
             valores.size < 2 ||
             operadores.isEmpty()
         ) {
+
             throw IllegalArgumentException()
         }
 
@@ -1606,6 +1824,7 @@ private fun avaliarExpressao(
             )
 
         valores.add(
+
             when (op) {
 
                 '+' ->
@@ -1622,6 +1841,7 @@ private fun avaliarExpressao(
                     if (
                         b == 0.0
                     ) {
+
                         throw ArithmeticException()
                     }
 
@@ -1650,7 +1870,9 @@ private fun avaliarExpressao(
 
             token == "(" -> {
 
-                operadores.add('(')
+                operadores.add(
+                    '('
+                )
             }
 
             token == ")" -> {
@@ -1666,6 +1888,7 @@ private fun avaliarExpressao(
                 if (
                     operadores.isEmpty()
                 ) {
+
                     throw IllegalArgumentException()
                 }
 
@@ -1675,13 +1898,13 @@ private fun avaliarExpressao(
             }
 
             token.length == 1 &&
-                token[0] in
-                charArrayOf(
-                    '+',
-                    '-',
-                    '*',
-                    '/'
-                ) -> {
+            token[0] in
+            charArrayOf(
+                '+',
+                '-',
+                '*',
+                '/'
+            ) -> {
 
                 val op =
                     token[0]
@@ -1697,7 +1920,9 @@ private fun avaliarExpressao(
                     aplicar()
                 }
 
-                operadores.add(op)
+                operadores.add(
+                    op
+                )
             }
 
             else -> {
@@ -1714,6 +1939,7 @@ private fun avaliarExpressao(
         if (
             operadores.last() == '('
         ) {
+
             throw IllegalArgumentException()
         }
 
@@ -1730,15 +1956,14 @@ private fun avaliarExpressao(
     return valores[0]
 }
 
-/* =========================================================
-   FORMATAÇÃO
-========================================================= */
-
 private fun formatarNumero(
     numero: Double
 ): String {
 
-    if (!numero.isFinite()) {
+    if (
+        !numero.isFinite()
+    ) {
+
         return "Erro"
     }
 

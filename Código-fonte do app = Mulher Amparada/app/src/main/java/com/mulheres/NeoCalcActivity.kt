@@ -1,5 +1,9 @@
 package com.mulheres
 
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import android.view.WindowManager
 import androidx.compose.ui.res.painterResource
 import android.content.Intent
@@ -56,7 +60,7 @@ import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 import androidx.activity.enableEdgeToEdge
 
-class NeoCalcActivity : ComponentActivity() {
+class NeoCalcActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -197,7 +201,8 @@ private fun carregarQuicksand(
 private enum class TipoDialogo {
     ALERTA,
     PROMPT,
-    CONFIRMACAO
+    CONFIRMACAO,
+    RECUPERACAO
 }
 
 private data class Dialogo(
@@ -1256,73 +1261,38 @@ private fun recuperarSenha(
 
     val senhaSalva =
         try {
-
-            cripto.carregar(
-                CHAVE_SENHA
-            )
+            cripto.carregar(CHAVE_SENHA)
                 ?.trim()
                 ?: ""
-
-        } catch (
-            e: Exception
-        ) {
-
+        } catch (e: Exception) {
             mostrarMensagem("Erro")
-
             return
         }
 
-    /*
-     * =====================================================
-     * NÃO EXISTE SENHA
-     * =====================================================
-     */
-
-    if (
-        senhaSalva.isEmpty()
-    ) {
+    if (senhaSalva.isEmpty()) {
 
         mostrarDialogo(
             Dialogo(
-                tipo =
-                    TipoDialogo.PROMPT,
-
-                titulo =
-                    "Criar senha",
-
-                mensagem =
-                    "Digite uma senha para proteger esta área.",
-
-                textoConfirmar =
-                    "Criar"
+                tipo = TipoDialogo.PROMPT,
+                titulo = "Criar senha",
+                mensagem = "Digite uma senha para proteger esta área.",
+                textoConfirmar = "Criar"
             )
         )
 
         return
     }
 
-    /*
-     * =====================================================
-     * JÁ EXISTE SENHA
-     * =====================================================
-     */
-
     mostrarDialogo(
         Dialogo(
-            tipo =
-                TipoDialogo.PROMPT,
-
-            titulo =
-                "Recuperar senha",
-
-            mensagem =
-                "Como você gosta de ser chamada?",
-
-            textoConfirmar =
-                "OK"
+            tipo = TipoDialogo.RECUPERACAO,
+            titulo = "Recuperar senha",
+            mensagem = "Como você gosta de ser chamada?",
+            textoConfirmar = "OK"
         )
     )
 }
+    
 /* =========================================================
    CONTINUAÇÃO DO PROMPT
 ========================================================= */

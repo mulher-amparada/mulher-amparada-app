@@ -2580,9 +2580,13 @@ private fun MulherAmparadaScreen() {
                     )
 
                     AmparoArea(
-                        c = c,
-                        font = font
-                    )
+    c = c,
+    font = font
+)
+
+Spacer(
+    Modifier.height(30.dp)
+)
 
                 } else {
 
@@ -2893,9 +2897,13 @@ private fun MulherAmparadaScreen() {
                     )
 
                     EmergencyAccess(
-                        c = c,
-                        font = font
-                    )
+    c = c,
+    font = font
+)
+
+Spacer(
+    Modifier.height(30.dp)
+)
                 }
             }
 

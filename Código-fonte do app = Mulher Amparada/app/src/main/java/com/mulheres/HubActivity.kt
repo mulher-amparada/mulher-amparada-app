@@ -3316,15 +3316,17 @@ private fun SectionTitle(
             Alignment.CenterVertically,
 
         modifier =
-            Modifier
-                .padding(
-                    start = 3.dp,
-                    bottom =
-                        if (compactBottom)
-                            (-15).dp
-                        else
-                            0.dp
-                )
+    Modifier
+        .offset(
+            y =
+                if (compactBottom)
+                    (-15).dp
+                else
+                    0.dp
+        )
+        .padding(
+            start = 3.dp
+        )
     ) {
 
         Box(

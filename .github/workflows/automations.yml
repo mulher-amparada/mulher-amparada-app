@@ -755,7 +755,7 @@ jobs:
 
     runs-on: ubuntu-24.04
 
-    needs: broken-links
+    needs: snake
 
     steps:
 
@@ -1144,7 +1144,7 @@ jobs:
   snake:
     name: Gerar Snake das contribuições
     runs-on: ubuntu-24.04
-    needs: deploy
+    needs: publicar-divulgacao
 
     steps:
       - name: Baixar repositório

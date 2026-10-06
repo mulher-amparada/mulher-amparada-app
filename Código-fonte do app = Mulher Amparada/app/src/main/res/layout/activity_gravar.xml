@@ -205,50 +205,6 @@
         </FrameLayout>
 
 
-        <!-- ===================================================== -->
-        <!-- STATUS                                                -->
-        <!-- ===================================================== -->
-
-        <LinearLayout
-            android:id="@+id/recordStatus"
-
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-
-            android:gravity="center"
-
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
-
-            android:background="@drawable/recorder_status">
-
-
-            <View
-                android:id="@+id/statusDot"
-
-                android:layout_width="7dp"
-                android:layout_height="7dp"
-
-                android:layout_marginEnd="8dp"
-
-                android:background="@drawable/recorder_dot" />
-
-
-            <TextView
-                android:id="@+id/statusText"
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="Pronto para gravar"
-
-                android:textColor="@color/recorder_status_text"
-                android:textSize="13sp"
-
-                android:fontFamily="sans"
-                android:includeFontPadding="false" />
-
-        </LinearLayout>
 
 
 

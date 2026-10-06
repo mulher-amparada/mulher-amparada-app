@@ -1,5 +1,7 @@
 package com.mulheres
 
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity

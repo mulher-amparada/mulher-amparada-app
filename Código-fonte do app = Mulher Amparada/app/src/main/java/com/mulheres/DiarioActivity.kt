@@ -767,7 +767,7 @@ private fun DiarioTopBar(
                 )
                 .padding(
                     start = 13.dp,
-                    end = 16.dp
+                    end = 8.dp
                 ),
         verticalAlignment =
             Alignment.CenterVertically

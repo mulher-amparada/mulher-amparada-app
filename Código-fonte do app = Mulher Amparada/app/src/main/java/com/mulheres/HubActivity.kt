@@ -2219,7 +2219,7 @@ private fun BottomAreaSelector(
                     c.borderLight,
                     shape
                 )
-                .padding(12.dp)
+                .padding(5.dp)
     ) {
 
         val thumbSize =

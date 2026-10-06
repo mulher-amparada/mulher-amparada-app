@@ -2521,81 +2521,87 @@ private fun MulherAmparadaScreen() {
                         ),
 
                 verticalArrangement =
-                    Arrangement.spacedBy(30.dp)
+                    Arrangement.Top
             ) {
-if (
-    activity?.areaProtegidaSelecionada == true
-) {
 
-    /*
-     * =========================================
-     * CABEÇALHO DAS ÁREAS
-     * =========================================
-     */
-
-    Hero(
-        c = c,
-        font = font
-    )
-
-    /*
-     * =========================================
-     * CENTRAL DE PROTEÇÃO
-     * =========================================
-     */
-
-    SystemOverview(
-        c = c,
-        font = font
-    )
-
-    /*
-     * =========================================
-     * ÁREAS PROTEGIDAS
-     * =========================================
-     */
-
-    SectionTitle(
-        text = "Espaços protegidos",
-        c = c,
-        font = font,
-        purple = true,
-        compactBottom = true
-    )
-
-    ProtectedArea(
-        c = c,
-        font = font
-    )
-
-    SectionTitle(
-        text = "Espaço de acolhimento",
-        c = c,
-        font = font,
-        purple = true,
-        compactBottom = true
-    )
-
-    AmparoArea(
-        c = c,
-        font = font
-    )
-
-} else {
-                    /*
-                     * =========================================
-                     * CONTEÚDO NORMAL
-                     * =========================================
-                     */
+                if (
+                    activity?.areaProtegidaSelecionada == true
+                ) {
 
                     Hero(
                         c = c,
                         font = font
                     )
 
+                    Spacer(
+                        Modifier.height(30.dp)
+                    )
+
                     SystemOverview(
                         c = c,
                         font = font
+                    )
+
+                    Spacer(
+                        Modifier.height(30.dp)
+                    )
+
+                    SectionTitle(
+                        text = "Espaços protegidos",
+                        c = c,
+                        font = font,
+                        purple = true,
+                        compactBottom = true
+                    )
+
+                    Spacer(
+                        Modifier.height(15.dp)
+                    )
+
+                    ProtectedArea(
+                        c = c,
+                        font = font
+                    )
+
+                    Spacer(
+                        Modifier.height(30.dp)
+                    )
+
+                    SectionTitle(
+                        text = "Espaço de acolhimento",
+                        c = c,
+                        font = font,
+                        purple = true,
+                        compactBottom = true
+                    )
+
+                    Spacer(
+                        Modifier.height(15.dp)
+                    )
+
+                    AmparoArea(
+                        c = c,
+                        font = font
+                    )
+
+                } else {
+
+                    Hero(
+                        c = c,
+                        font = font
+                    )
+
+                    Spacer(
+                        Modifier.height(30.dp)
+                    )
+
+                    SystemOverview(
+                        c = c,
+                        font = font
+                    )
+
+                    Spacer(
+                        Modifier.height(30.dp)
                     )
 
                     SectionTitle(
@@ -2605,9 +2611,17 @@ if (
                         compactBottom = true
                     )
 
+                    Spacer(
+                        Modifier.height(15.dp)
+                    )
+
                     PanicCard(
                         c = c,
                         font = font
+                    )
+
+                    Spacer(
+                        Modifier.height(30.dp)
                     )
 
                     SectionTitle(
@@ -2615,6 +2629,10 @@ if (
                         c = c,
                         font = font,
                         compactBottom = true
+                    )
+
+                    Spacer(
+                        Modifier.height(15.dp)
                     )
 
                     SensorCard(
@@ -2647,6 +2665,10 @@ if (
                         font = font
                     )
 
+                    Spacer(
+                        Modifier.height(30.dp)
+                    )
+
                     SensorCard(
                         number = "02 / MOVIMENTO",
                         title = "Proteção por movimento",
@@ -2677,6 +2699,10 @@ if (
                         font = font
                     )
 
+                    Spacer(
+                        Modifier.height(30.dp)
+                    )
+
                     SensorCard(
                         number = "03 / VISIBILIDADE",
                         title = "Escurecimento por inclinação",
@@ -2704,11 +2730,19 @@ if (
                         font = font
                     )
 
+                    Spacer(
+                        Modifier.height(30.dp)
+                    )
+
                     SectionTitle(
                         text = "Serviços de emergência",
                         c = c,
                         font = font,
                         compactBottom = true
+                    )
+
+                    Spacer(
+                        Modifier.height(15.dp)
                     )
 
                     ActionCard(
@@ -2726,6 +2760,10 @@ if (
                         }
                     )
 
+                    Spacer(
+                        Modifier.height(30.dp)
+                    )
+
                     ActionCard(
                         title = "SAMU — 192",
                         description =
@@ -2739,6 +2777,10 @@ if (
                         onClick = {
                             activity?.ligarPara("192")
                         }
+                    )
+
+                    Spacer(
+                        Modifier.height(30.dp)
                     )
 
                     ActionCard(
@@ -2756,11 +2798,19 @@ if (
                         }
                     )
 
+                    Spacer(
+                        Modifier.height(30.dp)
+                    )
+
                     SectionTitle(
                         text = "Recursos de apoio",
                         c = c,
                         font = font,
                         compactBottom = true
+                    )
+
+                    Spacer(
+                        Modifier.height(15.dp)
                     )
 
                     ActionCard(
@@ -2778,11 +2828,19 @@ if (
                         }
                     )
 
+                    Spacer(
+                        Modifier.height(30.dp)
+                    )
+
                     SectionTitle(
                         text = "Contatos de confiança",
                         c = c,
                         font = font,
                         compactBottom = true
+                    )
+
+                    Spacer(
+                        Modifier.height(15.dp)
                     )
 
                     ActionCard(
@@ -2800,6 +2858,10 @@ if (
                         }
                     )
 
+                    Spacer(
+                        Modifier.height(30.dp)
+                    )
+
                     ActionCard(
                         title = "SOS para contatos",
                         description =
@@ -2815,11 +2877,19 @@ if (
                         }
                     )
 
+                    Spacer(
+                        Modifier.height(30.dp)
+                    )
+
                     SectionTitle(
                         text = "Acesso rápido",
                         c = c,
                         font = font,
                         compactBottom = true
+                    )
+
+                    Spacer(
+                        Modifier.height(15.dp)
                     )
 
                     EmergencyAccess(
@@ -2828,12 +2898,6 @@ if (
                     )
                 }
             }
-
-            /*
-             * =========================================
-             * SELETOR FIXO NO FUNDO
-             * =========================================
-             */
 
             Box(
                 modifier =
@@ -2867,35 +2931,29 @@ if (
                 )
             }
 
-            /*
-             * =========================================
-             * BLOQUEIO DE PERMISSÕES
-             * =========================================
-             */
-if (
-    activity != null &&
-    !activity.permissoesConcedidas
-) {
+            if (
+                activity != null &&
+                !activity.permissoesConcedidas
+            ) {
 
-    Box(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .background(Color.Black)
-                .zIndex(100f),
+                Box(
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .background(Color.Black)
+                            .zIndex(100f),
 
-        contentAlignment =
-            Alignment.Center
-    ) {
+                    contentAlignment =
+                        Alignment.Center
+                ) {
 
-        PermissionCard(
-            onAbrirPermissoes = {
-                activity.solicitarPermissoes()
+                    PermissionCard(
+                        onAbrirPermissoes = {
+                            activity.solicitarPermissoes()
+                        }
+                    )
+                }
             }
-        )
-    }
-}
-
         }
     }
 }
@@ -3316,17 +3374,7 @@ private fun SectionTitle(
             Alignment.CenterVertically,
 
         modifier =
-    Modifier
-        .offset(
-            y =
-                if (compactBottom)
-                    (-15).dp
-                else
-                    0.dp
-        )
-        .padding(
-            start = 3.dp
-        )
+    
     ) {
 
         Box(

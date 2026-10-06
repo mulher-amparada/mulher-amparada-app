@@ -1191,17 +1191,16 @@ jobs:
           git push origin HEAD:main
           
           
-
-    # =========================================================
+  # =========================================================
   # PUBLICAR KIT DE DIVULGAÇÃO NO GITHUB PACKAGES
   # =========================================================
 
-    publicar-divulgacao:
+  publicar-divulgacao:
 
     name: Publicar Kit de Divulgação
 
     runs-on: ubuntu-24.04
-    needs: deploy
+
     permissions:
       contents: read
       packages: write

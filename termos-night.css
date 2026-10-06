@@ -69,7 +69,7 @@
             padding-top: 32px;
         }
 
-        .license {
+        .termsandpolicy {
             display: block;
             width: fit-content;
             margin: 0 auto 18px;
@@ -80,12 +80,12 @@
             text-decoration: none;
         }
 
-        .license span {
+        .termsandpolicy span {
             margin-left: 5px;
             font-size: 20px;
         }
 
-        .license:focus-visible {
+        .termsandpolicy:focus-visible {
             outline: 3px solid rgba(255, 143, 181, 0.35);
             outline-offset: 5px;
             border-radius: 5px;

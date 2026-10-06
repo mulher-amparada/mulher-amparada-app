@@ -2219,7 +2219,7 @@ private fun BottomAreaSelector(
                     c.borderLight,
                     shape
                 )
-                .padding(4.dp)
+                .padding(12.dp)
     ) {
 
         val thumbSize =
@@ -3321,7 +3321,7 @@ private fun SectionTitle(
                     start = 3.dp,
                     bottom =
                         if (compactBottom)
-                            15.dp
+                            (-15).dp
                         else
                             0.dp
                 )

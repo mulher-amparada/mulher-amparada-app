@@ -1,0 +1,13 @@
+{
+  "name": "@mulher-amparada/divulgacao",
+  "version": "1.0.0",
+  "description": "Kit oficial de divulgação do projeto Mulher Amparada.",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mulher-amparada/mulher-amparada-app.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}

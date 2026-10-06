@@ -1108,7 +1108,7 @@ jobs:
 
       - name: Salvar relatório SEO
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: seo-audit
           path: seo-audit.md

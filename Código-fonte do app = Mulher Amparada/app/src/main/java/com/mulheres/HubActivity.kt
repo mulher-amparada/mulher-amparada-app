@@ -2498,7 +2498,15 @@ private fun MulherAmparadaScreen() {
                     )
 
                     SystemOverview(
-                        c = c,
+    c = c,
+    onClick = {
+        activity?.startActivity(
+            Intent(
+                activity,
+                UpdateActivity::class.java
+            )
+        )
+    }
 )
 
                     Spacer(
@@ -2554,7 +2562,15 @@ Spacer(
                     )
 
                     SystemOverview(
-                        c = c,
+    c = c,
+    onClick = {
+        activity?.startActivity(
+            Intent(
+                activity,
+                UpdateActivity::class.java
+            )
+        )
+    }
 )
 
                     Spacer(
@@ -3129,31 +3145,34 @@ lineHeight = 18.sp
 @Composable
 private fun SystemOverview(
     c: AppColors,
+    onClick: () -> Unit
 ) {
 
     Box(
-
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .clip(
-                    RoundedCornerShape(32.dp)
-                )
-                .background(
-                    Brush.linearGradient(
-                        listOf(
-                            c.surfaceLight,
-                            c.surface
-                        )
+    modifier =
+        Modifier
+            .fillMaxWidth()
+            .clip(
+                RoundedCornerShape(32.dp)
+            )
+            .background(
+                Brush.linearGradient(
+                    listOf(
+                        c.surfaceLight,
+                        c.surface
                     )
                 )
-                .border(
-                    1.dp,
-                    c.borderLight,
-                    RoundedCornerShape(32.dp)
-                )
-                .padding(22.dp)
-    ) {
+            )
+            .border(
+                1.dp,
+                c.borderLight,
+                RoundedCornerShape(32.dp)
+            )
+            .clickable {
+                onClick()
+            }
+            .padding(22.dp)
+) {
 
         Row(
 
@@ -3184,13 +3203,13 @@ letterSpacing = 1.5.sp
                 )
 
                 Text(
-                    "Central de proteção",
+                    "Versão do app",
                     color = c.text,
                     fontSize = 21.sp,
 )
 
                 Text(
-                    "Gerencie seus recursos de segurança e mantenha suas ferramentas de emergência sempre acessíveis.",
+                    "Veja as informações técnicas do seu aplicativo!",
                     color = c.secondary,
                     fontSize = 10.sp,
 lineHeight = 15.sp

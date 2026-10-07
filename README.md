@@ -1,8 +1,4 @@
-<p align="center">
-  <img src="user1.png" alt="Mulher Amparada">
-</p>
-
-<h1 align="center">Mulher Amparada</h1>
+# Mulher Amparada
 
 Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!
 
@@ -10,7 +6,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4577**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4556**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
@@ -471,6 +467,8 @@ NeoCalcActivity (compose) = Tela que contém o disfarce de calculadora
  
  ArquivoActivity = (compose) Tela da funcao de arquivo seguro da área protegida!
  
+ UpdateActivity = (compose) Tela da funcao que mostra o ícone do app disfarçado nome do aplicativo, versão instalada (versionName), número da build (versionCode), indicador visual de disponibilidade do sistema, informações sobre atualizações, botão para verificar se existe uma versão mais recente e botão para retornar à tela anterior.
+ 
  GeoActivity = (compose) Tela da funcao de raio seguro com georreferenciamento seguro da área protegida!
  
  # Sobre como o aplicativo é compilado:
@@ -564,14 +562,30 @@ O aplicativo possui suporte aos ícones temáticos do Android (Themed Icons), pe
 O Impacto Visual: O ícone deixa de depender exclusivamente de suas cores originais e passa a responder à personalização visual do sistema. Isso proporciona uma apresentação mais discreta e consistente com a interface do dispositivo, sem que o aplicativo precise criar manualmente uma versão diferente para cada paleta de cores.
 
 ### Disfarce do app (assistente de saúde falso!):
+tutorial: ao entrar no app, clique no canto superior direito com o icone de calculadora. e ai quando ele for iniciado, voce precisará tocar no visor 5 vezes para cadastrar a senha e a pergunta de recuperação (e ele salva em uma classe kt de criptografia), assim so acessa com a senha informada, para resetar essa senha (dê 5 toques em menos de 2 segundos, e digite como você gosta de ser chamada, e digite sua nova senha!), mas antes dessa tela, tem outra tipo uma gaveta de apps..., porém, agora no mulher amparada, ele já vem com o icone de calculadora e o nome calculadora, só dá para mudar o icone, ou seja, o app ja vem com icone de (Assistente de saúde), uma tela genérica de elementos de medição de saúde (bpm e etc), e vale lembrar que:
 
-Vale lembrar que: Os dados da primeira página do app (disfarce do assistente de saúde) são meramente fictícios e não representam informações reais!, e ele é uma oagina de assistente de saude, e os dados mudam com o tempo, mas são fictícios!
-
-tutorial: ao entrar no app, clique no canto superior direito com o icone de calculadora. e ai quando ele for iniciado, voce precisará tocar no visor 5 vezes para cadastrar a senha e a pergunta de recuperação (e ele salva em uma classe kt de criptografia), assim so acessa com a senha informada, para resetar essa senha (dê 5 toques em menos de 2 segundos, e digite como você gosta de ser chamada, e digite sua nova senha!), mas antes dessa tela, tem outra tipo uma gaveta de apps..., porém, agora no mulher amparada, ele já vem com o icone de calculadora e o nome calculadora, só dá para mudar o icone, ou seja, o app ja vem com icone de (Assistente de saúde), uma tela genérica de elementos de medição de saúde (bpm e etc), 
+Os dados da primeira página do app (disfarce do assistente de saúde) são meramente fictícios e não representam informações reais!
 
 e tambem, reforcando que no canto superior direito tem um icone de calculadora que quando clica vai pra uma calculadora e aparece o disfarce de calculadora 
 
 > no disfarce de calculadora, caso a usuaria esqueça tudo, existe um popup que usa o BiometricPrompt que poderá resetar tanto a senha tanto a pergunta de recuperação (e ele usa APENAS o device credencial!), porém, quando utiliza o BiometricPrompt e é validado, ele pergunta repetidamente a pergunta de recuperação e a senha, eu preferi deixar assim porque ai a usuaria pode errar quantas vezes ela quiser!, e eu preferi que o BiometricPrompt use só apenas o device credential, porque senão o agressor que tiver com acesso físico ao aparelho pode ou se cadastrar ou coagir a usuária a desbloquear!
+
+### Versão do app:
+
+A "UpdateActivity" apresenta as informações da versão instalada do Mulher Amparada, utilizando os dados diretamente do aplicativo instalado.
+
+Ela exibe:
+
+- Ícone do app disfarçado
+- Nome do aplicativo
+- Versão instalada ("versionName")
+- Número da build ("versionCode")
+- Indicador visual de disponibilidade do sistema
+- Informações sobre atualizações
+- Botão para verificar se existe uma versão mais recente
+- Botão para retornar à tela anterior
+
+A versão e a build são obtidas diretamente dos metadados do APK, garantindo que as informações exibidas correspondam à versão realmente instalada no dispositivo.
 
 ### Botão de Pânico:
 Botão de Pânico, com ligação ao 180 de forma direta no primeiro clique.
@@ -1111,8 +1125,6 @@ o proprio qr do site do giithub pages;
 banners do projeto, tanto png, tanto um código para html;
 
 icones para sites e para usos no geral, tanto o do mulher amparada tanto o ic_launcher do app, versão normal e monocromático;
-
-o código-fonte inteiro do projeto;
 
 >APENAS PARA AS USUÁRIAS!: Ao indicar o projeto para uma mulher em situação de risco, **priorize o compartilhamento do QR Code impresso ou na tela**, em vez de enviar links de texto por mensagens (como WhatsApp ou SMS). 
 >

@@ -1933,6 +1933,7 @@ private data class AppColors(
 )
 
 
+@Composable
 private fun colors(): AppColors {
 
     val dark =
@@ -2184,6 +2185,7 @@ private fun colors(): AppColors {
     }
 }
 
+@Composable
 private fun BottomAreaSelector(
     c: AppColors,
     areaProtegidaSelecionada: Boolean,
@@ -2904,6 +2906,7 @@ Spacer(
    POPUP DE PERMISSÕES
 ========================================================= */
 
+@Composable
 private fun PermissionCard(
     onAbrirPermissoes: () -> Unit
 ) {

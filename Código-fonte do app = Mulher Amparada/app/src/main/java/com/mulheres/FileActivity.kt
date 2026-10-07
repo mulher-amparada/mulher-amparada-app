@@ -720,69 +720,43 @@ private fun atualizarBotaoArmazenamento() {
 
     private fun abrirUSBAtual() {
 
-        /*
-         * Primeiro tenta o USB já autorizado pelo SAF.
-         */
-        val salvo =
-            obterUsbRootSalvo()
+    val salvo =
+        obterUsbRootSalvo()
 
-        if (
-            salvo != null &&
-            salvo.exists() &&
-            salvo.isDirectory
+    if (
+        salvo != null &&
+        salvo.exists() &&
+        salvo.isDirectory
+    ) {
+
+        usbRoot = salvo
+
+        if (usbHistory.isEmpty()) {
+
+            usbHistory.add(salvo)
+            usbIndex = 0
+
+        } else if (
+            usbIndex < 0 ||
+            usbIndex >= usbHistory.size
         ) {
 
-            usbRoot = salvo
-
-            if (usbHistory.isEmpty()) {
-
-                usbHistory.add(salvo)
-                usbIndex = 0
-
-            } else if (
-                usbIndex < 0 ||
-                usbIndex >= usbHistory.size
-            ) {
-
-                usbHistory.clear()
-                usbHistory.add(salvo)
-                usbIndex = 0
-            }
-
-            atualizarListaUSB(
-                usbHistory[usbIndex]
-            )
-
-            return
+            usbHistory.clear()
+            usbHistory.add(salvo)
+            usbIndex = 0
         }
 
-        /*
-         * Se o StorageVolume fornecer um File USB,
-         * também aceitamos esse caminho.
-         */
-        val fileUsb =
-            encontrarVolumeUSB()
+        atualizarListaUSB(
+            usbHistory[usbIndex]
+        )
 
-        if (fileUsb != null) {
-
-            abrirVolumeExterno(
-                fileUsb
-            )
-
-            return
-        }
-
-        /*
-         * Nenhum USB conhecido.
-         *
-         * Mostramos vazio, conforme solicitado,
-         * mas oferecemos o seletor quando o usuário
-         * estiver tentando acessar o USB.
-         */
-        mostrarListaVazia()
-
-        abrirSeletorUSB()
+        return
     }
+
+    mostrarListaVazia()
+
+    abrirSeletorUSB()
+}
 
     private fun abrirSeletorUSB() {
 
@@ -901,81 +875,73 @@ private fun atualizarBotaoArmazenamento() {
     // =========================================================
 
     private fun atualizarCaminhoUSB(
-        directory: DocumentFile
-    ) {
+    directory: DocumentFile
+) {
 
-        val raiz =
-            usbRoot
+    val raiz =
+        usbRoot
 
-        if (raiz == null) {
+    if (raiz == null) {
 
-            pathText.text = ""
+        pathText.text = ""
 
-            return
-        }
-
-        val nomeRaiz =
-            raiz.name
-                ?.ifBlank {
-                    "Pendrive USB"
-                }
-                ?: "Pendrive USB"
-
-        if (
-            directory.uri == raiz.uri
-        ) {
-
-            pathText.text =
-                nomeRaiz
-
-            return
-        }
-
-        /*
-         * Para SAF não dependemos de caminhos físicos.
-         * Reconstruímos o caminho usando os históricos.
-         */
-        val partes =
-            ArrayList<String>()
-
-        val limite =
-            minOf(
-                usbIndex,
-                usbHistory.lastIndex
-            )
-
-        if (limite >= 0) {
-
-            for (i in 0..limite) {
-
-                val nome =
-                    usbHistory[i]
-                        .name
-                        ?.takeIf {
-                            it.isNotBlank()
-                        }
-
-                if (
-                    nome != null &&
-                    i > 0
-                ) {
-
-                    partes.add(nome)
-                }
-            }
-        }
-
-        pathText.text =
-            if (partes.isEmpty()) {
-
-                nomeRaiz
-
-            } else {
-
-                "$nomeRaiz / ${partes.joinToString(" / ")}"
-            }
+        return
     }
 
+    val nomeRaiz =
+        raiz.name
+            ?.trim()
+            ?.takeIf {
+                it.isNotBlank()
+            }
+            ?: "Armazenamento USB"
+
+    if (
+        directory.uri == raiz.uri
+    ) {
+
+        pathText.text =
+            nomeRaiz
+
+        return
+    }
+
+    val partes =
+        ArrayList<String>()
+
+    val indice =
+        usbHistory.indexOfFirst {
+            it.uri == directory.uri
+        }
+
+    if (indice > 0) {
+
+        for (i in 1..indice) {
+
+            val nome =
+                usbHistory[i]
+                    .name
+                    ?.trim()
+                    ?.takeIf {
+                        it.isNotBlank()
+                    }
+
+            if (nome != null) {
+                partes.add(nome)
+            }
+        }
+    }
+
+    pathText.text =
+        if (partes.isEmpty()) {
+
+            nomeRaiz
+
+        } else {
+
+            "$nomeRaiz / ${partes.joinToString(" / ")}"
+        }
+}
     // =========================================================
     // SD
     // =========================================================

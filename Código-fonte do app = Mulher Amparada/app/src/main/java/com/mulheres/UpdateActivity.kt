@@ -1,34 +1,26 @@
 package com.mulheres
 
-import android.content.pm.PackageManager
 import android.graphics.Color as AndroidColor
+import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -149,7 +141,7 @@ private fun UpdateScreen() {
         packageInfo.versionName ?: "Desconhecida"
 
     val versionCode =
-        if (android.os.Build.VERSION.SDK_INT >= 28) {
+        if (Build.VERSION.SDK_INT >= 28) {
             packageInfo.longVersionCode
         } else {
             @Suppress("DEPRECATION")
@@ -282,68 +274,28 @@ private fun UpdateScreen() {
                                 Modifier.height(7.dp)
                         )
 
-                        Row(
+                        Text(
+                            text =
+                                "Versão $versionName",
+                            color = textColor,
+                            fontSize = 18.sp,
+                            fontWeight =
+                                FontWeight.SemiBold
+                        )
+
+                        Spacer(
                             modifier =
-                                Modifier.fillMaxWidth(),
-                            verticalAlignment =
-                                Alignment.CenterVertically,
-                            horizontalArrangement =
-                                Arrangement.SpaceBetween
-                        ) {
+                                Modifier.height(10.dp)
+                        )
 
-                            Row(
-                                verticalAlignment =
-                                    Alignment.CenterVertically
-                            ) {
-
-                                Box(
-                                    modifier =
-                                        Modifier
-                                            .size(10.dp)
-                                            .clip(CircleShape)
-                                            .background(
-                                                Success
-                                            )
-                                )
-
-                                Spacer(
-                                    modifier =
-                                        Modifier.width(9.dp)
-                                )
-
-                                Text(
-                                    text =
-                                        "Versão $versionName",
-                                    color = textColor,
-                                    fontSize = 18.sp,
-                                    fontWeight =
-                                        FontWeight.SemiBold
-                                )
-                            }
-
-                            Box(
-                                modifier =
-                                    Modifier
-                                        .clip(CircleShape)
-                                        .background(
-                                            AccentSoft
-                                        )
-                                        .padding(
-                                            horizontal = 11.dp,
-                                            vertical = 6.dp
-                                        )
-                            ) {
-
-                                Text(
-                                    text =
-                                        "Build $versionCode",
-                                    color = Accent,
-                                    fontSize = 10.sp,
-                                    fontWeight =
-                                        FontWeight.Bold
-                                )
-                            }
-                        }
+                        Text(
+                            text =
+                                "Build $versionCode",
+                            color = Accent,
+                            fontSize = 12.sp,
+                            fontWeight =
+                                FontWeight.Bold
+                        )
 
                         Spacer(
                             modifier =
@@ -370,119 +322,6 @@ private fun UpdateScreen() {
                             fontSize = 12.sp,
                             lineHeight = 18.sp
                         )
-                    }
-
-                    Spacer(
-                        modifier =
-                            Modifier.height(14.dp)
-                    )
-
-                    Column(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .clip(
-                                    RoundedCornerShape(25.dp)
-                                )
-                                .background(card)
-                                .border(
-                                    1.dp,
-                                    border,
-                                    RoundedCornerShape(25.dp)
-                                )
-                                .padding(20.dp)
-                    ) {
-
-                        Text(
-                            text =
-                                "Verificar atualização",
-                            color = textColor,
-                            fontSize = 16.sp,
-                            fontWeight =
-                                FontWeight.SemiBold
-                        )
-
-                        Spacer(
-                            modifier =
-                                Modifier.height(6.dp)
-                        )
-
-                        Text(
-                            text =
-                                "Confira se existe uma versão mais recente do Mulher Amparada.",
-                            color = muted,
-                            fontSize = 11.sp,
-                            lineHeight = 17.sp
-                        )
-
-                        Spacer(
-                            modifier =
-                                Modifier.height(16.dp)
-                        )
-
-                        Button(
-                            onClick = {},
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .height(50.dp),
-                            shape =
-                                RoundedCornerShape(16.dp),
-                            colors =
-                                ButtonDefaults.buttonColors(
-                                    containerColor =
-                                        Accent,
-                                    contentColor =
-                                        Color.Black
-                                )
-                        ) {
-
-                            Text(
-                                text =
-                                    "Verificar atualização",
-                                fontSize = 13.sp,
-                                fontWeight =
-                                    FontWeight.Bold
-                            )
-                        }
-
-                        Spacer(
-                            modifier =
-                                Modifier.height(8.dp)
-                        )
-
-                        OutlinedButton(
-                            onClick = {
-                                (context as? UpdateActivity)
-                                    ?.finish()
-                            },
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .height(50.dp),
-                            shape =
-                                RoundedCornerShape(16.dp),
-                            colors =
-                                ButtonDefaults.outlinedButtonColors(
-                                    contentColor =
-                                        if (dark) {
-                                            Color.White
-                                        } else {
-                                            LightText
-                                        }
-                                ),
-                            border =
-                                BorderStroke(
-                                    1.dp,
-                                    border
-                                )
-                        ) {
-
-                            Text(
-                                text = "Voltar",
-                                fontSize = 13.sp
-                            )
-                        }
                     }
 
                     Spacer(

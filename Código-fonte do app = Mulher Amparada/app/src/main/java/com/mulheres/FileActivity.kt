@@ -720,44 +720,14 @@ private fun atualizarBotaoArmazenamento() {
 
     private fun abrirUSBAtual() {
 
-    val salvo =
-        obterUsbRootSalvo()
-
-    if (
-        salvo != null &&
-        salvo.exists() &&
-        salvo.isDirectory
-    ) {
-
-        usbRoot = salvo
-
-        if (usbHistory.isEmpty()) {
-
-            usbHistory.add(salvo)
-            usbIndex = 0
-
-        } else if (
-            usbIndex < 0 ||
-            usbIndex >= usbHistory.size
-        ) {
-
-            usbHistory.clear()
-            usbHistory.add(salvo)
-            usbIndex = 0
-        }
-
-        atualizarListaUSB(
-            usbHistory[usbIndex]
-        )
-
-        return
-    }
+    usbRoot = null
+    usbHistory.clear()
+    usbIndex = -1
 
     mostrarListaVazia()
 
     abrirSeletorUSB()
 }
-
     private fun abrirSeletorUSB() {
 
         try {

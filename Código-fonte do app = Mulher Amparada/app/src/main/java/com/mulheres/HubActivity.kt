@@ -84,8 +84,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -1935,7 +1933,6 @@ private data class AppColors(
 )
 
 
-@Composable
 private fun colors(): AppColors {
 
     val dark =
@@ -2187,7 +2184,6 @@ private fun colors(): AppColors {
     }
 }
 
-@Composable
 private fun BottomAreaSelector(
     c: AppColors,
     areaProtegidaSelecionada: Boolean,
@@ -2321,9 +2317,7 @@ private fun BottomAreaSelector(
                         Color.White,
                     fontSize =
                         9.sp,
-                    fontWeight =
-                        FontWeight.Bold
-                )
+)
             }
         }
     }
@@ -2433,7 +2427,6 @@ private fun MulherAmparadaTheme(
    FONTE
 ========================================================= */
 
-@Composable
 
 
 /* =========================================================
@@ -2446,7 +2439,6 @@ private fun MulherAmparadaScreen() {
     val c =
         colors()
 
-    val font =
 
     val context =
         LocalContext.current
@@ -2497,8 +2489,7 @@ private fun MulherAmparadaScreen() {
 
                     Hero(
                         c = c,
-                        font = font
-                    )
+)
 
                     Spacer(
                         Modifier.height(30.dp)
@@ -2506,8 +2497,7 @@ private fun MulherAmparadaScreen() {
 
                     SystemOverview(
                         c = c,
-                        font = font
-                    )
+)
 
                     Spacer(
                         Modifier.height(30.dp)
@@ -2516,8 +2506,7 @@ private fun MulherAmparadaScreen() {
                     SectionTitle(
                         text = "Espaços protegidos",
                         c = c,
-                        font = font,
-                        purple = true,
+purple = true,
                         compactBottom = true
                     )
 
@@ -2527,8 +2516,7 @@ private fun MulherAmparadaScreen() {
 
                     ProtectedArea(
                         c = c,
-                        font = font
-                    )
+)
 
                     Spacer(
                         Modifier.height(30.dp)
@@ -2537,8 +2525,7 @@ private fun MulherAmparadaScreen() {
                     SectionTitle(
                         text = "Espaço de acolhimento",
                         c = c,
-                        font = font,
-                        purple = true,
+purple = true,
                         compactBottom = true
                     )
 
@@ -2548,7 +2535,6 @@ private fun MulherAmparadaScreen() {
 
                     AmparoArea(
     c = c,
-    font = font
 )
 
 Spacer(
@@ -2559,8 +2545,7 @@ Spacer(
 
                     Hero(
                         c = c,
-                        font = font
-                    )
+)
 
                     Spacer(
                         Modifier.height(30.dp)
@@ -2568,8 +2553,7 @@ Spacer(
 
                     SystemOverview(
                         c = c,
-                        font = font
-                    )
+)
 
                     Spacer(
                         Modifier.height(30.dp)
@@ -2578,8 +2562,7 @@ Spacer(
                     SectionTitle(
                         text = "Resposta imediata",
                         c = c,
-                        font = font,
-                        compactBottom = true
+compactBottom = true
                     )
 
                     Spacer(
@@ -2588,8 +2571,7 @@ Spacer(
 
                     PanicCard(
                         c = c,
-                        font = font
-                    )
+)
 
                     Spacer(
                         Modifier.height(30.dp)
@@ -2598,8 +2580,7 @@ Spacer(
                     SectionTitle(
                         text = "Proteções automáticas",
                         c = c,
-                        font = font,
-                        compactBottom = true
+compactBottom = true
                     )
 
                     Spacer(
@@ -2633,8 +2614,7 @@ Spacer(
                             }
                         },
                         c = c,
-                        font = font
-                    )
+)
 
                     Spacer(
                         Modifier.height(30.dp)
@@ -2667,8 +2647,7 @@ Spacer(
                             }
                         },
                         c = c,
-                        font = font
-                    )
+)
 
                     Spacer(
                         Modifier.height(30.dp)
@@ -2698,8 +2677,7 @@ Spacer(
                             }
                         },
                         c = c,
-                        font = font
-                    )
+)
 
                     Spacer(
                         Modifier.height(30.dp)
@@ -2708,8 +2686,7 @@ Spacer(
                     SectionTitle(
                         text = "Serviços de emergência",
                         c = c,
-                        font = font,
-                        compactBottom = true
+compactBottom = true
                     )
 
                     Spacer(
@@ -2725,8 +2702,7 @@ Spacer(
                         gradient = c.actionBlueGradient,
                         accent = c.blue,
                         c = c,
-                        font = font,
-                        onClick = {
+onClick = {
                             activity?.ligarPara("190")
                         }
                     )
@@ -2744,8 +2720,7 @@ Spacer(
                         gradient = c.actionOrangeGradient,
                         accent = c.orange,
                         c = c,
-                        font = font,
-                        onClick = {
+onClick = {
                             activity?.ligarPara("192")
                         }
                     )
@@ -2763,8 +2738,7 @@ Spacer(
                         gradient = c.actionPinkGradient,
                         accent = c.pinkLight,
                         c = c,
-                        font = font,
-                        onClick = {
+onClick = {
                             activity?.ligarPara("180")
                         }
                     )
@@ -2776,8 +2750,7 @@ Spacer(
                     SectionTitle(
                         text = "Recursos de apoio",
                         c = c,
-                        font = font,
-                        compactBottom = true
+compactBottom = true
                     )
 
                     Spacer(
@@ -2793,8 +2766,7 @@ Spacer(
                         gradient = c.actionCyanGradient,
                         accent = c.cyan,
                         c = c,
-                        font = font,
-                        onClick = {
+onClick = {
                             activity?.enviarLocalizacaoPara180()
                         }
                     )
@@ -2806,8 +2778,7 @@ Spacer(
                     SectionTitle(
                         text = "Contatos de confiança",
                         c = c,
-                        font = font,
-                        compactBottom = true
+compactBottom = true
                     )
 
                     Spacer(
@@ -2823,8 +2794,7 @@ Spacer(
                         gradient = c.actionPurpleGradient,
                         accent = c.purple,
                         c = c,
-                        font = font,
-                        onClick = {
+onClick = {
                             activity?.abrirContatos()
                         }
                     )
@@ -2842,8 +2812,7 @@ Spacer(
                         gradient = c.actionRedGradient,
                         accent = c.red,
                         c = c,
-                        font = font,
-                        onClick = {
+onClick = {
                             activity?.enviarSosParaContato()
                         }
                     )
@@ -2855,8 +2824,7 @@ Spacer(
                     SectionTitle(
                         text = "Acesso rápido",
                         c = c,
-                        font = font,
-                        compactBottom = true
+compactBottom = true
                     )
 
                     Spacer(
@@ -2865,7 +2833,6 @@ Spacer(
 
                     EmergencyAccess(
     c = c,
-    font = font
 )
 
 Spacer(
@@ -2937,7 +2904,6 @@ Spacer(
    POPUP DE PERMISSÕES
 ========================================================= */
 
-@Composable
 private fun PermissionCard(
     onAbrirPermissoes: () -> Unit
 ) {
@@ -2992,8 +2958,7 @@ private fun PermissionCard(
             text = "Permissões necessárias",
             color = Color.White,
             fontSize = 24.sp,
-            fontWeight = FontWeight.ExtraBold,
-            lineHeight = 25.sp,
+lineHeight = 25.sp,
             letterSpacing = (-0.5).sp
         )
 
@@ -3007,8 +2972,7 @@ private fun PermissionCard(
                 "conceda as permissões necessárias ao aplicativo.",
             color = Color(0xFF85858E),
             fontSize = 11.sp,
-            fontWeight = FontWeight.SemiBold,
-            lineHeight = 17.sp
+lineHeight = 17.sp
         )
 
         Spacer(
@@ -3052,8 +3016,7 @@ private fun PermissionCard(
                     text = "Abrir permissões",
                     color = Color.White,
                     fontSize = 12.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
+)
             }
         }
     }
@@ -3066,7 +3029,6 @@ private fun PermissionCard(
 @Composable
 private fun Hero(
     c: AppColors,
-    font: FontFamily
 ) {
 
     Column(
@@ -3121,8 +3083,7 @@ private fun Hero(
                     "SISTEMA DE PROTEÇÃO PESSOAL",
                 color = c.pinkLight,
                 fontSize = 9.sp,
-                fontWeight = FontWeight.ExtraBold,
-                letterSpacing = 2.sp
+letterSpacing = 2.sp
             )
         }
 
@@ -3135,8 +3096,7 @@ private fun Hero(
                 "Mulher\nAmparada.",
             color = c.white,
             fontSize = 48.sp,
-            fontWeight = FontWeight.ExtraBold,
-            lineHeight = 43.sp,
+lineHeight = 43.sp,
             letterSpacing = (-3).sp
         )
 
@@ -3153,8 +3113,7 @@ private fun Hero(
                 ),
             color = c.secondary,
             fontSize = 11.sp,
-            fontWeight = FontWeight.SemiBold,
-            lineHeight = 18.sp
+lineHeight = 18.sp
         )
     }
 }
@@ -3164,10 +3123,8 @@ private fun Hero(
    VISÃO GERAL
 ========================================================= */
 
-@Composable
 private fun SystemOverview(
     c: AppColors,
-    font: FontFamily
 ) {
 
     Box(
@@ -3219,23 +3176,20 @@ private fun SystemOverview(
                     "ESTADO DO SISTEMA",
                     color = c.muted,
                     fontSize = 9.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    letterSpacing = 1.5.sp
+letterSpacing = 1.5.sp
                 )
 
                 Text(
                     "Central de proteção",
                     color = c.text,
                     fontSize = 21.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
+)
 
                 Text(
                     "Gerencie seus recursos de segurança e mantenha suas ferramentas de emergência sempre acessíveis.",
                     color = c.secondary,
                     fontSize = 10.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    lineHeight = 15.sp
+lineHeight = 15.sp
                 )
 
                 Row(
@@ -3260,8 +3214,7 @@ private fun SystemOverview(
                         "SISTEMA DISPONÍVEL",
                         color = c.green,
                         fontSize = 9.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        letterSpacing = .8.sp
+letterSpacing = .8.sp
                     )
                 }
             }
@@ -3328,8 +3281,7 @@ private fun SystemOverview(
 private fun SectionTitle(
     text: String,
     c: AppColors,
-    font: FontFamily,
-    purple: Boolean = false,
+purple: Boolean = false,
     compactBottom: Boolean = false
 ) {
 
@@ -3365,8 +3317,7 @@ private fun SectionTitle(
                 text.uppercase(),
             color = c.muted,
             fontSize = 9.sp,
-            fontWeight = FontWeight.ExtraBold,
-            letterSpacing = 2.sp
+letterSpacing = 2.sp
         )
     }
 }
@@ -3376,10 +3327,8 @@ private fun SectionTitle(
    PANIC
 ========================================================= */
 
-@Composable
 private fun PanicCard(
     c: AppColors,
-    font: FontFamily
 ) {
 
     val context =
@@ -3485,8 +3434,7 @@ private fun PanicCard(
                 "Precisa de ajuda?",
                 color = Color.White,
                 fontSize = 30.sp,
-                fontWeight = FontWeight.ExtraBold,
-                letterSpacing = (-1.2).sp,
+letterSpacing = (-1.2).sp,
                 textAlign = TextAlign.Center
             )
 
@@ -3501,8 +3449,7 @@ private fun PanicCard(
                         alpha = .92f
                     ),
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
-                lineHeight = 20.sp,
+lineHeight = 20.sp,
                 textAlign = TextAlign.Center
             )
         }
@@ -3523,7 +3470,6 @@ private fun SensorCard(
     active: Boolean,
     onClick: () -> Unit,
     c: AppColors,
-    font: FontFamily
 ) {
 
     val background =
@@ -3597,16 +3543,14 @@ private fun SensorCard(
                     text = number,
                     color = c.muted,
                     fontSize = 9.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    letterSpacing = 1.5.sp
+letterSpacing = 1.5.sp
                 )
 
                 Text(
                     text = title,
                     color = c.text,
                     fontSize = 22.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    lineHeight = 25.sp,
+lineHeight = 25.sp,
                     letterSpacing = (-.7).sp,
                     modifier =
                         Modifier.fillMaxWidth()
@@ -3685,11 +3629,7 @@ private fun SensorCard(
 
 
             fontSize = 10.sp,
-
-            fontWeight =
-                FontWeight.SemiBold,
-
-            lineHeight = 16.sp,
+lineHeight = 16.sp,
 
             maxLines = 3
         )
@@ -3746,11 +3686,7 @@ private fun SensorCard(
 
 
                     fontSize = 9.sp,
-
-                    fontWeight =
-                        FontWeight.ExtraBold,
-
-                    letterSpacing = 1.2.sp
+letterSpacing = 1.2.sp
                 )
             }
 
@@ -3768,7 +3704,6 @@ private fun SensorCard(
    SWITCH
 ========================================================= */
 
-@Composable
 private fun FakeSwitch(
     color: Color,
     active: Boolean,
@@ -3835,8 +3770,7 @@ private fun ActionCard(
     gradient: List<Color>,
     accent: Color,
     c: AppColors,
-    font: FontFamily,
-    onClick: () -> Unit = {}
+onClick: () -> Unit = {}
 ) {
 
     Row(
@@ -3917,8 +3851,7 @@ private fun ActionCard(
                     else
                         c.text,
                 fontSize = 16.sp,
-                fontWeight = FontWeight.ExtraBold,
-                lineHeight = 18.sp
+lineHeight = 18.sp
             )
 
             Text(
@@ -3931,16 +3864,14 @@ private fun ActionCard(
                     else
                         c.secondary,
                 fontSize = 10.sp,
-                fontWeight = FontWeight.SemiBold,
-                lineHeight = 15.sp
+lineHeight = 15.sp
             )
 
             Text(
                 "ATENDIMENTO DISPONÍVEL",
                 color = accent,
                 fontSize = 7.sp,
-                fontWeight = FontWeight.ExtraBold,
-                letterSpacing = 1.sp
+letterSpacing = 1.sp
             )
         }
 
@@ -3990,10 +3921,8 @@ private fun ActionCard(
    ACESSO DE EMERGÊNCIA
 ========================================================= */
 
-@Composable
 private fun EmergencyAccess(
     c: AppColors,
-    font: FontFamily
 ) {
     val activity = LocalContext.current as? HubActivity
 
@@ -4009,8 +3938,7 @@ private fun EmergencyAccess(
                 Color(0xFFB87900),
         gradient = c.emergencyGradient,
         c = c,
-        font = font,
-        onClick = {
+onClick = {
             activity?.mostrarBotaoEmergencia()
         }
     )
@@ -4023,7 +3951,6 @@ private fun EmergencyAccess(
 @Composable
 private fun ProtectedArea(
     c: AppColors,
-    font: FontFamily
 ) {
 
 val activity =
@@ -4052,9 +3979,7 @@ val activity =
         c.protectedGradient,
 
     c = c,
-    font = font,
-
-    onClick = {
+onClick = {
         activity?.abrirAreaProtegida()
     }
 )
@@ -4064,10 +3989,8 @@ val activity =
    ÁREA DO AMPARO
 ========================================================= */
 
-@Composable
 private fun AmparoArea(
     c: AppColors,
-    font: FontFamily
 ) {
 
     val activity =
@@ -4097,10 +4020,7 @@ private fun AmparoArea(
             c.amparoGradient,
 
         c = c,
-
-        font = font,
-
-        onClick = {
+onClick = {
             activity?.abrirHomeActivity()
         }
     )
@@ -4120,8 +4040,7 @@ private fun ActionPortal(
     accent: Color,
     gradient: List<Color>,
     c: AppColors,
-    font: FontFamily,
-    onClick: () -> Unit = {}
+onClick: () -> Unit = {}
 ) {
 
     Row(
@@ -4219,16 +4138,14 @@ private fun ActionPortal(
                     else
                         c.text,
                 fontSize = 20.sp,
-                fontWeight = FontWeight.ExtraBold,
-                letterSpacing = (-1).sp
+letterSpacing = (-1).sp
             )
 
             Text(
                 subtitle,
                 color = accent.copy(.85f),
                 fontSize = 9.sp,
-                fontWeight = FontWeight.SemiBold,
-                lineHeight = 14.sp
+lineHeight = 14.sp
             )
 
             Row(
@@ -4256,8 +4173,7 @@ private fun ActionPortal(
                     meta,
                     color = accent,
                     fontSize = 7.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    letterSpacing = 1.3.sp
+letterSpacing = 1.3.sp
                 )
             }
         }

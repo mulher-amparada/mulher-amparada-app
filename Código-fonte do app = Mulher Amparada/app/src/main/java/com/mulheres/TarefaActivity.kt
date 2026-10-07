@@ -67,8 +67,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -349,8 +347,7 @@ CompositionLocalProvider(
             Text(
                 text = "+",
                 fontSize = 28.sp,
-                fontWeight = FontWeight.Medium
-            )
+)
         }
     }
 ) {
@@ -717,15 +714,13 @@ private fun Header(
                 text = "Planner",
                 color = textColor,
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
+)
 
             Text(
                 text = subtitle,
                 color = muted,
                 fontSize = 10.sp,
-                fontWeight = FontWeight.Medium
-            )
+)
         }
     }
 }
@@ -813,8 +808,7 @@ private fun StatCard(
             text = number.toString(),
             color = Accent,
             fontSize = 19.sp,
-            fontWeight = FontWeight.Bold
-        )
+)
 
         Text(
             text = label,
@@ -994,11 +988,8 @@ private fun Filters(
                             LightText.copy(.65f)
                         },
                     fontSize = 11.sp,
-                    fontWeight =
                         if (active) {
-                            FontWeight.Bold
                         } else {
-                            FontWeight.Medium
                         }
                 )
             }
@@ -1175,11 +1166,8 @@ private fun SortDropdown(
                         } else {
                             LightText
                         },
-                    fontWeight =
                         if (value == current)
-                            FontWeight.Bold
                         else
-                            FontWeight.Normal
                 )
             },
 
@@ -1313,8 +1301,7 @@ private fun TaskCard(
                 text = task.text,
                 color = textColor,
                 fontSize = 13.sp,
-                fontWeight = FontWeight.SemiBold,
-                maxLines = 2
+maxLines = 2
             )
 
             Spacer(
@@ -1494,8 +1481,7 @@ private fun EmptyState(
                     "Tudo tranquilo por aqui",
             color = textColor.copy(.75f),
             fontSize = 14.sp,
-            fontWeight = FontWeight.Bold
-        )
+)
 
         Spacer(
             modifier = Modifier.height(5.dp)
@@ -1587,8 +1573,7 @@ private fun Pomodoro(
                     "$minutes:${seconds.toString().padStart(2, '0')}",
                 color = Accent,
                 fontSize = 36.sp,
-                fontWeight = FontWeight.Bold
-            )
+)
         }
 
         Spacer(
@@ -1736,8 +1721,7 @@ private fun PomoButton(
                 else
                     LightText,
             fontSize = 11.sp,
-            fontWeight = FontWeight.SemiBold
-        )
+)
     }
 }
 
@@ -1799,8 +1783,7 @@ private fun TaskDialog(
                     else
                         "Editar tarefa",
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color =
+color =
                     if (dark)
                         Color.White
                     else
@@ -2002,8 +1985,7 @@ private fun TaskDialog(
                 Text(
                     "Salvar",
                     color = Accent,
-                    fontWeight = FontWeight.Bold
-                )
+)
             }
         },
 

@@ -39,8 +39,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -304,7 +302,6 @@ private fun corIcone(): Color {
    FONTE
 ========================================================= */
 
-    )
 
 
 /* =========================================================
@@ -670,11 +667,7 @@ private fun Cabecalho(
 
                 fontSize =
                     24.sp,
-
-                fontWeight =
-                    FontWeight.Bold,
-
-                letterSpacing =
+letterSpacing =
                     (-1.1).sp,
 
                 lineHeight =
@@ -701,11 +694,7 @@ private fun Cabecalho(
 
                 fontSize =
                     9.sp,
-
-                fontWeight =
-                    FontWeight.Bold,
-
-                lineHeight =
+lineHeight =
                     14.sp,
 
                 maxLines =
@@ -861,11 +850,7 @@ private fun Hero(
 
                     fontSize =
                         7.sp,
-
-                    fontWeight =
-                        FontWeight.Bold,
-
-                    letterSpacing =
+letterSpacing =
                         1.2.sp
                 )
 
@@ -911,11 +896,7 @@ private fun Hero(
 
                         fontSize =
                             7.sp,
-
-                        fontWeight =
-                            FontWeight.Bold,
-
-                        letterSpacing =
+letterSpacing =
                             .8.sp
                     )
                 }
@@ -1038,11 +1019,7 @@ private fun Hero(
 
                         fontSize =
                             30.sp,
-
-                        fontWeight =
-                            FontWeight.Bold,
-
-                        letterSpacing =
+letterSpacing =
                             (-1.2).sp
                     )
 
@@ -1066,10 +1043,7 @@ private fun Hero(
 
                         fontSize =
                             8.sp,
-
-                        fontWeight =
-                            FontWeight.Bold
-                    )
+)
                 }
             }
 
@@ -1100,10 +1074,7 @@ private fun Hero(
 
                     fontSize =
                         15.sp,
-
-                    fontWeight =
-                        FontWeight.Bold
-                )
+)
 
 
                 Spacer(
@@ -1125,10 +1096,7 @@ private fun Hero(
 
                     fontSize =
                         8.sp,
-
-                    fontWeight =
-                        FontWeight.Bold
-                )
+)
             }
         }
     }
@@ -1287,11 +1255,7 @@ private fun ResumoItem(
 
                 fontSize =
                     7.sp,
-
-                fontWeight =
-                    FontWeight.Bold,
-
-                letterSpacing =
+letterSpacing =
                     .7.sp
             )
 
@@ -1313,10 +1277,7 @@ private fun ResumoItem(
 
                     fontSize =
                         17.sp,
-
-                    fontWeight =
-                        FontWeight.Bold
-                )
+)
 
 
                 Spacer(
@@ -1338,10 +1299,7 @@ private fun ResumoItem(
 
                     fontSize =
                         7.sp,
-
-                    fontWeight =
-                        FontWeight.Bold
-                )
+)
             }
         }
     }
@@ -1392,11 +1350,7 @@ private fun SecaoTitulo(
 
             fontSize =
                 14.sp,
-
-            fontWeight =
-                FontWeight.Bold,
-
-            letterSpacing =
+letterSpacing =
                 (-.25).sp
         )
 
@@ -1414,11 +1368,7 @@ private fun SecaoTitulo(
 
                 fontSize =
                     7.sp,
-
-                fontWeight =
-                    FontWeight.Bold,
-
-                letterSpacing =
+letterSpacing =
                     .7.sp
             )
         }
@@ -1752,10 +1702,7 @@ private fun IndicadorCard(
 
                         fontSize =
                             7.sp,
-
-                        fontWeight =
-                            FontWeight.Bold
-                    )
+)
                 }
 
 
@@ -1778,10 +1725,7 @@ private fun IndicadorCard(
 
                     fontSize =
                         9.sp,
-
-                    fontWeight =
-                        FontWeight.Bold
-                )
+)
 
 
                 Spacer(
@@ -1819,11 +1763,7 @@ private fun IndicadorCard(
 
                         fontSize =
                             22.sp,
-
-                        fontWeight =
-                            FontWeight.Bold,
-
-                        letterSpacing =
+letterSpacing =
                             (-.8).sp
                     )
 
@@ -1839,10 +1779,7 @@ private fun IndicadorCard(
 
                         fontSize =
                             8.sp,
-
-                        fontWeight =
-                            FontWeight.Bold
-                    )
+)
                 }
             }
 
@@ -2047,10 +1984,7 @@ private fun BemEstar(
 
                             fontSize =
                                 10.sp,
-
-                            fontWeight =
-                                FontWeight.Bold
-                        )
+)
 
 
                         Spacer(
@@ -2072,10 +2006,7 @@ private fun BemEstar(
 
                             fontSize =
                                 7.sp,
-
-                            fontWeight =
-                                FontWeight.Bold
-                        )
+)
                     }
                 }
 
@@ -2099,11 +2030,7 @@ private fun BemEstar(
 
                         fontSize =
                             27.sp,
-
-                        fontWeight =
-                            FontWeight.Bold,
-
-                        letterSpacing =
+letterSpacing =
                             (-1.2).sp
                     )
 
@@ -2127,10 +2054,7 @@ private fun BemEstar(
 
                         fontSize =
                             8.sp,
-
-                        fontWeight =
-                            FontWeight.Bold
-                    )
+)
                 }
             }
 
@@ -2293,10 +2217,7 @@ private fun BemEstarInfo(
 
             fontSize =
                 7.sp,
-
-            fontWeight =
-                FontWeight.Bold
-        )
+)
 
 
         Text(
@@ -2310,10 +2231,7 @@ private fun BemEstarInfo(
 
             fontSize =
                 9.sp,
-
-            fontWeight =
-                FontWeight.Bold
-        )
+)
     }
 }
 
@@ -2473,11 +2391,7 @@ private fun AtividadeRow(
 
                     fontSize =
                         9.sp,
-
-                    fontWeight =
-                        FontWeight.Bold,
-
-                    maxLines =
+maxLines =
                         1,
 
                     overflow =
@@ -2504,11 +2418,7 @@ private fun AtividadeRow(
 
                     fontSize =
                         7.sp,
-
-                    fontWeight =
-                        FontWeight.Bold,
-
-                    lineHeight =
+lineHeight =
                         10.sp,
 
                     maxLines =
@@ -2539,10 +2449,7 @@ private fun AtividadeRow(
 
                 fontSize =
                     7.sp,
-
-                fontWeight =
-                    FontWeight.Bold
-            )
+)
         }
     }
 }

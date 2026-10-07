@@ -62,8 +62,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
@@ -612,8 +610,7 @@ Box(
 
                 Text(
                     text = "Apagar diário",
-                    fontWeight = FontWeight.Bold
-                )
+)
 
             },
 
@@ -650,8 +647,7 @@ Box(
                     Text(
                         text = "Apagar",
                         color = PinkDark,
-                        fontWeight = FontWeight.Bold
-                    )
+)
 
                 }
             },
@@ -795,8 +791,7 @@ private fun DiarioTopBar(
             Text(
                 text = "Meu Diário",
                 color = text,
-                fontWeight = FontWeight.Bold,
-                fontSize = 15.sp
+fontSize = 15.sp
             )
 
             Text(
@@ -1142,9 +1137,7 @@ private fun CurrentPage(
             textStyle =
                 TextStyle(
                     color = pageText,
-                    fontWeight =
-                        FontWeight.Medium,
-                    fontSize = 15.sp,
+fontSize = 15.sp,
                     lineHeight = 28.sp,
                     letterSpacing = 0.1.sp
                 ),
@@ -1178,12 +1171,7 @@ private fun CurrentPage(
                                     Color(0x59FFFFFF)
                                 else
                                     Color(0x593C232D),
-
-
-                            fontWeight =
-                                FontWeight.Medium,
-
-                            fontSize =
+fontSize =
                                 15.sp,
 
                             lineHeight =

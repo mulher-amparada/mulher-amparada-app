@@ -48,8 +48,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -746,9 +744,7 @@ val mutedColor =
                             text =
                                 "Você saiu da área segura",
                             color = contentColor,
-                            fontWeight =
-                                FontWeight.Bold,
-                            fontSize = 16.sp
+fontSize = 16.sp
                         )
 
                         Spacer(
@@ -791,9 +787,7 @@ val mutedColor =
                             Text(
                                 text =
                                     "Pedir ajuda",
-                                fontWeight =
-                                    FontWeight.Bold
-                            )
+)
                         }
                     }
 
@@ -868,9 +862,7 @@ val mutedColor =
                                 "Raio: ${
                                     radius.roundToInt()
                                 } m",
-                            fontWeight =
-                                FontWeight.Bold
-                        )
+)
                     }
                 }
             }
@@ -886,8 +878,7 @@ val mutedColor =
         Text(
             text = "Raio da área segura",
             color = contentColor,
-            fontWeight = FontWeight.Bold
-        )
+)
     },
                     text = {
 
@@ -934,9 +925,7 @@ val mutedColor =
                                     "Salvar",
                                 color =
                                     PinkDark,
-                                fontWeight =
-                                    FontWeight.Bold
-                            )
+)
                         }
                     },
                     dismissButton = {

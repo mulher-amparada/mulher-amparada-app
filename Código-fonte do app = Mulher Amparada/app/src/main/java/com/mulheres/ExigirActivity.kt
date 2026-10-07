@@ -30,8 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
@@ -173,10 +171,7 @@ private fun ExigirScreen() {
 
 
             fontSize = 38.sp,
-
-            fontWeight = FontWeight.ExtraBold,
-
-            lineHeight = 37.sp,
+lineHeight = 37.sp,
 
             letterSpacing = (-1.5).sp
         )
@@ -198,10 +193,7 @@ private fun ExigirScreen() {
 
 
             fontSize = 12.sp,
-
-            fontWeight = FontWeight.SemiBold,
-
-            lineHeight = 18.6.sp
+lineHeight = 18.6.sp
         )
 
         Spacer(
@@ -236,10 +228,7 @@ private fun ExigirScreen() {
 
 
                 fontSize = 9.sp,
-
-                fontWeight = FontWeight.ExtraBold,
-
-                letterSpacing = 2.sp
+letterSpacing = 2.sp
             )
 
             Spacer(
@@ -258,10 +247,7 @@ private fun ExigirScreen() {
 
 
                 fontSize = 30.sp,
-
-                fontWeight = FontWeight.ExtraBold,
-
-                lineHeight = 31.5.sp,
+lineHeight = 31.5.sp,
 
                 letterSpacing = (-0.5).sp
             )
@@ -286,10 +272,7 @@ private fun ExigirScreen() {
 
 
                 fontSize = 12.sp,
-
-                fontWeight = FontWeight.SemiBold,
-
-                lineHeight = 19.8.sp
+lineHeight = 19.8.sp
             )
 
             Spacer(
@@ -322,10 +305,7 @@ private fun ExigirScreen() {
 
 
                     fontSize = 9.sp,
-
-                    fontWeight = FontWeight.ExtraBold,
-
-                    letterSpacing = 1.7.sp
+letterSpacing = 1.7.sp
                 )
 
                 Spacer(
@@ -341,10 +321,7 @@ private fun ExigirScreen() {
 
 
                     fontSize = 21.sp,
-
-                    fontWeight = FontWeight.ExtraBold,
-
-                    lineHeight = 26.25.sp
+lineHeight = 26.25.sp
                 )
 
 
@@ -406,9 +383,7 @@ private fun ExigirScreen() {
 
 
                             fontSize = 13.sp,
-
-                            fontWeight = FontWeight.Bold
-                        )
+)
 
                         Spacer(
                             modifier = Modifier.height(3.dp)
@@ -422,10 +397,7 @@ private fun ExigirScreen() {
 
 
                             fontSize = 10.sp,
-
-                            fontWeight = FontWeight.SemiBold,
-
-                            lineHeight = 14.sp
+lineHeight = 14.sp
                         )
                     }
                 }
@@ -460,9 +432,7 @@ private fun ExigirScreen() {
 
 
                     fontSize = 15.sp,
-
-                    fontWeight = FontWeight.ExtraBold
-                )
+)
 
                 Spacer(
                     modifier = Modifier.height(6.dp)
@@ -476,9 +446,7 @@ private fun ExigirScreen() {
 
 
                     fontSize = 10.sp,
-
-                    fontWeight = FontWeight.ExtraBold
-                )
+)
 
                 Spacer(
                     modifier = Modifier.height(12.dp)
@@ -605,9 +573,7 @@ private fun ExigirScreen() {
 
 
                     fontSize = 11.sp,
-
-                    fontWeight = FontWeight.ExtraBold
-                )
+)
 
                 Spacer(
                     modifier = Modifier.height(7.dp)
@@ -626,10 +592,7 @@ private fun ExigirScreen() {
 
 
                     fontSize = 10.sp,
-
-                    fontWeight = FontWeight.SemiBold,
-
-                    lineHeight = 16.sp
+lineHeight = 16.sp
                 )
             }
         }
@@ -650,10 +613,7 @@ private fun LawParagraph(
 
 
         fontSize = 11.sp,
-
-        fontWeight = FontWeight.SemiBold,
-
-        lineHeight = 18.15.sp
+lineHeight = 18.15.sp
     )
 }
 
@@ -685,9 +645,7 @@ private fun ConditionCard(
 
 
             fontSize = 10.sp,
-
-            fontWeight = FontWeight.Bold
-        )
+)
 
         Spacer(
             modifier = Modifier.height(4.dp)
@@ -700,10 +658,7 @@ private fun ConditionCard(
 
 
             fontSize = 9.sp,
-
-            fontWeight = FontWeight.SemiBold,
-
-            lineHeight = 12.6.sp
+lineHeight = 12.6.sp
         )
     }
 }

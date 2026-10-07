@@ -49,8 +49,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -707,12 +705,7 @@ private fun CabecalhoMapa(
 
                 color =
                     texto,
-
-
-                fontWeight =
-                    FontWeight.Bold,
-
-                fontSize =
+fontSize =
                     16.sp
             )
 
@@ -754,12 +747,7 @@ private fun CabecalhoMapa(
 
                     color =
                         suave,
-
-
-                    fontWeight =
-                        FontWeight.Medium,
-
-                    fontSize =
+fontSize =
                         10.sp
                 )
             }
@@ -1053,12 +1041,7 @@ private fun ToastMapa(
                 else
 
                     Color.Black,
-
-
-            fontWeight =
-                FontWeight.Medium,
-
-            fontSize =
+fontSize =
                 12.sp
         )
     }

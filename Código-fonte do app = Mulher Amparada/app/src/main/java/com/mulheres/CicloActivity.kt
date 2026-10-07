@@ -73,8 +73,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -594,8 +592,7 @@ private fun CicloApp() {
 
                         Text(
                             text = "Apagar registros",
-                            fontWeight = FontWeight.ExtraBold
-                        )
+)
                     },
                     text = {
 
@@ -620,8 +617,7 @@ private fun CicloApp() {
                             Text(
                                 text = "Apagar",
                                 color = Rosa2,
-                                fontWeight = FontWeight.Bold
-                            )
+)
                         }
                     },
                     dismissButton = {
@@ -821,15 +817,13 @@ private fun TopoCiclo(
             Text(
                 text = "Ciclo",
                 fontSize = 25.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = texto
+color = texto
             )
 
             Text(
                 text = "Acompanhe seus registros",
                 fontSize = 11.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = texto3
+color = texto3
             )
         }
 
@@ -1003,8 +997,7 @@ private fun ResumoCard(
             Text(
                 text = label,
                 fontSize = 10.sp,
-                fontWeight = FontWeight.Bold,
-                color = texto3
+color = texto3
             )
 
             Text(
@@ -1014,8 +1007,7 @@ private fun ResumoCard(
                         10.sp
                     else
                         23.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = texto,
+color = texto,
                 modifier = Modifier.padding(
                     top = 6.dp
                 )
@@ -1123,8 +1115,7 @@ private fun Controles(
                                 "Maior dor"
                         },
                         fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = texto
+color = texto
                     )
 
                     Icon(
@@ -1239,8 +1230,7 @@ private fun Vazio(
                 else
                     "Nenhum registro ainda",
             fontSize = 16.sp,
-            fontWeight = FontWeight.ExtraBold,
-            color = texto
+color = texto
         )
 
         Spacer(
@@ -1336,8 +1326,7 @@ private fun RegistroCard(
                         registro.data
                     ),
                 fontSize = 15.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = texto
+color = texto
             )
 
             Text(
@@ -1346,8 +1335,7 @@ private fun RegistroCard(
                         registro.humor
                     ),
                 fontSize = 10.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = texto3
+color = texto3
             )
         }
 
@@ -1374,8 +1362,7 @@ private fun RegistroCard(
                     text =
                         "Dor ${registro.dor}/10",
                     fontSize = 9.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    color =
+color =
                         texto2Safe(texto)
                 )
             }
@@ -1460,8 +1447,7 @@ private fun NovoRegistroDialog(
 
                 Text(
                     text = "Novo registro",
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 21.sp
+fontSize = 21.sp
                 )
 
                 IconButton(
@@ -1561,8 +1547,7 @@ private fun NovoRegistroDialog(
                 Text(
                     text = "Como você se sentiu?",
                     fontSize = 11.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = texto2
+color = texto2
                 )
 
                 HumorOpcoes(
@@ -1714,8 +1699,7 @@ private fun NovoRegistroDialog(
 
                 Text(
                     text = "Salvar registro",
-                    fontWeight = FontWeight.ExtraBold
-                )
+)
             }
         },
 
@@ -1846,8 +1830,7 @@ private fun HumorOpcoes(
                 Text(
                     text = nome.substring(3),
                     fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = texto
+color = texto
                 )
 
                 if (ativa) {
@@ -1887,8 +1870,7 @@ private fun CheckSection(
         Text(
             text = titulo,
             fontSize = 11.sp,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(
+modifier = Modifier.padding(
                 bottom = 8.dp
             )
         )
@@ -1937,9 +1919,7 @@ private fun CheckSection(
                 Text(
                     text = item.first,
                     fontSize = 10.sp,
-                    fontWeight =
-                        FontWeight.SemiBold,
-                    color = texto
+color = texto
                 )
             }
         }
@@ -2010,8 +1990,7 @@ private fun TelaDetalhes(
                             registro.data
                         ),
                         fontSize = 20.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = texto
+color = texto
                     )
 
                     Text(
@@ -2227,8 +2206,7 @@ private fun DorDestaque(
                 Text(
                     text = dor.toString(),
                     fontSize = 40.sp,
-                    fontWeight = FontWeight.Black,
-                    color = texto
+color = texto
                 )
 
                 Spacer(
@@ -2248,8 +2226,7 @@ private fun DorDestaque(
             Text(
                 text = intensidade,
                 fontSize = 10.sp,
-                fontWeight = FontWeight.Bold,
-                color = Rosa2
+color = Rosa2
             )
         }
 
@@ -2260,8 +2237,7 @@ private fun DorDestaque(
             Text(
                 text = "${dor * 10}%",
                 fontSize = 10.sp,
-                fontWeight = FontWeight.Bold,
-                color = texto2
+color = texto2
             )
 
             Spacer(
@@ -2305,8 +2281,7 @@ private fun GraficoCard(
         Text(
             text = titulo,
             fontSize = 12.sp,
-            fontWeight = FontWeight.ExtraBold,
-            color = texto
+color = texto
         )
 
         Spacer(
@@ -2369,15 +2344,6 @@ private fun IndicadorBooleano(
         Text(
             text = nome,
             fontSize = 10.sp,
-            fontWeight = if (ativo)
-                FontWeight.Bold
-            else
-                FontWeight.Normal,
-            color = if (ativo)
-                texto
-            else
-                texto2.copy(alpha = .65f),
-            modifier = Modifier.width(125.dp)
         )
 
         Spacer(
@@ -2423,8 +2389,7 @@ private fun IndicadorBooleano(
         Text(
             text = if (ativo) "Sim" else "Não",
             fontSize = 9.sp,
-            fontWeight = FontWeight.Bold,
-            color = if (ativo)
+color = if (ativo)
                 Rosa2
             else
                 texto2.copy(alpha = .5f),
@@ -2485,8 +2450,7 @@ private fun IndicadoresRotina(
         Text(
             text = "Dor",
             fontSize = 10.sp,
-            fontWeight = FontWeight.Bold,
-            color = texto
+color = texto
         )
 
         Row(

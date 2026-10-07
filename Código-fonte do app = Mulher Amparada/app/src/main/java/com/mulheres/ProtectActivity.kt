@@ -41,8 +41,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -711,11 +709,7 @@ private fun Hero(
 
             fontSize =
                 38.sp,
-
-            fontWeight =
-                FontWeight.ExtraBold,
-
-            letterSpacing =
+letterSpacing =
                 (-1.2).sp,
 
             lineHeight =
@@ -750,11 +744,7 @@ private fun Hero(
 
             fontSize =
                 15.sp,
-
-            fontWeight =
-                FontWeight.Medium,
-
-            lineHeight =
+lineHeight =
                 23.sp,
 
             textAlign =
@@ -779,11 +769,7 @@ private fun Hero(
 
             fontSize =
                 10.sp,
-
-            fontWeight =
-                FontWeight.Bold,
-
-            letterSpacing =
+letterSpacing =
                 1.7.sp
         )
     }
@@ -852,11 +838,7 @@ private fun TituloSecao(
 
             fontSize =
                 10.sp,
-
-            fontWeight =
-                FontWeight.ExtraBold,
-
-            letterSpacing =
+letterSpacing =
                 1.8.sp
         )
     }
@@ -1024,11 +1006,7 @@ private fun ConteudoCartao(
 
                 fontSize =
                     15.sp,
-
-                fontWeight =
-                    FontWeight.Bold,
-
-                lineHeight =
+lineHeight =
                     19.sp
             )
 
@@ -1050,11 +1028,7 @@ private fun ConteudoCartao(
 
                 fontSize =
                     12.sp,
-
-                fontWeight =
-                    FontWeight.Medium,
-
-                lineHeight =
+lineHeight =
                     16.sp
             )
         }

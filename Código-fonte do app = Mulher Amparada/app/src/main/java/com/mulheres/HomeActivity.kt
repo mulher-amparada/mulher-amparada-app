@@ -46,8 +46,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -236,11 +234,7 @@ private fun CarteiraScreen(
 
 
                     fontSize = 44.sp,
-
-                    fontWeight =
-                        FontWeight.ExtraBold,
-
-                    lineHeight = 43.sp,
+lineHeight = 43.sp,
 
                     letterSpacing = (-1.6).sp
                 )
@@ -260,11 +254,7 @@ private fun CarteiraScreen(
 
 
                     fontSize = 11.sp,
-
-                    fontWeight =
-                        FontWeight.SemiBold,
-
-                    lineHeight = 16.sp,
+lineHeight = 16.sp,
 
                     letterSpacing = 0.15.sp
                 )
@@ -287,11 +277,7 @@ private fun CarteiraScreen(
 
 
                     fontSize = 11.sp,
-
-                    fontWeight =
-                        FontWeight.SemiBold,
-
-                    lineHeight = 16.sp,
+lineHeight = 16.sp,
 
                     letterSpacing = 0.15.sp
                 )
@@ -397,11 +383,7 @@ private fun CarteiraLabel(
 
 
             fontSize = 10.sp,
-
-            fontWeight =
-                FontWeight.ExtraBold,
-
-            letterSpacing = 2.sp,
+letterSpacing = 2.sp,
 
             maxLines = 1,
 

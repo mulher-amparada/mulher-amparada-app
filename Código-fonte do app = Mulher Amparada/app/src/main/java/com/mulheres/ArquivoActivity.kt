@@ -50,8 +50,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -690,10 +688,7 @@ private fun ArquivoSeguro() {
 
                             fontSize =
                                 14.sp,
-
-                            fontWeight =
-                                FontWeight.Bold
-                        )
+)
                     }
                 }
             }
@@ -800,11 +795,7 @@ private fun HeroArquivo(
 
 
             fontSize = 32.sp,
-
-            fontWeight =
-                FontWeight.ExtraBold,
-
-            letterSpacing =
+letterSpacing =
                 (-1.0).sp
         )
 
@@ -828,11 +819,7 @@ private fun HeroArquivo(
 
 
             fontSize = 14.sp,
-
-            fontWeight =
-                FontWeight.Medium,
-
-            lineHeight = 21.sp,
+lineHeight = 21.sp,
 
             textAlign =
                 TextAlign.Center
@@ -940,10 +927,7 @@ private fun BotaoAdicionar(
 
 
                 fontSize = 15.sp,
-
-                fontWeight =
-                    FontWeight.Bold
-            )
+)
 
             Spacer(
                 modifier =
@@ -962,10 +946,7 @@ private fun BotaoAdicionar(
 
 
                 fontSize = 12.sp,
-
-                fontWeight =
-                    FontWeight.Medium
-            )
+)
         }
 
         Icon(
@@ -1099,11 +1080,7 @@ private fun CartaoArquivo(
 
 
                     fontSize = 14.sp,
-
-                    fontWeight =
-                        FontWeight.Bold,
-
-                    maxLines = 2
+maxLines = 2
                 )
 
                 Spacer(
@@ -1121,10 +1098,7 @@ private fun CartaoArquivo(
 
 
                     fontSize = 11.sp,
-
-                    fontWeight =
-                        FontWeight.Medium
-                )
+)
             }
         }
 
@@ -1234,11 +1208,7 @@ private fun AcaoArquivo(
 
 
             fontSize = 11.sp,
-
-            fontWeight =
-                FontWeight.Bold,
-
-            textAlign =
+textAlign =
                 TextAlign.Center
         )
     }
@@ -1275,11 +1245,7 @@ private fun EstadoVazio(
 
 
             fontSize = 13.sp,
-
-            fontWeight =
-                FontWeight.Medium,
-
-            textAlign =
+textAlign =
                 TextAlign.Center
         )
     }
@@ -1325,11 +1291,7 @@ private fun Mensagem(
 
 
             fontSize = 12.sp,
-
-            fontWeight =
-                FontWeight.SemiBold,
-
-            textAlign =
+textAlign =
                 TextAlign.Center
         )
     }
@@ -1380,11 +1342,7 @@ private fun TituloSecao(
 
 
             fontSize = 10.sp,
-
-            fontWeight =
-                FontWeight.ExtraBold,
-
-            letterSpacing =
+letterSpacing =
                 1.8.sp
         )
     }

@@ -32,8 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -180,10 +178,7 @@ private fun GestoScreen() {
 
 
             fontSize = 38.sp,
-
-            fontWeight = FontWeight.ExtraBold,
-
-            lineHeight = 37.sp,
+lineHeight = 37.sp,
 
             letterSpacing = (-1.5).sp
         )
@@ -204,10 +199,7 @@ private fun GestoScreen() {
 
 
             fontSize = 12.sp,
-
-            fontWeight = FontWeight.SemiBold,
-
-            lineHeight = 18.6.sp
+lineHeight = 18.6.sp
         )
 
         Spacer(
@@ -242,10 +234,7 @@ private fun GestoScreen() {
 
 
                 fontSize = 9.sp,
-
-                fontWeight = FontWeight.ExtraBold,
-
-                letterSpacing = 2.sp
+letterSpacing = 2.sp
             )
 
             Spacer(
@@ -264,10 +253,7 @@ private fun GestoScreen() {
 
 
                 fontSize = 30.sp,
-
-                fontWeight = FontWeight.ExtraBold,
-
-                lineHeight = 31.5.sp
+lineHeight = 31.5.sp
             )
 
             Spacer(
@@ -290,10 +276,7 @@ private fun GestoScreen() {
 
 
                 fontSize = 12.sp,
-
-                fontWeight = FontWeight.SemiBold,
-
-                lineHeight = 19.8.sp
+lineHeight = 19.8.sp
             )
 
             Spacer(
@@ -326,10 +309,7 @@ private fun GestoScreen() {
 
 
                     fontSize = 9.sp,
-
-                    fontWeight = FontWeight.ExtraBold,
-
-                    letterSpacing = 1.7.sp
+letterSpacing = 1.7.sp
                 )
 
                 Spacer(
@@ -345,10 +325,7 @@ private fun GestoScreen() {
 
 
                     fontSize = 21.sp,
-
-                    fontWeight = FontWeight.ExtraBold,
-
-                    lineHeight = 26.25.sp,
+lineHeight = 26.25.sp,
 
                     textAlign = TextAlign.Center
                 )
@@ -368,10 +345,7 @@ private fun GestoScreen() {
 
 
                     fontSize = 10.sp,
-
-                    fontWeight = FontWeight.SemiBold,
-
-                    lineHeight = 16.sp,
+lineHeight = 16.sp,
 
                     textAlign = TextAlign.Center
                 )
@@ -405,9 +379,7 @@ private fun GestoScreen() {
 
 
                     fontSize = 15.sp,
-
-                    fontWeight = FontWeight.ExtraBold
-                )
+)
 
                 GestureStep(
                     number = "PASSO 01",
@@ -486,9 +458,7 @@ private fun GestoScreen() {
 
 
                     fontSize = 15.sp,
-
-                    fontWeight = FontWeight.ExtraBold
-                )
+)
 
                 Spacer(
                     modifier = Modifier.height(11.dp)
@@ -505,10 +475,7 @@ private fun GestoScreen() {
 
 
                     fontSize = 11.sp,
-
-                    fontWeight = FontWeight.SemiBold,
-
-                    lineHeight = 18.15.sp
+lineHeight = 18.15.sp
                 )
 
                 Spacer(
@@ -527,10 +494,7 @@ private fun GestoScreen() {
 
 
                     fontSize = 11.sp,
-
-                    fontWeight = FontWeight.SemiBold,
-
-                    lineHeight = 18.15.sp
+lineHeight = 18.15.sp
                 )
             }
 
@@ -562,9 +526,7 @@ private fun GestoScreen() {
 
 
                     fontSize = 11.sp,
-
-                    fontWeight = FontWeight.ExtraBold
-                )
+)
 
                 Spacer(
                     modifier = Modifier.height(7.dp)
@@ -582,10 +544,7 @@ private fun GestoScreen() {
 
 
                     fontSize = 10.sp,
-
-                    fontWeight = FontWeight.SemiBold,
-
-                    lineHeight = 16.sp
+lineHeight = 16.sp
                 )
             }
         }
@@ -622,10 +581,7 @@ private fun GestureStep(
 
 
             fontSize = 9.sp,
-
-            fontWeight = FontWeight.ExtraBold,
-
-            letterSpacing = 1.5.sp
+letterSpacing = 1.5.sp
         )
 
         Spacer(
@@ -639,9 +595,7 @@ private fun GestureStep(
 
 
             fontSize = 11.sp,
-
-            fontWeight = FontWeight.Bold
-        )
+)
 
         Spacer(
             modifier = Modifier.height(5.dp)
@@ -654,10 +608,7 @@ private fun GestureStep(
 
 
             fontSize = 9.sp,
-
-            fontWeight = FontWeight.SemiBold,
-
-            lineHeight = 13.5.sp
+lineHeight = 13.5.sp
         )
     }
 }

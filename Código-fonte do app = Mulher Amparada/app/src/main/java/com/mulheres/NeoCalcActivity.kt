@@ -51,8 +51,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -235,7 +233,7 @@ private fun NeoCalcScreen() {
 
             recuperarSenha(
                 context = context,
-                fonte = fonte,
+e,
                 cripto = cripto,
                 mostrarDialogo = {
 
@@ -529,11 +527,7 @@ private fun NeoCalcScreen() {
                             cores.texto,
 
                             fonte,
-
-                        fontWeight =
-                            FontWeight.Bold,
-
-                        fontSize =
+fontSize =
                             54.sp,
 
                         lineHeight =
@@ -558,7 +552,7 @@ private fun NeoCalcScreen() {
                 ) {
 
                     LinhaBotoes(
-                        fonte = fonte,
+e,
                         cores = cores,
 
                         botoes = listOf(
@@ -600,7 +594,7 @@ private fun NeoCalcScreen() {
                     )
 
                     LinhaBotoes(
-                        fonte = fonte,
+e,
                         cores = cores,
 
                         botoes = listOf(
@@ -637,7 +631,7 @@ private fun NeoCalcScreen() {
                     )
 
                     LinhaBotoes(
-                        fonte = fonte,
+e,
                         cores = cores,
 
                         botoes = listOf(
@@ -674,7 +668,7 @@ private fun NeoCalcScreen() {
                     )
 
                     LinhaBotoes(
-                        fonte = fonte,
+e,
                         cores = cores,
 
                         botoes = listOf(
@@ -711,7 +705,7 @@ private fun NeoCalcScreen() {
                     )
 
                     LinhaBotoes(
-                        fonte = fonte,
+e,
                         cores = cores,
 
                         botoes = listOf(
@@ -771,11 +765,7 @@ private fun NeoCalcScreen() {
                                 atual.titulo,
 
                                 fonte,
-
-                            fontWeight =
-                                FontWeight.Bold,
-
-                            color =
+color =
                                 cores.texto
                         )
                     },
@@ -789,11 +779,7 @@ private fun NeoCalcScreen() {
                                     atual.mensagem,
 
                                     fonte,
-
-                                fontWeight =
-                                    FontWeight.Bold,
-
-                                color =
+color =
                                     cores.textoSecundario,
 
                                 lineHeight =
@@ -929,9 +915,7 @@ private fun NeoCalcScreen() {
 
                                             context =
                                                 context,
-
-                                            fonte =
-                                                fonte,
+e,
 
                                             cripto =
                                                 cripto,
@@ -962,9 +946,7 @@ private fun NeoCalcScreen() {
 
                                             context =
                                                 context,
-
-                                            fonte =
-                                                fonte,
+e,
 
                                             cripto =
                                                 cripto,
@@ -995,9 +977,7 @@ private fun NeoCalcScreen() {
 
                                             context =
                                                 context,
-
-                                            fonte =
-                                                fonte,
+e,
 
                                             cripto =
                                                 cripto,
@@ -1033,11 +1013,7 @@ private fun NeoCalcScreen() {
                                     atual.textoConfirmar,
 
                                     fonte,
-
-                                fontWeight =
-                                    FontWeight.Bold,
-
-                                color =
+color =
                                     Color.White
                             )
                         }
@@ -1077,11 +1053,7 @@ private fun NeoCalcScreen() {
                                             "Esqueci tudo",
 
                                             fonte,
-
-                                        fontWeight =
-                                            FontWeight.Bold,
-
-                                        color =
+color =
                                             cores.texto
                                     )
                                 }
@@ -1104,11 +1076,7 @@ private fun NeoCalcScreen() {
                                             "Cancelar",
 
                                             fonte,
-
-                                        fontWeight =
-                                            FontWeight.Bold,
-
-                                        color =
+color =
                                             cores.texto
                                     )
                                 }
@@ -1142,8 +1110,7 @@ private data class BotaoCalculadora(
 
 @Composable
 private fun LinhaBotoes(
-    fonte: FontFamily,
-    cores: CoresNeoCalc,
+cores: CoresNeoCalc,
     botoes: List<BotaoCalculadora>
 ) {
 
@@ -1224,11 +1191,7 @@ private fun LinhaBotoes(
                             cores.texto,
 
                             fonte,
-
-                        fontWeight =
-                            FontWeight.Bold,
-
-                        fontSize =
+fontSize =
                             25.sp
                     )
                 }
@@ -1239,8 +1202,7 @@ private fun LinhaBotoes(
 
 private fun recuperarSenha(
     context: android.content.Context,
-    fonte: FontFamily,
-    cripto: Cripto,
+cripto: Cripto,
     mostrarDialogo: (Dialogo) -> Unit,
     fecharDialogo: () -> Unit,
     mostrarMensagem: (String) -> Unit
@@ -1310,8 +1272,7 @@ private fun continuarPrompt(
     valor: String,
     titulo: String,
     context: android.content.Context,
-    fonte: FontFamily,
-    cripto: Cripto,
+cripto: Cripto,
     mostrarDialogo: (Dialogo) -> Unit,
     mostrarMensagem: (String) -> Unit
 ) {
@@ -1501,8 +1462,7 @@ private fun continuarPrompt(
 private fun continuarRecuperacao(
     valor: String,
     context: android.content.Context,
-    fonte: FontFamily,
-    cripto: Cripto,
+cripto: Cripto,
     mostrarDialogo: (Dialogo) -> Unit,
     mostrarMensagem: (String) -> Unit
 ) {
@@ -1667,8 +1627,7 @@ private fun autenticarParaRedefinir(
 
 private fun continuarConfirmacao(
     context: android.content.Context,
-    fonte: FontFamily,
-    cripto: Cripto,
+cripto: Cripto,
     mostrarDialogo: (Dialogo) -> Unit
 ) {
 

@@ -2,7 +2,7 @@
   <img src="user1.png" alt="Mulher Amparada">
 </p>
 
-# Mulher Amparada
+<h1 align="center"> Mulher Amparada</h1>
 
 Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!
 

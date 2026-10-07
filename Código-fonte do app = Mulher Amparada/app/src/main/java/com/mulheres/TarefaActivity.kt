@@ -976,7 +976,6 @@ private fun Filters(
                         vertical = 8.dp
                     )
             ) {
-
                 Text(
                     text = label,
                     color =
@@ -987,10 +986,7 @@ private fun Filters(
                         } else {
                             LightText.copy(.65f)
                         },
-                    fontSize = 11.sp,
-                        if (active) {
-                        } else {
-                        }
+                    fontSize = 11.sp
                 )
             }
         }

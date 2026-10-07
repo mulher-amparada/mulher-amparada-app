@@ -1,11 +1,13 @@
 package com.mulheres
 
+import android.content.pm.PackageManager
 import android.graphics.Color as AndroidColor
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
@@ -35,7 +37,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -100,6 +101,7 @@ class UpdateActivity : ComponentActivity() {
 @Composable
 private fun UpdateScreen() {
 
+    val context = LocalContext.current
     val dark = isSystemInDarkTheme()
 
     val background =
@@ -137,8 +139,22 @@ private fun UpdateScreen() {
             LightMuted
         }
 
-    val versionName = BuildConfig.VERSION_NAME
-    val versionCode = BuildConfig.VERSION_CODE
+    val packageInfo =
+        context.packageManager.getPackageInfo(
+            context.packageName,
+            0
+        )
+
+    val versionName =
+        packageInfo.versionName ?: "Desconhecida"
+
+    val versionCode =
+        if (android.os.Build.VERSION.SDK_INT >= 28) {
+            packageInfo.longVersionCode
+        } else {
+            @Suppress("DEPRECATION")
+            packageInfo.versionCode.toLong()
+        }
 
     CompositionLocalProvider(
         LocalOverscrollFactory provides null
@@ -149,97 +165,110 @@ private fun UpdateScreen() {
         ) { paddingValues ->
 
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(background)
-                    .padding(paddingValues)
-                    .padding(
-                        start = 18.dp,
-                        end = 18.dp,
-                        top = 20.dp,
-                        bottom = 20.dp
-                    ),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .background(background)
+                        .padding(paddingValues)
+                        .padding(
+                            start = 18.dp,
+                            end = 18.dp,
+                            top = 20.dp,
+                            bottom = 20.dp
+                        ),
+                contentAlignment =
+                    Alignment.Center
             ) {
 
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            horizontal = 2.dp
-                        ),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                horizontal = 2.dp
+                            ),
                     horizontalAlignment =
                         Alignment.CenterHorizontally
                 ) {
 
                     Box(
-                        modifier = Modifier
-                            .size(112.dp)
-                            .clip(
-                                RoundedCornerShape(34.dp)
-                            )
-                            .background(
-                                AccentSoft
-                            )
-                            .border(
-                                1.dp,
-                                Accent.copy(.28f),
-                                RoundedCornerShape(34.dp)
-                            ),
+                        modifier =
+                            Modifier
+                                .size(112.dp)
+                                .clip(
+                                    RoundedCornerShape(34.dp)
+                                )
+                                .background(
+                                    AccentSoft
+                                )
+                                .border(
+                                    1.dp,
+                                    Accent.copy(.28f),
+                                    RoundedCornerShape(34.dp)
+                                ),
                         contentAlignment =
                             Alignment.Center
                     ) {
 
                         Image(
-                            painter = painterResource(
-                                id = R.drawable.ic_launcher_foreground
-                            ),
+                            painter =
+                                painterResource(
+                                    id =
+                                        R.drawable.ic_launcher_foreground
+                                ),
                             contentDescription =
                                 "Mulher Amparada",
-                            modifier = Modifier
-                                .size(72.dp)
+                            modifier =
+                                Modifier
+                                    .size(72.dp)
                         )
                     }
 
                     Spacer(
-                        modifier = Modifier.height(24.dp)
+                        modifier =
+                            Modifier.height(24.dp)
                     )
 
                     Text(
                         text = "Atualização",
                         color = textColor,
                         fontSize = 27.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight =
+                            FontWeight.Bold
                     )
 
                     Spacer(
-                        modifier = Modifier.height(7.dp)
+                        modifier =
+                            Modifier.height(7.dp)
                     )
 
                     Text(
                         text = "Mulher Amparada",
                         color = Accent,
                         fontSize = 15.sp,
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight =
+                            FontWeight.SemiBold
                     )
 
                     Spacer(
-                        modifier = Modifier.height(24.dp)
+                        modifier =
+                            Modifier.height(24.dp)
                     )
 
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(
-                                RoundedCornerShape(25.dp)
-                            )
-                            .background(card)
-                            .border(
-                                1.dp,
-                                border,
-                                RoundedCornerShape(25.dp)
-                            )
-                            .padding(20.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .clip(
+                                    RoundedCornerShape(25.dp)
+                                )
+                                .background(card)
+                                .border(
+                                    1.dp,
+                                    border,
+                                    RoundedCornerShape(25.dp)
+                                )
+                                .padding(20.dp)
                     ) {
 
                         Text(
@@ -249,11 +278,13 @@ private fun UpdateScreen() {
                         )
 
                         Spacer(
-                            modifier = Modifier.height(7.dp)
+                            modifier =
+                                Modifier.height(7.dp)
                         )
 
                         Row(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier =
+                                Modifier.fillMaxWidth(),
                             verticalAlignment =
                                 Alignment.CenterVertically,
                             horizontalArrangement =
@@ -266,20 +297,23 @@ private fun UpdateScreen() {
                             ) {
 
                                 Box(
-                                    modifier = Modifier
-                                        .size(10.dp)
-                                        .clip(CircleShape)
-                                        .background(
-                                            Success
-                                        )
+                                    modifier =
+                                        Modifier
+                                            .size(10.dp)
+                                            .clip(CircleShape)
+                                            .background(
+                                                Success
+                                            )
                                 )
 
                                 Spacer(
-                                    modifier = Modifier.width(9.dp)
+                                    modifier =
+                                        Modifier.width(9.dp)
                                 )
 
                                 Text(
-                                    text = "Versão $versionName",
+                                    text =
+                                        "Versão $versionName",
                                     color = textColor,
                                     fontSize = 18.sp,
                                     fontWeight =
@@ -288,19 +322,21 @@ private fun UpdateScreen() {
                             }
 
                             Box(
-                                modifier = Modifier
-                                    .clip(CircleShape)
-                                    .background(
-                                        AccentSoft
-                                    )
-                                    .padding(
-                                        horizontal = 11.dp,
-                                        vertical = 6.dp
-                                    )
+                                modifier =
+                                    Modifier
+                                        .clip(CircleShape)
+                                        .background(
+                                            AccentSoft
+                                        )
+                                        .padding(
+                                            horizontal = 11.dp,
+                                            vertical = 6.dp
+                                        )
                             ) {
 
                                 Text(
-                                    text = "Build $versionCode",
+                                    text =
+                                        "Build $versionCode",
                                     color = Accent,
                                     fontSize = 10.sp,
                                     fontWeight =
@@ -310,22 +346,26 @@ private fun UpdateScreen() {
                         }
 
                         Spacer(
-                            modifier = Modifier.height(16.dp)
+                            modifier =
+                                Modifier.height(16.dp)
                         )
 
                         Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(1.dp)
-                                .background(border)
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .height(1.dp)
+                                    .background(border)
                         )
 
                         Spacer(
-                            modifier = Modifier.height(16.dp)
+                            modifier =
+                                Modifier.height(16.dp)
                         )
 
                         Text(
-                            text = "Seu aplicativo está pronto para receber atualizações.",
+                            text =
+                                "Seu aplicativo está pronto para receber atualizações.",
                             color = muted,
                             fontSize = 12.sp,
                             lineHeight = 18.sp
@@ -333,26 +373,29 @@ private fun UpdateScreen() {
                     }
 
                     Spacer(
-                        modifier = Modifier.height(14.dp)
+                        modifier =
+                            Modifier.height(14.dp)
                     )
 
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(
-                                RoundedCornerShape(25.dp)
-                            )
-                            .background(card)
-                            .border(
-                                1.dp,
-                                border,
-                                RoundedCornerShape(25.dp)
-                            )
-                            .padding(20.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .clip(
+                                    RoundedCornerShape(25.dp)
+                                )
+                                .background(card)
+                                .border(
+                                    1.dp,
+                                    border,
+                                    RoundedCornerShape(25.dp)
+                                )
+                                .padding(20.dp)
                     ) {
 
                         Text(
-                            text = "Verificar atualização",
+                            text =
+                                "Verificar atualização",
                             color = textColor,
                             fontSize = 16.sp,
                             fontWeight =
@@ -360,38 +403,43 @@ private fun UpdateScreen() {
                         )
 
                         Spacer(
-                            modifier = Modifier.height(6.dp)
+                            modifier =
+                                Modifier.height(6.dp)
                         )
 
                         Text(
-                            text = "Confira se existe uma versão mais recente do Mulher Amparada.",
+                            text =
+                                "Confira se existe uma versão mais recente do Mulher Amparada.",
                             color = muted,
                             fontSize = 11.sp,
                             lineHeight = 17.sp
                         )
 
                         Spacer(
-                            modifier = Modifier.height(16.dp)
+                            modifier =
+                                Modifier.height(16.dp)
                         )
 
                         Button(
-                            onClick = {
-                                // Ação de verificar atualização
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(50.dp),
+                            onClick = {},
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .height(50.dp),
                             shape =
                                 RoundedCornerShape(16.dp),
                             colors =
                                 ButtonDefaults.buttonColors(
-                                    containerColor = Accent,
-                                    contentColor = Color.Black
+                                    containerColor =
+                                        Accent,
+                                    contentColor =
+                                        Color.Black
                                 )
                         ) {
 
                             Text(
-                                text = "Verificar atualização",
+                                text =
+                                    "Verificar atualização",
                                 fontSize = 13.sp,
                                 fontWeight =
                                     FontWeight.Bold
@@ -399,16 +447,19 @@ private fun UpdateScreen() {
                         }
 
                         Spacer(
-                            modifier = Modifier.height(8.dp)
+                            modifier =
+                                Modifier.height(8.dp)
                         )
 
                         OutlinedButton(
                             onClick = {
-                                finish()
+                                (context as? UpdateActivity)
+                                    ?.finish()
                             },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(50.dp),
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .height(50.dp),
                             shape =
                                 RoundedCornerShape(16.dp),
                             colors =
@@ -421,7 +472,7 @@ private fun UpdateScreen() {
                                         }
                                 ),
                             border =
-                                androidx.compose.foundation.BorderStroke(
+                                BorderStroke(
                                     1.dp,
                                     border
                                 )
@@ -435,12 +486,15 @@ private fun UpdateScreen() {
                     }
 
                     Spacer(
-                        modifier = Modifier.height(18.dp)
+                        modifier =
+                            Modifier.height(18.dp)
                     )
 
                     Text(
-                        text = "Mulher Amparada • Build $versionCode",
-                        color = muted.copy(.65f),
+                        text =
+                            "Mulher Amparada • Build $versionCode",
+                        color =
+                            muted.copy(.65f),
                         fontSize = 9.sp
                     )
                 }

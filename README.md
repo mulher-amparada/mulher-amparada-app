@@ -467,7 +467,7 @@ NeoCalcActivity (compose) = Tela que contém o disfarce de calculadora
  
  ArquivoActivity = (compose) Tela da funcao de arquivo seguro da área protegida!
  
- UpdateActivity = (compose) Tela da funcao que mostra o ícone do app disfarçado nome do aplicativo, versão instalada (versionName), número da build (versionCode), indicador visual de disponibilidade do sistema, informações sobre atualizações, botão para verificar se existe uma versão mais recente e botão para retornar à tela anterior.
+ UpdateActivity = (compose) Tela da funcao que mostra o ícone do app disfarçado nome do aplicativo, versão instalada (versionName), número da build (versionCode) e um indicador visual de disponibilidade do sistema
  
  GeoActivity = (compose) Tela da funcao de raio seguro com georreferenciamento seguro da área protegida!
  
@@ -524,7 +524,7 @@ E também as barras tanto de status tanto de navegação são transparentes, por
 
 **Método:** somente `DEVICE_CREDENTIAL`.
 
-####Área protegida:
+#### Área protegida:
 
 **Título:**
 >Desbloquear a área protegida
@@ -532,7 +532,7 @@ E também as barras tanto de status tanto de navegação são transparentes, por
 **Descrição:**
 >🌸 Apenas a usuária cadastrada pode acessar este local
 
-####Área do amparo:
+#### Área do amparo:
 
 **Título:**
 
@@ -542,7 +542,7 @@ E também as barras tanto de status tanto de navegação são transparentes, por
 
 >🌸 Acesso protegido por biometria
 
-####E nos dois tem embaixo (Use sua impressão digital., Usar o reconhecimento facial.)
+#### E nos dois tem embaixo (Use sua impressão digital., Usar o reconhecimento facial.)
 
 O método de autenticação é definido pelo próprio Android de acordo com os autenticadores disponíveis no dispositivo, utilizando "BIOMETRIC_WEAK" e "DEVICE_CREDENTIAL".
 
@@ -581,9 +581,6 @@ Ela exibe:
 - Versão instalada ("versionName")
 - Número da build ("versionCode")
 - Indicador visual de disponibilidade do sistema
-- Informações sobre atualizações
-- Botão para verificar se existe uma versão mais recente
-- Botão para retornar à tela anterior
 
 A versão e a build são obtidas diretamente dos metadados do APK, garantindo que as informações exibidas correspondam à versão realmente instalada no dispositivo.
 

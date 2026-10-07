@@ -1162,8 +1162,7 @@ private fun SortDropdown(
                         } else {
                             LightText
                         },
-                        if (value == current)
-                        else
+                        
                 )
             },
 

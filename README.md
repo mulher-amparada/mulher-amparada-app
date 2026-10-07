@@ -1108,6 +1108,8 @@ banners do projeto, tanto png, tanto um código para html;
 
 icones para sites e para usos no geral, tanto o do mulher amparada tanto o ic_launcher do app, versão normal e monocromático;
 
+o código-fonte inteiro do projeto;
+
 >APENAS PARA AS USUÁRIAS!: Ao indicar o projeto para uma mulher em situação de risco, **priorize o compartilhamento do QR Code impresso ou na tela**, em vez de enviar links de texto por mensagens (como WhatsApp ou SMS). 
 >
 **Por que o QR Code?** Links de texto deixam rastros fáceis de serem interceptados por agressores que monitoram o celular da vítima. 

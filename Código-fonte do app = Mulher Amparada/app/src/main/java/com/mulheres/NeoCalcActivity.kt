@@ -518,7 +518,6 @@ private fun NeoCalcScreen() {
                         color =
                             cores.texto,
 
-                            fonte,
 fontSize =
                             54.sp,
 
@@ -751,8 +750,7 @@ fontSize =
                             text =
                                 atual.titulo,
 
-                                fonte,
-color =
+    color =
                                 cores.texto
                         )
                     },
@@ -765,8 +763,7 @@ color =
                                 text =
                                     atual.mensagem,
 
-                                    fonte,
-color =
+        color =
                                     cores.textoSecundario,
 
                                 lineHeight =
@@ -996,8 +993,7 @@ color =
                                 text =
                                     atual.textoConfirmar,
 
-                                    fonte,
-color =
+        color =
                                     Color.White
                             )
                         }
@@ -1036,8 +1032,7 @@ color =
                                         text =
                                             "Esqueci tudo",
 
-                                            fonte,
-color =
+                color =
                                             cores.texto
                                     )
                                 }
@@ -1059,8 +1054,7 @@ color =
                                         text =
                                             "Cancelar",
 
-                                            fonte,
-color =
+                color =
                                             cores.texto
                                     )
                                 }
@@ -1174,7 +1168,6 @@ cores: CoresNeoCalc,
                         color =
                             cores.texto,
 
-                            fonte,
 fontSize =
                             25.sp
                     )

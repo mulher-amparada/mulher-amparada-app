@@ -162,14 +162,7 @@ private fun NeoCalcScreen() {
             obterCoresNeoCalc(
                 escuro
             )
-        }
-
-    val fonte =
-        remember {
-                context
-            )
-        }
-
+    
     var expr by remember {
         mutableStateOf("")
     }
@@ -233,7 +226,6 @@ private fun NeoCalcScreen() {
 
             recuperarSenha(
                 context = context,
-e,
                 cripto = cripto,
                 mostrarDialogo = {
 
@@ -552,7 +544,6 @@ fontSize =
                 ) {
 
                     LinhaBotoes(
-e,
                         cores = cores,
 
                         botoes = listOf(
@@ -594,7 +585,6 @@ e,
                     )
 
                     LinhaBotoes(
-e,
                         cores = cores,
 
                         botoes = listOf(
@@ -631,7 +621,6 @@ e,
                     )
 
                     LinhaBotoes(
-e,
                         cores = cores,
 
                         botoes = listOf(
@@ -668,7 +657,6 @@ e,
                     )
 
                     LinhaBotoes(
-e,
                         cores = cores,
 
                         botoes = listOf(
@@ -705,7 +693,6 @@ e,
                     )
 
                     LinhaBotoes(
-e,
                         cores = cores,
 
                         botoes = listOf(
@@ -915,7 +902,6 @@ color =
 
                                             context =
                                                 context,
-e,
 
                                             cripto =
                                                 cripto,
@@ -946,7 +932,6 @@ e,
 
                                             context =
                                                 context,
-e,
 
                                             cripto =
                                                 cripto,
@@ -977,7 +962,6 @@ e,
 
                                             context =
                                                 context,
-e,
 
                                             cripto =
                                                 cripto,

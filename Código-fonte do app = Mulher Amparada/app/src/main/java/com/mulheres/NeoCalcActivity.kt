@@ -163,6 +163,8 @@ private fun NeoCalcScreen() {
                 escuro
             )
     
+    }
+    
     var expr by remember {
         mutableStateOf("")
     }

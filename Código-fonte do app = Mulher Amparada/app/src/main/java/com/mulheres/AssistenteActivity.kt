@@ -1,5 +1,8 @@
 package com.mulheres
 
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import kotlinx.coroutines.delay
 import android.view.WindowManager
 import android.os.Bundle
 import android.content.Intent
@@ -309,25 +312,19 @@ private fun corIcone(): Color {
 ========================================================= */
 
 data class Indicador(
-
     val valor: Float,
-
     val min: Float,
-
     val max: Float,
-
     val passo: Float
 )
 
-
 data class DadosSaude(
-
     val batimentos: Indicador =
         Indicador(
             72f,
-            65f,
-            82f,
-            2f
+            60f,
+            100f,
+            3f
         ),
 
     val respiracao: Indicador =
@@ -335,23 +332,23 @@ data class DadosSaude(
             16f,
             12f,
             20f,
-            .5f
+            0.8f
         ),
 
     val temperatura: Indicador =
         Indicador(
             36.5f,
             36.1f,
-            36.9f,
-            .05f
+            37.0f,
+            0.1f
         ),
 
     val hidratacao: Indicador =
         Indicador(
             68f,
-            55f,
-            82f,
-            1f
+            50f,
+            90f,
+            3f
         ),
 
     val bemEstar: Indicador =
@@ -359,7 +356,7 @@ data class DadosSaude(
             72f,
             60f,
             88f,
-            2f
+            4f
         )
 )
 
@@ -399,10 +396,93 @@ fun AssistenteSaude() {
     val context =
         androidx.compose.ui.platform.LocalContext.current
 
-    val estado =
-        remember {
-            DadosSaude()
+    var batimentos by remember {
+        mutableStateOf(
+            72f
+        )
+    }
+
+    var respiracao by remember {
+        mutableStateOf(
+            16f
+        )
+    }
+
+    var temperatura by remember {
+        mutableStateOf(
+            36.5f
+        )
+    }
+
+    var hidratacao by remember {
+        mutableStateOf(
+            68f
+        )
+    }
+
+    var bemEstar by remember {
+        mutableStateOf(
+            72f
+        )
+    }
+
+    LaunchedEffect(Unit) {
+
+        while (true) {
+
+            delay(4000)
+
+            batimentos =
+                variar(
+                    Indicador(
+                        batimentos,
+                        60f,
+                        100f,
+                        3f
+                    )
+                )
+
+            respiracao =
+                variar(
+                    Indicador(
+                        respiracao,
+                        12f,
+                        20f,
+                        0.8f
+                    )
+                )
+
+            temperatura =
+                variar(
+                    Indicador(
+                        temperatura,
+                        36.1f,
+                        37.0f,
+                        0.1f
+                    )
+                )
+
+            hidratacao =
+                variar(
+                    Indicador(
+                        hidratacao,
+                        50f,
+                        90f,
+                        3f
+                    )
+                )
+
+            bemEstar =
+                variar(
+                    Indicador(
+                        bemEstar,
+                        60f,
+                        88f,
+                        4f
+                    )
+                )
         }
+    }
 
     CompositionLocalProvider(
         LocalOverscrollFactory provides null
@@ -420,7 +500,6 @@ fun AssistenteSaude() {
                         start = 24.dp,
                         end = 24.dp
                     ),
-                   
 
             verticalArrangement =
                 Arrangement.spacedBy(
@@ -428,12 +507,6 @@ fun AssistenteSaude() {
                 )
         ) {
 
-            /*
-             * PRIMEIRO ITEM
-             *
-             * O espaço de 25.dp fica somente
-             * entre a barra de status e o cabeçalho.
-             */
             item {
 
                 Spacer(
@@ -463,15 +536,11 @@ fun AssistenteSaude() {
                 )
             }
 
-
-            /*
-             * HERO
-             */
             item {
 
                 Hero(
                     bemEstar =
-                        estado.bemEstar.valor
+                        bemEstar
                 )
 
                 Spacer(
@@ -482,29 +551,21 @@ fun AssistenteSaude() {
                 )
             }
 
-
-            /*
-             * RESUMO
-             */
             item {
 
                 Resumo(
 
                     batimentos =
-                        estado.batimentos.valor,
+                        batimentos,
 
                     respiracao =
-                        estado.respiracao.valor,
+                        respiracao,
 
                     temperatura =
-                        estado.temperatura.valor
+                        temperatura
                 )
             }
 
-
-            /*
-             * INDICADORES
-             */
             item {
 
                 Spacer(
@@ -515,7 +576,6 @@ fun AssistenteSaude() {
                 )
 
                 SecaoTitulo(
-
                     titulo =
                         "Indicadores",
 
@@ -531,15 +591,53 @@ fun AssistenteSaude() {
                 )
 
                 Indicadores(
+
                     dados =
-                        estado
+                        DadosSaude(
+
+                            batimentos =
+                                Indicador(
+                                    batimentos,
+                                    60f,
+                                    100f,
+                                    3f
+                                ),
+
+                            respiracao =
+                                Indicador(
+                                    respiracao,
+                                    12f,
+                                    20f,
+                                    0.8f
+                                ),
+
+                            temperatura =
+                                Indicador(
+                                    temperatura,
+                                    36.1f,
+                                    37.0f,
+                                    0.1f
+                                ),
+
+                            hidratacao =
+                                Indicador(
+                                    hidratacao,
+                                    50f,
+                                    90f,
+                                    3f
+                                ),
+
+                            bemEstar =
+                                Indicador(
+                                    bemEstar,
+                                    60f,
+                                    88f,
+                                    4f
+                                )
+                        )
                 )
             }
 
-
-            /*
-             * BEM-ESTAR
-             */
             item {
 
                 Spacer(
@@ -567,62 +665,53 @@ fun AssistenteSaude() {
 
                 BemEstar(
                     valor =
-                        estado.bemEstar.valor
+                        bemEstar
                 )
             }
 
+            item {
 
-/*
- * ATIVIDADE
- */
-item {
+                Spacer(
+                    modifier =
+                        Modifier.height(
+                            36.dp
+                        )
+                )
 
-    Spacer(
-        modifier =
-            Modifier.height(
-                36.dp
-            )
-    )
+                SecaoTitulo(
+                    titulo =
+                        "Atividade"
+                )
 
-    SecaoTitulo(
-        titulo =
-            "Atividade"
-    )
+                Spacer(
+                    modifier =
+                        Modifier.height(
+                            14.dp
+                        )
+                )
 
-    Spacer(
-        modifier =
-            Modifier.height(
-                14.dp
-            )
-    )
+                Atividade()
 
-    Atividade()
+                Spacer(
+                    modifier =
+                        Modifier.height(
+                            14.dp
+                        )
+                )
+            }
 
-    Spacer(
-        modifier =
-            Modifier.height(
-                14.dp
-            )
-    )
-}
+            item {
 
-
-/*
- * ESPAÇO FINAL
- */
-item {
-
-    Spacer(
-        modifier =
-            Modifier.height(
-                60.dp
-            )
-    )
-}
-                
+                Spacer(
+                    modifier =
+                        Modifier.height(
+                            60.dp
+                        )
+                )
             }
         }
     }
+}
 
 /* =========================================================
    CABEÇALHO

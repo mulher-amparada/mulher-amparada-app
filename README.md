@@ -560,9 +560,10 @@ O aplicativo possui suporte aos ícones temáticos do Android (Themed Icons), pe
 O Impacto Visual: O ícone deixa de depender exclusivamente de suas cores originais e passa a responder à personalização visual do sistema. Isso proporciona uma apresentação mais discreta e consistente com a interface do dispositivo, sem que o aplicativo precise criar manualmente uma versão diferente para cada paleta de cores.
 
 ### Disfarce do app (assistente de saúde falso!):
-tutorial: ao entrar no app, clique no canto superior direito com o icone de calculadora. e ai quando ele for iniciado, voce precisará tocar no visor 5 vezes para cadastrar a senha e a pergunta de recuperação (e ele salva em uma classe kt de criptografia), assim so acessa com a senha informada, para resetar essa senha (dê 5 toques em menos de 2 segundos, e digite como você gosta de ser chamada, e digite sua nova senha!), mas antes dessa tela, tem outra tipo uma gaveta de apps..., porém, agora no mulher amparada, ele já vem com o icone de calculadora e o nome calculadora, só dá para mudar o icone, ou seja, o app ja vem com icone de (Assistente de saúde), uma tela genérica de elementos de medição de saúde (bpm e etc), e vale lembrar que:
 
-Os dados da primeira página do app (disfarce do assistente de saúde) são meramente fictícios e não representam informações reais!
+Vale lembrar que: Os dados da primeira página do app (disfarce do assistente de saúde) são meramente fictícios e não representam informações reais!, e ele é uma oagina de assistente de saude, e os dados mudam com o tempo, mas são fictícios!
+
+tutorial: ao entrar no app, clique no canto superior direito com o icone de calculadora. e ai quando ele for iniciado, voce precisará tocar no visor 5 vezes para cadastrar a senha e a pergunta de recuperação (e ele salva em uma classe kt de criptografia), assim so acessa com a senha informada, para resetar essa senha (dê 5 toques em menos de 2 segundos, e digite como você gosta de ser chamada, e digite sua nova senha!), mas antes dessa tela, tem outra tipo uma gaveta de apps..., porém, agora no mulher amparada, ele já vem com o icone de calculadora e o nome calculadora, só dá para mudar o icone, ou seja, o app ja vem com icone de (Assistente de saúde), uma tela genérica de elementos de medição de saúde (bpm e etc), 
 
 e tambem, reforcando que no canto superior direito tem um icone de calculadora que quando clica vai pra uma calculadora e aparece o disfarce de calculadora 
 

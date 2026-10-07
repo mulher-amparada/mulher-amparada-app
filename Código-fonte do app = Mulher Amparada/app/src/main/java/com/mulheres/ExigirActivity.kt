@@ -40,13 +40,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.statusBars
 
-private val Quicksand = FontFamily(
-    Font(R.font.quicksand, FontWeight.Normal),
-    Font(R.font.quicksand, FontWeight.Medium),
-    Font(R.font.quicksand, FontWeight.SemiBold),
-    Font(R.font.quicksand, FontWeight.Bold),
-    Font(R.font.quicksand, FontWeight.ExtraBold)
-)
 
 private val Pink = Color(0xFFFF3F82)
 private val PinkSoft = Color(0xFFFF6B9F)
@@ -178,7 +171,6 @@ private fun ExigirScreen() {
 
             color = text,
 
-            fontFamily = Quicksand,
 
             fontSize = 38.sp,
 
@@ -204,7 +196,6 @@ private fun ExigirScreen() {
 
             color = soft,
 
-            fontFamily = Quicksand,
 
             fontSize = 12.sp,
 
@@ -243,7 +234,6 @@ private fun ExigirScreen() {
 
                 color = PinkSoft,
 
-                fontFamily = Quicksand,
 
                 fontSize = 9.sp,
 
@@ -266,7 +256,6 @@ private fun ExigirScreen() {
 
                 color = text,
 
-                fontFamily = Quicksand,
 
                 fontSize = 30.sp,
 
@@ -295,7 +284,6 @@ private fun ExigirScreen() {
 
                 color = cardText,
 
-                fontFamily = Quicksand,
 
                 fontSize = 12.sp,
 
@@ -332,7 +320,6 @@ private fun ExigirScreen() {
 
                     color = PinkSoft,
 
-                    fontFamily = Quicksand,
 
                     fontSize = 9.sp,
 
@@ -352,7 +339,6 @@ private fun ExigirScreen() {
 
                     color = text,
 
-                    fontFamily = Quicksand,
 
                     fontSize = 21.sp,
 
@@ -418,7 +404,6 @@ private fun ExigirScreen() {
 
                             color = text,
 
-                            fontFamily = Quicksand,
 
                             fontSize = 13.sp,
 
@@ -435,7 +420,6 @@ private fun ExigirScreen() {
 
                             color = soft,
 
-                            fontFamily = Quicksand,
 
                             fontSize = 10.sp,
 
@@ -474,7 +458,6 @@ private fun ExigirScreen() {
 
                     color = text,
 
-                    fontFamily = Quicksand,
 
                     fontSize = 15.sp,
 
@@ -491,7 +474,6 @@ private fun ExigirScreen() {
 
                     color = PinkSoft,
 
-                    fontFamily = Quicksand,
 
                     fontSize = 10.sp,
 
@@ -621,7 +603,6 @@ private fun ExigirScreen() {
 
                     color = text,
 
-                    fontFamily = Quicksand,
 
                     fontSize = 11.sp,
 
@@ -643,7 +624,6 @@ private fun ExigirScreen() {
 
                     color = soft,
 
-                    fontFamily = Quicksand,
 
                     fontSize = 10.sp,
 
@@ -668,7 +648,6 @@ private fun LawParagraph(
 
         color = color,
 
-        fontFamily = Quicksand,
 
         fontSize = 11.sp,
 
@@ -704,7 +683,6 @@ private fun ConditionCard(
 
             color = textColor,
 
-            fontFamily = Quicksand,
 
             fontSize = 10.sp,
 
@@ -720,7 +698,6 @@ private fun ConditionCard(
 
             color = mutedColor,
 
-            fontFamily = Quicksand,
 
             fontSize = 9.sp,
 

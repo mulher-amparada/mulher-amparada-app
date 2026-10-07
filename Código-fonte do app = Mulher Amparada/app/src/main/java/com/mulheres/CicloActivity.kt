@@ -86,9 +86,6 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-private val Quicksand = FontFamily(
-    Font(R.font.quicksand)
-)
 
 private val Rosa = Color(0xFFFF7F9F)
 private val Rosa2 = Color(0xFFFF7F9F)
@@ -597,7 +594,6 @@ private fun CicloApp() {
 
                         Text(
                             text = "Apagar registros",
-                            fontFamily = Quicksand,
                             fontWeight = FontWeight.ExtraBold
                         )
                     },
@@ -606,7 +602,6 @@ private fun CicloApp() {
                         Text(
                             text =
                                 "Apagar todos os registros?\n\nEssa ação não pode ser desfeita.",
-                            fontFamily = Quicksand
                         )
                     },
                     confirmButton = {
@@ -625,7 +620,6 @@ private fun CicloApp() {
                             Text(
                                 text = "Apagar",
                                 color = Rosa2,
-                                fontFamily = Quicksand,
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -640,7 +634,6 @@ private fun CicloApp() {
 
                             Text(
                                 text = "Cancelar",
-                                fontFamily = Quicksand
                             )
                         }
                     }
@@ -827,7 +820,6 @@ private fun TopoCiclo(
 
             Text(
                 text = "Ciclo",
-                fontFamily = Quicksand,
                 fontSize = 25.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = texto
@@ -835,7 +827,6 @@ private fun TopoCiclo(
 
             Text(
                 text = "Acompanhe seus registros",
-                fontFamily = Quicksand,
                 fontSize = 11.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = texto3
@@ -1011,7 +1002,6 @@ private fun ResumoCard(
 
             Text(
                 text = label,
-                fontFamily = Quicksand,
                 fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
                 color = texto3
@@ -1019,7 +1009,6 @@ private fun ResumoCard(
 
             Text(
                 text = valor,
-                fontFamily = Quicksand,
                 fontSize =
                     if (valorPequeno)
                         10.sp
@@ -1034,7 +1023,6 @@ private fun ResumoCard(
 
             Text(
                 text = detalhe,
-                fontFamily = Quicksand,
                 fontSize = 9.sp,
                 color = texto3
             )
@@ -1073,7 +1061,6 @@ private fun Controles(
 
                 Text(
                     "Pesquisar registros...",
-                    fontFamily = Quicksand,
                     color = texto2
                 )
             },
@@ -1135,7 +1122,6 @@ private fun Controles(
                             Ordem.DOR ->
                                 "Maior dor"
                         },
-                        fontFamily = Quicksand,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
                         color = texto
@@ -1165,7 +1151,6 @@ private fun Controles(
                     text = {
                         Text(
                             "Mais recentes",
-                            fontFamily = Quicksand
                         )
                     },
                     onClick = {
@@ -1179,7 +1164,6 @@ private fun Controles(
                     text = {
                         Text(
                             "Mais antigos",
-                            fontFamily = Quicksand
                         )
                     },
                     onClick = {
@@ -1193,7 +1177,6 @@ private fun Controles(
                     text = {
                         Text(
                             "Maior dor",
-                            fontFamily = Quicksand
                         )
                     },
                     onClick = {
@@ -1255,7 +1238,6 @@ private fun Vazio(
                     "Nenhum resultado"
                 else
                     "Nenhum registro ainda",
-            fontFamily = Quicksand,
             fontSize = 16.sp,
             fontWeight = FontWeight.ExtraBold,
             color = texto
@@ -1271,7 +1253,6 @@ private fun Vazio(
                     "Tente pesquisar por outra data ou informação."
                 else
                     "Toque no botão + para criar seu primeiro registro.",
-            fontFamily = Quicksand,
             fontSize = 11.sp,
             color = texto3
         )
@@ -1354,7 +1335,6 @@ private fun RegistroCard(
                     formatarData(
                         registro.data
                     ),
-                fontFamily = Quicksand,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = texto
@@ -1365,7 +1345,6 @@ private fun RegistroCard(
                     nomeHumor(
                         registro.humor
                     ),
-                fontFamily = Quicksand,
                 fontSize = 10.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = texto3
@@ -1394,7 +1373,6 @@ private fun RegistroCard(
                 Text(
                     text =
                         "Dor ${registro.dor}/10",
-                    fontFamily = Quicksand,
                     fontSize = 9.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color =
@@ -1482,7 +1460,6 @@ private fun NovoRegistroDialog(
 
                 Text(
                     text = "Novo registro",
-                    fontFamily = Quicksand,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 21.sp
                 )
@@ -1531,7 +1508,6 @@ private fun NovoRegistroDialog(
                         label = {
                             Text(
                                 "Data",
-                                fontFamily = Quicksand
                             )
                         },
                         trailingIcon = {
@@ -1573,7 +1549,6 @@ private fun NovoRegistroDialog(
 
                             Text(
                                 "Dor — 0 a 10",
-                                fontFamily = Quicksand
                             )
                         },
                         keyboardOptions = KeyboardOptions(
@@ -1585,7 +1560,6 @@ private fun NovoRegistroDialog(
 
                 Text(
                     text = "Como você se sentiu?",
-                    fontFamily = Quicksand,
                     fontSize = 11.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = texto2
@@ -1740,7 +1714,6 @@ private fun NovoRegistroDialog(
 
                 Text(
                     text = "Salvar registro",
-                    fontFamily = Quicksand,
                     fontWeight = FontWeight.ExtraBold
                 )
             }
@@ -1872,7 +1845,6 @@ private fun HumorOpcoes(
 
                 Text(
                     text = nome.substring(3),
-                    fontFamily = Quicksand,
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Bold,
                     color = texto
@@ -1914,7 +1886,6 @@ private fun CheckSection(
 
         Text(
             text = titulo,
-            fontFamily = Quicksand,
             fontSize = 11.sp,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(
@@ -1965,7 +1936,6 @@ private fun CheckSection(
 
                 Text(
                     text = item.first,
-                    fontFamily = Quicksand,
                     fontSize = 10.sp,
                     fontWeight =
                         FontWeight.SemiBold,
@@ -2039,7 +2009,6 @@ private fun TelaDetalhes(
                         text = formatarData(
                             registro.data
                         ),
-                        fontFamily = Quicksand,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = texto
@@ -2051,7 +2020,6 @@ private fun TelaDetalhes(
                                 registro.humor
                             )
                         }",
-                        fontFamily = Quicksand,
                         fontSize = 10.sp,
                         color = texto3
                     )
@@ -2248,7 +2216,6 @@ private fun DorDestaque(
 
             Text(
                 text = "Intensidade da dor",
-                fontFamily = Quicksand,
                 fontSize = 11.sp,
                 color = texto2
             )
@@ -2259,7 +2226,6 @@ private fun DorDestaque(
 
                 Text(
                     text = dor.toString(),
-                    fontFamily = Quicksand,
                     fontSize = 40.sp,
                     fontWeight = FontWeight.Black,
                     color = texto
@@ -2271,7 +2237,6 @@ private fun DorDestaque(
 
                 Text(
                     text = "/ 10",
-                    fontFamily = Quicksand,
                     fontSize = 11.sp,
                     color = texto3,
                     modifier = Modifier.padding(
@@ -2282,7 +2247,6 @@ private fun DorDestaque(
 
             Text(
                 text = intensidade,
-                fontFamily = Quicksand,
                 fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
                 color = Rosa2
@@ -2295,7 +2259,6 @@ private fun DorDestaque(
 
             Text(
                 text = "${dor * 10}%",
-                fontFamily = Quicksand,
                 fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
                 color = texto2
@@ -2341,7 +2304,6 @@ private fun GraficoCard(
 
         Text(
             text = titulo,
-            fontFamily = Quicksand,
             fontSize = 12.sp,
             fontWeight = FontWeight.ExtraBold,
             color = texto
@@ -2353,7 +2315,6 @@ private fun GraficoCard(
 
         Text(
             text = subtitulo,
-            fontFamily = Quicksand,
             fontSize = 9.sp,
             color = texto2.copy(alpha = .65f)
         )
@@ -2407,7 +2368,6 @@ private fun IndicadorBooleano(
 
         Text(
             text = nome,
-            fontFamily = Quicksand,
             fontSize = 10.sp,
             fontWeight = if (ativo)
                 FontWeight.Bold
@@ -2462,7 +2422,6 @@ private fun IndicadorBooleano(
 
         Text(
             text = if (ativo) "Sim" else "Não",
-            fontFamily = Quicksand,
             fontSize = 9.sp,
             fontWeight = FontWeight.Bold,
             color = if (ativo)
@@ -2525,7 +2484,6 @@ private fun IndicadoresRotina(
 
         Text(
             text = "Dor",
-            fontFamily = Quicksand,
             fontSize = 10.sp,
             fontWeight = FontWeight.Bold,
             color = texto
@@ -2538,7 +2496,6 @@ private fun IndicadoresRotina(
 
             Text(
                 text = "${registro.dor}/10",
-                fontFamily = Quicksand,
                 fontSize = 9.sp,
                 color = texto2,
                 modifier = Modifier.width(45.dp)
@@ -2562,7 +2519,6 @@ private fun IndicadoresRotina(
                 else ->
                     "Intensidade alta"
             },
-            fontFamily = Quicksand,
             fontSize = 9.sp,
             color = texto3
         )

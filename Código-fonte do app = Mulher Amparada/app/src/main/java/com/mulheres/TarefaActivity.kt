@@ -87,24 +87,6 @@ import androidx.activity.enableEdgeToEdge
    FONTE
 ========================================================= */
 
-private val Quicksand = FontFamily(
-    Font(
-        resId = R.font.quicksand,
-        weight = FontWeight.Normal
-    ),
-    Font(
-        resId = R.font.quicksand,
-        weight = FontWeight.Medium
-    ),
-    Font(
-        resId = R.font.quicksand,
-        weight = FontWeight.SemiBold
-    ),
-    Font(
-        resId = R.font.quicksand,
-        weight = FontWeight.Bold
-    )
-)
 
 
 /* =========================================================
@@ -366,7 +348,6 @@ CompositionLocalProvider(
         ) {
             Text(
                 text = "+",
-                fontFamily = Quicksand,
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Medium
             )
@@ -735,7 +716,6 @@ private fun Header(
             Text(
                 text = "Planner",
                 color = textColor,
-                fontFamily = Quicksand,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -743,7 +723,6 @@ private fun Header(
             Text(
                 text = subtitle,
                 color = muted,
-                fontFamily = Quicksand,
                 fontSize = 10.sp,
                 fontWeight = FontWeight.Medium
             )
@@ -833,7 +812,6 @@ private fun StatCard(
         Text(
             text = number.toString(),
             color = Accent,
-            fontFamily = Quicksand,
             fontSize = 19.sp,
             fontWeight = FontWeight.Bold
         )
@@ -841,7 +819,6 @@ private fun StatCard(
         Text(
             text = label,
             color = muted,
-            fontFamily = Quicksand,
             fontSize = 10.sp
         )
     }
@@ -881,7 +858,6 @@ private fun SearchBox(
             Text(
                 "Pesquisar tarefas...",
                 color = muted,
-                fontFamily = Quicksand,
                 fontSize = 13.sp
             )
         },
@@ -905,7 +881,6 @@ private fun SearchBox(
             color =
                 if (dark) Color.White
                 else LightText,
-            fontFamily = Quicksand,
             fontSize = 13.sp
         ),
 
@@ -1018,7 +993,6 @@ private fun Filters(
                         } else {
                             LightText.copy(.65f)
                         },
-                    fontFamily = Quicksand,
                     fontSize = 11.sp,
                     fontWeight =
                         if (active) {
@@ -1068,7 +1042,6 @@ private fun Toolbar(
                         "tarefas"
                 }",
             color = muted,
-            fontFamily = Quicksand,
             fontSize = 10.sp
         )
 
@@ -1149,7 +1122,6 @@ private fun SortDropdown(
                 color =
                     if (dark) Color.White
                     else LightText,
-                fontFamily = Quicksand,
                 fontSize = 10.sp
             )
 
@@ -1194,7 +1166,6 @@ private fun SortDropdown(
 
                 Text(
                     text = label,
-                    fontFamily = Quicksand,
                     fontSize = 11.sp,
                     color =
                         if (value == current) {
@@ -1341,7 +1312,6 @@ private fun TaskCard(
             Text(
                 text = task.text,
                 color = textColor,
-                fontFamily = Quicksand,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.SemiBold,
                 maxLines = 2
@@ -1373,7 +1343,6 @@ private fun TaskCard(
                     text =
                         "${task.cat} • ${priorityName(task.priority)}",
                     color = muted,
-                    fontFamily = Quicksand,
                     fontSize = 9.sp
                 )
             }
@@ -1524,7 +1493,6 @@ private fun EmptyState(
                 else
                     "Tudo tranquilo por aqui",
             color = textColor.copy(.75f),
-            fontFamily = Quicksand,
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold
         )
@@ -1540,7 +1508,6 @@ private fun EmptyState(
                 else
                     "Adicione sua primeira tarefa usando o botão +.",
             color = muted,
-            fontFamily = Quicksand,
             fontSize = 10.sp
         )
     }
@@ -1587,7 +1554,6 @@ private fun Pomodoro(
         Text(
             text = "Pomodoro",
             color = muted,
-            fontFamily = Quicksand,
             fontSize = 12.sp
         )
 
@@ -1620,7 +1586,6 @@ private fun Pomodoro(
                 text =
                     "$minutes:${seconds.toString().padStart(2, '0')}",
                 color = Accent,
-                fontFamily = Quicksand,
                 fontSize = 36.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -1770,7 +1735,6 @@ private fun PomoButton(
                     Color.White
                 else
                     LightText,
-            fontFamily = Quicksand,
             fontSize = 11.sp,
             fontWeight = FontWeight.SemiBold
         )
@@ -1834,7 +1798,6 @@ private fun TaskDialog(
                         "Nova tarefa"
                     else
                         "Editar tarefa",
-                fontFamily = Quicksand,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color =
@@ -1867,7 +1830,6 @@ private fun TaskDialog(
                     Color.White.copy(.45f)
                 else
                     LightText.copy(.55f),
-            fontFamily = Quicksand,
             fontSize = 13.sp
         )
     },
@@ -1878,7 +1840,6 @@ private fun TaskDialog(
                 Color.White
             else
                 LightText,
-        fontFamily = Quicksand,
         fontSize = 13.sp
     ),
 
@@ -1952,7 +1913,6 @@ private fun TaskDialog(
                     Text(
                         text = "Digite uma tarefa.",
                         color = Danger,
-                        fontFamily = Quicksand,
                         fontSize = 10.sp,
                         modifier =
                             Modifier.padding(
@@ -2042,7 +2002,6 @@ private fun TaskDialog(
                 Text(
                     "Salvar",
                     color = Accent,
-                    fontFamily = Quicksand,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -2061,7 +2020,6 @@ private fun TaskDialog(
                             Color.White.copy(.75f)
                         else
                             LightText.copy(.70f),
-                    fontFamily = Quicksand
                 )
             }
         }
@@ -2095,7 +2053,6 @@ private fun PlannerDropdown(
                     Color.White.copy(.45f)
                 else
                     LightText.copy(.55f),
-            fontFamily = Quicksand,
             fontSize = 10.sp
         )
 
@@ -2147,7 +2104,6 @@ private fun PlannerDropdown(
                             Color.White
                         else
                             LightText,
-                    fontFamily = Quicksand,
                     fontSize = 13.sp
                 )
 
@@ -2196,7 +2152,6 @@ private fun PlannerDropdown(
 
                             Text(
                                 text = option,
-                                fontFamily = Quicksand,
                                 fontSize = 13.sp,
                                 color =
                                     if (option == value) {
@@ -2263,7 +2218,6 @@ private fun ToastMessage(
                     Color.White
                 else
                     LightText,
-            fontFamily = Quicksand,
             fontSize = 11.sp
         )
     }

@@ -2319,7 +2319,6 @@ private fun BottomAreaSelector(
                             "Proteções",
                     color =
                         Color.White,
-                    fontFamily =
                         quicksand(),
                     fontSize =
                         9.sp,
@@ -3025,7 +3024,6 @@ private fun PermissionCard(
         Text(
             text = "Permissões necessárias",
             color = Color.White,
-            fontFamily = font,
             fontSize = 24.sp,
             fontWeight = FontWeight.ExtraBold,
             lineHeight = 25.sp,
@@ -3041,7 +3039,6 @@ private fun PermissionCard(
                 "Para aproveitar todos os recursos do Mulher Amparada, " +
                 "conceda as permissões necessárias ao aplicativo.",
             color = Color(0xFF85858E),
-            fontFamily = font,
             fontSize = 11.sp,
             fontWeight = FontWeight.SemiBold,
             lineHeight = 17.sp
@@ -3087,7 +3084,6 @@ private fun PermissionCard(
                 Text(
                     text = "Abrir permissões",
                     color = Color.White,
-                    fontFamily = font,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
@@ -3157,7 +3153,6 @@ private fun Hero(
                 text =
                     "SISTEMA DE PROTEÇÃO PESSOAL",
                 color = c.pinkLight,
-                fontFamily = font,
                 fontSize = 9.sp,
                 fontWeight = FontWeight.ExtraBold,
                 letterSpacing = 2.sp
@@ -3172,7 +3167,6 @@ private fun Hero(
             text =
                 "Mulher\nAmparada.",
             color = c.white,
-            fontFamily = font,
             fontSize = 48.sp,
             fontWeight = FontWeight.ExtraBold,
             lineHeight = 43.sp,
@@ -3191,7 +3185,6 @@ private fun Hero(
                     max = 370.dp
                 ),
             color = c.secondary,
-            fontFamily = font,
             fontSize = 11.sp,
             fontWeight = FontWeight.SemiBold,
             lineHeight = 18.sp
@@ -3258,7 +3251,6 @@ private fun SystemOverview(
                 Text(
                     "ESTADO DO SISTEMA",
                     color = c.muted,
-                    fontFamily = font,
                     fontSize = 9.sp,
                     fontWeight = FontWeight.ExtraBold,
                     letterSpacing = 1.5.sp
@@ -3267,7 +3259,6 @@ private fun SystemOverview(
                 Text(
                     "Central de proteção",
                     color = c.text,
-                    fontFamily = font,
                     fontSize = 21.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
@@ -3275,7 +3266,6 @@ private fun SystemOverview(
                 Text(
                     "Gerencie seus recursos de segurança e mantenha suas ferramentas de emergência sempre acessíveis.",
                     color = c.secondary,
-                    fontFamily = font,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.SemiBold,
                     lineHeight = 15.sp
@@ -3302,7 +3292,6 @@ private fun SystemOverview(
                     Text(
                         "SISTEMA DISPONÍVEL",
                         color = c.green,
-                        fontFamily = font,
                         fontSize = 9.sp,
                         fontWeight = FontWeight.ExtraBold,
                         letterSpacing = .8.sp
@@ -3408,7 +3397,6 @@ private fun SectionTitle(
             text =
                 text.uppercase(),
             color = c.muted,
-            fontFamily = font,
             fontSize = 9.sp,
             fontWeight = FontWeight.ExtraBold,
             letterSpacing = 2.sp
@@ -3529,7 +3517,6 @@ private fun PanicCard(
             Text(
                 "Precisa de ajuda?",
                 color = Color.White,
-                fontFamily = font,
                 fontSize = 30.sp,
                 fontWeight = FontWeight.ExtraBold,
                 letterSpacing = (-1.2).sp,
@@ -3546,7 +3533,6 @@ private fun PanicCard(
                     Color.White.copy(
                         alpha = .92f
                     ),
-                fontFamily = font,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
                 lineHeight = 20.sp,
@@ -3643,7 +3629,6 @@ private fun SensorCard(
                 Text(
                     text = number,
                     color = c.muted,
-                    fontFamily = font,
                     fontSize = 9.sp,
                     fontWeight = FontWeight.ExtraBold,
                     letterSpacing = 1.5.sp
@@ -3652,7 +3637,6 @@ private fun SensorCard(
                 Text(
                     text = title,
                     color = c.text,
-                    fontFamily = font,
                     fontSize = 22.sp,
                     fontWeight = FontWeight.ExtraBold,
                     lineHeight = 25.sp,
@@ -3732,7 +3716,6 @@ private fun SensorCard(
 
             color = c.secondary,
 
-            fontFamily = font,
 
             fontSize = 10.sp,
 
@@ -3794,7 +3777,6 @@ private fun SensorCard(
                         else
                             c.muted,
 
-                    fontFamily = font,
 
                     fontSize = 9.sp,
 
@@ -3967,7 +3949,6 @@ private fun ActionCard(
                         Color.White
                     else
                         c.text,
-                fontFamily = font,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.ExtraBold,
                 lineHeight = 18.sp
@@ -3982,7 +3963,6 @@ private fun ActionCard(
                         Color.White.copy(.66f)
                     else
                         c.secondary,
-                fontFamily = font,
                 fontSize = 10.sp,
                 fontWeight = FontWeight.SemiBold,
                 lineHeight = 15.sp
@@ -3991,7 +3971,6 @@ private fun ActionCard(
             Text(
                 "ATENDIMENTO DISPONÍVEL",
                 color = accent,
-                fontFamily = font,
                 fontSize = 7.sp,
                 fontWeight = FontWeight.ExtraBold,
                 letterSpacing = 1.sp
@@ -4272,7 +4251,6 @@ private fun ActionPortal(
                         Color.White
                     else
                         c.text,
-                fontFamily = font,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.ExtraBold,
                 letterSpacing = (-1).sp
@@ -4281,7 +4259,6 @@ private fun ActionPortal(
             Text(
                 subtitle,
                 color = accent.copy(.85f),
-                fontFamily = font,
                 fontSize = 9.sp,
                 fontWeight = FontWeight.SemiBold,
                 lineHeight = 14.sp
@@ -4311,7 +4288,6 @@ private fun ActionPortal(
                 Text(
                     meta,
                     color = accent,
-                    fontFamily = font,
                     fontSize = 7.sp,
                     fontWeight = FontWeight.ExtraBold,
                     letterSpacing = 1.3.sp

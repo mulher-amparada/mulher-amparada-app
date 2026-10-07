@@ -40,13 +40,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import android.view.WindowManager
 
-private val Quicksand = FontFamily(
-    Font(R.font.quicksand, FontWeight.Normal),
-    Font(R.font.quicksand, FontWeight.Medium),
-    Font(R.font.quicksand, FontWeight.SemiBold),
-    Font(R.font.quicksand, FontWeight.Bold),
-    Font(R.font.quicksand, FontWeight.ExtraBold)
-)
 
 private val Pink = Color(0xFFFF3F82)
 private val PinkSoft = Color(0xFFFF6B9F)
@@ -185,7 +178,6 @@ private fun GestoScreen() {
 
             color = text,
 
-            fontFamily = Quicksand,
 
             fontSize = 38.sp,
 
@@ -210,7 +202,6 @@ private fun GestoScreen() {
 
             color = soft,
 
-            fontFamily = Quicksand,
 
             fontSize = 12.sp,
 
@@ -249,7 +240,6 @@ private fun GestoScreen() {
 
                 color = PinkSoft,
 
-                fontFamily = Quicksand,
 
                 fontSize = 9.sp,
 
@@ -272,7 +262,6 @@ private fun GestoScreen() {
 
                 color = text,
 
-                fontFamily = Quicksand,
 
                 fontSize = 30.sp,
 
@@ -299,7 +288,6 @@ private fun GestoScreen() {
 
                 color = bodyText,
 
-                fontFamily = Quicksand,
 
                 fontSize = 12.sp,
 
@@ -336,7 +324,6 @@ private fun GestoScreen() {
 
                     color = PinkSoft,
 
-                    fontFamily = Quicksand,
 
                     fontSize = 9.sp,
 
@@ -356,7 +343,6 @@ private fun GestoScreen() {
 
                     color = text,
 
-                    fontFamily = Quicksand,
 
                     fontSize = 21.sp,
 
@@ -380,7 +366,6 @@ private fun GestoScreen() {
 
                     color = soft,
 
-                    fontFamily = Quicksand,
 
                     fontSize = 10.sp,
 
@@ -418,7 +403,6 @@ private fun GestoScreen() {
 
                     color = text,
 
-                    fontFamily = Quicksand,
 
                     fontSize = 15.sp,
 
@@ -500,7 +484,6 @@ private fun GestoScreen() {
 
                     color = text,
 
-                    fontFamily = Quicksand,
 
                     fontSize = 15.sp,
 
@@ -520,7 +503,6 @@ private fun GestoScreen() {
 
                     color = bodyText,
 
-                    fontFamily = Quicksand,
 
                     fontSize = 11.sp,
 
@@ -543,7 +525,6 @@ private fun GestoScreen() {
 
                     color = bodyText,
 
-                    fontFamily = Quicksand,
 
                     fontSize = 11.sp,
 
@@ -579,7 +560,6 @@ private fun GestoScreen() {
 
                     color = text,
 
-                    fontFamily = Quicksand,
 
                     fontSize = 11.sp,
 
@@ -600,7 +580,6 @@ private fun GestoScreen() {
 
                     color = soft,
 
-                    fontFamily = Quicksand,
 
                     fontSize = 10.sp,
 
@@ -641,7 +620,6 @@ private fun GestureStep(
 
             color = PinkSoft,
 
-            fontFamily = Quicksand,
 
             fontSize = 9.sp,
 
@@ -659,7 +637,6 @@ private fun GestureStep(
 
             color = textColor,
 
-            fontFamily = Quicksand,
 
             fontSize = 11.sp,
 
@@ -675,7 +652,6 @@ private fun GestureStep(
 
             color = mutedColor,
 
-            fontFamily = Quicksand,
 
             fontSize = 9.sp,
 

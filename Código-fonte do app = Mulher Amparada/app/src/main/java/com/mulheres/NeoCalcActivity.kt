@@ -545,7 +545,6 @@ private fun NeoCalcScreen() {
                         color =
                             cores.texto,
 
-                        fontFamily =
                             fonte,
 
                         fontWeight =
@@ -788,7 +787,6 @@ private fun NeoCalcScreen() {
                             text =
                                 atual.titulo,
 
-                            fontFamily =
                                 fonte,
 
                             fontWeight =
@@ -807,7 +805,6 @@ private fun NeoCalcScreen() {
                                 text =
                                     atual.mensagem,
 
-                                fontFamily =
                                     fonte,
 
                                 fontWeight =
@@ -1052,7 +1049,6 @@ private fun NeoCalcScreen() {
                                 text =
                                     atual.textoConfirmar,
 
-                                fontFamily =
                                     fonte,
 
                                 fontWeight =
@@ -1097,7 +1093,6 @@ private fun NeoCalcScreen() {
                                         text =
                                             "Esqueci tudo",
 
-                                        fontFamily =
                                             fonte,
 
                                         fontWeight =
@@ -1125,7 +1120,6 @@ private fun NeoCalcScreen() {
                                         text =
                                             "Cancelar",
 
-                                        fontFamily =
                                             fonte,
 
                                         fontWeight =
@@ -1246,7 +1240,6 @@ private fun LinhaBotoes(
                         color =
                             cores.texto,
 
-                        fontFamily =
                             fonte,
 
                         fontWeight =

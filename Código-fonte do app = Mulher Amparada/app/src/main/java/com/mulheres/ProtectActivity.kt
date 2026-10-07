@@ -180,33 +180,6 @@ abrirArquivoSeguro = {
    FONTE
 ========================================================= */
 
-private val Quicksand = FontFamily(
-
-    Font(
-        R.font.quicksand,
-        FontWeight.Normal
-    ),
-
-    Font(
-        R.font.quicksand,
-        FontWeight.Medium
-    ),
-
-    Font(
-        R.font.quicksand,
-        FontWeight.SemiBold
-    ),
-
-    Font(
-        R.font.quicksand,
-        FontWeight.Bold
-    ),
-
-    Font(
-        R.font.quicksand,
-        FontWeight.ExtraBold
-    )
-)
 
 
 /* =========================================================
@@ -735,8 +708,6 @@ private fun Hero(
             color =
                 texto,
 
-            fontFamily =
-                Quicksand,
 
             fontSize =
                 38.sp,
@@ -776,8 +747,6 @@ private fun Hero(
             color =
                 textoSuave,
 
-            fontFamily =
-                Quicksand,
 
             fontSize =
                 15.sp,
@@ -807,8 +776,6 @@ private fun Hero(
             color =
                 selo,
 
-            fontFamily =
-                Quicksand,
 
             fontSize =
                 10.sp,
@@ -882,8 +849,6 @@ private fun TituloSecao(
             color =
                 corTexto,
 
-            fontFamily =
-                Quicksand,
 
             fontSize =
                 10.sp,
@@ -1056,8 +1021,6 @@ private fun ConteudoCartao(
                 color =
                     texto,
 
-                fontFamily =
-                    Quicksand,
 
                 fontSize =
                     15.sp,
@@ -1084,8 +1047,6 @@ private fun ConteudoCartao(
                 color =
                     descricao,
 
-                fontFamily =
-                    Quicksand,
 
                 fontSize =
                     12.sp,

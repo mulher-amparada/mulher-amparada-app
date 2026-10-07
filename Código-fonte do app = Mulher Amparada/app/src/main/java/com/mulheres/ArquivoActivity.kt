@@ -110,13 +110,6 @@ class ArquivoActivity : ComponentActivity() {
     }
 }
 
-private val Quicksand = FontFamily(
-    Font(R.font.quicksand, FontWeight.Normal),
-    Font(R.font.quicksand, FontWeight.Medium),
-    Font(R.font.quicksand, FontWeight.SemiBold),
-    Font(R.font.quicksand, FontWeight.Bold),
-    Font(R.font.quicksand, FontWeight.ExtraBold)
-)
 
 private val FundoEscuro =
     Color(0xFF000000)
@@ -694,8 +687,6 @@ private fun ArquivoSeguro() {
                                 else
                                     TextoClaro,
 
-                            fontFamily =
-                                Quicksand,
 
                             fontSize =
                                 14.sp,
@@ -807,8 +798,6 @@ private fun HeroArquivo(
 
             color = texto,
 
-            fontFamily =
-                Quicksand,
 
             fontSize = 32.sp,
 
@@ -837,8 +826,6 @@ private fun HeroArquivo(
 
             color = textoSuave,
 
-            fontFamily =
-                Quicksand,
 
             fontSize = 14.sp,
 
@@ -951,8 +938,6 @@ private fun BotaoAdicionar(
 
                 color = texto,
 
-                fontFamily =
-                    Quicksand,
 
                 fontSize = 15.sp,
 
@@ -975,8 +960,6 @@ private fun BotaoAdicionar(
                     else
                         TextoMutedClaro,
 
-                fontFamily =
-                    Quicksand,
 
                 fontSize = 12.sp,
 
@@ -1114,8 +1097,6 @@ private fun CartaoArquivo(
 
                     color = texto,
 
-                    fontFamily =
-                        Quicksand,
 
                     fontSize = 14.sp,
 
@@ -1138,8 +1119,6 @@ private fun CartaoArquivo(
 
                     color = descricao,
 
-                    fontFamily =
-                        Quicksand,
 
                     fontSize = 11.sp,
 
@@ -1253,8 +1232,6 @@ private fun AcaoArquivo(
 
             color = cor,
 
-            fontFamily =
-                Quicksand,
 
             fontSize = 11.sp,
 
@@ -1296,8 +1273,6 @@ private fun EstadoVazio(
 
             color = texto,
 
-            fontFamily =
-                Quicksand,
 
             fontSize = 13.sp,
 
@@ -1348,8 +1323,6 @@ private fun Mensagem(
                 else
                     TextoSuaveClaro,
 
-            fontFamily =
-                Quicksand,
 
             fontSize = 12.sp,
 
@@ -1405,8 +1378,6 @@ private fun TituloSecao(
                 else
                     Color(0xFF74747E),
 
-            fontFamily =
-                Quicksand,
 
             fontSize = 10.sp,
 

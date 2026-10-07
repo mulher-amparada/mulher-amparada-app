@@ -179,7 +179,6 @@ private fun MapaApp() {
 
         androidx.compose.material3.LocalTextStyle provides
             MaterialTheme.typography.bodyMedium.copy(
-                fontFamily = Quicksand
             )
 
     ) {
@@ -717,8 +716,6 @@ private fun CabecalhoMapa(
                 color =
                     texto,
 
-                fontFamily =
-                    Quicksand,
 
                 fontWeight =
                     FontWeight.Bold,
@@ -766,8 +763,6 @@ private fun CabecalhoMapa(
                     color =
                         suave,
 
-                    fontFamily =
-                        Quicksand,
 
                     fontWeight =
                         FontWeight.Medium,
@@ -1067,8 +1062,6 @@ private fun ToastMapa(
 
                     Color.Black,
 
-            fontFamily =
-                Quicksand,
 
             fontWeight =
                 FontWeight.Medium,

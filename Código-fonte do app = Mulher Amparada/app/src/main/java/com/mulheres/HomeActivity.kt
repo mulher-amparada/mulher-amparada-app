@@ -56,33 +56,6 @@ import androidx.core.view.WindowCompat
 import androidx.activity.enableEdgeToEdge
 
 
-private val Quicksand = FontFamily(
-
-    Font(
-        resId = R.font.quicksand,
-        weight = FontWeight.Normal
-    ),
-
-    Font(
-        resId = R.font.quicksand,
-        weight = FontWeight.Medium
-    ),
-
-    Font(
-        resId = R.font.quicksand,
-        weight = FontWeight.SemiBold
-    ),
-
-    Font(
-        resId = R.font.quicksand,
-        weight = FontWeight.Bold
-    ),
-
-    Font(
-        resId = R.font.quicksand,
-        weight = FontWeight.ExtraBold
-    )
-)
 
 
 private val Pink = Color(0xFFFF3F82)
@@ -261,7 +234,6 @@ private fun CarteiraScreen(
 
                     color = text,
 
-                    fontFamily = Quicksand,
 
                     fontSize = 44.sp,
 
@@ -286,7 +258,6 @@ private fun CarteiraScreen(
 
                     color = soft,
 
-                    fontFamily = Quicksand,
 
                     fontSize = 11.sp,
 
@@ -314,7 +285,6 @@ private fun CarteiraScreen(
 
                     color = soft,
 
-                    fontFamily = Quicksand,
 
                     fontSize = 11.sp,
 
@@ -425,7 +395,6 @@ private fun CarteiraLabel(
 
             color = color,
 
-            fontFamily = Quicksand,
 
             fontSize = 10.sp,
 

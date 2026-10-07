@@ -676,8 +676,6 @@ private fun Cabecalho(
                 color =
                     cores.textoPrincipal,
 
-                fontFamily =
-                    Quicksand,
 
                 fontSize =
                     24.sp,
@@ -709,8 +707,6 @@ private fun Cabecalho(
                 color =
                     cores.textoEscuro,
 
-                fontFamily =
-                    Quicksand,
 
                 fontSize =
                     9.sp,
@@ -871,8 +867,6 @@ private fun Hero(
                     color =
                         cores.textoEscuro,
 
-                    fontFamily =
-                        Quicksand,
 
                     fontSize =
                         7.sp,
@@ -923,8 +917,6 @@ private fun Hero(
                         color =
                             cores.textoEscuro,
 
-                        fontFamily =
-                            Quicksand,
 
                         fontSize =
                             7.sp,
@@ -1052,8 +1044,6 @@ private fun Hero(
                         color =
                             cores.textoPrincipal,
 
-                        fontFamily =
-                            Quicksand,
 
                         fontSize =
                             30.sp,
@@ -1082,8 +1072,6 @@ private fun Hero(
                         color =
                             cores.textoEscuro,
 
-                        fontFamily =
-                            Quicksand,
 
                         fontSize =
                             8.sp,
@@ -1118,8 +1106,6 @@ private fun Hero(
                     color =
                         cores.textoPrincipal,
 
-                    fontFamily =
-                        Quicksand,
 
                     fontSize =
                         15.sp,
@@ -1145,8 +1131,6 @@ private fun Hero(
                     color =
                         cores.textoEscuro,
 
-                    fontFamily =
-                        Quicksand,
 
                     fontSize =
                         8.sp,
@@ -1309,8 +1293,6 @@ private fun ResumoItem(
                 color =
                     cores.textoEscuro,
 
-                fontFamily =
-                    Quicksand,
 
                 fontSize =
                     7.sp,
@@ -1337,8 +1319,6 @@ private fun ResumoItem(
                     color =
                         cores.textoPrincipal,
 
-                    fontFamily =
-                        Quicksand,
 
                     fontSize =
                         17.sp,
@@ -1364,8 +1344,6 @@ private fun ResumoItem(
                     color =
                         cores.textoEscuro,
 
-                    fontFamily =
-                        Quicksand,
 
                     fontSize =
                         7.sp,
@@ -1420,8 +1398,6 @@ private fun SecaoTitulo(
             color =
                 cores.textoPrincipal,
 
-            fontFamily =
-                Quicksand,
 
             fontSize =
                 14.sp,
@@ -1444,8 +1420,6 @@ private fun SecaoTitulo(
                 color =
                     cores.textoEscuro,
 
-                fontFamily =
-                    Quicksand,
 
                 fontSize =
                     7.sp,
@@ -1784,8 +1758,6 @@ private fun IndicadorCard(
                         color =
                             cores.textoMuitoEscuro,
 
-                        fontFamily =
-                            Quicksand,
 
                         fontSize =
                             7.sp,
@@ -1812,8 +1784,6 @@ private fun IndicadorCard(
                     color =
                         cores.textoSecundario,
 
-                    fontFamily =
-                        Quicksand,
 
                     fontSize =
                         9.sp,
@@ -1855,8 +1825,6 @@ private fun IndicadorCard(
                         color =
                             cores.textoPrincipal,
 
-                        fontFamily =
-                            Quicksand,
 
                         fontSize =
                             22.sp,
@@ -1877,8 +1845,6 @@ private fun IndicadorCard(
                         color =
                             cores.textoEscuro,
 
-                        fontFamily =
-                            Quicksand,
 
                         fontSize =
                             8.sp,
@@ -2087,8 +2053,6 @@ private fun BemEstar(
                             color =
                                 cores.textoPrincipal,
 
-                            fontFamily =
-                                Quicksand,
 
                             fontSize =
                                 10.sp,
@@ -2114,8 +2078,6 @@ private fun BemEstar(
                             color =
                                 cores.textoEscuro,
 
-                            fontFamily =
-                                Quicksand,
 
                             fontSize =
                                 7.sp,
@@ -2143,8 +2105,6 @@ private fun BemEstar(
                         color =
                             cores.textoPrincipal,
 
-                        fontFamily =
-                            Quicksand,
 
                         fontSize =
                             27.sp,
@@ -2173,8 +2133,6 @@ private fun BemEstar(
                         color =
                             cores.textoEscuro,
 
-                        fontFamily =
-                            Quicksand,
 
                         fontSize =
                             8.sp,
@@ -2341,8 +2299,6 @@ private fun BemEstarInfo(
             color =
                 cores.textoMuitoEscuro,
 
-            fontFamily =
-                Quicksand,
 
             fontSize =
                 7.sp,
@@ -2360,8 +2316,6 @@ private fun BemEstarInfo(
             color =
                 cores.textoSecundario,
 
-            fontFamily =
-                Quicksand,
 
             fontSize =
                 9.sp,
@@ -2525,8 +2479,6 @@ private fun AtividadeRow(
                     color =
                         cores.textoSecundario,
 
-                    fontFamily =
-                        Quicksand,
 
                     fontSize =
                         9.sp,
@@ -2558,8 +2510,6 @@ private fun AtividadeRow(
                     color =
                         cores.textoMuitoEscuro,
 
-                    fontFamily =
-                        Quicksand,
 
                     fontSize =
                         7.sp,
@@ -2595,8 +2545,6 @@ private fun AtividadeRow(
                 color =
                     cores.textoMuitoEscuro,
 
-                fontFamily =
-                    Quicksand,
 
                 fontSize =
                     7.sp,

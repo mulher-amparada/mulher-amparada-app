@@ -73,24 +73,6 @@ private val PinkDark = Color(0xFFE96D92)
 
 private val Danger = Color(0xFFE53935)
 
-private val Quicksand = FontFamily(
-    Font(
-        resId = R.font.quicksand,
-        weight = FontWeight.Normal
-    ),
-    Font(
-        resId = R.font.quicksand,
-        weight = FontWeight.Medium
-    ),
-    Font(
-        resId = R.font.quicksand,
-        weight = FontWeight.SemiBold
-    ),
-    Font(
-        resId = R.font.quicksand,
-        weight = FontWeight.Bold
-    )
-)
 
 class GeoActivity : ComponentActivity() {
 
@@ -764,7 +746,6 @@ val mutedColor =
                             text =
                                 "Você saiu da área segura",
                             color = contentColor,
-                            fontFamily = Quicksand,
                             fontWeight =
                                 FontWeight.Bold,
                             fontSize = 16.sp
@@ -786,7 +767,6 @@ val mutedColor =
                                     distance
                                 ),
                             color = mutedColor,
-                            fontFamily = Quicksand,
                             fontSize = 11.sp
                         )
 
@@ -811,8 +791,6 @@ val mutedColor =
                             Text(
                                 text =
                                     "Pedir ajuda",
-                                fontFamily =
-                                    Quicksand,
                                 fontWeight =
                                     FontWeight.Bold
                             )
@@ -866,7 +844,6 @@ val mutedColor =
                         Text(
                             text =
                                 "Atualizar",
-                            fontFamily =
                                 Quicksand
                         )
                     }
@@ -892,8 +869,6 @@ val mutedColor =
                                 "Raio: ${
                                     radius.roundToInt()
                                 } m",
-                            fontFamily =
-                                Quicksand,
                             fontWeight =
                                 FontWeight.Bold
                         )
@@ -912,7 +887,6 @@ val mutedColor =
         Text(
             text = "Raio da área segura",
             color = contentColor,
-            fontFamily = Quicksand,
             fontWeight = FontWeight.Bold
         )
     },
@@ -924,7 +898,6 @@ val mutedColor =
                                 text =
                                     "${radius.roundToInt()} metros",
                                     color = contentColor,
-                                fontFamily =
                                     Quicksand
                             )
 
@@ -963,8 +936,6 @@ val mutedColor =
                                     "Salvar",
                                 color =
                                     PinkDark,
-                                fontFamily =
-                                    Quicksand,
                                 fontWeight =
                                     FontWeight.Bold
                             )
@@ -982,7 +953,6 @@ val mutedColor =
                             Text(
                                 text =
                                     "Cancelar",
-                                fontFamily =
                                     Quicksand
                             )
                         }

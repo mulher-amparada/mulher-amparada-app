@@ -107,24 +107,6 @@ private val LightPageText = Color(0xFF292127)
    QUICKSAND
 ========================================================= */
 
-private val Quicksand = FontFamily(
-    Font(
-        resId = R.font.quicksand,
-        weight = FontWeight.Normal
-    ),
-    Font(
-        resId = R.font.quicksand,
-        weight = FontWeight.Medium
-    ),
-    Font(
-        resId = R.font.quicksand,
-        weight = FontWeight.SemiBold
-    ),
-    Font(
-        resId = R.font.quicksand,
-        weight = FontWeight.Bold
-    )
-)
 
 /* =========================================================
    ACTIVITY
@@ -202,27 +184,21 @@ private fun DiarioTheme(
         typography = MaterialTheme.typography.copy(
             bodyLarge =
                 MaterialTheme.typography.bodyLarge.copy(
-                    fontFamily = Quicksand
                 ),
             bodyMedium =
                 MaterialTheme.typography.bodyMedium.copy(
-                    fontFamily = Quicksand
                 ),
             bodySmall =
                 MaterialTheme.typography.bodySmall.copy(
-                    fontFamily = Quicksand
                 ),
             titleLarge =
                 MaterialTheme.typography.titleLarge.copy(
-                    fontFamily = Quicksand
                 ),
             titleMedium =
                 MaterialTheme.typography.titleMedium.copy(
-                    fontFamily = Quicksand
                 ),
             titleSmall =
                 MaterialTheme.typography.titleSmall.copy(
-                    fontFamily = Quicksand
                 )
         ),
         content = content
@@ -637,7 +613,6 @@ Box(
 
                 Text(
                     text = "Apagar diário",
-                    fontFamily = Quicksand,
                     fontWeight = FontWeight.Bold
                 )
 
@@ -649,7 +624,6 @@ Box(
                     text =
                         "Apagar todas as páginas do diário?\n\n" +
                             "Esta ação não pode ser desfeita.",
-                    fontFamily = Quicksand
                 )
 
             },
@@ -677,7 +651,6 @@ Box(
                     Text(
                         text = "Apagar",
                         color = PinkDark,
-                        fontFamily = Quicksand,
                         fontWeight = FontWeight.Bold
                     )
 
@@ -696,7 +669,6 @@ Box(
 
                     Text(
                         text = "Cancelar",
-                        fontFamily = Quicksand
                     )
 
                 }
@@ -824,7 +796,6 @@ private fun DiarioTopBar(
             Text(
                 text = "Meu Diário",
                 color = text,
-                fontFamily = Quicksand,
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp
             )
@@ -832,7 +803,6 @@ private fun DiarioTopBar(
             Text(
                 text = "Suas ideias estão seguras",
                 color = muted,
-                fontFamily = Quicksand,
                 fontSize = 8.sp
             )
         }
@@ -1152,8 +1122,6 @@ private fun CurrentPage(
                     else
                         Color(0xA6292127),
 
-                fontFamily =
-                    Quicksand,
 
                 fontSize =
                     8.sp
@@ -1175,7 +1143,6 @@ private fun CurrentPage(
             textStyle =
                 TextStyle(
                     color = pageText,
-                    fontFamily = Quicksand,
                     fontWeight =
                         FontWeight.Medium,
                     fontSize = 15.sp,
@@ -1213,8 +1180,6 @@ private fun CurrentPage(
                                 else
                                     Color(0x593C232D),
 
-                            fontFamily =
-                                Quicksand,
 
                             fontWeight =
                                 FontWeight.Medium,

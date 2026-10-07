@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="user1.png" alt="Mulher Amparada" width="300">
+  <img src="user1.png" alt="Mulher Amparada">
 </p>
 
 # Mulher Amparada

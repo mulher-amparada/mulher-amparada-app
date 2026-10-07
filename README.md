@@ -1103,11 +1103,53 @@ funciona como uma forma direta de solicitar a abertura do aplicativo Mulher Ampa
 
 e temos um botão no index.html no site do github pages que leva pro app usando esse link também!
 
-# 📢 Divulgação:
+# 🔗Central de links e referências do projeto **Mulher Amparada**.
 
-Acompanhe as referências e publicações relacionadas ao projeto **Mulher Amparada** na página oficial de divulgação da Wiki.
+```
 
-🔗 **[Acessar a página de divulgação](https://github.com/mulher-amparada/mulher-amparada-app/wiki/Divulga%C3%A7%C3%A3o-do-projeto-=-Mulher-Amparada)**
+---
+
+## 📱 Redes sociais:
+
+- 🐦 [X — @mulheramparada](https://x.com/mulheramparada/status/2105045353615761521?s=20)
+- 🌷 [Tumblr — Mulher Amparada: um projeto gratuito e livre](https://www.tumblr.com/mulheramparada/829407067773255680/mulher-amparada-um-projeto-gratuito-e-livre)
+- 📰 [Blogger — Links do Projeto Mulher Amparada](https://mulheramparada.blogspot.com/2026/10/projeto-mulher-amparada-links.html?m=1)
+
+---
+
+## 📰 Imprensa e divulgação:
+
+- 📢 [SubmitPR — Mulher Amparada](https://submitpr.org/press-release/mulheramparada)
+
+---
+
+## 🚀 Product Hunt:
+
+- 🟣 [Product Hunt — Mulher Amparada](https://www.producthunt.com/products/mulher-amparada?launch=mulher-amparada)
+
+- 📃 [Paper WF — Projeto Mulher Amparada](https://paper.wf/mulheramparada/projeto-mulher-amparada)
+
+---
+## 👨🏾‍💻DEV Community:
+
+- 📝 [DEV Community — Projeto Mulher Amparada](https://dev.to/mulher_amparada/projeto-mulher-amparada-1c49)
+
+---
+## 💻 CoderLegion:
+
+- 🔗 [Links do Projeto Mulher Amparada](https://coderlegion.com/29843/links-do-projeto-mulher-amparada)
+
+---
+
+## 🌱 Agregadores:
+
+- 🚀 [NicheLoom — Mulher Amparada](https://www.nicheloom.com/launches/40835/)
+
+- ⚠️ [Observatório Blockchain — link atualmente retorna 404](https://observatorioblockchain.com/newsfeed/item/23123e760a8918f1/)
+
+---
+
+```
 
 # 📦Packpage do repositório no github:
 

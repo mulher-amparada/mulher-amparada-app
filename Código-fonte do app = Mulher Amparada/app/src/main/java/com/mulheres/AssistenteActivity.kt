@@ -304,15 +304,6 @@ private fun corIcone(): Color {
    FONTE
 ========================================================= */
 
-private val Quicksand =
-    FontFamily(
-        Font(
-            resId =
-                com.mulheres.R.font.quicksand,
-
-            weight =
-                FontWeight.Bold
-        )
     )
 
 

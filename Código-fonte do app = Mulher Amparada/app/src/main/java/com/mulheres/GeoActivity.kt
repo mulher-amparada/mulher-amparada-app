@@ -844,7 +844,6 @@ val mutedColor =
                         Text(
                             text =
                                 "Atualizar",
-                                Quicksand
                         )
                     }
 
@@ -898,7 +897,6 @@ val mutedColor =
                                 text =
                                     "${radius.roundToInt()} metros",
                                     color = contentColor,
-                                    Quicksand
                             )
 
                             Slider(
@@ -953,7 +951,6 @@ val mutedColor =
                             Text(
                                 text =
                                     "Cancelar",
-                                    Quicksand
                             )
                         }
                     }

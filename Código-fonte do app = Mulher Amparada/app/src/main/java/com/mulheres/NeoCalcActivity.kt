@@ -129,22 +129,6 @@ private const val CHAVE_SENHA =
 private const val CHAVE_RECUPERACAO =
     "nome_recuperacao"
 
-private fun carregarQuicksand(
-    context: android.content.Context
-): FontFamily {
-
-    val typeface =
-        Typeface.createFromAsset(
-            context.assets,
-            "font.ttf"
-        )
-
-    return FontFamily(
-        androidx.compose.ui.text.font.Typeface(
-            typeface
-        )
-    )
-}
 
 private enum class TipoDialogo {
     ALERTA,
@@ -184,7 +168,6 @@ private fun NeoCalcScreen() {
 
     val fonte =
         remember {
-            carregarQuicksand(
                 context
             )
         }

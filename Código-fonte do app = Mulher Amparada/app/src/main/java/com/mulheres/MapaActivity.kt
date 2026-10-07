@@ -66,14 +66,6 @@ import org.osmdroid.views.overlay.Polygon
 import androidx.activity.enableEdgeToEdge
 
 
-private val Quicksand =
-    FontFamily(
-        Font(R.font.quicksand, FontWeight.Normal),
-        Font(R.font.quicksand, FontWeight.Medium),
-        Font(R.font.quicksand, FontWeight.SemiBold),
-        Font(R.font.quicksand, FontWeight.Bold),
-        Font(R.font.quicksand, FontWeight.ExtraBold)
-    )
 
 
 private val FundoEscuro =

@@ -2319,7 +2319,6 @@ private fun BottomAreaSelector(
                             "Proteções",
                     color =
                         Color.White,
-                        quicksand(),
                     fontSize =
                         9.sp,
                     fontWeight =
@@ -2435,36 +2434,6 @@ private fun MulherAmparadaTheme(
 ========================================================= */
 
 @Composable
-private fun quicksand(): FontFamily {
-
-    return FontFamily(
-
-        Font(
-            resId = R.font.quicksand,
-            weight = FontWeight.Normal
-        ),
-
-        Font(
-            resId = R.font.quicksand,
-            weight = FontWeight.Medium
-        ),
-
-        Font(
-            resId = R.font.quicksand,
-            weight = FontWeight.SemiBold
-        ),
-
-        Font(
-            resId = R.font.quicksand,
-            weight = FontWeight.Bold
-        ),
-
-        Font(
-            resId = R.font.quicksand,
-            weight = FontWeight.ExtraBold
-        )
-    )
-}
 
 
 /* =========================================================
@@ -2478,7 +2447,6 @@ private fun MulherAmparadaScreen() {
         colors()
 
     val font =
-        quicksand()
 
     val context =
         LocalContext.current
@@ -2974,7 +2942,6 @@ private fun PermissionCard(
     onAbrirPermissoes: () -> Unit
 ) {
 
-    val font = quicksand()
 
     Column(
         modifier =

@@ -3126,6 +3126,7 @@ lineHeight = 18.sp
    VISÃO GERAL
 ========================================================= */
 
+@Composable
 private fun SystemOverview(
     c: AppColors,
 ) {
@@ -3330,6 +3331,7 @@ letterSpacing = 2.sp
    PANIC
 ========================================================= */
 
+@Composable
 private fun PanicCard(
     c: AppColors,
 ) {
@@ -3707,6 +3709,7 @@ letterSpacing = 1.2.sp
    SWITCH
 ========================================================= */
 
+@Composable
 private fun FakeSwitch(
     color: Color,
     active: Boolean,
@@ -3924,6 +3927,7 @@ letterSpacing = 1.sp
    ACESSO DE EMERGÊNCIA
 ========================================================= */
 
+@Composable
 private fun EmergencyAccess(
     c: AppColors,
 ) {
@@ -3992,6 +3996,7 @@ onClick = {
    ÁREA DO AMPARO
 ========================================================= */
 
+@Composable
 private fun AmparoArea(
     c: AppColors,
 ) {

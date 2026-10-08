@@ -2227,7 +2227,7 @@ private fun BottomAreaSelector(
     ) {
 
         val thumbSize =
-            135.dp
+            145.dp
 
         val innerWidth =
             maxWidth - 8.dp
@@ -2616,7 +2616,7 @@ compactBottom = true
     description =
         "Detecta sons altos e situações suspeitas para acionar os mecanismos de proteção.",
     icon = R.drawable.ic_0003,
-    activeImage = R.drawable.ic_0003,
+    activeImage = R.drawable.ic_00003,
     color = c.pink,
                         active =
                             activity?.palmasAtivas
@@ -2650,7 +2650,7 @@ compactBottom = true
     description =
         "Detecta movimentos bruscos no celular e pode iniciar uma resposta de emergência.",
     icon = R.drawable.ic_0004,
-    activeImage = R.drawable.ic_0004,
+    activeImage = R.drawable.ic_00004,
     color = c.purple,
                         active =
                             activity?.protecaoMovimentoAtiva
@@ -2684,7 +2684,7 @@ compactBottom = true
     description =
         "Escurece a tela automaticamente quando o dispositivo identifica a posição configurada.",
     icon = R.drawable.ic_0005,
-    activeImage = R.drawable.ic_0005,
+    activeImage = R.drawable.ic_00005,
     color = c.orange,
                         active =
                             activity?.escurecimentoAtivo

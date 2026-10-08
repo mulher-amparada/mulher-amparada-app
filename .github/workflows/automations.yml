@@ -1214,7 +1214,7 @@ jobs:
   atualizar-footer:
     name: Atualizar Footer com README
     runs-on: ubuntu-24.04
-    needs: deploy
+    needs: publicar-divulgacao
 
     permissions:
       contents: write

@@ -1,6 +1,5 @@
 package com.mulheres
 
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.fragment.app.FragmentActivity
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -2227,7 +2226,7 @@ private fun BottomAreaSelector(
     ) {
 
         val thumbSize =
-            90.dp
+            135.dp
 
         val innerWidth =
             maxWidth - 8.dp
@@ -2615,8 +2614,8 @@ compactBottom = true
     title = "Proteção por barulho",
     description =
         "Detecta sons altos e situações suspeitas para acionar os mecanismos de proteção.",
-    icon = R.drawable.ic_00003,
-    activeImage = R.drawable.ic_00003,
+    icon = R.drawable.ic_0003,
+    activeImage = R.drawable.ic_0003,
     color = c.pink,
                         active =
                             activity?.palmasAtivas
@@ -2649,8 +2648,8 @@ compactBottom = true
     title = "Proteção por movimento",
     description =
         "Detecta movimentos bruscos no celular e pode iniciar uma resposta de emergência.",
-    icon = R.drawable.ic_00004,
-    activeImage = R.drawable.ic_00004,
+    icon = R.drawable.ic_0004,
+    activeImage = R.drawable.ic_0004,
     color = c.purple,
                         active =
                             activity?.protecaoMovimentoAtiva
@@ -2683,8 +2682,8 @@ compactBottom = true
     title = "Escurecimento por inclinação",
     description =
         "Escurece a tela automaticamente quando o dispositivo identifica a posição configurada.",
-    icon = R.drawable.ic_00005,
-    activeImage = R.drawable.ic_00005,
+    icon = R.drawable.ic_0005,
+    activeImage = R.drawable.ic_0005,
     color = c.orange,
                         active =
                             activity?.escurecimentoAtivo
@@ -3558,7 +3557,7 @@ private fun SensorCard(
 
             val scale by
                 transition.animateFloat(
-                    initialValue = 0.92f,
+                    initialValue = 1f,
                     targetValue = 1.08f,
                     animationSpec =
                         infiniteRepeatable(
@@ -3598,12 +3597,7 @@ private fun SensorCard(
 
                 modifier =
                     Modifier
-                        .fillMaxWidth()
-                        .height(170.dp)
-                        .align(Alignment.Center)
-                        .offset(
-                            y = (-18).dp
-                        )
+                        .fillMaxSize()
                         .graphicsLayer {
                             scaleX = scale
                             scaleY = scale
@@ -3611,7 +3605,7 @@ private fun SensorCard(
                         },
 
                 contentScale =
-                    ContentScale.Fit
+                    ContentScale.Crop
             )
         }
 

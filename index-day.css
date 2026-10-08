@@ -2791,6 +2791,10 @@ footer {
     line-height: 1.8;
     overflow-wrap: anywhere;
     transition: background-color 0.3s ease, color 0.3s ease;
+height: auto !important;
+    min-height: 0;
+    max-height: none !important;
+    overflow-y: visible !important;
 }
 
 footer::before {

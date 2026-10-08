@@ -1142,7 +1142,7 @@ e temos um botão no index.html no site do github pages que leva pro app usando 
 - 📃 [Paper WF — Projeto Mulher Amparada](https://paper.wf/mulheramparada/projeto-mulher-amparada)
 
 ---
-## 👨🏾‍💻DEV Community:
+## 👨🏾‍💻 DEV Community:
 
 - 📝 [DEV Community — Projeto Mulher Amparada](https://dev.to/mulher_amparada/projeto-mulher-amparada-1c49)
 
@@ -1152,7 +1152,7 @@ e temos um botão no index.html no site do github pages que leva pro app usando 
 - 🔗 [Links do Projeto Mulher Amparada](https://coderlegion.com/29843/links-do-projeto-mulher-amparada)
 
 ---
-## 📰Tabnews:
+## 📰 Tabnews:
 
 - 🔗 [Mulher Amparada — Desenvolvimento de um aplicativo Android independente](https://www.tabnews.com.br/projetomulheramparadaapp/mulher-amparada-desenvolvimento-de-um-aplicativo-android-independente)
 

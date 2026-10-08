@@ -1206,3 +1206,35 @@ jobs:
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+       atualizar-footer:
+    runs-on: ubuntu-24.04
+    needs: deploy
+    permissions:
+      contents: write
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Instalar dependência Python
+        run: pip install Markdown
+
+      - name: Atualizar footer com README
+        run: python3 scripts/atualizar_footer.py
+
+      - name: Salvar alterações
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Atualiza footer com README"
+            git push origin HEAD:${{ github.event.repository.default_branch }}
+          fi

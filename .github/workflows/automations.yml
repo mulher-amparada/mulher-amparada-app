@@ -1250,3 +1250,36 @@ jobs:
           else
             echo "O footer já está atualizado."
           fi
+
+  atualizar-relatorio-commits:
+    name: Atualizar relatório de commits
+    runs-on: ubuntu-24.04
+    needs: publicar-divulgacao
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Instalar Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+
+      - name: Gerar relatório de commits
+        run: ruby scripts/commits.rb
+
+      - name: Salvar relatório no repositório
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dados_commits.txt
+          if ! git diff --cached --quiet; then
+            git commit -m "Atualizar relatório de commits"
+            git push origin HEAD:main
+          fi

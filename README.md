@@ -250,6 +250,22 @@ São utilizados os Secrets:
 - "PAPERWF_PASSWORD"
 
 ---
+## ✏️Atualização automática do footer
+
+O workflow utiliza Python para atualizar automaticamente o footer do `index.html` com base no README do repositório.
+
+- **Execução:** após o job `deploy`.
+- **Ambiente:** Ubuntu 24.04.
+- **Linguagem:** Python 3.
+- **Dependência:** biblioteca `Markdown`.
+- **Script:** `scripts/atualizar_footer.py`.
+- **Arquivo atualizado:** `index.html`.
+- **Versionamento:** as alterações são enviadas para a branch `main` somente quando existem mudanças.
+- **Commit automático:** `Atualizar footer com README [skip ci]`.
+
+O processo é executado pelo GitHub Actions e utiliza a conta automática `github-actions[bot]` para registrar as alterações.
+
+----
 
 🗺️ Sitemap
 

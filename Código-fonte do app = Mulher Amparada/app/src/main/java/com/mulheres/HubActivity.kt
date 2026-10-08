@@ -2287,40 +2287,39 @@ private fun BottomAreaSelector(
                 Alignment.Center
         ) {
 
-            Column(
-                horizontalAlignment =
-                    Alignment.CenterHorizontally,
-                verticalArrangement =
-                    Arrangement.spacedBy(
-                        (-2).dp
-                    )
-            ) {
+    Row(
+    verticalAlignment =
+        Alignment.CenterVertically,
+    horizontalArrangement =
+        Arrangement.spacedBy(7.dp)
+) {
 
-                Image(
-                    painter =
-                        painterResource(
-                            if (areaProtegidaSelecionada)
-                                R.drawable.ic_secret
-                            else
-                                R.drawable.ic_protecoes
-                        ),
-                    contentDescription = null,
-                    modifier =
-                        Modifier.size(29.dp)
-                )
+    Image(
+        painter =
+            painterResource(
+                if (areaProtegidaSelecionada)
+                    R.drawable.ic_secret
+                else
+                    R.drawable.ic_protecoes
+            ),
+        contentDescription = null,
+        modifier =
+            Modifier.size(29.dp)
+    )
 
-                Text(
-                    text =
-                        if (areaProtegidaSelecionada)
-                            "Áreas"
-                        else
-                            "Proteções",
-                    color =
-                        Color.White,
-                    fontSize =
-                        9.sp,
-)
-            }
+    Text(
+        text =
+            if (areaProtegidaSelecionada)
+                "Áreas"
+            else
+                "Proteções",
+        color =
+            Color.White,
+        fontSize =
+            9.sp
+    )
+}
+    
         }
     }
 }

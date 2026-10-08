@@ -2614,8 +2614,8 @@ compactBottom = true
     title = "Proteção por barulho",
     description =
         "Detecta sons altos e situações suspeitas para acionar os mecanismos de proteção.",
-    icon = R.drawable.ic_0003,
-    activeImage = R.drawable.ic_0003,
+    icon = R.drawable.ic_00003,
+    activeImage = R.drawable.ic_00003,
     color = c.pink,
                         active =
                             activity?.palmasAtivas
@@ -2648,8 +2648,8 @@ compactBottom = true
     title = "Proteção por movimento",
     description =
         "Detecta movimentos bruscos no celular e pode iniciar uma resposta de emergência.",
-    icon = R.drawable.ic_0004,
-    activeImage = R.drawable.ic_0004,
+    icon = R.drawable.ic_00004,
+    activeImage = R.drawable.ic_00004,
     color = c.purple,
                         active =
                             activity?.protecaoMovimentoAtiva
@@ -2682,8 +2682,8 @@ compactBottom = true
     title = "Escurecimento por inclinação",
     description =
         "Escurece a tela automaticamente quando o dispositivo identifica a posição configurada.",
-    icon = R.drawable.ic_0005,
-    activeImage = R.drawable.ic_0005,
+    icon = R.drawable.ic_00005,
+    activeImage = R.drawable.ic_00005,
     color = c.orange,
                         active =
                             activity?.escurecimentoAtivo

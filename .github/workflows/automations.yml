@@ -755,7 +755,7 @@ jobs:
 
     runs-on: ubuntu-24.04
 
-    needs: publicar-divulgacao
+    needs: deploy
 
     steps:
 

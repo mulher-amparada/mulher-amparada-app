@@ -1198,7 +1198,7 @@ jobs:
         run: npm pack
 
       - name: Publicar pacote no GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: divulgacao
           name: Kit de Divulgação
@@ -1227,7 +1227,7 @@ jobs:
           ref: main
 
       - name: Instalar Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.x"
 

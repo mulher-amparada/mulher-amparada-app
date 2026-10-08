@@ -1254,7 +1254,7 @@ jobs:
   atualizar-relatorio-commits:
     name: Atualizar relatório de commits
     runs-on: ubuntu-24.04
-    needs: publicar-divulgacao
+    needs: atualizar-footer
 
     permissions:
       contents: write

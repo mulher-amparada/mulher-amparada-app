@@ -321,13 +321,13 @@ O Lighthouse permite analisar aspectos como:
 
 ✏️ Atualização automática do README no site:
 
-O job converte automaticamente todo o conteúdo do arquivo "README.md" de Markdown para HTML, preservando a estrutura e os elementos compatíveis com a conversão, como títulos, parágrafos, listas, links, tabelas e blocos de código.
+O job executa o script Python "scripts/atualizar_footer.py", responsável por ler o conteúdo do arquivo "README.md", convertê-lo de Markdown para HTML usando a biblioteca Python "Markdown" e inserir o resultado no rodapé do site.
 
-Após a conversão, o conteúdo gerado é inserido no rodapé do "index.html", substituindo o conteúdo anterior localizado entre os marcadores "README-FOOTER-START" e "README-FOOTER-END".
+O script atualiza o arquivo "index.html", substituindo o conteúdo existente entre os marcadores "README-FOOTER-START" e "README-FOOTER-END".
 
-Dessa forma, o rodapé do site acompanha as alterações realizadas no README, sem a necessidade de copiar e atualizar manualmente o conteúdo. Sempre que o job é executado, o script gera novamente o HTML a partir da versão atual do README e atualiza o arquivo do site.
+Dessa forma, o rodapé do site acompanha automaticamente as alterações realizadas no README, sem a necessidade de copiar e atualizar manualmente o conteúdo. A cada execução, o script gera novamente o HTML a partir do README atual e atualiza o arquivo do site.
 
-O job automatiza a sincronização do conteúdo entre o README e o site. A exibição final depende da estrutura do HTML e dos estilos CSS aplicados à página.
+A automação depende do script Python, da biblioteca "Markdown" e dos marcadores presentes no "index.html". A exibição final do conteúdo depende também da estrutura HTML e dos estilos CSS aplicados ao site.
 
 ---
 

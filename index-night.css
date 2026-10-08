@@ -2279,7 +2279,7 @@ footer {
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    margin-top: 64px;
+    
     padding: 56px 24px 28px;
     color: var(--footer-text);
     background:

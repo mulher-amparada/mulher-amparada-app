@@ -6,7 +6,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4693**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4605**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
@@ -250,22 +250,6 @@ São utilizados os Secrets:
 - "PAPERWF_PASSWORD"
 
 ---
-## ✏️Atualização automática do footer
-
-O workflow utiliza Python para atualizar automaticamente o footer do `index.html` com base no README do repositório.
-
-- **Execução:** após o job `deploy`.
-- **Ambiente:** Ubuntu 24.04.
-- **Linguagem:** Python 3.
-- **Dependência:** biblioteca `Markdown`.
-- **Script:** `scripts/atualizar_footer.py`.
-- **Arquivo atualizado:** `index.html`.
-- **Versionamento:** as alterações são enviadas para a branch `main` somente quando existem mudanças.
-- **Commit automático:** `Atualizar footer com README [skip ci]`.
-
-O processo é executado pelo GitHub Actions e utiliza a conta automática `github-actions[bot]` para registrar as alterações.
-
-----
 
 🗺️ Sitemap
 
@@ -292,32 +276,6 @@ A autenticação utiliza o Secret:
 "INDEXNOW_KEY"
 
 O objetivo é comunicar aos mecanismos de busca compatíveis que existem URLs atualizadas para serem rastreadas.
-
----
-
-🔍 Auditoria SEO
-
-O workflow executa uma auditoria SEO completa utilizando:
-
-"@nurkamol/seo-audit"
-
-A ferramenta analisa o site e gera um relatório:
-
-"seo-audit.md"
-
-O relatório é armazenado como artifact do GitHub Actions.
-
-A auditoria permite verificar problemas relacionados a aspectos como:
-
-- SEO técnico;
-- metadados;
-- indexabilidade;
-- links;
-- imagens;
-- canonical;
-- Open Graph;
-- dados estruturados;
-- sitemap.
 
 ---
 
@@ -509,6 +467,8 @@ NeoCalcActivity (compose) = Tela que contém o disfarce de calculadora
  
  ArquivoActivity = (compose) Tela da funcao de arquivo seguro da área protegida!
  
+ UpdateActivity = (compose) Tela da funcao que mostra o ícone do app disfarçado nome do aplicativo, versão instalada (versionName), número da build (versionCode) e um indicador visual de disponibilidade do sistema
+ 
  GeoActivity = (compose) Tela da funcao de raio seguro com georreferenciamento seguro da área protegida!
  
  # Sobre como o aplicativo é compilado:
@@ -564,7 +524,7 @@ E também as barras tanto de status tanto de navegação são transparentes, por
 
 **Método:** somente `DEVICE_CREDENTIAL`.
 
-####Área protegida:
+#### Área protegida:
 
 **Título:**
 >Desbloquear a área protegida
@@ -572,7 +532,7 @@ E também as barras tanto de status tanto de navegação são transparentes, por
 **Descrição:**
 >🌸 Apenas a usuária cadastrada pode acessar este local
 
-####Área do amparo:
+#### Área do amparo:
 
 **Título:**
 
@@ -582,7 +542,7 @@ E também as barras tanto de status tanto de navegação são transparentes, por
 
 >🌸 Acesso protegido por biometria
 
-####E nos dois tem embaixo (Use sua impressão digital., Usar o reconhecimento facial.)
+#### E nos dois tem embaixo (Use sua impressão digital., Usar o reconhecimento facial.)
 
 O método de autenticação é definido pelo próprio Android de acordo com os autenticadores disponíveis no dispositivo, utilizando "BIOMETRIC_WEAK" e "DEVICE_CREDENTIAL".
 
@@ -608,7 +568,21 @@ Os dados da primeira página do app (disfarce do assistente de saúde) são mera
 
 e tambem, reforcando que no canto superior direito tem um icone de calculadora que quando clica vai pra uma calculadora e aparece o disfarce de calculadora 
 
-> no disfarce de calculadora, caso a usuaria esqueça tudo, existe um popup que usa o BiometricPrompt que poderá resetar tanto a senha tanto a pergunta de recuperação (e ele usa APENAS o device credencial!), porém, quando utiliza o BiometricPrompt e é validado, ele pergunta repetidamente a pergunta de recuperação e a senha, eu preferi deixar assim porque ai a usuaria pode errar quantas vezes ela quiser!
+> no disfarce de calculadora, caso a usuaria esqueça tudo, existe um popup que usa o BiometricPrompt que poderá resetar tanto a senha tanto a pergunta de recuperação (e ele usa APENAS o device credencial!), porém, quando utiliza o BiometricPrompt e é validado, ele pergunta repetidamente a pergunta de recuperação e a senha, eu preferi deixar assim porque ai a usuaria pode errar quantas vezes ela quiser!, e eu preferi que o BiometricPrompt use só apenas o device credential, porque senão o agressor que tiver com acesso físico ao aparelho pode ou se cadastrar ou coagir a usuária a desbloquear!
+
+### Versão do app:
+
+A "UpdateActivity" apresenta as informações da versão instalada do Mulher Amparada, utilizando os dados diretamente do aplicativo instalado.
+
+Ela exibe:
+
+- Ícone do app disfarçado
+- Nome do aplicativo
+- Versão instalada ("versionName")
+- Número da build ("versionCode")
+- Indicador visual de disponibilidade do sistema
+
+A versão e a build são obtidas diretamente dos metadados do APK, garantindo que as informações exibidas correspondam à versão realmente instalada no dispositivo.
 
 ### Botão de Pânico:
 Botão de Pânico, com ligação ao 180 de forma direta no primeiro clique.
@@ -1129,11 +1103,53 @@ funciona como uma forma direta de solicitar a abertura do aplicativo Mulher Ampa
 
 e temos um botão no index.html no site do github pages que leva pro app usando esse link também!
 
-# 📢 Divulgação:
+# 🔗Central de links e referências do projeto **Mulher Amparada**.
 
-Acompanhe as referências e publicações relacionadas ao projeto **Mulher Amparada** na página oficial de divulgação da Wiki.
+```
 
-🔗 **[Acessar a página de divulgação](https://github.com/mulher-amparada/mulher-amparada-app/wiki/Divulga%C3%A7%C3%A3o-do-projeto-=-Mulher-Amparada)**
+---
+
+## 📱 Redes sociais:
+
+- 🐦 [X — @mulheramparada](https://x.com/mulheramparada/status/2105045353615761521?s=20)
+- 🌷 [Tumblr — Mulher Amparada: um projeto gratuito e livre](https://www.tumblr.com/mulheramparada/829407067773255680/mulher-amparada-um-projeto-gratuito-e-livre)
+- 📰 [Blogger — Links do Projeto Mulher Amparada](https://mulheramparada.blogspot.com/2026/10/projeto-mulher-amparada-links.html?m=1)
+
+---
+
+## 📰 Imprensa e divulgação:
+
+- 📢 [SubmitPR — Mulher Amparada](https://submitpr.org/press-release/mulheramparada)
+
+---
+
+## 🚀 Product Hunt:
+
+- 🟣 [Product Hunt — Mulher Amparada](https://www.producthunt.com/products/mulher-amparada?launch=mulher-amparada)
+
+- 📃 [Paper WF — Projeto Mulher Amparada](https://paper.wf/mulheramparada/projeto-mulher-amparada)
+
+---
+## 👨🏾‍💻DEV Community:
+
+- 📝 [DEV Community — Projeto Mulher Amparada](https://dev.to/mulher_amparada/projeto-mulher-amparada-1c49)
+
+---
+## 💻 CoderLegion:
+
+- 🔗 [Links do Projeto Mulher Amparada](https://coderlegion.com/29843/links-do-projeto-mulher-amparada)
+
+---
+
+## 🌱 Agregadores:
+
+- 🚀 [NicheLoom — Mulher Amparada](https://www.nicheloom.com/launches/40835/)
+
+- ⚠️ [Observatório Blockchain — link atualmente retorna 404](https://observatorioblockchain.com/newsfeed/item/23123e760a8918f1/)
+
+---
+
+```
 
 # 📦Packpage do repositório no github:
 
@@ -1156,3 +1172,5 @@ icones para sites e para usos no geral, tanto o do mulher amparada tanto o ic_la
 >**Como agir:** Se for imprimir cartazes ou banners, certifique-se de que o QR Code está visível e em alta resolução. Isso permite que a usuária aponte a câmera e acesse o projeto diretamente, minimizando o histórico de digitação e mensagens trocadas.
 
 a pessoa instala pelo github releases!
+
+e quem publica e atualiza essa release é o proprio workflow!

@@ -2318,7 +2318,7 @@ private fun BottomAreaSelector(
             if (areaProtegidaSelecionada)
                 "Áreas"
             else
-                "Proteções",
+                "Ajuda",
         color =
             Color.White,
         fontSize =

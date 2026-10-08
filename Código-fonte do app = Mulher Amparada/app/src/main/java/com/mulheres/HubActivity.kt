@@ -1,6 +1,11 @@
 package com.mulheres
 
 import androidx.fragment.app.FragmentActivity
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.BoxWithConstraints
 import android.view.WindowManager
@@ -2203,7 +2208,7 @@ private fun BottomAreaSelector(
 
         modifier =
             Modifier
-                .fillMaxWidth(0.55f)
+                .fillMaxWidth(0.80f)
                 .height(76.dp)
                 .clip(shape)
                 .background(
@@ -2316,7 +2321,7 @@ private fun BottomAreaSelector(
         color =
             Color.White,
         fontSize =
-            9.sp
+            25.sp
     )
 }
     
@@ -2605,12 +2610,13 @@ compactBottom = true
                     )
 
                     SensorCard(
-                        number = "01 / ÁUDIO",
-                        title = "Proteção por barulho",
-                        description =
-                            "Detecta sons altos e situações suspeitas para acionar os mecanismos de proteção.",
-                        icon = R.drawable.ic_0003,
-                        color = c.pink,
+    number = "01 / ÁUDIO",
+    title = "Proteção por barulho",
+    description =
+        "Detecta sons altos e situações suspeitas para acionar os mecanismos de proteção.",
+    icon = R.drawable.ic_0003,
+    activeImage = R.drawable.ic_0003,
+    color = c.pink,
                         active =
                             activity?.palmasAtivas
                                 ?: false,
@@ -2638,12 +2644,13 @@ compactBottom = true
                     )
 
                     SensorCard(
-                        number = "02 / MOVIMENTO",
-                        title = "Proteção por movimento",
-                        description =
-                            "Detecta movimentos bruscos no celular e pode iniciar uma resposta de emergência.",
-                        icon = R.drawable.ic_0004,
-                        color = c.purple,
+    number = "02 / MOVIMENTO",
+    title = "Proteção por movimento",
+    description =
+        "Detecta movimentos bruscos no celular e pode iniciar uma resposta de emergência.",
+    icon = R.drawable.ic_0004,
+    activeImage = R.drawable.ic_0004,
+    color = c.purple,
                         active =
                             activity?.protecaoMovimentoAtiva
                                 ?: false,
@@ -2671,12 +2678,13 @@ compactBottom = true
                     )
 
                     SensorCard(
-                        number = "03 / VISIBILIDADE",
-                        title = "Escurecimento por inclinação",
-                        description =
-                            "Escurece a tela automaticamente quando o dispositivo identifica a posição configurada.",
-                        icon = R.drawable.ic_0005,
-                        color = c.orange,
+    number = "03 / VISIBILIDADE",
+    title = "Escurecimento por inclinação",
+    description =
+        "Escurece a tela automaticamente quando o dispositivo identifica a posição configurada.",
+    icon = R.drawable.ic_0005,
+    activeImage = R.drawable.ic_0005,
+    color = c.orange,
                         active =
                             activity?.escurecimentoAtivo
                                 ?: false,
@@ -3483,12 +3491,14 @@ lineHeight = 20.sp,
 /* =========================================================
    SENSOR
 ========================================================= */
+
 @Composable
 private fun SensorCard(
     number: String,
     title: String,
     description: String,
     icon: Int,
+    activeImage: Int,
     color: Color,
     active: Boolean,
     onClick: () -> Unit,
@@ -3513,7 +3523,7 @@ private fun SensorCard(
             )
         }
 
-    Column(
+    Box(
         modifier =
             Modifier
                 .fillMaxWidth()
@@ -3536,192 +3546,248 @@ private fun SensorCard(
                 .clickable {
                     onClick()
                 }
-                .padding(22.dp),
-
-        verticalArrangement =
-            Arrangement.SpaceBetween
     ) {
 
-        /* =================================================
-           TOPO
-        ================================================= */
+        if (active) {
 
-        Row(
-            modifier =
-                Modifier.fillMaxWidth(),
-
-            verticalAlignment =
-                Alignment.Top
-        ) {
-
-            Column(
-                modifier =
-                    Modifier.weight(1f),
-
-                verticalArrangement =
-                    Arrangement.spacedBy(8.dp)
-            ) {
-
-                Text(
-                    text = number,
-                    color = c.muted,
-                    fontSize = 9.sp,
-letterSpacing = 1.5.sp
+            val transition =
+                rememberInfiniteTransition(
+                    label = "sensor_image"
                 )
 
-                Text(
-                    text = title,
-                    color = c.text,
-                    fontSize = 22.sp,
-lineHeight = 25.sp,
-                    letterSpacing = (-.7).sp,
-                    modifier =
-                        Modifier.fillMaxWidth()
+            val scale by
+                transition.animateFloat(
+                    initialValue = 0.92f,
+                    targetValue = 1.08f,
+                    animationSpec =
+                        infiniteRepeatable(
+                            animation =
+                                tween(
+                                    durationMillis = 1800
+                                ),
+                            repeatMode =
+                                RepeatMode.Reverse
+                        ),
+                    label = "sensor_scale"
                 )
-            }
 
-            Spacer(
-                Modifier.width(14.dp)
-            )
+            val alpha by
+                transition.animateFloat(
+                    initialValue = 0.08f,
+                    targetValue = 0.22f,
+                    animationSpec =
+                        infiniteRepeatable(
+                            animation =
+                                tween(
+                                    durationMillis = 1800
+                                ),
+                            repeatMode =
+                                RepeatMode.Reverse
+                        ),
+                    label = "sensor_alpha"
+                )
 
-            /* ÍCONE */
+            Image(
+                painter =
+                    painterResource(
+                        activeImage
+                    ),
 
-            Box(
+                contentDescription = null,
+
                 modifier =
                     Modifier
-                        .size(55.dp)
-                        .clip(
-                            RoundedCornerShape(20.dp)
+                        .fillMaxWidth()
+                        .height(170.dp)
+                        .align(Alignment.Center)
+                        .offset(
+                            y = (-18).dp
                         )
-                        .background(
-                            color.copy(.075f)
-                        )
-                        .border(
-                            1.dp,
-                            color.copy(.27f),
-                            RoundedCornerShape(20.dp)
-                        ),
+                        .graphicsLayer {
+                            scaleX = scale
+                            scaleY = scale
+                            this.alpha = alpha
+                        },
 
-                contentAlignment =
-                    Alignment.Center
+                contentScale =
+                    ContentScale.Fit
+            )
+        }
+
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(22.dp),
+
+            verticalArrangement =
+                Arrangement.SpaceBetween
+        ) {
+
+            Row(
+                modifier =
+                    Modifier.fillMaxWidth(),
+
+                verticalAlignment =
+                    Alignment.Top
             ) {
+
+                Column(
+                    modifier =
+                        Modifier.weight(1f),
+
+                    verticalArrangement =
+                        Arrangement.spacedBy(8.dp)
+                ) {
+
+                    Text(
+                        text = number,
+                        color = c.muted,
+                        fontSize = 9.sp,
+                        letterSpacing = 1.5.sp
+                    )
+
+                    Text(
+                        text = title,
+                        color = c.text,
+                        fontSize = 22.sp,
+                        lineHeight = 25.sp,
+                        letterSpacing = (-.7).sp,
+                        modifier =
+                            Modifier.fillMaxWidth()
+                    )
+                }
+
+                Spacer(
+                    Modifier.width(14.dp)
+                )
 
                 Box(
                     modifier =
                         Modifier
-                            .size(39.dp)
+                            .size(55.dp)
+                            .clip(
+                                RoundedCornerShape(20.dp)
+                            )
+                            .background(
+                                color.copy(.075f)
+                            )
                             .border(
                                 1.dp,
-                                c.borderLight,
-                                RoundedCornerShape(16.dp)
+                                color.copy(.27f),
+                                RoundedCornerShape(20.dp)
                             ),
 
                     contentAlignment =
                         Alignment.Center
                 ) {
 
-                    Image(
-                        painter =
-                            painterResource(icon),
-
-                        contentDescription = null,
-
+                    Box(
                         modifier =
-                            Modifier.size(24.dp)
-                    )
+                            Modifier
+                                .size(39.dp)
+                                .border(
+                                    1.dp,
+                                    c.borderLight,
+                                    RoundedCornerShape(16.dp)
+                                ),
+
+                        contentAlignment =
+                            Alignment.Center
+                    ) {
+
+                        Image(
+                            painter =
+                                painterResource(icon),
+
+                            contentDescription = null,
+
+                            modifier =
+                                Modifier.size(24.dp)
+                        )
+                    }
                 }
             }
-        }
 
-        /* =================================================
-           DESCRIÇÃO
-        ================================================= */
+            Text(
+                text = description,
 
-        Text(
-            text = description,
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = 4.dp,
+                            end = 4.dp
+                        ),
 
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        top = 4.dp,
-                        end = 4.dp
-                    ),
+                color = c.secondary,
 
-            color = c.secondary,
+                fontSize = 10.sp,
+                lineHeight = 16.sp,
 
-
-            fontSize = 10.sp,
-lineHeight = 16.sp,
-
-            maxLines = 3
-        )
-
-        /* =================================================
-           RODAPÉ
-        ================================================= */
-
-        Row(
-            modifier =
-                Modifier.fillMaxWidth(),
-
-            verticalAlignment =
-                Alignment.CenterVertically,
-
-            horizontalArrangement =
-                Arrangement.SpaceBetween
-        ) {
+                maxLines = 3
+            )
 
             Row(
+                modifier =
+                    Modifier.fillMaxWidth(),
+
                 verticalAlignment =
-                    Alignment.CenterVertically
+                    Alignment.CenterVertically,
+
+                horizontalArrangement =
+                    Arrangement.SpaceBetween
             ) {
 
-                Box(
-                    modifier =
-                        Modifier
-                            .size(6.dp)
-                            .clip(CircleShape)
-                            .background(
-                                if (active)
-                                    color
-                                else
-                                    c.muted
-                            )
-                )
+                Row(
+                    verticalAlignment =
+                        Alignment.CenterVertically
+                ) {
 
-                Spacer(
-                    Modifier.width(8.dp)
-                )
+                    Box(
+                        modifier =
+                            Modifier
+                                .size(6.dp)
+                                .clip(CircleShape)
+                                .background(
+                                    if (active)
+                                        color
+                                    else
+                                        c.muted
+                                )
+                    )
 
-                Text(
-                    text =
-                        if (active)
-                            "ATIVADO"
-                        else
-                            "DESATIVADO",
+                    Spacer(
+                        Modifier.width(8.dp)
+                    )
 
-                    color =
-                        if (active)
-                            color
-                        else
-                            c.muted,
+                    Text(
+                        text =
+                            if (active)
+                                "ATIVADO"
+                            else
+                                "DESATIVADO",
 
+                        color =
+                            if (active)
+                                color
+                            else
+                                c.muted,
 
-                    fontSize = 9.sp,
-letterSpacing = 1.2.sp
+                        fontSize = 9.sp,
+                        letterSpacing = 1.2.sp
+                    )
+                }
+
+                FakeSwitch(
+                    color = color,
+                    active = active,
+                    c = c
                 )
             }
-
-            FakeSwitch(
-                color = color,
-                active = active,
-                c = c
-            )
         }
     }
 }
-
 
 /* =========================================================
    SWITCH

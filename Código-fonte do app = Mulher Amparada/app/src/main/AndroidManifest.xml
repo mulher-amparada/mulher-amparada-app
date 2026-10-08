@@ -117,82 +117,103 @@
 
         <activity
             android:name=".FileActivity"
-           
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
                      android:exported="false" />
                      
         <activity
             android:name=".AssistenteActivity"
-            
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
                      android:exported="false" />
 
         <activity
             android:name=".NeoCalcActivity"
-            
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
                      android:exported="false" />
                      
                              <activity
             android:name=".HubActivity"
-            
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
                      android:exported="false" />
 
         <activity
             android:name=".GravarActivity"
-            
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
             android:exported="false" />
             
                     <activity
             android:name=".HomeActivity"
-            
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
             android:exported="false" />
 
 
                              <activity
             android:name=".GestoActivity"
-            
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
                      android:exported="false" />
 
                            <activity
             android:name=".ExigirActivity"
-            
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
                      android:exported="false" />
                      
                                                 <activity
             android:name=".ProtectActivity"
-            
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
                      android:exported="false" />
                      
                              <activity
             android:name=".MapaActivity"
-            
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
                      android:exported="false" />
                      
                                                   <activity
             android:name=".DiarioActivity"
-            
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
                      android:exported="false" />
                     
 
                                           <activity
             android:name=".CicloActivity"
-     android:exported="false" />
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
+                     android:exported="false" />
                      
                                                                
                      
                                                                <activity
             android:name=".TarefaActivity"
-       android:exported="false" />
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
+                     android:exported="false" />
                      
                              <activity
             android:name=".ArquivoActivity"
-                android:exported="false" />
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
+                     android:exported="false" />
                      
                                                   <activity
             android:name=".GeoActivity"
-                  android:exported="false" />
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
+                     android:exported="false" />
                      
                                                                        <activity
             android:name=".UpdateActivity"
-             android:exported="false" />
+            android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
+                     android:exported="false" />
                      
                      
 <!-- ================================================= -->

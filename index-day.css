@@ -2768,12 +2768,12 @@ svg {
 }
 
 footer {
-    --footer-accent: #ff3f82;
-    --footer-accent-soft: #ff8fb5;
-    --footer-background: #fff4f8;
-    --footer-text: #38232c;
-    --footer-muted: #806b75;
-    --footer-border: #f2d5e0;
+    --footer-accent: #a855f7;
+    --footer-accent-soft: #d8b4fe;
+    --footer-background: #faf5ff;
+    --footer-text: #352344;
+    --footer-muted: #857096;
+    --footer-border: #e9d5ff;
 
     position: relative;
     isolation: isolate;
@@ -2786,7 +2786,7 @@ footer {
         radial-gradient(ellipse at 100% 100%, #ff3f8210, transparent 45%),
         var(--footer-background);
     border-top: 1px solid var(--footer-border);
-    border-radius: 32px 32px 0 0;
+    border-radius: 32px;
     font-family: inherit;
     line-height: 1.8;
     overflow-wrap: anywhere;

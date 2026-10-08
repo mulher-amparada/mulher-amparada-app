@@ -1207,21 +1207,29 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
-       atualizar-footer:
+  # =========================================================
+  # ATUALIZAR FOOTER COM README
+  # =========================================================
+
+  atualizar-footer:
+    name: Atualizar Footer com README
     runs-on: ubuntu-24.04
     needs: deploy
+
     permissions:
       contents: write
+
     steps:
       - name: Baixar repositório
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
-          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 1
+          ref: main
 
       - name: Instalar Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
       - name: Instalar dependência Python
         run: pip install Markdown
@@ -1233,8 +1241,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add index.html
+
           if ! git diff --cached --quiet; then
-            git commit -m "Atualiza footer com README"
-            git push origin HEAD:${{ github.event.repository.default_branch }}
+            git commit -m "Atualizar footer com README [skip ci]"
+            git push origin HEAD:main
+          else
+            echo "O footer já está atualizado."
           fi

@@ -2322,7 +2322,7 @@ private fun BottomAreaSelector(
         color =
             Color.White,
         fontSize =
-            25.sp
+            20.sp
     )
 }
     

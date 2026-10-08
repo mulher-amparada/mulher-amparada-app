@@ -535,7 +535,7 @@ Mais informações
 <p>Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!</p>
 <p>e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, onde nem tinha os recursos, ja programei ele num app de A-IDE, num A05, e eu ja perdi vários projetos porque o celular nao aguentava, matava o projeto porque matou o processo de compilação!, e uma vez eu fiz o projeto do mulher amparada e eu mesmo fiz o app do mulher amparada (primeiro eu refiz porque o family link apagou a pasta segura samsung, depois na 2 vez que perdi portei tudo do apk compilado para descompilado, e depois perdi denovo mas ai eu ja tinha o código-fonte!)</p>
 <p>E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)</p>
-<p><strong>Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4690</strong></p>
+<p><strong>Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4710</strong></p>
 <p>E o projeto é = Open-source! (aderido no dia 02/10/2026)</p>
 <h1>👾Nossas contribuições!:</h1>
 <p><em>Gerado pelo workflow do projeto junto com uma action do marketplace do github!</em></p>
@@ -739,22 +739,6 @@ São utilizados os Secrets:
 - &quot;PAPERWF_PASSWORD&quot;
 
 ---
-## ✏️Atualização automática do footer
-
-O workflow utiliza Python para atualizar automaticamente o footer do `index.html` com base no README do repositório.
-
-- **Execução:** após o job `deploy`.
-- **Ambiente:** Ubuntu 24.04.
-- **Linguagem:** Python 3.
-- **Dependência:** biblioteca `Markdown`.
-- **Script:** `scripts/atualizar_footer.py`.
-- **Arquivo atualizado:** `index.html`.
-- **Versionamento:** as alterações são enviadas para a branch `main` somente quando existem mudanças.
-- **Commit automático:** `Atualizar footer com README [skip ci]`.
-
-O processo é executado pelo GitHub Actions e utiliza a conta automática `github-actions[bot]` para registrar as alterações.
-
-----
 
 🗺️ Sitemap
 
@@ -781,32 +765,6 @@ A autenticação utiliza o Secret:
 &quot;INDEXNOW_KEY&quot;
 
 O objetivo é comunicar aos mecanismos de busca compatíveis que existem URLs atualizadas para serem rastreadas.
-
----
-
-🔍 Auditoria SEO
-
-O workflow executa uma auditoria SEO completa utilizando:
-
-&quot;@nurkamol/seo-audit&quot;
-
-A ferramenta analisa o site e gera um relatório:
-
-&quot;seo-audit.md&quot;
-
-O relatório é armazenado como artifact do GitHub Actions.
-
-A auditoria permite verificar problemas relacionados a aspectos como:
-
-- SEO técnico;
-- metadados;
-- indexabilidade;
-- links;
-- imagens;
-- canonical;
-- Open Graph;
-- dados estruturados;
-- sitemap.
 
 ---
 
@@ -847,6 +805,18 @@ O Lighthouse permite analisar aspectos como:
 - boas práticas;
 - SEO;
 - experiência geral da página.
+
+----
+
+✏️ Atualização automática do README no site:
+
+O job executa o script Python &quot;scripts/atualizar_footer.py&quot;, responsável por ler o conteúdo do arquivo &quot;README.md&quot;, convertê-lo de Markdown para HTML usando a biblioteca Python &quot;Markdown&quot; e inserir o resultado no rodapé do site.
+
+O script atualiza o arquivo &quot;index.html&quot;, substituindo o conteúdo existente entre os marcadores &quot;README-FOOTER-START&quot; e &quot;README-FOOTER-END&quot;.
+
+Dessa forma, o rodapé do site acompanha automaticamente as alterações realizadas no README, sem a necessidade de copiar e atualizar manualmente o conteúdo. A cada execução, o script gera novamente o HTML a partir do README atual e atualiza o arquivo do site.
+
+A automação depende do script Python, da biblioteca &quot;Markdown&quot; e dos marcadores presentes no &quot;index.html&quot;. A exibição final do conteúdo depende também da estrutura HTML e dos estilos CSS aplicados ao site.
 
 ---
 
@@ -961,6 +931,7 @@ updates:
 <p>GravarActivity (xml) = Recurso do gravador de voz da área protegida</p>
 <p>FileActivity (xml) = Recurso de Gerenciador de arquivos da área protegida (mas ele apenas visualiza!)</p>
 <p>ArquivoActivity = (compose) Tela da funcao de arquivo seguro da área protegida!</p>
+<p>UpdateActivity = (compose) Tela da funcao que mostra o ícone do app disfarçado nome do aplicativo, versão instalada (versionName), número da build (versionCode) e um indicador visual de disponibilidade do sistema</p>
 <p>GeoActivity = (compose) Tela da funcao de raio seguro com georreferenciamento seguro da área protegida!</p>
 <p># Sobre como o aplicativo é compilado:</p>
 <p>Proteção da Activity de Entrada:</p>
@@ -1038,8 +1009,19 @@ updates:
 <p>Os dados da primeira página do app (disfarce do assistente de saúde) são meramente fictícios e não representam informações reais!</p>
 <p>e tambem, reforcando que no canto superior direito tem um icone de calculadora que quando clica vai pra uma calculadora e aparece o disfarce de calculadora </p>
 <blockquote>
-<p>no disfarce de calculadora, caso a usuaria esqueça tudo, existe um popup que usa o BiometricPrompt que poderá resetar tanto a senha tanto a pergunta de recuperação (e ele usa APENAS o device credencial!), porém, quando utiliza o BiometricPrompt e é validado, ele pergunta repetidamente a pergunta de recuperação e a senha, eu preferi deixar assim porque ai a usuaria pode errar quantas vezes ela quiser!</p>
+<p>no disfarce de calculadora, caso a usuaria esqueça tudo, existe um popup que usa o BiometricPrompt que poderá resetar tanto a senha tanto a pergunta de recuperação (e ele usa APENAS o device credencial!), porém, quando utiliza o BiometricPrompt e é validado, ele pergunta repetidamente a pergunta de recuperação e a senha, eu preferi deixar assim porque ai a usuaria pode errar quantas vezes ela quiser!, e eu preferi que o BiometricPrompt use só apenas o device credential, porque senão o agressor que tiver com acesso físico ao aparelho pode ou se cadastrar ou coagir a usuária a desbloquear!</p>
 </blockquote>
+<h3>Versão do app:</h3>
+<p>A "UpdateActivity" apresenta as informações da versão instalada do Mulher Amparada, utilizando os dados diretamente do aplicativo instalado.</p>
+<p>Ela exibe:</p>
+<ul>
+<li>Ícone do app disfarçado</li>
+<li>Nome do aplicativo</li>
+<li>Versão instalada ("versionName")</li>
+<li>Número da build ("versionCode")</li>
+<li>Indicador visual de disponibilidade do sistema</li>
+</ul>
+<p>A versão e a build são obtidas diretamente dos metadados do APK, garantindo que as informações exibidas correspondam à versão realmente instalada no dispositivo.</p>
 <h3>Botão de Pânico:</h3>
 <p>Botão de Pânico, com ligação ao 180 de forma direta no primeiro clique.</p>
 <h3>Proteção por Barulho:</h3>
@@ -1449,9 +1431,56 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
 <p>com.mulheres://abrir</p>
 <p>funciona como uma forma direta de solicitar a abertura do aplicativo Mulher Amparada.</p>
 <p>e temos um botão no index.html no site do github pages que leva pro app usando esse link também!</p>
-<h1>📢 Divulgação:</h1>
-<p>Acompanhe as referências e publicações relacionadas ao projeto <strong>Mulher Amparada</strong> na página oficial de divulgação da Wiki.</p>
-<p>🔗 <strong><a href="https://github.com/mulher-amparada/mulher-amparada-app/wiki/Divulga%C3%A7%C3%A3o-do-projeto-=-Mulher-Amparada">Acessar a página de divulgação</a></strong></p>
+<h1>🔗Central de links e referências do projeto <strong>Mulher Amparada</strong>.</h1>
+<pre><code>
+---
+
+## 📱 Redes sociais:
+
+- 🐦 [X — @mulheramparada](https://x.com/mulheramparada/status/2105045353615761521?s=20)
+- 🌷 [Tumblr — Mulher Amparada: um projeto gratuito e livre](https://www.tumblr.com/mulheramparada/829407067773255680/mulher-amparada-um-projeto-gratuito-e-livre)
+- 📰 [Blogger — Links do Projeto Mulher Amparada](https://mulheramparada.blogspot.com/2026/10/projeto-mulher-amparada-links.html?m=1)
+
+---
+
+## 📰 Imprensa e divulgação:
+
+- 📢 [SubmitPR — Mulher Amparada](https://submitpr.org/press-release/mulheramparada)
+
+---
+
+## 🚀 Product Hunt:
+
+- 🟣 [Product Hunt — Mulher Amparada](https://www.producthunt.com/products/mulher-amparada?launch=mulher-amparada)
+
+- 📃 [Paper WF — Projeto Mulher Amparada](https://paper.wf/mulheramparada/projeto-mulher-amparada)
+
+---
+## 👨🏾‍💻 DEV Community:
+
+- 📝 [DEV Community — Projeto Mulher Amparada](https://dev.to/mulher_amparada/projeto-mulher-amparada-1c49)
+
+---
+## 💻 CoderLegion:
+
+- 🔗 [Links do Projeto Mulher Amparada](https://coderlegion.com/29843/links-do-projeto-mulher-amparada)
+
+---
+## 📰 Tabnews:
+
+- 🔗 [Mulher Amparada — Desenvolvimento de um aplicativo Android independente](https://www.tabnews.com.br/projetomulheramparadaapp/mulher-amparada-desenvolvimento-de-um-aplicativo-android-independente)
+
+---
+
+## 🌱 Agregadores:
+
+- 🚀 [NicheLoom — Mulher Amparada](https://www.nicheloom.com/launches/40835/)
+
+- ⚠️ [Observatório Blockchain — link atualmente retorna 404](https://observatorioblockchain.com/newsfeed/item/23123e760a8918f1/)
+
+---
+
+</code></pre>
 <h1>📦Packpage do repositório no github:</h1>
 <p>ele é um packpage focado para quem quiser divulgar o projeto!</p>
 <h3>ele contém:</h3>
@@ -1465,6 +1494,7 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
 <p><strong>Como agir:</strong> Se for imprimir cartazes ou banners, certifique-se de que o QR Code está visível e em alta resolução. Isso permite que a usuária aponte a câmera e acesse o projeto diretamente, minimizando o histórico de digitação e mensagens trocadas.</p>
 </blockquote>
 <p>a pessoa instala pelo github releases!</p>
+<p>e quem publica e atualiza essa release é o proprio workflow!</p>
 <!-- README-FOOTER-END -->
 </footer>
 

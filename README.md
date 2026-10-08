@@ -331,6 +331,12 @@ A automação depende do script Python, da biblioteca "Markdown" e dos marcadore
 
 ---
 
+🔁 Atualização do relatório de commits:
+
+O job "atualizar-relatorio-commits" depende da conclusão bem-sucedida do job "publicar-divulgacao". Ele utiliza Ruby para gerar o arquivo "dados_commits.txt", contendo estatísticas do histórico Git, como o total de commits, a quantidade de commits por autor e o histórico detalhado das alterações registradas. O relatório é atualizado na raiz do repositório e enviado ao GitHub somente quando há mudanças no arquivo.
+
+---
+
 🔐 Principais Secrets utilizados
 
 Secret| Finalidade

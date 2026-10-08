@@ -6,7 +6,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4698**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4605**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
@@ -316,6 +316,18 @@ O Lighthouse permite analisar aspectos como:
 - boas práticas;
 - SEO;
 - experiência geral da página.
+
+----
+
+✏️ Atualização automática do README no site:
+
+O job converte automaticamente todo o conteúdo do arquivo "README.md" de Markdown para HTML, preservando a estrutura e os elementos compatíveis com a conversão, como títulos, parágrafos, listas, links, tabelas e blocos de código.
+
+Após a conversão, o conteúdo gerado é inserido no rodapé do "index.html", substituindo o conteúdo anterior localizado entre os marcadores "README-FOOTER-START" e "README-FOOTER-END".
+
+Dessa forma, o rodapé do site acompanha as alterações realizadas no README, sem a necessidade de copiar e atualizar manualmente o conteúdo. Sempre que o job é executado, o script gera novamente o HTML a partir da versão atual do README e atualiza o arquivo do site.
+
+O job automatiza a sincronização do conteúdo entre o README e o site. A exibição final depende da estrutura do HTML e dos estilos CSS aplicados à página.
 
 ---
 

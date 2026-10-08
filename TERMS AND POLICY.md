@@ -1208,9 +1208,3 @@ O Serviço de Acessibilidade é utilizado especificamente para o recurso de bloq
 O aplicativo não utiliza mais o mecanismo de Administrador do dispositivo para realizar o bloqueio da tela.
 
 O sistema Cripto utiliza AES-256, Android Keystore e Jetpack DataStore Preferences para proteger e armazenar dados locais destinados às funcionalidades que utilizam esse sistema.
-
-### 1. Incorporação por Referência e Vinculação por Hiperlink
-
-- **Validade Jurídica dos Avisos:** Para todos os fins legais e de auditoria das autoridades ou instituições de direitos humanos, todas as especificações de uso de sensores, regras de permissões manuais de Activitys, escopos do visualizador de arquivos e restrições territoriais estão integradas a este documento por meio de referência direta.
-
-- **Acesso aos Avisos:** A especificação técnica e o contexto de cada mecanismo de proteção encontram-se publicados e updated na página principal do projeto. O uso do sistema está condicionado à ciência de todos os alertas detalhados no [Mural de Avisos do README.md](https://github.com).

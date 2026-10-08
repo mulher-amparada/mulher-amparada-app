@@ -1,0 +1,158 @@
+RELATÓRIO DE COMMITS — MULHER AMPARADA
+Intervalo: 3301 a 3450
+Quantidade neste arquivo: 150
+Total de commits encontrados: 4733
+Gerado em: 2026-10-08T23:24:14+00:00
+
+HASH | AUTOR | DATA | MENSAGEM
+
+b7876bc1237ef690de6d917a6dc3903252764360	Mulher amparada	2026-09-26T08:45:48-03:00	Add files via upload
+7fa0d3474affd091c39c99bcdb3f34d29c629137	Mulher amparada	2026-09-26T08:49:58-03:00	Add files via upload
+3c544129c8b877729401c5f6f4546ad74a5f50fc	Mulher amparada	2026-09-26T08:54:30-03:00	Atualizar o AssistenteActivity.kt
+f645190ddd338fbca1aa8172977dd2581b5a325f	Mulher amparada	2026-09-26T08:57:51-03:00	Atualizar o AssistenteActivity.kt
+ff4932a972dc8f1af3f56c0d37dc046d74782d00	Mulher amparada	2026-09-26T08:59:37-03:00	Atualizar o build.gradle
+9756d3e1cd6f1e67d66b47ea50a7ddd67e1607df	github-actions[bot]	2026-09-26T12:00:27Z	Atualizar APK assinado [skip ci]
+e0d7233133ad43d4971b6f5b6b59296c4f8e7255	Mulher amparada	2026-09-26T09:01:50-03:00	Atualizar o AssistenteActivity.kt
+79cc20cdc1fd21b9619a700c0cb8f74955c257ae	github-actions[bot]	2026-09-26T12:02:39Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+4380349ef5098e1a0b33eab0868bcb6befd8c8ba	Mulher amparada	2026-09-26T09:10:41-03:00	Atualizar o AssistenteActivity.kt
+9dfba4e85bf70adaf2441ca560b56d6e97573770	Mulher amparada	2026-09-26T09:13:44-03:00	Excluir icone_8.xml
+fb3f95cba339226147fb6177490bcb975836adc4	Mulher amparada	2026-09-26T09:14:03-03:00	Criar ic_8.xml
+5d093dbcfd59353705b21494d56277587d1c07c3	Mulher amparada	2026-09-26T09:15:44-03:00	Atualizar o AssistenteActivity.kt
+287550804401ad84fc53c360cea0ded9703c7778	Mulher amparada	2026-09-26T09:20:28-03:00	Atualizar o build.gradle
+c2cf5eb8cba101b94889d586ac4f58bcf5452138	Mulher amparada	2026-09-26T09:22:37-03:00	Atualizar o build.gradle
+66b499e400c80d91ed7ea197e445eb20d000769f	github-actions[bot]	2026-09-26T12:24:26Z	Atualizar APK assinado [skip ci]
+731bfc3d2189397a302bfe0c44c624f4d912df33	github-actions[bot]	2026-09-26T12:24:32Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+bf9649341d409f4ba86e855cc27772e2d9bc0f8a	github-actions[bot]	2026-09-26T12:25:51Z	Atualizar total de commits [skip ci]
+284fa44140241c48a28ae2a30afd10ab080fd281	Mulher amparada	2026-09-26T09:29:33-03:00	Atualizar o settings.gradle
+9e167f1ae2acf391c2c653f5f80451e28af30045	github-actions[bot]	2026-09-26T12:33:28Z	Atualizar total de commits [skip ci]
+31fcd36a2e7995d4402e787feabb40114978c4bf	Mulher amparada	2026-09-26T09:38:50-03:00	Atualizar o AssistenteActivity.kt
+44f91daeb7bbc6a5fca521717b8f413b24d762a8	Mulher amparada	2026-09-26T09:41:48-03:00	Atualizar o AssistenteActivity.kt
+f7192e711a6bdd202a6609604548746d12167bd1	github-actions[bot]	2026-09-26T12:43:34Z	Atualizar APK assinado [skip ci]
+aee5ac0f10af6a63673b86a1cf1fe7518ddd65f0	github-actions[bot]	2026-09-26T12:43:41Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+4875498b63b73f9fbd4e5d46f3fccac444273a1c	github-actions[bot]	2026-09-26T12:44:48Z	Atualizar total de commits [skip ci]
+0d1c796a7e6b9fa84ed42ae746e866484542a12d	Mulher amparada	2026-09-26T09:55:20-03:00	Atualizar o AssistenteActivity.kt
+6b764de6a561d9ba38876d1a8d69276ae4df976e	github-actions[bot]	2026-09-26T12:57:23Z	Atualizar APK assinado [skip ci]
+3a665c7529fa4d7a6b917bf529a5dd7f60da212b	github-actions[bot]	2026-09-26T12:57:30Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+786d982bc32e1eb6972a420e0181dfdc2b0453e7	github-actions[bot]	2026-09-26T12:58:45Z	Atualizar total de commits [skip ci]
+89989821b69a7779460216ee2322297bd3ef170c	Mulher amparada	2026-09-26T10:07:52-03:00	Atualizar o AssistenteActivity.kt
+da3ad4d2323caf99b632c0d9cceeed721f0605a4	github-actions[bot]	2026-09-26T13:09:43Z	Atualizar APK assinado [skip ci]
+f5e3262f1fd6a033b8ffc0409b5bc5a2db6ba6eb	github-actions[bot]	2026-09-26T13:09:50Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+92a14bcfe621d548a3978039f1d2a9a2dcd46cad	github-actions[bot]	2026-09-26T13:10:57Z	Atualizar total de commits [skip ci]
+d5b3c32c1877413af94cab053d9016e8d33ce3e6	Mulher amparada	2026-09-26T10:11:41-03:00	Atualizar o AssistenteActivity.kt
+a5d6743f9dc6f7826eb53a1b02ac6ca73b9617b0	github-actions[bot]	2026-09-26T13:13:44Z	Atualizar APK assinado [skip ci]
+6dbf0a3c63b2a2d5c7b6801b03bc63df44a2b0ce	github-actions[bot]	2026-09-26T13:13:51Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+57cfff6c4c98c63101fcbd7c6167fc523a9b6e92	github-actions[bot]	2026-09-26T13:15:34Z	Atualizar total de commits [skip ci]
+252ffd917aa6d99a9d6f19ce279877d8d2c44d84	Mulher amparada	2026-09-26T10:15:47-03:00	Atualizar o AssistenteActivity.kt
+b35dcb6b9ef360d287966cc8a1b182c120fc787b	Mulher amparada	2026-09-26T10:17:01-03:00	Atualizar o batimentos1.xml
+168cdef8720bec0ad3eec36d8b48cbb311a1ef43	github-actions[bot]	2026-09-26T13:18:49Z	Atualizar APK assinado [skip ci]
+97d984ac6660b1fc633a5c1377cc783ab444b52d	github-actions[bot]	2026-09-26T13:18:56Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+cba6aa67ab9b2a82306f93fc25b17511c225a380	Mulher amparada	2026-09-26T10:19:20-03:00	Criar NeoCalcActivity.kt
+66f8217ba3ba8083be11132b4557bc76749a9bdd	Mulher amparada	2026-09-26T10:26:53-03:00	Atualizar o AssistenteActivity.kt
+b81a3b12bdb8e5f3092aa54425e9f54574cbb854	Mulher amparada	2026-09-26T10:28:00-03:00	Atualizar o ic_8.xml
+263ce7697e646bec561ab88fc4d4e1a08c3778f0	Mulher amparada	2026-09-26T10:28:48-03:00	Atualizar o assistente1.xml
+60125b97a6199723569513bac84eed7b31b0eaa6	Mulher amparada	2026-09-26T10:29:53-03:00	Atualizar o respiracao1.xml
+1f620931acb73d2ced1d0488b4280ae7a4d130d1	Mulher amparada	2026-09-26T10:30:46-03:00	Atualizar o temperatura1.xml
+4680c7ee5a4171144b5c188c04997fe3b2e3fa02	Mulher amparada	2026-09-26T10:31:30-03:00	Atualizar o hidratacao1.xml
+d135a4da0d7c214ae835b5cf10aef93475224f47	Mulher amparada	2026-09-26T10:32:14-03:00	Atualizar o bemestar1.xml
+36980888cbb33b8459637f346124fec9db4629b4	Mulher amparada	2026-09-26T10:34:36-03:00	Atualizar o AssistenteActivity.kt
+6b593bc2dde91483927a02191a1d696da1434cd7	Mulher amparada	2026-09-26T10:36:38-03:00	Atualizar o NeoCalcActivity.kt
+795fc890ba869d52dd8f36464699995e278dcfe3	Mulher amparada	2026-09-26T10:40:12-03:00	Atualizar o NeoCalcActivity.kt
+129b31c1dd75f2f6fa2444d5539a4b584336d7b2	Mulher amparada	2026-09-26T10:50:09-03:00	Atualizar o NeoCalcActivity.kt
+95f6387287cba001c29cc109db2057ab63691bfd	Mulher amparada	2026-09-26T10:52:33-03:00	Atualizar o NeoCalcActivity.kt
+ce865a5be626191a0e5afc8207542152ab2167b1	Mulher amparada	2026-09-26T10:54:59-03:00	Atualizar o NeoCalcActivity.kt
+39047c7b2364c341e567dec814d269fc62ef0d11	Mulher amparada	2026-09-26T10:55:52-03:00	Atualizar o AndroidManifest.xml
+d6c91a7d65d537c342cd38fdcaa99e1d910993f9	github-actions[bot]	2026-09-26T13:58:09Z	Atualizar APK assinado [skip ci]
+53805d04aca6fb3a3c789c477e1e73597ad10e57	github-actions[bot]	2026-09-26T13:58:16Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+89595615a4a7c47509510acdc91ec73be9c3411f	github-actions[bot]	2026-09-26T13:59:27Z	Atualizar total de commits [skip ci]
+4b41b529cba780f7d7e3f82d928687df78e73a85	Mulher amparada	2026-09-26T11:04:36-03:00	Atualizar o NeoCalcActivity.kt
+bf92d87ef0553fce0f1a18413dd6350e11302b5f	Mulher amparada	2026-09-26T11:06:23-03:00	Criar ic_erase.xml
+0a6b251ca3ecb949967e51837e9b560b6bb61ddf	Mulher amparada	2026-09-26T11:07:06-03:00	Atualizar o NeoCalcActivity.kt
+ee1a83ca1a9634a8f9a35ba29cff1e4075bde616	Mulher amparada	2026-09-26T11:11:34-03:00	Criar HubActivity.kt
+8d260fa03ef1e720538359b86035d2843cae9ec5	Mulher amparada	2026-09-26T11:20:50-03:00	Add files via upload
+bd1ed244e644dc9b307d08dbf36d1c1905e66f30	Mulher amparada	2026-09-26T11:22:50-03:00	Atualizar o HubActivity.kt
+c9ad1762975d40788df93580e736600e6ec3eada	Mulher amparada	2026-09-26T11:25:42-03:00	Atualizar o HubActivity.kt
+09dfbe28388f5603c057ef6f575a209ea2b63810	Mulher amparada	2026-09-26T11:28:01-03:00	Atualizar o NeoCalcActivity.kt
+7da0720dc355cee34ae0ffe8da31e337ea758093	github-actions[bot]	2026-09-26T14:30:03Z	Atualizar APK assinado [skip ci]
+29d5bcfd896d02f1a704c876cda9c9acd211ad6b	github-actions[bot]	2026-09-26T14:30:09Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+3f7c59f347f711ac85368ea02ed92da25e67e3a6	github-actions[bot]	2026-09-26T14:31:14Z	Atualizar total de commits [skip ci]
+0f9715a2c2aaf452390f123611ff6b4ef2cac3f7	Mulher amparada	2026-09-26T11:32:23-03:00	Atualizar o AndroidManifest.xml
+a431c7371a4330a3efba9368366dc92a067a51bc	github-actions[bot]	2026-09-26T14:34:26Z	Atualizar APK assinado [skip ci]
+c2b159bf4668322309043b5c8bc397684541b357	github-actions[bot]	2026-09-26T14:34:31Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+739133d971381f026104ce9d60525d27da8ab6ba	github-actions[bot]	2026-09-26T14:35:40Z	Atualizar total de commits [skip ci]
+8de63fa27392ce88019a6888050de77e9581763b	Mulher amparada	2026-09-26T12:07:08-03:00	Atualizar o HubActivity.kt
+0be1ec803438e41b041eef419d557ee35fa6edc9	Mulher amparada	2026-09-26T12:09:18-03:00	Atualizar o HubActivity.kt
+3d71e87defa59dfb3061a723ed62c23fffe39f73	github-actions[bot]	2026-09-26T15:11:01Z	Atualizar APK assinado [skip ci]
+65cc15e6011bf7f728ecb0542ad2e710af03e1f0	github-actions[bot]	2026-09-26T15:11:07Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+2c173b6eabfbaf0521ef4f5353968288103ff11d	github-actions[bot]	2026-09-26T15:12:27Z	Atualizar total de commits [skip ci]
+e4c61bd3d6931c2ab2878d5d2b5b2ca29d3c68e0	Mulher amparada	2026-09-26T12:18:41-03:00	Atualizar o PalmaService.kt
+795fba4f86693e17ea80507f714cd28806626622	github-actions[bot]	2026-09-26T15:20:42Z	Atualizar APK assinado [skip ci]
+22a5e72b0c39fe8f7aa282f62caf92ee2fedf3be	github-actions[bot]	2026-09-26T15:20:49Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+ad7b98f277927fcd10ce0d01f930e28ce6153620	github-actions[bot]	2026-09-26T15:22:20Z	Atualizar total de commits [skip ci]
+11566b4dba343db2cff1334164d53c95290e35e3	Mulher amparada	2026-09-26T12:26:07-03:00	Atualizar o PalmaService.kt
+e9454277a862530a8ebae523066cf29063f44f29	Mulher amparada	2026-09-26T12:29:28-03:00	Atualizar o HubActivity.kt
+04565bcf5780f2f318e8c978deabad9b87d5e85c	Mulher amparada	2026-09-26T12:30:27-03:00	Atualizar o PalmaService.kt
+1ea49d6ac1d7648aee5d92fda91b8bff081fca74	Mulher amparada	2026-09-26T12:32:35-03:00	Atualizar o HubActivity.kt
+110fbf5a9b9dc03ce7a8e2fed3e4409d7eaff594	github-actions[bot]	2026-09-26T15:34:39Z	Atualizar APK assinado [skip ci]
+3bec987704e2410abd80285d20cc40300441344c	github-actions[bot]	2026-09-26T15:34:46Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+c7f4ad0e930df2a680fe9e755a06b066e5ca47f1	github-actions[bot]	2026-09-26T15:35:56Z	Atualizar total de commits [skip ci]
+6144cf485f7e90a788f24b4bcc637cfc126bc603	Mulher amparada	2026-09-26T12:42:57-03:00	Atualizar o TiltBrightnessController.kt
+d9149c086de7b45fbc6a0badc9f30e65125b4fae	Mulher amparada	2026-09-26T12:45:26-03:00	Atualizar o HubActivity.kt
+25b0f2b28eef0d6e72a777b72acde43545523dca	Mulher amparada	2026-09-26T12:48:43-03:00	Atualizar o MainActivity.kt
+11c7dd868e7b0714f15ec49558a40a95378cf853	Mulher amparada	2026-09-26T12:51:34-03:00	Atualizar o MainActivity.kt
+35b4f28db68ce597e7e5570aad92146f6807f10a	Mulher amparada	2026-09-26T12:53:41-03:00	Atualizar o HubActivity.kt
+f7796e47cf469a375e66a3d1da00a82f8b894de4	Mulher amparada	2026-09-26T12:54:31-03:00	Atualizar o WebAppInterface.kt
+26f40bc8c72194cf50741bc316137e803f34faac	github-actions[bot]	2026-09-26T15:56:08Z	Atualizar APK assinado [skip ci]
+36e66474a779cd380be1d3817f7aa2510d33b021	github-actions[bot]	2026-09-26T15:56:15Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+48b8959a71e7c22c4fbc9d7470bd2ca781e36ee6	github-actions[bot]	2026-09-26T15:57:47Z	Atualizar total de commits [skip ci]
+355c0002602efe1a115c1c4fa6f1059b0df0b77f	Mulher amparada	2026-09-26T13:01:35-03:00	Atualizar o HubActivity.kt
+f91709e05d9d5af7e2eecffea3f01992ebaa9db2	Mulher amparada	2026-09-26T13:03:39-03:00	Atualizar o HubActivity.kt
+4c62e826c245942c63c28431b491be60610aa897	github-actions[bot]	2026-09-26T16:05:14Z	Atualizar APK assinado [skip ci]
+c897b475a98a6e3b8027c5d786b4586e60665aeb	github-actions[bot]	2026-09-26T16:05:21Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+9db4f32901a5f76572a76fd35c412ee0d0941cde	github-actions[bot]	2026-09-26T16:06:28Z	Atualizar total de commits [skip ci]
+47fea2b83ed1dacba0a92c47ae00b9670645c812	Mulher amparada	2026-09-26T13:09:43-03:00	Atualizar o AssistenteActivity.kt
+ac080eb07434b420506ebc68264feb65623ad8a1	Mulher amparada	2026-09-26T13:11:16-03:00	Atualizar o TiltBrightnessController.kt
+13a39001e2aa3c0ccf6fd9152e9ec6702529062a	Mulher amparada	2026-09-26T13:19:08-03:00	Atualizar o HubActivity.kt
+3cee084cb16a9ba5962016c6f3a150b592190bc3	Mulher amparada	2026-09-26T13:20:12-03:00	Atualizar o AssistenteActivity.kt
+c6f75ea5865cdcac4ad04342f79d76db1630b28b	Mulher amparada	2026-09-26T13:31:53-03:00	Atualizar o HubActivity.kt
+8c08dcf22067c13f26278cc5db647f5fbbeb48a7	Mulher amparada	2026-09-26T13:32:36-03:00	Atualizar o MainActivity.kt
+d9198b7c209d94b9f44e0a568895d27461a2bc7c	Mulher amparada	2026-09-26T13:32:50-03:00	Atualizar o WebAppInterface.kt
+0c457e556f74f1f02563d6e0476e354cbcca3e39	github-actions[bot]	2026-09-26T16:35:22Z	Atualizar APK assinado [skip ci]
+c1cc8d429903381a9f455fd63e4b7c8399666d24	github-actions[bot]	2026-09-26T16:35:28Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+7e41e5a128a349cb9b75ddb5d540e2ab6a624164	github-actions[bot]	2026-09-26T16:36:39Z	Atualizar total de commits [skip ci]
+1323c12dc974c0eac60c83c27ad258a1b97dd47c	Mulher amparada	2026-09-26T13:51:23-03:00	Add files via upload
+ab4b2bcf73e642ff9a93410e1c383055f4514113	Mulher amparada	2026-09-26T13:55:23-03:00	Atualizar o AssistenteActivity.kt
+2e0088e8476c8ecdb2b379dcbf4d674ebf9754e1	Mulher amparada	2026-09-26T13:58:50-03:00	Add files via upload
+7665651bbf376b8da8b6a33445bdb52ae3f888bb	github-actions[bot]	2026-09-26T17:00:49Z	Atualizar APK assinado [skip ci]
+c02b2933460c52a86e7840eb737930e7ca1e0772	github-actions[bot]	2026-09-26T17:00:56Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+bee92c425fc500ce4a1022caa4b54e16e2e7aa4e	github-actions[bot]	2026-09-26T17:02:30Z	Atualizar total de commits [skip ci]
+686d44695ef16ae5d089bc2737a37b9988d3829b	Mulher amparada	2026-09-26T14:07:51-03:00	Atualizar o README.md
+4ac806cc5c4f5c4280a0935c5af41567572a1e75	github-actions[bot]	2026-09-26T17:11:02Z	Atualizar total de commits [skip ci]
+943e152ebe8ed4012afa26280e6537cfdefc3836	Mulher amparada	2026-09-26T14:13:29-03:00	Excluir index2.html
+fa9d570b9a07482fd8e0ecda96eadb0c8b62cddd	Mulher amparada	2026-09-26T14:13:52-03:00	Excluir index11.html
+db4ee6555ad687bc1696d947ab4065b427490441	Mulher amparada	2026-09-26T14:14:03-03:00	Excluir index1.html
+cafcf1129a834ea88b75938c1e03c48e6d2a7c20	Mulher amparada	2026-09-26T14:14:16-03:00	Excluir index1.html
+1de6eb96c0e5c88649e9bd7306b61697467555a0	Mulher amparada	2026-09-26T14:14:43-03:00	Excluir index2.html
+31e234176a63d67281b1d768a28ad77a6df3dac1	Mulher amparada	2026-09-26T14:14:52-03:00	Excluir index11.html
+42d425db44a284f99191f83f0a2a154df6b03aef	Mulher amparada	2026-09-26T14:17:07-03:00	Add files via upload
+287875726647b180d8eb9ab4f920ed23126b8bbe	github-actions[bot]	2026-09-26T17:17:09Z	Atualizar APK assinado [skip ci]
+f19ad3edd195a878625e2a0f83ccbeff5357fde4	github-actions[bot]	2026-09-26T17:17:14Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+9b7e941d273665e66020c4a5787d3e26f6f4437e	Mulher amparada	2026-09-26T14:20:28-03:00	Atualizar o HubActivity.kt
+89d1a7b649522c201d1847f9c4725e2f90b576b2	github-actions[bot]	2026-09-26T17:22:28Z	Atualizar APK assinado [skip ci]
+6b7c05c336cd6696b75fb1b90a4a18a3c3c5ffce	github-actions[bot]	2026-09-26T17:22:36Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+fc136337f59fe7d6939dd7882c2c064f1a697747	github-actions[bot]	2026-09-26T17:24:01Z	Atualizar total de commits [skip ci]
+aa5d8efa3c6f919665dbd46609a8dd2404fec173	Mulher amparada	2026-09-26T14:33:43-03:00	Atualizar o HubActivity.kt
+531ac083949a7e938c5f4b4fa253361c3f75a2e6	Mulher amparada	2026-09-26T14:36:08-03:00	Atualizar o HubActivity.kt
+0482a8e6ad6619327f7d9730cd196e8de11a9138	Mulher amparada	2026-09-26T14:36:50-03:00	Atualizar o AndroidManifest.xml
+5ec62106669ca355d33031293fd2d9217216a330	Mulher amparada	2026-09-26T14:38:52-03:00	Criar HomeActivity.kt
+ba6563324477389d57187a04d0cf7f213ef0a3d0	Mulher amparada	2026-09-26T14:41:39-03:00	Atualizar o HubActivity.kt
+a324a1ea61f3f7f9154ed61c765ee237f79a2ed7	Mulher amparada	2026-09-26T14:45:26-03:00	Add files via upload
+b7109418b244881a7510f3dd838f7cf002d4720d	Mulher amparada	2026-09-26T14:49:46-03:00	Add files via upload
+8f773f4e2b0b3eaf901ff7891119b7ebd4977cff	Mulher amparada	2026-09-26T14:51:54-03:00	Atualizar o HubActivity.kt
+b0949c258090a45ef3c1cf8454f363210b76fa62	github-actions[bot]	2026-09-26T17:53:32Z	Atualizar APK assinado [skip ci]
+235895b9931db3c984fc515d223727c9ed29dba5	github-actions[bot]	2026-09-26T17:53:38Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+f7ae223d14d1b9adbb842904671b148640e58dc1	github-actions[bot]	2026-09-26T17:55:13Z	Atualizar total de commits [skip ci]
+edd10c1671224958af30313c1a73240dc3f72fef	Mulher amparada	2026-09-26T15:02:34-03:00	Atualizar o HubActivity.kt
+3bd635e31e58b791ea6f743d6646d09bca8ba6e2	Mulher amparada	2026-09-26T15:05:20-03:00	Atualizar o HubActivity.kt
+8a75bcd8e4dda03c6a5d7c966cd9682da8f9f994	Mulher amparada	2026-09-26T15:07:17-03:00	Atualizar o NeoCalcActivity.kt
+ebba5534ba1e5581c5de4a30b47b3c59816c2371	github-actions[bot]	2026-09-26T18:07:18Z	Atualizar APK assinado [skip ci]
+a2a0bfd78df272e69f401ee534603498f5adc50d	github-actions[bot]	2026-09-26T18:07:27Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]

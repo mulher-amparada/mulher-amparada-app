@@ -1,0 +1,158 @@
+RELATÓRIO DE COMMITS — MULHER AMPARADA
+Intervalo: 1201 a 1350
+Quantidade neste arquivo: 150
+Total de commits encontrados: 4733
+Gerado em: 2026-10-08T23:24:14+00:00
+
+HASH | AUTOR | DATA | MENSAGEM
+
+30bc600bb8afa287b22b01416174791fa0d447af	Mulher amparada	2026-08-28T13:36:44-03:00	Delete imagem6.jpg
+3f99cf98f885ad2a43539247a16c23f6b300f12b	Mulher amparada	2026-08-28T13:36:56-03:00	Delete imagem11.jpg
+a304468f06677d6bf1250ab93f43494e6faf75e5	Mulher amparada	2026-08-28T13:37:08-03:00	Delete imagem2.jpg
+2f9650bee3bdcfcca478861ff1611a0e4ec75246	Mulher amparada	2026-08-28T13:37:22-03:00	Delete imagem3.jpg
+3b82d79c8c386c164d75997beba3c6ca82331621	Mulher amparada	2026-08-28T13:37:40-03:00	Delete imagem5.jpg
+c9b5e010c93106f023019c36682bcbb79f7f92de	Mulher amparada	2026-08-28T13:38:06-03:00	Delete imagem4.jpg
+a8306aac60ca08e94d8d9c1f4bcb6da11f60bfad	Mulher amparada	2026-08-28T13:41:47-03:00	Delete comer1.png
+78f674a526ef8f9c3be7be202f85e6b2b14fd9b6	Mulher amparada	2026-08-28T13:42:00-03:00	Delete comer2.png
+559798174428d10ad02e4c8ac43ce29d108c31df	Mulher amparada	2026-08-28T13:42:13-03:00	Delete avaliar.html
+daa76b6d237000364a820176e1e7e661c52024d8	Mulher amparada	2026-08-28T13:43:05-03:00	Add files via upload
+00f3b90786d4f83fe665662bb8c8b57686ea4c9c	Mulher amparada	2026-08-28T13:48:24-03:00	Add files via upload
+333212ae8371d836d8a5953475f785e766da690c	Mulher amparada	2026-08-28T13:49:59-03:00	Excluir futuro.html
+99c4e201e915676dd01700469c4f0b0bb0e997cc	Mulher amparada	2026-08-28T13:50:31-03:00	Excluir texto.txt
+e0bd49b2d91e97729387014d399a29f296b97e4b	Mulher amparada	2026-08-28T13:50:38-03:00	Excluir texto99.txt
+eec2c33a02817521a70a049dc2891320dfa02c01	Mulher amparada	2026-08-28T13:53:03-03:00	Atualizar o home.html
+902de3287903e76e108e0db316dd7d3456e375a3	Mulher amparada	2026-08-28T13:54:25-03:00	Atualizar o README.md
+3ef144596eb862eb712a0f71668f007b00613a39	Mulher amparada	2026-08-28T14:09:56-03:00	Add files via upload
+61c0ba71d7347e70c302ef3024cbea6f1256370a	Mulher amparada	2026-08-28T14:52:12-03:00	Add files via upload
+ce4351a22a22c96d93ada07cbd6671c80a088dd6	Mulher amparada	2026-08-28T14:58:13-03:00	Add files via upload
+69bb98c70a522fe4598efc8c567ced5a7bb4cfc0	Mulher amparada	2026-08-28T15:27:19-03:00	Add files via upload
+cf021858359e8e76534a04d6d0e214d7de1a73b4	Mulher amparada	2026-08-28T18:43:33-03:00	Excluir Dev1.html
+21c04f75c6a4baf68856b635dcebc7883c906d8c	Mulher amparada	2026-08-28T18:43:51-03:00	Excluir Dev.html
+6f6fd282a3668ed10396dc3ada161e993afb77d5	Mulher amparada	2026-08-28T18:43:58-03:00	Excluir Dev3.html
+4e17ab173ab17752d4ccddccc67eeb0fdac1ce80	Mulher amparada	2026-08-28T18:44:12-03:00	Excluir texto9999.txt
+44ef77d48cf53172ff33aec04668a5c67ef00ca3	Mulher amparada	2026-08-28T18:44:17-03:00	Excluir texto999.txt
+a6b4f743864daa5382bdd180b83d8a621dfa8b65	Mulher amparada	2026-08-28T18:45:55-03:00	Excluir Dev4.html
+f39ad42293b75275965fb05dc3a6d58022ce46ff	Mulher amparada	2026-08-28T18:46:30-03:00	Atualizar o home.html
+3e01e9ecf29e0db5ae3e38c7478c90e8ec271017	Mulher amparada	2026-08-28T18:48:55-03:00	Atualizar o qr.html
+24a5a409e8ffa2c0a22bdd87bd1d423c3d23fe50	Mulher amparada	2026-08-28T19:36:33-03:00	Add files via upload
+900ab1de0f2f247dab543840dfa44127547e0db0	Mulher amparada	2026-08-28T19:53:15-03:00	Add files via upload
+c58cc1f0b063194f3b5e1b0c16cb54f0f73064bc	Mulher amparada	2026-08-28T19:57:56-03:00	Add files via upload
+42116a26cb8a79776c5cf4d2aa1f691c13e5c327	Mulher amparada	2026-08-28T20:21:23-03:00	Atualizar o download.html
+7e155edd94c77e713091472634a059aa74a9b251	Mulher amparada	2026-08-28T20:32:50-03:00	Add files via upload
+722533b89f27567fa47e88dbd8bdd444c299106c	Mulher amparada	2026-08-28T21:24:25-03:00	Add files via upload
+e7dcd5d1d05d178675f36dd2c4192df98d80acdf	Mulher amparada	2026-08-28T21:29:45-03:00	Add files via upload
+dffa296d458907b52c52caa903cf8eb774333a20	Mulher amparada	2026-08-29T08:05:54-03:00	Excluir mim.html
+c53fc378cd7feaed88f4e841b8628a0de619a018	Mulher amparada	2026-08-29T08:09:35-03:00	Delete prova.png
+1fcac469e152f08b0762dde6a84135afbc04a52a	Mulher amparada	2026-08-29T08:10:22-03:00	Add files via upload
+c21987c1f8487f9895effcadb1cc5b688b4d0aa6	Mulher amparada	2026-08-29T08:12:23-03:00	Add files via upload
+abdf9d344457a58dc0a410b15e88c7d64ce40716	Mulher amparada	2026-08-29T08:19:03-03:00	Delete 006.apk
+925188ae686092457d0307648ec99ef56b95096d	Mulher amparada	2026-08-29T08:19:43-03:00	Delete 2.zip
+cccdde4af72776929584332111b3ebcefc6c5fd7	Mulher amparada	2026-08-29T08:19:59-03:00	Add files via upload
+998fc1bbcf718f4288e40ca367e9f79f7bbac8a4	Mulher amparada	2026-08-29T08:24:59-03:00	Delete 06.apk
+f067bb34d954c24380df6453882a689caf79fc8e	Mulher amparada	2026-08-29T08:25:08-03:00	Delete 6.apk
+6e2ccae655a482e1bd1bcf55d998e32c11ea2d11	Mulher amparada	2026-08-29T08:25:16-03:00	Delete 1.zip
+5c4582510f54aa1f24fc0ba88a5cd0ef0323d172	Mulher amparada	2026-08-29T08:25:24-03:00	Delete 3.zip
+cb2f8041a7ac595fdb4eafa4bb12256c9e3dd0be	Mulher amparada	2026-08-29T08:25:58-03:00	Add files via upload
+0e77c5ea72fd7a381e8c7b942ecbb96c9ca44e13	Mulher amparada	2026-08-29T08:36:14-03:00	Add files via upload
+40cf38e96c790b1fe17171871037ac002c4fc27c	Mulher amparada	2026-08-29T11:58:52-03:00	Delete 2.zip
+e357ce8fe0b182d299f821d240ab573a355b7f4f	Mulher amparada	2026-08-29T11:59:04-03:00	Delete 006.apk
+7bc56ffce31f3cffe8c1a76ea69c7ab846f0330b	Mulher amparada	2026-08-29T11:59:21-03:00	Delete 6.apk
+9dad46c3ce5b852fa72c7e39186c07ffe0c7965f	Mulher amparada	2026-08-29T11:59:34-03:00	Delete 3.zip
+b10abb9e0eaa732d74dde643c31b073939310e59	Mulher amparada	2026-08-29T12:29:14-03:00	Add files via upload
+49d4a0940be8d48a90dab4734422e71216b597ed	Mulher amparada	2026-08-29T12:31:11-03:00	Atualizar o README.md
+e121f51127c06d7fbb69e62ed611a57a3548c53c	Mulher amparada	2026-08-29T13:15:49-03:00	Delete 1.zip
+e12b04cb778ca640e2a9dfe5065e07aeb2fbc246	Mulher amparada	2026-08-29T13:16:16-03:00	Delete 06.apk
+51367f6ec54298605564257e8e67e6286f3988ba	Mulher amparada	2026-08-29T13:17:02-03:00	Add files via upload
+dd8e0d7482161beb1812556c207eedfe4c043d32	Mulher amparada	2026-08-29T13:21:58-03:00	Delete 1.zip
+886bf1020163ada09fcf0665154041a626c91dce	Mulher amparada	2026-08-29T13:22:07-03:00	Delete 06.apk
+66f9504fcd026647b49367a9231b863e9a3f8872	Mulher amparada	2026-08-29T13:22:24-03:00	Add files via upload
+400be0714f28345b65d4f4dc312824f182d5e98a	Mulher amparada	2026-08-29T13:33:34-03:00	Add files via upload
+3c1ace50f639fabd4c96bdf06e1889025cb88ec9	Mulher amparada	2026-08-29T14:59:05-03:00	Add files via upload
+efeb50faa554920fca35c335d4d5af523baf285f	Mulher amparada	2026-08-29T15:11:58-03:00	Delete 06.apk
+4f4f4b6b46332f9b73c828ddb5748cdd545e6903	Mulher amparada	2026-08-29T15:12:07-03:00	Delete 1.zip
+c2381d944bab510e3f809974b857ab7361265f1f	Mulher amparada	2026-08-29T15:12:23-03:00	Delete 006.apk
+8baa9876adc02fbace00b08a783a0b769e6f8403	Mulher amparada	2026-08-29T15:12:56-03:00	Delete 2.zip
+58c94e7d575879c095901624cd2bd9ca6fdff624	Mulher amparada	2026-08-29T15:13:03-03:00	Delete 6.apk
+61eff5d67460ce84a7446b54789695ed66cbe2db	Mulher amparada	2026-08-29T15:13:15-03:00	Delete 3.zip
+6f46c363676b9f0222ca1a304733604b8b199bf8	Mulher amparada	2026-08-29T15:13:49-03:00	Add files via upload
+ceb4aeebb728de4d03955497c6102499b125de27	Mulher amparada	2026-08-29T15:14:25-03:00	Add files via upload
+76b2437668213bc62cb19e2c094d42c0fd588ad5	Mulher amparada	2026-08-29T15:14:43-03:00	Add files via upload
+b523a22801847e9d9feda957cce35669828d786a	Mulher amparada	2026-08-29T15:17:05-03:00	Atualizar o README.md
+15a4615ab30fd15cdcf33519ceabc7f70ae29c45	Mulher amparada	2026-08-29T15:24:43-03:00	Delete 3.zip
+3fb4da00dd8feea903dce09d6552c0461e1d852a	Mulher amparada	2026-08-29T15:24:53-03:00	Delete 6.apk
+b50cefec301588c01398fc7fb9d14d0ea541dee1	Mulher amparada	2026-08-29T15:30:03-03:00	Add files via upload
+5443f8d0534f84007b2f5603ac6760691fb8a926	Mulher amparada	2026-08-29T18:36:30-03:00	Delete 6.apk
+560e4f95734fc29eec43665b8dfecf377e8ae4bc	Mulher amparada	2026-08-29T18:36:41-03:00	Delete 3.zip
+0dd0f5cb974ecec02808837bc20419c57fd22d5b	Mulher amparada	2026-08-29T18:36:58-03:00	Add files via upload
+f25fd52a7a5c1e5ead5a8d69d9fc137f7364d0ae	Mulher amparada	2026-08-29T19:46:12-03:00	Delete 3.zip
+6ebee15b19ed4ba3765c11679f3ef1ce5f30be7a	Mulher amparada	2026-08-29T19:46:22-03:00	Delete 6.apk
+3a8150dff1b3e8f78abebdb17b9be3f158fd9e81	Mulher amparada	2026-08-29T19:46:37-03:00	Add files via upload
+a335adde20ea6d3330b46d620378a69362af5c12	Mulher amparada	2026-08-29T20:50:28-03:00	Delete 6.apk
+dc8648720cd18a94e0461155125d5756515bde40	Mulher amparada	2026-08-29T20:50:38-03:00	Delete 3.zip
+58d9ddafba3ab0ac963d3006d6ce42306a9a0ca5	Mulher amparada	2026-08-29T20:52:38-03:00	Add files via upload
+640178236a7479980968381e1a781bcc11c16993	Mulher amparada	2026-08-29T20:56:07-03:00	Delete 3.zip
+a738529a441060b7a886bb9cd43bf6287fc036b5	Mulher amparada	2026-08-29T20:56:16-03:00	Delete 6.apk
+1f481cbce432dd8e0895eab3443d65c4aee608be	Mulher amparada	2026-08-30T08:19:49-03:00	Add files via upload
+3e556a379c819d70bd0a0afbfd8014fdc5bf8a4b	Mulher amparada	2026-08-30T08:22:44-03:00	Delete 6.apk
+95f4cbfd310aac0878ab9e9e147a37eb2ef155a8	Mulher amparada	2026-08-30T08:22:53-03:00	Delete 3.zip
+2cf938d84884a265cb7fe3eacd967a5acaa768ba	Mulher amparada	2026-08-30T08:23:08-03:00	Add files via upload
+2bb8f20a5c9614f86a9c84fb052c595a69ca0416	Mulher amparada	2026-08-30T08:24:50-03:00	Atualizar o README.md
+c915a629fc735c340202d0e1a163e0076b15aef8	Mulher amparada	2026-08-30T08:35:22-03:00	Atualizar o download.html
+ea1fa2845ac3f3ade3651302c57ed8608ae733d5	Mulher amparada	2026-08-30T08:37:40-03:00	Atualizar o download.html
+57e811193d4d49054cb80a9e1ddb397adb354a34	Mulher amparada	2026-08-30T11:09:05-03:00	Delete 06.apk
+9a3063711915839284d2de497496741a1f16f7c1	Mulher amparada	2026-08-30T11:09:15-03:00	Delete 006.apk
+0c6e0988559002ae26ac18dbd6c09384430770e3	Mulher amparada	2026-08-30T11:09:24-03:00	Delete 6.apk
+35464e8bdee9ac1b543dbaaf70229f4a2f901b35	Mulher amparada	2026-08-30T11:09:32-03:00	Delete 3.zip
+5d363c3efec76752abd737d911124fc3e60eef00	Mulher amparada	2026-08-30T11:09:40-03:00	Delete 2.zip
+d56156bcb6ed4f390572e9b80e41c457134eb716	Mulher amparada	2026-08-30T11:09:47-03:00	Delete 1.zip
+74a7813beb3aa9d4ca6d4a406ee822fbeccd923c	Mulher amparada	2026-08-30T11:10:19-03:00	Add files via upload
+1c07981265c9a908f60de8a830b898d2bc0cdce1	Mulher amparada	2026-08-30T11:10:38-03:00	Add files via upload
+678041c7f2539122d0515275ceae916c83a37e36	Mulher amparada	2026-08-30T13:18:46-03:00	Delete 1.zip
+ebec5924b0155c354769693eeb0176a8692bedee	Mulher amparada	2026-08-30T13:18:55-03:00	Delete 06.apk
+76a43820cfe6d3e8ad4e1aca945c4f02cda58fba	Mulher amparada	2026-08-30T13:21:17-03:00	Add files via upload
+db82319c88908c022133da788abea3660f78ad8f	Mulher amparada	2026-08-30T15:09:30-03:00	Atualizar o README.md
+62239aea279e95049a9478fd42e4fa89fdf76500	Mulher amparada	2026-08-30T15:15:46-03:00	Delete 2.zip
+44f3798a106639f41059bce38a67e90869250d2d	Mulher amparada	2026-08-30T15:16:00-03:00	Add files via upload
+b867d39fdc313ae4ceca9d5060e368105ded4404	Mulher amparada	2026-08-30T15:28:58-03:00	Delete 006.apk
+c4bb0ff90a866aa6e1725781bcc05a298c4efce0	Mulher amparada	2026-08-30T15:29:06-03:00	Delete 06.apk
+0d7a4b7033e32972d304530c7b53eebe89191425	Mulher amparada	2026-08-30T15:29:14-03:00	Delete 1.zip
+9ce7d949f9dc147bad2a59a225d3601306d3bd88	Mulher amparada	2026-08-30T15:29:22-03:00	Delete 3.zip
+f19bb0e78c2cd44e4676a75318f28d15bcac41c3	Mulher amparada	2026-08-30T15:29:46-03:00	Delete 6.apk
+ba0a8217e949f02878e96f16f9914bae2d99eb37	mulher-amparada	2026-09-01T17:53:31-03:00	Manter apenas index.html
+6ad3ee2ea972c7471c94a73269b724db20991ce2	mulher-amparada	2026-09-01T17:54:50-03:00	Adicionar arquivos do projeto
+684b7b3573a38c88bf366650b3e24dc7488b9aab	mulher-amparada	2026-09-01T17:55:26-03:00	Adicionar arquivos do projeto
+a8558389a0e905a9bf70154b001f3518ad25ce8c	Mulher amparada	2026-09-01T18:01:05-03:00	Atualizar o nome.html
+2dcf7b00a1f74831fa951c95fc0d10cccafed99b	Mulher amparada	2026-09-01T18:01:45-03:00	Excluir package.json
+98981ba41e0225e248b6e914d8746421e1c6b3fd	Mulher amparada	2026-09-01T18:03:07-03:00	Atualizar o nome.html
+8ad215b465433a5b95cd8e00340010e0fa07a0d4	Mulher amparada	2026-09-01T18:13:35-03:00	Add files via upload
+aa44cc03c38eef30221b97f13e106b8cd72cd164	Mulher amparada	2026-09-01T18:41:29-03:00	Add files via upload
+bb29af9febf728ac5bf07b9310bc7191737df3c4	Mulher amparada	2026-09-01T18:44:26-03:00	Update nome.html
+7bff3f182a9ecdfc99ad0debd804859c3528acfb	Mulher amparada	2026-09-01T19:06:14-03:00	Atualizar o home.html
+a3de50bdb5eed11db084da625f4433e7f16de577	mulher-amparada	2026-09-02T07:36:58-03:00	Adicionar códigos-fonte dos aplicativos
+40cd62f8a36c1e1715abbf18523b350620b22689	mulher-amparada	2026-09-02T07:49:08-03:00	Atualizar arquivos
+987934a347537c74641c0e8ebb878d0724d41a35	mulher-amparada	2026-09-02T07:51:43-03:00	Manter somente index.html na raiz
+244dcc139ccba081a16ebaf771f714aaca964f5c	mulher-amparada	2026-09-02T07:54:00-03:00	Sincronizar repositório com arquivos locais
+d4b69d563cf1a1772efe88b1accb75b0e5015c9b	Mulher amparada	2026-09-02T07:55:10-03:00	Add files via upload
+f6ce765c7bdec32c0adc7d5ae5ef4bfb3fbfe8c1	Mulher amparada	2026-09-02T08:05:19-03:00	Delete Código-fonte do app = Mulher Amparada/.github/workflows/main2.yml
+f8d12aea0c4de0fb957a0f089afc2e2e28dbe818	Mulher amparada	2026-09-02T08:05:34-03:00	Delete Código-fonte do app = Gerenciador De Arquivos Do Mulher Amparada/.github/workflows/android2.yml
+ce42379e19f0abfd993beec7afb1ad504fa83be2	Mulher amparada	2026-09-02T08:06:13-03:00	Delete Código-fonte do app = Assistente De Voz Do Mulher Amparada/.github/workflows/android1.yml
+850acc6ec9424f8c3fdbaa094bd17e59e8584c55	Mulher amparada	2026-09-02T08:06:45-03:00	Add files via upload
+7d05d943a9fd8b09afd865caebf3073cb6bf4a0d	Mulher amparada	2026-09-02T08:07:56-03:00	Add files via upload
+f370bd2850d8a0c8b70cc54f90235c37e8750dea	Mulher amparada	2026-09-02T08:14:44-03:00	Add files via upload
+368d43c6b95a15c8e0c1a819f11592fa24c9b81a	Mulher amparada	2026-09-02T08:23:00-03:00	Add files via upload
+a3585c8e37fb15b3dfe601ac9f1cd502c5fd98ff	Mulher amparada	2026-09-02T10:02:56-03:00	Add files via upload
+3d78b52f48f58620856a49b2547d8aa34171daf8	Mulher amparada	2026-09-02T10:07:05-03:00	Atualizar o index.html
+e206f16fddb88ed2cfd7bd7c9a0c4acd47abc5b9	Mulher amparada	2026-09-02T18:06:10-03:00	Excluir SECURITY.md
+abd836bb579f383f2d139f6d99f60de4435d7915	Mulher amparada	2026-09-02T18:06:19-03:00	Excluir LICENSE
+f54c8505a7c72dc975e31c0634638408aea7f04d	Mulher amparada	2026-09-02T18:06:25-03:00	Excluir README.md
+aefbe59c2f67262e06986889ee34fd7d3087cad1	Mulher amparada	2026-09-02T18:06:34-03:00	Excluir LICENSE
+aa96a2a56ae0e5e82270ce29ad65f96730c353a4	Mulher amparada	2026-09-02T18:06:39-03:00	Excluir README.md
+38c959b6fcc41ab311f79f9f97e60c5ad38db032	Mulher amparada	2026-09-02T18:06:45-03:00	Excluir SECURITY.md
+3719f44fb7d86b6eb64c68f3c46bef76a6fbc468	Mulher amparada	2026-09-02T18:06:55-03:00	Excluir LICENSE
+35ac4c7327a0992f9243f61701d849236b134475	Mulher amparada	2026-09-02T18:07:10-03:00	Excluir SECURITY.md
+fd64d53532f7feb8f61b7b9adc1a925cc73ae406	Mulher amparada	2026-09-02T18:07:18-03:00	Excluir README.md
+c522b775b21e0978ea03a723e088bb38e690f370	Mulher amparada	2026-09-02T18:17:41-03:00	Atualizar o assistente de voz.yml
+9bbdbb8d5f1a0f9eb55bc13636e5b595f5de7baf	Mulher amparada	2026-09-02T18:22:24-03:00	Atualizar o assistente de voz.yml
+f4ff17703daae8eab7c8aaf7c9546c665ee3d0f6	Mulher amparada	2026-09-02T18:23:33-03:00	Atualizar o assistente de voz.yml
+db68c2879e6ab1a5483136bbb9d29cccf7e477fe	Mulher amparada	2026-09-02T18:28:17-03:00	Atualizar o assistente de voz.yml
+63e1b61677d831d1d32c6a35e6d3fcc89ed4855a	github-actions[bot]	2026-09-02T21:30:45Z	Atualizar App3.zip [skip ci]

@@ -1,0 +1,158 @@
+RELATÓRIO DE COMMITS — MULHER AMPARADA
+Intervalo: 2401 a 2550
+Quantidade neste arquivo: 150
+Total de commits encontrados: 4733
+Gerado em: 2026-10-08T23:24:14+00:00
+
+HASH | AUTOR | DATA | MENSAGEM
+
+4709d49b0db2436d932a8e60ce4107c2ef20fab2	github-actions[bot]	2026-09-15T16:10:30Z	Atualizar link e tamanho do APK [skip ci]
+6e2538aec9d1e04ab48c91bab8ff4705ec900b87	Mulher amparada	2026-09-15T13:37:15-03:00	Atualizar o MainActivity.kt
+20ad8f18db24cc7bcdb664dca04f2acd7abb1c2e	Mulher amparada	2026-09-15T13:43:31-03:00	Atualizar o build.gradle
+8823604bfbfe1b8b6ba800b01d5fc6722ee5d598	Mulher amparada	2026-09-15T13:46:27-03:00	Atualizar o MainActivity.kt
+0772a4b647fb881487006fe8b12269d5f6d6e7c5	Mulher amparada	2026-09-15T13:56:58-03:00	Atualizar o MainActivity.kt
+7eb1f823deb54f2d191169402834adff22c3a526	Mulher amparada	2026-09-15T14:18:38-03:00	Atualizar o MainActivity.kt
+d1b77c7306961afa818ccda12bfeafbd4bc9d0db	Mulher amparada	2026-09-15T14:20:39-03:00	Atualizar o MainActivity.kt
+c49cb5c5b73a36476ad7cd768a01f387605b54d2	Mulher amparada	2026-09-15T14:24:40-03:00	Atualizar o activity_main.xml
+9ed36dcb977c1fce53d3af5e75f26f2f0188b2af	github-actions[bot]	2026-09-15T17:25:52Z	Atualizar APK assinado [skip ci]
+58d8105596f225ca3c1a5732e28ee111d7208ad9	Mulher amparada	2026-09-15T14:27:50-03:00	Atualizar o MainActivity.kt
+2488f3d8843c3c47283622f2ba1fbad62c3b3efa	Mulher amparada	2026-09-15T14:31:10-03:00	Atualizar o build.gradle
+8c63fa157189990d6f489eeab34a40332bcf9a02	github-actions[bot]	2026-09-15T17:39:05Z	Atualizar APK assinado [skip ci]
+4d6bfdd044a4e5590e2a903edffa32d6192dabaf	Mulher amparada	2026-09-15T14:39:50-03:00	Atualizar o Compilar o app do Mulher Amparada.yml
+75859502acd9d16e4504da21977d49e8e8a8457b	Mulher amparada	2026-09-15T14:43:43-03:00	Atualizar o MainActivity.kt
+a08e38b6fb673cffbe7a949102a88786f0041544	github-actions[bot]	2026-09-15T17:44:53Z	Atualizar APK assinado [skip ci]
+4db4c5fa2d00b0844b0266bb3b413565e8b55b28	Mulher amparada	2026-09-15T14:55:10-03:00	Add files via upload
+836c060325417167820d8e4057aa311a5caff294	Mulher amparada	2026-09-15T14:59:36-03:00	Add files via upload
+065b7e82e63573862938eded5a1f05fbc239455d	github-actions[bot]	2026-09-15T18:00:34Z	Atualizar APK assinado [skip ci]
+f2215c3933a53e3f6e0834ea06a39589b8d48e7e	Mulher amparada	2026-09-15T15:01:40-03:00	Add files via upload
+f85ac8cb76334a6a8e8038084ab09e817b84c701	github-actions[bot]	2026-09-15T18:02:39Z	Atualizar APK assinado [skip ci]
+edf7e3a2a450cb0dfbd6b29b91cdaf5470d6fc98	Mulher amparada	2026-09-15T15:03:27-03:00	Atualizar o MainActivity.kt
+88cbaa226b7d6c968d2e4378396e2e2af4d4012c	github-actions[bot]	2026-09-15T18:04:20Z	Atualizar APK assinado [skip ci]
+4806e14c4fe71b551435209bb6b9d4ae3e0c6e0f	Mulher amparada	2026-09-15T15:13:16-03:00	Add files via upload
+8b8e908b71b9ea35b805f4e3137ab0bf1b8ec159	github-actions[bot]	2026-09-15T18:14:29Z	Atualizar APK assinado [skip ci]
+a810e79bb9bd155259f74a412c6835cb748452f1	Mulher amparada	2026-09-15T15:36:04-03:00	Atualizar o permissao.html
+b4d4dfc06c17e4dc1e41bdc0473ff7aac5c0e082	github-actions[bot]	2026-09-15T18:37:13Z	Atualizar APK assinado [skip ci]
+9c9cdb2c9d94e9c02b8c7d3a1315d9e59d5bd452	Mulher amparada	2026-09-15T15:48:01-03:00	Atualizar o README.md
+9633a1cae21833cde5f18c329e7bbc706432a465	Mulher amparada	2026-09-15T16:33:27-03:00	Atualizar o download.html
+bbda982ae3e801c9f6dfed43f6159bbfce0d4851	Mulher amparada	2026-09-15T16:37:35-03:00	Atualizar o Compilar o app do Mulher Amparada.yml
+3f3491e73dd6bbd63b88ce8d7eca063b61d46b23	github-actions[bot]	2026-09-15T19:38:45Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+230bb0725942b394d34066f1467288a96da0ce1b	Mulher amparada	2026-09-15T16:41:20-03:00	Atualizar o download.html
+018658814d6d28df803e4929de3e28ac2a4b9d2f	github-actions[bot]	2026-09-15T19:42:39Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+66a4d67de2ddf7ed23f2a23e38befc86b805f6a9	Mulher amparada	2026-09-15T16:52:51-03:00	Atualizar o download.html
+6adc63196fae12fef7b2f01b2a027f91a9203307	github-actions[bot]	2026-09-15T19:54:01Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+9e2b67a1308c8c89825fee4a6458d0d4bd9122e5	Mulher amparada	2026-09-15T16:54:20-03:00	Atualizar o README.md
+5cdc81793ebf5a672b1b0c34670e6d0307bba43e	Mulher amparada	2026-09-15T17:25:37-03:00	Criar mipmap-anydpi-v26/ic_launcher.xml
+aedd23963551c62d57fa33256eb7f3201afc5b9d	Mulher amparada	2026-09-15T17:31:27-03:00	Add files via upload
+9de31d532d7dc166358448e478a33e2cf094bd47	Mulher amparada	2026-09-15T17:31:53-03:00	Add files via upload
+bf6c3c5363092d2f5528b3fff265d05b07ea81dd	Mulher amparada	2026-09-15T17:32:15-03:00	Add files via upload
+55900d3b3a35eefe3879425a7eac347e7c8b3765	Mulher amparada	2026-09-15T17:32:40-03:00	Add files via upload
+0b3d11893f349ba59f2994ba096cb27fe4eaf48f	Mulher amparada	2026-09-15T17:33:04-03:00	Add files via upload
+7d003a3d4ee4fdea6a6b8218bfe570d76cce0b81	Mulher amparada	2026-09-15T17:34:03-03:00	Add files via upload
+0bfb4fb33f5b2b11814c7bf871c70fe91cfcf896	Mulher amparada	2026-09-15T17:35:46-03:00	Delete Código-fonte do app = Mulher Amparada/app/src/main/res/drawable/ic_launcher_background.xml
+d6385f04e5577cefde2b6d314987467f808ed614	Mulher amparada	2026-09-15T17:36:01-03:00	Delete Código-fonte do app = Mulher Amparada/app/src/main/res/drawable/ic_launcher_background.png
+7b7e783277facbbf6020a7a70e7c2effa7abb4f8	Mulher amparada	2026-09-15T17:36:53-03:00	Add files via upload
+0b305f1e3fdd2ac02ba448f7907695bf05aaa924	github-actions[bot]	2026-09-15T20:36:59Z	Atualizar APK assinado [skip ci]
+1b60b7902949e22848a69b185e1199a31f49d90c	github-actions[bot]	2026-09-15T20:37:06Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+996266b36d8304ecd9e5529e0043cb15c348f94f	github-actions[bot]	2026-09-15T20:38:15Z	Atualizar APK assinado [skip ci]
+b44c6f05b8113b9c7b21599545e60a091ca6718b	github-actions[bot]	2026-09-15T20:38:22Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+0e93ee47d42efeebe9792658e800b5ae09b7a99b	Mulher amparada	2026-09-15T17:39:13-03:00	Atualizar o README.md
+f6d41854b62c65936fdc37bac5c228adbe0e8be2	Mulher amparada	2026-09-15T17:39:53-03:00	Atualizar o README.md
+b3ca09a93cb08735d39ef524120949524fac6485	Mulher amparada	2026-09-15T17:49:21-03:00	Add files via upload
+60a2a1d186c3fd88017cb55b0b64a6a4cf794a24	Mulher amparada	2026-09-15T17:50:19-03:00	Add files via upload
+e9d9688a5407457969fed47c9db478f2153d623d	github-actions[bot]	2026-09-15T20:50:28Z	Atualizar APK assinado [skip ci]
+e1d3d3d2ef9223f9311b5949029bead23e3a68ca	github-actions[bot]	2026-09-15T20:50:35Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+517896b3cec1c6e9b41ee9433d5d47b319f2c18e	Mulher amparada	2026-09-15T17:50:46-03:00	Add files via upload
+1a9a9d2b29c687c5b1f4c0f3bc7b00d822c4ea49	Mulher amparada	2026-09-15T17:51:10-03:00	Add files via upload
+744d3200593994c882fd2772a436eaee6afc41ce	Mulher amparada	2026-09-15T17:51:47-03:00	Add files via upload
+03aa091e19a9cc205a44644ea6ed3fc95145231f	github-actions[bot]	2026-09-15T20:51:51Z	Atualizar APK assinado [skip ci]
+f35eac1d229f52215087ab640a2d94b832e0005c	Mulher amparada	2026-09-15T17:52:16-03:00	Add files via upload
+98d10bb4be8106a06163c1d6e0c4e5654bd72a0c	github-actions[bot]	2026-09-15T20:53:11Z	Atualizar APK assinado [skip ci]
+53115897d8c7f1013dbb1438891459cadbcd15fd	github-actions[bot]	2026-09-15T20:53:17Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+44832b6870c62d74e30d9f5cce9ed748de583360	github-actions[bot]	2026-09-15T20:54:16Z	Atualizar APK assinado [skip ci]
+31ee62ee5a062059fb1f1131aff5cd48c1811fa6	github-actions[bot]	2026-09-15T20:54:24Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+b1422aac8874127f3017a597b8d35ac129f0d22f	Mulher amparada	2026-09-15T18:01:43-03:00	Atualizar o README.md
+9e23c205335b5c055342ed03339de62f0ca2a7a5	Mulher amparada	2026-09-15T18:07:03-03:00	Atualizar o styles.xml
+5076274b3b4fe3dcb4e914a4e798e27118a391fe	github-actions[bot]	2026-09-15T21:08:13Z	Atualizar APK assinado [skip ci]
+943b46aa38efdce4446de5ef7bf355cf35ab2132	github-actions[bot]	2026-09-15T21:08:20Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+f101a3493da47a992ce998987874dc20aeb6bd27	Mulher amparada	2026-09-15T18:13:23-03:00	Atualizar o README.md
+314d3b306e7eaa4c7d1196801bfdc27c6208543a	Mulher amparada	2026-09-15T19:10:24-03:00	Atualizar o termos.html
+d21581ec1badd02884c3794db63fdbf7c0e02c17	Mulher amparada	2026-09-15T20:32:42-03:00	Add files via upload
+1805f38dffd8ec4f9ed386a5835d8ca798654603	Mulher amparada	2026-09-15T20:52:52-03:00	Atualizar o index2.html
+69c316bfbdd30547d164c3266967c013a9c2a4f1	github-actions[bot]	2026-09-15T23:54:03Z	Atualizar APK assinado [skip ci]
+fe239d5f18c689d672b798b7b6ae37754ed3a705	github-actions[bot]	2026-09-15T23:54:08Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+b8f3deba4cbd602a36f9df8520731bd9e555b3ce	Mulher amparada	2026-09-15T21:27:16-03:00	Atualizar o index.html
+a767bb88fafc13ab37d12359e7e27f31550475bf	Mulher amparada	2026-09-16T08:49:18-03:00	Atualizar o index.html
+d9ae3784f2d604f562a94f8e0717714d96cdf099	Mulher amparada	2026-09-16T09:06:07-03:00	Atualizar o index.html
+655436438d61396a700b1952e06480d42824e28d	Mulher amparada	2026-09-16T09:27:30-03:00	Atualizar o MainActivity.kt
+0aed574a4a7f21380de07ce96853b3112ab47aad	github-actions[bot]	2026-09-16T12:28:39Z	Atualizar APK assinado [skip ci]
+67e8c1ff7a9876a696c7c2c35a42d03a9d16582d	github-actions[bot]	2026-09-16T12:28:45Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+73a73f6aabe17525148ca5b16863326e0e792b9d	Mulher amparada	2026-09-16T09:36:25-03:00	Add files via upload
+e021fc9284e23196cbb3d0aa46a455af96bc954e	github-actions[bot]	2026-09-16T12:37:31Z	Atualizar APK assinado [skip ci]
+f034e25085d4b6e085076262bcd6ccaff6f033e7	github-actions[bot]	2026-09-16T12:37:38Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+401f52ae7278af86253e73dc752577f810f258f0	Mulher amparada	2026-09-16T10:52:02-03:00	Delete app2.html
+b95ae83ee18d40df595fe2a81c472ed1ff10b5e3	Mulher amparada	2026-09-16T10:52:13-03:00	Delete app3.html
+84963d8dd0320a12d9a23ef9dd0ca6f61575333c	Mulher amparada	2026-09-16T11:18:40-03:00	Delete home.html
+ab99bb0e488eeaa9aa7716e0a62a65839878941b	Mulher amparada	2026-09-16T11:18:56-03:00	Delete home.svg
+1437ed737442f04d9dca5d1d2add33672e9caf6a	Mulher amparada	2026-09-16T11:22:02-03:00	Add files via upload
+6842f915a5e95bebf5f7409b73ac75ec624f1398	Mulher amparada	2026-09-16T11:24:23-03:00	Excluir codigo.html
+84d5bcd9313352c530f4234b841a177016b070d7	Mulher amparada	2026-09-16T11:26:53-03:00	Add files via upload
+c877f53e4576b16204f655a91a1ffdc715a28741	Mulher amparada	2026-09-16T11:31:47-03:00	Add files via upload
+67613205639b6c5d136f2187ac3045241815425a	Mulher amparada	2026-09-16T11:36:37-03:00	Update checkout action version in jekyll.yml
+4a085c4a3d7efd0f767619f0414b2cc8b39529a3	Mulher amparada	2026-09-16T11:37:16-03:00	Update upload-pages-artifact action to v6
+4f5e89d586fa21770406f6483abfc19a5e18ca0a	Mulher amparada	2026-09-16T11:37:36-03:00	Delete .github/workflows/jekyll.yml
+9243d0ed0be274162bd82abbbe88c2de77ec2159	Mulher amparada	2026-09-16T11:39:58-03:00	Excluir jekyll-gh-pages.yml
+ebc7bb23a5468ee0e16e935a2ab87c2e43aa90b9	Mulher amparada	2026-09-16T11:43:46-03:00	Criar main.yml
+d5b537241a6cd97e2b8427ac9e302bee886bb0a7	Mulher amparada	2026-09-16T11:44:39-03:00	Update workflow to deploy Jekyll with GitHub Pages
+442e3de651923418d1d8b654e57173caff11b321	Mulher amparada	2026-09-16T11:44:58-03:00	Delete .github/workflows/Main.yml
+c817285476e6f35adf9cbe52cb4538d6eaccdb93	Mulher amparada	2026-09-16T11:52:53-03:00	Atualizar o index.html
+5bc217c57cfba1cab3aeb4db9b7071e90a074aa1	Mulher amparada	2026-09-16T12:28:38-03:00	Atualizar o main.yml
+55bd26409dbcce83bc559dcc6ca732f455273a2e	Mulher amparada	2026-09-16T12:29:18-03:00	Add files via upload
+1f77f846a87e66b73ba169d919de2d9f4aa51a2a	Mulher amparada	2026-09-16T12:31:07-03:00	Atualizar o main.yml
+eb2db6f82e4fbee5e1243178d7e46ec4e624f588	Mulher amparada	2026-09-16T12:48:19-03:00	Atualizar o qr.html
+b30e186e0f3dfb238d8539c34d1e6ca06b6a4b77	Mulher amparada	2026-09-16T13:13:22-03:00	Criar testes do app usando o android emulator do github.yml
+ffd08223501bbc8dd0478469d35ae6c05dfadbe8	Mulher amparada	2026-09-16T13:15:02-03:00	Atualizar o testes do app usando o android emulator do github.yml
+780f49b6b859f2944f7f7dc616f7327e2cfc861b	Mulher amparada	2026-09-16T13:16:53-03:00	Atualizar o testes do app usando o android emulator do github.yml
+aed6b7b2a9560c63dd264a084d5c79cbd6e2b8a2	Mulher amparada	2026-09-16T13:22:40-03:00	Excluir testes do app usando o android emulator do github.yml
+7bb8323446bf74dabda11ae4a4387e633a83b417	Mulher amparada	2026-09-16T13:31:30-03:00	Atualizar o README.md
+7ae15ccd8f80040505abf8d154fc37f6b347b2fa	Mulher amparada	2026-09-16T13:32:15-03:00	Criar divulgar todos os commits do projeto.yml
+df4e197c2536d1e3bbf31b14003ae41333b2281c	Mulher amparada	2026-09-16T13:34:12-03:00	Atualizar o divulgar todos os commits do projeto.yml
+d819526e0fef4af6a46b97b0f585a60b680928e9	github-actions[bot]	2026-09-16T16:34:46Z	Atualizar total de commits
+d85a50fd5e8f463ee0a74809bfedf260c3e11177	Mulher amparada	2026-09-16T13:39:22-03:00	Excluir divulgar todos os commits do projeto.yml
+a648fe7afc1fc70a4e534c879660d9eb57cfdb48	Mulher amparada	2026-09-16T13:39:28-03:00	Excluir Compilar o app do Mulher Amparada.yml
+b0af05a19a4f48df9f591364a3aa54e4035fa73c	Mulher amparada	2026-09-16T13:39:48-03:00	Atualizar o main.yml
+bbab588cb8f560345f196f415443855d12c9838c	github-actions[bot]	2026-09-16T16:40:32Z	Atualizar total de commits [skip ci]
+d466c25dbb3b2ea09e0a9b9a66b01bd6ec569dcf	Mulher amparada	2026-09-16T13:42:57-03:00	Atualizar o README.md
+085e0de4a3e87475b281ffc1a14e09f6e3ff84df	github-actions[bot]	2026-09-16T16:44:52Z	Atualizar total de commits [skip ci]
+1e05ab26454a9cebf836df0c89e608dd916099e7	Mulher amparada	2026-09-16T13:45:26-03:00	Atualizar o main.yml
+1e29f242ddbfb3f1956f5893a7ba0e65959c388c	github-actions[bot]	2026-09-16T16:46:10Z	Atualizar total de commits [skip ci]
+dfe4d5ee248e725a6b34a55555565a89b5d07c84	Mulher amparada	2026-09-16T13:48:26-03:00	Atualizar o main.yml
+8d8004e1fea2b51c00d78febd11ca8a751748943	github-actions[bot]	2026-09-16T16:49:06Z	Atualizar total de commits [skip ci]
+dba50157d5c231f44736f4eb49c38c071eb659af	Mulher amparada	2026-09-16T13:50:36-03:00	Atualizar o main.yml
+3a6e53da0d3f9370d957ae77b382a57dadab70ff	Mulher amparada	2026-09-16T13:52:36-03:00	Atualizar o main.yml
+41f11c2c9c6d6834805a510d73f027095b25b99b	Mulher amparada	2026-09-16T13:55:13-03:00	Atualizar o main.yml
+1cdd4285ccf3e844dfc5c3fa253d58eeb12bdb6b	Mulher amparada	2026-09-16T13:55:31-03:00	Atualizar o README.md
+efe74e3be3ff23df5c4ee6f745bca3c942c468e6	Mulher amparada	2026-09-16T13:58:28-03:00	Atualizar o main.yml
+61a33868a9e31812da4025e63b5bf1da5374e8b3	Mulher amparada	2026-09-16T13:59:03-03:00	Atualizar o README.md
+57bcfc8a9ec944ef389fdc0dc59ce234ac28f2a6	Mulher amparada	2026-09-16T14:01:44-03:00	Atualizar o main.yml
+d7ae9fd38424bad68bccd2bd122a84e6ba41552e	Mulher amparada	2026-09-16T14:02:30-03:00	Atualizar o main.yml
+e68e208162ace7b77de109ab12a83f19bc98bedc	Mulher amparada	2026-09-16T14:04:26-03:00	Atualizar o main.yml
+87b063da84564662add83e086cab8695c6b29651	Mulher amparada	2026-09-16T14:14:25-03:00	Atualizar o main.yml
+5c1c742b091b71df2d4e99cfa9440827c405966a	Mulher amparada	2026-09-16T14:16:39-03:00	Atualizar o main.yml
+a6c78e961917fe8edc31c6dad59ef6200f02ae1b	Mulher amparada	2026-09-16T14:20:35-03:00	Atualizar o main.yml
+3b8d7b8c308124368cea480fc6698e80092ce8b2	Mulher amparada	2026-09-16T14:22:36-03:00	Atualizar o main.yml
+6eb49d4d22eed6b4dd508a96eba2817d7eefdd18	Mulher amparada	2026-09-16T14:38:39-03:00	Atualizar o main.yml
+83a7796579c47cf686c278cbb5809c0b61fda6c6	Mulher amparada	2026-09-16T14:40:12-03:00	Atualizar o main.yml
+79fbdc49585874012ae3b2a47d1c029cd9c26e2c	Mulher amparada	2026-09-16T14:40:37-03:00	Atualizar o main.yml
+4e24e8bfdd3614f0bfef5b89f14310e1d9671f34	Mulher amparada	2026-09-16T14:45:30-03:00	Atualizar o main.yml
+9abb16238bee6a530dbe75af4864b4d93897680d	Mulher amparada	2026-09-16T14:46:32-03:00	Atualizar o main.yml
+46fed29896ea4bbe192b4a0862565b348042d120	github-actions[bot]	2026-09-16T17:52:30Z	Atualizar total de commits [skip ci]
+f7713b6c6e8e8323681edba46e317bc47f62a198	Mulher amparada	2026-09-16T14:56:37-03:00	Atualizar o README.md
+92046d1e8166c43e5ef295fb5020994a46fa2b54	github-actions[bot]	2026-09-16T18:05:25Z	Atualizar total de commits [skip ci]
+7b79bed129537edbfc99cfa20e32004cd9ea7420	Mulher amparada	2026-09-16T16:00:58-03:00	Atualizar o index.html
+643d1e879a2023856c22fe3d42fb40d8dbd17171	github-actions[bot]	2026-09-16T19:13:23Z	Atualizar total de commits [skip ci]
+81de6d2fba76c313b4e54b05a6e3dd7c4d23491b	Mulher amparada	2026-09-16T16:29:18-03:00	Atualizar o MainActivity.kt
+cf8c7a32ad08ca7b255a7cb630e2f679b6657022	github-actions[bot]	2026-09-16T19:30:26Z	Atualizar APK assinado [skip ci]
+3a3f19a349b38718c0106fc7901a99a0faa48b8c	github-actions[bot]	2026-09-16T19:30:34Z	Atualizar link, tamanho e SHA-256 do APK [skip ci]
+f30ea37ef66edf861162693930ffc34cbc1d695f	github-actions[bot]	2026-09-16T19:37:39Z	Atualizar total de commits [skip ci]
+a7cfacd9d4b0709ddc2d76e5a8f1c48292b9f6d3	Mulher amparada	2026-09-17T11:24:48-03:00	Atualizar o index.html
+6579c0206afdc438b454b3700f8c2b252363916f	github-actions[bot]	2026-09-17T14:27:23Z	Atualizar total de commits [skip ci]

@@ -2,8 +2,8 @@
 
 - **Arquivo de origem:** `.github/workflows/automations.yml`
 - **Arquivo gerado:** `.github/workflows/workflow.md`
-- **Jobs identificados:** 17
-- **Etapas identificadas:** 73
+- **Jobs identificados:** 16
+- **Etapas identificadas:** 68
 
 ## Tabela completa de jobs e etapas
 
@@ -25,7 +25,6 @@
 | `atualizar-relatorio-commits` | Atualizar relatório de commits | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Ruby (`ruby/setup-ruby@v1`); 3. Gerar relatório de commits — executa comandos; 4. arquivos-relatorio-commits (`actions/upload-artifact@v6`) |
 | `pesquisar-projeto` | Documentar workflow YAML | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar PHP — executa comandos; 3. Gerar documentação do workflow — executa comandos; 4. arquivos-pesquisas (`actions/upload-artifact@v6`) |
 | `salvar-na-main` | Salvar todos os arquivos na main | ubuntu-24.04 | `atualizar-commits`, `snake`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. arquivo-readme (`actions/download-artifact@v6`); 3. arquivos-snake (`actions/download-artifact@v6`); 4. arquivo-sitemap (`actions/download-artifact@v6`); 5. arquivo-footer (`actions/download-artifact@v6`); 6. arquivos-relatorio-commits (`actions/download-artifact@v6`); 7. arquivos-pesquisas (`actions/download-artifact@v6`); 8. Reunir arquivos gerados — executa comandos; 9. Salvar todas as alterações em um commit — executa comandos |
-| `relatorio-erros` | Relatório de erros em português | ubuntu-24.04 | `sincronizar-paperwf`, `sincronizar-devto` | 1. Baixar código (`actions/checkout@v6`); 2. Criar relatório inicial — executa comandos; 3. Instalar Rust (`dtolnay/rust-toolchain@stable`); 4. Coletar logs e gerar relatório — executa comandos; 5. relatorio-erros-portugues (`actions/upload-artifact@v6`) |
 
 ## Grafo completo de dependências
 
@@ -49,7 +48,6 @@ flowchart TD
     job_atualizar_relatorio_commits["Atualizar relatório de commits"]
     job_pesquisar_projeto["Documentar workflow YAML"]
     job_salvar_na_main["Salvar todos os arquivos na main"]
-    job_relatorio_erros["Relatório de erros em português"]
     job_build --> job_build_site
     job_build_site --> job_deploy
     job_deploy --> job_atualizar_commits
@@ -69,8 +67,6 @@ flowchart TD
     job_atualizar_footer --> job_salvar_na_main
     job_atualizar_relatorio_commits --> job_salvar_na_main
     job_pesquisar_projeto --> job_salvar_na_main
-    job_sincronizar_paperwf --> job_relatorio_erros
-    job_sincronizar_devto --> job_relatorio_erros
 ```
 
 ## Detalhamento dos jobs
@@ -286,20 +282,6 @@ flowchart TD
 | 7 | arquivos-pesquisas | `actions/download-artifact@v6` | — |
 | 8 | Reunir arquivos gerados | — | \| |
 | 9 | Salvar todas as alterações em um commit | — | \| |
-
-### Relatório de erros em português
-
-- **ID:** `relatorio-erros`
-- **Runner:** `ubuntu-24.04`
-- **Dependências:** `sincronizar-paperwf`, `sincronizar-devto`
-
-| # | Etapa | Ação | Execução |
-|---:|---|---|---|
-| 1 | Baixar código | `actions/checkout@v6` | — |
-| 2 | Criar relatório inicial | — | \| |
-| 3 | Instalar Rust | `dtolnay/rust-toolchain@stable` | — |
-| 4 | Coletar logs e gerar relatório | — | \| |
-| 5 | relatorio-erros-portugues | `actions/upload-artifact@v6` | — |
 
 ## YAML original completo
 
@@ -1664,79 +1646,4 @@ jobs:
           git push origin HEAD:main
 
           echo "Todos os arquivos gerados foram salvos na main."
-          
-
-  relatorio-erros:
-    name: Relatório de erros em português
-    runs-on: ubuntu-24.04
-    if: ${{ always() }}
-
-    needs:
-      - sincronizar-paperwf
-      - sincronizar-devto
-
-    permissions:
-      actions: read
-      contents: read
-
-    steps:
-      - name: Baixar código
-        uses: actions/checkout@v6
-
-      - name: Criar relatório inicial
-        run: |
-          cat > "$GITHUB_WORKSPACE/relatorio-erros.md" <<'EOF'
-          # Relatório de erros — Mulher Amparada
-
-          A coleta de logs ainda não foi concluída.
-          Consulte o resultado da etapa de coleta para identificar falhas.
-          EOF
-
-      - name: Instalar Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Coletar logs e gerar relatório
-        id: relatorio
-        continue-on-error: true
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_RUN_ID: ${{ github.run_id }}
-        run: |
-          set +e
-
-          cargo run --release \
-            --manifest-path "$GITHUB_WORKSPACE/tools/relatorio-erros/Cargo.toml" \
-            2>&1 | tee "$GITHUB_WORKSPACE/erro-rust.log"
-
-          STATUS=${PIPESTATUS[0]}
-
-          if [ ! -s "$GITHUB_WORKSPACE/relatorio-erros.md" ]; then
-            {
-              echo "# Relatório de erros — Mulher Amparada"
-              echo
-              echo "A coleta falhou antes de gerar o relatório."
-              echo
-              echo "**Código de saída:** $STATUS"
-              echo
-              echo "## Erro técnico"
-              echo
-              echo '```text'
-              tail -n 100 "$GITHUB_WORKSPACE/erro-rust.log"
-              echo '```'
-            } > "$GITHUB_WORKSPACE/relatorio-erros.md"
-          fi
-
-          exit "$STATUS"
-
-      - name: Publicar relatório como Artifact
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v6
-        with:
-          name: relatorio-erros-portugues
-          path: |
-            relatorio-erros.md
-            erro-rust.log
-          if-no-files-found: error
-          retention-days: 30
 ````

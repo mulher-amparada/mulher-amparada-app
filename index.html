@@ -535,7 +535,7 @@ Mais informações
 <p>Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!</p>
 <p>e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, onde nem tinha os recursos, ja programei ele num app de A-IDE, num A05, e eu ja perdi vários projetos porque o celular nao aguentava, matava o projeto porque matou o processo de compilação!, e uma vez eu fiz o projeto do mulher amparada e eu mesmo fiz o app do mulher amparada (primeiro eu refiz porque o family link apagou a pasta segura samsung, depois na 2 vez que perdi portei tudo do apk compilado para descompilado, e depois perdi denovo mas ai eu ja tinha o código-fonte!)</p>
 <p>E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)</p>
-<p><strong>Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4855</strong></p>
+<p><strong>Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4857</strong></p>
 <p>E o projeto é = Open-source! (aderido no dia 02/10/2026)</p>
 <h1>👾Nossas contribuições!:</h1>
 <p><em>Gerado pelo workflow do projeto junto com uma action do marketplace do github!</em></p>
@@ -1068,54 +1068,7 @@ A intenção é centralizar os resultados de geração em um commit, reduzindo a
 
 O sucesso depende de todos os artifacts exigidos estarem disponíveis, de os caminhos coincidirem com a estrutura esperada e de o rebase e o push serem concluídos sem conflitos.
 
-🛠️ 17. Relatório de erros em português
-
-O job &quot;relatorio-erros&quot; utiliza &quot;ubuntu-24.04&quot; e declara:
-
-&quot;if: ${{ always() }}&quot;
-
-Essa condição solicita que o job seja avaliado mesmo quando as dependências anteriores falharem ou forem ignoradas, respeitando as demais condições de execução do GitHub Actions.
-
-O job declara dependências em &quot;sincronizar-paperwf&quot; e &quot;sincronizar-devto&quot;, para acompanhar o resultado das duas sincronizações externas.
-
-Preparação do relatório
-
-O job baixa o código e cria inicialmente &quot;relatorio-erros.md&quot;, contendo um título e uma mensagem informando que a coleta ainda não foi concluída.
-
-Em seguida, instala a toolchain estável do Rust por meio de &quot;dtolnay/rust-toolchain@stable&quot;.
-
-Execução do coletor Rust
-
-O script é executado com:
-
-&quot;cargo run --release --manifest-path &quot;$GITHUB_WORKSPACE/tools/relatorio-erros/Cargo.toml&quot;&quot;
-
-A execução utiliza as variáveis:
-
-- &quot;GITHUB_TOKEN&quot;, fornecida pelo token da execução.
-- &quot;GITHUB_REPOSITORY&quot;, com o identificador do repositório.
-- &quot;GITHUB_RUN_ID&quot;, com o identificador da execução atual.
-
-A saída é encaminhada ao terminal e gravada em &quot;erro-rust.log&quot;.
-
-O shell captura o código de saída do processo Cargo por meio de &quot;PIPESTATUS[0]&quot;.
-
-Se &quot;relatorio-erros.md&quot; estiver ausente ou vazio depois da execução, o job gera um relatório alternativo contendo o código de saída e as últimas 100 linhas do log técnico.
-
-A etapa está marcada com &quot;continue-on-error: true&quot;, permitindo que o job prossiga para a publicação do artifact mesmo quando a coleta falhar. O código de saída é preservado na etapa, e o resultado final deve ser interpretado considerando o tratamento de falhas da etapa e o comportamento do job.
-
-Publicação do relatório
-
-A etapa de upload utiliza &quot;if: ${{ always() }}&quot; e publica:
-
-- &quot;relatorio-erros.md&quot;
-- &quot;erro-rust.log&quot;
-
-O artifact recebe o nome &quot;relatorio-erros-portugues&quot; e tem retenção configurada para 30 dias.
-
-Limite da implementação apresentada: o job executa o programa Rust e fornece um token de acesso, mas a coleta efetiva dos logs de outros jobs depende do código implementado em &quot;tools/relatorio-erros/&quot;. O YAML, isoladamente, não comprova que todos os logs do workflow são baixados ou analisados.
-
-🔐 18. Secrets utilizados
+🔐 17. Secrets utilizados
 
 O workflow utiliza credenciais armazenadas no sistema de secrets do GitHub Actions.
 
@@ -1133,7 +1086,7 @@ O workflow também utiliza o &quot;GITHUB_TOKEN&quot; ou &quot;${{ github.token 
 
 Os secrets devem ser configurados nas definições do repositório antes da execução dos jobs que dependem deles. O acesso efetivo depende das permissões concedidas ao token e às actions utilizadas.
 
-🧰 19. Tecnologias e ferramentas utilizadas
+🧰 18. Tecnologias e ferramentas utilizadas
 
 O workflow combina diferentes tecnologias para automatizar tarefas específicas:
 
@@ -1161,7 +1114,7 @@ Lighthouse CI| Auditoria automatizada do site
 Platane/snk| Geração da Snake de contribuições
 GitHub Artifacts| Transporte dos arquivos gerados entre jobs
 
-🔄 20. Fluxo geral de dependências
+🔄 19. Fluxo geral de dependências
 
 O workflow é dividido em etapas encadeadas. O fluxo principal do aplicativo e do site é:
 
@@ -1180,7 +1133,7 @@ Em paralelo à cadeia de geração e sincronização, &quot;indexnow&quot;, &quo
 
 Essas relações representam as dependências declaradas em &quot;needs&quot;. Elas não significam que todos os jobs sejam executados em uma única sequência linear, pois jobs sem dependências diretas entre si podem ser executados em paralelo.
 
-📦 21. Artifacts produzidos
+📦 20. Artifacts produzidos
 
 O workflow utiliza artifacts para transportar arquivos entre jobs sem precisar gerar todos os resultados novamente em cada etapa.
 
@@ -1196,7 +1149,7 @@ Nome do artifact| Conteúdo
 
 O artifact &quot;APK-Kotlin-Assinado&quot; é independente do asset da GitHub Release. Da mesma forma, os artifacts intermediários de geração não são publicados automaticamente no site: sua persistência no repositório depende das etapas que os baixam e copiam.
 
-⚠️ 22. Observações operacionais
+⚠️ 21. Observações operacionais
 
 - A Release com tag &quot;app&quot; precisa existir antes da execução do job de compilação.
 - As credenciais de assinatura precisam corresponder ao keystore esperado.

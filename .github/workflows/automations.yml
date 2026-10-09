@@ -997,7 +997,7 @@ jobs:
       - name: Gerar Sitemap
         uses: cicirello/generate-sitemap@v1
         with:
-          base-url-path: https://intellicore555-oss.github.io/mulher-amparada-app/
+          base-url-path: https://mulher-amparada.github.io/mulher-amparada-app/
 
       - name: Enviar Sitemap gerado
         uses: actions/upload-artifact@v6
@@ -1020,7 +1020,7 @@ jobs:
       - name: Enviar Sitemap ao IndexNow
         uses: bojieyang/indexnow-action@v3
         with:
-          sitemap-location: https://intellicore555-oss.github.io/mulher-amparada-app/sitemap.xml
+          sitemap-location: https://mulher-amparada.github.io/mulher-amparada-app/sitemap.xml
           key: ${{ secrets.INDEXNOW_KEY }}
 
 
@@ -1037,8 +1037,8 @@ jobs:
       - name: Verificar links
         uses: ScholliYT/Broken-Links-Crawler-Action@v3
         with:
-          website_url: https://intellicore555-oss.github.io/mulher-amparada-app/
-          include_url_prefix: https://intellicore555-oss.github.io/mulher-amparada-app/
+          website_url: https://mulher-amparada.github.io/mulher-amparada-app/
+          include_url_prefix: https://mulher-amparada.github.io/mulher-amparada-app/
           resolve_before_filtering: "true"
           verbose: "true"
           max_retry_time: 30
@@ -1060,7 +1060,7 @@ jobs:
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
-            https://intellicore555-oss.github.io/mulher-amparada-app/
+            https://mulher-amparada.github.io/mulher-amparada-app/
           uploadArtifacts: true
 
 
@@ -1345,10 +1345,10 @@ jobs:
 
           git push origin HEAD:main
           
+
   relatorio-erros:
     name: Relatório de erros em português
     runs-on: ubuntu-24.04
-
     if: ${{ always() }}
 
     needs:
@@ -1377,6 +1377,15 @@ jobs:
       - name: Baixar código
         uses: actions/checkout@v6
 
+      - name: Criar relatório inicial
+        run: |
+          cat > "$GITHUB_WORKSPACE/relatorio-erros.md" <<'EOF'
+          # Relatório de erros — Mulher Amparada
+
+          A coleta de logs ainda não foi concluída.
+          Consulte o resultado da etapa de coleta para identificar falhas.
+          EOF
+
       - name: Instalar Rust
         uses: dtolnay/rust-toolchain@stable
 
@@ -1387,13 +1396,40 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_RUN_ID: ${{ github.run_id }}
-        run: cargo run --release --manifest-path tools/relatorio-erros/Cargo.toml
+        run: |
+          set +e
+
+          cargo run --release \
+            --manifest-path "$GITHUB_WORKSPACE/tools/relatorio-erros/Cargo.toml" \
+            2>&1 | tee "$GITHUB_WORKSPACE/erro-rust.log"
+
+          STATUS=${PIPESTATUS[0]}
+
+          if [ ! -s "$GITHUB_WORKSPACE/relatorio-erros.md" ]; then
+            {
+              echo "# Relatório de erros — Mulher Amparada"
+              echo
+              echo "A coleta falhou antes de gerar o relatório."
+              echo
+              echo "**Código de saída:** $STATUS"
+              echo
+              echo "## Erro técnico"
+              echo
+              echo '```text'
+              tail -n 100 "$GITHUB_WORKSPACE/erro-rust.log"
+              echo '```'
+            } > "$GITHUB_WORKSPACE/relatorio-erros.md"
+          fi
+
+          exit "$STATUS"
 
       - name: Publicar relatório como Artifact
         if: ${{ always() }}
         uses: actions/upload-artifact@v6
         with:
           name: relatorio-erros-portugues
-          path: relatorio-erros.md
+          path: |
+            relatorio-erros.md
+            erro-rust.log
           if-no-files-found: error
           retention-days: 30

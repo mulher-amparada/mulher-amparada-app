@@ -1211,12 +1211,15 @@ jobs:
 
   
   # =========================================================
-  # DOCUMENTAR WORKFLOW COM PHP
+  # DOCUMENTAR WORKFLOW YAML
   # =========================================================
 
-  pesquisar-projeto:
-    name: Documentar workflow com PHP
+  documentar-workflow:
+    name: Documentar workflow YAML
     runs-on: ubuntu-24.04
+
+    permissions:
+      contents: write
 
     steps:
       - name: Baixar repositório
@@ -1230,16 +1233,23 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y php-cli
 
-      - name: Gerar documentação do workflow
+      - name: Documentar workflow YAML
         run: php scripts/pesquisar_projeto.php
 
-      - name: Enviar documentação do workflow
-        uses: actions/upload-artifact@v6
-        with:
-          name: documentacao-workflow
-          path: pesquisas/workflow.md
-          if-no-files-found: error
-          retention-days: 30
+      - name: Salvar documentação no repositório
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add pesquisas/workflow.md
+
+          if git diff --cached --quiet; then
+            echo "A documentação já está atualizada."
+            exit 0
+          fi
+
+          git commit -m "docs: atualizar documentação do workflow"
+          git push origin HEAD:main
 
 
 

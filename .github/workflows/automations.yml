@@ -1288,32 +1288,32 @@ jobs:
 
 
   gerar-poster:
-    name: Gerar pôster do Mulher Amparada
+    name: Gerar pôster Mulher Amparada
     runs-on: ubuntu-24.04
 
     permissions:
-      contents: read
+      contents: write
 
     steps:
       - name: Baixar repositório
         uses: actions/checkout@v6
-        with:
-          fetch-depth: 1
 
       - name: Instalar dependências
         run: |
           sudo apt-get update
-          sudo apt-get install -y php-cli php-curl php-mbstring imagemagick
+          sudo apt-get install -y php-cli imagemagick
 
       - name: Gerar pôster
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: php scripts/gerar_poster.php
 
-      - name: Disponibilizar pôster gerado
-        uses: actions/upload-artifact@v6
-        with:
-          name: poster-mulher-amparada
-          path: midia/mulher-amparada.png
-          if-no-files-found: error
-          retention-days: 30
+      - name: Salvar PNG no repositório
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add midia/mulher-amparada.png
+          if git diff --cached --quiet; then
+            echo "O pôster não mudou."
+          else
+            git commit -m "Atualizar pôster Mulher Amparada"
+            git push
+          fi

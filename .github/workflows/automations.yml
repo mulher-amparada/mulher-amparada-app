@@ -1375,10 +1375,14 @@ jobs:
           git push origin HEAD:main
           
 
-  relatorio-erros:
+    relatorio-erros:
     name: Relatório de erros em português
     runs-on: ubuntu-24.04
     if: ${{ always() }}
+
+    needs:
+      - sincronizar-paperwf
+      - sincronizar-devto
 
     permissions:
       actions: read

@@ -1,34 +1,35 @@
 # Documentação do workflow — Mulher Amparada
 
 - **Arquivo de origem:** `.github/workflows/automations.yml`
+- **Arquivo gerado:** `.github/workflows/workflow.md`
 - **Jobs identificados:** 17
 - **Etapas identificadas:** 73
 
-## Tabela completa de jobs
+## Tabela completa de jobs e etapas
 
-| ID do job | Nome | Runner | Dependências | Quantidade de etapas | Etapas |
-|---|---|---|---|---:|---|
-| `build` | Compilar APK Kotlin | ubuntu-24.04 | Nenhuma | 20 | 1. Baixar código (`actions/checkout@v6`); 2. Verificar projeto — executa comandos; 3. Configurar Java 17 (`actions/setup-java@v6`); 4. Verificar Android SDK 37 — executa comandos; 5. Dar permissão ao Gradle — executa comandos; 6. Compilar APK — executa comandos; 7. Localizar APK — executa comandos; 8. Assinar APK — executa comandos; 9. Preparar APK da Release — executa comandos; 10. APK-Kotlin-Assinado (`actions/upload-artifact@v6`); 11. Calcular tamanho real do APK — executa comandos; 12. Calcular SHA-256 — executa comandos; 13. Atualizar APK no main — executa comandos; 14. Verificar Release — executa comandos; 15. Excluir APK antigo da Release — executa comandos; 16. Enviar APK para a Release — executa comandos; 17. Atualizar SHA-256 da Release — executa comandos; 18. Atualizar link, tamanho e SHA-256 no download.html — executa comandos; 19. Enviar download.html atualizado para o main — executa comandos; 20. Mostrar resumo — executa comandos |
-| `build-site` | build-site | ubuntu-24.04 | `build` | 4 | 1. Checkout (`actions/checkout@v6`); 2. Setup Pages (`actions/configure-pages@v6`); 3. Build with Jekyll (`actions/jekyll-build-pages@v1`); 4. Upload Pages artifact (`actions/upload-pages-artifact@v5`) |
-| `deploy` | deploy | ubuntu-24.04 | `build-site` | 1 | 1. Deploy to GitHub Pages (`actions/deploy-pages@v5`) |
-| `atualizar-commits` | atualizar-commits | ubuntu-24.04 | `deploy` | 3 | 1. Baixar todo o histórico (`actions/checkout@v6`); 2. Atualizar total de commits — executa comandos; 3. arquivo-readme (`actions/upload-artifact@v6`) |
-| `sincronizar-devto` | Sincronizar README com DEV.to | ubuntu-24.04 | `salvar-na-main` | 2 | 1. Baixar código atualizado (`actions/checkout@v6`); 2. Atualizar artigo no DEV.to — executa comandos |
-| `sincronizar-paperwf` | Sincronizar README com Paper.wf | ubuntu-24.04 | `salvar-na-main` | 2 | 1. Baixar código atualizado (`actions/checkout@v6`); 2. Autenticar e atualizar publicação — executa comandos |
-| `sitemap` | Gerar Sitemap | ubuntu-24.04 | `snake` | 3 | 1. Checkout (`actions/checkout@v6`); 2. Gerar Sitemap (`cicirello/generate-sitemap@v1`); 3. arquivo-sitemap (`actions/upload-artifact@v6`) |
-| `indexnow` | IndexNow | ubuntu-24.04 | `deploy` | 1 | 1. Enviar Sitemap ao IndexNow (`bojieyang/indexnow-action@v3`) |
-| `broken-links` | Verificar Links Quebrados | ubuntu-24.04 | `deploy` | 1 | 1. Verificar links (`ScholliYT/Broken-Links-Crawler-Action@v3`) |
-| `lighthouse` | Lighthouse | ubuntu-24.04 | `deploy` | 1 | 1. Lighthouse (`treosh/lighthouse-ci-action@v12`) |
-| `snake` | Gerar Snake das contribuições | ubuntu-24.04 | `atualizar-commits` | 4 | 1. Baixar repositório (`actions/checkout@v6`); 2. Gerar Snake (`Platane/snk@v3`); 3. Preparar arquivos da Snake — executa comandos; 4. arquivos-snake (`actions/upload-artifact@v6`) |
-| `publicar-divulgacao` | Publicar Kit de Divulgação | ubuntu-24.04 | `lighthouse` | 4 | 1. Baixar repositório (`actions/checkout@v6`); 2. Configurar Node.js (`actions/setup-node@v6`); 3. Criar pacote de divulgação — executa comandos; 4. Kit de Divulgação (`softprops/action-gh-release@v3`) |
-| `atualizar-footer` | Atualizar Footer com README | ubuntu-24.04 | `atualizar-commits` | 5 | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Python (`actions/setup-python@v6`); 3. Instalar dependência Python — executa comandos; 4. Atualizar footer com README — executa comandos; 5. arquivo-footer (`actions/upload-artifact@v6`) |
-| `atualizar-relatorio-commits` | Atualizar relatório de commits | ubuntu-24.04 | `atualizar-commits` | 4 | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Ruby (`ruby/setup-ruby@v1`); 3. Gerar relatório de commits — executa comandos; 4. arquivos-relatorio-commits (`actions/upload-artifact@v6`) |
-| `pesquisar-projeto` | Documentar workflow YAML | ubuntu-24.04 | Nenhuma | 4 | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar PHP — executa comandos; 3. Gerar documentação do workflow — executa comandos; 4. arquivos-pesquisas (`actions/upload-artifact@v6`) |
-| `salvar-na-main` | Salvar todos os arquivos na main | ubuntu-24.04 | `atualizar-commits`, `snake`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto` | 9 | 1. Baixar código atualizado (`actions/checkout@v6`); 2. arquivo-readme (`actions/download-artifact@v6`); 3. arquivos-snake (`actions/download-artifact@v6`); 4. arquivo-sitemap (`actions/download-artifact@v6`); 5. arquivo-footer (`actions/download-artifact@v6`); 6. arquivos-relatorio-commits (`actions/download-artifact@v6`); 7. arquivos-pesquisas (`actions/download-artifact@v6`); 8. Reunir arquivos gerados — executa comandos; 9. Salvar todas as alterações em um commit — executa comandos |
-| `relatorio-erros` | Relatório de erros em português | ubuntu-24.04 | Nenhuma | 5 | 1. Baixar código (`actions/checkout@v6`); 2. Criar relatório inicial — executa comandos; 3. Instalar Rust (`dtolnay/rust-toolchain@stable`); 4. Coletar logs e gerar relatório — executa comandos; 5. relatorio-erros-portugues (`actions/upload-artifact@v6`) |
+| ID do job | Nome | Runner | Dependências | Etapas |
+|---|---|---|---|---|
+| `build` | Compilar APK Kotlin | ubuntu-24.04 | Nenhuma | 1. Baixar código (`actions/checkout@v6`); 2. Verificar projeto — executa comandos; 3. Configurar Java 17 (`actions/setup-java@v6`); 4. Verificar Android SDK 37 — executa comandos; 5. Dar permissão ao Gradle — executa comandos; 6. Compilar APK — executa comandos; 7. Localizar APK — executa comandos; 8. Assinar APK — executa comandos; 9. Preparar APK da Release — executa comandos; 10. APK-Kotlin-Assinado (`actions/upload-artifact@v6`); 11. Calcular tamanho real do APK — executa comandos; 12. Calcular SHA-256 — executa comandos; 13. Atualizar APK no main — executa comandos; 14. Verificar Release — executa comandos; 15. Excluir APK antigo da Release — executa comandos; 16. Enviar APK para a Release — executa comandos; 17. Atualizar SHA-256 da Release — executa comandos; 18. Atualizar link, tamanho e SHA-256 no download.html — executa comandos; 19. Enviar download.html atualizado para o main — executa comandos; 20. Mostrar resumo — executa comandos |
+| `build-site` | build-site | ubuntu-24.04 | `build` | 1. Checkout (`actions/checkout@v6`); 2. Setup Pages (`actions/configure-pages@v6`); 3. Build with Jekyll (`actions/jekyll-build-pages@v1`); 4. Upload Pages artifact (`actions/upload-pages-artifact@v5`) |
+| `deploy` | deploy | ubuntu-24.04 | `build-site` | 1. Deploy to GitHub Pages (`actions/deploy-pages@v5`) |
+| `atualizar-commits` | atualizar-commits | ubuntu-24.04 | `deploy` | 1. Baixar todo o histórico (`actions/checkout@v6`); 2. Atualizar total de commits — executa comandos; 3. arquivo-readme (`actions/upload-artifact@v6`) |
+| `sincronizar-devto` | Sincronizar README com DEV.to | ubuntu-24.04 | `salvar-na-main` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. Atualizar artigo no DEV.to — executa comandos |
+| `sincronizar-paperwf` | Sincronizar README com Paper.wf | ubuntu-24.04 | `salvar-na-main` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. Autenticar e atualizar publicação — executa comandos |
+| `sitemap` | Gerar Sitemap | ubuntu-24.04 | `snake` | 1. Checkout (`actions/checkout@v6`); 2. Gerar Sitemap (`cicirello/generate-sitemap@v1`); 3. arquivo-sitemap (`actions/upload-artifact@v6`) |
+| `indexnow` | IndexNow | ubuntu-24.04 | `deploy` | 1. Enviar Sitemap ao IndexNow (`bojieyang/indexnow-action@v3`) |
+| `broken-links` | Verificar Links Quebrados | ubuntu-24.04 | `deploy` | 1. Verificar links (`ScholliYT/Broken-Links-Crawler-Action@v3`) |
+| `lighthouse` | Lighthouse | ubuntu-24.04 | `deploy` | 1. Lighthouse (`treosh/lighthouse-ci-action@v12`) |
+| `snake` | Gerar Snake das contribuições | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Gerar Snake (`Platane/snk@v3`); 3. Preparar arquivos da Snake — executa comandos; 4. arquivos-snake (`actions/upload-artifact@v6`) |
+| `publicar-divulgacao` | Publicar Kit de Divulgação | ubuntu-24.04 | `lighthouse` | 1. Baixar repositório (`actions/checkout@v6`); 2. Configurar Node.js (`actions/setup-node@v6`); 3. Criar pacote de divulgação — executa comandos; 4. Kit de Divulgação (`softprops/action-gh-release@v3`) |
+| `atualizar-footer` | Atualizar Footer com README | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Python (`actions/setup-python@v6`); 3. Instalar dependência Python — executa comandos; 4. Atualizar footer com README — executa comandos; 5. arquivo-footer (`actions/upload-artifact@v6`) |
+| `atualizar-relatorio-commits` | Atualizar relatório de commits | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Ruby (`ruby/setup-ruby@v1`); 3. Gerar relatório de commits — executa comandos; 4. arquivos-relatorio-commits (`actions/upload-artifact@v6`) |
+| `pesquisar-projeto` | Documentar workflow YAML | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar PHP — executa comandos; 3. Gerar documentação do workflow — executa comandos; 4. arquivos-pesquisas (`actions/upload-artifact@v6`) |
+| `salvar-na-main` | Salvar todos os arquivos na main | ubuntu-24.04 | `atualizar-commits`, `snake`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. arquivo-readme (`actions/download-artifact@v6`); 3. arquivos-snake (`actions/download-artifact@v6`); 4. arquivo-sitemap (`actions/download-artifact@v6`); 5. arquivo-footer (`actions/download-artifact@v6`); 6. arquivos-relatorio-commits (`actions/download-artifact@v6`); 7. arquivos-pesquisas (`actions/download-artifact@v6`); 8. Reunir arquivos gerados — executa comandos; 9. Salvar todas as alterações em um commit — executa comandos |
+| `relatorio-erros` | Relatório de erros em português | ubuntu-24.04 | Nenhuma | 1. Baixar código (`actions/checkout@v6`); 2. Criar relatório inicial — executa comandos; 3. Instalar Rust (`dtolnay/rust-toolchain@stable`); 4. Coletar logs e gerar relatório — executa comandos; 5. relatorio-erros-portugues (`actions/upload-artifact@v6`) |
 
 ## Grafo completo de dependências
 
-O diagrama abaixo contém todos os jobs identificados e todas as ligações declaradas em `needs`.
+As setas representam as dependências declaradas em `needs` no YAML original.
 
 ```mermaid
 flowchart TD
@@ -70,13 +71,13 @@ flowchart TD
     job_pesquisar_projeto --> job_salvar_na_main
 ```
 
-## Detalhamento de todos os jobs
+## Detalhamento dos jobs
 
 ### Compilar APK Kotlin
 
 - **ID:** `build`
 - **Runner:** `ubuntu-24.04`
-- **Dependências:** Nenhuma identificada
+- **Dependências:** Nenhuma
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
@@ -257,7 +258,7 @@ flowchart TD
 
 - **ID:** `pesquisar-projeto`
 - **Runner:** `ubuntu-24.04`
-- **Dependências:** Nenhuma identificada
+- **Dependências:** Nenhuma
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
@@ -288,7 +289,7 @@ flowchart TD
 
 - **ID:** `relatorio-erros`
 - **Runner:** `ubuntu-24.04`
-- **Dependências:** Nenhuma identificada
+- **Dependências:** Nenhuma
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
@@ -300,7 +301,7 @@ flowchart TD
 
 ## YAML original completo
 
-Esta seção preserva o conteúdo integral do arquivo original, incluindo configurações, condições, variáveis, comandos e opções que a tabela não representa.
+O bloco abaixo reproduz o conteúdo original do arquivo `automations.yml`, preservando comandos, condições, variáveis, comentários e configurações.
 
 ````yaml
 name: Automações do Mulher Amparada

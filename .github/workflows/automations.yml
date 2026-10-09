@@ -751,24 +751,19 @@ jobs:
   # =========================================================
   # ATUALIZAR TOTAL DE COMMITS
   # =========================================================
+
   atualizar-commits:
-
     runs-on: ubuntu-24.04
-
     needs: deploy
 
     steps:
-
       - name: Baixar todo o histórico
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-          
-
 
       - name: Atualizar total de commits
         run: |
-
           TOTAL=$(git rev-list --all --count)
 
           python3 - "$TOTAL" <<'PY'
@@ -777,7 +772,6 @@ jobs:
           import sys
 
           total = sys.argv[1]
-
           arquivo = Path("README.md")
           texto = arquivo.read_text(encoding="utf-8")
 
@@ -791,29 +785,12 @@ jobs:
           arquivo.write_text(texto, encoding="utf-8")
           PY
 
-
-      - name: Salvar alteração
-        run: |
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add README.md
-
-          if git diff --cached --quiet; then
-
-            echo "Nenhuma alteração necessária."
-
-          else
-
-            git commit -m "Atualizar total de commits [skip ci]"
-
-            git fetch origin main
-            git rebase origin/main
-
-            git push origin main
-
-          fi
+      - name: Enviar README atualizado
+        uses: actions/upload-artifact@v6
+        with:
+          name: arquivo-readme
+          path: README.md
+          if-no-files-found: error
 
 
   # =========================================================
@@ -821,15 +798,11 @@ jobs:
   # =========================================================
 
   sincronizar-devto:
-
     name: Sincronizar README com DEV.to
-
     runs-on: ubuntu-24.04
-
-    needs: atualizar-commits
+    needs: salvar-na-main
 
     steps:
-
       - name: Baixar código atualizado
         uses: actions/checkout@v6
         with:
@@ -840,17 +813,13 @@ jobs:
         env:
           DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
         run: |
-
           python3 - <<'PY'
-
           import json
           import os
           import urllib.request
+          import urllib.error
 
-          README = "README.md"
-          ARTICLE_ID = 4771914
-
-          with open(README, "r", encoding="utf-8") as arquivo:
+          with open("README.md", "r", encoding="utf-8") as arquivo:
               markdown = arquivo.read()
 
           dados = json.dumps({
@@ -860,7 +829,7 @@ jobs:
           }).encode("utf-8")
 
           requisicao = urllib.request.Request(
-              f"https://dev.to/api/articles/{ARTICLE_ID}",
+              "https://dev.to/api/articles/4771914",
               data=dados,
               method="PUT",
               headers={
@@ -871,30 +840,24 @@ jobs:
           )
 
           try:
-
               with urllib.request.urlopen(requisicao) as resposta:
-
-                  resultado = resposta.read().decode("utf-8")
-
+                  print(resposta.read().decode("utf-8"))
                   print("DEV.to atualizado com sucesso.")
-                  print(resultado)
-
           except urllib.error.HTTPError as erro:
-
-              corpo = erro.read().decode("utf-8")
-
-              print("ERRO ao atualizar o DEV.to.")
-              print(f"HTTP: {erro.code}")
-              print(corpo)
-
+              print(f"HTTP {erro.code}")
+              print(erro.read().decode("utf-8", errors="replace"))
               raise
-
           PY
-          
+
+
+  # =========================================================
+  # SINCRONIZAR README COM PAPER.WF
+  # =========================================================
+
   sincronizar-paperwf:
     name: Sincronizar README com Paper.wf
     runs-on: ubuntu-24.04
-    needs: atualizar-commits
+    needs: salvar-na-main
 
     steps:
       - name: Baixar código atualizado
@@ -915,10 +878,8 @@ jobs:
           import urllib.error
 
           BASE = "https://paper.wf"
-
           USERNAME = os.environ["PAPERWF_USERNAME"]
           PASSWORD = os.environ["PAPERWF_PASSWORD"]
-
           COLLECTION = "mulheramparada"
           SLUG = "projeto-mulher-amparada"
 
@@ -947,23 +908,11 @@ jobs:
               try:
                   with urllib.request.urlopen(request) as response:
                       body = response.read().decode("utf-8")
-
-                      if not body:
-                          return {}
-
-                      return json.loads(body)
-
+                      return json.loads(body) if body else {}
               except urllib.error.HTTPError as error:
-                  body = error.read().decode(
-                      "utf-8",
-                      errors="replace"
-                  )
-
                   print(f"HTTP {error.code}")
-                  print(body)
+                  print(error.read().decode("utf-8", errors="replace"))
                   raise
-
-          print("Autenticando no Paper.wf...")
 
           login_payload = json.dumps({
               "alias": USERNAME,
@@ -984,17 +933,10 @@ jobs:
           )
 
           if not token:
-              raise RuntimeError(
-                  "O Paper.wf não retornou um token de acesso."
-              )
-
-          print("Login realizado com sucesso.")
-
-          print("Localizando publicação existente...")
+              raise RuntimeError("O Paper.wf não retornou um token.")
 
           post = api(
               f"{BASE}/api/collections/{COLLECTION}/posts/{SLUG}",
-              method="GET",
               token=token
           )
 
@@ -1002,16 +944,11 @@ jobs:
 
           if isinstance(post_data, list):
               if not post_data:
-                  raise RuntimeError(
-                      "O Paper.wf retornou uma lista de posts vazia."
-                  )
-
+                  raise RuntimeError("Nenhuma publicação encontrada.")
               post_data = post_data[0]
 
           if not isinstance(post_data, dict):
-              raise RuntimeError(
-                  "Resposta inesperada ao localizar o post."
-              )
+              raise RuntimeError("Resposta inesperada do Paper.wf.")
 
           post_id = (
               post_data.get("id")
@@ -1023,18 +960,12 @@ jobs:
           )
 
           if not post_id:
-              raise RuntimeError(
-                  "Não foi possível encontrar o ID do post existente."
-              )
-
-          print(f"Post encontrado: {post_id}")
+              raise RuntimeError("ID da publicação não encontrado.")
 
           payload = json.dumps({
               "title": "Projeto Mulher Amparada",
               "body": readme
           }).encode("utf-8")
-
-          print("Atualizando publicação...")
 
           api(
               f"{BASE}/api/posts/{post_id}",
@@ -1045,11 +976,17 @@ jobs:
 
           print("README sincronizado com o Paper.wf.")
           PY
-          
+
+
+  # =========================================================
+  # GERAR SITEMAP
+  # =========================================================
+
   sitemap:
-    name: Gerar e salvar Sitemap
+    name: Gerar Sitemap
     runs-on: ubuntu-24.04
     needs: snake
+
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -1060,61 +997,77 @@ jobs:
       - name: Gerar Sitemap
         uses: cicirello/generate-sitemap@v1
         with:
-          base-url-path: https://mulher-amparada.github.io/mulher-amparada-app/
+          base-url-path: https://intellicore555-oss.github.io/mulher-amparada-app/
 
-      - name: Salvar Sitemap no repositório
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add sitemap.xml
+      - name: Enviar Sitemap gerado
+        uses: actions/upload-artifact@v6
+        with:
+          name: arquivo-sitemap
+          path: sitemap.xml
+          if-no-files-found: error
 
-          if git diff --cached --quiet; then
-            echo "sitemap.xml já está atualizado."
-          else
-            git commit -m "Atualizar sitemap [skip ci]"
-            git push origin main
-          fi
+
+  # =========================================================
+  # INDEXNOW
+  # =========================================================
 
   indexnow:
     name: IndexNow
     runs-on: ubuntu-24.04
-    needs: sitemap
+    needs: deploy
+
     steps:
       - name: Enviar Sitemap ao IndexNow
         uses: bojieyang/indexnow-action@v3
         with:
-          sitemap-location: https://mulher-amparada.github.io/mulher-amparada-app/sitemap.xml
+          sitemap-location: https://intellicore555-oss.github.io/mulher-amparada-app/sitemap.xml
           key: ${{ secrets.INDEXNOW_KEY }}
 
-  
+
+  # =========================================================
+  # VERIFICAR LINKS QUEBRADOS
+  # =========================================================
+
   broken-links:
     name: Verificar Links Quebrados
     runs-on: ubuntu-24.04
-    needs:  indexnow
+    needs: deploy
+
     steps:
       - name: Verificar links
         uses: ScholliYT/Broken-Links-Crawler-Action@v3
         with:
-          website_url: https://mulher-amparada.github.io/mulher-amparada-app/
-          include_url_prefix: https://mulher-amparada.github.io/mulher-amparada-app/
-          resolve_before_filtering: 'true'
-          verbose: 'true'
+          website_url: https://intellicore555-oss.github.io/mulher-amparada-app/
+          include_url_prefix: https://intellicore555-oss.github.io/mulher-amparada-app/
+          resolve_before_filtering: "true"
+          verbose: "true"
           max_retry_time: 30
           max_retries: 5
           max_depth: -1
-          
+
+
+  # =========================================================
+  # LIGHTHOUSE
+  # =========================================================
+
   lighthouse:
     name: Lighthouse
     runs-on: ubuntu-24.04
-    needs: broken-links
+    needs: deploy
+
     steps:
       - name: Lighthouse
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
-            https://mulher-amparada.github.io/mulher-amparada-app/
+            https://intellicore555-oss.github.io/mulher-amparada-app/
           uploadArtifacts: true
-          
+
+
+  # =========================================================
+  # GERAR SNAKE DAS CONTRIBUIÇÕES
+  # =========================================================
+
   snake:
     name: Gerar Snake das contribuições
     runs-on: ubuntu-24.04
@@ -1135,53 +1088,34 @@ jobs:
             dist/github-contribution-grid-snake.svg
             dist/github-contribution-grid-snake.gif
 
-      - name: Publicar Snake no repositório
+      - name: Preparar arquivos da Snake
         run: |
-          set -e
+          mkdir -p arquivos-gerados/snake
 
           cp dist/github-contribution-grid-snake.svg \
-            "Código-fonte do app = Mulher Amparada/snake.svg"
+            arquivos-gerados/snake/snake.svg
 
           cp dist/github-contribution-grid-snake.gif \
-            "Código-fonte do app = Mulher Amparada/snake.gif"
+            arquivos-gerados/snake/snake.gif
 
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Enviar Snake gerada
+        uses: actions/upload-artifact@v6
+        with:
+          name: arquivos-snake
+          path: arquivos-gerados/snake/
+          if-no-files-found: error
 
-          git add \
-            "Código-fonte do app = Mulher Amparada/snake.svg" \
-            "Código-fonte do app = Mulher Amparada/snake.gif"
 
-          if git diff --cached --quiet; then
-            echo "Nenhuma alteração na Snake."
-            exit 0
-          fi
-
-          git commit -m "chore: atualizar snake [skip ci]"
-
-          git fetch origin main
-          git rebase origin/main
-
-          git push origin HEAD:main
-          
-          
   # =========================================================
-  # PUBLICAR KIT DE DIVULGAÇÃO NO GITHUB RELEASE
+  # PUBLICAR KIT DE DIVULGAÇÃO
   # =========================================================
 
   publicar-divulgacao:
-
     name: Publicar Kit de Divulgação
-
     runs-on: ubuntu-24.04
-
-    permissions:
-      contents: write
-
     needs: lighthouse
-    
-    steps:
 
+    steps:
       - name: Baixar repositório
         uses: actions/checkout@v6
         with:
@@ -1206,7 +1140,8 @@ jobs:
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+
+
   # =========================================================
   # ATUALIZAR FOOTER COM README
   # =========================================================
@@ -1214,10 +1149,7 @@ jobs:
   atualizar-footer:
     name: Atualizar Footer com README
     runs-on: ubuntu-24.04
-    needs: publicar-divulgacao
-
-    permissions:
-      contents: write
+    needs: atualizar-commits
 
     steps:
       - name: Baixar repositório
@@ -1237,27 +1169,22 @@ jobs:
       - name: Atualizar footer com README
         run: python3 scripts/atualizar_footer.py
 
-      - name: Salvar alterações
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Enviar footer gerado
+        uses: actions/upload-artifact@v6
+        with:
+          name: arquivo-footer
+          path: index.html
+          if-no-files-found: error
 
-          git add index.html
 
-          if ! git diff --cached --quiet; then
-            git commit -m "Atualizar footer com README [skip ci]"
-            git push origin HEAD:main
-          else
-            echo "O footer já está atualizado."
-          fi
+  # =========================================================
+  # ATUALIZAR RELATÓRIO DE COMMITS
+  # =========================================================
 
   atualizar-relatorio-commits:
     name: Atualizar relatório de commits
     runs-on: ubuntu-24.04
-    needs: atualizar-footer
-
-    permissions:
-      contents: write
+    needs: atualizar-commits
 
     steps:
       - name: Baixar repositório
@@ -1269,51 +1196,151 @@ jobs:
       - name: Instalar Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.4'
+          ruby-version: "3.4"
 
       - name: Gerar relatório de commits
         run: ruby scripts/commits.rb
 
-
-      - name: Salvar relatório no repositório
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add commits/
-          if ! git diff --cached --quiet; then
-            git commit -m "Atualizar relatórios de commits"
-            git push origin HEAD:main
-          fi
+      - name: Enviar relatório gerado
+        uses: actions/upload-artifact@v6
+        with:
+          name: arquivos-relatorio-commits
+          path: commits/
+          if-no-files-found: error
 
 
+  # =========================================================
+  # PESQUISAR REFERÊNCIAS DO PROJETO
+  # =========================================================
 
-  gerar-poster:
-    name: Gerar pôster Mulher Amparada
+  pesquisar-projeto:
+    name: Pesquisar referências do projeto na internet
     runs-on: ubuntu-24.04
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          ref: main
+
+      - name: Instalar PHP e extensões
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y php-cli php-curl php-xml
+
+      - name: Pesquisar o projeto
+        run: php scripts/pesquisar_projeto.php
+
+      - name: Enviar relatórios de pesquisa
+        uses: actions/upload-artifact@v6
+        with:
+          name: arquivos-pesquisas
+          path: pesquisas/
+          if-no-files-found: error
+
+
+  # =========================================================
+  # CENTRALIZAR E SALVAR ARQUIVOS NA MAIN
+  # =========================================================
+
+  salvar-na-main:
+    name: Salvar todos os arquivos na main
+    runs-on: ubuntu-24.04
+
+    needs:
+      - atualizar-commits
+      - snake
+      - sitemap
+      - atualizar-footer
+      - atualizar-relatorio-commits
+      - pesquisar-projeto
 
     permissions:
       contents: write
 
     steps:
-      - name: Baixar repositório
+      - name: Baixar código atualizado
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: main
 
-      - name: Instalar dependências
+      - name: Baixar README atualizado
+        uses: actions/download-artifact@v6
+        with:
+          name: arquivo-readme
+          path: artefatos/readme
+
+      - name: Baixar Snake
+        uses: actions/download-artifact@v6
+        with:
+          name: arquivos-snake
+          path: artefatos/snake
+
+      - name: Baixar Sitemap
+        uses: actions/download-artifact@v6
+        with:
+          name: arquivo-sitemap
+          path: artefatos/sitemap
+
+      - name: Baixar Footer
+        uses: actions/download-artifact@v6
+        with:
+          name: arquivo-footer
+          path: artefatos/footer
+
+      - name: Baixar relatório de commits
+        uses: actions/download-artifact@v6
+        with:
+          name: arquivos-relatorio-commits
+          path: artefatos/commits
+
+      - name: Baixar pesquisas
+        uses: actions/download-artifact@v6
+        with:
+          name: arquivos-pesquisas
+          path: artefatos/pesquisas
+
+      - name: Reunir arquivos gerados
         run: |
-          sudo apt-get update
-          sudo apt-get install -y php-cli imagemagick
+          set -e
 
-      - name: Gerar pôster
-        run: php scripts/gerar_poster.php
+          cp artefatos/readme/README.md README.md
 
-      - name: Salvar PNG no repositório
+          cp artefatos/snake/snake.svg \
+            "Código-fonte do app = Mulher Amparada/snake.svg"
+
+          cp artefatos/snake/snake.gif \
+            "Código-fonte do app = Mulher Amparada/snake.gif"
+
+          cp artefatos/sitemap/sitemap.xml sitemap.xml
+          cp artefatos/footer/index.html index.html
+
+          mkdir -p commits pesquisas
+
+          cp -a artefatos/commits/. commits/
+          cp -a artefatos/pesquisas/. pesquisas/
+
+      - name: Salvar todas as alterações em um commit
         run: |
+          set -e
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add midia/mulher-amparada.png
+
+          git add README.md index.html sitemap.xml commits/ pesquisas/ \
+            "Código-fonte do app = Mulher Amparada/snake.svg" \
+            "Código-fonte do app = Mulher Amparada/snake.gif"
+
           if git diff --cached --quiet; then
-            echo "O pôster não mudou."
-          else
-            git commit -m "Atualizar pôster Mulher Amparada"
-            git push
+            echo "Nenhuma alteração para salvar."
+            exit 0
           fi
+
+          git commit -m "Atualizar arquivos gerados [skip ci]"
+
+          git fetch origin main
+          git rebase origin/main
+
+          git push origin HEAD:main

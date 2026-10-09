@@ -186,7 +186,7 @@ controller.isAppearanceLightNavigationBars =
                 android.R.id.content
             )
 
-        aplicarFonte(raiz)
+      
 
         btnRecord =
             findViewById(

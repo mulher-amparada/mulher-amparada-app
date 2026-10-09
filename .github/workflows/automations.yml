@@ -1340,11 +1340,10 @@ jobs:
         with:
           cmdline-tools-version: 12266719
 
-      - name: Aceitar licenças do Android SDK
+        - name: Aceitar licenças do Android SDK
         run: |
-          set -o pipefail
-          yes | sdkmanager --licenses
-
+          sdkmanager --licenses < /dev/null
+          
       - name: Instalar ferramentas do emulador
         run: |
           sdkmanager --install \

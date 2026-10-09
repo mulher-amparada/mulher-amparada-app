@@ -1302,48 +1302,18 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
-          
-      - name: Baixar APK compilado
-        uses: actions/download-artifact@v6
-        with:
-          name: APK-Kotlin-Assinado
-          path: ${{ runner.temp }}/apk
-
-      - name: Localizar APK
-        id: apk
-        shell: bash
-        run: |
-          APK="$(find "$RUNNER_TEMP/apk" -type f -name '*.apk' -print -quit)"
-
-          if [ -z "$APK" ]; then
-            echo "Nenhum APK encontrado no artifact app-debug-assinado."
-            exit 1
-          fi
-
-          echo "path=$APK" >> "$GITHUB_OUTPUT"
-          echo "APK encontrado: $APK"
-
-      - name: Instalar PHP e extensões
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y php-cli php-xml
 
       - name: Configurar Java
         uses: actions/setup-java@v6
         with:
           distribution: temurin
-          java-version: '21'
-
+          java-version: '17'
 
       - name: Configurar Android SDK
         uses: android-actions/setup-android@v4
         with:
           cmdline-tools-version: 12266719
 
-      - name: Aceitar licenças do Android SDK
-        run: |
-          sdkmanager --licenses < /dev/null
-          
       - name: Instalar ferramentas do emulador
         run: |
           sdkmanager --install \
@@ -1352,6 +1322,153 @@ jobs:
             "system-images;android-36;google_apis;x86_64" \
             "emulator"
 
+      - name: Instalar PHP e extensões
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y php-cli php-xml
+
+      - name: Desativar FLAG_SECURE somente na cópia temporária
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          raiz = Path("Código-fonte do app = Mulher Amparada")
+          pastas = [
+              raiz / "app/src/main/java",
+              raiz / "app/src/main/kotlin",
+          ]
+
+          arquivos = []
+          for pasta in pastas:
+              if pasta.exists():
+                  arquivos.extend(pasta.rglob("*.kt"))
+
+          total = 0
+
+          padrao_chamada = re.compile(
+              r'(?:(?:this\s*\.\s*)?window\s*\.\s*'
+              r'(?:setFlags|addFlags)|'
+              r'getWindow\s*\(\s*\)\s*\.\s*'
+              r'(?:setFlags|addFlags))\s*$'
+          )
+
+          for arquivo in arquivos:
+              texto = arquivo.read_text(encoding="utf-8")
+              original = texto
+
+              ocorrencias = list(
+                  re.finditer(r'\bFLAG_SECURE\b', texto)
+              )
+
+              for ocorrencia in reversed(ocorrencias):
+                  posicao = ocorrencia.start()
+                  abertura = texto.rfind("(", 0, posicao)
+
+                  if abertura < 0:
+                      continue
+
+                  chamada = padrao_chamada.search(
+                      texto[:abertura]
+                  )
+
+                  if not chamada:
+                      continue
+
+                  profundidade = 0
+                  fechamento = None
+
+                  for indice in range(abertura, len(texto)):
+                      caractere = texto[indice]
+
+                      if caractere == "(":
+                          profundidade += 1
+                      elif caractere == ")":
+                          profundidade -= 1
+
+                          if profundidade == 0:
+                              fechamento = indice + 1
+                              break
+
+                  if fechamento is None:
+                      raise SystemExit(
+                          f"Chamada incompleta em {arquivo}"
+                      )
+
+                  argumentos = texto[abertura + 1:fechamento - 1]
+
+                  if "FLAG_SECURE" not in argumentos:
+                      continue
+
+                  inicio = chamada.start()
+                  linha_inicio = texto.rfind("\n", 0, inicio) + 1
+                  linha_fim = texto.find("\n", fechamento)
+
+                  if linha_fim == -1:
+                      linha_fim = len(texto)
+
+                  antes = texto[linha_inicio:inicio]
+                  depois = texto[fechamento:linha_fim]
+
+                  if antes.strip():
+                      raise SystemExit(
+                          "Chamada FLAG_SECURE junto com outra "
+                          f"expressão em {arquivo}. "
+                          "Nenhuma captura foi iniciada."
+                      )
+
+                  if depois.strip() not in ("", ";"):
+                      raise SystemExit(
+                          "Não foi possível remover a chamada "
+                          f"com segurança em {arquivo}."
+                      )
+
+                  texto = (
+                      texto[:linha_inicio]
+                      + texto[linha_fim:]
+                  )
+                  total += 1
+
+              if texto != original:
+                  arquivo.write_text(texto, encoding="utf-8")
+
+          if total == 0:
+              sys.exit(
+                  "Nenhuma chamada compatível de FLAG_SECURE "
+                  "foi encontrada. Verifique a implementação Kotlin."
+              )
+
+          print(
+              f"{total} chamada(s) removida(s) temporariamente."
+          )
+          print("Nenhuma alteração será enviada ao repositório.")
+          PY
+
+      - name: Compilar APK temporário para capturas
+        working-directory: Código-fonte do app = Mulher Amparada
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --stacktrace
+
+      - name: Localizar APK temporário
+        id: apk
+        shell: bash
+        run: |
+          APK="$(find \
+            "Código-fonte do app = Mulher Amparada/app/build/outputs/apk/debug" \
+            -type f \
+            -name '*.apk' \
+            -print -quit)"
+
+          if [ -z "$APK" ]; then
+            echo "ERRO: APK temporário não encontrado."
+            exit 1
+          fi
+
+          echo "path=$GITHUB_WORKSPACE/$APK" >> "$GITHUB_OUTPUT"
+          echo "APK temporário localizado."
 
       - name: Iniciar emulador e capturar Activities
         uses: reactivecircus/android-emulator-runner@v2
@@ -1371,7 +1488,10 @@ jobs:
             adb wait-for-device
 
             for i in $(seq 1 60); do
-              BOOT_COMPLETED="$(adb shell getprop sys.boot_completed | tr -d '\r')"
+              BOOT_COMPLETED="$(
+                adb shell getprop sys.boot_completed |
+                tr -d '\r'
+              )"
 
               if [ "$BOOT_COMPLETED" = "1" ]; then
                 break
@@ -1380,7 +1500,10 @@ jobs:
               sleep 2
             done
 
-            if [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" != "1" ]; then
+            if [ "$(
+              adb shell getprop sys.boot_completed |
+              tr -d '\r'
+            )" != "1" ]; then
               echo "O emulador não iniciou a tempo."
               exit 1
             fi

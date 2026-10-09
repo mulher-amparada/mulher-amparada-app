@@ -1,362 +1,404 @@
+
 <?php
 
 declare(strict_types=1);
 
 $raiz = dirname(__DIR__);
+$arquivoYml = $raiz . '/.github/workflows/automations.yml';
 $pasta = $raiz . '/pesquisas';
-$data = date('Y-m-d_H-i-s');
+$arquivoMd = $pasta . '/workflow.md';
+
+if (!is_file($arquivoYml)) {
+    exit("Erro: .github/workflows/automations.yml não encontrado.\n");
+}
 
 if (!is_dir($pasta) && !mkdir($pasta, 0775, true) && !is_dir($pasta)) {
     exit("Erro ao criar a pasta pesquisas.\n");
 }
 
-if (!extension_loaded('curl') || !class_exists('DOMDocument')) {
-    exit("Instale as extensões PHP cURL e XML.\n");
+$conteudo = file_get_contents($arquivoYml);
+
+if ($conteudo === false || trim($conteudo) === '') {
+    exit("Erro: não foi possível ler o YAML ou ele está vazio.\n");
 }
 
-$projeto = 'Mulher Amparada';
-$repositorio = 'https://github.com/mulher-amparada/mulher-amparada-app';
-$site = 'https://intellicore555-oss.github.io/mulher-amparada-app/';
-
-$consultas = [
-    '"Mulher Amparada"',
-    '"Mulher Amparada" aplicativo',
-    '"Mulher Amparada" Android',
-    '"Mulher Amparada Pela Liberdade Feminina"',
-    '"mulher-amparada/mulher-amparada-app"',
-    '"intellicore555-oss.github.io/mulher-amparada-app"',
-    '"mulheramparada"',
-    '"mulher amparada" projeto',
-    '"mulher-amparada-app" -github',
-    '"Mulher Amparada" violência mulheres',
-    'site:dev.to/mulher_amparada "Mulher Amparada"',
-    'site:tabnews.com.br "Mulher Amparada"',
-    'site:hashnode.dev "Mulher Amparada"',
-    'site:tumblr.com/mulheramparada "Mulher Amparada"',
-    'site:reddit.com "Mulher Amparada" aplicativo',
-    'site:linkedin.com "Mulher Amparada" aplicativo',
-    'site:youtube.com "Mulher Amparada" aplicativo',
-    'site:medium.com "Mulher Amparada" aplicativo',
-];
-
-function requisicao(string $url, array $headers = []): ?string
-{
-    $curl = curl_init($url);
-
-    curl_setopt_array($curl, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_MAXREDIRS => 5,
-        CURLOPT_CONNECTTIMEOUT => 15,
-        CURLOPT_TIMEOUT => 35,
-        CURLOPT_ENCODING => '',
-        CURLOPT_USERAGENT => 'Mozilla/5.0 (compatible; ProjetoResearchBot/1.0)',
-        CURLOPT_HTTPHEADER => $headers,
-    ]);
-
-    $resposta = curl_exec($curl);
-    $status = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-    curl_close($curl);
-
-    if (!is_string($resposta) || $status < 200 || $status >= 300) {
-        return null;
-    }
-
-    return $resposta;
+if (!preg_match('/^jobs:\s*$/m', $conteudo)) {
+    exit("Erro: seção jobs: não encontrada no YAML.\n");
 }
 
-function limpar(?string $texto): string
+function escaparTabela(string $texto): string
 {
-    $texto = html_entity_decode(
-        strip_tags($texto ?? ''),
-        ENT_QUOTES | ENT_HTML5,
-        'UTF-8'
+    return str_replace(
+        ["|", "\r", "\n"],
+        ["\\|", '', ' '],
+        trim($texto)
     );
-
-    return trim(preg_replace('/\s+/u', ' ', $texto) ?? '');
 }
 
-function buscarWeb(string $consulta): array
+function escaparMermaid(string $texto): string
 {
-    $url = 'https://html.duckduckgo.com/html/?q=' . urlencode($consulta);
-    $html = requisicao($url);
-
-    if ($html === null) {
-        return [];
-    }
-
-    libxml_use_internal_errors(true);
-
-    $documento = new DOMDocument();
-
-    if (!$documento->loadHTML($html)) {
-        libxml_clear_errors();
-        return [];
-    }
-
-    $xpath = new DOMXPath($documento);
-    $nos = $xpath->query('//a[contains(@class,"result__a")]');
-    $resultados = [];
-
-    if ($nos !== false) {
-        foreach ($nos as $no) {
-            $titulo = limpar($no->textContent);
-            $link = trim($no->getAttribute('href'));
-
-            if ($titulo === '' || $link === '') {
-                continue;
-            }
-
-            if (str_starts_with($link, '//')) {
-                $link = 'https:' . $link;
-            }
-
-            if (!filter_var($link, FILTER_VALIDATE_URL)) {
-                continue;
-            }
-
-            $pai = $no->parentNode?->parentNode;
-            $resumo = '';
-
-            if ($pai !== null) {
-                $snippets = (new DOMXPath($documento))->query(
-                    './/*[contains(@class,"result__snippet")]',
-                    $pai
-                );
-
-                if ($snippets !== false && $snippets->length > 0) {
-                    $resumo = limpar($snippets->item(0)?->textContent);
-                }
-            }
-
-            $resultados[] = [
-                'fonte' => 'DuckDuckGo',
-                'consulta' => $consulta,
-                'titulo' => $titulo,
-                'url' => $link,
-                'resumo' => $resumo,
-            ];
-        }
-    }
-
-    libxml_clear_errors();
-
-    return $resultados;
+    return str_replace(
+        ['"', "\r", "\n", '[', ']', '(', ')'],
+        ["'", '', ' ', '(', ')', '', ''],
+        trim($texto)
+    );
 }
 
-function pesquisarGitHub(string $endpoint, string $tipo): array
+function indentacao(string $linha): int
 {
-    $url = 'https://api.github.com/repos/mulher-amparada/mulher-amparada-app'
-        . $endpoint;
+    return strlen($linha) - strlen(ltrim($linha, ' '));
+}
 
-    $resposta = requisicao($url, [
-        'Accept: application/vnd.github+json',
-        'X-GitHub-Api-Version: 2022-11-28',
-    ]);
+function extrairEscalar(string $valor): string
+{
+    $valor = trim($valor);
 
-    if ($resposta === null) {
-        return [];
+    if (
+        strlen($valor) >= 2 &&
+        (
+            ($valor[0] === '"' && str_ends_with($valor, '"')) ||
+            ($valor[0] === "'" && str_ends_with($valor, "'"))
+        )
+    ) {
+        return substr($valor, 1, -1);
     }
 
-    $dados = json_decode($resposta, true);
+    return $valor;
+}
 
-    if (!is_array($dados)) {
-        return [];
+$linhas = preg_split('/\r\n|\r|\n/', $conteudo);
+$jobs = [];
+$jobAtual = null;
+$secaoAtual = '';
+$stepAtual = null;
+$indentJobs = null;
+$indentJob = null;
+$indentSteps = null;
+$indentStep = null;
+$indentNeeds = null;
+$indentNome = null;
+$indentRun = null;
+$emBloco = false;
+
+foreach ($linhas as $linha) {
+    if (trim($linha) === '' || preg_match('/^\s*#/', $linha)) {
+        continue;
     }
 
-    if (isset($dados['message'])) {
-        return [[
-            'fonte' => 'GitHub API',
-            'tipo' => $tipo,
-            'erro' => $dados['message'],
-        ]];
+    $nivel = indentacao($linha);
+    $texto = trim($linha);
+
+    if ($nivel === 0) {
+        $emBloco = false;
+        continue;
     }
 
-    $lista = array_is_list($dados) ? $dados : [$dados];
-    $resultados = [];
-
-    foreach ($lista as $item) {
-        if (!is_array($item)) {
+    if ($emBloco) {
+        if ($nivel > $indentRun) {
             continue;
         }
 
-        $resultados[] = [
-            'fonte' => 'GitHub API',
-            'tipo' => $tipo,
-            'titulo' => $item['name']
-                ?? $item['tag_name']
-                ?? $item['title']
-                ?? $item['full_name']
-                ?? $tipo,
-            'url' => $item['html_url']
-                ?? $item['url']
-                ?? $repositorio,
-            'resumo' => $item['description']
-                ?? $item['body']
-                ?? $item['message']
-                ?? '',
-            'data' => $item['published_at']
-                ?? $item['created_at']
-                ?? $item['updated_at']
-                ?? null,
-        ];
+        $emBloco = false;
     }
 
-    return $resultados;
-}
-
-$resultados = [];
-$falhas = [];
-
-foreach ($consultas as $consulta) {
-    echo "Pesquisando: {$consulta}\n";
-
-    $encontrados = buscarWeb($consulta);
-
-    if ($encontrados === []) {
-        $falhas[] = [
-            'consulta' => $consulta,
-            'motivo' => 'Nenhum resultado retornado; pode ter ocorrido bloqueio ou falha.',
-        ];
-    }
-
-    $resultados = array_merge($resultados, $encontrados);
-
-    usleep(800000);
-}
-
-echo "Consultando dados públicos do GitHub...\n";
-
-$endpoints = [
-    '' => 'Repositório',
-    '/releases?per_page=100' => 'Releases',
-    '/issues?state=all&per_page=100' => 'Issues e pull requests',
-    '/commits?per_page=100' => 'Commits recentes',
-    '/contributors?per_page=100' => 'Contribuidores',
-];
-
-$github = [];
-
-foreach ($endpoints as $endpoint => $tipo) {
-    $github = array_merge(
-        $github,
-        pesquisarGitHub($endpoint, $tipo)
-    );
-}
-
-$unicos = [];
-
-foreach ($resultados as $resultado) {
-    $chave = strtolower($resultado['url']);
-
-    if (!isset($unicos[$chave])) {
-        $unicos[$chave] = $resultado;
-    } elseif (
-        ($unicos[$chave]['resumo'] ?? '') === '' &&
-        ($resultado['resumo'] ?? '') !== ''
+    if (
+        $nivel === 2 &&
+        preg_match('/^([A-Za-z0-9_-]+):\s*$/', $texto, $m)
     ) {
-        $unicos[$chave]['resumo'] = $resultado['resumo'];
+        $secaoAtual = $m[1];
+
+        if ($secaoAtual === 'jobs') {
+            $indentJobs = $nivel;
+        }
+
+        continue;
+    }
+
+    if (
+        $secaoAtual !== 'jobs' ||
+        $indentJobs === null
+    ) {
+        continue;
+    }
+
+    if (
+        $nivel === 4 &&
+        preg_match('/^([A-Za-z0-9_-]+):\s*$/', $texto, $m)
+    ) {
+        $jobAtual = $m[1];
+
+        $jobs[$jobAtual] = [
+            'id' => $jobAtual,
+            'nome' => $jobAtual,
+            'descricao' => '',
+            'needs' => [],
+            'steps' => [],
+            'runs_on' => '',
+            'if' => '',
+        ];
+
+        $indentJob = $nivel;
+        $indentSteps = null;
+        $indentStep = null;
+        $indentNeeds = null;
+        $indentNome = null;
+        $indentRun = null;
+
+        continue;
+    }
+
+    if ($jobAtual === null) {
+        continue;
+    }
+
+    if (
+        $nivel === 6 &&
+        preg_match('/^name:\s*(.*)$/', $texto, $m)
+    ) {
+        $jobs[$jobAtual]['nome'] = extrairEscalar($m[1]);
+        $indentNome = $nivel;
+        continue;
+    }
+
+    if (
+        $nivel === 6 &&
+        preg_match('/^runs-on:\s*(.*)$/', $texto, $m)
+    ) {
+        $jobs[$jobAtual]['runs_on'] = extrairEscalar($m[1]);
+        continue;
+    }
+
+    if (
+        $nivel === 6 &&
+        preg_match('/^if:\s*(.*)$/', $texto, $m)
+    ) {
+        $jobs[$jobAtual]['if'] = extrairEscalar($m[1]);
+        continue;
+    }
+
+    if (
+        $nivel === 6 &&
+        preg_match('/^needs:\s*(.*)$/', $texto, $m)
+    ) {
+        $indentNeeds = $nivel;
+        $valor = trim($m[1]);
+
+        if ($valor !== '') {
+            $valor = trim($valor, '[]');
+
+            foreach (explode(',', $valor) as $dependencia) {
+                $dependencia = trim($dependencia, " \t\"'");
+
+                if ($dependencia !== '') {
+                    $jobs[$jobAtual]['needs'][] = $dependencia;
+                }
+            }
+        }
+
+        continue;
+    }
+
+    if (
+        $indentNeeds !== null &&
+        $nivel > $indentNeeds &&
+        preg_match('/^-\s*(.+)$/', $texto, $m)
+    ) {
+        $dependencia = trim($m[1], " \t\"'");
+
+        if ($dependencia !== '') {
+            $jobs[$jobAtual]['needs'][] = $dependencia;
+        }
+
+        continue;
+    }
+
+    if (
+        $nivel === 6 &&
+        preg_match('/^steps:\s*$/', $texto)
+    ) {
+        $indentSteps = $nivel;
+        $indentStep = null;
+        continue;
+    }
+
+    if (
+        $indentSteps !== null &&
+        $nivel === 8 &&
+        preg_match('/^-\s*name:\s*(.*)$/', $texto, $m)
+    ) {
+        $jobs[$jobAtual]['steps'][] = [
+            'nome' => extrairEscalar($m[1]),
+            'uses' => '',
+            'run' => '',
+        ];
+
+        $indentStep = $nivel;
+        $indentRun = null;
+        continue;
+    }
+
+    if (
+        $indentSteps !== null &&
+        $indentStep !== null &&
+        $nivel >= 10 &&
+        preg_match('/^uses:\s*(.*)$/', $texto, $m)
+    ) {
+        $ultimo = count($jobs[$jobAtual]['steps']) - 1;
+
+        if ($ultimo >= 0) {
+            $jobs[$jobAtual]['steps'][$ultimo]['uses'] =
+                extrairEscalar($m[1]);
+        }
+
+        continue;
+    }
+
+    if (
+        $indentSteps !== null &&
+        $indentStep !== null &&
+        $nivel >= 10 &&
+        preg_match('/^run:\s*(.*)$/', $texto, $m)
+    ) {
+        $ultimo = count($jobs[$jobAtual]['steps']) - 1;
+
+        if ($ultimo >= 0) {
+            $jobs[$jobAtual]['steps'][$ultimo]['run'] =
+                extrairEscalar($m[1]);
+        }
+
+        if (in_array(trim($m[1]), ['|', '>', '|-', '>-'], true)) {
+            $indentRun = $nivel;
+            $emBloco = true;
+        }
+
+        continue;
+    }
+
+    if (
+        $indentSteps !== null &&
+        $indentStep !== null &&
+        $nivel >= 10 &&
+        preg_match('/^uses:\s*(.*)$/', $texto, $m)
+    ) {
+        continue;
+    }
+
+    if (
+        $nivel === 6 &&
+        preg_match('/^description:\s*(.*)$/', $texto, $m)
+    ) {
+        $jobs[$jobAtual]['descricao'] = extrairEscalar($m[1]);
     }
 }
 
-$resultados = array_values($unicos);
-
-usort(
-    $resultados,
-    static fn(array $a, array $b): int =>
-        strcasecmp($a['titulo'] ?? '', $b['titulo'] ?? '')
-);
-
-$relatorio = [
-    'projeto' => $projeto,
-    'repositorio' => $repositorio,
-    'site' => $site,
-    'pesquisado_em' => date(DATE_ATOM),
-    'consultas' => $consultas,
-    'total_resultados_web' => count($resultados),
-    'resultados_web' => $resultados,
-    'dados_github' => $github,
-    'consultas_sem_resultados' => $falhas,
-    'observacao' => 'Os resultados dependem da cobertura e disponibilidade das fontes consultadas.',
-];
-
-$arquivoJson = $pasta . '/pesquisa_' . $data . '.json';
-$arquivoMd = $pasta . '/pesquisa_' . $data . '.md';
-
-$json = json_encode(
-    $relatorio,
-    JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE |
-    JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE
-);
-
-if ($json === false || file_put_contents($arquivoJson, $json . "\n") === false) {
-    exit("Erro ao salvar o relatório JSON.\n");
+if ($jobs === []) {
+    exit("Nenhum job foi identificado no YAML.\n");
 }
 
-$md = "# Pesquisa na internet — Mulher Amparada\n\n";
-$md .= '- Data: ' . date('d/m/Y H:i:s') . "\n";
-$md .= '- Site: ' . $site . "\n";
-$md .= '- Repositório: ' . $repositorio . "\n";
-$md .= '- Resultados web únicos: ' . count($resultados) . "\n\n";
-$md .= "> Pesquisa automatizada. Ausência de resultados não significa ausência de menções na internet.\n\n";
+foreach ($jobs as &$job) {
+    $job['needs'] = array_values(array_unique($job['needs']));
+}
+unset($job);
 
-$md .= "## Resultados encontrados na web\n\n";
+$md = "# Workflow — Automações do Mulher Amparada\n\n";
+$md .= '- Arquivo analisado: `.github/workflows/automations.yml`' . "\n";
+$md .= '- Data da geração: ' . date('d/m/Y H:i:s') . "\n";
+$md .= '- Total de jobs identificados: ' . count($jobs) . "\n\n";
 
-foreach ($resultados as $i => $resultado) {
-    $md .= '### ' . ($i + 1) . '. ' . ($resultado['titulo'] ?? 'Sem título') . "\n\n";
-    $md .= '- Fonte: ' . ($resultado['fonte'] ?? 'Não identificada') . "\n";
-    $md .= '- Consulta: ' . ($resultado['consulta'] ?? '') . "\n";
-    $md .= '- URL: ' . ($resultado['url'] ?? '') . "\n";
+$md .= "## Tabela dos jobs\n\n";
+$md .= "| Job | Nome | Dependências | Ambiente | Etapas |\n";
+$md .= "|---|---|---|---|---:|\n";
 
-    if (($resultado['resumo'] ?? '') !== '') {
-        $md .= '- Resumo: ' . $resultado['resumo'] . "\n";
+foreach ($jobs as $job) {
+    $dependencias = $job['needs'] === []
+        ? 'Nenhuma declarada'
+        : implode(', ', $job['needs']);
+
+    $md .= '| `' . escaparTabela($job['id']) . '`'
+        . ' | ' . escaparTabela($job['nome'])
+        . ' | ' . escaparTabela($dependencias)
+        . ' | ' . escaparTabela($job['runs_on'] ?: 'Não especificado')
+        . ' | ' . count($job['steps'])
+        . " |\n";
+}
+
+$md .= "\n## Diagrama de dependências\n\n";
+$md .= "```mermaid\nflowchart TD\n";
+
+foreach ($jobs as $job) {
+    $id = $job['id'];
+    $rotulo = escaparMermaid($job['nome']);
+
+    $md .= '    ' . $id . '["' . $rotulo . "\"]\n";
+}
+
+foreach ($jobs as $job) {
+    foreach ($job['needs'] as $dependencia) {
+        if (isset($jobs[$dependencia])) {
+            $md .= '    ' . $dependencia . ' --> ' . $job['id'] . "\n";
+        }
+    }
+}
+
+$md .= "```\n\n";
+$md .= "> As setas indicam que o job de origem é uma dependência declarada do job de destino.\n\n";
+
+$md .= "## Descrição dos jobs\n\n";
+
+foreach ($jobs as $job) {
+    $md .= '### ' . $job['nome'] . "\n\n";
+    $md .= '- Identificador: `' . $job['id'] . "`\n";
+    $md .= '- Ambiente: ' . ($job['runs_on'] ?: 'Não especificado') . "\n";
+
+    if ($job['needs'] !== []) {
+        $md .= '- Dependências: ' . implode(', ', array_map(
+            static fn(string $item): string => '`' . $item . '`',
+            $job['needs']
+        )) . "\n";
+    } else {
+        $md .= "- Dependências: nenhuma declarada.\n";
+    }
+
+    if ($job['if'] !== '') {
+        $md .= '- Condição de execução: `' . $job['if'] . "`\n";
+    }
+
+    if ($job['descricao'] !== '') {
+        $md .= "\n" . $job['descricao'] . "\n";
+    }
+
+    if ($job['steps'] === []) {
+        $md .= "\nNenhuma etapa identificada pelo analisador.\n\n";
+        continue;
+    }
+
+    $md .= "\n**Etapas configuradas:**\n\n";
+
+    foreach ($job['steps'] as $indice => $step) {
+        $nome = $step['nome'] !== ''
+            ? $step['nome']
+            : 'Etapa ' . ($indice + 1);
+
+        $md .= ($indice + 1) . '. **' . $nome . '**';
+
+        if ($step['uses'] !== '') {
+            $md .= ' — ação: `' . $step['uses'] . '`';
+        }
+
+        if ($step['run'] !== '') {
+            $md .= ' — comando: `' . str_replace('`', '\`', $step['run']) . '`';
+        }
+
+        $md .= "\n";
     }
 
     $md .= "\n";
-}
-
-$md .= "## Dados públicos do GitHub\n\n";
-
-foreach ($github as $item) {
-    $md .= '### ' . ($item['tipo'] ?? 'Registro') . ': '
-        . ($item['titulo'] ?? 'Sem título') . "\n\n";
-
-    if (isset($item['url'])) {
-        $md .= '- URL: ' . $item['url'] . "\n";
-    }
-
-    if (isset($item['data']) && $item['data'] !== null) {
-        $md .= '- Data: ' . $item['data'] . "\n";
-    }
-
-    if (($item['resumo'] ?? '') !== '') {
-        $md .= '- Detalhes: ' . limpar($item['resumo']) . "\n";
-    }
-
-    if (isset($item['erro'])) {
-        $md .= '- Erro: ' . $item['erro'] . "\n";
-    }
-
-    $md .= "\n";
-}
-
-$md .= "## Consultas sem resultados\n\n";
-
-if ($falhas === []) {
-    $md .= "Todas as consultas retornaram pelo menos um resultado.\n\n";
-} else {
-    foreach ($falhas as $falha) {
-        $md .= '- `' . $falha['consulta'] . '`: ' . $falha['motivo'] . "\n";
-    }
 }
 
 if (file_put_contents($arquivoMd, $md) === false) {
     exit("Erro ao salvar o relatório Markdown.\n");
 }
 
-echo "\nPesquisa concluída.\n";
-echo "Resultados web: " . count($resultados) . "\n";
-echo "GitHub: " . count($github) . " registros.\n";
-echo "Markdown: pesquisas/" . basename($arquivoMd) . "\n";
-echo "JSON: pesquisas/" . basename($arquivoJson) . "\n";
+echo "Workflow analisado com sucesso.\n";
+echo 'Jobs identificados: ' . count($jobs) . "\n";
+echo "Relatório: pesquisas/workflow.md\n";

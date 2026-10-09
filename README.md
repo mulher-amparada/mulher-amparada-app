@@ -404,25 +404,7 @@ A chave é fornecida pelo secret "INDEXNOW_KEY".
 
 A finalidade é comunicar URLs aos mecanismos de busca que participam do protocolo IndexNow. O envio não garante rastreamento, indexação ou posicionamento nos resultados de pesquisa.
 
-🔗 9. Verificar links quebrados
-
-O job "broken-links" depende de "deploy".
-
-Ele utiliza "ScholliYT/Broken-Links-Crawler-Action@v3" para rastrear links do site publicado.
-
-A configuração inclui:
-
-- URL inicial: "https://mulher-amparada.github.io/mulher-amparada-app/"
-- Prefixo de URLs a incluir: o mesmo endereço-base.
-- "resolve_before_filtering: "true"" para resolver URLs antes da filtragem.
-- "verbose: "true"" para ampliar a saída de diagnóstico.
-- Tempo máximo de tentativa: 30 segundos.
-- Até cinco tentativas.
-- Profundidade máxima configurada em "-1".
-
-O objetivo é encontrar links que não possam ser acessados corretamente durante o rastreamento. A abrangência real depende do comportamento da action, dos links descobertos e das respostas dos servidores.
-
-💡 10. Auditar o site com Lighthouse
+💡 9. Auditar o site com Lighthouse
 
 O job "lighthouse" depende de "deploy".
 
@@ -438,29 +420,8 @@ O Lighthouse pode avaliar aspectos como desempenho, acessibilidade, boas prátic
 
 A auditoria fornece informações para identificar oportunidades de melhoria, mas não significa que o site recebeu automaticamente uma pontuação específica ou que todos os problemas foram corrigidos.
 
-🐍 11. Gerar a Snake de contribuições
 
-O job "snake" depende de "atualizar-commits".
-
-Ele baixa o repositório com o histórico completo disponível e utiliza "Platane/snk@v3" para gerar representações animadas da grade de contribuições do GitHub.
-
-O nome do usuário é obtido de "github.repository_owner".
-
-Os arquivos gerados são:
-
-- "dist/github-contribution-grid-snake.svg"
-- "dist/github-contribution-grid-snake.gif"
-
-Uma etapa posterior copia os arquivos para "arquivos-gerados/snake/", renomeando-os para:
-
-- "snake.svg"
-- "snake.gif"
-
-Esses arquivos são publicados como artifact com o nome "arquivos-snake".
-
-O job "salvar-na-main" baixa os arquivos e os copia para o diretório "Código-fonte do app = Mulher Amparada", onde são adicionados ao commit de centralização.
-
-📦 12. Publicar o kit de divulgação
+📦 10. Publicar o kit de divulgação
 
 O job "publicar-divulgacao" depende de "lighthouse".
 
@@ -478,7 +439,7 @@ A opção "fail_on_unmatched_files: true" faz a publicação falhar se nenhum ar
 
 O token "GITHUB_TOKEN" é disponibilizado para a etapa de publicação. A existência de uma Release com a tag correspondente e as permissões necessárias deve ser compatível com a configuração do repositório e da action.
 
-🦶 13. Atualizar o footer com o README
+🦶 11. Atualizar o footer com o README
 
 O job "atualizar-footer" depende de "atualizar-commits".
 
@@ -494,7 +455,7 @@ O arquivo "index.html" resultante é enviado como artifact com o nome "arquivo-f
 
 Posteriormente, o job "salvar-na-main" baixa esse artifact e copia o "index.html" gerado para a raiz do repositório.
 
-📚 14. Gerar o relatório histórico de commits
+📚 12. Gerar o relatório histórico de commits
 
 O job "atualizar-relatorio-commits" depende de "atualizar-commits".
 
@@ -510,7 +471,7 @@ A configuração exige que o diretório contenha arquivos correspondentes ao cam
 
 O job "salvar-na-main" baixa o artifact e incorpora os arquivos gerados ao diretório "commits/" do repositório.
 
-📖 15. Documentar o workflow YAML
+📖 13. Documentar o workflow YAML
 
 O job "pesquisar-projeto", identificado como Documentar workflow YAML, gera documentação técnica a partir do script PHP "scripts/pesquisar_projeto.php".
 
@@ -525,7 +486,7 @@ O arquivo resultante é enviado como artifact com o nome "arquivos-pesquisas", c
 
 Observação: o destino verificado pelo job é ".github/workflows/workflow.md", enquanto o job de centralização copia os arquivos baixados para o diretório "pesquisas/". Portanto, o arquivo será armazenado no destino pretendido somente se o conteúdo do artifact e a lógica de cópia forem compatíveis com essa estrutura.
 
-🗃️ 16. Centralizar e salvar os arquivos na branch "main"
+🗃️ 14. Centralizar e salvar os arquivos na branch "main"
 
 O job "salvar-na-main" reúne os resultados de vários jobs anteriores e tenta registrá-los no repositório.
 
@@ -581,7 +542,7 @@ A intenção é centralizar os resultados de geração em um commit, reduzindo a
 
 O sucesso depende de todos os artifacts exigidos estarem disponíveis, de os caminhos coincidirem com a estrutura esperada e de o rebase e o push serem concluídos sem conflitos.
 
-🔐 17. Secrets utilizados
+🔐 15. Secrets utilizados
 
 O workflow utiliza credenciais armazenadas no sistema de secrets do GitHub Actions.
 
@@ -599,7 +560,7 @@ O workflow também utiliza o "GITHUB_TOKEN" ou "${{ github.token }}" para opera�
 
 Os secrets devem ser configurados nas definições do repositório antes da execução dos jobs que dependem deles. O acesso efetivo depende das permissões concedidas ao token e às actions utilizadas.
 
-🧰 18. Tecnologias e ferramentas utilizadas
+🧰 16. Tecnologias e ferramentas utilizadas
 
 O workflow combina diferentes tecnologias para automatizar tarefas específicas:
 
@@ -627,7 +588,7 @@ Lighthouse CI| Auditoria automatizada do site
 Platane/snk| Geração da Snake de contribuições
 GitHub Artifacts| Transporte dos arquivos gerados entre jobs
 
-🔄 19. Fluxo geral de dependências
+🔄 17. Fluxo geral de dependências
 
 O workflow é dividido em etapas encadeadas. O fluxo principal do aplicativo e do site é:
 
@@ -646,7 +607,7 @@ Em paralelo à cadeia de geração e sincronização, "indexnow", "broken-links"
 
 Essas relações representam as dependências declaradas em "needs". Elas não significam que todos os jobs sejam executados em uma única sequência linear, pois jobs sem dependências diretas entre si podem ser executados em paralelo.
 
-📦 20. Artifacts produzidos
+📦 18. Artifacts produzidos
 
 O workflow utiliza artifacts para transportar arquivos entre jobs sem precisar gerar todos os resultados novamente em cada etapa.
 
@@ -662,7 +623,7 @@ Nome do artifact| Conteúdo
 
 O artifact "APK-Kotlin-Assinado" é independente do asset da GitHub Release. Da mesma forma, os artifacts intermediários de geração não são publicados automaticamente no site: sua persistência no repositório depende das etapas que os baixam e copiam.
 
-⚠️ 21. Observações operacionais
+⚠️ 19. Observações operacionais
 
 - A Release com tag "app" precisa existir antes da execução do job de compilação.
 - As credenciais de assinatura precisam corresponder ao keystore esperado.

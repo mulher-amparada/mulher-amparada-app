@@ -1,3 +1,4 @@
+
 use chrono::Utc;
 use reqwest::blocking::Client;
 use std::env;
@@ -143,9 +144,7 @@ fn baixar_logs(
     Ok(corpo.to_vec())
 }
 
-fn analisar_logs(
-    bytes: Vec<u8>,
-) -> Result<(usize, String), Box<dyn Error>> {
+fn analisar_logs(bytes: Vec<u8>) -> Result<(usize, String), Box<dyn Error>> {
     let cursor = Cursor::new(bytes);
     let mut arquivo_zip = ZipArchive::new(cursor)?;
 
@@ -229,6 +228,96 @@ fn analisar_logs(
         );
     } else if quantidade == 0 {
         relatorio.push_str(
-            "\nNenhuma linha contendo os indicadores de erro configurados foi identificada.\n
-);
+            "\nNenhuma linha contendo os indicadores de erro configurados foi identificada.\n",
+        );
+    }
+
+    Ok((quantidade, relatorio))
+}
+
+fn executar() -> Result<String, Box<dyn Error>> {
+    let token = env::var("GITHUB_TOKEN")?;
+    let repositorio = env::var("GITHUB_REPOSITORY")?;
+    let run_id = env::var("GITHUB_RUN_ID")?;
+
+    let data = Utc::now().format("%d/%m/%Y %H:%M:%S UTC");
+    let cliente = criar_cliente()?;
+
+    let (status, conclusao) =
+        consultar_execucao(&cliente, &token, &repositorio, &run_id)?;
+
+    let mut relatorio = format!(
+        "# Relatório de erros — Mulher Amparada\n\n\
+         - **Repositório:** `{}`\n\
+         - **Execução:** `{}`\n\
+         - **Status:** `{}`\n\
+         - **Conclusão:** `{}`\n\
+         - **Data da análise:** {}\n\n",
+        repositorio, run_id, status, conclusao, data
+    );
+
+    if status != "completed" {
+        relatorio.push_str(
+            "## Logs ainda indisponíveis\n\n\
+             A execução ainda não foi concluída. Os logs completos podem não estar disponíveis.\n",
+        );
+
+        return Ok(relatorio);
+    }
+
+    match baixar_logs(&cliente, &token, &repositorio, &run_id) {
+        Ok(bytes) => match analisar_logs(bytes) {
+            Ok((quantidade, detalhes)) => {
+                relatorio.push_str(&format!(
+                    "## Resultado da análise\n\n\
+                     - **Ocorrências identificadas:** {}\n\n{}",
+                    quantidade, detalhes
+                ));
+            }
+            Err(erro) => {
+                relatorio.push_str(&format!(
+                    "## Falha ao analisar os logs\n\n```text\n{}\n```\n",
+                    erro
+                ));
+            }
+        },
+        Err(erro) => {
+            relatorio.push_str(&format!(
+                "## Falha ao obter os logs\n\n```text\n{}\n```\n",
+                erro
+            ));
+        }
+    }
+
+    Ok(relatorio)
+}
+
+fn salvar_relatorio(conteudo: &str) -> Result<(), Box<dyn Error>> {
+    fs::write("relatorio-erros.md", conteudo)?;
+
+    if let Ok(caminho) = env::var("GITHUB_STEP_SUMMARY") {
+        fs::write(caminho, conteudo)?;
+    }
+
+    println!("{}", conteudo);
+    Ok(())
+}
+
+fn main() {
+    let resultado = executar();
+
+    let relatorio = match resultado {
+        Ok(conteudo) => conteudo,
+        Err(erro) => format!(
+            "# Relatório de erros — Mulher Amparada\n\n\
+             Não foi possível concluir a coleta dos logs.\n\n\
+             ```text\n{}\n```\n",
+            erro
+        ),
+    };
+
+    if let Err(erro) = salvar_relatorio(&relatorio) {
+        eprintln!("Falha ao salvar o relatório: {}", erro);
+        std::process::exit(1);
+    }
 }

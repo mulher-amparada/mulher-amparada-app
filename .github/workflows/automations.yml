@@ -1284,3 +1284,102 @@ jobs:
             git commit -m "Atualizar relatórios de commits"
             git push origin HEAD:main
           fi
+
+
+  capturar-activities:
+    name: Capturar prints de todas as Activities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    needs: build
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Instalar PHP e extensões
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y php-cli php-xml
+
+      - name: Configurar Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Configurar Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Instalar ferramentas do emulador
+        run: |
+          sdkmanager \
+            "platform-tools" \
+            "platforms;android-36" \
+            "system-images;android-36;google_apis;x86_64" \
+            "emulator"
+
+      - name: Iniciar emulador Android
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 36
+          arch: x86_64
+          target: google_apis
+          profile: pixel_2
+          ram-size: 2048M
+          heap-size: 512M
+          script: |
+            adb devices
+
+            echo "Aguardando inicialização do Android..."
+            adb wait-for-device
+
+            for i in $(seq 1 60); do
+              BOOT_COMPLETED=$(adb shell getprop sys.boot_completed | tr -d '\r')
+
+              if [ "$BOOT_COMPLETED" = "1" ]; then
+                break
+              fi
+
+              sleep 2
+            done
+
+            if [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" != "1" ]; then
+              echo "O emulador não iniciou a tempo."
+              exit 1
+            fi
+
+            adb shell settings put system font_scale 1.0
+            adb shell wm dismiss-keyguard
+
+            echo "Emulador pronto."
+
+      - name: Compilar e instalar o aplicativo
+        run: |
+          echo "Este passo precisa receber o APK gerado pelo workflow."
+          echo "Configure o caminho do APK antes de executar as capturas."
+          exit 1
+
+      - name: Capturar Activities
+        if: success()
+        env:
+          RUNNER_TEMP: ${{ runner.temp }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/screenshots"
+
+          php scripts/capturar_activities.php \
+            com.mulheres \
+            "Código-fonte do app = Mulher Amparada/app/src/main/AndroidManifest.xml"
+
+      - name: Disponibilizar capturas para download
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: capturas-activities
+          path: ${{ runner.temp }}/screenshots/
+          if-no-files-found: warn
+          retention-days: 7

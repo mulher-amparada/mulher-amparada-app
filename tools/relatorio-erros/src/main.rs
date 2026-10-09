@@ -230,3 +230,5 @@ fn analisar_logs(
     } else if quantidade == 0 {
         relatorio.push_str(
             "\nNenhuma linha contendo os indicadores de erro configurados foi identificada.\n
+);
+}

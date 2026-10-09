@@ -1354,24 +1354,6 @@ jobs:
     runs-on: ubuntu-24.04
     if: ${{ always() }}
 
-    needs:
-      - build
-      - build-site
-      - deploy
-      - atualizar-commits
-      - sincronizar-devto
-      - sincronizar-paperwf
-      - sitemap
-      - indexnow
-      - broken-links
-      - lighthouse
-      - snake
-      - publicar-divulgacao
-      - atualizar-footer
-      - atualizar-relatorio-commits
-      - pesquisar-projeto
-      - salvar-na-main
-
     permissions:
       actions: read
       contents: read

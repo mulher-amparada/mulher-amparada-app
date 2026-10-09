@@ -8,11 +8,7 @@ $pasta = $raiz . '/pesquisas';
 $arquivoMd = $pasta . '/workflow.md';
 
 if (!is_file($arquivoYml)) {
-    exit("Erro: .github/workflows/automations.yml não encontrado.\n");
-}
-
-if (!is_dir($pasta) && !mkdir($pasta, 0775, true) && !is_dir($pasta)) {
-    exit("Erro ao criar a pasta pesquisas.\n");
+    exit("Erro: arquivo YAML não encontrado: {$arquivoYml}\n");
 }
 
 $conteudo = file_get_contents($arquivoYml);
@@ -23,6 +19,10 @@ if ($conteudo === false || trim($conteudo) === '') {
 
 if (!preg_match('/^jobs:\s*$/m', $conteudo)) {
     exit("Erro: seção jobs: não encontrada no YAML.\n");
+}
+
+if (!is_dir($pasta) && !mkdir($pasta, 0775, true) && !is_dir($pasta)) {
+    exit("Erro ao criar a pasta de saída: {$pasta}\n");
 }
 
 function escaparTabela(string $texto): string
@@ -66,18 +66,21 @@ function extrairEscalar(string $valor): string
 }
 
 $linhas = preg_split('/\r\n|\r|\n/', $conteudo);
+
+if ($linhas === false) {
+    exit("Erro ao dividir as linhas do YAML.\n");
+}
+
 $jobs = [];
 $jobAtual = null;
 $secaoAtual = '';
-$stepAtual = null;
 $indentJobs = null;
-$indentJob = null;
 $indentSteps = null;
 $indentStep = null;
 $indentNeeds = null;
-$indentNome = null;
 $indentRun = null;
 $emBloco = false;
+$ultimoStep = null;
 
 foreach ($linhas as $linha) {
     if (trim($linha) === '' || preg_match('/^\s*#/', $linha)) {
@@ -89,11 +92,26 @@ foreach ($linhas as $linha) {
 
     if ($nivel === 0) {
         $emBloco = false;
+        $jobAtual = null;
+
+        if (preg_match('/^([A-Za-z0-9_-]+):\s*$/', $texto, $m)) {
+            $secaoAtual = $m[1];
+        }
+
         continue;
     }
 
     if ($emBloco) {
         if ($nivel > $indentRun) {
+            if ($ultimoStep !== null) {
+                $indice = count($jobs[$jobAtual]['steps']) - 1;
+
+                if ($indice >= 0) {
+                    $jobs[$jobAtual]['steps'][$indice]['run'] .=
+                        "\n" . trim($linha);
+                }
+            }
+
             continue;
         }
 
@@ -113,10 +131,7 @@ foreach ($linhas as $linha) {
         continue;
     }
 
-    if (
-        $secaoAtual !== 'jobs' ||
-        $indentJobs === null
-    ) {
+    if ($secaoAtual !== 'jobs' || $indentJobs === null) {
         continue;
     }
 
@@ -136,12 +151,11 @@ foreach ($linhas as $linha) {
             'if' => '',
         ];
 
-        $indentJob = $nivel;
         $indentSteps = null;
         $indentStep = null;
         $indentNeeds = null;
-        $indentNome = null;
         $indentRun = null;
+        $ultimoStep = null;
 
         continue;
     }
@@ -155,7 +169,6 @@ foreach ($linhas as $linha) {
         preg_match('/^name:\s*(.*)$/', $texto, $m)
     ) {
         $jobs[$jobAtual]['nome'] = extrairEscalar($m[1]);
-        $indentNome = $nivel;
         continue;
     }
 
@@ -232,7 +245,9 @@ foreach ($linhas as $linha) {
         ];
 
         $indentStep = $nivel;
+        $ultimoStep = count($jobs[$jobAtual]['steps']) - 1;
         $indentRun = null;
+
         continue;
     }
 
@@ -242,10 +257,10 @@ foreach ($linhas as $linha) {
         $nivel >= 10 &&
         preg_match('/^uses:\s*(.*)$/', $texto, $m)
     ) {
-        $ultimo = count($jobs[$jobAtual]['steps']) - 1;
+        $indice = count($jobs[$jobAtual]['steps']) - 1;
 
-        if ($ultimo >= 0) {
-            $jobs[$jobAtual]['steps'][$ultimo]['uses'] =
+        if ($indice >= 0) {
+            $jobs[$jobAtual]['steps'][$indice]['uses'] =
                 extrairEscalar($m[1]);
         }
 
@@ -258,27 +273,18 @@ foreach ($linhas as $linha) {
         $nivel >= 10 &&
         preg_match('/^run:\s*(.*)$/', $texto, $m)
     ) {
-        $ultimo = count($jobs[$jobAtual]['steps']) - 1;
+        $indice = count($jobs[$jobAtual]['steps']) - 1;
 
-        if ($ultimo >= 0) {
-            $jobs[$jobAtual]['steps'][$ultimo]['run'] =
+        if ($indice >= 0) {
+            $jobs[$jobAtual]['steps'][$indice]['run'] =
                 extrairEscalar($m[1]);
         }
 
-        if (in_array(trim($m[1]), ['|', '>', '|-', '>-'], true)) {
+        if (in_array(trim($m[1]), ['|', '>', '|-', '>-', '|+', '>+'], true)) {
             $indentRun = $nivel;
             $emBloco = true;
         }
 
-        continue;
-    }
-
-    if (
-        $indentSteps !== null &&
-        $indentStep !== null &&
-        $nivel >= 10 &&
-        preg_match('/^uses:\s*(.*)$/', $texto, $m)
-    ) {
         continue;
     }
 
@@ -291,7 +297,7 @@ foreach ($linhas as $linha) {
 }
 
 if ($jobs === []) {
-    exit("Nenhum job foi identificado no YAML.\n");
+    exit("Erro: nenhum job foi identificado no YAML.\n");
 }
 
 foreach ($jobs as &$job) {
@@ -300,7 +306,7 @@ foreach ($jobs as &$job) {
 unset($job);
 
 $md = "# Workflow — Automações do Mulher Amparada\n\n";
-$md .= '- Arquivo analisado: `.github/workflows/automations.yml`' . "\n";
+$md .= "- Arquivo analisado: `.github/workflows/automations.yml`\n";
 $md .= '- Data da geração: ' . date('d/m/Y H:i:s') . "\n";
 $md .= '- Total de jobs identificados: ' . count($jobs) . "\n\n";
 
@@ -381,11 +387,12 @@ foreach ($jobs as $job) {
         $md .= ($indice + 1) . '. **' . $nome . '**';
 
         if ($step['uses'] !== '') {
-            $md .= ' — ação: `' . $step['uses'] . '`';
+            $md .= ' — ação: `' . escaparTabela($step['uses']) . '`';
         }
 
         if ($step['run'] !== '') {
-            $md .= ' — comando: `' . str_replace('`', '\`', $step['run']) . '`';
+            $comando = str_replace('`', '\`', $step['run']);
+            $md .= ' — comando: `' . $comando . '`';
         }
 
         $md .= "\n";
@@ -394,10 +401,18 @@ foreach ($jobs as $job) {
     $md .= "\n";
 }
 
+if (!is_dir($pasta) && !mkdir($pasta, 0775, true) && !is_dir($pasta)) {
+    exit("Erro ao criar a pasta de saída: {$pasta}\n");
+}
+
 if (file_put_contents($arquivoMd, $md) === false) {
-    exit("Erro ao salvar o relatório Markdown.\n");
+    exit("Erro ao salvar o relatório Markdown em: {$arquivoMd}\n");
+}
+
+if (!is_file($arquivoMd) || filesize($arquivoMd) === 0) {
+    exit("Erro: o relatório Markdown não foi criado corretamente.\n");
 }
 
 echo "Workflow analisado com sucesso.\n";
 echo 'Jobs identificados: ' . count($jobs) . "\n";
-echo "Relatório: pesquisas/workflow.md\n";
+echo "Relatório criado em: {$arquivoMd}\n";

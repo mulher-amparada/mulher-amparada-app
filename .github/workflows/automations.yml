@@ -1286,20 +1286,42 @@ jobs:
           fi
 
 
+
   capturar-activities:
     name: Capturar prints de todas as Activities
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
     needs: build
+    timeout-minutes: 30
 
     permissions:
       contents: read
+      actions: read
 
     steps:
       - name: Baixar repositório
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
+
+      - name: Baixar APK compilado
+        uses: actions/download-artifact@v6
+        with:
+          name: app-debug-assinado
+          path: ${{ runner.temp }}/apk
+
+      - name: Localizar APK
+        id: apk
+        shell: bash
+        run: |
+          APK="$(find "$RUNNER_TEMP/apk" -type f -name '*.apk' -print -quit)"
+
+          if [ -z "$APK" ]; then
+            echo "Nenhum APK encontrado no artifact app-debug-assinado."
+            exit 1
+          fi
+
+          echo "path=$APK" >> "$GITHUB_OUTPUT"
+          echo "APK encontrado: $APK"
 
       - name: Instalar PHP e extensões
         run: |
@@ -1315,6 +1337,9 @@ jobs:
       - name: Configurar Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Aceitar licenças do Android SDK
+        run: yes | sdkmanager --licenses
+
       - name: Instalar ferramentas do emulador
         run: |
           sdkmanager \
@@ -1323,8 +1348,11 @@ jobs:
             "system-images;android-36;google_apis;x86_64" \
             "emulator"
 
-      - name: Iniciar emulador Android
+      - name: Iniciar emulador e capturar Activities
         uses: reactivecircus/android-emulator-runner@v2
+        env:
+          APK_PATH: ${{ steps.apk.outputs.path }}
+          RUNNER_TEMP: ${{ runner.temp }}
         with:
           api-level: 36
           arch: x86_64
@@ -1333,13 +1361,12 @@ jobs:
           ram-size: 2048M
           heap-size: 512M
           script: |
-            adb devices
+            set -e
 
-            echo "Aguardando inicialização do Android..."
             adb wait-for-device
 
             for i in $(seq 1 60); do
-              BOOT_COMPLETED=$(adb shell getprop sys.boot_completed | tr -d '\r')
+              BOOT_COMPLETED="$(adb shell getprop sys.boot_completed | tr -d '\r')"
 
               if [ "$BOOT_COMPLETED" = "1" ]; then
                 break
@@ -1354,28 +1381,15 @@ jobs:
             fi
 
             adb shell settings put system font_scale 1.0
-            adb shell wm dismiss-keyguard
+            adb install -r "$APK_PATH"
 
-            echo "Emulador pronto."
+            mkdir -p "$RUNNER_TEMP/screenshots"
 
-      - name: Compilar e instalar o aplicativo
-        run: |
-          echo "Este passo precisa receber o APK gerado pelo workflow."
-          echo "Configure o caminho do APK antes de executar as capturas."
-          exit 1
+            php scripts/capturar_activities.php \
+              com.mulheres \
+              "Código-fonte do app = Mulher Amparada/app/src/main/AndroidManifest.xml"
 
-      - name: Capturar Activities
-        if: success()
-        env:
-          RUNNER_TEMP: ${{ runner.temp }}
-        run: |
-          mkdir -p "$RUNNER_TEMP/screenshots"
-
-          php scripts/capturar_activities.php \
-            com.mulheres \
-            "Código-fonte do app = Mulher Amparada/app/src/main/AndroidManifest.xml"
-
-      - name: Disponibilizar capturas para download
+      - name: Publicar capturas como artifact
         uses: actions/upload-artifact@v6
         if: always()
         with:

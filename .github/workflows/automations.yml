@@ -1287,250 +1287,34 @@ jobs:
 
 
 
-  capturar-activities:
-    name: Capturar prints de todas as Activities
+gerar-video:
+    name: Gerar vídeo animado do Mulher Amparada
     runs-on: ubuntu-24.04
     needs: build
-    timeout-minutes: 30
-
+    
     permissions:
       contents: read
-      actions: read
 
     steps:
       - name: Baixar repositório
         uses: actions/checkout@v6
-        with:
-          fetch-depth: 1
 
-      - name: Configurar Java
-        uses: actions/setup-java@v6
-        with:
-          distribution: temurin
-          java-version: '17'
-
-      - name: Configurar Android SDK
-        uses: android-actions/setup-android@v4
-        with:
-          cmdline-tools-version: 12266719
-
-      - name: Instalar ferramentas do emulador
-        run: |
-          sdkmanager --install \
-            "platform-tools" \
-            "platforms;android-36" \
-            "system-images;android-36;google_apis;x86_64" \
-            "emulator"
-
-      - name: Instalar PHP e extensões
+      - name: Instalar PHP, FFmpeg e librsvg
         run: |
           sudo apt-get update
-          sudo apt-get install -y php-cli php-xml
+          sudo apt-get install -y \
+            php-cli \
+            php-mbstring \
+            ffmpeg \
+            librsvg2-bin
 
-      - name: Desativar FLAG_SECURE somente na cópia temporária
-        shell: bash
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-          import sys
+      - name: Gerar vídeo animado
+        run: php scripts/gerar_video.php
 
-          raiz = Path("Código-fonte do app = Mulher Amparada")
-          pastas = [
-              raiz / "app/src/main/java",
-              raiz / "app/src/main/kotlin",
-          ]
-
-          arquivos = []
-          for pasta in pastas:
-              if pasta.exists():
-                  arquivos.extend(pasta.rglob("*.kt"))
-
-          total = 0
-
-          padrao_chamada = re.compile(
-              r'(?:(?:this\s*\.\s*)?window\s*\.\s*'
-              r'(?:setFlags|addFlags)|'
-              r'getWindow\s*\(\s*\)\s*\.\s*'
-              r'(?:setFlags|addFlags))\s*$'
-          )
-
-          for arquivo in arquivos:
-              texto = arquivo.read_text(encoding="utf-8")
-              original = texto
-
-              ocorrencias = list(
-                  re.finditer(r'\bFLAG_SECURE\b', texto)
-              )
-
-              for ocorrencia in reversed(ocorrencias):
-                  posicao = ocorrencia.start()
-                  abertura = texto.rfind("(", 0, posicao)
-
-                  if abertura < 0:
-                      continue
-
-                  chamada = padrao_chamada.search(
-                      texto[:abertura]
-                  )
-
-                  if not chamada:
-                      continue
-
-                  profundidade = 0
-                  fechamento = None
-
-                  for indice in range(abertura, len(texto)):
-                      caractere = texto[indice]
-
-                      if caractere == "(":
-                          profundidade += 1
-                      elif caractere == ")":
-                          profundidade -= 1
-
-                          if profundidade == 0:
-                              fechamento = indice + 1
-                              break
-
-                  if fechamento is None:
-                      raise SystemExit(
-                          f"Chamada incompleta em {arquivo}"
-                      )
-
-                  argumentos = texto[abertura + 1:fechamento - 1]
-
-                  if "FLAG_SECURE" not in argumentos:
-                      continue
-
-                  inicio = chamada.start()
-                  linha_inicio = texto.rfind("\n", 0, inicio) + 1
-                  linha_fim = texto.find("\n", fechamento)
-
-                  if linha_fim == -1:
-                      linha_fim = len(texto)
-
-                  antes = texto[linha_inicio:inicio]
-                  depois = texto[fechamento:linha_fim]
-
-                  if antes.strip():
-                      raise SystemExit(
-                          "Chamada FLAG_SECURE junto com outra "
-                          f"expressão em {arquivo}. "
-                          "Nenhuma captura foi iniciada."
-                      )
-
-                  if depois.strip() not in ("", ";"):
-                      raise SystemExit(
-                          "Não foi possível remover a chamada "
-                          f"com segurança em {arquivo}."
-                      )
-
-                  texto = (
-                      texto[:linha_inicio]
-                      + texto[linha_fim:]
-                  )
-                  total += 1
-
-              if texto != original:
-                  arquivo.write_text(texto, encoding="utf-8")
-
-          if total == 0:
-              sys.exit(
-                  "Nenhuma chamada compatível de FLAG_SECURE "
-                  "foi encontrada. Verifique a implementação Kotlin."
-              )
-
-          print(
-              f"{total} chamada(s) removida(s) temporariamente."
-          )
-          print("Nenhuma alteração será enviada ao repositório.")
-          PY
-
-      - name: Compilar APK temporário para capturas
-        working-directory: Código-fonte do app = Mulher Amparada
-        run: |
-          chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace
-
-      - name: Localizar APK temporário
-        id: apk
-        shell: bash
-        run: |
-          APK="$(find \
-            "Código-fonte do app = Mulher Amparada/app/build/outputs/apk/debug" \
-            -type f \
-            -name '*.apk' \
-            -print -quit)"
-
-          if [ -z "$APK" ]; then
-            echo "ERRO: APK temporário não encontrado."
-            exit 1
-          fi
-
-          echo "path=$GITHUB_WORKSPACE/$APK" >> "$GITHUB_OUTPUT"
-          echo "APK temporário localizado."
-
-      - name: Iniciar emulador e capturar Activities
-        uses: reactivecircus/android-emulator-runner@v2
-        env:
-          APK_PATH: ${{ steps.apk.outputs.path }}
-          RUNNER_TEMP: ${{ runner.temp }}
-        with:
-          api-level: 36
-          arch: x86_64
-          target: google_apis
-          profile: pixel_2
-          ram-size: 2048M
-          heap-size: 512M
-          script: |
-            set -e
-
-            for i in $(seq 1 60); do
-              adb start-server >/dev/null 2>&1 || true
-              adb reconnect offline >/dev/null 2>&1 || true
-
-              STATE="$(adb get-state 2>/dev/null || true)"
-
-              if [ "$STATE" = "device" ]; then
-                BOOT_COMPLETED="$(
-                  adb shell getprop sys.boot_completed 2>/dev/null |
-                  tr -d '\r'
-                )"
-
-                if [ "$BOOT_COMPLETED" = "1" ]; then
-                  break
-                fi
-              fi
-
-              sleep 2
-            done
-
-            STATE="$(adb get-state 2>/dev/null || true)"
-
-            if [ "$STATE" != "device" ] || \
-               [ "$(
-                 adb shell getprop sys.boot_completed 2>/dev/null |
-                 tr -d '\r'
-               )" != "1" ]; then
-              echo "ERRO: o emulador não ficou pronto após 120 segundos."
-              adb devices -l
-              exit 1
-            fi
-
-            adb shell settings put system font_scale 1.0
-            adb install -r "$APK_PATH"
-
-            mkdir -p "$RUNNER_TEMP/screenshots"
-
-            php scripts/capturar_activities.php \
-              com.mulheres \
-              "Código-fonte do app = Mulher Amparada/app/src/main/AndroidManifest.xml"
-
-      - name: Enviar capturas como artefato
-        if: always()
+      - name: Publicar vídeo como artefato
         uses: actions/upload-artifact@v6
         with:
-          name: Capturas-Activities
-          path: ${{ runner.temp }}/screenshots/
-          if-no-files-found: warn
-          retention-days: 7
+          name: Video-Mulher-Amparada
+          path: midia/mulher-amparada.mp4
+          if-no-files-found: error
+          retention-days: 14

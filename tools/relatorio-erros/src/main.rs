@@ -1,46 +1,120 @@
-
+use chrono::Utc;
 use reqwest::blocking::Client;
 use std::env;
+use std::error::Error;
 use std::fs;
-use std::io::{Cursor, Error, ErrorKind, Read};
-use std::path::Path;
+use std::io::{Cursor, Read};
 use zip::ZipArchive;
 
 fn traduzir(texto: &str) -> String {
-    let substituicoes = [
-        ("Process completed with exit code 1", "O processo terminou com código de erro 1."),
-        ("Process completed with exit code 101", "O processo Rust/Cargo terminou com código de erro 101."),
-        ("Resource not accessible by integration", "O recurso não está acessível com as permissões atuais do GitHub Actions."),
-        ("Not Found", "O recurso solicitado não foi encontrado."),
-        ("Permission denied", "Permissão negada."),
-        ("timed out", "A operação excedeu o tempo limite."),
-        ("Connection refused", "A conexão foi recusada."),
-        ("Could not resolve host", "Não foi possível resolver o endereço do servidor."),
-        ("No files were found with the provided path", "Nenhum arquivo foi encontrado no caminho informado."),
-        ("failed to parse manifest", "O Cargo não conseguiu interpretar o arquivo Cargo.toml."),
-        ("no targets specified in the manifest", "O Cargo não encontrou um destino configurado no Cargo.toml."),
-        ("error:", "Erro:"),
+    let traducoes = [
+        ("Process completed with exit code 1", "O processo terminou com código de saída 1"),
+        ("Process completed with exit code 127", "Comando não encontrado"),
+        ("Process completed with exit code 137", "Processo encerrado pelo sistema"),
+        ("Permission denied", "Permissão negada"),
+        ("Operation not permitted", "Operação não permitida"),
+        ("No such file or directory", "Arquivo ou diretório não encontrado"),
+        ("command not found", "Comando não encontrado"),
+        ("Connection timed out", "Tempo limite da conexão excedido"),
+        ("Operation timed out", "Tempo limite da operação excedido"),
+        ("Request timed out", "A solicitação excedeu o tempo limite"),
+        ("Network is unreachable", "Rede inacessível"),
+        ("Connection refused", "Conexão recusada"),
+        ("Could not resolve host", "Não foi possível localizar o servidor"),
+        ("Could not resolve hostname", "Não foi possível localizar o servidor"),
+        ("Resource not accessible by integration", "Recurso inacessível para o token do GitHub Actions"),
+        ("Bad credentials", "Credenciais inválidas"),
+        ("Not Found", "Recurso não encontrado"),
+        ("Rate limit exceeded", "Limite de solicitações excedido"),
+        ("API rate limit exceeded", "Limite de solicitações da API excedido"),
+        ("manifest path", "Caminho do arquivo de manifesto"),
+        ("could not compile", "Não foi possível compilar"),
+        ("failed to compile", "Falha na compilação"),
+        ("error[E", "Erro do compilador Rust"),
         ("warning:", "Aviso:"),
+        ("error:", "Erro:"),
+        ("fatal:", "Erro fatal:"),
+        ("failed:", "Falha:"),
+        ("Failure:", "Falha:"),
+        ("Error:", "Erro:"),
+        ("Timed out", "Tempo limite excedido"),
+        ("timed out", "tempo limite excedido"),
+        ("Cancelled", "Cancelado"),
+        ("cancelled", "cancelado"),
+        ("Canceled", "Cancelado"),
+        ("canceled", "cancelado"),
+        ("Skipping", "Ignorando"),
+        ("Uploading artifact", "Enviando artefato"),
+        ("Downloading artifact", "Baixando artefato"),
+        ("Cache not found", "Cache não encontrado"),
+        ("Process completed successfully", "Processo concluído com sucesso"),
     ];
 
     let mut resultado = texto.to_string();
 
-    for (original, traducao) in substituicoes {
+    for (original, traducao) in traducoes {
         resultado = resultado.replace(original, traducao);
     }
 
     resultado
 }
 
-fn executar() -> Result<String, Box<dyn std::error::Error>> {
-    let token = env::var("GITHUB_TOKEN")?;
-    let repositorio = env::var("GITHUB_REPOSITORY")?;
-    let run_id = env::var("GITHUB_RUN_ID")?;
-
-    let cliente = Client::builder()
+fn criar_cliente() -> Result<Client, Box<dyn Error>> {
+    Ok(Client::builder()
         .user_agent("Mulher-Amparada-Workflow-Error-Report")
-        .build()?;
+        .build()?)
+}
 
+fn consultar_execucao(
+    cliente: &Client,
+    token: &str,
+    repositorio: &str,
+    run_id: &str,
+) -> Result<(String, String), Box<dyn Error>> {
+    let url = format!(
+        "https://api.github.com/repos/{}/actions/runs/{}",
+        repositorio, run_id
+    );
+
+    let resposta = cliente
+        .get(&url)
+        .bearer_auth(token)
+        .header("Accept", "application/vnd.github+json")
+        .header("X-GitHub-Api-Version", "2022-11-28")
+        .send()?;
+
+    let status_http = resposta.status();
+    let corpo = resposta.text()?;
+
+    if !status_http.is_success() {
+        return Err(format!(
+            "Não foi possível consultar a execução.\nHTTP {}.\nResposta da API: {}",
+            status_http, corpo
+        )
+        .into());
+    }
+
+    let dados: serde_json::Value = serde_json::from_str(&corpo)?;
+
+    let status = dados["status"]
+        .as_str()
+        .unwrap_or("desconhecido")
+        .to_string();
+
+    let conclusao = dados["conclusion"]
+        .as_str()
+        .unwrap_or("ainda não concluída")
+        .to_string();
+
+    Ok((status, conclusao))
+}
+
+fn baixar_logs(
+    cliente: &Client,
+    token: &str,
+    repositorio: &str,
+    run_id: &str,
+) -> Result<Vec<u8>, Box<dyn Error>> {
     let url = format!(
         "https://api.github.com/repos/{}/actions/runs/{}/logs",
         repositorio, run_id
@@ -48,150 +122,111 @@ fn executar() -> Result<String, Box<dyn std::error::Error>> {
 
     let resposta = cliente
         .get(&url)
-        .bearer_auth(&token)
+        .bearer_auth(token)
         .header("Accept", "application/vnd.github+json")
         .header("X-GitHub-Api-Version", "2022-11-28")
         .send()?;
 
     let status = resposta.status();
+    let corpo = resposta.bytes()?;
 
     if !status.is_success() {
-        let corpo = resposta
-            .text()
-            .unwrap_or_else(|erro| format!("Não foi possível ler a resposta: {}", erro));
+        let mensagem = String::from_utf8_lossy(&corpo);
 
-        let explicacao = match status.as_u16() {
-            401 => "O token está ausente, inválido ou expirado.",
-            403 => "A API recusou o acesso. Verifique as permissões e os limites da API.",
-            404 => "A execução não foi encontrada ou os logs ainda não estão disponíveis para consulta.",
-            _ => "A API do GitHub retornou uma resposta de erro.",
-        };
-
-        return Err(Box::new(Error::new(
-            ErrorKind::Other,
-            format!(
-                "HTTP {} — {}\nURL: {}\nResposta da API: {}",
-                status.as_u16(),
-                explicacao,
-                url,
-                corpo
-            ),
-        )));
+        return Err(format!(
+            "Não foi possível baixar os logs.\nHTTP {}.\nURL: {}\nResposta da API: {}",
+            status, url, mensagem
+        )
+        .into());
     }
 
-    let resposta = resposta.bytes()?;
-    let cursor = Cursor::new(resposta);
+    Ok(corpo.to_vec())
+}
+
+fn analisar_logs(
+    bytes: Vec<u8>,
+) -> Result<(usize, String), Box<dyn Error>> {
+    let cursor = Cursor::new(bytes);
     let mut arquivo_zip = ZipArchive::new(cursor)?;
-    let mut erros = Vec::new();
+
+    let indicadores = [
+        "error",
+        "erro",
+        "failed",
+        "failure",
+        "fatal",
+        "exception",
+        "panic",
+        "timed out",
+        "permission denied",
+        "not found",
+        "exit code",
+    ];
+
+    let mut quantidade = 0usize;
+    let mut relatorio = String::new();
+    let mut arquivos_analisados = 0usize;
 
     for indice in 0..arquivo_zip.len() {
         let mut arquivo = arquivo_zip.by_index(indice)?;
 
-        if !arquivo.name().ends_with(".txt") {
+        if arquivo.is_dir() {
             continue;
         }
 
         let nome = arquivo.name().to_string();
-        let mut conteudo = String::new();
 
-        arquivo.read_to_string(&mut conteudo)?;
+        if !nome.ends_with(".txt") && !nome.ends_with(".log") {
+            continue;
+        }
 
-        let linhas: Vec<&str> = conteudo.lines().collect();
+        let mut bytes_arquivo = Vec::new();
+        arquivo.read_to_end(&mut bytes_arquivo)?;
 
-        for (indice_linha, linha) in linhas.iter().enumerate() {
-            let minusculo = linha.to_lowercase();
+        let conteudo = String::from_utf8_lossy(&bytes_arquivo);
+        arquivos_analisados += 1;
 
-            let relevante = [
-                "error",
-                "failed",
-                "failure",
-                "fatal",
-                "exception",
-                "exit code",
-                "timed out",
-                "not found",
-                "denied",
-                "panic",
-            ]
-            .iter()
-            .any(|termo| minusculo.contains(termo));
+        let mut linhas_encontradas = Vec::new();
 
-            if relevante {
-                let trecho = linhas
-                    .iter()
-                    .skip(indice_linha.saturating_sub(2))
-                    .take(5)
-                    .copied()
-                    .collect::<Vec<_>>()
-                    .join("\n");
+        for (indice_linha, linha) in conteudo.lines().enumerate() {
+            let linha_minuscula = linha.to_lowercase();
 
-                erros.push(format!(
-                    "### Log: `{}`\n\n```text\n{}\n```",
-                    nome,
-                    traduzir(&trecho)
+            if indicadores
+                .iter()
+                .any(|indicador| linha_minuscula.contains(indicador))
+            {
+                linhas_encontradas.push(format!(
+                    "- Linha {}: {}",
+                    indice_linha + 1,
+                    traduzir(linha.trim())
                 ));
+
+                quantidade += 1;
+
+                if quantidade >= 500 {
+                    break;
+                }
             }
         }
+
+        if !linhas_encontradas.is_empty() {
+            relatorio.push_str(&format!("\n### Arquivo: `{}`\n\n", nome));
+
+            for linha in linhas_encontradas {
+                relatorio.push_str(&linha);
+                relatorio.push('\n');
+            }
+        }
+
+        if quantidade >= 500 {
+            break;
+        }
     }
 
-    let mut relatorio = String::new();
-
-    relatorio.push_str("# Relatório de erros — Mulher Amparada\n\n");
-    relatorio.push_str(&format!("- Repositório: `{}`\n", repositorio));
-    relatorio.push_str(&format!("- Execução: `{}`\n", run_id));
-    relatorio.push_str(&format!(
-        "- Data UTC: `{}`\n\n",
-        chrono::Utc::now().to_rfc3339()
-    ));
-
-    if erros.is_empty() {
+    if arquivos_analisados == 0 {
         relatorio.push_str(
-            "Nenhuma linha com indicadores conhecidos de erro foi encontrada nos logs coletados.\n\n",
+            "\nNenhum arquivo de log `.txt` ou `.log` foi encontrado no ZIP.\n",
         );
+    } else if quantidade == 0 {
         relatorio.push_str(
-            "Isso não garante que a execução esteja livre de falhas; consulte os logs completos no GitHub Actions.\n",
-        );
-    } else {
-        relatorio.push_str(&format!(
-            "Foram encontrados {} trechos que podem indicar erros ou avisos.\n\n",
-            erros.len()
-        ));
-
-        for erro in &erros {
-            relatorio.push_str(erro);
-            relatorio.push_str("\n\n");
-        }
-    }
-
-    Ok(relatorio)
-}
-
-fn main() {
-    let caminho = Path::new("relatorio-erros.md");
-
-    let relatorio = match executar() {
-        Ok(conteudo) => conteudo,
-        Err(erro) => {
-            format!(
-                "# Relatório de erros — Mulher Amparada\n\n\
-                Não foi possível coletar os logs da execução.\n\n\
-                ## Erro técnico\n\n\
-                ```text\n{}\n```\n",
-                erro
-            )
-        }
-    };
-
-    if let Err(erro) = fs::write(caminho, &relatorio) {
-        eprintln!("Erro ao salvar relatorio-erros.md: {}", erro);
-        std::process::exit(1);
-    }
-
-    println!("{}", relatorio);
-
-    if let Ok(caminho_resumo) = env::var("GITHUB_STEP_SUMMARY") {
-        if let Err(erro) = fs::write(caminho_resumo, &relatorio) {
-            eprintln!("Não foi possível atualizar o resumo: {}", erro);
-        }
-    }
-}
+            "\nNenhuma linha contendo os indicadores de erro configurados foi identificada.\n

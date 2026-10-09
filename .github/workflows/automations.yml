@@ -1066,20 +1066,27 @@ jobs:
     needs: deploy
 
     steps:
-      - name: Verificar links do site
+      - name: Verificar links
         run: |
           set -e
 
           URL="https://mulher-amparada.github.io/mulher-amparada-app/"
 
-          echo "Verificando:"
+          echo "========================================"
+          echo "VERIFICANDO LINKS"
+          echo "========================================"
+          echo "Site:"
           echo "$URL"
+          echo "========================================"
 
-          npx --yes broken-link-checker-cli "$URL" \
-            --filter-level 3 \
-            --ordered \
-            --recursive \
-            --verbose
+          npx --yes linkinator@8.1.0 \
+            "$URL" \
+            --recurse
+
+          echo ""
+          echo "========================================"
+          echo "VERIFICAÇÃO CONCLUÍDA"
+          echo "========================================"
 
   # =========================================================
   # LIGHTHOUSE
@@ -1103,19 +1110,37 @@ jobs:
   # GERAR SNAKE DAS CONTRIBUIÇÕES
   # =========================================================
 
+  # =========================================================
+  # GERAR SNAKE DAS CONTRIBUIÇÕES
+  # =========================================================
+
   snake:
     name: Gerar Snake das contribuições
     runs-on: ubuntu-24.04
     needs: atualizar-commits
 
     steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: main
 
       - name: Configurar Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version: 22
+          cache: npm
 
-      - name: Gerar Snake SVG e GIF
+      - name: Instalar dependências da Snake
+        run: |
+          set -e
+
+          npm install --no-save --no-package-lock \
+            generate-snake-animation@3 \
+            canvas
+
+      - name: Gerar Snake
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -1123,14 +1148,27 @@ jobs:
 
           mkdir -p dist
 
-          npx --yes generate-snake-animation@3 \
+          echo "🎣 Buscando contribuições do GitHub..."
+          echo "🐍 Gerando SVG e GIF..."
+
+          npx --no-install generate-snake-animation@3 \
             --github_user "${{ github.repository_owner }}" \
             --github_token "$GITHUB_TOKEN" \
             --output "dist/github-contribution-grid-snake.svg" \
             --output "dist/github-contribution-grid-snake.gif"
 
-          echo "Arquivos gerados:"
-          ls -lh dist/
+      - name: Verificar arquivos gerados
+        run: |
+          set -e
+
+          test -s dist/github-contribution-grid-snake.svg
+          test -s dist/github-contribution-grid-snake.gif
+
+          echo "✅ Snake SVG gerada:"
+          ls -lh dist/github-contribution-grid-snake.svg
+
+          echo "✅ Snake GIF gerada:"
+          ls -lh dist/github-contribution-grid-snake.gif
 
       - name: Preparar arquivos da Snake
         run: |
@@ -1138,20 +1176,11 @@ jobs:
 
           mkdir -p arquivos-gerados/snake
 
-          test -f dist/github-contribution-grid-snake.svg
-          test -f dist/github-contribution-grid-snake.gif
-
           cp dist/github-contribution-grid-snake.svg \
             arquivos-gerados/snake/snake.svg
 
           cp dist/github-contribution-grid-snake.gif \
             arquivos-gerados/snake/snake.gif
-
-          echo "Snake SVG:"
-          ls -lh arquivos-gerados/snake/snake.svg
-
-          echo "Snake GIF:"
-          ls -lh arquivos-gerados/snake/snake.gif
 
       - name: Enviar Snake gerada
         uses: actions/upload-artifact@v6

@@ -24,7 +24,7 @@
 | `atualizar-footer` | Atualizar Footer com README | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Python (`actions/setup-python@v6`); 3. Instalar dependência Python — executa comandos; 4. Atualizar footer com README — executa comandos; 5. arquivo-footer (`actions/upload-artifact@v6`) |
 | `atualizar-relatorio-commits` | Atualizar relatório de commits | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Ruby (`ruby/setup-ruby@v1`); 3. Gerar relatório de commits — executa comandos; 4. arquivos-relatorio-commits (`actions/upload-artifact@v6`) |
 | `pesquisar-projeto` | Documentar workflow YAML | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar PHP — executa comandos; 3. Gerar documentação do workflow — executa comandos; 4. arquivos-pesquisas (`actions/upload-artifact@v6`) |
-| `salvar-na-main` | Salvar todos os arquivos na main | ubuntu-24.04 | `atualizar-commits`, `snake`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. arquivo-readme (`actions/download-artifact@v6`); 3. arquivos-snake (`actions/download-artifact@v6`); 4. arquivo-sitemap (`actions/download-artifact@v6`); 5. arquivo-footer (`actions/download-artifact@v6`); 6. arquivos-relatorio-commits (`actions/download-artifact@v6`); 7. arquivos-pesquisas (`actions/download-artifact@v6`); 8. Reunir arquivos gerados — executa comandos; 9. Salvar todas as alterações em um commit — executa comandos |
+| `salvar-na-main` | Salvar todos os arquivos na main | ubuntu-24.04 | `atualizar-commits`, `snake`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. arquivo-readme (`actions/download-artifact@v7`); 3. arquivos-snake (`actions/download-artifact@v7`); 4. arquivo-sitemap (`actions/download-artifact@v7`); 5. arquivo-footer (`actions/download-artifact@v7`); 6. arquivos-relatorio-commits (`actions/download-artifact@v7`); 7. arquivos-pesquisas (`actions/download-artifact@v7`); 8. Reunir arquivos gerados — executa comandos; 9. Salvar todas as alterações em um commit — executa comandos |
 
 ## Grafo completo de dependências
 
@@ -274,12 +274,12 @@ flowchart TD
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
 | 1 | Baixar código atualizado | `actions/checkout@v6` | — |
-| 2 | arquivo-readme | `actions/download-artifact@v6` | — |
-| 3 | arquivos-snake | `actions/download-artifact@v6` | — |
-| 4 | arquivo-sitemap | `actions/download-artifact@v6` | — |
-| 5 | arquivo-footer | `actions/download-artifact@v6` | — |
-| 6 | arquivos-relatorio-commits | `actions/download-artifact@v6` | — |
-| 7 | arquivos-pesquisas | `actions/download-artifact@v6` | — |
+| 2 | arquivo-readme | `actions/download-artifact@v7` | — |
+| 3 | arquivos-snake | `actions/download-artifact@v7` | — |
+| 4 | arquivo-sitemap | `actions/download-artifact@v7` | — |
+| 5 | arquivo-footer | `actions/download-artifact@v7` | — |
+| 6 | arquivos-relatorio-commits | `actions/download-artifact@v7` | — |
+| 7 | arquivos-pesquisas | `actions/download-artifact@v7` | — |
 | 8 | Reunir arquivos gerados | — | \| |
 | 9 | Salvar todas as alterações em um commit | — | \| |
 
@@ -1576,37 +1576,37 @@ jobs:
           ref: main
 
       - name: Baixar README atualizado
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: arquivo-readme
           path: artefatos/readme
 
       - name: Baixar Snake
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: arquivos-snake
           path: artefatos/snake
 
       - name: Baixar Sitemap
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: arquivo-sitemap
           path: artefatos/sitemap
 
       - name: Baixar Footer
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: arquivo-footer
           path: artefatos/footer
 
       - name: Baixar relatório de commits
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: arquivos-relatorio-commits
           path: artefatos/commits
 
       - name: Baixar pesquisas
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: arquivos-pesquisas
           path: artefatos/pesquisas

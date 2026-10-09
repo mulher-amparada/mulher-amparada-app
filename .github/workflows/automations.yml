@@ -1066,17 +1066,20 @@ jobs:
     needs: deploy
 
     steps:
-      - name: Verificar links
-        uses: ScholliYT/Broken-Links-Crawler-Action@v3
-        with:
-          website_url: https://mulher-amparada.github.io/mulher-amparada-app/
-          include_url_prefix: https://mulher-amparada.github.io/mulher-amparada-app/
-          resolve_before_filtering: "true"
-          verbose: "true"
-          max_retry_time: 30
-          max_retries: 5
-          max_depth: -1
+      - name: Verificar links do site
+        run: |
+          set -e
 
+          URL="https://mulher-amparada.github.io/mulher-amparada-app/"
+
+          echo "Verificando:"
+          echo "$URL"
+
+          npx --yes broken-link-checker-cli "$URL" \
+            --filter-level 3 \
+            --ordered \
+            --recursive \
+            --verbose
 
   # =========================================================
   # LIGHTHOUSE
@@ -1106,23 +1109,37 @@ jobs:
     needs: atualizar-commits
 
     steps:
-      - name: Baixar repositório
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          ref: main
 
-      - name: Gerar Snake
-        uses: Platane/snk@v3
+      - name: Configurar Node.js
+        uses: actions/setup-node@v6
         with:
-          github_user_name: ${{ github.repository_owner }}
-          outputs: |
-            dist/github-contribution-grid-snake.svg
-            dist/github-contribution-grid-snake.gif
+          node-version: 24
+
+      - name: Gerar Snake SVG e GIF
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+
+          mkdir -p dist
+
+          npx --yes generate-snake-animation@3 \
+            --github_user "${{ github.repository_owner }}" \
+            --github_token "$GITHUB_TOKEN" \
+            --output "dist/github-contribution-grid-snake.svg" \
+            --output "dist/github-contribution-grid-snake.gif"
+
+          echo "Arquivos gerados:"
+          ls -lh dist/
 
       - name: Preparar arquivos da Snake
         run: |
+          set -e
+
           mkdir -p arquivos-gerados/snake
+
+          test -f dist/github-contribution-grid-snake.svg
+          test -f dist/github-contribution-grid-snake.gif
 
           cp dist/github-contribution-grid-snake.svg \
             arquivos-gerados/snake/snake.svg
@@ -1130,13 +1147,18 @@ jobs:
           cp dist/github-contribution-grid-snake.gif \
             arquivos-gerados/snake/snake.gif
 
+          echo "Snake SVG:"
+          ls -lh arquivos-gerados/snake/snake.svg
+
+          echo "Snake GIF:"
+          ls -lh arquivos-gerados/snake/snake.gif
+
       - name: Enviar Snake gerada
         uses: actions/upload-artifact@v6
         with:
           name: arquivos-snake
           path: arquivos-gerados/snake/
           if-no-files-found: error
-
 
   # =========================================================
   # PUBLICAR KIT DE DIVULGAÇÃO

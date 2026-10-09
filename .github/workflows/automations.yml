@@ -1302,11 +1302,11 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
-
+          
       - name: Baixar APK compilado
         uses: actions/download-artifact@v6
         with:
-          name: app-debug-assinado
+          name: APK-Kotlin-Assinado
           path: ${{ runner.temp }}/apk
 
       - name: Localizar APK
@@ -1329,24 +1329,30 @@ jobs:
           sudo apt-get install -y php-cli php-xml
 
       - name: Configurar Java
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '21'
 
+
       - name: Configurar Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
+        with:
+          cmdline-tools-version: 12266719
 
       - name: Aceitar licenças do Android SDK
-        run: yes | sdkmanager --licenses
+        run: |
+          set -o pipefail
+          yes | sdkmanager --licenses
 
       - name: Instalar ferramentas do emulador
         run: |
-          sdkmanager \
+          sdkmanager --install \
             "platform-tools" \
             "platforms;android-36" \
             "system-images;android-36;google_apis;x86_64" \
             "emulator"
+
 
       - name: Iniciar emulador e capturar Activities
         uses: reactivecircus/android-emulator-runner@v2
@@ -1389,11 +1395,11 @@ jobs:
               com.mulheres \
               "Código-fonte do app = Mulher Amparada/app/src/main/AndroidManifest.xml"
 
-      - name: Publicar capturas como artifact
-        uses: actions/upload-artifact@v6
+      - name: Enviar capturas como artefato
         if: always()
+        uses: actions/upload-artifact@v6
         with:
-          name: capturas-activities
+          name: Capturas-Activities
           path: ${{ runner.temp }}/screenshots/
           if-no-files-found: warn
           retention-days: 7

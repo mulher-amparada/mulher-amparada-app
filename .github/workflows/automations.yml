@@ -1356,7 +1356,7 @@ jobs:
           git push origin HEAD:main
           
           - name: Salvar documentação no repositório
-        run: |
+            run: |
           set -e
 
           mkdir -p pesquisas

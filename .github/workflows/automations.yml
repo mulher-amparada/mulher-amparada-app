@@ -1232,7 +1232,13 @@ jobs:
           sudo apt-get install -y php-cli
 
       - name: Gerar documentação do workflow
-        run: php scripts/pesquisar_projeto.php
+        run: |
+          set -e
+          php -l scripts/pesquisar_projeto.php
+          php scripts/pesquisar_projeto.php
+          test -s pesquisas/workflow.md
+          echo "Documentação gerada:"
+          ls -lh pesquisas/workflow.md
 
       - name: Enviar documentação como artifact
         uses: actions/upload-artifact@v6

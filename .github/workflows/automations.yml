@@ -1240,11 +1240,11 @@ jobs:
           echo "Documentação gerada:"
           ls -lh pesquisas/workflow.md
 
-      - name: Enviar documentação como artifact
+      - name: Enviar documentação do workflow como artifact
         uses: actions/upload-artifact@v6
         with:
           name: arquivos-pesquisas
-          path: pesquisas/
+          path: .github/workflows/workflow.md
           if-no-files-found: error
           retention-days: 30
 

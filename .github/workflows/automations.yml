@@ -1358,7 +1358,6 @@ jobs:
       - sincronizar-paperwf
       - sitemap
       - indexnow
-      - seo-audit
       - broken-links
       - lighthouse
       - snake

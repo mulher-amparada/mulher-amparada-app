@@ -1662,25 +1662,8 @@ jobs:
           git rebase origin/main
 
           git push origin HEAD:main
-          
-          - name: Salvar documentação no repositório
-            run: |
-          set -e
 
-          mkdir -p pesquisas
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add pesquisas/workflow.md
-
-          if git diff --cached --quiet; then
-            echo "A documentação já está atualizada."
-            exit 0
-          fi
-
-          git commit -m "docs: atualizar documentação do workflow"
-          git push origin HEAD:main
+          echo "Todos os arquivos gerados foram salvos na main."
           
 
   relatorio-erros:

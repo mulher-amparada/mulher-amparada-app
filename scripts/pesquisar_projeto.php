@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 $raiz = dirname(__DIR__);
-$workflow = $raiz . '/workflows/automations.yml';
-$saida = $raiz . '/workflows/workflow.md';
+$workflow = $raiz . '/.github/workflows/automations.yml';
+$saida = $raiz . '/.github/workflows/workflow.md';
 
 if (!is_file($workflow)) {
     fwrite(STDERR, "Erro: automations.yml não encontrado.\n");
@@ -188,8 +188,8 @@ $totalEtapas = array_sum(
 );
 
 $md = "# Documentação do workflow — Mulher Amparada\n\n";
-$md .= "- **Arquivo de origem:** `workflows/automations.yml`\n";
-$md .= "- **Arquivo gerado:** `workflows/workflow.md`\n";
+$md .= "- **Arquivo de origem:** `.github/workflows/automations.yml`\n";
+$md .= "- **Arquivo gerado:** `.github/workflows/workflow.md`\n";
 $md .= "- **Jobs identificados:** " . count($jobs) . "\n";
 $md .= "- **Etapas identificadas:** {$totalEtapas}\n\n";
 
@@ -311,10 +311,10 @@ $md .= rtrim($yaml) . "\n";
 $md .= "````\n";
 
 if (file_put_contents($saida, $md) === false) {
-    fwrite(STDERR, "Erro: não foi possível gravar workflows/workflow.md.\n");
+    fwrite(STDERR, "Erro: não foi possível gravar .github/workflows/workflow.md.\n");
     exit(1);
 }
 
-echo "Documentação gerada: workflows/workflow.md\n";
+echo "Documentação gerada: .github/workflows/workflow.md\n";
 echo "Jobs identificados: " . count($jobs) . "\n";
 echo "Etapas identificadas: {$totalEtapas}\n";

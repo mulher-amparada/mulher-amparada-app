@@ -2,8 +2,8 @@
 
 - **Arquivo de origem:** `.github/workflows/automations.yml`
 - **Arquivo gerado:** `.github/workflows/workflow.md`
-- **Jobs identificados:** 16
-- **Etapas identificadas:** 68
+- **Jobs identificados:** 13
+- **Etapas identificadas:** 60
 
 ## Tabela completa de jobs e etapas
 
@@ -14,17 +14,14 @@
 | `deploy` | deploy | ubuntu-24.04 | `build-site` | 1. Deploy to GitHub Pages (`actions/deploy-pages@v5`) |
 | `atualizar-commits` | atualizar-commits | ubuntu-24.04 | `deploy` | 1. Baixar todo o histórico (`actions/checkout@v6`); 2. Atualizar total de commits — executa comandos; 3. arquivo-readme (`actions/upload-artifact@v6`) |
 | `sincronizar-devto` | Sincronizar README com DEV.to | ubuntu-24.04 | `salvar-na-main` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. Atualizar artigo no DEV.to — executa comandos |
-| `sincronizar-paperwf` | Sincronizar README com Paper.wf | ubuntu-24.04 | `deploy` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. Autenticar e atualizar publicação — executa comandos |
-| `sitemap` | Gerar Sitemap | ubuntu-24.04 | `snake` | 1. Checkout (`actions/checkout@v6`); 2. Gerar Sitemap (`cicirello/generate-sitemap@v1`); 3. arquivo-sitemap (`actions/upload-artifact@v6`) |
+| `sitemap` | Gerar Sitemap | ubuntu-24.04 | `atualizar-commits` | 1. Checkout (`actions/checkout@v6`); 2. Gerar Sitemap (`cicirello/generate-sitemap@v1`); 3. arquivo-sitemap (`actions/upload-artifact@v6`) |
 | `indexnow` | IndexNow | ubuntu-24.04 | `deploy` | 1. Enviar Sitemap ao IndexNow (`bojieyang/indexnow-action@v3`) |
-| `broken-links` | Verificar Links Quebrados | ubuntu-24.04 | `deploy` | 1. Verificar links (`ScholliYT/Broken-Links-Crawler-Action@v3`) |
 | `lighthouse` | Lighthouse | ubuntu-24.04 | `deploy` | 1. Lighthouse (`treosh/lighthouse-ci-action@v12`) |
-| `snake` | Gerar Snake das contribuições | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Gerar Snake (`Platane/snk@v3`); 3. Preparar arquivos da Snake — executa comandos; 4. arquivos-snake (`actions/upload-artifact@v6`) |
 | `publicar-divulgacao` | Publicar Kit de Divulgação | ubuntu-24.04 | `lighthouse` | 1. Baixar repositório (`actions/checkout@v6`); 2. Configurar Node.js (`actions/setup-node@v6`); 3. Criar pacote de divulgação — executa comandos; 4. Kit de Divulgação (`softprops/action-gh-release@v3`) |
 | `atualizar-footer` | Atualizar Footer com README | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Python (`actions/setup-python@v6`); 3. Instalar dependência Python — executa comandos; 4. Atualizar footer com README — executa comandos; 5. arquivo-footer (`actions/upload-artifact@v6`) |
 | `atualizar-relatorio-commits` | Atualizar relatório de commits | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Ruby (`ruby/setup-ruby@v1`); 3. Gerar relatório de commits — executa comandos; 4. arquivos-relatorio-commits (`actions/upload-artifact@v6`) |
 | `pesquisar-projeto` | Documentar workflow YAML | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar PHP — executa comandos; 3. Gerar documentação do workflow — executa comandos; 4. arquivos-pesquisas (`actions/upload-artifact@v6`) |
-| `salvar-na-main` | Salvar todos os arquivos na main | ubuntu-24.04 | `atualizar-commits`, `snake`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. arquivo-readme (`actions/download-artifact@v7`); 3. arquivos-snake (`actions/download-artifact@v7`); 4. arquivo-sitemap (`actions/download-artifact@v7`); 5. arquivo-footer (`actions/download-artifact@v7`); 6. arquivos-relatorio-commits (`actions/download-artifact@v7`); 7. arquivos-pesquisas (`actions/download-artifact@v7`); 8. Reunir arquivos gerados — executa comandos; 9. Salvar todas as alterações em um commit — executa comandos |
+| `salvar-na-main` | Salvar todos os arquivos na main | ubuntu-24.04 | `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. arquivo-readme (`actions/download-artifact@v7`); 3. arquivo-sitemap (`actions/download-artifact@v7`); 4. arquivo-footer (`actions/download-artifact@v7`); 5. arquivos-relatorio-commits (`actions/download-artifact@v7`); 6. arquivos-pesquisas (`actions/download-artifact@v7`); 7. Reunir arquivos gerados — executa comandos; 8. Salvar todas as alterações em um commit — executa comandos |
 
 ## Grafo completo de dependências
 
@@ -37,12 +34,9 @@ flowchart TD
     job_deploy["deploy"]
     job_atualizar_commits["atualizar-commits"]
     job_sincronizar_devto["Sincronizar README com DEV.to"]
-    job_sincronizar_paperwf["Sincronizar README com Paper.wf"]
     job_sitemap["Gerar Sitemap"]
     job_indexnow["IndexNow"]
-    job_broken_links["Verificar Links Quebrados"]
     job_lighthouse["Lighthouse"]
-    job_snake["Gerar Snake das contribuições"]
     job_publicar_divulgacao["Publicar Kit de Divulgação"]
     job_atualizar_footer["Atualizar Footer com README"]
     job_atualizar_relatorio_commits["Atualizar relatório de commits"]
@@ -52,17 +46,13 @@ flowchart TD
     job_build_site --> job_deploy
     job_deploy --> job_atualizar_commits
     job_salvar_na_main --> job_sincronizar_devto
-    job_deploy --> job_sincronizar_paperwf
-    job_snake --> job_sitemap
+    job_atualizar_commits --> job_sitemap
     job_deploy --> job_indexnow
-    job_deploy --> job_broken_links
     job_deploy --> job_lighthouse
-    job_atualizar_commits --> job_snake
     job_lighthouse --> job_publicar_divulgacao
     job_atualizar_commits --> job_atualizar_footer
     job_atualizar_commits --> job_atualizar_relatorio_commits
     job_atualizar_commits --> job_salvar_na_main
-    job_snake --> job_salvar_na_main
     job_sitemap --> job_salvar_na_main
     job_atualizar_footer --> job_salvar_na_main
     job_atualizar_relatorio_commits --> job_salvar_na_main
@@ -146,22 +136,11 @@ flowchart TD
 | 1 | Baixar código atualizado | `actions/checkout@v6` | — |
 | 2 | Atualizar artigo no DEV.to | — | \| |
 
-### Sincronizar README com Paper.wf
-
-- **ID:** `sincronizar-paperwf`
-- **Runner:** `ubuntu-24.04`
-- **Dependências:** `deploy`
-
-| # | Etapa | Ação | Execução |
-|---:|---|---|---|
-| 1 | Baixar código atualizado | `actions/checkout@v6` | — |
-| 2 | Autenticar e atualizar publicação | — | \| |
-
 ### Gerar Sitemap
 
 - **ID:** `sitemap`
 - **Runner:** `ubuntu-24.04`
-- **Dependências:** `snake`
+- **Dependências:** `atualizar-commits`
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
@@ -179,16 +158,6 @@ flowchart TD
 |---:|---|---|---|
 | 1 | Enviar Sitemap ao IndexNow | `bojieyang/indexnow-action@v3` | — |
 
-### Verificar Links Quebrados
-
-- **ID:** `broken-links`
-- **Runner:** `ubuntu-24.04`
-- **Dependências:** `deploy`
-
-| # | Etapa | Ação | Execução |
-|---:|---|---|---|
-| 1 | Verificar links | `ScholliYT/Broken-Links-Crawler-Action@v3` | — |
-
 ### Lighthouse
 
 - **ID:** `lighthouse`
@@ -198,19 +167,6 @@ flowchart TD
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
 | 1 | Lighthouse | `treosh/lighthouse-ci-action@v12` | — |
-
-### Gerar Snake das contribuições
-
-- **ID:** `snake`
-- **Runner:** `ubuntu-24.04`
-- **Dependências:** `atualizar-commits`
-
-| # | Etapa | Ação | Execução |
-|---:|---|---|---|
-| 1 | Baixar repositório | `actions/checkout@v6` | — |
-| 2 | Gerar Snake | `Platane/snk@v3` | — |
-| 3 | Preparar arquivos da Snake | — | \| |
-| 4 | arquivos-snake | `actions/upload-artifact@v6` | — |
 
 ### Publicar Kit de Divulgação
 
@@ -269,19 +225,18 @@ flowchart TD
 
 - **ID:** `salvar-na-main`
 - **Runner:** `ubuntu-24.04`
-- **Dependências:** `atualizar-commits`, `snake`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`
+- **Dependências:** `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
 | 1 | Baixar código atualizado | `actions/checkout@v6` | — |
 | 2 | arquivo-readme | `actions/download-artifact@v7` | — |
-| 3 | arquivos-snake | `actions/download-artifact@v7` | — |
-| 4 | arquivo-sitemap | `actions/download-artifact@v7` | — |
-| 5 | arquivo-footer | `actions/download-artifact@v7` | — |
-| 6 | arquivos-relatorio-commits | `actions/download-artifact@v7` | — |
-| 7 | arquivos-pesquisas | `actions/download-artifact@v7` | — |
-| 8 | Reunir arquivos gerados | — | \| |
-| 9 | Salvar todas as alterações em um commit | — | \| |
+| 3 | arquivo-sitemap | `actions/download-artifact@v7` | — |
+| 4 | arquivo-footer | `actions/download-artifact@v7` | — |
+| 5 | arquivos-relatorio-commits | `actions/download-artifact@v7` | — |
+| 6 | arquivos-pesquisas | `actions/download-artifact@v7` | — |
+| 7 | Reunir arquivos gerados | — | \| |
+| 8 | Salvar todas as alterações em um commit | — | \| |
 
 ## YAML original completo
 
@@ -1140,166 +1095,7 @@ jobs:
           PY
 
 
-  # =========================================================
-  # SINCRONIZAR README COM PAPER.WF
-  # =========================================================
-
-  sincronizar-paperwf:
-    name: Sincronizar README com Paper.wf
-    runs-on: ubuntu-24.04
-    needs: deploy
-
-    steps:
-      - name: Baixar código atualizado
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 1
-          ref: main
-
-      - name: Autenticar e atualizar publicação
-        env:
-          PAPERWF_USERNAME: ${{ secrets.PAPERWF_USERNAME }}
-          PAPERWF_PASSWORD: ${{ secrets.PAPERWF_PASSWORD }}
-        run: |
-          python3 - <<'PY'
-          import json
-          import os
-          import urllib.request
-          import urllib.error
-
-          BASE = "https://paper.wf"
-
-          USERNAME = os.environ["PAPERWF_USERNAME"]
-          PASSWORD = os.environ["PAPERWF_PASSWORD"]
-
-          COLLECTION = "mulheramparada"
-          SLUG = "projeto-mulher-amparada"
-
-          with open("README.md", "r", encoding="utf-8") as f:
-              readme = f.read()
-
-          def api(url, method="GET", data=None, token=None):
-              headers = {
-                  "Accept": "application/json",
-                  "User-Agent": "Mulher-Amparada-GitHub-Action"
-              }
-
-              if data is not None:
-                  headers["Content-Type"] = "application/json"
-
-              if token:
-                  headers["Authorization"] = f"Token {token}"
-
-              request = urllib.request.Request(
-                  url,
-                  data=data,
-                  method=method,
-                  headers=headers
-              )
-
-              try:
-                  with urllib.request.urlopen(request) as response:
-                      body = response.read().decode("utf-8")
-
-                      if not body:
-                          return {}
-
-                      return json.loads(body)
-
-              except urllib.error.HTTPError as error:
-                  body = error.read().decode(
-                      "utf-8",
-                      errors="replace"
-                  )
-
-                  print(f"HTTP {error.code}")
-                  print(body)
-                  raise
-
-          print("Autenticando no Paper.wf...")
-
-          login_payload = json.dumps({
-              "alias": USERNAME,
-              "pass": PASSWORD
-          }).encode("utf-8")
-
-          login = api(
-              f"{BASE}/api/auth/login",
-              method="POST",
-              data=login_payload
-          )
-
-          token = (
-              login.get("data", {}).get("access_token")
-              or login.get("access_token")
-              or login.get("token")
-              or login.get("data", {}).get("token")
-          )
-
-          if not token:
-              raise RuntimeError(
-                  "O Paper.wf não retornou um token de acesso."
-              )
-
-          print("Login realizado com sucesso.")
-
-          print("Localizando publicação existente...")
-
-          post = api(
-              f"{BASE}/api/collections/{COLLECTION}/posts/{SLUG}",
-              method="GET",
-              token=token
-          )
-
-          post_data = post.get("data", post)
-
-          if isinstance(post_data, list):
-              if not post_data:
-                  raise RuntimeError(
-                      "O Paper.wf retornou uma lista de posts vazia."
-                  )
-
-              post_data = post_data[0]
-
-          if not isinstance(post_data, dict):
-              raise RuntimeError(
-                  "Resposta inesperada ao localizar o post."
-              )
-
-          post_id = (
-              post_data.get("id")
-              or (
-                  post_data.get("post", {}).get("id")
-                  if isinstance(post_data.get("post"), dict)
-                  else None
-              )
-          )
-
-          if not post_id:
-              raise RuntimeError(
-                  "Não foi possível encontrar o ID do post existente."
-              )
-
-          print(f"Post encontrado: {post_id}")
-
-          payload = json.dumps({
-              "title": "Projeto Mulher Amparada",
-              "body": readme
-          }).encode("utf-8")
-
-          print("Atualizando publicação...")
-
-          api(
-              f"{BASE}/api/posts/{post_id}",
-              method="POST",
-              data=payload,
-              token=token
-          )
-
-          print("README sincronizado com o Paper.wf.")
-          PY
-
-
+  
   # =========================================================
   # GERAR SITEMAP
   # =========================================================
@@ -1307,7 +1103,7 @@ jobs:
   sitemap:
     name: Gerar Sitemap
     runs-on: ubuntu-24.04
-    needs: snake
+    needs: atualizar-commits
 
     steps:
       - name: Checkout
@@ -1346,27 +1142,6 @@ jobs:
           key: ${{ secrets.INDEXNOW_KEY }}
 
 
-  # =========================================================
-  # VERIFICAR LINKS QUEBRADOS
-  # =========================================================
-
-  broken-links:
-    name: Verificar Links Quebrados
-    runs-on: ubuntu-24.04
-    needs: deploy
-
-    steps:
-      - name: Verificar links
-        uses: ScholliYT/Broken-Links-Crawler-Action@v3
-        with:
-          website_url: https://mulher-amparada.github.io/mulher-amparada-app/
-          include_url_prefix: https://mulher-amparada.github.io/mulher-amparada-app/
-          resolve_before_filtering: "true"
-          verbose: "true"
-          max_retry_time: 30
-          max_retries: 5
-          max_depth: -1
-
 
   # =========================================================
   # LIGHTHOUSE
@@ -1390,43 +1165,11 @@ jobs:
   # GERAR SNAKE DAS CONTRIBUIÇÕES
   # =========================================================
 
-  snake:
-    name: Gerar Snake das contribuições
-    runs-on: ubuntu-24.04
-    needs: atualizar-commits
+  # =========================================================
+  # GERAR SNAKE DAS CONTRIBUIÇÕES
+  # =========================================================
 
-    steps:
-      - name: Baixar repositório
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          ref: main
-
-      - name: Gerar Snake
-        uses: Platane/snk@v3
-        with:
-          github_user_name: ${{ github.repository_owner }}
-          outputs: |
-            dist/github-contribution-grid-snake.svg
-            dist/github-contribution-grid-snake.gif
-
-      - name: Preparar arquivos da Snake
-        run: |
-          mkdir -p arquivos-gerados/snake
-
-          cp dist/github-contribution-grid-snake.svg \
-            arquivos-gerados/snake/snake.svg
-
-          cp dist/github-contribution-grid-snake.gif \
-            arquivos-gerados/snake/snake.gif
-
-      - name: Enviar Snake gerada
-        uses: actions/upload-artifact@v6
-        with:
-          name: arquivos-snake
-          path: arquivos-gerados/snake/
-          if-no-files-found: error
-
+  
 
   # =========================================================
   # PUBLICAR KIT DE DIVULGAÇÃO
@@ -1579,8 +1322,6 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-
-
   # =========================================================
   # CENTRALIZAR E SALVAR ARQUIVOS NA MAIN
   # =========================================================
@@ -1591,7 +1332,6 @@ jobs:
 
     needs:
       - atualizar-commits
-      - snake
       - sitemap
       - atualizar-footer
       - atualizar-relatorio-commits
@@ -1612,12 +1352,6 @@ jobs:
         with:
           name: arquivo-readme
           path: artefatos/readme
-
-      - name: Baixar Snake
-        uses: actions/download-artifact@v7
-        with:
-          name: arquivos-snake
-          path: artefatos/snake
 
       - name: Baixar Sitemap
         uses: actions/download-artifact@v7
@@ -1649,13 +1383,8 @@ jobs:
 
           cp artefatos/readme/README.md README.md
 
-          cp artefatos/snake/snake.svg \
-            "Código-fonte do app = Mulher Amparada/snake.svg"
-
-          cp artefatos/snake/snake.gif \
-            "Código-fonte do app = Mulher Amparada/snake.gif"
-
           cp artefatos/sitemap/sitemap.xml sitemap.xml
+
           cp artefatos/footer/index.html index.html
 
           mkdir -p commits pesquisas
@@ -1680,9 +1409,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add README.md index.html sitemap.xml commits/ pesquisas/ \
-            "Código-fonte do app = Mulher Amparada/snake.svg" \
-            "Código-fonte do app = Mulher Amparada/snake.gif"
+          git add README.md index.html sitemap.xml commits/ pesquisas/
 
           if git diff --cached --quiet; then
             echo "Nenhuma alteração para salvar."

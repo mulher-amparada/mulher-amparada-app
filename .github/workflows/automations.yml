@@ -1287,7 +1287,7 @@ jobs:
 
 
 
-gerar-video:
+  gerar-video:
     name: Gerar vídeo animado do Mulher Amparada
     runs-on: ubuntu-24.04
     needs: build

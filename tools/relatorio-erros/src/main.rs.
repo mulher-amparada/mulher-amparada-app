@@ -1,1 +1,165 @@
- 
+use reqwest::blocking::Client;
+use std::env;
+use std::fs;
+use std::io::{Cursor, Read, Write};
+use std::path::Path;
+use zip::ZipArchive;
+
+fn traduzir(linha: &str) -> Option<&'static str> {
+    let texto = linha.to_lowercase();
+
+    if texto.contains("could not open input file") {
+        Some("O PHP não conseguiu abrir o arquivo indicado. Confira o caminho e se o arquivo existe.")
+    } else if texto.contains("no such file or directory") {
+        Some("Arquivo ou diretório não encontrado. Confira o caminho.")
+    } else if texto.contains("command not found") {
+        Some("Comando não encontrado. Confira se o programa está instalado e disponível no PATH.")
+    } else if texto.contains("permission denied") {
+        Some("Permissão negada. Confira as permissões necessárias.")
+    } else if texto.contains("process completed with exit code 1") {
+        Some("A etapa terminou com código de erro 1. Consulte as mensagens anteriores para identificar a causa.")
+    } else if texto.contains("could not resolve") {
+        Some("Não foi possível resolver uma dependência ou endereço. Confira a configuração e a conexão.")
+    } else if texto.contains("gradle build failed") || texto.contains("build failed") {
+        Some("A compilação falhou. Consulte os erros anteriores para localizar a causa.")
+    } else if texto.contains("error:") || texto.contains(" error ") {
+        Some("O log contém uma mensagem de erro. Analise a mensagem original abaixo.")
+    } else {
+        None
+    }
+}
+
+fn executar() -> Result<(), Box<dyn std::error::Error>> {
+    let token = env::var("GITHUB_TOKEN")?;
+    let repositorio = env::var("GITHUB_REPOSITORY")?;
+    let run_id = env::var("GITHUB_RUN_ID")?;
+
+    let client = Client::builder()
+        .user_agent("Mulher-Amparada-Error-Reporter")
+        .build()?;
+
+    let url = format!(
+        "https://api.github.com/repos/{repositorio}/actions/runs/{run_id}/logs"
+    );
+
+    let resposta = client
+        .get(url)
+        .bearer_auth(token)
+        .header("Accept", "application/vnd.github+json")
+        .send()?
+        .error_for_status()?;
+
+    let bytes = resposta.bytes()?;
+    let mut arquivo_zip = ZipArchive::new(Cursor::new(bytes))?;
+
+    let mut relatorio = String::from(
+        "# Relatório de erros — Mulher Amparada\n\n\
+         Os registros abaixo foram extraídos dos logs desta execução.\n\n"
+    );
+
+    let mut encontrados = 0usize;
+
+    for indice in 0..arquivo_zip.len() {
+        let mut entrada = arquivo_zip.by_index(indice)?;
+
+        if !entrada.name().ends_with(".txt") {
+            continue;
+        }
+
+        let nome = entrada.name().to_string();
+        let mut conteudo = String::new();
+
+        if entrada.read_to_string(&mut conteudo).is_err() {
+            continue;
+        }
+
+        let mut erros_deste_arquivo = Vec::new();
+
+        for linha in conteudo.lines() {
+            let minuscula = linha.to_lowercase();
+
+            let parece_erro = [
+                "error:",
+                " error ",
+                "failed",
+                "failure",
+                "exception",
+                "could not",
+                "unable to",
+                "not found",
+                "permission denied",
+                "exit code 1",
+                "fatal:",
+                "erro:",
+            ]
+            .iter()
+            .any(|termo| minuscula.contains(termo));
+
+            if parece_erro {
+                erros_deste_arquivo.push(linha.trim().to_string());
+            }
+        }
+
+        if erros_deste_arquivo.is_empty() {
+            continue;
+        }
+
+        relatorio.push_str(&format!("## Log: `{nome}`\n\n"));
+
+        for linha in erros_deste_arquivo.iter().take(30) {
+            encontrados += 1;
+
+            if let Some(traducao) = traduzir(linha) {
+                relatorio.push_str(&format!("**Em português:** {traducao}\n\n"));
+            } else {
+                relatorio.push_str(
+                    "**Em português:** Mensagem possivelmente relacionada a uma falha; \
+                     tradução específica não disponível para este padrão.\n\n"
+                );
+            }
+
+            relatorio.push_str("**Mensagem original:**\n\n```text\n");
+            relatorio.push_str(&linha.replace("```", "'''"));
+            relatorio.push_str("\n```\n\n");
+        }
+    }
+
+    if encontrados == 0 {
+        relatorio.push_str(
+            "Nenhuma mensagem correspondente aos padrões configurados foi encontrada. \
+             Isso não garante que a execução esteja livre de erros.\n"
+        );
+    }
+
+    let caminho = Path::new("relatorio-erros.md");
+    fs::write(caminho, &relatorio)?;
+
+    if let Ok(summary) = env::var("GITHUB_STEP_SUMMARY") {
+        let mut arquivo = fs::OpenOptions::new()
+            .create(true)
+            .append(true)
+            .open(summary)?;
+
+        arquivo.write_all(relatorio.as_bytes())?;
+    }
+
+    println!("Relatório criado: relatorio-erros.md");
+    println!("Mensagens encontradas: {encontrados}");
+
+    Ok(())
+}
+
+fn main() {
+    if let Err(erro) = executar() {
+        eprintln!("Não foi possível gerar o relatório: {erro}");
+
+        let fallback = format!(
+            "# Relatório de erros — Mulher Amparada\n\n\
+             A coleta automática falhou.\n\n\
+             **Motivo técnico:** `{erro}`\n"
+        );
+
+        let _ = fs::write("relatorio-erros.md", fallback);
+        std::process::exit(1);
+    }
+} 

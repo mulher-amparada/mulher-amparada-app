@@ -1,4 +1,3 @@
-
 require "open3"
 require "time"
 require "fileutils"
@@ -21,24 +20,34 @@ historico = git(
 total = historico.size
 tamanho_lote = 150
 
-Dir.glob("#{pasta}/*.txt").each { |arquivo| File.delete(arquivo) }
+Dir.glob("#{pasta}/*.md").each { |arquivo| File.delete(arquivo) }
 
 historico.each_slice(tamanho_lote).with_index do |lote, indice|
   inicio = indice * tamanho_lote + 1
   fim = inicio + lote.size - 1
 
-  nome = format("%s/commits_%05d-%05d.txt", pasta, inicio, fim)
+  nome = format("%s/commits_%05d-%05d.md", pasta, inicio, fim)
 
   File.open(nome, "w:UTF-8") do |arquivo|
-    arquivo.puts "RELATÓRIO DE COMMITS — MULHER AMPARADA"
-    arquivo.puts "Intervalo: #{inicio} a #{fim}"
-    arquivo.puts "Quantidade neste arquivo: #{lote.size}"
-    arquivo.puts "Total de commits encontrados: #{total}"
-    arquivo.puts "Gerado em: #{Time.now.iso8601}"
+    arquivo.puts "# Relatório de Commits — Mulher Amparada"
     arquivo.puts
-    arquivo.puts "HASH | AUTOR | DATA | MENSAGEM"
+    arquivo.puts "- **Intervalo:** #{inicio} a #{fim}"
+    arquivo.puts "- **Quantidade neste arquivo:** #{lote.size}"
+    arquivo.puts "- **Total de commits encontrados:** #{total}"
+    arquivo.puts "- **Gerado em:** #{Time.now.iso8601}"
     arquivo.puts
-    lote.each { |linha| arquivo.puts linha }
+    arquivo.puts "| Hash | Autor | Data | Mensagem |"
+    arquivo.puts "|---|---|---|---|"
+
+    lote.each do |linha|
+      hash, autor, data, mensagem = linha.split("\t", 4)
+
+      valores = [hash, autor, data, mensagem].map do |valor|
+        valor.to_s.gsub("\\", "\\\\\\").gsub("|", "\\|").gsub("\n", " ")
+      end
+
+      arquivo.puts "| #{valores.join(" | ")} |"
+    end
   end
 
   puts "Gerado: #{nome} (#{lote.size} commits)"

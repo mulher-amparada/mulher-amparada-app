@@ -857,7 +857,7 @@ jobs:
   sincronizar-paperwf:
     name: Sincronizar README com Paper.wf
     runs-on: ubuntu-24.04
-    needs: deploy
+    needs: salvar-na-main
 
     steps:
       - name: Baixar código atualizado

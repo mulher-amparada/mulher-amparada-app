@@ -12,7 +12,7 @@ permissions:
   contents: write
   pages: write
   id-token: write
-
+  actions: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -1344,3 +1344,52 @@ jobs:
           git rebase origin/main
 
           git push origin HEAD:main
+          
+  relatorio-erros:
+    name: Relatório de erros em português
+    runs-on: ubuntu-24.04
+    if: ${{ always() }}
+    needs:
+      - build
+      - build-site
+      - deploy
+      - atualizar-commits
+      - sincronizar-devto
+      - sincronizar-paperwf
+      - sitemap
+      - indexnow
+      - seo-audit
+      - broken-links
+      - lighthouse
+      - snake
+      - publicar-divulgacao
+      - atualizar-footer
+      - atualizar-relatorio-commits
+      - pesquisar-projeto
+      - salvar-na-main
+
+    permissions:
+      actions: read
+      contents: read
+
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v6
+
+      - name: Instalar Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Coletar logs e gerar relatório
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+        run: cargo run --release --manifest-path tools/relatorio-erros/Cargo.toml
+
+      - name: Publicar relatório de erros
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: relatorio-erros-portugues
+          path: relatorio-erros.md
+          if-no-files-found: warn

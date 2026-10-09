@@ -1056,37 +1056,6 @@ jobs:
           key: ${{ secrets.INDEXNOW_KEY }}
 
 
-  # =========================================================
-  # VERIFICAR LINKS QUEBRADOS
-  # =========================================================
-
-  broken-links:
-    name: Verificar Links Quebrados
-    runs-on: ubuntu-24.04
-    needs: deploy
-
-    steps:
-      - name: Verificar links
-        run: |
-          set -e
-
-          URL="https://mulher-amparada.github.io/mulher-amparada-app/"
-
-          echo "========================================"
-          echo "VERIFICANDO LINKS"
-          echo "========================================"
-          echo "Site:"
-          echo "$URL"
-          echo "========================================"
-
-          npx --yes linkinator@8.1.0 \
-            "$URL" \
-            --recurse
-
-          echo ""
-          echo "========================================"
-          echo "VERIFICAÇÃO CONCLUÍDA"
-          echo "========================================"
 
   # =========================================================
   # LIGHTHOUSE
@@ -1114,80 +1083,7 @@ jobs:
   # GERAR SNAKE DAS CONTRIBUIÇÕES
   # =========================================================
 
-  snake:
-    name: Gerar Snake das contribuições
-    runs-on: ubuntu-24.04
-    needs: atualizar-commits
-
-    steps:
-      - name: Baixar repositório
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          ref: main
-
-      - name: Configurar Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Instalar dependências da Snake
-        run: |
-          set -e
-
-          npm install --no-save --no-package-lock \
-            generate-snake-animation@3 \
-            canvas
-
-      - name: Gerar Snake
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -e
-
-          mkdir -p dist
-
-          echo "🎣 Buscando contribuições do GitHub..."
-          echo "🐍 Gerando SVG e GIF..."
-
-          npx --no-install generate-snake-animation@3 \
-            --github_user "${{ github.repository_owner }}" \
-            --github_token "$GITHUB_TOKEN" \
-            --output "dist/github-contribution-grid-snake.svg" \
-            --output "dist/github-contribution-grid-snake.gif"
-
-      - name: Verificar arquivos gerados
-        run: |
-          set -e
-
-          test -s dist/github-contribution-grid-snake.svg
-          test -s dist/github-contribution-grid-snake.gif
-
-          echo "✅ Snake SVG gerada:"
-          ls -lh dist/github-contribution-grid-snake.svg
-
-          echo "✅ Snake GIF gerada:"
-          ls -lh dist/github-contribution-grid-snake.gif
-
-      - name: Preparar arquivos da Snake
-        run: |
-          set -e
-
-          mkdir -p arquivos-gerados/snake
-
-          cp dist/github-contribution-grid-snake.svg \
-            arquivos-gerados/snake/snake.svg
-
-          cp dist/github-contribution-grid-snake.gif \
-            arquivos-gerados/snake/snake.gif
-
-      - name: Enviar Snake gerada
-        uses: actions/upload-artifact@v6
-        with:
-          name: arquivos-snake
-          path: arquivos-gerados/snake/
-          if-no-files-found: error
+  
 
   # =========================================================
   # PUBLICAR KIT DE DIVULGAÇÃO
@@ -1340,8 +1236,6 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-
-
   # =========================================================
   # CENTRALIZAR E SALVAR ARQUIVOS NA MAIN
   # =========================================================
@@ -1352,7 +1246,6 @@ jobs:
 
     needs:
       - atualizar-commits
-      - snake
       - sitemap
       - atualizar-footer
       - atualizar-relatorio-commits
@@ -1373,12 +1266,6 @@ jobs:
         with:
           name: arquivo-readme
           path: artefatos/readme
-
-      - name: Baixar Snake
-        uses: actions/download-artifact@v7
-        with:
-          name: arquivos-snake
-          path: artefatos/snake
 
       - name: Baixar Sitemap
         uses: actions/download-artifact@v7
@@ -1410,13 +1297,8 @@ jobs:
 
           cp artefatos/readme/README.md README.md
 
-          cp artefatos/snake/snake.svg \
-            "Código-fonte do app = Mulher Amparada/snake.svg"
-
-          cp artefatos/snake/snake.gif \
-            "Código-fonte do app = Mulher Amparada/snake.gif"
-
           cp artefatos/sitemap/sitemap.xml sitemap.xml
+
           cp artefatos/footer/index.html index.html
 
           mkdir -p commits pesquisas
@@ -1441,9 +1323,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add README.md index.html sitemap.xml commits/ pesquisas/ \
-            "Código-fonte do app = Mulher Amparada/snake.svg" \
-            "Código-fonte do app = Mulher Amparada/snake.gif"
+          git add README.md index.html sitemap.xml commits/ pesquisas/
 
           if git diff --cached --quiet; then
             echo "Nenhuma alteração para salvar."
@@ -1458,4 +1338,4 @@ jobs:
           git push origin HEAD:main
 
           echo "Todos os arquivos gerados foram salvos na main."
-         
+

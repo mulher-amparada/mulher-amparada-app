@@ -1747,11 +1747,7 @@ controller.isAppearanceLightNavigationBars =
             0
         )
 
-        text.typeface =
-            Typeface.createFromAsset(
-                assets,
-                "font.ttf"
-            )
+        text.typeface = Typeface.DEFAULT
 
         text.layoutParams =
             LinearLayout.LayoutParams(
@@ -1955,43 +1951,7 @@ container.addView(delete)
     }
 
 
-    // =========================================================
-    // FONTE
-    // =========================================================
-
-    private fun aplicarFonte(
-        view: View
-    ) {
-
-        val fonte =
-            try {
-
-                Typeface.createFromAsset(
-                    assets,
-                    "font.ttf"
-                )
-
-            } catch (e: Exception) {
-
-                Typeface.DEFAULT
-            }
-
-        if (view is TextView) {
-            view.typeface = fonte
-        }
-
-        if (view is ViewGroup) {
-
-            for (
-                i in 0 until view.childCount
-            ) {
-
-                aplicarFonte(
-                    view.getChildAt(i)
-                )
-            }
-        }
-    }
+  
 
 
     // =========================================================

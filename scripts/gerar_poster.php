@@ -5,21 +5,8 @@ declare(strict_types=1);
 $raiz = dirname(__DIR__);
 $pastaMidia = $raiz . '/midia';
 $destino = $pastaMidia . '/mulher-amparada.png';
-$temporario = $pastaMidia . '/poster-gerado.png';
 
-$apiKey = getenv('OPENAI_API_KEY');
-
-if (!$apiKey) {
-    exit("Erro: defina a variável OPENAI_API_KEY.\n");
-}
-
-$readme = $raiz . '/README.md';
-
-if (!is_file($readme)) {
-    exit("Erro: README.md não encontrado.\n");
-}
-
-$possiveisLogos = [
+$logos = [
     $raiz . '/user1.png',
     $raiz . '/midia/user1.png',
     $raiz . '/images/user1.png',
@@ -28,7 +15,7 @@ $possiveisLogos = [
 
 $logo = null;
 
-foreach ($possiveisLogos as $caminho) {
+foreach ($logos as $caminho) {
     if (is_file($caminho)) {
         $logo = $caminho;
         break;
@@ -36,7 +23,7 @@ foreach ($possiveisLogos as $caminho) {
 }
 
 if ($logo === null) {
-    exit("Erro: user1.png não encontrado na raiz ou nas pastas de imagens.\n");
+    exit("Erro: user1.png não encontrado.\n");
 }
 
 if (!is_dir($pastaMidia) &&
@@ -45,170 +32,190 @@ if (!is_dir($pastaMidia) &&
     exit("Erro ao criar a pasta midia.\n");
 }
 
-if (!extension_loaded('curl')) {
-    exit("Erro: a extensão PHP cURL é necessária.\n");
+$magick = trim((string) shell_exec('command -v magick 2>/dev/null'));
+
+if ($magick === '') {
+    $magick = trim((string) shell_exec('command -v convert 2>/dev/null'));
 }
 
-$conteudo = file_get_contents($readme);
-
-if ($conteudo === false) {
-    exit("Erro ao ler README.md.\n");
+if ($magick === '') {
+    exit("Erro: ImageMagick não está instalado.\n");
 }
 
-$linhas = preg_split('/\R/u', $conteudo) ?: [];
-$resumo = [];
+$svg = <<<'SVG'
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1800" viewBox="0 0 1200 1800">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#08070b"/>
+    <stop offset=".55" stop-color="#1c0b18"/>
+    <stop offset="1" stop-color="#050507"/>
+  </linearGradient>
+  <linearGradient id="pink" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#ff8fb5"/>
+    <stop offset=".55" stop-color="#ff3f82"/>
+    <stop offset="1" stop-color="#a91855"/>
+  </linearGradient>
+  <linearGradient id="metal" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#4b4149"/>
+    <stop offset=".25" stop-color="#e1d3dc"/>
+    <stop offset=".5" stop-color="#62545e"/>
+    <stop offset=".8" stop-color="#d9cbd4"/>
+    <stop offset="1" stop-color="#51434d"/>
+  </linearGradient>
+  <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#25101f"/>
+    <stop offset="1" stop-color="#09090d"/>
+  </linearGradient>
+  <radialGradient id="glow">
+    <stop offset="0" stop-color="#ff3f82" stop-opacity=".5"/>
+    <stop offset="1" stop-color="#ff3f82" stop-opacity="0"/>
+  </radialGradient>
+  <filter id="blur">
+    <feGaussianBlur stdDeviation="25"/>
+  </filter>
+</defs>
 
-foreach ($linhas as $linha) {
-    $linha = trim($linha);
+<rect width="1200" height="1800" fill="url(#bg)"/>
+<circle cx="850" cy="850" r="520" fill="url(#glow)"/>
+<circle cx="150" cy="1430" r="350" fill="url(#glow)"/>
 
-    if (preg_match('/^#{1,3}\s+(.+)/u', $linha, $m)) {
-        $resumo[] = $m[1];
-    } elseif (preg_match('/^[-*]\s+(.+)/u', $linha, $m)) {
-        $resumo[] = $m[1];
-    }
+<g fill="none" stroke="#ff3f82">
+  <path d="M-100 430 C180 170 460 300 740 40" stroke-opacity=".28" stroke-width="3"/>
+  <path d="M-80 475 C200 215 490 345 760 80" stroke-opacity=".14" stroke-width="2"/>
+  <path d="M630 1740 C900 1490 1050 1320 1280 1280" stroke-opacity=".35" stroke-width="3"/>
+</g>
 
-    if (mb_strlen(implode("\n", $resumo)) > 3500) {
-        break;
-    }
+<g fill="#ff8fb5" opacity=".7">
+  <circle cx="1010" cy="230" r="4"/>
+  <circle cx="1060" cy="270" r="2"/>
+  <circle cx="1100" cy="220" r="3"/>
+  <circle cx="900" cy="310" r="2"/>
+  <circle cx="150" cy="1170" r="3"/>
+  <circle cx="200" cy="1210" r="2"/>
+  <circle cx="1000" cy="1460" r="3"/>
+</g>
+
+<text x="600" y="110" text-anchor="middle" fill="#ff8fb5" font-family="DejaVu Sans,sans-serif" font-size="22" letter-spacing="6">PROJETO ANDROID INDEPENDENTE</text>
+<text x="600" y="205" text-anchor="middle" fill="#ffffff" font-family="DejaVu Sans,sans-serif" font-size="70" font-weight="bold">MULHER</text>
+<text x="600" y="285" text-anchor="middle" fill="url(#pink)" font-family="DejaVu Sans,sans-serif" font-size="78" font-weight="bold">AMPARADA</text>
+<rect x="385" y="315" width="430" height="4" rx="2" fill="url(#pink)"/>
+<text x="600" y="365" text-anchor="middle" fill="#f8eaf0" font-family="DejaVu Sans,sans-serif" font-size="25" letter-spacing="2">PELA LIBERDADE FEMININA</text>
+<text x="600" y="420" text-anchor="middle" fill="#d8c5d0" font-family="DejaVu Sans,sans-serif" font-size="24">Informação, apoio e segurança.</text>
+
+<!-- Dispositivo frontal -->
+<ellipse cx="600" cy="1020" rx="330" ry="500" fill="#ff3f82" opacity=".25" filter="url(#blur)"/>
+
+<g transform="translate(355 470) rotate(-3 245 510)">
+  <rect x="0" y="0" width="490" height="1010" rx="70" fill="url(#metal)" stroke="#f8eaf0" stroke-width="2"/>
+  <rect x="9" y="9" width="472" height="992" rx="62" fill="#050507"/>
+  <rect x="19" y="19" width="452" height="972" rx="54" fill="url(#screen)"/>
+
+  <!-- Barra de status -->
+  <text x="48" y="57" fill="#ffffff" font-family="DejaVu Sans,sans-serif" font-size="18" font-weight="bold">9:41</text>
+  <g fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round">
+    <path d="M350 46 Q363 32 376 46"/>
+    <path d="M355 52 Q363 44 371 52"/>
+    <circle cx="363" cy="57" r="2" fill="#ffffff"/>
+    <rect x="390" y="39" width="29" height="17" rx="4"/>
+    <rect x="420" y="44" width="4" height="7" rx="1" fill="#ffffff"/>
+    <rect x="394" y="43" width="18" height="9" rx="2" fill="#ff8fb5" stroke="none"/>
+    <path d="M331 55 L337 42 L343 55 Z" fill="#ffffff" stroke="none"/>
+  </g>
+
+  <text x="45" y="112" fill="#ff8fb5" font-family="DejaVu Sans,sans-serif" font-size="15" letter-spacing="2">MULHER AMPARADA</text>
+  <text x="45" y="165" fill="#ffffff" font-family="DejaVu Sans,sans-serif" font-size="31" font-weight="bold">Apoio para</text>
+  <text x="45" y="205" fill="#ffffff" font-family="DejaVu Sans,sans-serif" font-size="31" font-weight="bold">seguir em frente.</text>
+  <text x="45" y="244" fill="#d8c5d0" font-family="DejaVu Sans,sans-serif" font-size="15">Proteção, informação e organização</text>
+
+  <rect x="35" y="276" width="420" height="105" rx="23" fill="#321525" stroke="#ff3f82" stroke-width="2"/>
+  <circle cx="82" cy="328" r="25" fill="url(#pink)"/>
+  <path d="M82 312 V344 M66 328 H98" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <text x="122" y="320" fill="#ffffff" font-family="DejaVu Sans,sans-serif" font-size="19" font-weight="bold">Ajuda e emergência</text>
+  <text x="122" y="350" fill="#d8c5d0" font-family="DejaVu Sans,sans-serif" font-size="14">Acesso rápido a contatos úteis</text>
+
+  <rect x="35" y="398" width="200" height="130" rx="21" fill="#17131b" stroke="#573044" stroke-width="2"/>
+  <circle cx="77" cy="438" r="19" fill="#ff3f82" fill-opacity=".22"/>
+  <path d="M68 439 L75 446 L88 430" fill="none" stroke="#ff8fb5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="57" y="483" fill="#ffffff" font-family="DejaVu Sans,sans-serif" font-size="17" font-weight="bold">Direitos</text>
+  <text x="57" y="507" fill="#cbb8c4" font-family="DejaVu Sans,sans-serif" font-size="13">Informação útil</text>
+
+  <rect x="255" y="398" width="200" height="130" rx="21" fill="#17131b" stroke="#573044" stroke-width="2"/>
+  <circle cx="297" cy="438" r="19" fill="#ff3f82" fill-opacity=".22"/>
+  <path d="M287 439 Q297 426 307 439 Q307 449 297 455 Q287 449 287 439Z" fill="none" stroke="#ff8fb5" stroke-width="3"/>
+  <text x="277" y="483" fill="#ffffff" font-family="DejaVu Sans,sans-serif" font-size="17" font-weight="bold">Organização</text>
+  <text x="277" y="507" fill="#cbb8c4" font-family="DejaVu Sans,sans-serif" font-size="13">Rotina e registros</text>
+
+  <rect x="35" y="545" width="420" height="104" rx="21" fill="#17131b" stroke="#573044" stroke-width="2"/>
+  <circle cx="81" cy="597" r="23" fill="#ff3f82" fill-opacity=".22"/>
+  <path d="M71 597 L79 605 L93 587" fill="none" stroke="#ff8fb5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="121" y="588" fill="#ffffff" font-family="DejaVu Sans,sans-serif" font-size="19" font-weight="bold">Arquivo seguro</text>
+  <text x="121" y="618" fill="#d8c5d0" font-family="DejaVu Sans,sans-serif" font-size="14">Privacidade no dispositivo</text>
+
+  <rect x="35" y="670" width="420" height="83" rx="21" fill="url(#pink)"/>
+  <text x="245" y="704" text-anchor="middle" fill="#ffffff" font-family="DejaVu Sans,sans-serif" font-size="18" font-weight="bold">Informação. Amparo. Autonomia.</text>
+  <text x="245" y="731" text-anchor="middle" fill="#ffffff" font-family="DejaVu Sans,sans-serif" font-size="13">Um projeto independente e gratuito</text>
+
+  <text x="245" y="800" text-anchor="middle" fill="#ff8fb5" font-family="DejaVu Sans,sans-serif" font-size="15">GRATUITO • SEM ANÚNCIOS</text>
+  <text x="245" y="830" text-anchor="middle" fill="#cbb8c4" font-family="DejaVu Sans,sans-serif" font-size="13">Desenvolvido com apoio do ChatGPT</text>
+
+  <!-- Barra de navegação por gestos -->
+  <rect x="170" y="951" width="150" height="6" rx="3" fill="#ffffff"/>
+</g>
+
+<rect x="100" y="1550" width="1000" height="135" rx="28" fill="#171019" stroke="#6d2c4a" stroke-width="2"/>
+<circle cx="165" cy="1618" r="24" fill="#ff3f82" fill-opacity=".22"/>
+<path d="M165 1604 V1632 M151 1618 H179" stroke="#ff8fb5" stroke-width="4" stroke-linecap="round"/>
+<text x="215" y="1608" fill="#ffffff" font-family="DejaVu Sans,sans-serif" font-size="24" font-weight="bold">Gratuito e sem anúncios</text>
+<text x="215" y="1647" fill="#cbb8c4" font-family="DejaVu Sans,sans-serif" font-size="18">Projeto independente com código-fonte disponível</text>
+
+<text x="600" y="1735" text-anchor="middle" fill="#ff8fb5" font-family="DejaVu Sans,sans-serif" font-size="17" letter-spacing="3">MULHER AMPARADA</text>
+<text x="600" y="1770" text-anchor="middle" fill="#8f7c89" font-family="DejaVu Sans,sans-serif" font-size="14">Pela liberdade feminina</text>
+</svg>
+SVG;
+
+$svgTemporario = tempnam(sys_get_temp_dir(), 'poster_');
+
+if ($svgTemporario === false ||
+    file_put_contents($svgTemporario, $svg) === false) {
+    exit("Erro ao preparar o pôster.\n");
 }
 
-$recursos = implode("\n", $resumo);
-
-$prompt = <<<PROMPT
-Create a breathtaking, premium, photorealistic advertising poster for
-the real Brazilian Android project "Mulher Amparada Pela Liberdade Feminina".
-
-FORMAT AND ART DIRECTION:
-Vertical portrait poster, 2:3 composition, extremely polished premium
-technology campaign, cinematic studio photography, deep black background,
-glowing vivid pink (#ff3f82), soft pink (#ff8fb5), subtle burgundy accents,
-beautiful controlled reflections, realistic metallic materials, volumetric
-lighting, elegant shadows, sophisticated typography and balanced editorial
-layout. It must look like an expensive professional campaign, not a template.
-
-PHONE:
-Show ONLY THE FRONT of a Samsung Galaxy S26 Ultra, with a large realistic
-display, refined titanium-colored frame, accurate modern squared-off Ultra
-silhouette and rounded screen corners. Three-quarter frontal angle is allowed,
-but the screen must face the viewer. Absolutely NO rear view, NO back panel,
-NO rear camera array visible, NO second phone showing its back.
-
-The screen displays an elegant fictional presentation of the Mulher Amparada
-Android app in a Samsung One UI-inspired interface: recognizable status bar at
-the top with time, signal, Wi-Fi and battery indicators, rounded One UI cards,
-dark mode, clean spacing, pink accents and a bottom gesture/navigation bar.
-Do not imitate a specific existing screenshot.
-
-LOGO:
-The provided input image is the authentic project logo reference.
-Respect its shape and colors. Do not invent a replacement logo.
-Leave a clean, dark, unobstructed area in the upper-left quadrant for the
-original logo to be composited afterward. Do not put important text there.
-
-PROJECT CONTENT:
-Use the following README-derived project headings and list items as factual
-inspiration for the visual features. Prioritize only relevant real features:
-{$recursos}
-
-BRANDING:
-Project name: "Mulher Amparada"
-Subtitle: "Pela Liberdade Feminina"
-Tagline: "Informação, apoio e segurança para todas as mulheres."
-Emphasize that the project is free and has no advertisements.
-Describe it as source-available, not necessarily OSI-approved open source.
-Mention that it was developed by a 15-year-old adolescent with ChatGPT support.
-
-VISUAL ELEMENTS:
-Elegant pink geometric curves, glowing circles, fine light trails, tasteful
-Material-inspired line icons, sophisticated feature cards, atmospheric
-pink-lit surfaces and beautiful depth. The phone is the hero object.
-Create a cohesive composition with plenty of negative space and readable
-Portuguese copy. Use only a few short text elements to avoid clutter.
-
-ACCURACY:
-Do not claim availability on Google Play or the Apple App Store.
-Do not invent partnerships, certifications, awards, user counts or features.
-Do not show the back of the phone.
-Do not replace or redraw the real logo.
-No watermarks, no mockup marketplace labels, no download-from-store badges.
-The result should look exceptionally beautiful, serious, credible and modern.
-PROMPT;
-
-$curl = curl_init('https://api.openai.com/v1/images/edits');
-
-curl_setopt_array($curl, [
-    CURLOPT_POST => true,
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_CONNECTTIMEOUT => 30,
-    CURLOPT_TIMEOUT => 600,
-    CURLOPT_HTTPHEADER => [
-        'Authorization: Bearer ' . $apiKey,
-    ],
-    CURLOPT_POSTFIELDS => [
-        'model' => 'gpt-image-2.5-sunburst',
-        'prompt' => $prompt,
-        'size' => '1024x1536',
-        'quality' => 'high',
-        'image[]' => new CURLFile(
-            $logo,
-            'image/png',
-            'user1.png'
-        ),
-    ],
-]);
-
-$resposta = curl_exec($curl);
-$erroCurl = curl_error($curl);
-$status = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-curl_close($curl);
-
-if ($resposta === false) {
-    exit("Erro na conexão com a API: {$erroCurl}\n");
-}
-
-$json = json_decode($resposta, true);
-
-if ($status < 200 || $status >= 300) {
-    $mensagem = $json['error']['message'] ?? $resposta;
-    exit("Erro da API ({$status}): {$mensagem}\n");
-}
-
-$base64 = $json['data'][0]['b64_json'] ?? null;
-
-if (!is_string($base64) || $base64 === '') {
-    exit("Erro: a API não retornou a imagem esperada.\n");
-}
-
-$dadosImagem = base64_decode($base64, true);
-
-if ($dadosImagem === false ||
-    file_put_contents($temporario, $dadosImagem) === false) {
-    exit("Erro ao salvar a imagem gerada.\n");
-}
-
-/*
- * Sobrepõe a logo original para que ela não dependa
- * da reprodução visual feita pelo modelo de IA.
- */
-
-$comando = 'magick ' .
-    escapeshellarg($temporario) .
-    ' \( ' . escapeshellarg($logo) .
-    ' -resize 190x190 \) ' .
-    '-gravity northwest -geometry +58+58 -composite ' .
+$comando = escapeshellarg($magick) . ' ' .
+    escapeshellarg($svgTemporario) . ' ' .
+    '-background "#08070b" -alpha remove -alpha off ' .
     escapeshellarg($destino);
 
-exec($comando . ' 2>&1', $saidaComando, $codigo);
+exec($comando . ' 2>&1', $saida, $codigo);
+@unlink($svgTemporario);
 
 if ($codigo !== 0 || !is_file($destino)) {
-    @unlink($temporario);
     exit(
-        "Erro ao aplicar a logo original. Verifique se ImageMagick está instalado.\n" .
-        implode("\n", $saidaComando) . "\n"
+        "Erro ao gerar o PNG. Verifique o suporte a SVG do ImageMagick.\n" .
+        implode("\n", $saida) . "\n"
     );
 }
 
-@unlink($temporario);
+$temporarioFinal = $destino . '.tmp.png';
+
+$comandoLogo = escapeshellarg($magick) . ' ' .
+    escapeshellarg($destino) . ' ' .
+    '\( ' . escapeshellarg($logo) . ' -resize 150x150 \) ' .
+    '-gravity northwest -geometry +45+25 -composite ' .
+    escapeshellarg($temporarioFinal);
+
+exec($comandoLogo . ' 2>&1', $saidaLogo, $codigoLogo);
+
+if ($codigoLogo !== 0 || !is_file($temporarioFinal)) {
+    @unlink($destino);
+    exit(
+        "Erro ao aplicar o logo original.\n" .
+        implode("\n", $saidaLogo) . "\n"
+    );
+}
+
+if (!rename($temporarioFinal, $destino)) {
+    @unlink($temporarioFinal);
+    exit("Erro ao finalizar o pôster.\n");
+}
 
 echo "Pôster gerado: midia/mulher-amparada.png\n";

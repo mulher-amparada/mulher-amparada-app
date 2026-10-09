@@ -1209,12 +1209,13 @@ jobs:
           if-no-files-found: error
 
 
+  
   # =========================================================
-  # PESQUISAR REFERÊNCIAS DO PROJETO
+  # DOCUMENTAR WORKFLOW COM PHP
   # =========================================================
 
   pesquisar-projeto:
-    name: Pesquisar referências do projeto na internet
+    name: Documentar workflow com PHP
     runs-on: ubuntu-24.04
 
     steps:
@@ -1224,20 +1225,22 @@ jobs:
           fetch-depth: 1
           ref: main
 
-      - name: Instalar PHP e extensões
+      - name: Instalar PHP
         run: |
           sudo apt-get update
-          sudo apt-get install -y php-cli php-curl php-xml
+          sudo apt-get install -y php-cli
 
-      - name: Pesquisar o projeto
+      - name: Gerar documentação do workflow
         run: php scripts/pesquisar_projeto.php
 
-      - name: Enviar relatórios de pesquisa
+      - name: Enviar documentação do workflow
         uses: actions/upload-artifact@v6
         with:
-          name: arquivos-pesquisas
-          path: pesquisas/
+          name: documentacao-workflow
+          path: pesquisas/workflow.md
           if-no-files-found: error
+          retention-days: 30
+
 
 
   # =========================================================

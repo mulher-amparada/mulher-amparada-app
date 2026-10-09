@@ -1286,37 +1286,37 @@ jobs:
           ref: main
 
       - name: Baixar README atualizado
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: arquivo-readme
           path: artefatos/readme
 
       - name: Baixar Snake
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: arquivos-snake
           path: artefatos/snake
 
       - name: Baixar Sitemap
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: arquivo-sitemap
           path: artefatos/sitemap
 
       - name: Baixar Footer
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: arquivo-footer
           path: artefatos/footer
 
       - name: Baixar relatório de commits
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: arquivos-relatorio-commits
           path: artefatos/commits
 
       - name: Baixar pesquisas
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: arquivos-pesquisas
           path: artefatos/pesquisas

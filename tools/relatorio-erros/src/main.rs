@@ -2,7 +2,7 @@
 use reqwest::blocking::Client;
 use std::env;
 use std::fs;
-use std::io::{Cursor, Read};
+use std::io::{Cursor, Error, ErrorKind, Read};
 use std::path::Path;
 use zip::ZipArchive;
 
@@ -18,7 +18,7 @@ fn traduzir(texto: &str) -> String {
         ("Could not resolve host", "Não foi possível resolver o endereço do servidor."),
         ("No files were found with the provided path", "Nenhum arquivo foi encontrado no caminho informado."),
         ("failed to parse manifest", "O Cargo não conseguiu interpretar o arquivo Cargo.toml."),
-        ("no targets specified in the manifest", "O Cargo não encontrou src/main.rs, src/lib.rs ou um destino configurado no Cargo.toml."),
+        ("no targets specified in the manifest", "O Cargo não encontrou um destino configurado no Cargo.toml."),
         ("error:", "Erro:"),
         ("warning:", "Aviso:"),
     ];
@@ -48,13 +48,38 @@ fn executar() -> Result<String, Box<dyn std::error::Error>> {
 
     let resposta = cliente
         .get(&url)
-        .bearer_auth(token)
+        .bearer_auth(&token)
         .header("Accept", "application/vnd.github+json")
         .header("X-GitHub-Api-Version", "2022-11-28")
-        .send()?
-        .error_for_status()?
-        .bytes()?;
+        .send()?;
 
+    let status = resposta.status();
+
+    if !status.is_success() {
+        let corpo = resposta
+            .text()
+            .unwrap_or_else(|erro| format!("Não foi possível ler a resposta: {}", erro));
+
+        let explicacao = match status.as_u16() {
+            401 => "O token está ausente, inválido ou expirado.",
+            403 => "A API recusou o acesso. Verifique as permissões e os limites da API.",
+            404 => "A execução não foi encontrada ou os logs ainda não estão disponíveis para consulta.",
+            _ => "A API do GitHub retornou uma resposta de erro.",
+        };
+
+        return Err(Box::new(Error::new(
+            ErrorKind::Other,
+            format!(
+                "HTTP {} — {}\nURL: {}\nResposta da API: {}",
+                status.as_u16(),
+                explicacao,
+                url,
+                corpo
+            ),
+        )));
+    }
+
+    let resposta = resposta.bytes()?;
     let cursor = Cursor::new(resposta);
     let mut arquivo_zip = ZipArchive::new(cursor)?;
     let mut erros = Vec::new();
@@ -74,18 +99,22 @@ fn executar() -> Result<String, Box<dyn std::error::Error>> {
         let linhas: Vec<&str> = conteudo.lines().collect();
 
         for (indice_linha, linha) in linhas.iter().enumerate() {
-            let minúsculo = linha.to_lowercase();
+            let minusculo = linha.to_lowercase();
 
-            let relevante = minúsculo.contains("error")
-                || minúsculo.contains("failed")
-                || minúsculo.contains("failure")
-                || minúsculo.contains("fatal")
-                || minúsculo.contains("exception")
-                || minúsculo.contains("exit code")
-                || minúsculo.contains("timed out")
-                || minúsculo.contains("not found")
-                || minúsculo.contains("denied")
-                || minúsculo.contains("panic");
+            let relevante = [
+                "error",
+                "failed",
+                "failure",
+                "fatal",
+                "exception",
+                "exit code",
+                "timed out",
+                "not found",
+                "denied",
+                "panic",
+            ]
+            .iter()
+            .any(|termo| minusculo.contains(termo));
 
             if relevante {
                 let trecho = linhas
@@ -110,14 +139,17 @@ fn executar() -> Result<String, Box<dyn std::error::Error>> {
     relatorio.push_str("# Relatório de erros — Mulher Amparada\n\n");
     relatorio.push_str(&format!("- Repositório: `{}`\n", repositorio));
     relatorio.push_str(&format!("- Execução: `{}`\n", run_id));
-    relatorio.push_str(&format!("- Data UTC: `{}`\n\n", chrono::Utc::now().to_rfc3339()));
+    relatorio.push_str(&format!(
+        "- Data UTC: `{}`\n\n",
+        chrono::Utc::now().to_rfc3339()
+    ));
 
     if erros.is_empty() {
         relatorio.push_str(
-            "Nenhuma linha com indicadores conhecidos de erro foi encontrada nos logs coletados.\n\n"
+            "Nenhuma linha com indicadores conhecidos de erro foi encontrada nos logs coletados.\n\n",
         );
         relatorio.push_str(
-            "Isso não garante que a execução esteja livre de falhas; consulte os logs completos no GitHub Actions.\n"
+            "Isso não garante que a execução esteja livre de falhas; consulte os logs completos no GitHub Actions.\n",
         );
     } else {
         relatorio.push_str(&format!(
@@ -137,9 +169,7 @@ fn executar() -> Result<String, Box<dyn std::error::Error>> {
 fn main() {
     let caminho = Path::new("relatorio-erros.md");
 
-    let resultado = executar();
-
-    let relatorio = match resultado {
+    let relatorio = match executar() {
         Ok(conteudo) => conteudo,
         Err(erro) => {
             format!(
@@ -159,11 +189,9 @@ fn main() {
 
     println!("{}", relatorio);
 
-    if env::var("GITHUB_STEP_SUMMARY").is_ok() {
-        if let Ok(caminho_resumo) = env::var("GITHUB_STEP_SUMMARY") {
-            if let Err(erro) = fs::write(caminho_resumo, &relatorio) {
-                eprintln!("Não foi possível atualizar o resumo: {}", erro);
-            }
+    if let Ok(caminho_resumo) = env::var("GITHUB_STEP_SUMMARY") {
+        if let Err(erro) = fs::write(caminho_resumo, &relatorio) {
+            eprintln!("Não foi possível atualizar o resumo: {}", erro);
         }
     }
 }

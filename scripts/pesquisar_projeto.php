@@ -1,161 +1,70 @@
+
 <?php
 
 declare(strict_types=1);
 
 $raiz = dirname(__DIR__);
-$arquivoYml = $raiz . '/.github/workflows/automations.yml';
-$pasta = $raiz . '/pesquisas';
-$arquivoMd = $pasta . '/workflow.md';
+$workflow = $raiz . '/.github/workflows/automations.yml';
+$pastaSaida = $raiz . '/pesquisas';
+$saida = $pastaSaida . '/workflow.md';
 
-if (!is_file($arquivoYml)) {
-    exit("Erro: arquivo YAML não encontrado: {$arquivoYml}\n");
+if (!is_file($workflow)) {
+    fwrite(STDERR, "Erro: automations.yml não encontrado.\n");
+    exit(1);
 }
 
-$conteudo = file_get_contents($arquivoYml);
-
-if ($conteudo === false || trim($conteudo) === '') {
-    exit("Erro: não foi possível ler o YAML ou ele está vazio.\n");
-}
-
-if (!preg_match('/^jobs:\s*$/m', $conteudo)) {
-    exit("Erro: seção jobs: não encontrada no YAML.\n");
-}
-
-if (!is_dir($pasta) && !mkdir($pasta, 0775, true) && !is_dir($pasta)) {
-    exit("Erro ao criar a pasta de saída: {$pasta}\n");
-}
-
-function escaparTabela(string $texto): string
-{
-    return str_replace(
-        ["|", "\r", "\n"],
-        ["\\|", '', ' '],
-        trim($texto)
-    );
-}
-
-function escaparMermaid(string $texto): string
-{
-    return str_replace(
-        ['"', "\r", "\n", '[', ']', '(', ')'],
-        ["'", '', ' ', '(', ')', '', ''],
-        trim($texto)
-    );
-}
-
-function indentacao(string $linha): int
-{
-    return strlen($linha) - strlen(ltrim($linha, ' '));
-}
-
-function extrairEscalar(string $valor): string
-{
-    $valor = trim($valor);
-
-    if (
-        strlen($valor) >= 2 &&
-        (
-            ($valor[0] === '"' && str_ends_with($valor, '"')) ||
-            ($valor[0] === "'" && str_ends_with($valor, "'"))
-        )
-    ) {
-        return substr($valor, 1, -1);
-    }
-
-    return $valor;
-}
-
-$linhas = preg_split('/\r\n|\r|\n/', $conteudo);
+$linhas = file($workflow, FILE_IGNORE_NEW_LINES);
 
 if ($linhas === false) {
-    exit("Erro ao dividir as linhas do YAML.\n");
+    fwrite(STDERR, "Erro: não foi possível ler automations.yml.\n");
+    exit(1);
 }
 
 $jobs = [];
+$emJobs = false;
 $jobAtual = null;
-$secaoAtual = '';
-$indentJobs = null;
-$indentSteps = null;
-$indentStep = null;
-$indentNeeds = null;
-$indentRun = null;
-$emBloco = false;
-$ultimoStep = null;
+$etapaAtual = null;
+$nivelRun = null;
+$nivelNeeds = null;
+$nivelSteps = null;
 
 foreach ($linhas as $linha) {
     if (trim($linha) === '' || preg_match('/^\s*#/', $linha)) {
         continue;
     }
 
-    $nivel = indentacao($linha);
-    $texto = trim($linha);
+    preg_match('/^ */', $linha, $espacos);
+    $nivel = strlen($espacos[0]);
+    $conteudo = trim($linha);
 
     if ($nivel === 0) {
-        $emBloco = false;
-        $jobAtual = null;
-
-        if (preg_match('/^([A-Za-z0-9_-]+):\s*$/', $texto, $m)) {
-            $secaoAtual = $m[1];
-        }
-
+        $emJobs = ($conteudo === 'jobs:');
         continue;
     }
 
-    if ($emBloco) {
-        if ($nivel > $indentRun) {
-            if ($ultimoStep !== null) {
-                $indice = count($jobs[$jobAtual]['steps']) - 1;
-
-                if ($indice >= 0) {
-                    $jobs[$jobAtual]['steps'][$indice]['run'] .=
-                        "\n" . trim($linha);
-                }
-            }
-
-            continue;
-        }
-
-        $emBloco = false;
-    }
-
-    if (
-        $nivel === 2 &&
-        preg_match('/^([A-Za-z0-9_-]+):\s*$/', $texto, $m)
-    ) {
-        $secaoAtual = $m[1];
-
-        if ($secaoAtual === 'jobs') {
-            $indentJobs = $nivel;
-        }
-
-        continue;
-    }
-
-    if ($secaoAtual !== 'jobs' || $indentJobs === null) {
+    if (!$emJobs) {
         continue;
     }
 
     if (
-        $nivel === 4 &&
-        preg_match('/^([A-Za-z0-9_-]+):\s*$/', $texto, $m)
+        $nivel === 2
+        && preg_match('/^([A-Za-z0-9_-]+):\s*(?:#.*)?$/', $conteudo, $m)
     ) {
-        $jobAtual = $m[1];
+        $id = $m[1];
 
-        $jobs[$jobAtual] = [
-            'id' => $jobAtual,
-            'nome' => $jobAtual,
-            'descricao' => '',
+        $jobs[$id] = [
+            'id' => $id,
+            'name' => $id,
+            'runs-on' => '',
             'needs' => [],
             'steps' => [],
-            'runs_on' => '',
-            'if' => '',
         ];
 
-        $indentSteps = null;
-        $indentStep = null;
-        $indentNeeds = null;
-        $indentRun = null;
-        $ultimoStep = null;
+        $jobAtual = $id;
+        $etapaAtual = null;
+        $nivelRun = null;
+        $nivelNeeds = null;
+        $nivelSteps = null;
 
         continue;
     }
@@ -164,235 +73,175 @@ foreach ($linhas as $linha) {
         continue;
     }
 
-    if (
-        $nivel === 6 &&
-        preg_match('/^name:\s*(.*)$/', $texto, $m)
-    ) {
-        $jobs[$jobAtual]['nome'] = extrairEscalar($m[1]);
-        continue;
+    if ($nivelRun !== null && $nivel <= $nivelRun) {
+        $nivelRun = null;
     }
 
-    if (
-        $nivel === 6 &&
-        preg_match('/^runs-on:\s*(.*)$/', $texto, $m)
-    ) {
-        $jobs[$jobAtual]['runs_on'] = extrairEscalar($m[1]);
-        continue;
+    if ($nivelNeeds !== null && $nivel <= $nivelNeeds) {
+        $nivelNeeds = null;
     }
 
-    if (
-        $nivel === 6 &&
-        preg_match('/^if:\s*(.*)$/', $texto, $m)
-    ) {
-        $jobs[$jobAtual]['if'] = extrairEscalar($m[1]);
-        continue;
+    if ($nivelSteps !== null && $nivel < $nivelSteps) {
+        $nivelSteps = null;
+        $etapaAtual = null;
     }
 
-    if (
-        $nivel === 6 &&
-        preg_match('/^needs:\s*(.*)$/', $texto, $m)
-    ) {
-        $indentNeeds = $nivel;
-        $valor = trim($m[1]);
+    if ($nivel === 4) {
+        if (preg_match('/^name:\s*(.+)$/', $conteudo, $m)) {
+            $jobs[$jobAtual]['name'] = trim($m[1], " \t\"'");
+        } elseif (preg_match('/^runs-on:\s*(.+)$/', $conteudo, $m)) {
+            $jobs[$jobAtual]['runs-on'] = trim($m[1], " \t\"'");
+        } elseif (preg_match('/^needs:\s*(.*)$/', $conteudo, $m)) {
+            $valor = trim($m[1]);
 
-        if ($valor !== '') {
-            $valor = trim($valor, '[]');
-
-            foreach (explode(',', $valor) as $dependencia) {
-                $dependencia = trim($dependencia, " \t\"'");
-
-                if ($dependencia !== '') {
-                    $jobs[$jobAtual]['needs'][] = $dependencia;
-                }
+            if ($valor === '') {
+                $nivelNeeds = 4;
+            } elseif (preg_match('/^\[(.*)\]$/', $valor, $lista)) {
+                $jobs[$jobAtual]['needs'] = array_values(
+                    array_filter(
+                        array_map(
+                            fn($item) => trim($item, " \t\"'"),
+                            explode(',', $lista[1])
+                        )
+                    )
+                );
+            } else {
+                $jobs[$jobAtual]['needs'] = [
+                    trim($valor, " \t\"'")
+                ];
             }
+        } elseif ($conteudo === 'steps:') {
+            $nivelSteps = 6;
+            $etapaAtual = null;
         }
 
         continue;
     }
 
-    if (
-        $indentNeeds !== null &&
-        $nivel > $indentNeeds &&
-        preg_match('/^-\s*(.+)$/', $texto, $m)
-    ) {
-        $dependencia = trim($m[1], " \t\"'");
-
-        if ($dependencia !== '') {
-            $jobs[$jobAtual]['needs'][] = $dependencia;
-        }
-
+    if ($nivelNeeds === 4 && $nivel === 6 && preg_match('/^-\s*(.+)$/', $conteudo, $m)) {
+        $jobs[$jobAtual]['needs'][] = trim($m[1], " \t\"'");
         continue;
     }
 
-    if (
-        $nivel === 6 &&
-        preg_match('/^steps:\s*$/', $texto)
-    ) {
-        $indentSteps = $nivel;
-        $indentStep = null;
-        continue;
-    }
-
-    if (
-        $indentSteps !== null &&
-        $nivel === 8 &&
-        preg_match('/^-\s*name:\s*(.*)$/', $texto, $m)
-    ) {
-        $jobs[$jobAtual]['steps'][] = [
-            'nome' => extrairEscalar($m[1]),
+    if ($nivelSteps !== null && $nivel === 6 && preg_match('/^-\s*(.*)$/', $conteudo, $m)) {
+        $etapaAtual = [
+            'name' => '',
             'uses' => '',
             'run' => '',
         ];
 
-        $indentStep = $nivel;
-        $ultimoStep = count($jobs[$jobAtual]['steps']) - 1;
-        $indentRun = null;
+        $jobs[$jobAtual]['steps'][] = &$etapaAtual;
 
-        continue;
-    }
+        $resto = trim($m[1]);
 
-    if (
-        $indentSteps !== null &&
-        $indentStep !== null &&
-        $nivel >= 10 &&
-        preg_match('/^uses:\s*(.*)$/', $texto, $m)
-    ) {
-        $indice = count($jobs[$jobAtual]['steps']) - 1;
-
-        if ($indice >= 0) {
-            $jobs[$jobAtual]['steps'][$indice]['uses'] =
-                extrairEscalar($m[1]);
+        if (preg_match('/^name:\s*(.+)$/', $resto, $campo)) {
+            $etapaAtual['name'] = trim($campo[1], " \t\"'");
+        } elseif (preg_match('/^uses:\s*(.+)$/', $resto, $campo)) {
+            $etapaAtual['uses'] = trim($campo[1], " \t\"'");
         }
 
         continue;
     }
 
-    if (
-        $indentSteps !== null &&
-        $indentStep !== null &&
-        $nivel >= 10 &&
-        preg_match('/^run:\s*(.*)$/', $texto, $m)
-    ) {
-        $indice = count($jobs[$jobAtual]['steps']) - 1;
-
-        if ($indice >= 0) {
-            $jobs[$jobAtual]['steps'][$indice]['run'] =
-                extrairEscalar($m[1]);
-        }
-
-        if (in_array(trim($m[1]), ['|', '>', '|-', '>-', '|+', '>+'], true)) {
-            $indentRun = $nivel;
-            $emBloco = true;
+    if ($nivelSteps !== null && $nivel >= 8 && $etapaAtual !== null) {
+        if (preg_match('/^name:\s*(.+)$/', $conteudo, $m)) {
+            $etapaAtual['name'] = trim($m[1], " \t\"'");
+        } elseif (preg_match('/^uses:\s*(.+)$/', $conteudo, $m)) {
+            $etapaAtual['uses'] = trim($m[1], " \t\"'");
+        } elseif (preg_match('/^run:\s*(.*)$/', $conteudo, $m)) {
+            $etapaAtual['run'] = trim($m[1]) === '' ? 'Comando em bloco' : trim($m[1]);
         }
 
         continue;
-    }
-
-    if (
-        $nivel === 6 &&
-        preg_match('/^description:\s*(.*)$/', $texto, $m)
-    ) {
-        $jobs[$jobAtual]['descricao'] = extrairEscalar($m[1]);
     }
 }
 
 if ($jobs === []) {
-    exit("Erro: nenhum job foi identificado no YAML.\n");
+    fwrite(
+        STDERR,
+        "Erro: nenhum job foi identificado. Verifique se existe jobs: na raiz e se os jobs têm dois espaços de indentação.\n"
+    );
+    exit(1);
 }
 
-foreach ($jobs as &$job) {
-    $job['needs'] = array_values(array_unique($job['needs']));
-}
-unset($job);
+$md = "# Documentação do workflow — Mulher Amparada\n\n";
+$md .= "Arquivo analisado: `.github/workflows/automations.yml`\n\n";
+$md .= "Total de jobs identificados: **" . count($jobs) . "**\n\n";
 
-$md = "# Workflow — Automações do Mulher Amparada\n\n";
-$md .= "- Arquivo analisado: `.github/workflows/automations.yml`\n";
-$md .= '- Data da geração: ' . date('d/m/Y H:i:s') . "\n";
-$md .= '- Total de jobs identificados: ' . count($jobs) . "\n\n";
-
-$md .= "## Tabela dos jobs\n\n";
-$md .= "| Job | Nome | Dependências | Ambiente | Etapas |\n";
-$md .= "|---|---|---|---|---:|\n";
-
-foreach ($jobs as $job) {
-    $dependencias = $job['needs'] === []
-        ? 'Nenhuma declarada'
-        : implode(', ', $job['needs']);
-
-    $md .= '| `' . escaparTabela($job['id']) . '`'
-        . ' | ' . escaparTabela($job['nome'])
-        . ' | ' . escaparTabela($dependencias)
-        . ' | ' . escaparTabela($job['runs_on'] ?: 'Não especificado')
-        . ' | ' . count($job['steps'])
-        . " |\n";
-}
-
-$md .= "\n## Diagrama de dependências\n\n";
+$md .= "## Fluxo de dependências\n\n";
 $md .= "```mermaid\nflowchart TD\n";
 
-foreach ($jobs as $job) {
-    $id = $job['id'];
-    $rotulo = escaparMermaid($job['nome']);
+foreach ($jobs as $id => $job) {
+    $node = 'job_' . preg_replace('/[^A-Za-z0-9_]/', '_', $id);
+    $rotulo = str_replace(
+        ['"', '[', ']', "\n", "\r"],
+        ["'", '(', ')', ' ', ' '],
+        $job['name']
+    );
 
-    $md .= '    ' . $id . '["' . $rotulo . "\"]\n";
+    $md .= "    {$node}[\"{$rotulo}\"]\n";
 }
 
-foreach ($jobs as $job) {
+foreach ($jobs as $id => $job) {
+    $destino = 'job_' . preg_replace('/[^A-Za-z0-9_]/', '_', $id);
+
     foreach ($job['needs'] as $dependencia) {
-        if (isset($jobs[$dependencia])) {
-            $md .= '    ' . $dependencia . ' --> ' . $job['id'] . "\n";
+        if (!isset($jobs[$dependencia])) {
+            continue;
         }
+
+        $origem = 'job_' . preg_replace(
+            '/[^A-Za-z0-9_]/',
+            '_',
+            $dependencia
+        );
+
+        $md .= "    {$origem} --> {$destino}\n";
     }
 }
 
 $md .= "```\n\n";
-$md .= "> As setas indicam que o job de origem é uma dependência declarada do job de destino.\n\n";
-
-$md .= "## Descrição dos jobs\n\n";
+$md .= "## Jobs identificados\n\n";
 
 foreach ($jobs as $job) {
-    $md .= '### ' . $job['nome'] . "\n\n";
-    $md .= '- Identificador: `' . $job['id'] . "`\n";
-    $md .= '- Ambiente: ' . ($job['runs_on'] ?: 'Não especificado') . "\n";
+    $md .= "### " . $job['name'] . "\n\n";
+    $md .= "- **ID:** `" . $job['id'] . "`\n";
+
+    if ($job['runs-on'] !== '') {
+        $md .= "- **Runner:** `" . $job['runs-on'] . "`\n";
+    }
 
     if ($job['needs'] !== []) {
-        $md .= '- Dependências: ' . implode(', ', array_map(
-            static fn(string $item): string => '`' . $item . '`',
-            $job['needs']
-        )) . "\n";
+        $md .= "- **Dependências:** "
+            . implode(', ', array_map(
+                fn($item) => "`{$item}`",
+                $job['needs']
+            ))
+            . "\n";
     } else {
-        $md .= "- Dependências: nenhuma declarada.\n";
+        $md .= "- **Dependências:** nenhuma identificada\n";
     }
 
-    if ($job['if'] !== '') {
-        $md .= '- Condição de execução: `' . $job['if'] . "`\n";
-    }
-
-    if ($job['descricao'] !== '') {
-        $md .= "\n" . $job['descricao'] . "\n";
-    }
+    $md .= "\n**Etapas:**\n\n";
 
     if ($job['steps'] === []) {
-        $md .= "\nNenhuma etapa identificada pelo analisador.\n\n";
+        $md .= "- Nenhuma etapa identificada pelo analisador.\n\n";
         continue;
     }
 
-    $md .= "\n**Etapas configuradas:**\n\n";
+    foreach ($job['steps'] as $indice => $etapa) {
+        $nome = $etapa['name'] !== ''
+            ? $etapa['name']
+            : ($etapa['uses'] !== '' ? $etapa['uses'] : 'Etapa ' . ($indice + 1));
 
-    foreach ($job['steps'] as $indice => $step) {
-        $nome = $step['nome'] !== ''
-            ? $step['nome']
-            : 'Etapa ' . ($indice + 1);
+        $md .= ($indice + 1) . ". **" . $nome . "**";
 
-        $md .= ($indice + 1) . '. **' . $nome . '**';
-
-        if ($step['uses'] !== '') {
-            $md .= ' — ação: `' . escaparTabela($step['uses']) . '`';
+        if ($etapa['uses'] !== '') {
+            $md .= " — usa `" . $etapa['uses'] . "`";
         }
 
-        if ($step['run'] !== '') {
-            $comando = str_replace('`', '\`', $step['run']);
-            $md .= ' — comando: `' . $comando . '`';
+        if ($etapa['run'] !== '') {
+            $md .= " — executa comandos de shell";
         }
 
         $md .= "\n";
@@ -401,18 +250,15 @@ foreach ($jobs as $job) {
     $md .= "\n";
 }
 
-if (!is_dir($pasta) && !mkdir($pasta, 0775, true) && !is_dir($pasta)) {
-    exit("Erro ao criar a pasta de saída: {$pasta}\n");
+if (!is_dir($pastaSaida) && !mkdir($pastaSaida, 0775, true) && !is_dir($pastaSaida)) {
+    fwrite(STDERR, "Erro: não foi possível criar a pasta pesquisas/.\n");
+    exit(1);
 }
 
-if (file_put_contents($arquivoMd, $md) === false) {
-    exit("Erro ao salvar o relatório Markdown em: {$arquivoMd}\n");
+if (file_put_contents($saida, $md) === false) {
+    fwrite(STDERR, "Erro: não foi possível gravar pesquisas/workflow.md.\n");
+    exit(1);
 }
 
-if (!is_file($arquivoMd) || filesize($arquivoMd) === 0) {
-    exit("Erro: o relatório Markdown não foi criado corretamente.\n");
-}
-
-echo "Workflow analisado com sucesso.\n";
-echo 'Jobs identificados: ' . count($jobs) . "\n";
-echo "Relatório criado em: {$arquivoMd}\n";
+echo "Documentação gerada: pesquisas/workflow.md\n";
+echo "Jobs identificados: " . count($jobs) . "\n";

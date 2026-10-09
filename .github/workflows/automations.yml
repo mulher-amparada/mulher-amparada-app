@@ -1340,7 +1340,7 @@ jobs:
         with:
           cmdline-tools-version: 12266719
 
-        - name: Aceitar licenças do Android SDK
+      - name: Aceitar licenças do Android SDK
         run: |
           sdkmanager --licenses < /dev/null
           

@@ -1,8 +1,13 @@
+
 [package]
 name = "relatorio-erros"
 version = "0.1.0"
 edition = "2024"
 
+[[bin]]
+name = "relatorio-erros"
+path = "src/main.rs"
+
 [dependencies]
 reqwest = { version = "0.12", features = ["blocking", "rustls-tls"] }
-zip = "2" 
+zip = "2"

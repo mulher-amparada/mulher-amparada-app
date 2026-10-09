@@ -535,7 +535,7 @@ Mais informações
 <p>Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!</p>
 <p>e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, onde nem tinha os recursos, ja programei ele num app de A-IDE, num A05, e eu ja perdi vários projetos porque o celular nao aguentava, matava o projeto porque matou o processo de compilação!, e uma vez eu fiz o projeto do mulher amparada e eu mesmo fiz o app do mulher amparada (primeiro eu refiz porque o family link apagou a pasta segura samsung, depois na 2 vez que perdi portei tudo do apk compilado para descompilado, e depois perdi denovo mas ai eu ja tinha o código-fonte!)</p>
 <p>E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)</p>
-<p><strong>Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4839</strong></p>
+<p><strong>Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4793</strong></p>
 <p>E o projeto é = Open-source! (aderido no dia 02/10/2026)</p>
 <h1>👾Nossas contribuições!:</h1>
 <p><em>Gerado pelo workflow do projeto junto com uma action do marketplace do github!</em></p>
@@ -585,307 +585,636 @@ Mais informações
 <p>Para acessar o conteúdo completo sobre finanças, consulte a <a href="ABOUT.md">Carta do desenvolvedor</a>.</p>
 <h1>🏗Estrutura do projeto:</h1>
 <h3>Sobre como eu automatizo o projeto:</h3>
-<pre><code>Automações do Mulher Amparada
+<pre><code>⚙️ Automações do Mulher Amparada
 
-O workflow Automações do Mulher Amparada automatiza a compilação, assinatura, publicação, atualização e verificação do projeto.
+O projeto Mulher Amparada Pela Liberdade Feminina utiliza um workflow automatizado do GitHub Actions para compilar o aplicativo Android, assinar o APK, publicar atualizações, construir e implantar o site, gerar arquivos auxiliares, documentar o próprio workflow, sincronizar publicações externas e produzir relatórios.
 
-Ele é executado automaticamente quando há um &quot;push&quot; na branch &quot;main&quot; e também pode ser executado manualmente através do &quot;workflow_dispatch&quot;.
+O workflow está definido em &quot;.github/workflows/automations.yml&quot; e utiliza jobs independentes, dependências entre etapas, artifacts, GitHub Releases, GitHub Pages e scripts em diferentes linguagens de programação.
 
-⚙️ O que ele faz
+🚀 Como o workflow é iniciado
 
-📱 Compilação do APK
+O workflow é executado automaticamente quando ocorre um &quot;push&quot; em qualquer branch do repositório. Também pode ser iniciado manualmente pela opção &quot;workflow_dispatch&quot; na interface do GitHub Actions.
 
-O workflow:
+A configuração de concorrência utiliza o nome do workflow e a referência da execução para separar os grupos. Execuções automáticas anteriores do mesmo grupo podem ser canceladas quando uma nova execução é iniciada, enquanto execuções manuais não ativam esse cancelamento pela configuração apresentada.
 
-- Baixa o código do repositório.
-- Verifica se o projeto Android está presente.
-- Configura Java 17 Temurin.
-- Verifica a disponibilidade do Android SDK 37.
-- Dá permissão de execução ao Gradle.
-- Compila o APK usando Gradle.
-- Localiza o APK gerado.
-- Assina o APK usando &quot;apksigner&quot;.
-- Verifica a assinatura do APK.
-- Remove o keystore temporário utilizado durante a assinatura.
+As permissões globais concedidas ao workflow são:
 
-🔐 Assinatura
+- &quot;contents: write&quot; — permite operações de escrita no conteúdo do repositório.
+- &quot;pages: write&quot; — permite operações necessárias à publicação no GitHub Pages.
+- &quot;id-token: write&quot; — permite solicitar tokens de identidade OIDC.
+- &quot;actions: read&quot; — permite leitura de informações de execuções do GitHub Actions.
 
-A assinatura utiliza os seguintes Secrets do GitHub:
+Jobs que declaram permissões próprias podem restringir as permissões disponíveis para suas operações.
+
+🏗️ 1. Compilar APK Kotlin
+
+O job &quot;build&quot;, denominado Compilar APK Kotlin, é executado em &quot;ubuntu-24.04&quot;. Ele prepara o ambiente de compilação, verifica a estrutura do projeto, compila o aplicativo, assina o APK e atualiza os arquivos de distribuição.
+
+Preparação do ambiente
+
+O job define as seguintes variáveis:
+
+- &quot;App1_DIR&quot;: diretório &quot;Código-fonte do app = Mulher Amparada&quot;.
+- &quot;RELEASE_TAG&quot;: identificador &quot;app&quot; da GitHub Release.
+- &quot;RELEASE_APK_NAME&quot;: nome &quot;app-debug-assinado.apk&quot; utilizado para distribuir o APK assinado.
+
+As etapas iniciais:
+
+1. Baixam o repositório com &quot;actions/checkout@v6&quot;, utilizando histórico superficial.
+2. Verificam se o diretório do aplicativo existe.
+3. Verificam se o arquivo &quot;gradlew&quot; está presente.
+4. Configuram o Java 17 por meio de &quot;actions/setup-java@v6&quot;, utilizando a distribuição Temurin e o cache do Gradle.
+5. Verificam a presença de uma plataforma Android SDK 37 em &quot;ANDROID_HOME/platforms&quot;.
+6. Concedem permissão de execução ao Gradle Wrapper.
+
+Se o diretório, o Gradle Wrapper ou a plataforma Android SDK 37 esperada não forem encontrados, a execução é interrompida com uma mensagem de erro.
+
+Compilação com Gradle
+
+A compilação utiliza:
+
+&quot;./gradlew assembleDebug --stacktrace&quot;
+
+A saída do Gradle é exibida no log e gravada em &quot;gradle-build.log&quot;. O script também verifica o código de saída do processo.
+
+Se a compilação falhar, o resumo da execução recebe uma seção em Markdown contendo:
+
+- Identificação da etapa com falha.
+- Descrição do problema.
+- As últimas 100 linhas do log do Gradle.
+- O código de saída retornado pelo processo.
+
+A falha é propagada para que o job seja marcado como malsucedido.
+
+Localização do APK
+
+Após a compilação, o workflow procura arquivos &quot;.apk&quot; em &quot;app/build/outputs/apk/debug&quot;. Se nenhum APK for encontrado, a etapa falha. Caso contrário, o caminho encontrado é armazenado em uma saída para utilização nas etapas seguintes.
+
+Assinatura e verificação do APK
+
+A assinatura utiliza o utilitário &quot;apksigner&quot;, encontrado no Android SDK Build Tools, e um keystore fornecido por meio dos seguintes GitHub Secrets:
 
 - &quot;KEYSTORE_BASE64&quot;
 - &quot;KEYSTORE_PASSWORD&quot;
 - &quot;KEY_ALIAS&quot;
 - &quot;KEY_PASSWORD&quot;
 
-O keystore é reconstruído temporariamente durante a execução e removido depois da assinatura.
+O processo:
 
-📦 Artifact
+1. Verifica se todos os secrets necessários estão configurados.
+2. Decodifica o keystore Base64 para o arquivo temporário &quot;mulher-amparada.jks&quot;.
+3. Confere se o APK de entrada existe.
+4. Localiza o executável &quot;apksigner&quot;.
+5. Assina o APK utilizando o keystore e as credenciais configuradas.
+6. Substitui o arquivo de entrada pela versão assinada.
+7. Executa &quot;apksigner verify --verbose&quot; para verificar a assinatura.
+8. Remove o arquivo temporário do keystore após a execução bem-sucedida das operações previstas.
 
-O APK assinado é enviado como um GitHub Actions Artifact utilizando:
+As credenciais não são escritas diretamente no código-fonte: são fornecidas por meio dos secrets do repositório.
 
-&quot;actions/upload-artifact@v6&quot;
+Artifact do APK
 
-📏 Tamanho e SHA-256
+O arquivo assinado é copiado para a raiz do workspace com o nome &quot;app-debug-assinado.apk&quot;.
 
-O workflow calcula automaticamente:
+Em seguida, &quot;actions/upload-artifact@v6&quot; publica o arquivo como artifact da execução, com o nome:
 
-- tamanho real do APK em bytes;
-- tamanho em MB;
-- hash SHA-256.
+&quot;APK-Kotlin-Assinado&quot;
 
-Essas informações são utilizadas posteriormente na Release e no &quot;download.html&quot;.
+A opção &quot;if-no-files-found: error&quot; faz a etapa falhar se o arquivo esperado não existir.
 
-📂 Atualização do APK no repositório
+Esse artifact é uma cópia associada à execução do workflow, separada do asset publicado na GitHub Release.
 
-O APK assinado é copiado automaticamente para:
+Cálculo do tamanho real
+
+O tamanho do APK é calculado a partir do arquivo assinado, usando &quot;stat -c%s&quot; para obter o tamanho em bytes.
+
+O valor em megabytes é calculado dividindo os bytes por (1024^2), com duas casas decimais. O resultado é disponibilizado como saída para outras etapas.
+
+São registrados:
+
+- Caminho do arquivo.
+- Tamanho em bytes.
+- Tamanho formatado em MB.
+
+Cálculo do SHA-256
+
+O hash é calculado com &quot;sha256sum&quot; sobre o APK assinado.
+
+O SHA-256 é armazenado como saída do job e posteriormente utilizado nas notas da Release, na página de download e no resumo da compilação. Isso permite comparar o hash publicado com o hash calculado sobre um arquivo obtido pelo usuário.
+
+Atualização do APK na branch &quot;main&quot;
+
+O workflow configura a identidade de commit do &quot;github-actions[bot]&quot;, copia o APK para:
 
 &quot;Código-fonte do app = Mulher Amparada/app-release.apk&quot;
 
-Se houver alteração, o workflow cria um commit e envia o arquivo para a branch &quot;main&quot;.
+Depois, busca a referência remota &quot;main&quot;, sincroniza o checkout com &quot;origin/main&quot;, copia novamente o APK gerado, adiciona o arquivo ao Git e verifica se existem alterações.
 
-🚀 GitHub Release
+Se o conteúdo for diferente, cria um commit com a mensagem:
 
-O workflow utiliza a Release:
+&quot;Atualizar APK assinado [skip ci]&quot;
 
-&quot;app&quot;
+e tenta enviá-lo para &quot;main&quot;.
 
-Ele:
+Se o arquivo já estiver atualizado, nenhum commit adicional é criado por essa etapa.
 
-1. Verifica se a Release existe.
-2. Procura o APK antigo.
-3. Remove o APK antigo.
-4. Envia o novo APK.
-5. Atualiza as notas da Release com o SHA-256 da compilação.
+Atualização da GitHub Release
 
-🌐 Atualização do &quot;download.html&quot;
+A Release identificada pela tag &quot;app&quot; precisa existir previamente. O workflow verifica sua existência usando a GitHub CLI.
 
-O workflow atualiza automaticamente no &quot;download.html&quot;:
+Depois:
 
-- link de download do APK;
-- tamanho real do APK;
-- SHA-256.
+1. Consulta os assets associados à Release.
+2. Procura um asset com o nome &quot;app-debug-assinado.apk&quot;.
+3. Exclui o asset antigo, se encontrado.
+4. Envia o APK recém-assinado para a Release.
+5. Recupera as notas atuais da Release.
+6. Atualiza a linha &quot;SHA-256 gerado nesta compilação:&quot; ou acrescenta essa informação caso ela ainda não exista.
+7. Salva as notas atualizadas na Release.
 
-Depois, se houver alteração, o arquivo é enviado para a branch &quot;main&quot;.
+A substituição do asset é realizada por exclusão seguida de envio do novo arquivo. Portanto, não constitui uma troca atômica.
 
----
+Atualização de &quot;download.html&quot;
 
-🌐 GitHub Pages
+O script Python integrado ao workflow atualiza automaticamente informações da página &quot;download.html&quot;.
 
-O site é construído e publicado automaticamente.
+O endereço de download é montado a partir do repositório, da tag &quot;app&quot; e do nome do asset.
 
-Build do site
+O script procura e substitui, por meio de expressões regulares:
 
-Utiliza:
+- O atributo &quot;href&quot; do primeiro link com a classe &quot;download&quot;.
+- O tamanho do APK no elemento com a classe &quot;summary-value&quot;.
+- O tamanho aproximado no elemento com a classe &quot;detail-value&quot;.
+- O valor exibido no campo identificado como &quot;Código SHA-256&quot;.
 
-- &quot;actions/checkout@v6&quot;
-- &quot;actions/configure-pages@v6&quot;
-- &quot;actions/jekyll-build-pages@v1&quot;
-- &quot;actions/upload-pages-artifact@v5&quot;
+Se algum dos campos esperados não for encontrado, o script encerra com uma mensagem de erro, evitando declarar a atualização como concluída.
 
-O conteúdo do repositório é transformado em um artifact do GitHub Pages.
+O tamanho e o hash exibidos correspondem aos valores calculados sobre o APK assinado naquela execução.
 
-Deploy
+Salvamento de &quot;download.html&quot;
 
-A publicação é feita através de:
+Após a atualização da página, o workflow configura a identidade do bot, adiciona &quot;download.html&quot; ao Git e verifica se existem alterações.
 
-&quot;actions/deploy-pages@v5&quot;
+Se houver mudanças, cria um commit com a mensagem:
 
-Assim, o site é atualizado automaticamente após uma nova compilação.
+&quot;Atualizar link, tamanho e SHA-256 do APK [skip ci]&quot;
 
----
+e tenta enviá-lo para &quot;main&quot;.
 
-🔢 Atualização do contador de commits
+Resumo da compilação
 
-O workflow calcula a quantidade total de commits existentes no histórico do projeto.
+A última etapa do job &quot;build&quot; adiciona informações ao resumo da execução do GitHub Actions, incluindo:
 
-Ele:
+- Identificação da Release.
+- Branch de referência.
+- Nome do APK enviado.
+- Tamanho real em MB.
+- Tamanho em bytes.
+- SHA-256 completo do arquivo.
 
-1. Baixa todo o histórico Git.
-2. Conta os commits.
-3. Localiza o número no &quot;README.md&quot;.
-4. Atualiza o valor.
-5. Cria um commit somente quando existe alteração.
+Esse resumo facilita a consulta dos dados da compilação sem precisar localizar cada valor nos logs individuais.
 
----
+🌐 2. Construir o site com Jekyll
 
-📝 Sincronização com DEV.to
+O job &quot;build-site&quot; depende do sucesso de &quot;build&quot;.
 
-O README é utilizado como fonte de conteúdo para o artigo do projeto no DEV.to.
+Ele utiliza o ambiente &quot;ubuntu-24.04&quot; e executa as seguintes operações:
 
-O workflow:
+1. Baixa o repositório.
+2. Configura o GitHub Pages por meio de &quot;actions/configure-pages@v6&quot;.
+3. Constrói o site com &quot;actions/jekyll-build-pages@v1&quot;.
+4. Define &quot;./&quot; como diretório de origem e &quot;./_site&quot; como destino da construção.
+5. Publica o diretório gerado como artifact do GitHub Pages por meio de &quot;actions/upload-pages-artifact@v5&quot;.
 
-- baixa o README atualizado;
-- autentica utilizando &quot;DEVTO_API_KEY&quot;;
-- envia o conteúdo através da API do DEV.to;
-- atualiza automaticamente o artigo.
+O resultado é um pacote estático preparado para implantação.
 
----
+🚀 3. Implantar o site no GitHub Pages
 
-📰 Sincronização com Paper.wf
+O job &quot;deploy&quot; depende de &quot;build-site&quot;.
 
-O README também é sincronizado com a publicação do projeto no Paper.wf.
+Ele utiliza &quot;actions/deploy-pages@v5&quot; para implantar o artifact do site no ambiente &quot;github-pages&quot;.
 
-O workflow:
+A etapa de implantação recebe o identificador &quot;deployment&quot;, e o endereço retornado é utilizado como URL do ambiente do job.
 
-1. Autentica na API do Paper.wf.
-2. Localiza a publicação existente.
-3. Obtém o ID da publicação.
-4. Atualiza o título e o conteúdo.
-5. Utiliza o README como conteúdo principal.
+A implantação disponibiliza a versão construída do site no GitHub Pages.
 
-São utilizados os Secrets:
+🔢 4. Atualizar o total histórico de commits
 
-- &quot;PAPERWF_USERNAME&quot;
-- &quot;PAPERWF_PASSWORD&quot;
+O job &quot;atualizar-commits&quot; depende da conclusão de &quot;deploy&quot;.
 
----
+Ele baixa o repositório com &quot;fetch-depth: 0&quot;, permitindo consultar o histórico Git disponível em todas as referências buscadas.
 
-🗺️ Sitemap
+O comando &quot;git rev-list --all --count&quot; calcula a quantidade de commits alcançáveis pelas referências locais existentes naquele checkout.
 
-O workflow gera automaticamente o &quot;sitemap.xml&quot; utilizando:
+Um script Python recebe esse total e utiliza uma expressão regular para localizar no &quot;README.md&quot; a linha que começa com:
 
-&quot;cicirello/generate-sitemap@v1&quot;
+&quot;Commits totais de toda a história do projeto&quot;
 
-O sitemap utiliza como endereço-base:
+A linha é atualizada com o valor calculado, mantendo o formato textual esperado pelo README.
+
+O arquivo atualizado é enviado como artifact chamado &quot;arquivo-readme&quot;. Ele será utilizado posteriormente pelo job de centralização dos arquivos.
+
+O valor calculado depende do histórico e das referências disponíveis no checkout; não deve ser interpretado como uma contagem universal de todos os commits que possam existir em referências remotas não buscadas.
+
+🐍 5. Sincronizar o README com o DEV.to
+
+O job &quot;sincronizar-devto&quot; depende de &quot;salvar-na-main&quot;.
+
+Ele baixa a versão do repositório correspondente à branch &quot;main&quot; e lê o conteúdo completo do &quot;README.md&quot;.
+
+Um script Python utiliza a biblioteca padrão para:
+
+1. Ler o README em UTF-8.
+2. Criar um payload JSON com o conteúdo em &quot;article.body_markdown&quot;.
+3. Enviar uma requisição HTTP &quot;PUT&quot; para a API do artigo &quot;4771914&quot; do DEV.to.
+4. Autenticar utilizando o secret &quot;DEVTO_API_KEY&quot;.
+5. Definir o cabeçalho &quot;User-Agent&quot; como &quot;Mulher-Amparada-GitHub-Action&quot;.
+6. Exibir a resposta da API quando a requisição for aceita.
+7. Exibir o código HTTP e a resposta retornada quando ocorrer um erro HTTP.
+
+O objetivo é manter o corpo do artigo do DEV.to sincronizado com o README do repositório.
+
+O job não cria um artigo novo: a requisição está direcionada ao identificador de artigo configurado no script.
+
+📝 6. Sincronizar o README com o Paper.wf
+
+O job &quot;sincronizar-paperwf&quot; também depende de &quot;salvar-na-main&quot;.
+
+Ele baixa o README atualizado e utiliza um script Python para autenticar na API do Paper.wf e atualizar uma publicação existente.
+
+A configuração utiliza:
+
+- Base da API: &quot;https://paper.wf&quot;
+- Coleção: &quot;mulheramparada&quot;
+- Slug: &quot;projeto-mulher-amparada&quot;
+- Título enviado: &quot;Projeto Mulher Amparada&quot;
+- Secrets: &quot;PAPERWF_USERNAME&quot; e &quot;PAPERWF_PASSWORD&quot;
+
+O processo:
+
+1. Lê o README em UTF-8.
+2. Envia as credenciais para a rota de autenticação.
+3. Procura um token de acesso em diferentes formatos possíveis da resposta.
+4. Consulta a publicação configurada na coleção.
+5. Identifica o ID da publicação, tratando respostas que contenham objetos ou listas.
+6. Monta o payload com o título e o conteúdo integral do README.
+7. Envia uma requisição &quot;POST&quot; para atualizar a publicação identificada.
+8. Exibe uma mensagem de sucesso se as operações terminarem sem exceção.
+
+O script também apresenta respostas HTTP de erro e interrompe a execução quando não consegue autenticar, identificar o token ou localizar o ID da publicação.
+
+🗺️ 7. Gerar o sitemap
+
+O job &quot;sitemap&quot; depende de &quot;snake&quot;.
+
+Ele baixa o repositório na branch &quot;main&quot; e utiliza a action &quot;cicirello/generate-sitemap@v1&quot; para gerar um sitemap XML.
+
+A URL-base configurada é:
 
 &quot;https://mulher-amparada.github.io/mulher-amparada-app/&quot;
 
-Depois de gerado, ele é salvo no próprio repositório.
+O arquivo gerado, &quot;sitemap.xml&quot;, é publicado como artifact com o nome &quot;arquivo-sitemap&quot;.
 
----
+Posteriormente, o job &quot;salvar-na-main&quot; baixa esse artifact e copia o arquivo para a raiz do repositório.
 
-🔎 IndexNow
+O sitemap serve como índice de URLs para mecanismos de busca, mas sua geração e publicação não garantem que as páginas serão indexadas.
 
-O sitemap é enviado ao IndexNow utilizando:
+🔎 8. IndexNow
 
-&quot;bojieyang/indexnow-action@v3&quot;
+O job &quot;indexnow&quot; depende de &quot;deploy&quot;.
 
-A autenticação utiliza o Secret:
+Ele utiliza &quot;bojieyang/indexnow-action@v3&quot; para enviar o endereço do sitemap configurado:
 
-&quot;INDEXNOW_KEY&quot;
+&quot;https://mulher-amparada.github.io/mulher-amparada-app/sitemap.xml&quot;
 
-O objetivo é comunicar aos mecanismos de busca compatíveis que existem URLs atualizadas para serem rastreadas.
+A chave é fornecida pelo secret &quot;INDEXNOW_KEY&quot;.
 
----
+A finalidade é comunicar URLs aos mecanismos de busca que participam do protocolo IndexNow. O envio não garante rastreamento, indexação ou posicionamento nos resultados de pesquisa.
 
-🔗 Verificação de links quebrados
+🔗 9. Verificar links quebrados
 
-O workflow utiliza:
+O job &quot;broken-links&quot; depende de &quot;deploy&quot;.
 
-&quot;ScholliYT/Broken-Links-Crawler-Action@v3&quot;
+Ele utiliza &quot;ScholliYT/Broken-Links-Crawler-Action@v3&quot; para rastrear links do site publicado.
 
-para rastrear o site e verificar se existem links que não funcionam.
+A configuração inclui:
 
-Ele analisa o endereço:
+- URL inicial: &quot;https://mulher-amparada.github.io/mulher-amparada-app/&quot;
+- Prefixo de URLs a incluir: o mesmo endereço-base.
+- &quot;resolve_before_filtering: &quot;true&quot;&quot; para resolver URLs antes da filtragem.
+- &quot;verbose: &quot;true&quot;&quot; para ampliar a saída de diagnóstico.
+- Tempo máximo de tentativa: 30 segundos.
+- Até cinco tentativas.
+- Profundidade máxima configurada em &quot;-1&quot;.
+
+O objetivo é encontrar links que não possam ser acessados corretamente durante o rastreamento. A abrangência real depende do comportamento da action, dos links descobertos e das respostas dos servidores.
+
+💡 10. Auditar o site com Lighthouse
+
+O job &quot;lighthouse&quot; depende de &quot;deploy&quot;.
+
+Ele utiliza &quot;treosh/lighthouse-ci-action@v12&quot; para executar uma auditoria na página publicada.
+
+A URL configurada é:
 
 &quot;https://mulher-amparada.github.io/mulher-amparada-app/&quot;
 
-e seus links internos.
+A opção &quot;uploadArtifacts: true&quot; solicita o envio dos artifacts produzidos pela action.
 
----
+O Lighthouse pode avaliar aspectos como desempenho, acessibilidade, boas práticas e SEO, conforme as categorias executadas pela configuração utilizada.
 
-🚦 Lighthouse
+A auditoria fornece informações para identificar oportunidades de melhoria, mas não significa que o site recebeu automaticamente uma pontuação específica ou que todos os problemas foram corrigidos.
 
-O workflow utiliza:
+🐍 11. Gerar a Snake de contribuições
 
-&quot;treosh/lighthouse-ci-action@v12&quot;
+O job &quot;snake&quot; depende de &quot;atualizar-commits&quot;.
 
-para executar uma auditoria Lighthouse na página inicial:
+Ele baixa o repositório com o histórico completo disponível e utiliza &quot;Platane/snk@v3&quot; para gerar representações animadas da grade de contribuições do GitHub.
 
-&quot;https://mulher-amparada.github.io/mulher-amparada-app/&quot;
+O nome do usuário é obtido de &quot;github.repository_owner&quot;.
 
-Os resultados são enviados como artifacts através de:
+Os arquivos gerados são:
 
-&quot;uploadArtifacts: true&quot;
+- &quot;dist/github-contribution-grid-snake.svg&quot;
+- &quot;dist/github-contribution-grid-snake.gif&quot;
 
-O Lighthouse permite analisar aspectos como:
+Uma etapa posterior copia os arquivos para &quot;arquivos-gerados/snake/&quot;, renomeando-os para:
 
-- desempenho;
-- acessibilidade;
-- boas práticas;
-- SEO;
-- experiência geral da página.
+- &quot;snake.svg&quot;
+- &quot;snake.gif&quot;
 
-----
+Esses arquivos são publicados como artifact com o nome &quot;arquivos-snake&quot;.
 
-✏️ Atualização automática do README no site:
+O job &quot;salvar-na-main&quot; baixa os arquivos e os copia para o diretório &quot;Código-fonte do app = Mulher Amparada&quot;, onde são adicionados ao commit de centralização.
 
-O job executa o script Python &quot;scripts/atualizar_footer.py&quot;, responsável por ler o conteúdo do arquivo &quot;README.md&quot;, convertê-lo de Markdown para HTML usando a biblioteca Python &quot;Markdown&quot; e inserir o resultado no rodapé do site.
+📦 12. Publicar o kit de divulgação
 
-O script atualiza o arquivo &quot;index.html&quot;, substituindo o conteúdo existente entre os marcadores &quot;README-FOOTER-START&quot; e &quot;README-FOOTER-END&quot;.
+O job &quot;publicar-divulgacao&quot; depende de &quot;lighthouse&quot;.
 
-Dessa forma, o rodapé do site acompanha automaticamente as alterações realizadas no README, sem a necessidade de copiar e atualizar manualmente o conteúdo. A cada execução, o script gera novamente o HTML a partir do README atual e atualiza o arquivo do site.
+Ele baixa o repositório na branch &quot;main&quot;, configura o Node.js 24 por meio de &quot;actions/setup-node@v6&quot; e executa &quot;npm pack&quot; dentro do diretório &quot;divulgacao&quot;.
 
-A automação depende do script Python, da biblioteca &quot;Markdown&quot; e dos marcadores presentes no &quot;index.html&quot;. A exibição final do conteúdo depende também da estrutura HTML e dos estilos CSS aplicados ao site.
+O comando gera um pacote compactado no formato &quot;.tgz&quot;, conforme a configuração do pacote npm.
 
----
+Em seguida, &quot;softprops/action-gh-release@v3&quot; publica o pacote na GitHub Release configurada com:
 
-🔁 Atualização do relatório de commits:
+- Tag: &quot;divulgacao&quot;
+- Nome: &quot;Kit de Divulgação&quot;
+- Arquivos: &quot;divulgacao/*.tgz&quot;
 
-O job &quot;atualizar-relatorio-commits&quot; depende da conclusão bem-sucedida do job &quot;publicar-divulgacao&quot;. Ele utiliza Ruby para gerar arquivos de tabela em markdown, contendo estatísticas do histórico Git, como o total de commits, a quantidade de commits por autor e o histórico detalhado das alterações registradas. O relatório é atualizado na raiz do repositório e enviado ao GitHub somente quando há mudanças no arquivo. E a cada 150 commits salvos no arquivo md na pasta commits na raiz do repositório, ele quebra para outro arquivo md!
----
+A opção &quot;fail_on_unmatched_files: true&quot; faz a publicação falhar se nenhum arquivo corresponder ao padrão esperado.
 
-🔐 Principais Secrets utilizados
+O token &quot;GITHUB_TOKEN&quot; é disponibilizado para a etapa de publicação. A existência de uma Release com a tag correspondente e as permissões necessárias deve ser compatível com a configuração do repositório e da action.
+
+🦶 13. Atualizar o footer com o README
+
+O job &quot;atualizar-footer&quot; depende de &quot;atualizar-commits&quot;.
+
+Ele baixa o repositório na branch &quot;main&quot;, instala o Python 3.x por meio de &quot;actions/setup-python@v6&quot; e instala a dependência Python &quot;Markdown&quot;.
+
+Depois, executa:
+
+&quot;python3 scripts/atualizar_footer.py&quot;
+
+O script é responsável por gerar ou atualizar o conteúdo do &quot;index.html&quot; a partir do README, conforme a lógica implementada em &quot;scripts/atualizar_footer.py&quot;.
+
+O arquivo &quot;index.html&quot; resultante é enviado como artifact com o nome &quot;arquivo-footer&quot;.
+
+Posteriormente, o job &quot;salvar-na-main&quot; baixa esse artifact e copia o &quot;index.html&quot; gerado para a raiz do repositório.
+
+📚 14. Gerar o relatório histórico de commits
+
+O job &quot;atualizar-relatorio-commits&quot; depende de &quot;atualizar-commits&quot;.
+
+Ele baixa o repositório com o histórico Git completo disponível, configura o Ruby 3.4 utilizando &quot;ruby/setup-ruby@v1&quot; e executa:
+
+&quot;ruby scripts/commits.rb&quot;
+
+O script é responsável por processar o histórico de commits e gerar os arquivos de relatório dentro do diretório &quot;commits/&quot;, de acordo com sua implementação.
+
+Os arquivos produzidos são enviados como artifact chamado &quot;arquivos-relatorio-commits&quot;.
+
+A configuração exige que o diretório contenha arquivos correspondentes ao caminho informado; caso contrário, o upload falha.
+
+O job &quot;salvar-na-main&quot; baixa o artifact e incorpora os arquivos gerados ao diretório &quot;commits/&quot; do repositório.
+
+📖 15. Documentar o workflow YAML
+
+O job &quot;pesquisar-projeto&quot;, identificado como Documentar workflow YAML, gera documentação técnica a partir do script PHP &quot;scripts/pesquisar_projeto.php&quot;.
+
+Ele baixa o repositório na branch &quot;main&quot;, instala o PHP CLI e executa as seguintes verificações e operações:
+
+1. &quot;php -l scripts/pesquisar_projeto.php&quot; verifica a sintaxe do script PHP.
+2. &quot;php scripts/pesquisar_projeto.php&quot; executa o gerador de documentação.
+3. &quot;test -s .github/workflows/workflow.md&quot; verifica se o arquivo de saída existe e não está vazio.
+4. &quot;ls -lh .github/workflows/workflow.md&quot; exibe informações do arquivo gerado.
+
+O arquivo resultante é enviado como artifact com o nome &quot;arquivos-pesquisas&quot;, com retenção configurada para 30 dias.
+
+Observação: o destino verificado pelo job é &quot;.github/workflows/workflow.md&quot;, enquanto o job de centralização copia os arquivos baixados para o diretório &quot;pesquisas/&quot;. Portanto, o arquivo será armazenado no destino pretendido somente se o conteúdo do artifact e a lógica de cópia forem compatíveis com essa estrutura.
+
+🗃️ 16. Centralizar e salvar os arquivos na branch &quot;main&quot;
+
+O job &quot;salvar-na-main&quot; reúne os resultados de vários jobs anteriores e tenta registrá-los no repositório.
+
+Ele depende de:
+
+- &quot;atualizar-commits&quot;
+- &quot;snake&quot;
+- &quot;sitemap&quot;
+- &quot;atualizar-footer&quot;
+- &quot;atualizar-relatorio-commits&quot;
+- &quot;pesquisar-projeto&quot;
+
+Download dos artifacts
+
+O job baixa a branch &quot;main&quot; com histórico completo e recupera os artifacts:
+
+- &quot;arquivo-readme&quot;
+- &quot;arquivos-snake&quot;
+- &quot;arquivo-sitemap&quot;
+- &quot;arquivo-footer&quot;
+- &quot;arquivos-relatorio-commits&quot;
+- &quot;arquivos-pesquisas&quot;
+
+Os arquivos são armazenados inicialmente em subdiretórios de &quot;artefatos/&quot;.
+
+Organização dos arquivos
+
+Uma etapa de cópia reúne os resultados nos destinos do repositório:
+
+Artifact| Destino
+&quot;arquivo-readme&quot;| &quot;README.md&quot;
+&quot;arquivos-snake&quot;| &quot;Código-fonte do app = Mulher Amparada/snake.svg&quot; e &quot;snake.gif&quot;
+&quot;arquivo-sitemap&quot;| &quot;sitemap.xml&quot;
+&quot;arquivo-footer&quot;| &quot;index.html&quot;
+&quot;arquivos-relatorio-commits&quot;| Diretório &quot;commits/&quot;
+&quot;arquivos-pesquisas&quot;| Diretório &quot;pesquisas/&quot;
+
+Os diretórios &quot;commits/&quot; e &quot;pesquisas/&quot; são criados quando necessário, e os arquivos dos artifacts são copiados preservando sua estrutura interna.
+
+Commit e envio
+
+O job configura a identidade de commit do bot, adiciona os arquivos gerados ao Git e verifica se existem alterações.
+
+Se não houver diferenças preparadas para commit, a etapa encerra sem criar um commit.
+
+Se houver mudanças, cria um commit com a mensagem:
+
+&quot;Atualizar arquivos gerados [skip ci]&quot;
+
+Depois, busca a versão remota de &quot;main&quot;, tenta reaplicar o commit sobre a versão atualizada por meio de &quot;git rebase origin/main&quot; e envia o resultado para &quot;main&quot;.
+
+A intenção é centralizar os resultados de geração em um commit, reduzindo a necessidade de vários commits separados para cada artifact.
+
+O sucesso depende de todos os artifacts exigidos estarem disponíveis, de os caminhos coincidirem com a estrutura esperada e de o rebase e o push serem concluídos sem conflitos.
+
+🛠️ 17. Relatório de erros em português
+
+O job &quot;relatorio-erros&quot; utiliza &quot;ubuntu-24.04&quot; e declara:
+
+&quot;if: ${{ always() }}&quot;
+
+Essa condição solicita que o job seja avaliado mesmo quando as dependências anteriores falharem ou forem ignoradas, respeitando as demais condições de execução do GitHub Actions.
+
+O job declara dependências em &quot;sincronizar-paperwf&quot; e &quot;sincronizar-devto&quot;, para acompanhar o resultado das duas sincronizações externas.
+
+Preparação do relatório
+
+O job baixa o código e cria inicialmente &quot;relatorio-erros.md&quot;, contendo um título e uma mensagem informando que a coleta ainda não foi concluída.
+
+Em seguida, instala a toolchain estável do Rust por meio de &quot;dtolnay/rust-toolchain@stable&quot;.
+
+Execução do coletor Rust
+
+O script é executado com:
+
+&quot;cargo run --release --manifest-path &quot;$GITHUB_WORKSPACE/tools/relatorio-erros/Cargo.toml&quot;&quot;
+
+A execução utiliza as variáveis:
+
+- &quot;GITHUB_TOKEN&quot;, fornecida pelo token da execução.
+- &quot;GITHUB_REPOSITORY&quot;, com o identificador do repositório.
+- &quot;GITHUB_RUN_ID&quot;, com o identificador da execução atual.
+
+A saída é encaminhada ao terminal e gravada em &quot;erro-rust.log&quot;.
+
+O shell captura o código de saída do processo Cargo por meio de &quot;PIPESTATUS[0]&quot;.
+
+Se &quot;relatorio-erros.md&quot; estiver ausente ou vazio depois da execução, o job gera um relatório alternativo contendo o código de saída e as últimas 100 linhas do log técnico.
+
+A etapa está marcada com &quot;continue-on-error: true&quot;, permitindo que o job prossiga para a publicação do artifact mesmo quando a coleta falhar. O código de saída é preservado na etapa, e o resultado final deve ser interpretado considerando o tratamento de falhas da etapa e o comportamento do job.
+
+Publicação do relatório
+
+A etapa de upload utiliza &quot;if: ${{ always() }}&quot; e publica:
+
+- &quot;relatorio-erros.md&quot;
+- &quot;erro-rust.log&quot;
+
+O artifact recebe o nome &quot;relatorio-erros-portugues&quot; e tem retenção configurada para 30 dias.
+
+Limite da implementação apresentada: o job executa o programa Rust e fornece um token de acesso, mas a coleta efetiva dos logs de outros jobs depende do código implementado em &quot;tools/relatorio-erros/&quot;. O YAML, isoladamente, não comprova que todos os logs do workflow são baixados ou analisados.
+
+🔐 18. Secrets utilizados
+
+O workflow utiliza credenciais armazenadas no sistema de secrets do GitHub Actions.
 
 Secret| Finalidade
-&quot;KEYSTORE_BASE64&quot;| Keystore Android codificado em Base64
+&quot;KEYSTORE_BASE64&quot;| Keystore codificado em Base64 para assinar o APK
 &quot;KEYSTORE_PASSWORD&quot;| Senha do keystore
 &quot;KEY_ALIAS&quot;| Alias da chave de assinatura
 &quot;KEY_PASSWORD&quot;| Senha da chave
-&quot;DEVTO_API_KEY&quot;| Autenticação da API do DEV.to
-&quot;PAPERWF_USERNAME&quot;| Usuário do Paper.wf
-&quot;PAPERWF_PASSWORD&quot;| Senha do Paper.wf
-&quot;INDEXNOW_KEY&quot;| Chave utilizada pelo IndexNow
+&quot;DEVTO_API_KEY&quot;| Autenticação na API do DEV.to
+&quot;PAPERWF_USERNAME&quot;| Identificação da conta no Paper.wf
+&quot;PAPERWF_PASSWORD&quot;| Senha da conta no Paper.wf
+&quot;INDEXNOW_KEY&quot;| Chave utilizada na integração com IndexNow
 
----
+O workflow também utiliza o &quot;GITHUB_TOKEN&quot; ou &quot;${{ github.token }}&quot; para operações autorizadas no GitHub.
 
-🧩 Tecnologias e serviços utilizados
+Os secrets devem ser configurados nas definições do repositório antes da execução dos jobs que dependem deles. O acesso efetivo depende das permissões concedidas ao token e às actions utilizadas.
 
-O workflow integra:
+🧰 19. Tecnologias e ferramentas utilizadas
 
-- GitHub Actions
-- GitHub Pages
-- GitHub Releases
-- Gradle
-- Android SDK 37
-- Java 17 Temurin
-- apksigner
-- Jekyll
-- DEV.to API
-- Paper.wf API
-- IndexNow
-- Lighthouse
-- SEO Audit
-- Broken Links Crawler
-- Git
+O workflow combina diferentes tecnologias para automatizar tarefas específicas:
 
-🔄 Fluxo geral
+Tecnologia ou ferramenta| Utilização
+GitHub Actions| Orquestração dos jobs e das etapas
+Bash| Verificações, cópias, operações Git e comandos do sistema
+Java 17 / Temurin| Ambiente de execução do Gradle
+Kotlin e Gradle| Compilação do aplicativo Android
+Android SDK 37| Verificação da plataforma Android exigida
+&quot;apksigner&quot;| Assinatura e verificação do APK
+Git e GitHub CLI| Versionamento, Releases e operações no repositório
+Python 3| Atualização do README, da página de download e do footer
+Biblioteca Python &quot;Markdown&quot;| Dependência utilizada na geração do footer
+Ruby 3.4| Geração do relatório de commits
+PHP CLI| Geração da documentação do workflow
+Rust| Execução do coletor do relatório de erros
+Node.js 24 / npm| Empacotamento do kit de divulgação
+Jekyll| Construção do site estático
+GitHub Pages| Publicação do site
+DEV.to API| Sincronização do artigo
+Paper.wf API| Sincronização da publicação
+IndexNow| Notificação do sitemap
+Broken Links Crawler| Rastreamento de links do site
+Lighthouse CI| Auditoria automatizada do site
+Platane/snk| Geração da Snake de contribuições
+GitHub Artifacts| Transporte dos arquivos gerados entre jobs
 
-Push na main
-      │
-      ▼
-Compilar APK
-      │
-      ├──► Assinar APK
-      │
-      ├──► Calcular SHA-256
-      │
-      ├──► Publicar Release
-      │
-      └──► Atualizar download.html
-      │
-      ▼
-Construir GitHub Pages
-      │
-      ▼
-Publicar GitHub Pages
-      │
-      ├──► IndexNow
-      ├──► Auditoria SEO
-      ├──► Links quebrados
-      └──► Lighthouse
+🔄 20. Fluxo geral de dependências
 
-Dessa forma, uma alteração enviada para a &quot;main&quot; pode disparar automaticamente praticamente todo o ciclo de atualização do Mulher Amparada, desde a compilação do aplicativo até a publicação do site e verificações de SEO.
+O workflow é dividido em etapas encadeadas. O fluxo principal do aplicativo e do site é:
+
+1. &quot;build&quot; compila e assina o APK.
+2. &quot;build-site&quot; constrói o site após a conclusão de &quot;build&quot;.
+3. &quot;deploy&quot; publica o site.
+4. &quot;atualizar-commits&quot; atualiza o total de commits após a implantação.
+5. &quot;snake&quot;, &quot;atualizar-footer&quot; e &quot;atualizar-relatorio-commits&quot; geram arquivos auxiliares a partir de &quot;atualizar-commits&quot;.
+6. &quot;sitemap&quot; depende de &quot;snake&quot;.
+7. &quot;pesquisar-projeto&quot; gera a documentação do workflow.
+8. &quot;salvar-na-main&quot; reúne os artifacts exigidos e tenta salvá-los na branch &quot;main&quot;.
+9. &quot;sincronizar-devto&quot; e &quot;sincronizar-paperwf&quot; dependem de &quot;salvar-na-main&quot;.
+10. &quot;relatorio-erros&quot; acompanha os resultados das duas sincronizações externas, com a condição &quot;always()&quot;.
+
+Em paralelo à cadeia de geração e sincronização, &quot;indexnow&quot;, &quot;broken-links&quot; e &quot;lighthouse&quot; dependem de &quot;deploy&quot;. O job &quot;publicar-divulgacao&quot; depende de &quot;lighthouse&quot;.
+
+Essas relações representam as dependências declaradas em &quot;needs&quot;. Elas não significam que todos os jobs sejam executados em uma única sequência linear, pois jobs sem dependências diretas entre si podem ser executados em paralelo.
+
+📦 21. Artifacts produzidos
+
+O workflow utiliza artifacts para transportar arquivos entre jobs sem precisar gerar todos os resultados novamente em cada etapa.
+
+Nome do artifact| Conteúdo
+&quot;APK-Kotlin-Assinado&quot;| APK assinado para download na execução
+&quot;arquivo-readme&quot;| README atualizado com o total de commits
+&quot;arquivos-snake&quot;| Snake em SVG e GIF
+&quot;arquivo-sitemap&quot;| Sitemap XML
+&quot;arquivo-footer&quot;| &quot;index.html&quot; gerado
+&quot;arquivos-relatorio-commits&quot;| Arquivos do relatório histórico de commits
+&quot;arquivos-pesquisas&quot;| Documentação do workflow
+&quot;relatorio-erros-portugues&quot;| Relatório em Markdown e log do coletor Rust
+
+O artifact &quot;APK-Kotlin-Assinado&quot; é independente do asset da GitHub Release. Da mesma forma, os artifacts intermediários de geração não são publicados automaticamente no site: sua persistência no repositório depende das etapas que os baixam e copiam.
+
+⚠️ 22. Observações operacionais
+
+- A Release com tag &quot;app&quot; precisa existir antes da execução do job de compilação.
+- As credenciais de assinatura precisam corresponder ao keystore esperado.
+- A assinatura só é considerada concluída após a execução da verificação do &quot;apksigner&quot;.
+- Os scripts de atualização dependem dos elementos e caminhos esperados nos arquivos do projeto.
+- A sincronização com serviços externos depende das APIs, das credenciais e das respostas recebidas.
+- A geração do sitemap não garante indexação nos mecanismos de busca.
+- As auditorias de links e Lighthouse dependem da disponibilidade do site implantado.
+- A centralização dos arquivos depende dos artifacts exigidos e de seus caminhos internos.
+- Os commits feitos pelos workflows podem atualizar o histórico utilizado pelo contador de commits.
+- O uso de &quot;[skip ci]&quot; nas mensagens de commit solicita que os mecanismos compatíveis ignorem a execução automática associada àquele commit; isso não substitui as regras de proteção do repositório.
+- O job de relatório de erros precisa ter sua implementação Rust configurada para consultar os logs que pretende analisar.
+
+🎯 Objetivo geral
+
+O workflow Automações do Mulher Amparada concentra em uma única configuração a compilação e assinatura do aplicativo Android, a atualização dos arquivos de distribuição, a publicação do site, a manutenção de informações do README, a geração de documentação e relatórios, a criação de recursos visuais de contribuições e a sincronização de conteúdo com plataformas externas.
+
+A automação reduz tarefas manuais repetitivas e organiza os resultados por meio de dependências entre jobs, scripts especializados, artifacts e commits automatizados. Cada etapa mantém uma responsabilidade específica dentro do processo de manutenção e distribuição do projeto.
 </code></pre>
 <p>E temos esse dependabot (.github/dependabot yml):</p>
 <pre><code>version: 2

@@ -25,7 +25,7 @@
 | `atualizar-relatorio-commits` | Atualizar relatório de commits | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Ruby (`ruby/setup-ruby@v1`); 3. Gerar relatório de commits — executa comandos; 4. arquivos-relatorio-commits (`actions/upload-artifact@v6`) |
 | `pesquisar-projeto` | Documentar workflow YAML | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar PHP — executa comandos; 3. Gerar documentação do workflow — executa comandos; 4. arquivos-pesquisas (`actions/upload-artifact@v6`) |
 | `salvar-na-main` | Salvar todos os arquivos na main | ubuntu-24.04 | `atualizar-commits`, `snake`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. arquivo-readme (`actions/download-artifact@v6`); 3. arquivos-snake (`actions/download-artifact@v6`); 4. arquivo-sitemap (`actions/download-artifact@v6`); 5. arquivo-footer (`actions/download-artifact@v6`); 6. arquivos-relatorio-commits (`actions/download-artifact@v6`); 7. arquivos-pesquisas (`actions/download-artifact@v6`); 8. Reunir arquivos gerados — executa comandos; 9. Salvar todas as alterações em um commit — executa comandos |
-| `relatorio-erros` | Relatório de erros em português | ubuntu-24.04 | Nenhuma | 1. Baixar código (`actions/checkout@v6`); 2. Criar relatório inicial — executa comandos; 3. Instalar Rust (`dtolnay/rust-toolchain@stable`); 4. Coletar logs e gerar relatório — executa comandos; 5. relatorio-erros-portugues (`actions/upload-artifact@v6`) |
+| `relatorio-erros` | Relatório de erros em português | ubuntu-24.04 | `sincronizar-paperwf`, `sincronizar-devto` | 1. Baixar código (`actions/checkout@v6`); 2. Criar relatório inicial — executa comandos; 3. Instalar Rust (`dtolnay/rust-toolchain@stable`); 4. Coletar logs e gerar relatório — executa comandos; 5. relatorio-erros-portugues (`actions/upload-artifact@v6`) |
 
 ## Grafo completo de dependências
 
@@ -69,6 +69,8 @@ flowchart TD
     job_atualizar_footer --> job_salvar_na_main
     job_atualizar_relatorio_commits --> job_salvar_na_main
     job_pesquisar_projeto --> job_salvar_na_main
+    job_sincronizar_paperwf --> job_relatorio_erros
+    job_sincronizar_devto --> job_relatorio_erros
 ```
 
 ## Detalhamento dos jobs
@@ -289,7 +291,7 @@ flowchart TD
 
 - **ID:** `relatorio-erros`
 - **Runner:** `ubuntu-24.04`
-- **Dependências:** Nenhuma
+- **Dependências:** `sincronizar-paperwf`, `sincronizar-devto`
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
@@ -1661,11 +1663,34 @@ jobs:
 
           git push origin HEAD:main
           
+          - name: Salvar documentação no repositório
+            run: |
+          set -e
+
+          mkdir -p pesquisas
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add pesquisas/workflow.md
+
+          if git diff --cached --quiet; then
+            echo "A documentação já está atualizada."
+            exit 0
+          fi
+
+          git commit -m "docs: atualizar documentação do workflow"
+          git push origin HEAD:main
+          
 
   relatorio-erros:
     name: Relatório de erros em português
     runs-on: ubuntu-24.04
     if: ${{ always() }}
+
+    needs:
+      - sincronizar-paperwf
+      - sincronizar-devto
 
     permissions:
       actions: read

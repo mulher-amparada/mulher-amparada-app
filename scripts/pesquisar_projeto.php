@@ -3,27 +3,34 @@
 declare(strict_types=1);
 
 $raiz = dirname(__DIR__);
-$workflow = $raiz . '/.github/workflows/automations.yml';
-$saida = $raiz . '/.github/workflows/workflow.md';
+$workflow = $raiz . '/workflows/automations.yml';
+$saida = $raiz . '/workflows/workflow.md';
 
 if (!is_file($workflow)) {
     fwrite(STDERR, "Erro: automations.yml não encontrado.\n");
     exit(1);
 }
 
-$linhas = file($workflow, FILE_IGNORE_NEW_LINES);
+$yaml = file_get_contents($workflow);
 
-if ($linhas === false) {
+if ($yaml === false) {
     fwrite(STDERR, "Erro: não foi possível ler automations.yml.\n");
     exit(1);
 }
 
+$linhas = preg_split('/\r\n|\n|\r/', $yaml);
+
+if ($linhas === false) {
+    fwrite(STDERR, "Erro: não foi possível separar as linhas do YAML.\n");
+    exit(1);
+}
+
 $jobs = [];
-$emJobs = false;
 $jobAtual = null;
-$etapaIndice = null;
+$etapaAtual = null;
+$emJobs = false;
+$emSteps = false;
 $nivelNeeds = false;
-$nivelSteps = false;
 
 foreach ($linhas as $linha) {
     if (trim($linha) === '' || preg_match('/^\s*#/', $linha)) {
@@ -36,6 +43,10 @@ foreach ($linhas as $linha) {
 
     if ($nivel === 0) {
         $emJobs = ($conteudo === 'jobs:');
+        $jobAtual = null;
+        $etapaAtual = null;
+        $emSteps = false;
+        $nivelNeeds = false;
         continue;
     }
 
@@ -52,16 +63,15 @@ foreach ($linhas as $linha) {
         $jobs[$id] = [
             'id' => $id,
             'name' => $id,
-            'runs-on' => '',
+            'runner' => '',
             'needs' => [],
             'steps' => [],
         ];
 
         $jobAtual = $id;
-        $etapaIndice = null;
+        $etapaAtual = null;
+        $emSteps = false;
         $nivelNeeds = false;
-        $nivelSteps = false;
-
         continue;
     }
 
@@ -73,38 +83,36 @@ foreach ($linhas as $linha) {
         $nivelNeeds = false;
     }
 
-    if ($nivelSteps && $nivel < 6) {
-        $nivelSteps = false;
-        $etapaIndice = null;
+    if ($emSteps && $nivel < 6) {
+        $emSteps = false;
+        $etapaAtual = null;
     }
 
     if ($nivel === 4) {
         if (preg_match('/^name:\s*(.+)$/', $conteudo, $m)) {
             $jobs[$jobAtual]['name'] = trim($m[1], " \t\"'");
         } elseif (preg_match('/^runs-on:\s*(.+)$/', $conteudo, $m)) {
-            $jobs[$jobAtual]['runs-on'] = trim($m[1], " \t\"'");
+            $jobs[$jobAtual]['runner'] = trim($m[1], " \t\"'");
         } elseif (preg_match('/^needs:\s*(.*)$/', $conteudo, $m)) {
             $valor = trim($m[1]);
 
             if ($valor === '') {
                 $nivelNeeds = true;
             } elseif (preg_match('/^\[(.*)\]$/', $valor, $lista)) {
-                $jobs[$jobAtual]['needs'] = array_values(
-                    array_filter(
-                        array_map(
-                            fn($item) => trim($item, " \t\"'"),
-                            explode(',', $lista[1])
-                        )
+                $jobs[$jobAtual]['needs'] = array_values(array_filter(
+                    array_map(
+                        fn($item) => trim($item, " \t\"'"),
+                        explode(',', $lista[1])
                     )
-                );
+                ));
             } else {
                 $jobs[$jobAtual]['needs'] = [
                     trim($valor, " \t\"'")
                 ];
             }
         } elseif ($conteudo === 'steps:') {
-            $nivelSteps = true;
-            $etapaIndice = null;
+            $emSteps = true;
+            $etapaAtual = null;
         }
 
         continue;
@@ -120,7 +128,7 @@ foreach ($linhas as $linha) {
     }
 
     if (
-        $nivelSteps
+        $emSteps
         && $nivel === 6
         && preg_match('/^-\s*(.*)$/', $conteudo, $m)
     ) {
@@ -130,37 +138,33 @@ foreach ($linhas as $linha) {
             'run' => '',
         ];
 
-        $etapaIndice = count($jobs[$jobAtual]['steps']) - 1;
+        $etapaAtual = count($jobs[$jobAtual]['steps']) - 1;
         $resto = trim($m[1]);
 
         if (preg_match('/^name:\s*(.+)$/', $resto, $campo)) {
-            $jobs[$jobAtual]['steps'][$etapaIndice]['name'] =
+            $jobs[$jobAtual]['steps'][$etapaAtual]['name'] =
                 trim($campo[1], " \t\"'");
         } elseif (preg_match('/^uses:\s*(.+)$/', $resto, $campo)) {
-            $jobs[$jobAtual]['steps'][$etapaIndice]['uses'] =
+            $jobs[$jobAtual]['steps'][$etapaAtual]['uses'] =
                 trim($campo[1], " \t\"'");
         } elseif (preg_match('/^run:\s*(.*)$/', $resto, $campo)) {
-            $jobs[$jobAtual]['steps'][$etapaIndice]['run'] =
-                trim($campo[1]) === '' ? 'Comando em bloco' : trim($campo[1]);
+            $jobs[$jobAtual]['steps'][$etapaAtual]['run'] =
+                trim($campo[1]) === '' ? 'Bloco de comandos' : trim($campo[1]);
         }
 
         continue;
     }
 
-    if (
-        $nivelSteps
-        && $nivel >= 8
-        && $etapaIndice !== null
-    ) {
+    if ($emSteps && $nivel >= 8 && $etapaAtual !== null) {
         if (preg_match('/^name:\s*(.+)$/', $conteudo, $m)) {
-            $jobs[$jobAtual]['steps'][$etapaIndice]['name'] =
+            $jobs[$jobAtual]['steps'][$etapaAtual]['name'] =
                 trim($m[1], " \t\"'");
         } elseif (preg_match('/^uses:\s*(.+)$/', $conteudo, $m)) {
-            $jobs[$jobAtual]['steps'][$etapaIndice]['uses'] =
+            $jobs[$jobAtual]['steps'][$etapaAtual]['uses'] =
                 trim($m[1], " \t\"'");
         } elseif (preg_match('/^run:\s*(.*)$/', $conteudo, $m)) {
-            $jobs[$jobAtual]['steps'][$etapaIndice]['run'] =
-                trim($m[1]) === '' ? 'Comando em bloco' : trim($m[1]);
+            $jobs[$jobAtual]['steps'][$etapaAtual]['run'] =
+                trim($m[1]) === '' ? 'Bloco de comandos' : trim($m[1]);
         }
     }
 }
@@ -170,36 +174,28 @@ if ($jobs === []) {
     exit(1);
 }
 
-$escapar = static function (string $texto): string {
-    return str_replace(
-        ["|", "\r", "\n"],
-        ["\\|", ' ', ' '],
-        $texto
-    );
-};
+$escapar = static fn(string $texto): string =>
+    str_replace(["|", "\r", "\n"], ["\\|", ' ', ' '], $texto);
 
-$identificador = static function (string $id): string {
-    return 'job_' . preg_replace('/[^A-Za-z0-9_]/', '_', $id);
-};
+$idMermaid = static fn(string $id): string =>
+    'job_' . preg_replace('/[^A-Za-z0-9_]/', '_', $id);
 
-$rotuloMermaid = static function (string $texto): string {
-    return str_replace(
-        ['"', '[', ']', "\r", "\n"],
-        ["'", '(', ')', ' ', ' '],
-        $texto
-    );
-};
+$rotuloMermaid = static fn(string $texto): string =>
+    str_replace(['"', '[', ']', "\r", "\n"], ["'", '(', ')', ' ', ' '], $texto);
+
+$totalEtapas = array_sum(
+    array_map(fn($job) => count($job['steps']), $jobs)
+);
 
 $md = "# Documentação do workflow — Mulher Amparada\n\n";
-$md .= "- **Arquivo de origem:** `.github/workflows/automations.yml`\n";
+$md .= "- **Arquivo de origem:** `workflows/automations.yml`\n";
+$md .= "- **Arquivo gerado:** `workflows/workflow.md`\n";
 $md .= "- **Jobs identificados:** " . count($jobs) . "\n";
-$md .= "- **Etapas identificadas:** " . array_sum(
-    array_map(fn($job) => count($job['steps']), $jobs)
-) . "\n\n";
+$md .= "- **Etapas identificadas:** {$totalEtapas}\n\n";
 
-$md .= "## Tabela completa de jobs\n\n";
-$md .= "| ID do job | Nome | Runner | Dependências | Quantidade de etapas | Etapas |\n";
-$md .= "|---|---|---|---|---:|---|\n";
+$md .= "## Tabela completa de jobs e etapas\n\n";
+$md .= "| ID do job | Nome | Runner | Dependências | Etapas |\n";
+$md .= "|---|---|---|---|---|\n";
 
 foreach ($jobs as $job) {
     $dependencias = $job['needs'] === []
@@ -211,14 +207,12 @@ foreach ($jobs as $job) {
 
     $etapas = [];
 
-    foreach ($job['steps'] as $indice => $etapa) {
+    foreach ($job['steps'] as $i => $etapa) {
         $nome = $etapa['name'] !== ''
             ? $etapa['name']
-            : ($etapa['uses'] !== ''
-                ? $etapa['uses']
-                : 'Etapa ' . ($indice + 1));
+            : ($etapa['uses'] !== '' ? $etapa['uses'] : 'Etapa ' . ($i + 1));
 
-        $detalhe = ($indice + 1) . '. ' . $nome;
+        $detalhe = ($i + 1) . '. ' . $nome;
 
         if ($etapa['uses'] !== '') {
             $detalhe .= ' (`' . $etapa['uses'] . '`)';
@@ -233,59 +227,46 @@ foreach ($jobs as $job) {
 
     $md .= '| `' . $escapar($job['id']) . '`'
         . ' | ' . $escapar($job['name'])
-        . ' | ' . $escapar($job['runs-on'] !== '' ? $job['runs-on'] : 'Não identificado')
+        . ' | ' . $escapar($job['runner'] ?: 'Não identificado')
         . ' | ' . $escapar($dependencias)
-        . ' | ' . count($job['steps'])
         . ' | ' . $escapar(implode('; ', $etapas) ?: 'Nenhuma identificada')
         . " |\n";
 }
 
 $md .= "\n## Grafo completo de dependências\n\n";
-$md .= "O diagrama abaixo contém todos os jobs identificados e todas as ligações declaradas em `needs`.\n\n";
+$md .= "As setas representam as dependências declaradas em `needs` no YAML original.\n\n";
 $md .= "```mermaid\nflowchart TD\n";
 
 foreach ($jobs as $id => $job) {
-    $node = $identificador($id);
-    $rotulo = $rotuloMermaid($job['name']);
-
-    $md .= '    ' . $node . '["' . $rotulo . "\"]\n";
+    $md .= '    ' . $idMermaid($id)
+        . '["' . $rotuloMermaid($job['name']) . "\"]\n";
 }
 
 foreach ($jobs as $id => $job) {
-    $destino = $identificador($id);
-
     foreach ($job['needs'] as $dependencia) {
+        $origem = $idMermaid($dependencia);
+        $destino = $idMermaid($id);
+
         if (!isset($jobs[$dependencia])) {
-            $md .= '    dependencia_' . $identificador($dependencia)
-                . '["Dependência externa: '
-                . $rotuloMermaid($dependencia)
-                . "\"]\n";
-
-            $md .= '    dependencia_' . $identificador($dependencia)
-                . ' --> ' . $destino . "\n";
-
-            continue;
+            $md .= '    ' . $origem
+                . '["Dependência não identificada: '
+                . $rotuloMermaid($dependencia) . "\"]\n";
         }
 
-        $origem = $identificador($dependencia);
-        $md .= '    ' . $origem . ' --> ' . $destino . "\n";
+        $md .= "    {$origem} --> {$destino}\n";
     }
 }
 
 $md .= "```\n\n";
-
-$md .= "## Detalhamento de todos os jobs\n\n";
+$md .= "## Detalhamento dos jobs\n\n";
 
 foreach ($jobs as $job) {
     $md .= "### " . $job['name'] . "\n\n";
     $md .= "- **ID:** `" . $job['id'] . "`\n";
-    $md .= "- **Runner:** "
-        . ($job['runs-on'] !== '' ? '`' . $job['runs-on'] . '`' : 'Não identificado')
-        . "\n";
-
+    $md .= "- **Runner:** `" . ($job['runner'] ?: 'Não identificado') . "`\n";
     $md .= "- **Dependências:** "
         . ($job['needs'] === []
-            ? 'Nenhuma identificada'
+            ? 'Nenhuma'
             : implode(', ', array_map(
                 fn($item) => '`' . $item . '`',
                 $job['needs']
@@ -300,12 +281,10 @@ foreach ($jobs as $job) {
         continue;
     }
 
-    foreach ($job['steps'] as $indice => $etapa) {
+    foreach ($job['steps'] as $i => $etapa) {
         $nome = $etapa['name'] !== ''
             ? $etapa['name']
-            : ($etapa['uses'] !== ''
-                ? $etapa['uses']
-                : 'Etapa ' . ($indice + 1));
+            : ($etapa['uses'] !== '' ? $etapa['uses'] : 'Etapa ' . ($i + 1));
 
         $acao = $etapa['uses'] !== ''
             ? '`' . $etapa['uses'] . '`'
@@ -315,7 +294,7 @@ foreach ($jobs as $job) {
             ? $etapa['run']
             : '—';
 
-        $md .= '| ' . ($indice + 1)
+        $md .= '| ' . ($i + 1)
             . ' | ' . $escapar($nome)
             . ' | ' . $escapar($acao)
             . ' | ' . $escapar($execucao)
@@ -326,31 +305,16 @@ foreach ($jobs as $job) {
 }
 
 $md .= "## YAML original completo\n\n";
-$md .= "Esta seção preserva o conteúdo integral do arquivo original, incluindo configurações, condições, variáveis, comandos e opções que a tabela não representa.\n\n";
-
-$delimitador = '````';
-$md .= $delimitador . "yaml\n";
-$md .= implode("\n", $linhas) . "\n";
-$md .= $delimitador . "\n";
-
-$pastaSaida = dirname($saida);
-
-if (
-    !is_dir($pastaSaida)
-    && !mkdir($pastaSaida, 0775, true)
-    && !is_dir($pastaSaida)
-) {
-    fwrite(STDERR, "Erro: não foi possível criar .github/workflows/.\n");
-    exit(1);
-}
+$md .= "O bloco abaixo reproduz o conteúdo original do arquivo `automations.yml`, preservando comandos, condições, variáveis, comentários e configurações.\n\n";
+$md .= "````yaml\n";
+$md .= rtrim($yaml) . "\n";
+$md .= "````\n";
 
 if (file_put_contents($saida, $md) === false) {
-    fwrite(STDERR, "Erro: não foi possível gravar workflow.md.\n");
+    fwrite(STDERR, "Erro: não foi possível gravar workflows/workflow.md.\n");
     exit(1);
 }
 
-echo "Documentação gerada: .github/workflows/workflow.md\n";
+echo "Documentação gerada: workflows/workflow.md\n";
 echo "Jobs identificados: " . count($jobs) . "\n";
-echo "Etapas identificadas: " . array_sum(
-    array_map(fn($job) => count($job['steps']), $jobs)
-) . "\n";
+echo "Etapas identificadas: {$totalEtapas}\n";

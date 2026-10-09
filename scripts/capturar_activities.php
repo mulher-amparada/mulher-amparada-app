@@ -1,114 +1,271 @@
 
 <?php
 
-$package = $argv[1] ?? '';
-$manifest = $argv[2] ?? 'app/src/main/AndroidManifest.xml';
-$outputDir = $argv[3] ?? 'screenshots';
+declare(strict_types=1);
 
-if ($package === '' || !is_file($manifest)) {
-    fwrite(STDERR, "Uso: php capturar_activities.php pacote manifest.xml [pasta]\n");
+function executar(string $comando): array
+{
+    $processo = proc_open(
+        $comando,
+        [
+            0 => ['pipe', 'r'],
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w'],
+        ],
+        $pipes
+    );
+
+    if (!is_resource($processo)) {
+        return [
+            'codigo' => 1,
+            'saida' => '',
+            'erro' => 'Não foi possível iniciar o processo.',
+        ];
+    }
+
+    fclose($pipes[0]);
+
+    $saida = stream_get_contents($pipes[1]);
+    fclose($pipes[1]);
+
+    $erro = stream_get_contents($pipes[2]);
+    fclose($pipes[2]);
+
+    $codigo = proc_close($processo);
+
+    return [
+        'codigo' => $codigo,
+        'saida' => trim($saida),
+        'erro' => trim($erro),
+    ];
+}
+
+function registrar(string $mensagem): void
+{
+    echo '[' . date('H:i:s') . '] ' . $mensagem . PHP_EOL;
+}
+
+function nomeArquivo(string $nome): string
+{
+    $nome = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $nome) ?? 'activity';
+    return trim($nome, '._-') ?: 'activity';
+}
+
+$pacote = $argv[1] ?? 'com.mulheres';
+$manifesto = $argv[2] ?? 'Código-fonte do app = Mulher Amparada/app/src/main/AndroidManifest.xml';
+
+$runnerTemp = getenv('RUNNER_TEMP');
+
+if ($runnerTemp === false || $runnerTemp === '') {
+    fwrite(STDERR, "Erro: a variável RUNNER_TEMP não está definida.\n");
     exit(1);
 }
 
-if (!is_dir($outputDir)) {
-    mkdir($outputDir, 0777, true);
-}
+$pastaCapturas = $runnerTemp . DIRECTORY_SEPARATOR . 'screenshots';
 
-$adb = 'adb';
-
-function runCommand(string $command): array {
-    exec($command . ' 2>&1', $output, $status);
-    return [$status, implode("\n", $output)];
-}
-
-[$status, $devices] = runCommand(
-    escapeshellarg('adb') . ' devices'
-);
-
-if ($status !== 0 || !str_contains($devices, "\tdevice")) {
-    fwrite(STDERR, "Nenhum dispositivo ou emulador ADB conectado.\n");
+if (!is_dir($pastaCapturas) && !mkdir($pastaCapturas, 0777, true) && !is_dir($pastaCapturas)) {
+    fwrite(STDERR, "Erro: não foi possível criar a pasta temporária de capturas.\n");
     exit(1);
 }
 
-$xml = simplexml_load_file($manifest);
-
-if ($xml === false) {
-    fwrite(STDERR, "Não foi possível ler o AndroidManifest.xml.\n");
+if (!is_file($manifesto)) {
+    fwrite(STDERR, "Erro: AndroidManifest.xml não encontrado: {$manifesto}\n");
     exit(1);
 }
 
-$android = $xml->getNamespaces(true)['android']
-    ?? 'http://schemas.android.com/apk/res/android';
+if (!class_exists(DOMDocument::class)) {
+    fwrite(STDERR, "Erro: a extensão PHP DOM não está instalada.\n");
+    exit(1);
+}
+
+$xml = new DOMDocument();
+
+if (!$xml->load($manifesto)) {
+    fwrite(STDERR, "Erro: não foi possível ler o AndroidManifest.xml.\n");
+    exit(1);
+}
+
+$xpath = new DOMXPath($xml);
+$nos = $xpath->query('//activity | //activity-alias');
+
+if ($nos === false || $nos->length === 0) {
+    fwrite(STDERR, "Erro: nenhuma Activity encontrada no manifesto.\n");
+    exit(1);
+}
 
 $activities = [];
 
-foreach ($xml->xpath('//activity | //activity-alias') as $node) {
-    $attrs = $node->attributes($android);
-    $name = (string) ($attrs['name'] ?? '');
-
-    if ($name === '') {
+foreach ($nos as $no) {
+    if (!$no instanceof DOMElement) {
         continue;
     }
 
-    if (str_starts_with($name, '.')) {
-        $name = $package . $name;
-    } elseif (!str_contains($name, '.')) {
-        $name = $package . '.' . $name;
+    $nome = trim($no->getAttribute('android:name'));
+
+    if ($nome === '') {
+        continue;
     }
 
-    $activities[] = $name;
+    if (str_starts_with($nome, '.')) {
+        $nome = $pacote . $nome;
+    } elseif (!str_contains($nome, '.')) {
+        $nome = $pacote . '.' . $nome;
+    }
+
+    $activities[$nome] = true;
 }
 
-$activities = array_values(array_unique($activities));
+$activities = array_keys($activities);
 
-if (!$activities) {
-    fwrite(STDERR, "Nenhuma Activity encontrada no manifest.\n");
+if (count($activities) === 0) {
+    fwrite(STDERR, "Erro: não foi possível resolver os nomes das Activities.\n");
     exit(1);
 }
 
-$csv = fopen("$outputDir/relatorio.csv", 'w');
-fputcsv($csv, ['Activity', 'Resultado', 'Captura']);
+registrar('Verificando conexão com o emulador...');
 
-foreach ($activities as $index => $activity) {
-    $safeName = preg_replace('/[^A-Za-z0-9_.-]/', '_', $activity);
-    $png = "$outputDir/" . sprintf('%03d_', $index + 1) . "$safeName.png";
+$dispositivos = executar('adb devices');
 
-    runCommand("$adb shell am force-stop " . escapeshellarg($package));
+if ($dispositivos['codigo'] !== 0 || !preg_match('/\tdevice(?:\r?$)/m', $dispositivos['saida'])) {
+    fwrite(STDERR, "Erro: nenhum dispositivo Android conectado e autorizado.\n");
+    fwrite(STDERR, $dispositivos['saida'] . PHP_EOL . $dispositivos['erro'] . PHP_EOL);
+    exit(1);
+}
 
-    [$status, $result] = runCommand(
-        "$adb shell am start -W -n " .
-        escapeshellarg("$package/$activity")
+registrar('Activities encontradas: ' . count($activities));
+registrar('Capturas temporárias: ' . $pastaCapturas);
+
+$csv = fopen($pastaCapturas . DIRECTORY_SEPARATOR . 'relatorio.csv', 'w');
+
+if ($csv === false) {
+    fwrite(STDERR, "Erro: não foi possível criar o relatório.\n");
+    exit(1);
+}
+
+fputcsv($csv, ['Activity', 'Resultado', 'Arquivo', 'Detalhes']);
+
+$totalSucesso = 0;
+$totalFalha = 0;
+
+foreach ($activities as $activity) {
+    $arquivo = nomeArquivo($activity) . '.png';
+    $caminho = $pastaCapturas . DIRECTORY_SEPARATOR . $arquivo;
+
+    registrar("Abrindo {$activity}");
+
+    executar('adb shell am force-stop ' . escapeshellarg($pacote));
+
+    $inicio = executar(
+        'adb shell am start -W -n ' .
+        escapeshellarg($pacote . '/' . $activity)
     );
+
+    if ($inicio['codigo'] !== 0 || str_contains($inicio['saida'] . $inicio['erro'], 'Error:')) {
+        $detalhes = trim($inicio['saida'] . ' ' . $inicio['erro']);
+
+        registrar("FALHA ao abrir {$activity}");
+
+        fputcsv($csv, [
+            $activity,
+            'FALHA AO ABRIR',
+            '',
+            $detalhes,
+        ]);
+
+        $totalFalha++;
+        continue;
+    }
 
     sleep(3);
 
-    [$shotStatus, $shotResult] = runCommand(
-        "$adb exec-out screencap -p > " . escapeshellarg($png)
+    $captura = executar(
+        'adb exec-out screencap -p'
     );
 
-    $valid = $shotStatus === 0
-        && is_file($png)
-        && filesize($png) > 100;
+    if ($captura['codigo'] !== 0 || $captura['saida'] === '') {
+        registrar("FALHA ao capturar {$activity}");
 
-    $opened = str_contains($result, 'Status: ok');
+        fputcsv($csv, [
+            $activity,
+            'FALHA NA CAPTURA',
+            '',
+            $captura['erro'] ?: $captura['saida'],
+        ]);
 
-    $state = $opened && $valid
-        ? 'OK'
-        : (!$opened ? 'Falha ao abrir' : 'Falha na captura');
-
-    if (!$valid && is_file($png)) {
-        unlink($png);
+        $totalFalha++;
+        continue;
     }
+
+    $processo = proc_open(
+        'adb exec-out screencap -p',
+        [
+            0 => ['pipe', 'r'],
+            1 => ['file', $caminho, 'wb'],
+            2 => ['pipe', 'w'],
+        ],
+        $pipes
+    );
+
+    if (!is_resource($processo)) {
+        registrar("FALHA ao salvar {$activity}");
+
+        fputcsv($csv, [
+            $activity,
+            'FALHA AO SALVAR',
+            '',
+            'Não foi possível executar a captura.',
+        ]);
+
+        $totalFalha++;
+        continue;
+    }
+
+    fclose($pipes[0]);
+    $erro = stream_get_contents($pipes[2]);
+    fclose($pipes[2]);
+    $codigo = proc_close($processo);
+
+    $conteudo = is_file($caminho) ? file_get_contents($caminho) : false;
+
+    if (
+        $codigo !== 0 ||
+        $conteudo === false ||
+        !str_starts_with($conteudo, "\x89PNG\r\n\x1a\n")
+    ) {
+        @unlink($caminho);
+
+        registrar("FALHA ao validar o print de {$activity}");
+
+        fputcsv($csv, [
+            $activity,
+            'FALHA NA CAPTURA',
+            '',
+            trim($erro) ?: 'A imagem PNG não foi gerada corretamente.',
+        ]);
+
+        $totalFalha++;
+        continue;
+    }
+
+    registrar("Captura salva: {$arquivo}");
 
     fputcsv($csv, [
         $activity,
-        $state,
-        $valid ? basename($png) : ''
+        'SUCESSO',
+        $arquivo,
+        '',
     ]);
 
-    echo "$state: $activity\n";
+    $totalSucesso++;
 }
 
 fclose($csv);
 
-echo "\nCapturas e relatório: $outputDir\n";
+registrar('Processo concluído.');
+registrar("Capturas realizadas: {$totalSucesso}");
+registrar("Falhas: {$totalFalha}");
+registrar("Diretório temporário: {$pastaCapturas}");
+
+if ($totalSucesso === 0) {
+    exit(1);
+}

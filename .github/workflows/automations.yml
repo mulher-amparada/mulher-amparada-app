@@ -1485,26 +1485,35 @@ jobs:
           script: |
             set -e
 
-            adb wait-for-device
-
             for i in $(seq 1 60); do
-              BOOT_COMPLETED="$(
-                adb shell getprop sys.boot_completed |
-                tr -d '\r'
-              )"
+              adb start-server >/dev/null 2>&1 || true
+              adb reconnect offline >/dev/null 2>&1 || true
 
-              if [ "$BOOT_COMPLETED" = "1" ]; then
-                break
+              STATE="$(adb get-state 2>/dev/null || true)"
+
+              if [ "$STATE" = "device" ]; then
+                BOOT_COMPLETED="$(
+                  adb shell getprop sys.boot_completed 2>/dev/null |
+                  tr -d '\r'
+                )"
+
+                if [ "$BOOT_COMPLETED" = "1" ]; then
+                  break
+                fi
               fi
 
               sleep 2
             done
 
-            if [ "$(
-              adb shell getprop sys.boot_completed |
-              tr -d '\r'
-            )" != "1" ]; then
-              echo "O emulador não iniciou a tempo."
+            STATE="$(adb get-state 2>/dev/null || true)"
+
+            if [ "$STATE" != "device" ] || \
+               [ "$(
+                 adb shell getprop sys.boot_completed 2>/dev/null |
+                 tr -d '\r'
+               )" != "1" ]; then
+              echo "ERRO: o emulador não ficou pronto após 120 segundos."
+              adb devices -l
               exit 1
             fi
 

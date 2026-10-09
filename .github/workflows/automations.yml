@@ -1216,37 +1216,46 @@ jobs:
   # =========================================================
   
   pesquisar-projeto:
-    name: Documentar workflow YAML
-    runs-on: ubuntu-24.04
+  name: Documentar workflow YAML
+  runs-on: ubuntu-24.04
 
-    steps:
-      - name: Baixar repositório
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 1
-          ref: main
+  steps:
+    - name: Baixar repositório
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: 1
+        ref: main
 
-      - name: Instalar PHP
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y php-cli
+    - name: Instalar PHP
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y php-cli
 
-      - name: Gerar documentação do workflow
-        run: |
-          set -e
-          php -l scripts/pesquisar_projeto.php
-          php scripts/pesquisar_projeto.php
-          test -s .github/workflows/workflow.md
-          echo "Documentação gerada:"
-          ls -lh .github/workflows/workflow.md
+    - name: Gerar documentação do workflow
+      run: |
+        set -e
 
-      - name: Enviar documentação do workflow como artifact
-        uses: actions/upload-artifact@v6
-        with:
-          name: arquivos-pesquisas
-          path: .github/workflows/workflow.md
-          if-no-files-found: error
-          retention-days: 30
+        mkdir -p pesquisas
+
+        php -l scripts/pesquisar_projeto.php
+        php scripts/pesquisar_projeto.php
+
+        if [ -f ".github/workflows/workflow.md" ]; then
+          mv .github/workflows/workflow.md pesquisas/workflow.md
+        fi
+
+        test -s pesquisas/workflow.md
+
+        echo "Documentação gerada:"
+        ls -lh pesquisas/workflow.md
+
+    - name: Enviar documentação do workflow como artifact
+      uses: actions/upload-artifact@v6
+      with:
+        name: arquivos-pesquisas
+        path: pesquisas/workflow.md
+        if-no-files-found: error
+        retention-days: 30
 
 
 
@@ -1331,6 +1340,16 @@ jobs:
 
           cp -a artefatos/commits/. commits/
           cp -a artefatos/pesquisas/. pesquisas/
+
+          if [ -f "pesquisas/.github/workflows/workflow.md" ]; then
+            mv "pesquisas/.github/workflows/workflow.md" \
+              "pesquisas/workflow.md"
+          fi
+
+          test -s pesquisas/workflow.md
+
+          echo "Workflow salvo em pesquisas/workflow.md"
+          ls -lh pesquisas/workflow.md
 
       - name: Salvar todas as alterações em um commit
         run: |

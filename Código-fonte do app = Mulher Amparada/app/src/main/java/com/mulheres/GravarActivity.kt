@@ -128,21 +128,19 @@ class GravarActivity : AppCompatActivity(),
     // ON CREATE
     // =========================================================
 
-    override fun onCreate(
-        savedInstanceState: Bundle?
-    ) {
-        enableEdgeToEdge()
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-        super.onCreate(savedInstanceState)
+    enableEdgeToEdge()
 
-        window.addFlags(
-            WindowManager.LayoutParams.FLAG_SECURE
-        )
+    window.addFlags(
+        WindowManager.LayoutParams.FLAG_SECURE
+    )
 
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
-        )
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        false
+    )
 
         window.statusBarColor =
             Color.TRANSPARENT

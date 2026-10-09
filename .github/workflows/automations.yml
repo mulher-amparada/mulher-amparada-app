@@ -1017,7 +1017,7 @@ jobs:
   sitemap:
     name: Gerar Sitemap
     runs-on: ubuntu-24.04
-    needs: snake
+    needs: atualizar-commits
 
     steps:
       - name: Checkout

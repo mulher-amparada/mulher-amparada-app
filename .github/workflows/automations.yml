@@ -1287,34 +1287,33 @@ jobs:
 
 
 
-  gerar-video:
-    name: Gerar vídeo animado do Mulher Amparada
+  gerar-poster:
+    name: Gerar pôster do Mulher Amparada
     runs-on: ubuntu-24.04
-    needs: build
-    
+
     permissions:
       contents: read
 
     steps:
       - name: Baixar repositório
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
 
-      - name: Instalar PHP, FFmpeg e librsvg
+      - name: Instalar dependências
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            php-cli \
-            php-mbstring \
-            ffmpeg \
-            librsvg2-bin
+          sudo apt-get install -y php-cli php-curl php-mbstring imagemagick
 
-      - name: Gerar vídeo animado
-        run: php scripts/gerar_video.php
+      - name: Gerar pôster
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: php scripts/gerar_poster.php
 
-      - name: Publicar vídeo como artefato
+      - name: Disponibilizar pôster gerado
         uses: actions/upload-artifact@v6
         with:
-          name: Video-Mulher-Amparada
-          path: midia/mulher-amparada.mp4
+          name: poster-mulher-amparada
+          path: midia/mulher-amparada.png
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 30

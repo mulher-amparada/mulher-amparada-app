@@ -579,54 +579,7 @@ A intenção é centralizar os resultados de geração em um commit, reduzindo a
 
 O sucesso depende de todos os artifacts exigidos estarem disponíveis, de os caminhos coincidirem com a estrutura esperada e de o rebase e o push serem concluídos sem conflitos.
 
-🛠️ 17. Relatório de erros em português
-
-O job "relatorio-erros" utiliza "ubuntu-24.04" e declara:
-
-"if: ${{ always() }}"
-
-Essa condição solicita que o job seja avaliado mesmo quando as dependências anteriores falharem ou forem ignoradas, respeitando as demais condições de execução do GitHub Actions.
-
-O job declara dependências em "sincronizar-paperwf" e "sincronizar-devto", para acompanhar o resultado das duas sincronizações externas.
-
-Preparação do relatório
-
-O job baixa o código e cria inicialmente "relatorio-erros.md", contendo um título e uma mensagem informando que a coleta ainda não foi concluída.
-
-Em seguida, instala a toolchain estável do Rust por meio de "dtolnay/rust-toolchain@stable".
-
-Execução do coletor Rust
-
-O script é executado com:
-
-"cargo run --release --manifest-path "$GITHUB_WORKSPACE/tools/relatorio-erros/Cargo.toml""
-
-A execução utiliza as variáveis:
-
-- "GITHUB_TOKEN", fornecida pelo token da execução.
-- "GITHUB_REPOSITORY", com o identificador do repositório.
-- "GITHUB_RUN_ID", com o identificador da execução atual.
-
-A saída é encaminhada ao terminal e gravada em "erro-rust.log".
-
-O shell captura o código de saída do processo Cargo por meio de "PIPESTATUS[0]".
-
-Se "relatorio-erros.md" estiver ausente ou vazio depois da execução, o job gera um relatório alternativo contendo o código de saída e as últimas 100 linhas do log técnico.
-
-A etapa está marcada com "continue-on-error: true", permitindo que o job prossiga para a publicação do artifact mesmo quando a coleta falhar. O código de saída é preservado na etapa, e o resultado final deve ser interpretado considerando o tratamento de falhas da etapa e o comportamento do job.
-
-Publicação do relatório
-
-A etapa de upload utiliza "if: ${{ always() }}" e publica:
-
-- "relatorio-erros.md"
-- "erro-rust.log"
-
-O artifact recebe o nome "relatorio-erros-portugues" e tem retenção configurada para 30 dias.
-
-Limite da implementação apresentada: o job executa o programa Rust e fornece um token de acesso, mas a coleta efetiva dos logs de outros jobs depende do código implementado em "tools/relatorio-erros/". O YAML, isoladamente, não comprova que todos os logs do workflow são baixados ou analisados.
-
-🔐 18. Secrets utilizados
+🔐 17. Secrets utilizados
 
 O workflow utiliza credenciais armazenadas no sistema de secrets do GitHub Actions.
 
@@ -644,7 +597,7 @@ O workflow também utiliza o "GITHUB_TOKEN" ou "${{ github.token }}" para opera�
 
 Os secrets devem ser configurados nas definições do repositório antes da execução dos jobs que dependem deles. O acesso efetivo depende das permissões concedidas ao token e às actions utilizadas.
 
-🧰 19. Tecnologias e ferramentas utilizadas
+🧰 18. Tecnologias e ferramentas utilizadas
 
 O workflow combina diferentes tecnologias para automatizar tarefas específicas:
 
@@ -672,7 +625,7 @@ Lighthouse CI| Auditoria automatizada do site
 Platane/snk| Geração da Snake de contribuições
 GitHub Artifacts| Transporte dos arquivos gerados entre jobs
 
-🔄 20. Fluxo geral de dependências
+🔄 19. Fluxo geral de dependências
 
 O workflow é dividido em etapas encadeadas. O fluxo principal do aplicativo e do site é:
 
@@ -691,7 +644,7 @@ Em paralelo à cadeia de geração e sincronização, "indexnow", "broken-links"
 
 Essas relações representam as dependências declaradas em "needs". Elas não significam que todos os jobs sejam executados em uma única sequência linear, pois jobs sem dependências diretas entre si podem ser executados em paralelo.
 
-📦 21. Artifacts produzidos
+📦 20. Artifacts produzidos
 
 O workflow utiliza artifacts para transportar arquivos entre jobs sem precisar gerar todos os resultados novamente em cada etapa.
 
@@ -707,7 +660,7 @@ Nome do artifact| Conteúdo
 
 O artifact "APK-Kotlin-Assinado" é independente do asset da GitHub Release. Da mesma forma, os artifacts intermediários de geração não são publicados automaticamente no site: sua persistência no repositório depende das etapas que os baixam e copiam.
 
-⚠️ 22. Observações operacionais
+⚠️ 21. Observações operacionais
 
 - A Release com tag "app" precisa existir antes da execução do job de compilação.
 - As credenciais de assinatura precisam corresponder ao keystore esperado.

@@ -1236,9 +1236,9 @@ jobs:
           set -e
           php -l scripts/pesquisar_projeto.php
           php scripts/pesquisar_projeto.php
-          test -s pesquisas/workflow.md
+          test -s .github/workflows/workflow.md
           echo "Documentação gerada:"
-          ls -lh pesquisas/workflow.md
+          ls -lh .github/workflows/workflow.md
 
       - name: Enviar documentação do workflow como artifact
         uses: actions/upload-artifact@v6

@@ -14,7 +14,7 @@
 | `deploy` | deploy | ubuntu-24.04 | `build-site` | 1. Deploy to GitHub Pages (`actions/deploy-pages@v5`) |
 | `atualizar-commits` | atualizar-commits | ubuntu-24.04 | `deploy` | 1. Baixar todo o histórico (`actions/checkout@v6`); 2. Atualizar total de commits — executa comandos; 3. arquivo-readme (`actions/upload-artifact@v6`) |
 | `sincronizar-devto` | Sincronizar README com DEV.to | ubuntu-24.04 | `salvar-na-main` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. Atualizar artigo no DEV.to — executa comandos |
-| `sincronizar-paperwf` | Sincronizar README com Paper.wf | ubuntu-24.04 | `salvar-na-main` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. Autenticar e atualizar publicação — executa comandos |
+| `sincronizar-paperwf` | Sincronizar README com Paper.wf | ubuntu-24.04 | `deploy` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. Autenticar e atualizar publicação — executa comandos |
 | `sitemap` | Gerar Sitemap | ubuntu-24.04 | `snake` | 1. Checkout (`actions/checkout@v6`); 2. Gerar Sitemap (`cicirello/generate-sitemap@v1`); 3. arquivo-sitemap (`actions/upload-artifact@v6`) |
 | `indexnow` | IndexNow | ubuntu-24.04 | `deploy` | 1. Enviar Sitemap ao IndexNow (`bojieyang/indexnow-action@v3`) |
 | `broken-links` | Verificar Links Quebrados | ubuntu-24.04 | `deploy` | 1. Verificar links (`ScholliYT/Broken-Links-Crawler-Action@v3`) |
@@ -52,7 +52,7 @@ flowchart TD
     job_build_site --> job_deploy
     job_deploy --> job_atualizar_commits
     job_salvar_na_main --> job_sincronizar_devto
-    job_salvar_na_main --> job_sincronizar_paperwf
+    job_deploy --> job_sincronizar_paperwf
     job_snake --> job_sitemap
     job_deploy --> job_indexnow
     job_deploy --> job_broken_links
@@ -150,7 +150,7 @@ flowchart TD
 
 - **ID:** `sincronizar-paperwf`
 - **Runner:** `ubuntu-24.04`
-- **Dependências:** `salvar-na-main`
+- **Dependências:** `deploy`
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
@@ -1147,7 +1147,7 @@ jobs:
   sincronizar-paperwf:
     name: Sincronizar README com Paper.wf
     runs-on: ubuntu-24.04
-    needs: salvar-na-main
+    needs: deploy
 
     steps:
       - name: Baixar código atualizado
@@ -1168,8 +1168,10 @@ jobs:
           import urllib.error
 
           BASE = "https://paper.wf"
+
           USERNAME = os.environ["PAPERWF_USERNAME"]
           PASSWORD = os.environ["PAPERWF_PASSWORD"]
+
           COLLECTION = "mulheramparada"
           SLUG = "projeto-mulher-amparada"
 
@@ -1198,11 +1200,23 @@ jobs:
               try:
                   with urllib.request.urlopen(request) as response:
                       body = response.read().decode("utf-8")
-                      return json.loads(body) if body else {}
+
+                      if not body:
+                          return {}
+
+                      return json.loads(body)
+
               except urllib.error.HTTPError as error:
+                  body = error.read().decode(
+                      "utf-8",
+                      errors="replace"
+                  )
+
                   print(f"HTTP {error.code}")
-                  print(error.read().decode("utf-8", errors="replace"))
+                  print(body)
                   raise
+
+          print("Autenticando no Paper.wf...")
 
           login_payload = json.dumps({
               "alias": USERNAME,
@@ -1223,10 +1237,17 @@ jobs:
           )
 
           if not token:
-              raise RuntimeError("O Paper.wf não retornou um token.")
+              raise RuntimeError(
+                  "O Paper.wf não retornou um token de acesso."
+              )
+
+          print("Login realizado com sucesso.")
+
+          print("Localizando publicação existente...")
 
           post = api(
               f"{BASE}/api/collections/{COLLECTION}/posts/{SLUG}",
+              method="GET",
               token=token
           )
 
@@ -1234,11 +1255,16 @@ jobs:
 
           if isinstance(post_data, list):
               if not post_data:
-                  raise RuntimeError("Nenhuma publicação encontrada.")
+                  raise RuntimeError(
+                      "O Paper.wf retornou uma lista de posts vazia."
+                  )
+
               post_data = post_data[0]
 
           if not isinstance(post_data, dict):
-              raise RuntimeError("Resposta inesperada do Paper.wf.")
+              raise RuntimeError(
+                  "Resposta inesperada ao localizar o post."
+              )
 
           post_id = (
               post_data.get("id")
@@ -1250,12 +1276,18 @@ jobs:
           )
 
           if not post_id:
-              raise RuntimeError("ID da publicação não encontrado.")
+              raise RuntimeError(
+                  "Não foi possível encontrar o ID do post existente."
+              )
+
+          print(f"Post encontrado: {post_id}")
 
           payload = json.dumps({
               "title": "Projeto Mulher Amparada",
               "body": readme
           }).encode("utf-8")
+
+          print("Atualizando publicação...")
 
           api(
               f"{BASE}/api/posts/{post_id}",

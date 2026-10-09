@@ -1348,7 +1348,9 @@ jobs:
   relatorio-erros:
     name: Relatório de erros em português
     runs-on: ubuntu-24.04
+
     if: ${{ always() }}
+
     needs:
       - build
       - build-site
@@ -1379,16 +1381,19 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Coletar logs e gerar relatório
+        id: relatorio
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_RUN_ID: ${{ github.run_id }}
         run: cargo run --release --manifest-path tools/relatorio-erros/Cargo.toml
 
-      - name: Publicar relatório de erros
+      - name: Publicar relatório como Artifact
         if: ${{ always() }}
         uses: actions/upload-artifact@v6
         with:
           name: relatorio-erros-portugues
           path: relatorio-erros.md
-          if-no-files-found: warn
+          if-no-files-found: error
+          retention-days: 30

@@ -542,7 +542,7 @@ Mais informações
 <p>Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!</p>
 <p>e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, onde nem tinha os recursos, ja programei ele num app de A-IDE, num A05, e eu ja perdi vários projetos porque o celular nao aguentava, matava o projeto porque matou o processo de compilação!, e uma vez eu fiz o projeto do mulher amparada e eu mesmo fiz o app do mulher amparada (primeiro eu refiz porque o family link apagou a pasta segura samsung, depois na 2 vez que perdi portei tudo do apk compilado para descompilado, e depois perdi denovo mas ai eu ja tinha o código-fonte!)</p>
 <p>E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)</p>
-<p><strong>Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4890</strong></p>
+<p><strong>Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4892</strong></p>
 <p>E o projeto é = Open-source! (aderido no dia 02/10/2026)</p>
 <h1>⚠️MURAL DE AVISOS:</h1>
 <h3>Sobre como o projeto foi estruturado:</h3>
@@ -819,33 +819,6 @@ A linha é atualizada com o valor calculado, mantendo o formato textual esperado
 O arquivo atualizado é enviado como artifact chamado &quot;arquivo-readme&quot;. Ele será utilizado posteriormente pelo job de centralização dos arquivos.
 
 O valor calculado depende do histórico e das referências disponíveis no checkout; não deve ser interpretado como uma contagem universal de todos os commits que possam existir em referências remotas não buscadas.
-
-📝 Sincronizar o README com o Paper.wf
-
-O job &quot;sincronizar-paperwf&quot; também depende de &quot;salvar-na-main&quot;.
-
-Ele baixa o README atualizado e utiliza um script Python para autenticar na API do Paper.wf e atualizar uma publicação existente.
-
-A configuração utiliza:
-
-- Base da API: &quot;https://paper.wf&quot;
-- Coleção: &quot;mulheramparada&quot;
-- Slug: &quot;projeto-mulher-amparada&quot;
-- Título enviado: &quot;Projeto Mulher Amparada&quot;
-- Secrets: &quot;PAPERWF_USERNAME&quot; e &quot;PAPERWF_PASSWORD&quot;
-
-O processo:
-
-- Lê o README em UTF-8.
-- Envia as credenciais para a rota de autenticação.
-- Procura um token de acesso em diferentes formatos possíveis da resposta.
-- Consulta a publicação configurada na coleção.
-- Identifica o ID da publicação, tratando respostas que contenham objetos ou listas.
-- Monta o payload com o título e o conteúdo integral do README.
-- Envia uma requisição &quot;POST&quot; para atualizar a publicação identificada.
-- Exibe uma mensagem de sucesso se as operações terminarem sem exceção.
-
-O script também apresenta respostas HTTP de erro e interrompe a execução quando não consegue autenticar, identificar o token ou localizar o ID da publicação.
 
 🗺️ Gerar o sitemap
 

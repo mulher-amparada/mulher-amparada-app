@@ -1134,67 +1134,65 @@ jobs:
 # GERAR IMAGEM DAS LINGUAGENS
 # =========================================================
 
-gerar-linguagens:
-  name: Gerar imagem das linguagens
-  runs-on: ubuntu-24.04
-  needs: atualizar-commits
+  gerar-linguagens:
+    name: Gerar imagem das linguagens
+    runs-on: ubuntu-24.04
+    needs: atualizar-commits
 
-  steps:
-    - name: Baixar repositório
-      uses: actions/checkout@v6
-      with:
-        fetch-depth: 0
-        ref: main
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: main
 
-    - name: Baixar README atualizado
-      uses: actions/download-artifact@v7
-      with:
-        name: arquivo-readme
-        path: artefatos/readme
+      - name: Baixar README atualizado
+        uses: actions/download-artifact@v7
+        with:
+          name: arquivo-readme
+          path: artefatos/readme
 
-    - name: Copiar README
-      run: |
-        set -e
-        cp \
-          artefatos/readme/README.md \
-          README.md
+      - name: Copiar README
+        run: |
+          set -e
+          cp artefatos/readme/README.md README.md
 
-    - name: Configurar Go
-      uses: actions/setup-go@v6
-      with:
-        go-version: "1.25"
+      - name: Configurar Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.25"
 
-    - name: Executar languages.go
-      run: |
-        set -e
-        go run tools/languages.go
+      - name: Executar languages.go
+        run: |
+          set -e
+          go run tools/languages.go
 
-    - name: Verificar arquivos gerados
-      run: |
-        set -e
-        test -s README.md
-        test -s github-languages.png
+      - name: Verificar arquivos gerados
+        run: |
+          set -e
+          test -s README.md
+          test -s github-languages.png
 
-        echo "README:"
-        ls -lh README.md
+          echo "README:"
+          ls -lh README.md
 
-        echo ""
-        echo "Imagem das linguagens:"
-        ls -lh github-languages.png
+          echo ""
+          echo "Imagem das linguagens:"
+          ls -lh github-languages.png
 
-    - name: Enviar README atualizado
-      uses: actions/upload-artifact@v6
-      with:
-        name: arquivo-readme-linguagens
-        path: README.md
-        if-no-files-found: error
+      - name: Enviar README atualizado
+        uses: actions/upload-artifact@v6
+        with:
+          name: arquivo-readme-linguagens
+          path: README.md
+          if-no-files-found: error
 
-    - name: Enviar imagem das linguagens
-      uses: actions/upload-artifact@v6
-      with:
-        name: github-languages
-        path: github-languages.png
-        if-no-files-found: error
+      - name: Enviar imagem das linguagens
+        uses: actions/upload-artifact@v6
+        with:
+          name: github-languages
+          path: github-languages.png
+          if-no-files-found: error
 
 # =========================================================
 # CENTRALIZAR E SALVAR ARQUIVOS NA MAIN

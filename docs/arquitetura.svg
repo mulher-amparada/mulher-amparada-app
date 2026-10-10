@@ -1,0 +1,213 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="2030" viewBox="0 0 1240 2030">
+<rect width="100%" height="100%" fill="#080808"/>
+<text x="620" y="55" font-family="Arial" font-size="30" font-weight="bold" fill="white" text-anchor="middle">Arquitetura — Mulher Amparada</text>
+<rect x="40" y="125" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="58" y="155" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/MainActivity.kt</text>
+<text x="60" y="183" font-family="Arial" font-size="14" fill="#dddddd">• MainActivity</text>
+<text x="60" y="201" font-family="Arial" font-size="14" fill="#dddddd">• fun onCreate()</text>
+<text x="60" y="219" font-family="Arial" font-size="14" fill="#dddddd">• :</text>
+<text x="60" y="237" font-family="Arial" font-size="14" fill="#dddddd">• fun handleOnBackPressed()</text>
+<text x="60" y="255" font-family="Arial" font-size="14" fill="#dddddd">• fun configurarWebView()</text>
+<text x="60" y="273" font-family="Arial" font-size="14" fill="#dddddd">• fun onGeolocationPermissionsShowPrompt()</text>
+<text x="60" y="291" font-family="Arial" font-size="13" fill="#999999">+ 3 elementos</text>
+<rect x="440" y="125" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="458" y="155" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/PalmaService.kt</text>
+<text x="460" y="183" font-family="Arial" font-size="14" fill="#dddddd">• PalmaService</text>
+<text x="460" y="201" font-family="Arial" font-size="14" fill="#dddddd">• :</text>
+<text x="460" y="219" font-family="Arial" font-size="14" fill="#dddddd">• fun onCallStateChanged()</text>
+<text x="460" y="237" font-family="Arial" font-size="14" fill="#dddddd">• fun onCreate()</text>
+<text x="460" y="255" font-family="Arial" font-size="14" fill="#dddddd">• fun onStartCommand()</text>
+<text x="460" y="273" font-family="Arial" font-size="14" fill="#dddddd">• fun onBind()</text>
+<text x="460" y="291" font-family="Arial" font-size="13" fill="#999999">+ 9 elementos</text>
+<rect x="840" y="125" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="858" y="155" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/SdFileProvider.kt</text>
+<text x="860" y="183" font-family="Arial" font-size="14" fill="#dddddd">• SdFileProvider</text>
+<text x="860" y="201" font-family="Arial" font-size="14" fill="#dddddd">• {</text>
+<text x="860" y="219" font-family="Arial" font-size="14" fill="#dddddd">• fun getUriForFile()</text>
+<text x="860" y="237" font-family="Arial" font-size="14" fill="#dddddd">• fun onCreate()</text>
+<text x="860" y="255" font-family="Arial" font-size="14" fill="#dddddd">• fun getType()</text>
+<text x="860" y="273" font-family="Arial" font-size="14" fill="#dddddd">• fun openFile()</text>
+<text x="860" y="291" font-family="Arial" font-size="13" fill="#999999">+ 6 elementos</text>
+<rect x="40" y="335" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="58" y="365" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/GeoActivity.kt</text>
+<text x="60" y="393" font-family="Arial" font-size="14" fill="#dddddd">• GeoActivity</text>
+<text x="60" y="411" font-family="Arial" font-size="14" fill="#dddddd">• fun onCreate()</text>
+<text x="60" y="429" font-family="Arial" font-size="14" fill="#dddddd">• fun onResume()</text>
+<text x="60" y="447" font-family="Arial" font-size="14" fill="#dddddd">• fun onPause()</text>
+<text x="60" y="465" font-family="Arial" font-size="14" fill="#dddddd">• fun onDestroy()</text>
+<text x="60" y="483" font-family="Arial" font-size="14" fill="#dddddd">• fun hasLocationPermission()</text>
+<text x="60" y="501" font-family="Arial" font-size="13" fill="#999999">+ 14 elementos</text>
+<rect x="440" y="335" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="458" y="365" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/CicloActivity.kt</text>
+<text x="460" y="393" font-family="Arial" font-size="14" fill="#dddddd">• CicloRegistro(</text>
+<text x="460" y="411" font-family="Arial" font-size="14" fill="#dddddd">• Ordem</text>
+<text x="460" y="429" font-family="Arial" font-size="14" fill="#dddddd">• fun CicloRegistro.toJson()</text>
+<text x="460" y="447" font-family="Arial" font-size="14" fill="#dddddd">• fun JSONObject.bool()</text>
+<text x="460" y="465" font-family="Arial" font-size="14" fill="#dddddd">• fun JSONObject.toCicloRegistro()</text>
+<text x="460" y="483" font-family="Arial" font-size="14" fill="#dddddd">• fun carregarCiclo()</text>
+<text x="460" y="501" font-family="Arial" font-size="13" fill="#999999">+ 30 elementos</text>
+<rect x="840" y="335" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="858" y="365" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/HubActivity.kt</text>
+<text x="860" y="393" font-family="Arial" font-size="14" fill="#dddddd">• HubActivity</text>
+<text x="860" y="411" font-family="Arial" font-size="14" fill="#dddddd">• fun selecionarConteudo()</text>
+<text x="860" y="429" font-family="Arial" font-size="14" fill="#dddddd">• fun selecionarAreasProtegidas()</text>
+<text x="860" y="447" font-family="Arial" font-size="14" fill="#dddddd">• fun ligarPara()</text>
+<text x="860" y="465" font-family="Arial" font-size="14" fill="#dddddd">• fun abrirAreaProtegida()</text>
+<text x="860" y="483" font-family="Arial" font-size="14" fill="#dddddd">• :</text>
+<text x="860" y="501" font-family="Arial" font-size="13" fill="#999999">+ 57 elementos</text>
+<rect x="40" y="545" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="58" y="575" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt</text>
+<text x="60" y="603" font-family="Arial" font-size="14" fill="#dddddd">• ArquivoActivity</text>
+<text x="60" y="621" font-family="Arial" font-size="14" fill="#dddddd">• fun onCreate()</text>
+<text x="60" y="639" font-family="Arial" font-size="14" fill="#dddddd">• ArquivoSeguroItem(</text>
+<text x="60" y="657" font-family="Arial" font-size="14" fill="#dddddd">• @Composable</text>
+<text x="60" y="675" font-family="Arial" font-size="14" fill="#dddddd">• fun ArquivoSeguro()</text>
+<text x="60" y="693" font-family="Arial" font-size="14" fill="#dddddd">• fun atualizarArquivos()</text>
+<text x="60" y="711" font-family="Arial" font-size="13" fill="#999999">+ 9 elementos</text>
+<rect x="440" y="545" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="458" y="575" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/TiltBrightnessController.kt</text>
+<text x="460" y="603" font-family="Arial" font-size="14" fill="#dddddd">• TiltBrightnessController(</text>
+<text x="460" y="621" font-family="Arial" font-size="14" fill="#dddddd">• fun startTiltBrightness()</text>
+<text x="460" y="639" font-family="Arial" font-size="14" fill="#dddddd">• :</text>
+<text x="460" y="657" font-family="Arial" font-size="14" fill="#dddddd">• fun onSensorChanged()</text>
+<text x="460" y="675" font-family="Arial" font-size="14" fill="#dddddd">• fun onAccuracyChanged()</text>
+<text x="460" y="693" font-family="Arial" font-size="14" fill="#dddddd">• fun stopTiltBrightness()</text>
+<text x="460" y="711" font-family="Arial" font-size="13" fill="#999999">+ 7 elementos</text>
+<rect x="840" y="545" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="858" y="575" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ExigirActivity.kt</text>
+<text x="860" y="603" font-family="Arial" font-size="14" fill="#dddddd">• ExigirActivity</text>
+<text x="860" y="621" font-family="Arial" font-size="14" fill="#dddddd">• fun onCreate()</text>
+<text x="860" y="639" font-family="Arial" font-size="14" fill="#dddddd">• @Composable</text>
+<text x="860" y="657" font-family="Arial" font-size="14" fill="#dddddd">• fun ExigirScreen()</text>
+<text x="860" y="675" font-family="Arial" font-size="14" fill="#dddddd">• fun LawParagraph()</text>
+<text x="860" y="693" font-family="Arial" font-size="14" fill="#dddddd">• fun ConditionCard()</text>
+<text x="860" y="711" font-family="Arial" font-size="13" fill="#999999">+ 1 elementos</text>
+<rect x="40" y="755" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="58" y="785" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/EntradaActivity.kt</text>
+<text x="60" y="813" font-family="Arial" font-size="14" fill="#dddddd">• EntradaActivity</text>
+<text x="60" y="831" font-family="Arial" font-size="14" fill="#dddddd">• fun onCreate()</text>
+<rect x="440" y="755" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="458" y="785" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/NeoCalcActivity.kt</text>
+<text x="460" y="813" font-family="Arial" font-size="14" fill="#dddddd">• NeoCalcActivity</text>
+<text x="460" y="831" font-family="Arial" font-size="14" fill="#dddddd">• fun onCreate()</text>
+<text x="460" y="849" font-family="Arial" font-size="14" fill="#dddddd">• CoresNeoCalc(</text>
+<text x="460" y="867" font-family="Arial" font-size="14" fill="#dddddd">• fun obterCoresNeoCalc()</text>
+<text x="460" y="885" font-family="Arial" font-size="14" fill="#dddddd">• TipoDialogo</text>
+<text x="460" y="903" font-family="Arial" font-size="14" fill="#dddddd">• Dialogo(</text>
+<text x="460" y="921" font-family="Arial" font-size="13" fill="#999999">+ 26 elementos</text>
+<rect x="840" y="755" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="858" y="785" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/GestoActivity.kt</text>
+<text x="860" y="813" font-family="Arial" font-size="14" fill="#dddddd">• GestoActivity</text>
+<text x="860" y="831" font-family="Arial" font-size="14" fill="#dddddd">• fun onCreate()</text>
+<text x="860" y="849" font-family="Arial" font-size="14" fill="#dddddd">• @Composable</text>
+<text x="860" y="867" font-family="Arial" font-size="14" fill="#dddddd">• fun GestoScreen()</text>
+<text x="860" y="885" font-family="Arial" font-size="14" fill="#dddddd">• fun GestureStep()</text>
+<rect x="40" y="965" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="58" y="995" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/TarefaActivity.kt</text>
+<text x="60" y="1023" font-family="Arial" font-size="14" fill="#dddddd">• Tarefa(</text>
+<text x="60" y="1041" font-family="Arial" font-size="14" fill="#dddddd">• TarefaActivity</text>
+<text x="60" y="1059" font-family="Arial" font-size="14" fill="#dddddd">• fun onCreate()</text>
+<text x="60" y="1077" font-family="Arial" font-size="14" fill="#dddddd">• @Composable</text>
+<text x="60" y="1095" font-family="Arial" font-size="14" fill="#dddddd">• fun TarefaScreen()</text>
+<text x="60" y="1113" font-family="Arial" font-size="14" fill="#dddddd">• fun Header()</text>
+<text x="60" y="1131" font-family="Arial" font-size="13" fill="#999999">+ 19 elementos</text>
+<rect x="440" y="965" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="458" y="995" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/GravarActivity.kt</text>
+<text x="460" y="1023" font-family="Arial" font-size="14" fill="#dddddd">• GravarActivity</text>
+<text x="460" y="1041" font-family="Arial" font-size="14" fill="#dddddd">• {</text>
+<text x="460" y="1059" font-family="Arial" font-size="14" fill="#dddddd">• fun onCreate()</text>
+<text x="460" y="1077" font-family="Arial" font-size="14" fill="#dddddd">• fun checkPermissions()</text>
+<text x="460" y="1095" font-family="Arial" font-size="14" fill="#dddddd">• fun iniciarSensores()</text>
+<text x="460" y="1113" font-family="Arial" font-size="14" fill="#dddddd">• fun pararSensores()</text>
+<text x="460" y="1131" font-family="Arial" font-size="13" fill="#999999">+ 28 elementos</text>
+<rect x="840" y="965" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="858" y="995" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/UpdateActivity.kt</text>
+<text x="860" y="1023" font-family="Arial" font-size="14" fill="#dddddd">• UpdateActivity</text>
+<text x="860" y="1041" font-family="Arial" font-size="14" fill="#dddddd">• fun onCreate()</text>
+<text x="860" y="1059" font-family="Arial" font-size="14" fill="#dddddd">• @Composable</text>
+<text x="860" y="1077" font-family="Arial" font-size="14" fill="#dddddd">• fun UpdateScreen()</text>
+<rect x="40" y="1175" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="58" y="1205" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/FileActivity.kt</text>
+<text x="60" y="1233" font-family="Arial" font-size="14" fill="#dddddd">• StorageCircleDrawable(</text>
+<text x="60" y="1251" font-family="Arial" font-size="14" fill="#dddddd">• fun animateToColor()</text>
+<text x="60" y="1269" font-family="Arial" font-size="14" fill="#dddddd">• fun draw()</text>
+<text x="60" y="1287" font-family="Arial" font-size="14" fill="#dddddd">• fun setAlpha()</text>
+<text x="60" y="1305" font-family="Arial" font-size="14" fill="#dddddd">• fun setColorFilter()</text>
+<text x="60" y="1323" font-family="Arial" font-size="14" fill="#dddddd">• fun getOpacity()</text>
+<text x="60" y="1341" font-family="Arial" font-size="13" fill="#999999">+ 49 elementos</text>
+<rect x="440" y="1175" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="458" y="1205" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/EmergencyOverlay.kt</text>
+<text x="460" y="1233" font-family="Arial" font-size="14" fill="#dddddd">• @Composable</text>
+<text x="460" y="1251" font-family="Arial" font-size="14" fill="#dddddd">• fun EmergencyOverlay()</text>
+<rect x="840" y="1175" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="858" y="1205" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ProtectActivity.kt</text>
+<text x="860" y="1233" font-family="Arial" font-size="14" fill="#dddddd">• ProtectActivity</text>
+<text x="860" y="1251" font-family="Arial" font-size="14" fill="#dddddd">• fun onCreate()</text>
+<text x="860" y="1269" font-family="Arial" font-size="14" fill="#dddddd">• Acesso(</text>
+<text x="860" y="1287" font-family="Arial" font-size="14" fill="#dddddd">• fun MeusAcessos()</text>
+<text x="860" y="1305" font-family="Arial" font-size="14" fill="#dddddd">• fun Hero()</text>
+<text x="860" y="1323" font-family="Arial" font-size="14" fill="#dddddd">• fun TituloSecao()</text>
+<text x="860" y="1341" font-family="Arial" font-size="13" fill="#999999">+ 2 elementos</text>
+<rect x="40" y="1385" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="58" y="1415" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt</text>
+<text x="60" y="1443" font-family="Arial" font-size="14" fill="#dddddd">• AssistenteActivity</text>
+<text x="60" y="1461" font-family="Arial" font-size="14" fill="#dddddd">• fun onCreate()</text>
+<text x="60" y="1479" font-family="Arial" font-size="14" fill="#dddddd">• CoresAssistente(</text>
+<text x="60" y="1497" font-family="Arial" font-size="14" fill="#dddddd">• @Composable</text>
+<text x="60" y="1515" font-family="Arial" font-size="14" fill="#dddddd">• fun AssistenteTheme()</text>
+<text x="60" y="1533" font-family="Arial" font-size="14" fill="#dddddd">• fun coresAssistente()</text>
+<text x="60" y="1551" font-family="Arial" font-size="13" fill="#999999">+ 17 elementos</text>
+<rect x="440" y="1385" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="458" y="1415" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/WebAppInterface.kt</text>
+<text x="460" y="1443" font-family="Arial" font-size="14" fill="#dddddd">• WebAppInterface(</text>
+<text x="460" y="1461" font-family="Arial" font-size="14" fill="#dddddd">• fun safeMainActivityCall()</text>
+<text x="460" y="1479" font-family="Arial" font-size="14" fill="#dddddd">• fun obterApps()</text>
+<text x="460" y="1497" font-family="Arial" font-size="14" fill="#dddddd">• fun abrirApp()</text>
+<text x="460" y="1515" font-family="Arial" font-size="14" fill="#dddddd">• fun drawableToBase64()</text>
+<text x="460" y="1533" font-family="Arial" font-size="14" fill="#dddddd">• fun openFiles()</text>
+<text x="460" y="1551" font-family="Arial" font-size="13" fill="#999999">+ 5 elementos</text>
+<rect x="840" y="1385" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="858" y="1415" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/DiarioActivity.kt</text>
+<text x="860" y="1443" font-family="Arial" font-size="14" fill="#dddddd">• DiarioActivity</text>
+<text x="860" y="1461" font-family="Arial" font-size="14" fill="#dddddd">• fun onCreate()</text>
+<text x="860" y="1479" font-family="Arial" font-size="14" fill="#dddddd">• @Composable</text>
+<text x="860" y="1497" font-family="Arial" font-size="14" fill="#dddddd">• fun DiarioTheme()</text>
+<text x="860" y="1515" font-family="Arial" font-size="14" fill="#dddddd">• DiarioStorage(</text>
+<text x="860" y="1533" font-family="Arial" font-size="14" fill="#dddddd">• fun loadPages()</text>
+<text x="860" y="1551" font-family="Arial" font-size="13" fill="#999999">+ 12 elementos</text>
+<rect x="40" y="1595" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="58" y="1625" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/MapaActivity.kt</text>
+<text x="60" y="1653" font-family="Arial" font-size="14" fill="#dddddd">• MapaActivity</text>
+<text x="60" y="1671" font-family="Arial" font-size="14" fill="#dddddd">• fun onCreate()</text>
+<text x="60" y="1689" font-family="Arial" font-size="14" fill="#dddddd">• @Composable</text>
+<text x="60" y="1707" font-family="Arial" font-size="14" fill="#dddddd">• fun MapaApp()</text>
+<text x="60" y="1725" font-family="Arial" font-size="14" fill="#dddddd">• fun MapaTela()</text>
+<text x="60" y="1743" font-family="Arial" font-size="14" fill="#dddddd">• fun localizar()</text>
+<text x="60" y="1761" font-family="Arial" font-size="13" fill="#999999">+ 8 elementos</text>
+<rect x="440" y="1595" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="458" y="1625" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/FolderAdapter.kt</text>
+<text x="460" y="1653" font-family="Arial" font-size="14" fill="#dddddd">• FolderAdapter(</text>
+<text x="460" y="1671" font-family="Arial" font-size="14" fill="#dddddd">• StorageItem</text>
+<text x="460" y="1689" font-family="Arial" font-size="14" fill="#dddddd">• Local(</text>
+<text x="460" y="1707" font-family="Arial" font-size="14" fill="#dddddd">• Document(</text>
+<text x="460" y="1725" font-family="Arial" font-size="14" fill="#dddddd">• VH(view:</text>
+<text x="460" y="1743" font-family="Arial" font-size="14" fill="#dddddd">• fun onCreateViewHolder()</text>
+<text x="460" y="1761" font-family="Arial" font-size="13" fill="#999999">+ 3 elementos</text>
+<rect x="840" y="1595" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="858" y="1625" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/HomeActivity.kt</text>
+<text x="860" y="1653" font-family="Arial" font-size="14" fill="#dddddd">• HomeActivity</text>
+<text x="860" y="1671" font-family="Arial" font-size="14" fill="#dddddd">• fun onCreate()</text>
+<text x="860" y="1689" font-family="Arial" font-size="14" fill="#dddddd">• @Composable</text>
+<text x="860" y="1707" font-family="Arial" font-size="14" fill="#dddddd">• fun CarteiraScreen()</text>
+<text x="860" y="1725" font-family="Arial" font-size="14" fill="#dddddd">• fun CarteiraLabel()</text>
+<text x="860" y="1743" font-family="Arial" font-size="14" fill="#dddddd">• fun CarteiraCard()</text>
+<rect x="40" y="1805" width="360" height="170" rx="18" fill="#151515" stroke="#8e44ad" stroke-width="2"/>
+<text x="58" y="1835" font-family="Arial" font-size="17" font-weight="bold" fill="white">./Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/Cripto.kt</text>
+<text x="60" y="1863" font-family="Arial" font-size="14" fill="#dddddd">• Cripto(context:</text>
+<text x="60" y="1881" font-family="Arial" font-size="14" fill="#dddddd">• {</text>
+<text x="60" y="1899" font-family="Arial" font-size="14" fill="#dddddd">• fun getDataStore()</text>
+<text x="60" y="1917" font-family="Arial" font-size="14" fill="#dddddd">• fun getOrCreateKey()</text>
+<text x="60" y="1935" font-family="Arial" font-size="14" fill="#dddddd">• fun criptografar()</text>
+<text x="60" y="1953" font-family="Arial" font-size="14" fill="#dddddd">• fun descriptografar()</text>
+<text x="60" y="1971" font-family="Arial" font-size="13" fill="#999999">+ 6 elementos</text>
+</svg>

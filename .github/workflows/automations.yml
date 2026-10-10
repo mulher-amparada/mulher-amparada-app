@@ -1126,11 +1126,7 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-  # =========================================================
-  # COLOCAR O WORKFLOW NO README
-  # =========================================================
-
-  # =========================================================
+# =========================================================
 # GERAR IMAGEM DAS LINGUAGENS
 # =========================================================
 
@@ -1161,15 +1157,24 @@ jobs:
         uses: actions/setup-go@v6
         with:
           go-version: "1.25"
+          cache-dependency-path: tools/go.sum
 
-      - name: Executar languages.go
+      - name: Baixar dependências Go
+        working-directory: tools
         run: |
           set -e
-          go run tools/languages.go
+          go mod download
+
+      - name: Executar languages.go
+        working-directory: tools
+        run: |
+          set -e
+          go run languages.go
 
       - name: Verificar arquivos gerados
         run: |
           set -e
+
           test -s README.md
           test -s github-languages.png
 
@@ -1193,7 +1198,7 @@ jobs:
           name: github-languages
           path: github-languages.png
           if-no-files-found: error
-
+          
 # =========================================================
 # CENTRALIZAR E SALVAR ARQUIVOS NA MAIN
 # =========================================================

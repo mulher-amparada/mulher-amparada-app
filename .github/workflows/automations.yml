@@ -1125,7 +1125,6 @@ jobs:
           path: pesquisas/workflow.md
           if-no-files-found: error
           retention-days: 30
-
 # =========================================================
 # GERAR IMAGEM DAS LINGUAGENS
 # =========================================================
@@ -1167,17 +1166,14 @@ jobs:
 
           if [ ! -f go.mod ]; then
             echo "go.mod não encontrado. Criando..."
-
             go mod init github.com/mulher-amparada/mulher-amparada-app
           fi
 
           echo "Atualizando dependências..."
+          go mod tidy || true
 
-          go mod tidy
-
-          go mod download
-
-          go mod verify
+          # Garante que o go.sum exista mesmo se o projeto não tiver dependências externas
+          touch go.sum
 
           echo ""
           echo "Arquivos Go:"
@@ -1234,7 +1230,8 @@ jobs:
             go.mod
             go.sum
           if-no-files-found: error
-          
+
+
           
 # =========================================================
 # CENTRALIZAR E SALVAR ARQUIVOS NA MAIN

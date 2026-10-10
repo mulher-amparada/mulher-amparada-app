@@ -2709,7 +2709,7 @@ Row(
 ) {
 
     ActionCard(
-        title = "Polícia — 190",
+        title = "Polícia 190",
         description = "Emergência policial e atendimento imediato",
         icon = R.drawable.ic_0007,
         arrow = R.drawable.ic_arrow,
@@ -2723,7 +2723,7 @@ Row(
     )
 
     ActionCard(
-        title = "SAMU — 192",
+        title = "SAMU 192",
         description = "Atendimento médico de emergência",
         icon = R.drawable.ic_0008,
         arrow = R.drawable.ic_arrow,
@@ -2737,7 +2737,7 @@ Row(
     )
 
     ActionCard(
-        title = "Central da Mulher — 180",
+        title = "Central da Mulher 180",
         description = "Orientação, acolhimento e atendimento",
         icon = R.drawable.ic_0009,
         arrow = R.drawable.ic_arrow,
@@ -2834,9 +2834,7 @@ Spacer(
     Modifier.height(30.dp)
 )
 
-                    Spacer(
-                        Modifier.height(30.dp)
-                    )
+
 
                     SectionTitle(
                         text = "Acesso rápido",
@@ -3518,8 +3516,7 @@ private fun SensorCard(
 
     Box(
         modifier =
-            Modifier
-                
+            modifier
                 .height(210.dp)
                 .clip(
                     RoundedCornerShape(25.dp)
@@ -3602,132 +3599,127 @@ private fun SensorCard(
             )
         }
 
-        Column(
+        Row(
             modifier =
                 Modifier
                     .fillMaxSize()
                     .padding(22.dp),
 
-            verticalArrangement =
-                Arrangement.SpaceBetween
+            verticalAlignment =
+                Alignment.CenterVertically
         ) {
 
-            Row(
+            Column(
                 modifier =
-                    Modifier.fillMaxWidth(),
+                    Modifier.weight(1f),
 
-                verticalAlignment =
-                    Alignment.Top
+                verticalArrangement =
+                    Arrangement.spacedBy(8.dp)
             ) {
 
-                Column(
-                    modifier =
-                        Modifier.weight(1f),
-
-                    verticalArrangement =
-                        Arrangement.spacedBy(8.dp)
-                ) {
-
-                    Text(
-                        text = number,
-                        color = c.muted,
-                        fontSize = 9.sp,
-                        letterSpacing = 1.5.sp
-                    )
-
-                    Text(
-                        text = title,
-                        color = c.text,
-                        fontSize = 22.sp,
-                        lineHeight = 25.sp,
-                        letterSpacing = (-.7).sp,
-                        modifier =
-                            Modifier.fillMaxWidth()
-                    )
-                }
-
-                Spacer(
-                    Modifier.width(14.dp)
+                Text(
+                    text = number,
+                    color = c.muted,
+                    fontSize = 9.sp,
+                    letterSpacing = 1.5.sp
                 )
+
+                Text(
+                    text = title,
+                    color = c.text,
+                    fontSize = 22.sp,
+                    lineHeight = 25.sp,
+                    letterSpacing = (-.7).sp,
+                    modifier =
+                        Modifier.fillMaxWidth()
+                )
+            }
+
+            Spacer(
+                Modifier.width(14.dp)
+            )
+
+            Box(
+                modifier =
+                    Modifier
+                        .size(55.dp)
+                        .clip(
+                            RoundedCornerShape(20.dp)
+                        )
+                        .background(
+                            color.copy(.075f)
+                        )
+                        .border(
+                            1.dp,
+                            color.copy(.27f),
+                            RoundedCornerShape(20.dp)
+                        ),
+
+                contentAlignment =
+                    Alignment.Center
+            ) {
 
                 Box(
                     modifier =
                         Modifier
-                            .size(55.dp)
-                            .clip(
-                                RoundedCornerShape(20.dp)
-                            )
-                            .background(
-                                color.copy(.075f)
-                            )
+                            .size(39.dp)
                             .border(
                                 1.dp,
-                                color.copy(.27f),
-                                RoundedCornerShape(20.dp)
+                                c.borderLight,
+                                RoundedCornerShape(16.dp)
                             ),
 
                     contentAlignment =
                         Alignment.Center
                 ) {
 
-                    Box(
+                    Image(
+                        painter =
+                            painterResource(icon),
+
+                        contentDescription = null,
+
                         modifier =
-                            Modifier
-                                .size(39.dp)
-                                .border(
-                                    1.dp,
-                                    c.borderLight,
-                                    RoundedCornerShape(16.dp)
-                                ),
-
-                        contentAlignment =
-                            Alignment.Center
-                    ) {
-
-                        Image(
-                            painter =
-                                painterResource(icon),
-
-                            contentDescription = null,
-
-                            modifier =
-                                Modifier.size(24.dp)
-                        )
-                    }
+                            Modifier.size(24.dp)
+                    )
                 }
             }
 
-            Text(
-                text = description,
-
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = 4.dp,
-                            end = 4.dp
-                        ),
-
-                color = c.secondary,
-
-                fontSize = 10.sp,
-                lineHeight = 16.sp,
-
-                maxLines = 3
+            Spacer(
+                Modifier.width(14.dp)
             )
 
-            Row(
+            Column(
                 modifier =
-                    Modifier.fillMaxWidth(),
+                    Modifier.weight(1f),
 
-                verticalAlignment =
-                    Alignment.CenterVertically,
-
-                horizontalArrangement =
-                    Arrangement.SpaceBetween
+                verticalArrangement =
+                    Arrangement.spacedBy(8.dp)
             ) {
 
+                Text(
+                    text = description,
+
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                top = 4.dp,
+                                end = 4.dp
+                            ),
+
+                    color = c.secondary,
+
+                    fontSize = 10.sp,
+                    lineHeight = 16.sp,
+
+                    maxLines = 3
+                )
+
                 Row(
+                    modifier =
+                        Modifier.fillMaxWidth(),
+
                     verticalAlignment =
                         Alignment.CenterVertically
                 ) {
@@ -3766,13 +3758,17 @@ private fun SensorCard(
                         letterSpacing = 1.2.sp
                     )
                 }
-
-                FakeSwitch(
-                    color = color,
-                    active = active,
-                    c = c
-                )
             }
+
+            Spacer(
+                Modifier.width(14.dp)
+            )
+
+            FakeSwitch(
+                color = color,
+                active = active,
+                c = c
+            )
         }
     }
 }
@@ -3853,7 +3849,6 @@ private fun ActionCard(
 ) {
 
     Row(
-
         modifier =
             modifier
                 .height(210.dp)
@@ -3877,49 +3872,48 @@ private fun ActionCard(
             Alignment.CenterVertically
     ) {
 
-        Column(
-
+        Box(
             modifier =
-                Modifier.fillMaxWidth(),
+                Modifier
+                    .size(55.dp)
+                    .clip(
+                        RoundedCornerShape(19.dp)
+                    )
+                    .background(
+                        accent.copy(.09f)
+                    )
+                    .border(
+                        1.dp,
+                        accent.copy(.32f),
+                        RoundedCornerShape(19.dp)
+                    ),
 
-            horizontalAlignment =
-                Alignment.CenterHorizontally,
-
-            verticalArrangement =
-                Arrangement.spacedBy(9.dp)
+            contentAlignment =
+                Alignment.Center
         ) {
 
-            Box(
+            Image(
+                painter =
+                    painterResource(icon),
+
+                contentDescription = null,
 
                 modifier =
-                    Modifier
-                        .size(55.dp)
-                        .clip(
-                            RoundedCornerShape(19.dp)
-                        )
-                        .background(
-                            accent.copy(.09f)
-                        )
-                        .border(
-                            1.dp,
-                            accent.copy(.32f),
-                            RoundedCornerShape(19.dp)
-                        ),
+                    Modifier.size(29.dp)
+            )
+        }
 
-                contentAlignment =
-                    Alignment.Center
-            ) {
+        Spacer(
+            Modifier.width(12.dp)
+        )
 
-                Image(
-                    painter =
-                        painterResource(icon),
+        Column(
+            modifier =
+                Modifier.weight(1f),
 
-                    contentDescription = null,
-
-                    modifier =
-                        Modifier.size(29.dp)
-                )
-            }
+            verticalArrangement =
+                Arrangement.spacedBy(5.dp)
+        ) {
 
             Text(
                 text = title,
@@ -3930,9 +3924,9 @@ private fun ActionCard(
                     else
                         c.text,
 
-                fontSize = 14.sp,
-                lineHeight = 17.sp,
-                textAlign = TextAlign.Center
+                fontSize = 13.sp,
+                lineHeight = 16.sp,
+                maxLines = 2
             )
 
             Text(
@@ -3944,9 +3938,8 @@ private fun ActionCard(
                     else
                         c.secondary,
 
-                fontSize = 9.sp,
-                lineHeight = 13.sp,
-                textAlign = TextAlign.Center,
+                fontSize = 8.sp,
+                lineHeight = 12.sp,
                 maxLines = 3
             )
 
@@ -3956,44 +3949,47 @@ private fun ActionCard(
                 color = accent,
 
                 fontSize = 6.sp,
-                letterSpacing = .8.sp,
-                textAlign = TextAlign.Center
+                letterSpacing = .6.sp,
+                maxLines = 1
             )
+        }
 
-            Box(
+        Spacer(
+            Modifier.width(7.dp)
+        )
+
+        Box(
+            modifier =
+                Modifier
+                    .size(34.dp)
+                    .clip(
+                        RoundedCornerShape(12.dp)
+                    )
+                    .background(
+                        if (isSystemInDarkTheme())
+                            Color.Black.copy(.13f)
+                        else
+                            Color.Black.copy(.05f)
+                    )
+                    .border(
+                        1.dp,
+                        accent.copy(.22f),
+                        RoundedCornerShape(12.dp)
+                    ),
+
+            contentAlignment =
+                Alignment.Center
+        ) {
+
+            Image(
+                painter =
+                    painterResource(arrow),
+
+                contentDescription = null,
 
                 modifier =
-                    Modifier
-                        .size(34.dp)
-                        .clip(
-                            RoundedCornerShape(12.dp)
-                        )
-                        .background(
-                            if (isSystemInDarkTheme())
-                                Color.Black.copy(.13f)
-                            else
-                                Color.Black.copy(.05f)
-                        )
-                        .border(
-                            1.dp,
-                            accent.copy(.22f),
-                            RoundedCornerShape(12.dp)
-                        ),
-
-                contentAlignment =
-                    Alignment.Center
-            ) {
-
-                Image(
-                    painter =
-                        painterResource(arrow),
-
-                    contentDescription = null,
-
-                    modifier =
-                        Modifier.size(16.dp)
-                )
-            }
+                    Modifier.size(16.dp)
+            )
         }
     }
 }

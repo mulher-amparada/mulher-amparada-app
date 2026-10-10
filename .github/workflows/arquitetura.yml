@@ -1,0 +1,51 @@
+name: Gerar arquitetura Kotlin
+
+on:
+  push:
+    paths:
+      - "**/*.kt"
+      - "**/*.kts"
+      - "tools/arquitetura.c"
+      - ".github/workflows/arquitetura.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  arquitetura:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Compilar C
+        run: |
+          gcc -O2 tools/arquitetura.c -o arquitetura
+
+      - name: Gerar arquitetura
+        run: |
+          ./arquitetura
+
+      - name: Instalar conversor SVG
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y librsvg2-bin
+
+      - name: Gerar PNG
+        run: |
+          rsvg-convert \
+            -o docs/arquitetura.png \
+            docs/arquitetura.svg
+
+      - name: Salvar arquitetura
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add docs/arquitetura.svg docs/arquitetura.png
+
+          git diff --cached --quiet || \
+            git commit -m "chore: atualizar arquitetura do projeto"
+
+          git push

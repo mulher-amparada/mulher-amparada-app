@@ -1,1198 +1,281 @@
-# Termos e politicas do projeto = Mulher Amparada.
+# Termos de Uso e Política de Privacidade — Mulher Amparada
 
----
+**Última revisão:** 10 de outubro de 2026
 
-1. Finalidade do Aplicativo
+O Mulher Amparada é um projeto voltado ao apoio, à segurança e à privacidade de suas usuárias. Este documento descreve a finalidade do aplicativo, os recursos mencionados pelo projeto, as permissões necessárias e as limitações de funcionamento.
 
-Cláusula 1.1: Este aplicativo foi desenvolvido com objetivo de oferecer suporte, acolhimento e auxílio para mulheres em situações de risco, vulnerabilidade, ameaça ou violência.
+> **Nota importante:** este documento foi revisado com base no texto fornecido. Antes da publicação, confirme que cada afirmação técnica corresponde ao código e ao comportamento real da versão disponibilizada. Este texto não constitui aconselhamento jurídico.
 
-Cláusula 1.2: O aplicativo atua como ferramenta complementar de apoio pessoal e segurança digital.
+## 1. Finalidade do aplicativo
 
-Cláusula 1.3: O aplicativo disponibiliza funcionalidades emergenciais, contatos rápidos, proteção de acesso, recursos de localização e ferramentas de segurança.
+**1.1.** O Mulher Amparada foi desenvolvido para oferecer ferramentas de apoio, acolhimento e segurança a pessoas em situações de risco, vulnerabilidade ou violência.
 
-Cláusula 1.4: O uso do aplicativo é gratuito e voluntário.
+**1.2.** O aplicativo constitui uma ferramenta complementar e não substitui serviços oficiais de emergência, autoridades públicas, atendimento médico ou acompanhamento profissional.
 
-Cláusula 1.5: Ao utilizar o aplicativo, a usuária declara estar ciente e concordar com os presentes Termos de Uso e Política de Privacidade.
+**1.3.** Os recursos disponíveis dependem da versão instalada, das características do dispositivo, das permissões concedidas e das condições de funcionamento do Android.
 
-Cláusula 1.6: O aplicativo não utiliza a permissão de sensores corporais ou de saúde do Android para coleta, monitoramento ou processamento de dados de saúde.
+**1.4.** A utilização do aplicativo é voluntária. Eventuais custos relacionados à internet, telefonia ou serviços de terceiros são definidos pelos respectivos fornecedores.
 
-Cláusula 1.7: O aplicativo utiliza um Serviço de Acessibilidade exclusivamente para a funcionalidade de bloqueio da tela, mediante ativação manual da própria usuária nas configurações de Acessibilidade do Android.
+**1.5.** Este documento explica as condições gerais de uso e as práticas de privacidade descritas para o aplicativo.
 
----
+## 2. Público-alvo e uso responsável
 
-2. Público-Alvo
+**2.1.** O projeto tem como público prioritário mulheres em situação de risco ou vulnerabilidade.
 
-Cláusula 2.1: O aplicativo foi direcionado principalmente para mulheres em situação de violência, risco ou vulnerabilidade.
+**2.2.** Todas as pessoas que utilizarem o aplicativo deverão respeitar a legislação aplicável e os direitos de terceiros.
 
-Cláusula 2.2: Qualquer pessoa que utilize o aplicativo deverá respeitar integralmente estes termos.
+**2.3.** O aplicativo não deve ser utilizado para perseguição, assédio, vigilância indevida, fraude ou qualquer finalidade ilícita.
 
-Cláusula 2.3: O aplicativo não realiza discriminação de gênero, raça, religião, nacionalidade ou qualquer outra condição pessoal.
+**2.4.** A disponibilidade de um recurso não garante que ele funcione em todas as situações ou dispositivos.
 
----
+## 3. Permissões e acessos do Android
 
-3. Permissões Utilizadas
+**3.1.** O aplicativo poderá solicitar permissões ou acessos especiais quando forem necessários para os recursos disponíveis na versão instalada.
 
-Cláusula 3.1: O aplicativo solicita apenas permissões e acessos especiais necessários para funcionalidades específicas.
+**3.2.** Conforme a funcionalidade utilizada e a implementação existente, esses acessos poderão incluir telefone, contatos, localização, microfone, sensores e armazenamento de arquivos.
 
-Cláusula 3.2: A permissão de telefone poderá ser utilizada para iniciar chamadas através do aplicativo padrão do Android.
+**3.3.** Algumas permissões dependem de autorização da usuária. Outras funcionalidades podem utilizar APIs do Android que não exigem uma permissão separada.
 
-Cláusula 3.3: A permissão de contatos poderá ser utilizada para seleção manual de contatos de emergência.
+**3.4.** A usuária poderá consultar e revogar permissões nas configurações do dispositivo, respeitadas as opções disponibilizadas pelo Android.
 
-Cláusula 3.4: A permissão de localização poderá ser utilizada em funcionalidades relacionadas a emergência e compartilhamento de localização.
+**3.5.** A revogação de uma permissão poderá impedir ou limitar o funcionamento do recurso correspondente.
 
-Cláusula 3.5: A permissão especial de Acesso a todos os arquivos poderá ser utilizada para o serviço de visualização de arquivos da área protegida.
+**3.6.** A concessão de uma permissão não significa autorização irrestrita para finalidades diferentes daquelas necessárias à funcionalidade utilizada.
 
-Cláusula 3.15: O microfone poderá ser utilizado para funcionalidades de detecção sonora e proteção por barulho, mediante autorização da usuária.
+## 4. Contatos de emergência
 
-Cláusula 3.16: A execução de determinados recursos poderá ocorrer em segundo plano quando a própria usuária tiver ativado a respectiva funcionalidade.
+**4.1.** Quando houver uma funcionalidade de seleção de contatos, a usuária poderá escolher manualmente os contatos que deseja utilizar.
 
-Cláusula 3.17: Todas as permissões e acessos especiais dependem de consentimento da usuária, conforme os mecanismos disponibilizados pelo Android.
+**4.2.** O acesso a nomes e números telefônicos dependerá da implementação e das permissões disponibilizadas pelo Android.
 
-Cláusula 3.18: As permissões podem ser revogadas a qualquer momento nas configurações do Android.
+**4.3.** Os contatos selecionados poderão ser armazenados localmente quando essa opção estiver implementada.
 
-Cláusula 3.19: O aplicativo não contorna, burla ou oculta as permissões e mecanismos de segurança do sistema Android.
+**4.4.** Não se deve presumir que toda a agenda telefônica seja sincronizada, enviada a servidores ou acessada continuamente.
 
----
+**4.5.** A usuária deverá conferir os números e contatos configurados antes de depender deles em uma situação de emergência.
 
-4. Uso de Contatos
+## 5. Localização
 
-Cláusula 4.1: O acesso aos contatos ocorre apenas mediante ação manual da própria usuária.
+**5.1.** Os recursos que utilizam localização dependem das permissões concedidas e dos serviços de localização do dispositivo.
 
-Cláusula 4.2: O aplicativo poderá acessar nome e telefone de contatos selecionados pela usuária.
+**5.2.** A localização poderá ser utilizada em funcionalidades de mapa, georreferenciamento ou apoio emergencial, quando disponíveis.
 
-Cláusula 4.3: Os contatos poderão ser armazenados localmente no dispositivo.
+**5.3.** A precisão poderá variar conforme o sinal de GPS, o ambiente, o dispositivo e as condições de rede.
 
-Cláusula 4.4: O aplicativo não sincroniza automaticamente toda a agenda do aparelho.
+**5.4.** O compartilhamento da localização deverá ocorrer conforme a ação iniciada pela usuária e o funcionamento específico do recurso utilizado.
 
-Cláusula 4.5: Os contatos não são vendidos nem utilizados para marketing.
+**5.5.** Não se deve interpretar a presença de uma função de localização como garantia de rastreamento contínuo, localização exata ou comunicação bem-sucedida.
 
----
+## 6. Botão SOS e chamadas
 
-5. Uso de Localização
+**6.1.** O aplicativo poderá disponibilizar atalhos para facilitar o acesso a serviços de ajuda.
 
-Cláusula 5.1: A localização é utilizada mediante ação da usuária e conforme as funcionalidades que dependem desse recurso.
+**6.2.** Conforme a implementação e as limitações do Android, uma ação poderá abrir o aplicativo de telefone padrão com um número preenchido, exigindo que a usuária confirme a chamada.
 
-Cláusula 5.2: O aplicativo não realiza rastreamento contínuo da usuária para fins de monitoramento oculto.
+**6.3.** O comportamento poderá variar conforme o dispositivo, a versão do Android, as permissões, a operadora e a disponibilidade da rede.
 
-Cláusula 5.3: O aplicativo poderá utilizar a última localização disponível do dispositivo quando tecnicamente necessário para determinada funcionalidade.
+**6.4.** A presença de um botão SOS não garante que a chamada seja completada, atendida ou que a ajuda chegue imediatamente.
 
-Cláusula 5.4: Informações de localização poderão ser compartilhadas manualmente pela usuária em funcionalidades emergenciais.
+**6.5.** Em uma emergência, a usuária deverá verificar o número exibido antes de confirmar a ligação. No Brasil, o Ligue 180 é um canal de atendimento à mulher; em perigo imediato, procure também o serviço de emergência adequado.
 
----
+## 7. Proteção por movimento
 
-6. Botão de Emergência
+**7.1.** Se disponível na versão instalada, a proteção por movimento poderá utilizar o acelerômetro do dispositivo para identificar movimentações.
 
-Cláusula 6.1: O aplicativo poderá disponibilizar funcionalidades emergenciais para agilizar pedidos de ajuda.
+**7.2.** O acelerômetro é um sensor do aparelho e, em geral, não exige uma permissão específica do Android.
 
-Cláusula 6.2: Chamadas poderão ser realizadas através do aplicativo padrão de telefone do Android.
+**7.3.** A detecção depende da disponibilidade do sensor, da implementação, das restrições do sistema e das condições do dispositivo.
 
-Cláusula 6.3: Quando a funcionalidade não puder iniciar diretamente uma chamada, o aplicativo poderá abrir o discador nativo do Android com o número correspondente já preenchido.
+**7.4.** Movimentos involuntários, impactos ou vibrações poderão ocasionar detecções incorretas.
 
-Cláusula 6.4: O funcionamento poderá variar conforme fabricante, permissões e versão do Android.
+**7.5.** Qualquer ação emergencial associada ao recurso dependerá da implementação e das permissões necessárias. Não há garantia de detecção ou acionamento em todas as situações.
 
-Cláusula 6.5: O aplicativo não garante resposta imediata ou atendimento oficial.
+**7.6.** A usuária deverá ativar e desativar o recurso conforme as opções disponíveis no aplicativo.
 
----
+## 8. Proteção por sons ou palmas
 
-7. Proteção por Movimento
+**8.1.** Caso esteja disponível e seja ativado pela usuária, um recurso de detecção sonora poderá utilizar o microfone para identificar determinados padrões acústicos.
 
-Cláusula 7.1: O recurso de proteção por movimento utiliza o sensor de acelerômetro do dispositivo Android.
+**8.2.** A detecção automática de sons não é infalível. Ruídos ambientes, distância, qualidade do microfone e limitações do sistema podem causar falsos positivos ou falhas.
 
-Cláusula 7.2: O acelerômetro é um sensor interno do aparelho utilizado para detectar movimentações físicas.
+**8.3.** A utilização do microfone em segundo plano, quando implementada, depende das permissões, dos serviços e das restrições aplicáveis ao Android.
 
-Cláusula 7.3: O aplicativo poderá acessar dados do acelerômetro enquanto a proteção por movimento estiver ativada.
+**8.4.** O processamento local, a gravação, o armazenamento e a transmissão de áudio dependem do funcionamento real do recurso. Não se deve presumir que o áudio seja sempre processado localmente sem verificar o código.
 
-Cláusula 7.4: O acesso ao acelerômetro ocorre exclusivamente para funcionamento da detecção de movimentos emergenciais.
+**8.5.** A usuária deverá manter o controle sobre a ativação do recurso e observar os indicadores de uso do microfone disponibilizados pelo Android.
 
-Cláusula 7.5: O acelerômetro é um componente interno do Android e não exige permissão separada específica no sistema.
+**8.6.** O uso prolongado do microfone poderá aumentar o consumo de bateria.
 
-Cláusula 7.6: O funcionamento poderá variar conforme fabricante, sensores disponíveis e versão do Android.
+## 9. Autenticação e áreas protegidas
 
-Cláusula 7.7: Alguns dispositivos poderão limitar sensores devido a economia de bateria ou restrições do sistema.
+**9.1.** Quando disponíveis, áreas protegidas poderão utilizar mecanismos de autenticação implementados no aplicativo ou oferecidos pelo Android.
 
-Cláusula 7.8: Dispositivos sem acelerômetro poderão não executar corretamente a funcionalidade.
+**9.2.** A autenticação poderá variar conforme a configuração e a compatibilidade do dispositivo.
 
-Cláusula 7.9: Vibrações, impactos ou movimentos involuntários poderão ativar o recurso automaticamente.
+**9.3.** Se houver integração com a autenticação biométrica do Android, os dados biométricos serão tratados pelo sistema de autenticação do dispositivo, conforme a API utilizada.
 
-Cláusula 7.10: O recurso poderá iniciar automaticamente uma ligação telefônica quando movimentos compatíveis forem detectados.
+**9.4.** O aplicativo não deverá ser considerado invulnerável a acessos indevidos. A proteção depende da implementação, da configuração do dispositivo e das condições de segurança do sistema.
 
-Cláusula 7.11: A ligação automática depende da permissão de chamadas telefônicas concedida pela usuária.
+**9.5.** A usuária deverá manter protegidos o dispositivo e os métodos de autenticação utilizados.
 
-Cláusula 7.12: Sem permissão de chamadas, a funcionalidade poderá não operar corretamente.
+## 10. Armazenamento local e criptografia
 
-Cláusula 7.13: O funcionamento depende da operadora, rede móvel e disponibilidade do dispositivo.
+**10.1.** Dados utilizados pelo aplicativo poderão ser armazenados localmente, conforme a funcionalidade e a implementação existentes.
 
-Cláusula 7.14: O recurso pode ser ativado ou desativado manualmente pela usuária.
+**10.2.** Quando o sistema Cripto estiver implementado, os dados abrangidos por ele poderão ser protegidos por criptografia e por mecanismos de gerenciamento de chaves do Android.
 
----
+**10.3.** A documentação técnica do projeto menciona AES-256, Android Keystore e Jetpack DataStore Preferences. A aplicação efetiva dessas tecnologias e o conjunto de dados protegidos devem ser confirmados no código.
 
-8. Segurança de acesso da área protegida
+**10.4.** A criptografia reduz determinados riscos, mas não garante proteção absoluta em caso de comprometimento do dispositivo, falhas de implementação ou acesso autorizado ao aparelho.
 
-Cláusula 8.1: O aplicativo poderá utilizar mecanismos de segurança do próprio Android.
+**10.5.** A usuária deverá verificar quais informações são armazenadas por cada funcionalidade e evitar inserir dados desnecessários.
 
-Cláusula 8.2: O aplicativo poderá utilizar PIN, senha, padrão ou biometria do sistema.
+## 11. Privacidade e dados pessoais
 
-Cláusula 8.3: Dados biométricos permanecem sob gerenciamento exclusivo do Android.
+**11.1.** O tratamento de dados pessoais deverá observar a legislação aplicável, incluindo a Lei Geral de Proteção de Dados Pessoais (LGPD), quando aplicável.
 
-Cláusula 8.4: O aplicativo não armazena impressões digitais, rosto ou informações biométricas.
+**11.2.** As informações acessadas devem ser limitadas às finalidades necessárias para os recursos utilizados.
 
----
+**11.3.** O tipo de dado tratado, o local de armazenamento, o prazo de retenção e eventuais destinatários dependem da implementação real do aplicativo e de seus serviços associados.
 
-9. Conteúdo Protegido
+**11.4.** Não se afirma neste documento que o aplicativo nunca coleta dados, nunca gera registros técnicos ou nunca se comunica com serviços externos sem que isso tenha sido verificado no código e no tráfego da aplicação.
 
-Cláusula 9.1: O recurso de conteúdo protegido depende das configurações de segurança do aparelho.
+**11.5.** Para publicar uma política de privacidade definitiva, o responsável pelo projeto deverá identificar os dados efetivamente tratados, suas finalidades, bases legais, prazos de retenção e meios de contato para solicitações dos titulares.
 
-Cláusula 9.2: O dispositivo deverá possuir autenticação configurada para funcionamento adequado.
+## 12. Permissão de Acessibilidade
 
-Cláusula 9.3: Sem autenticação configurada, determinadas telas poderão abrir sem solicitação de biometria ou senha.
+**12.1.** Caso o aplicativo utilize um Serviço de Acessibilidade, sua finalidade deverá ser descrita de maneira específica e compatível com a implementação real.
 
----
+**12.2.** A ativação de um serviço de acessibilidade poderá exigir ação manual da usuária nas configurações do Android.
 
-10. Armazenamento Local
+**12.3.** A usuária deverá ler a tela de autorização do Android e compreender o acesso concedido antes de ativar o serviço.
 
-Cláusula 10.1: Dados utilizados pelo aplicativo poderão ser armazenados localmente no dispositivo.
+**12.4.** Não se deve afirmar que o serviço não lê telas ou não interage com outros aplicativos sem confirmar seu código e suas configurações.
 
-Cláusula 10.2: Dados protegidos pelo sistema Cripto são armazenados localmente utilizando criptografia AES-256, Android Keystore e Jetpack DataStore Preferences.
+**12.5.** A usuária poderá desativar o serviço nas configurações de acessibilidade do dispositivo.
 
-Cláusula 10.3: O aplicativo não realiza venda de dados pessoais.
+## 13. Visualizador de arquivos
 
----
+**13.1.** Se disponível, o visualizador poderá permitir a navegação e abertura de arquivos acessíveis ao aplicativo conforme as APIs e permissões do Android.
 
-11. Ausência de Monitoramento Oculto
+**13.2.** A compatibilidade depende do tipo, tamanho e integridade do arquivo, além dos recursos disponíveis no dispositivo.
 
-Cláusula 11.1: O aplicativo não utiliza spyware.
+**13.3.** A abertura de determinados arquivos poderá depender de aplicativos externos escolhidos pela usuária.
 
-Cláusula 11.2: O aplicativo não realiza monitoramento oculto contínuo.
+**13.4.** O comportamento de aplicativos externos, incluindo seu processamento e armazenamento de dados, não é controlado pelo visualizador do Mulher Amparada.
 
-Cláusula 11.3: Nenhuma funcionalidade sensível opera sem as permissões ou acessos necessários do Android e sem a ativação correspondente pela usuária.
+**13.5.** Não se presume que o aplicativo faça backup, verificação antivírus, recuperação de arquivos ou sincronização com nuvem.
 
----
+**13.6.** A usuária deverá ter cuidado ao abrir arquivos de origem desconhecida.
 
-12. Compatibilidade
+## 14. Mapa e Raio Seguro
 
-Cláusula 12.1: Determinadas funcionalidades poderão variar conforme fabricante e versão do Android.
+**14.1.** Caso disponíveis, os recursos de mapa poderão utilizar dados cartográficos do OpenStreetMap e bibliotecas compatíveis, conforme a implementação instalada.
 
-Cláusula 12.2: Recursos poderão não funcionar corretamente em dispositivos modificados.
+**14.2.** O Raio Seguro, quando implementado, poderá comparar a localização do dispositivo com uma área definida pela usuária.
 
----
+**14.3.** A precisão depende da qualidade da localização, das condições ambientais e das limitações do dispositivo.
 
-13. LGPD e Privacidade
+**14.4.** A exibição de um mapa ou a configuração de uma área segura não constitui garantia de proteção física nem substitui serviços oficiais de emergência.
 
-Cláusula 13.1: O aplicativo busca respeitar a Lei Geral de Proteção de Dados.
+**14.5.** A utilização de serviços cartográficos externos poderá envolver conexões com os respectivos fornecedores. O tratamento de dados por esses serviços depende de suas próprias políticas.
 
-Cláusula 13.2: As permissões possuem finalidade limitada às funcionalidades do aplicativo.
+## 15. Gravador de áudio
 
-Cláusula 13.3: A usuária poderá revogar permissões diretamente no Android.
+**15.1.** Se disponível, a função de gravação poderá capturar áudio por meio do microfone após a concessão das permissões necessárias.
 
----
+**15.2.** O local de armazenamento, as opções de reprodução e a possibilidade de exclusão dependem da implementação real.
 
-14. Limitações
+**15.3.** A usuária é responsável pelo uso das gravações e deverá respeitar a legislação aplicável e os direitos de privacidade de terceiros.
 
-Cláusula 14.1: O aplicativo não substitui serviços oficiais de emergência.
+**15.4.** O aplicativo não garante que uma gravação seja aceita como prova ou possua validade jurídica em qualquer circunstância.
 
-Cláusula 14.2: Não existe garantia de funcionamento contínuo.
+## 16. Calculadora, tarefas e produtividade
 
-Cláusula 14.3: O funcionamento depende de internet, sensores, permissões e serviços do Android.
+**16.1.** Se disponíveis, recursos de calculadora, tarefas ou temporizador poderão auxiliar em atividades pessoais e de organização.
 
----
+**16.2.** A usuária é responsável por conferir resultados e informações inseridas.
 
-15. Responsabilidade da Usuária
+**16.3.** Essas ferramentas não substituem sistemas profissionais especializados nem devem ser consideradas fonte exclusiva para decisões críticas.
 
-Cláusula 15.1: A usuária é responsável pelo uso adequado do aplicativo.
+**16.4.** A persistência das informações depende do armazenamento utilizado. Limpar os dados do aplicativo ou desinstalá-lo poderá causar perda de informações locais.
 
-Cláusula 15.2: A usuária é responsável pelas permissões concedidas ao aplicativo.
+## 17. Funcionamento offline e serviços externos
 
----
+**17.1.** Algumas funcionalidades poderão operar sem internet, enquanto outras dependerão de conexão ou serviços externos.
 
-16. Instalação Fora da Play Store
+**17.2.** Chamadas, mensagens, mapas e recursos de terceiros poderão depender de aplicativos instalados, permissões, rede e disponibilidade dos respectivos fornecedores.
 
-Cláusula 16.1: O aplicativo poderá ser distribuído fora da Google Play Store.
+**17.3.** O desenvolvedor não controla falhas de operadoras, do sistema Android ou de serviços externos, sem prejuízo das responsabilidades que a legislação aplicável determinar.
 
-Cláusula 16.2: A instalação dependerá de autorização manual da própria usuária no Android.
+## 18. Compatibilidade e falhas técnicas
 
-Cláusula 16.3: A usuária é responsável por instalar o aplicativo apenas através de fontes confiáveis.
+**18.1.** O funcionamento poderá variar conforme fabricante, modelo, versão do Android, sensores e configurações de economia de bateria.
 
-Cláusula 16.4: O aplicativo poderá recomendar verificações de segurança do Android e Google Play Protect.
+**18.2.** Atualizações do sistema operacional ou do aplicativo poderão modificar o comportamento dos recursos.
 
----
+**18.3.** Podem ocorrer falhas, interrupções ou incompatibilidades. Não há garantia de funcionamento contínuo ou livre de erros.
 
-17. Atualizações do Aplicativo
+**18.4.** A usuária deverá manter o dispositivo atualizado e utilizar fontes confiáveis para instalar o aplicativo.
 
-Cláusula 17.1: O aplicativo poderá receber atualizações destinadas a melhorias de desempenho, estabilidade e segurança.
+## 19. Instalação e atualizações
 
-Cláusula 17.2: Funcionalidades poderão ser alteradas, adicionadas ou removidas futuramente.
+**19.1.** Se o aplicativo for distribuído fora da Google Play Store, a instalação poderá exigir autorização específica do Android.
 
-Cláusula 17.3: Atualizações poderão modificar elementos visuais, permissões ou comportamento interno do aplicativo.
+**19.2.** A usuária deverá verificar a origem do arquivo antes de instalá-lo.
 
-Cláusula 17.4: O uso contínuo do aplicativo após atualizações representa concordância com eventuais alterações.
+**19.3.** Atualizações poderão corrigir erros, alterar a interface ou modificar recursos. A disponibilidade e a forma de instalação dependem do canal de distribuição.
 
----
+**19.4.** Não se presume que as atualizações sejam automáticas; isso depende do canal e das configurações utilizadas.
 
-18. Alterações nos Termos
+## 20. Exclusão e conservação de dados
 
-Cláusula 18.1: Estes Termos de Uso poderão ser atualizados futuramente.
+**20.1.** Dados armazenados localmente poderão ser removidos pelas opções oferecidas pelo aplicativo ou pelas configurações do Android.
 
-Cláusula 18.2: Alterações poderão ocorrer por motivos legais, técnicos, operacionais ou de segurança.
+**20.2.** Desinstalar o aplicativo ou limpar seus dados poderá apagar informações locais e tornar sua recuperação impossível.
 
-Cláusula 18.3: A versão mais recente dos termos poderá substituir versões anteriores.
+**20.3.** A remoção do aplicativo não necessariamente exclui arquivos pessoais salvos em locais compartilhados do dispositivo.
 
-Cláusula 18.4: O uso contínuo do aplicativo representa concordância com os termos atualizados.
+**20.4.** Se houver tratamento de dados fora do dispositivo, os procedimentos de acesso, correção ou exclusão deverão ser informados pelo responsável conforme a legislação aplicável.
 
----
+## 21. Propriedade intelectual e uso indevido
 
-19. Uso Responsável
+**21.1.** A utilização de marcas, textos, imagens e demais materiais deverá respeitar os direitos de seus titulares e as licenças aplicáveis.
 
-Cláusula 19.1: A usuária concorda em utilizar o aplicativo de forma ética e compatível com a legislação.
+**21.2.** Não é permitido utilizar o aplicativo para fins ilícitos ou tentar comprometer deliberadamente sua segurança e integridade.
 
-Cláusula 19.2: O aplicativo não deve ser utilizado para perseguição, assédio, fraude ou atividades ilegais.
+**21.3.** O código-fonte publicado em repositório público permanece sujeito à licença que efetivamente o acompanha. A publicação no GitHub, por si só, não significa ausência de direitos autorais.
 
-Cláusula 19.3: O uso indevido do aplicativo poderá resultar em limitações de funcionalidades.
+## 22. Limitação de responsabilidade
 
-Cláusula 19.4: A usuária é responsável pelas ações realizadas através do próprio dispositivo.
+**22.1.** O Mulher Amparada é uma ferramenta complementar de apoio e não garante prevenção de violência, detecção de todas as emergências ou resposta imediata.
 
----
+**22.2.** A usuária não deverá depender exclusivamente do aplicativo em situações de risco imediato.
 
-20. Dependência de Serviços Externos
+**22.3.** A utilização de recursos sensíveis deverá considerar as condições do dispositivo, as permissões concedidas e as limitações descritas neste documento.
 
-Cláusula 20.1: Algumas funcionalidades dependem de aplicativos externos instalados no dispositivo.
+**22.4.** Esta seção não exclui nem limita direitos ou responsabilidades que não possam ser afastados pela legislação aplicável.
 
-Cláusula 20.2: Serviços externos poderão incluir telefone, SMS, mapas, GPS ou aplicativos de comunicação.
+## 23. Alterações deste documento
 
-Cláusula 20.3: O funcionamento poderá variar conforme disponibilidade desses aplicativos.
+**23.1.** Este documento poderá ser atualizado para refletir mudanças no aplicativo, em suas práticas de tratamento de dados ou na legislação.
 
-Cláusula 20.4: O aplicativo não possui controle sobre falhas de serviços externos.
+**23.2.** A versão publicada deverá indicar a data de revisão.
 
----
+**23.3.** Alterações relevantes de privacidade deverão ser comunicadas pelos meios disponíveis, quando exigido pela legislação aplicável.
 
-21. Uso Offline
+## 24. Contato e solicitações de privacidade
 
-Cláusula 21.1: Algumas funcionalidades poderão operar parcialmente sem internet.
+**24.1.** O responsável pelo projeto deverá disponibilizar um canal de contato para dúvidas, solicitações e questões relacionadas à privacidade.
 
-Cláusula 21.2: Recursos relacionados a mapas, localização em tempo real ou comunicação poderão exigir conexão ativa.
+**24.2.** Antes da publicação definitiva, preencha esta seção com um endereço de contato oficial efetivamente monitorado.
 
-Cláusula 21.3: O funcionamento offline poderá variar conforme o dispositivo.
+**Contato oficial:** [inserir e-mail ou canal oficial do projeto]
 
----
+## 25. Considerações finais
 
-22. Segurança do Dispositivo
+O Mulher Amparada busca oferecer ferramentas de apoio com atenção à segurança, à privacidade e ao controle da usuária.
 
-Cláusula 22.1: A segurança do aplicativo também depende das práticas de segurança da própria usuária.
+A disponibilidade de cada funcionalidade e o tratamento de dados devem ser confirmados na versão efetivamente distribuída. Este documento não deve ser interpretado como garantia de que recursos específicos estejam presentes ou operem de determinada maneira em todos os dispositivos.
 
-Cláusula 22.2: Recomenda-se utilização de senha, PIN ou biometria no dispositivo.
-
-Cláusula 22.3: Recomenda-se manter o Android atualizado.
-
-Cláusula 22.4: Recomenda-se instalar apenas aplicativos confiáveis.
-
----
-
-23. Exclusão de Dados
-
-Cláusula 23.1: A usuária poderá remover dados locais apagando os dados do aplicativo nas configurações do Android.
-
-Cláusula 23.2: A desinstalação poderá remover informações armazenadas localmente.
-
-Cláusula 23.3: Alguns dados removidos poderão não ser recuperáveis.
-
----
-
-24. Transparência
-
-Cláusula 24.1: O aplicativo busca operar com foco em transparência e privacidade.
-
-Cláusula 24.2: Nenhuma funcionalidade sensível é executada sem as permissões ou acessos necessários do Android e sem a ativação correspondente pela usuária.
-
-Cláusula 24.3: O aplicativo não executa ações ocultas em segundo plano fora das funcionalidades informadas.
-
-Cláusula 24.4: A usuária poderá revisar permissões e acessos diretamente nas configurações do sistema.
-
----
-
-26. Compatibilidade de Sensores
-
-Cláusula 26.1: Recursos relacionados ao acelerômetro dependem da disponibilidade do sensor no aparelho.
-
-Cláusula 26.2: Sensores poderão apresentar diferenças de precisão entre fabricantes.
-
-Cláusula 26.3: O Android poderá suspender sensores em economia de bateria.
-
-Cláusula 26.4: Restrições do fabricante poderão limitar funcionalidades relacionadas a movimento.
-
----
-
-27. Chamadas Automáticas
-
-Cláusula 27.1: O recurso de chamadas automáticas depende da permissão de telefone concedida pela usuária.
-
-Cláusula 27.2: Sem permissão adequada, chamadas automáticas poderão não funcionar.
-
-Cláusula 27.3: O aplicativo poderá utilizar o discador padrão do Android.
-
-Cláusula 27.4: O funcionamento depende da operadora e disponibilidade de rede.
-
----
-
-28. Falhas Técnicas
-
-Cláusula 28.2: Funcionalidades poderão ser afetadas por atualizações do Android.
-
-Cláusula 28.3: Sensores e permissões poderão apresentar comportamento diferente entre aparelhos.
-
-Cláusula 28.4: O desenvolvedor poderá corrigir falhas futuramente através de atualizações.
-
----
-
-29. Limitação de Responsabilidade
-
-Cláusula 29.1: O aplicativo é uma ferramenta complementar de apoio.
-
-Cláusula 29.2: O aplicativo não substitui polícia, bombeiros, SAMU ou autoridades oficiais.
-
-Cláusula 29.3: Não existe garantia absoluta de proteção ou prevenção de riscos.
-
-Cláusula 29.4: O desenvolvedor não se responsabiliza por indisponibilidades externas.
-
----
-
-30. Aceitação dos Termos
-
-Cláusula 30.1: Ao continuar utilizando o aplicativo, a usuária declara concordar com estes termos.
-
-Cláusula 30.2: Caso não concorde com os termos, recomenda-se interromper o uso do aplicativo.
-
-Cláusula 30.3: Estes termos possuem finalidade informativa, operacional e de transparência.
-
----
-
-31. Proteção por barulhos
-
-Cláusula 31.1: O recurso "Proteção por barulhos" poderá utilizar o microfone do dispositivo para detectar sons em segundo plano.
-
-Cláusula 31.2: Quando ativado pela própria usuária, o aplicativo poderá monitorar padrões sonoros relacionados a múltiplos barulhos consecutivos.
-
-Cláusula 31.3: A funcionalidade poderá iniciar automaticamente ações emergenciais previamente configuradas pela usuária.
-
-Cláusula 31.4: O processamento de áudio ocorre localmente no dispositivo Android.
-
-Cláusula 31.5: O aplicativo não possui finalidade de gravação contínua, armazenamento permanente ou compartilhamento de conversas privadas por meio dessa funcionalidade.
-
-Cláusula 31.6: Sons ambientes, ruídos externos ou variações acústicas poderão causar ativações involuntárias ou falhas de detecção.
-
-Cláusula 31.7: O funcionamento poderá variar conforme fabricante, hardware, versão do Android, permissões concedidas e restrições do sistema operacional.
-
-Cláusula 31.8: O recurso poderá utilizar serviços em segundo plano enquanto estiver ativado pela usuária.
-
-Cláusula 31.9: O uso contínuo do microfone poderá aumentar o consumo de bateria do dispositivo.
-
-Cláusula 31.10: A funcionalidade poderá ser ativada ou desativada manualmente pela própria usuária a qualquer momento dentro do aplicativo.
-
-Cláusula 31.11: O aplicativo não garante detecção perfeita, funcionamento contínuo ou resposta imediata em todas as situações.
-
----
-
-32. Uso Responsável da Plataforma
-
-Cláusula 32.1: O usuário compromete-se a utilizar o aplicativo e o site de maneira ética, responsável e conforme a legislação vigente.
-
----
-
-33. Proibição de Conteúdo Ofensivo
-
-Cláusula 33.1: É proibida a publicação, envio ou compartilhamento de conteúdos ofensivos, discriminatórios, violentos ou ilegais dentro da plataforma.
-
----
-
-34. Integridade das Informações
-
-Cláusula 34.1: O usuário declara que as informações fornecidas no cadastro e durante o uso da plataforma devem ser verdadeiras e atualizadas.
-
----
-
-35. Suspensão de Acesso
-
-Cláusula 35.1: O Mulher Amparada poderá suspender temporariamente usuários que apresentem comportamento suspeito ou violem estes termos.
-
----
-
-36. Encerramento de Conta
-
-Cláusula 36.1: O usuário poderá solicitar o encerramento de sua conta a qualquer momento pelos canais oficiais disponibilizados.
-
----
-
-37. Segurança de Dados
-
-Cláusula 37.1: A plataforma adota medidas técnicas e administrativas para proteger os dados dos usuários contra acessos não autorizados.
-
----
-
-38. Atualizações do Sistema
-
-Cláusula 38.1: O aplicativo poderá receber atualizações periódicas para melhorias de segurança, estabilidade e desempenho.
-
----
-
-39. Disponibilidade do Serviço
-
-Cláusula 39.1: O funcionamento da plataforma poderá sofrer interrupções temporárias para manutenção técnica ou atualização.
-
----
-
-40. Responsabilidade do Usuário
-
-Cláusula 40.1: O usuário é responsável pelas atividades realizadas em sua conta e pela proteção de seus dados de acesso.
-
----
-
-42. Proteção Contra Fraudes
-
-Cláusula 42.1: O Mulher Amparada poderá utilizar mecanismos automatizados para identificar atividades suspeitas e prevenir fraudes.
-
----
-
-43. Direitos Autorais
-
-Cláusula 43.1: Os elementos visuais, textos, marcas e funcionalidades da plataforma são protegidos pela legislação de direitos autorais.
-
----
-
-44. Uso Indevido da Marca
-
-Cláusula 44.1: É proibida a utilização da marca Mulher Amparada sem autorização prévia e expressa.
-
----
-
-45. Privacidade do Usuário
-
-Cláusula 45.1: A plataforma respeita a privacidade dos usuários e busca limitar a coleta de dados ao mínimo necessário.
-
----
-
-46. Dados de Navegação
-
-Cláusula 46.1: Informações técnicas de navegação poderão ser utilizadas para melhorar a experiência e o desempenho do sistema.
-
----
-
-47. Consentimento do Usuário
-
-Cláusula 47.1: Ao utilizar a plataforma, o usuário declara estar ciente e concordar com estes termos.
-
----
-
-48. Alterações nos Termos
-
-Cláusula 48.1: Estes termos poderão ser modificados a qualquer momento para adequação legal ou melhoria dos serviços.
-
----
-
-49. Continuidade do Serviço
-
-Cláusula 49.1: O Mulher Amparada poderá alterar funcionalidades ou encerrar partes do serviço mediante aviso prévio quando possível.
-
----
-
-50. Uso Permitido
-
-Cláusula 50.1: O uso da plataforma deve ocorrer exclusivamente para finalidades lícitas e compatíveis com os objetivos do aplicativo.
-
-Cláusula 50.2: É proibido compartilhar, copiar ou distribuir indevidamente mecanismos internos da plataforma sem autorização.
-
----
-
-51. Compartilhamento Não Autorizado
-
-Cláusula 51.1: É proibido compartilhar contas, acessos ou mecanismos internos da plataforma sem autorização.
-
----
-
-52. Tentativas de Invasão
-
-Cláusula 52.1: Qualquer tentativa de invasão, exploração de falhas ou comprometimento do sistema poderá resultar em bloqueio imediato.
-
----
-
-53. Backup e Estabilidade
-
-Cláusula 53.1: A plataforma poderá realizar procedimentos internos de backup visando maior segurança operacional.
-
----
-
-54. Compatibilidade
-
-Cláusula 54.1: Algumas funcionalidades podem variar conforme o dispositivo, sistema operacional ou versão utilizada.
-
----
-
-55. Conexão com a Internet
-
-Cláusula 55.1: O funcionamento do aplicativo depende de acesso à internet em determinadas funcionalidades.
-
----
-
-56. Uso de Recursos do Dispositivo
-
-Cláusula 56.1: O aplicativo poderá utilizar recursos essenciais do dispositivo apenas quando necessários ao funcionamento da plataforma.
-
----
-
-58. Responsabilidade Técnica
-
-Cláusula 58.1: A equipe responsável poderá implementar medidas técnicas para preservar a integridade do serviço.
-
----
-
-59. Acesso Seguro
-
-Cláusula 59.1: Recomenda-se que o usuário mantenha mecanismos de segurança ativos em seu dispositivo.
-
----
-
-60. Encerramento de Serviços
-
-Cláusula 60.1: Serviços específicos poderão ser descontinuados ou substituídos conforme necessidade operacional.
-
----
-
-61. Informações do código
-
-Cláusula 61.1: Todas as informações dos códigos são passíveis de visualização pelos arquivos Markdown do repositório do GitHub do projeto, além de todo o código-fonte estar disponível no mesmo.
-
----
-
-62. Conduta do Usuário
-
-Cláusula 62.1: O usuário deverá respeitar os demais participantes e utilizar a plataforma de maneira adequada.
-
----
-
-63. Estabilidade Operacional
-
-Cláusula 63.1: Poderão ocorrer ajustes internos para garantir estabilidade, desempenho e segurança dos sistemas.
-
----
-
-64. Proteção da Plataforma
-
-Cláusula 64.1: Medidas automáticas poderão ser adotadas para impedir acessos abusivos ou automatizados.
-
----
-
-65. Limitação de Responsabilidade
-
-Cláusula 65.1: A plataforma não se responsabiliza por falhas causadas por fatores externos ao seu controle.
-
----
-
-66. Serviços de Terceiros
-
-Cláusula 66.1: Alguns recursos poderão depender de serviços externos fornecidos por terceiros.
-
----
-
-67. Atualização de Recursos
-
-Cláusula 67.1: Funcionalidades poderão ser alteradas, expandidas ou removidas para melhoria contínua da plataforma.
-
----
-
-68. Proteção do Ambiente Digital
-
-Cláusula 68.1: O Mulher Amparada poderá aplicar medidas preventivas para proteger seus sistemas e usuários.
-
----
-
-69. Registro de Atividades Técnicas
-
-Cláusula 69.1: Registros técnicos poderão ser mantidos temporariamente para fins de segurança e diagnóstico.
-
----
-
-70. Conformidade Legal
-
-Cláusula 70.1: O funcionamento da plataforma busca respeitar a legislação aplicável e princípios de proteção de dados.
-
----
-
-71. Ambiente Seguro
-
-Cláusula 71.1: A plataforma procura manter um ambiente digital seguro e adequado aos usuários.
-
----
-
-72. Integridade do Sistema
-
-Cláusula 72.1: Qualquer uso que comprometa a integridade do sistema poderá resultar em restrições de acesso.
-
----
-
-73. Cooperação Técnica
-
-Cláusula 73.1: O usuário poderá colaborar relatando falhas ou problemas encontrados na plataforma.
-
----
-
-74. Correções e Melhorias
-
-Cláusula 74.1: Correções técnicas poderão ser aplicadas sem aviso prévio para garantir estabilidade e segurança.
-
----
-
-75. Compatibilidade Futura
-
-Cláusula 75.1: Nem todos os dispositivos antigos poderão suportar futuras versões do aplicativo.
-
----
-
-76. Segurança do usuário
-
-Cláusula 76.1: O usuário deve manter seus métodos de autenticação protegidos contra acessos indevidos.
-
----
-
-77. Utilização Adequada
-
-Cláusula 77.1: A utilização da plataforma deve ocorrer de forma compatível com sua finalidade social e tecnológica.
-
----
-
-78. Atualizações Automáticas
-
-Cláusula 78.1: Algumas atualizações poderão ocorrer automaticamente conforme as configurações do dispositivo e da loja de aplicativos.
-
----
-
-79. Disponibilidade Parcial
-
-Cláusula 79.1: Certas funcionalidades poderão variar conforme a versão do aplicativo, dispositivo utilizado ou disponibilidade regional.
-
----
-
-80. Dados Temporários
-
-Cláusula 80.1: O sistema poderá utilizar dados temporários estritamente necessários ao funcionamento técnico da plataforma.
-
----
-
-81. Uso Ético
-
-Cláusula 81.1: O usuário compromete-se a utilizar o aplicativo e o site de forma ética, respeitosa e conforme a legislação vigente.
-
----
-
-82. Medidas Preventivas
-
-Cláusula 82.1: O Mulher Amparada poderá aplicar medidas preventivas para preservar a segurança e estabilidade da plataforma.
-
----
-
-83. Identificação de Problemas
-
-Cláusula 83.1: Informações técnicas poderão ser utilizadas exclusivamente para diagnóstico de falhas e melhorias internas.
-
----
-
-84. Funcionamento do Aplicativo
-
-Cláusula 84.1: O desempenho do aplicativo poderá variar conforme o dispositivo, conexão e ambiente de utilização.
-
----
-
-85. Continuidade Técnica
-
-Cláusula 85.1: Procedimentos internos poderão ser realizados para garantir estabilidade, manutenção e continuidade dos serviços.
-
----
-
-86. Respeito às Normas
-
-Cláusula 86.1: Todos os usuários devem respeitar estes termos e as normas aplicáveis durante a utilização da plataforma.
-
----
-
-87. Segurança Operacional
-
-Cláusula 87.1: O sistema poderá utilizar mecanismos técnicos de proteção contra atividades abusivas ou maliciosas.
-
----
-
-88. Melhorias Contínuas
-
-Cláusula 88.1: O Mulher Amparada poderá implementar melhorias contínuas em recursos, desempenho e estabilidade.
-
----
-
-89. Recursos Essenciais
-
-Cláusula 89.1: O aplicativo busca utilizar apenas recursos essenciais ao funcionamento básico da plataforma.
-
----
-
-90. Comunicação de Atualizações
-
-Cláusula 90.1: Alterações relevantes poderão ser comunicadas por meios oficiais disponibilizados pela plataforma.
-
----
-
-91. Integridade das Funcionalidades
-
-Cláusula 91.1: Não é permitido tentar alterar, comprometer ou prejudicar o funcionamento interno da plataforma.
-
----
-
-92. Uso de Tecnologias de Segurança
-
-Cláusula 92.1: Tecnologias de proteção poderão ser utilizadas para reduzir riscos operacionais e preservar a integridade do sistema.
-
----
-
-93. Estabilidade dos Serviços
-
-Cláusula 93.1: A equipe técnica poderá realizar ajustes preventivos visando manter estabilidade e desempenho dos serviços.
-
----
-
-94. Responsabilidade sobre o Dispositivo
-
-Cláusula 94.1: O usuário é responsável pela segurança e conservação do dispositivo utilizado para acessar a plataforma.
-
----
-
-95. Recursos de Proteção
-
-Cláusula 95.1: O aplicativo poderá utilizar mecanismos internos de proteção contra uso indevido ou abusivo.
-
-O serviço de palmas pode impactar a privacidade da usuária, pois funciona em segundo plano e, em alguns casos, também em primeiro plano. Por esse motivo, o recurso foi desenvolvido com ativação e desativação manual pela própria usuária.
-
-Cláusula 95.2: O recurso de relógio e localização utiliza APIs do dispositivo e depende das permissões concedidas voluntariamente pela usuária para seu funcionamento adequado.
-
-Cláusula 95.3: Nenhum recurso é executado sem consentimento prévio da usuária, e as permissões podem ser revogadas a qualquer momento nas configurações do dispositivo.
-
-Cláusula 95.4: Os dados utilizados pelos recursos são acessados apenas para possibilitar as funcionalidades descritas, respeitando as permissões autorizadas pela usuária.
-
-Cláusula 95.5: A funcionalidade de detecção por palmas foi projetada para operar apenas quando habilitada manualmente, garantindo maior controle e transparência sobre sua utilização.
-
-Cláusula 95.6: Os serviços de localização e horário podem utilizar recursos nativos do sistema operacional para fornecer informações em tempo real de maneira eficiente.
-
-Cláusula 95.7: O aplicativo não realiza compartilhamento indevido de informações pessoais obtidas através das permissões concedidas pela usuária.
-
-Cláusula 95.8: A usuária possui controle sobre a ativação dos recursos relacionados a monitoramento, localização e execução em segundo plano.
-
----
-
-96. Consentimento Contínuo
-
-Cláusula 96.1: A continuidade da utilização da plataforma representa concordância com eventuais atualizações destes termos.
-
----
-
-97. Compatibilidade Técnica
-
-Cláusula 97.1: Algumas funcionalidades poderão depender de permissões técnicas específicas do dispositivo.
-
----
-
-98. Transparência Operacional
-
-Cláusula 98.1: O Mulher Amparada busca atuar com clareza quanto às funcionalidades e limitações da plataforma.
-
----
-
-99. Proteção da Experiência do Usuário
-
-Cláusula 99.1: Medidas técnicas poderão ser aplicadas para melhorar segurança, estabilidade e experiência de utilização.
-
----
-
-100. Dados de Saúde, Condição Física e Bem-Estar
-
-Cláusula 100.1: Segundo o desenvolvedor responsável pelo projeto Mulher Amparada, durante a criação do aplicativo não foi utilizada qualquer permissão relacionada a saúde, condição física, atividades corporais ou bem-estar do usuário.
-
-Cláusula 100.2: O aplicativo não realiza coleta, armazenamento, monitoramento ou processamento de informações médicas, frequência cardíaca, exercícios físicos, sono, calorias ou dados semelhantes.
-
-Cláusula 100.3: Caso o sistema operacional Android apresente referências técnicas relacionadas a permissões de saúde ou bem-estar, isso poderá ocorrer devido a componentes padrão do sistema, bibliotecas externas ou requisitos internos do ambiente Android, sem utilização prática pelo Mulher Amparada.
-
-Cláusula 100.4: O Mulher Amparada reafirma seu compromisso com a privacidade, proteção de dados e utilização apenas das permissões estritamente necessárias para o funcionamento essencial da plataforma.
-
----
-
-101. Aceitação dos Termos
-
-Cláusula 101.1: Ao continuar utilizando o aplicativo, a usuária declara concordar com estes termos.
-
-Cláusula 101.2: Caso não concorde com os termos, recomenda-se interromper o uso do aplicativo.
-
-Cláusula 101.3: Estes termos possuem finalidade informativa, operacional e de transparência.
-
-Cláusula 101.4: Autenticação biométrica.
-
-Cláusula 101.5: Ao utilizar recursos protegidos por biometria, o aplicativo poderá emitir sinais visuais e sonoros locais para indicar sucesso, falha ou bloqueio de acesso.
-
-Cláusula 101.6: Os dados biométricos não são acessados diretamente pelo aplicativo, sendo processados exclusivamente pelo sistema de segurança do dispositivo Android.
-
-Cláusula 101.7: Sons e feedbacks do aplicativo.
-
-Cláusula 101.8: O aplicativo poderá reproduzir efeitos sonoros locais durante determinadas ações da interface, incluindo autenticação biométrica, bloqueio de áreas protegidas, navegação entre páginas e encerramento de sessões internas.
-
-Cláusula 101.9: Esses sons possuem finalidade exclusivamente informativa e de experiência de uso, sendo reproduzidos apenas no próprio dispositivo da usuária.
-
-Cláusula 101.10: Nenhum áudio do ambiente é gravado ou enviado a servidores em razão desses efeitos sonoros.
-
----
-
-Mulher Amparada 💜
-
-Este aplicativo opera com foco em privacidade, transparência, segurança e controle da própria usuária.
-
-Nenhuma funcionalidade sensível é executada sem as permissões ou acessos necessários do Android e sem a ativação correspondente pela usuária.
-
-O aplicativo não realiza monitoramento oculto, espionagem, rastreamento contínuo ou ações secretas em segundo plano.
-
-Algumas funcionalidades podem depender de internet, permissões do Android, acessos especiais, disponibilidade do aparelho, sensores internos, operadora móvel e aplicativos externos.
-
-O recurso de proteção por movimento depende do acelerômetro disponível no dispositivo Android.
-
-O aplicativo não substitui serviços oficiais de emergência, autoridades públicas, atendimento médico ou proteção policial.
-
-Em situações reais de risco imediato, procure imediatamente ajuda especializada e serviços oficiais.
-
-O uso contínuo do microfone em segundo plano pode aumentar o consumo de bateria.
-
----
-
-Sistema Cripto (Segurança do App)
-
-O sistema Cripto protege os dados armazenados pelo aplicativo utilizando criptografia AES-256 e o Android Keystore, com armazenamento realizado por meio do Jetpack DataStore Preferences.
-
-Como funciona
-
-Quando você salva um dado no app, ele não é armazenado diretamente em texto normal. O sistema Cripto criptografa o conteúdo antes de armazená-lo.
-
-A chave de criptografia é protegida pelo Android Keystore, reduzindo o risco de acesso direto à chave por outros aplicativos.
-
-Os dados criptografados são armazenados pelo Jetpack DataStore Preferences. Assim, informações como contatos confiáveis e outros dados protegidos não ficam disponíveis em texto simples no armazenamento do aplicativo.
-
-O sistema também permite salvar, carregar, remover dados específicos e limpar todos os dados armazenados.
-
-Tecnologia usada
-
-- AES-256 (criptografia)
-- Android Keystore (proteção das chaves)
-- Jetpack DataStore Preferences (armazenamento)
-
-O que cada função faz
-
-"salvar(chave, valor)" → guarda o dado de forma criptografada.
-
-"carregar(chave)" → recupera o dado original.
-
-"remover(chave)" → apaga um dado específico.
-
-"limparTudo()" → remove todos os dados salvos.
-
-Segurança
-
-Os dados são protegidos por uma chave segura do próprio Android e não ficam visíveis diretamente no armazenamento do aparelho.
-
----
-
-102. Função de calculadora e minhas tarefas
-
-Cláusula 102.1: Este aplicativo possui funcionalidades auxiliares de calculadora e organização de tarefas pessoais, estudos e trabalho, oferecendo ferramentas de planejamento simples e organização local.
-
-Cláusula 102.2: O usuário é totalmente responsável pelas informações inseridas, incluindo tarefas, categorias, prioridades e qualquer dado armazenado localmente no dispositivo.
-
-Cláusula 102.3: As informações dessas funcionalidades são destinadas ao uso pessoal, educacional e organizacional.
-
-Cláusula 102.4: O aplicativo não substitui ferramentas profissionais de gestão de projetos.
-
-Cláusula 102.5: A funcionalidade de cálculo presente no sistema tem caráter apenas auxiliar, não devendo ser utilizada como única fonte para decisões críticas, financeiras ou profissionais de alta precisão.
-
-Cláusula 102.6: O modo Pomodoro é uma ferramenta de apoio à produtividade, e seus tempos e alertas podem variar conforme o dispositivo ou ambiente utilizado.
-
-Cláusula 102.7: O sistema não garante armazenamento permanente dos dados, podendo ocorrer perda de informações em caso de limpeza de dados do aplicativo, navegador ou armazenamento local.
-
-Cláusula 102.8: O usuário pode personalizar cores e preferências visuais, sendo estas alterações aplicadas localmente no dispositivo.
-
-Cláusula 102.9: O desenvolvedor não se responsabiliza por uso inadequado, interpretação incorreta ou dependência excessiva da ferramenta para organização pessoal.
-
-Cláusula 102.10: Este aplicativo pode ser atualizado, modificado ou aprimorado a qualquer momento.
-
-Cláusula 102.11: O uso contínuo do sistema implica aceitação destes termos e condições de uso.
-
----
-
-103. Registro de áudio e armazenamento local
-
-Cláusula 103.1: O sistema permite a gravação e reprodução de áudio diretamente no dispositivo do usuário, utilizando o microfone mediante permissão concedida.
-
-Cláusula 103.2: Os arquivos de áudio são processados e armazenados localmente no dispositivo conforme o funcionamento da funcionalidade de gravação.
-
-Cláusula 103.3: O usuário é responsável por gerenciar, excluir ou manter as gravações conforme sua necessidade.
-
-Cláusula 103.4: As gravações podem ser utilizadas como registros pessoais de situações, lembretes, anotações ou documentação de eventos, de acordo com a decisão do usuário.
-
-Cláusula 103.5: O aplicativo não garante validade jurídica automática de qualquer gravação, sendo esta dependente de fatores externos como contexto, legislação e forma de obtenção.
-
-Cláusula 103.6: O sistema não realiza edição, verificação ou autenticação do conteúdo gravado, atuando como ferramenta de captura, armazenamento e reprodução de áudio.
-
-Cláusula 103.7: O uso da função de gravação para fins de registro de acontecimentos ou possíveis evidências é de responsabilidade exclusiva do usuário, respeitando as leis vigentes.
-
-Cláusula 103.8: O aplicativo não incentiva ou orienta o uso indevido da gravação de áudio.
-
-Cláusula 103.9: O usuário deve respeitar a privacidade de terceiros ao utilizar a função de gravação, conforme as leis aplicáveis em sua região.
-
-Cláusula 103.10: O desenvolvedor não se responsabiliza por qualquer uso inadequado ou consequências decorrentes das gravações realizadas pelo usuário.
-
----
-
-105. Mapa
-
-Cláusula 105.1: Este módulo exibe um mapa interativo baseado em OpenStreetMap, permitindo visualização da região da usuária.
-
-Cláusula 105.2: O mapa pode mostrar pontos de interesse representados por marcadores circulares.
-
-Cláusula 105.3: A localização exibida depende das permissões e da interação da usuária com o sistema.
-
-Cláusula 105.4: Este recurso tem finalidade informativa e de apoio visual, não devendo ser utilizado como sistema de navegação profissional.
-
----
-
-106. Visualizador de arquivos
-
-Cláusula 106.1: Este aplicativo possui uma funcionalidade de visualização de arquivos locais do dispositivo, permitindo ao usuário navegar por pastas e abrir arquivos compatíveis com o sistema.
-
-Cláusula 106.2: O acesso aos arquivos é realizado no dispositivo do usuário, conforme as permissões e mecanismos de armazenamento disponibilizados pelo Android.
-
-Cláusula 106.3: O aplicativo não se responsabiliza por arquivos corrompidos, excluídos ou modificados pelo próprio usuário ou por outros aplicativos do sistema.
-
-Cláusula 106.4: O usuário é o único responsável pelo conteúdo acessado ou aberto através do visualizador de arquivos.
-
-Cláusula 106.5: O aplicativo pode solicitar acesso ao armazenamento apenas para viabilizar a leitura de arquivos locais quando necessário.
-
-Cláusula 106.6: O aplicativo não realiza backup automático dos arquivos acessados.
-
-Cláusula 106.7: O aplicativo não altera arquivos sem ação direta do usuário.
-
-Cláusula 106.8: O aplicativo pode exibir arquivos apenas quando permitido pelo sistema operacional.
-
-Cláusula 106.9: O aplicativo não garante compatibilidade com todos os tipos de arquivos existentes.
-
-Cláusula 106.10: Arquivos protegidos pelo sistema podem não ser acessíveis.
-
-Cláusula 106.11: O desempenho do carregamento de arquivos depende do dispositivo do usuário.
-
-Cláusula 106.12: Arquivos muito grandes podem apresentar lentidão ou falhas na abertura.
-
-Cláusula 106.13: O aplicativo não modifica permissões do sistema.
-
-Cláusula 106.14: O usuário pode revogar permissões a qualquer momento nas configurações do sistema.
-
-Cláusula 106.15: O aplicativo respeita as políticas de armazenamento do Android.
-
-Cláusula 106.16: O aplicativo não acessa arquivos ocultos sem autorização do sistema.
-
-Cláusula 106.17: O conteúdo dos arquivos não é analisado ou processado externamente.
-
-Cláusula 106.18: O aplicativo não envia dados de arquivos para a internet como parte normal do funcionamento do visualizador.
-
-Cláusula 106.19: Não há sincronização automática dos arquivos com nuvem.
-
-Cláusula 106.20: O usuário pode visualizar apenas arquivos disponíveis ao aplicativo conforme as permissões e APIs do Android.
-
-Cláusula 106.21: O aplicativo não possui sistema de monitoramento contínuo de arquivos.
-
-Cláusula 106.22: O acesso a arquivos depende do acesso ao armazenamento concedido pelo usuário e permitido pelo sistema.
-
-Cláusula 106.23: O aplicativo não interfere em outros gerenciadores de arquivos.
-
-Cláusula 106.24: O usuário pode utilizar outros aplicativos simultaneamente sem que o visualizador tenha controle sobre eles.
-
-Cláusula 106.25: O aplicativo não realiza compartilhamento automático de arquivos.
-
-Cláusula 106.26: O usuário é responsável por abrir arquivos de origem desconhecida.
-
-Cláusula 106.27: O aplicativo não verifica vírus ou ameaças em arquivos.
-
-Cláusula 106.28: O uso do aplicativo não substitui antivírus.
-
-Cláusula 106.29: O aplicativo não possui acesso root ao sistema.
-
-Cláusula 106.30: Todas as ações são executadas dentro das permissões e APIs disponibilizadas pelo Android.
-
-Cláusula 106.31: O aplicativo pode solicitar atualização de permissões conforme novas versões do Android.
-
-Cláusula 106.32: O funcionamento pode variar entre dispositivos diferentes.
-
-Cláusula 106.33: O aplicativo não garante funcionamento em dispositivos modificados ou com root.
-
-Cláusula 106.34: O usuário é responsável por manter o sistema atualizado.
-
-Cláusula 106.35: O aplicativo pode apresentar falhas em sistemas desatualizados.
-
-Cláusula 106.36: O aplicativo não coleta dados pessoais através de arquivos para envio externo.
-
-Cláusula 106.37: O conteúdo acessado pelo visualizador não é armazenado automaticamente em servidores externos.
-
-Cláusula 106.38: O aplicativo não exige login para uso do visualizador.
-
-Cláusula 106.39: A funcionalidade de visualização de arquivos foi projetada para uso local.
-
-Cláusula 106.40: O aplicativo não rastreia a atividade de navegação de arquivos.
-
-Cláusula 106.41: O usuário pode remover o aplicativo a qualquer momento.
-
-Cláusula 106.42: A remoção do aplicativo não tem como finalidade excluir arquivos pessoais do armazenamento externo do dispositivo.
-
-Cláusula 106.43: O aplicativo não cria cópias automáticas de segurança dos arquivos.
-
-Cláusula 106.44: O usuário deve manter backup próprio se necessário.
-
-Cláusula 106.45: O aplicativo não possui função geral de recuperação de arquivos.
-
-Cláusula 106.46: O uso indevido do aplicativo é de responsabilidade do usuário.
-
-Cláusula 106.47: O aplicativo não incentiva modificação de arquivos críticos do sistema.
-
-Cláusula 106.48: O aplicativo não acessa partições protegidas fora das possibilidades concedidas pelo Android.
-
-Cláusula 106.49: O acesso é limitado ao armazenamento permitido pelo sistema.
-
-Cláusula 106.50: O aplicativo segue os mecanismos de segurança e armazenamento disponibilizados pelo Android.
-
-Cláusula 106.51: O aplicativo não executa arquivos automaticamente.
-
-Cláusula 106.52: A abertura de determinados arquivos poderá depender de aplicativos externos compatíveis.
-
-Cláusula 106.53: O aplicativo não altera permissões de outros aplicativos.
-
-Cláusula 106.54: O usuário controla as ações de abertura de arquivos.
-
-Cláusula 106.55: O aplicativo não mantém histórico permanente de arquivos abertos.
-
-Cláusula 106.56: Não há registro permanente de atividade de navegação de arquivos.
-
-Cláusula 106.57: O aplicativo não compartilha automaticamente dados dos arquivos com terceiros.
-
-Cláusula 106.58: O uso é limitado às permissões concedidas e aos recursos disponibilizados pelo sistema.
-
-Cláusula 106.59: O aplicativo pode ser atualizado a qualquer momento para melhorias de desempenho e segurança.
-
-Cláusula 106.60: Ao abrir o seletor de aplicativos do Android para abrir determinado arquivo, a ação subsequente passa a depender do aplicativo escolhido pela própria usuária. O desenvolvedor do Mulher Amparada não controla o comportamento, processamento ou armazenamento realizado por aplicativos externos.
-
----
-
-Informações adicionais
-
-Aviso: dentro da área protegida existe uma função de gravador de voz. A tela de gravação é separada das demais telas e o funcionamento do recurso depende das permissões concedidas pela usuária.
-
-Aviso: Os sons de bloqueio e desbloqueio da área segura permanecem como definidos pelo aplicativo, conforme a implementação adotada a partir de 20/05/2026.
-
-Aviso: O rastreamento pode variar conforme o navegador utilizado. Em alguns casos, o próprio navegador pode exibir avisos sobre coleta de dados. No aplicativo, não há finalidade de rastreamento de usuários, porém algumas funções podem utilizar dados essenciais para funcionamento, como a localização. Fora essas funcionalidades e o uso do navegador, não há coleta de dados para fins de rastreamento.
-
-Aviso: O aplicativo não utiliza mais a permissão de notificações.
-
-A função "Meus Arquivos", dentro da área protegida, utiliza as APIs e informações de armazenamento disponibilizadas pelo sistema Android para identificar o tipo de armazenamento acessível e realizar a leitura das pastas e arquivos permitidos pelo sistema.
-
-O botão vermelho de SOS, exibido como primeiro botão ao entrar no aplicativo, utiliza a telefonia do dispositivo. Quando não é possível iniciar diretamente a chamada, o aplicativo poderá abrir o telefone nativo do celular com o número 180 já discado para que a própria usuária realize a chamada.
-
-O Serviço de Acessibilidade utilizado pelo aplicativo precisa ser ativado manualmente pela usuária nas configurações de Acessibilidade do Android. O aplicativo não ativa esse serviço sozinho.
-
-O Serviço de Acessibilidade é utilizado especificamente para o recurso de bloqueio da tela e não é utilizado para leitura do conteúdo de outras telas ou para controle arbitrário de outros aplicativos.
-
-O aplicativo não utiliza mais o mecanismo de Administrador do dispositivo para realizar o bloqueio da tela.
-
-O sistema Cripto utiliza AES-256, Android Keystore e Jetpack DataStore Preferences para proteger e armazenar dados locais destinados às funcionalidades que utilizam esse sistema.
-
----
-
-Raio Seguro:
-
-O Raio Seguro é um recurso de georreferenciamento do Mulher Amparada que permite definir uma área considerada segura e verificar se a usuária permanece dentro dela.
-
-Como funciona
-
-1. A usuária abre o Raio Seguro e concede ao aplicativo a permissão de localização.
-2. O aplicativo identifica a localização atual do dispositivo.
-3. A usuária define o tamanho do raio seguro.
-4. A localização atual pode ser utilizada como centro da área segura.
-5. Ao tocar em Atualizar, a área definida é salva de forma criptografada.
-6. Enquanto o recurso estiver ativo, a localização atual é comparada com o centro da área.
-7. Se a usuária permanecer dentro do raio definido, nenhuma ação de alerta é apresentada.
-8. Caso a localização ultrapasse o limite estabelecido, o aplicativo informa que a usuária saiu da área segura e disponibiliza a opção Pedir ajuda.
-
-Georreferenciamento
-
-O recurso utiliza coordenadas geográficas do dispositivo:
-
-- Latitude: representa a posição norte-sul.
-- Longitude: representa a posição leste-oeste.
-- Raio: determina a distância máxima permitida a partir do centro da área segura.
-
-A distância entre a localização atual e o centro da área é utilizada para determinar se a usuária está dentro ou fora do raio.
-
-Mapa
-
-A visualização cartográfica utiliza o OpenStreetMap por meio do "osmdroid".
-
-O mapa permite visualizar a localização e a área segura de forma gráfica, sem depender do Google Maps.
-
-«O carregamento dos mapas do OpenStreetMap requer conexão com a internet.»
-
-Privacidade
-
-O recurso foi projetado para verificar a permanência dentro de uma área definida, e não para criar um histórico de trajetos.
-
-A área segura configurada é armazenada de forma criptografada pelo aplicativo.
-
-O recurso não utiliza um servidor próprio do Mulher Amparada para armazenar um histórico de localização da usuária.
-
-Importante
-
-O Raio Seguro é um recurso de apoio e não substitui serviços oficiais de emergência, sistemas de localização ou acompanhamento profissional. A precisão da localização pode variar conforme o dispositivo, o sinal de GPS, o ambiente e as condições de rede.
-
----
-
-Mulher Amparada 💜
-
-Este aplicativo opera com foco em privacidade, transparência, segurança e controle da própria usuária.
-
-Nenhuma funcionalidade sensível é executada sem as permissões ou acessos necessários do Android e sem a ativação correspondente.
-
-O aplicativo não realiza monitoramento oculto, espionagem, rastreamento contínuo ou ações secretas em segundo plano.
-
-Algumas funcionalidades podem depender de internet, permissões do Android, acessos especiais, disponibilidade do aparelho, sensores internos, operadora móvel e aplicativos externos.
-
-O recurso de proteção por movimento depende do acelerômetro disponível no dispositivo Android.
-
-O aplicativo não substitui serviços oficiais de emergência, autoridades públicas, atendimento médico ou proteção policial.
-
-Em situações reais de risco imediato, procure imediatamente ajuda especializada e serviços oficiais.
-
-O uso contínuo do microfone em segundo plano pode aumentar o consumo de bateria.
-
-Aviso: dentro da área protegida existe uma função de gravador de voz. A tela de gravação é separada das demais telas e o funcionamento do recurso depende das permissões concedidas pela usuária.
-
-Aviso: Os sons de bloqueio e desbloqueio da área segura permanecem como definidos pelo aplicativo, conforme a implementação adotada a partir de 20/05/2026.
-
-Aviso: O rastreamento pode variar conforme o navegador utilizado. Em alguns casos, o próprio navegador pode exibir avisos sobre coleta de dados. No aplicativo, não há finalidade de rastreamento de usuários, porém algumas funções podem utilizar dados essenciais para funcionamento, como a localização. Fora essas funcionalidades e o uso do navegador, não há coleta de dados para fins de rastreamento.
-
-Aviso: O aplicativo não utiliza mais a permissão de notificações.
-
-A função "Meus Arquivos", dentro da área protegida, utiliza as APIs e informações de armazenamento disponibilizadas pelo sistema Android para identificar o tipo de armazenamento acessível e realizar a leitura das pastas e arquivos permitidos pelo sistema.
-
-O botão vermelho de SOS, exibido como primeiro botão ao entrar no aplicativo, utiliza a telefonia do dispositivo. Quando não é possível iniciar diretamente a chamada, o aplicativo poderá abrir o telefone nativo do celular com o número 180 já discado para que a própria usuária realize a chamada.
-
-O Serviço de Acessibilidade utilizado pelo aplicativo precisa ser ativado manualmente pela usuária nas configurações de Acessibilidade do Android. O aplicativo não ativa esse serviço sozinho.
-
-O Serviço de Acessibilidade é utilizado especificamente para o recurso de bloqueio da tela e não é utilizado para leitura do conteúdo de outras telas ou para controle arbitrário de outros aplicativos.
-
-O aplicativo não utiliza mais o mecanismo de Administrador do dispositivo para realizar o bloqueio da tela.
-
-O sistema Cripto utiliza AES-256, Android Keystore e Jetpack DataStore Preferences para proteger e armazenar dados locais destinados às funcionalidades que utilizam esse sistema.
-
-### 1. Incorporação por Referência e Vinculação por Hiperlink
-
-- **Validade Jurídica dos Avisos:** Para todos os fins legais e de auditoria das autoridades ou instituições de direitos humanos, todas as especificações do projeto integradas a este documento por meio de referência direta.
-
-- **Acesso aos Avisos:** A especificação técnica e o contexto de cada mecanismo de proteção encontram-se publicados na página principal do projeto. O uso do sistema está condicionado à ciência de todos os alertas detalhados no [Mural de Avisos do README.md](https://github.com).
+**Mulher Amparada 💜**

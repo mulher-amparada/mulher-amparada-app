@@ -3832,53 +3832,33 @@ private fun FakeSwitch(
 ========================================================= */
 @Composable
 private fun ActionCard(
+    number: String,
     title: String,
     description: String,
     icon: Int,
+    arrow: Boolean,
     accent: Color,
     gradient: List<Color>,
-    arrow: Boolean = true,
-    c: AppColors? = null,
+    c: AppColors,
     onClick: () -> Unit
 ) {
     val infiniteTransition =
-        rememberInfiniteTransition(label = "action_effect")
+        rememberInfiniteTransition(label = "actionCardGlow")
 
     val glowAlpha by infiniteTransition.animateFloat(
-        initialValue = 0.10f,
-        targetValue = 0.22f,
+        initialValue = 0.08f,
+        targetValue = 0.18f,
         animationSpec = infiniteRepeatable(
             animation = tween(1800),
             repeatMode = RepeatMode.Reverse
         ),
-        label = "glow"
-    )
-
-    var pressed by remember {
-        mutableStateOf(false)
-    }
-
-    val scale by animateFloatAsState(
-        targetValue = if (pressed) 0.97f else 1f,
-        animationSpec = tween(120),
-        label = "scale"
+        label = "glowAlpha"
     )
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(128.dp)
-            .graphicsLayer {
-                scaleX = scale
-                scaleY = scale
-
-                shadowElevation =
-                    if (pressed) 4.dp.toPx()
-                    else 14.dp.toPx()
-
-                shape = RoundedCornerShape(27.dp)
-                clip = true
-            }
             .clip(RoundedCornerShape(27.dp))
             .background(
                 Brush.linearGradient(
@@ -3887,33 +3867,19 @@ private fun ActionCard(
             )
             .border(
                 width = 1.dp,
-                color = accent.copy(alpha = 0.35f),
+                color = accent.copy(alpha = 0.30f),
                 shape = RoundedCornerShape(27.dp)
             )
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onPress = {
-                        pressed = true
-
-                        try {
-                            awaitRelease()
-                        } finally {
-                            pressed = false
-                        }
-
-                        onClick()
-                    }
-                )
-            }
+            .clickable(onClick = onClick)
     ) {
 
-        // BRILHO RADIAL
+        // Glow principal
         Box(
             modifier = Modifier
-                .size(170.dp)
+                .size(190.dp)
                 .offset(
-                    x = 120.dp,
-                    y = (-70).dp
+                    x = 130.dp,
+                    y = (-85).dp
                 )
                 .background(
                     Brush.radialGradient(
@@ -3926,13 +3892,13 @@ private fun ActionCard(
                 )
         )
 
-        // SEGUNDO BRILHO
+        // Glow secundário
         Box(
             modifier = Modifier
-                .size(110.dp)
+                .size(120.dp)
                 .offset(
-                    x = (-35).dp,
-                    y = 55.dp
+                    x = (-45).dp,
+                    y = 65.dp
                 )
                 .background(
                     Brush.radialGradient(
@@ -3945,7 +3911,7 @@ private fun ActionCard(
                 )
         )
 
-        // REFLEXO SUPERIOR
+        // Reflexo superior
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -3955,34 +3921,37 @@ private fun ActionCard(
                     Brush.horizontalGradient(
                         colors = listOf(
                             Color.Transparent,
-                            Color.White.copy(alpha = 0.28f),
+                            Color.White.copy(alpha = 0.25f),
                             Color.Transparent
                         )
                     )
                 )
         )
 
-        // CONTEÚDO
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp),
+                .padding(
+                    horizontal = 18.dp,
+                    vertical = 16.dp
+                ),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            // ÍCONE COM GLOW
+            // Ícone
             Box(
-                modifier = Modifier.size(62.dp),
+                modifier = Modifier.size(58.dp),
                 contentAlignment = Alignment.Center
             ) {
 
+                // Halo
                 Box(
                     modifier = Modifier
-                        .size(62.dp)
+                        .size(58.dp)
                         .background(
                             Brush.radialGradient(
                                 colors = listOf(
-                                    accent.copy(alpha = 0.35f),
+                                    accent.copy(alpha = 0.28f),
                                     Color.Transparent
                                 )
                             ),
@@ -3990,31 +3959,33 @@ private fun ActionCard(
                         )
                 )
 
+                // Fundo do ícone
                 Box(
                     modifier = Modifier
-                        .size(48.dp)
+                        .size(46.dp)
                         .clip(CircleShape)
                         .background(
-                            accent.copy(alpha = 0.14f)
+                            accent.copy(alpha = 0.12f)
                         )
                         .border(
-                            1.dp,
-                            accent.copy(alpha = 0.45f),
-                            CircleShape
+                            width = 1.dp,
+                            color = accent.copy(alpha = 0.40f),
+                            shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = icon,
+
+                    Image(
+                        painter = painterResource(id = icon),
                         contentDescription = null,
-                        tint = accent,
-                        modifier = Modifier.size(25.dp)
+                        modifier = Modifier.size(25.dp),
+                        contentScale = ContentScale.Fit
                     )
                 }
             }
 
             Spacer(
-                modifier = Modifier.width(15.dp)
+                modifier = Modifier.width(14.dp)
             )
 
             Column(
@@ -4024,19 +3995,33 @@ private fun ActionCard(
                 Text(
                     text = title,
                     color = Color.White,
-                    fontSize = 17.sp,
+                    fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
 
                 Spacer(
-                    modifier = Modifier.height(5.dp)
+                    modifier = Modifier.height(4.dp)
                 )
 
                 Text(
                     text = description,
                     color = Color.White.copy(alpha = 0.68f),
                     fontSize = 12.sp,
-                    lineHeight = 16.sp
+                    lineHeight = 16.sp,
+                    maxLines = 3
+                )
+            }
+
+            if (arrow) {
+                Spacer(
+                    modifier = Modifier.width(8.dp)
+                )
+
+                Text(
+                    text = "›",
+                    color = accent.copy(alpha = 0.85f),
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Light
                 )
             }
         }

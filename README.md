@@ -1,5 +1,8 @@
-# Mulher Amparada
+<div align="center">
+  <img src="https://mulher-amparada.github.io/mulher-amparada-app/title.png" alt="Mulher Amparada" width="300">
+</div>
 
+img src="
 Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista laudado nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!
 
 e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, onde nem tinha os recursos, ja programei ele num app de A-IDE, num A05, e eu ja perdi vários projetos porque o celular nao aguentava, matava o projeto porque matou o processo de compilação!, e uma vez eu fiz o projeto do mulher amparada e eu mesmo fiz o app do mulher amparada (primeiro eu refiz porque o family link apagou a pasta segura samsung, depois na 2 vez que perdi portei tudo do apk compilado para descompilado, e depois perdi denovo mas ai eu ja tinha o código-fonte!)
@@ -11,16 +14,6 @@ e pra ser sincero, comecei esse projeto no dia 13/05/2026 e terminei no dia 10/1
 **Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4920**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
-
-# 👾Linguagens do projeto:
-
-<p align="center">
-  <img src="github-languages.png" alt="Linguagens utilizadas no projeto">
-</p>
-
-# 🎉Projeto Finalizado:
-
-https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Projeto-Finalizado
 
 # ⚠️MURAL DE AVISOS:
 

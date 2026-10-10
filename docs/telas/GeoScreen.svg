@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="430" height="900">
+<rect width="430" height="900" rx="30" fill="#080808"/>
+<rect x="15" y="15" width="400" height="45" rx="15" fill="#151515"/>
+<text x="215" y="44" text-anchor="middle" font-family="Arial" font-size="17" font-weight="bold" fill="white">GeoScreen</text>
+<text x="55" y="105" font-family="Arial" font-size="18" fill="white"></text>
+<text x="55" y="173" font-family="Arial" font-size="18" fill="white"></text>
+<rect x="55" y="241" width="340" height="55" rx="14" fill="#7B3FA1"/>
+<text x="225" y="275" text-anchor="middle" font-family="Arial" font-size="16" fill="white">BOTÃO</text>
+<text x="55" y="316" font-family="Arial" font-size="18" fill="white"></text>
+<rect x="40" y="389" width="340" height="55" rx="14" fill="#7B3FA1"/>
+<text x="210" y="423" text-anchor="middle" font-family="Arial" font-size="16" fill="white">BOTÃO</text>
+<text x="25" y="464" font-family="Arial" font-size="18" fill="white"></text>
+<rect x="25" y="532" width="340" height="55" rx="14" fill="#7B3FA1"/>
+<text x="195" y="566" text-anchor="middle" font-family="Arial" font-size="16" fill="white">BOTÃO</text>
+<text x="25" y="607" font-family="Arial" font-size="18" fill="white"></text>
+<text x="25" y="645" font-family="Arial" font-size="18" fill="white"></text>
+<text x="25" y="683" font-family="Arial" font-size="18" fill="white"></text>
+<rect x="25" y="721" width="340" height="55" rx="14" fill="#7B3FA1"/>
+<text x="195" y="755" text-anchor="middle" font-family="Arial" font-size="16" fill="white">BOTÃO</text>
+<text x="25" y="796" font-family="Arial" font-size="18" fill="white"></text>
+</svg>

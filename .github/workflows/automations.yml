@@ -1125,130 +1125,7 @@ jobs:
           path: pesquisas/workflow.md
           if-no-files-found: error
           retention-days: 30
-# =========================================================
-# GERAR IMAGEM DAS LINGUAGENS
-# =========================================================
-
-  gerar-linguagens:
-    name: Gerar imagem das linguagens
-    runs-on: ubuntu-24.04
-
-    needs:
-      - atualizar-commits
-
-    steps:
-      - name: Baixar repositório
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          ref: main
-
-      - name: Baixar README atualizado
-        uses: actions/download-artifact@v7
-        with:
-          name: arquivo-readme
-          path: artefatos/readme
-
-      - name: Copiar README
-        run: |
-          set -e
-          cp artefatos/readme/README.md README.md
-
-      - name: Configurar Go
-        uses: actions/setup-go@v6
-        with:
-          go-version: "1.25"
-          cache: false
-
-      - name: Instalar dependências Go
-        shell: bash
-        run: |
-          set -e
-
-          if [ ! -f go.mod ]; then
-            go mod init github.com/mulher-amparada/mulher-amparada-app
-          fi
-
-          go get golang.org/x/image/font
-          go get golang.org/x/image/font/basicfont
-          go get golang.org/x/image/math/fixed
-          go get gopkg.in/yaml.v3
-
-          go mod tidy
-
-          touch go.sum
           
-      - name: Criar go.mod e go.sum
-        run: |
-          set -e
-
-          if [ ! -f go.mod ]; then
-            echo "go.mod não encontrado. Criando..."
-            go mod init github.com/mulher-amparada/mulher-amparada-app
-          fi
-
-          echo "Atualizando dependências..."
-          go mod tidy || true
-
-          # Garante que o go.sum exista mesmo se o projeto não tiver dependências externas
-          touch go.sum
-
-          echo ""
-          echo "Arquivos Go:"
-          ls -lh go.mod go.sum
-
-      - name: Executar languages.go
-        run: |
-          set -e
-          go run ./tools/languages.go
-
-      - name: Verificar arquivos gerados
-        run: |
-          set -e
-
-          test -s go.mod
-          test -s go.sum
-          test -s README.md
-          test -s github-languages.png
-
-          echo "go.mod:"
-          ls -lh go.mod
-
-          echo ""
-          echo "go.sum:"
-          ls -lh go.sum
-
-          echo ""
-          echo "README:"
-          ls -lh README.md
-
-          echo ""
-          echo "Imagem das linguagens:"
-          ls -lh github-languages.png
-
-      - name: Enviar README atualizado
-        uses: actions/upload-artifact@v6
-        with:
-          name: arquivo-readme-linguagens
-          path: README.md
-          if-no-files-found: error
-
-      - name: Enviar imagem das linguagens
-        uses: actions/upload-artifact@v6
-        with:
-          name: github-languages
-          path: github-languages.png
-          if-no-files-found: error
-
-      - name: Enviar arquivos Go
-        uses: actions/upload-artifact@v6
-        with:
-          name: dependencias-go
-          path: |
-            go.mod
-            go.sum
-          if-no-files-found: error
-
 
           
 # =========================================================
@@ -1266,8 +1143,7 @@ jobs:
       - atualizar-relatorio-commits
       - pesquisar-projeto
       - observatorio
-      - gerar-linguagens
-
+  
     permissions:
       contents: write
 
@@ -1293,23 +1169,6 @@ jobs:
       with:
         name: arquivo-readme
         path: artefatos/readme
-
-    - name: Baixar README com linguagens
-      uses: actions/download-artifact@v7
-      with:
-        name: arquivo-readme-linguagens
-        path: artefatos/readme-linguagens
-
-
-    # =========================================================
-    # BAIXAR IMAGEM DAS LINGUAGENS
-    # =========================================================
-
-    - name: Baixar imagem das linguagens
-      uses: actions/download-artifact@v7
-      with:
-        name: github-languages
-        path: artefatos/linguagens
 
 
     # =========================================================
@@ -1384,16 +1243,8 @@ jobs:
         # -----------------------------------------------------
 
         cp \
-          artefatos/readme-linguagens/README.md \
+          artefatos/readme/README.md \
           README.md
-
-        # -----------------------------------------------------
-        # IMAGEM DAS LINGUAGENS
-        # -----------------------------------------------------
-
-        cp \
-          artefatos/linguagens/github-languages.png \
-          github-languages.png
 
         # -----------------------------------------------------
         # SITEMAP
@@ -1460,7 +1311,6 @@ jobs:
         # -----------------------------------------------------
 
         test -s README.md
-        test -s github-languages.png
         test -s sitemap.xml
         test -s index.html
         test -s pesquisas/workflow.md
@@ -1474,10 +1324,6 @@ jobs:
         echo ""
         echo "README:"
         ls -lh README.md
-
-        echo ""
-        echo "Imagem das linguagens:"
-        ls -lh github-languages.png
 
         echo ""
         echo "Sitemap:"
@@ -1529,7 +1375,6 @@ jobs:
 
         git add \
           README.md \
-          github-languages.png \
           index.html \
           sitemap.xml \
           commits/ \
@@ -1580,7 +1425,6 @@ jobs:
         echo ""
         echo "Arquivos incluídos:"
         echo "- README.md"
-        echo "- github-languages.png"
         echo "- index.html"
         echo "- sitemap.xml"
         echo "- commits/"

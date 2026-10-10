@@ -2610,101 +2610,84 @@ compactBottom = true
                         Modifier.height(15.dp)
                     )
 
-                    SensorCard(
-    number = "01 / ÁUDIO",
-    title = "Proteção por barulho",
-    description =
-        "Detecta sons altos e situações suspeitas para acionar os mecanismos de proteção.",
-    icon = R.drawable.ic_0003,
-    activeImage = R.drawable.ic_00003,
-    color = c.pink,
-                        active =
-                            activity?.palmasAtivas
-                                ?: false,
-                        onClick = {
+                   Row(
+    modifier = Modifier.fillMaxWidth(),
+    horizontalArrangement = Arrangement.spacedBy(10.dp),
+    verticalAlignment = Alignment.Top
+) {
 
-                            activity?.let {
+    SensorCard(
+        number = "01 / ÁUDIO",
+        title = "Proteção por barulho",
+        description =
+            "Detecta sons altos e situações suspeitas para acionar os mecanismos de proteção.",
+        icon = R.drawable.ic_0003,
+        activeImage = R.drawable.ic_00003,
+        color = c.pink,
+        active =
+            activity?.palmasAtivas
+                ?: false,
+        onClick = {
+            activity?.let {
+                if (it.palmasAtivas) {
+                    it.desativarPalmas()
+                } else {
+                    it.ativarPalmas()
+                }
+            }
+        },
+        c = c,
+        modifier = Modifier.weight(1f)
+    )
 
-                                if (
-                                    it.palmasAtivas
-                                ) {
+    SensorCard(
+        number = "02 / MOVIMENTO",
+        title = "Proteção por movimento",
+        description =
+            "Detecta movimentos bruscos no celular e pode iniciar uma resposta de emergência.",
+        icon = R.drawable.ic_0004,
+        activeImage = R.drawable.ic_00004,
+        color = c.purple,
+        active =
+            activity?.protecaoMovimentoAtiva
+                ?: false,
+        onClick = {
+            activity?.let {
+                if (it.protecaoMovimentoAtiva) {
+                    it.desativarProtecaoMovimento()
+                } else {
+                    it.ativarProtecaoMovimento()
+                }
+            }
+        },
+        c = c,
+        modifier = Modifier.weight(1f)
+    )
 
-                                    it.desativarPalmas()
-
-                                } else {
-
-                                    it.ativarPalmas()
-                                }
-                            }
-                        },
-                        c = c,
-)
-
-                    Spacer(
-                        Modifier.height(30.dp)
-                    )
-
-                    SensorCard(
-    number = "02 / MOVIMENTO",
-    title = "Proteção por movimento",
-    description =
-        "Detecta movimentos bruscos no celular e pode iniciar uma resposta de emergência.",
-    icon = R.drawable.ic_0004,
-    activeImage = R.drawable.ic_00004,
-    color = c.purple,
-                        active =
-                            activity?.protecaoMovimentoAtiva
-                                ?: false,
-                        onClick = {
-
-                            activity?.let {
-
-                                if (
-                                    it.protecaoMovimentoAtiva
-                                ) {
-
-                                    it.desativarProtecaoMovimento()
-
-                                } else {
-
-                                    it.ativarProtecaoMovimento()
-                                }
-                            }
-                        },
-                        c = c,
-)
-
-                    Spacer(
-                        Modifier.height(30.dp)
-                    )
-
-                    SensorCard(
-    number = "03 / VISIBILIDADE",
-    title = "Escurecimento por inclinação",
-    description =
-        "Escurece a tela automaticamente quando o dispositivo identifica a posição configurada.",
-    icon = R.drawable.ic_0005,
-    activeImage = R.drawable.ic_00005,
-    color = c.orange,
-                        active =
-                            activity?.escurecimentoAtivo
-                                ?: false,
-                        onClick = {
-
-                            activity?.let {
-
-                                if (
-                                    it.escurecimentoAtivo
-                                ) {
-                                    it.desativarEscurecimento()
-                                } else {
-                                    it.ativarEscurecimento()
-                                }
-                            }
-                        },
-                        c = c,
-)
-
+    SensorCard(
+        number = "03 / VISIBILIDADE",
+        title = "Escurecimento por inclinação",
+        description =
+            "Escurece a tela automaticamente quando o dispositivo identifica a posição configurada.",
+        icon = R.drawable.ic_0005,
+        activeImage = R.drawable.ic_00005,
+        color = c.orange,
+        active =
+            activity?.escurecimentoAtivo
+                ?: false,
+        onClick = {
+            activity?.let {
+                if (it.escurecimentoAtivo) {
+                    it.desativarEscurecimento()
+                } else {
+                    it.ativarEscurecimento()
+                }
+            }
+        },
+        c = c,
+        modifier = Modifier.weight(1f)
+    )
+}
                     Spacer(
                         Modifier.height(30.dp)
                     )
@@ -2719,55 +2702,54 @@ compactBottom = true
                         Modifier.height(15.dp)
                     )
 
-                    ActionCard(
-                        title = "Polícia — 190",
-                        description =
-                            "Emergência policial e atendimento imediato",
-                        icon = R.drawable.ic_0007,
-                        arrow = R.drawable.ic_arrow,
-                        gradient = c.actionBlueGradient,
-                        accent = c.blue,
-                        c = c,
-onClick = {
-                            activity?.ligarPara("190")
-                        }
-                    )
+Row(
+    modifier = Modifier.fillMaxWidth(),
+    horizontalArrangement = Arrangement.spacedBy(10.dp),
+    verticalAlignment = Alignment.Top
+) {
 
-                    Spacer(
-                        Modifier.height(30.dp)
-                    )
+    ActionCard(
+        title = "Polícia — 190",
+        description = "Emergência policial e atendimento imediato",
+        icon = R.drawable.ic_0007,
+        arrow = R.drawable.ic_arrow,
+        gradient = c.actionBlueGradient,
+        accent = c.blue,
+        c = c,
+        onClick = {
+            activity?.ligarPara("190")
+        },
+        modifier = Modifier.weight(1f)
+    )
 
-                    ActionCard(
-                        title = "SAMU — 192",
-                        description =
-                            "Atendimento médico de emergência",
-                        icon = R.drawable.ic_0008,
-                        arrow = R.drawable.ic_arrow,
-                        gradient = c.actionOrangeGradient,
-                        accent = c.orange,
-                        c = c,
-onClick = {
-                            activity?.ligarPara("192")
-                        }
-                    )
+    ActionCard(
+        title = "SAMU — 192",
+        description = "Atendimento médico de emergência",
+        icon = R.drawable.ic_0008,
+        arrow = R.drawable.ic_arrow,
+        gradient = c.actionOrangeGradient,
+        accent = c.orange,
+        c = c,
+        onClick = {
+            activity?.ligarPara("192")
+        },
+        modifier = Modifier.weight(1f)
+    )
 
-                    Spacer(
-                        Modifier.height(30.dp)
-                    )
-
-                    ActionCard(
-                        title = "Central da Mulher — 180",
-                        description =
-                            "Orientação, acolhimento e atendimento",
-                        icon = R.drawable.ic_0009,
-                        arrow = R.drawable.ic_arrow,
-                        gradient = c.actionPinkGradient,
-                        accent = c.pinkLight,
-                        c = c,
-onClick = {
-                            activity?.ligarPara("180")
-                        }
-                    )
+    ActionCard(
+        title = "Central da Mulher — 180",
+        description = "Orientação, acolhimento e atendimento",
+        icon = R.drawable.ic_0009,
+        arrow = R.drawable.ic_arrow,
+        gradient = c.actionPinkGradient,
+        accent = c.pinkLight,
+        c = c,
+        onClick = {
+            activity?.ligarPara("180")
+        },
+        modifier = Modifier.weight(1f)
+    )
+}
 
                     Spacer(
                         Modifier.height(30.dp)
@@ -2811,37 +2793,46 @@ compactBottom = true
                         Modifier.height(15.dp)
                     )
 
-                    ActionCard(
-                        title = "Adicionar contato",
-                        description =
-                            "Escolha uma pessoa de confiança",
-                        icon = R.drawable.ic_0011,
-                        arrow = R.drawable.ic_arrow,
-                        gradient = c.actionPurpleGradient,
-                        accent = c.purple,
-                        c = c,
-onClick = {
-                            activity?.abrirContatos()
-                        }
-                    )
+                    Row(
+    modifier = Modifier.fillMaxWidth(),
+    horizontalArrangement = Arrangement.spacedBy(10.dp),
+    verticalAlignment = Alignment.Top
+) {
 
-                    Spacer(
-                        Modifier.height(30.dp)
-                    )
+    ActionCard(
+        title = "Adicionar contato",
+        description =
+            "Escolha uma pessoa de confiança",
+        icon = R.drawable.ic_0011,
+        arrow = R.drawable.ic_arrow,
+        gradient = c.actionPurpleGradient,
+        accent = c.purple,
+        c = c,
+        onClick = {
+            activity?.abrirContatos()
+        },
+        modifier = Modifier.weight(1f)
+    )
 
-                    ActionCard(
-                        title = "SOS para contatos",
-                        description =
-                            "Envie um alerta para pessoas de confiança",
-                        icon = R.drawable.ic_0012,
-                        arrow = R.drawable.ic_arrow,
-                        gradient = c.actionRedGradient,
-                        accent = c.red,
-                        c = c,
-onClick = {
-                            activity?.enviarSosParaContato()
-                        }
-                    )
+    ActionCard(
+        title = "SOS para contatos",
+        description =
+            "Envie um alerta para pessoas de confiança",
+        icon = R.drawable.ic_0012,
+        arrow = R.drawable.ic_arrow,
+        gradient = c.actionRedGradient,
+        accent = c.red,
+        c = c,
+        onClick = {
+            activity?.enviarSosParaContato()
+        },
+        modifier = Modifier.weight(1f)
+    )
+}
+
+Spacer(
+    Modifier.height(30.dp)
+)
 
                     Spacer(
                         Modifier.height(30.dp)
@@ -3504,6 +3495,7 @@ private fun SensorCard(
     active: Boolean,
     onClick: () -> Unit,
     c: AppColors,
+    modifier: Modifier = Modifier
 ) {
 
     val background =
@@ -3527,7 +3519,7 @@ private fun SensorCard(
     Box(
         modifier =
             Modifier
-                .fillMaxWidth()
+                
                 .height(210.dp)
                 .clip(
                     RoundedCornerShape(25.dp)
@@ -3856,152 +3848,155 @@ private fun ActionCard(
     gradient: List<Color>,
     accent: Color,
     c: AppColors,
-onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    modifier: Modifier = Modifier
 ) {
 
     Row(
 
-    modifier =
-        Modifier
-            .fillMaxWidth()
-            .height(128.dp)
-            .clip(
-                RoundedCornerShape(27.dp)
-            )
-            .background(
-                Brush.linearGradient(gradient)
-            )
-            .border(
-                1.dp,
-                accent.copy(.31f),
-                RoundedCornerShape(27.dp)
-            )
-            .clickable {
-                onClick()
-            }
-            .padding(20.dp),
+        modifier =
+            modifier
+                .height(210.dp)
+                .clip(
+                    RoundedCornerShape(27.dp)
+                )
+                .background(
+                    Brush.linearGradient(gradient)
+                )
+                .border(
+                    1.dp,
+                    accent.copy(.31f),
+                    RoundedCornerShape(27.dp)
+                )
+                .clickable {
+                    onClick()
+                }
+                .padding(14.dp),
 
-    verticalAlignment =
-        Alignment.CenterVertically
-) {
-        Box(
-
-            modifier =
-                Modifier
-                    .size(66.dp)
-                    .clip(
-                        RoundedCornerShape(23.dp)
-                    )
-                    .background(
-                        accent.copy(.09f)
-                    )
-                    .border(
-                        1.dp,
-                        accent.copy(.32f),
-                        RoundedCornerShape(23.dp)
-                    ),
-
-            contentAlignment =
-                Alignment.Center
-        ) {
-
-            Image(
-                painter =
-                    painterResource(icon),
-                contentDescription = null,
-                modifier =
-                    Modifier.size(35.dp)
-            )
-        }
-
-        Spacer(
-            Modifier.width(16.dp)
-        )
+        verticalAlignment =
+            Alignment.CenterVertically
+    ) {
 
         Column(
 
             modifier =
-                Modifier.weight(1f),
+                Modifier.fillMaxWidth(),
+
+            horizontalAlignment =
+                Alignment.CenterHorizontally,
 
             verticalArrangement =
-                Arrangement.spacedBy(8.dp)
+                Arrangement.spacedBy(9.dp)
         ) {
 
+            Box(
+
+                modifier =
+                    Modifier
+                        .size(55.dp)
+                        .clip(
+                            RoundedCornerShape(19.dp)
+                        )
+                        .background(
+                            accent.copy(.09f)
+                        )
+                        .border(
+                            1.dp,
+                            accent.copy(.32f),
+                            RoundedCornerShape(19.dp)
+                        ),
+
+                contentAlignment =
+                    Alignment.Center
+            ) {
+
+                Image(
+                    painter =
+                        painterResource(icon),
+
+                    contentDescription = null,
+
+                    modifier =
+                        Modifier.size(29.dp)
+                )
+            }
+
             Text(
-                title,
+                text = title,
+
                 color =
-                    if (
-                        isSystemInDarkTheme()
-                    )
+                    if (isSystemInDarkTheme())
                         Color.White
                     else
                         c.text,
-                fontSize = 16.sp,
-lineHeight = 18.sp
+
+                fontSize = 14.sp,
+                lineHeight = 17.sp,
+                textAlign = TextAlign.Center
             )
 
             Text(
-                description,
+                text = description,
+
                 color =
-                    if (
-                        isSystemInDarkTheme()
-                    )
+                    if (isSystemInDarkTheme())
                         Color.White.copy(.66f)
                     else
                         c.secondary,
-                fontSize = 10.sp,
-lineHeight = 15.sp
+
+                fontSize = 9.sp,
+                lineHeight = 13.sp,
+                textAlign = TextAlign.Center,
+                maxLines = 3
             )
 
             Text(
-                "ATENDIMENTO DISPONÍVEL",
+                text = "ATENDIMENTO DISPONÍVEL",
+
                 color = accent,
-                fontSize = 7.sp,
-letterSpacing = 1.sp
+
+                fontSize = 6.sp,
+                letterSpacing = .8.sp,
+                textAlign = TextAlign.Center
             )
-        }
 
-        Spacer(
-            Modifier.width(16.dp)
-        )
+            Box(
 
-        Box(
-
-            modifier =
-                Modifier
-                    .size(43.dp)
-                    .clip(
-                        RoundedCornerShape(16.dp)
-                    )
-                    .background(
-                        if (
-                            isSystemInDarkTheme()
-                        )
-                            Color.Black.copy(.13f)
-                        else
-                            Color.Black.copy(.05f)
-                    )
-                    .border(
-                        1.dp,
-                        accent.copy(.22f),
-                        RoundedCornerShape(16.dp)
-                    ),
-
-            contentAlignment =
-                Alignment.Center
-        ) {
-
-            Image(
-                painter =
-                    painterResource(arrow),
-                contentDescription = null,
                 modifier =
-                    Modifier.size(19.dp)
-            )
+                    Modifier
+                        .size(34.dp)
+                        .clip(
+                            RoundedCornerShape(12.dp)
+                        )
+                        .background(
+                            if (isSystemInDarkTheme())
+                                Color.Black.copy(.13f)
+                            else
+                                Color.Black.copy(.05f)
+                        )
+                        .border(
+                            1.dp,
+                            accent.copy(.22f),
+                            RoundedCornerShape(12.dp)
+                        ),
+
+                contentAlignment =
+                    Alignment.Center
+            ) {
+
+                Image(
+                    painter =
+                        painterResource(arrow),
+
+                    contentDescription = null,
+
+                    modifier =
+                        Modifier.size(16.dp)
+                )
+            }
         }
     }
 }
-
 
 /* =========================================================
    ACESSO DE EMERGÊNCIA

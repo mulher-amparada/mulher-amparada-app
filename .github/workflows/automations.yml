@@ -1125,7 +1125,6 @@ jobs:
           path: pesquisas/workflow.md
           if-no-files-found: error
           retention-days: 30
-
 # =========================================================
 # GERAR IMAGEM DAS LINGUAGENS
 # =========================================================
@@ -1133,7 +1132,8 @@ jobs:
   gerar-linguagens:
     name: Gerar imagem das linguagens
     runs-on: ubuntu-24.04
-    needs: atualizar-commits
+    needs:
+      - atualizar-commits
 
     steps:
       - name: Baixar repositório
@@ -1157,19 +1157,23 @@ jobs:
         uses: actions/setup-go@v6
         with:
           go-version: "1.25"
-          cache-dependency-path: tools/go.sum
+          cache: true
+          cache-dependency-path: go.sum
 
       - name: Baixar dependências Go
-        working-directory: tools
         run: |
           set -e
           go mod download
 
-      - name: Executar languages.go
-        working-directory: tools
+      - name: Verificar dependências Go
         run: |
           set -e
-          go run languages.go
+          go mod verify
+
+      - name: Executar languages.go
+        run: |
+          set -e
+          go run ./tools/languages.go
 
       - name: Verificar arquivos gerados
         run: |

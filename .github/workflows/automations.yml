@@ -1015,7 +1015,7 @@ jobs:
   # HORAS DE TRABALHO NO REPOSITÓRIO
   # =========================================================
   
-    horas-trabalho:
+  horas-trabalho:
     name: Calcular horas de trabalho
     runs-on: ubuntu-24.04
     needs: atualizar-commits

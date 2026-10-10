@@ -2,6 +2,8 @@
 
 O **Mulher Amparada Bot** é uma GitHub App criada especificamente para executar e controlar as automações do projeto **Mulher Amparada**, utilizando uma identidade própria no GitHub em vez de depender diretamente da identidade padrão `github-actions[bot]`.
 
+e ele executa todos os dias as 15:00h!
+
 A autenticação é realizada por meio de uma **GitHub App**, utilizando um **JWT assinado com a Private Key da aplicação**. Depois disso, o bot obtém um **Installation Access Token**, utilizado para acessar a API do GitHub de acordo com as permissões concedidas à instalação.
 
 ## 🎯 Objetivo

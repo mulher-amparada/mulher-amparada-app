@@ -12,42 +12,40 @@ permissions:
 
 jobs:
   observatorio:
+    name: 🌌 Gerar mapa de calor
     runs-on: ubuntu-24.04
 
     steps:
-      - name: 📥 Checkout
+      - name: 📥 Checkout completo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: 🔧 Dependências
+      - name: 🔧 Instalar Cairo e GCC
         run: |
           sudo apt-get update
-          sudo apt-get install -y gcc imagemagick
+          sudo apt-get install -y \
+            gcc \
+            libcairo2-dev \
+            pkg-config
 
-      - name: 🧱 Compilar
+      - name: 🧱 Compilar C
         run: |
           gcc \
             -O2 \
             -Wall \
             -Wextra \
             tools/observatorio.c \
+            $(pkg-config --cflags --libs cairo) \
             -lm \
             -o observatorio
 
-      - name: 🌌 Gerar observatório
+      - name: 🌌 Gerar mapa de calor
         run: |
+          mkdir -p docs/observatorio
           ./observatorio
 
-      - name: 🖼️ Converter para PNG
-        run: |
-          convert \
-            docs/observatorio/observatorio.ppm \
-            docs/observatorio/observatorio.png
-
-          rm docs/observatorio/observatorio.ppm
-
-      - name: 💾 Commit
+      - name: 💾 Publicar imagem
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -55,9 +53,9 @@ jobs:
           git add docs/observatorio/observatorio.png
 
           if git diff --cached --quiet; then
-            echo "Nenhuma alteração."
+            echo "Nenhuma alteração na imagem."
             exit 0
           fi
 
-          git commit -m "chore: atualizar observatorio"
+          git commit -m "chore: atualizar mapa de calor"
           git push

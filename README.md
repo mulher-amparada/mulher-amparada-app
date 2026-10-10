@@ -110,10 +110,9 @@ updates:
       
 ```
       
-      🤖 **[Mulher Amparada Bot](https://github.com/mulher-amparada/mulher-amparada-app/blob/main/MULHER-AMPARADA-BOT.md)**
+🤖 **[Mulher Amparada Bot](https://github.com/mulher-amparada/mulher-amparada-app/blob/main/MULHER-AMPARADA-BOT.md)**
 
-> 📖 Documentação completa do bot de automações do projeto **Mulher Amparada**.
-
+📘 [YML-INFO.md](https://github.com/mulher-amparada/mulher-amparada-app/blob/main/YML-INFO.md)
       
 E eu também já consegui configurar um ssh na conta, e 2fa nela tambem, e com o ssh, eu consegui mover pastas inteiras para o repositório, e transformei 4 em 1, e mais de 100 commits em 1,
 

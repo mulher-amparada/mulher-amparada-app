@@ -9,7 +9,6 @@
  * - Intensidade baseada na proximidade entre commits
  * - Grid cresce conforme o número de commits
  * - Escudo central emerge do próprio mapa
- * - Onda sonora matemática no centro
  *
  * Compilação:
  *   gcc -O2 -Wall -Wextra tools/observatorio.c \
@@ -52,8 +51,12 @@ static size_t commit_count = 0;
 
 static double clamp01(double x)
 {
-    if (x < 0.0) return 0.0;
-    if (x > 1.0) return 1.0;
+    if (x < 0.0)
+        return 0.0;
+
+    if (x > 1.0)
+        return 1.0;
+
     return x;
 }
 
@@ -75,7 +78,11 @@ static int load_commits(void)
     );
 
     if (!pipe) {
-        fprintf(stderr, "Erro ao executar git log.\n");
+        fprintf(
+            stderr,
+            "Erro ao executar git log.\n"
+        );
+
         return 0;
     }
 
@@ -91,7 +98,8 @@ static int load_commits(void)
         if (value <= 0)
             continue;
 
-        commits[commit_count].timestamp = (time_t)value;
+        commits[commit_count].timestamp =
+            (time_t)value;
 
         struct tm local_tm;
 
@@ -102,7 +110,9 @@ static int load_commits(void)
 
             commits[commit_count].hour =
                 local_tm.tm_hour;
+
         } else {
+
             commits[commit_count].hour = 12;
         }
 
@@ -120,7 +130,7 @@ static int load_commits(void)
 /* ============================================================
  * CALCULAR INTENSIDADE DO CALOR
  *
- * Commits muito próximos no tempo ficam mais "quentes".
+ * Commits muito próximos no tempo ficam mais quentes.
  * ============================================================ */
 
 static void calculate_heat(void)
@@ -129,11 +139,12 @@ static void calculate_heat(void)
         return;
 
     if (commit_count == 1) {
+
         commits[0].heat = 1.0f;
+
         return;
     }
 
-    double min_gap = 1e30;
     double max_gap = 0.0;
 
     for (size_t i = 1; i < commit_count; i++) {
@@ -145,9 +156,6 @@ static void calculate_heat(void)
 
         if (gap < 0)
             gap = 0;
-
-        if (gap < min_gap)
-            min_gap = gap;
 
         if (gap > max_gap)
             max_gap = gap;
@@ -161,11 +169,14 @@ static void calculate_heat(void)
         double gap;
 
         if (i == 0) {
+
             gap = difftime(
                 commits[1].timestamp,
                 commits[0].timestamp
             );
+
         } else {
+
             gap = difftime(
                 commits[i].timestamp,
                 commits[i - 1].timestamp
@@ -181,8 +192,10 @@ static void calculate_heat(void)
          */
         double normalized =
             1.0 -
-            (log(1.0 + gap) /
-             log(1.0 + max_gap));
+            (
+                log(1.0 + gap) /
+                log(1.0 + max_gap)
+            );
 
         normalized = clamp01(normalized);
 
@@ -191,7 +204,10 @@ static void calculate_heat(void)
          * nos commits mais isolados.
          */
         commits[i].heat =
-            (float)(0.18 + normalized * 0.82);
+            (float)(
+                0.18 +
+                normalized * 0.82
+            );
     }
 }
 
@@ -199,9 +215,9 @@ static void calculate_heat(void)
 /* ============================================================
  * COR DO HORÁRIO
  *
- * Madrugada -> azul
- * Dia       -> roxo
- * Noite     -> rosa
+ * Madrugada -> azul/ciano
+ * Dia       -> azul/roxo
+ * Noite     -> roxo/rosa
  * ============================================================ */
 
 static void hour_color(
@@ -230,9 +246,10 @@ static void hour_color(
     } else if (hour < 18) {
 
         /*
-         * Azul -> roxo
+         * Azul -> roxo — dia
          */
-        double t = (hour - 6) / 12.0;
+        double t =
+            (hour - 6) / 12.0;
 
         rr = lerp(0.20, 0.65, t);
         gg = lerp(0.30, 0.08, t);
@@ -241,9 +258,10 @@ static void hour_color(
     } else {
 
         /*
-         * Roxo -> rosa
+         * Roxo -> rosa — noite
          */
-        double t = (hour - 18) / 6.0;
+        double t =
+            (hour - 18) / 6.0;
 
         rr = lerp(0.65, 1.00, t);
         gg = lerp(0.08, 0.08, t);
@@ -290,16 +308,42 @@ static void draw_background(cairo_t *cr)
         0.13
     );
 
-    for (int x = MAP_X; x <= MAP_X + MAP_W; x += 24) {
+    for (
+        int x = MAP_X;
+        x <= MAP_X + MAP_W;
+        x += 24
+    ) {
 
-        cairo_move_to(cr, x, MAP_Y);
-        cairo_line_to(cr, x, MAP_Y + MAP_H);
+        cairo_move_to(
+            cr,
+            x,
+            MAP_Y
+        );
+
+        cairo_line_to(
+            cr,
+            x,
+            MAP_Y + MAP_H
+        );
     }
 
-    for (int y = MAP_Y; y <= MAP_Y + MAP_H; y += 24) {
+    for (
+        int y = MAP_Y;
+        y <= MAP_Y + MAP_H;
+        y += 24
+    ) {
 
-        cairo_move_to(cr, MAP_X, y);
-        cairo_line_to(cr, MAP_X + MAP_W, y);
+        cairo_move_to(
+            cr,
+            MAP_X,
+            y
+        );
+
+        cairo_line_to(
+            cr,
+            MAP_X + MAP_W,
+            y
+        );
     }
 
     cairo_stroke(cr);
@@ -308,6 +352,19 @@ static void draw_background(cairo_t *cr)
 
 /* ============================================================
  * MAPA DE CALOR
+ *
+ * Cada célula = um commit real.
+ *
+ * Ordem:
+ *
+ * 1 -> 2 -> 3 -> 4
+ *                  |
+ * 8 <- 7 <- 6 <- 5
+ * |
+ * 9 -> 10 -> 11...
+ *
+ * Na prática, a ordem continua sempre:
+ * esquerda -> direita -> próxima linha.
  * ============================================================ */
 
 static void draw_heatmap(cairo_t *cr)
@@ -316,16 +373,19 @@ static void draw_heatmap(cairo_t *cr)
         return;
 
     /*
-     * Grid quadrado baseado na quantidade de commits.
+     * Grid aproximadamente quadrado.
      *
-     * 4920 commits:
+     * Exemplo:
      *
+     * 4920 commits
      * sqrt(4920) ≈ 70
      *
      * => aproximadamente 70 x 70
      */
     int cols =
-        (int)ceil(sqrt((double)commit_count));
+        (int)ceil(
+            sqrt((double)commit_count)
+        );
 
     if (cols < 1)
         cols = 1;
@@ -344,16 +404,27 @@ static void draw_heatmap(cairo_t *cr)
 
     for (size_t i = 0; i < commit_count; i++) {
 
-        int col = (int)(i % cols);
-        int row = (int)(i / cols);
+        /*
+         * A posição é determinada exclusivamente
+         * pela ordem cronológica do commit.
+         */
+        int col =
+            (int)(i % cols);
+
+        int row =
+            (int)(i / cols);
 
         double x =
-            MAP_X + col * cell_w;
+            MAP_X +
+            col * cell_w;
 
         double y =
-            MAP_Y + row * cell_h;
+            MAP_Y +
+            row * cell_h;
 
-        double r, g, b;
+        double r;
+        double g;
+        double b;
 
         hour_color(
             commits[i].hour,
@@ -367,10 +438,9 @@ static void draw_heatmap(cairo_t *cr)
             commits[i].heat;
 
         /*
-         * Pequeno brilho retangular.
+         * Brilho da própria célula.
          *
-         * Não é uma bolinha:
-         * continua sendo a própria célula.
+         * Não cria círculos nem pontos extras.
          */
         if (heat > 0.65) {
 
@@ -415,7 +485,10 @@ static void draw_heatmap(cairo_t *cr)
         cairo_fill(cr);
 
         /*
-         * Núcleo de commits muito intensos.
+         * Núcleo luminoso para commits
+         * muito próximos de outros commits.
+         *
+         * Continua sendo parte da mesma célula.
          */
         if (heat > 0.82) {
 
@@ -445,7 +518,9 @@ static void draw_heatmap(cairo_t *cr)
  * ESCUDO CENTRAL
  *
  * O escudo NÃO é uma figura sólida.
- * Ele aumenta o brilho das células que já existem.
+ *
+ * Ele aumenta o brilho das células que já
+ * existem no mapa.
  * ============================================================ */
 
 static int inside_shield(
@@ -470,7 +545,7 @@ static int inside_shield(
         return 0;
 
     /*
-     * Curva superior + ponta inferior.
+     * Curva superior.
      */
     double top =
         -0.80 +
@@ -479,6 +554,9 @@ static int inside_shield(
     if (ny < top)
         return 0;
 
+    /*
+     * Ponta inferior.
+     */
     double bottom =
         0.85 -
         0.25 * fabs(nx);
@@ -496,7 +574,9 @@ static void illuminate_shield(cairo_t *cr)
         return;
 
     int cols =
-        (int)ceil(sqrt((double)commit_count));
+        (int)ceil(
+            sqrt((double)commit_count)
+        );
 
     int rows =
         (int)ceil(
@@ -511,10 +591,12 @@ static void illuminate_shield(cairo_t *cr)
         (double)MAP_H / rows;
 
     double cx =
-        MAP_X + MAP_W * 0.50;
+        MAP_X +
+        MAP_W * 0.50;
 
     double cy =
-        MAP_Y + MAP_H * 0.50;
+        MAP_Y +
+        MAP_H * 0.50;
 
     double shield_w =
         MAP_W * 0.25;
@@ -524,8 +606,11 @@ static void illuminate_shield(cairo_t *cr)
 
     for (size_t i = 0; i < commit_count; i++) {
 
-        int col = (int)(i % cols);
-        int row = (int)(i / cols);
+        int col =
+            (int)(i % cols);
+
+        int row =
+            (int)(i / cols);
 
         double x =
             MAP_X +
@@ -554,132 +639,55 @@ static void illuminate_shield(cairo_t *cr)
          * Verde-limão + azul neon.
          */
         double r =
-            lerp(0.10, 0.65, intensity);
+            lerp(
+                0.10,
+                0.65,
+                intensity
+            );
 
         double g =
-            lerp(0.70, 1.00, intensity);
+            lerp(
+                0.70,
+                1.00,
+                intensity
+            );
 
         double b =
-            lerp(0.35, 0.95, intensity);
+            lerp(
+                0.35,
+                0.95,
+                intensity
+            );
 
         cairo_set_source_rgba(
             cr,
             r,
             g,
             b,
-            0.25 + intensity * 0.60
+            0.25 +
+            intensity * 0.60
         );
 
         cairo_rectangle(
             cr,
-            MAP_X + col * cell_w + 1,
-            MAP_Y + row * cell_h + 1,
-            fmax(1.0, cell_w - 2),
-            fmax(1.0, cell_h - 2)
+            MAP_X +
+                col * cell_w +
+                1,
+            MAP_Y +
+                row * cell_h +
+                1,
+            fmax(
+                1.0,
+                cell_w - 2
+            ),
+            fmax(
+                1.0,
+                cell_h - 2
+            )
         );
 
         cairo_fill(cr);
     }
-}
-
-
-/* ============================================================
- * ONDA SONORA
- * ============================================================ */
-
-static void draw_wave(cairo_t *cr)
-{
-    double cx =
-        MAP_X + MAP_W * 0.50;
-
-    double cy =
-        MAP_Y + MAP_H * 0.50;
-
-    cairo_set_line_width(cr, 4.0);
-
-    cairo_set_source_rgba(
-        cr,
-        0.55,
-        1.00,
-        0.35,
-        0.95
-    );
-
-    cairo_new_path(cr);
-
-    int points = 260;
-
-    for (int i = 0; i < points; i++) {
-
-        double t =
-            (double)i /
-            (points - 1);
-
-        double x =
-            cx -
-            260.0 +
-            t * 520.0;
-
-        double envelope =
-            sin(M_PI * t);
-
-        double amplitude =
-            72.0 * envelope;
-
-        double y =
-            cy +
-            sin(t * M_PI * 10.0) *
-            amplitude;
-
-        if (i == 0)
-            cairo_move_to(cr, x, y);
-        else
-            cairo_line_to(cr, x, y);
-    }
-
-    cairo_stroke(cr);
-
-    /*
-     * Segunda camada azul.
-     */
-    cairo_set_line_width(cr, 1.5);
-
-    cairo_set_source_rgba(
-        cr,
-        0.20,
-        0.70,
-        1.00,
-        0.85
-    );
-
-    cairo_new_path(cr);
-
-    for (int i = 0; i < points; i++) {
-
-        double t =
-            (double)i /
-            (points - 1);
-
-        double x =
-            cx -
-            260.0 +
-            t * 520.0;
-
-        double amplitude =
-            82.0 * sin(M_PI * t);
-
-        double y =
-            cy +
-            sin(t * M_PI * 10.0) *
-            amplitude;
-
-        if (i == 0)
-            cairo_move_to(cr, x, y);
-        else
-            cairo_line_to(cr, x, y);
-    }
-
-    cairo_stroke(cr);
 }
 
 
@@ -690,10 +698,12 @@ static void draw_wave(cairo_t *cr)
 static void draw_shield_outline(cairo_t *cr)
 {
     double cx =
-        MAP_X + MAP_W * 0.50;
+        MAP_X +
+        MAP_W * 0.50;
 
     double cy =
-        MAP_Y + MAP_H * 0.50;
+        MAP_Y +
+        MAP_H * 0.50;
 
     double w =
         MAP_W * 0.25;
@@ -751,7 +761,13 @@ static void draw_shield_outline(cairo_t *cr)
 
     cairo_close_path(cr);
 
-    cairo_set_line_width(cr, 3.0);
+    /*
+     * Contorno verde.
+     */
+    cairo_set_line_width(
+        cr,
+        3.0
+    );
 
     cairo_set_source_rgba(
         cr,
@@ -764,9 +780,12 @@ static void draw_shield_outline(cairo_t *cr)
     cairo_stroke(cr);
 
     /*
-     * Segunda linha azul.
+     * Segundo contorno azul.
      */
-    cairo_set_line_width(cr, 1.0);
+    cairo_set_line_width(
+        cr,
+        1.0
+    );
 
     cairo_set_source_rgba(
         cr,
@@ -803,7 +822,10 @@ static void text(
         CAIRO_FONT_WEIGHT_NORMAL
     );
 
-    cairo_set_font_size(cr, size);
+    cairo_set_font_size(
+        cr,
+        size
+    );
 
     cairo_set_source_rgba(
         cr,
@@ -854,16 +876,24 @@ static void draw_header(cairo_t *cr)
 
     char info[256];
 
+    int cols =
+        (int)ceil(
+            sqrt((double)commit_count)
+        );
+
+    int rows =
+        (int)ceil(
+            (double)commit_count /
+            cols
+        );
+
     snprintf(
         info,
         sizeof(info),
         "%zu COMMITS  |  GRID %dx%d",
         commit_count,
-        (int)ceil(sqrt((double)commit_count)),
-        (int)ceil(
-            (double)commit_count /
-            ceil(sqrt((double)commit_count))
-        )
+        cols,
+        rows
     );
 
     text(
@@ -880,15 +910,14 @@ static void draw_header(cairo_t *cr)
 }
 
 
+/* ============================================================
+ * RODAPÉ
+ * ============================================================ */
+
 static void draw_footer(cairo_t *cr)
 {
-    char footer[256];
-
-    snprintf(
-        footer,
-        sizeof(footer),
-        "TARGET_SDK: 37  |  GRADLE: 9.6  |  VERSION_CODE: 33"
-    );
+    const char *footer =
+        "TARGET_SDK: 37  |  GRADLE: 9.6  |  VERSION_CODE: 33";
 
     text(
         cr,
@@ -909,7 +938,9 @@ static void draw_footer(cairo_t *cr)
         struct tm tm_value;
 
         if (localtime_r(
-                &commits[commit_count - 1].timestamp,
+                &commits[
+                    commit_count - 1
+                ].timestamp,
                 &tm_value
             )) {
 
@@ -919,8 +950,13 @@ static void draw_footer(cairo_t *cr)
                 "%Y-%m-%d %H:%M",
                 &tm_value
             );
+
         } else {
-            strcpy(date, "unknown");
+
+            strcpy(
+                date,
+                "unknown"
+            );
         }
 
         char latest[256];
@@ -953,7 +989,10 @@ static void draw_footer(cairo_t *cr)
 
 static void draw_map_border(cairo_t *cr)
 {
-    cairo_set_line_width(cr, 1.0);
+    cairo_set_line_width(
+        cr,
+        1.0
+    );
 
     cairo_set_source_rgba(
         cr,
@@ -1032,24 +1071,34 @@ int main(void)
     draw_shield_outline(cr);
 
     /*
-     * 6. Onda sonora
-     */
-    draw_wave(cr);
-
-    /*
-     * 7. Moldura
+     * 6. Moldura
      */
     draw_map_border(cr);
 
     /*
-     * 8. Rodapé
+     * 7. Rodapé
      */
     draw_footer(cr);
 
-    cairo_surface_write_to_png(
-        surface,
-        "docs/observatorio/observatorio.png"
-    );
+    cairo_status_t status =
+        cairo_surface_write_to_png(
+            surface,
+            "docs/observatorio/observatorio.png"
+        );
+
+    if (status != CAIRO_STATUS_SUCCESS) {
+
+        fprintf(
+            stderr,
+            "Erro ao salvar PNG: %s\n",
+            cairo_status_to_string(status)
+        );
+
+        cairo_destroy(cr);
+        cairo_surface_destroy(surface);
+
+        return 1;
+    }
 
     cairo_destroy(cr);
     cairo_surface_destroy(surface);

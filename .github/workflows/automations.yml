@@ -1126,18 +1126,16 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-  # =========================================================
-  # COLOCAR O WORKFLOW NO README
-  # =========================================================
-
-  # =========================================================
+# =========================================================
 # GERAR IMAGEM DAS LINGUAGENS
 # =========================================================
 
   gerar-linguagens:
     name: Gerar imagem das linguagens
     runs-on: ubuntu-24.04
-    needs: atualizar-commits
+
+    needs:
+      - atualizar-commits
 
     steps:
       - name: Baixar repositório
@@ -1161,18 +1159,52 @@ jobs:
         uses: actions/setup-go@v6
         with:
           go-version: "1.25"
+          cache: false
+
+      - name: Criar go.mod e go.sum
+        run: |
+          set -e
+
+          if [ ! -f go.mod ]; then
+            echo "go.mod não encontrado. Criando..."
+
+            go mod init github.com/mulher-amparada/mulher-amparada-app
+          fi
+
+          echo "Atualizando dependências..."
+
+          go mod tidy
+
+          go mod download
+
+          go mod verify
+
+          echo ""
+          echo "Arquivos Go:"
+          ls -lh go.mod go.sum
 
       - name: Executar languages.go
         run: |
           set -e
-          go run tools/languages.go
+          go run ./tools/languages.go
 
       - name: Verificar arquivos gerados
         run: |
           set -e
+
+          test -s go.mod
+          test -s go.sum
           test -s README.md
           test -s github-languages.png
 
+          echo "go.mod:"
+          ls -lh go.mod
+
+          echo ""
+          echo "go.sum:"
+          ls -lh go.sum
+
+          echo ""
           echo "README:"
           ls -lh README.md
 
@@ -1194,6 +1226,16 @@ jobs:
           path: github-languages.png
           if-no-files-found: error
 
+      - name: Enviar arquivos Go
+        uses: actions/upload-artifact@v6
+        with:
+          name: dependencias-go
+          path: |
+            go.mod
+            go.sum
+          if-no-files-found: error
+          
+          
 # =========================================================
 # CENTRALIZAR E SALVAR ARQUIVOS NA MAIN
 # =========================================================

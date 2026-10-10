@@ -1,0 +1,75 @@
+name: Copilot Setup Steps
+
+on:
+  workflow_dispatch:
+
+jobs:
+  copilot-setup-steps:
+    name: Preparar ambiente do Copilot
+    runs-on: ubuntu-24.04
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Configurar ambiente
+        run: |
+          set -e
+
+          sudo apt-get update
+
+          sudo apt-get install -y \
+            g++ \
+            libcurl4-openssl-dev \
+            libssl-dev \
+            jq
+
+      - name: Configurar Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.25"
+          cache: true
+          cache-dependency-path: go.sum
+
+      - name: Baixar dependências Go
+        if: ${{ hashFiles('go.mod') != '' }}
+        run: |
+          set -e
+          go mod download
+
+      - name: Verificar ferramentas
+        run: |
+          set -e
+
+          echo "Git:"
+          git --version
+
+          echo ""
+          echo "Go:"
+          go version
+
+          echo ""
+          echo "G++:"
+          g++ --version
+
+          echo ""
+          echo "Curl:"
+          curl --version | head -n 1
+
+          echo ""
+          echo "jq:"
+          jq --version
+
+      - name: Verificar estrutura do projeto
+        run: |
+          set -e
+
+          test -d .github || true
+          test -d tools || true
+
+          echo "Ambiente do Copilot preparado."

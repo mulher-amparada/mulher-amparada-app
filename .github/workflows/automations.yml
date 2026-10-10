@@ -1134,8 +1134,7 @@ jobs:
     name: Gerar imagem das linguagens
     runs-on: ubuntu-24.04
 
-    needs:
-      - atualizar-commits
+    
 
     steps:
       - name: Baixar repositório

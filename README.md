@@ -1,4 +1,8 @@
 <div align="center">
+  <img src="https://mulher-amparada.github.io/mulher-amparada-app/user1.png" alt="Mulher Amparada">
+</div>
+
+<div align="center">
   <img src="https://mulher-amparada.github.io/mulher-amparada-app/title.png" alt="Mulher Amparada">
 </div>
 

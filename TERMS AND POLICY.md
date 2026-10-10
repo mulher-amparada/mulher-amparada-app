@@ -2,7 +2,7 @@
 
 ---
 
-1. Finalidade do Aplicativo
+1. Finalidade do Aplicativo:
 
 Cláusula 1.1: Este aplicativo foi desenvolvido com objetivo de oferecer suporte, acolhimento e auxílio para mulheres em situações de risco, vulnerabilidade, ameaça ou violência.
 
@@ -20,7 +20,7 @@ Cláusula 1.7: O aplicativo utiliza um Serviço de Acessibilidade exclusivamente
 
 ---
 
-2. Público-Alvo
+2. Público-Alvo:
 
 Cláusula 2.1: O aplicativo foi direcionado principalmente para mulheres em situação de violência, risco ou vulnerabilidade.
 
@@ -30,7 +30,7 @@ Cláusula 2.3: O aplicativo não realiza discriminação de gênero, raça, reli
 
 ---
 
-3. Permissões Utilizadas
+3. Permissões Utilizadas:
 
 Cláusula 3.1: O aplicativo solicita apenas permissões e acessos especiais necessários para funcionalidades específicas.
 
@@ -54,7 +54,7 @@ Cláusula 3.19: O aplicativo não contorna, burla ou oculta as permissões e mec
 
 ---
 
-4. Uso de Contatos
+4. Uso de Contatos:
 
 Cláusula 4.1: O acesso aos contatos ocorre apenas mediante ação manual da própria usuária.
 
@@ -68,7 +68,7 @@ Cláusula 4.5: Os contatos não são vendidos nem utilizados para marketing.
 
 ---
 
-5. Uso de Localização
+5. Uso de Localização:
 
 Cláusula 5.1: A localização é utilizada mediante ação da usuária e conforme as funcionalidades que dependem desse recurso.
 
@@ -80,7 +80,7 @@ Cláusula 5.4: Informações de localização poderão ser compartilhadas manual
 
 ---
 
-6. Botão de Emergência
+6. Botão de Emergência:
 
 Cláusula 6.1: O aplicativo poderá disponibilizar funcionalidades emergenciais para agilizar pedidos de ajuda.
 
@@ -94,7 +94,7 @@ Cláusula 6.5: O aplicativo não garante resposta imediata ou atendimento oficia
 
 ---
 
-7. Proteção por Movimento
+7. Proteção por Movimento:
 
 Cláusula 7.1: O recurso de proteção por movimento utiliza o sensor de acelerômetro do dispositivo Android.
 
@@ -126,7 +126,7 @@ Cláusula 7.14: O recurso pode ser ativado ou desativado manualmente pela usuár
 
 ---
 
-8. Segurança de acesso da área protegida
+8. Segurança de acesso da área protegida:
 
 Cláusula 8.1: O aplicativo poderá utilizar mecanismos de segurança do próprio Android.
 
@@ -138,7 +138,7 @@ Cláusula 8.4: O aplicativo não armazena impressões digitais, rosto ou informa
 
 ---
 
-9. Conteúdo Protegido
+9. Conteúdo Protegido:
 
 Cláusula 9.1: O recurso de conteúdo protegido depende das configurações de segurança do aparelho.
 
@@ -148,7 +148,7 @@ Cláusula 9.3: Sem autenticação configurada, determinadas telas poderão abrir
 
 ---
 
-10. Armazenamento Local
+10. Armazenamento Local:
 
 Cláusula 10.1: Dados utilizados pelo aplicativo poderão ser armazenados localmente no dispositivo.
 
@@ -158,7 +158,7 @@ Cláusula 10.3: O aplicativo não realiza venda de dados pessoais.
 
 ---
 
-11. Ausência de Monitoramento Oculto
+11. Ausência de Monitoramento Oculto:
 
 Cláusula 11.1: O aplicativo não utiliza spyware.
 
@@ -168,7 +168,7 @@ Cláusula 11.3: Nenhuma funcionalidade sensível opera sem as permissões ou ace
 
 ---
 
-12. Compatibilidade
+12. Compatibilidade:
 
 Cláusula 12.1: Determinadas funcionalidades poderão variar conforme fabricante e versão do Android.
 
@@ -176,7 +176,7 @@ Cláusula 12.2: Recursos poderão não funcionar corretamente em dispositivos mo
 
 ---
 
-13. LGPD e Privacidade
+13. LGPD e Privacidade:
 
 Cláusula 13.1: O aplicativo busca respeitar a Lei Geral de Proteção de Dados.
 
@@ -186,7 +186,7 @@ Cláusula 13.3: A usuária poderá revogar permissões diretamente no Android.
 
 ---
 
-14. Limitações
+14. Limitações:
 
 Cláusula 14.1: O aplicativo não substitui serviços oficiais de emergência.
 
@@ -196,7 +196,7 @@ Cláusula 14.3: O funcionamento depende de internet, sensores, permissões e ser
 
 ---
 
-15. Responsabilidade da Usuária
+15. Responsabilidade da Usuária:
 
 Cláusula 15.1: A usuária é responsável pelo uso adequado do aplicativo.
 
@@ -204,7 +204,7 @@ Cláusula 15.2: A usuária é responsável pelas permissões concedidas ao aplic
 
 ---
 
-16. Instalação Fora da Play Store
+16. Instalação Fora da Play Store:
 
 Cláusula 16.1: O aplicativo poderá ser distribuído fora da Google Play Store.
 
@@ -216,7 +216,7 @@ Cláusula 16.4: O aplicativo poderá recomendar verificações de segurança do 
 
 ---
 
-17. Atualizações do Aplicativo
+17. Atualizações do Aplicativo:
 
 Cláusula 17.1: O aplicativo poderá receber atualizações destinadas a melhorias de desempenho, estabilidade e segurança.
 
@@ -228,7 +228,7 @@ Cláusula 17.4: O uso contínuo do aplicativo após atualizações representa co
 
 ---
 
-18. Alterações nos Termos
+18. Alterações nos Termos:
 
 Cláusula 18.1: Estes Termos de Uso poderão ser atualizados futuramente.
 
@@ -240,7 +240,7 @@ Cláusula 18.4: O uso contínuo do aplicativo representa concordância com os te
 
 ---
 
-19. Uso Responsável
+19. Uso Responsável:
 
 Cláusula 19.1: A usuária concorda em utilizar o aplicativo de forma ética e compatível com a legislação.
 
@@ -252,7 +252,7 @@ Cláusula 19.4: A usuária é responsável pelas ações realizadas através do 
 
 ---
 
-20. Dependência de Serviços Externos
+20. Dependência de Serviços Externos:
 
 Cláusula 20.1: Algumas funcionalidades dependem de aplicativos externos instalados no dispositivo.
 
@@ -264,7 +264,7 @@ Cláusula 20.4: O aplicativo não possui controle sobre falhas de serviços exte
 
 ---
 
-21. Uso Offline
+21. Uso Offline:
 
 Cláusula 21.1: Algumas funcionalidades poderão operar parcialmente sem internet.
 
@@ -274,7 +274,7 @@ Cláusula 21.3: O funcionamento offline poderá variar conforme o dispositivo.
 
 ---
 
-22. Segurança do Dispositivo
+22. Segurança do Dispositivo:
 
 Cláusula 22.1: A segurança do aplicativo também depende das práticas de segurança da própria usuária.
 
@@ -286,7 +286,7 @@ Cláusula 22.4: Recomenda-se instalar apenas aplicativos confiáveis.
 
 ---
 
-23. Exclusão de Dados
+23. Exclusão de Dados:
 
 Cláusula 23.1: A usuária poderá remover dados locais apagando os dados do aplicativo nas configurações do Android.
 
@@ -296,7 +296,7 @@ Cláusula 23.3: Alguns dados removidos poderão não ser recuperáveis.
 
 ---
 
-24. Transparência
+24. Transparência:
 
 Cláusula 24.1: O aplicativo busca operar com foco em transparência e privacidade.
 
@@ -308,7 +308,7 @@ Cláusula 24.4: A usuária poderá revisar permissões e acessos diretamente nas
 
 ---
 
-26. Compatibilidade de Sensores
+26. Compatibilidade de Sensores:
 
 Cláusula 26.1: Recursos relacionados ao acelerômetro dependem da disponibilidade do sensor no aparelho.
 
@@ -320,7 +320,7 @@ Cláusula 26.4: Restrições do fabricante poderão limitar funcionalidades rela
 
 ---
 
-27. Chamadas Automáticas
+27. Chamadas Automáticas:
 
 Cláusula 27.1: O recurso de chamadas automáticas depende da permissão de telefone concedida pela usuária.
 
@@ -332,7 +332,7 @@ Cláusula 27.4: O funcionamento depende da operadora e disponibilidade de rede.
 
 ---
 
-28. Falhas Técnicas
+28. Falhas Técnicas:
 
 Cláusula 28.2: Funcionalidades poderão ser afetadas por atualizações do Android.
 
@@ -342,7 +342,7 @@ Cláusula 28.4: O desenvolvedor poderá corrigir falhas futuramente através de 
 
 ---
 
-29. Limitação de Responsabilidade
+29. Limitação de Responsabilidade:
 
 Cláusula 29.1: O aplicativo é uma ferramenta complementar de apoio.
 
@@ -354,7 +354,7 @@ Cláusula 29.4: O desenvolvedor não se responsabiliza por indisponibilidades ex
 
 ---
 
-30. Aceitação dos Termos
+30. Aceitação dos Termos:
 
 Cláusula 30.1: Ao continuar utilizando o aplicativo, a usuária declara concordar com estes termos.
 
@@ -364,7 +364,7 @@ Cláusula 30.3: Estes termos possuem finalidade informativa, operacional e de tr
 
 ---
 
-31. Proteção por barulhos
+31. Proteção por barulhos:
 
 Cláusula 31.1: O recurso "Proteção por barulhos" poderá utilizar o microfone do dispositivo para detectar sons em segundo plano.
 
@@ -390,79 +390,73 @@ Cláusula 31.11: O aplicativo não garante detecção perfeita, funcionamento co
 
 ---
 
-32. Uso Responsável da Plataforma
+32. Uso Responsável da Plataforma:
 
 Cláusula 32.1: O usuário compromete-se a utilizar o aplicativo e o site de maneira ética, responsável e conforme a legislação vigente.
 
 ---
 
-33. Proibição de Conteúdo Ofensivo
+33. Proibição de Conteúdo Ofensivo:
 
 Cláusula 33.1: É proibida a publicação, envio ou compartilhamento de conteúdos ofensivos, discriminatórios, violentos ou ilegais dentro da plataforma.
 
 ---
 
-37. Segurança de Dados
+37. Segurança de Dados:
 
 Cláusula 37.1: A plataforma adota medidas técnicas e administrativas para proteger os dados dos usuários contra acessos não autorizados.
 
 ---
 
-38. Atualizações do Sistema
+38. Atualizações do Sistema:
 
 Cláusula 38.1: O aplicativo poderá receber atualizações periódicas para melhorias de segurança, estabilidade e desempenho.
 
 ---
 
-39. Disponibilidade do Serviço
+39. Disponibilidade do Serviço:
 
 Cláusula 39.1: O funcionamento da plataforma poderá sofrer interrupções temporárias para manutenção técnica ou atualização.
 
 ---
 
-43. Direitos Autorais
+43. Direitos Autorais:
 
 Cláusula 43.1: Os elementos visuais, textos, marcas e funcionalidades da plataforma são protegidos pela legislação de direitos autorais.
 
 ---
 
-44. Uso Indevido da Marca
+44. Uso Indevido da Marca:
 
 Cláusula 44.1: É proibida a utilização da marca Mulher Amparada sem autorização prévia e expressa.
 
 ---
 
-45. Privacidade do Usuário
+45. Privacidade do Usuário:
 
 Cláusula 45.1: A plataforma respeita a privacidade dos usuários e busca limitar a coleta de dados ao mínimo necessário.
 
 ---
 
-46. Dados de Navegação
+46. Dados de Navegação:
 
 Cláusula 46.1: Informações técnicas de navegação poderão ser utilizadas para melhorar a experiência e o desempenho do sistema.
 
 ---
 
-47. Consentimento do Usuário
+47. Consentimento do Usuário:
 
 Cláusula 47.1: Ao utilizar a plataforma, o usuário declara estar ciente e concordar com estes termos.
 
 ---
 
-48. Alterações nos Termos
-
-Cláusula 48.1: Estes termos poderão ser modificados a qualquer momento para adequação legal ou melhoria dos serviços.
-
----
-
-49. Continuidade do Serviço
+49. Continuidade do Serviço:
 
 Cláusula 49.1: O Mulher Amparada poderá alterar funcionalidades ou encerrar partes do serviço mediante aviso prévio quando possível.
 
 ---
 
-50. Uso Permitido
+50. Uso Permitido:
 
 Cláusula 50.1: O uso da plataforma deve ocorrer exclusivamente para finalidades lícitas e compatíveis com os objetivos do aplicativo.
 
@@ -470,265 +464,265 @@ Cláusula 50.2: É proibido compartilhar, copiar ou distribuir indevidamente mec
 
 ---
 
-51. Compartilhamento Não Autorizado
+51. Compartilhamento Não Autorizado:
 
 Cláusula 51.1: É proibido compartilhar contas, acessos ou mecanismos internos da plataforma sem autorização.
 
 ---
 
-52. Tentativas de Invasão
+52. Tentativas de Invasão:
 
 Cláusula 52.1: Qualquer tentativa de invasão, exploração de falhas ou comprometimento do sistema poderá resultar em bloqueio imediato.
 
 ---
 
-53. Backup e Estabilidade
+53. Backup e Estabilidade:
 
 Cláusula 53.1: A plataforma poderá realizar procedimentos internos de backup visando maior segurança operacional.
 
 ---
 
-54. Compatibilidade
+54. Compatibilidade:
 
 Cláusula 54.1: Algumas funcionalidades podem variar conforme o dispositivo, sistema operacional ou versão utilizada.
 
 ---
 
-55. Conexão com a Internet
+55. Conexão com a Internet:
 
 Cláusula 55.1: O funcionamento do aplicativo depende de acesso à internet em determinadas funcionalidades.
 
 ---
 
-56. Uso de Recursos do Dispositivo
+56. Uso de Recursos do Dispositivo:
 
 Cláusula 56.1: O aplicativo poderá utilizar recursos essenciais do dispositivo apenas quando necessários ao funcionamento da plataforma.
 
 ---
 
-58. Responsabilidade Técnica
+58. Responsabilidade Técnica:
 
 Cláusula 58.1: A equipe responsável poderá implementar medidas técnicas para preservar a integridade do serviço.
 
 ---
 
-59. Acesso Seguro
+59. Acesso Seguro:
 
 Cláusula 59.1: Recomenda-se que o usuário mantenha mecanismos de segurança ativos em seu dispositivo.
 
 ---
 
-60. Encerramento de Serviços
+60. Encerramento de Serviços:
 
 Cláusula 60.1: Serviços específicos poderão ser descontinuados ou substituídos conforme necessidade operacional.
 
 ---
 
-61. Informações do código
+61. Informações do código:
 
 Cláusula 61.1: Todas as informações dos códigos são passíveis de visualização pelos arquivos Markdown do repositório do GitHub do projeto, além de todo o código-fonte estar disponível no mesmo.
 
 ---
 
-62. Conduta do Usuário
+62. Conduta do Usuário:
 
 Cláusula 62.1: O usuário deverá respeitar os demais participantes e utilizar a plataforma de maneira adequada.
 
 ---
 
-63. Estabilidade Operacional
+63. Estabilidade Operacional:
 
 Cláusula 63.1: Poderão ocorrer ajustes internos para garantir estabilidade, desempenho e segurança dos sistemas.
 
 ---
 
-64. Proteção da Plataforma
+64. Proteção da Plataforma:
 
 Cláusula 64.1: Medidas automáticas poderão ser adotadas para impedir acessos abusivos ou automatizados.
 
 ---
 
-65. Limitação de Responsabilidade
+65. Limitação de Responsabilidade:
 
 Cláusula 65.1: A plataforma não se responsabiliza por falhas causadas por fatores externos ao seu controle.
 
 ---
 
-66. Serviços de Terceiros
+66. Serviços de Terceiros:
 
 Cláusula 66.1: Alguns recursos poderão depender de serviços externos fornecidos por terceiros.
 
 ---
 
-67. Atualização de Recursos
+67. Atualização de Recursos:
 
 Cláusula 67.1: Funcionalidades poderão ser alteradas, expandidas ou removidas para melhoria contínua da plataforma.
 
 ---
 
-68. Proteção do Ambiente Digital
+68. Proteção do Ambiente Digital:
 
 Cláusula 68.1: O Mulher Amparada poderá aplicar medidas preventivas para proteger seus sistemas e usuários.
 
 ---
 
-69. Registro de Atividades Técnicas
+69. Registro de Atividades Técnicas:
 
 Cláusula 69.1: Registros técnicos poderão ser mantidos temporariamente para fins de segurança e diagnóstico.
 
 ---
 
-70. Conformidade Legal
+70. Conformidade Legal:
 
 Cláusula 70.1: O funcionamento da plataforma busca respeitar a legislação aplicável e princípios de proteção de dados.
 
 ---
 
-71. Ambiente Seguro
+71. Ambiente Seguro:
 
 Cláusula 71.1: A plataforma procura manter um ambiente digital seguro e adequado aos usuários.
 
 ---
 
-72. Integridade do Sistema
+72. Integridade do Sistema:
 
 Cláusula 72.1: Qualquer uso que comprometa a integridade do sistema poderá resultar em restrições de acesso.
 
 ---
 
-73. Cooperação Técnica
+73. Cooperação Técnica:
 
 Cláusula 73.1: O usuário poderá colaborar relatando falhas ou problemas encontrados na plataforma.
 
 ---
 
-74. Correções e Melhorias
+74. Correções e Melhorias:
 
 Cláusula 74.1: Correções técnicas poderão ser aplicadas sem aviso prévio para garantir estabilidade e segurança.
 
 ---
 
-75. Compatibilidade Futura
+75. Compatibilidade Futura:
 
 Cláusula 75.1: Nem todos os dispositivos antigos poderão suportar futuras versões do aplicativo.
 
 ---
 
-76. Segurança do usuário
+76. Segurança do usuário:
 
 Cláusula 76.1: O usuário deve manter seus métodos de autenticação protegidos contra acessos indevidos.
 
 ---
 
-77. Utilização Adequada
+77. Utilização Adequada:
 
 Cláusula 77.1: A utilização da plataforma deve ocorrer de forma compatível com sua finalidade social e tecnológica.
 
 ---
 
-78. Atualizações Automáticas
+78. Atualizações Automáticas:
 
 Cláusula 78.1: Algumas atualizações poderão ocorrer automaticamente conforme as configurações do dispositivo e da loja de aplicativos.
 
 ---
 
-79. Disponibilidade Parcial
+79. Disponibilidade Parcial:
 
 Cláusula 79.1: Certas funcionalidades poderão variar conforme a versão do aplicativo, dispositivo utilizado ou disponibilidade regional.
 
 ---
 
-80. Dados Temporários
+80. Dados Temporários:
 
 Cláusula 80.1: O sistema poderá utilizar dados temporários estritamente necessários ao funcionamento técnico da plataforma.
 
 ---
 
-81. Uso Ético
+81. Uso Ético:
 
 Cláusula 81.1: O usuário compromete-se a utilizar o aplicativo e o site de forma ética, respeitosa e conforme a legislação vigente.
 
 ---
 
-82. Medidas Preventivas
+82. Medidas Preventivas:
 
 Cláusula 82.1: O Mulher Amparada poderá aplicar medidas preventivas para preservar a segurança e estabilidade da plataforma.
 
 ---
 
-83. Identificação de Problemas
+83. Identificação de Problemas:
 
 Cláusula 83.1: Informações técnicas poderão ser utilizadas exclusivamente para diagnóstico de falhas e melhorias internas.
 
 ---
 
-84. Funcionamento do Aplicativo
+84. Funcionamento do Aplicativo:
 
 Cláusula 84.1: O desempenho do aplicativo poderá variar conforme o dispositivo, conexão e ambiente de utilização.
 
 ---
 
-85. Continuidade Técnica
+85. Continuidade Técnica:
 
 Cláusula 85.1: Procedimentos internos poderão ser realizados para garantir estabilidade, manutenção e continuidade dos serviços.
 
 ---
 
-86. Respeito às Normas
+86. Respeito às Normas:
 
 Cláusula 86.1: Todos os usuários devem respeitar estes termos e as normas aplicáveis durante a utilização da plataforma.
 
 ---
 
-87. Segurança Operacional
+87. Segurança Operacional:
 
 Cláusula 87.1: O sistema poderá utilizar mecanismos técnicos de proteção contra atividades abusivas ou maliciosas.
 
 ---
 
-88. Melhorias Contínuas
+88. Melhorias Contínuas:
 
 Cláusula 88.1: O Mulher Amparada poderá implementar melhorias contínuas em recursos, desempenho e estabilidade.
 
 ---
 
-89. Recursos Essenciais
+89. Recursos Essenciais:
 
 Cláusula 89.1: O aplicativo busca utilizar apenas recursos essenciais ao funcionamento básico da plataforma.
 
 ---
 
-90. Comunicação de Atualizações
+90. Comunicação de Atualizações:
 
 Cláusula 90.1: Alterações relevantes poderão ser comunicadas por meios oficiais disponibilizados pela plataforma.
 
 ---
 
-91. Integridade das Funcionalidades
+91. Integridade das Funcionalidades:
 
 Cláusula 91.1: Não é permitido tentar alterar, comprometer ou prejudicar o funcionamento interno da plataforma.
 
 ---
 
-92. Uso de Tecnologias de Segurança
+92. Uso de Tecnologias de Segurança:
 
 Cláusula 92.1: Tecnologias de proteção poderão ser utilizadas para reduzir riscos operacionais e preservar a integridade do sistema.
 
 ---
 
-93. Estabilidade dos Serviços
+93. Estabilidade dos Serviços:
 
 Cláusula 93.1: A equipe técnica poderá realizar ajustes preventivos visando manter estabilidade e desempenho dos serviços.
 
 ---
 
-94. Responsabilidade sobre o Dispositivo
+94. Responsabilidade sobre o Dispositivo:
 
 Cláusula 94.1: O usuário é responsável pela segurança e conservação do dispositivo utilizado para acessar a plataforma.
 
 ---
 
-95. Recursos de Proteção
+95. Recursos de Proteção:
 
 Cláusula 95.1: O aplicativo poderá utilizar mecanismos internos de proteção contra uso indevido ou abusivo.
 
@@ -750,43 +744,31 @@ Cláusula 95.8: A usuária possui controle sobre a ativação dos recursos relac
 
 ---
 
-96. Consentimento Contínuo
+96. Consentimento Contínuo:
 
 Cláusula 96.1: A continuidade da utilização da plataforma representa concordância com eventuais atualizações destes termos.
 
 ---
 
-97. Compatibilidade Técnica
+97. Compatibilidade Técnica:
 
 Cláusula 97.1: Algumas funcionalidades poderão depender de permissões técnicas específicas do dispositivo.
 
 ---
 
-98. Transparência Operacional
+98. Transparência Operacional:
 
 Cláusula 98.1: O Mulher Amparada busca atuar com clareza quanto às funcionalidades e limitações da plataforma.
 
 ---
 
-99. Proteção da Experiência do Usuário
+99. Proteção da Experiência do Usuário:
 
 Cláusula 99.1: Medidas técnicas poderão ser aplicadas para melhorar segurança, estabilidade e experiência de utilização.
 
 ---
 
-100. Dados de Saúde, Condição Física e Bem-Estar
-
-Cláusula 100.1: Segundo o desenvolvedor responsável pelo projeto Mulher Amparada, durante a criação do aplicativo não foi utilizada qualquer permissão relacionada a saúde, condição física, atividades corporais ou bem-estar do usuário.
-
-Cláusula 100.2: O aplicativo não realiza coleta, armazenamento, monitoramento ou processamento de informações médicas, frequência cardíaca, exercícios físicos, sono, calorias ou dados semelhantes.
-
-Cláusula 100.3: Caso o sistema operacional Android apresente referências técnicas relacionadas a permissões de saúde ou bem-estar, isso poderá ocorrer devido a componentes padrão do sistema, bibliotecas externas ou requisitos internos do ambiente Android, sem utilização prática pelo Mulher Amparada.
-
-Cláusula 100.4: O Mulher Amparada reafirma seu compromisso com a privacidade, proteção de dados e utilização apenas das permissões estritamente necessárias para o funcionamento essencial da plataforma.
-
----
-
-101. Aceitação dos Termos
+101. Aceitação dos Termos:
 
 Cláusula 101.1: Ao continuar utilizando o aplicativo, a usuária declara concordar com estes termos.
 

@@ -3834,7 +3834,7 @@ private fun FakeSwitch(
 private fun ActionCard(
     title: String,
     description: String,
-    icon: ImageVector,
+    icon: Int,
     accent: Color,
     gradient: List<Color>,
     arrow: Boolean = true,

@@ -1211,6 +1211,6 @@ O sistema Cripto utiliza AES-256, Android Keystore e Jetpack DataStore Preferenc
 
 ### 1. Incorporação por Referência e Vinculação por Hiperlink
 
-- **Validade Jurídica dos Avisos:** Para todos os fins legais e de auditoria das autoridades ou instituições de direitos humanos, todas as especificações de uso de sensores, regras de permissões manuais de Activitys, escopos do visualizador de arquivos e restrições territoriais estão integradas a este documento por meio de referência direta.
+- **Validade Jurídica dos Avisos:** Para todos os fins legais e de auditoria das autoridades ou instituições de direitos humanos, todas as especificações do projeto integradas a este documento por meio de referência direta.
 
-- **Acesso aos Avisos:** A especificação técnica e o contexto de cada mecanismo de proteção encontram-se publicados e updated na página principal do projeto. O uso do sistema está condicionado à ciência de todos os alertas detalhados no [Mural de Avisos do README.md](https://github.com).
+- **Acesso aos Avisos:** A especificação técnica e o contexto de cada mecanismo de proteção encontram-se publicados na página principal do projeto. O uso do sistema está condicionado à ciência de todos os alertas detalhados no [Mural de Avisos do README.md](https://github.com).

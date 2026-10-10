@@ -18,7 +18,7 @@ E o projeto é = Open-source! (aderido no dia 02/10/2026)
   <img src="github-languages.png" alt="Linguagens utilizadas no projeto">
 </p>
 
-# 🎉Projeto Finalizado
+# 🎉Projeto Finalizado:
 
 https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Projeto-Finalizado!
 

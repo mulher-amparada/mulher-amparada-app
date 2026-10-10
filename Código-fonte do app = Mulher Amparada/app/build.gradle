@@ -117,7 +117,7 @@ androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
 
 // Splash Screen
-implementation 'androidx.core:core-splashscreen:1.0.1'
+implementation 'androidx.core:core-splashscreen:1.2.0'
 
 // DocumentFile
 implementation 'androidx.documentfile:documentfile:1.1.0'

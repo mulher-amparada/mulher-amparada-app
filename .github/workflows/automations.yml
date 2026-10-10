@@ -1160,6 +1160,24 @@ jobs:
           go-version: "1.25"
           cache: false
 
+      - name: Instalar dependências Go
+        shell: bash
+        run: |
+          set -e
+
+          if [ ! -f go.mod ]; then
+            go mod init github.com/mulher-amparada/mulher-amparada-app
+          fi
+
+          go get golang.org/x/image/font
+          go get golang.org/x/image/font/basicfont
+          go get golang.org/x/image/math/fixed
+          go get gopkg.in/yaml.v3
+
+          go mod tidy
+
+          touch go.sum
+          
       - name: Criar go.mod e go.sum
         run: |
           set -e

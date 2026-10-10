@@ -3846,158 +3846,213 @@ private fun FakeSwitch(
 /* =========================================================
    CARDS DE AÇÃO
 ========================================================= */
-
 @Composable
 private fun ActionCard(
     title: String,
     description: String,
-    icon: Int,
-    arrow: Int,
-    gradient: List<Color>,
+    icon: ImageVector,
     accent: Color,
-    c: AppColors,
-onClick: () -> Unit = {}
+    gradient: List<Color>,
+    onClick: () -> Unit
 ) {
+    val infiniteTransition =
+        rememberInfiniteTransition(label = "action_effect")
 
-    Row(
+    val glowAlpha by infiniteTransition.animateFloat(
+        initialValue = 0.10f,
+        targetValue = 0.22f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1800),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "glow"
+    )
 
-    modifier =
-        Modifier
+    var pressed by remember {
+        mutableStateOf(false)
+    }
+
+    val scale by animateFloatAsState(
+        targetValue = if (pressed) 0.97f else 1f,
+        animationSpec = tween(120),
+        label = "scale"
+    )
+
+    Box(
+        modifier = Modifier
             .fillMaxWidth()
             .height(128.dp)
-            .clip(
-                RoundedCornerShape(27.dp)
-            )
+            .graphicsLayer {
+                scaleX = scale
+                scaleY = scale
+
+                shadowElevation =
+                    if (pressed) 4.dp.toPx()
+                    else 14.dp.toPx()
+
+                shape = RoundedCornerShape(27.dp)
+                clip = true
+            }
+            .clip(RoundedCornerShape(27.dp))
             .background(
-                Brush.linearGradient(gradient)
+                Brush.linearGradient(
+                    colors = gradient
+                )
             )
             .border(
-                1.dp,
-                accent.copy(.31f),
-                RoundedCornerShape(27.dp)
+                width = 1.dp,
+                color = accent.copy(alpha = 0.35f),
+                shape = RoundedCornerShape(27.dp)
             )
-            .clickable {
-                onClick()
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onPress = {
+                        pressed = true
+
+                        try {
+                            awaitRelease()
+                        } finally {
+                            pressed = false
+                        }
+
+                        onClick()
+                    }
+                )
             }
-            .padding(20.dp),
+    ) {
 
-    verticalAlignment =
-        Alignment.CenterVertically
-) {
+        // BRILHO RADIAL
         Box(
-
-            modifier =
-                Modifier
-                    .size(66.dp)
-                    .clip(
-                        RoundedCornerShape(23.dp)
-                    )
-                    .background(
-                        accent.copy(.09f)
-                    )
-                    .border(
-                        1.dp,
-                        accent.copy(.32f),
-                        RoundedCornerShape(23.dp)
-                    ),
-
-            contentAlignment =
-                Alignment.Center
-        ) {
-
-            Image(
-                painter =
-                    painterResource(icon),
-                contentDescription = null,
-                modifier =
-                    Modifier.size(35.dp)
-            )
-        }
-
-        Spacer(
-            Modifier.width(16.dp)
-        )
-
-        Column(
-
-            modifier =
-                Modifier.weight(1f),
-
-            verticalArrangement =
-                Arrangement.spacedBy(8.dp)
-        ) {
-
-            Text(
-                title,
-                color =
-                    if (
-                        isSystemInDarkTheme()
-                    )
-                        Color.White
-                    else
-                        c.text,
-                fontSize = 16.sp,
-lineHeight = 18.sp
-            )
-
-            Text(
-                description,
-                color =
-                    if (
-                        isSystemInDarkTheme()
-                    )
-                        Color.White.copy(.66f)
-                    else
-                        c.secondary,
-                fontSize = 10.sp,
-lineHeight = 15.sp
-            )
-
-            Text(
-                "ATENDIMENTO DISPONÍVEL",
-                color = accent,
-                fontSize = 7.sp,
-letterSpacing = 1.sp
-            )
-        }
-
-        Spacer(
-            Modifier.width(16.dp)
-        )
-
-        Box(
-
-            modifier =
-                Modifier
-                    .size(43.dp)
-                    .clip(
-                        RoundedCornerShape(16.dp)
-                    )
-                    .background(
-                        if (
-                            isSystemInDarkTheme()
+            modifier = Modifier
+                .size(170.dp)
+                .offset(
+                    x = 120.dp,
+                    y = (-70).dp
+                )
+                .background(
+                    Brush.radialGradient(
+                        colors = listOf(
+                            accent.copy(alpha = glowAlpha),
+                            Color.Transparent
                         )
-                            Color.Black.copy(.13f)
-                        else
-                            Color.Black.copy(.05f)
-                    )
-                    .border(
-                        1.dp,
-                        accent.copy(.22f),
-                        RoundedCornerShape(16.dp)
                     ),
+                    CircleShape
+                )
+        )
 
-            contentAlignment =
-                Alignment.Center
+        // SEGUNDO BRILHO
+        Box(
+            modifier = Modifier
+                .size(110.dp)
+                .offset(
+                    x = (-35).dp,
+                    y = 55.dp
+                )
+                .background(
+                    Brush.radialGradient(
+                        colors = listOf(
+                            accent.copy(alpha = 0.10f),
+                            Color.Transparent
+                        )
+                    ),
+                    CircleShape
+                )
+        )
+
+        // REFLEXO SUPERIOR
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .align(Alignment.TopCenter)
+                .background(
+                    Brush.horizontalGradient(
+                        colors = listOf(
+                            Color.Transparent,
+                            Color.White.copy(alpha = 0.28f),
+                            Color.Transparent
+                        )
+                    )
+                )
+        )
+
+        // CONTEÚDO
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(20.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Image(
-                painter =
-                    painterResource(arrow),
-                contentDescription = null,
-                modifier =
-                    Modifier.size(19.dp)
+            // ÍCONE COM GLOW
+            Box(
+                modifier = Modifier.size(62.dp),
+                contentAlignment = Alignment.Center
+            ) {
+
+                Box(
+                    modifier = Modifier
+                        .size(62.dp)
+                        .background(
+                            Brush.radialGradient(
+                                colors = listOf(
+                                    accent.copy(alpha = 0.35f),
+                                    Color.Transparent
+                                )
+                            ),
+                            CircleShape
+                        )
+                )
+
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape)
+                        .background(
+                            accent.copy(alpha = 0.14f)
+                        )
+                        .border(
+                            1.dp,
+                            accent.copy(alpha = 0.45f),
+                            CircleShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = accent,
+                        modifier = Modifier.size(25.dp)
+                    )
+                }
+            }
+
+            Spacer(
+                modifier = Modifier.width(15.dp)
             )
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+
+                Text(
+                    text = title,
+                    color = Color.White,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Spacer(
+                    modifier = Modifier.height(5.dp)
+                )
+
+                Text(
+                    text = description,
+                    color = Color.White.copy(alpha = 0.68f),
+                    fontSize = 12.sp,
+                    lineHeight = 16.sp
+                )
+            }
         }
     }
 }

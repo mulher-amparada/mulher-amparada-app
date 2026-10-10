@@ -16,7 +16,7 @@ e pra ser sincero, comecei esse projeto no dia 13/05/2026 e terminei no dia 10/1
 
 **Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4920**
 
-**Horas de trabalho no projeto = 0h 0min**
+**Horas de trabalho no projeto = 1976h 23min**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 

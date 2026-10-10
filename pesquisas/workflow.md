@@ -2,8 +2,8 @@
 
 - **Arquivo de origem:** `.github/workflows/automations.yml`
 - **Arquivo gerado:** `.github/workflows/workflow.md`
-- **Jobs identificados:** 13
-- **Etapas identificadas:** 60
+- **Jobs identificados:** 15
+- **Etapas identificadas:** 72
 
 ## Tabela completa de jobs e etapas
 
@@ -18,10 +18,12 @@
 | `indexnow` | IndexNow | ubuntu-24.04 | `deploy` | 1. Enviar Sitemap ao IndexNow (`bojieyang/indexnow-action@v3`) |
 | `lighthouse` | Lighthouse | ubuntu-24.04 | `deploy` | 1. Lighthouse (`treosh/lighthouse-ci-action@v12`) |
 | `publicar-divulgacao` | Publicar Kit de Divulgação | ubuntu-24.04 | `lighthouse` | 1. Baixar repositório (`actions/checkout@v6`); 2. Configurar Node.js (`actions/setup-node@v6`); 3. Criar pacote de divulgação — executa comandos; 4. Kit de Divulgação (`softprops/action-gh-release@v3`) |
+| `observatorio` | Observatório | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar dependências do Observatório — executa comandos; 3. Compilar observatório — executa comandos; 4. Executar observatório — executa comandos; 5. Verificar mapa gerado — executa comandos; 6. observatorio (`actions/upload-artifact@v6`) |
+| `horas-trabalho` | Calcular horas de trabalho | ubuntu-24.04 | `atualizar-commits` | 1. Baixar histórico completo (`actions/checkout@v6`); 2. Compilar calculador de horas — executa comandos; 3. Calcular horas e atualizar README — executa comandos; 4. arquivo-horas-trabalho (`actions/upload-artifact@v6`) |
 | `atualizar-footer` | Atualizar Footer com README | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Python (`actions/setup-python@v6`); 3. Instalar dependência Python — executa comandos; 4. Atualizar footer com README — executa comandos; 5. arquivo-footer (`actions/upload-artifact@v6`) |
 | `atualizar-relatorio-commits` | Atualizar relatório de commits | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Ruby (`ruby/setup-ruby@v1`); 3. Gerar relatório de commits — executa comandos; 4. arquivos-relatorio-commits (`actions/upload-artifact@v6`) |
 | `pesquisar-projeto` | Documentar workflow YAML | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar PHP — executa comandos; 3. Gerar documentação do workflow — executa comandos; 4. arquivos-pesquisas (`actions/upload-artifact@v6`) |
-| `salvar-na-main` | Salvar todos os arquivos na main | ubuntu-24.04 | `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. arquivo-readme (`actions/download-artifact@v7`); 3. arquivo-sitemap (`actions/download-artifact@v7`); 4. arquivo-footer (`actions/download-artifact@v7`); 5. arquivos-relatorio-commits (`actions/download-artifact@v7`); 6. arquivos-pesquisas (`actions/download-artifact@v7`); 7. Reunir arquivos gerados — executa comandos; 8. Salvar todas as alterações em um commit — executa comandos |
+| `salvar-na-main` | Salvar todos os arquivos na main | ubuntu-24.04 | `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`, `observatorio`, `horas-trabalho` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. arquivo-readme (`actions/download-artifact@v7`); 3. arquivo-horas-trabalho (`actions/download-artifact@v7`); 4. arquivo-sitemap (`actions/download-artifact@v7`); 5. arquivo-footer (`actions/download-artifact@v7`); 6. arquivos-relatorio-commits (`actions/download-artifact@v7`); 7. arquivos-pesquisas (`actions/download-artifact@v7`); 8. observatorio (`actions/download-artifact@v7`); 9. Reunir arquivos gerados — executa comandos; 10. Salvar todas as alterações em um commit — executa comandos |
 
 ## Grafo completo de dependências
 
@@ -38,6 +40,8 @@ flowchart TD
     job_indexnow["IndexNow"]
     job_lighthouse["Lighthouse"]
     job_publicar_divulgacao["Publicar Kit de Divulgação"]
+    job_observatorio["Observatório"]
+    job_horas_trabalho["Calcular horas de trabalho"]
     job_atualizar_footer["Atualizar Footer com README"]
     job_atualizar_relatorio_commits["Atualizar relatório de commits"]
     job_pesquisar_projeto["Documentar workflow YAML"]
@@ -50,6 +54,8 @@ flowchart TD
     job_deploy --> job_indexnow
     job_deploy --> job_lighthouse
     job_lighthouse --> job_publicar_divulgacao
+    job_atualizar_commits --> job_observatorio
+    job_atualizar_commits --> job_horas_trabalho
     job_atualizar_commits --> job_atualizar_footer
     job_atualizar_commits --> job_atualizar_relatorio_commits
     job_atualizar_commits --> job_salvar_na_main
@@ -57,6 +63,8 @@ flowchart TD
     job_atualizar_footer --> job_salvar_na_main
     job_atualizar_relatorio_commits --> job_salvar_na_main
     job_pesquisar_projeto --> job_salvar_na_main
+    job_observatorio --> job_salvar_na_main
+    job_horas_trabalho --> job_salvar_na_main
 ```
 
 ## Detalhamento dos jobs
@@ -181,6 +189,34 @@ flowchart TD
 | 3 | Criar pacote de divulgação | — | npm pack |
 | 4 | Kit de Divulgação | `softprops/action-gh-release@v3` | — |
 
+### Observatório
+
+- **ID:** `observatorio`
+- **Runner:** `ubuntu-24.04`
+- **Dependências:** `atualizar-commits`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| 1 | Baixar repositório | `actions/checkout@v6` | — |
+| 2 | Instalar dependências do Observatório | — | \| |
+| 3 | Compilar observatório | — | \| |
+| 4 | Executar observatório | — | \| |
+| 5 | Verificar mapa gerado | — | \| |
+| 6 | observatorio | `actions/upload-artifact@v6` | — |
+
+### Calcular horas de trabalho
+
+- **ID:** `horas-trabalho`
+- **Runner:** `ubuntu-24.04`
+- **Dependências:** `atualizar-commits`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| 1 | Baixar histórico completo | `actions/checkout@v6` | — |
+| 2 | Compilar calculador de horas | — | \| |
+| 3 | Calcular horas e atualizar README | — | \| |
+| 4 | arquivo-horas-trabalho | `actions/upload-artifact@v6` | — |
+
 ### Atualizar Footer com README
 
 - **ID:** `atualizar-footer`
@@ -225,18 +261,20 @@ flowchart TD
 
 - **ID:** `salvar-na-main`
 - **Runner:** `ubuntu-24.04`
-- **Dependências:** `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`
+- **Dependências:** `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`, `observatorio`, `horas-trabalho`
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
 | 1 | Baixar código atualizado | `actions/checkout@v6` | — |
 | 2 | arquivo-readme | `actions/download-artifact@v7` | — |
-| 3 | arquivo-sitemap | `actions/download-artifact@v7` | — |
-| 4 | arquivo-footer | `actions/download-artifact@v7` | — |
-| 5 | arquivos-relatorio-commits | `actions/download-artifact@v7` | — |
-| 6 | arquivos-pesquisas | `actions/download-artifact@v7` | — |
-| 7 | Reunir arquivos gerados | — | \| |
-| 8 | Salvar todas as alterações em um commit | — | \| |
+| 3 | arquivo-horas-trabalho | `actions/download-artifact@v7` | — |
+| 4 | arquivo-sitemap | `actions/download-artifact@v7` | — |
+| 5 | arquivo-footer | `actions/download-artifact@v7` | — |
+| 6 | arquivos-relatorio-commits | `actions/download-artifact@v7` | — |
+| 7 | arquivos-pesquisas | `actions/download-artifact@v7` | — |
+| 8 | observatorio | `actions/download-artifact@v7` | — |
+| 9 | Reunir arquivos gerados | — | \| |
+| 10 | Salvar todas as alterações em um commit | — | \| |
 
 ## YAML original completo
 
@@ -1161,15 +1199,7 @@ jobs:
           uploadArtifacts: true
 
 
-  # =========================================================
-  # GERAR SNAKE DAS CONTRIBUIÇÕES
-  # =========================================================
 
-  # =========================================================
-  # GERAR SNAKE DAS CONTRIBUIÇÕES
-  # =========================================================
-
-  
 
   # =========================================================
   # PUBLICAR KIT DE DIVULGAÇÃO
@@ -1205,8 +1235,100 @@ jobs:
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+  # =========================================================
+  # OBSERVATÓRIO
+  # =========================================================
 
+  observatorio:
+    name: Observatório
+    runs-on: ubuntu-24.04
+    needs: atualizar-commits
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
+      - name: Instalar dependências do Observatório
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            gcc \
+            libcairo2-dev
+
+      - name: Compilar observatório
+        run: |
+          set -e
+
+          gcc \
+            tools/observatorio.c \
+            -o observatorio \
+            $(pkg-config --cflags --libs cairo) \
+            -lm
+
+      - name: Executar observatório
+        run: |
+          set -e
+
+          chmod +x observatorio
+          ./observatorio
+
+      - name: Verificar mapa gerado
+        run: |
+          set -e
+
+          test -s docs/observatorio/observatorio.png
+
+          file docs/observatorio/observatorio.png
+
+          echo ""
+          echo "Observatório gerado:"
+          ls -lh docs/observatorio/observatorio.png
+
+      - name: Disponibilizar observatório
+        uses: actions/upload-artifact@v6
+        with:
+          name: observatorio
+          path: docs/observatorio/observatorio.png
+          if-no-files-found: error
+          retention-days: 30
+
+# =========================================================
+  # HORAS DE TRABALHO NO REPOSITÓRIO
+  # =========================================================
+  
+  horas-trabalho:
+    name: Calcular horas de trabalho
+    runs-on: ubuntu-24.04
+    needs: atualizar-commits
+
+    steps:
+      - name: Baixar histórico completo
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Compilar calculador de horas
+        run: |
+          g++ \
+            tools/horas_trabalho.cpp \
+            -o horas-trabalho \
+            -std=c++17
+
+      - name: Calcular horas e atualizar README
+        run: |
+          chmod +x horas-trabalho
+          ./horas-trabalho
+
+      - name: Enviar README atualizado
+        uses: actions/upload-artifact@v6
+        with:
+          name: arquivo-horas-trabalho
+          path: README.md
+          if-no-files-found: error
+          
   # =========================================================
   # ATUALIZAR FOOTER COM README
   # =========================================================
@@ -1336,16 +1458,28 @@ jobs:
       - atualizar-footer
       - atualizar-relatorio-commits
       - pesquisar-projeto
+      - observatorio
+      - horas-trabalho
 
     permissions:
       contents: write
 
     steps:
+
+      # =========================================================
+      # BAIXAR CÓDIGO ATUALIZADO
+      # =========================================================
+
       - name: Baixar código atualizado
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
           ref: main
+
+
+      # =========================================================
+      # BAIXAR README
+      # =========================================================
 
       - name: Baixar README atualizado
         uses: actions/download-artifact@v7
@@ -1353,11 +1487,32 @@ jobs:
           name: arquivo-readme
           path: artefatos/readme
 
+
+      # =========================================================
+      # BAIXAR README COM HORAS DE TRABALHO
+      # =========================================================
+
+      - name: Baixar README com horas de trabalho
+        uses: actions/download-artifact@v7
+        with:
+          name: arquivo-horas-trabalho
+          path: artefatos/horas
+
+
+      # =========================================================
+      # BAIXAR SITEMAP
+      # =========================================================
+
       - name: Baixar Sitemap
         uses: actions/download-artifact@v7
         with:
           name: arquivo-sitemap
           path: artefatos/sitemap
+
+
+      # =========================================================
+      # BAIXAR FOOTER
+      # =========================================================
 
       - name: Baixar Footer
         uses: actions/download-artifact@v7
@@ -1365,11 +1520,21 @@ jobs:
           name: arquivo-footer
           path: artefatos/footer
 
+
+      # =========================================================
+      # BAIXAR RELATÓRIO DE COMMITS
+      # =========================================================
+
       - name: Baixar relatório de commits
         uses: actions/download-artifact@v7
         with:
           name: arquivos-relatorio-commits
           path: artefatos/commits
+
+
+      # =========================================================
+      # BAIXAR PESQUISAS
+      # =========================================================
 
       - name: Baixar pesquisas
         uses: actions/download-artifact@v7
@@ -1377,30 +1542,161 @@ jobs:
           name: arquivos-pesquisas
           path: artefatos/pesquisas
 
+
+      # =========================================================
+      # BAIXAR OBSERVATÓRIO
+      # =========================================================
+
+      - name: Baixar Observatório
+        uses: actions/download-artifact@v7
+        with:
+          name: observatorio
+          path: artefatos/observatorio
+
+
+      # =========================================================
+      # REUNIR TODOS OS ARQUIVOS
+      # =========================================================
+
       - name: Reunir arquivos gerados
         run: |
           set -e
 
-          cp artefatos/readme/README.md README.md
+          echo "========================================"
+          echo "REUNINDO ARQUIVOS GERADOS"
+          echo "========================================"
 
-          cp artefatos/sitemap/sitemap.xml sitemap.xml
+          # -----------------------------------------------------
+          # README PRINCIPAL
+          # -----------------------------------------------------
 
-          cp artefatos/footer/index.html index.html
+          cp \
+            artefatos/readme/README.md \
+            README.md
 
-          mkdir -p commits pesquisas
+          # -----------------------------------------------------
+          # README COM HORAS DE TRABALHO
+          # -----------------------------------------------------
 
-          cp -a artefatos/commits/. commits/
-          cp -a artefatos/pesquisas/. pesquisas/
+          cp \
+            artefatos/horas/README.md \
+            README.md
+
+          # -----------------------------------------------------
+          # SITEMAP
+          # -----------------------------------------------------
+
+          cp \
+            artefatos/sitemap/sitemap.xml \
+            sitemap.xml
+
+          # -----------------------------------------------------
+          # FOOTER
+          # -----------------------------------------------------
+
+          cp \
+            artefatos/footer/index.html \
+            index.html
+
+          # -----------------------------------------------------
+          # DIRETÓRIOS
+          # -----------------------------------------------------
+
+          mkdir -p commits
+          mkdir -p pesquisas
+          mkdir -p docs/observatorio
+
+          # -----------------------------------------------------
+          # RELATÓRIO DE COMMITS
+          # -----------------------------------------------------
+
+          cp -a \
+            artefatos/commits/. \
+            commits/
+
+          # -----------------------------------------------------
+          # PESQUISAS
+          # -----------------------------------------------------
+
+          cp -a \
+            artefatos/pesquisas/. \
+            pesquisas/
+
+          # -----------------------------------------------------
+          # OBSERVATÓRIO
+          # -----------------------------------------------------
+
+          cp \
+            artefatos/observatorio/observatorio.png \
+            docs/observatorio/observatorio.png
+
+          # -----------------------------------------------------
+          # CORREÇÃO DA DOCUMENTAÇÃO DO WORKFLOW
+          # -----------------------------------------------------
 
           if [ -f "pesquisas/.github/workflows/workflow.md" ]; then
-            mv "pesquisas/.github/workflows/workflow.md" \
+
+            mv \
+              "pesquisas/.github/workflows/workflow.md" \
               "pesquisas/workflow.md"
+
           fi
 
-          test -s pesquisas/workflow.md
+          # -----------------------------------------------------
+          # VERIFICAR ARQUIVOS
+          # -----------------------------------------------------
 
-          echo "Workflow salvo em pesquisas/workflow.md"
+          test -s README.md
+          test -s sitemap.xml
+          test -s index.html
+          test -s pesquisas/workflow.md
+          test -s docs/observatorio/observatorio.png
+
+          echo ""
+          echo "========================================"
+          echo "ARQUIVOS REUNIDOS"
+          echo "========================================"
+
+          echo ""
+          echo "README:"
+          ls -lh README.md
+
+          echo ""
+          echo "Sitemap:"
+          ls -lh sitemap.xml
+
+          echo ""
+          echo "Footer:"
+          ls -lh index.html
+
+          echo ""
+          echo "Relatórios:"
+          find commits \
+            -maxdepth 1 \
+            -type f \
+            -name "commits_*.md" \
+            -print \
+            | sort
+
+          echo ""
+          echo "Pesquisas:"
           ls -lh pesquisas/workflow.md
+
+          echo ""
+          echo "Observatório:"
+          ls -lh docs/observatorio/observatorio.png
+
+          echo ""
+          echo "Horas de trabalho:"
+          grep -F "Horas de trabalho no projeto" README.md || true
+
+          echo ""
+          echo "Todos os arquivos foram reunidos."
+
+
+      # =========================================================
+      # SALVAR NA MAIN
+      # =========================================================
 
       - name: Salvar todas as alterações em um commit
         run: |
@@ -1409,19 +1705,70 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add README.md index.html sitemap.xml commits/ pesquisas/
+          echo "========================================"
+          echo "PREPARANDO COMMIT"
+          echo "========================================"
+
+          # -----------------------------------------------------
+          # ADICIONAR ARQUIVOS
+          # -----------------------------------------------------
+
+          git add \
+            README.md \
+            index.html \
+            sitemap.xml \
+            commits/ \
+            pesquisas/ \
+            docs/observatorio/
+
+          # -----------------------------------------------------
+          # VERIFICAR ALTERAÇÕES
+          # -----------------------------------------------------
 
           if git diff --cached --quiet; then
+
             echo "Nenhuma alteração para salvar."
             exit 0
+
           fi
 
-          git commit -m "Atualizar arquivos gerados [skip ci]"
+          echo ""
+          echo "Arquivos que serão salvos:"
+          git diff --cached --name-status
+
+          # -----------------------------------------------------
+          # COMMIT
+          # -----------------------------------------------------
+
+          git commit \
+            -m "Atualizar arquivos gerados [skip ci]"
+
+          # -----------------------------------------------------
+          # ATUALIZAR MAIN
+          # -----------------------------------------------------
 
           git fetch origin main
+
           git rebase origin/main
+
+          # -----------------------------------------------------
+          # ENVIAR PARA MAIN
+          # -----------------------------------------------------
 
           git push origin HEAD:main
 
-          echo "Todos os arquivos gerados foram salvos na main."
+          echo ""
+          echo "========================================"
+          echo "TODOS OS ARQUIVOS FORAM SALVOS NA MAIN"
+          echo "========================================"
+
+          echo ""
+          echo "Arquivos incluídos:"
+          echo "- README.md"
+          echo "- index.html"
+          echo "- sitemap.xml"
+          echo "- commits/"
+          echo "- pesquisas/"
+          echo "- docs/observatorio/observatorio.png"
+          echo "- Horas de trabalho no README"
 ````

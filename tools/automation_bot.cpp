@@ -9,7 +9,9 @@ int main() {
     const char* repo = std::getenv("GITHUB_REPOSITORY");
 
     if (!token || !repo) {
-        std::cerr << "GH_TOKEN ou GITHUB_REPOSITORY não definido.\n";
+        std::cerr
+            << "ERRO: GH_TOKEN ou GITHUB_REPOSITORY não definido.\n";
+
         return 1;
     }
 
@@ -21,7 +23,9 @@ int main() {
     CURL* curl = curl_easy_init();
 
     if (!curl) {
-        std::cerr << "Não foi possível iniciar libcurl.\n";
+        std::cerr
+            << "ERRO: não foi possível iniciar libcurl.\n";
+
         return 1;
     }
 
@@ -39,7 +43,16 @@ int main() {
 
     headers = curl_slist_append(
         headers,
-        ("Authorization: Bearer " + std::string(token)).c_str()
+        "User-Agent: mulher-amparada-automation-bot"
+    );
+
+    std::string autorizacao =
+        "Authorization: Bearer " +
+        std::string(token);
+
+    headers = curl_slist_append(
+        headers,
+        autorizacao.c_str()
     );
 
     headers = curl_slist_append(
@@ -47,24 +60,50 @@ int main() {
         "Content-Type: application/json"
     );
 
-    std::string body = R"({"ref":"main"})";
+    const std::string body =
+        R"({"ref":"main"})";
 
-    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-    curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.c_str());
+    curl_easy_setopt(
+        curl,
+        CURLOPT_URL,
+        url.c_str()
+    );
 
-    CURLcode resultado = curl_easy_perform(curl);
+    curl_easy_setopt(
+        curl,
+        CURLOPT_HTTPHEADER,
+        headers
+    );
+
+    curl_easy_setopt(
+        curl,
+        CURLOPT_CUSTOMREQUEST,
+        "POST"
+    );
+
+    curl_easy_setopt(
+        curl,
+        CURLOPT_POSTFIELDS,
+        body.c_str()
+    );
+
+    CURLcode resultado =
+        curl_easy_perform(curl);
 
     long status = 0;
-    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &status);
+
+    curl_easy_getinfo(
+        curl,
+        CURLINFO_RESPONSE_CODE,
+        &status
+    );
 
     curl_slist_free_all(headers);
     curl_easy_cleanup(curl);
 
     if (resultado != CURLE_OK) {
         std::cerr
-            << "Erro ao chamar GitHub API: "
+            << "ERRO na comunicação com GitHub: "
             << curl_easy_strerror(resultado)
             << "\n";
 
@@ -81,7 +120,15 @@ int main() {
     }
 
     std::cout
-        << "automations.yml executado com sucesso.\n";
+        << "========================================\n"
+        << "BOT DE AUTOMAÇÕES\n"
+        << "========================================\n\n"
+        << "Repositório: "
+        << repo
+        << "\n"
+        << "Workflow: automations.yml\n"
+        << "Branch: main\n"
+        << "Status: disparado com sucesso\n";
 
     return 0;
 }

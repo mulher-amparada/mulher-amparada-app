@@ -916,15 +916,7 @@ jobs:
           uploadArtifacts: true
 
 
-  # =========================================================
-  # GERAR SNAKE DAS CONTRIBUIÇÕES
-  # =========================================================
 
-  # =========================================================
-  # GERAR SNAKE DAS CONTRIBUIÇÕES
-  # =========================================================
-
-  
 
   # =========================================================
   # PUBLICAR KIT DE DIVULGAÇÃO
@@ -1019,6 +1011,41 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+# =========================================================
+  # HORAS DE TRABALHO NO REPOSITÓRIO
+  # =========================================================
+  
+    horas-trabalho:
+    name: Calcular horas de trabalho
+    runs-on: ubuntu-24.04
+    needs: atualizar-commits
+
+    steps:
+      - name: Baixar histórico completo
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Compilar calculador de horas
+        run: |
+          g++ \
+            tools/horas_trabalho.cpp \
+            -o horas-trabalho \
+            -std=c++17
+
+      - name: Calcular horas e atualizar README
+        run: |
+          chmod +x horas-trabalho
+          ./horas-trabalho
+
+      - name: Enviar README atualizado
+        uses: actions/upload-artifact@v6
+        with:
+          name: arquivo-horas-trabalho
+          path: README.md
+          if-no-files-found: error
+          
   # =========================================================
   # ATUALIZAR FOOTER COM README
   # =========================================================
@@ -1149,6 +1176,7 @@ jobs:
       - atualizar-relatorio-commits
       - pesquisar-projeto
       - observatorio
+      - horas-trabalho
 
     permissions:
       contents: write
@@ -1175,6 +1203,17 @@ jobs:
         with:
           name: arquivo-readme
           path: artefatos/readme
+
+
+      # =========================================================
+      # BAIXAR README COM HORAS DE TRABALHO
+      # =========================================================
+
+      - name: Baixar README com horas de trabalho
+        uses: actions/download-artifact@v7
+        with:
+          name: arquivo-horas-trabalho
+          path: artefatos/horas
 
 
       # =========================================================
@@ -1245,11 +1284,19 @@ jobs:
           echo "========================================"
 
           # -----------------------------------------------------
-          # README
+          # README PRINCIPAL
           # -----------------------------------------------------
 
           cp \
             artefatos/readme/README.md \
+            README.md
+
+          # -----------------------------------------------------
+          # README COM HORAS DE TRABALHO
+          # -----------------------------------------------------
+
+          cp \
+            artefatos/horas/README.md \
             README.md
 
           # -----------------------------------------------------
@@ -1357,6 +1404,10 @@ jobs:
           ls -lh docs/observatorio/observatorio.png
 
           echo ""
+          echo "Horas de trabalho:"
+          grep -F "Horas de trabalho no projeto" README.md || true
+
+          echo ""
           echo "Todos os arquivos foram reunidos."
 
 
@@ -1436,3 +1487,4 @@ jobs:
           echo "- commits/"
           echo "- pesquisas/"
           echo "- docs/observatorio/observatorio.png"
+          echo "- Horas de trabalho no README"

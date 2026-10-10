@@ -3481,7 +3481,6 @@ lineHeight = 20.sp,
 /* =========================================================
    SENSOR
 ========================================================= */
-
 @Composable
 private fun SensorCard(
     number: String,
@@ -3563,8 +3562,8 @@ private fun SensorCard(
 
             val alpha by
                 transition.animateFloat(
-                    initialValue = 0.08f,
-                    targetValue = 0.22f,
+                    initialValue = .08f,
+                    targetValue = .22f,
                     animationSpec =
                         infiniteRepeatable(
                             animation =
@@ -3579,9 +3578,7 @@ private fun SensorCard(
 
             Image(
                 painter =
-                    painterResource(
-                        activeImage
-                    ),
+                    painterResource(activeImage),
 
                 contentDescription = null,
 
@@ -3603,7 +3600,7 @@ private fun SensorCard(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(22.dp),
+                    .padding(10.dp),
 
             verticalAlignment =
                 Alignment.CenterVertically
@@ -3614,112 +3611,35 @@ private fun SensorCard(
                     Modifier.weight(1f),
 
                 verticalArrangement =
-                    Arrangement.spacedBy(8.dp)
+                    Arrangement.spacedBy(4.dp)
             ) {
 
                 Text(
                     text = number,
                     color = c.muted,
-                    fontSize = 9.sp,
-                    letterSpacing = 1.5.sp
+                    fontSize = 7.sp,
+                    letterSpacing = .8.sp,
+                    maxLines = 1
                 )
 
                 Text(
                     text = title,
                     color = c.text,
-                    fontSize = 22.sp,
-                    lineHeight = 25.sp,
-                    letterSpacing = (-.7).sp,
-                    modifier =
-                        Modifier.fillMaxWidth()
+                    fontSize = 12.sp,
+                    lineHeight = 14.sp,
+                    letterSpacing = (-.2).sp,
+                    maxLines = 2
                 )
-            }
-
-            Spacer(
-                Modifier.width(14.dp)
-            )
-
-            Box(
-                modifier =
-                    Modifier
-                        .size(55.dp)
-                        .clip(
-                            RoundedCornerShape(20.dp)
-                        )
-                        .background(
-                            color.copy(.075f)
-                        )
-                        .border(
-                            1.dp,
-                            color.copy(.27f),
-                            RoundedCornerShape(20.dp)
-                        ),
-
-                contentAlignment =
-                    Alignment.Center
-            ) {
-
-                Box(
-                    modifier =
-                        Modifier
-                            .size(39.dp)
-                            .border(
-                                1.dp,
-                                c.borderLight,
-                                RoundedCornerShape(16.dp)
-                            ),
-
-                    contentAlignment =
-                        Alignment.Center
-                ) {
-
-                    Image(
-                        painter =
-                            painterResource(icon),
-
-                        contentDescription = null,
-
-                        modifier =
-                            Modifier.size(24.dp)
-                    )
-                }
-            }
-
-            Spacer(
-                Modifier.width(14.dp)
-            )
-
-            Column(
-                modifier =
-                    Modifier.weight(1f),
-
-                verticalArrangement =
-                    Arrangement.spacedBy(8.dp)
-            ) {
 
                 Text(
                     text = description,
-
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                top = 4.dp,
-                                end = 4.dp
-                            ),
-
                     color = c.secondary,
-
-                    fontSize = 10.sp,
-                    lineHeight = 16.sp,
-
+                    fontSize = 7.sp,
+                    lineHeight = 9.sp,
                     maxLines = 3
                 )
 
                 Row(
-                    modifier =
-                        Modifier.fillMaxWidth(),
-
                     verticalAlignment =
                         Alignment.CenterVertically
                 ) {
@@ -3727,7 +3647,7 @@ private fun SensorCard(
                     Box(
                         modifier =
                             Modifier
-                                .size(6.dp)
+                                .size(5.dp)
                                 .clip(CircleShape)
                                 .background(
                                     if (active)
@@ -3738,7 +3658,7 @@ private fun SensorCard(
                     )
 
                     Spacer(
-                        Modifier.width(8.dp)
+                        Modifier.width(4.dp)
                     )
 
                     Text(
@@ -3754,14 +3674,65 @@ private fun SensorCard(
                             else
                                 c.muted,
 
-                        fontSize = 9.sp,
-                        letterSpacing = 1.2.sp
+                        fontSize = 6.sp,
+                        letterSpacing = .5.sp,
+                        maxLines = 1
                     )
                 }
             }
 
             Spacer(
-                Modifier.width(14.dp)
+                Modifier.width(6.dp)
+            )
+
+            Box(
+                modifier =
+                    Modifier
+                        .size(42.dp)
+                        .clip(
+                            RoundedCornerShape(15.dp)
+                        )
+                        .background(
+                            color.copy(.075f)
+                        )
+                        .border(
+                            1.dp,
+                            color.copy(.27f),
+                            RoundedCornerShape(15.dp)
+                        ),
+
+                contentAlignment =
+                    Alignment.Center
+            ) {
+
+                Box(
+                    modifier =
+                        Modifier
+                            .size(31.dp)
+                            .border(
+                                1.dp,
+                                c.borderLight,
+                                RoundedCornerShape(12.dp)
+                            ),
+
+                    contentAlignment =
+                        Alignment.Center
+                ) {
+
+                    Image(
+                        painter =
+                            painterResource(icon),
+
+                        contentDescription = null,
+
+                        modifier =
+                            Modifier.size(19.dp)
+                    )
+                }
+            }
+
+            Spacer(
+                Modifier.width(5.dp)
             )
 
             FakeSwitch(
@@ -3835,6 +3806,8 @@ private fun FakeSwitch(
    CARDS DE AÇÃO
 ========================================================= */
 
+
+
 @Composable
 private fun ActionCard(
     title: String,
@@ -3866,7 +3839,7 @@ private fun ActionCard(
                 .clickable {
                     onClick()
                 }
-                .padding(14.dp),
+                .padding(10.dp),
 
         verticalAlignment =
             Alignment.CenterVertically
@@ -3875,9 +3848,9 @@ private fun ActionCard(
         Box(
             modifier =
                 Modifier
-                    .size(55.dp)
+                    .size(42.dp)
                     .clip(
-                        RoundedCornerShape(19.dp)
+                        RoundedCornerShape(15.dp)
                     )
                     .background(
                         accent.copy(.09f)
@@ -3885,7 +3858,7 @@ private fun ActionCard(
                     .border(
                         1.dp,
                         accent.copy(.32f),
-                        RoundedCornerShape(19.dp)
+                        RoundedCornerShape(15.dp)
                     ),
 
             contentAlignment =
@@ -3899,12 +3872,12 @@ private fun ActionCard(
                 contentDescription = null,
 
                 modifier =
-                    Modifier.size(29.dp)
+                    Modifier.size(22.dp)
             )
         }
 
         Spacer(
-            Modifier.width(12.dp)
+            Modifier.width(7.dp)
         )
 
         Column(
@@ -3912,7 +3885,7 @@ private fun ActionCard(
                 Modifier.weight(1f),
 
             verticalArrangement =
-                Arrangement.spacedBy(5.dp)
+                Arrangement.spacedBy(4.dp)
         ) {
 
             Text(
@@ -3924,8 +3897,8 @@ private fun ActionCard(
                     else
                         c.text,
 
-                fontSize = 13.sp,
-                lineHeight = 16.sp,
+                fontSize = 10.sp,
+                lineHeight = 12.sp,
                 maxLines = 2
             )
 
@@ -3938,8 +3911,8 @@ private fun ActionCard(
                     else
                         c.secondary,
 
-                fontSize = 8.sp,
-                lineHeight = 12.sp,
+                fontSize = 7.sp,
+                lineHeight = 9.sp,
                 maxLines = 3
             )
 
@@ -3948,22 +3921,22 @@ private fun ActionCard(
 
                 color = accent,
 
-                fontSize = 6.sp,
-                letterSpacing = .6.sp,
+                fontSize = 5.sp,
+                letterSpacing = .4.sp,
                 maxLines = 1
             )
         }
 
         Spacer(
-            Modifier.width(7.dp)
+            Modifier.width(5.dp)
         )
 
         Box(
             modifier =
                 Modifier
-                    .size(34.dp)
+                    .size(28.dp)
                     .clip(
-                        RoundedCornerShape(12.dp)
+                        RoundedCornerShape(10.dp)
                     )
                     .background(
                         if (isSystemInDarkTheme())
@@ -3974,7 +3947,7 @@ private fun ActionCard(
                     .border(
                         1.dp,
                         accent.copy(.22f),
-                        RoundedCornerShape(12.dp)
+                        RoundedCornerShape(10.dp)
                     ),
 
             contentAlignment =
@@ -3988,7 +3961,7 @@ private fun ActionCard(
                 contentDescription = null,
 
                 modifier =
-                    Modifier.size(16.dp)
+                    Modifier.size(13.dp)
             )
         }
     }

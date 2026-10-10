@@ -42,24 +42,6 @@ Cláusula 3.4: A permissão de localização poderá ser utilizada em funcionali
 
 Cláusula 3.5: A permissão especial de Acesso a todos os arquivos poderá ser utilizada para o serviço de visualização de arquivos da área protegida.
 
-Cláusula 3.6: A permissão de acesso à lista de aplicativos instalados poderá ser utilizada pela função destinada a listar aplicativos dentro da área protegida, conforme as informações disponibilizadas pelo Android.
-
-Cláusula 3.7: O aplicativo utiliza um Serviço de Acessibilidade para realizar o bloqueio da tela quando a funcionalidade correspondente estiver ativada.
-
-Cláusula 3.8: O Serviço de Acessibilidade não é ativado automaticamente pelo aplicativo. A usuária precisa autorizar manualmente sua utilização nas configurações de Acessibilidade do Android.
-
-Cláusula 3.9: O Serviço de Acessibilidade é utilizado especificamente para solicitar o bloqueio da tela por meio dos recursos oficiais disponibilizados pelo Android.
-
-Cláusula 3.10: O aplicativo não utiliza o Serviço de Acessibilidade para ler o conteúdo de outras telas, controlar arbitrariamente outros aplicativos ou acessar conteúdo das janelas de outros aplicativos.
-
-Cláusula 3.11: O aplicativo não utiliza mais o mecanismo de Administrador do dispositivo ("DeviceAdminReceiver") para realizar o bloqueio da tela.
-
-Cláusula 3.12: A classe responsável pelo Serviço de Acessibilidade permanece denominada "MyDeviceAdminReceiver" por compatibilidade com a estrutura existente do projeto, porém ela atualmente estende "AccessibilityService" e não é um Administrador do dispositivo.
-
-Cláusula 3.13: O bloqueio da tela utiliza a ação oficial "GLOBAL_ACTION_LOCK_SCREEN" disponibilizada pelo Serviço de Acessibilidade do Android.
-
-Cláusula 3.14: A ativação, desativação e gerenciamento do Serviço de Acessibilidade são controlados pelo sistema Android e pela própria usuária.
-
 Cláusula 3.15: O microfone poderá ser utilizado para funcionalidades de detecção sonora e proteção por barulho, mediante autorização da usuária.
 
 Cláusula 3.16: A execução de determinados recursos poderá ocorrer em segundo plano quando a própria usuária tiver ativado a respectiva funcionalidade.

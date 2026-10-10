@@ -8,7 +8,13 @@
  * - Cor baseada no horário do commit
  * - Intensidade baseada na proximidade entre commits
  * - Grid cresce conforme o número de commits
- * - Escudo central emerge do próprio mapa
+ * - Escudo central emerge das próprias células
+ *
+ * Sem:
+ * - contorno externo do escudo
+ * - segundo contorno
+ * - núcleo dentro das células
+ * - brilho externo das células
  *
  * Compilação:
  *   gcc -O2 -Wall -Wextra tools/observatorio.c \
@@ -23,7 +29,6 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
-#include <stdint.h>
 
 #define WIDTH  1800
 #define HEIGHT 1100
@@ -129,8 +134,6 @@ static int load_commits(void)
 
 /* ============================================================
  * CALCULAR INTENSIDADE DO CALOR
- *
- * Commits muito próximos no tempo ficam mais quentes.
  * ============================================================ */
 
 static void calculate_heat(void)
@@ -139,9 +142,7 @@ static void calculate_heat(void)
         return;
 
     if (commit_count == 1) {
-
         commits[0].heat = 1.0f;
-
         return;
     }
 
@@ -186,10 +187,6 @@ static void calculate_heat(void)
         if (gap < 0)
             gap = 0;
 
-        /*
-         * Quanto menor o intervalo,
-         * maior a intensidade.
-         */
         double normalized =
             1.0 -
             (
@@ -199,10 +196,6 @@ static void calculate_heat(void)
 
         normalized = clamp01(normalized);
 
-        /*
-         * Mantém alguma luminosidade mesmo
-         * nos commits mais isolados.
-         */
         commits[i].heat =
             (float)(
                 0.18 +
@@ -234,9 +227,6 @@ static void hour_color(
 
     if (hour < 6) {
 
-        /*
-         * Azul/ciano — madrugada
-         */
         double t = hour / 6.0;
 
         rr = lerp(0.05, 0.20, t);
@@ -245,9 +235,6 @@ static void hour_color(
 
     } else if (hour < 18) {
 
-        /*
-         * Azul -> roxo — dia
-         */
         double t =
             (hour - 6) / 12.0;
 
@@ -257,9 +244,6 @@ static void hour_color(
 
     } else {
 
-        /*
-         * Roxo -> rosa — noite
-         */
         double t =
             (hour - 18) / 6.0;
 
@@ -268,9 +252,6 @@ static void hour_color(
         bb = lerp(0.85, 0.55, t);
     }
 
-    /*
-     * Intensidade do calor.
-     */
     double brightness =
         0.55 + heat * 0.45;
 
@@ -295,9 +276,6 @@ static void draw_background(cairo_t *cr)
 
     cairo_paint(cr);
 
-    /*
-     * Grade muito discreta.
-     */
     cairo_set_line_width(cr, 1.0);
 
     cairo_set_source_rgba(
@@ -353,18 +331,14 @@ static void draw_background(cairo_t *cr)
 /* ============================================================
  * MAPA DE CALOR
  *
- * Cada célula = um commit real.
+ * Cada célula = exatamente um commit.
  *
- * Ordem:
- *
- * 1 -> 2 -> 3 -> 4
- *                  |
- * 8 <- 7 <- 6 <- 5
- * |
- * 9 -> 10 -> 11...
- *
- * Na prática, a ordem continua sempre:
- * esquerda -> direita -> próxima linha.
+ * Não existe:
+ * - núcleo interno
+ * - ponto
+ * - bola
+ * - brilho externo
+ * - célula adicional
  * ============================================================ */
 
 static void draw_heatmap(cairo_t *cr)
@@ -372,16 +346,6 @@ static void draw_heatmap(cairo_t *cr)
     if (commit_count == 0)
         return;
 
-    /*
-     * Grid aproximadamente quadrado.
-     *
-     * Exemplo:
-     *
-     * 4920 commits
-     * sqrt(4920) ≈ 70
-     *
-     * => aproximadamente 70 x 70
-     */
     int cols =
         (int)ceil(
             sqrt((double)commit_count)
@@ -404,10 +368,6 @@ static void draw_heatmap(cairo_t *cr)
 
     for (size_t i = 0; i < commit_count; i++) {
 
-        /*
-         * A posição é determinada exclusivamente
-         * pela ordem cronológica do commit.
-         */
         int col =
             (int)(i % cols);
 
@@ -438,33 +398,7 @@ static void draw_heatmap(cairo_t *cr)
             commits[i].heat;
 
         /*
-         * Brilho da própria célula.
-         *
-         * Não cria círculos nem pontos extras.
-         */
-        if (heat > 0.65) {
-
-            cairo_set_source_rgba(
-                cr,
-                r,
-                g,
-                b,
-                0.08 * heat
-            );
-
-            cairo_rectangle(
-                cr,
-                x - 2,
-                y - 2,
-                cell_w + 4,
-                cell_h + 4
-            );
-
-            cairo_fill(cr);
-        }
-
-        /*
-         * Célula principal.
+         * UMA ÚNICA CÉLULA POR COMMIT.
          */
         cairo_set_source_rgba(
             cr,
@@ -483,33 +417,6 @@ static void draw_heatmap(cairo_t *cr)
         );
 
         cairo_fill(cr);
-
-        /*
-         * Núcleo luminoso para commits
-         * muito próximos de outros commits.
-         *
-         * Continua sendo parte da mesma célula.
-         */
-        if (heat > 0.82) {
-
-            cairo_set_source_rgba(
-                cr,
-                0.85,
-                0.95,
-                1.0,
-                0.22 * heat
-            );
-
-            cairo_rectangle(
-                cr,
-                x + cell_w * 0.25,
-                y + cell_h * 0.25,
-                cell_w * 0.50,
-                cell_h * 0.50
-            );
-
-            cairo_fill(cr);
-        }
     }
 }
 
@@ -517,10 +424,10 @@ static void draw_heatmap(cairo_t *cr)
 /* ============================================================
  * ESCUDO CENTRAL
  *
- * O escudo NÃO é uma figura sólida.
+ * O escudo não possui desenho externo.
  *
- * Ele aumenta o brilho das células que já
- * existem no mapa.
+ * Ele é formado exclusivamente pelas próprias
+ * células existentes no mapa.
  * ============================================================ */
 
 static int inside_shield(
@@ -545,7 +452,7 @@ static int inside_shield(
         return 0;
 
     /*
-     * Curva superior.
+     * Parte superior.
      */
     double top =
         -0.80 +
@@ -555,7 +462,7 @@ static int inside_shield(
         return 0;
 
     /*
-     * Ponta inferior.
+     * Parte inferior.
      */
     double bottom =
         0.85 -
@@ -612,19 +519,19 @@ static void illuminate_shield(cairo_t *cr)
         int row =
             (int)(i / cols);
 
-        double x =
+        double cell_cx =
             MAP_X +
             col * cell_w +
             cell_w * 0.5;
 
-        double y =
+        double cell_cy =
             MAP_Y +
             row * cell_h +
             cell_h * 0.5;
 
         if (!inside_shield(
-                x,
-                y,
+                cell_cx,
+                cell_cy,
                 cx,
                 cy,
                 shield_w,
@@ -632,40 +539,59 @@ static void illuminate_shield(cairo_t *cr)
             ))
             continue;
 
-        double intensity =
+        /*
+         * Mantém a célula original,
+         * apenas aumentando discretamente
+         * sua presença.
+         *
+         * Não cria nenhuma forma nova.
+         */
+        double heat =
             commits[i].heat;
 
+        double original_r;
+        double original_g;
+        double original_b;
+
+        hour_color(
+            commits[i].hour,
+            heat,
+            &original_r,
+            &original_g,
+            &original_b
+        );
+
         /*
-         * Verde-limão + azul neon.
+         * Mistura a cor original com
+         * azul/ciano do escudo.
          */
         double r =
             lerp(
-                0.10,
-                0.65,
-                intensity
+                original_r,
+                0.25,
+                0.42
             );
 
         double g =
             lerp(
-                0.70,
-                1.00,
-                intensity
+                original_g,
+                0.90,
+                0.42
             );
 
         double b =
             lerp(
-                0.35,
-                0.95,
-                intensity
+                original_b,
+                1.00,
+                0.42
             );
 
         cairo_set_source_rgba(
             cr,
-            r,
-            g,
-            b,
-            0.25 +
-            intensity * 0.60
+            clamp01(r),
+            clamp01(g),
+            clamp01(b),
+            0.55 + heat * 0.40
         );
 
         cairo_rectangle(
@@ -688,114 +614,6 @@ static void illuminate_shield(cairo_t *cr)
 
         cairo_fill(cr);
     }
-}
-
-
-/* ============================================================
- * CONTORNO DO ESCUDO
- * ============================================================ */
-
-static void draw_shield_outline(cairo_t *cr)
-{
-    double cx =
-        MAP_X +
-        MAP_W * 0.50;
-
-    double cy =
-        MAP_Y +
-        MAP_H * 0.50;
-
-    double w =
-        MAP_W * 0.25;
-
-    double h =
-        MAP_H * 0.36;
-
-    cairo_new_path(cr);
-
-    cairo_move_to(
-        cr,
-        cx,
-        cy - h
-    );
-
-    cairo_curve_to(
-        cr,
-        cx + w * 0.70,
-        cy - h * 0.80,
-        cx + w,
-        cy - h * 0.55,
-        cx + w,
-        cy - h * 0.20
-    );
-
-    cairo_curve_to(
-        cr,
-        cx + w,
-        cy + h * 0.35,
-        cx + w * 0.45,
-        cy + h * 0.75,
-        cx,
-        cy + h
-    );
-
-    cairo_curve_to(
-        cr,
-        cx - w * 0.45,
-        cy + h * 0.75,
-        cx - w,
-        cy + h * 0.35,
-        cx - w,
-        cy - h * 0.20
-    );
-
-    cairo_curve_to(
-        cr,
-        cx - w,
-        cy - h * 0.55,
-        cx - w * 0.70,
-        cy - h * 0.80,
-        cx,
-        cy - h
-    );
-
-    cairo_close_path(cr);
-
-    /*
-     * Contorno verde.
-     */
-    cairo_set_line_width(
-        cr,
-        3.0
-    );
-
-    cairo_set_source_rgba(
-        cr,
-        0.55,
-        1.00,
-        0.30,
-        0.85
-    );
-
-    cairo_stroke(cr);
-
-    /*
-     * Segundo contorno azul.
-     */
-    cairo_set_line_width(
-        cr,
-        1.0
-    );
-
-    cairo_set_source_rgba(
-        cr,
-        0.15,
-        0.65,
-        1.00,
-        0.75
-    );
-
-    cairo_stroke(cr);
 }
 
 
@@ -1053,30 +871,26 @@ int main(void)
     draw_header(cr);
 
     /*
-     * 3. MAPA DE CALOR REAL
-     *
-     * Cada quadrado = um commit.
+     * 3. Cada quadrado representa
+     *    exatamente um commit.
      */
     draw_heatmap(cr);
 
     /*
-     * 4. O próprio mapa ilumina
-     *    o escudo central.
+     * 4. O escudo emerge das próprias
+     *    células existentes.
+     *
+     *    Nenhum contorno é desenhado.
      */
     illuminate_shield(cr);
 
     /*
-     * 5. Escudo
-     */
-    draw_shield_outline(cr);
-
-    /*
-     * 6. Moldura
+     * 5. Moldura do mapa.
      */
     draw_map_border(cr);
 
     /*
-     * 7. Rodapé
+     * 6. Rodapé.
      */
     draw_footer(cr);
 

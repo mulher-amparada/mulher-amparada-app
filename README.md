@@ -10,8 +10,6 @@ e pra ser sincero, comecei esse projeto no dia 13/05/2026 e terminei no dia 10/1
 
 **Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4920**
 
-**Horas de trabalho no projeto = 1976h 32min**
-
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
 # ⚠️MURAL DE AVISOS:
@@ -115,6 +113,9 @@ updates:
 E eu também já consegui configurar um ssh na conta, e 2fa nela tambem, e com o ssh, eu consegui mover pastas inteiras para o repositório, e transformei 4 em 1, e mais de 100 commits em 1,
 
 e os contatos de confiança, quando são cadrastados eles também são criptografados!
+
+<!-- AUTOMATIONS_YML_INICIO -->
+<!-- AUTOMATIONS_YML_FIM -->
 
 ### Sobre o site que está hospedado pelo github pages:
 

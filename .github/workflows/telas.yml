@@ -1,0 +1,57 @@
+name: Gerar prévias das telas
+
+on:
+  push:
+    paths:
+      - "**/*.kt"
+      - "**/*.kts"
+      - "tools/telas.c"
+      - ".github/workflows/telas.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  gerar-telas:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar projeto
+        uses: actions/checkout@v4
+
+      - name: Compilar analisador C
+        run: |
+          gcc -O2 tools/telas.c -o gerador-telas
+
+      - name: Analisar Kotlin
+        run: |
+          ./gerador-telas
+
+      - name: Instalar conversor SVG
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y librsvg2-bin
+
+      - name: Converter telas para PNG
+        run: |
+          for arquivo in docs/telas/*.svg; do
+            nome=$(basename "$arquivo" .svg)
+
+            rsvg-convert \
+              "$arquivo" \
+              -o "docs/telas/$nome.png"
+          done
+
+      - name: Salvar imagens
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add docs/telas/
+
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteração nas telas."
+          else
+            git commit -m "chore: atualizar prévias das telas"
+            git push
+          fi

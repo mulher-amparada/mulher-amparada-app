@@ -1,10 +1,10 @@
 <div align="center">
-  <img src="https://mulher-amparada.github.io/mulher-amparada-app/user1.png" alt="Mulher Amparada" width="200">
+  <img src="https://mulher-amparada.github.io/mulher-amparada-app/user1.png" width="200">
 </div>
 
 
 <div align="center">
-  <img src="https://mulher-amparada.github.io/mulher-amparada-app/title.png" alt="Mulher Amparada">
+  <img src="https://mulher-amparada.github.io/mulher-amparada-app/title.png">
 </div>
 
 Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista laudado nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!

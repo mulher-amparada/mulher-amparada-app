@@ -1,0 +1,43 @@
+name: Bot de Automações
+
+on:
+  schedule:
+    - cron: "0 15 * * *"
+
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  bot:
+    name: Executar bot
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v6
+
+      - name: Instalar libcurl
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            g++ \
+            libcurl4-openssl-dev
+
+      - name: Compilar bot
+        run: |
+          g++ \
+            tools/automation_bot.cpp \
+            -o automation-bot \
+            -std=c++17 \
+            -lcurl
+
+      - name: Executar bot
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          chmod +x automation-bot
+          ./automation-bot

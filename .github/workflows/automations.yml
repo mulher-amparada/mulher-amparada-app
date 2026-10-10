@@ -7,7 +7,6 @@ on:
 
   workflow_dispatch:
 
-
 permissions:
   contents: write
   pages: write
@@ -22,12 +21,12 @@ concurrency:
 jobs:
 
   # =========================================================
-  # COMPILAR APK
+  # TODAS AS AUTOMAÇÕES
   # =========================================================
 
-  build:
+  automacoes:
 
-    name: Compilar APK Kotlin
+    name: Automações do Mulher Amparada
 
     runs-on: ubuntu-24.04
 
@@ -38,19 +37,19 @@ jobs:
 
     steps:
 
-      # =========================================================
-      # BAIXAR CÓDIGO
-      # =========================================================
+      # =====================================================
+      # BAIXAR TODO O REPOSITÓRIO
+      # =====================================================
 
-      - name: Baixar código
+      - name: Baixar todo o repositório
         uses: actions/checkout@v6
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
 
-      # =========================================================
+      # =====================================================
       # VERIFICAR PROJETO
-      # =========================================================
+      # =====================================================
 
       - name: Verificar projeto
         run: |
@@ -66,10 +65,13 @@ jobs:
             exit 1
           fi
 
+          echo "Projeto encontrado:"
+          echo "$App1_DIR"
 
-      # =========================================================
+
+      # =====================================================
       # JAVA
-      # =========================================================
+      # =====================================================
 
       - name: Configurar Java 17
         uses: actions/setup-java@v6
@@ -79,9 +81,9 @@ jobs:
           cache: gradle
 
 
-      # =========================================================
+      # =====================================================
       # VERIFICAR ANDROID SDK 37
-      # =========================================================
+      # =====================================================
 
       - name: Verificar Android SDK 37
         run: |
@@ -95,6 +97,7 @@ jobs:
 
           echo ""
           echo "Plataformas 37 disponíveis:"
+
           find "$ANDROID_HOME/platforms" \
             -maxdepth 1 \
             -type d \
@@ -108,21 +111,22 @@ jobs:
 
             echo "ERRO: nenhuma plataforma Android 37 encontrada."
             exit 1
+
           fi
 
 
-      # =========================================================
+      # =====================================================
       # PERMISSÃO DO GRADLE
-      # =========================================================
+      # =====================================================
 
       - name: Dar permissão ao Gradle
         working-directory: ${{ env.App1_DIR }}
         run: chmod +x gradlew
 
 
-      # =========================================================
+      # =====================================================
       # COMPILAR APK
-      # =========================================================
+      # =====================================================
 
       - name: Compilar APK
         id: compilar_apk
@@ -160,12 +164,13 @@ jobs:
             } >> "$GITHUB_STEP_SUMMARY"
 
             exit "$STATUS"
+
           fi
 
 
-      # =========================================================
+      # =====================================================
       # LOCALIZAR APK
-      # =========================================================
+      # =====================================================
 
       - name: Localizar APK
         id: apk
@@ -188,9 +193,9 @@ jobs:
           echo "apk=$APK" >> "$GITHUB_OUTPUT"
 
 
-      # =========================================================
+      # =====================================================
       # ASSINAR APK
-      # =========================================================
+      # =====================================================
 
       - name: Assinar APK
         working-directory: ${{ env.App1_DIR }}
@@ -221,15 +226,20 @@ jobs:
             exit 1
           fi
 
-          echo "$KEYSTORE_BASE64" | base64 --decode > mulher-amparada.jks
+          echo "$KEYSTORE_BASE64" \
+            | base64 --decode > mulher-amparada.jks
 
           APK="${{ steps.apk.outputs.apk }}"
 
           if [ ! -f "$APK" ]; then
+
             echo "ERRO: APK não encontrado:"
             echo "$APK"
+
             rm -f mulher-amparada.jks
+
             exit 1
+
           fi
 
           APKSIGNER=$(find "$ANDROID_HOME/build-tools" \
@@ -239,9 +249,13 @@ jobs:
             | tail -n 1)
 
           if [ -z "$APKSIGNER" ]; then
+
             echo "ERRO: apksigner não encontrado."
+
             rm -f mulher-amparada.jks
+
             exit 1
+
           fi
 
           echo "Assinando APK..."
@@ -267,9 +281,9 @@ jobs:
           echo "APK assinado e verificado com sucesso."
 
 
-      # =========================================================
-      # PREPARAR APK DA RELEASE
-      # =========================================================
+      # =====================================================
+      # PREPARAR APK
+      # =====================================================
 
       - name: Preparar APK da Release
         working-directory: ${{ env.App1_DIR }}
@@ -277,15 +291,16 @@ jobs:
 
           APK="${{ steps.apk.outputs.apk }}"
 
-          cp "$APK" "$GITHUB_WORKSPACE/$RELEASE_APK_NAME"
+          cp "$APK" \
+            "$GITHUB_WORKSPACE/$RELEASE_APK_NAME"
 
           echo "APK preparado:"
           echo "$GITHUB_WORKSPACE/$RELEASE_APK_NAME"
 
 
-      # =========================================================
-      # ARTIFACT
-      # =========================================================
+      # =====================================================
+      # ARTIFACT DO APK
+      # =====================================================
 
       - name: Enviar APK como artifact
         uses: actions/upload-artifact@v6
@@ -295,9 +310,9 @@ jobs:
           if-no-files-found: error
 
 
-      # =========================================================
+      # =====================================================
       # TAMANHO REAL
-      # =========================================================
+      # =====================================================
 
       - name: Calcular tamanho real do APK
         id: apk_size
@@ -331,9 +346,9 @@ jobs:
           echo "size_formatado=$SIZE_FORMATADO" >> "$GITHUB_OUTPUT"
 
 
-      # =========================================================
+      # =====================================================
       # SHA-256
-      # =========================================================
+      # =====================================================
 
       - name: Calcular SHA-256
         id: sha256
@@ -354,39 +369,26 @@ jobs:
           echo "sha256=$SHA256" >> "$GITHUB_OUTPUT"
 
 
-      # =========================================================
+      # =====================================================
       # ATUALIZAR APK NO MAIN
-      # =========================================================
+      # =====================================================
 
-      - name: Atualizar APK no main
+      - name: Preparar APK no main
         run: |
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           TARGET="${App1_DIR}/app-release.apk"
 
-          cp "$GITHUB_WORKSPACE/$RELEASE_APK_NAME" "$TARGET"
+          cp \
+            "$GITHUB_WORKSPACE/$RELEASE_APK_NAME" \
+            "$TARGET"
 
-          git fetch origin main
-
-          git reset --hard origin/main
-
-          cp "$GITHUB_WORKSPACE/$RELEASE_APK_NAME" "$TARGET"
-
-          git add "$TARGET"
-
-          if git diff --cached --quiet; then
-            echo "APK já está atualizado."
-          else
-            git commit -m "Atualizar APK assinado [skip ci]"
-            git push origin main
-          fi
+          echo "APK preparado para ser salvo:"
+          echo "$TARGET"
 
 
-      # =========================================================
+      # =====================================================
       # VERIFICAR RELEASE
-      # =========================================================
+      # =====================================================
 
       - name: Verificar Release
         env:
@@ -398,14 +400,15 @@ jobs:
 
             echo "ERRO: A Release '$RELEASE_TAG' não existe."
             exit 1
+
           fi
 
           echo "Release encontrada."
 
 
-      # =========================================================
+      # =====================================================
       # EXCLUIR APK ANTIGO
-      # =========================================================
+      # =====================================================
 
       - name: Excluir APK antigo da Release
         env:
@@ -434,9 +437,9 @@ jobs:
           fi
 
 
-      # =========================================================
+      # =====================================================
       # ENVIAR APK PARA RELEASE
-      # =========================================================
+      # =====================================================
 
       - name: Enviar APK para a Release
         env:
@@ -451,9 +454,9 @@ jobs:
           echo "Novo APK enviado para a Release."
 
 
-      # =========================================================
+      # =====================================================
       # ATUALIZAR SHA-256 DA RELEASE
-      # =========================================================
+      # =====================================================
 
       - name: Atualizar SHA-256 da Release
         env:
@@ -467,7 +470,9 @@ jobs:
             --json body \
             --jq '.body' > release-notes.txt
 
-          if grep -q "SHA-256 gerado nesta compilação:" release-notes.txt; then
+          if grep -q \
+            "SHA-256 gerado nesta compilação:" \
+            release-notes.txt; then
 
             sed -i \
               "s/^SHA-256 gerado nesta compilação:.*$/SHA-256 gerado nesta compilação: $SHA256/" \
@@ -475,7 +480,9 @@ jobs:
 
           else
 
-            printf '\n\nSHA-256 gerado nesta compilação: %s\n' "$SHA256" \
+            printf \
+              '\n\nSHA-256 gerado nesta compilação: %s\n' \
+              "$SHA256" \
               >> release-notes.txt
 
           fi
@@ -488,12 +495,11 @@ jobs:
           echo "$SHA256"
 
 
-      # =========================================================
+      # =====================================================
       # ATUALIZAR download.html
-      # =========================================================
+      # =====================================================
 
       - name: Atualizar link, tamanho e SHA-256 no download.html
-        working-directory: ${{ github.workspace }}
         run: |
 
           ASSET_URL="https://github.com/$GITHUB_REPOSITORY/releases/download/$RELEASE_TAG/$RELEASE_APK_NAME"
@@ -632,194 +638,179 @@ jobs:
           PY
 
 
-      # =========================================================
-      # ENVIAR download.html PARA MAIN
-      # =========================================================
-
-      - name: Enviar download.html atualizado para o main
-        run: |
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add download.html
-
-          if git diff --cached --quiet; then
-
-            echo "download.html já está atualizado."
-
-          else
-
-            git commit -m "Atualizar link, tamanho e SHA-256 do APK [skip ci]"
-
-            git push origin main
-
-          fi
-
-
-      # =========================================================
-      # RESUMO
-      # =========================================================
-
-      - name: Mostrar resumo
-        run: |
-
-          echo "## Compilação concluída" >> "$GITHUB_STEP_SUMMARY"
-
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-
-          echo "**Release:** $RELEASE_TAG" \
-            >> "$GITHUB_STEP_SUMMARY"
-
-          echo "**Branch:** main" \
-            >> "$GITHUB_STEP_SUMMARY"
-
-          echo "**Release recebe:** $RELEASE_APK_NAME" \
-            >> "$GITHUB_STEP_SUMMARY"
-
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-
-          echo "**Tamanho REAL do APK assinado:** ${{ steps.apk_size.outputs.size_formatado }}" \
-            >> "$GITHUB_STEP_SUMMARY"
-
-          echo "**Tamanho em bytes:** ${{ steps.apk_size.outputs.bytes }}" \
-            >> "$GITHUB_STEP_SUMMARY"
-
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-
-          echo "**SHA-256 do APK:**" \
-            >> "$GITHUB_STEP_SUMMARY"
-
-          echo '```' \
-            >> "$GITHUB_STEP_SUMMARY"
-
-          echo "${{ steps.sha256.outputs.sha256 }}" \
-            >> "$GITHUB_STEP_SUMMARY"
-
-          echo '```' \
-            >> "$GITHUB_STEP_SUMMARY"
-
-  # =========================================================
-  # JEKYLL / GITHUB PAGES
-  # =========================================================
-
-  build-site:
-
-    runs-on: ubuntu-24.04
-
-    needs: build
-
-    steps:
-
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v6
-
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
-        with:
-          source: ./
-          destination: ./_site
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v5
-        with:
-          path: ./_site
-
-  # =========================================================
-  # DEPLOY GITHUB PAGES
-  # =========================================================
-
-  deploy:
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    runs-on: ubuntu-24.04
-
-    needs: build-site
-
-    steps:
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v5
-        
-  # =========================================================
-  # ATUALIZAR TOTAL DE COMMITS
-  # =========================================================
-
-  atualizar-commits:
-    runs-on: ubuntu-24.04
-    needs: deploy
-
-    steps:
-      - name: Baixar todo o histórico
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
+      # =====================================================
+      # ATUALIZAR TOTAL DE COMMITS
+      # =====================================================
 
       - name: Atualizar total de commits
         run: |
+
           TOTAL=$(git rev-list --all --count)
 
+          echo "Total de commits:"
+          echo "$TOTAL"
+
           python3 - "$TOTAL" <<'PY'
+
           from pathlib import Path
           import re
           import sys
 
           total = sys.argv[1]
-          arquivo = Path("README.md")
-          texto = arquivo.read_text(encoding="utf-8")
 
-          texto = re.sub(
-              r"\*\*Commits totais de toda a história do projeto, \(feitos por mim e pelos workflows do github actions!\) =.*\*\*",
-              f"**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = {total}**",
+          arquivo = Path("README.md")
+
+          if not arquivo.exists():
+              raise SystemExit(
+                  "ERRO: README.md não encontrado."
+              )
+
+          texto = arquivo.read_text(
+              encoding="utf-8"
+          )
+
+          padrao = (
+              r"\*\*Commits totais de toda a história "
+              r"do projeto, "
+              r"\(feitos por mim e pelos workflows "
+              r"do github actions!\) =.*\*\*"
+          )
+
+          novo = (
+              "**Commits totais de toda a história "
+              "do projeto, "
+              "(feitos por mim e pelos workflows "
+              f"do github actions!) = {total}**"
+          )
+
+          texto, quantidade = re.subn(
+              padrao,
+              novo,
               texto,
               count=1
           )
 
-          arquivo.write_text(texto, encoding="utf-8")
+          if quantidade == 0:
+              print(
+                  "Aviso: contador de commits não encontrado."
+              )
+          else:
+              arquivo.write_text(
+                  texto,
+                  encoding="utf-8"
+              )
+
+              print(
+                  "README atualizado com sucesso."
+              )
+
           PY
 
-      - name: Enviar README atualizado
-        uses: actions/upload-artifact@v6
+
+      # =====================================================
+      # ATUALIZAR FOOTER COM README
+      # =====================================================
+
+      - name: Instalar dependência Markdown
+        run: |
+
+          python3 -m pip install Markdown
+
+
+      - name: Atualizar footer com README
+        run: |
+
+          python3 scripts/atualizar_footer.py
+
+          echo "Footer atualizado."
+
+
+      # =====================================================
+      # GERAR RELATÓRIO DE COMMITS
+      # =====================================================
+
+      - name: Configurar Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          name: arquivo-readme
-          path: README.md
-          if-no-files-found: error
+          ruby-version: "3.4"
 
 
-  # =========================================================
-  # SINCRONIZAR README COM DEV.TO
-  # =========================================================
+      - name: Gerar relatório de commits
+        run: |
 
-  sincronizar-devto:
-    name: Sincronizar README com DEV.to
-    runs-on: ubuntu-24.04
-    needs: salvar-na-main
+          ruby scripts/commits.rb
 
-    steps:
-      - name: Baixar código atualizado
-        uses: actions/checkout@v6
+          echo "Relatório de commits gerado."
+
+
+      # =====================================================
+      # DOCUMENTAR WORKFLOW YAML
+      # =====================================================
+
+      - name: Instalar PHP
+        run: |
+
+          sudo apt-get update
+          sudo apt-get install -y php-cli
+
+
+      - name: Gerar documentação do workflow
+        run: |
+
+          set -e
+
+          mkdir -p pesquisas
+
+          php -l scripts/pesquisar_projeto.php
+
+          php scripts/pesquisar_projeto.php
+
+          if [ -f ".github/workflows/workflow.md" ]; then
+
+            mv \
+              .github/workflows/workflow.md \
+              pesquisas/workflow.md
+
+          fi
+
+          test -s pesquisas/workflow.md
+
+          echo "Documentação gerada:"
+          ls -lh pesquisas/workflow.md
+
+
+      # =====================================================
+      # GERAR SITEMAP
+      # =====================================================
+
+      - name: Gerar Sitemap
+        uses: cicirello/generate-sitemap@v1
         with:
-          fetch-depth: 1
-          ref: main
+          base-url-path: https://mulher-amparada.github.io/mulher-amparada-app/
 
-      - name: Atualizar artigo no DEV.to
+
+      # =====================================================
+      # SINCRONIZAR README COM DEV.TO
+      # =====================================================
+
+      - name: Sincronizar README com DEV.to
         env:
           DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
         run: |
+
           python3 - <<'PY'
+
           import json
           import os
           import urllib.request
           import urllib.error
 
-          with open("README.md", "r", encoding="utf-8") as arquivo:
+          with open(
+              "README.md",
+              "r",
+              encoding="utf-8"
+          ) as arquivo:
+
               markdown = arquivo.read()
 
           dados = json.dumps({
@@ -835,123 +826,62 @@ jobs:
               headers={
                   "Content-Type": "application/json",
                   "api-key": os.environ["DEVTO_API_KEY"],
-                  "User-Agent": "Mulher-Amparada-GitHub-Action"
+                  "User-Agent":
+                      "Mulher-Amparada-GitHub-Action"
               }
           )
 
           try:
-              with urllib.request.urlopen(requisicao) as resposta:
-                  print(resposta.read().decode("utf-8"))
-                  print("DEV.to atualizado com sucesso.")
+
+              with urllib.request.urlopen(
+                  requisicao
+              ) as resposta:
+
+                  print(
+                      resposta
+                      .read()
+                      .decode("utf-8")
+                  )
+
+                  print(
+                      "DEV.to atualizado com sucesso."
+                  )
+
           except urllib.error.HTTPError as erro:
+
               print(f"HTTP {erro.code}")
-              print(erro.read().decode("utf-8", errors="replace"))
+
+              print(
+                  erro.read()
+                  .decode(
+                      "utf-8",
+                      errors="replace"
+                  )
+              )
+
               raise
+
           PY
 
 
-  
-  # =========================================================
-  # GERAR SITEMAP
-  # =========================================================
-
-  sitemap:
-    name: Gerar Sitemap
-    runs-on: ubuntu-24.04
-    needs: atualizar-commits
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 1
-          ref: main
-
-      - name: Gerar Sitemap
-        uses: cicirello/generate-sitemap@v1
-        with:
-          base-url-path: https://mulher-amparada.github.io/mulher-amparada-app/
-
-      - name: Enviar Sitemap gerado
-        uses: actions/upload-artifact@v6
-        with:
-          name: arquivo-sitemap
-          path: sitemap.xml
-          if-no-files-found: error
-
-
-  # =========================================================
-  # INDEXNOW
-  # =========================================================
-
-  indexnow:
-    name: IndexNow
-    runs-on: ubuntu-24.04
-    needs: deploy
-
-    steps:
-      - name: Enviar Sitemap ao IndexNow
-        uses: bojieyang/indexnow-action@v3
-        with:
-          sitemap-location: https://mulher-amparada.github.io/mulher-amparada-app/sitemap.xml
-          key: ${{ secrets.INDEXNOW_KEY }}
-
-
-
-  # =========================================================
-  # LIGHTHOUSE
-  # =========================================================
-
-  lighthouse:
-    name: Lighthouse
-    runs-on: ubuntu-24.04
-    needs: deploy
-
-    steps:
-      - name: Lighthouse
-        uses: treosh/lighthouse-ci-action@v12
-        with:
-          urls: |
-            https://mulher-amparada.github.io/mulher-amparada-app/
-          uploadArtifacts: true
-
-
-  # =========================================================
-  # GERAR SNAKE DAS CONTRIBUIÇÕES
-  # =========================================================
-
-  # =========================================================
-  # GERAR SNAKE DAS CONTRIBUIÇÕES
-  # =========================================================
-
-  
-
-  # =========================================================
-  # PUBLICAR KIT DE DIVULGAÇÃO
-  # =========================================================
-
-  publicar-divulgacao:
-    name: Publicar Kit de Divulgação
-    runs-on: ubuntu-24.04
-    needs: lighthouse
-
-    steps:
-      - name: Baixar repositório
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 1
-          ref: main
+      # =====================================================
+      # PUBLICAR KIT DE DIVULGAÇÃO
+      # =====================================================
 
       - name: Configurar Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 24
 
+
       - name: Criar pacote de divulgação
         working-directory: divulgacao
-        run: npm pack
+        run: |
 
-      - name: Publicar pacote no GitHub Release
+          npm pack
+
+
+      - name: Publicar Kit de Divulgação
         uses: softprops/action-gh-release@v3
         with:
           tag_name: divulgacao
@@ -962,221 +892,220 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
-  # =========================================================
-  # ATUALIZAR FOOTER COM README
-  # =========================================================
+      # =====================================================
+      # BUILD DO GITHUB PAGES
+      # =====================================================
 
-  atualizar-footer:
-    name: Atualizar Footer com README
-    runs-on: ubuntu-24.04
-    needs: atualizar-commits
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v6
 
-    steps:
-      - name: Baixar repositório
-        uses: actions/checkout@v6
+
+      - name: Construir GitHub Pages
+        uses: actions/jekyll-build-pages@v1
         with:
-          fetch-depth: 1
-          ref: main
+          source: ./
+          destination: ./_site
 
-      - name: Instalar Python
-        uses: actions/setup-python@v6
+
+      # =====================================================
+      # ENVIAR ARTIFACT DO PAGES
+      # =====================================================
+
+      - name: Enviar artifact do GitHub Pages
+        uses: actions/upload-pages-artifact@v5
         with:
-          python-version: "3.x"
+          path: ./_site
 
-      - name: Instalar dependência Python
-        run: pip install Markdown
 
-      - name: Atualizar footer com README
-        run: python3 scripts/atualizar_footer.py
+      # =====================================================
+      # DEPLOY GITHUB PAGES
+      # =====================================================
 
-      - name: Enviar footer gerado
-        uses: actions/upload-artifact@v6
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
+
+
+      # =====================================================
+      # INDEXNOW
+      # =====================================================
+
+      - name: Enviar Sitemap ao IndexNow
+        uses: bojieyang/indexnow-action@v3
         with:
-          name: arquivo-footer
-          path: index.html
-          if-no-files-found: error
+          sitemap-location: https://mulher-amparada.github.io/mulher-amparada-app/sitemap.xml
+          key: ${{ secrets.INDEXNOW_KEY }}
 
 
-  # =========================================================
-  # ATUALIZAR RELATÓRIO DE COMMITS
-  # =========================================================
+      # =====================================================
+      # LIGHTHOUSE
+      # =====================================================
 
-  atualizar-relatorio-commits:
-    name: Atualizar relatório de commits
-    runs-on: ubuntu-24.04
-    needs: atualizar-commits
-
-    steps:
-      - name: Baixar repositório
-        uses: actions/checkout@v6
+      - name: Lighthouse
+        uses: treosh/lighthouse-ci-action@v12
         with:
-          fetch-depth: 0
-          ref: main
-
-      - name: Instalar Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.4"
-
-      - name: Gerar relatório de commits
-        run: ruby scripts/commits.rb
-
-      - name: Enviar relatório gerado
-        uses: actions/upload-artifact@v6
-        with:
-          name: arquivos-relatorio-commits
-          path: commits/
-          if-no-files-found: error
+          urls: |
+            https://mulher-amparada.github.io/mulher-amparada-app/
+          uploadArtifacts: true
 
 
-  
+      # =====================================================
+      # PREPARAR RESUMO
+      # =====================================================
 
-# =========================================================
-  # DOCUMENTAR WORKFLOW YAML
-  # =========================================================
-
-  pesquisar-projeto:
-    name: Documentar workflow YAML
-    runs-on: ubuntu-24.04
-
-    steps:
-      - name: Baixar repositório
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 1
-          ref: main
-
-      - name: Instalar PHP
+      - name: Mostrar resumo
         run: |
-          sudo apt-get update
-          sudo apt-get install -y php-cli
 
-      - name: Gerar documentação do workflow
+          echo "## 🌸 Automações concluídas" \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo "" \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo "**Release:** $RELEASE_TAG" \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo "**APK:** $RELEASE_APK_NAME" \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo "" \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo "**Tamanho REAL:** ${{ steps.apk_size.outputs.size_formatado }}" \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo "**Tamanho em bytes:** ${{ steps.apk_size.outputs.bytes }}" \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo "" \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo "**SHA-256:**" \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo '```text' \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo "${{ steps.sha256.outputs.sha256 }}" \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo '```' \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo "" \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo "**GitHub Pages:**" \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          echo "https://mulher-amparada.github.io/mulher-amparada-app/" \
+            >> "$GITHUB_STEP_SUMMARY"
+
+
+      # =====================================================
+      # SALVAR TUDO NA MAIN
+      # =====================================================
+
+      - name: Salvar todas as alterações na main
         run: |
+
           set -e
 
-          mkdir -p pesquisas
+          git config user.name \
+            "github-actions[bot]"
 
-          php -l scripts/pesquisar_projeto.php
-          php scripts/pesquisar_projeto.php
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
 
-          if [ -f ".github/workflows/workflow.md" ]; then
-            mv .github/workflows/workflow.md pesquisas/workflow.md
-          fi
 
-          test -s pesquisas/workflow.md
-
-          echo "Documentação gerada:"
-          ls -lh pesquisas/workflow.md
-
-      - name: Enviar documentação do workflow como artifact
-        uses: actions/upload-artifact@v6
-        with:
-          name: arquivos-pesquisas
-          path: pesquisas/workflow.md
-          if-no-files-found: error
-          retention-days: 30
-
-  # =========================================================
-  # CENTRALIZAR E SALVAR ARQUIVOS NA MAIN
-  # =========================================================
-
-  salvar-na-main:
-    name: Salvar todos os arquivos na main
-    runs-on: ubuntu-24.04
-
-    needs:
-      - atualizar-commits
-      - sitemap
-      - atualizar-footer
-      - atualizar-relatorio-commits
-      - pesquisar-projeto
-
-    permissions:
-      contents: write
-
-    steps:
-      - name: Baixar código atualizado
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          ref: main
-
-      - name: Baixar README atualizado
-        uses: actions/download-artifact@v7
-        with:
-          name: arquivo-readme
-          path: artefatos/readme
-
-      - name: Baixar Sitemap
-        uses: actions/download-artifact@v7
-        with:
-          name: arquivo-sitemap
-          path: artefatos/sitemap
-
-      - name: Baixar Footer
-        uses: actions/download-artifact@v7
-        with:
-          name: arquivo-footer
-          path: artefatos/footer
-
-      - name: Baixar relatório de commits
-        uses: actions/download-artifact@v7
-        with:
-          name: arquivos-relatorio-commits
-          path: artefatos/commits
-
-      - name: Baixar pesquisas
-        uses: actions/download-artifact@v7
-        with:
-          name: arquivos-pesquisas
-          path: artefatos/pesquisas
-
-      - name: Reunir arquivos gerados
-        run: |
-          set -e
-
-          cp artefatos/readme/README.md README.md
-
-          cp artefatos/sitemap/sitemap.xml sitemap.xml
-
-          cp artefatos/footer/index.html index.html
-
-          mkdir -p commits pesquisas
-
-          cp -a artefatos/commits/. commits/
-          cp -a artefatos/pesquisas/. pesquisas/
-
-          if [ -f "pesquisas/.github/workflows/workflow.md" ]; then
-            mv "pesquisas/.github/workflows/workflow.md" \
-              "pesquisas/workflow.md"
-          fi
-
-          test -s pesquisas/workflow.md
-
-          echo "Workflow salvo em pesquisas/workflow.md"
-          ls -lh pesquisas/workflow.md
-
-      - name: Salvar todas as alterações em um commit
-        run: |
-          set -e
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add README.md index.html sitemap.xml commits/ pesquisas/
-
-          if git diff --cached --quiet; then
-            echo "Nenhuma alteração para salvar."
-            exit 0
-          fi
-
-          git commit -m "Atualizar arquivos gerados [skip ci]"
+          # -----------------------------------------------
+          # GARANTIR QUE ESTAMOS ATUALIZADOS
+          # -----------------------------------------------
 
           git fetch origin main
-          git rebase origin/main
 
-          git push origin HEAD:main
+          git checkout main
 
-          echo "Todos os arquivos gerados foram salvos na main."
+          git reset --mixed origin/main
 
+
+          # -----------------------------------------------
+          # GARANTIR APK FINAL
+          # -----------------------------------------------
+
+          TARGET="${App1_DIR}/app-release.apk"
+
+          cp \
+            "$GITHUB_WORKSPACE/$RELEASE_APK_NAME" \
+            "$TARGET"
+
+
+          # -----------------------------------------------
+          # VERIFICAR ARQUIVOS
+          # -----------------------------------------------
+
+          echo ""
+          echo "Arquivos gerados:"
+
+          ls -lh \
+            README.md \
+            index.html \
+            sitemap.xml \
+            "$TARGET" \
+            pesquisas/workflow.md
+
+
+          echo ""
+          echo "Relatórios:"
+
+          find commits \
+            -maxdepth 2 \
+            -type f \
+            -print \
+            2>/dev/null || true
+
+
+          # -----------------------------------------------
+          # ADICIONAR TUDO
+          # -----------------------------------------------
+
+          git add \
+            README.md \
+            index.html \
+            sitemap.xml \
+            commits/ \
+            pesquisas/ \
+            "$TARGET" \
+            download.html
+
+
+          # -----------------------------------------------
+          # VERIFICAR ALTERAÇÕES
+          # -----------------------------------------------
+
+          if git diff --cached --quiet; then
+
+            echo ""
+            echo "Nenhuma alteração para salvar."
+
+          else
+
+            echo ""
+            echo "Alterações encontradas:"
+            git diff --cached --stat
+
+            echo ""
+            echo "Criando commit..."
+
+            git commit \
+              -m "Atualizar arquivos gerados [skip ci]"
+
+            echo ""
+            echo "Enviando tudo para main..."
+
+            git push origin HEAD:main
+
+            echo ""
+            echo "Todos os arquivos foram salvos na main."
+
+          fi

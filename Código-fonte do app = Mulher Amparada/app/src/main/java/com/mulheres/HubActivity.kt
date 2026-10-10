@@ -1,5 +1,22 @@
 package com.mulheres
 
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.gestures.awaitRelease
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.pointerinput.pointerInput
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Icon
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.fragment.app.FragmentActivity
 import androidx.compose.animation.core.RepeatMode
@@ -3853,6 +3870,8 @@ private fun ActionCard(
     icon: ImageVector,
     accent: Color,
     gradient: List<Color>,
+    arrow: Boolean = true,
+    c: AppColors? = null,
     onClick: () -> Unit
 ) {
     val infiniteTransition =

@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/mulher-amparada/mulher-amparada-app/blob/main/title.png" alt="Mulher Amparada">
+  <img src="https://mulher-amparada.github.io/mulher-amparada-app/title.png" alt="Mulher Amparada">
 </div>
 
 Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista laudado nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!
@@ -13,6 +13,10 @@ e pra ser sincero, comecei esse projeto no dia 13/05/2026 e terminei no dia 10/1
 **Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 4920**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
+
+# 🎉Projeto Finalizado:
+
+https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Projeto-Finalizado
 
 # ⚠️MURAL DE AVISOS:
 

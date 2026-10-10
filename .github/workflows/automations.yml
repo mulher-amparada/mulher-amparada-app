@@ -968,30 +968,48 @@ jobs:
   observatorio:
     name: Observatório
     runs-on: ubuntu-24.04
-
+    needs: atualizar-commits
     steps:
-
       - name: Baixar repositório
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
+      - name: Instalar dependências do Observatório
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            gcc \
+            libcairo2-dev
+
       - name: Compilar observatório
         run: |
+          set -e
+
           gcc \
             tools/observatorio.c \
             -o observatorio \
+            $(pkg-config --cflags --libs cairo) \
             -lm
 
       - name: Executar observatório
         run: |
+          set -e
+
           chmod +x observatorio
           ./observatorio
 
       - name: Verificar mapa gerado
         run: |
+          set -e
+
           test -s docs/observatorio/observatorio.png
+
           file docs/observatorio/observatorio.png
+
+          echo ""
+          echo "Observatório gerado:"
+          ls -lh docs/observatorio/observatorio.png
 
       - name: Disponibilizar observatório
         uses: actions/upload-artifact@v6

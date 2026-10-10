@@ -12,6 +12,13 @@ e pra ser sincero, comecei esse projeto no dia 13/05/2026 e terminei no dia 10/1
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
+# 👾Linguagens do projeto:
+
+<p align="center">
+  <img src="github-languages.png" alt="Linguagens utilizadas no projeto">
+</p>
+
+
 # ⚠️MURAL DE AVISOS:
 
 ### Sobre como o projeto foi estruturado:

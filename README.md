@@ -327,33 +327,6 @@ O arquivo atualizado é enviado como artifact chamado "arquivo-readme". Ele ser�
 
 O valor calculado depende do histórico e das referências disponíveis no checkout; não deve ser interpretado como uma contagem universal de todos os commits que possam existir em referências remotas não buscadas.
 
-📝 Sincronizar o README com o Paper.wf
-
-O job "sincronizar-paperwf" também depende de "salvar-na-main".
-
-Ele baixa o README atualizado e utiliza um script Python para autenticar na API do Paper.wf e atualizar uma publicação existente.
-
-A configuração utiliza:
-
-- Base da API: "https://paper.wf"
-- Coleção: "mulheramparada"
-- Slug: "projeto-mulher-amparada"
-- Título enviado: "Projeto Mulher Amparada"
-- Secrets: "PAPERWF_USERNAME" e "PAPERWF_PASSWORD"
-
-O processo:
-
-- Lê o README em UTF-8.
-- Envia as credenciais para a rota de autenticação.
-- Procura um token de acesso em diferentes formatos possíveis da resposta.
-- Consulta a publicação configurada na coleção.
-- Identifica o ID da publicação, tratando respostas que contenham objetos ou listas.
-- Monta o payload com o título e o conteúdo integral do README.
-- Envia uma requisição "POST" para atualizar a publicação identificada.
-- Exibe uma mensagem de sucesso se as operações terminarem sem exceção.
-
-O script também apresenta respostas HTTP de erro e interrompe a execução quando não consegue autenticar, identificar o token ou localizar o ID da publicação.
-
 🗺️ Gerar o sitemap
 
 O job "sitemap" depende de "snake".

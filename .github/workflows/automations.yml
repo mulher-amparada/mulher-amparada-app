@@ -1169,15 +1169,12 @@ jobs:
             artefatos/readme/README.md \
             README.md
 
-      # =======================================================
-      # ADICIONAR WORKFLOW AO README
-      # =======================================================
-
       - name: Inserir automations.yml no README
+        shell: bash
         run: |
           set -e
 
-          python3 <<'PY'
+          cat > /tmp/documentar_workflow.py <<'PYTHON'
           from pathlib import Path
 
           readme = Path("README.md")
@@ -1221,8 +1218,10 @@ jobs:
           )
 
           print("automations.yml inserido no README.")
-          PY
+          PYTHON
 
+          python3 /tmp/documentar_workflow.py
+          
       # =======================================================
       # VERIFICAR README
       # =======================================================

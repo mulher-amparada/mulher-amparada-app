@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="430" height="900">
-<rect width="430" height="900" rx="30" fill="#080808"/>
-<rect x="15" y="15" width="400" height="45" rx="15" fill="#151515"/>
-<text x="215" y="44" text-anchor="middle" font-family="Arial" font-size="17" font-weight="bold" fill="white">DiarioTopBar</text>
-</svg>

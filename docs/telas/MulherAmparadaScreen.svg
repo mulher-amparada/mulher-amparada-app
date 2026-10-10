@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="430" height="900">
-<rect width="430" height="900" rx="30" fill="#080808"/>
-<rect x="15" y="15" width="400" height="45" rx="15" fill="#151515"/>
-<text x="215" y="44" text-anchor="middle" font-family="Arial" font-size="17" font-weight="bold" fill="white">MulherAmparadaScreen</text>
-<rect x="25" y="370" width="350" height="100" rx="18" fill="#181818" stroke="#555"/>
-<rect x="40" y="550" width="350" height="100" rx="18" fill="#181818" stroke="#555"/>
-<rect x="25" y="700" width="350" height="100" rx="18" fill="#181818" stroke="#555"/>
-</svg>

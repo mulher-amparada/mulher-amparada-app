@@ -1,7 +1,28 @@
 package com.mulheres
 
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.fragment.app.FragmentActivity
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.BoxWithConstraints
+import android.view.WindowManager
 import android.Manifest
+import androidx.core.app.ActivityCompat
+import androidx.compose.runtime.LaunchedEffect
 import android.content.BroadcastReceiver
+import android.os.BatteryManager
+import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.content.ContextCompat
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricPrompt
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -14,75 +35,70 @@ import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.net.Uri
-import android.os.BatteryManager
 import android.os.Build
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.telephony.TelephonyCallback
 import android.telephony.TelephonyManager
-import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.Toast
-
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.biometric.BiometricManager
-import androidx.biometric.BiometricPrompt
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
-
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-
-import androidx.fragment.app.FragmentActivity
-
+import android.provider.ContactsContract
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import kotlin.math.log10
 import kotlin.math.sqrt
 
@@ -3840,388 +3856,152 @@ private fun ActionCard(
     gradient: List<Color>,
     accent: Color,
     c: AppColors,
-    onClick: () -> Unit
+onClick: () -> Unit = {}
 ) {
 
-    val infiniteTransition =
-        rememberInfiniteTransition(
-            label = "actionCardGlow"
-        )
+    Row(
 
-    val glowAlpha by
-        infiniteTransition.animateFloat(
-            initialValue = 0.08f,
-            targetValue = 0.22f,
-            animationSpec =
-                infiniteRepeatable(
-                    animation =
-                        tween(
-                            durationMillis = 1800
-                        ),
-                    repeatMode =
-                        RepeatMode.Reverse
-                ),
-            label = "glowAlpha"
-        )
+    modifier =
+        Modifier
+            .fillMaxWidth()
+            .height(128.dp)
+            .clip(
+                RoundedCornerShape(27.dp)
+            )
+            .background(
+                Brush.linearGradient(gradient)
+            )
+            .border(
+                1.dp,
+                accent.copy(.31f),
+                RoundedCornerShape(27.dp)
+            )
+            .clickable {
+                onClick()
+            }
+            .padding(20.dp),
 
-    val glowScale by
-        infiniteTransition.animateFloat(
-            initialValue = 0.92f,
-            targetValue = 1.08f,
-            animationSpec =
-                infiniteRepeatable(
-                    animation =
-                        tween(
-                            durationMillis = 1800
-                        ),
-                    repeatMode =
-                        RepeatMode.Reverse
-                ),
-            label = "glowScale"
-        )
-
-    Box(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .height(128.dp)
-                .clip(
-                    RoundedCornerShape(27.dp)
-                )
-                .background(
-                    Brush.linearGradient(
-                        colors = gradient
-                    )
-                )
-                .border(
-                    width = 1.dp,
-                    color =
-                        accent.copy(
-                            alpha = 0.30f
-                        ),
-                    shape =
-                        RoundedCornerShape(27.dp)
-                )
-                .clickable(
-                    onClick = onClick
-                )
-    ) {
-
-        // =========================================
-        // GLOW PRINCIPAL
-        // =========================================
-
+    verticalAlignment =
+        Alignment.CenterVertically
+) {
         Box(
+
             modifier =
                 Modifier
-                    .size(210.dp)
-                    .offset(
-                        x = 120.dp,
-                        y = (-95).dp
-                    )
-                    .graphicsLayer {
-                        alpha = glowAlpha
-                        scaleX = glowScale
-                        scaleY = glowScale
-                    }
-                    .background(
-                        Brush.radialGradient(
-                            colors =
-                                listOf(
-                                    accent.copy(
-                                        alpha = 0.85f
-                                    ),
-                                    accent.copy(
-                                        alpha = 0.25f
-                                    ),
-                                    Color.Transparent
-                                )
-                        ),
-                        CircleShape
-                    )
-        )
-
-        // =========================================
-        // GLOW SECUNDÁRIO
-        // =========================================
-
-        Box(
-            modifier =
-                Modifier
-                    .size(130.dp)
-                    .offset(
-                        x = (-45).dp,
-                        y = 65.dp
+                    .size(66.dp)
+                    .clip(
+                        RoundedCornerShape(23.dp)
                     )
                     .background(
-                        Brush.radialGradient(
-                            colors =
-                                listOf(
-                                    accent.copy(
-                                        alpha = 0.18f
-                                    ),
-                                    Color.Transparent
-                                )
-                        ),
-                        CircleShape
+                        accent.copy(.09f)
                     )
-        )
-
-        // =========================================
-        // REFLEXO SUPERIOR
-        // =========================================
-
-        Box(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .height(45.dp)
-                    .align(
-                        Alignment.TopCenter
-                    )
-                    .background(
-                        Brush.verticalGradient(
-                            colors =
-                                listOf(
-                                    Color.White.copy(
-                                        alpha = 0.10f
-                                    ),
-                                    Color.Transparent
-                                )
-                        ),
-                        RoundedCornerShape(
-                            topStart = 27.dp,
-                            topEnd = 27.dp
-                        )
-                    )
-        )
-
-        // =========================================
-        // LINHA DE LUZ SUPERIOR
-        // =========================================
-
-        Box(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .align(
-                        Alignment.TopCenter
-                    )
-                    .background(
-                        Brush.horizontalGradient(
-                            colors =
-                                listOf(
-                                    Color.Transparent,
-                                    Color.White.copy(
-                                        alpha = 0.35f
-                                    ),
-                                    Color.Transparent
-                                )
-                        )
-                    )
-        )
-
-        // =========================================
-        // CONTEÚDO
-        // =========================================
-
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(
-                        horizontal = 18.dp,
-                        vertical = 15.dp
+                    .border(
+                        1.dp,
+                        accent.copy(.32f),
+                        RoundedCornerShape(23.dp)
                     ),
 
-            verticalAlignment =
-                Alignment.CenterVertically
+            contentAlignment =
+                Alignment.Center
         ) {
 
-            // =====================================
-            // ÍCONE + HALO
-            // =====================================
-
-            Box(
+            Image(
+                painter =
+                    painterResource(icon),
+                contentDescription = null,
                 modifier =
-                    Modifier.size(58.dp),
+                    Modifier.size(35.dp)
+            )
+        }
 
-                contentAlignment =
-                    Alignment.Center
-            ) {
+        Spacer(
+            Modifier.width(16.dp)
+        )
 
-                // Halo externo
-                Box(
-                    modifier =
-                        Modifier
-                            .size(58.dp)
-                            .graphicsLayer {
-                                alpha = 0.75f
-                            }
-                            .background(
-                                Brush.radialGradient(
-                                    colors =
-                                        listOf(
-                                            accent.copy(
-                                                alpha = 0.30f
-                                            ),
-                                            Color.Transparent
-                                        )
-                                ),
-                                CircleShape
-                            )
-                )
+        Column(
 
-                // Base do ícone
-                Box(
-                    modifier =
-                        Modifier
-                            .size(46.dp)
-                            .clip(
-                                CircleShape
-                            )
-                            .background(
-                                accent.copy(
-                                    alpha = 0.13f
-                                )
-                            )
-                            .border(
-                                width = 1.dp,
-                                color =
-                                    accent.copy(
-                                        alpha = 0.45f
-                                    ),
-                                shape = CircleShape
-                            ),
+            modifier =
+                Modifier.weight(1f),
 
-                    contentAlignment =
-                        Alignment.Center
-                ) {
+            verticalArrangement =
+                Arrangement.spacedBy(8.dp)
+        ) {
 
-                    Image(
-                        painter =
-                            painterResource(
-                                id = icon
-                            ),
-
-                        contentDescription =
-                            title,
-
-                        modifier =
-                            Modifier.size(25.dp),
-
-                        contentScale =
-                            ContentScale.Fit
+            Text(
+                title,
+                color =
+                    if (
+                        isSystemInDarkTheme()
                     )
-                }
-            }
-
-            Spacer(
-                Modifier.width(14.dp)
+                        Color.White
+                    else
+                        c.text,
+                fontSize = 16.sp,
+lineHeight = 18.sp
             )
 
-            // =====================================
-            // TEXTOS
-            // =====================================
-
-            Column(
-                modifier =
-                    Modifier.weight(1f),
-
-                verticalArrangement =
-                    Arrangement.Center
-            ) {
-
-                Text(
-                    text = title,
-
-                    color =
-                        Color.White,
-
-                    fontSize =
-                        16.sp,
-
-                    fontWeight =
-                        FontWeight.Bold,
-
-                    maxLines = 1
-                )
-
-                Spacer(
-                    Modifier.height(5.dp)
-                )
-
-                Text(
-                    text = description,
-
-                    color =
-                        Color.White.copy(
-                            alpha = 0.68f
-                        ),
-
-                    fontSize =
-                        11.sp,
-
-                    lineHeight =
-                        15.sp,
-
-                    maxLines = 3
-                )
-            }
-
-            Spacer(
-                Modifier.width(8.dp)
+            Text(
+                description,
+                color =
+                    if (
+                        isSystemInDarkTheme()
+                    )
+                        Color.White.copy(.66f)
+                    else
+                        c.secondary,
+                fontSize = 10.sp,
+lineHeight = 15.sp
             )
 
-            // =====================================
-            // SETA
-            // =====================================
+            Text(
+                "ATENDIMENTO DISPONÍVEL",
+                color = accent,
+                fontSize = 7.sp,
+letterSpacing = 1.sp
+            )
+        }
 
-            Box(
+        Spacer(
+            Modifier.width(16.dp)
+        )
+
+        Box(
+
+            modifier =
+                Modifier
+                    .size(43.dp)
+                    .clip(
+                        RoundedCornerShape(16.dp)
+                    )
+                    .background(
+                        if (
+                            isSystemInDarkTheme()
+                        )
+                            Color.Black.copy(.13f)
+                        else
+                            Color.Black.copy(.05f)
+                    )
+                    .border(
+                        1.dp,
+                        accent.copy(.22f),
+                        RoundedCornerShape(16.dp)
+                    ),
+
+            contentAlignment =
+                Alignment.Center
+        ) {
+
+            Image(
+                painter =
+                    painterResource(arrow),
+                contentDescription = null,
                 modifier =
-                    Modifier
-                        .size(36.dp)
-                        .clip(
-                            CircleShape
-                        )
-                        .background(
-                            accent.copy(
-                                alpha = 0.10f
-                            )
-                        )
-                        .border(
-                            width = 1.dp,
-                            color =
-                                accent.copy(
-                                    alpha = 0.32f
-                                ),
-                            shape = CircleShape
-                        ),
-
-                contentAlignment =
-                    Alignment.Center
-            ) {
-
-                Image(
-                    painter =
-                        painterResource(
-                            id = arrow
-                        ),
-
-                    contentDescription =
-                        null,
-
-                    modifier =
-                        Modifier.size(18.dp),
-
-                    contentScale =
-                        ContentScale.Fit
-                )
-            }
+                    Modifier.size(19.dp)
+            )
         }
     }
 }
+
 
 /* =========================================================
    ACESSO DE EMERGÊNCIA

@@ -1011,41 +1011,6 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-# =========================================================
-  # HORAS DE TRABALHO NO REPOSITÓRIO
-  # =========================================================
-  
-  horas-trabalho:
-    name: Calcular horas de trabalho
-    runs-on: ubuntu-24.04
-    needs: atualizar-commits
-
-    steps:
-      - name: Baixar histórico completo
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          ref: main
-
-      - name: Compilar calculador de horas
-        run: |
-          g++ \
-            tools/horas_trabalho.cpp \
-            -o horas-trabalho \
-            -std=c++17
-
-      - name: Calcular horas e atualizar README
-        run: |
-          chmod +x horas-trabalho
-          ./horas-trabalho
-
-      - name: Enviar README atualizado
-        uses: actions/upload-artifact@v6
-        with:
-          name: arquivo-horas-trabalho
-          path: README.md
-          if-no-files-found: error
-          
   # =========================================================
   # ATUALIZAR FOOTER COM README
   # =========================================================
@@ -1162,6 +1127,136 @@ jobs:
           retention-days: 30
 
   # =========================================================
+  # COLOCAR O WORKFLOW NO README
+  # =========================================================
+
+  documentar-workflow:
+    name: Documentar workflow no README
+    runs-on: ubuntu-24.04
+    needs: atualizar-commits
+
+    steps:
+
+      # =======================================================
+      # BAIXAR CÓDIGO
+      # =======================================================
+
+      - name: Baixar repositório
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: main
+
+      # =======================================================
+      # BAIXAR README ATUALIZADO
+      # =======================================================
+
+      - name: Baixar README atualizado
+        uses: actions/download-artifact@v7
+        with:
+          name: arquivo-readme
+          path: artefatos/readme
+
+      # =======================================================
+      # PREPARAR README
+      # =======================================================
+
+      - name: Copiar README
+        run: |
+          set -e
+
+          cp \
+            artefatos/readme/README.md \
+            README.md
+
+      # =======================================================
+      # ADICIONAR WORKFLOW AO README
+      # =======================================================
+
+      - name: Inserir automations.yml no README
+        run: |
+          set -e
+
+          python3 <<'PY'
+          from pathlib import Path
+
+          readme = Path("README.md")
+          workflow = Path(".github/workflows/automations.yml")
+
+          texto = readme.read_text(encoding="utf-8")
+          yml = workflow.read_text(encoding="utf-8").rstrip()
+
+          inicio = "<!-- AUTOMATIONS_YML_INICIO -->"
+          fim = "<!-- AUTOMATIONS_YML_FIM -->"
+
+          bloco = (
+              inicio
+              + "\n\n"
+              + "## ⚙️ Workflow de Automações\n\n"
+              + "O workflow completo utilizado pelo projeto está abaixo:\n\n"
+              + "```yaml\n"
+              + yml
+              + "\n```\n\n"
+              + fim
+          )
+
+          if inicio in texto and fim in texto:
+              inicio_pos = texto.index(inicio)
+              fim_pos = texto.index(fim) + len(fim)
+
+              texto = (
+                  texto[:inicio_pos]
+                  + bloco
+                  + texto[fim_pos:]
+              )
+          else:
+              if texto and not texto.endswith("\n"):
+                  texto += "\n"
+
+              texto += "\n" + bloco + "\n"
+
+          readme.write_text(
+              texto,
+              encoding="utf-8"
+          )
+
+          print("automations.yml inserido no README.")
+          PY
+
+      # =======================================================
+      # VERIFICAR README
+      # =======================================================
+
+      - name: Verificar README
+        run: |
+          set -e
+
+          test -s README.md
+
+          grep -F \
+            "<!-- AUTOMATIONS_YML_INICIO -->" \
+            README.md
+
+          grep -F \
+            "```yaml" \
+            README.md
+
+          echo ""
+          echo "README atualizado:"
+          ls -lh README.md
+
+      # =======================================================
+      # ENVIAR README
+      # =======================================================
+
+      - name: Enviar README atualizado
+        uses: actions/upload-artifact@v6
+        with:
+          name: arquivo-readme-workflow
+          path: README.md
+          if-no-files-found: error
+
+  # =========================================================
   # CENTRALIZAR E SALVAR ARQUIVOS NA MAIN
   # =========================================================
 
@@ -1176,8 +1271,7 @@ jobs:
       - atualizar-relatorio-commits
       - pesquisar-projeto
       - observatorio
-      - horas-trabalho
-
+      - documentar-workflow
     permissions:
       contents: write
 
@@ -1204,17 +1298,11 @@ jobs:
           name: arquivo-readme
           path: artefatos/readme
 
-
-      # =========================================================
-      # BAIXAR README COM HORAS DE TRABALHO
-      # =========================================================
-
-      - name: Baixar README com horas de trabalho
+      - name: Baixar README com workflow
         uses: actions/download-artifact@v7
         with:
-          name: arquivo-horas-trabalho
-          path: artefatos/horas
-
+          name: arquivo-readme-workflow
+          path: artefatos/readme-workflow
 
       # =========================================================
       # BAIXAR SITEMAP
@@ -1288,15 +1376,7 @@ jobs:
           # -----------------------------------------------------
 
           cp \
-            artefatos/readme/README.md \
-            README.md
-
-          # -----------------------------------------------------
-          # README COM HORAS DE TRABALHO
-          # -----------------------------------------------------
-
-          cp \
-            artefatos/horas/README.md \
+            artefatos/readme-workflow/README.md \
             README.md
 
           # -----------------------------------------------------
@@ -1404,10 +1484,6 @@ jobs:
           ls -lh docs/observatorio/observatorio.png
 
           echo ""
-          echo "Horas de trabalho:"
-          grep -F "Horas de trabalho no projeto" README.md || true
-
-          echo ""
           echo "Todos os arquivos foram reunidos."
 
 
@@ -1487,4 +1563,3 @@ jobs:
           echo "- commits/"
           echo "- pesquisas/"
           echo "- docs/observatorio/observatorio.png"
-          echo "- Horas de trabalho no README"

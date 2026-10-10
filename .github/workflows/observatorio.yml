@@ -1,0 +1,82 @@
+name: 🌌 Observatório do Projeto
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  observatorio:
+    name: Gerar Observatório
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: 📥 Baixar repositório
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔧 Instalar dependências
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            gcc \
+            librsvg2-bin
+
+      - name: 🧱 Compilar observatorio.c
+        run: |
+          gcc \
+            -O2 \
+            -Wall \
+            -Wextra \
+            tools/observatorio.c \
+            -lm \
+            -o observatorio
+
+      - name: 🔍 Executar análise
+        run: |
+          ./observatorio
+
+      - name: 🖼️ Converter SVG para PNG
+        run: |
+          mkdir -p docs/observatorio
+
+          for svg in docs/observatorio/*.svg; do
+            if [ -f "$svg" ]; then
+              nome="${svg%.svg}"
+
+              rsvg-convert \
+                "$svg" \
+                -o "${nome}.png"
+            fi
+          done
+
+      - name: 📋 Mostrar arquivos gerados
+        run: |
+          echo "Arquivos do Observatório:"
+          find docs/observatorio \
+            -maxdepth 1 \
+            -type f \
+            -print
+
+      - name: 💾 Salvar no repositório
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add docs/observatorio/
+
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteração no Observatório."
+            exit 0
+          fi
+
+          git commit \
+            -m "chore: atualizar observatorio do projeto"
+
+          git push

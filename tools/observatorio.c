@@ -1,605 +1,1139 @@
+/*
+ * Mulher Amparada
+ * Observatório — Mapa de Calor Consciente
+ *
+ * Cada célula representa um commit real do Git.
+ *
+ * - Ordem cronológica dos commits
+ * - Cor baseada no horário do commit
+ * - Intensidade baseada na proximidade entre commits
+ * - Grid cresce conforme o número de commits
+ * - Escudo central emerge do próprio mapa
+ * - Onda sonora matemática no centro
+ *
+ * Compilação:
+ *   gcc -O2 -Wall -Wextra tools/observatorio.c \
+ *       $(pkg-config --cflags --libs cairo) -lm \
+ *       -o observatorio
+ */
+
+#include <cairo/cairo.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include <time.h>
-#include <sys/stat.h>
-#include <sys/types.h>
+#include <stdint.h>
 
-#define WIDTH 1600
-#define HEIGHT 1000
+#define WIDTH  1800
+#define HEIGHT 1100
 
-#define BG_R 5
-#define BG_G 7
-#define BG_B 12
+#define MAP_X  90
+#define MAP_Y  150
+#define MAP_W  1620
+#define MAP_H  760
 
-typedef struct {
-    unsigned char r, g, b, a;
-} Pixel;
+#define MAX_COMMITS 200000
 
 typedef struct {
-    float x, y;
-    float radius;
-    unsigned char r, g, b;
-    char name[64];
-} Node;
+    time_t timestamp;
+    float heat;
+    int hour;
+} Commit;
 
-static Pixel image[HEIGHT][WIDTH];
+static Commit commits[MAX_COMMITS];
+static size_t commit_count = 0;
 
-/* =========================================================
-   PIXEL
-   ========================================================= */
 
-static void pixel(int x, int y,
-                  unsigned char r,
-                  unsigned char g,
-                  unsigned char b,
-                  unsigned char a)
+/* ============================================================
+ * UTILITÁRIOS
+ * ============================================================ */
+
+static double clamp01(double x)
 {
-    if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
-        return;
-
-    image[y][x].r = r;
-    image[y][x].g = g;
-    image[y][x].b = b;
-    image[y][x].a = a;
+    if (x < 0.0) return 0.0;
+    if (x > 1.0) return 1.0;
+    return x;
 }
 
-/* =========================================================
-   BLEND
-   ========================================================= */
-
-static void blend_pixel(int x, int y,
-                        unsigned char r,
-                        unsigned char g,
-                        unsigned char b,
-                        unsigned char a)
+static double lerp(double a, double b, double t)
 {
-    if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
-        return;
-
-    Pixel *p = &image[y][x];
-
-    float alpha = a / 255.0f;
-
-    p->r = (unsigned char)(p->r * (1.0f - alpha) + r * alpha);
-    p->g = (unsigned char)(p->g * (1.0f - alpha) + g * alpha);
-    p->b = (unsigned char)(p->b * (1.0f - alpha) + b * alpha);
+    return a + (b - a) * t;
 }
 
-/* =========================================================
-   CLEAR
-   ========================================================= */
 
-static void clear_image(void)
+/* ============================================================
+ * CARREGAR COMMITS REAIS DO GIT
+ * ============================================================ */
+
+static int load_commits(void)
 {
-    for (int y = 0; y < HEIGHT; y++) {
-        for (int x = 0; x < WIDTH; x++) {
-            image[y][x].r = BG_R;
-            image[y][x].g = BG_G;
-            image[y][x].b = BG_B;
-            image[y][x].a = 255;
+    FILE *pipe = popen(
+        "git log --format=%ct --reverse --all",
+        "r"
+    );
+
+    if (!pipe) {
+        fprintf(stderr, "Erro ao executar git log.\n");
+        return 0;
+    }
+
+    char line[128];
+
+    while (fgets(line, sizeof(line), pipe)) {
+
+        if (commit_count >= MAX_COMMITS)
+            break;
+
+        long long value = atoll(line);
+
+        if (value <= 0)
+            continue;
+
+        commits[commit_count].timestamp = (time_t)value;
+
+        struct tm local_tm;
+
+        if (localtime_r(
+                &commits[commit_count].timestamp,
+                &local_tm
+            )) {
+
+            commits[commit_count].hour =
+                local_tm.tm_hour;
+        } else {
+            commits[commit_count].hour = 12;
         }
+
+        commits[commit_count].heat = 0.0f;
+
+        commit_count++;
+    }
+
+    pclose(pipe);
+
+    return commit_count > 0;
+}
+
+
+/* ============================================================
+ * CALCULAR INTENSIDADE DO CALOR
+ *
+ * Commits muito próximos no tempo ficam mais "quentes".
+ * ============================================================ */
+
+static void calculate_heat(void)
+{
+    if (commit_count == 0)
+        return;
+
+    if (commit_count == 1) {
+        commits[0].heat = 1.0f;
+        return;
+    }
+
+    double min_gap = 1e30;
+    double max_gap = 0.0;
+
+    for (size_t i = 1; i < commit_count; i++) {
+
+        double gap = difftime(
+            commits[i].timestamp,
+            commits[i - 1].timestamp
+        );
+
+        if (gap < 0)
+            gap = 0;
+
+        if (gap < min_gap)
+            min_gap = gap;
+
+        if (gap > max_gap)
+            max_gap = gap;
+    }
+
+    if (max_gap <= 0)
+        max_gap = 1.0;
+
+    for (size_t i = 0; i < commit_count; i++) {
+
+        double gap;
+
+        if (i == 0) {
+            gap = difftime(
+                commits[1].timestamp,
+                commits[0].timestamp
+            );
+        } else {
+            gap = difftime(
+                commits[i].timestamp,
+                commits[i - 1].timestamp
+            );
+        }
+
+        if (gap < 0)
+            gap = 0;
+
+        /*
+         * Quanto menor o intervalo,
+         * maior a intensidade.
+         */
+        double normalized =
+            1.0 -
+            (log(1.0 + gap) /
+             log(1.0 + max_gap));
+
+        normalized = clamp01(normalized);
+
+        /*
+         * Mantém alguma luminosidade mesmo
+         * nos commits mais isolados.
+         */
+        commits[i].heat =
+            (float)(0.18 + normalized * 0.82);
     }
 }
 
-/* =========================================================
-   CIRCLE
-   ========================================================= */
 
-static void circle(float cx, float cy, float radius,
-                   unsigned char r,
-                   unsigned char g,
-                   unsigned char b)
+/* ============================================================
+ * COR DO HORÁRIO
+ *
+ * Madrugada -> azul
+ * Dia       -> roxo
+ * Noite     -> rosa
+ * ============================================================ */
+
+static void hour_color(
+    int hour,
+    double heat,
+    double *r,
+    double *g,
+    double *b
+)
 {
-    int minx = (int)(cx - radius);
-    int maxx = (int)(cx + radius);
-    int miny = (int)(cy - radius);
-    int maxy = (int)(cy + radius);
+    double rr;
+    double gg;
+    double bb;
 
-    float rr = radius * radius;
+    if (hour < 6) {
 
-    for (int y = miny; y <= maxy; y++) {
-        for (int x = minx; x <= maxx; x++) {
+        /*
+         * Azul/ciano — madrugada
+         */
+        double t = hour / 6.0;
 
-            float dx = x - cx;
-            float dy = y - cy;
+        rr = lerp(0.05, 0.20, t);
+        gg = lerp(0.55, 0.30, t);
+        bb = lerp(1.00, 0.95, t);
 
-            if (dx * dx + dy * dy <= rr)
-                pixel(x, y, r, g, b, 255);
-        }
+    } else if (hour < 18) {
+
+        /*
+         * Azul -> roxo
+         */
+        double t = (hour - 6) / 12.0;
+
+        rr = lerp(0.20, 0.65, t);
+        gg = lerp(0.30, 0.08, t);
+        bb = lerp(0.95, 0.85, t);
+
+    } else {
+
+        /*
+         * Roxo -> rosa
+         */
+        double t = (hour - 18) / 6.0;
+
+        rr = lerp(0.65, 1.00, t);
+        gg = lerp(0.08, 0.08, t);
+        bb = lerp(0.85, 0.55, t);
     }
+
+    /*
+     * Intensidade do calor.
+     */
+    double brightness =
+        0.55 + heat * 0.45;
+
+    *r = clamp01(rr * brightness);
+    *g = clamp01(gg * brightness);
+    *b = clamp01(bb * brightness);
 }
 
-/* =========================================================
-   GLOW
-   ========================================================= */
 
-static void glow(float cx, float cy, float radius,
-                 unsigned char r,
-                 unsigned char g,
-                 unsigned char b)
+/* ============================================================
+ * FUNDO
+ * ============================================================ */
+
+static void draw_background(cairo_t *cr)
 {
-    int minx = (int)(cx - radius);
-    int maxx = (int)(cx + radius);
-    int miny = (int)(cy - radius);
-    int maxy = (int)(cy + radius);
+    cairo_set_source_rgb(
+        cr,
+        0.005,
+        0.006,
+        0.012
+    );
 
-    float rr = radius * radius;
+    cairo_paint(cr);
 
-    for (int y = miny; y <= maxy; y++) {
-        for (int x = minx; x <= maxx; x++) {
+    /*
+     * Grade muito discreta.
+     */
+    cairo_set_line_width(cr, 1.0);
 
-            float dx = x - cx;
-            float dy = y - cy;
-            float d2 = dx * dx + dy * dy;
+    cairo_set_source_rgba(
+        cr,
+        0.15,
+        0.20,
+        0.30,
+        0.13
+    );
 
-            if (d2 > rr)
-                continue;
+    for (int x = MAP_X; x <= MAP_X + MAP_W; x += 24) {
 
-            float d = sqrtf(d2);
-            float a = 1.0f - d / radius;
+        cairo_move_to(cr, x, MAP_Y);
+        cairo_line_to(cr, x, MAP_Y + MAP_H);
+    }
 
-            a = a * a * 0.35f;
+    for (int y = MAP_Y; y <= MAP_Y + MAP_H; y += 24) {
 
-            blend_pixel(
-                x,
-                y,
+        cairo_move_to(cr, MAP_X, y);
+        cairo_line_to(cr, MAP_X + MAP_W, y);
+    }
+
+    cairo_stroke(cr);
+}
+
+
+/* ============================================================
+ * MAPA DE CALOR
+ * ============================================================ */
+
+static void draw_heatmap(cairo_t *cr)
+{
+    if (commit_count == 0)
+        return;
+
+    /*
+     * Grid quadrado baseado na quantidade de commits.
+     *
+     * 4920 commits:
+     *
+     * sqrt(4920) ≈ 70
+     *
+     * => aproximadamente 70 x 70
+     */
+    int cols =
+        (int)ceil(sqrt((double)commit_count));
+
+    if (cols < 1)
+        cols = 1;
+
+    int rows =
+        (int)ceil(
+            (double)commit_count /
+            cols
+        );
+
+    double cell_w =
+        (double)MAP_W / cols;
+
+    double cell_h =
+        (double)MAP_H / rows;
+
+    for (size_t i = 0; i < commit_count; i++) {
+
+        int col = (int)(i % cols);
+        int row = (int)(i / cols);
+
+        double x =
+            MAP_X + col * cell_w;
+
+        double y =
+            MAP_Y + row * cell_h;
+
+        double r, g, b;
+
+        hour_color(
+            commits[i].hour,
+            commits[i].heat,
+            &r,
+            &g,
+            &b
+        );
+
+        double heat =
+            commits[i].heat;
+
+        /*
+         * Pequeno brilho retangular.
+         *
+         * Não é uma bolinha:
+         * continua sendo a própria célula.
+         */
+        if (heat > 0.65) {
+
+            cairo_set_source_rgba(
+                cr,
                 r,
                 g,
                 b,
-                (unsigned char)(a * 255)
+                0.08 * heat
             );
+
+            cairo_rectangle(
+                cr,
+                x - 2,
+                y - 2,
+                cell_w + 4,
+                cell_h + 4
+            );
+
+            cairo_fill(cr);
+        }
+
+        /*
+         * Célula principal.
+         */
+        cairo_set_source_rgba(
+            cr,
+            r,
+            g,
+            b,
+            0.30 + heat * 0.70
+        );
+
+        cairo_rectangle(
+            cr,
+            x + 1,
+            y + 1,
+            fmax(1.0, cell_w - 2),
+            fmax(1.0, cell_h - 2)
+        );
+
+        cairo_fill(cr);
+
+        /*
+         * Núcleo de commits muito intensos.
+         */
+        if (heat > 0.82) {
+
+            cairo_set_source_rgba(
+                cr,
+                0.85,
+                0.95,
+                1.0,
+                0.22 * heat
+            );
+
+            cairo_rectangle(
+                cr,
+                x + cell_w * 0.25,
+                y + cell_h * 0.25,
+                cell_w * 0.50,
+                cell_h * 0.50
+            );
+
+            cairo_fill(cr);
         }
     }
 }
 
-/* =========================================================
-   LINE
-   ========================================================= */
 
-static void line(float x1, float y1,
-                 float x2, float y2,
-                 unsigned char r,
-                 unsigned char g,
-                 unsigned char b,
-                 unsigned char a)
-{
-    int steps = (int)fmaxf(fabsf(x2 - x1), fabsf(y2 - y1));
-
-    if (steps <= 0)
-        steps = 1;
-
-    for (int i = 0; i <= steps; i++) {
-
-        float t = (float)i / steps;
-
-        int x = (int)(x1 + (x2 - x1) * t);
-        int y = (int)(y1 + (y2 - y1) * t);
-
-        blend_pixel(x, y, r, g, b, a);
-    }
-}
-
-/* =========================================================
-   GRID
-   ========================================================= */
-
-static void draw_grid(int commits)
-{
-    int cells = (int)sqrt((double)(commits > 0 ? commits : 1));
-
-    if (cells < 8)
-        cells = 8;
-
-    if (cells > 100)
-        cells = 100;
-
-    float cell = 6.0f;
-
-    float total = cells * cell;
-
-    float start_x = WIDTH / 2.0f - total / 2.0f;
-    float start_y = HEIGHT / 2.0f - total / 2.0f;
-
-    for (int gy = 0; gy < cells; gy++) {
-
-        for (int gx = 0; gx < cells; gx++) {
-
-            int index = gy * cells + gx;
-
-            if (index >= commits)
-                continue;
-
-            /*
-             * Distribuição determinística.
-             * Em uma execução real, cada célula pode ser
-             * associada diretamente ao timestamp do commit.
-             */
-
-            float phase = index * 0.137f;
-
-            float wave =
-                (sinf(phase) + 1.0f) * 0.5f;
-
-            unsigned char r =
-                (unsigned char)(25 + wave * 70);
-
-            unsigned char g =
-                (unsigned char)(45 + wave * 120);
-
-            unsigned char b =
-                (unsigned char)(100 + wave * 130);
-
-            int x = (int)(start_x + gx * cell);
-            int y = (int)(start_y + gy * cell);
-
-            for (int py = 0; py < 4; py++) {
-                for (int px = 0; px < 4; px++) {
-                    blend_pixel(
-                        x + px,
-                        y + py,
-                        r,
-                        g,
-                        b,
-                        180
-                    );
-                }
-            }
-        }
-    }
-}
-
-/* =========================================================
-   ESCUDO
-   ========================================================= */
-
-static void draw_shield(float cx, float cy)
-{
-    glow(cx, cy, 180, 100, 255, 180);
-    glow(cx, cy, 90, 80, 255, 200);
-
-    /*
-     * Escudo geométrico.
-     */
-
-    for (int y = -110; y <= 110; y++) {
-
-        float yy = y / 110.0f;
-
-        float half =
-            95.0f * (1.0f - fabsf(yy) * 0.45f);
-
-        if (y > 20)
-            half *= 0.85f;
-
-        line(
-            cx - half,
-            cy + y,
-            cx + half,
-            cy + y,
-            70,
-            255,
-            190,
-            20
-        );
-    }
-
-    /*
-     * Contorno do escudo.
-     */
-
-    for (int i = 0; i < 360; i++) {
-
-        float a = i * (float)M_PI / 180.0f;
-
-        float x =
-            cx + cosf(a) * 105.0f;
-
-        float y =
-            cy + sinf(a) * 125.0f;
-
-        blend_pixel(
-            (int)x,
-            (int)y,
-            120,
-            255,
-            210,
-            230
-        );
-    }
-
-    /*
-     * Onda sonora.
-     */
-
-    float previous_x = cx - 80;
-    float previous_y = cy;
-
-    for (int i = 0; i <= 160; i++) {
-
-        float x = cx - 80 + i;
-
-        float t = i / 160.0f;
-
-        float y =
-            cy +
-            sinf(t * 6.0f * (float)M_PI)
-            * 22.0f *
-            expf(-fabsf(t - 0.5f) * 1.5f);
-
-        line(
-            previous_x,
-            previous_y,
-            x,
-            y,
-            170,
-            255,
-            220,
-            240
-        );
-
-        previous_x = x;
-        previous_y = y;
-    }
-}
-
-/* =========================================================
-   NÓS
-   ========================================================= */
-
-static void draw_nodes(void)
-{
-    Node nodes[] = {
-
-        {300, 270, 30, 90, 180, 255, "ANDROID"},
-        {470, 180, 25, 150, 110, 255, "KOTLIN"},
-        {650, 140, 22, 100, 220, 255, "JAVA"},
-        {950, 140, 22, 180, 100, 255, "C/C++"},
-        {1130, 190, 25, 255, 100, 180, "XML"},
-        {1290, 300, 30, 255, 150, 100, "GITHUB"},
-        {1340, 500, 28, 100, 220, 255, "SOS"},
-        {1260, 690, 28, 120, 255, 180, "SENSORES"},
-        {1080, 790, 25, 255, 100, 180, "LOCALIZAÇÃO"},
-        {850, 840, 22, 120, 180, 255, "DOCS"},
-        {600, 820, 24, 180, 100, 255, "CI/CD"},
-        {390, 690, 28, 100, 255, 200, "SEGURANÇA"}
-    };
-
-    int count =
-        sizeof(nodes) / sizeof(nodes[0]);
-
-    float cx = WIDTH / 2.0f;
-    float cy = HEIGHT / 2.0f;
-
-    for (int i = 0; i < count; i++) {
-
-        Node *n = &nodes[i];
-
-        line(
-            cx,
-            cy,
-            n->x,
-            n->y,
-            n->r,
-            n->g,
-            n->b,
-            35
-        );
-
-        glow(
-            n->x,
-            n->y,
-            n->radius * 4,
-            n->r,
-            n->g,
-            n->b
-        );
-
-        circle(
-            n->x,
-            n->y,
-            n->radius,
-            n->r,
-            n->g,
-            n->b
-        );
-
-        circle(
-            n->x,
-            n->y,
-            n->radius * 0.35f,
-            235,
-            245,
-            255
-        );
-    }
-}
-
-/* =========================================================
-   CONTAGEM DE COMMITS
-   ========================================================= */
-
-static int count_commits(void)
-{
-    FILE *pipe =
-        popen("git rev-list --count HEAD 2>/dev/null", "r");
-
-    if (!pipe)
-        return 0;
-
-    int commits = 0;
-
-    fscanf(pipe, "%d", &commits);
-
-    pclose(pipe);
-
-    return commits;
-}
-
-/* =========================================================
-   ÚLTIMO COMMIT
-   ========================================================= */
-
-static void get_commit_hash(char *buffer, size_t size)
-{
-    FILE *pipe =
-        popen("git rev-parse --short HEAD 2>/dev/null", "r");
-
-    if (!pipe) {
-        snprintf(buffer, size, "unknown");
-        return;
-    }
-
-    if (!fgets(buffer, size, pipe))
-        snprintf(buffer, size, "unknown");
-
-    pclose(pipe);
-
-    buffer[strcspn(buffer, "\r\n")] = '\0';
-}
-
-/* =========================================================
-   PNG
-   ========================================================= */
-
-/*
- * Para evitar dependências externas no código principal,
- * esta função escreve um PPM temporário.
+/* ============================================================
+ * ESCUDO CENTRAL
  *
- * O workflow converte o PPM para PNG.
- */
+ * O escudo NÃO é uma figura sólida.
+ * Ele aumenta o brilho das células que já existem.
+ * ============================================================ */
 
-static int write_ppm(const char *filename)
+static int inside_shield(
+    double x,
+    double y,
+    double cx,
+    double cy,
+    double width,
+    double height
+)
 {
-    FILE *f = fopen(filename, "wb");
+    double nx =
+        (x - cx) / width;
 
-    if (!f)
+    double ny =
+        (y - cy) / height;
+
+    if (fabs(nx) > 1.0)
         return 0;
 
-    fprintf(
-        f,
-        "P6\n%d %d\n255\n",
-        WIDTH,
-        HEIGHT
-    );
+    if (ny < -1.0 || ny > 1.0)
+        return 0;
 
-    for (int y = 0; y < HEIGHT; y++) {
+    /*
+     * Curva superior + ponta inferior.
+     */
+    double top =
+        -0.80 +
+        0.45 * nx * nx;
 
-        for (int x = 0; x < WIDTH; x++) {
+    if (ny < top)
+        return 0;
 
-            fputc(image[y][x].r, f);
-            fputc(image[y][x].g, f);
-            fputc(image[y][x].b, f);
-        }
-    }
+    double bottom =
+        0.85 -
+        0.25 * fabs(nx);
 
-    fclose(f);
+    if (ny > bottom)
+        return 0;
 
     return 1;
 }
 
-/* =========================================================
-   MAIN
-   ========================================================= */
+
+static void illuminate_shield(cairo_t *cr)
+{
+    if (commit_count == 0)
+        return;
+
+    int cols =
+        (int)ceil(sqrt((double)commit_count));
+
+    int rows =
+        (int)ceil(
+            (double)commit_count /
+            cols
+        );
+
+    double cell_w =
+        (double)MAP_W / cols;
+
+    double cell_h =
+        (double)MAP_H / rows;
+
+    double cx =
+        MAP_X + MAP_W * 0.50;
+
+    double cy =
+        MAP_Y + MAP_H * 0.50;
+
+    double shield_w =
+        MAP_W * 0.25;
+
+    double shield_h =
+        MAP_H * 0.36;
+
+    for (size_t i = 0; i < commit_count; i++) {
+
+        int col = (int)(i % cols);
+        int row = (int)(i / cols);
+
+        double x =
+            MAP_X +
+            col * cell_w +
+            cell_w * 0.5;
+
+        double y =
+            MAP_Y +
+            row * cell_h +
+            cell_h * 0.5;
+
+        if (!inside_shield(
+                x,
+                y,
+                cx,
+                cy,
+                shield_w,
+                shield_h
+            ))
+            continue;
+
+        double intensity =
+            commits[i].heat;
+
+        /*
+         * Verde-limão + azul neon.
+         */
+        double r =
+            lerp(0.10, 0.65, intensity);
+
+        double g =
+            lerp(0.70, 1.00, intensity);
+
+        double b =
+            lerp(0.35, 0.95, intensity);
+
+        cairo_set_source_rgba(
+            cr,
+            r,
+            g,
+            b,
+            0.25 + intensity * 0.60
+        );
+
+        cairo_rectangle(
+            cr,
+            MAP_X + col * cell_w + 1,
+            MAP_Y + row * cell_h + 1,
+            fmax(1.0, cell_w - 2),
+            fmax(1.0, cell_h - 2)
+        );
+
+        cairo_fill(cr);
+    }
+}
+
+
+/* ============================================================
+ * ONDA SONORA
+ * ============================================================ */
+
+static void draw_wave(cairo_t *cr)
+{
+    double cx =
+        MAP_X + MAP_W * 0.50;
+
+    double cy =
+        MAP_Y + MAP_H * 0.50;
+
+    cairo_set_line_width(cr, 4.0);
+
+    cairo_set_source_rgba(
+        cr,
+        0.55,
+        1.00,
+        0.35,
+        0.95
+    );
+
+    cairo_new_path(cr);
+
+    int points = 260;
+
+    for (int i = 0; i < points; i++) {
+
+        double t =
+            (double)i /
+            (points - 1);
+
+        double x =
+            cx -
+            260.0 +
+            t * 520.0;
+
+        double envelope =
+            sin(M_PI * t);
+
+        double amplitude =
+            72.0 * envelope;
+
+        double y =
+            cy +
+            sin(t * M_PI * 10.0) *
+            amplitude;
+
+        if (i == 0)
+            cairo_move_to(cr, x, y);
+        else
+            cairo_line_to(cr, x, y);
+    }
+
+    cairo_stroke(cr);
+
+    /*
+     * Segunda camada azul.
+     */
+    cairo_set_line_width(cr, 1.5);
+
+    cairo_set_source_rgba(
+        cr,
+        0.20,
+        0.70,
+        1.00,
+        0.85
+    );
+
+    cairo_new_path(cr);
+
+    for (int i = 0; i < points; i++) {
+
+        double t =
+            (double)i /
+            (points - 1);
+
+        double x =
+            cx -
+            260.0 +
+            t * 520.0;
+
+        double amplitude =
+            82.0 * sin(M_PI * t);
+
+        double y =
+            cy +
+            sin(t * M_PI * 10.0) *
+            amplitude;
+
+        if (i == 0)
+            cairo_move_to(cr, x, y);
+        else
+            cairo_line_to(cr, x, y);
+    }
+
+    cairo_stroke(cr);
+}
+
+
+/* ============================================================
+ * CONTORNO DO ESCUDO
+ * ============================================================ */
+
+static void draw_shield_outline(cairo_t *cr)
+{
+    double cx =
+        MAP_X + MAP_W * 0.50;
+
+    double cy =
+        MAP_Y + MAP_H * 0.50;
+
+    double w =
+        MAP_W * 0.25;
+
+    double h =
+        MAP_H * 0.36;
+
+    cairo_new_path(cr);
+
+    cairo_move_to(
+        cr,
+        cx,
+        cy - h
+    );
+
+    cairo_curve_to(
+        cr,
+        cx + w * 0.70,
+        cy - h * 0.80,
+        cx + w,
+        cy - h * 0.55,
+        cx + w,
+        cy - h * 0.20
+    );
+
+    cairo_curve_to(
+        cr,
+        cx + w,
+        cy + h * 0.35,
+        cx + w * 0.45,
+        cy + h * 0.75,
+        cx,
+        cy + h
+    );
+
+    cairo_curve_to(
+        cr,
+        cx - w * 0.45,
+        cy + h * 0.75,
+        cx - w,
+        cy + h * 0.35,
+        cx - w,
+        cy - h * 0.20
+    );
+
+    cairo_curve_to(
+        cr,
+        cx - w,
+        cy - h * 0.55,
+        cx - w * 0.70,
+        cy - h * 0.80,
+        cx,
+        cy - h
+    );
+
+    cairo_close_path(cr);
+
+    cairo_set_line_width(cr, 3.0);
+
+    cairo_set_source_rgba(
+        cr,
+        0.55,
+        1.00,
+        0.30,
+        0.85
+    );
+
+    cairo_stroke(cr);
+
+    /*
+     * Segunda linha azul.
+     */
+    cairo_set_line_width(cr, 1.0);
+
+    cairo_set_source_rgba(
+        cr,
+        0.15,
+        0.65,
+        1.00,
+        0.75
+    );
+
+    cairo_stroke(cr);
+}
+
+
+/* ============================================================
+ * TEXTO
+ * ============================================================ */
+
+static void text(
+    cairo_t *cr,
+    const char *value,
+    double x,
+    double y,
+    double size,
+    double r,
+    double g,
+    double b,
+    double alpha
+)
+{
+    cairo_select_font_face(
+        cr,
+        "DejaVu Sans Mono",
+        CAIRO_FONT_SLANT_NORMAL,
+        CAIRO_FONT_WEIGHT_NORMAL
+    );
+
+    cairo_set_font_size(cr, size);
+
+    cairo_set_source_rgba(
+        cr,
+        r,
+        g,
+        b,
+        alpha
+    );
+
+    cairo_move_to(
+        cr,
+        x,
+        y
+    );
+
+    cairo_show_text(
+        cr,
+        value
+    );
+}
+
+
+static void draw_header(cairo_t *cr)
+{
+    text(
+        cr,
+        "MULHER AMPARADA",
+        90,
+        65,
+        28,
+        0.75,
+        1.00,
+        0.80,
+        1.0
+    );
+
+    text(
+        cr,
+        "MAPA DE CALOR CONSCIENTE",
+        90,
+        105,
+        17,
+        0.35,
+        0.75,
+        1.00,
+        0.95
+    );
+
+    char info[256];
+
+    snprintf(
+        info,
+        sizeof(info),
+        "%zu COMMITS  |  GRID %dx%d",
+        commit_count,
+        (int)ceil(sqrt((double)commit_count)),
+        (int)ceil(
+            (double)commit_count /
+            ceil(sqrt((double)commit_count))
+        )
+    );
+
+    text(
+        cr,
+        info,
+        1210,
+        75,
+        15,
+        0.65,
+        0.70,
+        0.80,
+        0.90
+    );
+}
+
+
+static void draw_footer(cairo_t *cr)
+{
+    char footer[256];
+
+    snprintf(
+        footer,
+        sizeof(footer),
+        "TARGET_SDK: 37  |  GRADLE: 9.6  |  VERSION_CODE: 33"
+    );
+
+    text(
+        cr,
+        footer,
+        90,
+        1015,
+        14,
+        0.40,
+        0.65,
+        0.75,
+        0.90
+    );
+
+    if (commit_count > 0) {
+
+        char date[64];
+
+        struct tm tm_value;
+
+        if (localtime_r(
+                &commits[commit_count - 1].timestamp,
+                &tm_value
+            )) {
+
+            strftime(
+                date,
+                sizeof(date),
+                "%Y-%m-%d %H:%M",
+                &tm_value
+            );
+        } else {
+            strcpy(date, "unknown");
+        }
+
+        char latest[256];
+
+        snprintf(
+            latest,
+            sizeof(latest),
+            "LATEST COMMIT: %s",
+            date
+        );
+
+        text(
+            cr,
+            latest,
+            1320,
+            1015,
+            14,
+            0.80,
+            0.35,
+            0.75,
+            0.95
+        );
+    }
+}
+
+
+/* ============================================================
+ * BORDA DO MAPA
+ * ============================================================ */
+
+static void draw_map_border(cairo_t *cr)
+{
+    cairo_set_line_width(cr, 1.0);
+
+    cairo_set_source_rgba(
+        cr,
+        0.25,
+        0.55,
+        0.75,
+        0.30
+    );
+
+    cairo_rectangle(
+        cr,
+        MAP_X,
+        MAP_Y,
+        MAP_W,
+        MAP_H
+    );
+
+    cairo_stroke(cr);
+}
+
+
+/* ============================================================
+ * MAIN
+ * ============================================================ */
 
 int main(void)
 {
-    mkdir("docs", 0755);
-    mkdir("docs/observatorio", 0755);
+    if (!load_commits()) {
 
-    clear_image();
-
-    int commits = count_commits();
-
-    char hash[64];
-
-    get_commit_hash(hash, sizeof(hash));
-
-    /*
-     * Fundo generativo
-     */
-
-    draw_grid(commits);
-
-    /*
-     * Constelação
-     */
-
-    draw_nodes();
-
-    /*
-     * Vigilante digital
-     */
-
-    draw_shield(
-        WIDTH / 2.0f,
-        HEIGHT / 2.0f
-    );
-
-    /*
-     * Pequenos pontos atmosféricos
-     */
-
-    for (int i = 0; i < 180; i++) {
-
-        float x =
-            fmodf(
-                i * 97.31f,
-                WIDTH
-            );
-
-        float y =
-            fmodf(
-                i * 53.17f,
-                HEIGHT
-            );
-
-        float glow_size =
-            1.0f +
-            fmodf(i * 0.73f, 3.0f);
-
-        glow(
-            x,
-            y,
-            glow_size * 5,
-            90,
-            180,
-            255
-        );
-
-        circle(
-            x,
-            y,
-            glow_size,
-            150,
-            220,
-            255
-        );
-    }
-
-    /*
-     * PPM.
-     */
-
-    if (!write_ppm(
-            "docs/observatorio/observatorio.ppm"))
-    {
         fprintf(
             stderr,
-            "Erro ao gerar observatorio.ppm\n"
+            "Nenhum commit encontrado.\n"
         );
 
         return 1;
     }
 
+    calculate_heat();
+
+    cairo_surface_t *surface =
+        cairo_image_surface_create(
+            CAIRO_FORMAT_ARGB32,
+            WIDTH,
+            HEIGHT
+        );
+
+    cairo_t *cr =
+        cairo_create(surface);
+
+    /*
+     * 1. Fundo
+     */
+    draw_background(cr);
+
+    /*
+     * 2. Cabeçalho
+     */
+    draw_header(cr);
+
+    /*
+     * 3. MAPA DE CALOR REAL
+     *
+     * Cada quadrado = um commit.
+     */
+    draw_heatmap(cr);
+
+    /*
+     * 4. O próprio mapa ilumina
+     *    o escudo central.
+     */
+    illuminate_shield(cr);
+
+    /*
+     * 5. Escudo
+     */
+    draw_shield_outline(cr);
+
+    /*
+     * 6. Onda sonora
+     */
+    draw_wave(cr);
+
+    /*
+     * 7. Moldura
+     */
+    draw_map_border(cr);
+
+    /*
+     * 8. Rodapé
+     */
+    draw_footer(cr);
+
+    cairo_surface_write_to_png(
+        surface,
+        "docs/observatorio/observatorio.png"
+    );
+
+    cairo_destroy(cr);
+    cairo_surface_destroy(surface);
+
     printf(
-        "Observatório gerado.\n"
-        "Commits: %d\n"
-        "Build: %s\n",
-        commits,
-        hash
+        "Observatorio gerado com %zu commits.\n",
+        commit_count
     );
 
     return 0;
 }
+
+E troque o workflow anterior por este, porque agora o C gera PNG diretamente com Cairo, sem precisar do ImageMagick:
+
+name: 🌌 Observatório
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  observatorio:
+    name: 🌌 Gerar mapa de calor
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: 📥 Checkout completo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔧 Instalar Cairo e GCC
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            gcc \
+            libcairo2-dev \
+            pkg-config
+
+      - name: 🧱 Compilar C
+        run: |
+          gcc \
+            -O2 \
+            -Wall \
+            -Wextra \
+            tools/observatorio.c \
+            $(pkg-config --cflags --libs cairo) \
+            -lm \
+            -o observatorio
+
+      - name: 🌌 Gerar mapa de calor
+        run: |
+          mkdir -p docs/observatorio
+          ./observatorio
+
+      - name: 💾 Publicar imagem
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add docs/observatorio/observatorio.png
+
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteração na imagem."
+            exit 0
+          fi
+
+          git commit -m "chore: atualizar mapa de calor"
+          git push
+
+No README:
+
+## 🌌 Observatório do Projeto
+
+O Mulher Amparada possui um observatório visual gerado diretamente em C a partir do histórico real do Git.
+
+Cada célula representa um commit. A intensidade representa a concentração de atividade e as cores representam os períodos em que o projeto foi desenvolvido.
+
+![Mapa de Calor Consciente](docs/observatorio/observatorio.png)
+
+Agora não existem aquelas 180 bolinhas. O elemento principal é o grid: "1 commit = 1 célula". O escudo e a onda também usam o próprio grid, em vez de serem desenhos aleatórios colocados por cima.

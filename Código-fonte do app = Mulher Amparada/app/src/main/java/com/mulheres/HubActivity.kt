@@ -2610,84 +2610,101 @@ compactBottom = true
                         Modifier.height(15.dp)
                     )
 
-                   Row(
-    modifier = Modifier.fillMaxWidth(),
-    horizontalArrangement = Arrangement.spacedBy(10.dp),
-    verticalAlignment = Alignment.Top
-) {
+                    SensorCard(
+    number = "01 / ÁUDIO",
+    title = "Proteção por barulho",
+    description =
+        "Detecta sons altos e situações suspeitas para acionar os mecanismos de proteção.",
+    icon = R.drawable.ic_0003,
+    activeImage = R.drawable.ic_00003,
+    color = c.pink,
+                        active =
+                            activity?.palmasAtivas
+                                ?: false,
+                        onClick = {
 
-    SensorCard(
-        number = "01 / ÁUDIO",
-        title = "Proteção por barulho",
-        description =
-            "Detecta sons altos e situações suspeitas para acionar os mecanismos de proteção.",
-        icon = R.drawable.ic_0003,
-        activeImage = R.drawable.ic_00003,
-        color = c.pink,
-        active =
-            activity?.palmasAtivas
-                ?: false,
-        onClick = {
-            activity?.let {
-                if (it.palmasAtivas) {
-                    it.desativarPalmas()
-                } else {
-                    it.ativarPalmas()
-                }
-            }
-        },
-        c = c,
-        modifier = Modifier.weight(1f)
-    )
+                            activity?.let {
 
-    SensorCard(
-        number = "02 / MOVIMENTO",
-        title = "Proteção por movimento",
-        description =
-            "Detecta movimentos bruscos no celular e pode iniciar uma resposta de emergência.",
-        icon = R.drawable.ic_0004,
-        activeImage = R.drawable.ic_00004,
-        color = c.purple,
-        active =
-            activity?.protecaoMovimentoAtiva
-                ?: false,
-        onClick = {
-            activity?.let {
-                if (it.protecaoMovimentoAtiva) {
-                    it.desativarProtecaoMovimento()
-                } else {
-                    it.ativarProtecaoMovimento()
-                }
-            }
-        },
-        c = c,
-        modifier = Modifier.weight(1f)
-    )
+                                if (
+                                    it.palmasAtivas
+                                ) {
 
-    SensorCard(
-        number = "03 / VISIBILIDADE",
-        title = "Escurecimento por inclinação",
-        description =
-            "Escurece a tela automaticamente quando o dispositivo identifica a posição configurada.",
-        icon = R.drawable.ic_0005,
-        activeImage = R.drawable.ic_00005,
-        color = c.orange,
-        active =
-            activity?.escurecimentoAtivo
-                ?: false,
-        onClick = {
-            activity?.let {
-                if (it.escurecimentoAtivo) {
-                    it.desativarEscurecimento()
-                } else {
-                    it.ativarEscurecimento()
-                }
-            }
-        },
-        c = c,
-        modifier = Modifier.weight(1f)
-    )
-}
+                                    it.desativarPalmas()
+
+                                } else {
+
+                                    it.ativarPalmas()
+                                }
+                            }
+                        },
+                        c = c,
+)
+
+                    Spacer(
+                        Modifier.height(30.dp)
+                    )
+
+                    SensorCard(
+    number = "02 / MOVIMENTO",
+    title = "Proteção por movimento",
+    description =
+        "Detecta movimentos bruscos no celular e pode iniciar uma resposta de emergência.",
+    icon = R.drawable.ic_0004,
+    activeImage = R.drawable.ic_00004,
+    color = c.purple,
+                        active =
+                            activity?.protecaoMovimentoAtiva
+                                ?: false,
+                        onClick = {
+
+                            activity?.let {
+
+                                if (
+                                    it.protecaoMovimentoAtiva
+                                ) {
+
+                                    it.desativarProtecaoMovimento()
+
+                                } else {
+
+                                    it.ativarProtecaoMovimento()
+                                }
+                            }
+                        },
+                        c = c,
+)
+
+                    Spacer(
+                        Modifier.height(30.dp)
+                    )
+
+                    SensorCard(
+    number = "03 / VISIBILIDADE",
+    title = "Escurecimento por inclinação",
+    description =
+        "Escurece a tela automaticamente quando o dispositivo identifica a posição configurada.",
+    icon = R.drawable.ic_0005,
+    activeImage = R.drawable.ic_00005,
+    color = c.orange,
+                        active =
+                            activity?.escurecimentoAtivo
+                                ?: false,
+                        onClick = {
+
+                            activity?.let {
+
+                                if (
+                                    it.escurecimentoAtivo
+                                ) {
+                                    it.desativarEscurecimento()
+                                } else {
+                                    it.ativarEscurecimento()
+                                }
+                            }
+                        },
+                        c = c,
+)
+
                     Spacer(
                         Modifier.height(30.dp)
                     )
@@ -2702,54 +2719,55 @@ compactBottom = true
                         Modifier.height(15.dp)
                     )
 
-Row(
-    modifier = Modifier.fillMaxWidth(),
-    horizontalArrangement = Arrangement.spacedBy(10.dp),
-    verticalAlignment = Alignment.Top
-) {
+                    ActionCard(
+                        title = "Polícia — 190",
+                        description =
+                            "Emergência policial e atendimento imediato",
+                        icon = R.drawable.ic_0007,
+                        arrow = R.drawable.ic_arrow,
+                        gradient = c.actionBlueGradient,
+                        accent = c.blue,
+                        c = c,
+onClick = {
+                            activity?.ligarPara("190")
+                        }
+                    )
 
-    ActionCard(
-        title = "Polícia 190",
-        description = "Emergência policial e atendimento imediato",
-        icon = R.drawable.ic_0007,
-        arrow = R.drawable.ic_arrow,
-        gradient = c.actionBlueGradient,
-        accent = c.blue,
-        c = c,
-        onClick = {
-            activity?.ligarPara("190")
-        },
-        modifier = Modifier.weight(1f)
-    )
+                    Spacer(
+                        Modifier.height(30.dp)
+                    )
 
-    ActionCard(
-        title = "SAMU 192",
-        description = "Atendimento médico de emergência",
-        icon = R.drawable.ic_0008,
-        arrow = R.drawable.ic_arrow,
-        gradient = c.actionOrangeGradient,
-        accent = c.orange,
-        c = c,
-        onClick = {
-            activity?.ligarPara("192")
-        },
-        modifier = Modifier.weight(1f)
-    )
+                    ActionCard(
+                        title = "SAMU — 192",
+                        description =
+                            "Atendimento médico de emergência",
+                        icon = R.drawable.ic_0008,
+                        arrow = R.drawable.ic_arrow,
+                        gradient = c.actionOrangeGradient,
+                        accent = c.orange,
+                        c = c,
+onClick = {
+                            activity?.ligarPara("192")
+                        }
+                    )
 
-    ActionCard(
-        title = "Central da Mulher 180",
-        description = "Orientação, acolhimento e atendimento",
-        icon = R.drawable.ic_0009,
-        arrow = R.drawable.ic_arrow,
-        gradient = c.actionPinkGradient,
-        accent = c.pinkLight,
-        c = c,
-        onClick = {
-            activity?.ligarPara("180")
-        },
-        modifier = Modifier.weight(1f)
-    )
-}
+                    Spacer(
+                        Modifier.height(30.dp)
+                    )
+
+                    ActionCard(
+                        title = "Central da Mulher — 180",
+                        description =
+                            "Orientação, acolhimento e atendimento",
+                        icon = R.drawable.ic_0009,
+                        arrow = R.drawable.ic_arrow,
+                        gradient = c.actionPinkGradient,
+                        accent = c.pinkLight,
+                        c = c,
+onClick = {
+                            activity?.ligarPara("180")
+                        }
+                    )
 
                     Spacer(
                         Modifier.height(30.dp)
@@ -2793,48 +2811,41 @@ compactBottom = true
                         Modifier.height(15.dp)
                     )
 
-                    Row(
-    modifier = Modifier.fillMaxWidth(),
-    horizontalArrangement = Arrangement.spacedBy(10.dp),
-    verticalAlignment = Alignment.Top
-) {
+                    ActionCard(
+                        title = "Adicionar contato",
+                        description =
+                            "Escolha uma pessoa de confiança",
+                        icon = R.drawable.ic_0011,
+                        arrow = R.drawable.ic_arrow,
+                        gradient = c.actionPurpleGradient,
+                        accent = c.purple,
+                        c = c,
+onClick = {
+                            activity?.abrirContatos()
+                        }
+                    )
 
-    ActionCard(
-        title = "Adicionar contato",
-        description =
-            "Escolha uma pessoa de confiança",
-        icon = R.drawable.ic_0011,
-        arrow = R.drawable.ic_arrow,
-        gradient = c.actionPurpleGradient,
-        accent = c.purple,
-        c = c,
-        onClick = {
-            activity?.abrirContatos()
-        },
-        modifier = Modifier.weight(1f)
-    )
+                    Spacer(
+                        Modifier.height(30.dp)
+                    )
 
-    ActionCard(
-        title = "SOS para contatos",
-        description =
-            "Envie um alerta para pessoas de confiança",
-        icon = R.drawable.ic_0012,
-        arrow = R.drawable.ic_arrow,
-        gradient = c.actionRedGradient,
-        accent = c.red,
-        c = c,
-        onClick = {
-            activity?.enviarSosParaContato()
-        },
-        modifier = Modifier.weight(1f)
-    )
-}
+                    ActionCard(
+                        title = "SOS para contatos",
+                        description =
+                            "Envie um alerta para pessoas de confiança",
+                        icon = R.drawable.ic_0012,
+                        arrow = R.drawable.ic_arrow,
+                        gradient = c.actionRedGradient,
+                        accent = c.red,
+                        c = c,
+onClick = {
+                            activity?.enviarSosParaContato()
+                        }
+                    )
 
-Spacer(
-    Modifier.height(30.dp)
-)
-
-
+                    Spacer(
+                        Modifier.height(30.dp)
+                    )
 
                     SectionTitle(
                         text = "Acesso rápido",
@@ -3481,6 +3492,7 @@ lineHeight = 20.sp,
 /* =========================================================
    SENSOR
 ========================================================= */
+
 @Composable
 private fun SensorCard(
     number: String,
@@ -3492,7 +3504,6 @@ private fun SensorCard(
     active: Boolean,
     onClick: () -> Unit,
     c: AppColors,
-    modifier: Modifier = Modifier
 ) {
 
     val background =
@@ -3515,7 +3526,8 @@ private fun SensorCard(
 
     Box(
         modifier =
-            modifier
+            Modifier
+                .fillMaxWidth()
                 .height(210.dp)
                 .clip(
                     RoundedCornerShape(25.dp)
@@ -3562,8 +3574,8 @@ private fun SensorCard(
 
             val alpha by
                 transition.animateFloat(
-                    initialValue = .08f,
-                    targetValue = .22f,
+                    initialValue = 0.08f,
+                    targetValue = 0.22f,
                     animationSpec =
                         infiniteRepeatable(
                             animation =
@@ -3578,7 +3590,9 @@ private fun SensorCard(
 
             Image(
                 painter =
-                    painterResource(activeImage),
+                    painterResource(
+                        activeImage
+                    ),
 
                 contentDescription = null,
 
@@ -3596,48 +3610,130 @@ private fun SensorCard(
             )
         }
 
-        Row(
+        Column(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(10.dp),
+                    .padding(22.dp),
 
-            verticalAlignment =
-                Alignment.CenterVertically
+            verticalArrangement =
+                Arrangement.SpaceBetween
         ) {
 
-            Column(
+            Row(
                 modifier =
-                    Modifier.weight(1f),
+                    Modifier.fillMaxWidth(),
 
-                verticalArrangement =
-                    Arrangement.spacedBy(4.dp)
+                verticalAlignment =
+                    Alignment.Top
             ) {
 
-                Text(
-                    text = number,
-                    color = c.muted,
-                    fontSize = 7.sp,
-                    letterSpacing = .8.sp,
-                    maxLines = 1
+                Column(
+                    modifier =
+                        Modifier.weight(1f),
+
+                    verticalArrangement =
+                        Arrangement.spacedBy(8.dp)
+                ) {
+
+                    Text(
+                        text = number,
+                        color = c.muted,
+                        fontSize = 9.sp,
+                        letterSpacing = 1.5.sp
+                    )
+
+                    Text(
+                        text = title,
+                        color = c.text,
+                        fontSize = 22.sp,
+                        lineHeight = 25.sp,
+                        letterSpacing = (-.7).sp,
+                        modifier =
+                            Modifier.fillMaxWidth()
+                    )
+                }
+
+                Spacer(
+                    Modifier.width(14.dp)
                 )
 
-                Text(
-                    text = title,
-                    color = c.text,
-                    fontSize = 12.sp,
-                    lineHeight = 14.sp,
-                    letterSpacing = (-.2).sp,
-                    maxLines = 2
-                )
+                Box(
+                    modifier =
+                        Modifier
+                            .size(55.dp)
+                            .clip(
+                                RoundedCornerShape(20.dp)
+                            )
+                            .background(
+                                color.copy(.075f)
+                            )
+                            .border(
+                                1.dp,
+                                color.copy(.27f),
+                                RoundedCornerShape(20.dp)
+                            ),
 
-                Text(
-                    text = description,
-                    color = c.secondary,
-                    fontSize = 7.sp,
-                    lineHeight = 9.sp,
-                    maxLines = 3
-                )
+                    contentAlignment =
+                        Alignment.Center
+                ) {
+
+                    Box(
+                        modifier =
+                            Modifier
+                                .size(39.dp)
+                                .border(
+                                    1.dp,
+                                    c.borderLight,
+                                    RoundedCornerShape(16.dp)
+                                ),
+
+                        contentAlignment =
+                            Alignment.Center
+                    ) {
+
+                        Image(
+                            painter =
+                                painterResource(icon),
+
+                            contentDescription = null,
+
+                            modifier =
+                                Modifier.size(24.dp)
+                        )
+                    }
+                }
+            }
+
+            Text(
+                text = description,
+
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = 4.dp,
+                            end = 4.dp
+                        ),
+
+                color = c.secondary,
+
+                fontSize = 10.sp,
+                lineHeight = 16.sp,
+
+                maxLines = 3
+            )
+
+            Row(
+                modifier =
+                    Modifier.fillMaxWidth(),
+
+                verticalAlignment =
+                    Alignment.CenterVertically,
+
+                horizontalArrangement =
+                    Arrangement.SpaceBetween
+            ) {
 
                 Row(
                     verticalAlignment =
@@ -3647,7 +3743,7 @@ private fun SensorCard(
                     Box(
                         modifier =
                             Modifier
-                                .size(5.dp)
+                                .size(6.dp)
                                 .clip(CircleShape)
                                 .background(
                                     if (active)
@@ -3658,7 +3754,7 @@ private fun SensorCard(
                     )
 
                     Spacer(
-                        Modifier.width(4.dp)
+                        Modifier.width(8.dp)
                     )
 
                     Text(
@@ -3674,72 +3770,17 @@ private fun SensorCard(
                             else
                                 c.muted,
 
-                        fontSize = 6.sp,
-                        letterSpacing = .5.sp,
-                        maxLines = 1
+                        fontSize = 9.sp,
+                        letterSpacing = 1.2.sp
                     )
                 }
+
+                FakeSwitch(
+                    color = color,
+                    active = active,
+                    c = c
+                )
             }
-
-            Spacer(
-                Modifier.width(6.dp)
-            )
-
-            Box(
-                modifier =
-                    Modifier
-                        .size(42.dp)
-                        .clip(
-                            RoundedCornerShape(15.dp)
-                        )
-                        .background(
-                            color.copy(.075f)
-                        )
-                        .border(
-                            1.dp,
-                            color.copy(.27f),
-                            RoundedCornerShape(15.dp)
-                        ),
-
-                contentAlignment =
-                    Alignment.Center
-            ) {
-
-                Box(
-                    modifier =
-                        Modifier
-                            .size(31.dp)
-                            .border(
-                                1.dp,
-                                c.borderLight,
-                                RoundedCornerShape(12.dp)
-                            ),
-
-                    contentAlignment =
-                        Alignment.Center
-                ) {
-
-                    Image(
-                        painter =
-                            painterResource(icon),
-
-                        contentDescription = null,
-
-                        modifier =
-                            Modifier.size(19.dp)
-                    )
-                }
-            }
-
-            Spacer(
-                Modifier.width(5.dp)
-            )
-
-            FakeSwitch(
-                color = color,
-                active = active,
-                c = c
-            )
         }
     }
 }
@@ -3806,8 +3847,6 @@ private fun FakeSwitch(
    CARDS DE AÇÃO
 ========================================================= */
 
-
-
 @Composable
 private fun ActionCard(
     title: String,
@@ -3817,40 +3856,41 @@ private fun ActionCard(
     gradient: List<Color>,
     accent: Color,
     c: AppColors,
-    onClick: () -> Unit = {},
-    modifier: Modifier = Modifier
+onClick: () -> Unit = {}
 ) {
 
     Row(
-        modifier =
-            modifier
-                .height(210.dp)
-                .clip(
-                    RoundedCornerShape(27.dp)
-                )
-                .background(
-                    Brush.linearGradient(gradient)
-                )
-                .border(
-                    1.dp,
-                    accent.copy(.31f),
-                    RoundedCornerShape(27.dp)
-                )
-                .clickable {
-                    onClick()
-                }
-                .padding(10.dp),
 
-        verticalAlignment =
-            Alignment.CenterVertically
-    ) {
+    modifier =
+        Modifier
+            .fillMaxWidth()
+            .height(128.dp)
+            .clip(
+                RoundedCornerShape(27.dp)
+            )
+            .background(
+                Brush.linearGradient(gradient)
+            )
+            .border(
+                1.dp,
+                accent.copy(.31f),
+                RoundedCornerShape(27.dp)
+            )
+            .clickable {
+                onClick()
+            }
+            .padding(20.dp),
 
+    verticalAlignment =
+        Alignment.CenterVertically
+) {
         Box(
+
             modifier =
                 Modifier
-                    .size(42.dp)
+                    .size(66.dp)
                     .clip(
-                        RoundedCornerShape(15.dp)
+                        RoundedCornerShape(23.dp)
                     )
                     .background(
                         accent.copy(.09f)
@@ -3858,7 +3898,7 @@ private fun ActionCard(
                     .border(
                         1.dp,
                         accent.copy(.32f),
-                        RoundedCornerShape(15.dp)
+                        RoundedCornerShape(23.dp)
                     ),
 
             contentAlignment =
@@ -3868,78 +3908,75 @@ private fun ActionCard(
             Image(
                 painter =
                     painterResource(icon),
-
                 contentDescription = null,
-
                 modifier =
-                    Modifier.size(22.dp)
+                    Modifier.size(35.dp)
             )
         }
 
         Spacer(
-            Modifier.width(7.dp)
+            Modifier.width(16.dp)
         )
 
         Column(
+
             modifier =
                 Modifier.weight(1f),
 
             verticalArrangement =
-                Arrangement.spacedBy(4.dp)
+                Arrangement.spacedBy(8.dp)
         ) {
 
             Text(
-                text = title,
-
+                title,
                 color =
-                    if (isSystemInDarkTheme())
+                    if (
+                        isSystemInDarkTheme()
+                    )
                         Color.White
                     else
                         c.text,
-
-                fontSize = 10.sp,
-                lineHeight = 12.sp,
-                maxLines = 2
+                fontSize = 16.sp,
+lineHeight = 18.sp
             )
 
             Text(
-                text = description,
-
+                description,
                 color =
-                    if (isSystemInDarkTheme())
+                    if (
+                        isSystemInDarkTheme()
+                    )
                         Color.White.copy(.66f)
                     else
                         c.secondary,
-
-                fontSize = 7.sp,
-                lineHeight = 9.sp,
-                maxLines = 3
+                fontSize = 10.sp,
+lineHeight = 15.sp
             )
 
             Text(
-                text = "ATENDIMENTO DISPONÍVEL",
-
+                "ATENDIMENTO DISPONÍVEL",
                 color = accent,
-
-                fontSize = 5.sp,
-                letterSpacing = .4.sp,
-                maxLines = 1
+                fontSize = 7.sp,
+letterSpacing = 1.sp
             )
         }
 
         Spacer(
-            Modifier.width(5.dp)
+            Modifier.width(16.dp)
         )
 
         Box(
+
             modifier =
                 Modifier
-                    .size(28.dp)
+                    .size(43.dp)
                     .clip(
-                        RoundedCornerShape(10.dp)
+                        RoundedCornerShape(16.dp)
                     )
                     .background(
-                        if (isSystemInDarkTheme())
+                        if (
+                            isSystemInDarkTheme()
+                        )
                             Color.Black.copy(.13f)
                         else
                             Color.Black.copy(.05f)
@@ -3947,7 +3984,7 @@ private fun ActionCard(
                     .border(
                         1.dp,
                         accent.copy(.22f),
-                        RoundedCornerShape(10.dp)
+                        RoundedCornerShape(16.dp)
                     ),
 
             contentAlignment =
@@ -3957,15 +3994,14 @@ private fun ActionCard(
             Image(
                 painter =
                     painterResource(arrow),
-
                 contentDescription = null,
-
                 modifier =
-                    Modifier.size(13.dp)
+                    Modifier.size(19.dp)
             )
         }
     }
 }
+
 
 /* =========================================================
    ACESSO DE EMERGÊNCIA

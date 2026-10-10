@@ -1198,23 +1198,23 @@ jobs:
 # CENTRALIZAR E SALVAR ARQUIVOS NA MAIN
 # =========================================================
 
-salvar-na-main:
-  name: Salvar todos os arquivos na main
-  runs-on: ubuntu-24.04
+  salvar-na-main:
+    name: Salvar todos os arquivos na main
+    runs-on: ubuntu-24.04
 
-  needs:
-    - atualizar-commits
-    - sitemap
-    - atualizar-footer
-    - atualizar-relatorio-commits
-    - pesquisar-projeto
-    - observatorio
-    - gerar-linguagens
+    needs:
+      - atualizar-commits
+      - sitemap
+      - atualizar-footer
+      - atualizar-relatorio-commits
+      - pesquisar-projeto
+      - observatorio
+      - gerar-linguagens
 
-  permissions:
-    contents: write
+    permissions:
+      contents: write
 
-  steps:
+    steps:
 
     # =========================================================
     # BAIXAR CÓDIGO ATUALIZADO

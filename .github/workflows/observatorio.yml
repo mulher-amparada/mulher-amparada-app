@@ -1,4 +1,4 @@
-name: 🌌 Observatório do Projeto
+name: 🌌 Observatório
 
 on:
   push:
@@ -12,23 +12,20 @@ permissions:
 
 jobs:
   observatorio:
-    name: Gerar Observatório
     runs-on: ubuntu-24.04
 
     steps:
-      - name: 📥 Baixar repositório
+      - name: 📥 Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: 🔧 Instalar dependências
+      - name: 🔧 Dependências
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            gcc \
-            librsvg2-bin
+          sudo apt-get install -y gcc imagemagick
 
-      - name: 🧱 Compilar observatorio.c
+      - name: 🧱 Compilar
         run: |
           gcc \
             -O2 \
@@ -38,45 +35,29 @@ jobs:
             -lm \
             -o observatorio
 
-      - name: 🔍 Executar análise
+      - name: 🌌 Gerar observatório
         run: |
           ./observatorio
 
-      - name: 🖼️ Converter SVG para PNG
+      - name: 🖼️ Converter para PNG
         run: |
-          mkdir -p docs/observatorio
+          convert \
+            docs/observatorio/observatorio.ppm \
+            docs/observatorio/observatorio.png
 
-          for svg in docs/observatorio/*.svg; do
-            if [ -f "$svg" ]; then
-              nome="${svg%.svg}"
+          rm docs/observatorio/observatorio.ppm
 
-              rsvg-convert \
-                "$svg" \
-                -o "${nome}.png"
-            fi
-          done
-
-      - name: 📋 Mostrar arquivos gerados
-        run: |
-          echo "Arquivos do Observatório:"
-          find docs/observatorio \
-            -maxdepth 1 \
-            -type f \
-            -print
-
-      - name: 💾 Salvar no repositório
+      - name: 💾 Commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add docs/observatorio/
+          git add docs/observatorio/observatorio.png
 
           if git diff --cached --quiet; then
-            echo "Nenhuma alteração no Observatório."
+            echo "Nenhuma alteração."
             exit 0
           fi
 
-          git commit \
-            -m "chore: atualizar observatorio do projeto"
-
+          git commit -m "chore: atualizar observatorio"
           git push

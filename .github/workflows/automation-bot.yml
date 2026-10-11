@@ -69,30 +69,5 @@ jobs:
           chmod +x automation-bot
           ./automation-bot
 
-      # =====================================================
-      # INSTALAR JULIA
-      # =====================================================
-
-      - name: Instalar Julia
-        uses: julia-actions/setup-julia@v3
-        with:
-          version: "1"
-
-      # =====================================================
-      # INSTALAR DEPENDÊNCIAS JULIA
-      # =====================================================
-
-      - name: Instalar dependências Julia
-        run: |
-          julia --project=. -e '
-            using Pkg
-            Pkg.instantiate()
-          '
-
-      # =====================================================
-      # EXECUTAR ANÁLISE DE DADOS
-      # =====================================================
-
-      - name: Executar análise de dados em Julia
-        run: |
-          julia --project=. src/main.jl
+      
+            

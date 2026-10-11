@@ -15,13 +15,29 @@ E vale lembrar que antes todas as páginas eram html com webview, agora não sã
 
 e pra ser sincero, comecei esse projeto no dia 13/05/2026 e terminei no dia 10/10/2026!
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 5087**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 5072**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
 # 🎉Projeto Finalizado:
 
 https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Projeto-Finalizado
+
+# 👾Nossas contribuições!:
+
+<img
+  src="https://raw.githubusercontent.com/mulher-amparada/mulher-amparada-app/main/docs/observatorio/observatorio.png"
+  alt="Observatório do Mulher Amparada"
+  width="100%"
+/>
+
+# 🩸 Sofrimento das mulheres"
+
+<img
+  src="https://github.com/mulher-amparada/mulher-amparada-app/blob/main/relatorios%2Fgraficos%2Fligue180-2019.png"
+  alt="Observatório do Mulher Amparada"
+  width="100%"
+/>
 
 # ⚠️MURAL DE AVISOS:
 
@@ -107,14 +123,6 @@ A documentação completa do arquivo `.github/workflows/automations.yml` está d
 <a href="https://github.com/mulher-amparada/mulher-amparada-app/blob/main/pesquisas/workflow.md">
   📖 Pesquisas — Documentação do Workflow
 </a>
-
-<h3>📊 Observatório</h3>
-
-<img
-  src="https://raw.githubusercontent.com/mulher-amparada/mulher-amparada-app/main/docs/observatorio/observatorio.png"
-  alt="Observatório do Mulher Amparada"
-  width="100%"
-/>
 
 E temos esse dependabot (.github/dependabot.yml):
 ```

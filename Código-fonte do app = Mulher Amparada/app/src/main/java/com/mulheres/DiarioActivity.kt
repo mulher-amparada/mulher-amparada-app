@@ -4,6 +4,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.saveable.rememberSaveable
+import com.halilibo.richtext.ui.RichText
 import com.halilibo.richtext.commonmark.Markdown
 import com.halilibo.richtext.ui.RichText
 import androidx.compose.foundation.layout.statusBarsPadding

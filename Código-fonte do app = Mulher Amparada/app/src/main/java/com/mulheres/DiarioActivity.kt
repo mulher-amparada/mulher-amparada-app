@@ -1,20 +1,15 @@
 package com.mulheres
 
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import com.halilibo.richtext.ui.RichText
-import com.halilibo.richtext.commonmark.Markdown
-import androidx.compose.foundation.layout.statusBarsPadding
 import android.content.ContentValues
 import android.content.Context
-import androidx.compose.foundation.layout.navigationBarsPadding
-import android.widget.Toast
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
@@ -30,11 +25,15 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -65,10 +64,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
+import com.halilibo.richtext.ui.RichText
+import com.halilibo.richtext.commonmark.Markdown
 import kotlinx.coroutines.delay
 import org.json.JSONArray
 import java.text.SimpleDateFormat
@@ -76,7 +76,6 @@ import java.util.Date
 import java.util.Locale
 import kotlin.math.max
 import kotlin.math.min
-import androidx.activity.enableEdgeToEdge
 
 /* =========================================================
    CORES
@@ -106,44 +105,46 @@ private val LightPage = Color(0xFFFFC0D0)
 private val LightPageText = Color(0xFF292127)
 
 /* =========================================================
-========================================================= */
-
-
-/* =========================================================
    ACTIVITY
 ========================================================= */
+
 class DiarioActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState)
 
-    enableEdgeToEdge()
+        enableEdgeToEdge()
 
-window.addFlags(
-    WindowManager.LayoutParams.FLAG_SECURE
-)
+        window.addFlags(
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
 
-WindowCompat.setDecorFitsSystemWindows(
-    window,
-    false
-)
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
 
-window.statusBarColor =
-    android.graphics.Color.TRANSPARENT
+        window.statusBarColor =
+            android.graphics.Color.TRANSPARENT
 
-window.navigationBarColor =
-    android.graphics.Color.TRANSPARENT
+        window.navigationBarColor =
+            android.graphics.Color.TRANSPARENT
 
-if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-    window.isNavigationBarContrastEnforced = false
-}
-setContent {
-    DiarioTheme {
-        DiarioScreen()
+        if (
+            android.os.Build.VERSION.SDK_INT >=
+            android.os.Build.VERSION_CODES.Q
+        ) {
+            window.isNavigationBarContrastEnforced = false
+        }
+
+        setContent {
+            DiarioTheme {
+                DiarioScreen()
+            }
+        }
     }
 }
-}
-}
+
 /* =========================================================
    TEMA
 ========================================================= */
@@ -152,13 +153,10 @@ setContent {
 private fun DiarioTheme(
     content: @Composable () -> Unit
 ) {
-
-    val dark =
-        isSystemInDarkTheme()
+    val dark = isSystemInDarkTheme()
 
     val colors =
         if (dark) {
-
             darkColorScheme(
                 primary = Pink,
                 secondary = PinkLight,
@@ -167,9 +165,7 @@ private fun DiarioTheme(
                 onBackground = DarkText,
                 onSurface = DarkText
             )
-
         } else {
-
             lightColorScheme(
                 primary = PinkDark,
                 secondary = Pink,
@@ -183,24 +179,12 @@ private fun DiarioTheme(
     MaterialTheme(
         colorScheme = colors,
         typography = MaterialTheme.typography.copy(
-            bodyLarge =
-                MaterialTheme.typography.bodyLarge.copy(
-                ),
-            bodyMedium =
-                MaterialTheme.typography.bodyMedium.copy(
-                ),
-            bodySmall =
-                MaterialTheme.typography.bodySmall.copy(
-                ),
-            titleLarge =
-                MaterialTheme.typography.titleLarge.copy(
-                ),
-            titleMedium =
-                MaterialTheme.typography.titleMedium.copy(
-                ),
-            titleSmall =
-                MaterialTheme.typography.titleSmall.copy(
-                )
+            bodyLarge = MaterialTheme.typography.bodyLarge.copy(),
+            bodyMedium = MaterialTheme.typography.bodyMedium.copy(),
+            bodySmall = MaterialTheme.typography.bodySmall.copy(),
+            titleLarge = MaterialTheme.typography.titleLarge.copy(),
+            titleMedium = MaterialTheme.typography.titleMedium.copy(),
+            titleSmall = MaterialTheme.typography.titleSmall.copy()
         ),
         content = content
     )
@@ -213,11 +197,9 @@ private fun DiarioTheme(
 private class DiarioStorage(
     context: Context
 ) {
-
     private val cripto = Cripto(context)
 
     fun loadPages(): MutableList<String> {
-
         val saved = cripto.carregar("diario")
 
         if (saved.isBlank()) {
@@ -225,15 +207,11 @@ private class DiarioStorage(
         }
 
         return try {
-
             val array = JSONArray(saved)
-
             val result = mutableListOf<String>()
 
             for (i in 0 until array.length()) {
-                result.add(
-                    array.optString(i, "")
-                )
+                result.add(array.optString(i, ""))
             }
 
             if (result.isEmpty()) {
@@ -241,17 +219,12 @@ private class DiarioStorage(
             }
 
             result
-
         } catch (_: Exception) {
-
             mutableListOf("")
         }
     }
 
-    fun savePages(
-        pages: List<String>
-    ) {
-
+    fun savePages(pages: List<String>) {
         val array = JSONArray()
 
         pages.forEach { page ->
@@ -264,59 +237,40 @@ private class DiarioStorage(
         )
     }
 
-    fun loadDate(
-        index: Int
-    ): String? {
+    fun loadDate(index: Int): String? {
+        val date = cripto.carregar("diario_data_$index")
 
-        val date =
-            cripto.carregar(
-                "diario_data_$index"
-            )
-
-        return date
-            .takeIf { it.isNotBlank() }
+        return date.takeIf { it.isNotBlank() }
     }
 
     fun saveDate(
         index: Int,
         date: String
     ) {
-
         cripto.salvar(
             "diario_data_$index",
             date
         )
     }
 
-    fun removeDate(
-        index: Int
-    ) {
-
-        cripto.remover(
-            "diario_data_$index"
-        )
+    fun removeDate(index: Int) {
+        cripto.remover("diario_data_$index")
     }
 
     fun clear() {
-
         cripto.remover("diario")
 
         var index = 0
 
         while (true) {
-
-            val key =
-                "diario_data_$index"
-
-            val value =
-                cripto.carregar(key)
+            val key = "diario_data_$index"
+            val value = cripto.carregar(key)
 
             if (value.isBlank()) {
                 break
             }
 
             cripto.remover(key)
-
             index++
         }
     }
@@ -327,7 +281,6 @@ private class DiarioStorage(
 ========================================================= */
 
 private fun today(): String {
-
     return SimpleDateFormat(
         "dd/MM/yyyy",
         Locale("pt", "BR")
@@ -341,40 +294,28 @@ private fun today(): String {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DiarioScreen() {
-
     val context =
         androidx.compose.ui.platform.LocalContext.current
 
-    val storage =
-        remember {
-            DiarioStorage(context)
+    val storage = remember {
+        DiarioStorage(context)
+    }
+
+    val dark = isSystemInDarkTheme()
+
+    val pages = remember {
+        mutableStateListOf<String>().also { list ->
+            list.addAll(storage.loadPages())
         }
+    }
 
-    val dark =
-        isSystemInDarkTheme()
-
-    val pages =
-        remember {
-            mutableStateListOf<String>().also { list ->
-                list.addAll(
-                    storage.loadPages()
-                )
+    val dates = remember {
+        mutableStateListOf<String?>().also { list ->
+            repeat(pages.size) { index ->
+                list.add(storage.loadDate(index))
             }
         }
-
-    val dates =
-        remember {
-            mutableStateListOf<String?>().also { list ->
-
-                repeat(pages.size) { index ->
-
-                    list.add(
-                        storage.loadDate(index)
-                    )
-
-                }
-            }
-        }
+    }
 
     var currentPage by rememberSaveable {
         mutableIntStateOf(0)
@@ -395,244 +336,155 @@ private fun DiarioScreen() {
     CompositionLocalProvider(
         LocalOverscrollFactory provides null
     ) {
-
         Surface(
-    modifier =
-        Modifier
-            .fillMaxSize(),
-
-    color =
-        if (dark)
-            DarkBackground
-        else
-            LightBackground
-) {
-
+            modifier = Modifier.fillMaxSize(),
+            color = if (dark) DarkBackground else LightBackground
+        ) {
             Column(
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                          .statusBarsPadding()
-                        .padding(
-                            horizontal = 11.dp,
-                            vertical = 10.dp
-                        ),
-                horizontalAlignment =
-                    Alignment.CenterHorizontally
+                modifier = Modifier
+                    .fillMaxSize()
+                    .statusBarsPadding()
+                    .padding(
+                        horizontal = 11.dp,
+                        vertical = 10.dp
+                    ),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-Spacer(
-    modifier = Modifier.height(24.dp)
-)
+                Spacer(
+                    modifier = Modifier.height(24.dp)
+                )
 
                 DiarioTopBar(
                     dark = dark,
                     onDownload = {
+                        val baixou = exportAllPages(
+                            context = context,
+                            pages = pages,
+                            dates = dates
+                        )
 
-    val baixou =
-        exportAllPages(
-            context = context,
-            pages = pages,
-            dates = dates
-        )
-
-    Toast.makeText(
-        context,
-        if (baixou)
-            "Diário baixado"
-        else
-            "Não foi possível baixar o diário",
-        Toast.LENGTH_SHORT
-    ).show()
-
-},
+                        Toast.makeText(
+                            context,
+                            if (baixou) {
+                                "Diário baixado"
+                            } else {
+                                "Não foi possível baixar o diário"
+                            },
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    },
                     onDelete = {
-
                         showDeleteDialog = true
-
                     }
                 )
 
                 Spacer(
-    modifier =
-        Modifier.height(14.dp)
-)
+                    modifier = Modifier.height(14.dp)
+                )
 
-Box(
-    modifier =
-        Modifier
-            .fillMaxWidth()
-            .weight(1f)
-            .navigationBarsPadding()
-            .pointerInput(
-                currentPage,
-                pages.size
-            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .navigationBarsPadding()
+                        .pointerInput(
+                            currentPage,
+                            pages.size
+                        ) {
+                            detectHorizontalDragGestures(
+                                onDragStart = {
+                                    dragOffset = 0f
+                                },
+                                onHorizontalDrag = { change, amount ->
+                                    change.consume()
+                                    dragOffset += amount
+                                },
+                                onDragEnd = {
+                                    val threshold = 55f
 
-                                detectHorizontalDragGestures(
-
-                                    onDragStart = {
-
-                                        dragOffset = 0f
-
-                                    },
-
-                                    onHorizontalDrag = {
-                                            change,
-                                            amount ->
-
-                                        change.consume()
-
-                                        dragOffset += amount
-
-                                    },
-
-                                    onDragEnd = {
-
-                                        val threshold =
-                                            55f
-
-                                        when {
-
-                                            dragOffset <
-                                                -threshold -> {
-
-                                                if (
-                                                    currentPage ==
-                                                    pages.lastIndex
-                                                ) {
-
-                                                    pages.add("")
-                                                    dates.add(null)
-
-                                                }
-
-                                                currentPage =
-                                                    min(
-                                                        currentPage + 1,
-                                                        pages.lastIndex
-                                                    )
+                                    when {
+                                        dragOffset < -threshold -> {
+                                            if (
+                                                currentPage ==
+                                                pages.lastIndex
+                                            ) {
+                                                pages.add("")
+                                                dates.add(null)
                                             }
 
-                                            dragOffset >
-                                                threshold -> {
-
-                                                currentPage =
-                                                    max(
-                                                        currentPage - 1,
-                                                        0
-                                                    )
-                                            }
+                                            currentPage = min(
+                                                currentPage + 1,
+                                                pages.lastIndex
+                                            )
                                         }
 
-                                        dragOffset = 0f
-                                    },
-
-                                    onDragCancel = {
-
-                                        dragOffset = 0f
-
+                                        dragOffset > threshold -> {
+                                            currentPage = max(
+                                                currentPage - 1,
+                                                0
+                                            )
+                                        }
                                     }
-                                )
-                            },
-                    contentAlignment =
-                        Alignment.Center
-                ) {
 
+                                    dragOffset = 0f
+                                },
+                                onDragCancel = {
+                                    dragOffset = 0f
+                                }
+                            )
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
                     DiarioBook(
                         pages = pages,
                         dates = dates,
                         currentPage = currentPage,
                         dragOffset = dragOffset,
                         dark = dark,
-                        onTextChanged = {
-                                index,
-                                text ->
-
-                            while (
-                                pages.size <= index
-                            ) {
-
+                        onTextChanged = { index, text ->
+                            while (pages.size <= index) {
                                 pages.add("")
-
                             }
 
-                            while (
-                                dates.size <= index
-                            ) {
-
+                            while (dates.size <= index) {
                                 dates.add(null)
-
                             }
 
-                            pages[index] =
-                                text
+                            pages[index] = text
 
-                            storage.savePages(
-                                pages
-                            )
+                            storage.savePages(pages)
 
-                            if (
-                                text.isNotEmpty()
-                            ) {
-
-                                val date =
-                                    today()
-
-                                dates[index] =
-                                    date
-
-                                storage.saveDate(
-                                    index,
-                                    date
-                                )
-
+                            if (text.isNotEmpty()) {
+                                val date = today()
+                                dates[index] = date
+                                storage.saveDate(index, date)
                             }
 
                             saving = true
                         }
                     )
                 }
-
-                
-
-
             }
         }
     }
 
     if (showDeleteDialog) {
-
         AlertDialog(
             onDismissRequest = {
-
                 showDeleteDialog = false
-
             },
-
             title = {
-
-                Text(
-                    text = "Apagar diário",
-)
-
+                Text(text = "Apagar diário")
             },
-
             text = {
-
                 Text(
-                    text =
-                        "Apagar todas as páginas do diário?\n\n" +
-                            "Esta ação não pode ser desfeita.",
+                    text = "Apagar todas as páginas do diário?\n\n" +
+                        "Esta ação não pode ser desfeita."
                 )
-
             },
-
             confirmButton = {
-
                 TextButton(
                     onClick = {
-
                         storage.clear()
 
                         pages.clear()
@@ -642,47 +494,31 @@ Box(
                         dates.add(null)
 
                         currentPage = 0
-
                         showDeleteDialog = false
-
                     }
                 ) {
-
                     Text(
                         text = "Apagar",
-                        color = PinkDark,
-)
-
+                        color = PinkDark
+                    )
                 }
             },
-
             dismissButton = {
-
                 TextButton(
                     onClick = {
-
                         showDeleteDialog = false
-
                     }
                 ) {
-
-                    Text(
-                        text = "Cancelar",
-                    )
-
+                    Text(text = "Cancelar")
                 }
             }
         )
     }
 
     LaunchedEffect(saving) {
-
         if (saving) {
-
             delay(1000)
-
             saving = false
-
         }
     }
 }
@@ -697,105 +533,68 @@ private fun DiarioTopBar(
     onDownload: () -> Unit,
     onDelete: () -> Unit
 ) {
-
     val surface =
-        if (dark)
-            Color(0xFF111111)
-        else
-            Color.White
+        if (dark) Color(0xFF111111) else Color.White
 
     val border =
-        if (dark)
-            DarkBorder
-        else
-            LightBorder
+        if (dark) DarkBorder else LightBorder
 
     val text =
-        if (dark)
-            DarkText
-        else
-            LightText
+        if (dark) DarkText else LightText
 
     val muted =
-        if (dark)
-            DarkMuted
-        else
-            LightMuted
+        if (dark) DarkMuted else LightMuted
 
     Row(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .height(61.dp)
-                .clip(
-                    RoundedCornerShape(999.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(61.dp)
+            .clip(RoundedCornerShape(999.dp))
+            .background(surface)
+            .border(
+                1.dp,
+                border,
+                RoundedCornerShape(999.dp)
+            )
+            .padding(
+                start = 13.dp,
+                end = 8.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(39.dp)
+                .clip(RoundedCornerShape(50))
+                .background(
+                    if (dark) Color.Black else Color(0xFFF0EDEF)
                 )
-                .background(surface)
                 .border(
                     1.dp,
                     border,
-                    RoundedCornerShape(999.dp)
-                )
-                .padding(
-                    start = 13.dp,
-                    end = 8.dp
+                    RoundedCornerShape(50)
                 ),
-        verticalAlignment =
-            Alignment.CenterVertically
-    ) {
-
-        Box(
-            modifier =
-                Modifier
-                    .size(39.dp)
-                    .clip(
-                        RoundedCornerShape(50)
-                    )
-                    .background(
-                        if (dark)
-                            Color.Black
-                        else
-                            Color(0xFFF0EDEF)
-                    )
-                    .border(
-                        1.dp,
-                        border,
-                        RoundedCornerShape(50)
-                    ),
-            contentAlignment =
-                Alignment.Center
+            contentAlignment = Alignment.Center
         ) {
-
             Icon(
-                painter =
-                    painterResource(
-                        R.drawable.diario
-                    ),
+                painter = painterResource(R.drawable.diario),
                 contentDescription = null,
-                tint =
-                    if (dark)
-                        Color.White
-                    else
-                        PinkDark,
-                modifier =
-                    Modifier.size(18.dp)
+                tint = if (dark) Color.White else PinkDark,
+                modifier = Modifier.size(18.dp)
             )
         }
 
         Spacer(
-            modifier =
-                Modifier.width(11.dp)
+            modifier = Modifier.width(11.dp)
         )
 
         Column(
-            modifier =
-                Modifier.weight(1f)
+            modifier = Modifier.weight(1f)
         ) {
-
             Text(
                 text = "Meu Diário",
                 color = text,
-fontSize = 15.sp
+                fontSize = 15.sp
             )
 
             Text(
@@ -806,44 +605,28 @@ fontSize = 15.sp
         }
 
         Row(
-            horizontalArrangement =
-                Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-
             DiarioTopButton(
                 dark = dark,
                 onClick = onDownload
             ) {
-
                 Icon(
-                    painter =
-                        painterResource(
-                            R.drawable.download
-                        ),
-                    contentDescription =
-                        "Baixar todas as páginas",
-                    modifier =
-                        Modifier.size(19.dp)
+                    painter = painterResource(R.drawable.download),
+                    contentDescription = "Baixar todas as páginas",
+                    modifier = Modifier.size(19.dp)
                 )
-
             }
 
             DiarioTopButton(
                 dark = dark,
                 onClick = onDelete
             ) {
-
                 Icon(
-                    painter =
-                        painterResource(
-                            R.drawable.lixeira
-                        ),
-                    contentDescription =
-                        "Apagar diário",
-                    modifier =
-                        Modifier.size(19.dp)
+                    painter = painterResource(R.drawable.lixeira),
+                    contentDescription = "Apagar diário",
+                    modifier = Modifier.size(19.dp)
                 )
-
             }
         }
     }
@@ -859,48 +642,31 @@ private fun DiarioTopButton(
     onClick: () -> Unit,
     content: @Composable () -> Unit
 ) {
-
     val background =
-        if (dark)
-            Color(0x0BFFFFFF)
-        else
-            Color(0x08000000)
+        if (dark) Color(0x0BFFFFFF) else Color(0x08000000)
 
     val border =
-        if (dark)
-            DarkBorder
-        else
-            LightBorder
+        if (dark) DarkBorder else LightBorder
 
     val tint =
-        if (dark)
-            Color(0xCCFFFFFF)
-        else
-            Color(0xCC292127)
+        if (dark) Color(0xCCFFFFFF) else Color(0xCC292127)
 
     IconButton(
         onClick = onClick,
-        modifier =
-            Modifier
-                .size(39.dp)
-                .clip(
-                    RoundedCornerShape(50)
-                )
-                .background(background)
-                .border(
-                    1.dp,
-                    border,
-                    RoundedCornerShape(50)
-                )
+        modifier = Modifier
+            .size(39.dp)
+            .clip(RoundedCornerShape(50))
+            .background(background)
+            .border(
+                1.dp,
+                border,
+                RoundedCornerShape(50)
+            )
     ) {
-
         CompositionLocalProvider(
-            androidx.compose.material3.LocalContentColor
-                provides tint
+            androidx.compose.material3.LocalContentColor provides tint
         ) {
-
             content()
-
         }
     }
 }
@@ -918,85 +684,47 @@ private fun DiarioBook(
     dark: Boolean,
     onTextChanged: (Int, String) -> Unit
 ) {
-
     Box(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
-        contentAlignment =
-            Alignment.Center
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        contentAlignment = Alignment.Center
     ) {
-
         Box(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(
-                        start = 4.dp,
-                        top = 8.dp
-                    )
-                    .clip(
-                        RoundedCornerShape(25.dp)
-                    )
-                    .background(
-                        if (dark)
-                            Color(0xFF0C0C10)
-                        else
-                            Color(0xFFE1DADD)
-                    )
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    start = 4.dp,
+                    top = 8.dp
+                )
+                .clip(RoundedCornerShape(25.dp))
+                .background(
+                    if (dark) Color(0xFF0C0C10) else Color(0xFFE1DADD)
+                )
         )
 
         Box(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(
-                        start = 1.dp,
-                        top = 4.dp
-                    )
-                    .clip(
-                        RoundedCornerShape(25.dp)
-                    )
-                    .background(
-                        if (dark)
-                            Color(0xFF151519)
-                        else
-                            Color(0xFFEDE7E9)
-                    )
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    start = 1.dp,
+                    top = 4.dp
+                )
+                .clip(RoundedCornerShape(25.dp))
+                .background(
+                    if (dark) Color(0xFF151519) else Color(0xFFEDE7E9)
+                )
         )
 
         CurrentPage(
-            text =
-                pages.getOrElse(
-                    currentPage
-                ) {
-                    ""
-                },
-
-            date =
-                dates.getOrElse(
-                    currentPage
-                ) {
-                    null
-                },
-
-            pageIndex =
-                currentPage,
-
-            dragOffset =
-                dragOffset,
-
-            dark =
-                dark,
-
-            onTextChanged =
-                {
-                    onTextChanged(
-                        currentPage,
-                        it
-                    )
-                }
+            text = pages.getOrElse(currentPage) { "" },
+            date = dates.getOrElse(currentPage) { null },
+            pageIndex = currentPage,
+            dragOffset = dragOffset,
+            dark = dark,
+            onTextChanged = {
+                onTextChanged(currentPage, it)
+            }
         )
     }
 }
@@ -1004,6 +732,7 @@ private fun DiarioBook(
 /* =========================================================
    PÁGINA
 ========================================================= */
+
 @Composable
 private fun CurrentPage(
     text: String,
@@ -1064,11 +793,16 @@ private fun CurrentPage(
                 horizontalArrangement = Arrangement.End
             ) {
                 TextButton(
-                    onClick = { editing = !editing }
+                    onClick = {
+                        editing = !editing
+                    }
                 ) {
                     Text(
-                        if (editing) "Visualizar Markdown"
-                        else "Editar Markdown"
+                        if (editing) {
+                            "Visualizar Markdown"
+                        } else {
+                            "Editar Markdown"
+                        }
                     )
                 }
             }
@@ -1098,20 +832,19 @@ private fun CurrentPage(
                                     fontSize = 15.sp
                                 )
                             }
+
                             innerTextField()
                         }
                     }
                 )
             } else {
-                androidx.compose.foundation.layout.Box(
+                Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState())
                 ) {
                     RichText {
-                        Markdown(
-                            content = text
-                        )
+                        Markdown(text)
                     }
                 }
             }
@@ -1128,85 +861,62 @@ private fun exportAllPages(
     pages: List<String>,
     dates: List<String?>
 ): Boolean {
-
-    val resolver =
-        context.contentResolver
+    val resolver = context.contentResolver
 
     var algumDownload = false
 
     pages.forEachIndexed { index, content ->
+        val number = String.format(
+            Locale.US,
+            "%02d",
+            index + 1
+        )
 
-        val number =
-            String.format(
-                Locale.US,
-                "%02d",
-                index + 1
+        val date = dates.getOrNull(index) ?: "Sem data"
+
+        val safeDate = date
+            .replace("/", "-")
+            .replace("\\", "-")
+
+        val fileName = "pagina-$number = $safeDate.txt"
+
+        val fileContent = "Dia ($date):\n\n$content"
+
+        val values = ContentValues().apply {
+            put(
+                MediaStore.Downloads.DISPLAY_NAME,
+                fileName
             )
 
-        val date =
-            dates.getOrNull(index)
-                ?: "Sem data"
-
-        val safeDate =
-            date
-                .replace("/", "-")
-                .replace("\\", "-")
-
-        val fileName =
-            "pagina-$number = $safeDate.txt"
-
-        val fileContent =
-            "Dia ($date):\n\n$content"
-
-        val values =
-            ContentValues().apply {
-
-                put(
-                    MediaStore.Downloads.DISPLAY_NAME,
-                    fileName
-                )
-
-                put(
-                    MediaStore.Downloads.MIME_TYPE,
-                    "text/plain"
-                )
-
-                put(
-                    MediaStore.Downloads.RELATIVE_PATH,
-                    Environment.DIRECTORY_DOWNLOADS
-                )
-            }
-
-        val uri =
-            resolver.insert(
-                MediaStore.Downloads.EXTERNAL_CONTENT_URI,
-                values
+            put(
+                MediaStore.Downloads.MIME_TYPE,
+                "text/plain"
             )
+
+            put(
+                MediaStore.Downloads.RELATIVE_PATH,
+                Environment.DIRECTORY_DOWNLOADS
+            )
+        }
+
+        val uri = resolver.insert(
+            MediaStore.Downloads.EXTERNAL_CONTENT_URI,
+            values
+        )
 
         if (uri != null) {
-
             try {
-
                 resolver
                     .openOutputStream(uri)
                     ?.use { output ->
-
                         output.write(
-                            fileContent.toByteArray(
-                                Charsets.UTF_8
-                            )
+                            fileContent.toByteArray(Charsets.UTF_8)
                         )
                     }
 
                 algumDownload = true
-
             } catch (_: Exception) {
-
-                resolver.delete(
-                    uri,
-                    null,
-                    null
-                )
+                resolver.delete(uri, null, null)
             }
         }
     }

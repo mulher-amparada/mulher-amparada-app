@@ -126,7 +126,7 @@ implementation("org.osmdroid:osmdroid-android:6.1.20")
 
 // Markdown — Compose RichText
 implementation 'com.halilibo.compose-richtext:richtext-ui-android:0.13.0'
-implementation 'com.halilibo.compose-richtext:richtext-markdown-android:0.13.0'
+implementation 'com.halilibo.compose-richtext:richtext-markdown:0.13.0'
 implementation 'com.halilibo.compose-richtext:richtext-commonmark-android:0.13.0'
 
 // Jetpack DataStore — armazenamento de preferências

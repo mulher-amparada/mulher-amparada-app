@@ -31,7 +31,7 @@ https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Pro
   width="100%"
 />
 
-# 🩸 Sofrimento das mulheres"
+# 🩸 Sofrimento das mulheres:
 
 <img
   src="https://github.com/mulher-amparada/mulher-amparada-app/blob/main/relatorios%2Fgraficos%2Fligue180-2019.png"

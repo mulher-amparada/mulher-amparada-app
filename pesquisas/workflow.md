@@ -2,28 +2,29 @@
 
 - **Arquivo de origem:** `.github/workflows/automations.yml`
 - **Arquivo gerado:** `.github/workflows/workflow.md`
-- **Jobs identificados:** 15
-- **Etapas identificadas:** 77
+- **Jobs identificados:** 16
+- **Etapas identificadas:** 83
 
 ## Tabela completa de jobs e etapas
 
 | ID do job | Nome | Runner | Dependências | Etapas |
 |---|---|---|---|---|
 | `build` | Compilar APK Kotlin | ubuntu-24.04 | Nenhuma | 1. Baixar código (`actions/checkout@v6`); 2. Verificar projeto — executa comandos; 3. Configurar Java 17 (`actions/setup-java@v6`); 4. Verificar Android SDK 37 — executa comandos; 5. Dar permissão ao Gradle — executa comandos; 6. Compilar APK — executa comandos; 7. Localizar APK — executa comandos; 8. Assinar APK — executa comandos; 9. Preparar APK da Release — executa comandos; 10. APK-Kotlin-Assinado (`actions/upload-artifact@v6`); 11. Calcular tamanho real do APK — executa comandos; 12. Calcular SHA-256 — executa comandos; 13. Atualizar APK no main — executa comandos; 14. Verificar Release — executa comandos; 15. Excluir APK antigo da Release — executa comandos; 16. Enviar APK para a Release — executa comandos; 17. Atualizar SHA-256 da Release — executa comandos; 18. Atualizar link, tamanho e SHA-256 no download.html — executa comandos; 19. Enviar download.html atualizado para o main — executa comandos; 20. Mostrar resumo — executa comandos |
+| `linguagens` | Analisar todas as linguagens | ubuntu-24.04 | `publicar-divulgacao` | 1. Baixar repositório completo (`actions/checkout@v6`); 2. Instalar cloc — executa comandos; 3. Analisar arquivos e linguagens — executa comandos; 4. Exibir relatório — executa comandos; 5. relatorio-linguagens (`actions/upload-artifact@v6`) |
 | `bot` | Bot e análise de dados em Julia | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar dependências do bot — executa comandos; 3. Compilar bot — executa comandos; 4. Executar Mulher Amparada Bot — executa comandos; 5. Instalar Julia (`julia-actions/setup-julia@v3`); 6. Instalar dependências Julia — executa comandos; 7. Executar análise de dados em Julia — executa comandos; 8. Preparar resultados do Mulher Amparada Bot — executa comandos; 9. resultados-ligue180 (`actions/upload-artifact@v6`) |
 | `build-site` | build-site | ubuntu-24.04 | `build` | 1. Checkout (`actions/checkout@v6`); 2. Setup Pages (`actions/configure-pages@v6`); 3. Build with Jekyll (`actions/jekyll-build-pages@v1`); 4. Upload Pages artifact (`actions/upload-pages-artifact@v5`) |
 | `deploy` | deploy | ubuntu-24.04 | `build-site` | 1. Deploy to GitHub Pages (`actions/deploy-pages@v5`) |
 | `atualizar-commits` | atualizar-commits | ubuntu-24.04 | `deploy` | 1. Baixar todo o histórico (`actions/checkout@v6`); 2. Atualizar total de commits — executa comandos; 3. arquivo-readme (`actions/upload-artifact@v6`) |
 | `sincronizar-devto` | Sincronizar README com DEV.to | ubuntu-24.04 | `salvar-na-main` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. Atualizar artigo no DEV.to — executa comandos |
-| `sitemap` | Gerar Sitemap | ubuntu-24.04 | `atualizar-commits` | 1. Checkout (`actions/checkout@v6`); 2. Gerar Sitemap (`cicirello/generate-sitemap@v1`); 3. arquivo-sitemap (`actions/upload-artifact@v6`) |
-| `indexnow` | IndexNow | ubuntu-24.04 | `deploy`, `bot` | 1. Enviar Sitemap ao IndexNow (`bojieyang/indexnow-action@v3`) |
+| `sitemap` | Gerar Sitemap | ubuntu-24.04 | `deploy` | 1. Checkout (`actions/checkout@v6`); 2. Gerar Sitemap (`cicirello/generate-sitemap@v1`); 3. arquivo-sitemap (`actions/upload-artifact@v6`) |
+| `indexnow` | IndexNow | ubuntu-24.04 | `deploy`, `bot`, `linguagens`, `publicar-divulgacao` | 1. Enviar Sitemap ao IndexNow (`bojieyang/indexnow-action@v3`) |
 | `lighthouse` | Lighthouse | ubuntu-24.04 | `deploy` | 1. Lighthouse (`treosh/lighthouse-ci-action@v12`) |
-| `publicar-divulgacao` | Publicar Kit de Divulgação | ubuntu-24.04 | `lighthouse` | 1. Baixar repositório (`actions/checkout@v6`); 2. Configurar Node.js (`actions/setup-node@v6`); 3. Criar pacote de divulgação — executa comandos; 4. Kit de Divulgação (`softprops/action-gh-release@v3`) |
+| `publicar-divulgacao` | Publicar Kit de Divulgação | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Configurar Node.js (`actions/setup-node@v6`); 3. Criar pacote de divulgação — executa comandos; 4. Kit de Divulgação (`softprops/action-gh-release@v3`) |
 | `observatorio` | Observatório | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório completo (`actions/checkout@v6`); 2. Instalar dependências do Observatório — executa comandos; 3. Compilar observatório — executa comandos; 4. Executar observatório — executa comandos; 5. Verificar todos os mapas gerados — executa comandos; 6. observatorio (`actions/upload-artifact@v6`) |
 | `atualizar-footer` | Atualizar Footer com README | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Python (`actions/setup-python@v6`); 3. Instalar dependência Python — executa comandos; 4. Atualizar footer com README — executa comandos; 5. arquivo-footer (`actions/upload-artifact@v6`) |
 | `atualizar-relatorio-commits` | Atualizar relatório de commits | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Ruby (`ruby/setup-ruby@v1`); 3. Gerar relatório de commits — executa comandos; 4. arquivos-relatorio-commits (`actions/upload-artifact@v6`) |
 | `pesquisar-projeto` | Documentar workflow YAML | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar PHP — executa comandos; 3. Gerar documentação do workflow — executa comandos; 4. arquivos-pesquisas (`actions/upload-artifact@v6`) |
-| `salvar-na-main` | Salvar todos os arquivos na main | ubuntu-24.04 | `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`, `observatorio`, `bot` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. arquivo-readme (`actions/download-artifact@v7`); 3. arquivo-sitemap (`actions/download-artifact@v7`); 4. arquivo-footer (`actions/download-artifact@v7`); 5. arquivos-relatorio-commits (`actions/download-artifact@v7`); 6. arquivos-pesquisas (`actions/download-artifact@v7`); 7. observatorio (`actions/download-artifact@v7`); 8. resultados-ligue180 (`actions/download-artifact@v7`); 9. Reunir arquivos gerados — executa comandos; 10. Salvar todas as alterações em um commit — executa comandos |
+| `salvar-na-main` | Salvar todos os arquivos na main | ubuntu-24.04 | `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`, `observatorio`, `bot`, `linguagens` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. arquivo-readme (`actions/download-artifact@v7`); 3. arquivo-sitemap (`actions/download-artifact@v7`); 4. arquivo-footer (`actions/download-artifact@v7`); 5. arquivos-relatorio-commits (`actions/download-artifact@v7`); 6. arquivos-pesquisas (`actions/download-artifact@v7`); 7. observatorio (`actions/download-artifact@v7`); 8. resultados-ligue180 (`actions/download-artifact@v7`); 9. relatorio-linguagens (`actions/download-artifact@v7`); 10. Reunir arquivos gerados — executa comandos; 11. Salvar todas as alterações em um commit — executa comandos |
 
 ## Grafo completo de dependências
 
@@ -32,6 +33,7 @@ As setas representam as dependências declaradas em `needs` no YAML original.
 ```mermaid
 flowchart TD
     job_build["Compilar APK Kotlin"]
+    job_linguagens["Analisar todas as linguagens"]
     job_bot["Bot e análise de dados em Julia"]
     job_build_site["build-site"]
     job_deploy["deploy"]
@@ -46,15 +48,17 @@ flowchart TD
     job_atualizar_relatorio_commits["Atualizar relatório de commits"]
     job_pesquisar_projeto["Documentar workflow YAML"]
     job_salvar_na_main["Salvar todos os arquivos na main"]
+    job_publicar_divulgacao --> job_linguagens
     job_build --> job_build_site
     job_build_site --> job_deploy
     job_deploy --> job_atualizar_commits
     job_salvar_na_main --> job_sincronizar_devto
-    job_atualizar_commits --> job_sitemap
+    job_deploy --> job_sitemap
     job_deploy --> job_indexnow
     job_bot --> job_indexnow
+    job_linguagens --> job_indexnow
+    job_publicar_divulgacao --> job_indexnow
     job_deploy --> job_lighthouse
-    job_lighthouse --> job_publicar_divulgacao
     job_atualizar_commits --> job_observatorio
     job_atualizar_commits --> job_atualizar_footer
     job_atualizar_commits --> job_atualizar_relatorio_commits
@@ -65,6 +69,7 @@ flowchart TD
     job_pesquisar_projeto --> job_salvar_na_main
     job_observatorio --> job_salvar_na_main
     job_bot --> job_salvar_na_main
+    job_linguagens --> job_salvar_na_main
 ```
 
 ## Detalhamento dos jobs
@@ -97,6 +102,20 @@ flowchart TD
 | 18 | Atualizar link, tamanho e SHA-256 no download.html | — | \| |
 | 19 | Enviar download.html atualizado para o main | — | \| |
 | 20 | Mostrar resumo | — | \| |
+
+### Analisar todas as linguagens
+
+- **ID:** `linguagens`
+- **Runner:** `ubuntu-24.04`
+- **Dependências:** `publicar-divulgacao`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| 1 | Baixar repositório completo | `actions/checkout@v6` | — |
+| 2 | Instalar cloc | — | \| |
+| 3 | Analisar arquivos e linguagens | — | \| |
+| 4 | Exibir relatório | — | \| |
+| 5 | relatorio-linguagens | `actions/upload-artifact@v6` | — |
 
 ### Bot e análise de dados em Julia
 
@@ -166,7 +185,7 @@ flowchart TD
 
 - **ID:** `sitemap`
 - **Runner:** `ubuntu-24.04`
-- **Dependências:** `atualizar-commits`
+- **Dependências:** `deploy`
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
@@ -178,7 +197,7 @@ flowchart TD
 
 - **ID:** `indexnow`
 - **Runner:** `ubuntu-24.04`
-- **Dependências:** `deploy`, `bot`
+- **Dependências:** `deploy`, `bot`, `linguagens`, `publicar-divulgacao`
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
@@ -198,7 +217,7 @@ flowchart TD
 
 - **ID:** `publicar-divulgacao`
 - **Runner:** `ubuntu-24.04`
-- **Dependências:** `lighthouse`
+- **Dependências:** Nenhuma
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
@@ -266,7 +285,7 @@ flowchart TD
 
 - **ID:** `salvar-na-main`
 - **Runner:** `ubuntu-24.04`
-- **Dependências:** `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`, `observatorio`, `bot`
+- **Dependências:** `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`, `observatorio`, `bot`, `linguagens`
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
@@ -278,8 +297,9 @@ flowchart TD
 | 6 | arquivos-pesquisas | `actions/download-artifact@v7` | — |
 | 7 | observatorio | `actions/download-artifact@v7` | — |
 | 8 | resultados-ligue180 | `actions/download-artifact@v7` | — |
-| 9 | Reunir arquivos gerados | — | \| |
-| 10 | Salvar todas as alterações em um commit | — | \| |
+| 9 | relatorio-linguagens | `actions/download-artifact@v7` | — |
+| 10 | Reunir arquivos gerados | — | \| |
+| 11 | Salvar todas as alterações em um commit | — | \| |
 
 ## YAML original completo
 
@@ -988,6 +1008,84 @@ jobs:
             >> "$GITHUB_STEP_SUMMARY"
 
   # =========================================================
+  # ANALISAR TODAS AS LINGUAGENS DE PROGRAMAÇÃO
+  # =========================================================
+
+  linguagens:
+    name: Analisar todas as linguagens
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    needs: publicar-divulgacao
+    
+    steps:
+      - name: Baixar repositório completo
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Instalar cloc
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y cloc
+
+      - name: Analisar arquivos e linguagens
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p relatorios
+
+          echo "Listando arquivos rastreados pelo Git..."
+
+          git ls-files > /tmp/arquivos-repositorio.txt
+
+          if [ ! -s /tmp/arquivos-repositorio.txt ]; then
+            echo "::error::Nenhum arquivo rastreado pelo Git foi encontrado."
+            exit 1
+          fi
+
+          echo "Quantidade de caminhos listados:"
+          wc -l < /tmp/arquivos-repositorio.txt
+
+          echo "Gerando relatório JSON..."
+
+          cloc \
+            --list-file=/tmp/arquivos-repositorio.txt \
+            --json \
+            --out=relatorios/linguagens.json
+
+          echo "Gerando relatório Markdown..."
+
+          cloc \
+            --list-file=/tmp/arquivos-repositorio.txt \
+            --md \
+            --out=relatorios/linguagens.md
+
+          test -s relatorios/linguagens.json
+          test -s relatorios/linguagens.md
+
+          python3 -m json.tool \
+            relatorios/linguagens.json \
+            > /dev/null
+
+          echo "Relatórios gerados com sucesso."
+
+      - name: Exibir relatório
+        run: |
+          cat relatorios/linguagens.md
+
+      - name: Enviar relatórios como artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: relatorio-linguagens
+          path: |
+            relatorios/linguagens.json
+            relatorios/linguagens.md
+          if-no-files-found: error
+          retention-days: 7
+          
+  # =========================================================
   # JEKYLL / GITHUB PAGES
   # =========================================================
 
@@ -1291,7 +1389,7 @@ jobs:
   sitemap:
     name: Gerar Sitemap
     runs-on: ubuntu-24.04
-    needs: atualizar-commits
+    needs: deploy
 
     steps:
       - name: Checkout
@@ -1323,6 +1421,8 @@ jobs:
     needs:
       - deploy
       - bot
+      - linguagens
+      - publicar-divulgacao
 
     steps:
       - name: Enviar Sitemap ao IndexNow
@@ -1360,7 +1460,7 @@ jobs:
   publicar-divulgacao:
     name: Publicar Kit de Divulgação
     runs-on: ubuntu-24.04
-    needs: lighthouse
+    
 
     steps:
       - name: Baixar repositório
@@ -1598,6 +1698,7 @@ jobs:
 
           
 
+  
   salvar-na-main:
     name: Salvar todos os arquivos na main
     runs-on: ubuntu-24.04
@@ -1610,6 +1711,7 @@ jobs:
       - pesquisar-projeto
       - observatorio
       - bot
+      - linguagens
 
     permissions:
       contents: write
@@ -1662,7 +1764,13 @@ jobs:
         with:
           name: resultados-ligue180
           path: artefatos/resultados
-          
+
+      - name: Baixar relatório de linguagens
+        uses: actions/download-artifact@v7
+        with:
+          name: relatorio-linguagens
+          path: artefatos/linguagens
+
       - name: Reunir arquivos gerados
         shell: bash
         run: |
@@ -1683,7 +1791,7 @@ jobs:
 
           # DIRETÓRIOS
           mkdir -p commits pesquisas docs/observatorio
-          mkdir -p dados/processados relatorios/graficos
+          mkdir -p dados/processados relatorios/graficos relatorios
 
           # RELATÓRIO DE COMMITS
           cp -a artefatos/commits/. commits/
@@ -1774,6 +1882,25 @@ jobs:
           cp "$BOT_PNG" \
             relatorios/graficos/ligue180-2019.png
 
+          # RELATÓRIOS DE LINGUAGENS
+          LANG_JSON="artefatos/linguagens/linguagens.json"
+          LANG_MD="artefatos/linguagens/linguagens.md"
+
+          if [ ! -s "$LANG_JSON" ]; then
+            echo "::error::Relatório JSON de linguagens ausente ou vazio."
+            exit 1
+          fi
+
+          if [ ! -s "$LANG_MD" ]; then
+            echo "::error::Relatório Markdown de linguagens ausente ou vazio."
+            exit 1
+          fi
+
+          python3 -m json.tool "$LANG_JSON" > /dev/null
+
+          cp "$LANG_JSON" relatorios/linguagens.json
+          cp "$LANG_MD" relatorios/linguagens.md
+
           # VALIDAR ARQUIVOS PRINCIPAIS
           test -s README.md
           test -s sitemap.xml
@@ -1781,6 +1908,8 @@ jobs:
           test -s pesquisas/workflow.md
           test -s dados/processados/ligue180-2019-processado.csv
           test -s relatorios/graficos/ligue180-2019.png
+          test -s relatorios/linguagens.json
+          test -s relatorios/linguagens.md
 
           if ! find docs/observatorio \
             -maxdepth 1 \
@@ -1827,6 +1956,10 @@ jobs:
           ls -lh dados/processados/ligue180-2019-processado.csv
           ls -lh relatorios/graficos/ligue180-2019.png
 
+          echo "Relatórios de linguagens:"
+          ls -lh relatorios/linguagens.json
+          ls -lh relatorios/linguagens.md
+
           echo "Quantidade de mapas: $COPIED"
           echo "Todos os arquivos foram reunidos."
 
@@ -1850,7 +1983,9 @@ jobs:
             pesquisas/ \
             docs/observatorio/ \
             dados/processados/ligue180-2019-processado.csv \
-            relatorios/graficos/ligue180-2019.png
+            relatorios/graficos/ligue180-2019.png \
+            relatorios/linguagens.json \
+            relatorios/linguagens.md
 
           if git diff --cached --quiet; then
             echo "Nenhuma alteração para salvar."
@@ -1880,4 +2015,6 @@ jobs:
           echo "- docs/observatorio/observatorio-*.png"
           echo "- dados/processados/ligue180-2019-processado.csv"
           echo "- relatorios/graficos/ligue180-2019.png"
+          echo "- relatorios/linguagens.json"
+          echo "- relatorios/linguagens.md"
 ````

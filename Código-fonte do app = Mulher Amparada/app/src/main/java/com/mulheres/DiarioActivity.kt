@@ -1010,22 +1010,26 @@ private fun DiarioBook(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 4.dp, top = 8.dp)
+                .padding(
+                    start = 4.dp,
+                    top = 8.dp
+                )
                 .clip(RoundedCornerShape(25.dp))
                 .background(
-                    if (dark) Color(0xFF0C0C10)
-                    else Color(0xFFE1DADD)
+                    if (dark) Color(0xFF0C0C10) else Color(0xFFE1DADD)
                 )
         )
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 1.dp, top = 4.dp)
+                .padding(
+                    start = 1.dp,
+                    top = 4.dp
+                )
                 .clip(RoundedCornerShape(25.dp))
                 .background(
-                    if (dark) Color(0xFF151519)
-                    else Color(0xFFEDE7E9)
+                    if (dark) Color(0xFF151519) else Color(0xFFEDE7E9)
                 )
         )
 
@@ -1039,19 +1043,9 @@ private fun DiarioBook(
                 onTextChanged(currentPage, it)
             }
         )
-
-        Box(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .width(1.dp)
-                .fillMaxHeight(0.96f)
-                .background(
-                    if (dark) Color.White.copy(alpha = 0.12f)
-                    else Color.Black.copy(alpha = 0.12f)
-                )
-        )
     }
 }
+
 /* =========================================================
    PÁGINA
 ========================================================= */
@@ -1103,94 +1097,77 @@ private fun CurrentPage(
             )
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+    modifier = Modifier.fillMaxSize()
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End
+    ) {
+        TextButton(
+            onClick = {
+                editing = !editing
+            }
         ) {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                TextButton(
-                    onClick = {
-                        editing = !editing
-                    }
-                ) {
-                    Text(
-                        text = if (editing) {
-                            "Visualizar Markdown"
-                        } else {
-                            "Editar Markdown"
-                        },
-                        color = pageText,
-                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
-                    )
-                }
-            }
-
             Text(
-                text = "Página ${pageIndex + 1} • ${date ?: "Sem data"}",
-                color = pageText,
-                fontSize = 11.sp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp),
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                if (editing) {
+                    "Visualizar Markdown"
+                } else {
+                    "Editar Markdown"
+                }
             )
+        }
+    }
 
-            if (editing) {
-                BasicTextField(
-                    value = text,
-                    onValueChange = onTextChanged,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState()),
-                    textStyle = TextStyle(
-                        color = pageText,
-                        fontSize = 15.sp,
-                        lineHeight = 28.sp,
-                        letterSpacing = 0.1.sp,
-                        textAlign = androidx.compose.ui.text.style.TextAlign.Start
-                    ),
-                    cursorBrush = SolidColor(
-                        if (dark) Pink else PinkDark
-                    ),
-                    decorationBox = { innerTextField ->
-                        Box(
-                            modifier = Modifier.fillMaxWidth(),
-                            contentAlignment = Alignment.TopStart
-                        ) {
-                            if (text.isEmpty()) {
-                                Text(
-                                    text = "Digite o que está preso no seu coração...",
-                                    color = pageText.copy(alpha = 0.5f),
-                                    fontSize = 15.sp,
-                                    lineHeight = 28.sp,
-                                    textAlign = androidx.compose.ui.text.style.TextAlign.Start,
-                                    modifier = Modifier.fillMaxWidth()
-                                )
-                            }
+    Text(
+        text = "Página ${pageIndex + 1} • ${date ?: "Sem data"}",
+        color = pageText,
+        fontSize = 11.sp
+    )
 
-                            innerTextField()
-                        }
+    if (editing) {
+        BasicTextField(
+            value = text,
+            onValueChange = onTextChanged,
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            textStyle = TextStyle(
+                color = pageText,
+                fontSize = 15.sp,
+                lineHeight = 28.sp,
+                letterSpacing = 0.1.sp
+            ),
+            cursorBrush = SolidColor(
+                if (dark) Pink else PinkDark
+            ),
+            decorationBox = { innerTextField ->
+                Box {
+                    if (text.isEmpty()) {
+                        Text(
+                            text = "Digite seu Markdown aqui...",
+                            color = pageText.copy(alpha = 0.5f),
+                            fontSize = 15.sp
+                        )
                     }
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState()),
-                    contentAlignment = Alignment.TopCenter
-                ) {
-                    MarkdownPreview(
-                        text = text,
-                        color = pageText,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+
+                    innerTextField()
                 }
             }
+        )
+    } else {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            MarkdownPreview(
+                text = text,
+                color = pageText,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
+    }
+}
     }
 }
 

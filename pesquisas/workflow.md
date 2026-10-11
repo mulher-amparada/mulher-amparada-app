@@ -16,7 +16,7 @@
 | `atualizar-commits` | atualizar-commits | ubuntu-24.04 | `deploy` | 1. Baixar todo o histórico (`actions/checkout@v6`); 2. Atualizar total de commits — executa comandos; 3. arquivo-readme (`actions/upload-artifact@v6`) |
 | `sincronizar-devto` | Sincronizar README com DEV.to | ubuntu-24.04 | `salvar-na-main` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. Atualizar artigo no DEV.to — executa comandos |
 | `sitemap` | Gerar Sitemap | ubuntu-24.04 | `atualizar-commits` | 1. Checkout (`actions/checkout@v6`); 2. Gerar Sitemap (`cicirello/generate-sitemap@v1`); 3. arquivo-sitemap (`actions/upload-artifact@v6`) |
-| `indexnow` | IndexNow | ubuntu-24.04 | `deploy` | 1. Enviar Sitemap ao IndexNow (`bojieyang/indexnow-action@v3`) |
+| `indexnow` | IndexNow | ubuntu-24.04 | `deploy`, `bot` | 1. Enviar Sitemap ao IndexNow (`bojieyang/indexnow-action@v3`) |
 | `lighthouse` | Lighthouse | ubuntu-24.04 | `deploy` | 1. Lighthouse (`treosh/lighthouse-ci-action@v12`) |
 | `publicar-divulgacao` | Publicar Kit de Divulgação | ubuntu-24.04 | `lighthouse` | 1. Baixar repositório (`actions/checkout@v6`); 2. Configurar Node.js (`actions/setup-node@v6`); 3. Criar pacote de divulgação — executa comandos; 4. Kit de Divulgação (`softprops/action-gh-release@v3`) |
 | `observatorio` | Observatório | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório completo (`actions/checkout@v6`); 2. Instalar dependências do Observatório — executa comandos; 3. Compilar observatório — executa comandos; 4. Executar observatório — executa comandos; 5. Verificar todos os mapas gerados — executa comandos; 6. observatorio (`actions/upload-artifact@v6`) |
@@ -52,6 +52,7 @@ flowchart TD
     job_salvar_na_main --> job_sincronizar_devto
     job_atualizar_commits --> job_sitemap
     job_deploy --> job_indexnow
+    job_bot --> job_indexnow
     job_deploy --> job_lighthouse
     job_lighthouse --> job_publicar_divulgacao
     job_atualizar_commits --> job_observatorio
@@ -177,7 +178,7 @@ flowchart TD
 
 - **ID:** `indexnow`
 - **Runner:** `ubuntu-24.04`
-- **Dependências:** `deploy`
+- **Dependências:** `deploy`, `bot`
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
@@ -1319,7 +1320,9 @@ jobs:
   indexnow:
     name: IndexNow
     runs-on: ubuntu-24.04
-    needs: deploy
+    needs:
+      - deploy
+      - bot
 
     steps:
       - name: Enviar Sitemap ao IndexNow

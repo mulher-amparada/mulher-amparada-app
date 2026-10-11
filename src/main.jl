@@ -32,89 +32,134 @@ function executar()
 
     arquivo = joinpath(BRUTOS, "ligue180-2019.csv")
 
-    # 1. Baixar o arquivo original
+    # -----------------------------------------------------
+    # 1. BAIXAR O ARQUIVO ORIGINAL
+    # -----------------------------------------------------
+
     println("\n[1/4] Baixando CSV oficial...")
+
     Downloads.download(FONTE, arquivo)
 
     tamanho = filesize(arquivo)
-    tamanho > 100 || error("O arquivo baixado está vazio ou incompleto.")
+
+    tamanho > 100 ||
+        error("O arquivo baixado está vazio ou incompleto.")
 
     println("Arquivo recebido: ", tamanho, " bytes")
 
-    # 2. Localizar a tabela após o cabeçalho explicativo
+    # -----------------------------------------------------
+    # 2. LOCALIZAR E VALIDAR A TABELA
+    # -----------------------------------------------------
+
     println("\n[2/4] Lendo e validando os dados...")
 
     linhas = readlines(arquivo)
+
     cabecalho = findfirst(
         linha -> occursin(",UF,Jan,Fev,Mar,Abr", linha),
         linhas
     )
 
     isnothing(cabecalho) &&
-        error("Não foi possível localizar o cabeçalho esperado.")
+        error(
+            "Cabeçalho esperado não encontrado. " *
+            "A fonte pode ter mudado ou o download não contém CSV."
+        )
 
     tabela = CSV.read(
         IOBuffer(join(linhas[cabecalho:end], "\n")),
         DataFrame;
-        silencewarnings = true
+        on_error = :collect
     )
 
-    coluna_categoria = findfirst(==("UF"), names(tabela))
-    isnothing(coluna_categoria) &&
-        error("A coluna de categorias não foi encontrada.")
+    println("Colunas encontradas:")
+    println(names(tabela))
 
-    coluna_total = findfirst(==("Total 2019"), names(tabela))
+    coluna_categoria = findfirst(
+        nome -> strip(nome) == "UF",
+        names(tabela)
+    )
+
+    isnothing(coluna_categoria) &&
+        error("A coluna de categorias 'UF' não foi encontrada.")
+
+    coluna_total = findfirst(
+        nome -> strip(nome) == "Total 2019",
+        names(tabela)
+    )
+
     isnothing(coluna_total) &&
-        error("A coluna de totais não foi encontrada.")
+        error("A coluna de totais 'Total 2019' não foi encontrada.")
+
+    # -----------------------------------------------------
+    # 3. PROCESSAR E EXPORTAR OS DADOS
+    # -----------------------------------------------------
 
     categorias = String[]
     totais = Int[]
 
     for linha in eachrow(tabela)
-        categoria = strip(string(linha[coluna_categoria]))
-        valor = strip(string(linha[coluna_total]))
+        valor_categoria = linha[coluna_categoria]
+        valor_total = linha[coluna_total]
 
-        if isempty(categoria) || ismissing(linha[coluna_categoria])
+        if ismissing(valor_categoria) || ismissing(valor_total)
             continue
         end
 
-        if isempty(valor) || valor == "N/A" ||
-           ismissing(linha[coluna_total])
+        categoria = strip(string(valor_categoria))
+        valor = strip(string(valor_total))
+
+        if isempty(categoria) || isempty(valor)
             continue
         end
 
-        # Os valores publicados usam vírgula como separador
-        # de milhares, por exemplo: "3,256".
+        if uppercase(valor) in ("N/A", "NA", "NULL", "-")
+            continue
+        end
+
+        # Interpretar números com separador de milhares.
         valor_limpo = replace(valor, "," => "")
 
         total = tryparse(Int, valor_limpo)
+
         isnothing(total) && continue
 
+        # Ignorar linhas que sejam rótulos ou totais gerais
+        # repetidos, caso estejam presentes na fonte.
         push!(categorias, categoria)
         push!(totais, total)
     end
 
     isempty(categorias) &&
-        error("Nenhuma categoria válida foi encontrada.")
+        error(
+            "Nenhuma linha válida foi encontrada. " *
+            "Confira o formato e os cabeçalhos do CSV."
+        )
 
     resultado = DataFrame(
         categoria = categorias,
         total_2019 = totais
     )
 
-    # 3. Exportar dados processados
-    println("\n[3/4] Salvando CSV processado...")
-
-    CSV.write(
-        joinpath(PROCESSADOS, "ligue180-2019-processado.csv"),
-        resultado
+    arquivo_processado = joinpath(
+        PROCESSADOS,
+        "ligue180-2019-processado.csv"
     )
 
-    # 4. Criar gráfico
+    CSV.write(arquivo_processado, resultado)
+
+    println("CSV processado: ", arquivo_processado)
+    println("Linhas processadas: ", nrow(resultado))
+
+    # -----------------------------------------------------
+    # 4. GERAR O GRÁFICO
+    # -----------------------------------------------------
+
     println("\n[4/4] Gerando gráfico...")
 
     ordem = sortperm(resultado.total_2019; rev = true)
     quantidade = min(15, length(ordem))
+
     selecionados = resultado[ordem[1:quantidade], :]
 
     grafico = bar(
@@ -126,25 +171,44 @@ function executar()
         legend = false,
         size = (1200, 700),
         xrotation = 45,
-        bottom_margin = 12Plots.mm
+        bottom_margin = 12 * Plots.mm
     )
 
-    savefig(
-        grafico,
-        joinpath(GRAFICOS, "ligue180-2019.png")
+    arquivo_grafico = joinpath(
+        GRAFICOS,
+        "ligue180-2019.png"
     )
 
-    println("\nConcluído!")
+    savefig(grafico, arquivo_grafico)
+
+    println("Gráfico salvo: ", arquivo_grafico)
+
+    # -----------------------------------------------------
+    # RESUMO FINAL
+    # -----------------------------------------------------
+
+    println("\n========================================")
+    println(" PROCESSAMENTO CONCLUÍDO")
+    println("========================================")
+    println("Fonte: Ligue 180")
+    println("Período: 2019")
     println("Categorias processadas: ", nrow(resultado))
     println("CSV: dados/processados/ligue180-2019-processado.csv")
     println("Gráfico: relatorios/graficos/ligue180-2019.png")
     println("Fim: ", Dates.now())
 end
 
+# =========================================================
+# EXECUÇÃO E TRATAMENTO DE ERROS
+# =========================================================
+
 try
     executar()
 catch erro
+    println(stderr, "\nERRO NO PROCESSAMENTO DOS DADOS:")
+
     showerror(stderr, erro, catch_backtrace())
     println(stderr)
+
     exit(1)
 end

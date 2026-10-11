@@ -2,7 +2,7 @@
 
 - **Arquivo de origem:** `.github/workflows/automations.yml`
 - **Arquivo gerado:** `.github/workflows/workflow.md`
-- **Jobs identificados:** 16
+- **Jobs identificados:** 29
 - **Etapas identificadas:** 83
 
 ## Tabela completa de jobs e etapas
@@ -14,10 +14,23 @@
 | `bot` | Bot e análise de dados em Julia | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar dependências do bot — executa comandos; 3. Compilar bot — executa comandos; 4. Executar Mulher Amparada Bot — executa comandos; 5. Instalar Julia (`julia-actions/setup-julia@v3`); 6. Instalar dependências Julia — executa comandos; 7. Executar análise de dados em Julia — executa comandos; 8. Preparar resultados do Mulher Amparada Bot — executa comandos; 9. resultados-ligue180 (`actions/upload-artifact@v6`) |
 | `build-site` | build-site | ubuntu-24.04 | `build` | 1. Checkout (`actions/checkout@v6`); 2. Setup Pages (`actions/configure-pages@v6`); 3. Build with Jekyll (`actions/jekyll-build-pages@v1`); 4. Upload Pages artifact (`actions/upload-pages-artifact@v5`) |
 | `deploy` | deploy | ubuntu-24.04 | `build-site` | 1. Deploy to GitHub Pages (`actions/deploy-pages@v5`) |
+| `ler-readme` | Ler e processar o README | ubuntu-24.04 | Nenhuma | Nenhuma identificada |
+| `analisar-com-ia` | Analisar README com inteligência artificial | ubuntu-24.04 | `ler-readme` | Nenhuma identificada |
+| `pesquisar-conscientizacao` | Pesquisar imagens de conscientização | ubuntu-24.04 | `analisar-com-ia` | Nenhuma identificada |
+| `pesquisar-direitos` | Pesquisar imagens sobre direitos das mulheres | ubuntu-24.04 | `pesquisar-conscientizacao` | Nenhuma identificada |
+| `pesquisar-acolhimento` | Pesquisar imagens de acolhimento e apoio | ubuntu-24.04 | `pesquisar-direitos` | Nenhuma identificada |
+| `pesquisar-seguranca` | Pesquisar imagens de segurança e proteção | ubuntu-24.04 | `pesquisar-acolhimento` | Nenhuma identificada |
+| `pesquisar-igualdade` | Pesquisar imagens sobre igualdade de gênero | ubuntu-24.04 | `pesquisar-seguranca` | Nenhuma identificada |
+| `pesquisar-prevencao` | Pesquisar imagens de prevenção à violência | ubuntu-24.04 | `pesquisar-igualdade` | Nenhuma identificada |
+| `validar-imagens` | Validar imagens e licenças | ubuntu-24.04 | `pesquisar-prevencao` | Nenhuma identificada |
+| `remover-duplicatas` | Remover imagens duplicadas | ubuntu-24.04 | `validar-imagens` | Nenhuma identificada |
+| `gerar-catalogo` | Gerar catálogo de imagens e créditos | ubuntu-24.04 | `remover-duplicatas` | Nenhuma identificada |
+| `organizar-pastas` | Organizar imagens por categoria | ubuntu-24.04 | `gerar-catalogo` | Nenhuma identificada |
+| `publicar-na-main` | Publicar acervo visual na main | ubuntu-24.04 | `organizar-pastas` | Nenhuma identificada |
 | `atualizar-commits` | atualizar-commits | ubuntu-24.04 | `deploy` | 1. Baixar todo o histórico (`actions/checkout@v6`); 2. Atualizar total de commits — executa comandos; 3. arquivo-readme (`actions/upload-artifact@v6`) |
 | `sincronizar-devto` | Sincronizar README com DEV.to | ubuntu-24.04 | `salvar-na-main` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. Atualizar artigo no DEV.to — executa comandos |
 | `sitemap` | Gerar Sitemap | ubuntu-24.04 | `deploy` | 1. Checkout (`actions/checkout@v6`); 2. Gerar Sitemap (`cicirello/generate-sitemap@v1`); 3. arquivo-sitemap (`actions/upload-artifact@v6`) |
-| `indexnow` | IndexNow | ubuntu-24.04 | `deploy`, `bot`, `linguagens`, `publicar-divulgacao` | 1. Enviar Sitemap ao IndexNow (`bojieyang/indexnow-action@v3`) |
+| `indexnow` | IndexNow | ubuntu-24.04 | `deploy`, `bot`, `linguagens`, `publicar-divulgacao`, `atualizar-commits` | 1. Enviar Sitemap ao IndexNow (`bojieyang/indexnow-action@v3`) |
 | `lighthouse` | Lighthouse | ubuntu-24.04 | `deploy` | 1. Lighthouse (`treosh/lighthouse-ci-action@v12`) |
 | `publicar-divulgacao` | Publicar Kit de Divulgação | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Configurar Node.js (`actions/setup-node@v6`); 3. Criar pacote de divulgação — executa comandos; 4. Kit de Divulgação (`softprops/action-gh-release@v3`) |
 | `observatorio` | Observatório | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório completo (`actions/checkout@v6`); 2. Instalar dependências do Observatório — executa comandos; 3. Compilar observatório — executa comandos; 4. Executar observatório — executa comandos; 5. Verificar todos os mapas gerados — executa comandos; 6. observatorio (`actions/upload-artifact@v6`) |
@@ -37,6 +50,19 @@ flowchart TD
     job_bot["Bot e análise de dados em Julia"]
     job_build_site["build-site"]
     job_deploy["deploy"]
+    job_ler_readme["Ler e processar o README"]
+    job_analisar_com_ia["Analisar README com inteligência artificial"]
+    job_pesquisar_conscientizacao["Pesquisar imagens de conscientização"]
+    job_pesquisar_direitos["Pesquisar imagens sobre direitos das mulheres"]
+    job_pesquisar_acolhimento["Pesquisar imagens de acolhimento e apoio"]
+    job_pesquisar_seguranca["Pesquisar imagens de segurança e proteção"]
+    job_pesquisar_igualdade["Pesquisar imagens sobre igualdade de gênero"]
+    job_pesquisar_prevencao["Pesquisar imagens de prevenção à violência"]
+    job_validar_imagens["Validar imagens e licenças"]
+    job_remover_duplicatas["Remover imagens duplicadas"]
+    job_gerar_catalogo["Gerar catálogo de imagens e créditos"]
+    job_organizar_pastas["Organizar imagens por categoria"]
+    job_publicar_na_main["Publicar acervo visual na main"]
     job_atualizar_commits["atualizar-commits"]
     job_sincronizar_devto["Sincronizar README com DEV.to"]
     job_sitemap["Gerar Sitemap"]
@@ -51,6 +77,18 @@ flowchart TD
     job_publicar_divulgacao --> job_linguagens
     job_build --> job_build_site
     job_build_site --> job_deploy
+    job_ler_readme --> job_analisar_com_ia
+    job_analisar_com_ia --> job_pesquisar_conscientizacao
+    job_pesquisar_conscientizacao --> job_pesquisar_direitos
+    job_pesquisar_direitos --> job_pesquisar_acolhimento
+    job_pesquisar_acolhimento --> job_pesquisar_seguranca
+    job_pesquisar_seguranca --> job_pesquisar_igualdade
+    job_pesquisar_igualdade --> job_pesquisar_prevencao
+    job_pesquisar_prevencao --> job_validar_imagens
+    job_validar_imagens --> job_remover_duplicatas
+    job_remover_duplicatas --> job_gerar_catalogo
+    job_gerar_catalogo --> job_organizar_pastas
+    job_organizar_pastas --> job_publicar_na_main
     job_deploy --> job_atualizar_commits
     job_salvar_na_main --> job_sincronizar_devto
     job_deploy --> job_sitemap
@@ -58,6 +96,7 @@ flowchart TD
     job_bot --> job_indexnow
     job_linguagens --> job_indexnow
     job_publicar_divulgacao --> job_indexnow
+    job_atualizar_commits --> job_indexnow
     job_deploy --> job_lighthouse
     job_atualizar_commits --> job_observatorio
     job_atualizar_commits --> job_atualizar_footer
@@ -158,6 +197,136 @@ flowchart TD
 |---:|---|---|---|
 | 1 | Deploy to GitHub Pages | `actions/deploy-pages@v5` | — |
 
+### Ler e processar o README
+
+- **ID:** `ler-readme`
+- **Runner:** `ubuntu-24.04`
+- **Dependências:** Nenhuma
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### Analisar README com inteligência artificial
+
+- **ID:** `analisar-com-ia`
+- **Runner:** `ubuntu-24.04`
+- **Dependências:** `ler-readme`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### Pesquisar imagens de conscientização
+
+- **ID:** `pesquisar-conscientizacao`
+- **Runner:** `ubuntu-24.04`
+- **Dependências:** `analisar-com-ia`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### Pesquisar imagens sobre direitos das mulheres
+
+- **ID:** `pesquisar-direitos`
+- **Runner:** `ubuntu-24.04`
+- **Dependências:** `pesquisar-conscientizacao`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### Pesquisar imagens de acolhimento e apoio
+
+- **ID:** `pesquisar-acolhimento`
+- **Runner:** `ubuntu-24.04`
+- **Dependências:** `pesquisar-direitos`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### Pesquisar imagens de segurança e proteção
+
+- **ID:** `pesquisar-seguranca`
+- **Runner:** `ubuntu-24.04`
+- **Dependências:** `pesquisar-acolhimento`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### Pesquisar imagens sobre igualdade de gênero
+
+- **ID:** `pesquisar-igualdade`
+- **Runner:** `ubuntu-24.04`
+- **Dependências:** `pesquisar-seguranca`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### Pesquisar imagens de prevenção à violência
+
+- **ID:** `pesquisar-prevencao`
+- **Runner:** `ubuntu-24.04`
+- **Dependências:** `pesquisar-igualdade`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### Validar imagens e licenças
+
+- **ID:** `validar-imagens`
+- **Runner:** `ubuntu-24.04`
+- **Dependências:** `pesquisar-prevencao`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### Remover imagens duplicadas
+
+- **ID:** `remover-duplicatas`
+- **Runner:** `ubuntu-24.04`
+- **Dependências:** `validar-imagens`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### Gerar catálogo de imagens e créditos
+
+- **ID:** `gerar-catalogo`
+- **Runner:** `ubuntu-24.04`
+- **Dependências:** `remover-duplicatas`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### Organizar imagens por categoria
+
+- **ID:** `organizar-pastas`
+- **Runner:** `ubuntu-24.04`
+- **Dependências:** `gerar-catalogo`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### Publicar acervo visual na main
+
+- **ID:** `publicar-na-main`
+- **Runner:** `ubuntu-24.04`
+- **Dependências:** `organizar-pastas`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
 ### atualizar-commits
 
 - **ID:** `atualizar-commits`
@@ -197,7 +366,7 @@ flowchart TD
 
 - **ID:** `indexnow`
 - **Runner:** `ubuntu-24.04`
-- **Dependências:** `deploy`, `bot`, `linguagens`, `publicar-divulgacao`
+- **Dependências:** `deploy`, `bot`, `linguagens`, `publicar-divulgacao`, `atualizar-commits`
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
@@ -1279,9 +1448,92 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v5
         
+          # =========================================================
+# FÁBRICA VISUAL — MULHER AMPARADA
+# =========================================================
+
+  ler-readme:
+    name: Ler e processar o README
+    runs-on: ubuntu-24.04
+    
+
+  analisar-com-ia:
+    name: Analisar README com inteligência artificial
+    runs-on: ubuntu-24.04
+    needs:
+      - ler-readme
+
+  pesquisar-conscientizacao:
+    name: Pesquisar imagens de conscientização
+    runs-on: ubuntu-24.04
+    needs:
+      - analisar-com-ia
+
+  pesquisar-direitos:
+    name: Pesquisar imagens sobre direitos das mulheres
+    runs-on: ubuntu-24.04
+    needs:
+      - pesquisar-conscientizacao
+
+  pesquisar-acolhimento:
+    name: Pesquisar imagens de acolhimento e apoio
+    runs-on: ubuntu-24.04
+    needs:
+      - pesquisar-direitos
+
+  pesquisar-seguranca:
+    name: Pesquisar imagens de segurança e proteção
+    runs-on: ubuntu-24.04
+    needs:
+      - pesquisar-acolhimento
+
+  pesquisar-igualdade:
+    name: Pesquisar imagens sobre igualdade de gênero
+    runs-on: ubuntu-24.04
+    needs:
+      - pesquisar-seguranca
+
+  pesquisar-prevencao:
+    name: Pesquisar imagens de prevenção à violência
+    runs-on: ubuntu-24.04
+    needs:
+      - pesquisar-igualdade
+
+  validar-imagens:
+    name: Validar imagens e licenças
+    runs-on: ubuntu-24.04
+    needs:
+      - pesquisar-prevencao
+
+  remover-duplicatas:
+    name: Remover imagens duplicadas
+    runs-on: ubuntu-24.04
+    needs:
+      - validar-imagens
+
+  gerar-catalogo:
+    name: Gerar catálogo de imagens e créditos
+    runs-on: ubuntu-24.04
+    needs:
+      - remover-duplicatas
+
+  organizar-pastas:
+    name: Organizar imagens por categoria
+    runs-on: ubuntu-24.04
+    needs:
+      - gerar-catalogo
+
+  publicar-na-main:
+    name: Publicar acervo visual na main
+    runs-on: ubuntu-24.04
+    needs:
+      - organizar-pastas
+      
   # =========================================================
   # ATUALIZAR TOTAL DE COMMITS
   # =========================================================
+  
+
 
   atualizar-commits:
     runs-on: ubuntu-24.04
@@ -1423,6 +1675,7 @@ jobs:
       - bot
       - linguagens
       - publicar-divulgacao
+      - atualizar-commits
 
     steps:
       - name: Enviar Sitemap ao IndexNow

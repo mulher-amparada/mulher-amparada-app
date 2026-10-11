@@ -979,7 +979,7 @@ jobs:
   fabrica-visual:
     name: Fábrica visual com inteligência artificial
     runs-on: ubuntu-24.04
-    needs: deploy
+    
     timeout-minutes: 20
 
     permissions:

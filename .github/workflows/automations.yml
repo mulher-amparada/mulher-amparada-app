@@ -1446,7 +1446,7 @@ jobs:
   sincronizar-devto:
     name: Sincronizar README com DEV.to
     runs-on: ubuntu-24.04
-    needs: salvar-na-main
+    needs: atualizar-commits
 
     steps:
       - name: Baixar código atualizado
@@ -1820,6 +1820,7 @@ jobs:
   # =========================================================
 
   
+  
   salvar-na-main:
     name: Salvar todos os arquivos na main
     runs-on: ubuntu-24.04
@@ -1833,18 +1834,7 @@ jobs:
       - observatorio
       - bot
       - linguagens
-      - ler-readme
-      - analisar-com-ia
-      - pesquisar-conscientizacao
-      - pesquisar-direitos
-      - pesquisar-acolhimento
-      - pesquisar-seguranca
-      - pesquisar-igualdade
-      - pesquisar-prevencao
-      - validar-imagens
-      - remover-duplicatas
-      - gerar-catalogo
-      - organizar-pastas
+      - fabrica-visual
 
     permissions:
       contents: write

@@ -1097,77 +1097,94 @@ private fun CurrentPage(
             )
     ) {
         Column(
-    modifier = Modifier.fillMaxSize()
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.End
-    ) {
-        TextButton(
-            onClick = {
-                editing = !editing
-            }
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                if (editing) {
-                    "Visualizar Markdown"
-                } else {
-                    "Editar Markdown"
-                }
-            )
-        }
-    }
-
-    Text(
-        text = "Página ${pageIndex + 1} • ${date ?: "Sem data"}",
-        color = pageText,
-        fontSize = 11.sp
-    )
-
-    if (editing) {
-        BasicTextField(
-            value = text,
-            onValueChange = onTextChanged,
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-            textStyle = TextStyle(
-                color = pageText,
-                fontSize = 15.sp,
-                lineHeight = 28.sp,
-                letterSpacing = 0.1.sp
-            ),
-            cursorBrush = SolidColor(
-                if (dark) Pink else PinkDark
-            ),
-            decorationBox = { innerTextField ->
-                Box {
-                    if (text.isEmpty()) {
-                        Text(
-                            text = "Digite seu Markdown aqui...",
-                            color = pageText.copy(alpha = 0.5f),
-                            fontSize = 15.sp
-                        )
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                TextButton(
+                    onClick = {
+                        editing = !editing
                     }
-
-                    innerTextField()
+                ) {
+                    Text(
+                        text = if (editing) {
+                            "Visualizar Markdown"
+                        } else {
+                            "Editar Markdown"
+                        },
+                        color = pageText,
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                    )
                 }
             }
-        )
-    } else {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            MarkdownPreview(
-                text = text,
+
+            Text(
+                text = "Página ${pageIndex + 1} • ${date ?: "Sem data"}",
                 color = pageText,
-                modifier = Modifier.fillMaxWidth()
+                fontSize = 11.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp),
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center
             )
+
+            if (editing) {
+                BasicTextField(
+                    value = text,
+                    onValueChange = onTextChanged,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
+                    textStyle = TextStyle(
+                        color = pageText,
+                        fontSize = 15.sp,
+                        lineHeight = 28.sp,
+                        letterSpacing = 0.1.sp,
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Start
+                    ),
+                    cursorBrush = SolidColor(
+                        if (dark) Pink else PinkDark
+                    ),
+                    decorationBox = { innerTextField ->
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.TopStart
+                        ) {
+                            if (text.isEmpty()) {
+                                Text(
+                                    text = "Digite o que está preso no seu coração...",
+                                    color = pageText.copy(alpha = 0.5f),
+                                    fontSize = 15.sp,
+                                    lineHeight = 28.sp,
+                                    textAlign = androidx.compose.ui.text.style.TextAlign.Start,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+
+                            innerTextField()
+                        }
+                    }
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
+                    contentAlignment = Alignment.TopCenter
+                ) {
+                    MarkdownPreview(
+                        text = text,
+                        color = pageText,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
         }
-    }
-}
     }
 }
 
@@ -1181,7 +1198,6 @@ private fun exportAllPages(
     dates: List<String?>
 ): Boolean {
     val resolver = context.contentResolver
-
     var algumDownload = false
 
     pages.forEachIndexed { index, content ->
@@ -1197,9 +1213,14 @@ private fun exportAllPages(
             .replace("/", "-")
             .replace("\\", "-")
 
-        val fileName = "pagina-$number = $safeDate.txt"
+        val fileName = "pagina-$number-$safeDate.md"
 
-        val fileContent = "Dia ($date):\n\n$content"
+        val fileContent = buildString {
+            append("# Página ${index + 1}\n\n")
+            append("**Data:** $date\n\n")
+            append(content)
+            append("\n")
+        }
 
         val values = ContentValues().apply {
             put(
@@ -1209,7 +1230,7 @@ private fun exportAllPages(
 
             put(
                 MediaStore.Downloads.MIME_TYPE,
-                "text/plain"
+                "text/markdown"
             )
 
             put(
@@ -1221,22 +1242,20 @@ private fun exportAllPages(
         val uri = resolver.insert(
             MediaStore.Downloads.EXTERNAL_CONTENT_URI,
             values
-        )
+        ) ?: return@forEachIndexed
 
-        if (uri != null) {
-            try {
-                resolver
-                    .openOutputStream(uri)
-                    ?.use { output ->
-                        output.write(
-                            fileContent.toByteArray(Charsets.UTF_8)
-                        )
-                    }
+        try {
+            resolver.openOutputStream(uri)?.use { output ->
+                output.write(
+                    fileContent.toByteArray(Charsets.UTF_8)
+                )
+            } ?: throw IllegalStateException(
+                "Não foi possível abrir o arquivo."
+            )
 
-                algumDownload = true
-            } catch (_: Exception) {
-                resolver.delete(uri, null, null)
-            }
+            algumDownload = true
+        } catch (_: Exception) {
+            resolver.delete(uri, null, null)
         }
     }
 

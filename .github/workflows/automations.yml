@@ -708,7 +708,9 @@ jobs:
     name: Analisar linguagens e atualizar estilos
     runs-on: ubuntu-24.04
     timeout-minutes: 15
-    needs: publicar-divulgacao
+    needs:
+      - build
+      - publicar-divulgacao
 
     steps:
       - name: Baixar repositório completo
@@ -1164,7 +1166,9 @@ jobs:
   atualizar-commits:
     runs-on: ubuntu-24.04
     needs: deploy
-
+    permissions:
+      contents: write
+      
     steps:
       - name: Baixar todo o histórico
         uses: actions/checkout@v6
@@ -1201,6 +1205,19 @@ jobs:
           path: README.md
           if-no-files-found: error
 
+      - name: Publicar README na main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add README.md
+
+          if ! git diff --cached --quiet; then
+            git commit -m "Atualizar total de commits [skip ci]"
+            git push origin HEAD:main
+          fi
 
   # =========================================================
   # SINCRONIZAR README COM DEV.TO
@@ -1655,7 +1672,9 @@ jobs:
             pkg-config \
             unzip
 
-          g++ -std=c++17 \
+          g++ -std=c++17 -g -O1 \
+            -fsanitize=address,undefined \
+            -fno-omit-frame-pointer \
             tools/automation_bot.cpp \
             -o "$RUNNER_TEMP/automation_bot" \
             $(pkg-config --cflags --libs libcurl openssl)

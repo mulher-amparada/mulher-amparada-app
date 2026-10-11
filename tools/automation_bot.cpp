@@ -761,28 +761,31 @@ static void mergeArtifact(
     const fs::path& destination
 ) {
     if (!fs::exists(source) || !fs::is_directory(source)) {
-        std::cerr
-            << "Artifact não encontrado ou inválido: "
-            << source << '\n';
-
-        return;
+        throw std::runtime_error(
+            "Artifact não encontrado ou inválido: " +
+            source.string()
+        );
     }
 
     fs::create_directories(destination);
 
-    for (
-        const auto& item :
-        fs::recursive_directory_iterator(source)
-    ) {
-        if (!item.is_regular_file()) {
-            continue;
-        }
+    for (const auto& item :
+         fs::recursive_directory_iterator(source)) {
 
         const fs::path relative =
             fs::relative(item.path(), source);
 
         const fs::path output =
             destination / relative;
+
+        if (item.is_directory()) {
+            fs::create_directories(output);
+            continue;
+        }
+
+        if (!item.is_regular_file()) {
+            continue;
+        }
 
         fs::create_directories(output.parent_path());
 
@@ -793,7 +796,7 @@ static void mergeArtifact(
         );
 
         std::cout
-            << "Arquivo atualizado: "
+            << "Mesclado: "
             << relative.string()
             << '\n';
     }

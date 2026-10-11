@@ -668,6 +668,7 @@ A imagem é então enviada como artifact:
 
 com retenção de 30 dias.
 
+e ele pode cortar em outras imagens se não couber!
 ---
 
 # 🦶 `atualizar-footer`

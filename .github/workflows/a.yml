@@ -30,17 +30,42 @@ jobs:
           sudo apt-get install -y cloc
 
       - name: Analisar arquivos e linguagens
+        shell: bash
         run: |
+          set -e
+
           mkdir -p relatorios
 
-          cloc . \
-            --hidden \
+          echo "Procurando arquivos em todo o repositório..."
+
+          # Lista arquivos normais e ocultos, sem excluir pastas.
+          find . -type f -print0 > /tmp/arquivos-repositorio.bin
+
+          # Gera uma lista de caminhos para o cloc.
+          python3 - <<'PY'
+          import os
+
+          with open("/tmp/arquivos-repositorio.bin", "rb") as source:
+              paths = source.read().split(b"\0")
+
+          with open("/tmp/arquivos-repositorio.txt", "w", encoding="utf-8") as output:
+              for path in paths:
+                  if not path:
+                      continue
+                  name = os.fsdecode(path)
+                  if os.path.isfile(name):
+                      output.write(name + "\n")
+          PY
+
+          # Analisa os arquivos encontrados, incluindo os ocultos.
+          cloc \
+            --list-file=/tmp/arquivos-repositorio.txt \
             --follow-links \
             --json \
             --out=relatorios/linguagens.json
 
-          cloc . \
-            --hidden \
+          cloc \
+            --list-file=/tmp/arquivos-repositorio.txt \
             --follow-links \
             --md \
             --out=relatorios/linguagens.md

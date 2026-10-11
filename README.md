@@ -31,7 +31,7 @@ https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Pro
   width="100%"
 />
 
-# 🩸 Sofrimento das mulheres"
+# 🩸 Sofrimento das mulheres:
 
 <img
   src="https://github.com/mulher-amparada/mulher-amparada-app/blob/main/relatorios%2Fgraficos%2Fligue180-2019.png"
@@ -296,7 +296,7 @@ E a EntradaActivity tem o fundo preto!
 
 Essa configuração reduz a exposição direta das Activities internas a inicializações externas. Ela não impede a análise do APK ou de seus arquivos por ferramentas de engenharia reversa.
 
-Proteção do Código
+Proteção do Código:
 
 O aplicativo utiliza o **R8**, o sistema oficial de otimização, redução e ofuscação integrado ao *Android Gradle Plugin*, para aplicar proteção ao código-fonte na compilação da versão de lançamento (*release build*).
 
@@ -413,10 +413,10 @@ com isso, voce pode controlar o brilho da tela clicando em um botão..., porém,
 
 >Vale lembrar que ele só funciona dentro da HubActivity!
 
-###Emergência:
+### Emergência:
 Saindo dessa área, existem botões que abrem o aplicativo nativo do telefone nos números 190, 192 e 180.
 
-###Compartilhamento Rápido de Localização:
+### Compartilhamento Rápido de Localização:
 Além disso, existe um botão dentro do aplicativo que obtém a localização atual, monta um link do Google Maps com as coordenadas e abre uma conversa no WhatsApp do 180 com a mensagem preparada. O envio não é automático: é necessário apenas conferir a mensagem e tocar no botão de enviar.
 
 ### Contatos de Confiança:
@@ -486,10 +486,10 @@ A criptografia utiliza uma chave protegida pelo Android Keystore, enquanto o arm
 
 Dessa forma, o conteúdo protegido não fica diretamente legível no armazenamento do aparelho.
 
-###Calendário Menstrual:
+### Calendário Menstrual:
 Registre como dói cada dia e, com isso, o aplicativo monta um calendário.
 
-###Mapa:
+### Mapa:
 Mostra um mapa da região e, quando a localização estiver disponível e autorizada, permite visualizar a posição atual.
 
 ### Raio Seguro
@@ -517,7 +517,7 @@ Usando criptografia, a usuária poderá anotar o que quiser. Com a senha, ficar�
 
 
 
-###Tarefas:
+### Tarefas:
 O sistema permite categorizar tarefas em áreas como estudos, trabalho, pessoal e saúde.
 
 As tarefas podem ser marcadas como concluídas para acompanhamento do progresso.
@@ -526,7 +526,7 @@ Todas as tarefas são salvas diretamente na classe cripto da usuária.
 
 Os dados ficam armazenados localmente no dispositivo do usuário.
 
-###Gravador de voz:
+### Gravador de voz:
 ```
 Usando uma activity (uma tela) em kotlin, é possivel ter um gravador de voz no app, sendo possível registrar gravações que podem ser utilizadas pela própria usuária para documentação, além do que a usuária quiser, sempre usando permissoes android e com o consentimento da usuária!
 

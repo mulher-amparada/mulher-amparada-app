@@ -1010,26 +1010,22 @@ private fun DiarioBook(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(
-                    start = 4.dp,
-                    top = 8.dp
-                )
+                .padding(start = 4.dp, top = 8.dp)
                 .clip(RoundedCornerShape(25.dp))
                 .background(
-                    if (dark) Color(0xFF0C0C10) else Color(0xFFE1DADD)
+                    if (dark) Color(0xFF0C0C10)
+                    else Color(0xFFE1DADD)
                 )
         )
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(
-                    start = 1.dp,
-                    top = 4.dp
-                )
+                .padding(start = 1.dp, top = 4.dp)
                 .clip(RoundedCornerShape(25.dp))
                 .background(
-                    if (dark) Color(0xFF151519) else Color(0xFFEDE7E9)
+                    if (dark) Color(0xFF151519)
+                    else Color(0xFFEDE7E9)
                 )
         )
 
@@ -1043,9 +1039,19 @@ private fun DiarioBook(
                 onTextChanged(currentPage, it)
             }
         )
+
+        Box(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .width(1.dp)
+                .fillMaxHeight(0.96f)
+                .background(
+                    if (dark) Color.White.copy(alpha = 0.12f)
+                    else Color.Black.copy(alpha = 0.12f)
+                )
+        )
     }
 }
-
 /* =========================================================
    PÁGINA
 ========================================================= */

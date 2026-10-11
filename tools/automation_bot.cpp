@@ -1054,22 +1054,7 @@ int main() {
          */
         run(git + " add -A");
 
-        const int staged = std::system(
-            (
-                git +
-                "diff --cached --quiet"
-            ).c_str()
-        );
-
-        if (staged == 0) {
-            std::cout
-                << "Nenhuma alteração para publicar.\n";
-
-            curl_global_cleanup();
-            return 0;
-        }
-
-                run(git + " add -A");
+        
 
         const int staged = std::system(
             (

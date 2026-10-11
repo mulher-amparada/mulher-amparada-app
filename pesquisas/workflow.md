@@ -2,14 +2,15 @@
 
 - **Arquivo de origem:** `.github/workflows/automations.yml`
 - **Arquivo gerado:** `.github/workflows/workflow.md`
-- **Jobs identificados:** 14
-- **Etapas identificadas:** 67
+- **Jobs identificados:** 15
+- **Etapas identificadas:** 77
 
 ## Tabela completa de jobs e etapas
 
 | ID do job | Nome | Runner | Dependências | Etapas |
 |---|---|---|---|---|
 | `build` | Compilar APK Kotlin | ubuntu-24.04 | Nenhuma | 1. Baixar código (`actions/checkout@v6`); 2. Verificar projeto — executa comandos; 3. Configurar Java 17 (`actions/setup-java@v6`); 4. Verificar Android SDK 37 — executa comandos; 5. Dar permissão ao Gradle — executa comandos; 6. Compilar APK — executa comandos; 7. Localizar APK — executa comandos; 8. Assinar APK — executa comandos; 9. Preparar APK da Release — executa comandos; 10. APK-Kotlin-Assinado (`actions/upload-artifact@v6`); 11. Calcular tamanho real do APK — executa comandos; 12. Calcular SHA-256 — executa comandos; 13. Atualizar APK no main — executa comandos; 14. Verificar Release — executa comandos; 15. Excluir APK antigo da Release — executa comandos; 16. Enviar APK para a Release — executa comandos; 17. Atualizar SHA-256 da Release — executa comandos; 18. Atualizar link, tamanho e SHA-256 no download.html — executa comandos; 19. Enviar download.html atualizado para o main — executa comandos; 20. Mostrar resumo — executa comandos |
+| `bot` | Bot e análise de dados em Julia | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar dependências do bot — executa comandos; 3. Compilar bot — executa comandos; 4. Executar Mulher Amparada Bot — executa comandos; 5. Instalar Julia (`julia-actions/setup-julia@v3`); 6. Instalar dependências Julia — executa comandos; 7. Executar análise de dados em Julia — executa comandos; 8. Preparar resultados do Mulher Amparada Bot — executa comandos; 9. resultados-ligue180 (`actions/upload-artifact@v6`) |
 | `build-site` | build-site | ubuntu-24.04 | `build` | 1. Checkout (`actions/checkout@v6`); 2. Setup Pages (`actions/configure-pages@v6`); 3. Build with Jekyll (`actions/jekyll-build-pages@v1`); 4. Upload Pages artifact (`actions/upload-pages-artifact@v5`) |
 | `deploy` | deploy | ubuntu-24.04 | `build-site` | 1. Deploy to GitHub Pages (`actions/deploy-pages@v5`) |
 | `atualizar-commits` | atualizar-commits | ubuntu-24.04 | `deploy` | 1. Baixar todo o histórico (`actions/checkout@v6`); 2. Atualizar total de commits — executa comandos; 3. arquivo-readme (`actions/upload-artifact@v6`) |
@@ -22,7 +23,7 @@
 | `atualizar-footer` | Atualizar Footer com README | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Python (`actions/setup-python@v6`); 3. Instalar dependência Python — executa comandos; 4. Atualizar footer com README — executa comandos; 5. arquivo-footer (`actions/upload-artifact@v6`) |
 | `atualizar-relatorio-commits` | Atualizar relatório de commits | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Ruby (`ruby/setup-ruby@v1`); 3. Gerar relatório de commits — executa comandos; 4. arquivos-relatorio-commits (`actions/upload-artifact@v6`) |
 | `pesquisar-projeto` | Documentar workflow YAML | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar PHP — executa comandos; 3. Gerar documentação do workflow — executa comandos; 4. arquivos-pesquisas (`actions/upload-artifact@v6`) |
-| `salvar-na-main` | Salvar todos os arquivos na main | ubuntu-24.04 | `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`, `observatorio` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. arquivo-readme (`actions/download-artifact@v7`); 3. arquivo-sitemap (`actions/download-artifact@v7`); 4. arquivo-footer (`actions/download-artifact@v7`); 5. arquivos-relatorio-commits (`actions/download-artifact@v7`); 6. arquivos-pesquisas (`actions/download-artifact@v7`); 7. observatorio (`actions/download-artifact@v7`); 8. Reunir arquivos gerados — executa comandos; 9. Salvar todas as alterações em um commit — executa comandos |
+| `salvar-na-main` | Salvar todos os arquivos na main | ubuntu-24.04 | `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`, `observatorio`, `bot` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. arquivo-readme (`actions/download-artifact@v7`); 3. arquivo-sitemap (`actions/download-artifact@v7`); 4. arquivo-footer (`actions/download-artifact@v7`); 5. arquivos-relatorio-commits (`actions/download-artifact@v7`); 6. arquivos-pesquisas (`actions/download-artifact@v7`); 7. observatorio (`actions/download-artifact@v7`); 8. resultados-ligue180 (`actions/download-artifact@v7`); 9. Reunir arquivos gerados — executa comandos; 10. Salvar todas as alterações em um commit — executa comandos |
 
 ## Grafo completo de dependências
 
@@ -31,6 +32,7 @@ As setas representam as dependências declaradas em `needs` no YAML original.
 ```mermaid
 flowchart TD
     job_build["Compilar APK Kotlin"]
+    job_bot["Bot e análise de dados em Julia"]
     job_build_site["build-site"]
     job_deploy["deploy"]
     job_atualizar_commits["atualizar-commits"]
@@ -61,6 +63,7 @@ flowchart TD
     job_atualizar_relatorio_commits --> job_salvar_na_main
     job_pesquisar_projeto --> job_salvar_na_main
     job_observatorio --> job_salvar_na_main
+    job_bot --> job_salvar_na_main
 ```
 
 ## Detalhamento dos jobs
@@ -93,6 +96,24 @@ flowchart TD
 | 18 | Atualizar link, tamanho e SHA-256 no download.html | — | \| |
 | 19 | Enviar download.html atualizado para o main | — | \| |
 | 20 | Mostrar resumo | — | \| |
+
+### Bot e análise de dados em Julia
+
+- **ID:** `bot`
+- **Runner:** `ubuntu-24.04`
+- **Dependências:** Nenhuma
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| 1 | Baixar repositório | `actions/checkout@v6` | — |
+| 2 | Instalar dependências do bot | — | \| |
+| 3 | Compilar bot | — | \| |
+| 4 | Executar Mulher Amparada Bot | — | \| |
+| 5 | Instalar Julia | `julia-actions/setup-julia@v3` | — |
+| 6 | Instalar dependências Julia | — | \| |
+| 7 | Executar análise de dados em Julia | — | \| |
+| 8 | Preparar resultados do Mulher Amparada Bot | — | \| |
+| 9 | resultados-ligue180 | `actions/upload-artifact@v6` | — |
 
 ### build-site
 
@@ -244,7 +265,7 @@ flowchart TD
 
 - **ID:** `salvar-na-main`
 - **Runner:** `ubuntu-24.04`
-- **Dependências:** `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`, `observatorio`
+- **Dependências:** `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`, `observatorio`, `bot`
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
@@ -255,8 +276,9 @@ flowchart TD
 | 5 | arquivos-relatorio-commits | `actions/download-artifact@v7` | — |
 | 6 | arquivos-pesquisas | `actions/download-artifact@v7` | — |
 | 7 | observatorio | `actions/download-artifact@v7` | — |
-| 8 | Reunir arquivos gerados | — | \| |
-| 9 | Salvar todas as alterações em um commit | — | \| |
+| 8 | resultados-ligue180 | `actions/download-artifact@v7` | — |
+| 9 | Reunir arquivos gerados | — | \| |
+| 10 | Salvar todas as alterações em um commit | — | \| |
 
 ## YAML original completo
 
@@ -968,6 +990,151 @@ jobs:
   # JEKYLL / GITHUB PAGES
   # =========================================================
 
+  bot:
+    name: Bot e análise de dados em Julia
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+
+    steps:
+      # ================================================
+      # BAIXAR REPOSITÓRIO
+      # ================================================
+
+      - name: Baixar repositório
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      # ================================================
+      # INSTALAR DEPENDÊNCIAS DO BOT C++
+      # ================================================
+
+      - name: Instalar dependências do bot
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            g++ \
+            libcurl4-openssl-dev \
+            libssl-dev
+
+      # ================================================
+      # COMPILAR BOT
+      # ================================================
+
+      - name: Compilar bot
+        run: |
+          set -euo pipefail
+
+          g++ \
+            tools/automation_bot.cpp \
+            -o automation-bot \
+            -std=c++17 \
+            -lcurl \
+            -lssl \
+            -lcrypto
+
+      # ================================================
+      # EXECUTAR MULHER AMPARADA BOT
+      # ================================================
+
+      - name: Executar Mulher Amparada Bot
+        env:
+          MULHER_AMPARADA_APP_ID: ${{ secrets.MULHER_AMPARADA_APP_ID }}
+          MULHER_AMPARADA_INSTALLATION_ID: ${{ secrets.MULHER_AMPARADA_INSTALLATION_ID }}
+          MULHER_AMPARADA_PRIVATE_KEY: ${{ secrets.MULHER_AMPARADA_PRIVATE_KEY }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          chmod +x automation-bot
+          ./automation-bot
+
+      # ================================================
+      # INSTALAR JULIA
+      # ================================================
+
+      - name: Instalar Julia
+        uses: julia-actions/setup-julia@v3
+        with:
+          version: "1"
+
+      # ================================================
+      # INSTALAR DEPENDÊNCIAS JULIA
+      # ================================================
+
+      - name: Instalar dependências Julia
+        run: |
+          set -euo pipefail
+
+          julia --project=. -e '
+            using Pkg
+            Pkg.instantiate()
+          '
+
+      # ================================================
+      # EXECUTAR ANÁLISE DE DADOS
+      # ================================================
+
+      - name: Executar análise de dados em Julia
+        run: |
+          set -euo pipefail
+
+          julia --project=. src/main.jl
+
+      # ================================================
+      # VALIDAR E PREPARAR RESULTADOS
+      # ================================================
+
+      - name: Preparar resultados do Mulher Amparada Bot
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          CSV_ORIGINAL="dados/processados/ligue180-2019-processado.csv"
+          PNG_ORIGINAL="relatorios/graficos/ligue180-2019.png"
+
+          echo "========================================"
+          echo "VALIDANDO RESULTADOS DA ANÁLISE JULIA"
+          echo "========================================"
+
+          if [ ! -s "$CSV_ORIGINAL" ]; then
+            echo "::error::CSV processado não foi gerado ou está vazio: $CSV_ORIGINAL"
+            exit 1
+          fi
+
+          if [ ! -s "$PNG_ORIGINAL" ]; then
+            echo "::error::Gráfico não foi gerado ou está vazio: $PNG_ORIGINAL"
+            exit 1
+          fi
+
+          mkdir -p \
+            pacote-resultados/dados/processados \
+            pacote-resultados/relatorios/graficos
+
+          cp "$CSV_ORIGINAL" \
+            pacote-resultados/dados/processados/
+
+          cp "$PNG_ORIGINAL" \
+            pacote-resultados/relatorios/graficos/
+
+          echo ""
+          echo "Resultados preparados:"
+          ls -lh \
+            pacote-resultados/dados/processados/ligue180-2019-processado.csv \
+            pacote-resultados/relatorios/graficos/ligue180-2019.png
+
+      # ================================================
+      # PUBLICAR ARTEFATO PARA salvar-na-main
+      # ================================================
+
+      - name: Enviar resultados como artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: resultados-ligue180
+          path: pacote-resultados/
+          if-no-files-found: error
+          retention-days: 1
+          
   build-site:
 
     runs-on: ubuntu-24.04
@@ -1439,6 +1606,7 @@ jobs:
       - atualizar-relatorio-commits
       - pesquisar-projeto
       - observatorio
+      - bot
 
     permissions:
       contents: write
@@ -1486,6 +1654,12 @@ jobs:
           name: observatorio
           path: artefatos/observatorio
 
+      - name: Baixar resultados do bot
+        uses: actions/download-artifact@v7
+        with:
+          name: resultados-ligue180
+          path: artefatos/resultados
+          
       - name: Reunir arquivos gerados
         shell: bash
         run: |
@@ -1506,6 +1680,7 @@ jobs:
 
           # DIRETÓRIOS
           mkdir -p commits pesquisas docs/observatorio
+          mkdir -p dados/processados relatorios/graficos
 
           # RELATÓRIO DE COMMITS
           cp -a artefatos/commits/. commits/
@@ -1576,11 +1751,33 @@ jobs:
               "pesquisas/workflow.md"
           fi
 
+          # RESULTADOS DO BOT E DA ANÁLISE EM JULIA
+          BOT_CSV="artefatos/resultados/dados/processados/ligue180-2019-processado.csv"
+          BOT_PNG="artefatos/resultados/relatorios/graficos/ligue180-2019.png"
+
+          if [ ! -s "$BOT_CSV" ]; then
+            echo "::error::CSV processado do Ligue 180 ausente ou vazio."
+            exit 1
+          fi
+
+          if [ ! -s "$BOT_PNG" ]; then
+            echo "::error::Gráfico do Ligue 180 ausente ou vazio."
+            exit 1
+          fi
+
+          cp "$BOT_CSV" \
+            dados/processados/ligue180-2019-processado.csv
+
+          cp "$BOT_PNG" \
+            relatorios/graficos/ligue180-2019.png
+
           # VALIDAR ARQUIVOS PRINCIPAIS
           test -s README.md
           test -s sitemap.xml
           test -s index.html
           test -s pesquisas/workflow.md
+          test -s dados/processados/ligue180-2019-processado.csv
+          test -s relatorios/graficos/ligue180-2019.png
 
           if ! find docs/observatorio \
             -maxdepth 1 \
@@ -1606,8 +1803,11 @@ jobs:
           echo "Footer:"
           ls -lh index.html
 
-          echo "Relatórios:"
-          find commits -maxdepth 1 -type f -name "commits_*.md" -print | sort
+          echo "Relatórios de commits:"
+          find commits -maxdepth 1 \
+            -type f \
+            -name "commits_*.md" \
+            -print | sort
 
           echo "Pesquisas:"
           ls -lh pesquisas/workflow.md
@@ -1619,6 +1819,10 @@ jobs:
             -regextype posix-extended \
             -regex '.*/observatorio-[0-9]+\.png' \
             -print | sort -V
+
+          echo "Resultados do bot:"
+          ls -lh dados/processados/ligue180-2019-processado.csv
+          ls -lh relatorios/graficos/ligue180-2019.png
 
           echo "Quantidade de mapas: $COPIED"
           echo "Todos os arquivos foram reunidos."
@@ -1641,7 +1845,9 @@ jobs:
             sitemap.xml \
             commits/ \
             pesquisas/ \
-            docs/observatorio/
+            docs/observatorio/ \
+            dados/processados/ligue180-2019-processado.csv \
+            relatorios/graficos/ligue180-2019.png
 
           if git diff --cached --quiet; then
             echo "Nenhuma alteração para salvar."
@@ -1669,4 +1875,6 @@ jobs:
           echo "- commits/"
           echo "- pesquisas/"
           echo "- docs/observatorio/observatorio-*.png"
+          echo "- dados/processados/ligue180-2019-processado.csv"
+          echo "- relatorios/graficos/ligue180-2019.png"
 ````

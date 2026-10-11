@@ -1032,7 +1032,9 @@ jobs:
   indexnow:
     name: IndexNow
     runs-on: ubuntu-24.04
-    needs: deploy
+    needs:
+      - deploy
+      - bot
 
     steps:
       - name: Enviar Sitemap ao IndexNow

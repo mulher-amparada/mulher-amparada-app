@@ -972,425 +972,6 @@ jobs:
         uses: actions/deploy-pages@v5
         
 
-  # =========================================================
-  # FÁBRICA VISUAL — MULHER AMPARADA
-  # =========================================================
-
-  fabrica-visual:
-    name: Fábrica visual com inteligência artificial
-    runs-on: ubuntu-24.04
-    
-    timeout-minutes: 20
-
-    permissions:
-      contents: read
-
-    steps:
-      - name: Baixar repositório
-        uses: actions/checkout@v6
-        with:
-          ref: main
-
-      - name: Verificar configuração
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: |
-          if [ -z "$GEMINI_API_KEY" ]; then
-            echo "::error::Configure GEMINI_API_KEY em Settings > Secrets and variables > Actions."
-            exit 1
-          fi
-
-          test -s README.md || {
-            echo "::error::README.md não encontrado ou vazio."
-            exit 1
-          }
-
-      - name: Preparar Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-
-      - name: Analisar README, pesquisar e baixar imagens
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: |
-          cat > /tmp/fabrica_visual.py <<'PY'
-          import os
-          import re
-          import json
-          import time
-          import hashlib
-          import urllib.parse
-          import urllib.request
-          import urllib.error
-          from pathlib import Path
-          from html import unescape
-
-          BASE = Path("midias-gratuitas")
-          BASE.mkdir(parents=True, exist_ok=True)
-
-          CATEGORIAS = {
-              "conscientizacao": "Conscientização sobre violência contra mulheres",
-              "direitos": "Direitos das mulheres e cidadania",
-              "acolhimento": "Acolhimento, apoio e solidariedade",
-              "seguranca": "Segurança, proteção e redes de apoio",
-              "igualdade": "Igualdade de gênero e respeito",
-              "prevencao": "Prevenção da violência contra mulheres",
-          }
-
-          def requisicao(url, headers=None, data=None):
-              req = urllib.request.Request(
-                  url,
-                  data=data,
-                  headers={
-                      "User-Agent": "MulherAmparadaVisualFactory/1.0",
-                      **(headers or {}),
-                  },
-              )
-              with urllib.request.urlopen(req, timeout=30) as resposta:
-                  return resposta.read(), resposta.headers
-
-          def texto_metadata(metadata, campo):
-              valor = metadata.get(campo, {})
-              if isinstance(valor, dict):
-                  valor = valor.get("value", "")
-              valor = re.sub(r"<[^>]*>", " ", str(valor))
-              return re.sub(r"\s+", " ", unescape(valor)).strip()
-
-          def analisar_com_ia():
-              chave = os.environ["GEMINI_API_KEY"]
-              readme = Path("README.md").read_text(
-                  encoding="utf-8", errors="replace"
-              )[:18000]
-
-              prompt = f"""
-          Analise o README do projeto Mulher Amparada.
-          Gere termos curtos, relevantes e neutros para encontrar imagens
-          educativas e de apoio no Wikimedia Commons.
-
-          Retorne SOMENTE JSON válido neste formato:
-          {{
-            "resumo": "resumo curto do projeto",
-            "categorias": {{
-              "conscientizacao": ["termo em inglês", "outro termo"],
-              "direitos": ["termo em inglês", "outro termo"],
-              "acolhimento": ["termo em inglês", "outro termo"],
-              "seguranca": ["termo em inglês", "outro termo"],
-              "igualdade": ["termo em inglês", "outro termo"],
-              "prevencao": ["termo em inglês", "outro termo"]
-            }}
-          }}
-
-          Use termos adequados para imagens educativas, ilustrações,
-          campanhas de conscientização e apoio comunitário.
-          Cada categoria deve conter de 2 a 4 termos curtos.
-          Não invente URLs, imagens ou licenças.
-
-          README:
-          {readme}
-          """
-
-              corpo = json.dumps({
-                  "contents": [{
-                      "parts": [{"text": prompt}]
-                  }],
-                  "generationConfig": {
-                      "responseMimeType": "application/json"
-                  }
-              }).encode("utf-8")
-
-              url = (
-                  "https://generativelanguage.googleapis.com/v1beta/"
-                  "models/gemini-2.5-flash:generateContent"
-              )
-
-              dados, _ = requisicao(
-                  url,
-                  headers={
-                      "Content-Type": "application/json",
-                      "x-goog-api-key": chave,
-                  },
-                  data=corpo,
-              )
-
-              resposta = json.loads(dados)
-              partes = resposta["candidates"][0]["content"]["parts"]
-              conteudo = "".join(p.get("text", "") for p in partes)
-              conteudo = conteudo.strip()
-
-              if conteudo.startswith("```"):
-                  conteudo = re.sub(
-                      r"^```(?:json)?\s*|\s*```$",
-                      "",
-                      conteudo,
-                      flags=re.I,
-                  )
-
-              analise = json.loads(conteudo)
-
-              if not isinstance(analise.get("categorias"), dict):
-                  raise ValueError("A IA não retornou categorias válidas.")
-
-              return analise
-
-          def pesquisar_commons(termo):
-              parametros = {
-                  "action": "query",
-                  "format": "json",
-                  "generator": "search",
-                  "gsrsearch": termo + " filetype:bitmap",
-                  "gsrnamespace": "6",
-                  "gsrlimit": "15",
-                  "prop": "imageinfo",
-                  "iiprop": "url|extmetadata",
-                  "iiurlwidth": "1400",
-              }
-
-              url = (
-                  "https://commons.wikimedia.org/w/api.php?"
-                  + urllib.parse.urlencode(parametros)
-              )
-
-              dados, _ = requisicao(url)
-              resposta = json.loads(dados)
-
-              paginas = resposta.get("query", {}).get("pages", {})
-              return list(paginas.values())
-
-          def baixar_imagem(pagina, pasta, hashes):
-              info_lista = pagina.get("imageinfo", [])
-              if not info_lista:
-                  return None
-
-              info = info_lista[0]
-              metadata = info.get("extmetadata", {})
-
-              licenca = texto_metadata(metadata, "LicenseShortName")
-              url_licenca = texto_metadata(metadata, "LicenseUrl")
-              autor = texto_metadata(metadata, "Artist")
-              descricao = texto_metadata(metadata, "ImageDescription")
-              titulo = pagina.get("title", "Imagem")
-              pagina_fonte = (
-                  "https://commons.wikimedia.org/wiki/"
-                  + urllib.parse.quote(titulo.replace(" ", "_"))
-              )
-
-              # Aceita somente licenças abertas reconhecíveis.
-              licenca_url = url_licenca.lower()
-              licenca_nome = licenca.lower()
-
-              aberta = (
-                  "creativecommons.org/licenses/by/" in licenca_url
-                  or "creativecommons.org/licenses/by-sa/" in licenca_url
-                  or "creativecommons.org/publicdomain/" in licenca_url
-                  or "creativecommons.org/share-your-work/public-domain/" in licenca_url
-                  or "cc0" in licenca_nome
-                  or "public domain" in licenca_nome
-                  or "domínio público" in licenca_nome
-              )
-
-              if not aberta or not licenca_url:
-                  return None
-
-              # Prefere miniatura para limitar o tamanho dos arquivos.
-              url_imagem = info.get("thumburl") or info.get("url")
-              if not url_imagem:
-                  return None
-
-              extensao = Path(
-                  urllib.parse.urlparse(url_imagem).path
-              ).suffix.lower()
-
-              if extensao not in {".jpg", ".jpeg", ".png", ".webp"}:
-                  return None
-
-              try:
-                  conteudo, cabecalhos = requisicao(url_imagem)
-              except Exception as erro:
-                  print(f"Aviso: falha no download de {titulo}: {erro}")
-                  return None
-
-              if not conteudo or len(conteudo) > 10 * 1024 * 1024:
-                  return None
-
-              tipo = cabecalhos.get("Content-Type", "").lower()
-              if not tipo.startswith("image/"):
-                  return None
-
-              # Verifica assinaturas básicas de formatos de imagem.
-              valido = (
-                  conteudo.startswith(b"\xff\xd8\xff")
-                  or conteudo.startswith(b"\x89PNG\r\n\x1a\n")
-                  or (
-                      conteudo.startswith(b"RIFF")
-                      and conteudo[8:12] == b"WEBP"
-                  )
-              )
-              if not valido:
-                  return None
-
-              digest = hashlib.sha256(conteudo).hexdigest()
-              if digest in hashes:
-                  print(f"Duplicata ignorada: {titulo}")
-                  return None
-
-              hashes.add(digest)
-
-              nome = re.sub(
-                  r"[^a-zA-Z0-9_-]+", "-",
-                  Path(titulo).stem
-              ).strip("-")[:70] or "imagem"
-
-              destino = pasta / f"{nome}-{digest[:10]}{extensao}"
-              destino.write_bytes(conteudo)
-
-              return {
-                  "arquivo": str(destino),
-                  "titulo": titulo,
-                  "autor": autor or "Autor não informado nos metadados",
-                  "licenca": licenca,
-                  "licenca_url": url_licenca,
-                  "fonte": pagina_fonte,
-                  "descricao": descricao,
-                  "sha256": digest,
-              }
-
-          def main():
-              analise = analisar_com_ia()
-
-              (BASE / "analise-ia.json").write_text(
-                  json.dumps(analise, ensure_ascii=False, indent=2),
-                  encoding="utf-8",
-              )
-
-              (BASE / "README-fonte.md").write_text(
-                  Path("README.md").read_text(
-                      encoding="utf-8", errors="replace"
-                  ),
-                  encoding="utf-8",
-              )
-
-              hashes = set()
-              registros = []
-
-              termos_ia = analise.get("categorias", {})
-
-              for categoria, descricao_categoria in CATEGORIAS.items():
-                  pasta = BASE / categoria
-                  pasta.mkdir(parents=True, exist_ok=True)
-
-                  termos = termos_ia.get(categoria, [])
-                  if not isinstance(termos, list):
-                      termos = []
-
-                  termos = [
-                      str(t).strip()[:100]
-                      for t in termos
-                      if str(t).strip()
-                  ][:4]
-
-                  if not termos:
-                      termos = [descricao_categoria]
-
-                  total = 0
-                  vistos = set()
-
-                  for termo in termos:
-                      print(f"Pesquisando {categoria}: {termo}")
-
-                      try:
-                          paginas = pesquisar_commons(termo)
-                      except Exception as erro:
-                          print(f"Aviso: pesquisa falhou: {erro}")
-                          continue
-
-                      for pagina in paginas:
-                          titulo = pagina.get("title", "")
-                          if not titulo or titulo in vistos:
-                              continue
-
-                          vistos.add(titulo)
-
-                          registro = baixar_imagem(
-                              pagina, pasta, hashes
-                          )
-
-                          if registro:
-                              registro["categoria"] = categoria
-                              registros.append(registro)
-                              total += 1
-                              print(f"Imagem salva: {registro['arquivo']}")
-
-                          if total >= 3:
-                              break
-
-                      if total >= 3:
-                          break
-
-                      time.sleep(0.5)
-
-                  print(f"{categoria}: {total} imagem(ns) válida(s)")
-
-              # Catálogo com créditos, licença e página de origem.
-              linhas = [
-                  "# Acervo visual — Mulher Amparada",
-                  "",
-                  "Imagens pesquisadas automaticamente no Wikimedia Commons.",
-                  "Confira a página original e os termos de cada licença antes "
-                  "de redistribuir ou usar as imagens publicamente.",
-                  "",
-                  f"Total de imagens baixadas: {len(registros)}",
-                  "",
-                  "## Imagens e créditos",
-                  "",
-              ]
-
-              for item in registros:
-                  linhas.extend([
-                      f"### {item['titulo']}",
-                      "",
-                      f"- **Categoria:** {item['categoria']}",
-                      f"- **Arquivo local:** `{item['arquivo']}`",
-                      f"- **Autor:** {item['autor']}",
-                      f"- **Licença informada:** {item['licenca']}",
-                      f"- **Licença:** {item['licenca_url']}",
-                      f"- **Fonte:** {item['fonte']}",
-                      f"- **Descrição:** {item['descricao'] or 'Não informada'}",
-                      "",
-                  ])
-
-              (BASE / "README.md").write_text(
-                  "\n".join(linhas) + "\n",
-                  encoding="utf-8",
-              )
-
-              (BASE / "creditos.json").write_text(
-                  json.dumps(registros, ensure_ascii=False, indent=2),
-                  encoding="utf-8",
-              )
-
-              if not registros:
-                  raise SystemExit(
-                      "Nenhuma imagem foi baixada. "
-                      "O Artifact não será publicado."
-                  )
-
-              print(f"Fábrica concluída: {len(registros)} imagem(ns).")
-
-          if __name__ == "__main__":
-              main()
-          PY
-
-          python /tmp/fabrica_visual.py
-
-      - name: Enviar acervo como Artifact
-        uses: actions/upload-artifact@v6
-        with:
-          name: fabrica-visual-final
-          path: midias-gratuitas/
-          if-no-files-found: error
-          retention-days: 7
-
 
   # =========================================================
   # ATUALIZAR TOTAL DE COMMITS
@@ -1819,348 +1400,102 @@ jobs:
   # SALVAR NA BRANCH MAIN
   # =========================================================
 
-  
-  
   salvar-na-main:
-    name: Salvar todos os arquivos na main
+    name: Salvar artifacts na main pelo Mulher Amparada Bot
     runs-on: ubuntu-24.04
-
     needs:
+      - build
+      - linguagens
+      - bot
       - atualizar-commits
       - sitemap
       - atualizar-footer
       - atualizar-relatorio-commits
       - pesquisar-projeto
       - observatorio
-      - bot
-      - linguagens
-      - fabrica-visual
+    if: >-
+      ${{
+        !cancelled() &&
+        needs.build.result == 'success' &&
+        needs.linguagens.result == 'success' &&
+        needs.bot.result == 'success' &&
+        needs.fabrica-visual.result == 'success' &&
+        needs.atualizar-commits.result == 'success' &&
+        needs.sitemap.result == 'success' &&
+        needs.atualizar-footer.result == 'success' &&
+        needs.atualizar-relatorio-commits.result == 'success' &&
+        needs.pesquisar-projeto.result == 'success' &&
+        needs.observatorio.result == 'success'
+      }}
 
     permissions:
-      contents: write
+      contents: read
+      actions: read
 
     steps:
-      - name: Baixar código atualizado
-        uses: actions/checkout@v6
+      - name: Baixar código-fonte da main
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0
           ref: main
+          fetch-depth: 0
 
-      - name: Baixar README atualizado
-        uses: actions/download-artifact@v7
+      - name: Baixar todos os artifacts desta execução
+        uses: actions/download-artifact@v4
         with:
-          name: arquivo-readme
-          path: artefatos/readme
+          path: ${{ runner.temp }}/mulher-amparada-artifacts
+          merge-multiple: false
 
-      - name: Baixar Sitemap
-        uses: actions/download-artifact@v7
-        with:
-          name: arquivo-sitemap
-          path: artefatos/sitemap
-
-      - name: Baixar Footer
-        uses: actions/download-artifact@v7
-        with:
-          name: arquivo-footer
-          path: artefatos/footer
-
-      - name: Baixar relatório de commits
-        uses: actions/download-artifact@v7
-        with:
-          name: arquivos-relatorio-commits
-          path: artefatos/commits
-
-      - name: Baixar pesquisas
-        uses: actions/download-artifact@v7
-        with:
-          name: arquivos-pesquisas
-          path: artefatos/pesquisas
-
-      - name: Baixar Observatório
-        uses: actions/download-artifact@v7
-        with:
-          name: observatorio
-          path: artefatos/observatorio
-
-      - name: Baixar resultados do bot
-        uses: actions/download-artifact@v7
-        with:
-          name: resultados-ligue180
-          path: artefatos/resultados
-
-      - name: Baixar relatório de linguagens
-        uses: actions/download-artifact@v7
-        with:
-          name: relatorio-linguagens
-          path: artefatos/linguagens
-
-      - name: Baixar arquivos da fábrica visual
-        uses: actions/download-artifact@v7
-        with:
-          name: fabrica-visual-final
-          path: artefatos/fabrica-visual
-
-      - name: Reunir arquivos gerados
+      - name: Consultar workflow atual
         shell: bash
         run: |
           set -euo pipefail
 
-          echo "========================================"
-          echo "REUNINDO ARQUIVOS GERADOS"
-          echo "========================================"
+          WORKFLOW=".github/workflows/automations.yml"
 
-          # README
-          test -s artefatos/readme/README.md
-          cp artefatos/readme/README.md README.md
-
-          # SITEMAP
-          test -s artefatos/sitemap/sitemap.xml
-          cp artefatos/sitemap/sitemap.xml sitemap.xml
-
-          # FOOTER
-          test -s artefatos/footer/index.html
-          cp artefatos/footer/index.html index.html
-
-          # DIRETÓRIOS
-          mkdir -p commits pesquisas docs/observatorio
-          mkdir -p dados/processados relatorios/graficos relatorios
-          mkdir -p midias-gratuitas
-
-          # RELATÓRIO DE COMMITS
-          cp -a artefatos/commits/. commits/
-
-          # PESQUISAS
-          cp -a artefatos/pesquisas/. pesquisas/
-
-          # OBSERVATÓRIO
-          rm -f docs/observatorio/observatorio.png
-          rm -f docs/observatorio/observatorio-[0-9]*.png
-
-          COUNT=$(find artefatos/observatorio \
-            -maxdepth 1 \
-            -type f \
-            -regextype posix-extended \
-            -regex '.*/observatorio-[0-9]+\.png' \
-            | wc -l)
-
-          if [ "$COUNT" -eq 0 ]; then
-            echo "::error::Nenhum PNG sequencial recebido."
-            find artefatos/observatorio -maxdepth 2 -type f -print || true
+          if [[ ! -f "$WORKFLOW" ]]; then
+            echo "::error::Workflow não encontrado: $WORKFLOW"
             exit 1
           fi
 
-          find artefatos/observatorio \
-            -maxdepth 1 \
-            -type f \
-            -regextype posix-extended \
-            -regex '.*/observatorio-[0-9]+\.png' \
-            -exec cp -f {} docs/observatorio/ \;
+          echo "Workflow consultado:"
+          wc -l "$WORKFLOW"
 
-          COPIED=$(find docs/observatorio \
-            -maxdepth 1 \
-            -type f \
-            -regextype posix-extended \
-            -regex '.*/observatorio-[0-9]+\.png' \
-            | wc -l)
-
-          echo "Mapas recebidos: $COUNT"
-          echo "Mapas copiados: $COPIED"
-
-          if [ "$COPIED" -ne "$COUNT" ]; then
-            echo "::error::A quantidade de PNGs copiados diverge."
-            exit 1
-          fi
-
-          # VALIDAR TODOS OS PNGs DO OBSERVATÓRIO
-          while IFS= read -r -d '' FILE; do
-            if [ ! -s "$FILE" ]; then
-              echo "::error::Arquivo vazio: $FILE"
-              exit 1
-            fi
-
-            file "$FILE"
-          done < <(
-            find docs/observatorio \
-              -maxdepth 1 \
-              -type f \
-              -regextype posix-extended \
-              -regex '.*/observatorio-[0-9]+\.png' \
-              -print0
-          )
-
-          # CORRIGIR LOCALIZAÇÃO DA DOCUMENTAÇÃO
-          if [ -f "pesquisas/.github/workflows/workflow.md" ]; then
-            mv \
-              "pesquisas/.github/workflows/workflow.md" \
-              "pesquisas/workflow.md"
-          fi
-
-          # RESULTADOS DO BOT E DA ANÁLISE EM JULIA
-          BOT_CSV="artefatos/resultados/dados/processados/ligue180-2019-processado.csv"
-          BOT_PNG="artefatos/resultados/relatorios/graficos/ligue180-2019.png"
-
-          if [ ! -s "$BOT_CSV" ]; then
-            echo "::error::CSV processado do Ligue 180 ausente ou vazio."
-            exit 1
-          fi
-
-          if [ ! -s "$BOT_PNG" ]; then
-            echo "::error::Gráfico do Ligue 180 ausente ou vazio."
-            exit 1
-          fi
-
-          cp "$BOT_CSV" \
-            dados/processados/ligue180-2019-processado.csv
-
-          cp "$BOT_PNG" \
-            relatorios/graficos/ligue180-2019.png
-
-          # RELATÓRIOS DE LINGUAGENS
-          LANG_JSON="artefatos/linguagens/linguagens.json"
-          LANG_MD="artefatos/linguagens/linguagens.md"
-
-          if [ ! -s "$LANG_JSON" ]; then
-            echo "::error::Relatório JSON de linguagens ausente ou vazio."
-            exit 1
-          fi
-
-          if [ ! -s "$LANG_MD" ]; then
-            echo "::error::Relatório Markdown de linguagens ausente ou vazio."
-            exit 1
-          fi
-
-          python3 -m json.tool "$LANG_JSON" > /dev/null
-
-          cp "$LANG_JSON" relatorios/linguagens.json
-          cp "$LANG_MD" relatorios/linguagens.md
-
-          # FÁBRICA VISUAL
-          if [ -z "$(find artefatos/fabrica-visual \
-            -type f -print -quit)" ]; then
-            echo "::error::A fábrica visual não gerou arquivos."
-            exit 1
-          fi
-
-          cp -a artefatos/fabrica-visual/. midias-gratuitas/
-
-          # VALIDAR ARQUIVOS PRINCIPAIS
-          test -s README.md
-          test -s sitemap.xml
-          test -s index.html
-          test -s pesquisas/workflow.md
-          test -s dados/processados/ligue180-2019-processado.csv
-          test -s relatorios/graficos/ligue180-2019.png
-          test -s relatorios/linguagens.json
-          test -s relatorios/linguagens.md
-
-          if ! find docs/observatorio \
-            -maxdepth 1 \
-            -type f \
-            -regextype posix-extended \
-            -regex '.*/observatorio-[0-9]+\.png' \
-            -print -quit | grep -q .; then
-            echo "::error::Nenhum PNG sequencial válido encontrado."
-            exit 1
-          fi
-
-          echo ""
-          echo "========================================"
-          echo "ARQUIVOS REUNIDOS"
-          echo "========================================"
-
-          echo "README:"
-          ls -lh README.md
-
-          echo "Sitemap:"
-          ls -lh sitemap.xml
-
-          echo "Footer:"
-          ls -lh index.html
-
-          echo "Relatórios de commits:"
-          find commits -maxdepth 1 \
-            -type f \
-            -name "commits_*.md" \
-            -print | sort
-
-          echo "Pesquisas:"
-          find pesquisas -maxdepth 2 -type f -print | sort
-
-          echo "Observatório:"
-          find docs/observatorio \
-            -maxdepth 1 \
-            -type f \
-            -regextype posix-extended \
-            -regex '.*/observatorio-[0-9]+\.png' \
-            -print | sort -V
-
-          echo "Resultados do bot:"
-          ls -lh dados/processados/ligue180-2019-processado.csv
-          ls -lh relatorios/graficos/ligue180-2019.png
-
-          echo "Relatórios de linguagens:"
-          ls -lh relatorios/linguagens.json
-          ls -lh relatorios/linguagens.md
-
-          echo "Fábrica visual:"
-          find midias-gratuitas -type f -print | sort
-
-          echo "Quantidade de mapas: $COPIED"
-          echo "Todos os arquivos foram reunidos."
-
-      - name: Salvar todas as alterações em um commit
+      - name: Compilar o publicador C++
         shell: bash
         run: |
           set -euo pipefail
 
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          sudo apt-get update
+          sudo apt-get install -y \
+            g++ \
+            libcurl4-openssl-dev \
+            libssl-dev \
+            pkg-config \
+            unzip
 
-          echo "========================================"
-          echo "PREPARANDO COMMIT"
-          echo "========================================"
+          g++ -std=c++17 \
+            tools/automation_bot.cpp \
+            -o "$RUNNER_TEMP/automation_bot" \
+            $(pkg-config --cflags --libs libcurl openssl)
 
-          git add \
-            README.md \
-            index.html \
-            sitemap.xml \
-            commits/ \
-            pesquisas/ \
-            docs/observatorio/ \
-            dados/processados/ligue180-2019-processado.csv \
-            relatorios/graficos/ligue180-2019.png \
-            relatorios/linguagens.json \
-            relatorios/linguagens.md \
-            midias-gratuitas/
-
-          if git diff --cached --quiet; then
-            echo "Nenhuma alteração para salvar."
-            exit 0
-          fi
-
-          echo ""
-          echo "Arquivos que serão salvos:"
-          git diff --cached --name-status
-
-          git commit -m "Atualizar arquivos gerados [skip ci]"
-
-          git fetch origin main
-          git rebase origin/main
-          git push origin HEAD:main
-
-          echo ""
-          echo "========================================"
-          echo "TODOS OS ARQUIVOS FORAM SALVOS NA MAIN"
-          echo "========================================"
-
-          echo "- README.md"
-          echo "- index.html"
-          echo "- sitemap.xml"
-          echo "- commits/"
-          echo "- pesquisas/"
-          echo "- docs/observatorio/observatorio-*.png"
-          echo "- dados/processados/ligue180-2019-processado.csv"
-          echo "- relatorios/graficos/ligue180-2019.png"
-          echo "- relatorios/linguagens.json"
-          echo "- relatorios/linguagens.md"
-          echo "- midias-gratuitas/"
+      - name: Publicar na main pelo GitHub App
+        shell: bash
+        env:
+          MULHER_AMPARADA_APP_ID: ${{ secrets.MULHER_AMPARADA_APP_ID }}
+          MULHER_AMPARADA_INSTALLATION_ID: ${{ secrets.MULHER_AMPARADA_INSTALLATION_ID }}
+          MULHER_AMPARADA_PRIVATE_KEY: ${{ secrets.MULHER_AMPARADA_PRIVATE_KEY }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_WORKSPACE: ${{ github.workspace }}
+          MULHER_AMPARADA_ARTIFACT_MAP: >-
+            APK-Kotlin-Assinado:Código-fonte do app = Mulher Amparada;
+            arquivo-readme:.;
+            sitemap:.;
+            arquivo-footer:.;
+            relatorio-commits:.;
+            pesquisas:pesquisas;
+            observatorio:docs/observatorio;
+            resultados-ligue180:.
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/automation_bot"

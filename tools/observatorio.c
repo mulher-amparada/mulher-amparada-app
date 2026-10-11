@@ -3,27 +3,34 @@
  * Mulher Amparada
  * Observatorio — Mapa de Calor Consciente
  *
- * Cada celula representa exatamente um commit real do Git.
+ * Cada celula representa um commit real do Git.
  *
  * Recursos:
- * - Historico em ordem cronologica
- * - Cor baseada no horario do commit
+ * - Commits em ordem cronologica
+ * - Cores baseadas no horario local do commit
  * - Intensidade baseada no intervalo entre commits
- * - 20.000 commits por imagem
- * - Geracao automatica de PNGs sequenciais
- * - Processamento dinamico, sem limite fixo de commits
- * - Cabeçalho, grade, fundo e rodape preservados
+ * - Exatamente 20.000 commits por pagina, exceto a ultima
+ * - Geracao de PNGs sequenciais
+ * - Memoria dinamica, sem limite fixo de commits
+ * - Fundo, grade, cabecalho, moldura e rodape preservados
  *
  * Removidos:
  * - Escudo central
  * - Contorno do escudo
- * - Iluminacao adicional
- * - Circulos, nucleos e brilhos artificiais
+ * - Iluminacao adicional das celulas
+ * - Circulos e nucleos artificiais
+ *
+ * Arquivos gerados:
+ * docs/observatorio/observatorio-001.png
+ * docs/observatorio/observatorio-002.png
+ * docs/observatorio/observatorio-003.png
+ *
+ * Este programa nao gera observatorio.png.
  *
  * Compilacao:
- * gcc -O2 -Wall -Wextra tools/observatorio.c \
- *     $(pkg-config --cflags --libs cairo) -lm \
- *     -o observatorio
+ * clang -O2 -Wall -Wextra tools/observatorio.c \
+ *     -o observatorio \
+ *     $(pkg-config --cflags --libs cairo) -lm
  *
  * Execucao:
  * ./observatorio
@@ -40,6 +47,7 @@
 #include <time.h>
 #include <stdint.h>
 #include <errno.h>
+#include <limits.h>
 #include <sys/stat.h>
 
 #define WIDTH  1800
@@ -69,15 +77,15 @@ static size_t commit_capacity = 0;
  * UTILITARIOS
  * ============================================================ */
 
-static double clamp01(double x)
+static double clamp01(double value)
 {
-    if (x < 0.0)
+    if (value < 0.0)
         return 0.0;
 
-    if (x > 1.0)
+    if (value > 1.0)
         return 1.0;
 
-    return x;
+    return value;
 }
 
 
@@ -89,9 +97,6 @@ static double lerp(double a, double b, double t)
 
 /* ============================================================
  * ARMAZENAMENTO DINAMICO
- *
- * Nao existe mais o limite fixo de 200.000 commits.
- * A memoria cresce conforme o historico carregado.
  * ============================================================ */
 
 static int reserve_commits(size_t needed)
@@ -99,43 +104,53 @@ static int reserve_commits(size_t needed)
     if (needed <= commit_capacity)
         return 1;
 
-    size_t new_capacity =
+    size_t capacity =
         commit_capacity ? commit_capacity : 4096;
 
-    while (new_capacity < needed) {
-
-        if (new_capacity > SIZE_MAX / 2) {
-            new_capacity = needed;
+    while (capacity < needed) {
+        if (capacity > SIZE_MAX / 2) {
+            capacity = needed;
             break;
         }
 
-        new_capacity *= 2;
+        capacity *= 2;
     }
 
-    if (new_capacity > SIZE_MAX / sizeof(Commit)) {
-        fprintf(stderr, "Historico grande demais para a memoria.\n");
+    if (capacity > SIZE_MAX / sizeof(*commits)) {
+        fprintf(
+            stderr,
+            "Erro: historico grande demais para a memoria.\n"
+        );
         return 0;
     }
 
     Commit *new_commits = realloc(
         commits,
-        new_capacity * sizeof(Commit)
+        capacity * sizeof(*commits)
     );
 
     if (!new_commits) {
-        fprintf(stderr, "Memoria insuficiente para os commits.\n");
+        fprintf(
+            stderr,
+            "Erro: memoria insuficiente para os commits.\n"
+        );
         return 0;
     }
 
     commits = new_commits;
-    commit_capacity = new_capacity;
+    commit_capacity = capacity;
 
     return 1;
 }
 
 
 /* ============================================================
- * CARREGAR TODOS OS COMMITS DO GIT
+ * CARREGAR HISTORICO DO GIT
+ *
+ * git log --all considera commits alcancaveis pelas
+ * referencias locais do repositorio.
+ *
+ * --reverse apresenta o historico em ordem cronologica.
  * ============================================================ */
 
 static int load_commits(void)
@@ -154,8 +169,8 @@ static int load_commits(void)
     int allocation_error = 0;
 
     while (fgets(line, sizeof(line), pipe)) {
-
         char *end = NULL;
+
         errno = 0;
 
         long long value = strtoll(line, &end, 10);
@@ -166,7 +181,8 @@ static int load_commits(void)
         if ((long long)(time_t)value != value)
             continue;
 
-        if (!reserve_commits(commit_count + 1)) {
+        if (commit_count == SIZE_MAX ||
+            !reserve_commits(commit_count + 1)) {
             allocation_error = 1;
             break;
         }
@@ -193,20 +209,23 @@ static int load_commits(void)
     if (pipe_status != 0) {
         fprintf(
             stderr,
-            "Aviso: git log terminou com status %d.\n",
+            "Erro: git log terminou com status %d.\n",
             pipe_status
         );
 
         fprintf(
             stderr,
-            "O historico pode estar incompleto.\n"
+            "O historico pode estar incompleto; nenhuma geracao sera iniciada.\n"
         );
 
         return 0;
     }
 
     if (commit_count == 0) {
-        fprintf(stderr, "Nenhum commit encontrado.\n");
+        fprintf(
+            stderr,
+            "Nenhum commit encontrado nas referencias locais.\n"
+        );
         return 0;
     }
 
@@ -217,8 +236,8 @@ static int load_commits(void)
 /* ============================================================
  * CALCULAR INTENSIDADE
  *
- * O calculo usa o historico completo, inclusive entre
- * os limites das diferentes imagens.
+ * O calculo considera o historico inteiro, e nao apenas
+ * os commits pertencentes a cada imagem.
  * ============================================================ */
 
 static void calculate_heat(void)
@@ -234,7 +253,6 @@ static void calculate_heat(void)
     double max_gap = 0.0;
 
     for (size_t i = 1; i < commit_count; i++) {
-
         double gap = difftime(
             commits[i].timestamp,
             commits[i - 1].timestamp
@@ -253,18 +271,14 @@ static void calculate_heat(void)
     double denominator = log1p(max_gap);
 
     for (size_t i = 0; i < commit_count; i++) {
-
-        double gap = 0.0;
+        double gap;
 
         if (i == 0) {
-
             gap = difftime(
                 commits[1].timestamp,
                 commits[0].timestamp
             );
-
         } else {
-
             gap = difftime(
                 commits[i].timestamp,
                 commits[i - 1].timestamp
@@ -291,6 +305,9 @@ static void calculate_heat(void)
  * Madrugada: azul/ciano
  * Dia:       azul/roxo
  * Noite:     roxo/rosa
+ *
+ * O calor modifica a luminosidade da propria celula.
+ * Nenhuma segunda pintura e aplicada.
  * ============================================================ */
 
 static void hour_color(
@@ -306,7 +323,6 @@ static void hour_color(
     double bb;
 
     if (hour < 6) {
-
         double t = hour / 6.0;
 
         rr = lerp(0.05, 0.20, t);
@@ -314,7 +330,6 @@ static void hour_color(
         bb = lerp(1.00, 0.95, t);
 
     } else if (hour < 18) {
-
         double t = (hour - 6) / 12.0;
 
         rr = lerp(0.20, 0.65, t);
@@ -322,7 +337,6 @@ static void hour_color(
         bb = lerp(0.95, 0.85, t);
 
     } else {
-
         double t = (hour - 18) / 6.0;
 
         rr = lerp(0.65, 1.00, t);
@@ -344,7 +358,13 @@ static void hour_color(
 
 static void draw_background(cairo_t *cr)
 {
-    cairo_set_source_rgb(cr, 0.005, 0.006, 0.012);
+    cairo_set_source_rgb(
+        cr,
+        0.005,
+        0.006,
+        0.012
+    );
+
     cairo_paint(cr);
 
     cairo_set_line_width(cr, 1.0);
@@ -372,12 +392,15 @@ static void draw_background(cairo_t *cr)
 
 
 /* ============================================================
- * DESENHAR CELULAS
+ * MAPA DE CALOR
  *
- * Recebe um intervalo do historico global.
- * Cada commit do intervalo produz uma unica celula.
+ * Cada commit do intervalo produz exatamente uma celula.
  *
- * Nenhum efeito adicional e aplicado.
+ * Sem escudo, mascara central, circulos, nucleos,
+ * segunda camada ou iluminacao adicional.
+ *
+ * A cor e opaca: nao existe transparencia variavel
+ * capaz de criar um destaque adicional.
  * ============================================================ */
 
 static void draw_heatmap(
@@ -389,24 +412,27 @@ static void draw_heatmap(
     if (count == 0)
         return;
 
-    int cols = (int)ceil(sqrt((double)count));
+    size_t columns_size = (size_t)ceil(sqrt((double)count));
 
-    if (cols < 1)
-        cols = 1;
+    if (columns_size == 0)
+        columns_size = 1;
 
-    int rows = (int)(
-        (count + (size_t)cols - 1) / (size_t)cols
-    );
+    int cols = (int)columns_size;
+
+    size_t rows_size =
+        count / columns_size +
+        (count % columns_size != 0);
+
+    int rows = (int)rows_size;
 
     double cell_w = (double)MAP_W / cols;
     double cell_h = (double)MAP_H / rows;
 
     for (size_t j = 0; j < count; j++) {
-
         size_t i = start + j;
 
-        int col = (int)(j % (size_t)cols);
-        int row = (int)(j / (size_t)cols);
+        int col = (int)(j % columns_size);
+        int row = (int)(j / columns_size);
 
         double x = MAP_X + col * cell_w;
         double y = MAP_Y + row * cell_h;
@@ -421,20 +447,18 @@ static void draw_heatmap(
             &b
         );
 
-        cairo_set_source_rgba(
-            cr,
-            r,
-            g,
-            b,
-            0.30 + commits[i].heat * 0.70
-        );
+        /*
+         * Cor opaca: uma unica celula por commit.
+         * Nenhum brilho, circulo ou destaque central.
+         */
+        cairo_set_source_rgb(cr, r, g, b);
 
         cairo_rectangle(
             cr,
-            x + 1,
-            y + 1,
-            fmax(1.0, cell_w - 2),
-            fmax(1.0, cell_h - 2)
+            x + 1.0,
+            y + 1.0,
+            fmax(1.0, cell_w - 2.0),
+            fmax(1.0, cell_h - 2.0)
         );
 
         cairo_fill(cr);
@@ -506,14 +530,15 @@ static void draw_header(
         0.35, 0.75, 1.00, 0.95
     );
 
-    int cols = (int)ceil(sqrt((double)count));
+    size_t columns_size =
+        (size_t)ceil(sqrt((double)count));
 
-    if (cols < 1)
-        cols = 1;
+    if (columns_size == 0)
+        columns_size = 1;
 
-    int rows = (int)(
-        (count + (size_t)cols - 1) / (size_t)cols
-    );
+    size_t rows_size =
+        count / columns_size +
+        (count % columns_size != 0);
 
     char info[256];
 
@@ -536,9 +561,9 @@ static void draw_header(
     snprintf(
         info,
         sizeof(info),
-        "GRID %dx%d | COMMITS %zu-%zu",
-        cols,
-        rows,
+        "GRID %zux%zu | COMMITS %zu-%zu",
+        columns_size,
+        rows_size,
         start + 1,
         start + count
     );
@@ -581,16 +606,13 @@ static void draw_footer(
     struct tm tm_value;
 
     if (localtime_r(&commits[last].timestamp, &tm_value)) {
-
         strftime(
             date,
             sizeof(date),
             "%Y-%m-%d %H:%M",
             &tm_value
         );
-
     } else {
-
         strcpy(date, "unknown");
     }
 
@@ -641,25 +663,27 @@ static void draw_map_border(cairo_t *cr)
 
 
 /* ============================================================
- * CRIAR DIRETORIOS
+ * CRIAR DIRETORIOS DE SAIDA
  * ============================================================ */
 
-static int ensure_output_directory(void)
+static int ensure_directory(const char *path)
 {
-    if (mkdir("docs", 0755) != 0 && errno != EEXIST) {
-        perror("Erro ao criar docs");
-        return 0;
-    }
+    if (mkdir(path, 0755) == 0)
+        return 1;
 
-    if (mkdir(OUTPUT_DIR, 0755) != 0 && errno != EEXIST) {
-        perror("Erro ao criar diretorio do observatorio");
+    if (errno != EEXIST) {
+        perror(path);
         return 0;
     }
 
     struct stat st;
 
-    if (stat(OUTPUT_DIR, &st) != 0 || !S_ISDIR(st.st_mode)) {
-        fprintf(stderr, "%s nao e um diretorio valido.\n", OUTPUT_DIR);
+    if (stat(path, &st) != 0 || !S_ISDIR(st.st_mode)) {
+        fprintf(
+            stderr,
+            "Erro: %s existe, mas nao e um diretorio.\n",
+            path
+        );
         return 0;
     }
 
@@ -667,8 +691,24 @@ static int ensure_output_directory(void)
 }
 
 
+static int ensure_output_directory(void)
+{
+    if (!ensure_directory("docs"))
+        return 0;
+
+    if (!ensure_directory(OUTPUT_DIR))
+        return 0;
+
+    return 1;
+}
+
+
 /* ============================================================
- * GERAR UMA IMAGEM
+ * GERAR UMA IMAGEM SEQUENCIAL
+ *
+ * IMPORTANTE:
+ * O nome e sempre observatorio-NNN.png.
+ * Nunca escreve observatorio.png.
  * ============================================================ */
 
 static int generate_image(
@@ -688,22 +728,25 @@ static int generate_image(
     );
 
     if (written < 0 || (size_t)written >= sizeof(path)) {
-        fprintf(stderr, "Caminho de arquivo muito longo.\n");
+        fprintf(stderr, "Erro: caminho de arquivo muito longo.\n");
         return 0;
     }
 
-    cairo_surface_t *surface = cairo_image_surface_create(
-        CAIRO_FORMAT_ARGB32,
-        WIDTH,
-        HEIGHT
-    );
+    cairo_surface_t *surface =
+        cairo_image_surface_create(
+            CAIRO_FORMAT_ARGB32,
+            WIDTH,
+            HEIGHT
+        );
 
-    if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS) {
+    cairo_status_t surface_status =
+        cairo_surface_status(surface);
 
+    if (surface_status != CAIRO_STATUS_SUCCESS) {
         fprintf(
             stderr,
             "Erro ao criar superficie Cairo: %s\n",
-            cairo_status_to_string(cairo_surface_status(surface))
+            cairo_status_to_string(surface_status)
         );
 
         cairo_surface_destroy(surface);
@@ -712,12 +755,13 @@ static int generate_image(
 
     cairo_t *cr = cairo_create(surface);
 
-    if (cairo_status(cr) != CAIRO_STATUS_SUCCESS) {
+    cairo_status_t context_status = cairo_status(cr);
 
+    if (context_status != CAIRO_STATUS_SUCCESS) {
         fprintf(
             stderr,
             "Erro ao criar contexto Cairo: %s\n",
-            cairo_status_to_string(cairo_status(cr))
+            cairo_status_to_string(context_status)
         );
 
         cairo_destroy(cr);
@@ -743,12 +787,10 @@ static int generate_image(
 
     cairo_status_t status = cairo_status(cr);
 
-    if (status == CAIRO_STATUS_SUCCESS) {
+    if (status == CAIRO_STATUS_SUCCESS)
         status = cairo_surface_write_to_png(surface, path);
-    }
 
     if (status != CAIRO_STATUS_SUCCESS) {
-
         fprintf(
             stderr,
             "Erro ao gerar %s: %s\n",
@@ -758,7 +800,6 @@ static int generate_image(
 
         cairo_destroy(cr);
         cairo_surface_destroy(surface);
-
         return 0;
     }
 
@@ -806,13 +847,12 @@ int main(void)
         total_pages++;
 
     printf("Imagens previstas: %zu\n", total_pages);
-    printf("Commits por imagem: %d\n", COMMITS_PER_IMAGE);
+    printf("Limite por imagem: %d commits\n", COMMITS_PER_IMAGE);
 
     size_t processed = 0;
     size_t generated = 0;
 
     for (size_t page = 1; page <= total_pages; page++) {
-
         size_t remaining = commit_count - processed;
 
         size_t count = remaining;
@@ -826,7 +866,6 @@ int main(void)
                 processed,
                 count
             )) {
-
             fprintf(
                 stderr,
                 "Processamento interrompido na pagina %zu.\n",
@@ -835,14 +874,13 @@ int main(void)
 
             fprintf(
                 stderr,
-                "Commits processados anteriormente: %zu de %zu\n",
+                "Commits desenhados anteriormente: %zu de %zu\n",
                 processed,
                 commit_count
             );
 
             free(commits);
             commits = NULL;
-
             return 1;
         }
 
@@ -856,6 +894,7 @@ int main(void)
     printf("Commits desenhados: %zu\n", processed);
     printf("Imagens geradas: %zu\n", generated);
     printf("Diretorio: %s\n", OUTPUT_DIR);
+    printf("Nome antigo observatorio.png nao e gerado.\n");
 
     free(commits);
     commits = NULL;

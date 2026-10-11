@@ -3,7 +3,7 @@
 - **Arquivo de origem:** `.github/workflows/automations.yml`
 - **Arquivo gerado:** `.github/workflows/workflow.md`
 - **Jobs identificados:** 14
-- **Etapas identificadas:** 58
+- **Etapas identificadas:** 67
 
 ## Tabela completa de jobs e etapas
 
@@ -18,11 +18,11 @@
 | `indexnow` | IndexNow | ubuntu-24.04 | `deploy` | 1. Enviar Sitemap ao IndexNow (`bojieyang/indexnow-action@v3`) |
 | `lighthouse` | Lighthouse | ubuntu-24.04 | `deploy` | 1. Lighthouse (`treosh/lighthouse-ci-action@v12`) |
 | `publicar-divulgacao` | Publicar Kit de Divulgação | ubuntu-24.04 | `lighthouse` | 1. Baixar repositório (`actions/checkout@v6`); 2. Configurar Node.js (`actions/setup-node@v6`); 3. Criar pacote de divulgação — executa comandos; 4. Kit de Divulgação (`softprops/action-gh-release@v3`) |
-| `observatorio` | Observatório | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar dependências do Observatório — executa comandos; 3. Compilar observatório — executa comandos; 4. Executar observatório — executa comandos; 5. Verificar mapa gerado — executa comandos; 6. observatorio (`actions/upload-artifact@v6`) |
+| `observatorio` | Observatório | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório completo (`actions/checkout@v6`); 2. Instalar dependências do Observatório — executa comandos; 3. Compilar observatório — executa comandos; 4. Executar observatório — executa comandos; 5. Verificar todos os mapas gerados — executa comandos; 6. observatorio (`actions/upload-artifact@v6`) |
 | `atualizar-footer` | Atualizar Footer com README | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Python (`actions/setup-python@v6`); 3. Instalar dependência Python — executa comandos; 4. Atualizar footer com README — executa comandos; 5. arquivo-footer (`actions/upload-artifact@v6`) |
 | `atualizar-relatorio-commits` | Atualizar relatório de commits | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Ruby (`ruby/setup-ruby@v1`); 3. Gerar relatório de commits — executa comandos; 4. arquivos-relatorio-commits (`actions/upload-artifact@v6`) |
 | `pesquisar-projeto` | Documentar workflow YAML | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar PHP — executa comandos; 3. Gerar documentação do workflow — executa comandos; 4. arquivos-pesquisas (`actions/upload-artifact@v6`) |
-| `salvar-na-main` | Salvar todos os arquivos na main | ubuntu-24.04 | `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`, `observatorio` | Nenhuma identificada |
+| `salvar-na-main` | Salvar todos os arquivos na main | ubuntu-24.04 | `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`, `observatorio` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. arquivo-readme (`actions/download-artifact@v7`); 3. arquivo-sitemap (`actions/download-artifact@v7`); 4. arquivo-footer (`actions/download-artifact@v7`); 5. arquivos-relatorio-commits (`actions/download-artifact@v7`); 6. arquivos-pesquisas (`actions/download-artifact@v7`); 7. observatorio (`actions/download-artifact@v7`); 8. Reunir arquivos gerados — executa comandos; 9. Salvar todas as alterações em um commit — executa comandos |
 
 ## Grafo completo de dependências
 
@@ -193,11 +193,11 @@ flowchart TD
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
-| 1 | Baixar repositório | `actions/checkout@v6` | — |
+| 1 | Baixar repositório completo | `actions/checkout@v6` | — |
 | 2 | Instalar dependências do Observatório | — | \| |
 | 3 | Compilar observatório | — | \| |
 | 4 | Executar observatório | — | \| |
-| 5 | Verificar mapa gerado | — | \| |
+| 5 | Verificar todos os mapas gerados | — | \| |
 | 6 | observatorio | `actions/upload-artifact@v6` | — |
 
 ### Atualizar Footer com README
@@ -248,7 +248,15 @@ flowchart TD
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
-| — | Nenhuma etapa identificada | — | — |
+| 1 | Baixar código atualizado | `actions/checkout@v6` | — |
+| 2 | arquivo-readme | `actions/download-artifact@v7` | — |
+| 3 | arquivo-sitemap | `actions/download-artifact@v7` | — |
+| 4 | arquivo-footer | `actions/download-artifact@v7` | — |
+| 5 | arquivos-relatorio-commits | `actions/download-artifact@v7` | — |
+| 6 | arquivos-pesquisas | `actions/download-artifact@v7` | — |
+| 7 | observatorio | `actions/download-artifact@v7` | — |
+| 8 | Reunir arquivos gerados | — | \| |
+| 9 | Salvar todas as alterações em um commit | — | \| |
 
 ## YAML original completo
 
@@ -1210,32 +1218,32 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
-  # =========================================================
-  # OBSERVATÓRIO
+# =========================================================
+  # OBSERVATÓRIO — PNGs SEQUENCIAIS
   # =========================================================
 
   observatorio:
     name: Observatório
     runs-on: ubuntu-24.04
     needs: atualizar-commits
+
     steps:
-      - name: Baixar repositório
+      - name: Baixar repositório completo
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Instalar dependências do Observatório
         run: |
+          set -e
           sudo apt-get update
-          sudo apt-get install -y \
-            gcc \
-            libcairo2-dev
+          sudo apt-get install -y gcc libcairo2-dev
 
       - name: Compilar observatório
         run: |
           set -e
 
-          gcc \
+          gcc -O2 -Wall -Wextra \
             tools/observatorio.c \
             -o observatorio \
             $(pkg-config --cflags --libs cairo) \
@@ -1246,25 +1254,59 @@ jobs:
           set -e
 
           chmod +x observatorio
+
+          # Remover somente os arquivos antigos do padrão
+          # sequencial e o PNG legado, evitando artefatos obsoletos.
+          mkdir -p docs/observatorio
+          rm -f docs/observatorio/observatorio.png
+          rm -f docs/observatorio/observatorio-[0-9]*.png
+
           ./observatorio
 
-      - name: Verificar mapa gerado
+      - name: Verificar todos os mapas gerados
         run: |
           set -e
 
-          test -s docs/observatorio/observatorio.png
+          DIR="docs/observatorio"
 
-          file docs/observatorio/observatorio.png
+          COUNT=$(find "$DIR" -maxdepth 1 -type f \
+            -regextype posix-extended \
+            -regex '.*/observatorio-[0-9]+\.png' \
+            | wc -l)
 
-          echo ""
-          echo "Observatório gerado:"
-          ls -lh docs/observatorio/observatorio.png
+          if [ "$COUNT" -eq 0 ]; then
+            echo "ERRO: nenhum PNG sequencial foi gerado."
+            exit 1
+          fi
 
-      - name: Disponibilizar observatório
+          echo "Imagens encontradas: $COUNT"
+
+          find "$DIR" -maxdepth 1 -type f \
+            -regextype posix-extended \
+            -regex '.*/observatorio-[0-9]+\.png' \
+            -print | sort -V
+
+          while IFS= read -r -d '' FILE; do
+            if [ ! -s "$FILE" ]; then
+              echo "ERRO: arquivo vazio: $FILE"
+              exit 1
+            fi
+
+            file "$FILE"
+          done < <(
+            find "$DIR" -maxdepth 1 -type f \
+              -regextype posix-extended \
+              -regex '.*/observatorio-[0-9]+\.png' \
+              -print0
+          )
+
+          echo "Todos os PNGs sequenciais foram verificados."
+
+      - name: Disponibilizar todos os mapas
         uses: actions/upload-artifact@v6
         with:
           name: observatorio
-          path: docs/observatorio/observatorio.png
+          path: docs/observatorio/observatorio-*.png
           if-no-files-found: error
           retention-days: 30
 
@@ -1385,9 +1427,6 @@ jobs:
           
 
           
-# =========================================================
-# CENTRALIZAR E SALVAR ARQUIVOS NA MAIN
-# =========================================================
 
   salvar-na-main:
     name: Salvar todos os arquivos na main
@@ -1400,291 +1439,234 @@ jobs:
       - atualizar-relatorio-commits
       - pesquisar-projeto
       - observatorio
-  
+
     permissions:
       contents: write
 
     steps:
-
-    # =========================================================
-    # BAIXAR CÓDIGO ATUALIZADO
-    # =========================================================
-
-    - name: Baixar código atualizado
-      uses: actions/checkout@v6
-      with:
-        fetch-depth: 0
-        ref: main
-
-
-    # =========================================================
-    # BAIXAR README
-    # =========================================================
-
-    - name: Baixar README atualizado
-      uses: actions/download-artifact@v7
-      with:
-        name: arquivo-readme
-        path: artefatos/readme
-
-
-    # =========================================================
-    # BAIXAR SITEMAP
-    # =========================================================
-
-    - name: Baixar Sitemap
-      uses: actions/download-artifact@v7
-      with:
-        name: arquivo-sitemap
-        path: artefatos/sitemap
-
-
-    # =========================================================
-    # BAIXAR FOOTER
-    # =========================================================
-
-    - name: Baixar Footer
-      uses: actions/download-artifact@v7
-      with:
-        name: arquivo-footer
-        path: artefatos/footer
-
-
-    # =========================================================
-    # BAIXAR RELATÓRIO DE COMMITS
-    # =========================================================
-
-    - name: Baixar relatório de commits
-      uses: actions/download-artifact@v7
-      with:
-        name: arquivos-relatorio-commits
-        path: artefatos/commits
-
-
-    # =========================================================
-    # BAIXAR PESQUISAS
-    # =========================================================
-
-    - name: Baixar pesquisas
-      uses: actions/download-artifact@v7
-      with:
-        name: arquivos-pesquisas
-        path: artefatos/pesquisas
-
-
-    # =========================================================
-    # BAIXAR OBSERVATÓRIO
-    # =========================================================
-
-    - name: Baixar Observatório
-      uses: actions/download-artifact@v7
-      with:
-        name: observatorio
-        path: artefatos/observatorio
-
-
-    # =========================================================
-    # REUNIR TODOS OS ARQUIVOS
-    # =========================================================
-
-    - name: Reunir arquivos gerados
-      run: |
-        set -e
-
-        echo "========================================"
-        echo "REUNINDO ARQUIVOS GERADOS"
-        echo "========================================"
-
-        # -----------------------------------------------------
-        # README PRINCIPAL
-        # -----------------------------------------------------
-
-        cp \
-          artefatos/readme/README.md \
-          README.md
-
-        # -----------------------------------------------------
-        # SITEMAP
-        # -----------------------------------------------------
-
-        cp \
-          artefatos/sitemap/sitemap.xml \
-          sitemap.xml
-
-        # -----------------------------------------------------
-        # FOOTER
-        # -----------------------------------------------------
-
-        cp \
-          artefatos/footer/index.html \
-          index.html
-
-        # -----------------------------------------------------
-        # DIRETÓRIOS
-        # -----------------------------------------------------
-
-        mkdir -p commits
-        mkdir -p pesquisas
-        mkdir -p docs/observatorio
-
-        # -----------------------------------------------------
-        # RELATÓRIO DE COMMITS
-        # -----------------------------------------------------
-
-        cp -a \
-          artefatos/commits/. \
-          commits/
-
-        # -----------------------------------------------------
-        # PESQUISAS
-        # -----------------------------------------------------
-
-        cp -a \
-          artefatos/pesquisas/. \
-          pesquisas/
-
-        # -----------------------------------------------------
-        # OBSERVATÓRIO
-        # -----------------------------------------------------
-
-        cp \
-          artefatos/observatorio/observatorio.png \
-          docs/observatorio/observatorio.png
-
-        # -----------------------------------------------------
-        # CORREÇÃO DA DOCUMENTAÇÃO
-        # -----------------------------------------------------
-
-        if [ -f "pesquisas/.github/workflows/workflow.md" ]; then
-
-          mv \
-            "pesquisas/.github/workflows/workflow.md" \
-            "pesquisas/workflow.md"
-
-        fi
-
-        # -----------------------------------------------------
-        # VERIFICAR ARQUIVOS
-        # -----------------------------------------------------
-
-        test -s README.md
-        test -s sitemap.xml
-        test -s index.html
-        test -s pesquisas/workflow.md
-        test -s docs/observatorio/observatorio.png
-
-        echo ""
-        echo "========================================"
-        echo "ARQUIVOS REUNIDOS"
-        echo "========================================"
-
-        echo ""
-        echo "README:"
-        ls -lh README.md
-
-        echo ""
-        echo "Sitemap:"
-        ls -lh sitemap.xml
-
-        echo ""
-        echo "Footer:"
-        ls -lh index.html
-
-        echo ""
-        echo "Relatórios:"
-        find commits \
-          -maxdepth 1 \
-          -type f \
-          -name "commits_*.md" \
-          -print \
-          | sort
-
-        echo ""
-        echo "Pesquisas:"
-        ls -lh pesquisas/workflow.md
-
-        echo ""
-        echo "Observatório:"
-        ls -lh docs/observatorio/observatorio.png
-
-        echo ""
-        echo "Todos os arquivos foram reunidos."
-
-
-    # =========================================================
-    # SALVAR NA MAIN
-    # =========================================================
-
-    - name: Salvar todas as alterações em um commit
-      run: |
-        set -e
-
-        git config user.name "github-actions[bot]"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-        echo "========================================"
-        echo "PREPARANDO COMMIT"
-        echo "========================================"
-
-        # -----------------------------------------------------
-        # ADICIONAR ARQUIVOS
-        # -----------------------------------------------------
-
-        git add \
-          README.md \
-          index.html \
-          sitemap.xml \
-          commits/ \
-          pesquisas/ \
-          docs/observatorio/
-
-        # -----------------------------------------------------
-        # VERIFICAR ALTERAÇÕES
-        # -----------------------------------------------------
-
-        if git diff --cached --quiet; then
-
-          echo "Nenhuma alteração para salvar."
-          exit 0
-
-        fi
-
-        echo ""
-        echo "Arquivos que serão salvos:"
-        git diff --cached --name-status
-
-        # -----------------------------------------------------
-        # COMMIT
-        # -----------------------------------------------------
-
-        git commit \
-          -m "Atualizar arquivos gerados [skip ci]"
-
-        # -----------------------------------------------------
-        # ATUALIZAR MAIN
-        # -----------------------------------------------------
-
-        git fetch origin main
-
-        git rebase origin/main
-
-        # -----------------------------------------------------
-        # ENVIAR PARA MAIN
-        # -----------------------------------------------------
-
-        git push origin HEAD:main
-
-        echo ""
-        echo "========================================"
-        echo "TODOS OS ARQUIVOS FORAM SALVOS NA MAIN"
-        echo "========================================"
-
-        echo ""
-        echo "Arquivos incluídos:"
-        echo "- README.md"
-        echo "- index.html"
-        echo "- sitemap.xml"
-        echo "- commits/"
-        echo "- pesquisas/"
-        echo "- docs/observatorio/observatorio.png"
+      - name: Baixar código atualizado
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Baixar README atualizado
+        uses: actions/download-artifact@v7
+        with:
+          name: arquivo-readme
+          path: artefatos/readme
+
+      - name: Baixar Sitemap
+        uses: actions/download-artifact@v7
+        with:
+          name: arquivo-sitemap
+          path: artefatos/sitemap
+
+      - name: Baixar Footer
+        uses: actions/download-artifact@v7
+        with:
+          name: arquivo-footer
+          path: artefatos/footer
+
+      - name: Baixar relatório de commits
+        uses: actions/download-artifact@v7
+        with:
+          name: arquivos-relatorio-commits
+          path: artefatos/commits
+
+      - name: Baixar pesquisas
+        uses: actions/download-artifact@v7
+        with:
+          name: arquivos-pesquisas
+          path: artefatos/pesquisas
+
+      - name: Baixar Observatório
+        uses: actions/download-artifact@v7
+        with:
+          name: observatorio
+          path: artefatos/observatorio
+
+      - name: Reunir arquivos gerados
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "========================================"
+          echo "REUNINDO ARQUIVOS GERADOS"
+          echo "========================================"
+
+          # README
+          cp artefatos/readme/README.md README.md
+
+          # SITEMAP
+          cp artefatos/sitemap/sitemap.xml sitemap.xml
+
+          # FOOTER
+          cp artefatos/footer/index.html index.html
+
+          # DIRETÓRIOS
+          mkdir -p commits pesquisas docs/observatorio
+
+          # RELATÓRIO DE COMMITS
+          cp -a artefatos/commits/. commits/
+
+          # PESQUISAS
+          cp -a artefatos/pesquisas/. pesquisas/
+
+          # OBSERVATÓRIO
+          rm -f docs/observatorio/observatorio.png
+          rm -f docs/observatorio/observatorio-[0-9]*.png
+
+          COUNT=$(find artefatos/observatorio \
+            -maxdepth 1 \
+            -type f \
+            -regextype posix-extended \
+            -regex '.*/observatorio-[0-9]+\.png' \
+            | wc -l)
+
+          if [ "$COUNT" -eq 0 ]; then
+            echo "::error::Nenhum PNG sequencial recebido."
+            find artefatos/observatorio -maxdepth 2 -type f -print || true
+            exit 1
+          fi
+
+          find artefatos/observatorio \
+            -maxdepth 1 \
+            -type f \
+            -regextype posix-extended \
+            -regex '.*/observatorio-[0-9]+\.png' \
+            -exec cp -f {} docs/observatorio/ \;
+
+          COPIED=$(find docs/observatorio \
+            -maxdepth 1 \
+            -type f \
+            -regextype posix-extended \
+            -regex '.*/observatorio-[0-9]+\.png' \
+            | wc -l)
+
+          echo "Mapas recebidos: $COUNT"
+          echo "Mapas copiados: $COPIED"
+
+          if [ "$COPIED" -ne "$COUNT" ]; then
+            echo "::error::A quantidade de PNGs copiados diverge."
+            exit 1
+          fi
+
+          # VALIDAR TODOS OS PNGs
+          while IFS= read -r -d '' FILE; do
+            if [ ! -s "$FILE" ]; then
+              echo "::error::Arquivo vazio: $FILE"
+              exit 1
+            fi
+
+            file "$FILE"
+          done < <(
+            find docs/observatorio \
+              -maxdepth 1 \
+              -type f \
+              -regextype posix-extended \
+              -regex '.*/observatorio-[0-9]+\.png' \
+              -print0
+          )
+
+          # CORRIGIR LOCALIZAÇÃO DA DOCUMENTAÇÃO
+          if [ -f "pesquisas/.github/workflows/workflow.md" ]; then
+            mv \
+              "pesquisas/.github/workflows/workflow.md" \
+              "pesquisas/workflow.md"
+          fi
+
+          # VALIDAR ARQUIVOS PRINCIPAIS
+          test -s README.md
+          test -s sitemap.xml
+          test -s index.html
+          test -s pesquisas/workflow.md
+
+          if ! find docs/observatorio \
+            -maxdepth 1 \
+            -type f \
+            -regextype posix-extended \
+            -regex '.*/observatorio-[0-9]+\.png' \
+            -print -quit | grep -q .; then
+            echo "::error::Nenhum PNG sequencial válido encontrado."
+            exit 1
+          fi
+
+          echo ""
+          echo "========================================"
+          echo "ARQUIVOS REUNIDOS"
+          echo "========================================"
+
+          echo "README:"
+          ls -lh README.md
+
+          echo "Sitemap:"
+          ls -lh sitemap.xml
+
+          echo "Footer:"
+          ls -lh index.html
+
+          echo "Relatórios:"
+          find commits -maxdepth 1 -type f -name "commits_*.md" -print | sort
+
+          echo "Pesquisas:"
+          ls -lh pesquisas/workflow.md
+
+          echo "Observatório:"
+          find docs/observatorio \
+            -maxdepth 1 \
+            -type f \
+            -regextype posix-extended \
+            -regex '.*/observatorio-[0-9]+\.png' \
+            -print | sort -V
+
+          echo "Quantidade de mapas: $COPIED"
+          echo "Todos os arquivos foram reunidos."
+
+      - name: Salvar todas as alterações em um commit
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          echo "========================================"
+          echo "PREPARANDO COMMIT"
+          echo "========================================"
+
+          git add \
+            README.md \
+            index.html \
+            sitemap.xml \
+            commits/ \
+            pesquisas/ \
+            docs/observatorio/
+
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteração para salvar."
+            exit 0
+          fi
+
+          echo ""
+          echo "Arquivos que serão salvos:"
+          git diff --cached --name-status
+
+          git commit -m "Atualizar arquivos gerados [skip ci]"
+
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
+
+          echo ""
+          echo "========================================"
+          echo "TODOS OS ARQUIVOS FORAM SALVOS NA MAIN"
+          echo "========================================"
+
+          echo "- README.md"
+          echo "- index.html"
+          echo "- sitemap.xml"
+          echo "- commits/"
+          echo "- pesquisas/"
+          echo "- docs/observatorio/observatorio-*.png"
 ````

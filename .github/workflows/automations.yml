@@ -1616,13 +1616,13 @@ jobs:
 
     steps:
       - name: Baixar código-fonte da main
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: main
           fetch-depth: 0
 
       - name: Baixar todos os artifacts desta execução
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: ${{ runner.temp }}/mulher-amparada-artifacts
           merge-multiple: false
@@ -1671,16 +1671,7 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_RUN_ID: ${{ github.run_id }}
           GITHUB_WORKSPACE: ${{ github.workspace }}
-          MULHER_AMPARADA_ARTIFACT_MAP: >-
-            APK-Kotlin-Assinado:.
-            ;arquivo-readme:.
-            ;arquivo-sitemap:.
-            ;arquivo-footer:.
-            ;arquivos-relatorio-commits:.
-            ;arquivos-pesquisas:pesquisas
-            ;observatorio:docs/observatorio
-            ;resultados-ligue180:.
-            ;relatorio-linguagens:.
+                    MULHER_AMPARADA_ARTIFACT_MAP: "APK-Kotlin-Assinado:.;arquivo-readme:.;arquivo-sitemap:.;arquivo-footer:.;arquivos-relatorio-commits:.;arquivos-pesquisas:pesquisas;observatorio:docs/observatorio;resultados-ligue180:.;relatorio-linguagens:."
         run: |
           set -euo pipefail
           "$RUNNER_TEMP/automation_bot"

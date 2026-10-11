@@ -1611,7 +1611,7 @@ jobs:
       }}
 
     permissions:
-      contents: read
+      contents: write
       actions: read
 
     steps:
@@ -1662,7 +1662,9 @@ jobs:
 
       - name: Publicar na main pelo GitHub App
         shell: bash
+        
         env:
+          GH_TOKEN: ${{ github.token }}
           MULHER_AMPARADA_APP_ID: ${{ secrets.MULHER_AMPARADA_APP_ID }}
           MULHER_AMPARADA_INSTALLATION_ID: ${{ secrets.MULHER_AMPARADA_INSTALLATION_ID }}
           MULHER_AMPARADA_PRIVATE_KEY: ${{ secrets.MULHER_AMPARADA_PRIVATE_KEY }}

@@ -1,5 +1,11 @@
 package com.mulheres
 
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.saveable.rememberSaveable
+import com.halilibo.richtext.commonmark.Markdown
+import com.halilibo.richtext.ui.RichText
 import androidx.compose.foundation.layout.statusBarsPadding
 import android.content.ContentValues
 import android.content.Context
@@ -1000,7 +1006,6 @@ private fun DiarioBook(
 /* =========================================================
    PÁGINA
 ========================================================= */
-
 @Composable
 private fun CurrentPage(
     text: String,
@@ -1010,179 +1015,109 @@ private fun CurrentPage(
     dark: Boolean,
     onTextChanged: (String) -> Unit
 ) {
-
-    val rotation =
-        (dragOffset / 1.8f)
-            .coerceIn(
-                -180f,
-                0f
-            )
+    var editing by rememberSaveable(pageIndex) {
+        mutableStateOf(true)
+    }
 
     val pageBackground =
-        if (dark)
-            DarkPage
-        else
-            LightPage
+        if (dark) DarkPage else LightPage
 
     val pageText =
-        if (dark)
-            DarkText
-        else
-            LightPageText
+        if (dark) DarkText else LightPageText
 
     val pageBorder =
-        if (dark)
-            DarkPageBorder
-        else
-            Color(0x18000000)
+        if (dark) DarkPageBorder else Color(0x18000000)
 
     Box(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .graphicsLayer {
+        modifier = Modifier
+            .fillMaxSize()
+            .graphicsLayer {
+                rotationY = (dragOffset / 1.8f)
+                    .coerceIn(-180f, 0f)
 
-                    rotationY =
-                        rotation
-
-                    transformOrigin =
-                        TransformOrigin(
-                            0f,
-                            0.5f
-                        )
-
-                    cameraDistance =
-                        24f * density
-
-                }
-                .clip(
-                    RoundedCornerShape(24.dp)
-                )
-                .background(
-                    pageBackground
-                )
-                .border(
-                    1.dp,
-                    pageBorder,
-                    RoundedCornerShape(24.dp)
-                )
-                .padding(
-                    start = 21.dp,
-                    end = 21.dp,
-                    top = 29.dp,
-                    bottom = 22.dp
-                )
-    ) {
-
-        Box(
-            modifier =
-                Modifier
-                    .align(
-                        Alignment.TopCenter
-                    )
-                    .clip(
-                        RoundedCornerShape(999.dp)
-                    )
-                    .background(
-                        if (dark)
-                            Color(0x18FFFFFF)
-                        else
-                            Color(0x33FFFFFF)
-                    )
-                    .border(
-                        1.dp,
-                        if (dark)
-                            Color(0x20FFFFFF)
-                        else
-                            Color(0x29FFFFFF),
-                        RoundedCornerShape(999.dp)
-                    )
-                    .padding(
-                        horizontal = 10.dp,
-                        vertical = 5.dp
-                    )
-        ) {
-
-            Text(
-                text =
-                    if (date != null)
-                        "Página ${pageIndex + 1} = $date"
-                    else
-                        "Página ${pageIndex + 1} = Sem data",
-
-                color =
-                    if (dark)
-                        Color(0xBFFFFFFF)
-                    else
-                        Color(0xA6292127),
-
-
-                fontSize =
-                    8.sp
+                transformOrigin = TransformOrigin(0f, 0.5f)
+                cameraDistance = 24f * density
+            }
+            .clip(RoundedCornerShape(24.dp))
+            .background(pageBackground)
+            .border(
+                1.dp,
+                pageBorder,
+                RoundedCornerShape(24.dp)
             )
-        }
+            .padding(
+                start = 21.dp,
+                end = 21.dp,
+                top = 20.dp,
+                bottom = 22.dp
+            )
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Text(
+                text = "Página ${pageIndex + 1} • ${date ?: "Sem data"}",
+                color = pageText,
+                fontSize = 11.sp
+            )
 
-        BasicTextField(
-            value = text,
-
-            onValueChange = onTextChanged,
-
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(
-                        top = 65.dp
-                    ),
-
-            textStyle =
-                TextStyle(
-                    color = pageText,
-fontSize = 15.sp,
-                    lineHeight = 28.sp,
-                    letterSpacing = 0.1.sp
-                ),
-
-            cursorBrush =
-                SolidColor(
-                    if (dark)
-                        Pink
-                    else
-                        PinkDark
-                ),
-
-            decorationBox = {
-                innerTextField ->
-
-                Box(
-                    modifier =
-                        Modifier.fillMaxSize()
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                TextButton(
+                    onClick = { editing = !editing }
                 ) {
-
-                    if (
-                        text.isEmpty()
-                    ) {
-
-                        Text(
-                            text =
-                                "Comece a escrever aqui...",
-
-                            color =
-                                if (dark)
-                                    Color(0x59FFFFFF)
-                                else
-                                    Color(0x593C232D),
-fontSize =
-                                15.sp,
-
-                            lineHeight =
-                                28.sp
-                        )
-                    }
-
-                    innerTextField()
+                    Text(
+                        if (editing) "Visualizar Markdown"
+                        else "Editar Markdown"
+                    )
                 }
             }
-        )
+
+            if (editing) {
+                BasicTextField(
+                    value = text,
+                    onValueChange = onTextChanged,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
+                    textStyle = TextStyle(
+                        color = pageText,
+                        fontSize = 15.sp,
+                        lineHeight = 28.sp,
+                        letterSpacing = 0.1.sp
+                    ),
+                    cursorBrush = SolidColor(
+                        if (dark) Pink else PinkDark
+                    ),
+                    decorationBox = { innerTextField ->
+                        Box {
+                            if (text.isEmpty()) {
+                                Text(
+                                    text = "Digite seu Markdown aqui...",
+                                    color = pageText.copy(alpha = 0.5f),
+                                    fontSize = 15.sp
+                                )
+                            }
+                            innerTextField()
+                        }
+                    }
+                )
+            } else {
+                androidx.compose.foundation.layout.Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    RichText {
+                        Markdown(
+                            content = text
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 

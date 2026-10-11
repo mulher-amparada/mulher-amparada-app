@@ -1,3 +1,4 @@
+
 name: Mulher Amparada Bot
 
 on:
@@ -8,24 +9,41 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: mulher-amparada-bot
+  cancel-in-progress: false
+
 jobs:
   bot:
-    name: Mulher Amparada Bot
+    name: Bot e análise de dados em Julia
     runs-on: ubuntu-24.04
+    timeout-minutes: 45
 
     steps:
+      # =====================================================
+      # BAIXAR REPOSITÓRIO
+      # =====================================================
+
       - name: Baixar repositório
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
 
-      - name: Instalar dependências
+      # =====================================================
+      # INSTALAR DEPENDÊNCIAS DO BOT C++
+      # =====================================================
+
+      - name: Instalar dependências do bot
         run: |
           sudo apt-get update
           sudo apt-get install -y \
             g++ \
             libcurl4-openssl-dev \
             libssl-dev
+
+      # =====================================================
+      # COMPILAR BOT
+      # =====================================================
 
       - name: Compilar bot
         run: |
@@ -37,6 +55,10 @@ jobs:
             -lssl \
             -lcrypto
 
+      # =====================================================
+      # EXECUTAR BOT
+      # =====================================================
+
       - name: Executar Mulher Amparada Bot
         env:
           MULHER_AMPARADA_APP_ID: ${{ secrets.MULHER_AMPARADA_APP_ID }}
@@ -47,48 +69,30 @@ jobs:
           chmod +x automation-bot
           ./automation-bot
 
-
-# =========================================================
-# MULHER AMPARADA — ANÁLISE DE DADOS EM JULIA
-# =========================================================
-
-name: Atualizar dados de violência
-
-on:
-  workflow_dispatch:
-
-  schedule:
-    - cron: "0 10 * * 1"
-
-permissions:
-  contents: read
-
-concurrency:
-  group: dados-violencia-julia
-  cancel-in-progress: false
-
-jobs:
-  atualizar-dados:
-    name: Coletar e analisar dados públicos
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-
-    steps:
-      - name: Baixar repositório
-        uses: actions/checkout@v6
+      # =====================================================
+      # INSTALAR JULIA
+      # =====================================================
 
       - name: Instalar Julia
         uses: julia-actions/setup-julia@v3
         with:
           version: "1"
 
-      - name: Instalar dependências
+      # =====================================================
+      # INSTALAR DEPENDÊNCIAS JULIA
+      # =====================================================
+
+      - name: Instalar dependências Julia
         run: |
           julia --project=. -e '
             using Pkg
             Pkg.instantiate()
           '
 
-      - name: Executar análise de dados
+      # =====================================================
+      # EXECUTAR ANÁLISE DE DADOS
+      # =====================================================
+
+      - name: Executar análise de dados em Julia
         run: |
           julia --project=. src/main.jl

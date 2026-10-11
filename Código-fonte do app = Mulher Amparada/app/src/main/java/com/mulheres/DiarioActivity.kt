@@ -1,3 +1,4 @@
+
 package com.mulheres
 
 import android.content.ContentValues
@@ -63,12 +64,17 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
-import com.halilibo.richtext.ui.RichText
-import com.halilibo.richtext.commonmark.Markdown
 import kotlinx.coroutines.delay
 import org.json.JSONArray
 import java.text.SimpleDateFormat
@@ -285,6 +291,317 @@ private fun today(): String {
         "dd/MM/yyyy",
         Locale("pt", "BR")
     ).format(Date())
+}
+
+/* =========================================================
+   INTERPRETADOR MARKDOWN INLINE
+========================================================= */
+
+private val markdownInlineRegex = Regex(
+    """(\*\*.+?\*\*|__.+?__|~~.+?~~|\*.+?\*|_.+?_|`[^`]+`)"""
+)
+
+private fun parseMarkdownInline(
+    text: String,
+    color: Color
+): AnnotatedString {
+    return buildAnnotatedString {
+        var cursor = 0
+
+        markdownInlineRegex.findAll(text).forEach { match ->
+            if (match.range.first > cursor) {
+                append(
+                    text.substring(
+                        cursor,
+                        match.range.first
+                    )
+                )
+            }
+
+            val token = match.value
+
+            when {
+                token.startsWith("**") &&
+                    token.endsWith("**") -> {
+                    withStyle(
+                        SpanStyle(
+                            fontWeight = FontWeight.Bold
+                        )
+                    ) {
+                        append(token.substring(2, token.length - 2))
+                    }
+                }
+
+                token.startsWith("__") &&
+                    token.endsWith("__") -> {
+                    withStyle(
+                        SpanStyle(
+                            fontWeight = FontWeight.Bold
+                        )
+                    ) {
+                        append(token.substring(2, token.length - 2))
+                    }
+                }
+
+                token.startsWith("~~") &&
+                    token.endsWith("~~") -> {
+                    withStyle(
+                        SpanStyle(
+                            textDecoration = TextDecoration.LineThrough
+                        )
+                    ) {
+                        append(token.substring(2, token.length - 2))
+                    }
+                }
+
+                token.startsWith("`") &&
+                    token.endsWith("`") -> {
+                    withStyle(
+                        SpanStyle(
+                            fontFamily = FontFamily.Monospace,
+                            background = color.copy(alpha = 0.10f)
+                        )
+                    ) {
+                        append(token.substring(1, token.length - 1))
+                    }
+                }
+
+                token.startsWith("*") &&
+                    token.endsWith("*") -> {
+                    withStyle(
+                        SpanStyle(
+                            fontStyle = FontStyle.Italic
+                        )
+                    ) {
+                        append(token.substring(1, token.length - 1))
+                    }
+                }
+
+                token.startsWith("_") &&
+                    token.endsWith("_") -> {
+                    withStyle(
+                        SpanStyle(
+                            fontStyle = FontStyle.Italic
+                        )
+                    ) {
+                        append(token.substring(1, token.length - 1))
+                    }
+                }
+
+                else -> append(token)
+            }
+
+            cursor = match.range.last + 1
+        }
+
+        if (cursor < text.length) {
+            append(text.substring(cursor))
+        }
+    }
+}
+
+/* =========================================================
+   INTERPRETADOR MARKDOWN POR LINHA
+========================================================= */
+
+@Composable
+private fun MarkdownLine(
+    line: String,
+    color: Color
+) {
+    val trimmed = line.trimStart()
+
+    if (trimmed.isBlank()) {
+        Spacer(
+            modifier = Modifier.height(8.dp)
+        )
+        return
+    }
+
+    val headingMatch = Regex(
+        """^(#{1,6})\s+(.+)$"""
+    ).matchEntire(trimmed)
+
+    val orderedMatch = Regex(
+        """^(\d+)[.)]\s+(.+)$"""
+    ).matchEntire(trimmed)
+
+    val horizontalRule = Regex(
+        """^(---+|___+|\*\*\*+)\s*$"""
+    ).matches(trimmed)
+
+    when {
+        horizontalRule -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+                    .height(1.dp)
+                    .background(color.copy(alpha = 0.25f))
+            )
+        }
+
+        headingMatch != null -> {
+            val level = headingMatch.groupValues[1].length
+            val content = headingMatch.groupValues[2]
+
+            val headingSize = when (level) {
+                1 -> 25.sp
+                2 -> 22.sp
+                3 -> 19.sp
+                4 -> 17.sp
+                5 -> 16.sp
+                else -> 15.sp
+            }
+
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(
+                        SpanStyle(
+                            fontSize = headingSize,
+                            fontWeight = FontWeight.Bold
+                        )
+                    ) {
+                        append(
+                            parseMarkdownInline(
+                                content,
+                                color
+                            )
+                        )
+                    }
+                },
+                color = color,
+                lineHeight = headingSize * 1.4f,
+                modifier = Modifier.padding(
+                    top = 5.dp,
+                    bottom = 3.dp
+                )
+            )
+        }
+
+        trimmed.startsWith("> ") -> {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 3.dp),
+                verticalAlignment = Alignment.Top
+            ) {
+                Box(
+                    modifier = Modifier
+                        .width(3.dp)
+                        .height(24.dp)
+                        .background(
+                            PinkDark,
+                            RoundedCornerShape(3.dp)
+                        )
+                )
+
+                Text(
+                    text = parseMarkdownInline(
+                        trimmed.removePrefix("> "),
+                        color
+                    ),
+                    modifier = Modifier.padding(
+                        start = 9.dp
+                    ),
+                    color = color.copy(alpha = 0.85f),
+                    fontStyle = FontStyle.Italic,
+                    fontSize = 14.sp,
+                    lineHeight = 23.sp
+                )
+            }
+        }
+
+        trimmed.startsWith("- ") ||
+            trimmed.startsWith("* ") ||
+            trimmed.startsWith("+ ") -> {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 3.dp, bottom = 3.dp),
+                verticalAlignment = Alignment.Top
+            ) {
+                Text(
+                    text = "•",
+                    color = PinkDark,
+                    fontSize = 17.sp,
+                    modifier = Modifier.padding(end = 8.dp)
+                )
+
+                Text(
+                    text = parseMarkdownInline(
+                        trimmed.substring(2),
+                        color
+                    ),
+                    color = color,
+                    fontSize = 15.sp,
+                    lineHeight = 25.sp,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+
+        orderedMatch != null -> {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 3.dp, bottom = 3.dp),
+                verticalAlignment = Alignment.Top
+            ) {
+                Text(
+                    text = "${orderedMatch.groupValues[1]}.",
+                    color = PinkDark,
+                    fontSize = 15.sp,
+                    modifier = Modifier.padding(end = 8.dp)
+                )
+
+                Text(
+                    text = parseMarkdownInline(
+                        orderedMatch.groupValues[2],
+                        color
+                    ),
+                    color = color,
+                    fontSize = 15.sp,
+                    lineHeight = 25.sp,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+
+        else -> {
+            Text(
+                text = parseMarkdownInline(
+                    line,
+                    color
+                ),
+                color = color,
+                fontSize = 15.sp,
+                lineHeight = 25.sp
+            )
+        }
+    }
+}
+
+/* =========================================================
+   VISUALIZAÇÃO MARKDOWN
+========================================================= */
+
+@Composable
+private fun MarkdownPreview(
+    text: String,
+    color: Color,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+    ) {
+        text.split('\n').forEachIndexed { index, line ->
+            MarkdownLine(
+                line = line,
+                color = color
+            )
+        }
+    }
 }
 
 /* =========================================================
@@ -843,9 +1160,11 @@ private fun CurrentPage(
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState())
                 ) {
-                    RichText {
-                        Markdown(text)
-                    }
+                    MarkdownPreview(
+                        text = text,
+                        color = pageText,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
         }

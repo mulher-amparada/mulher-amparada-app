@@ -124,7 +124,8 @@ implementation 'androidx.documentfile:documentfile:1.1.0'
 
 implementation("org.osmdroid:osmdroid-android:6.1.20")
 
-implementation("com.halilibo.compose-richtext:richtext-commonmark:0.13.0")
+// Markdown
+implementation 'com.halilibo.compose-richtext:richtext-commonmark-android:1.0.0-alpha05'
 
 // Jetpack DataStore — armazenamento de preferências
 implementation 'androidx.datastore:datastore-preferences:1.1.7'

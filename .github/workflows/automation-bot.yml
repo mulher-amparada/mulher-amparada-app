@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   bot:
-    name: Bot e análise de dados em Julia
+    name: Mulher Amparada Bot 
     runs-on: ubuntu-24.04
     timeout-minutes: 45
 

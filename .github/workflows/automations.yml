@@ -1672,14 +1672,15 @@ jobs:
           GITHUB_RUN_ID: ${{ github.run_id }}
           GITHUB_WORKSPACE: ${{ github.workspace }}
           MULHER_AMPARADA_ARTIFACT_MAP: >-
-            APK-Kotlin-Assinado:Código-fonte do app = Mulher Amparada;
-            arquivo-readme:.;
-            sitemap:.;
-            arquivo-footer:.;
-            relatorio-commits:.;
-            pesquisas:pesquisas;
-            observatorio:docs/observatorio;
-            resultados-ligue180:.
+            APK-Kotlin-Assinado:.
+            ;arquivo-readme:.
+            ;arquivo-sitemap:.
+            ;arquivo-footer:.
+            ;arquivos-relatorio-commits:.
+            ;arquivos-pesquisas:pesquisas
+            ;observatorio:docs/observatorio
+            ;resultados-ligue180:.
+            ;relatorio-linguagens:.
         run: |
           set -euo pipefail
           "$RUNNER_TEMP/automation_bot"

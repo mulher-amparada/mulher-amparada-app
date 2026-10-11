@@ -1,0 +1,64 @@
+name: Analisar todas as linguagens
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - main
+
+  schedule:
+    - cron: "0 0 * * 1"
+
+permissions:
+  contents: write
+
+jobs:
+  analisar:
+    name: Percorrer todo o repositório
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repositório completo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Instalar ferramentas
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cloc
+
+      - name: Analisar arquivos e linguagens
+        run: |
+          mkdir -p relatorios
+
+          cloc . \
+            --hidden \
+            --follow-links \
+            --json \
+            --out=relatorios/linguagens.json
+
+          cloc . \
+            --hidden \
+            --follow-links \
+            --md \
+            --out=relatorios/linguagens.md
+
+      - name: Exibir relatório
+        run: |
+          cat relatorios/linguagens.md
+
+      - name: Salvar relatórios
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add -f relatorios/linguagens.json relatorios/linguagens.md
+
+          if ! git diff --cached --quiet; then
+            git commit -m "docs: atualizar relatório de linguagens"
+            git push
+          else
+            echo "Nenhuma alteração nos relatórios."
+          fi

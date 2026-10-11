@@ -1097,77 +1097,95 @@ private fun CurrentPage(
             )
     ) {
         Column(
-    modifier = Modifier.fillMaxSize()
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.End
-    ) {
-        TextButton(
-            onClick = {
-                editing = !editing
-            }
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                if (editing) {
-                    "Visualizar Markdown"
-                } else {
-                    "Editar Markdown"
-                }
-            )
-        }
-    }
-
-    Text(
-        text = "Página ${pageIndex + 1} • ${date ?: "Sem data"}",
-        color = pageText,
-        fontSize = 11.sp
-    )
-
-    if (editing) {
-        BasicTextField(
-            value = text,
-            onValueChange = onTextChanged,
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-            textStyle = TextStyle(
-                color = pageText,
-                fontSize = 15.sp,
-                lineHeight = 28.sp,
-                letterSpacing = 0.1.sp
-            ),
-            cursorBrush = SolidColor(
-                if (dark) Pink else PinkDark
-            ),
-            decorationBox = { innerTextField ->
-                Box {
-                    if (text.isEmpty()) {
-                        Text(
-                            text = "Digite seu Markdown aqui...",
-                            color = pageText.copy(alpha = 0.5f),
-                            fontSize = 15.sp
-                        )
+            // Botão centralizado no topo
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                TextButton(
+                    onClick = {
+                        editing = !editing
                     }
-
-                    innerTextField()
+                ) {
+                    Text(
+                        text = if (editing) {
+                            "Visualizar Markdown"
+                        } else {
+                            "Editar Markdown"
+                        },
+                        color = pageText
+                    )
                 }
             }
-        )
-    } else {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            MarkdownPreview(
-                text = text,
+
+            // Identificação da página centralizada
+            Text(
+                text = "Página ${pageIndex + 1} • ${date ?: "Sem data"}",
                 color = pageText,
-                modifier = Modifier.fillMaxWidth()
+                fontSize = 11.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp),
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center
             )
+
+            if (editing) {
+                BasicTextField(
+                    value = text,
+                    onValueChange = onTextChanged,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
+                    textStyle = TextStyle(
+                        color = pageText,
+                        fontSize = 15.sp,
+                        lineHeight = 28.sp,
+                        letterSpacing = 0.1.sp,
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                    ),
+                    cursorBrush = SolidColor(
+                        if (dark) Pink else PinkDark
+                    ),
+                    decorationBox = { innerTextField ->
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.TopCenter
+                        ) {
+                            if (text.isEmpty()) {
+                                Text(
+                                    text = "Digite seu Markdown aqui...",
+                                    color = pageText.copy(alpha = 0.5f),
+                                    fontSize = 15.sp,
+                                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+
+                            innerTextField()
+                        }
+                    }
+                )
+            } else {
+                // Visualização Markdown centralizada
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
+                    contentAlignment = Alignment.TopCenter
+                ) {
+                    MarkdownPreview(
+                        text = text,
+                        color = pageText,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
         }
-    }
-}
     }
 }
 

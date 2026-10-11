@@ -1,7 +1,30 @@
-version: 2
 
-updates:
-  - package-ecosystem: "gradle"
-    directory: "/Código-fonte do app = Mulher Amparada"
-    schedule:
-      interval: "weekly"
+name: Verificar atualizações do Gradle
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verificar:
+    name: Verificar dependências
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v6
+
+      - name: Configurar Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Verificar atualizações do Gradle
+        working-directory: Código-fonte do app = Mulher Amparada
+        run: |
+          set -euo pipefail
+          chmod +x gradlew
+          ./gradlew dependencyUpdates

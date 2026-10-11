@@ -700,6 +700,83 @@ jobs:
             >> "$GITHUB_STEP_SUMMARY"
 
   # =========================================================
+  # ANALISAR TODAS AS LINGUAGENS DE PROGRAMAÇÃO
+  # =========================================================
+
+  linguagens:
+    name: Analisar todas as linguagens
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    steps:
+      - name: Baixar repositório completo
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Instalar cloc
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y cloc
+
+      - name: Analisar arquivos e linguagens
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p relatorios
+
+          echo "Listando arquivos rastreados pelo Git..."
+
+          git ls-files > /tmp/arquivos-repositorio.txt
+
+          if [ ! -s /tmp/arquivos-repositorio.txt ]; then
+            echo "::error::Nenhum arquivo rastreado pelo Git foi encontrado."
+            exit 1
+          fi
+
+          echo "Quantidade de caminhos listados:"
+          wc -l < /tmp/arquivos-repositorio.txt
+
+          echo "Gerando relatório JSON..."
+
+          cloc \
+            --list-file=/tmp/arquivos-repositorio.txt \
+            --json \
+            --out=relatorios/linguagens.json
+
+          echo "Gerando relatório Markdown..."
+
+          cloc \
+            --list-file=/tmp/arquivos-repositorio.txt \
+            --md \
+            --out=relatorios/linguagens.md
+
+          test -s relatorios/linguagens.json
+          test -s relatorios/linguagens.md
+
+          python3 -m json.tool \
+            relatorios/linguagens.json \
+            > /dev/null
+
+          echo "Relatórios gerados com sucesso."
+
+      - name: Exibir relatório
+        run: |
+          cat relatorios/linguagens.md
+
+      - name: Enviar relatórios como artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: relatorio-linguagens
+          path: |
+            relatorios/linguagens.json
+            relatorios/linguagens.md
+          if-no-files-found: error
+          retention-days: 7
+          
+  # =========================================================
   # JEKYLL / GITHUB PAGES
   # =========================================================
 
@@ -1310,6 +1387,7 @@ jobs:
 
           
 
+  
   salvar-na-main:
     name: Salvar todos os arquivos na main
     runs-on: ubuntu-24.04
@@ -1322,6 +1400,7 @@ jobs:
       - pesquisar-projeto
       - observatorio
       - bot
+      - linguagens
 
     permissions:
       contents: write
@@ -1374,7 +1453,13 @@ jobs:
         with:
           name: resultados-ligue180
           path: artefatos/resultados
-          
+
+      - name: Baixar relatório de linguagens
+        uses: actions/download-artifact@v7
+        with:
+          name: relatorio-linguagens
+          path: artefatos/linguagens
+
       - name: Reunir arquivos gerados
         shell: bash
         run: |
@@ -1395,7 +1480,7 @@ jobs:
 
           # DIRETÓRIOS
           mkdir -p commits pesquisas docs/observatorio
-          mkdir -p dados/processados relatorios/graficos
+          mkdir -p dados/processados relatorios/graficos relatorios
 
           # RELATÓRIO DE COMMITS
           cp -a artefatos/commits/. commits/
@@ -1486,6 +1571,25 @@ jobs:
           cp "$BOT_PNG" \
             relatorios/graficos/ligue180-2019.png
 
+          # RELATÓRIOS DE LINGUAGENS
+          LANG_JSON="artefatos/linguagens/linguagens.json"
+          LANG_MD="artefatos/linguagens/linguagens.md"
+
+          if [ ! -s "$LANG_JSON" ]; then
+            echo "::error::Relatório JSON de linguagens ausente ou vazio."
+            exit 1
+          fi
+
+          if [ ! -s "$LANG_MD" ]; then
+            echo "::error::Relatório Markdown de linguagens ausente ou vazio."
+            exit 1
+          fi
+
+          python3 -m json.tool "$LANG_JSON" > /dev/null
+
+          cp "$LANG_JSON" relatorios/linguagens.json
+          cp "$LANG_MD" relatorios/linguagens.md
+
           # VALIDAR ARQUIVOS PRINCIPAIS
           test -s README.md
           test -s sitemap.xml
@@ -1493,6 +1597,8 @@ jobs:
           test -s pesquisas/workflow.md
           test -s dados/processados/ligue180-2019-processado.csv
           test -s relatorios/graficos/ligue180-2019.png
+          test -s relatorios/linguagens.json
+          test -s relatorios/linguagens.md
 
           if ! find docs/observatorio \
             -maxdepth 1 \
@@ -1539,6 +1645,10 @@ jobs:
           ls -lh dados/processados/ligue180-2019-processado.csv
           ls -lh relatorios/graficos/ligue180-2019.png
 
+          echo "Relatórios de linguagens:"
+          ls -lh relatorios/linguagens.json
+          ls -lh relatorios/linguagens.md
+
           echo "Quantidade de mapas: $COPIED"
           echo "Todos os arquivos foram reunidos."
 
@@ -1562,7 +1672,9 @@ jobs:
             pesquisas/ \
             docs/observatorio/ \
             dados/processados/ligue180-2019-processado.csv \
-            relatorios/graficos/ligue180-2019.png
+            relatorios/graficos/ligue180-2019.png \
+            relatorios/linguagens.json \
+            relatorios/linguagens.md
 
           if git diff --cached --quiet; then
             echo "Nenhuma alteração para salvar."
@@ -1592,3 +1704,5 @@ jobs:
           echo "- docs/observatorio/observatorio-*.png"
           echo "- dados/processados/ligue180-2019-processado.csv"
           echo "- relatorios/graficos/ligue180-2019.png"
+          echo "- relatorios/linguagens.json"
+          echo "- relatorios/linguagens.md"

@@ -703,7 +703,151 @@ jobs:
   # JEKYLL / GITHUB PAGES
   # =========================================================
 
+  bot:
+    name: Bot e análise de dados em Julia
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
 
+    steps:
+      # ================================================
+      # BAIXAR REPOSITÓRIO
+      # ================================================
+
+      - name: Baixar repositório
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      # ================================================
+      # INSTALAR DEPENDÊNCIAS DO BOT C++
+      # ================================================
+
+      - name: Instalar dependências do bot
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            g++ \
+            libcurl4-openssl-dev \
+            libssl-dev
+
+      # ================================================
+      # COMPILAR BOT
+      # ================================================
+
+      - name: Compilar bot
+        run: |
+          set -euo pipefail
+
+          g++ \
+            tools/automation_bot.cpp \
+            -o automation-bot \
+            -std=c++17 \
+            -lcurl \
+            -lssl \
+            -lcrypto
+
+      # ================================================
+      # EXECUTAR MULHER AMPARADA BOT
+      # ================================================
+
+      - name: Executar Mulher Amparada Bot
+        env:
+          MULHER_AMPARADA_APP_ID: ${{ secrets.MULHER_AMPARADA_APP_ID }}
+          MULHER_AMPARADA_INSTALLATION_ID: ${{ secrets.MULHER_AMPARADA_INSTALLATION_ID }}
+          MULHER_AMPARADA_PRIVATE_KEY: ${{ secrets.MULHER_AMPARADA_PRIVATE_KEY }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          chmod +x automation-bot
+          ./automation-bot
+
+      # ================================================
+      # INSTALAR JULIA
+      # ================================================
+
+      - name: Instalar Julia
+        uses: julia-actions/setup-julia@v3
+        with:
+          version: "1"
+
+      # ================================================
+      # INSTALAR DEPENDÊNCIAS JULIA
+      # ================================================
+
+      - name: Instalar dependências Julia
+        run: |
+          set -euo pipefail
+
+          julia --project=. -e '
+            using Pkg
+            Pkg.instantiate()
+          '
+
+      # ================================================
+      # EXECUTAR ANÁLISE DE DADOS
+      # ================================================
+
+      - name: Executar análise de dados em Julia
+        run: |
+          set -euo pipefail
+
+          julia --project=. src/main.jl
+
+      # ================================================
+      # VALIDAR E PREPARAR RESULTADOS
+      # ================================================
+
+      - name: Preparar resultados do Mulher Amparada Bot
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          CSV_ORIGINAL="dados/processados/ligue180-2019-processado.csv"
+          PNG_ORIGINAL="relatorios/graficos/ligue180-2019.png"
+
+          echo "========================================"
+          echo "VALIDANDO RESULTADOS DA ANÁLISE JULIA"
+          echo "========================================"
+
+          if [ ! -s "$CSV_ORIGINAL" ]; then
+            echo "::error::CSV processado não foi gerado ou está vazio: $CSV_ORIGINAL"
+            exit 1
+          fi
+
+          if [ ! -s "$PNG_ORIGINAL" ]; then
+            echo "::error::Gráfico não foi gerado ou está vazio: $PNG_ORIGINAL"
+            exit 1
+          fi
+
+          mkdir -p \
+            pacote-resultados/dados/processados \
+            pacote-resultados/relatorios/graficos
+
+          cp "$CSV_ORIGINAL" \
+            pacote-resultados/dados/processados/
+
+          cp "$PNG_ORIGINAL" \
+            pacote-resultados/relatorios/graficos/
+
+          echo ""
+          echo "Resultados preparados:"
+          ls -lh \
+            pacote-resultados/dados/processados/ligue180-2019-processado.csv \
+            pacote-resultados/relatorios/graficos/ligue180-2019.png
+
+      # ================================================
+      # PUBLICAR ARTEFATO PARA salvar-na-main
+      # ================================================
+
+      - name: Enviar resultados como artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: resultados-ligue180
+          path: pacote-resultados/
+          if-no-files-found: error
+          retention-days: 1
+          
   build-site:
 
     runs-on: ubuntu-24.04

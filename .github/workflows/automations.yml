@@ -699,16 +699,17 @@ jobs:
           echo '```' \
             >> "$GITHUB_STEP_SUMMARY"
 
+
   # =========================================================
-  # ANALISAR TODAS AS LINGUAGENS DE PROGRAMAÇÃO
+  # ANALISAR LINGUAGENS E ATUALIZAR CORES AUTOMATICAMENTE
   # =========================================================
 
   linguagens:
-    name: Analisar todas as linguagens
+    name: Analisar linguagens e atualizar estilos
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     needs: publicar-divulgacao
-    
+
     steps:
       - name: Baixar repositório completo
         uses: actions/checkout@v6
@@ -721,6 +722,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y cloc
 
+      # =======================================================
+      # ANALISAR TODAS AS LINGUAGENS
+      # =======================================================
+
       - name: Analisar arquivos e linguagens
         shell: bash
         run: |
@@ -728,58 +733,304 @@ jobs:
 
           mkdir -p relatorios
 
-          echo "Listando arquivos rastreados pelo Git..."
+          git ls-files > "$RUNNER_TEMP/arquivos-repositorio.txt"
 
-          git ls-files > /tmp/arquivos-repositorio.txt
-
-          if [ ! -s /tmp/arquivos-repositorio.txt ]; then
-            echo "::error::Nenhum arquivo rastreado pelo Git foi encontrado."
-            exit 1
-          fi
-
-          echo "Quantidade de caminhos listados:"
-          wc -l < /tmp/arquivos-repositorio.txt
-
-          echo "Gerando relatório JSON..."
+          test -s "$RUNNER_TEMP/arquivos-repositorio.txt"
 
           cloc \
-            --list-file=/tmp/arquivos-repositorio.txt \
+            --list-file="$RUNNER_TEMP/arquivos-repositorio.txt" \
             --json \
             --out=relatorios/linguagens.json
 
-          echo "Gerando relatório Markdown..."
-
           cloc \
-            --list-file=/tmp/arquivos-repositorio.txt \
+            --list-file="$RUNNER_TEMP/arquivos-repositorio.txt" \
             --md \
             --out=relatorios/linguagens.md
 
+          python3 -m json.tool relatorios/linguagens.json >/dev/null
+
+      # =======================================================
+      # ATUALIZAR CSS E CLASSES DO SITE
+      # =======================================================
+
+      - name: Gerar cores e atualizar os dois temas
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 - <<'PY'
+          import colorsys
+          import hashlib
+          import json
+          import re
+          import shutil
+          import unicodedata
+          from pathlib import Path
+
+          ROOT = Path.cwd()
+          PACOTE = ROOT / "pacote-linguagens"
+
+          DAY = ROOT / "linguagens-day.css"
+          NIGHT = ROOT / "linguagens-night.css"
+          RELATORIO = ROOT / "relatorios/linguagens.json"
+
+          for arquivo in (DAY, NIGHT, RELATORIO):
+              if not arquivo.is_file():
+                  raise SystemExit(f"Arquivo obrigatório ausente: {arquivo}")
+
+          dados = json.loads(RELATORIO.read_text(encoding="utf-8"))
+
+          linguagens = sorted(
+              nome for nome, valores in dados.items()
+              if nome not in ("header", "SUM")
+              and isinstance(valores, dict)
+              and "code" in valores
+          )
+
+          if not linguagens:
+              raise SystemExit("Nenhuma linguagem encontrada no relatório.")
+
+          def slug(nome):
+              nome = unicodedata.normalize("NFKD", nome)
+              nome = "".join(
+                  c for c in nome if not unicodedata.combining(c)
+              )
+              nome = re.sub(r"[^a-zA-Z0-9]+", "-", nome)
+              return nome.strip("-").lower() or "linguagem"
+
+          def cor_deterministica(nome):
+              digest = hashlib.sha256(nome.encode("utf-8")).digest()
+              hue = int.from_bytes(digest[:4], "big") / 0xffffffff
+              rgb = colorsys.hls_to_rgb(hue, 0.48, 0.68)
+              return "#{:02x}{:02x}{:02x}".format(
+                  *(round(v * 255) for v in rgb)
+              )
+
+          # Preserva as regras existentes e substitui somente
+          # o bloco gerenciado por esta automação.
+          inicio = "/* AUTO-LINGUAGENS: INICIO */"
+          fim = "/* AUTO-LINGUAGENS: FIM */"
+
+          regras = [inicio]
+
+          for nome in linguagens:
+              classe = "language-" + slug(nome)
+              cor = cor_deterministica(nome)
+              nome_css = nome.replace("\\", "\\\\").replace('"', '\\"')
+
+              regras.extend([
+                  f'/* {nome} */',
+                  f'.{classe} .dot,',
+                  f'.dot.{classe},',
+                  f'.{classe}.bar-segment,',
+                  f'.bar-segment.{classe},',
+                  f'[data-language="{nome_css}"] .dot,',
+                  f'.dot[data-language="{nome_css}"],',
+                  f'[data-language="{nome_css}"] .bar-segment,',
+                  f'.bar-segment[data-language="{nome_css}"]' + " {",
+                  f"    background-color: {cor};",
+                  "}",
+                  ""
+              ])
+
+          regras.append(fim)
+          bloco = "\n".join(regras)
+
+          for arquivo in (DAY, NIGHT):
+              texto = arquivo.read_text(encoding="utf-8")
+
+              padrao = re.compile(
+                  re.escape(inicio) + r".*?" + re.escape(fim),
+                  re.DOTALL
+              )
+
+              if padrao.search(texto):
+                  texto = padrao.sub(
+                      lambda _: bloco,
+                      texto
+                  )
+              else:
+                  texto = texto.rstrip() + "\n\n" + bloco + "\n"
+
+              arquivo.write_text(texto, encoding="utf-8")
+
+          # Atualiza as páginas HTML que realmente carregam
+          # os CSS de linguagens, sem tocar nas outras páginas.
+          marcador = "AUTO-LINGUAGENS-CORES-V1"
+
+          script = r"""
+          <script id="AUTO-LINGUAGENS-CORES-V1">
+          (() => {
+            const slug = name => name.normalize("NFKD")
+              .replace(/[\u0300-\u036f]/g, "")
+              .replace(/[^a-zA-Z0-9]+/g, "-")
+              .replace(/^-+|-+$/g, "")
+              .toLowerCase() || "linguagem";
+
+            const aplicar = (elemento, nome) => {
+              if (!elemento || !nome) return;
+              elemento.classList.add("language-" + slug(nome));
+              elemento.dataset.language = nome;
+            };
+
+            const legenda = [...document.querySelectorAll(".legend-item")];
+            const nomes = [];
+
+            legenda.forEach(item => {
+              const strong = item.querySelector("strong");
+              if (!strong) return;
+
+              const nome = strong.textContent.trim();
+              if (!nome) return;
+
+              nomes.push(nome);
+              aplicar(item, nome);
+              aplicar(item.querySelector(".dot"), nome);
+            });
+
+            document.querySelectorAll("tbody tr").forEach(row => {
+              const elemento = row.querySelector(".language");
+              if (!elemento) return;
+
+              const nome = elemento.textContent.trim();
+              if (!nome) return;
+
+              aplicar(row, nome);
+              aplicar(elemento, nome);
+              aplicar(elemento.querySelector(".dot"), nome);
+            });
+
+            const segmentos = [
+              ...document.querySelectorAll(".bar-segment")
+            ];
+
+            segmentos.forEach((segmento, indice) => {
+              const nome = segmento.dataset.language ||
+                segmento.getAttribute("aria-label") ||
+                segmento.getAttribute("title");
+
+              if (nome) {
+                aplicar(segmento, nome.trim());
+              } else if (nomes[indice]) {
+                aplicar(segmento, nomes[indice]);
+              }
+            });
+          })();
+          </script>
+          """
+
+          paginas = []
+
+          for arquivo in ROOT.rglob("*.html"):
+              relativo = arquivo.relative_to(ROOT)
+
+              if any(
+                  parte in {
+                      ".git", "node_modules", "_site",
+                      "pacote-linguagens"
+                  }
+                  for parte in relativo.parts
+              ):
+                  continue
+
+              texto = arquivo.read_text(encoding="utf-8")
+
+              if not re.search(
+                  r'linguagens-(?:day|night)\.css',
+                  texto,
+                  re.IGNORECASE
+              ):
+                  continue
+
+              if marcador not in texto:
+                  if re.search(r"</body\s*>", texto, re.IGNORECASE):
+                      texto = re.sub(
+                          r"</body\s*>",
+                          lambda _: script + "\n</body>",
+                          texto,
+                          count=1,
+                          flags=re.IGNORECASE
+                      )
+                  else:
+                      texto += "\n" + script + "\n"
+
+                  arquivo.write_text(texto, encoding="utf-8")
+
+              paginas.append(arquivo)
+
+          if not paginas:
+              raise SystemExit(
+                  "Nenhuma página HTML que carregue "
+                  "linguagens-day.css ou linguagens-night.css foi encontrada."
+              )
+
+          # Prepara um pacote com os caminhos originais preservados.
+          (PACOTE / "relatorios").mkdir(parents=True, exist_ok=True)
+
+          shutil.copy2(
+              ROOT / "relatorios/linguagens.json",
+              PACOTE / "relatorios/linguagens.json"
+          )
+
+          shutil.copy2(
+              ROOT / "relatorios/linguagens.md",
+              PACOTE / "relatorios/linguagens.md"
+          )
+
+          shutil.copy2(DAY, PACOTE / DAY.name)
+          shutil.copy2(NIGHT, PACOTE / NIGHT.name)
+
+          for pagina in paginas:
+              destino = PACOTE / pagina.relative_to(ROOT)
+              destino.parent.mkdir(parents=True, exist_ok=True)
+              shutil.copy2(pagina, destino)
+
+          print("Linguagens detectadas:", len(linguagens))
+          print("Páginas atualizadas:", len(paginas))
+          print("CSS claro e escuro atualizados.")
+
+          for nome in linguagens:
+              print(f"  {nome}: #{cor_deterministica(nome)[1:]}")
+
+          PY
+
+      # =======================================================
+      # VALIDAR ARQUIVOS
+      # =======================================================
+
+      - name: Validar relatórios, CSS e pacote
+        shell: bash
+        run: |
+          set -euo pipefail
+
           test -s relatorios/linguagens.json
           test -s relatorios/linguagens.md
+          test -s linguagens-day.css
+          test -s linguagens-night.css
 
-          python3 -m json.tool \
-            relatorios/linguagens.json \
-            > /dev/null
+          grep -q 'AUTO-LINGUAGENS: INICIO' linguagens-day.css
+          grep -q 'AUTO-LINGUAGENS: FIM' linguagens-day.css
+          grep -q 'AUTO-LINGUAGENS: INICIO' linguagens-night.css
+          grep -q 'AUTO-LINGUAGENS: FIM' linguagens-night.css
 
-          echo "Relatórios gerados com sucesso."
+          test -s pacote-linguagens/linguagens-day.css
+          test -s pacote-linguagens/linguagens-night.css
 
-      - name: Exibir relatório
-        run: |
-          cat relatorios/linguagens.md
+          echo "Todos os arquivos foram validados."
 
-      - name: Enviar relatórios como artifact
+      # =======================================================
+      # ENVIAR ARTIFACT PARA SALVAR-NA-MAIN
+      # =======================================================
+
+      - name: Enviar relatórios, CSS e HTML como artifact
         uses: actions/upload-artifact@v6
         with:
           name: relatorio-linguagens
-          path: |
-            relatorios/linguagens.json
-            relatorios/linguagens.md
+          path: pacote-linguagens/
           if-no-files-found: error
           retention-days: 7
-          
-  # =========================================================
-  # JEKYLL / GITHUB PAGES
-  # =========================================================
+
+         
 
   
   # =========================================================

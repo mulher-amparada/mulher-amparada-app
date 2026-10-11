@@ -707,7 +707,8 @@ jobs:
     name: Analisar todas as linguagens
     runs-on: ubuntu-24.04
     timeout-minutes: 15
-
+    needs: publicar-divulgacao
+    
     steps:
       - name: Baixar repositório completo
         uses: actions/checkout@v6

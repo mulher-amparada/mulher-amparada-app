@@ -1081,7 +1081,7 @@ jobs:
   sitemap:
     name: Gerar Sitemap
     runs-on: ubuntu-24.04
-    needs: atualizar-commits
+    needs: deploy
 
     steps:
       - name: Checkout
@@ -1152,7 +1152,7 @@ jobs:
   publicar-divulgacao:
     name: Publicar Kit de Divulgação
     runs-on: ubuntu-24.04
-    needs: lighthouse
+    needs: build-site
 
     steps:
       - name: Baixar repositório

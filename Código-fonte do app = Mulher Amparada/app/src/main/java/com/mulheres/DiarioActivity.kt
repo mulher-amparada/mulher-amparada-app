@@ -1100,7 +1100,6 @@ private fun CurrentPage(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Botão centralizado no topo
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -1116,12 +1115,12 @@ private fun CurrentPage(
                         } else {
                             "Editar Markdown"
                         },
-                        color = pageText
+                        color = pageText,
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
                     )
                 }
             }
 
-            // Identificação da página centralizada
             Text(
                 text = "Página ${pageIndex + 1} • ${date ?: "Sem data"}",
                 color = pageText,
@@ -1145,7 +1144,7 @@ private fun CurrentPage(
                         fontSize = 15.sp,
                         lineHeight = 28.sp,
                         letterSpacing = 0.1.sp,
-                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Start
                     ),
                     cursorBrush = SolidColor(
                         if (dark) Pink else PinkDark
@@ -1153,14 +1152,15 @@ private fun CurrentPage(
                     decorationBox = { innerTextField ->
                         Box(
                             modifier = Modifier.fillMaxWidth(),
-                            contentAlignment = Alignment.TopCenter
+                            contentAlignment = Alignment.TopStart
                         ) {
                             if (text.isEmpty()) {
                                 Text(
-                                    text = "Digite seu Markdown aqui...",
+                                    text = "Digite o que está preso no seu coração...",
                                     color = pageText.copy(alpha = 0.5f),
                                     fontSize = 15.sp,
-                                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                                    lineHeight = 28.sp,
+                                    textAlign = androidx.compose.ui.text.style.TextAlign.Start,
                                     modifier = Modifier.fillMaxWidth()
                                 )
                             }
@@ -1170,7 +1170,6 @@ private fun CurrentPage(
                     }
                 )
             } else {
-                // Visualização Markdown centralizada
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()

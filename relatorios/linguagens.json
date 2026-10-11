@@ -1,42 +1,42 @@
 {"header" : {
   "cloc_url"           : "github.com/AlDanial/cloc",
   "cloc_version"       : "1.98",
-  "elapsed_seconds"    : 0.06791090965271,
-  "n_files"            : 125,
-  "n_lines"            : 40629,
-  "files_per_second"   : 1840.64682153778,
-  "lines_per_second"   : 598269.117698068,
+  "elapsed_seconds"    : 0.102597951889038,
+  "n_files"            : 126,
+  "n_lines"            : 39346,
+  "files_per_second"   : 1228.09469078166,
+  "lines_per_second"   : 383496.934154724,
   "report_file"        : "relatorios/linguagens.json"},
-"Markdown" :{
-  "nFiles": 81,
-  "blank": 2744,
-  "comment": 6,
-  "code": 10271},
 "CSS" :{
   "nFiles": 18,
   "blank": 6157,
   "comment": 831,
   "code": 9947},
+"Markdown" :{
+  "nFiles": 83,
+  "blank": 2107,
+  "comment": 6,
+  "code": 9320},
 "HTML" :{
   "nFiles": 11,
   "blank": 2131,
   "comment": 87,
   "code": 4253},
 "YAML" :{
-  "nFiles": 4,
-  "blank": 463,
-  "comment": 155,
-  "code": 1271},
+  "nFiles": 3,
+  "blank": 444,
+  "comment": 127,
+  "code": 1220},
+"C++" :{
+  "nFiles": 1,
+  "blank": 181,
+  "comment": 0,
+  "code": 796},
 "C" :{
   "nFiles": 1,
   "blank": 195,
   "comment": 109,
   "code": 599},
-"C++" :{
-  "nFiles": 1,
-  "blank": 123,
-  "comment": 0,
-  "code": 451},
 "PHP" :{
   "nFiles": 1,
   "blank": 59,
@@ -78,7 +78,7 @@
   "comment": 0,
   "code": 7},
 "SUM": {
-  "blank": 11959,
-  "comment": 1214,
-  "code": 27456,
-  "nFiles": 125} }
+  "blank": 11361,
+  "comment": 1186,
+  "code": 26799,
+  "nFiles": 126} }

@@ -456,3 +456,174 @@
     }
 
 }
+
+/* AUTO-LINGUAGENS: INICIO */
+/* C */
+.language-c .dot,
+.dot.language-c,
+.language-c.bar-segment,
+.bar-segment.language-c,
+[data-language="C"] .dot,
+.dot[data-language="C"],
+[data-language="C"] .bar-segment,
+.bar-segment[data-language="C"] {
+    background-color: #27ce7c;
+}
+
+/* C++ */
+.language-c .dot,
+.dot.language-c,
+.language-c.bar-segment,
+.bar-segment.language-c,
+[data-language="C++"] .dot,
+.dot[data-language="C++"],
+[data-language="C++"] .bar-segment,
+.bar-segment[data-language="C++"] {
+    background-color: #ce275e;
+}
+
+/* CSS */
+.language-css .dot,
+.dot.language-css,
+.language-css.bar-segment,
+.bar-segment.language-css,
+[data-language="CSS"] .dot,
+.dot[data-language="CSS"],
+[data-language="CSS"] .bar-segment,
+.bar-segment[data-language="CSS"] {
+    background-color: #5127ce;
+}
+
+/* CSV */
+.language-csv .dot,
+.dot.language-csv,
+.language-csv.bar-segment,
+.bar-segment.language-csv,
+[data-language="CSV"] .dot,
+.dot[data-language="CSV"],
+[data-language="CSV"] .bar-segment,
+.bar-segment[data-language="CSV"] {
+    background-color: #ce2777;
+}
+
+/* HTML */
+.language-html .dot,
+.dot.language-html,
+.language-html.bar-segment,
+.bar-segment.language-html,
+[data-language="HTML"] .dot,
+.dot[data-language="HTML"],
+[data-language="HTML"] .bar-segment,
+.bar-segment[data-language="HTML"] {
+    background-color: #ce4327;
+}
+
+/* JSON */
+.language-json .dot,
+.dot.language-json,
+.language-json.bar-segment,
+.bar-segment.language-json,
+[data-language="JSON"] .dot,
+.dot[data-language="JSON"],
+[data-language="JSON"] .bar-segment,
+.bar-segment[data-language="JSON"] {
+    background-color: #ce27b7;
+}
+
+/* Julia */
+.language-julia .dot,
+.dot.language-julia,
+.language-julia.bar-segment,
+.bar-segment.language-julia,
+[data-language="Julia"] .dot,
+.dot[data-language="Julia"],
+[data-language="Julia"] .bar-segment,
+.bar-segment[data-language="Julia"] {
+    background-color: #ce2782;
+}
+
+/* Markdown */
+.language-markdown .dot,
+.dot.language-markdown,
+.language-markdown.bar-segment,
+.bar-segment.language-markdown,
+[data-language="Markdown"] .dot,
+.dot[data-language="Markdown"],
+[data-language="Markdown"] .bar-segment,
+.bar-segment[data-language="Markdown"] {
+    background-color: #ce5f27;
+}
+
+/* PHP */
+.language-php .dot,
+.dot.language-php,
+.language-php.bar-segment,
+.bar-segment.language-php,
+[data-language="PHP"] .dot,
+.dot[data-language="PHP"],
+[data-language="PHP"] .bar-segment,
+.bar-segment[data-language="PHP"] {
+    background-color: #ce5027;
+}
+
+/* Python */
+.language-python .dot,
+.dot.language-python,
+.language-python.bar-segment,
+.bar-segment.language-python,
+[data-language="Python"] .dot,
+.dot[data-language="Python"],
+[data-language="Python"] .bar-segment,
+.bar-segment[data-language="Python"] {
+    background-color: #ce8727;
+}
+
+/* Ruby */
+.language-ruby .dot,
+.dot.language-ruby,
+.language-ruby.bar-segment,
+.bar-segment.language-ruby,
+[data-language="Ruby"] .dot,
+.dot[data-language="Ruby"],
+[data-language="Ruby"] .bar-segment,
+.bar-segment[data-language="Ruby"] {
+    background-color: #ce6827;
+}
+
+/* TOML */
+.language-toml .dot,
+.dot.language-toml,
+.language-toml.bar-segment,
+.bar-segment.language-toml,
+[data-language="TOML"] .dot,
+.dot[data-language="TOML"],
+[data-language="TOML"] .bar-segment,
+.bar-segment[data-language="TOML"] {
+    background-color: #cec327;
+}
+
+/* XML */
+.language-xml .dot,
+.dot.language-xml,
+.language-xml.bar-segment,
+.bar-segment.language-xml,
+[data-language="XML"] .dot,
+.dot[data-language="XML"],
+[data-language="XML"] .bar-segment,
+.bar-segment[data-language="XML"] {
+    background-color: #79ce27;
+}
+
+/* YAML */
+.language-yaml .dot,
+.dot.language-yaml,
+.language-yaml.bar-segment,
+.bar-segment.language-yaml,
+[data-language="YAML"] .dot,
+.dot[data-language="YAML"],
+[data-language="YAML"] .bar-segment,
+.bar-segment[data-language="YAML"] {
+    background-color: #2763ce;
+}
+
+/* AUTO-LINGUAGENS: FIM */

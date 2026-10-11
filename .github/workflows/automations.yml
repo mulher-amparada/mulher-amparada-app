@@ -1113,6 +1113,7 @@ jobs:
       - deploy
       - bot
       - linguagens
+      - publicar-divulgacao
 
     steps:
       - name: Enviar Sitemap ao IndexNow

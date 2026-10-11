@@ -46,3 +46,49 @@ jobs:
         run: |
           chmod +x automation-bot
           ./automation-bot
+
+
+# =========================================================
+# MULHER AMPARADA — ANÁLISE DE DADOS EM JULIA
+# =========================================================
+
+name: Atualizar dados de violência
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron: "0 10 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dados-violencia-julia
+  cancel-in-progress: false
+
+jobs:
+  atualizar-dados:
+    name: Coletar e analisar dados públicos
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v6
+
+      - name: Instalar Julia
+        uses: julia-actions/setup-julia@v3
+        with:
+          version: "1"
+
+      - name: Instalar dependências
+        run: |
+          julia --project=. -e '
+            using Pkg
+            Pkg.instantiate()
+          '
+
+      - name: Executar análise de dados
+        run: |
+          julia --project=. src/main.jl

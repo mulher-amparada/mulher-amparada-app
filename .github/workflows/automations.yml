@@ -953,32 +953,32 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
-  # =========================================================
-  # OBSERVATÓRIO
+# =========================================================
+  # OBSERVATÓRIO — PNGs SEQUENCIAIS
   # =========================================================
 
   observatorio:
     name: Observatório
     runs-on: ubuntu-24.04
     needs: atualizar-commits
+
     steps:
-      - name: Baixar repositório
+      - name: Baixar repositório completo
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Instalar dependências do Observatório
         run: |
+          set -e
           sudo apt-get update
-          sudo apt-get install -y \
-            gcc \
-            libcairo2-dev
+          sudo apt-get install -y gcc libcairo2-dev
 
       - name: Compilar observatório
         run: |
           set -e
 
-          gcc \
+          gcc -O2 -Wall -Wextra \
             tools/observatorio.c \
             -o observatorio \
             $(pkg-config --cflags --libs cairo) \
@@ -989,25 +989,59 @@ jobs:
           set -e
 
           chmod +x observatorio
+
+          # Remover somente os arquivos antigos do padrão
+          # sequencial e o PNG legado, evitando artefatos obsoletos.
+          mkdir -p docs/observatorio
+          rm -f docs/observatorio/observatorio.png
+          rm -f docs/observatorio/observatorio-[0-9]*.png
+
           ./observatorio
 
-      - name: Verificar mapa gerado
+      - name: Verificar todos os mapas gerados
         run: |
           set -e
 
-          test -s docs/observatorio/observatorio.png
+          DIR="docs/observatorio"
 
-          file docs/observatorio/observatorio.png
+          COUNT=$(find "$DIR" -maxdepth 1 -type f \
+            -regextype posix-extended \
+            -regex '.*/observatorio-[0-9]+\.png' \
+            | wc -l)
 
-          echo ""
-          echo "Observatório gerado:"
-          ls -lh docs/observatorio/observatorio.png
+          if [ "$COUNT" -eq 0 ]; then
+            echo "ERRO: nenhum PNG sequencial foi gerado."
+            exit 1
+          fi
 
-      - name: Disponibilizar observatório
+          echo "Imagens encontradas: $COUNT"
+
+          find "$DIR" -maxdepth 1 -type f \
+            -regextype posix-extended \
+            -regex '.*/observatorio-[0-9]+\.png' \
+            -print | sort -V
+
+          while IFS= read -r -d '' FILE; do
+            if [ ! -s "$FILE" ]; then
+              echo "ERRO: arquivo vazio: $FILE"
+              exit 1
+            fi
+
+            file "$FILE"
+          done < <(
+            find "$DIR" -maxdepth 1 -type f \
+              -regextype posix-extended \
+              -regex '.*/observatorio-[0-9]+\.png' \
+              -print0
+          )
+
+          echo "Todos os PNGs sequenciais foram verificados."
+
+      - name: Disponibilizar todos os mapas
         uses: actions/upload-artifact@v6
         with:
           name: observatorio
-          path: docs/observatorio/observatorio.png
+          path: docs/observatorio/observatorio-*.png
           if-no-files-found: error
           retention-days: 30
 
@@ -1214,9 +1248,8 @@ jobs:
         name: arquivos-pesquisas
         path: artefatos/pesquisas
 
-
-    # =========================================================
-    # BAIXAR OBSERVATÓRIO
+# =========================================================
+    # BAIXAR TODOS OS PNGs DO OBSERVATÓRIO
     # =========================================================
 
     - name: Baixar Observatório
@@ -1224,7 +1257,6 @@ jobs:
       with:
         name: observatorio
         path: artefatos/observatorio
-
 
     # =========================================================
     # REUNIR TODOS OS ARQUIVOS
@@ -1287,12 +1319,48 @@ jobs:
           pesquisas/
 
         # -----------------------------------------------------
-        # OBSERVATÓRIO
+        # OBSERVATÓRIO — TODOS OS PNGs SEQUENCIAIS
         # -----------------------------------------------------
 
-        cp \
-          artefatos/observatorio/observatorio.png \
-          docs/observatorio/observatorio.png
+        mkdir -p docs/observatorio
+
+        # Remover o arquivo legado e imagens antigas que não
+        # façam parte da nova geração.
+        rm -f docs/observatorio/observatorio.png
+        rm -f docs/observatorio/observatorio-[0-9]*.png
+
+        COUNT=$(find artefatos/observatorio \
+          -maxdepth 1 -type f \
+          -regextype posix-extended \
+          -regex '.*/observatorio-[0-9]+\.png' \
+          | wc -l)
+
+        if [ "$COUNT" -eq 0 ]; then
+          echo "ERRO: nenhum PNG sequencial recebido."
+          exit 1
+        fi
+
+        cp artefatos/observatorio/observatorio-*.png \
+          docs/observatorio/
+
+        echo "Mapas copiados: $COUNT"
+
+        find docs/observatorio -maxdepth 1 -type f \
+          -regextype posix-extended \
+          -regex '.*/observatorio-[0-9]+\.png' \
+          -print | sort -V
+
+        # Verificar que todos os arquivos foram copiados.
+        COPIED=$(find docs/observatorio \
+          -maxdepth 1 -type f \
+          -regextype posix-extended \
+          -regex '.*/observatorio-[0-9]+\.png' \
+          | wc -l)
+
+        if [ "$COPIED" -ne "$COUNT" ]; then
+          echo "ERRO: quantidade de PNGs copiados diverge."
+          exit 1
+        fi
 
         # -----------------------------------------------------
         # CORREÇÃO DA DOCUMENTAÇÃO

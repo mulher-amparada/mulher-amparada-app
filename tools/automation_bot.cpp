@@ -1323,8 +1323,6 @@ int main() {
             )
         );
 
-        run(git + " fetch origin main");
-        run(git + " rebase origin/main");
         run(git + " add -A");
 
         const int staged = std::system(

@@ -1097,77 +1097,77 @@ private fun CurrentPage(
             )
     ) {
         Column(
-            modifier = Modifier.fillMaxSize()
+    modifier = Modifier.fillMaxSize()
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End
+    ) {
+        TextButton(
+            onClick = {
+                editing = !editing
+            }
         ) {
             Text(
-                text = "Página ${pageIndex + 1} • ${date ?: "Sem data"}",
-                color = pageText,
-                fontSize = 11.sp
+                if (editing) {
+                    "Visualizar Markdown"
+                } else {
+                    "Editar Markdown"
+                }
             )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
-                TextButton(
-                    onClick = {
-                        editing = !editing
-                    }
-                ) {
-                    Text(
-                        if (editing) {
-                            "Visualizar Markdown"
-                        } else {
-                            "Editar Markdown"
-                        }
-                    )
-                }
-            }
-
-            if (editing) {
-                BasicTextField(
-                    value = text,
-                    onValueChange = onTextChanged,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState()),
-                    textStyle = TextStyle(
-                        color = pageText,
-                        fontSize = 15.sp,
-                        lineHeight = 28.sp,
-                        letterSpacing = 0.1.sp
-                    ),
-                    cursorBrush = SolidColor(
-                        if (dark) Pink else PinkDark
-                    ),
-                    decorationBox = { innerTextField ->
-                        Box {
-                            if (text.isEmpty()) {
-                                Text(
-                                    text = "Digite seu Markdown aqui...",
-                                    color = pageText.copy(alpha = 0.5f),
-                                    fontSize = 15.sp
-                                )
-                            }
-
-                            innerTextField()
-                        }
-                    }
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    MarkdownPreview(
-                        text = text,
-                        color = pageText,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-            }
         }
+    }
+
+    Text(
+        text = "Página ${pageIndex + 1} • ${date ?: "Sem data"}",
+        color = pageText,
+        fontSize = 11.sp
+    )
+
+    if (editing) {
+        BasicTextField(
+            value = text,
+            onValueChange = onTextChanged,
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            textStyle = TextStyle(
+                color = pageText,
+                fontSize = 15.sp,
+                lineHeight = 28.sp,
+                letterSpacing = 0.1.sp
+            ),
+            cursorBrush = SolidColor(
+                if (dark) Pink else PinkDark
+            ),
+            decorationBox = { innerTextField ->
+                Box {
+                    if (text.isEmpty()) {
+                        Text(
+                            text = "Digite seu Markdown aqui...",
+                            color = pageText.copy(alpha = 0.5f),
+                            fontSize = 15.sp
+                        )
+                    }
+
+                    innerTextField()
+                }
+            }
+        )
+    } else {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            MarkdownPreview(
+                text = text,
+                color = pageText,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
+}
     }
 }
 

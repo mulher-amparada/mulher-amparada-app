@@ -971,9 +971,92 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v5
         
+          # =========================================================
+# FÁBRICA VISUAL — MULHER AMPARADA
+# =========================================================
+
+  ler-readme:
+    name: Ler e processar o README
+    runs-on: ubuntu-24.04
+    
+
+  analisar-com-ia:
+    name: Analisar README com inteligência artificial
+    runs-on: ubuntu-24.04
+    needs:
+      - ler-readme
+
+  pesquisar-conscientizacao:
+    name: Pesquisar imagens de conscientização
+    runs-on: ubuntu-24.04
+    needs:
+      - analisar-com-ia
+
+  pesquisar-direitos:
+    name: Pesquisar imagens sobre direitos das mulheres
+    runs-on: ubuntu-24.04
+    needs:
+      - pesquisar-conscientizacao
+
+  pesquisar-acolhimento:
+    name: Pesquisar imagens de acolhimento e apoio
+    runs-on: ubuntu-24.04
+    needs:
+      - pesquisar-direitos
+
+  pesquisar-seguranca:
+    name: Pesquisar imagens de segurança e proteção
+    runs-on: ubuntu-24.04
+    needs:
+      - pesquisar-acolhimento
+
+  pesquisar-igualdade:
+    name: Pesquisar imagens sobre igualdade de gênero
+    runs-on: ubuntu-24.04
+    needs:
+      - pesquisar-seguranca
+
+  pesquisar-prevencao:
+    name: Pesquisar imagens de prevenção à violência
+    runs-on: ubuntu-24.04
+    needs:
+      - pesquisar-igualdade
+
+  validar-imagens:
+    name: Validar imagens e licenças
+    runs-on: ubuntu-24.04
+    needs:
+      - pesquisar-prevencao
+
+  remover-duplicatas:
+    name: Remover imagens duplicadas
+    runs-on: ubuntu-24.04
+    needs:
+      - validar-imagens
+
+  gerar-catalogo:
+    name: Gerar catálogo de imagens e créditos
+    runs-on: ubuntu-24.04
+    needs:
+      - remover-duplicatas
+
+  organizar-pastas:
+    name: Organizar imagens por categoria
+    runs-on: ubuntu-24.04
+    needs:
+      - gerar-catalogo
+
+  publicar-na-main:
+    name: Publicar acervo visual na main
+    runs-on: ubuntu-24.04
+    needs:
+      - organizar-pastas
+      
   # =========================================================
   # ATUALIZAR TOTAL DE COMMITS
   # =========================================================
+  
+
 
   atualizar-commits:
     runs-on: ubuntu-24.04
@@ -1115,6 +1198,7 @@ jobs:
       - bot
       - linguagens
       - publicar-divulgacao
+      - atualizar-commits
 
     steps:
       - name: Enviar Sitemap ao IndexNow

@@ -1,4 +1,4 @@
-cloc|github.com/AlDanial/cloc v 1.98  T=1.13 s (210.8 files/s, 61178.5 lines/s)
+cloc|github.com/AlDanial/cloc v 1.98  T=1.16 s (204.6 files/s, 59363.6 lines/s)
 --- | ---
 
 Language|files|blank|comment|code
@@ -15,7 +15,7 @@ C++|1|123|0|451
 PHP|1|59|0|261
 Julia|1|54|26|134
 JSON|2|0|0|122
-Gradle|3|38|14|114
+Gradle|3|38|14|113
 Ruby|1|21|0|71
 DOS Batch|1|21|2|66
 TOML|2|4|0|37
@@ -23,4 +23,4 @@ CSV|1|0|0|25
 Python|1|10|0|22
 Properties|2|0|20|9
 --------|--------|--------|--------|--------
-SUM:|238|17589|3570|47902
+SUM:|238|17589|3570|47901

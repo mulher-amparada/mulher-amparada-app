@@ -1162,339 +1162,392 @@ jobs:
           
 
           
-# =========================================================
-# CENTRALIZAR E SALVAR ARQUIVOS NA MAIN
-# =========================================================
+=========================================================
 
-  salvar-na-main:
-    name: Salvar todos os arquivos na main
-    runs-on: ubuntu-24.04
+CENTRALIZAR E SALVAR ARQUIVOS NA MAIN
 
-    needs:
-      - atualizar-commits
-      - sitemap
-      - atualizar-footer
-      - atualizar-relatorio-commits
-      - pesquisar-projeto
-      - observatorio
-  
-    permissions:
-      contents: write
+=========================================================
 
-    steps:
+salvar-na-main:
+name: Salvar todos os arquivos na main
+runs-on: ubuntu-24.04
 
-    # =========================================================
-    # BAIXAR CÓDIGO ATUALIZADO
-    # =========================================================
+needs:
+  - atualizar-commits
+  - sitemap
+  - atualizar-footer
+  - atualizar-relatorio-commits
+  - pesquisar-projeto
+  - observatorio
 
-    - name: Baixar código atualizado
-      uses: actions/checkout@v6
-      with:
-        fetch-depth: 0
-        ref: main
+permissions:
+  contents: write
 
+steps:
 
-    # =========================================================
-    # BAIXAR README
-    # =========================================================
+  # =========================================================
+  # BAIXAR CÓDIGO ATUALIZADO
+  # =========================================================
 
-    - name: Baixar README atualizado
-      uses: actions/download-artifact@v7
-      with:
-        name: arquivo-readme
-        path: artefatos/readme
+  - name: Baixar código atualizado
+    uses: actions/checkout@v6
+    with:
+      fetch-depth: 0
+      ref: main
 
+  # =========================================================
+  # BAIXAR README
+  # =========================================================
 
-    # =========================================================
-    # BAIXAR SITEMAP
-    # =========================================================
+  - name: Baixar README atualizado
+    uses: actions/download-artifact@v7
+    with:
+      name: arquivo-readme
+      path: artefatos/readme
 
-    - name: Baixar Sitemap
-      uses: actions/download-artifact@v7
-      with:
-        name: arquivo-sitemap
-        path: artefatos/sitemap
+  # =========================================================
+  # BAIXAR SITEMAP
+  # =========================================================
 
+  - name: Baixar Sitemap
+    uses: actions/download-artifact@v7
+    with:
+      name: arquivo-sitemap
+      path: artefatos/sitemap
 
-    # =========================================================
-    # BAIXAR FOOTER
-    # =========================================================
+  # =========================================================
+  # BAIXAR FOOTER
+  # =========================================================
 
-    - name: Baixar Footer
-      uses: actions/download-artifact@v7
-      with:
-        name: arquivo-footer
-        path: artefatos/footer
+  - name: Baixar Footer
+    uses: actions/download-artifact@v7
+    with:
+      name: arquivo-footer
+      path: artefatos/footer
 
+  # =========================================================
+  # BAIXAR RELATÓRIO DE COMMITS
+  # =========================================================
 
-    # =========================================================
-    # BAIXAR RELATÓRIO DE COMMITS
-    # =========================================================
+  - name: Baixar relatório de commits
+    uses: actions/download-artifact@v7
+    with:
+      name: arquivos-relatorio-commits
+      path: artefatos/commits
 
-    - name: Baixar relatório de commits
-      uses: actions/download-artifact@v7
-      with:
-        name: arquivos-relatorio-commits
-        path: artefatos/commits
+  # =========================================================
+  # BAIXAR PESQUISAS
+  # =========================================================
 
+  - name: Baixar pesquisas
+    uses: actions/download-artifact@v7
+    with:
+      name: arquivos-pesquisas
+      path: artefatos/pesquisas
 
-    # =========================================================
-    # BAIXAR PESQUISAS
-    # =========================================================
+  # =========================================================
+  # BAIXAR TODOS OS PNGs DO OBSERVATÓRIO
+  # =========================================================
 
-    - name: Baixar pesquisas
-      uses: actions/download-artifact@v7
-      with:
-        name: arquivos-pesquisas
-        path: artefatos/pesquisas
+  - name: Baixar Observatório
+    uses: actions/download-artifact@v7
+    with:
+      name: observatorio
+      path: artefatos/observatorio
 
-# =========================================================
-    # BAIXAR TODOS OS PNGs DO OBSERVATÓRIO
-    # =========================================================
+  # =========================================================
+  # REUNIR TODOS OS ARQUIVOS
+  # =========================================================
 
-    - name: Baixar Observatório
-      uses: actions/download-artifact@v7
-      with:
-        name: observatorio
-        path: artefatos/observatorio
+  - name: Reunir arquivos gerados
+    shell: bash
+    run: |
+      set -euo pipefail
 
-    # =========================================================
-    # REUNIR TODOS OS ARQUIVOS
-    # =========================================================
+      echo "========================================"
+      echo "REUNINDO ARQUIVOS GERADOS"
+      echo "========================================"
 
-    - name: Reunir arquivos gerados
-      run: |
-        set -e
+      # -----------------------------------------------------
+      # README PRINCIPAL
+      # -----------------------------------------------------
 
-        echo "========================================"
-        echo "REUNINDO ARQUIVOS GERADOS"
-        echo "========================================"
+      cp \
+        artefatos/readme/README.md \
+        README.md
 
-        # -----------------------------------------------------
-        # README PRINCIPAL
-        # -----------------------------------------------------
+      # -----------------------------------------------------
+      # SITEMAP
+      # -----------------------------------------------------
 
-        cp \
-          artefatos/readme/README.md \
-          README.md
+      cp \
+        artefatos/sitemap/sitemap.xml \
+        sitemap.xml
 
-        # -----------------------------------------------------
-        # SITEMAP
-        # -----------------------------------------------------
+      # -----------------------------------------------------
+      # FOOTER
+      # -----------------------------------------------------
 
-        cp \
-          artefatos/sitemap/sitemap.xml \
-          sitemap.xml
+      cp \
+        artefatos/footer/index.html \
+        index.html
 
-        # -----------------------------------------------------
-        # FOOTER
-        # -----------------------------------------------------
+      # -----------------------------------------------------
+      # DIRETÓRIOS
+      # -----------------------------------------------------
 
-        cp \
-          artefatos/footer/index.html \
-          index.html
+      mkdir -p commits
+      mkdir -p pesquisas
+      mkdir -p docs/observatorio
 
-        # -----------------------------------------------------
-        # DIRETÓRIOS
-        # -----------------------------------------------------
+      # -----------------------------------------------------
+      # RELATÓRIO DE COMMITS
+      # -----------------------------------------------------
 
-        mkdir -p commits
-        mkdir -p pesquisas
-        mkdir -p docs/observatorio
+      cp -a \
+        artefatos/commits/. \
+        commits/
 
-        # -----------------------------------------------------
-        # RELATÓRIO DE COMMITS
-        # -----------------------------------------------------
+      # -----------------------------------------------------
+      # PESQUISAS
+      # -----------------------------------------------------
 
-        cp -a \
-          artefatos/commits/. \
-          commits/
+      cp -a \
+        artefatos/pesquisas/. \
+        pesquisas/
 
-        # -----------------------------------------------------
-        # PESQUISAS
-        # -----------------------------------------------------
+      # -----------------------------------------------------
+      # OBSERVATÓRIO — PNGs SEQUENCIAIS
+      # -----------------------------------------------------
 
-        cp -a \
-          artefatos/pesquisas/. \
-          pesquisas/
+      echo ""
+      echo "Preparando imagens do Observatório..."
 
-        # -----------------------------------------------------
-        # OBSERVATÓRIO — TODOS OS PNGs SEQUENCIAIS
-        # -----------------------------------------------------
+      # Remover o PNG antigo, sem numeração.
+      rm -f docs/observatorio/observatorio.png
 
-        mkdir -p docs/observatorio
+      # Remover imagens numeradas antigas antes de copiar
+      # a geração atual.
+      rm -f docs/observatorio/observatorio-[0-9]*.png
 
-        # Remover o arquivo legado e imagens antigas que não
-        # façam parte da nova geração.
-        rm -f docs/observatorio/observatorio.png
-        rm -f docs/observatorio/observatorio-[0-9]*.png
+      # Contar os PNGs numerados recebidos no artefato.
+      COUNT=$(find artefatos/observatorio \
+        -maxdepth 1 \
+        -type f \
+        -regextype posix-extended \
+        -regex '.*/observatorio-[0-9]+\.png' \
+        | wc -l)
 
-        COUNT=$(find artefatos/observatorio \
-          -maxdepth 1 -type f \
-          -regextype posix-extended \
-          -regex '.*/observatorio-[0-9]+\.png' \
-          | wc -l)
+      if [ "$COUNT" -eq 0 ]; then
+        echo "::error::Nenhum PNG sequencial foi recebido."
+        echo "Conteúdo de artefatos/observatorio:"
+        find artefatos/observatorio \
+          -maxdepth 2 \
+          -type f \
+          -print || true
+        exit 1
+      fi
 
-        if [ "$COUNT" -eq 0 ]; then
-          echo "ERRO: nenhum PNG sequencial recebido."
+      # Copiar todos os mapas numerados.
+      find artefatos/observatorio \
+        -maxdepth 1 \
+        -type f \
+        -regextype posix-extended \
+        -regex '.*/observatorio-[0-9]+\.png' \
+        -exec cp -f {} docs/observatorio/ \;
+
+      echo "Mapas recebidos: $COUNT"
+
+      # Listar os mapas em ordem numérica.
+      find docs/observatorio \
+        -maxdepth 1 \
+        -type f \
+        -regextype posix-extended \
+        -regex '.*/observatorio-[0-9]+\.png' \
+        -print \
+        | sort -V
+
+      # -----------------------------------------------------
+      # VALIDAR QUANTIDADE E CONTEÚDO
+      # -----------------------------------------------------
+
+      COPIED=$(find docs/observatorio \
+        -maxdepth 1 \
+        -type f \
+        -regextype posix-extended \
+        -regex '.*/observatorio-[0-9]+\.png' \
+        | wc -l)
+
+      if [ "$COPIED" -ne "$COUNT" ]; then
+        echo "::error::A quantidade de PNGs copiados diverge."
+        echo "Recebidos: $COUNT"
+        echo "Copiados: $COPIED"
+        exit 1
+      fi
+
+      while IFS= read -r -d '' FILE; do
+        if [ ! -s "$FILE" ]; then
+          echo "::error::Arquivo vazio: $FILE"
           exit 1
         fi
 
-        cp artefatos/observatorio/observatorio-*.png \
-          docs/observatorio/
-
-        echo "Mapas copiados: $COUNT"
-
-        find docs/observatorio -maxdepth 1 -type f \
-          -regextype posix-extended \
-          -regex '.*/observatorio-[0-9]+\.png' \
-          -print | sort -V
-
-        # Verificar que todos os arquivos foram copiados.
-        COPIED=$(find docs/observatorio \
-          -maxdepth 1 -type f \
-          -regextype posix-extended \
-          -regex '.*/observatorio-[0-9]+\.png' \
-          | wc -l)
-
-        if [ "$COPIED" -ne "$COUNT" ]; then
-          echo "ERRO: quantidade de PNGs copiados diverge."
-          exit 1
-        fi
-
-        # -----------------------------------------------------
-        # CORREÇÃO DA DOCUMENTAÇÃO
-        # -----------------------------------------------------
-
-        if [ -f "pesquisas/.github/workflows/workflow.md" ]; then
-
-          mv \
-            "pesquisas/.github/workflows/workflow.md" \
-            "pesquisas/workflow.md"
-
-        fi
-
-        # -----------------------------------------------------
-        # VERIFICAR ARQUIVOS
-        # -----------------------------------------------------
-
-        test -s README.md
-        test -s sitemap.xml
-        test -s index.html
-        test -s pesquisas/workflow.md
-        test -s docs/observatorio/observatorio.png
-
-        echo ""
-        echo "========================================"
-        echo "ARQUIVOS REUNIDOS"
-        echo "========================================"
-
-        echo ""
-        echo "README:"
-        ls -lh README.md
-
-        echo ""
-        echo "Sitemap:"
-        ls -lh sitemap.xml
-
-        echo ""
-        echo "Footer:"
-        ls -lh index.html
-
-        echo ""
-        echo "Relatórios:"
-        find commits \
+        echo "Verificando: $FILE"
+        file "$FILE"
+      done < <(
+        find docs/observatorio \
           -maxdepth 1 \
           -type f \
-          -name "commits_*.md" \
-          -print \
-          | sort
+          -regextype posix-extended \
+          -regex '.*/observatorio-[0-9]+\.png' \
+          -print0
+      )
 
-        echo ""
-        echo "Pesquisas:"
-        ls -lh pesquisas/workflow.md
+      # -----------------------------------------------------
+      # CORREÇÃO DA DOCUMENTAÇÃO
+      # -----------------------------------------------------
 
-        echo ""
-        echo "Observatório:"
-        ls -lh docs/observatorio/observatorio.png
+      if [ -f "pesquisas/.github/workflows/workflow.md" ]; then
+        mv \
+          "pesquisas/.github/workflows/workflow.md" \
+          "pesquisas/workflow.md"
+      fi
 
-        echo ""
-        echo "Todos os arquivos foram reunidos."
+      # -----------------------------------------------------
+      # VERIFICAR ARQUIVOS
+      # -----------------------------------------------------
 
+      test -s README.md
+      test -s sitemap.xml
+      test -s index.html
+      test -s pesquisas/workflow.md
 
-    # =========================================================
-    # SALVAR NA MAIN
-    # =========================================================
+      # Verificar se existe pelo menos um PNG sequencial.
+      if ! find docs/observatorio \
+        -maxdepth 1 \
+        -type f \
+        -regextype posix-extended \
+        -regex '.*/observatorio-[0-9]+\.png' \
+        -print -quit | grep -q .; then
 
-    - name: Salvar todas as alterações em um commit
-      run: |
-        set -e
+        echo "::error::Nenhum PNG sequencial válido encontrado."
+        exit 1
+      fi
 
-        git config user.name "github-actions[bot]"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      echo ""
+      echo "========================================"
+      echo "ARQUIVOS REUNIDOS"
+      echo "========================================"
 
-        echo "========================================"
-        echo "PREPARANDO COMMIT"
-        echo "========================================"
+      echo ""
+      echo "README:"
+      ls -lh README.md
 
-        # -----------------------------------------------------
-        # ADICIONAR ARQUIVOS
-        # -----------------------------------------------------
+      echo ""
+      echo "Sitemap:"
+      ls -lh sitemap.xml
 
-        git add \
-          README.md \
-          index.html \
-          sitemap.xml \
-          commits/ \
-          pesquisas/ \
-          docs/observatorio/
+      echo ""
+      echo "Footer:"
+      ls -lh index.html
 
-        # -----------------------------------------------------
-        # VERIFICAR ALTERAÇÕES
-        # -----------------------------------------------------
+      echo ""
+      echo "Relatórios:"
+      find commits \
+        -maxdepth 1 \
+        -type f \
+        -name "commits_*.md" \
+        -print \
+        | sort
 
-        if git diff --cached --quiet; then
+      echo ""
+      echo "Pesquisas:"
+      ls -lh pesquisas/workflow.md
 
-          echo "Nenhuma alteração para salvar."
-          exit 0
+      echo ""
+      echo "Observatório:"
+      find docs/observatorio \
+        -maxdepth 1 \
+        -type f \
+        -regextype posix-extended \
+        -regex '.*/observatorio-[0-9]+\.png' \
+        -print \
+        | sort -V
 
-        fi
+      echo ""
+      echo "Quantidade de mapas: $COPIED"
+      echo "Todos os arquivos foram reunidos."
 
-        echo ""
-        echo "Arquivos que serão salvos:"
-        git diff --cached --name-status
+  # =========================================================
+  # SALVAR NA MAIN
+  # =========================================================
 
-        # -----------------------------------------------------
-        # COMMIT
-        # -----------------------------------------------------
+  - name: Salvar todas as alterações em um commit
+    shell: bash
+    run: |
+      set -euo pipefail
 
-        git commit \
-          -m "Atualizar arquivos gerados [skip ci]"
+      git config user.name "github-actions[bot]"
+      git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-        # -----------------------------------------------------
-        # ATUALIZAR MAIN
-        # -----------------------------------------------------
+      echo "========================================"
+      echo "PREPARANDO COMMIT"
+      echo "========================================"
 
-        git fetch origin main
+      # -----------------------------------------------------
+      # ADICIONAR ARQUIVOS
+      # -----------------------------------------------------
 
-        git rebase origin/main
+      git add \
+        README.md \
+        index.html \
+        sitemap.xml \
+        commits/ \
+        pesquisas/ \
+        docs/observatorio/
 
-        # -----------------------------------------------------
-        # ENVIAR PARA MAIN
-        # -----------------------------------------------------
+      # -----------------------------------------------------
+      # VERIFICAR ALTERAÇÕES
+      # -----------------------------------------------------
 
-        git push origin HEAD:main
+      if git diff --cached --quiet; then
+        echo "Nenhuma alteração para salvar."
+        exit 0
+      fi
 
-        echo ""
-        echo "========================================"
-        echo "TODOS OS ARQUIVOS FORAM SALVOS NA MAIN"
-        echo "========================================"
+      echo ""
+      echo "Arquivos que serão salvos:"
+      git diff --cached --name-status
 
-        echo ""
-        echo "Arquivos incluídos:"
-        echo "- README.md"
-        echo "- index.html"
-        echo "- sitemap.xml"
-        echo "- commits/"
-        echo "- pesquisas/"
-        echo "- docs/observatorio/observatorio.png"
+      # -----------------------------------------------------
+      # COMMIT
+      # -----------------------------------------------------
+
+      git commit \
+        -m "Atualizar arquivos gerados [skip ci]"
+
+      # -----------------------------------------------------
+      # ATUALIZAR MAIN
+      # -----------------------------------------------------
+
+      git fetch origin main
+      git rebase origin/main
+
+      # -----------------------------------------------------
+      # ENVIAR PARA MAIN
+      # -----------------------------------------------------
+
+      git push origin HEAD:main
+
+      echo ""
+      echo "========================================"
+      echo "TODOS OS ARQUIVOS FORAM SALVOS NA MAIN"
+      echo "========================================"
+
+      echo ""
+      echo "Arquivos incluídos:"
+      echo "- README.md"
+      echo "- index.html"
+      echo "- sitemap.xml"
+      echo "- commits/"
+      echo "- pesquisas/"
+      echo "- docs/observatorio/observatorio-*.png"

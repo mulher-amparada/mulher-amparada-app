@@ -526,20 +526,65 @@ static std::string jsonField(
     const std::string& json,
     const std::string& field
 ) {
-    const std::regex pattern(
-        "\"" + field +
-        R"re("\s*:\s*"((?:\\.|[^"\\])*)")re"
-    );
+    const std::string key = "\"" + field + "\"";
+    size_t position = json.find(key);
 
-    std::smatch match;
-
-    if (!std::regex_search(json, match, pattern)) {
+    if (position == std::string::npos) {
         throw std::runtime_error(
             "Campo JSON ausente: " + field
         );
     }
 
-    return jsonUnescape(match[1].str());
+    position += key.size();
+
+    while (position < json.size() &&
+           std::isspace(
+               static_cast<unsigned char>(json[position])
+           )) {
+        ++position;
+    }
+
+    if (position >= json.size() || json[position++] != ':') {
+        throw std::runtime_error(
+            "Campo JSON inválido: " + field
+        );
+    }
+
+    while (position < json.size() &&
+           std::isspace(
+               static_cast<unsigned char>(json[position])
+           )) {
+        ++position;
+    }
+
+    if (position >= json.size() || json[position++] != '"') {
+        throw std::runtime_error(
+            "Campo JSON não é texto: " + field
+        );
+    }
+
+    std::string value;
+    bool escaped = false;
+
+    for (; position < json.size(); ++position) {
+        const char c = json[position];
+
+        if (escaped) {
+            value.push_back('\\');
+            value.push_back(c);
+            escaped = false;
+        } else if (c == '\\') {
+            escaped = true;
+        } else if (c == '"') {
+            return jsonUnescape(value);
+        } else {
+            value.push_back(c);
+        }
+    }
+
+    throw std::runtime_error(
+        "String JSON incompleta: " + field
+    );
 }
 
 static long long jsonNumber(

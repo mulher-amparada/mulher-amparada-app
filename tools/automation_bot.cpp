@@ -1,7 +1,6 @@
 #include <curl/curl.h>
 #include <openssl/evp.h>
 #include <openssl/pem.h>
-
 #include <algorithm>
 #include <cctype>
 #include <cstdlib>
@@ -396,7 +395,7 @@ static std::string jsonField(
 ) {
     const std::regex pattern(
         "\"" + field +
-        R"("\s*:\s*"((?:\\.|[^"\\])*)")"
+        R"re("\s*:\s*"((?:\\.|[^"\\])*)")re"
     );
 
     std::smatch match;
@@ -409,6 +408,7 @@ static std::string jsonField(
 
     return jsonUnescape(match[1].str());
 }
+
 
 static long long jsonNumber(
     const std::string& json,
@@ -1069,5 +1069,46 @@ int main() {
             return 0;
         }
 
+                run(git + " add -A");
+
+        const int staged = std::system(
+            (
+                git +
+                "diff --cached --quiet"
+            ).c_str()
+        );
+
+        if (staged == 0) {
+            std::cout
+                << "Nenhuma alteração para publicar.\n";
+
+            curl_global_cleanup();
+            return 0;
+        }
+
         run(
-            git + "
+            git +
+            "commit -m " +
+            shellQuote("Atualização automática dos artifacts")
+        );
+
+        run(git + " fetch origin main");
+        run(git + " rebase origin/main");
+        run(git + " push origin HEAD:main");
+
+        std::cout
+            << "Artifacts publicados na branch main.\n";
+
+        curl_global_cleanup();
+        return 0;
+
+    } catch (const std::exception& error) {
+        std::cerr
+            << "Erro: "
+            << error.what()
+            << '\n';
+
+        curl_global_cleanup();
+        return 1;
+    }
+}

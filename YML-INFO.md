@@ -413,6 +413,326 @@ Ao final da compilação, o GitHub Actions recebe um resumo contendo:
 
 ---
 
+📊 "bot" — Bot e análise de dados em Julia
+
+Objetivo
+
+O job "bot" executa o Mulher Amparada Bot, compila seu código C++ e realiza uma análise de dados utilizando a linguagem Julia.
+
+A análise é executada no ambiente do GitHub Actions e produz arquivos que são encaminhados ao job "salvar-na-main", responsável por centralizar e publicar os resultados na branch "main".
+
+O job está definido no workflow:
+
+".github/workflows/automations.yml"
+
+Seu nome no GitHub Actions é:
+
+"Bot e análise de dados em Julia"
+
+⚙️ Ambiente de execução
+
+O job utiliza o runner:
+
+"ubuntu-24.04"
+
+O tempo máximo de execução é de 45 minutos:
+
+timeout-minutes: 45
+
+O código do repositório é obtido por meio de:
+
+- name: Baixar repositório
+  uses: actions/checkout@v6
+  with:
+    fetch-depth: 1
+
+A opção "fetch-depth: 1" utiliza um checkout superficial, suficiente quando as etapas não precisam consultar o histórico completo de commits.
+
+🤖 Compilação e execução do bot C++
+
+Antes da análise em Julia, o workflow instala as dependências necessárias à compilação do bot:
+
+- "g++";
+- "libcurl4-openssl-dev";
+- "libssl-dev".
+
+O arquivo compilado é:
+
+"tools/automation_bot.cpp"
+
+A compilação utiliza C++17, libcurl e as bibliotecas OpenSSL:
+
+g++ \
+  tools/automation_bot.cpp \
+  -o automation-bot \
+  -std=c++17 \
+  -lcurl \
+  -lssl \
+  -lcrypto
+
+O executável resultante é:
+
+"automation-bot"
+
+O bot recebe as credenciais necessárias por meio dos GitHub Actions Secrets:
+
+- "MULHER_AMPARADA_APP_ID";
+- "MULHER_AMPARADA_INSTALLATION_ID";
+- "MULHER_AMPARADA_PRIVATE_KEY".
+
+O nome do repositório é fornecido por meio da variável "GITHUB_REPOSITORY".
+
+As credenciais são transmitidas por variáveis de ambiente, evitando a necessidade de escrevê-las diretamente no código do workflow.
+
+🟠 Instalação do Julia
+
+Após a execução do bot C++, o workflow configura o ambiente Julia através da action:
+
+"julia-actions/setup-julia@v3"
+
+A configuração utilizada é:
+
+- name: Instalar Julia
+  uses: julia-actions/setup-julia@v3
+  with:
+    version: "1"
+
+A versão ""1"" solicita uma versão da série estável Julia 1.x disponibilizada pela action.
+
+O Julia é utilizado para executar o código de análise de dados do projeto.
+
+📦 Instalação das dependências Julia
+
+As dependências do ambiente são inicializadas com:
+
+- name: Instalar dependências Julia
+  run: |
+    julia --project=. -e '
+      using Pkg
+      Pkg.instantiate()
+    '
+
+O comando "julia --project=." inicia o Julia utilizando o ambiente de projeto localizado na raiz do repositório.
+
+A instrução:
+
+using Pkg
+
+carrega o gerenciador de pacotes do Julia.
+
+Em seguida:
+
+Pkg.instantiate()
+
+instala e prepara as dependências declaradas pelo projeto, utilizando os arquivos de ambiente disponíveis no repositório, como "Project.toml" e, quando presente, "Manifest.toml".
+
+A execução depende de esses arquivos declararem corretamente as dependências exigidas pelo código.
+
+📈 Execução da análise de dados
+
+A análise é iniciada pela seguinte etapa:
+
+- name: Executar análise de dados em Julia
+  run: |
+    julia --project=. src/main.jl
+
+O arquivo de entrada é:
+
+"src/main.jl"
+
+O script é executado no ambiente Julia configurado anteriormente.
+
+O código desse arquivo é responsável pela lógica efetiva da análise de dados. Portanto, os cálculos, as transformações, a leitura dos dados de origem e a geração dos resultados dependem da implementação presente em "src/main.jl" e dos módulos utilizados por ele.
+
+📄 Resultados esperados
+
+A integração com o job "salvar-na-main" utiliza dois arquivos de saída:
+
+Arquivo| Finalidade
+"dados/processados/ligue180-2019-processado.csv"| Disponibilizar os dados processados da análise do Ligue 180 de 2019 em formato CSV.
+"relatorios/graficos/ligue180-2019.png"| Disponibilizar o gráfico gerado para a análise do Ligue 180 de 2019.
+
+Esses caminhos são os resultados esperados pelo workflow. Para que o processo funcione, a implementação Julia precisa gerar os arquivos nesses locais.
+
+A existência desses arquivos, isoladamente, não comprova a exatidão estatística dos dados nem a correção científica do gráfico.
+
+✅ Validação dos resultados
+
+Depois de executar "src/main.jl", o workflow verifica se os dois arquivos esperados existem e possuem conteúdo.
+
+As verificações são realizadas com:
+
+test -s dados/processados/ligue180-2019-processado.csv
+test -s relatorios/graficos/ligue180-2019.png
+
+A opção "-s" verifica se o arquivo existe e tem tamanho maior que zero.
+
+Se um dos arquivos estiver ausente ou vazio, a etapa falha e interrompe o fluxo. Isso impede que resultados incompletos sejam encaminhados silenciosamente ao processo de centralização.
+
+Essa validação verifica a presença e o tamanho dos arquivos; não substitui a validação do conteúdo do CSV, dos dados estatísticos ou da integridade da imagem.
+
+📤 Preparação dos resultados
+
+Depois da validação, o workflow cria um diretório temporário para organizar os arquivos:
+
+"pacote-resultados/"
+
+A estrutura preparada é:
+
+pacote-resultados/
+├── dados/
+│   └── processados/
+│       └── ligue180-2019-processado.csv
+└── relatorios/
+    └── graficos/
+        └── ligue180-2019.png
+
+Os arquivos originais são copiados para essa estrutura, preservando os caminhos relativos necessários para a etapa de download posterior.
+
+O diretório funciona como uma área de preparação dos resultados, sem exigir que o job "bot" crie um commit próprio.
+
+📦 Publicação do artifact
+
+Os resultados preparados são enviados ao GitHub Actions como um artifact chamado:
+
+"resultados-ligue180"
+
+A publicação utiliza:
+
+- name: Enviar resultados como artifact
+  uses: actions/upload-artifact@v6
+  with:
+    name: resultados-ligue180
+    path: pacote-resultados/
+    if-no-files-found: error
+    retention-days: 1
+
+O artifact contém o CSV processado e o gráfico da análise.
+
+A opção "if-no-files-found: error" determina que a etapa falhe caso nenhum arquivo correspondente seja encontrado.
+
+A retenção de um dia mantém o artifact disponível temporariamente para o job consumidor, sem tratá-lo como armazenamento permanente.
+
+O artifact não é, por si só, um commit no Git. Ele funciona como um meio de transferência de arquivos entre jobs da mesma execução do workflow.
+
+💾 Integração com "salvar-na-main"
+
+O job "salvar-na-main" deve declarar "bot" em sua lista "needs":
+
+needs:
+  - atualizar-commits
+  - sitemap
+  - atualizar-footer
+  - atualizar-relatorio-commits
+  - pesquisar-projeto
+  - observatorio
+  - bot
+
+Essa dependência faz com que o job de centralização aguarde a conclusão bem-sucedida do job "bot", respeitando também as demais dependências declaradas.
+
+Antes da etapa "Reunir arquivos gerados", o artifact é baixado:
+
+- name: Baixar resultados do bot
+  uses: actions/download-artifact@v7
+  with:
+    name: resultados-ligue180
+    path: artefatos/resultados
+
+Após o download, os arquivos ficam disponíveis nos caminhos:
+
+- "artefatos/resultados/dados/processados/ligue180-2019-processado.csv";
+- "artefatos/resultados/relatorios/graficos/ligue180-2019.png".
+
+A etapa "Reunir arquivos gerados" copia esses arquivos para seus destinos definitivos no repositório.
+
+📝 Commit final
+
+O job "bot" não precisa executar "git commit" nem "git push" para publicar os dois resultados.
+
+A etapa "Salvar todas as alterações em um commit", dentro de "salvar-na-main", adiciona os caminhos dos arquivos ao conjunto de alterações:
+
+git add \
+  dados/processados/ligue180-2019-processado.csv \
+  relatorios/graficos/ligue180-2019.png
+
+Esses arquivos são incluídos no commit final junto aos demais arquivos gerados pelos jobs que participam da centralização.
+
+Quando existem alterações preparadas, o processo cria o commit e envia as alterações para a branch "main", conforme a lógica de sincronização e publicação já definida no workflow.
+
+Isso centraliza a publicação dos resultados da análise em um único job, em vez de permitir que o job "bot" envie os arquivos separadamente.
+
+🔄 Fluxo da análise Julia
+
+Job bot
+   │
+   ├── Baixar repositório
+   │
+   ├── Instalar dependências C++
+   │
+   ├── Compilar automation_bot.cpp
+   │
+   ├── Executar Mulher Amparada Bot
+   │
+   ├── Instalar Julia
+   │
+   ├── Inicializar dependências
+   │
+   ├── Executar src/main.jl
+   │
+   ├── Validar CSV e gráfico
+   │
+   ├── Preparar pacote-resultados/
+   │
+   └── Publicar artifact
+         │
+         ▼
+   resultados-ligue180
+         │
+         ▼
+   Job salvar-na-main
+         │
+         ├── Baixar artifact
+         │
+         ├── Reunir arquivos gerados
+         │
+         ├── Adicionar arquivos ao Git
+         │
+         ├── Criar commit
+         │
+         └── Enviar alterações para main
+
+🔐 Segurança e confiabilidade
+
+O processo utiliza algumas medidas para reduzir erros operacionais:
+
+- Credenciais do bot fornecidas por GitHub Actions Secrets.
+- Execução das etapas com falha interrompendo o processo quando um comando retorna erro.
+- Verificação dos arquivos esperados antes de publicar o artifact.
+- Transferência dos resultados entre jobs por meio de artifacts.
+- Centralização do commit final no job "salvar-na-main".
+
+A análise também depende da confiabilidade do código Julia, das fontes de dados e das bibliotecas utilizadas. A execução automatizada não substitui auditoria, revisão metodológica ou validação independente dos resultados.
+
+📁 Arquivos relacionados
+
+Caminho| Função
+"tools/automation_bot.cpp"| Código-fonte do bot C++.
+"src/main.jl"| Ponto de entrada da análise Julia.
+"Project.toml"| Declaração do ambiente e das dependências Julia, quando presente.
+"Manifest.toml"| Registro das versões resolvidas das dependências, quando presente.
+"dados/processados/ligue180-2019-processado.csv"| CSV processado esperado.
+"relatorios/graficos/ligue180-2019.png"| Gráfico esperado.
+".github/workflows/automations.yml"| Definição do workflow automatizado.
+
+🎯 Resultado final
+
+O job "bot" combina a execução do bot C++ com a análise de dados em Julia. Depois de validar e empacotar os resultados, disponibiliza-os para o job "salvar-na-main".
+
+A publicação dos resultados ocorre junto dos demais arquivos gerados pelo workflow, mantendo a centralização das alterações na branch "main".
+
+Esse mecanismo separa a geração dos dados da publicação no Git, facilita a transferência entre jobs e permite que a etapa central de commit seja responsável pela consolidação dos arquivos do projeto.
+
+---
 # 🌐 `build-site`
 
 ## Construção do site

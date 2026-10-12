@@ -1,6 +1,9 @@
 name: Mulher Amparada Agent
 
 on:
+  schedule:
+    - cron: '0 21 * * *'
+
   workflow_dispatch:
     inputs:
       action:
@@ -32,9 +35,11 @@ concurrency:
 jobs:
   agent:
     runs-on: ubuntu-latest
+
     steps:
-        - name: Baixar código do repositório
-           uses: actions/checkout@v4
+      - name: Baixar código do repositório
+        uses: actions/checkout@v4
+
       - name: Instalar dependências
         run: |
           sudo apt-get update
@@ -54,7 +59,10 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           set -euo pipefail
-          if [[ "${{ inputs.action }}" == "executar-workflow" ]]; then
+
+          if [[ "${{ github.event_name }}" == "schedule" ]]; then
+            ./github_agent workflow "automations.yml" "main"
+          elif [[ "${{ inputs.action }}" == "executar-workflow" ]]; then
             ./github_agent workflow "${{ inputs.workflow }}" "${{ inputs.branch }}"
           else
             ./github_agent dependabot "${{ inputs.branch }}"

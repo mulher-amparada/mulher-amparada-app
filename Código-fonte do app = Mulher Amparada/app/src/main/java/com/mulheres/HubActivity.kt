@@ -2192,7 +2192,6 @@ private fun colors(): AppColors {
     }
 }
 
-
 @Composable
 private fun BottomAreaSelector(
     c: AppColors,
@@ -2200,143 +2199,107 @@ private fun BottomAreaSelector(
     onSelecionarConteudo: () -> Unit,
     onSelecionarProtegidas: () -> Unit
 ) {
+    val isDark = isSystemInDarkTheme()
+    val configuration = LocalConfiguration.current
 
-    val isDark =
-        isSystemInDarkTheme()
+    val isLandscape =
+        configuration.screenWidthDp > configuration.screenHeightDp
 
-    val shape =
-        RoundedCornerShape(50.dp)
+    val shape = RoundedCornerShape(50.dp)
+
+    val barHeight = if (isLandscape) 76.dp else 76.dp
+    val thumbSize = if (isLandscape) 96.dp else 76.dp
+    val horizontalPadding = 5.dp
 
     BoxWithConstraints(
-
-        modifier =
-            Modifier
-                .fillMaxWidth(0.80f)
-                .height(
-    if (
-        LocalConfiguration.current.screenWidthDp >
-        LocalConfiguration.current.screenHeightDp
-    ) 96.dp else 76.dp
-)
-                .clip(shape)
-                .background(
-                    if (isDark)
-                        Color(0xFF17171A)
-                    else
-                        Color.White
-                )
-                .border(
-                    1.dp,
-                    c.borderLight,
-                    shape
-                )
-                .padding(5.dp)
+        modifier = Modifier
+            .fillMaxWidth(if (isLandscape) 0.55f else 0.80f)
+            .height(barHeight)
+            .clip(shape)
+            .background(
+                if (isDark) Color(0xFF17171A) else Color.White
+            )
+            .border(1.dp, c.borderLight, shape)
+            .padding(horizontal = horizontalPadding, vertical = 5.dp)
     ) {
-
-        val thumbSize =
-            145.dp
-
-        val innerWidth =
-            maxWidth - 8.dp
-
-        val halfWidth =
-            innerWidth / 2
+        val availableWidth = maxWidth
+        val halfWidth = availableWidth / 2
 
         val offsetX =
-            if (areaProtegidaSelecionada)
-                innerWidth - thumbSize + 7.dp
-            else
-                0.dp
+            if (areaProtegidaSelecionada) halfWidth else 0.dp
 
-        Row(
-            modifier =
-                Modifier.fillMaxSize()
-        ) {
-
+        Row(modifier = Modifier.fillMaxSize()) {
             Box(
-                modifier =
-                    Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                        .clickable(
-                            indication = null,
-                            interactionSource =
-                                androidx.compose.foundation.interaction
-                                    .MutableInteractionSource()
-                        ) {
-                            onSelecionarConteudo()
-                        }
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .clickable(
+                        indication = null,
+                        interactionSource = androidx.compose.foundation.interaction
+                            .MutableInteractionSource()
+                    ) {
+                        onSelecionarConteudo()
+                    }
             )
 
             Box(
-                modifier =
-                    Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                        .clickable(
-                            indication = null,
-                            interactionSource =
-                                androidx.compose.foundation.interaction
-                                    .MutableInteractionSource()
-                        ) {
-                            onSelecionarProtegidas()
-                        }
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .clickable(
+                        indication = null,
+                        interactionSource = androidx.compose.foundation.interaction
+                            .MutableInteractionSource()
+                    ) {
+                        onSelecionarProtegidas()
+                    }
             )
         }
 
         Box(
-            modifier =
-                Modifier
-                    .offset(
-                        x = offsetX
-                    )
-                    .size(thumbSize)
-                    .clip(CircleShape)
-                    .background(
-                        c.pink
-                    ),
-
-            contentAlignment =
-                Alignment.Center
+            modifier = Modifier
+                .offset(x = offsetX)
+                .size(
+                    width = halfWidth,
+                    height = thumbSize
+                )
+                .align(Alignment.CenterStart)
+                .clip(CircleShape)
+                .background(c.pink),
+            contentAlignment = Alignment.Center
         ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(
+                    if (isLandscape) 4.dp else 7.dp
+                )
+            ) {
+                Image(
+                    painter = painterResource(
+                        if (areaProtegidaSelecionada)
+                            R.drawable.ic_secret
+                        else
+                            R.drawable.ic_protecoes
+                    ),
+                    contentDescription = null,
+                    modifier = Modifier.size(
+                        if (isLandscape) 21.dp else 29.dp
+                    )
+                )
 
-    Row(
-    verticalAlignment =
-        Alignment.CenterVertically,
-    horizontalArrangement =
-        Arrangement.spacedBy(7.dp)
-) {
-
-    Image(
-        painter =
-            painterResource(
-                if (areaProtegidaSelecionada)
-                    R.drawable.ic_secret
-                else
-                    R.drawable.ic_protecoes
-            ),
-        contentDescription = null,
-        modifier =
-            Modifier.size(29.dp)
-    )
-
-    Text(
-        text =
-            if (areaProtegidaSelecionada)
-                "Áreas"
-            else
-                "Ajuda",
-        color =
-            Color.White,
-        fontSize =
-            20.sp
-    )
-}
-    
+                Text(
+                    text = if (areaProtegidaSelecionada)
+                        "Áreas"
+                    else
+                        "Ajuda",
+                    color = Color.White,
+                    fontSize = if (isLandscape) 13.sp else 20.sp,
+                    maxLines = 1
+                )
+            }
         }
     }
 }
-
 /* =========================================================
    TEMA
 ========================================================= */

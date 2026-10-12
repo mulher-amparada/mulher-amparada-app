@@ -875,9 +875,10 @@ val landscape =
     Row(
     modifier = Modifier
         .fillMaxWidth()
-        .padding(
-            horizontal = if (landscape) 64.dp else 0.dp
-        )
+.padding(
+    start = if (landscape) 64.dp else 0.dp,
+    end = if (landscape) 70.dp else 0.dp
+)
         .height(61.dp)
         .clip(RoundedCornerShape(999.dp))
         .background(surface)

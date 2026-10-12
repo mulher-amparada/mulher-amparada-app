@@ -694,7 +694,7 @@ val paddingHorizontal =
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-.padding(horizontal = paddingHorizontal)
+.padding(horizontal = paddingHorizontal),
         verticalArrangement =
             Arrangement.spacedBy(10.dp)
     ) {

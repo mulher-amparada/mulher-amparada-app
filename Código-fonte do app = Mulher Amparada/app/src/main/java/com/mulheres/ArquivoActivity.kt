@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.foundation.layout.navigationBarsPadding
 import android.graphics.Color as AndroidColor
 import android.net.Uri
@@ -175,6 +176,14 @@ private data class ArquivoSeguroItem(
 @Composable
 private fun ArquivoSeguro() {
 
+val configuration = LocalConfiguration.current
+
+val paisagem =
+    configuration.screenWidthDp > configuration.screenHeightDp
+
+val paddingHorizontal =
+    if (paisagem) 30.dp else 18.dp
+    
     val context =
         androidx.compose.ui.platform.LocalContext.current
 
@@ -529,13 +538,12 @@ private fun ArquivoSeguro() {
                 modifier =
                     Modifier.fillMaxSize(),
 
-                contentPadding =
-                    PaddingValues(
-                        start = 18.dp,
-                        end = 18.dp,
-                        top = 24.dp,
-                        bottom = 60.dp
-                    ),
+                contentPadding = PaddingValues(
+    start = paddingHorizontal,
+    end = paddingHorizontal,
+    top = 24.dp,
+    bottom = 60.dp
+),
 
                 verticalArrangement =
                     Arrangement.spacedBy(10.dp)

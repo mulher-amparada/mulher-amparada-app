@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -682,10 +683,18 @@ private fun TelaLista(
     onAbrir: (CicloRegistro) -> Unit
 ) {
 
+val configuration = LocalConfiguration.current
+
+val paisagem =
+    configuration.screenWidthDp > configuration.screenHeightDp
+
+val paddingHorizontal =
+    if (paisagem) 64.dp else 12.dp
+    
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 12.dp),
+.padding(horizontal = paddingHorizontal)
         verticalArrangement =
             Arrangement.spacedBy(10.dp)
     ) {

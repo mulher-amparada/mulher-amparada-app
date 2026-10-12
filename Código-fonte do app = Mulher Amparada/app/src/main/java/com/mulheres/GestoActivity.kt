@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.compose.ui.platform.LocalConfiguration
 import android.os.Bundle
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.activity.ComponentActivity
@@ -77,6 +78,14 @@ WindowCompat.setDecorFitsSystemWindows(
 @Composable
 private fun GestoScreen() {
 
+val configuration = LocalConfiguration.current
+
+val paisagem =
+    configuration.screenWidthDp > configuration.screenHeightDp
+
+val paddingHorizontal =
+    if (paisagem) 30.dp else 16.dp
+    
     val dark =
         androidx.compose.foundation.isSystemInDarkTheme()
 
@@ -140,12 +149,12 @@ private fun GestoScreen() {
             .verticalScroll(
                 rememberScrollState()
             )
-            .padding(
-                start = 16.dp,
-                end = 16.dp,
-                top = 25.dp,
-                bottom = 70.dp
-            )
+.padding(
+    start = paddingHorizontal,
+    end = paddingHorizontal,
+    top = 25.dp,
+    bottom = 70.dp
+)
             .windowInsetsPadding(
                 WindowInsets.statusBars
             )

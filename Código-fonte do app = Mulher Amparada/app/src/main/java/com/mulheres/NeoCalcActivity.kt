@@ -688,13 +688,13 @@ private fun LinhaBotoes(
                 modifier = Modifier
                     .weight(1f)
                     .then(
-                        if (paisagem) {
-                            Modifier
-                                .fillMaxHeight()
-                                .aspectRatio(
-                                    1f,
-                                    matchHeightConstraintsFirst = true
-                                )
+.then(
+    if (paisagem) {
+        Modifier.fillMaxHeight()
+    } else {
+        Modifier.aspectRatio(1f)
+    }
+)
                         } else {
                             Modifier.aspectRatio(1f)
                         }

@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.foundation.layout.asPaddingValues
 import android.content.Intent
 import android.os.Bundle
@@ -134,6 +135,14 @@ private fun CarteiraScreen(
 ) {
 
     val dark = isSystemInDarkTheme()
+    
+    val configuration = LocalConfiguration.current
+
+val paisagem =
+    configuration.screenWidthDp > configuration.screenHeightDp
+
+val paddingHorizontal =
+    if (paisagem) 30.dp else 16.dp
 
     val background = if (dark) {
         Color(0xFF000000)
@@ -183,12 +192,12 @@ private fun CarteiraScreen(
                 .verticalScroll(
                     rememberScrollState()
                 )
-                .padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    bottom = 32.dp,
-                    top = 20.dp
-                )
+        .padding(
+    start = paddingHorizontal,
+    end = paddingHorizontal,
+    bottom = 32.dp,
+    top = 20.dp
+)
                 .padding(
                     top = WindowInsets.statusBars
                         .asPaddingValues()

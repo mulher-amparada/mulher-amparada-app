@@ -1,4 +1,4 @@
-Package com.mulheres
+package com.mulheres
 
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxHeight

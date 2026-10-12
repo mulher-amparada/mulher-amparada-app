@@ -1283,7 +1283,7 @@ val spacer = View(this)
 spacer.layoutParams = LinearLayout.LayoutParams(
     LinearLayout.LayoutParams.MATCH_PARENT,
     (
-        (if (landscape) 480 else 120) *
+        (if (landscape) 240 else 120) *
         resources.displayMetrics.density
     ).toInt()
 )

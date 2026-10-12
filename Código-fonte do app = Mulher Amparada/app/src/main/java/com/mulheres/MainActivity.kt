@@ -107,19 +107,18 @@ if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
     if (paisagem) {
         params.setMargins(
             64.dp() + barras.left,
-            32.dp() + barras.top,
+            28.dp() + barras.top,
             64.dp() + barras.right,
             32.dp() + barras.bottom
         )
-    } else {
-        params.setMargins(
-            0,
-            barras.top,
-            0,
-            barras.bottom
-        )
-    }
-
+ } else {
+    params.setMargins(
+        8.dp(),
+        barras.top,
+        8.dp(),
+        barras.bottom
+    )
+}
     view.layoutParams = params
 
     insets

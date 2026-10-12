@@ -1011,22 +1011,27 @@ private fun DiarioBook(
     dark: Boolean,
     onTextChanged: (Int, String) -> Unit
 ) {
-val landscape =
-    LocalConfiguration.current.orientation ==
-        Configuration.ORIENTATION_LANDSCAPE
-        
+    val landscape =
+        LocalConfiguration.current.orientation ==
+            Configuration.ORIENTATION_LANDSCAPE
+
     Box(
-    modifier = Modifier
-        .fillMaxSize()
-        .padding(
-            start = if (landscape) 64.dp else 4.dp,
-            end = if (landscape) 64.dp else 4.dp
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                start = if (landscape) 64.dp else 4.dp,
+                end = if (landscape) 64.dp else 4.dp
+            )
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(25.dp))
+                .background(
+                    if (dark) Color(0xFF0C0C10)
+                    else Color(0xFFE1DADD)
+                )
         )
-        .clip(RoundedCornerShape(25.dp))
-        .background(
-            if (dark) Color(0xFF0C0C10) else Color(0xFFE1DADD)
-        )
-)
 
         Box(
             modifier = Modifier
@@ -1037,7 +1042,8 @@ val landscape =
                 )
                 .clip(RoundedCornerShape(25.dp))
                 .background(
-                    if (dark) Color(0xFF151519) else Color(0xFFEDE7E9)
+                    if (dark) Color(0xFF151519)
+                    else Color(0xFFEDE7E9)
                 )
         )
 

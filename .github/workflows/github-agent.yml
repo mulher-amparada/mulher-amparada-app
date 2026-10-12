@@ -51,6 +51,11 @@ jobs:
         run: |
           set -euo pipefail
 
+          if [[ -z "$PRIVATE_KEY" ]]; then
+            echo "::error::Configure o secret MULHER_AMPARADA_PRIVATE_KEY em Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+
           if [[ "$PRIVATE_KEY" == *"-----BEGIN"* ]]; then
             printf '%s\n' "$PRIVATE_KEY" > "$RUNNER_TEMP/private-key.pem"
           else

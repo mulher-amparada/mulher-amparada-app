@@ -2191,7 +2191,6 @@ private fun colors(): AppColors {
         )
     }
 }
-
 @Composable
 private fun BottomAreaSelector(
     c: AppColors,
@@ -2205,7 +2204,7 @@ private fun BottomAreaSelector(
     val isLandscape =
         configuration.screenWidthDp > configuration.screenHeightDp
 
-    val alturaBarra = if (isLandscape) 52.dp else 76.dp
+    val alturaBarra = if (isLandscape) 44.dp else 76.dp
     val tamanhoIcone = if (isLandscape) 23.dp else 29.dp
     val tamanhoTexto = if (isLandscape) 16.sp else 20.sp
 
@@ -2292,7 +2291,6 @@ private fun BottomAreaSelector(
         }
     }
 }
-
 /* =========================================================
    TEMA
 ========================================================= */
@@ -2416,14 +2414,14 @@ private fun MulherAmparadaScreen() {
         configuration.screenWidthDp >
         configuration.screenHeightDp
 
-    val paddingTela = if (isLandscape) 64.dp else 0.dp
+    val paddingTela = if (isLandscape) 24.dp else 0.dp
 
-    val alturaBarra = if (isLandscape) 40.dp else 64.dp
+val alturaBarra = if (isLandscape) 40.dp else 64.dp
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(paddingTela)
+            .padding(horizontal = paddingTela)
     ) {
     
         CompositionLocalProvider(

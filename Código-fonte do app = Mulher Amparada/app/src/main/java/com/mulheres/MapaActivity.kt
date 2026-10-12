@@ -453,7 +453,7 @@ val paisagem =
                 .align(Alignment.BottomStart)
                 .padding(
                     start = paddingHorizontal,
-                    bottom = 32.dp
+                    bottom = 22.dp
                 )
         )
     }

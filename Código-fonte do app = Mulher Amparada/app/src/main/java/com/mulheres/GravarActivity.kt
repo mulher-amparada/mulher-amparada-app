@@ -198,6 +198,16 @@ controller.isAppearanceLightNavigationBars =
                 R.id.list
             )
 
+val landscape =
+    resources.configuration.orientation ==
+        android.content.res.Configuration.ORIENTATION_LANDSCAPE
+
+list.orientation = if (landscape) {
+    LinearLayout.HORIZONTAL
+} else {
+    LinearLayout.VERTICAL
+}
+
         sensorManager =
             getSystemService(
                 Context.SENSOR_SERVICE
@@ -1658,10 +1668,7 @@ controller.isAppearanceLightNavigationBars =
     val file = File(path)
     if (!file.exists()) return
 
-    val landscape =
-        resources.configuration.orientation ==
-            android.content.res.Configuration.ORIENTATION_LANDSCAPE
-
+    
     val container = LinearLayout(this).apply {
         orientation = LinearLayout.HORIZONTAL
         gravity = android.view.Gravity.CENTER_VERTICAL

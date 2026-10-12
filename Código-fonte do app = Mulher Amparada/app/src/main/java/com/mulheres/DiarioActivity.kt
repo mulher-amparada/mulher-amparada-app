@@ -873,22 +873,25 @@ val landscape =
         if (dark) DarkMuted else LightMuted
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(61.dp)
-            .clip(RoundedCornerShape(999.dp))
-            .background(surface)
-            .border(
-                1.dp,
-                border,
-                RoundedCornerShape(999.dp)
-            )
-            .padding(
-                horizontal = if (landscape) 64.dp else 13.dp,
-                vertical = if (landscape) 12.dp else 0.dp
-            ),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+    modifier = Modifier
+        .fillMaxWidth()
+        .padding(
+            horizontal = if (landscape) 64.dp else 0.dp
+        )
+        .height(61.dp)
+        .clip(RoundedCornerShape(999.dp))
+        .background(surface)
+        .border(
+            1.dp,
+            border,
+            RoundedCornerShape(999.dp)
+        )
+        .padding(
+            horizontal = if (landscape) 13.dp else 13.dp,
+            vertical = if (landscape) 12.dp else 0.dp
+        ),
+    verticalAlignment = Alignment.CenterVertically
+) {
         Box(
             modifier = Modifier
                 .size(39.dp)
@@ -1019,8 +1022,8 @@ private fun DiarioBook(
         modifier = Modifier
             .fillMaxSize()
             .padding(
-                start = if (landscape) 64.dp else 4.dp,
-                end = if (landscape) 64.dp else 4.dp
+            start = if (landscape) 64.dp else 4.dp
+                end = if (landscape) 32.dp else 4.dp
             )
     ) {
         Box(

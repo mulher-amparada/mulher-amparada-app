@@ -40,7 +40,7 @@ fun EmergencyOverlay(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(
-                    end = 22.dp,
+                    end = 64.dp,
                     bottom = 115.dp
                 )
                 .size(86.dp)

@@ -1653,262 +1653,124 @@ controller.isAppearanceLightNavigationBars =
     // ITEM DA LISTA
     // =========================================================
 
-    private fun addToList(
-        path: String
-    ) {
+    private fun addToList(path: String) {
 
-        val file =
-            File(path)
+    val file = File(path)
+    if (!file.exists()) return
 
-        if (!file.exists()) {
-            return
-        }
+    val landscape =
+        resources.configuration.orientation ==
+                android.content.res.Configuration.ORIENTATION_LANDSCAPE
 
-        val container =
-            LinearLayout(this)
+    val container = LinearLayout(this).apply {
+        orientation = LinearLayout.HORIZONTAL
+        gravity = android.view.Gravity.CENTER_VERTICAL
+        setPadding(24, 24, 20, 24)
+        setBackgroundResource(R.drawable.bg_record_item)
+    }
 
-        container.orientation =
-            LinearLayout.HORIZONTAL
-
-        container.gravity =
-            android.view.Gravity.CENTER_VERTICAL
-
-        container.setPadding(
-            24,
-            24,
-            20,
-            24
-        )
-
-        container.setBackgroundResource(
-            R.drawable.bg_record_item
-        )
-
-        val params =
-            LinearLayout.LayoutParams(
-                -1,
-                -2
-            )
-
-        params.setMargins(
-            0,
-            0,
-            0,
-            16
-        )
-
-        container.layoutParams =
-            params
-
-        // =====================================================
-        // ÁUDIO
-        // =====================================================
-
-        val icon =
-            ImageView(this)
-
-        icon.setImageResource(
-            R.drawable.ic_audio
-        )
-
-        icon.contentDescription =
-            "Reproduzir gravação"
-
-        icon.layoutParams =
-            LinearLayout.LayoutParams(
-                56,
-                56
-            )
-
-        // =====================================================
-        // NOME
-        // =====================================================
-
-        val text =
-            TextView(this)
-
-        text.text =
-            file.nameWithoutExtension
-
-        text.textSize =
-            16f
-
-        text.setTextColor(
-    ContextCompat.getColor(
-        this,
-        R.color.record_text
+    val params = LinearLayout.LayoutParams(
+        if (landscape) {
+            (resources.displayMetrics.widthPixels / 2) - 48
+        } else {
+            -1
+        },
+        -2
     )
-)
 
-        text.setPadding(
-            18,
+    if (landscape) {
+        params.setMargins(0, 0, 16, 0)
+    } else {
+        params.setMargins(0, 0, 0, 16)
+    }
+
+    container.layoutParams = params
+
+    val icon = ImageView(this).apply {
+        setImageResource(R.drawable.ic_audio)
+        contentDescription = "Reproduzir gravação"
+        layoutParams = LinearLayout.LayoutParams(56, 56)
+    }
+
+    val text = TextView(this).apply {
+        text = file.nameWithoutExtension
+        textSize = 16f
+        setTextColor(
+            ContextCompat.getColor(
+                this@GravarActivity,
+                R.color.record_text
+            )
+        )
+        setPadding(18, 0, 12, 0)
+        typeface = Typeface.DEFAULT
+        maxLines = 1
+        ellipsize = android.text.TextUtils.TruncateAt.END
+        layoutParams = LinearLayout.LayoutParams(
             0,
-            12,
-            0
-        )
-
-        text.typeface = Typeface.DEFAULT
-
-        text.layoutParams =
-            LinearLayout.LayoutParams(
-                0,
-                -2,
-                1f
-            )
-
-        // =====================================================
-        // DOWNLOAD
-        // =====================================================
-
-        val download =
-            ImageView(this)
-
-        download.setImageResource(
-            R.drawable.ic_download
-        )
-
-        download.contentDescription =
-            "Baixar gravação"
-
-        download.isClickable =
-            true
-
-        download.isFocusable =
-            true
-
-        download.setBackgroundColor(
-            Color.TRANSPARENT
-        )
-
-        download.layoutParams =
-            LinearLayout.LayoutParams(
-                56,
-                56
-            )
-
-        // =====================================================
-        // EXCLUIR
-        // =====================================================
-
-        val delete =
-            ImageView(this)
-
-        delete.setImageResource(
-            R.drawable.ic_delete
-        )
-
-        delete.contentDescription =
-            "Excluir gravação"
-
-        delete.isClickable =
-            true
-
-        delete.isFocusable =
-            true
-
-        delete.setBackgroundColor(
-            Color.TRANSPARENT
-        )
-
-        delete.layoutParams =
-            LinearLayout.LayoutParams(
-                56,
-                56
-            )
-
-        // =====================================================
-        // ADICIONAR
-        // =====================================================
-
-        container.addView(download)
-container.addView(icon)
-container.addView(text)
-container.addView(delete)
-
-        // =====================================================
-        // REPRODUZIR
-        // =====================================================
-
-        icon.setOnClickListener {
-
-            playAudio(
-                file.absolutePath
-            )
-        }
-
-        text.setOnClickListener {
-
-            playAudio(
-                file.absolutePath
-            )
-        }
-
-        // =====================================================
-        // DOWNLOAD
-        // =====================================================
-
-        download.setOnClickListener {
-
-            downloadAudio(
-                file.absolutePath
-            )
-        }
-
-        // =====================================================
-        // EXCLUIR
-        // =====================================================
-
-        delete.setOnClickListener {
-
-            player?.release()
-
-            player = null
-
-            currentTempFile?.let {
-
-                if (it.exists()) {
-                    it.delete()
-                }
-            }
-
-            currentTempFile = null
-
-            // ===============================================
-            // ENC
-            // ===============================================
-
-            if (file.exists()) {
-                file.delete()
-            }
-
-            // ===============================================
-            // JSON
-            // ===============================================
-
-            val metadata =
-                File(
-                    file.parent,
-                    file.nameWithoutExtension +
-                            ".metadata.json"
-                )
-
-            if (metadata.exists()) {
-                metadata.delete()
-            }
-
-            // ===============================================
-            // LISTA
-            // ===============================================
-
-            list.removeView(
-                container
-            )
-        }
-
-        list.addView(
-            container
+            -2,
+            1f
         )
     }
+
+    val download = ImageView(this).apply {
+        setImageResource(R.drawable.ic_download)
+        contentDescription = "Baixar gravação"
+        isClickable = true
+        isFocusable = true
+        setBackgroundColor(Color.TRANSPARENT)
+        layoutParams = LinearLayout.LayoutParams(56, 56)
+    }
+
+    val delete = ImageView(this).apply {
+        setImageResource(R.drawable.ic_delete)
+        contentDescription = "Excluir gravação"
+        isClickable = true
+        isFocusable = true
+        setBackgroundColor(Color.TRANSPARENT)
+        layoutParams = LinearLayout.LayoutParams(56, 56)
+    }
+
+    container.addView(download)
+    container.addView(icon)
+    container.addView(text)
+    container.addView(delete)
+
+    icon.setOnClickListener {
+        playAudio(file.absolutePath)
+    }
+
+    text.setOnClickListener {
+        playAudio(file.absolutePath)
+    }
+
+    download.setOnClickListener {
+        downloadAudio(file.absolutePath)
+    }
+
+    delete.setOnClickListener {
+
+        player?.release()
+        player = null
+
+        currentTempFile?.let {
+            if (it.exists()) it.delete()
+        }
+        currentTempFile = null
+
+        if (file.exists()) file.delete()
+
+        val metadata = File(
+            file.parent,
+            file.nameWithoutExtension + ".metadata.json"
+        )
+
+        if (metadata.exists()) metadata.delete()
+
+        list.removeView(container)
+    }
+
+    list.addView(container)
+}
 
 
     // =========================================================

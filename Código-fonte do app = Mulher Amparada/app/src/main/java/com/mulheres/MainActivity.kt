@@ -1,5 +1,6 @@
 package com.mulheres
 
+import android.content.res.Configuration
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
@@ -27,7 +28,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
 
-
+private fun Int.dp(): Int =
+    (this * resources.displayMetrics.density).toInt()
+    
     override fun onCreate(
     savedInstanceState: Bundle?
 ) {
@@ -57,6 +60,10 @@ class MainActivity : AppCompatActivity() {
     window.navigationBarColor =
         Color.TRANSPARENT
 
+if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+    window.isNavigationBarContrastEnforced = false
+}
+
     // =====================================================
     // LAYOUT
     // =====================================================
@@ -64,6 +71,10 @@ class MainActivity : AppCompatActivity() {
     setContentView(
         R.layout.activity_main
     )
+    
+    val paisagem =
+    resources.configuration.orientation ==
+        Configuration.ORIENTATION_LANDSCAPE
 
     webView =
         findViewById(
@@ -81,29 +92,34 @@ class MainActivity : AppCompatActivity() {
     // =====================================================
 
     ViewCompat.setOnApplyWindowInsetsListener(
-        webView
-    ) { view, insets ->
+    webView
+) { view, insets ->
 
-        val barras =
-            insets.getInsets(
-                WindowInsetsCompat.Type.systemBars()
-            )
+    val barras = insets.getInsets(
+        WindowInsetsCompat.Type.systemBars()
+    )
 
-        val params =
-            view.layoutParams
-                as ViewGroup.MarginLayoutParams
+    val params =
+        view.layoutParams as ViewGroup.MarginLayoutParams
 
-        params.topMargin =
-            barras.top
-
-        params.bottomMargin =
-            barras.bottom
-
-        view.layoutParams =
-            params
-
-        insets
+    if (paisagem) {
+        params.setMargins(
+            64.dp(),
+            64.dp() + barras.top,
+            64.dp(),
+            64.dp() + barras.bottom
+        )
+    } else {
+        params.topMargin = barras.top
+        params.bottomMargin = barras.bottom
+        params.leftMargin = 0
+        params.rightMargin = 0
     }
+
+    view.layoutParams = params
+
+    insets
+}
 
     // =====================================================
     // PÁGINA INICIAL

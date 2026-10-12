@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.compose.ui.platform.LocalConfiguration
 import android.content.Context
 import android.graphics.Color as AndroidColor
 import androidx.compose.foundation.LocalOverscrollFactory
@@ -206,6 +207,10 @@ WindowCompat.setDecorFitsSystemWindows(
 @Composable
 private fun TarefaScreen() {
 
+val configuration = LocalConfiguration.current
+val paisagem =
+    configuration.screenWidthDp > configuration.screenHeightDp
+    
     val context = LocalContext.current
 
     val dark =
@@ -360,17 +365,17 @@ CompositionLocalProvider(
 
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(
-                        rememberScrollState()
-                    )
-                    .imePadding()
-                    .padding(
-                        start = 13.dp,
-                        end = 13.dp,
-                        top = 30.dp,
-                        bottom = 110.dp
-                    )
+    .fillMaxSize()
+    .verticalScroll(rememberScrollState())
+    .imePadding()
+    .padding(
+        horizontal = if (paisagem) 64.dp else 13.dp,
+        vertical = 0.dp
+    )
+    .padding(
+        top = 30.dp,
+        bottom = 110.dp
+    )
             ) {
 
                 Header(

@@ -380,91 +380,48 @@ private fun MapaTela(
 
 AndroidView(
     modifier = Modifier
-        .fillMaxWidth()
+        .fillMaxSize()
         .padding(
             start = if (paisagem) 30.dp else 10.dp,
             end = 10.dp,
             top = 92.dp,
             bottom = 22.dp
-        ),
-                    .clip(
-                        RoundedCornerShape(
-                            22.dp
-                        )
-                    )
-                    .border(
-                        1.dp,
-
-                        if (dark)
-                            Color.White.copy(
-                                alpha = .07f
-                            )
-                        else
-                            Color.Black.copy(
-                                alpha = .07f
-                            ),
-
-                        RoundedCornerShape(
-                            22.dp
-                        )
-                    ),
-
-            factory = { ctx ->
-
-                MapView(ctx).apply {
-
-                    mapView =
-                        this
-
-
-                    setTileSource(
-                        TileSourceFactory.MAPNIK
-                    )
-
-
-                    setMultiTouchControls(
-                        true
-                    )
-
-
-                    minZoomLevel =
-                        3.0
-
-                    maxZoomLevel =
-                        19.0
-
-
-                    controller.setZoom(
-                        ZOOM_PADRAO
-                    )
-
-
-                    controller.setCenter(
-                        CentroPadrao
-                    )
-
-
-                    isTilesScaledToDpi =
-                        true
-
-
-                    setBuiltInZoomControls(
-                        false
-                    )
-
-
-                    adicionarPontos(
-                        this
-                    )
-                }
-            },
-
-            update = { view ->
-
-                mapView =
-                    view
-            }
         )
+        .clip(
+            RoundedCornerShape(22.dp)
+        )
+        .border(
+            1.dp,
+            if (dark) {
+                Color.White.copy(alpha = .07f)
+            } else {
+                Color.Black.copy(alpha = .07f)
+            },
+            RoundedCornerShape(22.dp)
+        ),
+    factory = { ctx ->
+        MapView(ctx).apply {
+            mapView = this
+
+            setTileSource(TileSourceFactory.MAPNIK)
+            setMultiTouchControls(true)
+
+            minZoomLevel = 3.0
+            maxZoomLevel = 19.0
+
+            controller.setZoom(ZOOM_PADRAO)
+            controller.setCenter(CentroPadrao)
+
+            isTilesScaledToDpi = true
+            setBuiltInZoomControls(false)
+
+            adicionarPontos(this)
+        }
+    },
+    update = { view ->
+        mapView = view
+    }
+)
 
 
         CabecalhoMapa(

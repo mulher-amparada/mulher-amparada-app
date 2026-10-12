@@ -873,10 +873,9 @@ private fun DiarioTopBar(
                 border,
                 RoundedCornerShape(999.dp)
             )
-            .padding(
-                start = 13.dp,
-                end = 8.dp
-            ),
+.padding(
+    horizontal = if (landscape) 64.dp else 13.dp
+)
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
@@ -1010,10 +1009,9 @@ private fun DiarioBook(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(
-                    start = 4.dp,
-                    top = 8.dp
-                )
+.padding(
+    horizontal = if (landscape) 64.dp else 4.dp
+)
                 .clip(RoundedCornerShape(25.dp))
                 .background(
                     if (dark) Color(0xFF0C0C10) else Color(0xFFE1DADD)

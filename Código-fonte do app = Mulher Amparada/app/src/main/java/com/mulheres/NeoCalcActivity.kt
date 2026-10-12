@@ -324,7 +324,7 @@ private fun NeoCalcScreen() {
     .windowInsetsPadding(
         WindowInsets.systemBars
     )
-    .padding(horizontal = 64.dp, vertical = 4.dp)
+    .padding(horizontal = 24.dp, vertical = 4.dp)
         ) {
             val paisagem = maxWidth > maxHeight
 
@@ -332,18 +332,16 @@ private fun NeoCalcScreen() {
 Row(
     modifier = Modifier
         .fillMaxSize()
-        .padding(horizontal = 8.dp),
-    horizontalArrangement = Arrangement.spacedBy(8.dp),
+        .padding(horizontal = 4.dp),
+    horizontalArrangement = Arrangement.spacedBy(12.dp),
     verticalAlignment = Alignment.CenterVertically
 ) {
     Box(
         modifier = Modifier
-            .weight(0.85f)
+            .weight(0.9f)
             .fillMaxHeight()
             .pointerInput(Unit) {
-                detectTapGestures {
-                    registrarToque()
-                }
+                detectTapGestures { registrarToque() }
             }
             .padding(start = 4.dp, end = 4.dp),
         contentAlignment = Alignment.CenterEnd
@@ -360,13 +358,10 @@ Row(
 
     Column(
         modifier = Modifier
-            .weight(1.15f)
+            .weight(1.1f)
             .fillMaxHeight()
             .padding(vertical = 2.dp),
-        verticalArrangement = Arrangement.spacedBy(
-            3.dp,
-            Alignment.CenterVertically
-        ),
+        verticalArrangement = Arrangement.spacedBy(3.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val botoes = listOf(
@@ -395,7 +390,7 @@ Row(
                 BotaoCalculadora("+", TipoBotao.OPERADOR) { operacao("+") }
             ),
             listOf(
-                BotaoCalculadora("()") { adicionar("(") },
+                BotaoCalculadora("(") { adicionar("(") },
                 BotaoCalculadora("0") { adicionar("0") },
                 BotaoCalculadora(".") { adicionar(".") },
                 BotaoCalculadora("=", TipoBotao.IGUAL) { calcular() }
@@ -406,7 +401,8 @@ Row(
             LinhaBotoes(
                 cores = cores,
                 botoes = linha,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                paisagem = true
             )
         }
     }
@@ -670,11 +666,14 @@ private data class BotaoCalculadora(
 private fun LinhaBotoes(
     cores: CoresNeoCalc,
     botoes: List<BotaoCalculadora>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    paisagem: Boolean = false
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(
+            if (paisagem) 5.dp else 10.dp
+        ),
         verticalAlignment = Alignment.CenterVertically
     ) {
         botoes.forEach { botao ->
@@ -688,8 +687,18 @@ private fun LinhaBotoes(
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxHeight()
-                    .padding(horizontal = 2.dp, vertical = 1.dp)
+                    .then(
+                        if (paisagem) {
+                            Modifier
+                                .fillMaxHeight()
+                                .aspectRatio(
+                                    1f,
+                                    matchHeightConstraintsFirst = true
+                                )
+                        } else {
+                            Modifier.aspectRatio(1f)
+                        }
+                    )
                     .clip(CircleShape)
                     .background(cor)
                     .clickable { botao.acao() },
@@ -699,13 +708,15 @@ private fun LinhaBotoes(
                     androidx.compose.foundation.Image(
                         painter = painterResource(botao.icone),
                         contentDescription = "Apagar",
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(
+                            if (paisagem) 18.dp else 28.dp
+                        )
                     )
                 } else {
                     Text(
                         text = botao.texto,
                         color = cores.texto,
-                        fontSize = 19.sp,
+                        fontSize = if (paisagem) 17.sp else 25.sp,
                         maxLines = 1
                     )
                 }

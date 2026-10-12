@@ -13,7 +13,7 @@ e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, 
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)
 
-e pra ser sincero, comecei esse projeto no dia 13/05/2026 e terminei no dia 10/10/2026!
+e pra ser sincero, comecei esse projeto no dia 13/05/2026 e terminei no dia 12/10/2026!
 
 **Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 5315**
 

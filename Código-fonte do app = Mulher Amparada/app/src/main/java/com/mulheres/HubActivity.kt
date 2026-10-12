@@ -2225,7 +2225,7 @@ private fun BottomAreaSelector(
         val thumbSize = maxHeight
         val innerWidth = maxWidth - 8.dp
 
-        val offsetX = if (areaProtegidaSelecionada) 76.dp else 0.dp
+        val offsetX = if (areaProtegidaSelecionada) 76.dp else 76.dp
 
         Row(modifier = Modifier.fillMaxSize()) {
             Box(

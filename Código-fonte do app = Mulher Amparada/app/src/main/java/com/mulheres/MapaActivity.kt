@@ -1,6 +1,5 @@
 package com.mulheres
 
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.systemBars
@@ -157,7 +156,6 @@ class MapaActivity : ComponentActivity() {
 @Composable
 private fun MapaApp() {
 
-
     val dark =
         isSystemInDarkTheme()
 
@@ -196,14 +194,6 @@ private fun MapaApp() {
 private fun MapaTela(
     dark: Boolean
 ) {
-
-val configuration = LocalConfiguration.current
-
-val paisagem =
-    configuration.screenWidthDp > configuration.screenHeightDp
-
-val paddingHorizontal =
-    if (paisagem) 64.dp else 10.dp
 
     val context =
         androidx.compose.ui.platform.LocalContext.current
@@ -388,17 +378,15 @@ val paddingHorizontal =
 ) {
 
 
-        AndroidView(
-
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(
-    start = paddingHorizontal,
-    end = paddingHorizontal,
-    top = 92.dp,
-    bottom = 22.dp
-)
+AndroidView(
+    modifier = Modifier
+        .fillMaxWidth()
+        .padding(
+            start = if (paisagem) 30.dp else 10.dp,
+            end = 10.dp,
+            top = 92.dp,
+            bottom = 22.dp
+        ),
                     .clip(
                         RoundedCornerShape(
                             22.dp

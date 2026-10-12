@@ -1,5 +1,8 @@
 package com.mulheres
 
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.platform.LocalConfiguration
 import android.graphics.Color as AndroidColor
 import android.os.Build
 import android.os.Bundle
@@ -93,6 +96,10 @@ class UpdateActivity : ComponentActivity() {
 @Composable
 private fun UpdateScreen() {
 
+val configuration = LocalConfiguration.current
+val paisagem =
+    configuration.screenWidthDp > configuration.screenHeightDp
+    
     val context = LocalContext.current
     val dark = isSystemInDarkTheme()
 
@@ -157,31 +164,25 @@ private fun UpdateScreen() {
         ) { paddingValues ->
 
             Box(
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .background(background)
-                        .padding(paddingValues)
-                        .padding(
-                            start = 18.dp,
-                            end = 18.dp,
-                            top = 20.dp,
-                            bottom = 20.dp
-                        ),
-                contentAlignment =
-                    Alignment.Center
-            ) {
-
-                Column(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                horizontal = 2.dp
-                            ),
-                    horizontalAlignment =
-                        Alignment.CenterHorizontally
-                ) {
+    modifier = Modifier
+        .fillMaxSize()
+        .background(background)
+        .padding(paddingValues)
+        .padding(
+            start = if (paisagem) 30.dp else 18.dp,
+            end = 18.dp,
+            top = 20.dp,
+            bottom = 20.dp
+        ),
+    contentAlignment = Alignment.TopCenter
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 2.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
                     Box(
                         modifier =

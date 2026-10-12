@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.graphics.ColorFilter
 import android.graphics.Color as AndroidColor
 import androidx.compose.foundation.LocalOverscrollFactory
@@ -308,7 +309,14 @@ abrirArquivoSeguro: () -> Unit,
     val dark =
         isSystemInDarkTheme()
 
+val configuration = LocalConfiguration.current
 
+val paisagem =
+    configuration.screenWidthDp > configuration.screenHeightDp
+
+val paddingHorizontal =
+    if (paisagem) 64.dp else 18.dp
+    
     val fundo =
         if (dark)
             FundoEscuro
@@ -395,13 +403,12 @@ val outrasFuncoes = listOf(
                     Modifier
                         .fillMaxSize(),
 
-                contentPadding =
-                    PaddingValues(
-                        start = 18.dp,
-                        end = 18.dp,
-                        top = 48.dp,
-                        bottom = 70.dp
-                    ),
+                contentPadding = PaddingValues(
+    start = paddingHorizontal,
+    end = paddingHorizontal,
+    top = 48.dp,
+    bottom = 70.dp
+),
 
                 verticalArrangement =
                     Arrangement.spacedBy(

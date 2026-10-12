@@ -1273,6 +1273,14 @@ controller.isAppearanceLightNavigationBars =
                     it.absolutePath
                 )
             }
+            
+            val spacer = View(this)
+spacer.layoutParams = LinearLayout.LayoutParams(
+    1,
+    (32 * resources.displayMetrics.density).toInt()
+)
+list.addView(spacer)
+
     }
 
 
@@ -1905,14 +1913,9 @@ container.addView(delete)
             )
         }
 
-        list.addView(container)
-
-val spacer = View(this)
-spacer.layoutParams = LinearLayout.LayoutParams(
-    LinearLayout.LayoutParams.MATCH_PARENT,
-    (32 * resources.displayMetrics.density).toInt()
+        list.addView(
+    container
 )
-list.addView(spacer)
     }
 
 

@@ -877,7 +877,7 @@ val landscape =
         .fillMaxWidth()
 .padding(
     start = if (landscape) 64.dp else 0.dp,
-    end = if (landscape) 70.dp else 0.dp
+    end = if (landscape) 76.dp else 0.dp
 )
         .height(61.dp)
         .clip(RoundedCornerShape(999.dp))

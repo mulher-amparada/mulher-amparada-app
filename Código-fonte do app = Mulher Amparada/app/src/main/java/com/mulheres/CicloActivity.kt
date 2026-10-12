@@ -1947,10 +1947,18 @@ private fun TelaDetalhes(
     onBack: () -> Unit
 ) {
 
+val configuration = LocalConfiguration.current
+
+val paisagem =
+    configuration.screenWidthDp > configuration.screenHeightDp
+
+val paddingHorizontal =
+    if (paisagem) 64.dp else 12.dp
+    
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 12.dp),
+      .padding(horizontal = paddingHorizontal)
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
 
@@ -2416,86 +2424,88 @@ private fun IndicadoresRotina(
     dark: Boolean
 ) {
 
-    Column(
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+    
+Column(
+    verticalArrangement = Arrangement.spacedBy(10.dp)
+) {
+
+    IndicadorBooleano(
+        nome = "Exercício",
+        ativo = registro.exercicio,
+        texto = texto,
+        texto2 = texto2,
+        dark = dark
+    )
+
+    IndicadorBooleano(
+        nome = "Concentração ruim",
+        ativo = registro.concentracao,
+        texto = texto,
+        texto2 = texto2,
+        dark = dark
+    )
+
+    IndicadorBooleano(
+        nome = "Libido alterada",
+        ativo = registro.libido,
+        texto = texto,
+        texto2 = texto2,
+        dark = dark
+    )
+
+    IndicadorBooleano(
+        nome = "Irritação",
+        ativo = registro.irritacao,
+        texto = texto,
+        texto2 = texto2,
+        dark = dark
+    )
+
+    Spacer(
+        Modifier.height(3.dp)
+    )
+
+    Text(
+        text = "Dor",
+        fontSize = 10.sp,
+        color = if (dark) Color.White else texto
+    )
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
     ) {
 
-        IndicadorBooleano(
-            nome = "Exercício",
-            ativo = registro.exercicio,
-            texto = texto,
-            texto2 = texto2,
-            dark = dark
-        )
-
-        IndicadorBooleano(
-            nome = "Concentração ruim",
-            ativo = registro.concentracao,
-            texto = texto,
-            texto2 = texto2,
-            dark = dark
-        )
-
-        IndicadorBooleano(
-            nome = "Libido alterada",
-            ativo = registro.libido,
-            texto = texto,
-            texto2 = texto2,
-            dark = dark
-        )
-
-        IndicadorBooleano(
-            nome = "Irritação",
-            ativo = registro.irritacao,
-            texto = texto,
-            texto2 = texto2,
-            dark = dark
-        )
-
-        Spacer(
-            Modifier.height(3.dp)
-        )
-
         Text(
-            text = "Dor",
-            fontSize = 10.sp,
-color = texto
-        )
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Text(
-                text = "${registro.dor}/10",
-                fontSize = 9.sp,
-                color = texto2,
-                modifier = Modifier.width(45.dp)
-            )
-
-            BarraProgresso(
-                valor = registro.dor / 10f,
-                texto = texto,
-                modifier = Modifier.weight(1f)
-            )
-        }
-
-        Text(
-            text = when {
-                registro.dor == 0 ->
-                    "Nenhuma dor registrada"
-                registro.dor <= 3 ->
-                    "Intensidade baixa"
-                registro.dor <= 6 ->
-                    "Intensidade moderada"
-                else ->
-                    "Intensidade alta"
-            },
+            text = "${registro.dor}/10",
             fontSize = 9.sp,
-            color = texto3
+            color = texto2,
+            modifier = Modifier.width(45.dp)
+        )
+
+        BarraProgresso(
+            valor = registro.dor / 10f,
+            texto = texto,
+            modifier = Modifier.weight(1f)
         )
     }
+
+    Text(
+        text = when {
+            registro.dor == 0 ->
+                "Nenhuma dor registrada"
+            registro.dor <= 3 ->
+                "Intensidade baixa"
+            registro.dor <= 6 ->
+                "Intensidade moderada"
+            else ->
+                "Intensidade alta"
+        },
+        fontSize = 9.sp,
+        color = texto3
+    )
+}
+
 }
 
 @Composable

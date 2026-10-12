@@ -2359,9 +2359,10 @@ private fun IndicadorBooleano(
     ) {
 
         Text(
-            text = nome,
-            fontSize = 10.sp,
-        )
+    text = nome,
+    fontSize = 10.sp,
+    color = if (dark) Color.White else texto
+)
 
         Spacer(
             Modifier.width(8.dp)

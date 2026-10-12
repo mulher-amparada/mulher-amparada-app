@@ -150,7 +150,7 @@ CompositionLocalProvider(
         .padding(
             start = if (paisagem) 64.dp else 18.dp,
             end = if (paisagem) 64.dp else 18.dp,
-            top = if (paisagem) 30.dp else paddingValues.calculateTopPadding() + 20.dp,
+            top = if (paisagem) 64.dp else paddingValues.calculateTopPadding() + 20.dp,
             bottom = if (paisagem) 30.dp else paddingValues.calculateBottomPadding() + 20.dp
         ),
     contentAlignment = if (paisagem) {

@@ -1275,10 +1275,12 @@ controller.isAppearanceLightNavigationBars =
             }
             
             val spacer = View(this)
+
 spacer.layoutParams = LinearLayout.LayoutParams(
-    1,
-    (32 * resources.displayMetrics.density).toInt()
+    LinearLayout.LayoutParams.MATCH_PARENT,
+    (120 * resources.displayMetrics.density).toInt()
 )
+
 list.addView(spacer)
 
     }

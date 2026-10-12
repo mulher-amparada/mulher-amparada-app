@@ -715,11 +715,12 @@ val mutedColor =
                             Alignment.BottomCenter
                         )
                         .navigationBarsPadding()
-                .padding(
-    horizontalStart = if (paisagem) 64.dp else 6.dp,
-horizontalEnd = if (paisagem) 72.dp else 6.dp,
-    vertical = 6.dp
-),
+         .padding(
+    start = if (paisagem) 64.dp else 6.dp,
+    end = if (paisagem) 72.dp else 6.dp,
+    top = if (paisagem) 32.dp else 6.dp,
+    bottom = 6.dp
+)
                 horizontalAlignment =
                     Alignment.CenterHorizontally
             ) {

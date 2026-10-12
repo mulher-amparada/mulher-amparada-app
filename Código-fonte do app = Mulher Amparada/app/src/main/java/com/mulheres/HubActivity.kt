@@ -2191,6 +2191,8 @@ private fun colors(): AppColors {
         )
     }
 }
+
+
 @Composable
 private fun BottomAreaSelector(
     c: AppColors,
@@ -2198,95 +2200,138 @@ private fun BottomAreaSelector(
     onSelecionarConteudo: () -> Unit,
     onSelecionarProtegidas: () -> Unit
 ) {
-    val isDark = isSystemInDarkTheme()
 
-    val configuration = LocalConfiguration.current
-    val isLandscape =
-        configuration.screenWidthDp > configuration.screenHeightDp
+    val isDark =
+        isSystemInDarkTheme()
 
-    val alturaBarra = 76.dp
-    val tamanhoIcone = if (isLandscape) 23.dp else 29.dp
-    val tamanhoTexto = if (isLandscape) 16.sp else 20.sp
-
-    val shape = RoundedCornerShape(50.dp)
+    val shape =
+        RoundedCornerShape(50.dp)
 
     BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxWidth(0.80f)
-            .height(alturaBarra)
-            .clip(shape)
-            .background(
-                if (isDark) Color(0xFF17171A)
-                else Color.White
-            )
-            .border(1.dp, c.borderLight, shape)
-            .padding(5.dp)
+
+        modifier =
+            Modifier
+                .fillMaxWidth(0.80f)
+                .height(76.dp)
+                .clip(shape)
+                .background(
+                    if (isDark)
+                        Color(0xFF17171A)
+                    else
+                        Color.White
+                )
+                .border(
+                    1.dp,
+                    c.borderLight,
+                    shape
+                )
+                .padding(5.dp)
     ) {
-        val thumbSize = maxHeight
-        val innerWidth = maxWidth - 8.dp
 
-        val offsetX = if (areaProtegidaSelecionada) 76.dp else 76.dp
+        val thumbSize =
+            145.dp
 
-        Row(modifier = Modifier.fillMaxSize()) {
+        val innerWidth =
+            maxWidth - 8.dp
+
+        val halfWidth =
+            innerWidth / 2
+
+        val offsetX =
+            if (areaProtegidaSelecionada)
+                innerWidth - thumbSize + 7.dp
+            else
+                0.dp
+
+        Row(
+            modifier =
+                Modifier.fillMaxSize()
+        ) {
+
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .clickable(
-                        indication = null,
-                        interactionSource = androidx.compose.foundation.interaction
-                            .MutableInteractionSource()
-                    ) {
-                        onSelecionarConteudo()
-                    }
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .clickable(
+                            indication = null,
+                            interactionSource =
+                                androidx.compose.foundation.interaction
+                                    .MutableInteractionSource()
+                        ) {
+                            onSelecionarConteudo()
+                        }
             )
 
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .clickable(
-                        indication = null,
-                        interactionSource = androidx.compose.foundation.interaction
-                            .MutableInteractionSource()
-                    ) {
-                        onSelecionarProtegidas()
-                    }
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .clickable(
+                            indication = null,
+                            interactionSource =
+                                androidx.compose.foundation.interaction
+                                    .MutableInteractionSource()
+                        ) {
+                            onSelecionarProtegidas()
+                        }
             )
         }
 
         Box(
-            modifier = Modifier
-                .offset(x = offsetX)
-                .size(thumbSize)
-                .clip(CircleShape)
-                .background(c.pink),
-            contentAlignment = Alignment.Center
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(7.dp)
-            ) {
-                Image(
-                    painter = painterResource(
-                        if (areaProtegidaSelecionada)
-                            R.drawable.ic_secret
-                        else
-                            R.drawable.ic_protecoes
+            modifier =
+                Modifier
+                    .offset(
+                        x = offsetX
+                    )
+                    .size(thumbSize)
+                    .clip(CircleShape)
+                    .background(
+                        c.pink
                     ),
-                    contentDescription = null,
-                    modifier = Modifier.size(tamanhoIcone)
-                )
 
-                Text(
-                    text = if (areaProtegidaSelecionada) "Áreas" else "Ajuda",
-                    color = Color.White,
-                    fontSize = tamanhoTexto
-                )
-            }
+            contentAlignment =
+                Alignment.Center
+        ) {
+
+    Row(
+    verticalAlignment =
+        Alignment.CenterVertically,
+    horizontalArrangement =
+        Arrangement.spacedBy(7.dp)
+) {
+
+    Image(
+        painter =
+            painterResource(
+                if (areaProtegidaSelecionada)
+                    R.drawable.ic_secret
+                else
+                    R.drawable.ic_protecoes
+            ),
+        contentDescription = null,
+        modifier =
+            Modifier.size(29.dp)
+    )
+
+    Text(
+        text =
+            if (areaProtegidaSelecionada)
+                "Áreas"
+            else
+                "Ajuda",
+        color =
+            Color.White,
+        fontSize =
+            20.sp
+    )
+}
+    
         }
     }
 }
+
 /* =========================================================
    TEMA
 ========================================================= */

@@ -369,130 +369,90 @@ val paisagem =
 
 
     Box(
-    modifier =
-        Modifier
-            .fillMaxSize()
-            .background(
-                if (dark)
-                    FundoEscuro
-                else
-                    FundoClaro
-            )
-            .windowInsetsPadding(
-                WindowInsets.systemBars
-            )
-) {
-
-
-AndroidView(
     modifier = Modifier
         .fillMaxSize()
-.padding(
-    start = if (paisagem) 64.dp else 10.dp,
-    end = if (paisagem) 64.dp else 10.dp,
-    top = 92.dp,
-    bottom = 22.dp
-)
-        .clip(
-            RoundedCornerShape(22.dp)
+        .background(
+            if (dark) FundoEscuro else FundoClaro
         )
-        .border(
-            1.dp,
-            if (dark) {
-                Color.White.copy(alpha = .07f)
-            } else {
-                Color.Black.copy(alpha = .07f)
-            },
-            RoundedCornerShape(22.dp)
-        ),
-    factory = { ctx ->
-        MapView(ctx).apply {
-            mapView = this
+        .windowInsetsPadding(
+            WindowInsets.systemBars
+        )
+) {
+    val paddingHorizontal =
+        if (paisagem) 64.dp else 10.dp
 
-            setTileSource(TileSourceFactory.MAPNIK)
-            setMultiTouchControls(true)
-
-            minZoomLevel = 3.0
-            maxZoomLevel = 19.0
-
-            controller.setZoom(ZOOM_PADRAO)
-            controller.setCenter(CentroPadrao)
-
-            isTilesScaledToDpi = true
-            setBuiltInZoomControls(false)
-
-            adicionarPontos(this)
+    AndroidView(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                start = paddingHorizontal,
+                end = paddingHorizontal,
+                top = 92.dp,
+                bottom = 22.dp
+            )
+            .clip(RoundedCornerShape(22.dp))
+            .border(
+                1.dp,
+                if (dark) {
+                    Color.White.copy(alpha = .07f)
+                } else {
+                    Color.Black.copy(alpha = .07f)
+                },
+                RoundedCornerShape(22.dp)
+            ),
+        factory = { ctx ->
+            MapView(ctx).apply {
+                mapView = this
+                setTileSource(TileSourceFactory.MAPNIK)
+                setMultiTouchControls(true)
+                minZoomLevel = 3.0
+                maxZoomLevel = 19.0
+                controller.setZoom(ZOOM_PADRAO)
+                controller.setCenter(CentroPadrao)
+                isTilesScaledToDpi = true
+                setBuiltInZoomControls(false)
+                adicionarPontos(this)
+            }
+        },
+        update = { view ->
+            mapView = view
         }
-    },
-    update = { view ->
-        mapView = view
-    }
-)
+    )
 
+    CabecalhoMapa(
+        dark = dark,
+        aoLocalizar = {
+            localizar()
+        }
+    )
 
-        CabecalhoMapa(
+    ControlesMapa(
+        dark = dark,
+        aoZoomIn = {
+            mapView?.controller?.zoomIn()
+        },
+        aoZoomOut = {
+            mapView?.controller?.zoomOut()
+        },
+        aoLocalizar = {
+            localizar()
+        },
+        paisagem = paisagem
+    )
 
+    toast?.let { mensagem ->
+        ToastMapa(
+            mensagem = mensagem,
             dark = dark,
-
-            aoLocalizar = {
-                localizar()
-            }
-        )
-
-
-        ControlesMapa(
-
-            dark = dark,
-
-            aoZoomIn = {
-
-                mapView
-                    ?.controller
-                    ?.zoomIn()
-            },
-
-            aoZoomOut = {
-
-                mapView
-                    ?.controller
-                    ?.zoomOut()
-            },
-
-            aoLocalizar = {
-                localizar()
-            }
-        )
-
-
-        toast?.let { mensagem ->
-
-            Box(
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-            ) {
-
-                ToastMapa(
-
-                    mensagem =
-                        mensagem,
-
-                    dark =
-                        dark,
-
-                    modifier =
-    Modifier
-        .align(
-            Alignment.BottomStart
-        )
-        .padding(
-            start = 10.dp,
-            bottom = 22.dp
-        )
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(
+                    start = paddingHorizontal,
+                    bottom = 32.dp
                 )
-            }
-        }
+        )
     }
+}
 
 
     DisposableEffect(Unit) {

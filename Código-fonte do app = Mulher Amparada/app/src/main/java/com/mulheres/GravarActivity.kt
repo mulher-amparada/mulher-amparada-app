@@ -1653,14 +1653,14 @@ controller.isAppearanceLightNavigationBars =
     // ITEM DA LISTA
     // =========================================================
 
-    private fun addToList(path: String) {
+   private fun addToList(path: String) {
 
     val file = File(path)
     if (!file.exists()) return
 
     val landscape =
         resources.configuration.orientation ==
-                android.content.res.Configuration.ORIENTATION_LANDSCAPE
+            android.content.res.Configuration.ORIENTATION_LANDSCAPE
 
     val container = LinearLayout(this).apply {
         orientation = LinearLayout.HORIZONTAL
@@ -1679,7 +1679,7 @@ controller.isAppearanceLightNavigationBars =
     )
 
     if (landscape) {
-        params.setMargins(0, 0, 16, 0)
+        params.setMargins(8, 0, 8, 16)
     } else {
         params.setMargins(0, 0, 0, 16)
     }
@@ -1705,11 +1705,7 @@ controller.isAppearanceLightNavigationBars =
         typeface = Typeface.DEFAULT
         maxLines = 1
         ellipsize = android.text.TextUtils.TruncateAt.END
-        layoutParams = LinearLayout.LayoutParams(
-            0,
-            -2,
-            1f
-        )
+        layoutParams = LinearLayout.LayoutParams(0, -2, 1f)
     }
 
     val download = ImageView(this).apply {
@@ -1748,7 +1744,6 @@ controller.isAppearanceLightNavigationBars =
     }
 
     delete.setOnClickListener {
-
         player?.release()
         player = null
 
@@ -1771,7 +1766,6 @@ controller.isAppearanceLightNavigationBars =
 
     list.addView(container)
 }
-
 
     // =========================================================
     // VOLTAR

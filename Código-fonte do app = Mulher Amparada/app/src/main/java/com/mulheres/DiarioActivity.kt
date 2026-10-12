@@ -883,9 +883,10 @@ Row(
             border,
             RoundedCornerShape(999.dp)
         )
-        .padding(
-            horizontal = if (landscape) 64.dp else 13.dp
-        ),
+.padding(
+    horizontal = if (landscape) 64.dp else 13.dp,
+    vertical = if (landscape) 12.dp else 0.dp
+)
     verticalAlignment = Alignment.CenterVertically
 ) {
         Box(
@@ -1015,22 +1016,17 @@ val landscape =
         Configuration.ORIENTATION_LANDSCAPE
         
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        contentAlignment = Alignment.Center
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-.padding(
-    horizontal = if (landscape) 64.dp else 4.dp
-)
-                .clip(RoundedCornerShape(25.dp))
-                .background(
-                    if (dark) Color(0xFF0C0C10) else Color(0xFFE1DADD)
-                )
+    modifier = Modifier
+        .fillMaxSize()
+        .padding(
+            start = if (landscape) 64.dp else 4.dp,
+            end = if (landscape) 64.dp else 4.dp
         )
+        .clip(RoundedCornerShape(25.dp))
+        .background(
+            if (dark) Color(0xFF0C0C10) else Color(0xFFE1DADD)
+        )
+)
 
         Box(
             modifier = Modifier

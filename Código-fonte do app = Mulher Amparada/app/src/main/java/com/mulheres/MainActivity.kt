@@ -102,19 +102,21 @@ if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
     val params =
         view.layoutParams as ViewGroup.MarginLayoutParams
 
-    if (paisagem) {
-        params.setMargins(
-            64.dp(),
-            64.dp() + barras.top,
-            64.dp(),
-            64.dp() + barras.bottom
-        )
-    } else {
-        params.topMargin = barras.top
-        params.bottomMargin = barras.bottom
-        params.leftMargin = 0
-        params.rightMargin = 0
-    }
+if (paisagem) {
+    params.setMargins(
+        64.dp() + barras.left,
+        64.dp() + barras.top,
+        64.dp() + barras.right,
+        64.dp() + barras.bottom
+    )
+} else {
+    params.setMargins(
+        0,
+        barras.top,
+        0,
+        barras.bottom
+    )
+}
 
     view.layoutParams = params
 

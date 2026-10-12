@@ -1663,12 +1663,15 @@ list.orientation = if (landscape) {
     // ITEM DA LISTA
     // =========================================================
 
-   private fun addToList(path: String) {
+private fun addToList(path: String) {
 
     val file = File(path)
     if (!file.exists()) return
 
-    
+    val landscape =
+        resources.configuration.orientation ==
+            android.content.res.Configuration.ORIENTATION_LANDSCAPE
+
     val container = LinearLayout(this).apply {
         orientation = LinearLayout.HORIZONTAL
         gravity = android.view.Gravity.CENTER_VERTICAL
@@ -1773,6 +1776,7 @@ list.orientation = if (landscape) {
 
     list.addView(container)
 }
+
 
     // =========================================================
     // VOLTAR

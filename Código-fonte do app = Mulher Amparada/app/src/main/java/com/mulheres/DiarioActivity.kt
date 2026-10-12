@@ -1021,10 +1021,10 @@ private fun DiarioBook(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(
-            start = if (landscape) 64.dp else 4.dp
-                end = if (landscape) 32.dp else 4.dp
-            )
+.padding(
+    start = if (landscape) 64.dp else 4.dp,
+    end = if (landscape) 32.dp else 4.dp
+)
     ) {
         Box(
             modifier = Modifier

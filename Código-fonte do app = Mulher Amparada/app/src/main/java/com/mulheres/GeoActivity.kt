@@ -596,6 +596,10 @@ val SurfaceColor =
 val contentColor =
     if (darkTheme) Color.White else Color.Black
 
+val paisagem =
+    androidx.compose.ui.platform.LocalConfiguration.current.orientation ==
+        android.content.res.Configuration.ORIENTATION_LANDSCAPE
+        
 val mutedColor =
     if (darkTheme) {
         Color(0xB3FFFFFF)

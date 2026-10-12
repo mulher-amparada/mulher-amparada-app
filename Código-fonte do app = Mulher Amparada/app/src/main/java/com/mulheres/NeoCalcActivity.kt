@@ -1,4 +1,4 @@
-package com.mulheres
+Package com.mulheres
 
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -61,9 +61,7 @@ import kotlinx.coroutines.delay
 class NeoCalcActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         enableEdgeToEdge()
-
         super.onCreate(savedInstanceState)
 
         window.setFlags(
@@ -89,12 +87,8 @@ private data class CoresNeoCalc(
     val textoSecundario: Color
 )
 
-private fun obterCoresNeoCalc(
-    escuro: Boolean
-): CoresNeoCalc {
-
+private fun obterCoresNeoCalc(escuro: Boolean): CoresNeoCalc {
     return if (escuro) {
-
         CoresNeoCalc(
             fundo = Color.Black,
             botao = Color(0xFF151515),
@@ -106,9 +100,7 @@ private fun obterCoresNeoCalc(
             texto = Color.White,
             textoSecundario = Color(0xFFD0D0D0)
         )
-
     } else {
-
         CoresNeoCalc(
             fundo = Color(0xFFFFFFFF),
             botao = Color(0xFFE9E9E9),
@@ -123,12 +115,8 @@ private fun obterCoresNeoCalc(
     }
 }
 
-private const val CHAVE_SENHA =
-    "senha"
-
-private const val CHAVE_RECUPERACAO =
-    "nome_recuperacao"
-
+private const val CHAVE_SENHA = "senha"
+private const val CHAVE_RECUPERACAO = "nome_recuperacao"
 
 private enum class TipoDialogo {
     ALERTA,
@@ -147,103 +135,46 @@ private data class Dialogo(
 
 @Composable
 private fun NeoCalcScreen() {
-
-    val context =
-        LocalContext.current
-
-    val cripto =
-        remember {
-            Cripto(context)
-        }
-
-    val escuro =
-        isSystemInDarkTheme()
-
-    val cores =
-        remember(escuro) {
-            obterCoresNeoCalc(
-                escuro
-            )
+    val context = LocalContext.current
+    val cripto = remember { Cripto(context) }
+    val escuro = isSystemInDarkTheme()
+    val cores = remember(escuro) { obterCoresNeoCalc(escuro) }
     
-    }
-    
-    var expr by remember {
-        mutableStateOf("")
-    }
+    var expr by remember { mutableStateOf("") }
+    var mensagemTemporaria by remember { mutableStateOf<String?>(null) }
+    var dialogo by remember { mutableStateOf<Dialogo?>(null) }
+    var valorDialogo by remember { mutableStateOf("") }
+    var contadorToques by remember { mutableStateOf(0) }
+    var ultimoToque by remember { mutableLongStateOf(0L) }
 
-    var mensagemTemporaria by remember {
-        mutableStateOf<String?>(null)
-    }
+    val visorScroll = rememberScrollState()
 
-    var dialogo by remember {
-        mutableStateOf<Dialogo?>(null)
-    }
-
-    var valorDialogo by remember {
-        mutableStateOf("")
-    }
-
-    var contadorToques by remember {
-        mutableStateOf(0)
-    }
-
-    var ultimoToque by remember {
-        mutableLongStateOf(0L)
-    }
-
-    val visorScroll =
-        rememberScrollState()
-
-    LaunchedEffect(
-        expr,
-        mensagemTemporaria
-    ) {
-
+    LaunchedEffect(expr, mensagemTemporaria) {
         delay(1)
-
-        visorScroll.scrollTo(
-            visorScroll.maxValue
-        )
+        visorScroll.scrollTo(visorScroll.maxValue)
     }
 
     fun registrarToque() {
-
-        val agora =
-            System.currentTimeMillis()
-
-        if (
-            agora - ultimoToque > 2000
-        ) {
-
+        val agora = System.currentTimeMillis()
+        if (agora - ultimoToque > 2000) {
             contadorToques = 0
         }
-
         ultimoToque = agora
-
         contadorToques++
 
-        if (
-            contadorToques >= 5
-        ) {
-
+        if (contadorToques >= 5) {
             contadorToques = 0
-
             recuperarSenha(
                 context = context,
                 cripto = cripto,
                 mostrarDialogo = {
-
                     dialogo = it
-
-                    valorDialogo =
-                        it.valorInicial
+                    valorDialogo = it.valorInicial
                 },
                 fecharDialogo = {
-
                     dialogo = null
                 },
                 mostrarMensagem = {
-
                     mensagemTemporaria = it
                 }
             )
@@ -251,1734 +182,162 @@ private fun NeoCalcScreen() {
     }
 
     fun atualizar() {
-
         mensagemTemporaria = null
     }
 
-    fun adicionar(
-        valor: String
-    ) {
-
-        if (
-            valor == "."
-        ) {
-
-            val partes =
-                expr.split(
-                    Regex("[+\\-*/()]")
-                )
-
-            val parteAtual =
-                partes.lastOrNull()
-                    ?: ""
-
-            if (
-                parteAtual.contains(".")
-            ) {
-
+    fun adicionar(valor: String) {
+        if (valor == ".") {
+            val partes = expr.split(Regex("[+\\-*/()]"))
+            val parteAtual = partes.lastOrNull() ?: ""
+            if (parteAtual.contains(".")) {
                 return
             }
         }
-
         expr += valor
-
         atualizar()
     }
 
-    fun operacao(
-        op: String
-    ) {
-
-        if (
-            expr.isEmpty()
-        ) {
-
-            if (
-                op == "-"
-            ) {
-
+    fun operacao(op: String) {
+        if (expr.isEmpty()) {
+            if (op == "-") {
                 expr = "-"
-
                 atualizar()
             }
-
             return
         }
 
-        if (
-            expr.lastOrNull()
-                ?.toString()
-                ?.matches(
-                    Regex("[+\\-*/]")
-                ) == true
-        ) {
-
-            expr =
-                expr.dropLast(1) + op
-
+        if (expr.lastOrNull()?.toString()?.matches(Regex("[+\\-*/]")) == true) {
+            expr = expr.dropLast(1) + op
         } else {
-
             expr += op
         }
-
         atualizar()
     }
 
     fun porcentagem() {
-
-        if (
-            expr.isEmpty()
-        ) {
-
-            return
-        }
-
-        expr =
-            expr.replace(
-                Regex(
-                    "(\\d+(?:\\.\\d+)?)$"
-                ),
-                "($1/100)"
-            )
-
+        if (expr.isEmpty()) return
+        expr = expr.replace(Regex("(\\d+(?:\\.\\d+)?)$"), "($1/100)")
         atualizar()
     }
 
     fun limpar() {
-
         expr = ""
-
         atualizar()
     }
 
     fun apagar() {
-
-        if (
-            expr.isNotEmpty()
-        ) {
-
-            expr =
-                expr.dropLast(1)
-
+        if (expr.isNotEmpty()) {
+            expr = expr.dropLast(1)
             atualizar()
         }
     }
 
     fun calcular() {
+        val senha = try {
+            cripto.carregar(CHAVE_SENHA)?.trim() ?: ""
+        } catch (e: Exception) {
+            ""
+        }
 
-        val senha =
+        if (expr.trim().isNotEmpty() && expr.trim() == senha) {
             try {
-
-                cripto.carregar(
-                    CHAVE_SENHA
-                )
-                    ?.trim()
-                    ?: ""
-
-            } catch (
-                e: Exception
-            ) {
-
-                ""
+                context.startActivity(Intent(context, HubActivity::class.java))
+            } catch (e: Exception) {
+                mensagemTemporaria = "Acesso"
             }
-
-        if (
-            expr.trim().isNotEmpty() &&
-            expr.trim() == senha
-        ) {
-
-            try {
-
-                context.startActivity(
-                    Intent(
-                        context,
-                        HubActivity::class.java
-                    )
-                )
-
-            } catch (
-                e: Exception
-            ) {
-
-                mensagemTemporaria =
-                    "Acesso"
-            }
-
             return
         }
 
-        if (
-            expr.trim().isEmpty()
-        ) {
-
-            return
-        }
+        if (expr.trim().isEmpty()) return
 
         try {
-
-            val resultado =
-                avaliarExpressao(
-                    expr
-                )
-
-            if (
-                resultado.isFinite()
-            ) {
-
-                expr =
-                    formatarNumero(
-                        resultado
-                    )
-
-                mensagemTemporaria =
-                    null
-
+            val resultado = avaliarExpressao(expr)
+            if (resultado.isFinite()) {
+                expr = formatarNumero(resultado)
+                mensagemTemporaria = null
                 return
             }
+        } catch (e: Exception) {}
 
-        } catch (
-            e: Exception
-        ) {
-        }
-
-        mensagemTemporaria =
-            "Erro"
-
+        mensagemTemporaria = "Erro"
         expr = ""
     }
 
     androidx.compose.runtime.CompositionLocalProvider(
-    LocalOverscrollFactory provides null
-) {
-    BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(cores.fundo)
-            .padding(horizontal = 20.dp)
+        LocalOverscrollFactory provides null
     ) {
-        if (maxWidth > maxHeight) {
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(
-                    modifier = Modifier
-                        .weight(1.2f)
-                        .fillMaxHeight(),
-                    verticalArrangement = Arrangement.spacedBy(6.dp)
+        BoxWithConstraints(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(cores.fundo)
+                .padding(horizontal = 20.dp)
+        ) {
+            if (maxWidth > maxHeight) {
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val botoes = listOf(
-                        listOf(
-                            BotaoCalculadora("AC", TipoBotao.ACAO) { limpar() },
-                            BotaoCalculadora(
-                                "",
-                                TipoBotao.ACAO,
-                                R.drawable.ic_erase
-                            ) { apagar() },
-                            BotaoCalculadora("%", TipoBotao.ACAO) { porcentagem() },
-                            BotaoCalculadora("÷", TipoBotao.OPERADOR) {
-                                operacao("/")
-                            }
-                        ),
-                        listOf(
-                            BotaoCalculadora("7") { adicionar("7") },
-                            BotaoCalculadora("8") { adicionar("8") },
-                            BotaoCalculadora("9") { adicionar("9") },
-                            BotaoCalculadora("×", TipoBotao.OPERADOR) {
-                                operacao("*")
-                            }
-                        ),
-                        listOf(
-                            BotaoCalculadora("4") { adicionar("4") },
-                            BotaoCalculadora("5") { adicionar("5") },
-                            BotaoCalculadora("6") { adicionar("6") },
-                            BotaoCalculadora("−", TipoBotao.OPERADOR) {
-                                operacao("-")
-                            }
-                        ),
-                        listOf(
-                            BotaoCalculadora("1") { adicionar("1") },
-                            BotaoCalculadora("2") { adicionar("2") },
-                            BotaoCalculadora("3") { adicionar("3") },
-                            BotaoCalculadora("+", TipoBotao.OPERADOR) {
-                                operacao("+")
-                            }
-                        ),
-                        listOf(
-                            BotaoCalculadora("(") { adicionar("(") },
-                            BotaoCalculadora(")") { adicionar(")") },
-                            BotaoCalculadora("0") { adicionar("0") },
-                            BotaoCalculadora(".") { adicionar(".") },
-                            BotaoCalculadora("=", TipoBotao.IGUAL) { calcular() }
-                        )
-                    )
-
-                    botoes.forEach { linha ->
-                        Row(
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
-                        ) {
-                            linha.forEach { botao ->
-                                val cor = when (botao.tipo) {
-                                    TipoBotao.ACAO -> cores.acao
-                                    TipoBotao.OPERADOR,
-                                    TipoBotao.IGUAL -> cores.operador
-                                    TipoBotao.NORMAL -> cores.botao
-                                }
-
-                                Box(
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .fillMaxHeight()
-                                        .clip(CircleShape)
-                                        .background(cor)
-                                        .clickable {
-                                            botao.acao()
-                                        },
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    if (botao.icone != null) {
-                                        androidx.compose.foundation.Image(
-                                            painter = painterResource(
-                                                id = botao.icone
-                                            ),
-                                            contentDescription = "Apagar",
-                                            modifier = Modifier.size(24.dp)
-                                        )
-                                    } else {
-                                        Text(
-                                            text = botao.texto,
-                                            color = cores.texto,
-                                            fontSize = 22.sp
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(Color.Transparent)
-                        .horizontalScroll(visorScroll)
-                        .pointerInput(Unit) {
-                            detectTapGestures {
-                                registrarToque()
-                            }
-                        }
-                        .padding(20.dp),
-                    contentAlignment = Alignment.CenterEnd
-                ) {
-                    Text(
-                        text = mensagemTemporaria
-                            ?: if (expr.isEmpty()) "0" else expr,
-                        color = cores.texto,
-                        fontSize = 42.sp,
-                        lineHeight = 48.sp,
-                        textAlign = TextAlign.End,
-                        maxLines = 4
-                    )
-                }
-            }
-        } else {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(cores.fundo)
-                    .padding(horizontal = 20.dp)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.Center),
-                    verticalArrangement = Arrangement.spacedBy(18.dp)
-                ) {
-                    Box(
+                    Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(180.dp)
-                            .clip(RoundedCornerShape(20.dp))
-                            .background(Color.Transparent)
-                            .horizontalScroll(visorScroll)
-                            .pointerInput(Unit) {
-                                detectTapGestures {
-                                    registrarToque()
-                                }
-                            }
-                            .padding(20.dp),
-                        contentAlignment = Alignment.CenterEnd
+                            .weight(1.2f)
+                            .fillMaxHeight(),
+                        verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        Text(
-                            text = mensagemTemporaria
-                                ?: if (expr.isEmpty()) "0" else expr,
-                            color = cores.texto,
-                            fontSize = 54.sp,
-                            lineHeight = 58.sp,
-                            textAlign = TextAlign.End,
-                            maxLines = 4
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-                Column(
-                    modifier =
-                        Modifier.fillMaxWidth(),
-
-                    verticalArrangement =
-                        Arrangement.spacedBy(
-                            10.dp
-                        )
-                ) {
-
-                    LinhaBotoes(
-                        cores = cores,
-
-                        botoes = listOf(
-
-                            BotaoCalculadora(
-                                texto = "AC",
-                                tipo = TipoBotao.ACAO
-                            ) {
-
-                                limpar()
-                            },
-
-                            BotaoCalculadora(
-                                texto = "",
-                                tipo = TipoBotao.ACAO,
-                                icone =
-                                    R.drawable.ic_erase
-                            ) {
-
-                                apagar()
-                            },
-
-                            BotaoCalculadora(
-                                texto = "%",
-                                tipo = TipoBotao.ACAO
-                            ) {
-
-                                porcentagem()
-                            },
-
-                            BotaoCalculadora(
-                                texto = "÷",
-                                tipo = TipoBotao.OPERADOR
-                            ) {
-
-                                operacao("/")
-                            }
-                        )
-                    )
-
-                    LinhaBotoes(
-                        cores = cores,
-
-                        botoes = listOf(
-
-                            BotaoCalculadora(
-                                texto = "7"
-                            ) {
-
-                                adicionar("7")
-                            },
-
-                            BotaoCalculadora(
-                                texto = "8"
-                            ) {
-
-                                adicionar("8")
-                            },
-
-                            BotaoCalculadora(
-                                texto = "9"
-                            ) {
-
-                                adicionar("9")
-                            },
-
-                            BotaoCalculadora(
-                                texto = "×",
-                                tipo = TipoBotao.OPERADOR
-                            ) {
-
-                                operacao("*")
-                            }
-                        )
-                    )
-
-                    LinhaBotoes(
-                        cores = cores,
-
-                        botoes = listOf(
-
-                            BotaoCalculadora(
-                                texto = "4"
-                            ) {
-
-                                adicionar("4")
-                            },
-
-                            BotaoCalculadora(
-                                texto = "5"
-                            ) {
-
-                                adicionar("5")
-                            },
-
-                            BotaoCalculadora(
-                                texto = "6"
-                            ) {
-
-                                adicionar("6")
-                            },
-
-                            BotaoCalculadora(
-                                texto = "−",
-                                tipo = TipoBotao.OPERADOR
-                            ) {
-
-                                operacao("-")
-                            }
-                        )
-                    )
-
-                    LinhaBotoes(
-                        cores = cores,
-
-                        botoes = listOf(
-
-                            BotaoCalculadora(
-                                texto = "1"
-                            ) {
-
-                                adicionar("1")
-                            },
-
-                            BotaoCalculadora(
-                                texto = "2"
-                            ) {
-
-                                adicionar("2")
-                            },
-
-                            BotaoCalculadora(
-                                texto = "3"
-                            ) {
-
-                                adicionar("3")
-                            },
-
-                            BotaoCalculadora(
-                                texto = "+",
-                                tipo = TipoBotao.OPERADOR
-                            ) {
-
-                                operacao("+")
-                            }
-                        )
-                    )
-
-                    LinhaBotoes(
-                        cores = cores,
-
-                        botoes = listOf(
-
-                            BotaoCalculadora(
-                                texto = "()"
-                            ) {
-
-                                adicionar("(")
-                            },
-
-                            BotaoCalculadora(
-                                texto = "0"
-                            ) {
-
-                                adicionar("0")
-                            },
-
-                            BotaoCalculadora(
-                                texto = "."
-                            ) {
-
-                                adicionar(".")
-                            },
-
-                            BotaoCalculadora(
-                                texto = "=",
-                                tipo = TipoBotao.IGUAL
-                            ) {
-
-                                calcular()
-                            }
-                        )
-                    )
-                }
-            
-
-            dialogo?.let { atual ->
-
-                AlertDialog(
-
-                    onDismissRequest = {
-
-                        if (
-                            atual.tipo !=
-                            TipoDialogo.ALERTA
-                        ) {
-
-                            dialogo = null
-                        }
-                    },
-
-                    title = {
-
-                        Text(
-                            text =
-                                atual.titulo,
-
-    color =
-                                cores.texto
-                        )
-                    },
-
-                    text = {
-
-                        Column {
-
-                            Text(
-                                text =
-                                    atual.mensagem,
-
-        color =
-                                    cores.textoSecundario,
-
-                                lineHeight =
-                                    23.sp
-                            )
-
-                            if (
-                                atual.tipo ==
-                                TipoDialogo.PROMPT ||
-                                atual.tipo ==
-                                TipoDialogo.RECUPERACAO
-                            ) {
-
-                                Spacer(
-                                    Modifier.height(
-                                        16.dp
-                                    )
-                                )
-
-                                OutlinedTextField(
-
-                                    value =
-                                        valorDialogo,
-
-                                    onValueChange = {
-
-                                        valorDialogo =
-                                            it
-                                    },
-
-                                    singleLine =
-                                        true,
-
-                                    modifier =
-                                        Modifier.fillMaxWidth(),
-
-                                    colors =
-                                        OutlinedTextFieldDefaults.colors(
-
-                                            focusedTextColor =
-                                                cores.texto,
-
-                                            unfocusedTextColor =
-                                                cores.texto,
-
-                                            focusedBorderColor =
-                                                cores.acao,
-
-                                            unfocusedBorderColor =
-                                                if (
-                                                    escuro
-                                                ) {
-                                                    Color(
-                                                        0xFF353535
-                                                    )
-                                                } else {
-                                                    Color(
-                                                        0xFFBDBDBD
-                                                    )
-                                                },
-
-                                            cursorColor =
-                                                cores.acao
-                                        )
-                                )
-                            }
-                        }
-                    },
-
-                    confirmButton = {
-
-                        Button(
-
-                            onClick = {
-
-                                when (
-                                    atual.tipo
-                                ) {
-
-                                    TipoDialogo.ALERTA -> {
-
-                                        if (
-                                            atual.titulo ==
-                                            "Esqueci tudo"
-                                        ) {
-
-                                            dialogo =
-                                                null
-
-                                            autenticarParaRedefinir(
-
-                                                activity =
-                                                    context as FragmentActivity,
-
-                                                mostrarDialogo = {
-
-                                                    dialogo =
-                                                        it
-
-                                                    valorDialogo =
-                                                        it.valorInicial
-                                                },
-
-                                                mostrarMensagem = {
-
-                                                    mensagemTemporaria =
-                                                        it
-                                                }
-                                            )
-
-                                        } else {
-
-                                            dialogo =
-                                                null
-                                        }
-                                    }
-
-                                    TipoDialogo.PROMPT -> {
-
-                                        val valor =
-                                            valorDialogo
-
-                                        dialogo =
-                                            null
-
-                                        continuarPrompt(
-
-                                            valor =
-                                                valor,
-
-                                            titulo =
-                                                atual.titulo,
-
-                                            context =
-                                                context,
-
-                                            cripto =
-                                                cripto,
-
-                                            mostrarDialogo = {
-
-                                                dialogo =
-                                                    it
-
-                                                valorDialogo =
-                                                    it.valorInicial
-                                            },
-
-                                            mostrarMensagem = {
-
-                                                mensagemTemporaria =
-                                                    it
-                                            }
-                                        )
-                                    }
-
-                                    TipoDialogo.CONFIRMACAO -> {
-
-                                        dialogo =
-                                            null
-
-                                        continuarConfirmacao(
-
-                                            context =
-                                                context,
-
-                                            cripto =
-                                                cripto,
-
-                                            mostrarDialogo = {
-
-                                                dialogo =
-                                                    it
-
-                                                valorDialogo =
-                                                    it.valorInicial
-                                            }
-                                        )
-                                    }
-
-                                    TipoDialogo.RECUPERACAO -> {
-
-                                        val valor =
-                                            valorDialogo
-
-                                        dialogo =
-                                            null
-
-                                        continuarRecuperacao(
-
-                                            valor =
-                                                valor,
-
-                                            context =
-                                                context,
-
-                                            cripto =
-                                                cripto,
-
-                                            mostrarDialogo = {
-
-                                                dialogo =
-                                                    it
-
-                                                valorDialogo =
-                                                    it.valorInicial
-                                            },
-
-                                            mostrarMensagem = {
-
-                                                mensagemTemporaria =
-                                                    it
-                                            }
-                                        )
-                                    }
-                                }
-                            },
-
-                            colors =
-                                ButtonDefaults.buttonColors(
-                                    containerColor =
-                                        cores.acao
-                                )
-                        ) {
-
-                            Text(
-                                text =
-                                    atual.textoConfirmar,
-
-        color =
-                                    Color.White
-                            )
-                        }
-                    },
-
-                    dismissButton = {
-
-                        when (
-                            atual.tipo
-                        ) {
-
-                            TipoDialogo.RECUPERACAO -> {
-
-                                TextButton(
-
-                                    onClick = {
-
-                                        dialogo =
-                                            Dialogo(
-                                                tipo =
-                                                    TipoDialogo.ALERTA,
-
-                                                titulo =
-                                                    "Esqueci tudo",
-
-                                                mensagem =
-                                                    "Use o bloqueio de tela do dispositivo para confirmar sua identidade e permitir a redefinição da senha.",
-
-                                                textoConfirmar =
-                                                    "Continuar"
-                                            )
-                                    }
-                                ) {
-
-                                    Text(
-                                        text =
-                                            "Esqueci tudo",
-
-                color =
-                                            cores.texto
-                                    )
-                                }
-                            }
-
-                            TipoDialogo.PROMPT,
-                            TipoDialogo.CONFIRMACAO -> {
-
-                                TextButton(
-
-                                    onClick = {
-
-                                        dialogo =
-                                            null
-                                    }
-                                ) {
-
-                                    Text(
-                                        text =
-                                            "Cancelar",
-
-                color =
-                                            cores.texto
-                                    )
-                                }
-                            }
-
-                            TipoDialogo.ALERTA -> Unit
-                        }
-                    },
-
-                    containerColor =
-                        cores.botao
-                )
-            }
-        }
-    
-}
-
-private enum class TipoBotao {
-    NORMAL,
-    ACAO,
-    OPERADOR,
-    IGUAL
-}
-
-private data class BotaoCalculadora(
-    val texto: String,
-    val tipo: TipoBotao = TipoBotao.NORMAL,
-    val icone: Int? = null,
-    val acao: () -> Unit
-)
-
-@Composable
-private fun LinhaBotoes(
-cores: CoresNeoCalc,
-    botoes: List<BotaoCalculadora>
-) {
-
-    Row(
-        modifier =
-            Modifier.fillMaxWidth(),
-
-        horizontalArrangement =
-            Arrangement.spacedBy(
-                10.dp
-            )
-    ) {
-
-        botoes.forEach { botao ->
-
-            val cor =
-                when (
-                    botao.tipo
-                ) {
-
-                    TipoBotao.ACAO ->
-                        cores.acao
-
-                    TipoBotao.OPERADOR,
-                    TipoBotao.IGUAL ->
-                        cores.operador
-
-                    TipoBotao.NORMAL ->
-                        cores.botao
-                }
-
-            Box(
-                modifier =
-                    Modifier
-                        .weight(1f)
-                        .aspectRatio(1f)
-                        .clip(
-                            CircleShape
-                        )
-                        .background(
-                            cor
-                        )
-                        .clickable {
-                            botao.acao()
-                        },
-
-                contentAlignment =
-                    Alignment.Center
-            ) {
-
-                if (
-                    botao.icone != null
-                ) {
-
-                    androidx.compose.foundation.Image(
-                        painter =
-                            painterResource(
-                                id =
-                                    botao.icone
+                        val botoes = listOf(
+                            listOf(
+                                BotaoCalculadora("AC", TipoBotao.ACAO) { limpar() },
+                                BotaoCalculadora("", TipoBotao.ACAO, R.drawable.ic_erase) { apagar() },
+                                BotaoCalculadora("%", TipoBotao.ACAO) { porcentagem() },
+                                BotaoCalculadora("÷", TipoBotao.OPERADOR) { operacao("/") }
                             ),
-
-                        contentDescription =
-                            "Apagar",
-
-                        modifier =
-                            Modifier.size(
-                                28.dp
+                            listOf(
+                                BotaoCalculadora("7") { adicionar("7") },
+                                BotaoCalculadora("8") { adicionar("8") },
+                                BotaoCalculadora("9") { adicionar("9") },
+                                BotaoCalculadora("×", TipoBotao.OPERADOR) { operacao("*") }
+                            ),
+                            listOf(
+                                BotaoCalculadora("4") { adicionar("4") },
+                                BotaoCalculadora("5") { adicionar("5") },
+                                BotaoCalculadora("6") { adicionar("6") },
+                                BotaoCalculadora("−", TipoBotao.OPERADOR) { operacao("-") }
+                            ),
+                            listOf(
+                                BotaoCalculadora("1") { adicionar("1") },
+                                BotaoCalculadora("2") { adicionar("2") },
+                                BotaoCalculadora("3") { adicionar("3") },
+                                BotaoCalculadora("+", TipoBotao.OPERADOR) { operacao("+") }
+                            ),
+                            listOf(
+                                BotaoCalculadora("(") { adicionar("(") },
+                                BotaoCalculadora(")") { adicionar(")") },
+                                BotaoCalculadora("0") { adicionar("0") },
+                                BotaoCalculadora(".") { adicionar(".") },
+                                BotaoCalculadora("=", TipoBotao.IGUAL) { calcular() }
                             )
-                    )
-
-                } else {
-
-                    Text(
-                        text =
-                            botao.texto,
-
-                        color =
-                            cores.texto,
-
-fontSize =
-                            25.sp
-                    )
-                }
-            }
-        }
-    }
-}
-
-private fun recuperarSenha(
-    context: android.content.Context,
-cripto: Cripto,
-    mostrarDialogo: (Dialogo) -> Unit,
-    fecharDialogo: () -> Unit,
-    mostrarMensagem: (String) -> Unit
-) {
-
-    val senhaSalva =
-        try {
-
-            cripto.carregar(
-                CHAVE_SENHA
-            )
-                ?.trim()
-                ?: ""
-
-        } catch (
-            e: Exception
-        ) {
-
-            mostrarMensagem(
-                "Erro"
-            )
-
-            return
-        }
-
-    if (
-        senhaSalva.isEmpty()
-    ) {
-
-        mostrarDialogo(
-            Dialogo(
-                tipo =
-                    TipoDialogo.PROMPT,
-
-                titulo =
-                    "Criar senha",
-
-                mensagem =
-                    "Digite uma senha para proteger esta área.",
-
-                textoConfirmar =
-                    "Criar"
-            )
-        )
-
-        return
-    }
-
-    mostrarDialogo(
-        Dialogo(
-            tipo =
-                TipoDialogo.RECUPERACAO,
-
-            titulo =
-                "Recuperar senha",
-
-            mensagem =
-                "Como você gosta de ser chamada?",
-
-            textoConfirmar =
-                "OK"
-        )
-    )
-}
-
-private fun continuarPrompt(
-    valor: String,
-    titulo: String,
-    context: android.content.Context,
-cripto: Cripto,
-    mostrarDialogo: (Dialogo) -> Unit,
-    mostrarMensagem: (String) -> Unit
-) {
-
-    val valorLimpo =
-        valor.trim()
-
-    if (
-        titulo == "Criar senha"
-    ) {
-
-        if (
-            valorLimpo.isEmpty()
-        ) {
-
-            mostrarMensagem(
-                "Senha inválida"
-            )
-
-            return
-        }
-
-        cripto.salvar(
-            CHAVE_SENHA,
-            valorLimpo
-        )
-
-        mostrarDialogo(
-            Dialogo(
-                tipo =
-                    TipoDialogo.PROMPT,
-
-                titulo =
-                    "Recuperação",
-
-                mensagem =
-                    "Como você gosta de ser chamada?",
-
-                textoConfirmar =
-                    "Salvar"
-            )
-        )
-
-        return
-    }
-
-    val respostaSalva =
-        try {
-
-            cripto.carregar(
-                CHAVE_RECUPERACAO
-            )
-                ?.trim()
-                ?: ""
-
-        } catch (
-            e: Exception
-        ) {
-
-            ""
-        }
-
-    if (
-        titulo == "Recuperação" &&
-        respostaSalva.isEmpty()
-    ) {
-
-        if (
-            valorLimpo.isEmpty()
-        ) {
-
-            mostrarMensagem(
-                "Resposta inválida"
-            )
-
-            return
-        }
-
-        cripto.salvar(
-            CHAVE_RECUPERACAO,
-            valorLimpo.lowercase()
-        )
-
-        mostrarMensagem(
-            "Senha criada"
-        )
-
-        return
-    }
-
-    if (
-        titulo == "Nova senha"
-    ) {
-
-        if (
-            valorLimpo.isEmpty()
-        ) {
-
-            mostrarMensagem(
-                "Senha inválida"
-            )
-
-            return
-        }
-
-        cripto.salvar(
-            CHAVE_SENHA,
-            valorLimpo
-        )
-
-        mostrarDialogo(
-            Dialogo(
-                tipo =
-                    TipoDialogo.PROMPT,
-
-                titulo =
-                    "Nova recuperação",
-
-                mensagem =
-                    "Como você gosta de ser chamada?",
-
-                textoConfirmar =
-                    "Salvar"
-            )
-        )
-
-        return
-    }
-
-    if (
-        respostaSalva.isNotEmpty() &&
-        valorLimpo.lowercase() ==
-        respostaSalva.lowercase()
-    ) {
-
-        mostrarDialogo(
-            Dialogo(
-                tipo =
-                    TipoDialogo.PROMPT,
-
-                titulo =
-                    "Nova senha",
-
-                mensagem =
-                    "Digite a nova senha.",
-
-                textoConfirmar =
-                    "Salvar"
-            )
-        )
-
-        return
-    }
-
-    if (
-        titulo == "Nova recuperação"
-    ) {
-
-        if (
-            valorLimpo.isEmpty()
-        ) {
-
-            mostrarMensagem(
-                "Resposta inválida"
-            )
-
-            return
-        }
-
-        cripto.salvar(
-            CHAVE_RECUPERACAO,
-            valorLimpo.lowercase()
-        )
-
-        mostrarMensagem(
-            "Senha alterada"
-        )
-
-        return
-    }
-
-    mostrarMensagem(
-        "Resposta incorreta"
-    )
-}
-
-private fun continuarRecuperacao(
-    valor: String,
-    context: android.content.Context,
-cripto: Cripto,
-    mostrarDialogo: (Dialogo) -> Unit,
-    mostrarMensagem: (String) -> Unit
-) {
-
-    val valorLimpo =
-        valor.trim()
-
-    val respostaSalva =
-        try {
-
-            cripto.carregar(
-                CHAVE_RECUPERACAO
-            )
-                ?.trim()
-                ?: ""
-
-        } catch (
-            e: Exception
-        ) {
-
-            ""
-        }
-
-    if (
-        respostaSalva.isNotEmpty() &&
-        valorLimpo.lowercase() ==
-        respostaSalva.lowercase()
-    ) {
-
-        mostrarDialogo(
-            Dialogo(
-                tipo =
-                    TipoDialogo.PROMPT,
-
-                titulo =
-                    "Nova senha",
-
-                mensagem =
-                    "Digite a nova senha.",
-
-                textoConfirmar =
-                    "Salvar"
-            )
-        )
-
-        return
-    }
-
-    mostrarDialogo(
-        Dialogo(
-            tipo =
-                TipoDialogo.ALERTA,
-
-            titulo =
-                "Resposta incorreta",
-
-            mensagem =
-                "A resposta de recuperação não corresponde à cadastrada.",
-
-            textoConfirmar =
-                "OK"
-        )
-    )
-}
-
-private fun autenticarParaRedefinir(
-    activity: FragmentActivity,
-    mostrarDialogo: (Dialogo) -> Unit,
-    mostrarMensagem: (String) -> Unit
-) {
-
-    val executor =
-        ContextCompat.getMainExecutor(
-            activity
-        )
-
-    val prompt =
-        BiometricPrompt(
-            activity,
-            executor,
-            object :
-                BiometricPrompt.AuthenticationCallback() {
-
-                override fun onAuthenticationSucceeded(
-                    result:
-                        BiometricPrompt.AuthenticationResult
-                ) {
-
-                    super.onAuthenticationSucceeded(
-                        result
-                    )
-
-                    mostrarDialogo(
-                        Dialogo(
-                            tipo =
-                                TipoDialogo.CONFIRMACAO,
-
-                            titulo =
-                                "Redefinir senha",
-
-                            mensagem =
-                                "Deseja redefinir a senha e a pergunta de recuperação?",
-
-                            textoConfirmar =
-                                "Redefinir"
                         )
-                    )
-                }
 
-                override fun onAuthenticationError(
-                    errorCode: Int,
-                    errString: CharSequence
-                ) {
-
-                    super.onAuthenticationError(
-                        errorCode,
-                        errString
-                    )
-
-                    if (
-                        errorCode !=
-                        BiometricPrompt.ERROR_USER_CANCELED
-                    ) {
-
-                        mostrarMensagem(
-                            "Autenticação não concluída"
-                        )
-                    }
-                }
-
-                override fun onAuthenticationFailed() {
-
-                    super.onAuthenticationFailed()
-
-                    mostrarMensagem(
-                        "Autenticação não concluída"
-                    )
-                }
-            }
-        )
-
-    val promptInfo =
-        BiometricPrompt.PromptInfo.Builder()
-            .setTitle(
-                "Confirmar identidade"
-            )
-            .setSubtitle(
-                "Use o bloqueio de tela do dispositivo"
-            )
-            .setDescription(
-                "Confirme sua identidade para redefinir a senha."
-            )
-            .setAllowedAuthenticators(
-                BiometricManager.Authenticators.DEVICE_CREDENTIAL
-            )
-            .build()
-
-    prompt.authenticate(
-        promptInfo
-    )
-}
-
-private fun continuarConfirmacao(
-    context: android.content.Context,
-cripto: Cripto,
-    mostrarDialogo: (Dialogo) -> Unit
-) {
-
-    cripto.salvar(
-        CHAVE_SENHA,
-        ""
-    )
-
-    cripto.salvar(
-        CHAVE_RECUPERACAO,
-        ""
-    )
-
-    mostrarDialogo(
-        Dialogo(
-            tipo =
-                TipoDialogo.PROMPT,
-
-            titulo =
-                "Nova senha",
-
-            mensagem =
-                "Digite a nova senha.",
-
-            textoConfirmar =
-                "Salvar"
-        )
-    )
-}
-
-private fun avaliarExpressao(
-    expressao: String
-): Double {
-
-    val tokens =
-        mutableListOf<String>()
-
-    var numero = ""
-
-    for (
-        caractere in expressao
-    ) {
-
-        if (
-            caractere.isDigit() ||
-            caractere == '.'
-        ) {
-
-            numero += caractere
-
-        } else {
-
-            if (
-                numero.isNotEmpty()
-            ) {
-
-                tokens.add(
-                    numero
-                )
-
-                numero = ""
-            }
-
-            tokens.add(
-                caractere.toString()
-            )
-        }
-    }
-
-    if (
-        numero.isNotEmpty()
-    ) {
-
-        tokens.add(
-            numero
-        )
-    }
-
-    val valores =
-        mutableListOf<Double>()
-
-    val operadores =
-        mutableListOf<Char>()
-
-    fun prioridade(
-        operador: Char
-    ): Int {
-
-        return when (
-            operador
-        ) {
-
-            '+',
-            '-' ->
-                1
-
-            '*',
-            '/' ->
-                2
-
-            else ->
-                0
-        }
-    }
-
-    fun aplicar() {
-
-        if (
-            valores.size < 2 ||
-            operadores.isEmpty()
-        ) {
-
-            throw IllegalArgumentException()
-        }
-
-        val b =
-            valores.removeAt(
-                valores.lastIndex
-            )
-
-        val a =
-            valores.removeAt(
-                valores.lastIndex
-            )
-
-        val op =
-            operadores.removeAt(
-                operadores.lastIndex
-            )
-
-        valores.add(
-
-            when (op) {
-
-                '+' ->
-                    a + b
-
-                '-' ->
-                    a - b
-
-                '*' ->
-                    a * b
-
-                '/' -> {
-
-                    if (
-                        b == 0.0
-                    ) {
-
-                        throw ArithmeticException()
-                    }
-
-                    a / b
-                }
-
-                else ->
-                    throw IllegalArgumentException()
-            }
-        )
-    }
-
-    for (
-        token in tokens
-    ) {
-
-        when {
-
-            token.toDoubleOrNull()
-                != null -> {
-
-                valores.add(
-                    token.toDouble()
-                )
-            }
-
-            token == "(" -> {
-
-                operadores.add(
-                    '('
-                )
-            }
-
-            token == ")" -> {
-
-                while (
-                    operadores.isNotEmpty() &&
-                    operadores.last() != '('
-                ) {
-
-                    aplicar()
-                }
-
-                if (
-                    operadores.isEmpty()
-                ) {
-
-                    throw IllegalArgumentException()
-                }
-
-                operadores.removeAt(
-                    operadores.lastIndex
-                )
-            }
-
-            token.length == 1 &&
-            token[0] in
-            charArrayOf(
-                '+',
-                '-',
-                '*',
-                '/'
-            ) -> {
-
-                val op =
-                    token[0]
-
-                while (
-                    operadores.isNotEmpty() &&
-                    operadores.last() != '(' &&
-                    prioridade(
-                        operadores.last()
-                    ) >= prioridade(op)
-                ) {
-
-                    aplicar()
-                }
-
-                operadores.add(
-                    op
-                )
-            }
-
-            else -> {
-
-                throw IllegalArgumentException()
-            }
-        }
-    }
-
-    while (
-        operadores.isNotEmpty()
-    ) {
-
-        if (
-            operadores.last() == '('
-        ) {
-
-            throw IllegalArgumentException()
-        }
-
-        aplicar()
-    }
-
-    if (
-        valores.size != 1
-    ) {
-
-        throw IllegalArgumentException()
-    }
-
-    return valores[0]
-}
-
-private fun formatarNumero(
-    numero: Double
-): String {
-
-    if (
-        !numero.isFinite()
-    ) {
-
-        return "Erro"
-    }
-
-    return numero
-        .toBigDecimal()
-        .stripTrailingZeros()
-        .toPlainString()
-}
+                        botoes.forEach { linha ->
+                            Row(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                linha.forEach { botao ->
+                                    val cor = when (botao.tipo) {
+                                        TipoBotao.ACAO -> cores.acao
+                                        TipoBotao.OPERADOR, TipoBotao.IGUAL -> cores.operador
+                                        TipoBotao.NORMAL -> cores.botao
+                                    }
+
+                                    Box(
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .fillMaxHeight()
+                                            .clip(CircleShape)
+                                            .background(cor)
+                                            .clickable { botao.acao() },
+                                        contentAlignment = Alignment.Center
+                                    ) {

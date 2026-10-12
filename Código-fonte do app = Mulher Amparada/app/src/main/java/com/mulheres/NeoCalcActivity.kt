@@ -446,94 +446,188 @@ private fun NeoCalcScreen() {
     }
 
     androidx.compose.runtime.CompositionLocalProvider(
-        LocalOverscrollFactory provides null
+    LocalOverscrollFactory provides null
+) {
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(cores.fundo)
+            .padding(horizontal = 20.dp)
     ) {
-
-        Box(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(
-                        cores.fundo
-                    )
-                    .padding(
-                        horizontal = 20.dp
-                    )
-        ) {
-
-            Column(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .align(
-                            Alignment.Center
-                        ),
-
-                verticalArrangement =
-                    Arrangement.spacedBy(
-                        18.dp
-                    )
+        if (maxWidth > maxHeight) {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
+                Column(
+                    modifier = Modifier
+                        .weight(1.2f)
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    val botoes = listOf(
+                        listOf(
+                            BotaoCalculadora("AC", TipoBotao.ACAO) { limpar() },
+                            BotaoCalculadora(
+                                "",
+                                TipoBotao.ACAO,
+                                R.drawable.ic_erase
+                            ) { apagar() },
+                            BotaoCalculadora("%", TipoBotao.ACAO) { porcentagem() },
+                            BotaoCalculadora("÷", TipoBotao.OPERADOR) {
+                                operacao("/")
+                            }
+                        ),
+                        listOf(
+                            BotaoCalculadora("7") { adicionar("7") },
+                            BotaoCalculadora("8") { adicionar("8") },
+                            BotaoCalculadora("9") { adicionar("9") },
+                            BotaoCalculadora("×", TipoBotao.OPERADOR) {
+                                operacao("*")
+                            }
+                        ),
+                        listOf(
+                            BotaoCalculadora("4") { adicionar("4") },
+                            BotaoCalculadora("5") { adicionar("5") },
+                            BotaoCalculadora("6") { adicionar("6") },
+                            BotaoCalculadora("−", TipoBotao.OPERADOR) {
+                                operacao("-")
+                            }
+                        ),
+                        listOf(
+                            BotaoCalculadora("1") { adicionar("1") },
+                            BotaoCalculadora("2") { adicionar("2") },
+                            BotaoCalculadora("3") { adicionar("3") },
+                            BotaoCalculadora("+", TipoBotao.OPERADOR) {
+                                operacao("+")
+                            }
+                        ),
+                        listOf(
+                            BotaoCalculadora("(") { adicionar("(") },
+                            BotaoCalculadora(")") { adicionar(")") },
+                            BotaoCalculadora("0") { adicionar("0") },
+                            BotaoCalculadora(".") { adicionar(".") },
+                            BotaoCalculadora("=", TipoBotao.IGUAL) { calcular() }
+                        )
+                    )
+
+                    botoes.forEach { linha ->
+                        Row(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            linha.forEach { botao ->
+                                val cor = when (botao.tipo) {
+                                    TipoBotao.ACAO -> cores.acao
+                                    TipoBotao.OPERADOR,
+                                    TipoBotao.IGUAL -> cores.operador
+                                    TipoBotao.NORMAL -> cores.botao
+                                }
+
+                                Box(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .fillMaxHeight()
+                                        .clip(CircleShape)
+                                        .background(cor)
+                                        .clickable {
+                                            botao.acao()
+                                        },
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    if (botao.icone != null) {
+                                        androidx.compose.foundation.Image(
+                                            painter = painterResource(
+                                                id = botao.icone
+                                            ),
+                                            contentDescription = "Apagar",
+                                            modifier = Modifier.size(24.dp)
+                                        )
+                                    } else {
+                                        Text(
+                                            text = botao.texto,
+                                            color = cores.texto,
+                                            fontSize = 22.sp
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 
                 Box(
-                    modifier =
-                        Modifier
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(Color.Transparent)
+                        .horizontalScroll(visorScroll)
+                        .pointerInput(Unit) {
+                            detectTapGestures {
+                                registrarToque()
+                            }
+                        }
+                        .padding(20.dp),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+                    Text(
+                        text = mensagemTemporaria
+                            ?: if (expr.isEmpty()) "0" else expr,
+                        color = cores.texto,
+                        fontSize = 42.sp,
+                        lineHeight = 48.sp,
+                        textAlign = TextAlign.End,
+                        maxLines = 4
+                    )
+                }
+            }
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(cores.fundo)
+                    .padding(horizontal = 20.dp)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Center),
+                    verticalArrangement = Arrangement.spacedBy(18.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
                             .fillMaxWidth()
                             .height(180.dp)
-                            .clip(
-                                RoundedCornerShape(
-                                    20.dp
-                                )
-                            )
-                            .background(
-                                Color.Transparent
-                            )
-                            .horizontalScroll(
-                                visorScroll
-                            )
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(Color.Transparent)
+                            .horizontalScroll(visorScroll)
                             .pointerInput(Unit) {
-
                                 detectTapGestures {
-
                                     registrarToque()
                                 }
                             }
-                            .padding(
-                                20.dp
-                            ),
-
-                    contentAlignment =
-                        Alignment.CenterEnd
-                ) {
-
-                    Text(
-                        text =
-                            mensagemTemporaria
-                                ?: if (
-                                    expr.isEmpty()
-                                ) {
-                                    "0"
-                                } else {
-                                    expr
-                                },
-
-                        color =
-                            cores.texto,
-
-fontSize =
-                            54.sp,
-
-                        lineHeight =
-                            58.sp,
-
-                        textAlign =
-                            TextAlign.End,
-
-                        maxLines =
-                            4
-                    )
+                            .padding(20.dp),
+                        contentAlignment = Alignment.CenterEnd
+                    ) {
+                        Text(
+                            text = mensagemTemporaria
+                                ?: if (expr.isEmpty()) "0" else expr,
+                            color = cores.texto,
+                            fontSize = 54.sp,
+                            lineHeight = 58.sp,
+                            textAlign = TextAlign.End,
+                            maxLines = 4
+                        )
+                    }
                 }
-
+            }
+        }
+    }
+}
                 Column(
                     modifier =
                         Modifier.fillMaxWidth(),

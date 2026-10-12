@@ -52,20 +52,29 @@ jobs:
           set -euo pipefail
 
           if [[ -z "${PRIVATE_KEY:-}" ]]; then
-            echo "::error::O secret MULHER_AMPARADA_PRIVATE_KEY está vazio ou indisponível."
+            echo "::error::Secret MULHER_AMPARADA_PRIVATE_KEY vazio ou indisponível."
             exit 1
           fi
 
           KEY_FILE="$RUNNER_TEMP/private-key.pem"
 
           if [[ "$PRIVATE_KEY" == *"-----BEGIN"* ]]; then
-            printf '%s\n' "$PRIVATE_KEY" > "$KEY_FILE"
+            printf '%s' "$PRIVATE_KEY" |
+              sed 's/\\n/\n/g' > "$KEY_FILE"
           else
-            printf '%s' "$PRIVATE_KEY" | base64 --decode > "$KEY_FILE"
+            if ! printf '%s' "$PRIVATE_KEY" |
+              base64 --decode > "$KEY_FILE" 2>/dev/null; then
+              echo "::error::A chave não é PEM nem Base64 válido."
+              exit 1
+            fi
           fi
 
-          grep -q -- "-----BEGIN .*PRIVATE KEY-----" "$KEY_FILE"
-          grep -q -- "-----END .*PRIVATE KEY-----" "$KEY_FILE"
+          if ! openssl pkey -in "$KEY_FILE" -noout 2>/dev/null; then
+            echo "::error::Chave privada inválida. Verifique o conteúdo do arquivo PEM."
+            exit 1
+          fi
+
+          chmod 600 "$KEY_FILE"
 
           echo "MULHER_AMPARADA_PRIVATE_KEY_FILE=$KEY_FILE" >> "$GITHUB_ENV"
 
@@ -81,7 +90,7 @@ jobs:
       - name: Executar agente
         env:
           MULHER_AMPARADA_PRIVATE_KEY: ${{ secrets.MULHER_AMPARADA_PRIVATE_KEY }}
-          MULHER_AMPARADA_PRIVATE_KEY_FILE: ${{ env.MULHER_AMPARADA_PRIVATE_KEY_FILE }}
+          MULHER_AMPARADA_PRIVATE_KEY_FILE: ${{ runner.temp }}/private-key.pem
           MULHER_AMPARADA_APP_ID: ${{ secrets.MULHER_AMPARADA_APP_ID }}
           MULHER_AMPARADA_INSTALLATION_ID: ${{ secrets.MULHER_AMPARADA_INSTALLATION_ID }}
           GITHUB_REPOSITORY: ${{ github.repository }}
@@ -98,8 +107,8 @@ jobs:
             exit 1
           fi
 
-          if [[ -z "${MULHER_AMPARADA_PRIVATE_KEY:-}" && -z "${MULHER_AMPARADA_PRIVATE_KEY_FILE:-}" ]]; then
-            echo "::error::Chave privada não disponibilizada ao agente."
+          if [[ ! -s "$MULHER_AMPARADA_PRIVATE_KEY_FILE" ]]; then
+            echo "::error::Arquivo da chave privada não encontrado."
             exit 1
           fi
 

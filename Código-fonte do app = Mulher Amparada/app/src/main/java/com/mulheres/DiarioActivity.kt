@@ -872,23 +872,23 @@ val landscape =
     val muted =
         if (dark) DarkMuted else LightMuted
 
-Row(
-    modifier = Modifier
-        .fillMaxWidth()
-        .height(61.dp)
-        .clip(RoundedCornerShape(999.dp))
-        .background(surface)
-        .border(
-            1.dp,
-            border,
-            RoundedCornerShape(999.dp)
-        )
-.padding(
-    horizontal = if (landscape) 64.dp else 13.dp,
-    vertical = if (landscape) 12.dp else 0.dp
-)
-    verticalAlignment = Alignment.CenterVertically
-) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(61.dp)
+            .clip(RoundedCornerShape(999.dp))
+            .background(surface)
+            .border(
+                1.dp,
+                border,
+                RoundedCornerShape(999.dp)
+            )
+            .padding(
+                horizontal = if (landscape) 64.dp else 13.dp,
+                vertical = if (landscape) 12.dp else 0.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Box(
             modifier = Modifier
                 .size(39.dp)

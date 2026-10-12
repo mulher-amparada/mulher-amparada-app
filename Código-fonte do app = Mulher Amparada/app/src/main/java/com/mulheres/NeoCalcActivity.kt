@@ -1,5 +1,7 @@
 package com.mulheres
 
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
@@ -639,88 +641,42 @@ private data class BotaoCalculadora(
 
 @Composable
 private fun LinhaBotoes(
-cores: CoresNeoCalc,
-    botoes: List<BotaoCalculadora>
+    cores: CoresNeoCalc,
+    botoes: List<BotaoCalculadora>,
+    modifier: Modifier = Modifier
 ) {
-
     Row(
-        modifier =
-            Modifier.fillMaxWidth(),
-
-        horizontalArrangement =
-            Arrangement.spacedBy(
-                10.dp
-            )
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-
         botoes.forEach { botao ->
-
-            val cor =
-                when (
-                    botao.tipo
-                ) {
-
-                    TipoBotao.ACAO ->
-                        cores.acao
-
-                    TipoBotao.OPERADOR,
-                    TipoBotao.IGUAL ->
-                        cores.operador
-
-                    TipoBotao.NORMAL ->
-                        cores.botao
-                }
+            val cor = when (botao.tipo) {
+                TipoBotao.ACAO -> cores.acao
+                TipoBotao.OPERADOR,
+                TipoBotao.IGUAL -> cores.operador
+                TipoBotao.NORMAL -> cores.botao
+            }
 
             Box(
-                modifier =
-                    Modifier
-                        .weight(1f)
-                        .aspectRatio(1f)
-                        .clip(
-                            CircleShape
-                        )
-                        .background(
-                            cor
-                        )
-                        .clickable {
-                            botao.acao()
-                        },
-
-                contentAlignment =
-                    Alignment.Center
+                modifier = Modifier
+                    .weight(1f)
+                    .aspectRatio(1f)
+                    .clip(CircleShape)
+                    .background(cor)
+                    .clickable { botao.acao() },
+                contentAlignment = Alignment.Center
             ) {
-
-                if (
-                    botao.icone != null
-                ) {
-
+                if (botao.icone != null) {
                     androidx.compose.foundation.Image(
-                        painter =
-                            painterResource(
-                                id =
-                                    botao.icone
-                            ),
-
-                        contentDescription =
-                            "Apagar",
-
-                        modifier =
-                            Modifier.size(
-                                28.dp
-                            )
+                        painter = painterResource(botao.icone),
+                        contentDescription = "Apagar",
+                        modifier = Modifier.size(28.dp)
                     )
-
                 } else {
-
                     Text(
-                        text =
-                            botao.texto,
-
-                        color =
-                            cores.texto,
-
-fontSize =
-                            25.sp
+                        text = botao.texto,
+                        color = cores.texto,
+                        fontSize = 25.sp
                     )
                 }
             }

@@ -1,10 +1,10 @@
-cloc|github.com/AlDanial/cloc v 1.98  T=0.10 s (1098.6 files/s, 393721.1 lines/s)
+cloc|github.com/AlDanial/cloc v 1.98  T=0.07 s (1481.1 files/s, 526149.6 lines/s)
 --- | ---
 
 Language|files|blank|comment|code
 :-------|-------:|-------:|-------:|-------:
 CSS|18|6186|863|10229
-Markdown|63|2007|6|9112
+Markdown|64|2009|6|9127
 HTML|11|1452|87|3133
 C++|2|391|5|1586
 YAML|4|460|127|1321
@@ -18,4 +18,4 @@ CSV|1|0|0|25
 Python|1|10|0|22
 TOML|1|2|0|7
 --------|--------|--------|--------|--------
-SUM:|108|10837|1223|26644
+SUM:|109|10839|1223|26659

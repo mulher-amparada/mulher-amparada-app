@@ -491,15 +491,19 @@ fun AssistenteSaude() {
         LazyColumn(
 
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(
-                        cores.fundo
-                    )
-                    .padding(
-                        start = 24.dp,
-                        end = 24.dp
-                    ),
+    Modifier
+        .fillMaxSize()
+        .background(cores.fundo)
+        .padding(
+            horizontal = if (
+                androidx.compose.ui.platform.LocalConfiguration.current.orientation ==
+                    android.content.res.Configuration.ORIENTATION_LANDSCAPE
+            ) {
+                64.dp
+            } else {
+                24.dp
+            }
+        ),
 
             verticalArrangement =
                 Arrangement.spacedBy(

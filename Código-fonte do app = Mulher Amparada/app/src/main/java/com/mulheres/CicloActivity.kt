@@ -1956,11 +1956,11 @@ val paddingHorizontal =
     if (paisagem) 64.dp else 12.dp
     
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-      .padding(horizontal = paddingHorizontal)
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
+    modifier = Modifier
+        .fillMaxSize()
+        .padding(horizontal = paddingHorizontal),
+    verticalArrangement = Arrangement.spacedBy(12.dp)
+) {
 
         item {
 

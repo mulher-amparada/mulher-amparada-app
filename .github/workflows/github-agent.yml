@@ -35,6 +35,7 @@ concurrency:
 jobs:
   agent:
     runs-on: ubuntu-latest
+
     steps:
       - name: Baixar código do repositório
         uses: actions/checkout@v4
@@ -43,6 +44,23 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y g++ libcurl4-openssl-dev libssl-dev
+
+      - name: Preparar chave privada
+        env:
+          PRIVATE_KEY: ${{ secrets.MULHER_AMPARADA_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+
+          if [[ "$PRIVATE_KEY" == *"-----BEGIN"* ]]; then
+            printf '%s\n' "$PRIVATE_KEY" > "$RUNNER_TEMP/private-key.pem"
+          else
+            printf '%s' "$PRIVATE_KEY" | base64 -d > "$RUNNER_TEMP/private-key.pem"
+          fi
+
+          grep -q -- "-----BEGIN .*PRIVATE KEY-----" "$RUNNER_TEMP/private-key.pem"
+          grep -q -- "-----END .*PRIVATE KEY-----" "$RUNNER_TEMP/private-key.pem"
+
+          echo "MULHER_AMPARADA_PRIVATE_KEY_FILE=$RUNNER_TEMP/private-key.pem" >> "$GITHUB_ENV"
 
       - name: Compilar agente C++
         run: |
@@ -54,7 +72,6 @@ jobs:
         env:
           MULHER_AMPARADA_APP_ID: ${{ secrets.MULHER_AMPARADA_APP_ID }}
           MULHER_AMPARADA_INSTALLATION_ID: ${{ secrets.MULHER_AMPARADA_INSTALLATION_ID }}
-          MULHER_AMPARADA_PRIVATE_KEY: ${{ secrets.MULHER_AMPARADA_PRIVATE_KEY }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           set -euo pipefail

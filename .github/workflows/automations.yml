@@ -1205,7 +1205,7 @@ jobs:
           path: README.md
           if-no-files-found: error
 
-- name: Publicar README na main
+      - name: Publicar README na main
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

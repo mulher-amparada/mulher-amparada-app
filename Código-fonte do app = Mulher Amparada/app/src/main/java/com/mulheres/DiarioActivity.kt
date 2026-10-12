@@ -856,6 +856,10 @@ private fun DiarioTopBar(
     onDownload: () -> Unit,
     onDelete: () -> Unit
 ) {
+val landscape =
+    LocalConfiguration.current.orientation ==
+        Configuration.ORIENTATION_LANDSCAPE
+        
     val surface =
         if (dark) Color(0xFF111111) else Color.White
 
@@ -1006,6 +1010,10 @@ private fun DiarioBook(
     dark: Boolean,
     onTextChanged: (Int, String) -> Unit
 ) {
+val landscape =
+    LocalConfiguration.current.orientation ==
+        Configuration.ORIENTATION_LANDSCAPE
+        
     Box(
         modifier = Modifier
             .fillMaxWidth()

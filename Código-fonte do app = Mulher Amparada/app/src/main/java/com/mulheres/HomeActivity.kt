@@ -142,7 +142,7 @@ val paisagem =
     configuration.screenWidthDp > configuration.screenHeightDp
 
 val paddingHorizontal =
-    if (paisagem) 30.dp else 16.dp
+    if (paisagem) 64.dp else 16.dp
 
     val background = if (dark) {
         Color(0xFF000000)

@@ -182,7 +182,7 @@ val paisagem =
     configuration.screenWidthDp > configuration.screenHeightDp
 
 val paddingHorizontal =
-    if (paisagem) 30.dp else 18.dp
+    if (paisagem) 64.dp else 18.dp
     
     val context =
         androidx.compose.ui.platform.LocalContext.current

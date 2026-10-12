@@ -45,32 +45,27 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y g++ libcurl4-openssl-dev libssl-dev
 
-      - name: Preparar chave privada
+      - name: Preparar chave privada Base64
         env:
-          PRIVATE_KEY: ${{ secrets.MULHER_AMPARADA_PRIVATE_KEY }}
+          PRIVATE_KEY_BASE64: ${{ secrets.MULHER_AMPARADA_PRIVATE_KEY }}
         run: |
           set -euo pipefail
 
-          if [[ -z "${PRIVATE_KEY:-}" ]]; then
-            echo "::error::Secret MULHER_AMPARADA_PRIVATE_KEY vazio ou indisponível."
+          if [[ -z "${PRIVATE_KEY_BASE64:-}" ]]; then
+            echo "::error::Secret MULHER_AMPARADA_PRIVATE_KEY ausente."
             exit 1
           fi
 
           KEY_FILE="$RUNNER_TEMP/private-key.pem"
 
-          if [[ "$PRIVATE_KEY" == *"-----BEGIN"* ]]; then
-            printf '%s' "$PRIVATE_KEY" |
-              sed 's/\\n/\n/g' > "$KEY_FILE"
-          else
-            if ! printf '%s' "$PRIVATE_KEY" |
-              base64 --decode > "$KEY_FILE" 2>/dev/null; then
-              echo "::error::A chave não é PEM nem Base64 válido."
-              exit 1
-            fi
+          if ! printf '%s' "$PRIVATE_KEY_BASE64" |
+            base64 --decode > "$KEY_FILE"; then
+            echo "::error::Falha ao decodificar a chave Base64."
+            exit 1
           fi
 
           if ! openssl pkey -in "$KEY_FILE" -noout 2>/dev/null; then
-            echo "::error::Chave privada inválida. Verifique o conteúdo do arquivo PEM."
+            echo "::error::A chave decodificada não é uma chave privada PEM válida."
             exit 1
           fi
 

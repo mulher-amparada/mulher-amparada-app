@@ -928,11 +928,7 @@ val landscape =
                 fontSize = 15.sp
             )
 
-            Text(
-                text = "Suas ideias estão seguras",
-                color = muted,
-                fontSize = 8.sp
-            )
+            
         }
 
         Row(

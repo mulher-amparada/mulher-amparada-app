@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.compose.foundation.layout.weight
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.windowInsetsPadding

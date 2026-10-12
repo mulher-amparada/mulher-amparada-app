@@ -825,7 +825,7 @@ private fun NeoCalcScreen() {
                         )
                     )
                 }
-            }
+            
 
             dialogo?.let { atual ->
 

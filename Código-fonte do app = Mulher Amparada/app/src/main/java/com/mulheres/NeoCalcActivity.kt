@@ -1167,7 +1167,7 @@ private fun NeoCalcScreen() {
                 )
             }
         }
-    }
+    
 }
 
 private enum class TipoBotao {

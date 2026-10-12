@@ -35,7 +35,6 @@ concurrency:
 jobs:
   agent:
     runs-on: ubuntu-latest
-
     steps:
       - name: Baixar código do repositório
         uses: actions/checkout@v4

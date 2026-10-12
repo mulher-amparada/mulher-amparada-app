@@ -2212,7 +2212,12 @@ private fun BottomAreaSelector(
         modifier =
             Modifier
                 .fillMaxWidth(0.80f)
-                .height(76.dp)
+                .height(
+    if (
+        LocalConfiguration.current.screenWidthDp >
+        LocalConfiguration.current.screenHeightDp
+    ) 96.dp else 76.dp
+)
                 .clip(shape)
                 .background(
                     if (isDark)
@@ -2455,7 +2460,7 @@ private fun MulherAmparadaScreen() {
         configuration.screenWidthDp >
         configuration.screenHeightDp
 
-    val paddingTela = if (isLandscape) 30.dp else 0.dp
+    val paddingTela = if (isLandscape) 64.dp else 0.dp
 
     Box(
         modifier = Modifier

@@ -143,22 +143,29 @@ CompositionLocalProvider(
     ) { paddingValues ->
 
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(background)
-                .padding(
-                    start = if (paisagem) 30.dp else 18.dp,
-                    end = 18.dp,
-                    top = paddingValues.calculateTopPadding() + 20.dp,
-                    bottom = paddingValues.calculateBottomPadding() + 20.dp
-                ),
-            contentAlignment = Alignment.TopCenter
-        ) {
+    modifier = Modifier
+        .fillMaxSize()
+        .background(background)
+        .padding(
+            start = if (paisagem) 64.dp else 18.dp,
+            end = if (paisagem) 64.dp else 18.dp,
+            top = if (paisagem) 0.dp else paddingValues.calculateTopPadding() + 20.dp,
+            bottom = if (paisagem) 0.dp else paddingValues.calculateBottomPadding() + 20.dp
+        ),
+    contentAlignment = if (paisagem) {
+        Alignment.Center
+    } else {
+        Alignment.TopCenter
+    }
+) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 2.dp),
+             modifier = Modifier
+    .fillMaxSize()
+    .then(
+        if (paisagem) Modifier
+        else Modifier.verticalScroll(rememberScrollState())
+    )
+    .padding(horizontal = 2.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Box(

@@ -1,5 +1,7 @@
 package com.mulheres
 
+import android.content.res.Configuration
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.withStyle
 import android.content.ContentValues
 import android.content.Context
@@ -613,7 +615,11 @@ private fun MarkdownPreview(
 private fun DiarioScreen() {
     val context =
         androidx.compose.ui.platform.LocalContext.current
-
+        
+val landscape =
+    LocalConfiguration.current.orientation ==
+        Configuration.ORIENTATION_LANDSCAPE
+        
     val storage = remember {
         DiarioStorage(context)
     }
@@ -862,22 +868,22 @@ private fun DiarioTopBar(
     val muted =
         if (dark) DarkMuted else LightMuted
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(61.dp)
-            .clip(RoundedCornerShape(999.dp))
-            .background(surface)
-            .border(
-                1.dp,
-                border,
-                RoundedCornerShape(999.dp)
-            )
-.padding(
-    horizontal = if (landscape) 64.dp else 13.dp
-)
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+Row(
+    modifier = Modifier
+        .fillMaxWidth()
+        .height(61.dp)
+        .clip(RoundedCornerShape(999.dp))
+        .background(surface)
+        .border(
+            1.dp,
+            border,
+            RoundedCornerShape(999.dp)
+        )
+        .padding(
+            horizontal = if (landscape) 64.dp else 13.dp
+        ),
+    verticalAlignment = Alignment.CenterVertically
+) {
         Box(
             modifier = Modifier
                 .size(39.dp)

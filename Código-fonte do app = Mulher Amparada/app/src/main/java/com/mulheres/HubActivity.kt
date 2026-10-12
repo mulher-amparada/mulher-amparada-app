@@ -2073,7 +2073,7 @@ private fun colors(): AppColors {
         AppColors(
 
             background =
-                Color(0xFFF8F7FA),
+                Color(0xFFFFFFFF),
 
             surface =
                 Color(0xFFFFFFFF),

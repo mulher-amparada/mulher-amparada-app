@@ -1,5 +1,7 @@
 package com.mulheres
 
+import android.content.res.Configuration
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.systemBars
@@ -198,6 +200,10 @@ private fun MapaTela(
     val context =
         androidx.compose.ui.platform.LocalContext.current
 
+val paisagem =
+    LocalConfiguration.current.orientation ==
+        Configuration.ORIENTATION_LANDSCAPE
+        
     var mapView by remember {
         mutableStateOf<MapView?>(null)
     }
@@ -381,12 +387,12 @@ private fun MapaTela(
 AndroidView(
     modifier = Modifier
         .fillMaxSize()
-        .padding(
-            start = if (paisagem) 30.dp else 10.dp,
-            end = 10.dp,
-            top = 92.dp,
-            bottom = 22.dp
-        )
+.padding(
+    start = if (paisagem) 64.dp else 10.dp,
+    end = if (paisagem) 64.dp else 10.dp,
+    top = 92.dp,
+    bottom = 22.dp
+)
         .clip(
             RoundedCornerShape(22.dp)
         )

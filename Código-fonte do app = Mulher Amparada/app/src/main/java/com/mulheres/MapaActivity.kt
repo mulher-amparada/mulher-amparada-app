@@ -1,6 +1,5 @@
 package com.mulheres
 
-import android.content.res.Configuration
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -57,7 +56,8 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.delay
-import org.osmdroid.config.Configuration
+import android.content.res.Configuration as AndroidConfiguration
+import org.osmdroid.config.Configuration as OsmDroidConfiguration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -127,8 +127,8 @@ class MapaActivity : ComponentActivity() {
             WindowManager.LayoutParams.FLAG_SECURE
         )
 
-        Configuration
-            .getInstance()
+        OsmDroidConfiguration
+    .getInstance()
             .load(
                 this,
                 getSharedPreferences(
@@ -137,8 +137,8 @@ class MapaActivity : ComponentActivity() {
                 )
             )
 
-        Configuration
-            .getInstance()
+      OsmDroidConfiguration
+    .getInstance()
             .userAgentValue =
             packageName
 
@@ -202,7 +202,7 @@ private fun MapaTela(
 
 val paisagem =
     LocalConfiguration.current.orientation ==
-        Configuration.ORIENTATION_LANDSCAPE
+        AndroidConfiguration.ORIENTATION_LANDSCAPE
         
     var mapView by remember {
         mutableStateOf<MapView?>(null)

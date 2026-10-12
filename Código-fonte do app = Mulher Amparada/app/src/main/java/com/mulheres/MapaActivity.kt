@@ -470,230 +470,97 @@ val paisagem =
     }
 }
 
-
 @Composable
 private fun CabecalhoMapa(
     dark: Boolean,
     aoLocalizar: () -> Unit,
     modifier: Modifier = Modifier
-)
+) {
+    val paisagem =
+        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    val card =
-        if (dark)
-            CartaoEscuro
-        else
-            CartaoClaro
-
-
-    val texto =
-        if (dark)
-            TextoEscuro
-        else
-            TextoClaro
-
-
-    val suave =
-        if (dark)
-            TextoSuaveEscuro
-        else
-            TextoSuaveClaro
-
+    val card = if (dark) {
+        Color(0xFF1C1C1E)
+    } else {
+        Color.White
+    }
 
     Row(
-
-        
-
-modifier = Modifier
-        .fillMaxWidth()
-        .padding(
-            start = if (paisagem) 64.dp else 12.dp,
-            end = if (paisagem) 64.dp else 12.dp,
-            top = 10.dp
-        )
-
-                .clip(
-                    RoundedCornerShape(
-                        17.dp
-                    )
-                )
-
-                .background(
-                    card
-                )
-
-                .border(
-                    1.dp,
-
-                    if (dark)
-                        Color.White.copy(
-                            alpha = .10f
-                        )
-                    else
-                        Color.Black.copy(
-                            alpha = .08f
-                        ),
-
-                    RoundedCornerShape(
-                        17.dp
-                    )
-                )
-
-                .padding(
-                    start = 13.dp,
-                    end = 8.dp,
-                    top = 7.dp,
-                    bottom = 7.dp
-                ),
-
-        verticalAlignment =
-            Alignment.CenterVertically
-
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(
+                start = if (paisagem) 64.dp else 12.dp,
+                end = if (paisagem) 64.dp else 12.dp,
+                top = 10.dp,
+                bottom = 0.dp
+            )
+            .clip(RoundedCornerShape(17.dp))
+            .background(card)
+            .border(
+                1.dp,
+                if (dark) Color.White.copy(alpha = .10f)
+                else Color.Black.copy(alpha = .08f),
+                RoundedCornerShape(17.dp)
+            )
+            .padding(
+                start = 13.dp,
+                end = 8.dp,
+                top = 7.dp,
+                bottom = 7.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-
-
         Box(
-
-            modifier =
-                Modifier
-                    .size(34.dp)
-                    .clip(
-                        RoundedCornerShape(
-                            11.dp
-                        )
-                    )
-                    .background(
-                        Rosa.copy(
-                            alpha = .10f
-                        )
-                    )
-                    .border(
-                        1.dp,
-
-                        Rosa.copy(
-                            alpha = .16f
-                        ),
-
-                        RoundedCornerShape(
-                            11.dp
-                        )
-                    ),
-
-            contentAlignment =
-                Alignment.Center
-
+            modifier = Modifier.size(34.dp),
+            contentAlignment = Alignment.Center
         ) {
-
-            Icon(
-
-                painter =
-                    painterResource(
-                        R.drawable.ic_location
-                    ),
-
-                contentDescription =
-                    null,
-
-                tint =
-                    Rosa,
-
-                modifier =
-                    Modifier.size(
-                        21.dp
-                    )
+            Image(
+                painter = painterResource(id = R.drawable.ic_location),
+                contentDescription = null,
+                modifier = Modifier.size(34.dp)
             )
         }
 
-
-        Spacer(
-            modifier =
-                Modifier.width(
-                    9.dp
-                )
-        )
-
+        Spacer(modifier = Modifier.width(9.dp))
 
         Column(
-
-            modifier =
-                Modifier.weight(
-                    1f
-                )
-
+            modifier = Modifier.weight(1f)
         ) {
-
             Text(
-
-                text =
-                    "Mapa",
-
-                color =
-                    texto,
-fontSize =
-                    16.sp
+                text = "Mapa",
+                color = if (dark) Color.White else Color(0xFF202124),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
             )
 
-
             Row(
-
-                verticalAlignment =
-                    Alignment.CenterVertically
-
+                verticalAlignment = Alignment.CenterVertically
             ) {
-
                 Box(
-
-                    modifier =
-                        Modifier
-                            .size(6.dp)
-                            .clip(
-                                CircleShape
-                            )
-                            .background(
-                                Verde
-                            )
+                    modifier = Modifier
+                        .size(7.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFF34C759))
                 )
 
-
-                Spacer(
-
-                    modifier =
-                        Modifier.width(
-                            5.dp
-                        )
-                )
-
+                Spacer(modifier = Modifier.width(5.dp))
 
                 Text(
-
-                    text =
-                        "Mapa online",
-
-                    color =
-                        suave,
-fontSize =
-                        10.sp
+                    text = "Mapa online",
+                    color = if (dark) Color.LightGray else Color.Gray,
+                    fontSize = 12.sp
                 )
             }
         }
 
-
         BotaoMapa(
-
-            dark =
-                dark,
-
-            icone =
-                R.drawable.ic_map,
-
-            descricao =
-                "Minha localização",
-
-            aoClicar =
-                aoLocalizar
+            dark = dark,
+            icone = R.drawable.ic_map,
+            descricao = "Minha localização",
+            aoClicar = aoLocalizar
         )
     }
 }
-
 
 @Composable
 private fun ControlesMapa(

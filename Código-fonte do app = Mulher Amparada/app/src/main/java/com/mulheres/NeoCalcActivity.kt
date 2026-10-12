@@ -1,19 +1,14 @@
 package com.mulheres
 
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.fillMaxHeight
+import android.content.Intent
+import android.os.Bundle
+import android.view.WindowManager
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
-import android.view.WindowManager
-import androidx.compose.ui.res.painterResource
-import android.content.Intent
-import android.graphics.Typeface
-import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.LocalOverscrollFactory
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -21,10 +16,12 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -36,11 +33,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
@@ -53,9 +51,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import kotlinx.coroutines.delay
 
 class NeoCalcActivity : FragmentActivity() {
@@ -131,6 +132,20 @@ private data class Dialogo(
     val mensagem: String,
     val valorInicial: String = "",
     val textoConfirmar: String = "OK"
+)
+
+private enum class TipoBotao {
+    NORMAL,
+    ACAO,
+    OPERADOR,
+    IGUAL
+}
+
+private data class BotaoCalculadora(
+    val texto: String,
+    val tipo: TipoBotao = TipoBotao.NORMAL,
+    val icone: Int? = null,
+    val acao: () -> Unit
 )
 
 @Composable
@@ -263,8 +278,8 @@ private fun NeoCalcScreen() {
         expr = ""
     }
 
-    androidx.compose.runtime.CompositionLocalProvider(
-        LocalOverscrollFactory provides null
+    CompositionLocalProvider(
+        androidx.compose.foundation.LocalOverscrollFactory provides null
     ) {
         BoxWithConstraints(
             modifier = Modifier
@@ -341,3 +356,564 @@ private fun NeoCalcScreen() {
                                             .clickable { botao.acao() },
                                         contentAlignment = Alignment.Center
                                     ) {
+                                        if (botao.icone != null) {
+                                            Image(
+                                                painter = painterResource(id = botao.icone),
+                                                contentDescription = "Apagar",
+                                                modifier = Modifier.size(24.dp)
+                                            )
+                                        } else {
+                                            Text(
+                                                text = botao.texto,
+                                                color = cores.texto,
+                                                fontSize = 22.sp
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(Color.Transparent)
+                            .horizontalScroll(visorScroll)
+                            .pointerInput(Unit) {
+                                detectTapGestures { registrarToque() }
+                            }
+                            .padding(20.dp),
+                        contentAlignment = Alignment.CenterEnd
+                    ) {
+                        Text(
+                            text = mensagemTemporaria ?: if (expr.isEmpty()) "0" else expr,
+                            color = cores.texto,
+                            fontSize = 42.sp,
+                            lineHeight = 48.sp,
+                            textAlign = TextAlign.End,
+                            maxLines = 4
+                        )
+                    }
+                }
+            } else {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(cores.fundo)
+                        .padding(horizontal = 20.dp)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.Center),
+                        verticalArrangement = Arrangement.spacedBy(18.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(180.dp)
+                                .clip(RoundedCornerShape(20.dp))
+                                .background(Color.Transparent)
+                                .horizontalScroll(visorScroll)
+                                .pointerInput(Unit) {
+                                    detectTapGestures { registrarToque() }
+                                }
+                                .padding(20.dp),
+                            contentAlignment = Alignment.CenterEnd
+                        ) {
+                            Text(
+                                text = mensagemTemporaria ?: if (expr.isEmpty()) "0" else expr,
+                                color = cores.texto,
+                                fontSize = 54.sp,
+                                lineHeight = 58.sp,
+                                textAlign = TextAlign.End,
+                                maxLines = 4
+                            )
+                        }
+                    }
+                }
+            }
+
+            dialogo?.let { atual ->
+                AlertDialog(
+                    onDismissRequest = {
+                        if (atual.tipo != TipoDialogo.ALERTA) {
+                            dialogo = null
+                        }
+                    },
+                    title = {
+                        Text(text = atual.titulo, color = cores.texto)
+                    },
+                    text = {
+                        Column {
+                            Text(
+                                text = atual.mensagem,
+                                color = cores.textoSecundario,
+                                lineHeight = 23.sp
+                            )
+
+                            if (atual.tipo == TipoDialogo.PROMPT || atual.tipo == TipoDialogo.RECUPERACAO) {
+                                Spacer(Modifier.height(16.dp))
+                                OutlinedTextField(
+                                    value = valorDialogo,
+                                    onValueChange = { valorDialogo = it },
+                                    singleLine = true,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = OutlinedTextFieldDefaults.colors(
+                                        focusedTextColor = cores.texto,
+                                        unfocusedTextColor = cores.texto,
+                                        focusedBorderColor = cores.acao,
+                                        unfocusedBorderColor = if (escuro) Color(0xFF353535) else Color(0xFFBDBDBD),
+                                        cursorColor = cores.acao
+                                    )
+                                )
+                            }
+                        }
+                    },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                when (atual.tipo) {
+                                    TipoDialogo.ALERTA -> {
+                                        if (atual.titulo == "Esqueci tudo") {
+                                            dialogo = null
+                                            autenticarParaRedefinir(
+                                                activity = context as FragmentActivity,
+                                                mostrarDialogo = {
+                                                    dialogo = it
+                                                    valorDialogo = it.valorInicial
+                                                },
+                                                mostrarMensagem = {
+                                                    mensagemTemporaria = it
+                                                }
+                                            )
+                                        } else {
+                                            dialogo = null
+                                        }
+                                    }
+                                    TipoDialogo.PROMPT -> {
+                                        val valor = valorDialogo
+                                        dialogo = null
+                                        continuarPrompt(
+                                            valor = valor,
+                                            titulo = atual.titulo,
+                                            context = context,
+                                            cripto = cripto,
+                                            mostrarDialogo = {
+                                                dialogo = it
+                                                valorDialogo = it.valorInicial
+                                            },
+                                            mostrarMensagem = {
+                                                mensagemTemporaria = it
+                                            }
+                                        )
+                                    }
+                                    TipoDialogo.CONFIRMACAO -> {
+                                        dialogo = null
+                                        continuarConfirmacao(
+                                            context = context,
+                                            cripto = cripto,
+                                            mostrarDialogo = {
+                                                dialogo = it
+                                                valorDialogo = it.valorInicial
+                                            }
+                                        )
+                                    }
+                                    TipoDialogo.RECUPERACAO -> {
+                                        val valor = valorDialogo
+                                        dialogo = null
+                                        continuarRecuperacao(
+                                            valor = valor,
+                                            context = context,
+                                            cripto = cripto,
+                                            mostrarDialogo = {
+                                                dialogo = it
+                                                valorDialogo = it.valorInicial
+                                            },
+                                            mostrarMensagem = {
+                                                mensagemTemporaria = it
+                                            }
+                                        )
+                                    }
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = cores.acao)
+                        ) {
+                            Text(text = atual.textoConfirmar, color = Color.White)
+                        }
+                    },
+                    dismissButton = {
+                        when (atual.tipo) {
+                            TipoDialogo.RECUPERACAO -> {
+                                TextButton(
+                                    onClick = {
+                                        dialogo = Dialogo(
+                                            tipo = TipoDialogo.ALERTA,
+                                            titulo = "Esqueci tudo",
+                                            mensagem = "Use o bloqueio de tela do dispositivo para confirmar sua identidade e permitir a redefinição da senha.",
+                                            textoConfirmar = "Continuar"
+                                        )
+                                    }
+                                ) {
+                                    Text(text = "Esqueci tudo", color = cores.texto)
+                                }
+                            }
+                            TipoDialogo.PROMPT, TipoDialogo.CONFIRMACAO -> {
+                                TextButton(
+                                    onClick = {
+                                        dialogo = null
+                                    }
+                                ) {
+                                    Text(text = "Cancelar", color = cores.texto)
+                                }
+                            }
+                            TipoDialogo.ALERTA -> Unit
+                        }
+                    },
+                    containerColor = cores.botao
+                )
+            }
+        }
+    }
+}
+
+private fun recuperarSenha(
+    context: android.content.Context,
+    cripto: Cripto,
+    mostrarDialogo: (Dialogo) -> Unit,
+    fecharDialogo: () -> Unit,
+    mostrarMensagem: (String) -> Unit
+) {
+    val senhaSalva = try {
+        cripto.carregar(CHAVE_SENHA)?.trim() ?: ""
+    } catch (e: Exception) {
+        mostrarMensagem("Erro")
+        return
+    }
+
+    if (senhaSalva.isEmpty()) {
+        mostrarDialogo(
+            Dialogo(
+                tipo = TipoDialogo.PROMPT,
+                titulo = "Criar senha",
+                mensagem = "Digite uma senha para proteger esta área.",
+                textoConfirmar = "Criar"
+            )
+        )
+        return
+    }
+
+    mostrarDialogo(
+        Dialogo(
+            tipo = TipoDialogo.RECUPERACAO,
+            titulo = "Recuperar senha",
+            mensagem = "Como você gosta de ser chamada?",
+            textoConfirmar = "OK"
+        )
+    )
+}
+
+private fun continuarPrompt(
+    valor: String,
+    titulo: String,
+    context: android.content.Context,
+    cripto: Cripto,
+    mostrarDialogo: (Dialogo) -> Unit,
+    mostrarMensagem: (String) -> Unit
+) {
+    val valorLimpo = valor.trim()
+
+    if (titulo == "Criar senha") {
+        if (valorLimpo.isEmpty()) {
+            mostrarMensagem("Senha inválida")
+            return
+        }
+
+        cripto.salvar(CHAVE_SENHA, valorLimpo)
+        mostrarDialogo(
+            Dialogo(
+                tipo = TipoDialogo.PROMPT,
+                titulo = "Recuperação",
+                mensagem = "Como você gosta de ser chamada?",
+                textoConfirmar = "Salvar"
+            )
+        )
+        return
+    }
+
+    val respostaSalva = try {
+        cripto.carregar(CHAVE_RECUPERACAO)?.trim() ?: ""
+    } catch (e: Exception) {
+        ""
+    }
+
+    if (titulo == "Recuperação" && respostaSalva.isEmpty()) {
+        if (valorLimpo.isEmpty()) {
+            mostrarMensagem("Resposta inválida")
+            return
+        }
+
+        cripto.salvar(CHAVE_RECUPERACAO, valorLimpo.lowercase())
+        mostrarMensagem("Senha criada")
+        return
+    }
+
+    if (titulo == "Nova senha") {
+        if (valorLimpo.isEmpty()) {
+            mostrarMensagem("Senha inválida")
+            return
+        }
+
+        cripto.salvar(CHAVE_SENHA, valorLimpo)
+        mostrarDialogo(
+            Dialogo(
+                tipo = TipoDialogo.PROMPT,
+                titulo = "Nova recuperação",
+                mensagem = "Como você gosta de ser chamada?",
+                textoConfirmar = "Salvar"
+            )
+        )
+        return
+    }
+
+    if (respostaSalva.isNotEmpty() && valorLimpo.lowercase() == respostaSalva.lowercase()) {
+        mostrarDialogo(
+            Dialogo(
+                tipo = TipoDialogo.PROMPT,
+                titulo = "Nova senha",
+                mensagem = "Digite a nova senha.",
+                textoConfirmar = "Salvar"
+            )
+        )
+        return
+    }
+
+    if (titulo == "Nova recuperação") {
+        if (valorLimpo.isEmpty()) {
+            mostrarMensagem("Resposta inválida")
+            return
+        }
+
+        cripto.salvar(CHAVE_RECUPERACAO, valorLimpo.lowercase())
+        mostrarMensagem("Senha alterada")
+        return
+    }
+
+    mostrarMensagem("Resposta incorreta")
+}
+
+private fun continuarRecuperacao(
+    valor: String,
+    context: android.content.Context,
+    cripto: Cripto,
+    mostrarDialogo: (Dialogo) -> Unit,
+    mostrarMensagem: (String) -> Unit
+) {
+    val valorLimpo = valor.trim()
+    val respostaSalva = try {
+        cripto.carregar(CHAVE_RECUPERACAO)?.trim() ?: ""
+    } catch (e: Exception) {
+        ""
+    }
+
+    if (respostaSalva.isNotEmpty() && valorLimpo.lowercase() == respostaSalva.lowercase()) {
+        mostrarDialogo(
+            Dialogo(
+                tipo = TipoDialogo.PROMPT,
+                titulo = "Nova senha",
+                mensagem = "Digite a nova senha.",
+                textoConfirmar = "Salvar"
+            )
+        )
+        return
+    }
+
+    mostrarDialogo(
+        Dialogo(
+            tipo = TipoDialogo.ALERTA,
+            titulo = "Resposta incorreta",
+            mensagem = "A resposta de recuperação não corresponde à cadastrada.",
+            textoConfirmar = "OK"
+        )
+    )
+}
+
+private fun autenticarParaRedefinir(
+    activity: FragmentActivity,
+    mostrarDialogo: (Dialogo) -> Unit,
+    mostrarMensagem: (String) -> Unit
+) {
+    val executor = ContextCompat.getMainExecutor(activity)
+    val prompt = BiometricPrompt(
+        activity,
+        executor,
+        object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                super.onAuthenticationSucceeded(result)
+                mostrarDialogo(
+                    Dialogo(
+                        tipo = TipoDialogo.CONFIRMACAO,
+                        titulo = "Redefinir senha",
+                        mensagem = "Deseja redefinir a senha e a pergunta de recuperação?",
+                        textoConfirmar = "Redefinir"
+                    )
+                )
+            }
+
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                super.onAuthenticationError(errorCode, errString)
+                if (errorCode != BiometricPrompt.ERROR_USER_CANCELED) {
+                    mostrarMensagem("Autenticação não concluída")
+                }
+            }
+
+            override fun onAuthenticationFailed() {
+                super.onAuthenticationFailed()
+                mostrarMensagem("Autenticação não concluída")
+            }
+        }
+    )
+
+    val promptInfo = BiometricPrompt.PromptInfo.Builder()
+        .setTitle("Confirmar identidade")
+        .setSubtitle("Use o bloqueio de tela do dispositivo")
+        .setDescription("Confirme sua identidade para redefinir a senha.")
+        .setAllowedAuthenticators(BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+        .build()
+
+    prompt.authenticate(promptInfo)
+}
+
+private fun continuarConfirmacao(
+    context: android.content.Context,
+    cripto: Cripto,
+    mostrarDialogo: (Dialogo) -> Unit
+) {
+    cripto.salvar(CHAVE_SENHA, "")
+    cripto.salvar(CHAVE_RECUPERACAO, "")
+
+    mostrarDialogo(
+        Dialogo(
+            tipo = TipoDialogo.PROMPT,
+            titulo = "Nova senha",
+            mensagem = "Digite a nova senha.",
+            textoConfirmar = "Salvar"
+        )
+    )
+}
+
+private fun avaliarExpressao(expressao: String): Double {
+    val tokens = mutableListOf<String>()
+    var numero = ""
+
+    for (caractere in expressao) {
+        if (caractere.isDigit() || caractere == '.') {
+            numero += caractere
+        } else {
+            if (numero.isNotEmpty()) {
+                tokens.add(numero)
+                numero = ""
+            }
+            tokens.add(caractere.toString())
+        }
+    }
+
+    if (numero.isNotEmpty()) {
+        tokens.add(numero)
+    }
+
+    val valores = mutableListOf<Double>()
+    val operadores = mutableListOf<Char>()
+
+    fun prioridade(operador: Char): Int {
+        return when (operador) {
+            '+', '-' -> 1
+            '*', '/' -> 2
+            else -> 0
+        }
+    }
+
+    fun aplicar() {
+        if (valores.size < 2 || operadores.isEmpty()) {
+            throw IllegalArgumentException()
+        }
+
+        val b = valores.removeAt(valores.lastIndex)
+        val a = valores.removeAt(valores.lastIndex)
+        val op = operadores.removeAt(operadores.lastIndex)
+
+        valores.add(
+            when (op) {
+                '+' -> a + b
+                '-' -> a - b
+                '*' -> a * b
+                '/' -> {
+                    if (b == 0.0) throw ArithmeticException()
+                    a / b
+                }
+                else -> throw IllegalArgumentException()
+            }
+        )
+    }
+
+    for (token in tokens) {
+        when {
+            token.toDoubleOrNull() != null -> {
+                valores.add(token.toDouble())
+            }
+            token == "(" -> {
+                operadores.add('(')
+            }
+            token == ")" -> {
+                while (operadores.isNotEmpty() && operadores.last() != '(') {
+                    aplicar()
+                }
+                if (operadores.isEmpty()) {
+                    throw IllegalArgumentException()
+                }
+                operadores.removeAt(operadores.lastIndex)
+            }
+            token.length == 1 && token[0] in charArrayOf('+', '-', '*', '/') -> {
+                val op = token[0]
+                while (
+                    operadores.isNotEmpty() &&
+                    operadores.last() != '(' &&
+                    prioridade(operadores.last()) >= prioridade(op)
+                ) {
+                    aplicar()
+                }
+                operadores.add(op)
+            }
+            else -> {
+                throw IllegalArgumentException()
+            }
+        }
+    }
+
+    while (operadores.isNotEmpty()) {
+        if (operadores.last() == '(') {
+            throw IllegalArgumentException()
+        }
+        aplicar()
+    }
+
+    if (valores.size != 1) {
+        throw IllegalArgumentException()
+    }
+
+    return valores[0]
+}
+
+private fun formatarNumero(numero: Double): String {
+    if (!numero.isFinite()) {
+        return "Erro"
+    }
+
+    return numero
+        .toBigDecimal()
+        .stripTrailingZeros()
+        .toPlainString()
+}

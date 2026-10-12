@@ -1274,11 +1274,18 @@ controller.isAppearanceLightNavigationBars =
                 )
             }
             
-            val spacer = View(this)
+val landscape =
+    resources.configuration.orientation ==
+        android.content.res.Configuration.ORIENTATION_LANDSCAPE
+
+val spacer = View(this)
 
 spacer.layoutParams = LinearLayout.LayoutParams(
     LinearLayout.LayoutParams.MATCH_PARENT,
-    (120 * resources.displayMetrics.density).toInt()
+    (
+        (if (landscape) 480 else 120) *
+        resources.displayMetrics.density
+    ).toInt()
 )
 
 list.addView(spacer)

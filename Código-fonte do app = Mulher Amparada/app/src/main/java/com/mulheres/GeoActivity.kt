@@ -716,7 +716,8 @@ val mutedColor =
                         )
                         .navigationBarsPadding()
                 .padding(
-    horizontal = if (paisagem) 64.dp else 6.dp,
+    horizontalStart = if (paisagem) 64.dp else 6.dp,
+horizontalEnd = if (paisagem) 72.dp else 6.dp,
     vertical = 6.dp
 ),
                 horizontalAlignment =

@@ -91,9 +91,7 @@ if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
     // BARRAS DO SISTEMA
     // =====================================================
 
-    ViewCompat.setOnApplyWindowInsetsListener(
-    webView
-) { view, insets ->
+    ViewCompat.setOnApplyWindowInsetsListener(webView) { view, insets ->
 
     val barras = insets.getInsets(
         WindowInsetsCompat.Type.systemBars()
@@ -108,9 +106,9 @@ if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
 
     if (paisagem) {
         params.setMargins(
-            32.dp() + barras.left,
+            64.dp() + barras.left,
             32.dp() + barras.top,
-            32.dp() + barras.right,
+            64.dp() + barras.right,
             32.dp() + barras.bottom
         )
     } else {

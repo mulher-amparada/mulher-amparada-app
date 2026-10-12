@@ -1,6 +1,5 @@
 package com.mulheres
 
-import androidx.compose.foundation.layout.weight
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -429,14 +428,7 @@ val paisagem =
     dark = dark,
     aoLocalizar = {
         localizar()
-    },
-    modifier = Modifier
-        .fillMaxWidth()
-        .padding(
-            start = if (paisagem) 64.dp else 12.dp,
-            end = if (paisagem) 64.dp else 12.dp,
-            top = 10.dp
-        )
+    }
 )
     ControlesMapa(
         dark = dark,
@@ -481,11 +473,10 @@ val paisagem =
 
 @Composable
 private fun CabecalhoMapa(
-
     dark: Boolean,
-
-    aoLocalizar: () -> Unit
-) {
+    aoLocalizar: () -> Unit,
+    modifier: Modifier = Modifier
+)
 
     val card =
         if (dark)
@@ -510,16 +501,15 @@ private fun CabecalhoMapa(
 
     Row(
 
-        modifier =
-            Modifier
-                .fillMaxWidth()
+        
 
-                .padding(
-                    start = 12.dp,
-                    top = 10.dp,
-                    end = 12.dp,
-                    bottom = 0.dp
-                )
+modifier = Modifier
+        .fillMaxWidth()
+        .padding(
+            start = if (paisagem) 64.dp else 12.dp,
+            end = if (paisagem) 64.dp else 12.dp,
+            top = 10.dp
+        )
 
                 .clip(
                     RoundedCornerShape(

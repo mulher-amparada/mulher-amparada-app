@@ -145,103 +145,49 @@ private data class Dialogo(
 
 @Composable
 private fun NeoCalcScreen() {
+    val context = LocalContext.current
+    val cripto = remember { Cripto(context) }
+    val escuro = isSystemInDarkTheme()
+    val cores = remember(escuro) { obterCoresNeoCalc(escuro) }
 
-    val context =
-        LocalContext.current
+    var expr by remember { mutableStateOf("") }
+    var mensagemTemporaria by remember { mutableStateOf<String?>(null) }
+    var dialogo by remember { mutableStateOf<Dialogo?>(null) }
+    var valorDialogo by remember { mutableStateOf("") }
+    var contadorToques by remember { mutableStateOf(0) }
+    var ultimoToque by remember { mutableLongStateOf(0L) }
 
-    val cripto =
-        remember {
-            Cripto(context)
-        }
+    val visorScroll = rememberScrollState()
 
-    val escuro =
-        isSystemInDarkTheme()
-
-    val cores =
-        remember(escuro) {
-            obterCoresNeoCalc(
-                escuro
-            )
-    
-    }
-    
-    var expr by remember {
-        mutableStateOf("")
-    }
-
-    var mensagemTemporaria by remember {
-        mutableStateOf<String?>(null)
-    }
-
-    var dialogo by remember {
-        mutableStateOf<Dialogo?>(null)
-    }
-
-    var valorDialogo by remember {
-        mutableStateOf("")
-    }
-
-    var contadorToques by remember {
-        mutableStateOf(0)
-    }
-
-    var ultimoToque by remember {
-        mutableLongStateOf(0L)
-    }
-
-    val visorScroll =
-        rememberScrollState()
-
-    LaunchedEffect(
-        expr,
-        mensagemTemporaria
-    ) {
-
+    LaunchedEffect(expr, mensagemTemporaria) {
         delay(1)
-
-        visorScroll.scrollTo(
-            visorScroll.maxValue
-        )
+        visorScroll.scrollTo(visorScroll.maxValue)
     }
 
     fun registrarToque() {
+        val agora = System.currentTimeMillis()
 
-        val agora =
-            System.currentTimeMillis()
-
-        if (
-            agora - ultimoToque > 2000
-        ) {
-
+        if (agora - ultimoToque > 2000) {
             contadorToques = 0
         }
 
         ultimoToque = agora
-
         contadorToques++
 
-        if (
-            contadorToques >= 5
-        ) {
-
+        if (contadorToques >= 5) {
             contadorToques = 0
 
             recuperarSenha(
                 context = context,
                 cripto = cripto,
                 mostrarDialogo = {
-
                     dialogo = it
-
-                    valorDialogo =
-                        it.valorInicial
+                    valorDialogo = it.valorInicial
                 },
                 fecharDialogo = {
-
                     dialogo = null
                 },
                 mostrarMensagem = {
-
                     mensagemTemporaria = it
                 }
             )
@@ -249,73 +195,37 @@ private fun NeoCalcScreen() {
     }
 
     fun atualizar() {
-
         mensagemTemporaria = null
     }
 
-    fun adicionar(
-        valor: String
-    ) {
+    fun adicionar(valor: String) {
+        if (valor == ".") {
+            val partes = expr.split(Regex("[+\\-*/()]"))
+            val parteAtual = partes.lastOrNull() ?: ""
 
-        if (
-            valor == "."
-        ) {
-
-            val partes =
-                expr.split(
-                    Regex("[+\\-*/()]")
-                )
-
-            val parteAtual =
-                partes.lastOrNull()
-                    ?: ""
-
-            if (
-                parteAtual.contains(".")
-            ) {
-
-                return
-            }
+            if (parteAtual.contains(".")) return
         }
 
         expr += valor
-
         atualizar()
     }
 
-    fun operacao(
-        op: String
-    ) {
-
-        if (
-            expr.isEmpty()
-        ) {
-
-            if (
-                op == "-"
-            ) {
-
+    fun operacao(op: String) {
+        if (expr.isEmpty()) {
+            if (op == "-") {
                 expr = "-"
-
                 atualizar()
             }
-
             return
         }
 
         if (
             expr.lastOrNull()
                 ?.toString()
-                ?.matches(
-                    Regex("[+\\-*/]")
-                ) == true
+                ?.matches(Regex("[+\\-*/]")) == true
         ) {
-
-            expr =
-                expr.dropLast(1) + op
-
+            expr = expr.dropLast(1) + op
         } else {
-
             expr += op
         }
 
@@ -323,129 +233,63 @@ private fun NeoCalcScreen() {
     }
 
     fun porcentagem() {
+        if (expr.isEmpty()) return
 
-        if (
-            expr.isEmpty()
-        ) {
-
-            return
-        }
-
-        expr =
-            expr.replace(
-                Regex(
-                    "(\\d+(?:\\.\\d+)?)$"
-                ),
-                "($1/100)"
-            )
+        expr = expr.replace(
+            Regex("(\\d+(?:\\.\\d+)?)$"),
+            "($1/100)"
+        )
 
         atualizar()
     }
 
     fun limpar() {
-
         expr = ""
-
         atualizar()
     }
 
     fun apagar() {
-
-        if (
-            expr.isNotEmpty()
-        ) {
-
-            expr =
-                expr.dropLast(1)
-
+        if (expr.isNotEmpty()) {
+            expr = expr.dropLast(1)
             atualizar()
         }
     }
 
     fun calcular() {
+        val senha = try {
+            cripto.carregar(CHAVE_SENHA)?.trim() ?: ""
+        } catch (e: Exception) {
+            ""
+        }
 
-        val senha =
+        if (expr.trim().isNotEmpty() && expr.trim() == senha) {
             try {
-
-                cripto.carregar(
-                    CHAVE_SENHA
-                )
-                    ?.trim()
-                    ?: ""
-
-            } catch (
-                e: Exception
-            ) {
-
-                ""
-            }
-
-        if (
-            expr.trim().isNotEmpty() &&
-            expr.trim() == senha
-        ) {
-
-            try {
-
                 context.startActivity(
-                    Intent(
-                        context,
-                        HubActivity::class.java
-                    )
+                    Intent(context, HubActivity::class.java)
                 )
-
-            } catch (
-                e: Exception
-            ) {
-
-                mensagemTemporaria =
-                    "Acesso"
+            } catch (e: Exception) {
+                mensagemTemporaria = "Acesso"
             }
-
             return
         }
 
-        if (
-            expr.trim().isEmpty()
-        ) {
-
-            return
-        }
+        if (expr.trim().isEmpty()) return
 
         try {
+            val resultado = avaliarExpressao(expr)
 
-            val resultado =
-                avaliarExpressao(
-                    expr
-                )
-
-            if (
-                resultado.isFinite()
-            ) {
-
-                expr =
-                    formatarNumero(
-                        resultado
-                    )
-
-                mensagemTemporaria =
-                    null
-
+            if (resultado.isFinite()) {
+                expr = formatarNumero(resultado)
+                mensagemTemporaria = null
                 return
             }
-
-        } catch (
-            e: Exception
-        ) {
+        } catch (e: Exception) {
         }
 
-        mensagemTemporaria =
-            "Erro"
-
+        mensagemTemporaria = "Erro"
         expr = ""
     }
 
-    
     androidx.compose.runtime.CompositionLocalProvider(
         LocalOverscrollFactory provides null
     ) {
@@ -467,7 +311,6 @@ private fun NeoCalcScreen() {
                         modifier = Modifier
                             .weight(1f)
                             .fillMaxHeight()
-                            .clip(RoundedCornerShape(20.dp))
                             .horizontalScroll(visorScroll)
                             .pointerInput(Unit) {
                                 detectTapGestures {
@@ -478,11 +321,10 @@ private fun NeoCalcScreen() {
                         contentAlignment = Alignment.CenterEnd
                     ) {
                         Text(
-                            text = mensagemTemporaria
-                                ?: expr.ifEmpty { "0" },
+                            text = mensagemTemporaria ?: expr.ifEmpty { "0" },
                             color = cores.texto,
-                            fontSize = 54.sp,
-                            lineHeight = 58.sp,
+                            fontSize = 42.sp,
+                            lineHeight = 48.sp,
                             textAlign = TextAlign.End,
                             maxLines = 4
                         )
@@ -492,12 +334,11 @@ private fun NeoCalcScreen() {
                         modifier = Modifier
                             .weight(1f)
                             .fillMaxHeight()
-                            .padding(horizontal = 8.dp),
+                            .padding(horizontal = 8.dp, vertical = 4.dp),
                         verticalArrangement = Arrangement.spacedBy(
-                            8.dp,
+                            6.dp,
                             Alignment.CenterVertically
-                        ),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        )
                     ) {
                         val botoes = listOf(
                             listOf(
@@ -564,8 +405,7 @@ private fun NeoCalcScreen() {
                         contentAlignment = Alignment.CenterEnd
                     ) {
                         Text(
-                            text = mensagemTemporaria
-                                ?: expr.ifEmpty { "0" },
+                            text = mensagemTemporaria ?: expr.ifEmpty { "0" },
                             color = cores.texto,
                             fontSize = 54.sp,
                             lineHeight = 58.sp,
@@ -578,44 +418,31 @@ private fun NeoCalcScreen() {
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        LinhaBotoes(
-                            cores,
+                        val botoes = listOf(
                             listOf(
                                 BotaoCalculadora("AC", TipoBotao.ACAO) { limpar() },
                                 BotaoCalculadora("", TipoBotao.ACAO, R.drawable.ic_erase) { apagar() },
                                 BotaoCalculadora("%", TipoBotao.ACAO) { porcentagem() },
                                 BotaoCalculadora("÷", TipoBotao.OPERADOR) { operacao("/") }
-                            )
-                        )
-                        LinhaBotoes(
-                            cores,
+                            ),
                             listOf(
                                 BotaoCalculadora("7") { adicionar("7") },
                                 BotaoCalculadora("8") { adicionar("8") },
                                 BotaoCalculadora("9") { adicionar("9") },
                                 BotaoCalculadora("×", TipoBotao.OPERADOR) { operacao("*") }
-                            )
-                        )
-                        LinhaBotoes(
-                            cores,
+                            ),
                             listOf(
                                 BotaoCalculadora("4") { adicionar("4") },
                                 BotaoCalculadora("5") { adicionar("5") },
                                 BotaoCalculadora("6") { adicionar("6") },
                                 BotaoCalculadora("−", TipoBotao.OPERADOR) { operacao("-") }
-                            )
-                        )
-                        LinhaBotoes(
-                            cores,
+                            ),
                             listOf(
                                 BotaoCalculadora("1") { adicionar("1") },
                                 BotaoCalculadora("2") { adicionar("2") },
                                 BotaoCalculadora("3") { adicionar("3") },
                                 BotaoCalculadora("+", TipoBotao.OPERADOR) { operacao("+") }
-                            )
-                        )
-                        LinhaBotoes(
-                            cores,
+                            ),
                             listOf(
                                 BotaoCalculadora("()") { adicionar("(") },
                                 BotaoCalculadora("0") { adicionar("0") },
@@ -623,6 +450,13 @@ private fun NeoCalcScreen() {
                                 BotaoCalculadora("=", TipoBotao.IGUAL) { calcular() }
                             )
                         )
+
+                        botoes.forEach { linha ->
+                            LinhaBotoes(
+                                cores = cores,
+                                botoes = linha
+                            )
+                        }
                     }
                 }
             }
@@ -678,6 +512,7 @@ private fun NeoCalcScreen() {
                                     TipoDialogo.ALERTA -> {
                                         if (atual.titulo == "Esqueci tudo") {
                                             dialogo = null
+
                                             autenticarParaRedefinir(
                                                 activity = context as FragmentActivity,
                                                 mostrarDialogo = {
@@ -696,6 +531,7 @@ private fun NeoCalcScreen() {
                                     TipoDialogo.PROMPT -> {
                                         val valor = valorDialogo
                                         dialogo = null
+
                                         continuarPrompt(
                                             valor = valor,
                                             titulo = atual.titulo,
@@ -713,6 +549,7 @@ private fun NeoCalcScreen() {
 
                                     TipoDialogo.CONFIRMACAO -> {
                                         dialogo = null
+
                                         continuarConfirmacao(
                                             context = context,
                                             cripto = cripto,
@@ -726,6 +563,7 @@ private fun NeoCalcScreen() {
                                     TipoDialogo.RECUPERACAO -> {
                                         val valor = valorDialogo
                                         dialogo = null
+
                                         continuarRecuperacao(
                                             valor = valor,
                                             context = context,
@@ -745,7 +583,10 @@ private fun NeoCalcScreen() {
                                 containerColor = cores.acao
                             )
                         ) {
-                            Text(atual.textoConfirmar, color = Color.White)
+                            Text(
+                                atual.textoConfirmar,
+                                color = Color.White
+                            )
                         }
                     },
                     dismissButton = {
@@ -780,6 +621,7 @@ private fun NeoCalcScreen() {
             }
         }
     }
+}
 
 private enum class TipoBotao {
     NORMAL,

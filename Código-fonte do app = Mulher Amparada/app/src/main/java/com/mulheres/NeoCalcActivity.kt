@@ -1,5 +1,13 @@
 package com.mulheres
 
+import androidx.compose.foundation.layout.systemBars
+import androidx.core.view.WindowCompat
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.biometric.BiometricManager
@@ -60,21 +68,35 @@ import kotlinx.coroutines.delay
 
 class NeoCalcActivity : FragmentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-        enableEdgeToEdge()
+    WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        super.onCreate(savedInstanceState)
+    window.setFlags(
+        WindowManager.LayoutParams.FLAG_SECURE,
+        WindowManager.LayoutParams.FLAG_SECURE
+    )
 
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_SECURE,
-            WindowManager.LayoutParams.FLAG_SECURE
-        )
+    window.navigationBarColor = android.graphics.Color.TRANSPARENT
+    window.statusBarColor = android.graphics.Color.TRANSPARENT
 
-        setContent {
-            NeoCalcScreen()
-        }
+    WindowCompat.getInsetsController(window, window.decorView).apply {
+        isAppearanceLightNavigationBars = false
+        isAppearanceLightStatusBars = false
+        systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
     }
+
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+        window.isNavigationBarContrastEnforced = false
+        window.isStatusBarContrastEnforced = false
+    }
+
+    setContent {
+        NeoCalcScreen()
+    }
+}
 }
 
 private data class CoresNeoCalc(
@@ -297,93 +319,98 @@ private fun NeoCalcScreen() {
     ) {
         BoxWithConstraints(
             modifier = Modifier
-                .fillMaxSize()
-                .background(cores.fundo)
-                .padding(horizontal = 20.dp, vertical = 12.dp)
+    .fillMaxSize()
+    .background(cores.fundo)
+    .windowInsetsPadding(
+        WindowInsets.systemBars
+    )
+    .padding(horizontal = 64.dp, vertical = 4.dp)
         ) {
             val paisagem = maxWidth > maxHeight
 
             if (paisagem) {
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.spacedBy(24.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight()
-                            .horizontalScroll(visorScroll)
-                            .pointerInput(Unit) {
-                                detectTapGestures {
-                                    registrarToque()
-                                }
-                            }
-                            .padding(20.dp),
-                        contentAlignment = Alignment.CenterEnd
-                    ) {
-                        Text(
-                            text = mensagemTemporaria ?: expr.ifEmpty { "0" },
-                            color = cores.texto,
-                            fontSize = 42.sp,
-                            lineHeight = 48.sp,
-                            textAlign = TextAlign.End,
-                            maxLines = 4
-                        )
-                    }
-
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight()
-                            .padding(horizontal = 8.dp, vertical = 4.dp),
-                        verticalArrangement = Arrangement.spacedBy(
-                            6.dp,
-                            Alignment.CenterVertically
-                        )
-                    ) {
-                        val botoes = listOf(
-                            listOf(
-                                BotaoCalculadora("AC", TipoBotao.ACAO) { limpar() },
-                                BotaoCalculadora("", TipoBotao.ACAO, R.drawable.ic_erase) { apagar() },
-                                BotaoCalculadora("%", TipoBotao.ACAO) { porcentagem() },
-                                BotaoCalculadora("÷", TipoBotao.OPERADOR) { operacao("/") }
-                            ),
-                            listOf(
-                                BotaoCalculadora("7") { adicionar("7") },
-                                BotaoCalculadora("8") { adicionar("8") },
-                                BotaoCalculadora("9") { adicionar("9") },
-                                BotaoCalculadora("×", TipoBotao.OPERADOR) { operacao("*") }
-                            ),
-                            listOf(
-                                BotaoCalculadora("4") { adicionar("4") },
-                                BotaoCalculadora("5") { adicionar("5") },
-                                BotaoCalculadora("6") { adicionar("6") },
-                                BotaoCalculadora("−", TipoBotao.OPERADOR) { operacao("-") }
-                            ),
-                            listOf(
-                                BotaoCalculadora("1") { adicionar("1") },
-                                BotaoCalculadora("2") { adicionar("2") },
-                                BotaoCalculadora("3") { adicionar("3") },
-                                BotaoCalculadora("+", TipoBotao.OPERADOR) { operacao("+") }
-                            ),
-                            listOf(
-                                BotaoCalculadora("()") { adicionar("(") },
-                                BotaoCalculadora("0") { adicionar("0") },
-                                BotaoCalculadora(".") { adicionar(".") },
-                                BotaoCalculadora("=", TipoBotao.IGUAL) { calcular() }
-                            )
-                        )
-
-                        botoes.forEach { linha ->
-                            LinhaBotoes(
-                                cores = cores,
-                                botoes = linha,
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-                    }
+Row(
+    modifier = Modifier
+        .fillMaxSize()
+        .padding(horizontal = 8.dp),
+    horizontalArrangement = Arrangement.spacedBy(8.dp),
+    verticalAlignment = Alignment.CenterVertically
+) {
+    Box(
+        modifier = Modifier
+            .weight(0.85f)
+            .fillMaxHeight()
+            .pointerInput(Unit) {
+                detectTapGestures {
+                    registrarToque()
                 }
+            }
+            .padding(start = 4.dp, end = 4.dp),
+        contentAlignment = Alignment.CenterEnd
+    ) {
+        Text(
+            text = mensagemTemporaria ?: expr.ifEmpty { "0" },
+            color = cores.texto,
+            fontSize = 36.sp,
+            lineHeight = 40.sp,
+            textAlign = TextAlign.End,
+            maxLines = 3
+        )
+    }
+
+    Column(
+        modifier = Modifier
+            .weight(1.15f)
+            .fillMaxHeight()
+            .padding(vertical = 2.dp),
+        verticalArrangement = Arrangement.spacedBy(
+            3.dp,
+            Alignment.CenterVertically
+        ),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        val botoes = listOf(
+            listOf(
+                BotaoCalculadora("AC", TipoBotao.ACAO) { limpar() },
+                BotaoCalculadora("", TipoBotao.ACAO, R.drawable.ic_erase) { apagar() },
+                BotaoCalculadora("%", TipoBotao.ACAO) { porcentagem() },
+                BotaoCalculadora("÷", TipoBotao.OPERADOR) { operacao("/") }
+            ),
+            listOf(
+                BotaoCalculadora("7") { adicionar("7") },
+                BotaoCalculadora("8") { adicionar("8") },
+                BotaoCalculadora("9") { adicionar("9") },
+                BotaoCalculadora("×", TipoBotao.OPERADOR) { operacao("*") }
+            ),
+            listOf(
+                BotaoCalculadora("4") { adicionar("4") },
+                BotaoCalculadora("5") { adicionar("5") },
+                BotaoCalculadora("6") { adicionar("6") },
+                BotaoCalculadora("−", TipoBotao.OPERADOR) { operacao("-") }
+            ),
+            listOf(
+                BotaoCalculadora("1") { adicionar("1") },
+                BotaoCalculadora("2") { adicionar("2") },
+                BotaoCalculadora("3") { adicionar("3") },
+                BotaoCalculadora("+", TipoBotao.OPERADOR) { operacao("+") }
+            ),
+            listOf(
+                BotaoCalculadora("()") { adicionar("(") },
+                BotaoCalculadora("0") { adicionar("0") },
+                BotaoCalculadora(".") { adicionar(".") },
+                BotaoCalculadora("=", TipoBotao.IGUAL) { calcular() }
+            )
+        )
+
+        botoes.forEach { linha ->
+            LinhaBotoes(
+                cores = cores,
+                botoes = linha,
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
+}
             } else {
                 Column(
                     modifier = Modifier
@@ -647,7 +674,8 @@ private fun LinhaBotoes(
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         botoes.forEach { botao ->
             val cor = when (botao.tipo) {
@@ -660,7 +688,8 @@ private fun LinhaBotoes(
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .aspectRatio(1f)
+                    .fillMaxHeight()
+                    .padding(horizontal = 2.dp, vertical = 1.dp)
                     .clip(CircleShape)
                     .background(cor)
                     .clickable { botao.acao() },
@@ -670,13 +699,14 @@ private fun LinhaBotoes(
                     androidx.compose.foundation.Image(
                         painter = painterResource(botao.icone),
                         contentDescription = "Apagar",
-                        modifier = Modifier.size(28.dp)
+                        modifier = Modifier.size(20.dp)
                     )
                 } else {
                     Text(
                         text = botao.texto,
                         color = cores.texto,
-                        fontSize = 25.sp
+                        fontSize = 19.sp,
+                        maxLines = 1
                     )
                 }
             }

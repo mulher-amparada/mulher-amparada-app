@@ -51,40 +51,65 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [[ -z "$PRIVATE_KEY" ]]; then
-            echo "::error::Configure o secret MULHER_AMPARADA_PRIVATE_KEY em Settings > Secrets and variables > Actions."
+          if [[ -z "${PRIVATE_KEY:-}" ]]; then
+            echo "::error::O secret MULHER_AMPARADA_PRIVATE_KEY está vazio ou indisponível."
             exit 1
           fi
 
+          KEY_FILE="$RUNNER_TEMP/private-key.pem"
+
           if [[ "$PRIVATE_KEY" == *"-----BEGIN"* ]]; then
-            printf '%s\n' "$PRIVATE_KEY" > "$RUNNER_TEMP/private-key.pem"
+            printf '%s\n' "$PRIVATE_KEY" > "$KEY_FILE"
           else
-            printf '%s' "$PRIVATE_KEY" | base64 -d > "$RUNNER_TEMP/private-key.pem"
+            printf '%s' "$PRIVATE_KEY" | base64 --decode > "$KEY_FILE"
           fi
 
-          grep -q -- "-----BEGIN .*PRIVATE KEY-----" "$RUNNER_TEMP/private-key.pem"
-          grep -q -- "-----END .*PRIVATE KEY-----" "$RUNNER_TEMP/private-key.pem"
+          grep -q -- "-----BEGIN .*PRIVATE KEY-----" "$KEY_FILE"
+          grep -q -- "-----END .*PRIVATE KEY-----" "$KEY_FILE"
 
-          echo "MULHER_AMPARADA_PRIVATE_KEY_FILE=$RUNNER_TEMP/private-key.pem" >> "$GITHUB_ENV"
+          echo "MULHER_AMPARADA_PRIVATE_KEY_FILE=$KEY_FILE" >> "$GITHUB_ENV"
 
       - name: Compilar agente C++
         run: |
+          set -euo pipefail
+
           g++ -std=c++17 -O2 -Wall -Wextra \
-            tools/github_agent.cpp -o github_agent \
+            tools/github_agent.cpp \
+            -o github_agent \
             -lcurl -lssl -lcrypto
 
       - name: Executar agente
         env:
+          MULHER_AMPARADA_PRIVATE_KEY: ${{ secrets.MULHER_AMPARADA_PRIVATE_KEY }}
+          MULHER_AMPARADA_PRIVATE_KEY_FILE: ${{ env.MULHER_AMPARADA_PRIVATE_KEY_FILE }}
           MULHER_AMPARADA_APP_ID: ${{ secrets.MULHER_AMPARADA_APP_ID }}
           MULHER_AMPARADA_INSTALLATION_ID: ${{ secrets.MULHER_AMPARADA_INSTALLATION_ID }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           set -euo pipefail
 
+          if [[ -z "${MULHER_AMPARADA_APP_ID:-}" ]]; then
+            echo "::error::Secret MULHER_AMPARADA_APP_ID ausente."
+            exit 1
+          fi
+
+          if [[ -z "${MULHER_AMPARADA_INSTALLATION_ID:-}" ]]; then
+            echo "::error::Secret MULHER_AMPARADA_INSTALLATION_ID ausente."
+            exit 1
+          fi
+
+          if [[ -z "${MULHER_AMPARADA_PRIVATE_KEY:-}" && -z "${MULHER_AMPARADA_PRIVATE_KEY_FILE:-}" ]]; then
+            echo "::error::Chave privada não disponibilizada ao agente."
+            exit 1
+          fi
+
           if [[ "${{ github.event_name }}" == "schedule" ]]; then
             ./github_agent workflow "automations.yml" "main"
           elif [[ "${{ inputs.action }}" == "executar-workflow" ]]; then
             ./github_agent workflow "${{ inputs.workflow }}" "${{ inputs.branch }}"
-          else
+          elif [[ "${{ inputs.action }}" == "dependabot" ]]; then
             ./github_agent dependabot "${{ inputs.branch }}"
+          else
+            echo "::error::Ação inválida."
+            exit 1
           fi

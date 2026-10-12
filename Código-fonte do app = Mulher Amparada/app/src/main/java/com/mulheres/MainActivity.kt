@@ -99,29 +99,35 @@ if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
         WindowInsetsCompat.Type.systemBars()
     )
 
+    val paisagem =
+        resources.configuration.orientation ==
+            Configuration.ORIENTATION_LANDSCAPE
+
     val params =
         view.layoutParams as ViewGroup.MarginLayoutParams
 
-if (paisagem) {
-    params.setMargins(
-        64.dp() + barras.left,
-        64.dp() + barras.top,
-        64.dp() + barras.right,
-        64.dp() + barras.bottom
-    )
-} else {
-    params.setMargins(
-        0,
-        barras.top,
-        0,
-        barras.bottom
-    )
-}
+    if (paisagem) {
+        params.setMargins(
+            32.dp() + barras.left,
+            32.dp() + barras.top,
+            32.dp() + barras.right,
+            32.dp() + barras.bottom
+        )
+    } else {
+        params.setMargins(
+            0,
+            barras.top,
+            0,
+            barras.bottom
+        )
+    }
 
     view.layoutParams = params
 
     insets
 }
+
+ViewCompat.requestApplyInsets(webView)
 
     // =====================================================
     // PÁGINA INICIAL

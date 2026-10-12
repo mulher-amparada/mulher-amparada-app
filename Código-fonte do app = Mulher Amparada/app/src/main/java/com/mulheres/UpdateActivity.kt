@@ -1,8 +1,5 @@
 package com.mulheres
 
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.ui.platform.LocalConfiguration
 import android.graphics.Color as AndroidColor
 import android.os.Build
 import android.os.Bundle
@@ -23,7 +20,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -53,44 +53,43 @@ private val LightMuted = Color(0x88000000)
 
 private val Accent = Color(0xFFFF8FB5)
 private val AccentSoft = Color(0x24FF8FB5)
-private val Success = Color(0xFF6DFFAD)
 
 class UpdateActivity : ComponentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-        enableEdgeToEdge()
+    enableEdgeToEdge()
 
-        window.addFlags(
-            WindowManager.LayoutParams.FLAG_SECURE
-        )
+    window.addFlags(
+        WindowManager.LayoutParams.FLAG_SECURE
+    )
 
-        window.statusBarColor = AndroidColor.TRANSPARENT
-        window.navigationBarColor = AndroidColor.TRANSPARENT
-        window.isNavigationBarContrastEnforced = false
+    window.statusBarColor = AndroidColor.TRANSPARENT
+    window.navigationBarColor = AndroidColor.TRANSPARENT
+    window.isNavigationBarContrastEnforced = false
 
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
-        )
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        false
+    )
 
-        setContent {
+    setContent {
+        val dark = isSystemInDarkTheme()
 
-            val dark = isSystemInDarkTheme()
+        val controller =
+            WindowCompat.getInsetsController(
+                window,
+                window.decorView
+            )
 
-            val controller =
-                WindowCompat.getInsetsController(
-                    window,
-                    window.decorView
-                )
+        controller.isAppearanceLightStatusBars = !dark
+        controller.isAppearanceLightNavigationBars = !dark
 
-            controller.isAppearanceLightStatusBars = !dark
-            controller.isAppearanceLightNavigationBars = !dark
-
-            UpdateScreen()
-        }
+        UpdateScreen()
     }
+}
+
 }
 
 @Composable
@@ -99,246 +98,175 @@ private fun UpdateScreen() {
 val configuration = LocalConfiguration.current
 val paisagem =
     configuration.screenWidthDp > configuration.screenHeightDp
-    
-    val context = LocalContext.current
-    val dark = isSystemInDarkTheme()
 
-    val background =
-        if (dark) {
-            DarkBackground
-        } else {
-            LightBackground
-        }
+val context = LocalContext.current
+val dark = isSystemInDarkTheme()
 
-    val card =
-        if (dark) {
-            DarkCard
-        } else {
-            LightCard
-        }
+val background =
+    if (dark) DarkBackground else LightBackground
 
-    val border =
-        if (dark) {
-            DarkBorder
-        } else {
-            LightBorder
-        }
+val card =
+    if (dark) DarkCard else LightCard
 
-    val textColor =
-        if (dark) {
-            DarkText
-        } else {
-            LightText
-        }
+val border =
+    if (dark) DarkBorder else LightBorder
 
-    val muted =
-        if (dark) {
-            DarkMuted
-        } else {
-            LightMuted
-        }
+val textColor =
+    if (dark) DarkText else LightText
 
-    val packageInfo =
-        context.packageManager.getPackageInfo(
-            context.packageName,
-            0
-        )
+val muted =
+    if (dark) DarkMuted else LightMuted
 
-    val versionName =
-        packageInfo.versionName ?: "Desconhecida"
+val packageInfo =
+    context.packageManager.getPackageInfo(
+        context.packageName,
+        0
+    )
 
-    val versionCode =
-        if (Build.VERSION.SDK_INT >= 28) {
-            packageInfo.longVersionCode
-        } else {
-            @Suppress("DEPRECATION")
-            packageInfo.versionCode.toLong()
-        }
+val versionName =
+    packageInfo.versionName ?: "Desconhecida"
 
-    CompositionLocalProvider(
-        LocalOverscrollFactory provides null
-    ) {
+val versionCode =
+    if (Build.VERSION.SDK_INT >= 28) {
+        packageInfo.longVersionCode
+    } else {
+        @Suppress("DEPRECATION")
+        packageInfo.versionCode.toLong()
+    }
 
-        Scaffold(
-            containerColor = Color.Transparent
-        ) { paddingValues ->
-
-            Box(
-    modifier = Modifier
-        .fillMaxSize()
-        .background(background)
-        .padding(paddingValues)
-        .padding(
-            start = if (paisagem) 30.dp else 18.dp,
-            end = 18.dp,
-            top = 20.dp,
-            bottom = 20.dp
-        ),
-    contentAlignment = Alignment.TopCenter
+CompositionLocalProvider(
+    LocalOverscrollFactory provides null
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 2.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = Color.Transparent
+    ) { paddingValues ->
 
-                    Box(
-                        modifier =
-                            Modifier
-                                .size(112.dp)
-                                .clip(
-                                    RoundedCornerShape(34.dp)
-                                )
-                                .background(
-                                    AccentSoft
-                                )
-                                .border(
-                                    1.dp,
-                                    Accent.copy(.28f),
-                                    RoundedCornerShape(34.dp)
-                                ),
-                        contentAlignment =
-                            Alignment.Center
-                    ) {
-
-                        Image(
-                            painter =
-                                painterResource(
-                                    id =
-                                        R.drawable.ic_launcher_foreground
-                                ),
-                            contentDescription =
-                                "Mulher Amparada",
-                            modifier =
-                                Modifier
-                                    .size(72.dp)
-                        )
-                    }
-
-                    Spacer(
-                        modifier =
-                            Modifier.height(24.dp)
-                    )
-
-                    Text(
-                        text = "Atualização",
-                        color = textColor,
-                        fontSize = 27.sp,
-                        fontWeight =
-                            FontWeight.Bold
-                    )
-
-                    Spacer(
-                        modifier =
-                            Modifier.height(7.dp)
-                    )
-
-                    Text(
-                        text = "Mulher Amparada",
-                        color = Accent,
-                        fontSize = 15.sp,
-                        fontWeight =
-                            FontWeight.SemiBold
-                    )
-
-                    Spacer(
-                        modifier =
-                            Modifier.height(24.dp)
-                    )
-
-                    Column(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .clip(
-                                    RoundedCornerShape(25.dp)
-                                )
-                                .background(card)
-                                .border(
-                                    1.dp,
-                                    border,
-                                    RoundedCornerShape(25.dp)
-                                )
-                                .padding(20.dp)
-                    ) {
-
-                        Text(
-                            text = "Versão instalada",
-                            color = muted,
-                            fontSize = 11.sp
-                        )
-
-                        Spacer(
-                            modifier =
-                                Modifier.height(7.dp)
-                        )
-
-                        Text(
-                            text =
-                                "Versão $versionName",
-                            color = textColor,
-                            fontSize = 18.sp,
-                            fontWeight =
-                                FontWeight.SemiBold
-                        )
-
-                        Spacer(
-                            modifier =
-                                Modifier.height(10.dp)
-                        )
-
-                        Text(
-                            text =
-                                "Build $versionCode",
-                            color = Accent,
-                            fontSize = 12.sp,
-                            fontWeight =
-                                FontWeight.Bold
-                        )
-
-                        Spacer(
-                            modifier =
-                                Modifier.height(16.dp)
-                        )
-
-                        Box(
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .height(1.dp)
-                                    .background(border)
-                        )
-
-                        Spacer(
-                            modifier =
-                                Modifier.height(16.dp)
-                        )
-
-                        Text(
-                            text =
-                                "Seu aplicativo está pronto para receber atualizações.",
-                            color = muted,
-                            fontSize = 12.sp,
-                            lineHeight = 18.sp
-                        )
-                    }
-
-                    Spacer(
-                        modifier =
-                            Modifier.height(18.dp)
-                    )
-
-                    Text(
-                        text =
-                            "Mulher Amparada • Build $versionCode",
-                        color =
-                            muted.copy(.65f),
-                        fontSize = 9.sp
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(background)
+                .padding(
+                    start = if (paisagem) 30.dp else 18.dp,
+                    end = 18.dp,
+                    top = paddingValues.calculateTopPadding() + 20.dp,
+                    bottom = paddingValues.calculateBottomPadding() + 20.dp
+                ),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 2.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(112.dp)
+                        .clip(RoundedCornerShape(34.dp))
+                        .background(AccentSoft)
+                        .border(
+                            1.dp,
+                            Accent.copy(.28f),
+                            RoundedCornerShape(34.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(
+                            id = R.drawable.ic_launcher_foreground
+                        ),
+                        contentDescription = "Mulher Amparada",
+                        modifier = Modifier.size(72.dp)
                     )
                 }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Text(
+                    text = "Atualização",
+                    color = textColor,
+                    fontSize = 27.sp,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Spacer(modifier = Modifier.height(7.dp))
+
+                Text(
+                    text = "Mulher Amparada",
+                    color = Accent,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(25.dp))
+                        .background(card)
+                        .border(
+                            1.dp,
+                            border,
+                            RoundedCornerShape(25.dp)
+                        )
+                        .padding(20.dp)
+                ) {
+                    Text(
+                        text = "Versão instalada",
+                        color = muted,
+                        fontSize = 11.sp
+                    )
+
+                    Spacer(modifier = Modifier.height(7.dp))
+
+                    Text(
+                        text = "Versão $versionName",
+                        color = textColor,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Text(
+                        text = "Build $versionCode",
+                        color = Accent,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(1.dp)
+                            .background(border)
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = "Seu aplicativo está pronto para receber atualizações.",
+                        color = muted,
+                        fontSize = 12.sp,
+                        lineHeight = 18.sp
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(18.dp))
+
+                Text(
+                    text = "Mulher Amparada • Build $versionCode",
+                    color = muted.copy(.65f),
+                    fontSize = 9.sp
+                )
             }
         }
     }
+}
+
 }

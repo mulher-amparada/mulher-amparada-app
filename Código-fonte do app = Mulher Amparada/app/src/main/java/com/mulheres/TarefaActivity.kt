@@ -340,11 +340,11 @@ CompositionLocalProvider(
                 showTaskDialog = true
             },
             modifier = Modifier
-                .padding(
-                    end = 8.dp,
-                    bottom = 8.dp
-                )
-                .size(58.dp),
+    .padding(
+        end = if (paisagem) 64.dp else 8.dp,
+        bottom = 8.dp
+    )
+    .size(58.dp),
             shape = RoundedCornerShape(20.dp),
             containerColor = Accent,
             contentColor = Color.Black

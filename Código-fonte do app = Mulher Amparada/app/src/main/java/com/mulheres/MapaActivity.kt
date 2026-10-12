@@ -425,12 +425,18 @@ val paisagem =
 )
 
     CabecalhoMapa(
-        dark = dark,
-        aoLocalizar = {
-            localizar()
-        }
-    )
-
+    dark = dark,
+    aoLocalizar = {
+        localizar()
+    },
+    modifier = Modifier
+        .fillMaxWidth()
+        .padding(
+            start = if (paisagem) 64.dp else 12.dp,
+            end = if (paisagem) 64.dp else 12.dp,
+            top = 10.dp
+        )
+)
     ControlesMapa(
         dark = dark,
         aoZoomIn = {

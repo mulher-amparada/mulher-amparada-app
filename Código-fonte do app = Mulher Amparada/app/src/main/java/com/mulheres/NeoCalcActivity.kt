@@ -1,106 +1,73 @@
+
 package com.mulheres
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
-import androidx.compose.ui.platform.LocalView
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.foundation.layout.systemBars
-import androidx.core.view.WindowCompat
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.fillMaxHeight
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.view.WindowManager
+import androidx.activity.compose.setContent
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
-import android.view.WindowManager
-import androidx.compose.ui.res.painterResource
-import android.content.Intent
-import android.graphics.Typeface
-import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.fragment.app.FragmentActivity
 import kotlinx.coroutines.delay
 
 class NeoCalcActivity : FragmentActivity() {
 
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
-    window.setFlags(
-        WindowManager.LayoutParams.FLAG_SECURE,
-        WindowManager.LayoutParams.FLAG_SECURE
-    )
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_SECURE,
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
 
-    window.navigationBarColor = android.graphics.Color.TRANSPARENT
-    window.statusBarColor = android.graphics.Color.TRANSPARENT
+        window.navigationBarColor = android.graphics.Color.TRANSPARENT
+        window.statusBarColor = android.graphics.Color.TRANSPARENT
 
-    WindowCompat.getInsetsController(window, window.decorView).apply {
-        isAppearanceLightNavigationBars = false
-        isAppearanceLightStatusBars = false
-        systemBarsBehavior =
-            WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightNavigationBars = false
+            isAppearanceLightStatusBars = false
+            systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
+        }
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            window.isNavigationBarContrastEnforced = false
+            window.isStatusBarContrastEnforced = false
+        }
+
+        setContent {
+            NeoCalcScreen()
+        }
     }
-
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-        window.isNavigationBarContrastEnforced = false
-        window.isStatusBarContrastEnforced = false
-    }
-
-    setContent {
-        NeoCalcScreen()
-    }
-}
 }
 
 private data class CoresNeoCalc(
@@ -115,12 +82,8 @@ private data class CoresNeoCalc(
     val textoSecundario: Color
 )
 
-private fun obterCoresNeoCalc(
-    escuro: Boolean
-): CoresNeoCalc {
-
+private fun obterCoresNeoCalc(escuro: Boolean): CoresNeoCalc {
     return if (escuro) {
-
         CoresNeoCalc(
             fundo = Color.Black,
             botao = Color(0xFF151515),
@@ -132,11 +95,9 @@ private fun obterCoresNeoCalc(
             texto = Color.White,
             textoSecundario = Color(0xFFD0D0D0)
         )
-
     } else {
-
         CoresNeoCalc(
-            fundo = Color(0xFFFFFFFF),
+            fundo = Color.White,
             botao = Color(0xFFE9E9E9),
             botaoHover = Color(0xFFDCDCDC),
             acao = Color(0xFF5964E8),
@@ -149,12 +110,8 @@ private fun obterCoresNeoCalc(
     }
 }
 
-private const val CHAVE_SENHA =
-    "senha"
-
-private const val CHAVE_RECUPERACAO =
-    "nome_recuperacao"
-
+private const val CHAVE_SENHA = "senha"
+private const val CHAVE_RECUPERACAO = "nome_recuperacao"
 
 private enum class TipoDialogo {
     ALERTA,
@@ -171,21 +128,31 @@ private data class Dialogo(
     val textoConfirmar: String = "OK"
 )
 
+private enum class AcaoTelaPreta {
+    HUB,
+    RECUPERACAO,
+    RESETAR
+}
+
 @Composable
 private fun NeoCalcScreen() {
     val context = LocalContext.current
     val cripto = remember { Cripto(context) }
     val escuro = isSystemInDarkTheme()
     val cores = remember(escuro) { obterCoresNeoCalc(escuro) }
-var telaPreta by remember { mutableStateOf(false) }
-var confirmacaoLonga by remember { mutableStateOf(false) }
+
+    var telaPreta by remember { mutableStateOf(false) }
+    var acaoTelaPreta by remember {
+        mutableStateOf(AcaoTelaPreta.HUB)
+    }
+
     var expr by remember { mutableStateOf("") }
     var mensagemTemporaria by remember { mutableStateOf<String?>(null) }
     var dialogo by remember { mutableStateOf<Dialogo?>(null) }
     var valorDialogo by remember { mutableStateOf("") }
-    var contadorToques by remember { mutableStateOf(0) }
-    var ultimoToque by remember { mutableLongStateOf(0L) }
 
+    var contadorToques by remember { mutableIntStateOf(0) }
+    var ultimoToque by remember { mutableLongStateOf(0L) }
     val visorScroll = rememberScrollState()
 
     LaunchedEffect(expr, mensagemTemporaria) {
@@ -193,10 +160,24 @@ var confirmacaoLonga by remember { mutableStateOf(false) }
         visorScroll.scrollTo(visorScroll.maxValue)
     }
 
+    fun atualizar() {
+        mensagemTemporaria = null
+    }
+
+    fun mostrarDialogo(novo: Dialogo) {
+        dialogo = novo
+        valorDialogo = novo.valorInicial
+    }
+
+    fun ativarTelaPreta(acao: AcaoTelaPreta) {
+        acaoTelaPreta = acao
+        telaPreta = true
+    }
+
     fun registrarToque() {
         val agora = System.currentTimeMillis()
 
-        if (agora - ultimoToque > 2000) {
+        if (agora - ultimoToque > 2000L) {
             contadorToques = 0
         }
 
@@ -209,29 +190,17 @@ var confirmacaoLonga by remember { mutableStateOf(false) }
             recuperarSenha(
                 context = context,
                 cripto = cripto,
-                mostrarDialogo = {
-                    dialogo = it
-                    valorDialogo = it.valorInicial
-                },
-                fecharDialogo = {
-                    dialogo = null
-                },
-                mostrarMensagem = {
-                    mensagemTemporaria = it
-                }
+                mostrarDialogo = { mostrarDialogo(it) },
+                fecharDialogo = { dialogo = null },
+                mostrarMensagem = { mensagemTemporaria = it }
             )
         }
-    }
-
-    fun atualizar() {
-        mensagemTemporaria = null
     }
 
     fun adicionar(valor: String) {
         if (valor == ".") {
             val partes = expr.split(Regex("[+\\-*/()]"))
             val parteAtual = partes.lastOrNull() ?: ""
-
             if (parteAtual.contains(".")) return
         }
 
@@ -249,8 +218,7 @@ var confirmacaoLonga by remember { mutableStateOf(false) }
         }
 
         if (
-            expr.lastOrNull()
-                ?.toString()
+            expr.lastOrNull()?.toString()
                 ?.matches(Regex("[+\\-*/]")) == true
         ) {
             expr = expr.dropLast(1) + op
@@ -287,17 +255,16 @@ var confirmacaoLonga by remember { mutableStateOf(false) }
     fun calcular() {
         val senha = try {
             cripto.carregar(CHAVE_SENHA)?.trim() ?: ""
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             ""
         }
 
         if (expr.trim().isNotEmpty() && expr.trim() == senha) {
-    expr = ""
-    mensagemTemporaria = null
-    telaPreta = true
-    confirmacaoLonga = false
-    return
-}
+            expr = ""
+            mensagemTemporaria = null
+            ativarTelaPreta(AcaoTelaPreta.HUB)
+            return
+        }
 
         if (expr.trim().isEmpty()) return
 
@@ -309,148 +276,136 @@ var confirmacaoLonga by remember { mutableStateOf(false) }
                 mensagemTemporaria = null
                 return
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
+            // A expressão será tratada como erro abaixo.
         }
 
         mensagemTemporaria = "Erro"
         expr = ""
     }
 
-if (telaPreta) {
-    var pressionando by remember { mutableStateOf(false) }
-    var tempoPressionado by remember { mutableLongStateOf(0L) }
+    if (telaPreta) {
+        var toquesTela by remember { mutableIntStateOf(0) }
 
-    LaunchedEffect(pressionando) {
-        if (pressionando) {
-            delay(5000)
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black)
+                .pointerInput(Unit) {
+                    detectTapGestures {
+                        toquesTela++
 
-            if (pressionando) {
-                telaPreta = false
-                confirmacaoLonga = true
+                        if (toquesTela >= 5) {
+                            telaPreta = false
 
-                context.startActivity(
-                    Intent(context, HubActivity::class.java)
-                )
-            }
-        }
-    }
+                            when (acaoTelaPreta) {
+                                AcaoTelaPreta.HUB -> {
+                                    context.startActivity(
+                                        Intent(
+                                            context,
+                                            HubActivity::class.java
+                                        )
+                                    )
+                                }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black)
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onPress = {
-                        pressionando = true
-                        tempoPressionado = System.currentTimeMillis()
+                                AcaoTelaPreta.RECUPERACAO -> {
+                                    mostrarDialogo(
+                                        Dialogo(
+                                            tipo = TipoDialogo.PROMPT,
+                                            titulo = "Nova senha",
+                                            mensagem = "Digite a nova senha.",
+                                            textoConfirmar = "Salvar"
+                                        )
+                                    )
+                                }
 
-                        val soltou = tryAwaitRelease()
-
-                        if (soltou) {
-                            pressionando = false
+                                AcaoTelaPreta.RESETAR -> {
+                                    continuarConfirmacao(
+                                        context = context,
+                                        cripto = cripto,
+                                        mostrarDialogo = {
+                                            mostrarDialogo(it)
+                                        }
+                                    )
+                                }
+                            }
                         }
                     }
-                )
-            }
-    )
+                }
+        )
 
-    return
-}
+        return
+    }
 
-    androidx.compose.runtime.CompositionLocalProvider(
+    CompositionLocalProvider(
         LocalOverscrollFactory provides null
     ) {
         BoxWithConstraints(
             modifier = Modifier
-    .fillMaxSize()
-    .background(cores.fundo)
-    .windowInsetsPadding(
-        WindowInsets.systemBars
-    )
-    .padding(horizontal = 24.dp, vertical = 4.dp)
+                .fillMaxSize()
+                .background(cores.fundo)
+                .windowInsetsPadding(WindowInsets.systemBars)
+                .padding(horizontal = 24.dp, vertical = 4.dp)
         ) {
             val paisagem = maxWidth > maxHeight
 
             if (paisagem) {
-Row(
-    modifier = Modifier
-        .fillMaxSize()
-        .padding(horizontal = 4.dp),
-    horizontalArrangement = Arrangement.spacedBy(12.dp),
-    verticalAlignment = Alignment.CenterVertically
-) {
-    Box(
-        modifier = Modifier
-            .weight(0.9f)
-            .fillMaxHeight()
-            .pointerInput(Unit) {
-                detectTapGestures { registrarToque() }
-            }
-            .padding(start = 4.dp, end = 4.dp),
-        contentAlignment = Alignment.CenterEnd
-    ) {
-        Text(
-            text = mensagemTemporaria ?: expr.ifEmpty { "0" },
-            color = cores.texto,
-            fontSize = 36.sp,
-            lineHeight = 40.sp,
-            textAlign = TextAlign.End,
-            maxLines = 3
-        )
-    }
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .weight(0.9f)
+                            .fillMaxHeight()
+                            .pointerInput(Unit) {
+                                detectTapGestures {
+                                    registrarToque()
+                                }
+                            }
+                            .padding(start = 4.dp, end = 4.dp),
+                        contentAlignment = Alignment.CenterEnd
+                    ) {
+                        Text(
+                            text = mensagemTemporaria ?: expr.ifEmpty { "0" },
+                            color = cores.texto,
+                            fontSize = 36.sp,
+                            lineHeight = 40.sp,
+                            textAlign = TextAlign.End,
+                            maxLines = 3
+                        )
+                    }
 
-    Column(
-        modifier = Modifier
-            .weight(1.1f)
-            .fillMaxHeight()
-            .padding(vertical = 2.dp),
-        verticalArrangement = Arrangement.spacedBy(3.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        val botoes = listOf(
-            listOf(
-                BotaoCalculadora("AC", TipoBotao.ACAO) { limpar() },
-                BotaoCalculadora("", TipoBotao.ACAO, R.drawable.ic_erase) { apagar() },
-                BotaoCalculadora("%", TipoBotao.ACAO) { porcentagem() },
-                BotaoCalculadora("÷", TipoBotao.OPERADOR) { operacao("/") }
-            ),
-            listOf(
-                BotaoCalculadora("7") { adicionar("7") },
-                BotaoCalculadora("8") { adicionar("8") },
-                BotaoCalculadora("9") { adicionar("9") },
-                BotaoCalculadora("×", TipoBotao.OPERADOR) { operacao("*") }
-            ),
-            listOf(
-                BotaoCalculadora("4") { adicionar("4") },
-                BotaoCalculadora("5") { adicionar("5") },
-                BotaoCalculadora("6") { adicionar("6") },
-                BotaoCalculadora("−", TipoBotao.OPERADOR) { operacao("-") }
-            ),
-            listOf(
-                BotaoCalculadora("1") { adicionar("1") },
-                BotaoCalculadora("2") { adicionar("2") },
-                BotaoCalculadora("3") { adicionar("3") },
-                BotaoCalculadora("+", TipoBotao.OPERADOR) { operacao("+") }
-            ),
-            listOf(
-                BotaoCalculadora("(") { adicionar("(") },
-                BotaoCalculadora("0") { adicionar("0") },
-                BotaoCalculadora(".") { adicionar(".") },
-                BotaoCalculadora("=", TipoBotao.IGUAL) { calcular() }
-            )
-        )
+                    Column(
+                        modifier = Modifier
+                            .weight(1.1f)
+                            .fillMaxHeight()
+                            .padding(vertical = 2.dp),
+                        verticalArrangement = Arrangement.spacedBy(3.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        val botoes = listaBotoes(
+                            adicionar = ::adicionar,
+                            operacao = ::operacao,
+                            limpar = ::limpar,
+                            apagar = ::apagar,
+                            porcentagem = ::porcentagem,
+                            calcular = ::calcular
+                        )
 
-        botoes.forEach { linha ->
-            LinhaBotoes(
-                cores = cores,
-                botoes = linha,
-                modifier = Modifier.weight(1f),
-                paisagem = true
-            )
-        }
-    }
-}
+                        botoes.forEach { linha ->
+                            LinhaBotoes(
+                                cores = cores,
+                                botoes = linha,
+                                modifier = Modifier.weight(1f),
+                                paisagem = true
+                            )
+                        }
+                    }
+                }
             } else {
                 Column(
                     modifier = Modifier
@@ -487,37 +442,13 @@ Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        val botoes = listOf(
-                            listOf(
-                                BotaoCalculadora("AC", TipoBotao.ACAO) { limpar() },
-                                BotaoCalculadora("", TipoBotao.ACAO, R.drawable.ic_erase) { apagar() },
-                                BotaoCalculadora("%", TipoBotao.ACAO) { porcentagem() },
-                                BotaoCalculadora("÷", TipoBotao.OPERADOR) { operacao("/") }
-                            ),
-                            listOf(
-                                BotaoCalculadora("7") { adicionar("7") },
-                                BotaoCalculadora("8") { adicionar("8") },
-                                BotaoCalculadora("9") { adicionar("9") },
-                                BotaoCalculadora("×", TipoBotao.OPERADOR) { operacao("*") }
-                            ),
-                            listOf(
-                                BotaoCalculadora("4") { adicionar("4") },
-                                BotaoCalculadora("5") { adicionar("5") },
-                                BotaoCalculadora("6") { adicionar("6") },
-                                BotaoCalculadora("−", TipoBotao.OPERADOR) { operacao("-") }
-                            ),
-                            listOf(
-                                BotaoCalculadora("1") { adicionar("1") },
-                                BotaoCalculadora("2") { adicionar("2") },
-                                BotaoCalculadora("3") { adicionar("3") },
-                                BotaoCalculadora("+", TipoBotao.OPERADOR) { operacao("+") }
-                            ),
-                            listOf(
-                                BotaoCalculadora("()") { adicionar("(") },
-                                BotaoCalculadora("0") { adicionar("0") },
-                                BotaoCalculadora(".") { adicionar(".") },
-                                BotaoCalculadora("=", TipoBotao.IGUAL) { calcular() }
-                            )
+                        val botoes = listaBotoes(
+                            adicionar = ::adicionar,
+                            operacao = ::operacao,
+                            limpar = ::limpar,
+                            apagar = ::apagar,
+                            porcentagem = ::porcentagem,
+                            calcular = ::calcular
                         )
 
                         botoes.forEach { linha ->
@@ -585,8 +516,7 @@ Row(
                                             autenticarParaRedefinir(
                                                 activity = context as FragmentActivity,
                                                 mostrarDialogo = {
-                                                    dialogo = it
-                                                    valorDialogo = it.valorInicial
+                                                    mostrarDialogo(it)
                                                 },
                                                 mostrarMensagem = {
                                                     mensagemTemporaria = it
@@ -607,8 +537,7 @@ Row(
                                             context = context,
                                             cripto = cripto,
                                             mostrarDialogo = {
-                                                dialogo = it
-                                                valorDialogo = it.valorInicial
+                                                mostrarDialogo(it)
                                             },
                                             mostrarMensagem = {
                                                 mensagemTemporaria = it
@@ -618,15 +547,7 @@ Row(
 
                                     TipoDialogo.CONFIRMACAO -> {
                                         dialogo = null
-
-                                        continuarConfirmacao(
-                                            context = context,
-                                            cripto = cripto,
-                                            mostrarDialogo = {
-                                                dialogo = it
-                                                valorDialogo = it.valorInicial
-                                            }
-                                        )
+                                        ativarTelaPreta(AcaoTelaPreta.RESETAR)
                                     }
 
                                     TipoDialogo.RECUPERACAO -> {
@@ -638,11 +559,15 @@ Row(
                                             context = context,
                                             cripto = cripto,
                                             mostrarDialogo = {
-                                                dialogo = it
-                                                valorDialogo = it.valorInicial
+                                                mostrarDialogo(it)
                                             },
                                             mostrarMensagem = {
                                                 mensagemTemporaria = it
+                                            },
+                                            ativarTelaPreta = {
+                                                ativarTelaPreta(
+                                                    AcaoTelaPreta.RECUPERACAO
+                                                )
                                             }
                                         )
                                     }
@@ -652,10 +577,7 @@ Row(
                                 containerColor = cores.acao
                             )
                         ) {
-                            Text(
-                                atual.textoConfirmar,
-                                color = Color.White
-                            )
+                            Text(atual.textoConfirmar, color = Color.White)
                         }
                     },
                     dismissButton = {
@@ -690,6 +612,48 @@ Row(
             }
         }
     }
+}
+
+private fun listaBotoes(
+    adicionar: (String) -> Unit,
+    operacao: (String) -> Unit,
+    limpar: () -> Unit,
+    apagar: () -> Unit,
+    porcentagem: () -> Unit,
+    calcular: () -> Unit
+): List<List<BotaoCalculadora>> {
+    return listOf(
+        listOf(
+            BotaoCalculadora("AC", TipoBotao.ACAO) { limpar() },
+            BotaoCalculadora("", TipoBotao.ACAO, R.drawable.ic_erase) { apagar() },
+            BotaoCalculadora("%", TipoBotao.ACAO) { porcentagem() },
+            BotaoCalculadora("÷", TipoBotao.OPERADOR) { operacao("/") }
+        ),
+        listOf(
+            BotaoCalculadora("7") { adicionar("7") },
+            BotaoCalculadora("8") { adicionar("8") },
+            BotaoCalculadora("9") { adicionar("9") },
+            BotaoCalculadora("×", TipoBotao.OPERADOR) { operacao("*") }
+        ),
+        listOf(
+            BotaoCalculadora("4") { adicionar("4") },
+            BotaoCalculadora("5") { adicionar("5") },
+            BotaoCalculadora("6") { adicionar("6") },
+            BotaoCalculadora("−", TipoBotao.OPERADOR) { operacao("-") }
+        ),
+        listOf(
+            BotaoCalculadora("1") { adicionar("1") },
+            BotaoCalculadora("2") { adicionar("2") },
+            BotaoCalculadora("3") { adicionar("3") },
+            BotaoCalculadora("+", TipoBotao.OPERADOR) { operacao("+") }
+        ),
+        listOf(
+            BotaoCalculadora("(") { adicionar("(") },
+            BotaoCalculadora("0") { adicionar("0") },
+            BotaoCalculadora(".") { adicionar(".") },
+            BotaoCalculadora("=", TipoBotao.IGUAL) { calcular() }
+        )
+    )
 }
 
 private enum class TipoBotao {
@@ -744,7 +708,7 @@ private fun LinhaBotoes(
                 contentAlignment = Alignment.Center
             ) {
                 if (botao.icone != null) {
-                    androidx.compose.foundation.Image(
+                    Image(
                         painter = painterResource(botao.icone),
                         contentDescription = "Apagar",
                         modifier = Modifier.size(
@@ -765,69 +729,37 @@ private fun LinhaBotoes(
 }
 
 private fun recuperarSenha(
-    context: android.content.Context,
-cripto: Cripto,
+    context: Context,
+    cripto: Cripto,
     mostrarDialogo: (Dialogo) -> Unit,
     fecharDialogo: () -> Unit,
     mostrarMensagem: (String) -> Unit
 ) {
+    val senhaSalva = try {
+        cripto.carregar(CHAVE_SENHA)?.trim() ?: ""
+    } catch (_: Exception) {
+        mostrarMensagem("Erro")
+        return
+    }
 
-    val senhaSalva =
-        try {
-
-            cripto.carregar(
-                CHAVE_SENHA
-            )
-                ?.trim()
-                ?: ""
-
-        } catch (
-            e: Exception
-        ) {
-
-            mostrarMensagem(
-                "Erro"
-            )
-
-            return
-        }
-
-    if (
-        senhaSalva.isEmpty()
-    ) {
-
+    if (senhaSalva.isEmpty()) {
         mostrarDialogo(
             Dialogo(
-                tipo =
-                    TipoDialogo.PROMPT,
-
-                titulo =
-                    "Criar senha",
-
-                mensagem =
-                    "Digite uma senha para proteger esta área.",
-
-                textoConfirmar =
-                    "Criar"
+                tipo = TipoDialogo.PROMPT,
+                titulo = "Criar senha",
+                mensagem = "Digite uma senha para proteger esta área.",
+                textoConfirmar = "Criar"
             )
         )
-
         return
     }
 
     mostrarDialogo(
         Dialogo(
-            tipo =
-                TipoDialogo.RECUPERACAO,
-
-            titulo =
-                "Recuperar senha",
-
-            mensagem =
-                "Como você gosta de ser chamada?",
-
-            textoConfirmar =
-                "OK"
+            tipo = TipoDialogo.RECUPERACAO,
+            titulo = "Recuperar senha",
+            mensagem = "Como você gosta de ser chamada?",
+            textoConfirmar = "OK"
         )
     )
 }
@@ -835,259 +767,103 @@ cripto: Cripto,
 private fun continuarPrompt(
     valor: String,
     titulo: String,
-    context: android.content.Context,
-cripto: Cripto,
+    context: Context,
+    cripto: Cripto,
     mostrarDialogo: (Dialogo) -> Unit,
     mostrarMensagem: (String) -> Unit
 ) {
+    val valorLimpo = valor.trim()
 
-    val valorLimpo =
-        valor.trim()
-
-    if (
-        titulo == "Criar senha"
-    ) {
-
-        if (
-            valorLimpo.isEmpty()
-        ) {
-
-            mostrarMensagem(
-                "Senha inválida"
-            )
-
+    if (titulo == "Criar senha") {
+        if (valorLimpo.isEmpty()) {
+            mostrarMensagem("Senha inválida")
             return
         }
 
-        cripto.salvar(
-            CHAVE_SENHA,
-            valorLimpo
-        )
+        cripto.salvar(CHAVE_SENHA, valorLimpo)
 
         mostrarDialogo(
             Dialogo(
-                tipo =
-                    TipoDialogo.PROMPT,
-
-                titulo =
-                    "Recuperação",
-
-                mensagem =
-                    "Como você gosta de ser chamada?",
-
-                textoConfirmar =
-                    "Salvar"
+                tipo = TipoDialogo.PROMPT,
+                titulo = "Recuperação",
+                mensagem = "Como você gosta de ser chamada?",
+                textoConfirmar = "Salvar"
             )
         )
-
         return
     }
 
-    val respostaSalva =
-        try {
-
-            cripto.carregar(
-                CHAVE_RECUPERACAO
-            )
-                ?.trim()
-                ?: ""
-
-        } catch (
-            e: Exception
-        ) {
-
-            ""
-        }
-
-    if (
-        titulo == "Recuperação" &&
-        respostaSalva.isEmpty()
-    ) {
-
-        if (
-            valorLimpo.isEmpty()
-        ) {
-
-            mostrarMensagem(
-                "Resposta inválida"
-            )
-
+    if (titulo == "Recuperação") {
+        if (valorLimpo.isEmpty()) {
+            mostrarMensagem("Resposta inválida")
             return
         }
 
-        cripto.salvar(
-            CHAVE_RECUPERACAO,
-            valorLimpo.lowercase()
-        )
-
-        mostrarMensagem(
-            "Senha criada"
-        )
-
+        cripto.salvar(CHAVE_RECUPERACAO, valorLimpo.lowercase())
+        mostrarMensagem("Senha criada")
         return
     }
 
-    if (
-        titulo == "Nova senha"
-    ) {
-
-        if (
-            valorLimpo.isEmpty()
-        ) {
-
-            mostrarMensagem(
-                "Senha inválida"
-            )
-
+    if (titulo == "Nova senha") {
+        if (valorLimpo.isEmpty()) {
+            mostrarMensagem("Senha inválida")
             return
         }
 
-        cripto.salvar(
-            CHAVE_SENHA,
-            valorLimpo
-        )
+        cripto.salvar(CHAVE_SENHA, valorLimpo)
 
         mostrarDialogo(
             Dialogo(
-                tipo =
-                    TipoDialogo.PROMPT,
-
-                titulo =
-                    "Nova recuperação",
-
-                mensagem =
-                    "Como você gosta de ser chamada?",
-
-                textoConfirmar =
-                    "Salvar"
+                tipo = TipoDialogo.PROMPT,
+                titulo = "Nova recuperação",
+                mensagem = "Como você gosta de ser chamada?",
+                textoConfirmar = "Salvar"
             )
         )
-
         return
     }
 
-    if (
-        respostaSalva.isNotEmpty() &&
-        valorLimpo.lowercase() ==
-        respostaSalva.lowercase()
-    ) {
-
-        mostrarDialogo(
-            Dialogo(
-                tipo =
-                    TipoDialogo.PROMPT,
-
-                titulo =
-                    "Nova senha",
-
-                mensagem =
-                    "Digite a nova senha.",
-
-                textoConfirmar =
-                    "Salvar"
-            )
-        )
-
-        return
-    }
-
-    if (
-        titulo == "Nova recuperação"
-    ) {
-
-        if (
-            valorLimpo.isEmpty()
-        ) {
-
-            mostrarMensagem(
-                "Resposta inválida"
-            )
-
+    if (titulo == "Nova recuperação") {
+        if (valorLimpo.isEmpty()) {
+            mostrarMensagem("Resposta inválida")
             return
         }
 
-        cripto.salvar(
-            CHAVE_RECUPERACAO,
-            valorLimpo.lowercase()
-        )
-
-        mostrarMensagem(
-            "Senha alterada"
-        )
-
-        return
+        cripto.salvar(CHAVE_RECUPERACAO, valorLimpo.lowercase())
+        mostrarMensagem("Senha alterada")
     }
-
-    mostrarMensagem(
-        "Resposta incorreta"
-    )
 }
 
 private fun continuarRecuperacao(
     valor: String,
-    context: android.content.Context,
-cripto: Cripto,
+    context: Context,
+    cripto: Cripto,
     mostrarDialogo: (Dialogo) -> Unit,
-    mostrarMensagem: (String) -> Unit
+    mostrarMensagem: (String) -> Unit,
+    ativarTelaPreta: () -> Unit
 ) {
+    val valorLimpo = valor.trim()
 
-    val valorLimpo =
-        valor.trim()
-
-    val respostaSalva =
-        try {
-
-            cripto.carregar(
-                CHAVE_RECUPERACAO
-            )
-                ?.trim()
-                ?: ""
-
-        } catch (
-            e: Exception
-        ) {
-
-            ""
-        }
+    val respostaSalva = try {
+        cripto.carregar(CHAVE_RECUPERACAO)?.trim() ?: ""
+    } catch (_: Exception) {
+        ""
+    }
 
     if (
         respostaSalva.isNotEmpty() &&
-        valorLimpo.lowercase() ==
-        respostaSalva.lowercase()
+        valorLimpo.equals(respostaSalva, ignoreCase = true)
     ) {
-
-        mostrarDialogo(
-            Dialogo(
-                tipo =
-                    TipoDialogo.PROMPT,
-
-                titulo =
-                    "Nova senha",
-
-                mensagem =
-                    "Digite a nova senha.",
-
-                textoConfirmar =
-                    "Salvar"
-            )
-        )
-
+        ativarTelaPreta()
         return
     }
 
     mostrarDialogo(
         Dialogo(
-            tipo =
-                TipoDialogo.ALERTA,
-
-            titulo =
-                "Resposta incorreta",
-
-            mensagem =
-                "A resposta de recuperação não corresponde à cadastrada.",
-
-            textoConfirmar =
-                "OK"
+            tipo = TipoDialogo.ALERTA,
+            titulo = "Resposta incorreta",
+            mensagem = "A resposta de recuperação não corresponde à cadastrada.",
+            textoConfirmar = "OK"
         )
     )
 }
@@ -1097,374 +873,196 @@ private fun autenticarParaRedefinir(
     mostrarDialogo: (Dialogo) -> Unit,
     mostrarMensagem: (String) -> Unit
 ) {
+    val executor = ContextCompat.getMainExecutor(activity)
 
-    val executor =
-        ContextCompat.getMainExecutor(
-            activity
-        )
+    val prompt = BiometricPrompt(
+        activity,
+        executor,
+        object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationSucceeded(
+                result: BiometricPrompt.AuthenticationResult
+            ) {
+                super.onAuthenticationSucceeded(result)
 
-    val prompt =
-        BiometricPrompt(
-            activity,
-            executor,
-            object :
-                BiometricPrompt.AuthenticationCallback() {
+                mostrarDialogo(
+                    Dialogo(
+                        tipo = TipoDialogo.CONFIRMACAO,
+                        titulo = "Redefinir senha",
+                        mensagem = "Deseja redefinir a senha e a pergunta de recuperação?",
+                        textoConfirmar = "Redefinir"
+                    )
+                )
+            }
 
-                override fun onAuthenticationSucceeded(
-                    result:
-                        BiometricPrompt.AuthenticationResult
+            override fun onAuthenticationError(
+                errorCode: Int,
+                errString: CharSequence
+            ) {
+                super.onAuthenticationError(errorCode, errString)
+
+                if (
+                    errorCode !=
+                    BiometricPrompt.ERROR_USER_CANCELED
                 ) {
-
-                    super.onAuthenticationSucceeded(
-                        result
-                    )
-
-                    mostrarDialogo(
-                        Dialogo(
-                            tipo =
-                                TipoDialogo.CONFIRMACAO,
-
-                            titulo =
-                                "Redefinir senha",
-
-                            mensagem =
-                                "Deseja redefinir a senha e a pergunta de recuperação?",
-
-                            textoConfirmar =
-                                "Redefinir"
-                        )
-                    )
-                }
-
-                override fun onAuthenticationError(
-                    errorCode: Int,
-                    errString: CharSequence
-                ) {
-
-                    super.onAuthenticationError(
-                        errorCode,
-                        errString
-                    )
-
-                    if (
-                        errorCode !=
-                        BiometricPrompt.ERROR_USER_CANCELED
-                    ) {
-
-                        mostrarMensagem(
-                            "Autenticação não concluída"
-                        )
-                    }
-                }
-
-                override fun onAuthenticationFailed() {
-
-                    super.onAuthenticationFailed()
-
-                    mostrarMensagem(
-                        "Autenticação não concluída"
-                    )
+                    mostrarMensagem("Autenticação não concluída")
                 }
             }
-        )
 
-    val promptInfo =
-        BiometricPrompt.PromptInfo.Builder()
-            .setTitle(
-                "Confirmar identidade"
-            )
-            .setSubtitle(
-                "Use o bloqueio de tela do dispositivo"
-            )
-            .setDescription(
-                "Confirme sua identidade para redefinir a senha."
-            )
-            .setAllowedAuthenticators(
-                BiometricManager.Authenticators.DEVICE_CREDENTIAL
-            )
-            .build()
-
-    prompt.authenticate(
-        promptInfo
+            override fun onAuthenticationFailed() {
+                super.onAuthenticationFailed()
+                mostrarMensagem("Autenticação não concluída")
+            }
+        }
     )
+
+    val promptInfo = BiometricPrompt.PromptInfo.Builder()
+        .setTitle("Confirmar identidade")
+        .setSubtitle("Use o bloqueio de tela do dispositivo")
+        .setDescription(
+            "Confirme sua identidade para redefinir a senha."
+        )
+        .setAllowedAuthenticators(
+            BiometricManager.Authenticators.DEVICE_CREDENTIAL
+        )
+        .build()
+
+    prompt.authenticate(promptInfo)
 }
 
 private fun continuarConfirmacao(
-    context: android.content.Context,
-cripto: Cripto,
+    context: Context,
+    cripto: Cripto,
     mostrarDialogo: (Dialogo) -> Unit
 ) {
-
-    cripto.salvar(
-        CHAVE_SENHA,
-        ""
-    )
-
-    cripto.salvar(
-        CHAVE_RECUPERACAO,
-        ""
-    )
+    cripto.salvar(CHAVE_SENHA, "")
+    cripto.salvar(CHAVE_RECUPERACAO, "")
 
     mostrarDialogo(
         Dialogo(
-            tipo =
-                TipoDialogo.PROMPT,
-
-            titulo =
-                "Nova senha",
-
-            mensagem =
-                "Digite a nova senha.",
-
-            textoConfirmar =
-                "Salvar"
+            tipo = TipoDialogo.PROMPT,
+            titulo = "Nova senha",
+            mensagem = "Digite a nova senha.",
+            textoConfirmar = "Salvar"
         )
     )
 }
 
-private fun avaliarExpressao(
-    expressao: String
-): Double {
-
-    val tokens =
-        mutableListOf<String>()
-
+private fun avaliarExpressao(expressao: String): Double {
+    val tokens = mutableListOf<String>()
     var numero = ""
 
-    for (
-        caractere in expressao
-    ) {
-
-        if (
-            caractere.isDigit() ||
-            caractere == '.'
-        ) {
-
+    for (caractere in expressao) {
+        if (caractere.isDigit() || caractere == '.') {
             numero += caractere
-
         } else {
-
-            if (
-                numero.isNotEmpty()
-            ) {
-
-                tokens.add(
-                    numero
-                )
-
+            if (numero.isNotEmpty()) {
+                tokens.add(numero)
                 numero = ""
             }
-
-            tokens.add(
-                caractere.toString()
-            )
+            tokens.add(caractere.toString())
         }
     }
 
-    if (
-        numero.isNotEmpty()
-    ) {
-
-        tokens.add(
-            numero
-        )
+    if (numero.isNotEmpty()) {
+        tokens.add(numero)
     }
 
-    val valores =
-        mutableListOf<Double>()
+    val valores = mutableListOf<Double>()
+    val operadores = mutableListOf<Char>()
 
-    val operadores =
-        mutableListOf<Char>()
-
-    fun prioridade(
-        operador: Char
-    ): Int {
-
-        return when (
-            operador
-        ) {
-
-            '+',
-            '-' ->
-                1
-
-            '*',
-            '/' ->
-                2
-
-            else ->
-                0
+    fun prioridade(operador: Char): Int {
+        return when (operador) {
+            '+', '-' -> 1
+            '*', '/' -> 2
+            else -> 0
         }
     }
 
     fun aplicar() {
-
-        if (
-            valores.size < 2 ||
-            operadores.isEmpty()
-        ) {
-
+        if (valores.size < 2 || operadores.isEmpty()) {
             throw IllegalArgumentException()
         }
 
-        val b =
-            valores.removeAt(
-                valores.lastIndex
-            )
-
-        val a =
-            valores.removeAt(
-                valores.lastIndex
-            )
-
-        val op =
-            operadores.removeAt(
-                operadores.lastIndex
-            )
+        val b = valores.removeAt(valores.lastIndex)
+        val a = valores.removeAt(valores.lastIndex)
+        val op = operadores.removeAt(operadores.lastIndex)
 
         valores.add(
-
             when (op) {
-
-                '+' ->
-                    a + b
-
-                '-' ->
-                    a - b
-
-                '*' ->
-                    a * b
-
+                '+' -> a + b
+                '-' -> a - b
+                '*' -> a * b
                 '/' -> {
-
-                    if (
-                        b == 0.0
-                    ) {
-
+                    if (b == 0.0) {
                         throw ArithmeticException()
                     }
-
                     a / b
                 }
-
-                else ->
-                    throw IllegalArgumentException()
+                else -> throw IllegalArgumentException()
             }
         )
     }
 
-    for (
-        token in tokens
-    ) {
-
+    for (token in tokens) {
         when {
-
-            token.toDoubleOrNull()
-                != null -> {
-
-                valores.add(
-                    token.toDouble()
-                )
+            token.toDoubleOrNull() != null -> {
+                valores.add(token.toDouble())
             }
 
             token == "(" -> {
-
-                operadores.add(
-                    '('
-                )
+                operadores.add('(')
             }
 
             token == ")" -> {
-
                 while (
                     operadores.isNotEmpty() &&
                     operadores.last() != '('
                 ) {
-
                     aplicar()
                 }
 
-                if (
-                    operadores.isEmpty()
-                ) {
-
+                if (operadores.isEmpty()) {
                     throw IllegalArgumentException()
                 }
 
-                operadores.removeAt(
-                    operadores.lastIndex
-                )
+                operadores.removeAt(operadores.lastIndex)
             }
 
             token.length == 1 &&
-            token[0] in
-            charArrayOf(
-                '+',
-                '-',
-                '*',
-                '/'
-            ) -> {
-
-                val op =
-                    token[0]
+                token[0] in charArrayOf('+', '-', '*', '/') -> {
+                val op = token[0]
 
                 while (
                     operadores.isNotEmpty() &&
                     operadores.last() != '(' &&
-                    prioridade(
-                        operadores.last()
-                    ) >= prioridade(op)
+                    prioridade(operadores.last()) >= prioridade(op)
                 ) {
-
                     aplicar()
                 }
 
-                operadores.add(
-                    op
-                )
+                operadores.add(op)
             }
 
-            else -> {
-
-                throw IllegalArgumentException()
-            }
+            else -> throw IllegalArgumentException()
         }
     }
 
-    while (
-        operadores.isNotEmpty()
-    ) {
-
-        if (
-            operadores.last() == '('
-        ) {
-
+    while (operadores.isNotEmpty()) {
+        if (operadores.last() == '(') {
             throw IllegalArgumentException()
         }
-
         aplicar()
     }
 
-    if (
-        valores.size != 1
-    ) {
-
+    if (valores.size != 1) {
         throw IllegalArgumentException()
     }
 
     return valores[0]
 }
 
-private fun formatarNumero(
-    numero: Double
-): String {
-
-    if (
-        !numero.isFinite()
-    ) {
-
-        return "Erro"
-    }
+private fun formatarNumero(numero: Double): String {
+    if (!numero.isFinite()) return "Erro"
 
     return numero
         .toBigDecimal()

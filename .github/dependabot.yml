@@ -1,4 +1,5 @@
-name: 🧪Verificar atualizações do🧪 Gradle
+
+name: Verificar atualizações do Gradle
 
 on:
   workflow_dispatch:
@@ -8,7 +9,7 @@ permissions:
 
 jobs:
   verificar:
-    name: 🤖Dependabot Maintenance🤖
+    name: Verificar dependências
     runs-on: ubuntu-24.04
 
     steps:
@@ -27,40 +28,3 @@ jobs:
           set -euo pipefail
           chmod +x gradlew
           ./gradlew dependencyUpdates
-
-  verificar-versoes-yaml:
-    name: Verificar versões das Actions e do Ubuntu
-    runs-on: ubuntu-24.04
-
-    steps:
-      - name: Baixar repositório
-        uses: actions/checkout@v6
-
-      - name: Verificar versões nos workflows
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-
-          echo "Verificando versões das Actions e dos runners Ubuntu..."
-
-          find .github/workflows -type f \( -name '*.yml' -o -name '*.yaml' \) \
-            -print0 |
-          while IFS= read -r -d '' file; do
-            echo "::group::$file"
-
-            grep -nE 'uses:|runs-on:' "$file" || true
-
-            echo "::endgroup::"
-          done
-
-      - name: Verificar atualizações do Dependabot
-        run: |
-          set -euo pipefail
-
-          if [[ ! -f .github/dependabot.yml ]]; then
-            echo "::error::Arquivo .github/dependabot.yml não encontrado."
-            exit 1
-          fi
-
-          cat .github/dependabot.yml

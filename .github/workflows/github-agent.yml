@@ -18,7 +18,7 @@ on:
       workflow:
         description: Arquivo do workflow em .github/workflows
         required: false
-        default: verificar-gradle.yml
+        default: dependabot.yml
         type: string
 
       branch:

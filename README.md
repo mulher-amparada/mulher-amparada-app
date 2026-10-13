@@ -201,7 +201,7 @@ Resultado final:
 
 O workflow automatiza tarefas de compilação, análise, documentação, publicação e manutenção do projeto. Ao final, o Mulher-Amparada-Bot grava os artifacts na branch "main", conforme as dependências e condições definidas no workflow.
 
-e também temos um agente que roda o dependabot e o automations.yml (o de automações do mulher amparada) todo dia as 6h pm!
+e também temos um agente que roda o automations.yml (o de automações do mulher amparada) todo dia as 6h pm!
 
 ```
 

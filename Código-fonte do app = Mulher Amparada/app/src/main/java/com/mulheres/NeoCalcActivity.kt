@@ -1,5 +1,9 @@
 package com.mulheres
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.foundation.layout.systemBars
 import androidx.core.view.WindowCompat
 import androidx.compose.foundation.layout.WindowInsets
@@ -173,7 +177,8 @@ private fun NeoCalcScreen() {
     val cripto = remember { Cripto(context) }
     val escuro = isSystemInDarkTheme()
     val cores = remember(escuro) { obterCoresNeoCalc(escuro) }
-
+var telaPreta by remember { mutableStateOf(false) }
+var confirmacaoLonga by remember { mutableStateOf(false) }
     var expr by remember { mutableStateOf("") }
     var mensagemTemporaria by remember { mutableStateOf<String?>(null) }
     var dialogo by remember { mutableStateOf<Dialogo?>(null) }
@@ -287,15 +292,12 @@ private fun NeoCalcScreen() {
         }
 
         if (expr.trim().isNotEmpty() && expr.trim() == senha) {
-            try {
-                context.startActivity(
-                    Intent(context, HubActivity::class.java)
-                )
-            } catch (e: Exception) {
-                mensagemTemporaria = "Acesso"
-            }
-            return
-        }
+    expr = ""
+    mensagemTemporaria = null
+    telaPreta = true
+    confirmacaoLonga = false
+    return
+}
 
         if (expr.trim().isEmpty()) return
 
@@ -313,6 +315,48 @@ private fun NeoCalcScreen() {
         mensagemTemporaria = "Erro"
         expr = ""
     }
+
+if (telaPreta) {
+    var pressionando by remember { mutableStateOf(false) }
+    var tempoPressionado by remember { mutableLongStateOf(0L) }
+
+    LaunchedEffect(pressionando) {
+        if (pressionando) {
+            delay(5000)
+
+            if (pressionando) {
+                telaPreta = false
+                confirmacaoLonga = true
+
+                context.startActivity(
+                    Intent(context, HubActivity::class.java)
+                )
+            }
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onPress = {
+                        pressionando = true
+                        tempoPressionado = System.currentTimeMillis()
+
+                        val soltou = tryAwaitRelease()
+
+                        if (soltou) {
+                            pressionando = false
+                        }
+                    }
+                )
+            }
+    )
+
+    return
+}
 
     androidx.compose.runtime.CompositionLocalProvider(
         LocalOverscrollFactory provides null

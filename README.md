@@ -15,7 +15,7 @@ E vale lembrar que antes todas as páginas eram html com webview, agora não sã
 
 e pra ser sincero, comecei esse projeto no dia 13/05/2026 e terminei no dia 12/10/2026!
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 5429**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 5381**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
@@ -375,7 +375,7 @@ e tambem, reforcando que no canto superior direito tem um icone de calculadora q
 
 > no disfarce de calculadora, caso a usuaria esqueça tudo, existe um popup que usa o BiometricPrompt que poderá resetar tanto a senha tanto a pergunta de recuperação (e ele usa APENAS o device credencial!), porém, quando utiliza o BiometricPrompt e é validado, ele pergunta a pergunta de recuperação e a senha!
 
-> e depois da senha, toda a tela fica preta, ao pressionar por 5 segundos, ele vai pra HubActivity!
+> e depois da senha, toda a tela fica preta, ao clicar 5 vezes, ele vai pra HubActivity!, e pra recuperar a senha, ele faz todo o processo de recuperação, e ai fica repetindo a senha e a pergunta de recuperação, para a usuária errar sem medo, e se clicar fora do popup ele salva tudo, e ao apenas digitar a senha pelos botoes, a tela toda fica preta e se clicar por 5 vezes ele vai pra HubActivity!
 
 ### Versão do app:
 

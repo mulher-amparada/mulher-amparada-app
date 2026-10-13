@@ -2,29 +2,30 @@
 
 - **Arquivo de origem:** `.github/workflows/automations.yml`
 - **Arquivo gerado:** `.github/workflows/workflow.md`
-- **Jobs identificados:** 16
-- **Etapas identificadas:** 76
+- **Jobs identificados:** 17
+- **Etapas identificadas:** 77
 
 ## Tabela completa de jobs e etapas
 
 | ID do job | Nome | Runner | Dependências | Etapas |
 |---|---|---|---|---|
-| `build` | 📦Compilar APK Kotlin | ubuntu-24.04 | Nenhuma | 1. Baixar código (`actions/checkout@v6`); 2. Verificar projeto — executa comandos; 3. Configurar Java 17 (`actions/setup-java@v6`); 4. Verificar Android SDK 37 — executa comandos; 5. Dar permissão ao Gradle — executa comandos; 6. Compilar APK — executa comandos; 7. Localizar APK — executa comandos; 8. Assinar APK — executa comandos; 9. Preparar APK da Release — executa comandos; 10. APK-Kotlin-Assinado (`actions/upload-artifact@v6`); 11. Calcular tamanho real do APK — executa comandos; 12. Calcular SHA-256 — executa comandos; 13. Atualizar APK no main — executa comandos; 14. Verificar Release — executa comandos; 15. Excluir APK antigo da Release — executa comandos; 16. Enviar APK para a Release — executa comandos; 17. Atualizar SHA-256 da Release — executa comandos; 18. Atualizar link, tamanho e SHA-256 no download.html — executa comandos; 19. Enviar download.html atualizado para o main — executa comandos; 20. Mostrar resumo — executa comandos |
-| `linguagens` | 💬Analisar linguagens e atualizar estilos | ubuntu-24.04 | `build`, `publicar-divulgacao` | 1. Baixar repositório completo (`actions/checkout@v6`); 2. Instalar cloc — executa comandos; 3. Analisar arquivos e linguagens — executa comandos; 4. Gerar cores e atualizar os dois temas — executa comandos; 5. Validar relatórios, CSS e pacote — executa comandos; 6. relatorio-linguagens (`actions/upload-artifact@v6`) |
-| `bot` | 🎲Análise de dados em Julia | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Julia (`julia-actions/setup-julia@v3`); 3. Instalar dependências Julia — executa comandos; 4. Executar análise de dados em Julia — executa comandos; 5. Validar e preparar resultados — executa comandos; 6. resultados-ligue180 (`actions/upload-artifact@v6`) |
-| `build-site` | 🌐Montar site | ubuntu-24.04 | `build` | 1. Checkout (`actions/checkout@v6`); 2. Setup Pages (`actions/configure-pages@v6`); 3. Build with Jekyll (`actions/jekyll-build-pages@v1`); 4. Upload Pages artifact (`actions/upload-pages-artifact@v5`) |
+| `build` | 📦Compilar APK Kotlin | ubuntu-24.04 | Nenhuma | 1. Baixar código (`actions/checkout@v7`); 2. Verificar projeto — executa comandos; 3. Configurar Java 17 (`actions/setup-java@v6`); 4. Verificar Android SDK 37 — executa comandos; 5. Dar permissão ao Gradle — executa comandos; 6. Compilar APK — executa comandos; 7. Localizar APK — executa comandos; 8. Assinar APK — executa comandos; 9. Preparar APK da Release — executa comandos; 10. APK-Kotlin-Assinado (`actions/upload-artifact@v7`); 11. Calcular tamanho real do APK — executa comandos; 12. Calcular SHA-256 — executa comandos; 13. Atualizar APK no main — executa comandos; 14. Verificar Release — executa comandos; 15. Excluir APK antigo da Release — executa comandos; 16. Enviar APK para a Release — executa comandos; 17. Atualizar SHA-256 da Release — executa comandos; 18. Atualizar link, tamanho e SHA-256 no download.html — executa comandos; 19. Enviar download.html atualizado para o main — executa comandos; 20. Mostrar resumo — executa comandos |
+| `dependabot-merge` | 🤖 Merge das PRs do Dependabot | ubuntu-latest | Nenhuma | 1. 🔀 Fazer merge das PRs — executa comandos |
+| `linguagens` | 💬Analisar linguagens e atualizar estilos | ubuntu-24.04 | `build`, `publicar-divulgacao` | 1. Baixar repositório completo (`actions/checkout@v7`); 2. Instalar cloc — executa comandos; 3. Analisar arquivos e linguagens — executa comandos; 4. Gerar cores e atualizar os dois temas — executa comandos; 5. Validar relatórios, CSS e pacote — executa comandos; 6. relatorio-linguagens (`actions/upload-artifact@v7`) |
+| `bot` | 🎲Análise de dados em Julia | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v7`); 2. Instalar Julia (`julia-actions/setup-julia@v3`); 3. Instalar dependências Julia — executa comandos; 4. Executar análise de dados em Julia — executa comandos; 5. Validar e preparar resultados — executa comandos; 6. resultados-ligue180 (`actions/upload-artifact@v7`) |
+| `build-site` | 🌐Montar site | ubuntu-24.04 | `build` | 1. Checkout (`actions/checkout@v7`); 2. Setup Pages (`actions/configure-pages@v6`); 3. Build with Jekyll (`actions/jekyll-build-pages@v1`); 4. Upload Pages artifact (`actions/upload-pages-artifact@v5`) |
 | `deploy` | 🌐Publicar site | ubuntu-24.04 | `build-site` | 1. Deploy to GitHub Pages (`actions/deploy-pages@v5`) |
-| `atualizar-commits` | 🎲Atualizar contagem de commits | ubuntu-24.04 | `deploy` | 1. Baixar todo o histórico (`actions/checkout@v6`); 2. Atualizar total de commits — executa comandos; 3. arquivo-readme (`actions/upload-artifact@v6`); 4. Publicar README na main — executa comandos |
-| `sincronizar-devto` | 📄Sincronizar README com DEV.to | ubuntu-24.04 | `atualizar-commits` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. Atualizar artigo no DEV.to — executa comandos |
-| `sitemap` | 🎲Gerar Sitemap | ubuntu-24.04 | `deploy` | 1. Checkout (`actions/checkout@v6`); 2. Gerar Sitemap (`cicirello/generate-sitemap@v1`); 3. arquivo-sitemap (`actions/upload-artifact@v6`) |
+| `atualizar-commits` | 🎲Atualizar contagem de commits | ubuntu-24.04 | `deploy` | 1. Baixar todo o histórico (`actions/checkout@v7`); 2. Atualizar total de commits — executa comandos; 3. arquivo-readme (`actions/upload-artifact@v7`); 4. Publicar README na main — executa comandos |
+| `sincronizar-devto` | 📄Sincronizar README com DEV.to | ubuntu-24.04 | `atualizar-commits` | 1. Baixar código atualizado (`actions/checkout@v7`); 2. Atualizar artigo no DEV.to — executa comandos |
+| `sitemap` | 🎲Gerar Sitemap | ubuntu-24.04 | `deploy` | 1. Checkout (`actions/checkout@v7`); 2. Gerar Sitemap (`cicirello/generate-sitemap@v1`); 3. arquivo-sitemap (`actions/upload-artifact@v7`) |
 | `indexnow` | 🔍IndexNow | ubuntu-24.04 | `deploy`, `bot`, `linguagens`, `publicar-divulgacao`, `atualizar-commits` | 1. Enviar Sitemap ao IndexNow (`bojieyang/indexnow-action@v3`) |
 | `lighthouse` | 🔍Lighthouse | ubuntu-24.04 | `deploy` | 1. Lighthouse (`treosh/lighthouse-ci-action@v12`) |
-| `publicar-divulgacao` | 🎲Publicar Kit de Divulgação | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Configurar Node.js (`actions/setup-node@v6`); 3. Criar pacote de divulgação — executa comandos; 4. Kit de Divulgação (`softprops/action-gh-release@v3`) |
-| `observatorio` | 🎲Observatório | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório completo (`actions/checkout@v6`); 2. Instalar dependências do Observatório — executa comandos; 3. Compilar observatório — executa comandos; 4. Executar observatório — executa comandos; 5. Verificar todos os mapas gerados — executa comandos; 6. observatorio (`actions/upload-artifact@v6`) |
-| `atualizar-footer` | 📄Atualizar Footer com README | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Python (`actions/setup-python@v6`); 3. Instalar dependência Python — executa comandos; 4. Atualizar footer com README — executa comandos; 5. arquivo-footer (`actions/upload-artifact@v6`) |
-| `atualizar-relatorio-commits` | 📄Atualizar relatório de commits | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Ruby (`ruby/setup-ruby@v1`); 3. Gerar relatório de commits — executa comandos; 4. arquivos-relatorio-commits (`actions/upload-artifact@v6`) |
-| `pesquisar-projeto` | 🎲Documentar workflow YAML | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar PHP — executa comandos; 3. Gerar documentação do workflow — executa comandos; 4. arquivos-pesquisas (`actions/upload-artifact@v6`) |
-| `salvar-na-main` | 💾Salvar artifacts na main pelo Mulher Amparada Bot | ubuntu-24.04 | `build`, `linguagens`, `bot`, `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`, `observatorio` | 1. Baixar código-fonte da main (`actions/checkout@v6`); 2. Baixar todos os artifacts desta execução (`actions/download-artifact@v8`); 3. Consultar workflow atual — executa comandos; 4. Compilar o publicador C++ — executa comandos; 5. Publicar na main pelo GitHub App — executa comandos |
+| `publicar-divulgacao` | 🎲Publicar Kit de Divulgação | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v7`); 2. Configurar Node.js (`actions/setup-node@v7`); 3. Criar pacote de divulgação — executa comandos; 4. Kit de Divulgação (`softprops/action-gh-release@v3`) |
+| `observatorio` | 🎲Observatório | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório completo (`actions/checkout@v7`); 2. Instalar dependências do Observatório — executa comandos; 3. Compilar observatório — executa comandos; 4. Executar observatório — executa comandos; 5. Verificar todos os mapas gerados — executa comandos; 6. observatorio (`actions/upload-artifact@v7`) |
+| `atualizar-footer` | 📄Atualizar Footer com README | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v7`); 2. Instalar Python (`actions/setup-python@v7`); 3. Instalar dependência Python — executa comandos; 4. Atualizar footer com README — executa comandos; 5. arquivo-footer (`actions/upload-artifact@v7`) |
+| `atualizar-relatorio-commits` | 📄Atualizar relatório de commits | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v7`); 2. Instalar Ruby (`ruby/setup-ruby@v1`); 3. Gerar relatório de commits — executa comandos; 4. arquivos-relatorio-commits (`actions/upload-artifact@v7`) |
+| `pesquisar-projeto` | 🎲Documentar workflow YAML | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v7`); 2. Instalar PHP — executa comandos; 3. Gerar documentação do workflow — executa comandos; 4. arquivos-pesquisas (`actions/upload-artifact@v7`) |
+| `salvar-na-main` | 💾Salvar artifacts na main pelo Mulher Amparada Bot | ubuntu-24.04 | `build`, `linguagens`, `bot`, `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`, `observatorio` | 1. Baixar código-fonte da main (`actions/checkout@v7`); 2. Baixar todos os artifacts desta execução (`actions/download-artifact@v8`); 3. Consultar workflow atual — executa comandos; 4. Compilar o publicador C++ — executa comandos; 5. Publicar na main pelo GitHub App — executa comandos |
 
 ## Grafo completo de dependências
 
@@ -33,6 +34,7 @@ As setas representam as dependências declaradas em `needs` no YAML original.
 ```mermaid
 flowchart TD
     job_build["📦Compilar APK Kotlin"]
+    job_dependabot_merge["🤖 Merge das PRs do Dependabot"]
     job_linguagens["💬Analisar linguagens e atualizar estilos"]
     job_bot["🎲Análise de dados em Julia"]
     job_build_site["🌐Montar site"]
@@ -85,7 +87,7 @@ flowchart TD
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
-| 1 | Baixar código | `actions/checkout@v6` | — |
+| 1 | Baixar código | `actions/checkout@v7` | — |
 | 2 | Verificar projeto | — | \| |
 | 3 | Configurar Java 17 | `actions/setup-java@v6` | — |
 | 4 | Verificar Android SDK 37 | — | \| |
@@ -94,7 +96,7 @@ flowchart TD
 | 7 | Localizar APK | — | \| |
 | 8 | Assinar APK | — | \| |
 | 9 | Preparar APK da Release | — | \| |
-| 10 | APK-Kotlin-Assinado | `actions/upload-artifact@v6` | — |
+| 10 | APK-Kotlin-Assinado | `actions/upload-artifact@v7` | — |
 | 11 | Calcular tamanho real do APK | — | \| |
 | 12 | Calcular SHA-256 | — | \| |
 | 13 | Atualizar APK no main | — | \| |
@@ -106,6 +108,16 @@ flowchart TD
 | 19 | Enviar download.html atualizado para o main | — | \| |
 | 20 | Mostrar resumo | — | \| |
 
+### 🤖 Merge das PRs do Dependabot
+
+- **ID:** `dependabot-merge`
+- **Runner:** `ubuntu-latest`
+- **Dependências:** Nenhuma
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| 1 | 🔀 Fazer merge das PRs | — | \| |
+
 ### 💬Analisar linguagens e atualizar estilos
 
 - **ID:** `linguagens`
@@ -114,12 +126,12 @@ flowchart TD
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
-| 1 | Baixar repositório completo | `actions/checkout@v6` | — |
+| 1 | Baixar repositório completo | `actions/checkout@v7` | — |
 | 2 | Instalar cloc | — | \| |
 | 3 | Analisar arquivos e linguagens | — | \| |
 | 4 | Gerar cores e atualizar os dois temas | — | \| |
 | 5 | Validar relatórios, CSS e pacote | — | \| |
-| 6 | relatorio-linguagens | `actions/upload-artifact@v6` | — |
+| 6 | relatorio-linguagens | `actions/upload-artifact@v7` | — |
 
 ### 🎲Análise de dados em Julia
 
@@ -129,12 +141,12 @@ flowchart TD
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
-| 1 | Baixar repositório | `actions/checkout@v6` | — |
+| 1 | Baixar repositório | `actions/checkout@v7` | — |
 | 2 | Instalar Julia | `julia-actions/setup-julia@v3` | — |
 | 3 | Instalar dependências Julia | — | \| |
 | 4 | Executar análise de dados em Julia | — | \| |
 | 5 | Validar e preparar resultados | — | \| |
-| 6 | resultados-ligue180 | `actions/upload-artifact@v6` | — |
+| 6 | resultados-ligue180 | `actions/upload-artifact@v7` | — |
 
 ### 🌐Montar site
 
@@ -144,7 +156,7 @@ flowchart TD
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
-| 1 | Checkout | `actions/checkout@v6` | — |
+| 1 | Checkout | `actions/checkout@v7` | — |
 | 2 | Setup Pages | `actions/configure-pages@v6` | — |
 | 3 | Build with Jekyll | `actions/jekyll-build-pages@v1` | — |
 | 4 | Upload Pages artifact | `actions/upload-pages-artifact@v5` | — |
@@ -167,9 +179,9 @@ flowchart TD
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
-| 1 | Baixar todo o histórico | `actions/checkout@v6` | — |
+| 1 | Baixar todo o histórico | `actions/checkout@v7` | — |
 | 2 | Atualizar total de commits | — | \| |
-| 3 | arquivo-readme | `actions/upload-artifact@v6` | — |
+| 3 | arquivo-readme | `actions/upload-artifact@v7` | — |
 | 4 | Publicar README na main | — | \| |
 
 ### 📄Sincronizar README com DEV.to
@@ -180,7 +192,7 @@ flowchart TD
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
-| 1 | Baixar código atualizado | `actions/checkout@v6` | — |
+| 1 | Baixar código atualizado | `actions/checkout@v7` | — |
 | 2 | Atualizar artigo no DEV.to | — | \| |
 
 ### 🎲Gerar Sitemap
@@ -191,9 +203,9 @@ flowchart TD
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
-| 1 | Checkout | `actions/checkout@v6` | — |
+| 1 | Checkout | `actions/checkout@v7` | — |
 | 2 | Gerar Sitemap | `cicirello/generate-sitemap@v1` | — |
-| 3 | arquivo-sitemap | `actions/upload-artifact@v6` | — |
+| 3 | arquivo-sitemap | `actions/upload-artifact@v7` | — |
 
 ### 🔍IndexNow
 
@@ -223,8 +235,8 @@ flowchart TD
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
-| 1 | Baixar repositório | `actions/checkout@v6` | — |
-| 2 | Configurar Node.js | `actions/setup-node@v6` | — |
+| 1 | Baixar repositório | `actions/checkout@v7` | — |
+| 2 | Configurar Node.js | `actions/setup-node@v7` | — |
 | 3 | Criar pacote de divulgação | — | npm pack |
 | 4 | Kit de Divulgação | `softprops/action-gh-release@v3` | — |
 
@@ -236,12 +248,12 @@ flowchart TD
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
-| 1 | Baixar repositório completo | `actions/checkout@v6` | — |
+| 1 | Baixar repositório completo | `actions/checkout@v7` | — |
 | 2 | Instalar dependências do Observatório | — | \| |
 | 3 | Compilar observatório | — | \| |
 | 4 | Executar observatório | — | \| |
 | 5 | Verificar todos os mapas gerados | — | \| |
-| 6 | observatorio | `actions/upload-artifact@v6` | — |
+| 6 | observatorio | `actions/upload-artifact@v7` | — |
 
 ### 📄Atualizar Footer com README
 
@@ -251,11 +263,11 @@ flowchart TD
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
-| 1 | Baixar repositório | `actions/checkout@v6` | — |
-| 2 | Instalar Python | `actions/setup-python@v6` | — |
+| 1 | Baixar repositório | `actions/checkout@v7` | — |
+| 2 | Instalar Python | `actions/setup-python@v7` | — |
 | 3 | Instalar dependência Python | — | pip install Markdown |
 | 4 | Atualizar footer com README | — | python3 scripts/atualizar_footer.py |
-| 5 | arquivo-footer | `actions/upload-artifact@v6` | — |
+| 5 | arquivo-footer | `actions/upload-artifact@v7` | — |
 
 ### 📄Atualizar relatório de commits
 
@@ -265,10 +277,10 @@ flowchart TD
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
-| 1 | Baixar repositório | `actions/checkout@v6` | — |
+| 1 | Baixar repositório | `actions/checkout@v7` | — |
 | 2 | Instalar Ruby | `ruby/setup-ruby@v1` | — |
 | 3 | Gerar relatório de commits | — | ruby scripts/commits.rb |
-| 4 | arquivos-relatorio-commits | `actions/upload-artifact@v6` | — |
+| 4 | arquivos-relatorio-commits | `actions/upload-artifact@v7` | — |
 
 ### 🎲Documentar workflow YAML
 
@@ -278,10 +290,10 @@ flowchart TD
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
-| 1 | Baixar repositório | `actions/checkout@v6` | — |
+| 1 | Baixar repositório | `actions/checkout@v7` | — |
 | 2 | Instalar PHP | — | \| |
 | 3 | Gerar documentação do workflow | — | \| |
-| 4 | arquivos-pesquisas | `actions/upload-artifact@v6` | — |
+| 4 | arquivos-pesquisas | `actions/upload-artifact@v7` | — |
 
 ### 💾Salvar artifacts na main pelo Mulher Amparada Bot
 
@@ -291,7 +303,7 @@ flowchart TD
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
-| 1 | Baixar código-fonte da main | `actions/checkout@v6` | — |
+| 1 | Baixar código-fonte da main | `actions/checkout@v7` | — |
 | 2 | Baixar todos os artifacts desta execução | `actions/download-artifact@v8` | — |
 | 3 | Consultar workflow atual | — | \| |
 | 4 | Compilar o publicador C++ | — | \| |
@@ -347,7 +359,7 @@ jobs:
       # =========================================================
 
       - name: Baixar código
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
 
@@ -592,7 +604,7 @@ jobs:
       # =========================================================
 
       - name: Enviar APK como artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: APK-Kotlin-Assinado
           path: "${{ github.workspace }}/${{ env.RELEASE_APK_NAME }}"
@@ -1003,6 +1015,38 @@ jobs:
           echo '```' \
             >> "$GITHUB_STEP_SUMMARY"
 
+# =========================================================
+      # DEPENDABOT
+      # =========================================================
+
+  dependabot-merge:
+    name: 🤖 Merge das PRs do Dependabot
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: 🔀 Fazer merge das PRs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh pr list \
+            --repo "$GH_REPO" \
+            --author "app/dependabot" \
+            --state open \
+            --json number \
+            --jq '.[].number' |
+          while read -r pr; do
+            [ -z "$pr" ] && continue
+
+            gh pr merge "$pr" \
+              --repo "$GH_REPO" \
+              --auto \
+              --squash || true
+          done
 
   # =========================================================
   # ANALISAR LINGUAGENS E ATUALIZAR CORES AUTOMATICAMENTE
@@ -1018,7 +1062,7 @@ jobs:
 
     steps:
       - name: Baixar repositório completo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -1329,7 +1373,7 @@ jobs:
       # =======================================================
 
       - name: Enviar relatórios, CSS e HTML como artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: relatorio-linguagens
           path: pacote-linguagens/
@@ -1350,7 +1394,7 @@ jobs:
 
     steps:
       - name: Baixar repositório
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
 
@@ -1401,7 +1445,7 @@ jobs:
             pacote-resultados/relatorios/graficos/
 
       - name: Enviar resultados como artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: resultados-ligue180
           path: pacote-resultados/
@@ -1423,7 +1467,7 @@ jobs:
     steps:
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
@@ -1476,7 +1520,7 @@ jobs:
       
     steps:
       - name: Baixar todo o histórico
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -1504,7 +1548,7 @@ jobs:
           PY
 
       - name: Enviar README atualizado
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: arquivo-readme
           path: README.md
@@ -1546,7 +1590,7 @@ jobs:
 
     steps:
       - name: Baixar código atualizado
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
           ref: main
@@ -1604,7 +1648,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
           ref: main
@@ -1615,7 +1659,7 @@ jobs:
           base-url-path: https://mulher-amparada.github.io/mulher-amparada-app/
 
       - name: Enviar Sitemap gerado
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: arquivo-sitemap
           path: sitemap.xml
@@ -1676,13 +1720,13 @@ jobs:
 
     steps:
       - name: Baixar repositório
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
           ref: main
 
       - name: Configurar Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 24
 
@@ -1711,7 +1755,7 @@ jobs:
 
     steps:
       - name: Baixar repositório completo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -1785,7 +1829,7 @@ jobs:
           echo "Todos os PNGs sequenciais foram verificados."
 
       - name: Disponibilizar todos os mapas
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: observatorio
           path: docs/observatorio/observatorio-*.png
@@ -1803,13 +1847,13 @@ jobs:
 
     steps:
       - name: Baixar repositório
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
           ref: main
 
       - name: Instalar Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.x"
 
@@ -1820,7 +1864,7 @@ jobs:
         run: python3 scripts/atualizar_footer.py
 
       - name: Enviar footer gerado
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: arquivo-footer
           path: index.html
@@ -1838,7 +1882,7 @@ jobs:
 
     steps:
       - name: Baixar repositório
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           ref: main
@@ -1852,7 +1896,7 @@ jobs:
         run: ruby scripts/commits.rb
 
       - name: Enviar relatório gerado
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: arquivos-relatorio-commits
           path: commits/
@@ -1871,7 +1915,7 @@ jobs:
 
     steps:
       - name: Baixar repositório
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
           ref: main
@@ -1900,7 +1944,7 @@ jobs:
           ls -lh pesquisas/workflow.md
 
       - name: Enviar documentação do workflow como artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: arquivos-pesquisas
           path: pesquisas/workflow.md
@@ -1949,7 +1993,7 @@ jobs:
 
     steps:
       - name: Baixar código-fonte da main
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: main
           fetch-depth: 0

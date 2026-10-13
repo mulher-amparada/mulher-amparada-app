@@ -43,7 +43,7 @@ jobs:
       # =========================================================
 
       - name: Baixar código
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
 
@@ -288,7 +288,7 @@ jobs:
       # =========================================================
 
       - name: Enviar APK como artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: APK-Kotlin-Assinado
           path: "${{ github.workspace }}/${{ env.RELEASE_APK_NAME }}"
@@ -699,6 +699,38 @@ jobs:
           echo '```' \
             >> "$GITHUB_STEP_SUMMARY"
 
+# =========================================================
+      # DEPENDABOT
+      # =========================================================
+
+  dependabot-merge:
+    name: 🤖 Merge das PRs do Dependabot
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: 🔀 Fazer merge das PRs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh pr list \
+            --repo "$GH_REPO" \
+            --author "app/dependabot" \
+            --state open \
+            --json number \
+            --jq '.[].number' |
+          while read -r pr; do
+            [ -z "$pr" ] && continue
+
+            gh pr merge "$pr" \
+              --repo "$GH_REPO" \
+              --auto \
+              --squash || true
+          done
 
   # =========================================================
   # ANALISAR LINGUAGENS E ATUALIZAR CORES AUTOMATICAMENTE
@@ -714,7 +746,7 @@ jobs:
 
     steps:
       - name: Baixar repositório completo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -1025,7 +1057,7 @@ jobs:
       # =======================================================
 
       - name: Enviar relatórios, CSS e HTML como artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: relatorio-linguagens
           path: pacote-linguagens/
@@ -1046,7 +1078,7 @@ jobs:
 
     steps:
       - name: Baixar repositório
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
 
@@ -1097,7 +1129,7 @@ jobs:
             pacote-resultados/relatorios/graficos/
 
       - name: Enviar resultados como artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: resultados-ligue180
           path: pacote-resultados/
@@ -1119,7 +1151,7 @@ jobs:
     steps:
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
@@ -1172,7 +1204,7 @@ jobs:
       
     steps:
       - name: Baixar todo o histórico
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -1200,7 +1232,7 @@ jobs:
           PY
 
       - name: Enviar README atualizado
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: arquivo-readme
           path: README.md
@@ -1242,7 +1274,7 @@ jobs:
 
     steps:
       - name: Baixar código atualizado
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
           ref: main
@@ -1300,7 +1332,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
           ref: main
@@ -1311,7 +1343,7 @@ jobs:
           base-url-path: https://mulher-amparada.github.io/mulher-amparada-app/
 
       - name: Enviar Sitemap gerado
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: arquivo-sitemap
           path: sitemap.xml
@@ -1372,13 +1404,13 @@ jobs:
 
     steps:
       - name: Baixar repositório
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
           ref: main
 
       - name: Configurar Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 24
 
@@ -1407,7 +1439,7 @@ jobs:
 
     steps:
       - name: Baixar repositório completo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -1481,7 +1513,7 @@ jobs:
           echo "Todos os PNGs sequenciais foram verificados."
 
       - name: Disponibilizar todos os mapas
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: observatorio
           path: docs/observatorio/observatorio-*.png
@@ -1499,13 +1531,13 @@ jobs:
 
     steps:
       - name: Baixar repositório
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
           ref: main
 
       - name: Instalar Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.x"
 
@@ -1516,7 +1548,7 @@ jobs:
         run: python3 scripts/atualizar_footer.py
 
       - name: Enviar footer gerado
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: arquivo-footer
           path: index.html
@@ -1534,7 +1566,7 @@ jobs:
 
     steps:
       - name: Baixar repositório
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           ref: main
@@ -1548,7 +1580,7 @@ jobs:
         run: ruby scripts/commits.rb
 
       - name: Enviar relatório gerado
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: arquivos-relatorio-commits
           path: commits/
@@ -1567,7 +1599,7 @@ jobs:
 
     steps:
       - name: Baixar repositório
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
           ref: main
@@ -1596,7 +1628,7 @@ jobs:
           ls -lh pesquisas/workflow.md
 
       - name: Enviar documentação do workflow como artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: arquivos-pesquisas
           path: pesquisas/workflow.md
@@ -1645,7 +1677,7 @@ jobs:
 
     steps:
       - name: Baixar código-fonte da main
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: main
           fetch-depth: 0

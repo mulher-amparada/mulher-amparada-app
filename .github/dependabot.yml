@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   verificar:
-    name: 🗃Verificar dependências
+    name: 🤖Dependabot Maintenance🤖
     runs-on: ubuntu-24.04
 
     steps:

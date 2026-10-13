@@ -67,6 +67,14 @@
             android:autoVerify="true">
 
         </activity>
+        
+                <activity
+            android:name=".RepoActivity"
+            
+            android:exported="false"
+            android:autoVerify="true">
+
+        </activity>
 
 <activity
     android:name=".EntradaActivity"

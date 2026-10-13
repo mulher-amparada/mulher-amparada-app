@@ -32,6 +32,10 @@ https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Pro
 
 <img src="https://raw.githubusercontent.com/mulher-amparada/mulher-amparada-app/main/relatorios/graficos/ligue180-2019.png" alt="Gráfico do Ligue 180 — 2019" width="100%" />
 
+# 💬Considerações:
+
+No dia 13/10/2026, teve uma imagem de varios homems numa mesa em um escritorio no post do devto do meu projeto, então eu simplesmente retirei os posts de la, e assim o devto perdeu um ótimo desenvolvedor..., pra sempre!
+
 # ⚠️MURAL DE AVISOS:
 
 ### Sobre como o projeto foi estruturado:
@@ -157,10 +161,6 @@ Gera o site com Jekyll, prepara os arquivos para publicação e realiza o deploy
 Contagem de commits:
 
 Calcula o total de commits existentes no histórico do repositório e atualiza o número correspondente no "README.md".
-
-Integração com DEV.to:
-
-Envia o conteúdo do "README.md" para atualização do artigo configurado no DEV.to, utilizando a chave de API armazenada nos Secrets.
 
 Sitemap e IndexNow:
 

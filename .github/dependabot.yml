@@ -1,5 +1,4 @@
-
-name: Verificar atualizações do Gradle
+name: Verificar versões do Dependabot
 
 on:
   workflow_dispatch:
@@ -8,23 +7,74 @@ permissions:
   contents: read
 
 jobs:
-  verificar:
-    name: Verificar dependências
+  verificar-versoes-yml:
+    name: Verificar versões nos arquivos YAML
     runs-on: ubuntu-24.04
 
     steps:
       - name: Baixar repositório
         uses: actions/checkout@v6
 
-      - name: Configurar Java
-        uses: actions/setup-java@v5
+      - name: Configurar Python
+        uses: actions/setup-python@v6
         with:
-          distribution: temurin
-          java-version: "17"
+          python-version: "3.x"
 
-      - name: Verificar atualizações do Gradle
-        working-directory: Código-fonte do app = Mulher Amparada
+      - name: Instalar dependências
+        run: python -m pip install --upgrade pyyaml requests
+
+      - name: Verificar versões dos arquivos YAML
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
-          set -euo pipefail
-          chmod +x gradlew
-          ./gradlew dependencyUpdates
+          python <<'PY'
+          import os
+          import re
+          import glob
+          import requests
+
+          session = requests.Session()
+          session.headers.update({
+              "Authorization": f"Bearer {os.environ['GITHUB_TOKEN']}",
+              "Accept": "application/vnd.github+json",
+          })
+
+          arquivos = (
+              glob.glob(".github/**/*.yml", recursive=True)
+              + glob.glob(".github/**/*.yaml", recursive=True)
+          )
+
+          for arquivo in sorted(set(arquivos)):
+              print(f"\n### {arquivo}")
+
+              with open(arquivo, encoding="utf-8") as f:
+                  linhas = f.readlines()
+
+              for numero, linha in enumerate(linhas, 1):
+                  if re.search(r"runs-on\s*:|java-version\s*:", linha):
+                      print(f"Linha {numero}: {linha.strip()}")
+
+                  match = re.search(
+                      r"uses:\s*([A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)@([^\s#]+)",
+                      linha.strip(),
+                  )
+
+                  if match:
+                      action, versao = match.groups()
+                      print(f"Linha {numero}: {action}@{versao}")
+
+                      try:
+                          resposta = session.get(
+                              f"https://api.github.com/repos/{action}/releases/latest",
+                              timeout=20,
+                          )
+
+                          if resposta.ok:
+                              atual = resposta.json().get("tag_name")
+                              print(f"  Última release publicada: {atual}")
+                          else:
+                              print("  Não foi possível consultar a última release.")
+                      except requests.RequestException as erro:
+                          print(f"  Erro na consulta: {erro}")
+          PY

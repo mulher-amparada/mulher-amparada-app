@@ -18,7 +18,7 @@ on:
       workflow:
         description: Arquivo do workflow em .github/workflows
         required: false
-        default: automations.yml
+        default: verificar-gradle.yml
         type: string
 
       branch:
@@ -29,7 +29,7 @@ on:
 
 permissions:
   contents: read
-  actions: read
+  actions: write
 
 concurrency:
   group: mulher-amparada-agent-${{ github.ref }}
@@ -126,7 +126,7 @@ jobs:
             executar-workflow)
               ./github_agent workflow "$WORKFLOW" "$BRANCH"
               ;;
-            dependabot)
+            "executar dependabot")
               ./github_agent dependabot "$BRANCH"
               ;;
             ambos)

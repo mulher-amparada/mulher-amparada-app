@@ -542,7 +542,7 @@ int main(int argc, char** argv) {
                 << "Workflow solicitado: " << workflow
                 << " (branch " << branch << ").\n";
 
-          } else if (command == "dependabot") {
+        } else if (command == "dependabot") {
             if (argc != 3) {
                 throw std::runtime_error(
                     "Informe a branch."
@@ -557,15 +557,13 @@ int main(int argc, char** argv) {
                 throw std::runtime_error("Branch inválida.");
             }
 
-            const std::string workflow =
-                "dependabot-maintenance.yml";
-
             request(
-                api + "/actions/workflows/" +
-                    urlEncode(workflow) + "/dispatches",
+                api +
+                    "/actions/workflows/dependabot-maintenance.yml/dispatches",
                 "Bearer " + token,
                 "POST",
-                "{\"ref\":\"" + branch + "\",\"inputs\":{\"action\":\"rebase\"}}"
+                "{\"ref\":\"" + branch +
+                    "\",\"inputs\":{\"action\":\"rebase\"}}"
             );
 
             std::cout

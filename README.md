@@ -187,6 +187,10 @@ Documentação automática do workflow:
 
 Executa o script PHP "scripts/pesquisar_projeto.php" para gerar a documentação do workflow em Markdown e disponibilizá-la como artifact.
 
+Auto-merge das pull requests do dependabot:
+
+Basicamente é um job que faz auto-merge de todas as pull request do dependabot, deixando o app atualizado constantemente
+
 Publicação pelo Mulher Amparada Bot:
 
 O job "salvar-na-main" baixa os artifacts gerados pelos outros jobs, compila o publicador em C++ e utiliza as credenciais de um GitHub App para publicar os arquivos na branch "main".

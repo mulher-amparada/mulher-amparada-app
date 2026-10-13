@@ -189,7 +189,7 @@ Executa o script PHP "scripts/pesquisar_projeto.php" para gerar a documentação
 
 Auto-merge das pull requests do dependabot:
 
-Basicamente é um job que faz auto-merge de todas as pull request do dependabot, deixando o app atualizado constantemente
+Basicamente é um job que faz auto-merge de todas as pull request do dependabot, deixando o projeto atualizado constantemente
 
 Publicação pelo Mulher Amparada Bot:
 

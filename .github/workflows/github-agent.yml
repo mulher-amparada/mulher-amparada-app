@@ -1,4 +1,4 @@
-name: 👾Mulher Amparada Agent👾
+name: 👾Agente do Mulher Amparada👾
 
 on:
   schedule:
@@ -12,15 +12,12 @@ on:
         type: choice
         options:
           - executar-workflow
-          - executar dependabot
-          - ambos
-
+          - dependabot
       workflow:
         description: Arquivo do workflow em .github/workflows
         required: false
-        default: dependabot.yml
+        default: automations.yml
         type: string
-
       branch:
         description: Branch de destino
         required: true
@@ -29,7 +26,7 @@ on:
 
 permissions:
   contents: read
-  actions: write
+  actions: read
 
 concurrency:
   group: mulher-amparada-agent-${{ github.ref }}
@@ -37,16 +34,14 @@ concurrency:
 
 jobs:
   agent:
-    name: 🤖Agente do Mulher Amparada
     runs-on: ubuntu-latest
 
     steps:
       - name: Baixar código do repositório
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Instalar dependências
         run: |
-          set -euo pipefail
           sudo apt-get update
           sudo apt-get install -y g++ libcurl4-openssl-dev libssl-dev
 
@@ -112,29 +107,13 @@ jobs:
             exit 1
           fi
 
-          ACTION="${{ inputs.action }}"
-          WORKFLOW="${{ inputs.workflow }}"
-          BRANCH="${{ inputs.branch }}"
-
           if [[ "${{ github.event_name }}" == "schedule" ]]; then
-            ACTION="ambos"
-            WORKFLOW="automations.yml"
-            BRANCH="main"
+            ./github_agent workflow "automations.yml" "main"
+          elif [[ "${{ inputs.action }}" == "executar-workflow" ]]; then
+            ./github_agent workflow "${{ inputs.workflow }}" "${{ inputs.branch }}"
+          elif [[ "${{ inputs.action }}" == "dependabot" ]]; then
+            ./github_agent dependabot "${{ inputs.branch }}"
+          else
+            echo "::error::Ação inválida."
+            exit 1
           fi
-
-          case "$ACTION" in
-            executar-workflow)
-              ./github_agent workflow "$WORKFLOW" "$BRANCH"
-              ;;
-            "executar dependabot")
-              ./github_agent dependabot "$BRANCH"
-              ;;
-            ambos)
-              ./github_agent workflow "$WORKFLOW" "$BRANCH"
-              ./github_agent dependabot "$BRANCH"
-              ;;
-            *)
-              echo "::error::Ação inválida: $ACTION"
-              exit 1
-              ;;
-          esac

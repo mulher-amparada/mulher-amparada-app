@@ -234,6 +234,32 @@ private val FILE_CHOOSER_REQUEST_CODE = 1001
         // WEB CHROME CLIENT
         webView.webChromeClient = object : WebChromeClient() {
 
+override fun onShowFileChooser(
+    webView: WebView?,
+    filePathCallback: ValueCallback<Array<Uri>>?,
+    fileChooserParams: WebChromeClient.FileChooserParams?
+): Boolean {
+
+    fileChooserCallback?.onReceiveValue(null)
+    fileChooserCallback = filePathCallback
+
+    return try {
+        val intent = fileChooserParams?.createIntent()
+            ?: throw IllegalStateException("Seletor indisponível")
+
+        startActivityForResult(
+            intent,
+            FILE_CHOOSER_REQUEST_CODE
+        )
+
+        true
+    } catch (e: Exception) {
+        fileChooserCallback?.onReceiveValue(null)
+        fileChooserCallback = null
+        false
+    }
+}
+
             override fun onGeolocationPermissionsShowPrompt(
                 origin: String?,
                 callback: GeolocationPermissions.Callback?
@@ -271,31 +297,7 @@ private val FILE_CHOOSER_REQUEST_CODE = 1001
         // WEBVIEW CLIENT
         webView.webViewClient = object : WebViewClient() {
 
-override fun onShowFileChooser(
-    webView: WebView?,
-    filePathCallback: ValueCallback<Array<Uri>>?,
-    fileChooserParams: WebChromeClient.FileChooserParams?
-): Boolean {
 
-    fileChooserCallback?.onReceiveValue(null)
-    fileChooserCallback = filePathCallback
-
-    return try {
-        val intent = fileChooserParams?.createIntent()
-            ?: throw IllegalStateException("Seletor indisponível")
-
-        startActivityForResult(
-            intent,
-            FILE_CHOOSER_REQUEST_CODE
-        )
-
-        true
-    } catch (e: Exception) {
-        fileChooserCallback?.onReceiveValue(null)
-        fileChooserCallback = null
-        false
-    }
-}
 
             override fun shouldOverrideUrlLoading(
                 view: WebView?,

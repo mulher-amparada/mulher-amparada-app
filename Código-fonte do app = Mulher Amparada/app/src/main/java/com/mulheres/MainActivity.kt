@@ -1,5 +1,6 @@
 package com.mulheres
 
+import android.webkit.ValueCallback
 import android.content.res.Configuration
 import android.content.Intent
 import android.net.Uri
@@ -25,6 +26,10 @@ import androidx.activity.enableEdgeToEdge
 
 
 class MainActivity : AppCompatActivity() {
+
+private var fileChooserCallback: ValueCallback<Array<Uri>>? = null
+
+private val FILE_CHOOSER_REQUEST_CODE = 1001
 
     private lateinit var webView: WebView
 
@@ -108,7 +113,7 @@ if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
         params.setMargins(
             64.dp() + barras.left,
             28.dp() + barras.top,
-            64.dp() + barras.right,
+            32.dp() + barras.right,
             32.dp() + barras.bottom
         )
  } else {
@@ -317,7 +322,7 @@ private fun configurarWebView() {
             true
 
         settings.allowContentAccess =
-            false
+            true
 
         settings.allowFileAccessFromFileURLs =
             false
@@ -352,6 +357,32 @@ private fun configurarWebView() {
                         false
                     )
                 }
+                
+                override fun onShowFileChooser(
+    webView: WebView?,
+    filePathCallback: ValueCallback<Array<Uri>>?,
+    fileChooserParams: WebChromeClient.FileChooserParams?
+): Boolean {
+
+    fileChooserCallback?.onReceiveValue(null)
+    fileChooserCallback = filePathCallback
+
+    return try {
+        val intent = fileChooserParams?.createIntent()
+            ?: throw IllegalStateException("Seletor indisponível")
+
+        startActivityForResult(
+            intent,
+            FILE_CHOOSER_REQUEST_CODE
+        )
+
+        true
+    } catch (e: Exception) {
+        fileChooserCallback?.onReceiveValue(null)
+        fileChooserCallback = null
+        false
+    }
+}
 
 
                 override fun onPermissionRequest(
@@ -439,6 +470,29 @@ private fun configurarWebView() {
             }
             
             }
+
+@Deprecated("Usado para receber o resultado do seletor de arquivos")
+override fun onActivityResult(
+    requestCode: Int,
+    resultCode: Int,
+    data: Intent?
+) {
+    super.onActivityResult(requestCode, resultCode, data)
+
+    if (requestCode == FILE_CHOOSER_REQUEST_CODE) {
+        val result = if (resultCode == RESULT_OK) {
+            WebChromeClient.FileChooserParams.parseResult(
+                resultCode,
+                data
+            )
+        } else {
+            null
+        }
+
+        fileChooserCallback?.onReceiveValue(result)
+        fileChooserCallback = null
+    }
+}
 
     // =========================================================
     // LIMPEZA

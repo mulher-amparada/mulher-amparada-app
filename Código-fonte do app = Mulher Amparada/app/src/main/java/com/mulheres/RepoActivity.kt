@@ -1,6 +1,6 @@
-
 package com.mulheres
 
+import android.webkit.ValueCallback
 import android.content.res.Configuration
 import android.content.Intent
 import android.net.Uri
@@ -25,6 +25,10 @@ import androidx.core.view.WindowCompat
 import androidx.activity.enableEdgeToEdge
 
 class RepoActivity : AppCompatActivity() {
+
+private var fileChooserCallback: ValueCallback<Array<Uri>>? = null
+
+private val FILE_CHOOSER_REQUEST_CODE = 1001
 
     private lateinit var webView: WebView
 
@@ -82,7 +86,7 @@ class RepoActivity : AppCompatActivity() {
                 params.setMargins(
                     64.dp() + barras.left,
                     28.dp() + barras.top,
-                    64.dp() + barras.right,
+                    32.dp() + barras.right,
                     32.dp() + barras.bottom
                 )
             } else {
@@ -221,7 +225,7 @@ class RepoActivity : AppCompatActivity() {
         settings.setGeolocationEnabled(true)
 
         settings.allowFileAccess = true
-        settings.allowContentAccess = false
+        settings.allowContentAccess = true
         settings.allowFileAccessFromFileURLs = false
         settings.allowUniversalAccessFromFileURLs = false
         settings.javaScriptCanOpenWindowsAutomatically = false
@@ -267,6 +271,32 @@ class RepoActivity : AppCompatActivity() {
         // WEBVIEW CLIENT
         webView.webViewClient = object : WebViewClient() {
 
+override fun onShowFileChooser(
+    webView: WebView?,
+    filePathCallback: ValueCallback<Array<Uri>>?,
+    fileChooserParams: WebChromeClient.FileChooserParams?
+): Boolean {
+
+    fileChooserCallback?.onReceiveValue(null)
+    fileChooserCallback = filePathCallback
+
+    return try {
+        val intent = fileChooserParams?.createIntent()
+            ?: throw IllegalStateException("Seletor indisponível")
+
+        startActivityForResult(
+            intent,
+            FILE_CHOOSER_REQUEST_CODE
+        )
+
+        true
+    } catch (e: Exception) {
+        fileChooserCallback?.onReceiveValue(null)
+        fileChooserCallback = null
+        false
+    }
+}
+
             override fun shouldOverrideUrlLoading(
                 view: WebView?,
                 request: WebResourceRequest?
@@ -299,6 +329,29 @@ class RepoActivity : AppCompatActivity() {
             }
         }
     }
+
+@Deprecated("Usado para receber o resultado do seletor de arquivos")
+override fun onActivityResult(
+    requestCode: Int,
+    resultCode: Int,
+    data: Intent?
+) {
+    super.onActivityResult(requestCode, resultCode, data)
+
+    if (requestCode == FILE_CHOOSER_REQUEST_CODE) {
+        val result = if (resultCode == RESULT_OK) {
+            WebChromeClient.FileChooserParams.parseResult(
+                resultCode,
+                data
+            )
+        } else {
+            null
+        }
+
+        fileChooserCallback?.onReceiveValue(result)
+        fileChooserCallback = null
+    }
+}
 
     // LIMPEZA
     override fun onDestroy() {

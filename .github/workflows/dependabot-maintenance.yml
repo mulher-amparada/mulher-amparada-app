@@ -1,4 +1,4 @@
-name: Dependabot Maintenance
+name: 🤖Dependabot Maintenance🤖
 
 on:
   workflow_dispatch:

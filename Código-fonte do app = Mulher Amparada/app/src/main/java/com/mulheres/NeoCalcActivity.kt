@@ -672,7 +672,7 @@ private fun LinhaBotoes(
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(
-            if (paisagem) 10.dp else 10.dp
+            if (paisagem) 5.dp else 10.dp
         ),
         verticalAlignment = Alignment.CenterVertically
     ) {

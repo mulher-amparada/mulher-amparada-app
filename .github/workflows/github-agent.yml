@@ -108,12 +108,16 @@ jobs:
           fi
 
           if [[ "${{ github.event_name }}" == "schedule" ]]; then
-            ./github_agent workflow "automations.yml" "main"
-          elif [[ "${{ inputs.action }}" == "executar-workflow" ]]; then
-            ./github_agent workflow "${{ inputs.workflow }}" "${{ inputs.branch }}"
-          elif [[ "${{ inputs.action }}" == "dependabot" ]]; then
-            ./github_agent dependabot "${{ inputs.branch }}"
-          else
-            echo "::error::Ação inválida."
-            exit 1
-          fi
+  set +e
+  ./github_agent workflow "automations.yml" "main"
+  workflow_status=$?
+
+  ./github_agent dependabot "main"
+  dependabot_status=$?
+  set -e
+
+  if [[ "$workflow_status" -ne 0 || "$dependabot_status" -ne 0 ]]; then
+    exit 1
+  fi
+
+elif [[ "${{ inputs.action }}" == "executar-workflow" ]]; then

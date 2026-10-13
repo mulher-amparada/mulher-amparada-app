@@ -302,7 +302,7 @@ flowchart TD
 O bloco abaixo reproduz o conteúdo original do arquivo `automations.yml`, preservando comandos, condições, variáveis, comentários e configurações.
 
 ````yaml
-name: Automações do Mulher Amparada
+name: ⚙️Automações do Mulher Amparada⚙️
 
 on:
   push:

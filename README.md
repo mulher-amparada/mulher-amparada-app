@@ -283,6 +283,8 @@ NeoCalcActivity (compose) = Tela que contém o disfarce de calculadora
  UpdateActivity = (compose) Tela da funcao que mostra o ícone do app disfarçado nome do aplicativo, versão instalada (versionName), número da build (versionCode) e um indicador visual de disponibilidade do sistema
  
  GeoActivity = (compose) Tela da funcao de raio seguro com georreferenciamento seguro da área protegida!
+
+RepoActivity = (xml) Tela da funcao de mostrar o repositório do github da área protegida!
  
  # Sobre como o aplicativo é compilado:
 

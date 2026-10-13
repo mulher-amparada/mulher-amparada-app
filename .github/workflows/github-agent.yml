@@ -34,7 +34,7 @@ concurrency:
 
 jobs:
   agent:
-   name: 🤖Mulher amparada agent
+    name: 🤖Agente do Mulher Amparada 
     runs-on: ubuntu-latest
 
     steps:

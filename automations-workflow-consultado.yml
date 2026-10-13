@@ -27,7 +27,7 @@ jobs:
 
   build:
 
-    name: Compilar APK Kotlin
+    name: 📦Compilar APK Kotlin
 
     runs-on: ubuntu-24.04
 
@@ -705,7 +705,7 @@ jobs:
   # =========================================================
 
   linguagens:
-    name: Analisar linguagens e atualizar estilos
+    name: 💬Analisar linguagens e atualizar estilos
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     needs:
@@ -1040,7 +1040,7 @@ jobs:
   # =========================================================
 
   bot:
-    name: Análise de dados em Julia
+    name: 🎲Análise de dados em Julia
     runs-on: ubuntu-24.04
     timeout-minutes: 45
 
@@ -1111,9 +1111,9 @@ jobs:
 
           
   build-site:
-
+  
     runs-on: ubuntu-24.04
-
+    name: 🌐Montar site
     needs: build
 
     steps:
@@ -1146,7 +1146,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     runs-on: ubuntu-24.04
-
+    name: 🌐Publicar site
     needs: build-site
 
     steps:
@@ -1164,6 +1164,7 @@ jobs:
 
 
   atualizar-commits:
+    name: Atualizar contagem de commits:
     runs-on: ubuntu-24.04
     needs: deploy
     permissions:

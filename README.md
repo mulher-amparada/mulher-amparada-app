@@ -27,7 +27,7 @@ https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Pro
 
 https://github.com/mulher-amparada/mulher-amparada-app/issues/14
 
-# ⚖️🎙️ O Pronunciamento das Juízas: "A Lei é o Seu Escudo":
+# 🎙️ O Pronunciamento das Juízas: "A Lei é o Seu Escudo":
 
 https://github.com/mulher-amparada/mulher-amparada-app/issues/15
 

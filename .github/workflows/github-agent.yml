@@ -1,7 +1,6 @@
 name: 👾Agente do Mulher Amparada👾
 
 on:
-  workflow_dispatch:
   schedule:
     - cron: '0 21 * * *'
 
@@ -14,6 +13,7 @@ on:
         options:
           - executar-workflow
           - dependabot
+          - ambos
       workflow:
         description: Arquivo do workflow em .github/workflows
         required: false
@@ -27,7 +27,7 @@ on:
 
 permissions:
   contents: read
-  actions: read
+  actions: write
 
 concurrency:
   group: mulher-amparada-agent-${{ github.ref }}
@@ -43,6 +43,7 @@ jobs:
 
       - name: Instalar dependências
         run: |
+          set -euo pipefail
           sudo apt-get update
           sudo apt-get install -y g++ libcurl4-openssl-dev libssl-dev
 
@@ -59,8 +60,7 @@ jobs:
 
           KEY_FILE="$RUNNER_TEMP/private-key.pem"
 
-          if ! printf '%s' "$PRIVATE_KEY_BASE64" |
-            base64 --decode > "$KEY_FILE"; then
+          if ! printf '%s' "$PRIVATE_KEY_BASE64" | base64 --decode > "$KEY_FILE"; then
             echo "::error::Falha ao decodificar a chave Base64."
             exit 1
           fi
@@ -71,7 +71,6 @@ jobs:
           fi
 
           chmod 600 "$KEY_FILE"
-
           echo "MULHER_AMPARADA_PRIVATE_KEY_FILE=$KEY_FILE" >> "$GITHUB_ENV"
 
       - name: Compilar agente C++
@@ -90,6 +89,10 @@ jobs:
           MULHER_AMPARADA_APP_ID: ${{ secrets.MULHER_AMPARADA_APP_ID }}
           MULHER_AMPARADA_INSTALLATION_ID: ${{ secrets.MULHER_AMPARADA_INSTALLATION_ID }}
           GITHUB_REPOSITORY: ${{ github.repository }}
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_ACTION: ${{ inputs.action }}
+          INPUT_WORKFLOW: ${{ inputs.workflow }}
+          INPUT_BRANCH: ${{ inputs.branch }}
         run: |
           set -euo pipefail
 
@@ -108,17 +111,48 @@ jobs:
             exit 1
           fi
 
-          if [[ "${{ github.event_name }}" == "schedule" ]]; then
-  set +e
-  ./github_agent workflow "automations.yml" "main"
-  workflow_status=$?
+          WORKFLOW="${INPUT_WORKFLOW:-automations.yml}"
+          BRANCH="${INPUT_BRANCH:-main}"
 
-  ./github_agent dependabot "main"
-  dependabot_status=$?
-  set -e
+          if [[ "$EVENT_NAME" == "schedule" ]]; then
+            ACTION="ambos"
+            WORKFLOW="automations.yml"
+            BRANCH="main"
+          else
+            ACTION="${INPUT_ACTION:-ambos}"
+          fi
 
-  if [[ "$workflow_status" -ne 0 || "$dependabot_status" -ne 0 ]]; then
-    exit 1
-  fi
+          workflow_status=0
+          dependabot_status=0
 
-elif [[ "${{ inputs.action }}" == "executar-workflow" ]]; then
+          case "$ACTION" in
+            executar-workflow)
+              ./github_agent workflow "$WORKFLOW" "$BRANCH"
+              ;;
+
+            dependabot)
+              ./github_agent dependabot "$BRANCH"
+              ;;
+
+            ambos)
+              set +e
+
+              ./github_agent workflow "$WORKFLOW" "$BRANCH"
+              workflow_status=$?
+
+              ./github_agent dependabot "$BRANCH"
+              dependabot_status=$?
+
+              set -e
+
+              if [[ "$workflow_status" -ne 0 || "$dependabot_status" -ne 0 ]]; then
+                echo "::error::Uma ou mais ações do agente falharam."
+                exit 1
+              fi
+              ;;
+
+            *)
+              echo "::error::Ação inválida: $ACTION"
+              exit 1
+              ;;
+          esac

@@ -10,6 +10,7 @@ Este código de conduta se aplica a todos os espaços administrados pelo projeto
 
 Se você acredita que alguém está violando o código de conduta, pedimos que denuncie enviando um e-mail para "mulheramparada@gmail.com" (mailto:mulheramparada@gmail.com).
 
+> ⚠️Não compartilhe seu nome em lugar nenhum!
 - Seja amigável e paciente.
 - Seja acolhedor. Buscamos construir uma comunidade que receba e apoie pessoas de diferentes origens e identidades. Isso inclui, entre outros, membros de qualquer raça, etnia, cultura, nacionalidade, cor, situação migratória, classe social e econômica, nível educacional, sexo, orientação sexual, identidade e expressão de gênero, idade, tamanho corporal, situação familiar, posicionamento político, religião e capacidades mentais e físicas.
 - Seja atencioso. Seu trabalho será utilizado por outras pessoas e, por sua vez, você dependerá do trabalho de outras pessoas. Qualquer decisão que você tomar poderá afetar usuárias e colegas, e você deve considerar essas consequências ao tomar decisões. Lembre-se de que somos uma comunidade mundial, portanto, você pode estar se comunicando com alguém cuja língua principal seja diferente da sua.

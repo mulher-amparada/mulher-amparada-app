@@ -104,6 +104,15 @@ abrirArquivoSeguro = {
     )
 },
 
+abrirRepo = {
+    startActivity(
+        Intent(
+            this,
+            RepoActivity::class.java
+        )
+    )
+},
+
                 abrirNavegador = {
                     startActivity(
                         Intent(
@@ -295,6 +304,7 @@ private fun MeusAcessos(
 
     abrirArquivos: () -> Unit,
 
+abrirRepo: () -> Unit,
 
 abrirArquivoSeguro: () -> Unit,
 
@@ -356,9 +366,14 @@ val paddingHorizontal =
         ),
 
         Acesso(
-            "Navegador",
-            "Acesse páginas da internet"
-        )
+    "Navegador",
+    "Acesse páginas da internet"
+),
+
+Acesso(
+    "Repositório",
+    "Acesse o código-fonte do projeto"
+)
     )
 
 
@@ -489,6 +504,10 @@ val outrasFuncoes = listOf(
                                 "Navegador" -> {
                                     abrirNavegador()
                                 }
+                                
+                                "Repositório" -> {
+    abrirRepo()
+}
                                 
                                 "Raio seguro" -> {
     abrirGeo()

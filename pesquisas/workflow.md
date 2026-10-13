@@ -9,22 +9,22 @@
 
 | ID do job | Nome | Runner | Dependências | Etapas |
 |---|---|---|---|---|
-| `build` | Compilar APK Kotlin | ubuntu-24.04 | Nenhuma | 1. Baixar código (`actions/checkout@v6`); 2. Verificar projeto — executa comandos; 3. Configurar Java 17 (`actions/setup-java@v6`); 4. Verificar Android SDK 37 — executa comandos; 5. Dar permissão ao Gradle — executa comandos; 6. Compilar APK — executa comandos; 7. Localizar APK — executa comandos; 8. Assinar APK — executa comandos; 9. Preparar APK da Release — executa comandos; 10. APK-Kotlin-Assinado (`actions/upload-artifact@v6`); 11. Calcular tamanho real do APK — executa comandos; 12. Calcular SHA-256 — executa comandos; 13. Atualizar APK no main — executa comandos; 14. Verificar Release — executa comandos; 15. Excluir APK antigo da Release — executa comandos; 16. Enviar APK para a Release — executa comandos; 17. Atualizar SHA-256 da Release — executa comandos; 18. Atualizar link, tamanho e SHA-256 no download.html — executa comandos; 19. Enviar download.html atualizado para o main — executa comandos; 20. Mostrar resumo — executa comandos |
-| `linguagens` | Analisar linguagens e atualizar estilos | ubuntu-24.04 | `build`, `publicar-divulgacao` | 1. Baixar repositório completo (`actions/checkout@v6`); 2. Instalar cloc — executa comandos; 3. Analisar arquivos e linguagens — executa comandos; 4. Gerar cores e atualizar os dois temas — executa comandos; 5. Validar relatórios, CSS e pacote — executa comandos; 6. relatorio-linguagens (`actions/upload-artifact@v6`) |
-| `bot` | Análise de dados em Julia | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Julia (`julia-actions/setup-julia@v3`); 3. Instalar dependências Julia — executa comandos; 4. Executar análise de dados em Julia — executa comandos; 5. Validar e preparar resultados — executa comandos; 6. resultados-ligue180 (`actions/upload-artifact@v6`) |
-| `build-site` | build-site | ubuntu-24.04 | `build` | 1. Checkout (`actions/checkout@v6`); 2. Setup Pages (`actions/configure-pages@v6`); 3. Build with Jekyll (`actions/jekyll-build-pages@v1`); 4. Upload Pages artifact (`actions/upload-pages-artifact@v5`) |
-| `deploy` | deploy | ubuntu-24.04 | `build-site` | 1. Deploy to GitHub Pages (`actions/deploy-pages@v5`) |
-| `atualizar-commits` | atualizar-commits | ubuntu-24.04 | `deploy` | 1. Baixar todo o histórico (`actions/checkout@v6`); 2. Atualizar total de commits — executa comandos; 3. arquivo-readme (`actions/upload-artifact@v6`); 4. Publicar README na main — executa comandos |
-| `sincronizar-devto` | Sincronizar README com DEV.to | ubuntu-24.04 | `atualizar-commits` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. Atualizar artigo no DEV.to — executa comandos |
-| `sitemap` | Gerar Sitemap | ubuntu-24.04 | `deploy` | 1. Checkout (`actions/checkout@v6`); 2. Gerar Sitemap (`cicirello/generate-sitemap@v1`); 3. arquivo-sitemap (`actions/upload-artifact@v6`) |
-| `indexnow` | IndexNow | ubuntu-24.04 | `deploy`, `bot`, `linguagens`, `publicar-divulgacao`, `atualizar-commits` | 1. Enviar Sitemap ao IndexNow (`bojieyang/indexnow-action@v3`) |
-| `lighthouse` | Lighthouse | ubuntu-24.04 | `deploy` | 1. Lighthouse (`treosh/lighthouse-ci-action@v12`) |
-| `publicar-divulgacao` | Publicar Kit de Divulgação | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Configurar Node.js (`actions/setup-node@v6`); 3. Criar pacote de divulgação — executa comandos; 4. Kit de Divulgação (`softprops/action-gh-release@v3`) |
-| `observatorio` | Observatório | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório completo (`actions/checkout@v6`); 2. Instalar dependências do Observatório — executa comandos; 3. Compilar observatório — executa comandos; 4. Executar observatório — executa comandos; 5. Verificar todos os mapas gerados — executa comandos; 6. observatorio (`actions/upload-artifact@v6`) |
-| `atualizar-footer` | Atualizar Footer com README | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Python (`actions/setup-python@v6`); 3. Instalar dependência Python — executa comandos; 4. Atualizar footer com README — executa comandos; 5. arquivo-footer (`actions/upload-artifact@v6`) |
-| `atualizar-relatorio-commits` | Atualizar relatório de commits | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Ruby (`ruby/setup-ruby@v1`); 3. Gerar relatório de commits — executa comandos; 4. arquivos-relatorio-commits (`actions/upload-artifact@v6`) |
-| `pesquisar-projeto` | Documentar workflow YAML | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar PHP — executa comandos; 3. Gerar documentação do workflow — executa comandos; 4. arquivos-pesquisas (`actions/upload-artifact@v6`) |
-| `salvar-na-main` | Salvar artifacts na main pelo Mulher Amparada Bot | ubuntu-24.04 | `build`, `linguagens`, `bot`, `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`, `observatorio` | 1. Baixar código-fonte da main (`actions/checkout@v6`); 2. Baixar todos os artifacts desta execução (`actions/download-artifact@v8`); 3. Consultar workflow atual — executa comandos; 4. Compilar o publicador C++ — executa comandos; 5. Publicar na main pelo GitHub App — executa comandos |
+| `build` | 📦Compilar APK Kotlin | ubuntu-24.04 | Nenhuma | 1. Baixar código (`actions/checkout@v6`); 2. Verificar projeto — executa comandos; 3. Configurar Java 17 (`actions/setup-java@v6`); 4. Verificar Android SDK 37 — executa comandos; 5. Dar permissão ao Gradle — executa comandos; 6. Compilar APK — executa comandos; 7. Localizar APK — executa comandos; 8. Assinar APK — executa comandos; 9. Preparar APK da Release — executa comandos; 10. APK-Kotlin-Assinado (`actions/upload-artifact@v6`); 11. Calcular tamanho real do APK — executa comandos; 12. Calcular SHA-256 — executa comandos; 13. Atualizar APK no main — executa comandos; 14. Verificar Release — executa comandos; 15. Excluir APK antigo da Release — executa comandos; 16. Enviar APK para a Release — executa comandos; 17. Atualizar SHA-256 da Release — executa comandos; 18. Atualizar link, tamanho e SHA-256 no download.html — executa comandos; 19. Enviar download.html atualizado para o main — executa comandos; 20. Mostrar resumo — executa comandos |
+| `linguagens` | 💬Analisar linguagens e atualizar estilos | ubuntu-24.04 | `build`, `publicar-divulgacao` | 1. Baixar repositório completo (`actions/checkout@v6`); 2. Instalar cloc — executa comandos; 3. Analisar arquivos e linguagens — executa comandos; 4. Gerar cores e atualizar os dois temas — executa comandos; 5. Validar relatórios, CSS e pacote — executa comandos; 6. relatorio-linguagens (`actions/upload-artifact@v6`) |
+| `bot` | 🎲Análise de dados em Julia | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Julia (`julia-actions/setup-julia@v3`); 3. Instalar dependências Julia — executa comandos; 4. Executar análise de dados em Julia — executa comandos; 5. Validar e preparar resultados — executa comandos; 6. resultados-ligue180 (`actions/upload-artifact@v6`) |
+| `build-site` | 🌐Montar site | ubuntu-24.04 | `build` | 1. Checkout (`actions/checkout@v6`); 2. Setup Pages (`actions/configure-pages@v6`); 3. Build with Jekyll (`actions/jekyll-build-pages@v1`); 4. Upload Pages artifact (`actions/upload-pages-artifact@v5`) |
+| `deploy` | 🌐Publicar site | ubuntu-24.04 | `build-site` | 1. Deploy to GitHub Pages (`actions/deploy-pages@v5`) |
+| `atualizar-commits` | 🎲Atualizar contagem de commits | ubuntu-24.04 | `deploy` | 1. Baixar todo o histórico (`actions/checkout@v6`); 2. Atualizar total de commits — executa comandos; 3. arquivo-readme (`actions/upload-artifact@v6`); 4. Publicar README na main — executa comandos |
+| `sincronizar-devto` | 📄Sincronizar README com DEV.to | ubuntu-24.04 | `atualizar-commits` | 1. Baixar código atualizado (`actions/checkout@v6`); 2. Atualizar artigo no DEV.to — executa comandos |
+| `sitemap` | 🎲Gerar Sitemap | ubuntu-24.04 | `deploy` | 1. Checkout (`actions/checkout@v6`); 2. Gerar Sitemap (`cicirello/generate-sitemap@v1`); 3. arquivo-sitemap (`actions/upload-artifact@v6`) |
+| `indexnow` | 🔍IndexNow | ubuntu-24.04 | `deploy`, `bot`, `linguagens`, `publicar-divulgacao`, `atualizar-commits` | 1. Enviar Sitemap ao IndexNow (`bojieyang/indexnow-action@v3`) |
+| `lighthouse` | 🔍Lighthouse | ubuntu-24.04 | `deploy` | 1. Lighthouse (`treosh/lighthouse-ci-action@v12`) |
+| `publicar-divulgacao` | 🎲Publicar Kit de Divulgação | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Configurar Node.js (`actions/setup-node@v6`); 3. Criar pacote de divulgação — executa comandos; 4. Kit de Divulgação (`softprops/action-gh-release@v3`) |
+| `observatorio` | 🎲Observatório | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório completo (`actions/checkout@v6`); 2. Instalar dependências do Observatório — executa comandos; 3. Compilar observatório — executa comandos; 4. Executar observatório — executa comandos; 5. Verificar todos os mapas gerados — executa comandos; 6. observatorio (`actions/upload-artifact@v6`) |
+| `atualizar-footer` | 📄Atualizar Footer com README | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Python (`actions/setup-python@v6`); 3. Instalar dependência Python — executa comandos; 4. Atualizar footer com README — executa comandos; 5. arquivo-footer (`actions/upload-artifact@v6`) |
+| `atualizar-relatorio-commits` | 📄Atualizar relatório de commits | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar Ruby (`ruby/setup-ruby@v1`); 3. Gerar relatório de commits — executa comandos; 4. arquivos-relatorio-commits (`actions/upload-artifact@v6`) |
+| `pesquisar-projeto` | 🎲Documentar workflow YAML | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v6`); 2. Instalar PHP — executa comandos; 3. Gerar documentação do workflow — executa comandos; 4. arquivos-pesquisas (`actions/upload-artifact@v6`) |
+| `salvar-na-main` | 💾Salvar artifacts na main pelo Mulher Amparada Bot | ubuntu-24.04 | `build`, `linguagens`, `bot`, `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`, `observatorio` | 1. Baixar código-fonte da main (`actions/checkout@v6`); 2. Baixar todos os artifacts desta execução (`actions/download-artifact@v8`); 3. Consultar workflow atual — executa comandos; 4. Compilar o publicador C++ — executa comandos; 5. Publicar na main pelo GitHub App — executa comandos |
 
 ## Grafo completo de dependências
 
@@ -32,22 +32,22 @@ As setas representam as dependências declaradas em `needs` no YAML original.
 
 ```mermaid
 flowchart TD
-    job_build["Compilar APK Kotlin"]
-    job_linguagens["Analisar linguagens e atualizar estilos"]
-    job_bot["Análise de dados em Julia"]
-    job_build_site["build-site"]
-    job_deploy["deploy"]
-    job_atualizar_commits["atualizar-commits"]
-    job_sincronizar_devto["Sincronizar README com DEV.to"]
-    job_sitemap["Gerar Sitemap"]
-    job_indexnow["IndexNow"]
-    job_lighthouse["Lighthouse"]
-    job_publicar_divulgacao["Publicar Kit de Divulgação"]
-    job_observatorio["Observatório"]
-    job_atualizar_footer["Atualizar Footer com README"]
-    job_atualizar_relatorio_commits["Atualizar relatório de commits"]
-    job_pesquisar_projeto["Documentar workflow YAML"]
-    job_salvar_na_main["Salvar artifacts na main pelo Mulher Amparada Bot"]
+    job_build["📦Compilar APK Kotlin"]
+    job_linguagens["💬Analisar linguagens e atualizar estilos"]
+    job_bot["🎲Análise de dados em Julia"]
+    job_build_site["🌐Montar site"]
+    job_deploy["🌐Publicar site"]
+    job_atualizar_commits["🎲Atualizar contagem de commits"]
+    job_sincronizar_devto["📄Sincronizar README com DEV.to"]
+    job_sitemap["🎲Gerar Sitemap"]
+    job_indexnow["🔍IndexNow"]
+    job_lighthouse["🔍Lighthouse"]
+    job_publicar_divulgacao["🎲Publicar Kit de Divulgação"]
+    job_observatorio["🎲Observatório"]
+    job_atualizar_footer["📄Atualizar Footer com README"]
+    job_atualizar_relatorio_commits["📄Atualizar relatório de commits"]
+    job_pesquisar_projeto["🎲Documentar workflow YAML"]
+    job_salvar_na_main["💾Salvar artifacts na main pelo Mulher Amparada Bot"]
     job_build --> job_linguagens
     job_publicar_divulgacao --> job_linguagens
     job_build --> job_build_site
@@ -77,7 +77,7 @@ flowchart TD
 
 ## Detalhamento dos jobs
 
-### Compilar APK Kotlin
+### 📦Compilar APK Kotlin
 
 - **ID:** `build`
 - **Runner:** `ubuntu-24.04`
@@ -106,7 +106,7 @@ flowchart TD
 | 19 | Enviar download.html atualizado para o main | — | \| |
 | 20 | Mostrar resumo | — | \| |
 
-### Analisar linguagens e atualizar estilos
+### 💬Analisar linguagens e atualizar estilos
 
 - **ID:** `linguagens`
 - **Runner:** `ubuntu-24.04`
@@ -121,7 +121,7 @@ flowchart TD
 | 5 | Validar relatórios, CSS e pacote | — | \| |
 | 6 | relatorio-linguagens | `actions/upload-artifact@v6` | — |
 
-### Análise de dados em Julia
+### 🎲Análise de dados em Julia
 
 - **ID:** `bot`
 - **Runner:** `ubuntu-24.04`
@@ -136,7 +136,7 @@ flowchart TD
 | 5 | Validar e preparar resultados | — | \| |
 | 6 | resultados-ligue180 | `actions/upload-artifact@v6` | — |
 
-### build-site
+### 🌐Montar site
 
 - **ID:** `build-site`
 - **Runner:** `ubuntu-24.04`
@@ -149,7 +149,7 @@ flowchart TD
 | 3 | Build with Jekyll | `actions/jekyll-build-pages@v1` | — |
 | 4 | Upload Pages artifact | `actions/upload-pages-artifact@v5` | — |
 
-### deploy
+### 🌐Publicar site
 
 - **ID:** `deploy`
 - **Runner:** `ubuntu-24.04`
@@ -159,7 +159,7 @@ flowchart TD
 |---:|---|---|---|
 | 1 | Deploy to GitHub Pages | `actions/deploy-pages@v5` | — |
 
-### atualizar-commits
+### 🎲Atualizar contagem de commits
 
 - **ID:** `atualizar-commits`
 - **Runner:** `ubuntu-24.04`
@@ -172,7 +172,7 @@ flowchart TD
 | 3 | arquivo-readme | `actions/upload-artifact@v6` | — |
 | 4 | Publicar README na main | — | \| |
 
-### Sincronizar README com DEV.to
+### 📄Sincronizar README com DEV.to
 
 - **ID:** `sincronizar-devto`
 - **Runner:** `ubuntu-24.04`
@@ -183,7 +183,7 @@ flowchart TD
 | 1 | Baixar código atualizado | `actions/checkout@v6` | — |
 | 2 | Atualizar artigo no DEV.to | — | \| |
 
-### Gerar Sitemap
+### 🎲Gerar Sitemap
 
 - **ID:** `sitemap`
 - **Runner:** `ubuntu-24.04`
@@ -195,7 +195,7 @@ flowchart TD
 | 2 | Gerar Sitemap | `cicirello/generate-sitemap@v1` | — |
 | 3 | arquivo-sitemap | `actions/upload-artifact@v6` | — |
 
-### IndexNow
+### 🔍IndexNow
 
 - **ID:** `indexnow`
 - **Runner:** `ubuntu-24.04`
@@ -205,7 +205,7 @@ flowchart TD
 |---:|---|---|---|
 | 1 | Enviar Sitemap ao IndexNow | `bojieyang/indexnow-action@v3` | — |
 
-### Lighthouse
+### 🔍Lighthouse
 
 - **ID:** `lighthouse`
 - **Runner:** `ubuntu-24.04`
@@ -215,7 +215,7 @@ flowchart TD
 |---:|---|---|---|
 | 1 | Lighthouse | `treosh/lighthouse-ci-action@v12` | — |
 
-### Publicar Kit de Divulgação
+### 🎲Publicar Kit de Divulgação
 
 - **ID:** `publicar-divulgacao`
 - **Runner:** `ubuntu-24.04`
@@ -228,7 +228,7 @@ flowchart TD
 | 3 | Criar pacote de divulgação | — | npm pack |
 | 4 | Kit de Divulgação | `softprops/action-gh-release@v3` | — |
 
-### Observatório
+### 🎲Observatório
 
 - **ID:** `observatorio`
 - **Runner:** `ubuntu-24.04`
@@ -243,7 +243,7 @@ flowchart TD
 | 5 | Verificar todos os mapas gerados | — | \| |
 | 6 | observatorio | `actions/upload-artifact@v6` | — |
 
-### Atualizar Footer com README
+### 📄Atualizar Footer com README
 
 - **ID:** `atualizar-footer`
 - **Runner:** `ubuntu-24.04`
@@ -257,7 +257,7 @@ flowchart TD
 | 4 | Atualizar footer com README | — | python3 scripts/atualizar_footer.py |
 | 5 | arquivo-footer | `actions/upload-artifact@v6` | — |
 
-### Atualizar relatório de commits
+### 📄Atualizar relatório de commits
 
 - **ID:** `atualizar-relatorio-commits`
 - **Runner:** `ubuntu-24.04`
@@ -270,7 +270,7 @@ flowchart TD
 | 3 | Gerar relatório de commits | — | ruby scripts/commits.rb |
 | 4 | arquivos-relatorio-commits | `actions/upload-artifact@v6` | — |
 
-### Documentar workflow YAML
+### 🎲Documentar workflow YAML
 
 - **ID:** `pesquisar-projeto`
 - **Runner:** `ubuntu-24.04`
@@ -283,7 +283,7 @@ flowchart TD
 | 3 | Gerar documentação do workflow | — | \| |
 | 4 | arquivos-pesquisas | `actions/upload-artifact@v6` | — |
 
-### Salvar artifacts na main pelo Mulher Amparada Bot
+### 💾Salvar artifacts na main pelo Mulher Amparada Bot
 
 - **ID:** `salvar-na-main`
 - **Runner:** `ubuntu-24.04`
@@ -331,7 +331,7 @@ jobs:
 
   build:
 
-    name: Compilar APK Kotlin
+    name: 📦Compilar APK Kotlin
 
     runs-on: ubuntu-24.04
 
@@ -1009,7 +1009,7 @@ jobs:
   # =========================================================
 
   linguagens:
-    name: Analisar linguagens e atualizar estilos
+    name: 💬Analisar linguagens e atualizar estilos
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     needs:
@@ -1344,7 +1344,7 @@ jobs:
   # =========================================================
 
   bot:
-    name: Análise de dados em Julia
+    name: 🎲Análise de dados em Julia
     runs-on: ubuntu-24.04
     timeout-minutes: 45
 
@@ -1415,9 +1415,9 @@ jobs:
 
           
   build-site:
-
+  
     runs-on: ubuntu-24.04
-
+    name: 🌐Montar site
     needs: build
 
     steps:
@@ -1450,7 +1450,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     runs-on: ubuntu-24.04
-
+    name: 🌐Publicar site
     needs: build-site
 
     steps:
@@ -1468,6 +1468,7 @@ jobs:
 
 
   atualizar-commits:
+    name: 🎲Atualizar contagem de commits
     runs-on: ubuntu-24.04
     needs: deploy
     permissions:
@@ -1539,7 +1540,7 @@ jobs:
   # =========================================================
 
   sincronizar-devto:
-    name: Sincronizar README com DEV.to
+    name: 📄Sincronizar README com DEV.to
     runs-on: ubuntu-24.04
     needs: atualizar-commits
 
@@ -1597,7 +1598,7 @@ jobs:
   # =========================================================
 
   sitemap:
-    name: Gerar Sitemap
+    name: 🎲Gerar Sitemap
     runs-on: ubuntu-24.04
     needs: deploy
 
@@ -1626,7 +1627,7 @@ jobs:
   # =========================================================
 
   indexnow:
-    name: IndexNow
+    name: 🔍IndexNow
     runs-on: ubuntu-24.04
     needs:
       - deploy
@@ -1649,7 +1650,7 @@ jobs:
   # =========================================================
 
   lighthouse:
-    name: Lighthouse
+    name: 🔍Lighthouse
     runs-on: ubuntu-24.04
     needs: deploy
 
@@ -1669,7 +1670,7 @@ jobs:
   # =========================================================
 
   publicar-divulgacao:
-    name: Publicar Kit de Divulgação
+    name: 🎲Publicar Kit de Divulgação
     runs-on: ubuntu-24.04
     
 
@@ -1704,7 +1705,7 @@ jobs:
   # =========================================================
 
   observatorio:
-    name: Observatório
+    name: 🎲Observatório
     runs-on: ubuntu-24.04
     needs: atualizar-commits
 
@@ -1796,7 +1797,7 @@ jobs:
   # =========================================================
 
   atualizar-footer:
-    name: Atualizar Footer com README
+    name: 📄Atualizar Footer com README
     runs-on: ubuntu-24.04
     needs: atualizar-commits
 
@@ -1831,7 +1832,7 @@ jobs:
   # =========================================================
 
   atualizar-relatorio-commits:
-    name: Atualizar relatório de commits
+    name: 📄Atualizar relatório de commits
     runs-on: ubuntu-24.04
     needs: atualizar-commits
 
@@ -1865,7 +1866,7 @@ jobs:
   # =========================================================
 
   pesquisar-projeto:
-    name: Documentar workflow YAML
+    name: 🎲Documentar workflow YAML
     runs-on: ubuntu-24.04
 
     steps:
@@ -1915,7 +1916,7 @@ jobs:
   # =========================================================
 
   salvar-na-main:
-    name: Salvar artifacts na main pelo Mulher Amparada Bot
+    name: 💾Salvar artifacts na main pelo Mulher Amparada Bot
     runs-on: ubuntu-24.04
     needs:
       - build

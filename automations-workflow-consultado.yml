@@ -1164,7 +1164,7 @@ jobs:
 
 
   atualizar-commits:
-    name: Atualizar contagem de commits:
+    name: 🎲Atualizar contagem de commits
     runs-on: ubuntu-24.04
     needs: deploy
     permissions:
@@ -1236,7 +1236,7 @@ jobs:
   # =========================================================
 
   sincronizar-devto:
-    name: Sincronizar README com DEV.to
+    name: 📄Sincronizar README com DEV.to
     runs-on: ubuntu-24.04
     needs: atualizar-commits
 
@@ -1294,7 +1294,7 @@ jobs:
   # =========================================================
 
   sitemap:
-    name: Gerar Sitemap
+    name: 🎲Gerar Sitemap
     runs-on: ubuntu-24.04
     needs: deploy
 
@@ -1323,7 +1323,7 @@ jobs:
   # =========================================================
 
   indexnow:
-    name: IndexNow
+    name: 🔍IndexNow
     runs-on: ubuntu-24.04
     needs:
       - deploy
@@ -1346,7 +1346,7 @@ jobs:
   # =========================================================
 
   lighthouse:
-    name: Lighthouse
+    name: 🔍Lighthouse
     runs-on: ubuntu-24.04
     needs: deploy
 
@@ -1366,7 +1366,7 @@ jobs:
   # =========================================================
 
   publicar-divulgacao:
-    name: Publicar Kit de Divulgação
+    name: 🎲Publicar Kit de Divulgação
     runs-on: ubuntu-24.04
     
 
@@ -1401,7 +1401,7 @@ jobs:
   # =========================================================
 
   observatorio:
-    name: Observatório
+    name: 🎲Observatório
     runs-on: ubuntu-24.04
     needs: atualizar-commits
 
@@ -1493,7 +1493,7 @@ jobs:
   # =========================================================
 
   atualizar-footer:
-    name: Atualizar Footer com README
+    name: 📄Atualizar Footer com README
     runs-on: ubuntu-24.04
     needs: atualizar-commits
 
@@ -1528,7 +1528,7 @@ jobs:
   # =========================================================
 
   atualizar-relatorio-commits:
-    name: Atualizar relatório de commits
+    name: 📄Atualizar relatório de commits
     runs-on: ubuntu-24.04
     needs: atualizar-commits
 
@@ -1562,7 +1562,7 @@ jobs:
   # =========================================================
 
   pesquisar-projeto:
-    name: Documentar workflow YAML
+    name: 🎲Documentar workflow YAML
     runs-on: ubuntu-24.04
 
     steps:
@@ -1612,7 +1612,7 @@ jobs:
   # =========================================================
 
   salvar-na-main:
-    name: Salvar artifacts na main pelo Mulher Amparada Bot
+    name: 💾Salvar artifacts na main pelo Mulher Amparada Bot
     runs-on: ubuntu-24.04
     needs:
       - build

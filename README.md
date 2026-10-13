@@ -6,7 +6,7 @@
   <img src="https://mulher-amparada.github.io/mulher-amparada-app/title.png">
 </div>
 
-> Antes de mais nada, preciso ter uma conversa seria com o dev community, para eles, por acado voces acham legal colocar essa imagem (https://github.com/mulher-amparada/mulher-amparada-app/blob/main/Screenshot_20261013_202139_Google.png), num projeto independente que foi feito inteiramente sozinho, isso é feio, acredito que isso me machuca, isso me fere, eu EXIJO que retirem essa imagem, senão vou ter que abrir uma denuncia
+> Antes de mais nada, preciso ter uma conversa seria com o dev community e com a google, para eles, por acado voces acham legal colocar essa imagem (https://github.com/mulher-amparada/mulher-amparada-app/blob/main/Screenshot_20261013_202139_Google.png), num projeto independente que foi feito inteiramente sozinho, isso é feio, acredito que isso me machuca, isso me fere, eu EXIJO que retirem essa imagem, senão vou ter que abrir uma denuncia
 
 Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista laudado nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!
 

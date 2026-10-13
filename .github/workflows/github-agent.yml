@@ -12,7 +12,7 @@ on:
         type: choice
         options:
           - executar-workflow
-          - dependabot
+          - executar dependabot
           - ambos
 
       workflow:

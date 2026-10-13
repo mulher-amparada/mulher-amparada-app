@@ -49,6 +49,8 @@ https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Pro
 
 ### Sobre as funções do projeto:
 
+> Para as funções de balançar o celular para pedir ajuda e escurecimento por inclinação funcionarem, é preciso estar dentro do app, e repito que o escurecimento por inclinação só funciona dentro da HubActivity!
+
 >ATENÇÃO: Reforço que as proteções que utilizam sensores podem não funcionar corretamente em alguns aparelhos, dependendo das limitações ou características do hardware da usuária.
 
 

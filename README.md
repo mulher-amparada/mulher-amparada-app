@@ -15,21 +15,13 @@ E vale lembrar que antes todas as páginas eram html com webview, agora não sã
 
 e pra ser sincero, comecei esse projeto no dia 13/05/2026 e terminei no dia 12/10/2026!
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 5424**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 5381**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
 # 🎉Projeto Finalizado:
 
 https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Projeto-Finalizado
-
-# 👑 Ressignificar o conto da princesa, do príncipe e do sapo como forma de conscientização sobre a violência contra a mulher:
-
-https://github.com/mulher-amparada/mulher-amparada-app/issues/14
-
-# 🎙️ O Pronunciamento das Juízas: "A Lei é o Seu Escudo":
-
-https://github.com/mulher-amparada/mulher-amparada-app/issues/15
 
 # 👾Nossas contribuições!:
 
@@ -272,6 +264,8 @@ NeoCalcActivity (compose) = Tela que contém o disfarce de calculadora
  
  TarefaActivity (compose) = Recurso das tarefas da área protegida 
  
+ A MainActivity é a única que é feita com webview!, e representa o recurso de navegador da área protegida
+ 
  GravarActivity (xml) = Recurso do gravador de voz da área protegida
  
  FileActivity (xml) = Recurso de Gerenciador de arquivos da área protegida (mas ele apenas visualiza!)
@@ -281,8 +275,6 @@ NeoCalcActivity (compose) = Tela que contém o disfarce de calculadora
  UpdateActivity = (compose) Tela da funcao que mostra o ícone do app disfarçado nome do aplicativo, versão instalada (versionName), número da build (versionCode) e um indicador visual de disponibilidade do sistema
  
  GeoActivity = (compose) Tela da funcao de raio seguro com georreferenciamento seguro da área protegida!
-
-RepoActivity = (xml) Tela da funcao de mostrar o repositório do github da área protegida!
  
  # Sobre como o aplicativo é compilado:
 
@@ -382,6 +374,8 @@ Os dados da primeira página do app (disfarce do assistente de saúde) são mera
 e tambem, reforcando que no canto superior direito tem um icone de calculadora que quando clica vai pra uma calculadora e aparece o disfarce de calculadora 
 
 > no disfarce de calculadora, caso a usuaria esqueça tudo, existe um popup que usa o BiometricPrompt que poderá resetar tanto a senha tanto a pergunta de recuperação (e ele usa APENAS o device credencial!), porém, quando utiliza o BiometricPrompt e é validado, ele pergunta a pergunta de recuperação e a senha!
+
+> e depois da senha, toda a tela fica preta, ao pressionar por 5 segundos, ele vai pra HubActivity!
 
 ### Versão do app:
 
@@ -684,9 +678,6 @@ A navegação para o Google é feita diretamente pelo código usando window loca
 >
 >Voltar > fecha a MainActivity
 
-Navegador com o repositório do github:
-
-é uma activity que contém o site do repositório do github!
 
 ## Considerações finais:
 
@@ -822,7 +813,7 @@ settings.mixedContentMode =
 
 
     settings.allowContentAccess =  
-        false  
+        true  
 
 
     settings.allowFileAccessFromFileURLs =  

@@ -1,4 +1,110 @@
-# Termos e politicas do projeto = Mulher Amparada.
+# Termos e politicas do projeto = Mulher Amparada:
+
+---
+
+Protocolo de Segurança, Registro e Preservação de Evidências:
+
+1. Fundamentação jurídica:
+
+O aplicativo Mulher Amparada adota como referências jurídicas:
+
+- Lei Maria da Penha — Lei nº 11.340/2006, art. 19, §§ 4º, 5º e 6º, incluídos pela Lei nº 14.550/2023.
+- Lei Maria da Penha, art. 9º, § 2º, II, referente à assistência à mulher em situação de violência.
+- STF, Tema 237 de Repercussão Geral (RE 583.937), sobre a licitude da gravação ambiental realizada por um dos interlocutores.
+- Código de Processo Penal, art. 217, sobre medidas para evitar constrangimento de testemunhas e vítimas durante a inquirição.
+- Código de Processo Penal, art. 400-A, sobre a proteção da integridade física e psicológica da vítima durante audiências.
+- Código de Processo Penal, arts. 158-A e 158-B, sobre cadeia de custódia e rastreamento de vestígios.
+- Código Penal, art. 147-B, sobre violência psicológica contra a mulher.
+
+A aplicação dessas normas depende das circunstâncias concretas. O registro feito pelo aplicativo não garante, por si só, a admissibilidade ou a suficiência de uma prova judicial.
+
+2. Aviso sobre gravações e registros:
+
+Você pode registrar ameaças e situações de violência para proteger seus direitos, observadas as circunstâncias e a legislação aplicável. O STF, no Tema 237, reconhece a licitude da gravação ambiental realizada por um dos participantes da conversa, mesmo sem o conhecimento do outro.
+
+A legalidade de uma gravação depende do contexto. Sua utilização e seu valor probatório serão avaliados pelas autoridades competentes.
+
+Orientação: priorize sua segurança. Não se exponha ao perigo para obter uma gravação.
+
+3. Orientações para a qualidade dos registros:
+
+Identificação dos acontecimentos:
+
+Se for seguro e natural, relate verbalmente o que está acontecendo, identificando pessoas, acontecimentos e contexto. Não é obrigatório falar durante uma situação de violência, confrontar o agressor ou provocar qualquer reação para produzir uma gravação.
+
+Data e hora:
+
+Mantenha a data, a hora e o fuso horário do dispositivo corretos, preferencialmente com sincronização automática. O aplicativo deve registrar os metadados disponíveis sem apresentá-los como garantia absoluta da data real do acontecimento.
+
+Qualidade do áudio:
+
+Mantenha o microfone desobstruído sempre que possível. Tecidos, objetos e ruídos ambientais podem prejudicar a compreensão da gravação.
+
+Bateria e integridade dos arquivos:
+
+Mantenha o dispositivo carregado. O aplicativo deve tratar interrupções inesperadas, falta de espaço e falhas de energia de forma segura, informando quando um arquivo não tiver sido finalizado ou validado.
+
+Segurança pessoal:
+
+A gravação é opcional e nunca deve ser priorizada em detrimento da integridade física ou psicológica da usuária. Se o uso do celular puder aumentar o risco, interrompa a utilização quando for seguro fazê-lo e procure ajuda.
+
+4. Preservação e integridade das evidências:
+
+O Mulher Amparada deve proteger os registros armazenados por meio de controles de acesso e criptografia, quando implementados e testados.
+
+O sistema poderá utilizar:
+
+- Criptografia AES/GCM para arquivos protegidos.
+- Hash SHA-256 para verificar se um arquivo permaneceu inalterado após a geração do hash.
+- Registro de data e hora, versão do aplicativo e informações técnicas pertinentes.
+- Controle de acesso aos arquivos e prevenção de alterações não autorizadas.
+- Exportação segura dos registros para apresentação às autoridades competentes.
+
+O hash SHA-256 demonstra a correspondência entre arquivos comparados; isoladamente, não comprova autoria, autenticidade originária, data do acontecimento ou veracidade do conteúdo.
+
+A cadeia de custódia prevista no CPP compreende procedimentos de reconhecimento, isolamento, fixação, coleta, acondicionamento, transporte, recebimento, processamento, armazenamento e descarte. O aplicativo pode contribuir para a organização e a documentação dos registros, mas não substitui os procedimentos oficiais de perícia.
+
+5. Backup e recuperação de dados:
+
+A usuária deve verificar as opções de backup do dispositivo e compreender quais dados são efetivamente incluídos na cópia de segurança.
+
+A disponibilidade de backup depende da implementação do aplicativo, das configurações do sistema operacional e dos serviços utilizados. Não se deve presumir que os arquivos privados, as chaves criptográficas ou os metadados serão restaurados automaticamente.
+
+Para preservar os registros:
+
+1. Utilize mecanismos de exportação e backup efetivamente testados.
+2. Proteja as cópias com criptografia e controle de acesso.
+3. Mantenha cópias em locais seguros, considerando o risco de acesso pelo agressor.
+4. Não exclua o original até verificar a integridade e a recuperação da cópia.
+5. Antes de reinstalar ou trocar de dispositivo, confirme se os arquivos e as chaves poderão ser recuperados.
+
+Arquivos criptografados sem suas respectivas chaves podem se tornar irrecuperáveis. O aplicativo deve informar claramente os riscos de perda antes de operações destrutivas.
+
+6. Privacidade e segurança na nuvem:
+
+A escolha do serviço de armazenamento deve considerar sua política de privacidade, os controles de acesso, a criptografia, a possibilidade de compartilhamento e os riscos de comprometimento da conta.
+
+Ao exportar arquivos, prefira formatos e métodos de proteção que ofereçam criptografia robusta. Não presuma que um arquivo ZIP ou RAR com senha oferece proteção adequada sem verificar o algoritmo de criptografia utilizado e a força da senha.
+
+Evite compartilhar publicamente gravações, documentos, diários ou informações que identifiquem a vítima. Sempre considere se o dispositivo, a conta ou as cópias de segurança podem ser acessados por terceiros.
+
+7. Aviso de urgência:
+
+📞 AVISO DE URGÊNCIA EM CASO DE ATAQUE:
+
+O Mulher Amparada é uma ferramenta auxiliar de informação, prevenção, organização e preservação de registros. Não substitui a polícia, os serviços de emergência, o atendimento médico, a assistência jurídica ou os serviços públicos de proteção.
+
+Em caso de emergência ou agressão em curso, ligue para 190 — Polícia Militar. Para orientação e informações sobre os serviços de atendimento à mulher, ligue para 180 — Central de Atendimento à Mulher.
+
+Não arrisque sua segurança para utilizar o aplicativo, produzir registros ou preservar arquivos.
+
+8. Compromisso do Mulher Amparada:
+
+O Mulher Amparada busca oferecer recursos tecnológicos responsáveis para apoiar mulheres em situação de violência, respeitando sua autonomia, sua privacidade e sua segurança.
+
+A plataforma deve comunicar com clareza seus limites técnicos e jurídicos, evitar promessas de validade judicial automática e priorizar a proteção da usuária em todas as funcionalidades.
+
+A segurança da mulher vem antes de qualquer registro.
 
 ---
 

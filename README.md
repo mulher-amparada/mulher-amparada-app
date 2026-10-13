@@ -272,8 +272,6 @@ NeoCalcActivity (compose) = Tela que contém o disfarce de calculadora
  
  TarefaActivity (compose) = Recurso das tarefas da área protegida 
  
- A MainActivity é a única que é feita com webview!, e representa o recurso de navegador da área protegida
- 
  GravarActivity (xml) = Recurso do gravador de voz da área protegida
  
  FileActivity (xml) = Recurso de Gerenciador de arquivos da área protegida (mas ele apenas visualiza!)
@@ -686,6 +684,9 @@ A navegação para o Google é feita diretamente pelo código usando window loca
 >
 >Voltar > fecha a MainActivity
 
+Navegador com o repositório do github:
+
+é uma activity que contém o site do repositório do github!
 
 ## Considerações finais:
 

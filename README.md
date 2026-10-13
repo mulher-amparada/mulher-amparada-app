@@ -23,6 +23,14 @@ E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
 https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Projeto-Finalizado
 
+### 👑 Ressignificar o conto da princesa, do príncipe e do sapo como forma de conscientização sobre a violência contra a mulher:
+
+https://github.com/mulher-amparada/mulher-amparada-app/issues/14
+
+### ⚖️🎙️ O Pronunciamento das Juízas: "A Lei é o Seu Escudo":
+
+https://github.com/mulher-amparada/mulher-amparada-app/issues/15
+
 # 👾Nossas contribuições!:
 
 <img src="https://raw.githubusercontent.com/mulher-amparada/mulher-amparada-app/main/docs/observatorio/observatorio-001.png" alt="Observatório do Mulher Amparada" width="100%" />

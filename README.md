@@ -197,6 +197,7 @@ Dependabot:
 
 O projeto também conta com o Dependabot, ferramenta do GitHub que verifica dependências desatualizadas e vulnerabilidades compatíveis com suas configurações, podendo abrir pull requests para atualizar dependências.
 
+e ele também consegue ver as versões (exemplo v8, no yml) e também as versões do ubuntu nos workflows!
 Resultado final:
 
 O workflow automatiza tarefas de compilação, análise, documentação, publicação e manutenção do projeto. Ao final, o Mulher-Amparada-Bot grava os artifacts na branch "main", conforme as dependências e condições definidas no workflow.

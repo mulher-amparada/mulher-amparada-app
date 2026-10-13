@@ -4,6 +4,8 @@
 
 Contribuições são bem-vindas para melhorar o Mulher Amparada.
 
+> ⚠️Não compartilhe seu nome em nenhuma contribuição!
+
 Antes de contribuir:
 
 - Respeite as mulheres e as demais pessoas envolvidas no projeto.

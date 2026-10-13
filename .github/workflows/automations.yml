@@ -43,7 +43,7 @@ jobs:
       # =========================================================
 
       - name: Baixar código
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
 
@@ -714,7 +714,7 @@ jobs:
 
     steps:
       - name: Baixar repositório completo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -1046,7 +1046,7 @@ jobs:
 
     steps:
       - name: Baixar repositório
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
 
@@ -1119,7 +1119,7 @@ jobs:
     steps:
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
@@ -1172,7 +1172,7 @@ jobs:
       
     steps:
       - name: Baixar todo o histórico
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -1242,7 +1242,7 @@ jobs:
 
     steps:
       - name: Baixar código atualizado
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
           ref: main
@@ -1300,7 +1300,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
           ref: main
@@ -1372,7 +1372,7 @@ jobs:
 
     steps:
       - name: Baixar repositório
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
           ref: main
@@ -1407,7 +1407,7 @@ jobs:
 
     steps:
       - name: Baixar repositório completo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -1499,7 +1499,7 @@ jobs:
 
     steps:
       - name: Baixar repositório
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
           ref: main
@@ -1534,7 +1534,7 @@ jobs:
 
     steps:
       - name: Baixar repositório
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           ref: main
@@ -1567,7 +1567,7 @@ jobs:
 
     steps:
       - name: Baixar repositório
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
           ref: main
@@ -1645,7 +1645,7 @@ jobs:
 
     steps:
       - name: Baixar código-fonte da main
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: main
           fetch-depth: 0

@@ -288,7 +288,7 @@ jobs:
       # =========================================================
 
       - name: Enviar APK como artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: APK-Kotlin-Assinado
           path: "${{ github.workspace }}/${{ env.RELEASE_APK_NAME }}"
@@ -1025,7 +1025,7 @@ jobs:
       # =======================================================
 
       - name: Enviar relatórios, CSS e HTML como artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: relatorio-linguagens
           path: pacote-linguagens/
@@ -1097,7 +1097,7 @@ jobs:
             pacote-resultados/relatorios/graficos/
 
       - name: Enviar resultados como artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: resultados-ligue180
           path: pacote-resultados/
@@ -1200,7 +1200,7 @@ jobs:
           PY
 
       - name: Enviar README atualizado
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: arquivo-readme
           path: README.md
@@ -1311,7 +1311,7 @@ jobs:
           base-url-path: https://mulher-amparada.github.io/mulher-amparada-app/
 
       - name: Enviar Sitemap gerado
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: arquivo-sitemap
           path: sitemap.xml
@@ -1481,7 +1481,7 @@ jobs:
           echo "Todos os PNGs sequenciais foram verificados."
 
       - name: Disponibilizar todos os mapas
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: observatorio
           path: docs/observatorio/observatorio-*.png
@@ -1516,7 +1516,7 @@ jobs:
         run: python3 scripts/atualizar_footer.py
 
       - name: Enviar footer gerado
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: arquivo-footer
           path: index.html
@@ -1548,7 +1548,7 @@ jobs:
         run: ruby scripts/commits.rb
 
       - name: Enviar relatório gerado
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: arquivos-relatorio-commits
           path: commits/
@@ -1596,7 +1596,7 @@ jobs:
           ls -lh pesquisas/workflow.md
 
       - name: Enviar documentação do workflow como artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: arquivos-pesquisas
           path: pesquisas/workflow.md

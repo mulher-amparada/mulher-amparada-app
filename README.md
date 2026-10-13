@@ -375,7 +375,9 @@ e tambem, reforcando que no canto superior direito tem um icone de calculadora q
 
 > no disfarce de calculadora, caso a usuaria esqueça tudo, existe um popup que usa o BiometricPrompt que poderá resetar tanto a senha tanto a pergunta de recuperação (e ele usa APENAS o device credencial!), porém, quando utiliza o BiometricPrompt e é validado, ele pergunta a pergunta de recuperação e a senha!
 
-> e depois da senha, toda a tela fica preta, ao clicar 5 vezes, ele vai pra HubActivity!, e pra recuperar a senha, ele faz todo o processo de recuperação, e ai fica repetindo a senha e a pergunta de recuperação, para a usuária errar sem medo, e se clicar fora do popup ele salva tudo, e ao apenas digitar a senha pelos botoes, a tela toda fica preta e se clicar por 5 vezes ele vai pra HubActivity!
+> e depois da senha, toda a tela fica preta, ao clicar 5 vezes, ele vai pra HubActivity!,
+>
+> e pra recuperar a senha tanto pelo esqueci tudo tanto ao clicar por 5 vezes no visor, ele faz todo o processo de recuperação, e ai fica repetindo a senha e a pergunta de recuperação, para a usuária errar sem medo, e se clicar fora do popup ele salva tudo, e ao apenas digitar a senha pelos botoes, a tela toda fica preta e se clicar por 5 vezes ele vai pra HubActivity!
 
 ### Versão do app:
 

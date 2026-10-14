@@ -17,7 +17,7 @@ e pra ser sincero, comecei esse projeto no dia 13/05/2026 e terminei no dia 12/1
 
 Os contribuidores ajudaram também!, além de mim e dos bots:
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 5636**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 5630**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
@@ -215,7 +215,7 @@ Resultado final:
 
 O workflow automatiza tarefas de compilação, análise, documentação, publicação e manutenção do projeto. Ao final, o Mulher-Amparada-Bot grava os artifacts na branch "main", conforme as dependências e condições definidas no workflow.
 
-e também temos um agente que roda o automations.yml (o de automações do mulher amparada) todo dia a cada 30 minutos!
+e também temos um agente que eu escolho manualmente qual ele vai ativar, se é o dependabot por meio de um yml que faz a solicitação, ou o proprio automations..., e eu escolho a branch também!
 
 ```
 

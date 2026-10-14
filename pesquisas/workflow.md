@@ -1582,6 +1582,47 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+          git fetch origin main
+          git reset --hard origin/main
+
+          TOTAL=$(git rev-list --all --count)
+
+          python3 - "$TOTAL" <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          total = sys.argv[1]
+          arquivo = Path("README.md")
+          texto = arquivo.read_text(encoding="utf-8")
+
+          padrao = (
+              r"\*\*Commits totais de toda a história do projeto, "
+              r"\(feitos por mim e pelos workflows do github actions!\) =.*?\*\*"
+          )
+
+          novo = (
+              "**Commits totais de toda a história do projeto, "
+              "(feitos por mim e pelos workflows do github actions!) = "
+              + total
+              + "**"
+          )
+
+          texto, quantidade = re.subn(
+              padrao,
+              lambda _: novo,
+              texto,
+              count=1
+          )
+
+          if quantidade == 0:
+              raise SystemExit(
+                  "Contagem de commits não encontrada no README.md"
+              )
+
+          arquivo.write_text(texto, encoding="utf-8")
+          PY
+
           git add README.md
 
           if git diff --cached --quiet; then
@@ -1590,13 +1631,7 @@ jobs:
           fi
 
           git commit -m "Atualizar total de commits [skip ci]"
-
-          git fetch origin main
-
-          git rebase origin/main
-
           git push origin HEAD:main
-
 
   # =========================================================
   # GERAR SITEMAP

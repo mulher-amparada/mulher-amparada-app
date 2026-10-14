@@ -2,15 +2,16 @@
 
 - **Arquivo de origem:** `.github/workflows/automations.yml`
 - **Arquivo gerado:** `.github/workflows/workflow.md`
-- **Jobs identificados:** 16
-- **Etapas identificadas:** 75
+- **Jobs identificados:** 17
+- **Etapas identificadas:** 76
 
 ## Tabela completa de jobs e etapas
 
 | ID do job | Nome | Runner | Dependências | Etapas |
 |---|---|---|---|---|
 | `build` | 📦Compilar APK Kotlin | ubuntu-24.04 | Nenhuma | 1. Baixar código (`actions/checkout@v7`); 2. Verificar projeto — executa comandos; 3. Configurar Java 17 (`actions/setup-java@v6`); 4. Verificar Android SDK 37 — executa comandos; 5. Dar permissão ao Gradle — executa comandos; 6. Compilar APK — executa comandos; 7. Localizar APK — executa comandos; 8. Assinar APK — executa comandos; 9. Preparar APK da Release — executa comandos; 10. APK-Kotlin-Assinado (`actions/upload-artifact@v7`); 11. Calcular tamanho real do APK — executa comandos; 12. Calcular SHA-256 — executa comandos; 13. Atualizar APK no main — executa comandos; 14. Verificar Release — executa comandos; 15. Excluir APK antigo da Release — executa comandos; 16. Enviar APK para a Release — executa comandos; 17. Atualizar SHA-256 da Release — executa comandos; 18. Atualizar link, tamanho e SHA-256 no download.html — executa comandos; 19. Enviar download.html atualizado para o main — executa comandos; 20. Mostrar resumo — executa comandos |
-| `dependabot-merge` | 🤖 Merge das PRs do Dependabot | ubuntu-latest | Nenhuma | 1. 🔀 Fazer merge das PRs — executa comandos |
+| `executar-dependabot-maintenance` | 🤖 Executar dependabot-maintenance.yml | ubuntu-latest | Nenhuma | 1. Executar workflow — executa comandos |
+| `dependabot-merge` | 🤖 Merge das PRs do Dependabot | ubuntu-latest | `executar-dependabot-maintenance` | 1. 🔀 Fazer merge das PRs — executa comandos |
 | `linguagens` | 💬Analisar linguagens e atualizar estilos | ubuntu-24.04 | `build`, `publicar-divulgacao` | 1. Baixar repositório completo (`actions/checkout@v7`); 2. Instalar cloc — executa comandos; 3. Analisar arquivos e linguagens — executa comandos; 4. Gerar cores e atualizar os dois temas — executa comandos; 5. Validar relatórios, CSS e pacote — executa comandos; 6. relatorio-linguagens (`actions/upload-artifact@v7`) |
 | `bot` | 🎲Análise de dados em Julia | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v7`); 2. Instalar Julia (`julia-actions/setup-julia@v3`); 3. Instalar dependências Julia — executa comandos; 4. Executar análise de dados em Julia — executa comandos; 5. Validar e preparar resultados — executa comandos; 6. resultados-ligue180 (`actions/upload-artifact@v7`) |
 | `build-site` | 🌐Montar site | ubuntu-24.04 | `build` | 1. Checkout (`actions/checkout@v7`); 2. Setup Pages (`actions/configure-pages@v6`); 3. Build with Jekyll (`actions/jekyll-build-pages@v1`); 4. Upload Pages artifact (`actions/upload-pages-artifact@v5`) |
@@ -33,6 +34,7 @@ As setas representam as dependências declaradas em `needs` no YAML original.
 ```mermaid
 flowchart TD
     job_build["📦Compilar APK Kotlin"]
+    job_executar_dependabot_maintenance["🤖 Executar dependabot-maintenance.yml"]
     job_dependabot_merge["🤖 Merge das PRs do Dependabot"]
     job_linguagens["💬Analisar linguagens e atualizar estilos"]
     job_bot["🎲Análise de dados em Julia"]
@@ -48,6 +50,7 @@ flowchart TD
     job_atualizar_relatorio_commits["📄Atualizar relatório de commits"]
     job_pesquisar_projeto["🎲Documentar workflow YAML"]
     job_salvar_na_main["💾Salvar artifacts na main pelo Mulher Amparada Bot"]
+    job_executar_dependabot_maintenance --> job_dependabot_merge
     job_build --> job_linguagens
     job_publicar_divulgacao --> job_linguagens
     job_build --> job_build_site
@@ -105,11 +108,21 @@ flowchart TD
 | 19 | Enviar download.html atualizado para o main | — | \| |
 | 20 | Mostrar resumo | — | \| |
 
+### 🤖 Executar dependabot-maintenance.yml
+
+- **ID:** `executar-dependabot-maintenance`
+- **Runner:** `ubuntu-latest`
+- **Dependências:** Nenhuma
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| 1 | Executar workflow | — | \| |
+
 ### 🤖 Merge das PRs do Dependabot
 
 - **ID:** `dependabot-merge`
 - **Runner:** `ubuntu-latest`
-- **Dependências:** Nenhuma
+- **Dependências:** `executar-dependabot-maintenance`
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
@@ -1005,10 +1018,29 @@ jobs:
       # DEPENDABOT
       # =========================================================
 
-  dependabot-merge:
-    name: 🤖 Merge das PRs do Dependabot
+  executar-dependabot-maintenance:
+    name: 🤖 Executar dependabot-maintenance.yml
     runs-on: ubuntu-latest
 
+    permissions:
+      actions: write
+      contents: read
+
+    steps:
+      - name: Executar workflow
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh workflow run dependabot-maintenance.yml \
+            --repo "$GH_REPO" \
+            --ref main
+            
+  dependabot-merge:
+    name: 🤖 Merge das PRs do Dependabot
+    needs: executar-dependabot-maintenance
+    runs-on: ubuntu-latest
+    
     permissions:
       contents: write
       pull-requests: write

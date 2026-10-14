@@ -703,10 +703,29 @@ jobs:
       # DEPENDABOT
       # =========================================================
 
-  dependabot-merge:
-    name: 🤖 Merge das PRs do Dependabot
+  executar-dependabot-maintenance:
+    name: 🤖 Executar dependabot-maintenance.yml
     runs-on: ubuntu-latest
 
+    permissions:
+      actions: write
+      contents: read
+
+    steps:
+      - name: Executar workflow
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh workflow run dependabot-maintenance.yml \
+            --repo "$GH_REPO" \
+            --ref main
+            
+  dependabot-merge:
+    name: 🤖 Merge das PRs do Dependabot
+    needs: executar-dependabot-maintenance
+    runs-on: ubuntu-latest
+    
     permissions:
       contents: write
       pull-requests: write

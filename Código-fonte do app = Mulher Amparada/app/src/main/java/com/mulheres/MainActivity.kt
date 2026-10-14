@@ -57,26 +57,27 @@ private fun configurarToqueLongo() {
 }
 
 private fun mostrarDialogoModo() {
-    val opcoes = arrayOf("📱 Mobile", "🖥️ Desktop")
+    val opcoes = arrayOf("📱 Modo Mobile", "🖥️ Modo Computador")
 
-    AlertDialog.Builder(this)
+    AlertDialog.Builder(this@MainActivity)
         .setTitle("Modo de visualização")
-        .setMessage("Escolha como deseja visualizar a página.")
-        .setItems(opcoes) { _, which ->
+        .setItems(opcoes) { _, escolha ->
             val settings = webView.settings
 
-            if (which == 1) {
-                settings.useWideViewPort = true
-                settings.loadWithOverviewMode = true
-                settings.userAgentString =
-                    WebSettings.getDefaultUserAgent(this)
-                        .replace(" Mobile", "")
-                        .replace(" Android", "")
-            } else {
-                settings.userAgentString =
-                    WebSettings.getDefaultUserAgent(this)
-                settings.useWideViewPort = false
-                settings.loadWithOverviewMode = false
+            when (escolha) {
+                0 -> {
+                    settings.userAgentString =
+                        WebSettings.getDefaultUserAgent(this@MainActivity)
+                    settings.useWideViewPort = false
+                    settings.loadWithOverviewMode = false
+                }
+
+                1 -> {
+                    settings.userAgentString =
+                        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+                    settings.useWideViewPort = true
+                    settings.loadWithOverviewMode = true
+                }
             }
 
             webView.reload()

@@ -1,9 +1,5 @@
 package com.mulheres
 
-import android.app.AlertDialog
-import android.os.Handler
-import android.os.Looper
-import android.view.MotionEvent
 import android.webkit.ValueCallback
 import android.content.res.Configuration
 import android.content.Intent
@@ -29,59 +25,6 @@ import androidx.core.view.WindowCompat
 import androidx.activity.enableEdgeToEdge
 
 class RepoActivity : AppCompatActivity() {
-
-private var modoDesktop = false
-private val handler = Handler(Looper.getMainLooper())
-private var toqueLongoExecutado = false
-
-private val longPressRunnable = Runnable {
-    toqueLongoExecutado = true
-    mostrarDialogoModo()
-}
-
-private fun configurarToqueLongo() {
-    webView.setOnTouchListener { _, event ->
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                toqueLongoExecutado = false
-                handler.postDelayed(longPressRunnable, 5000)
-            }
-
-            MotionEvent.ACTION_UP,
-            MotionEvent.ACTION_CANCEL -> {
-                handler.removeCallbacks(longPressRunnable)
-            }
-        }
-        false
-    }
-}
-
-private fun mostrarDialogoModo() {
-    val opcoes = arrayOf("📱 Mobile", "🖥️ Computador")
-
-    AlertDialog.Builder(this@RepoActivity)
-        .setTitle("Modo de visualização")
-        .setItems(opcoes) { _, escolha ->
-            modoDesktop = escolha == 1
-
-            val settings = webView.settings
-
-            settings.userAgentString = if (modoDesktop) {
-                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
-            } else {
-                WebSettings.getDefaultUserAgent(this@RepoActivity)
-            }
-
-            settings.useWideViewPort = true
-            settings.loadWithOverviewMode = modoDesktop
-
-            val url = webView.url ?: paginaInicial
-            webView.stopLoading()
-            webView.loadUrl(url)
-        }
-        .setNegativeButton("Cancelar", null)
-        .show()
-}
 
 private var fileChooserCallback: ValueCallback<Array<Uri>>? = null
 
@@ -124,8 +67,6 @@ private val FILE_CHOOSER_REQUEST_CODE = 1001
 
         // CONFIGURAÇÃO DA WEBVIEW
         configurarWebView()
-        
-        configurarToqueLongo()
 
         // BARRAS DO SISTEMA
         ViewCompat.setOnApplyWindowInsetsListener(webView) { view, insets ->
@@ -143,10 +84,10 @@ private val FILE_CHOOSER_REQUEST_CODE = 1001
 
             if (paisagem) {
                 params.setMargins(
-            28.dp() + barras.left,
-            14.dp() + barras.top,
-            12.dp() + barras.right,
-            16.dp() + barras.bottom
+                    64.dp() + barras.left,
+                    28.dp() + barras.top,
+                    32.dp() + barras.right,
+                    32.dp() + barras.bottom
                 )
             } else {
                 params.setMargins(
@@ -290,82 +231,8 @@ private val FILE_CHOOSER_REQUEST_CODE = 1001
         settings.javaScriptCanOpenWindowsAutomatically = false
         settings.setSupportMultipleWindows(false)
 
-settings.useWideViewPort = true
-settings.loadWithOverviewMode = true
-
         // WEB CHROME CLIENT
         webView.webChromeClient = object : WebChromeClient() {
-
-override fun onJsAlert(
-    view: WebView?,
-    url: String?,
-    message: String?,
-    result: android.webkit.JsResult?
-): Boolean {
-    AlertDialog.Builder(this@RepoActivity)
-        .setTitle("Aviso")
-        .setMessage(message.orEmpty())
-        .setPositiveButton("OK") { _, _ ->
-            result?.confirm()
-        }
-        .setOnCancelListener {
-            result?.cancel()
-        }
-        .show()
-
-    return true
-}
-
-override fun onJsConfirm(
-    view: WebView?,
-    url: String?,
-    message: String?,
-    result: android.webkit.JsResult?
-): Boolean {
-    AlertDialog.Builder(this@RepoActivity)
-        .setTitle("Confirmação")
-        .setMessage(message.orEmpty())
-        .setPositiveButton("Sim") { _, _ ->
-            result?.confirm()
-        }
-        .setNegativeButton("Não") { _, _ ->
-            result?.cancel()
-        }
-        .setOnCancelListener {
-            result?.cancel()
-        }
-        .show()
-
-    return true
-}
-
-override fun onJsPrompt(
-    view: WebView?,
-    url: String?,
-    message: String?,
-    defaultValue: String?,
-    result: android.webkit.JsPromptResult?
-): Boolean {
-    val campo = android.widget.EditText(this@RepoActivity)
-    campo.setText(defaultValue.orEmpty())
-
-    AlertDialog.Builder(this@RepoActivity)
-        .setTitle("Entrada de dados")
-        .setMessage(message.orEmpty())
-        .setView(campo)
-        .setPositiveButton("OK") { _, _ ->
-            result?.confirm(campo.text.toString())
-        }
-        .setNegativeButton("Cancelar") { _, _ ->
-            result?.cancel()
-        }
-        .setOnCancelListener {
-            result?.cancel()
-        }
-        .show()
-
-    return true
-}
 
 override fun onShowFileChooser(
     webView: WebView?,

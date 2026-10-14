@@ -201,6 +201,10 @@ O job "salvar-na-main" baixa os artifacts gerados pelos outros jobs, compila o p
 
 O publicador utiliza os Secrets "MULHER_AMPARADA_APP_ID", "MULHER_AMPARADA_INSTALLATION_ID" e "MULHER_AMPARADA_PRIVATE_KEY" para autenticação.
 
+executar-dependabot-maintenance:
+
+ele executa o workflow que faz uma solicitação para disparar o dependabot!
+
 Dependabot:
 
 O projeto também conta com o Dependabot, ferramenta do GitHub que verifica dependências desatualizadas e vulnerabilidades compatíveis com suas configurações, podendo abrir pull requests para atualizar dependências.

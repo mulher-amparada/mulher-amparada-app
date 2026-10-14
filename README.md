@@ -34,7 +34,7 @@ https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Pro
 
 # 💬Considerações:
 
-No dia 13/10/2026, teve uma imagem de varios homems numa mesa em um escritorio no post do devto do meu projeto, então eu simplesmente retirei os posts de la, e assim o devto perdeu um ótimo desenvolvedor..., pra sempre!
+No dia 13/10/2026, teve uma imagem de varios homems numa mesa em um escritorio trabalhando, porem eu fiz esse projeto inteiramente sozinho, no post do devto do meu projeto, então eu simplesmente retirei os posts de la, e assim o devto perdeu um ótimo desenvolvedor..., pra sempre!
 
 # ⚠️MURAL DE AVISOS:
 

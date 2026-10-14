@@ -113,9 +113,7 @@ import kotlin.math.sqrt
 
 class HubActivity : FragmentActivity() {
 
-private val cripto by lazy {
-    Cripto(applicationContext)
-}
+private lateinit var cripto: Cripto
 
 var papelParedeUri by mutableStateOf<String?>(null)
     private set
@@ -155,7 +153,7 @@ private var palmasEmExecucao = false
 var permissoesConcedidas by mutableStateOf(false)
     private set
 
-private lateinit var cripto: Cripto
+
 
 private lateinit var telephonyManager: TelephonyManager
 

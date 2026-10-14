@@ -57,10 +57,7 @@ private fun configurarToqueLongo() {
 }
 
 private fun mostrarDialogoModo() {
-    val opcoes = arrayOf(
-        "📱 Modo Mobile",
-        "🖥️ Modo Computador"
-    )
+    val opcoes = arrayOf("📱 Mobile", "🖥️ Computador")
 
     AlertDialog.Builder(this@RepoActivity)
         .setTitle("Modo de visualização")
@@ -76,16 +73,11 @@ private fun mostrarDialogoModo() {
             }
 
             settings.useWideViewPort = true
-            settings.loadWithOverviewMode = true
+            settings.loadWithOverviewMode = modoDesktop
 
-            webView.post {
-                webView.evaluateJavascript(
-                    "document.querySelector('meta[name=\"viewport\"]')?.setAttribute('content', 'width=device-width, initial-scale=1')",
-                    null
-                )
-
-                webView.reload()
-            }
+            val url = webView.url ?: paginaInicial
+            webView.stopLoading()
+            webView.loadUrl(url)
         }
         .setNegativeButton("Cancelar", null)
         .show()
@@ -151,9 +143,9 @@ private val FILE_CHOOSER_REQUEST_CODE = 1001
 
             if (paisagem) {
                 params.setMargins(
-            32.dp() + barras.left,
+            28.dp() + barras.left,
             14.dp() + barras.top,
-            16.dp() + barras.right,
+            12.dp() + barras.right,
             16.dp() + barras.bottom
                 )
             } else {

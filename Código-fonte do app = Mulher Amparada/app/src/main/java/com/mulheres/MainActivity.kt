@@ -111,7 +111,7 @@ if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
 
     if (paisagem) {
         params.setMargins(
-            64.dp() + barras.left,
+            38.dp() + barras.left,
             28.dp() + barras.top,
             32.dp() + barras.right,
             32.dp() + barras.bottom

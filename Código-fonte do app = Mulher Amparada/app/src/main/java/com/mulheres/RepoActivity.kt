@@ -300,7 +300,7 @@ override fun onJsAlert(
     message: String?,
     result: android.webkit.JsResult?
 ): Boolean {
-    AlertDialog.Builder(this@MainActivity)
+    AlertDialog.Builder(this@RepoActivity)
         .setTitle("Aviso")
         .setMessage(message.orEmpty())
         .setPositiveButton("OK") { _, _ ->
@@ -320,7 +320,7 @@ override fun onJsConfirm(
     message: String?,
     result: android.webkit.JsResult?
 ): Boolean {
-    AlertDialog.Builder(this@MainActivity)
+    AlertDialog.Builder(this@RepoActivity)
         .setTitle("Confirmação")
         .setMessage(message.orEmpty())
         .setPositiveButton("Sim") { _, _ ->
@@ -344,10 +344,10 @@ override fun onJsPrompt(
     defaultValue: String?,
     result: android.webkit.JsPromptResult?
 ): Boolean {
-    val campo = android.widget.EditText(this@MainActivity)
+    val campo = android.widget.EditText(this@RepoActivity)
     campo.setText(defaultValue.orEmpty())
 
-    AlertDialog.Builder(this@MainActivity)
+    AlertDialog.Builder(this@RepoActivity)
         .setTitle("Entrada de dados")
         .setMessage(message.orEmpty())
         .setView(campo)

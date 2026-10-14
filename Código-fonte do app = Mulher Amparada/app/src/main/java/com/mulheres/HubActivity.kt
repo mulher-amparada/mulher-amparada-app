@@ -2,10 +2,8 @@ package com.mulheres
 
 import androidx.compose.material3.IconButton
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import android.content.Context
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.graphics.graphicsLayer
@@ -31,7 +29,6 @@ import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color as AndroidColor
@@ -3142,7 +3139,7 @@ private fun Hero(
                 ) {
                     Image(
                         painter = painterResource(
-                            R.drawable.seu_icone_de_pincel
+                            R.drawable.ic_pincel
                         ),
                         contentDescription = "Alterar papel de parede",
                         modifier = Modifier.size(24.dp)

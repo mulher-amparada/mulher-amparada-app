@@ -73,9 +73,10 @@ private fun mostrarDialogoModo() {
             }
 
             settings.useWideViewPort = true
-            settings.loadWithOverviewMode = modoDesktop
+            settings.loadWithOverviewMode = !modoDesktop
 
-            val url = webView.url ?: paginaInicial
+            val url = webView.url ?: "https://www.google.com"
+
             webView.stopLoading()
             webView.loadUrl(url)
         }

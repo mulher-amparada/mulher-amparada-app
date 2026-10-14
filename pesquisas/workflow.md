@@ -2,8 +2,8 @@
 
 - **Arquivo de origem:** `.github/workflows/automations.yml`
 - **Arquivo gerado:** `.github/workflows/workflow.md`
-- **Jobs identificados:** 17
-- **Etapas identificadas:** 77
+- **Jobs identificados:** 16
+- **Etapas identificadas:** 75
 
 ## Tabela completa de jobs e etapas
 
@@ -16,7 +16,6 @@
 | `build-site` | 🌐Montar site | ubuntu-24.04 | `build` | 1. Checkout (`actions/checkout@v7`); 2. Setup Pages (`actions/configure-pages@v6`); 3. Build with Jekyll (`actions/jekyll-build-pages@v1`); 4. Upload Pages artifact (`actions/upload-pages-artifact@v5`) |
 | `deploy` | 🌐Publicar site | ubuntu-24.04 | `build-site` | 1. Deploy to GitHub Pages (`actions/deploy-pages@v5`) |
 | `atualizar-commits` | 🎲Atualizar contagem de commits | ubuntu-24.04 | `deploy` | 1. Baixar todo o histórico (`actions/checkout@v7`); 2. Atualizar total de commits — executa comandos; 3. arquivo-readme (`actions/upload-artifact@v7`); 4. Publicar README na main — executa comandos |
-| `sincronizar-devto` | 📄Sincronizar README com DEV.to | ubuntu-24.04 | `atualizar-commits` | 1. Baixar código atualizado (`actions/checkout@v7`); 2. Atualizar artigo no DEV.to — executa comandos |
 | `sitemap` | 🎲Gerar Sitemap | ubuntu-24.04 | `deploy` | 1. Checkout (`actions/checkout@v7`); 2. Gerar Sitemap (`cicirello/generate-sitemap@v1`); 3. arquivo-sitemap (`actions/upload-artifact@v7`) |
 | `indexnow` | 🔍IndexNow | ubuntu-24.04 | `deploy`, `bot`, `linguagens`, `publicar-divulgacao`, `atualizar-commits` | 1. Enviar Sitemap ao IndexNow (`bojieyang/indexnow-action@v3`) |
 | `lighthouse` | 🔍Lighthouse | ubuntu-24.04 | `deploy` | 1. Lighthouse (`treosh/lighthouse-ci-action@v12`) |
@@ -40,7 +39,6 @@ flowchart TD
     job_build_site["🌐Montar site"]
     job_deploy["🌐Publicar site"]
     job_atualizar_commits["🎲Atualizar contagem de commits"]
-    job_sincronizar_devto["📄Sincronizar README com DEV.to"]
     job_sitemap["🎲Gerar Sitemap"]
     job_indexnow["🔍IndexNow"]
     job_lighthouse["🔍Lighthouse"]
@@ -55,7 +53,6 @@ flowchart TD
     job_build --> job_build_site
     job_build_site --> job_deploy
     job_deploy --> job_atualizar_commits
-    job_atualizar_commits --> job_sincronizar_devto
     job_deploy --> job_sitemap
     job_deploy --> job_indexnow
     job_bot --> job_indexnow
@@ -183,17 +180,6 @@ flowchart TD
 | 2 | Atualizar total de commits | — | \| |
 | 3 | arquivo-readme | `actions/upload-artifact@v7` | — |
 | 4 | Publicar README na main | — | \| |
-
-### 📄Sincronizar README com DEV.to
-
-- **ID:** `sincronizar-devto`
-- **Runner:** `ubuntu-24.04`
-- **Dependências:** `atualizar-commits`
-
-| # | Etapa | Ação | Execução |
-|---:|---|---|---|
-| 1 | Baixar código atualizado | `actions/checkout@v7` | — |
-| 2 | Atualizar artigo no DEV.to | — | \| |
 
 ### 🎲Gerar Sitemap
 
@@ -1579,64 +1565,7 @@ jobs:
 
           git push origin HEAD:main
 
-  # =========================================================
-  # SINCRONIZAR README COM DEV.TO
-  # =========================================================
 
-  sincronizar-devto:
-    name: 📄Sincronizar README com DEV.to
-    runs-on: ubuntu-24.04
-    needs: atualizar-commits
-
-    steps:
-      - name: Baixar código atualizado
-        uses: actions/checkout@v7
-        with:
-          fetch-depth: 1
-          ref: main
-
-      - name: Atualizar artigo no DEV.to
-        env:
-          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
-        run: |
-          python3 - <<'PY'
-          import json
-          import os
-          import urllib.request
-          import urllib.error
-
-          with open("README.md", "r", encoding="utf-8") as arquivo:
-              markdown = arquivo.read()
-
-          dados = json.dumps({
-              "article": {
-                  "body_markdown": markdown
-              }
-          }).encode("utf-8")
-
-          requisicao = urllib.request.Request(
-              "https://dev.to/api/articles/4771914",
-              data=dados,
-              method="PUT",
-              headers={
-                  "Content-Type": "application/json",
-                  "api-key": os.environ["DEVTO_API_KEY"],
-                  "User-Agent": "Mulher-Amparada-GitHub-Action"
-              }
-          )
-
-          try:
-              with urllib.request.urlopen(requisicao) as resposta:
-                  print(resposta.read().decode("utf-8"))
-                  print("DEV.to atualizado com sucesso.")
-          except urllib.error.HTTPError as erro:
-              print(f"HTTP {erro.code}")
-              print(erro.read().decode("utf-8", errors="replace"))
-              raise
-          PY
-
-
-  
   # =========================================================
   # GERAR SITEMAP
   # =========================================================

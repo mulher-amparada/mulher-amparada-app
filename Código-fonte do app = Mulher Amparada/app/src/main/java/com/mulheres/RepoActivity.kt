@@ -1,5 +1,9 @@
 package com.mulheres
 
+import android.app.AlertDialog
+import android.os.Handler
+import android.os.Looper
+import android.view.MotionEvent
 import android.webkit.ValueCallback
 import android.content.res.Configuration
 import android.content.Intent
@@ -25,6 +29,60 @@ import androidx.core.view.WindowCompat
 import androidx.activity.enableEdgeToEdge
 
 class RepoActivity : AppCompatActivity() {
+
+private val handler = Handler(Looper.getMainLooper())
+private var toqueLongoExecutado = false
+
+private val longPressRunnable = Runnable {
+    toqueLongoExecutado = true
+    mostrarDialogoModo()
+}
+
+private fun configurarToqueLongo() {
+    webView.setOnTouchListener { _, event ->
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                toqueLongoExecutado = false
+                handler.postDelayed(longPressRunnable, 5000)
+            }
+
+            MotionEvent.ACTION_UP,
+            MotionEvent.ACTION_CANCEL -> {
+                handler.removeCallbacks(longPressRunnable)
+            }
+        }
+        false
+    }
+}
+
+private fun mostrarDialogoModo() {
+    val opcoes = arrayOf("📱 Mobile", "🖥️ Desktop")
+
+    AlertDialog.Builder(this)
+        .setTitle("Modo de visualização")
+        .setMessage("Escolha como deseja visualizar a página.")
+        .setItems(opcoes) { _, which ->
+            val settings = webView.settings
+
+            if (which == 1) {
+                settings.useWideViewPort = true
+                settings.loadWithOverviewMode = true
+                settings.userAgentString =
+                    WebSettings.getDefaultUserAgent(this)
+                        .replace(" Mobile", "")
+                        .replace(" Android", "")
+            } else {
+                settings.userAgentString =
+                    WebSettings.getDefaultUserAgent(this)
+                settings.useWideViewPort = false
+                settings.loadWithOverviewMode = false
+            }
+
+            webView.reload()
+        }
+        .setNegativeButton("Cancelar", null)
+        .show()
+}
 
 private var fileChooserCallback: ValueCallback<Array<Uri>>? = null
 
@@ -67,6 +125,8 @@ private val FILE_CHOOSER_REQUEST_CODE = 1001
 
         // CONFIGURAÇÃO DA WEBVIEW
         configurarWebView()
+        
+        configurarToqueLongo()
 
         // BARRAS DO SISTEMA
         ViewCompat.setOnApplyWindowInsetsListener(webView) { view, insets ->
@@ -233,6 +293,77 @@ private val FILE_CHOOSER_REQUEST_CODE = 1001
 
         // WEB CHROME CLIENT
         webView.webChromeClient = object : WebChromeClient() {
+
+override fun onJsAlert(
+    view: WebView?,
+    url: String?,
+    message: String?,
+    result: android.webkit.JsResult?
+): Boolean {
+    AlertDialog.Builder(this@MainActivity)
+        .setTitle("Aviso")
+        .setMessage(message.orEmpty())
+        .setPositiveButton("OK") { _, _ ->
+            result?.confirm()
+        }
+        .setOnCancelListener {
+            result?.cancel()
+        }
+        .show()
+
+    return true
+}
+
+override fun onJsConfirm(
+    view: WebView?,
+    url: String?,
+    message: String?,
+    result: android.webkit.JsResult?
+): Boolean {
+    AlertDialog.Builder(this@MainActivity)
+        .setTitle("Confirmação")
+        .setMessage(message.orEmpty())
+        .setPositiveButton("Sim") { _, _ ->
+            result?.confirm()
+        }
+        .setNegativeButton("Não") { _, _ ->
+            result?.cancel()
+        }
+        .setOnCancelListener {
+            result?.cancel()
+        }
+        .show()
+
+    return true
+}
+
+override fun onJsPrompt(
+    view: WebView?,
+    url: String?,
+    message: String?,
+    defaultValue: String?,
+    result: android.webkit.JsPromptResult?
+): Boolean {
+    val campo = android.widget.EditText(this@MainActivity)
+    campo.setText(defaultValue.orEmpty())
+
+    AlertDialog.Builder(this@MainActivity)
+        .setTitle("Entrada de dados")
+        .setMessage(message.orEmpty())
+        .setView(campo)
+        .setPositiveButton("OK") { _, _ ->
+            result?.confirm(campo.text.toString())
+        }
+        .setNegativeButton("Cancelar") { _, _ ->
+            result?.cancel()
+        }
+        .setOnCancelListener {
+            result?.cancel()
+        }
+        .show()
+
+    return true
+}
 
 override fun onShowFileChooser(
     webView: WebView?,

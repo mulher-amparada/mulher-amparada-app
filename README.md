@@ -122,8 +122,6 @@ Para acessar o conteúdo completo sobre finanças, consulte a [Carta do desenvol
 
 E eu também já consegui configurar um ssh na conta, e 2fa nela tambem, e com o ssh, eu consegui mover pastas inteiras para o repositório, e transformei 4 em 1, e mais de 100 commits em 1,
 
-e também todas as activities que carregam um webview se pressionar 5 vezes dá para escolher entre o modo desktop ou mobile!
-
 ```
 Automações do Mulher Amparada:
 

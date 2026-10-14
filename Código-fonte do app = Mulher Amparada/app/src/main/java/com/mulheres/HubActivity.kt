@@ -1,6 +1,9 @@
 package com.mulheres
 
 import com.mulheres.Cripto
+import android.graphics.BitmapFactory
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.runtime.remember
 import androidx.compose.material3.IconButton
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -110,8 +113,8 @@ import kotlin.math.sqrt
 
 class HubActivity : FragmentActivity() {
 
-private val preferenciasPapelParede by lazy {
-    getSharedPreferences("aparencia", Context.MODE_PRIVATE)
+private val cripto by lazy {
+    Cripto(applicationContext)
 }
 
 var papelParedeUri by mutableStateOf<String?>(null)
@@ -119,20 +122,26 @@ var papelParedeUri by mutableStateOf<String?>(null)
 
 fun salvarPapelParede(uri: Uri) {
     try {
-        contentResolver.takePersistableUriPermission(
-            uri,
-            Intent.FLAG_GRANT_READ_URI_PERMISSION
+        try {
+            contentResolver.takePersistableUriPermission(
+                uri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+        } catch (_: Exception) {
+            // A URI ainda será salva; a permissão persistente
+            // pode não ser oferecida por alguns seletores.
+        }
+
+        cripto.salvar(
+            "papel_parede",
+            uri.toString()
         )
 
-        preferenciasPapelParede.edit()
-            .putString("papel_parede", uri.toString())
-            .apply()
-
         papelParedeUri = uri.toString()
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         Toast.makeText(
             this,
-            "Não foi possível definir o papel de parede.",
+            "Não foi possível salvar o papel de parede.",
             Toast.LENGTH_SHORT
         ).show()
     }
@@ -926,8 +935,8 @@ fun desativarFullscreen() {
             }
         )
 
-papelParedeUri = preferenciasPapelParede
-    .getString("papel_parede", null)
+papelParedeUri = cripto.carregar("papel_parede")
+    .takeIf { it.isNotBlank() }
     
     setContent {
 
@@ -2469,13 +2478,22 @@ private fun MulherAmparadaScreen() {
     
     val papelParede = activity?.papelParedeUri
 
-if (papelParede != null) {
-    androidx.compose.foundation.Image(
-        painter = androidx.compose.ui.graphics
-            .ImageBitmap.imageResource(
-                id = R.drawable.ic_launcher_background
-            ),
-        contentDescription = null
+val bitmapPapelParede = remember(papelParede) {
+    papelParede?.let { caminho ->
+        runCatching {
+            context.contentResolver
+                .openInputStream(Uri.parse(caminho))
+                ?.use { BitmapFactory.decodeStream(it)?.asImageBitmap() }
+        }.getOrNull()
+    }
+}
+
+if (bitmapPapelParede != null) {
+    Image(
+        bitmap = bitmapPapelParede,
+        contentDescription = null,
+        modifier = Modifier.fillMaxSize(),
+        contentScale = ContentScale.Crop
     )
 }
     
@@ -2487,7 +2505,13 @@ if (papelParede != null) {
                 modifier =
                     Modifier
                         .fillMaxSize()
-                        .background(c.background)
+                        .background(
+    if (bitmapPapelParede == null) {
+        c.background
+    } else {
+        Color.Transparent
+    }
+)
                         .verticalScroll(
                             rememberScrollState()
                         )

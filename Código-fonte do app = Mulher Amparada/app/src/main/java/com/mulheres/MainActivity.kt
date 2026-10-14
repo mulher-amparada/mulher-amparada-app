@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
 private val handler = Handler(Looper.getMainLooper())
 private var toqueLongoExecutado = false
-
+private var modoDesktop = false
 private val longPressRunnable = Runnable {
     toqueLongoExecutado = true
     mostrarDialogoModo()
@@ -57,30 +57,35 @@ private fun configurarToqueLongo() {
 }
 
 private fun mostrarDialogoModo() {
-    val opcoes = arrayOf("📱 Modo Mobile", "🖥️ Modo Computador")
+    val opcoes = arrayOf(
+        "📱 Modo Mobile",
+        "🖥️ Modo Computador"
+    )
 
     AlertDialog.Builder(this@MainActivity)
         .setTitle("Modo de visualização")
         .setItems(opcoes) { _, escolha ->
+            modoDesktop = escolha == 1
+
             val settings = webView.settings
 
-            when (escolha) {
-                0 -> {
-                    settings.userAgentString =
-                        WebSettings.getDefaultUserAgent(this@MainActivity)
-                    settings.useWideViewPort = false
-                    settings.loadWithOverviewMode = false
-                }
-
-                1 -> {
-                    settings.userAgentString =
-                        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
-                    settings.useWideViewPort = true
-                    settings.loadWithOverviewMode = true
-                }
+            settings.userAgentString = if (modoDesktop) {
+                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+            } else {
+                WebSettings.getDefaultUserAgent(this@MainActivity)
             }
 
-            webView.reload()
+            settings.useWideViewPort = true
+            settings.loadWithOverviewMode = true
+
+            webView.post {
+                webView.evaluateJavascript(
+                    "document.querySelector('meta[name=\"viewport\"]')?.setAttribute('content', 'width=device-width, initial-scale=1')",
+                    null
+                )
+
+                webView.reload()
+            }
         }
         .setNegativeButton("Cancelar", null)
         .show()
@@ -172,10 +177,10 @@ configurarToqueLongo()
 
     if (paisagem) {
         params.setMargins(
-            64.dp() + barras.left,
-            28.dp() + barras.top,
-            32.dp() + barras.right,
-            32.dp() + barras.bottom
+            32.dp() + barras.left,
+            14.dp() + barras.top,
+            16.dp() + barras.right,
+            16.dp() + barras.bottom
         )
  } else {
     params.setMargins(

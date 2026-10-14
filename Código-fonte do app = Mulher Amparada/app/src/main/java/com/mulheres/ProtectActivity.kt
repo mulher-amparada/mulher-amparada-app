@@ -755,7 +755,7 @@ letterSpacing =
         androidx.compose.material3.Text(
 
             text =
-                "Tudo o que você precisa, organizado em um só lugar.",
+                "Tudo o que você precisar.",
 
             modifier =
                 Modifier

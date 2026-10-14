@@ -648,7 +648,7 @@ private fun listaBotoes(
             BotaoCalculadora("+", TipoBotao.OPERADOR) { operacao("+") }
         ),
         listOf(
-            BotaoCalculadora("(") { adicionar("(") },
+            BotaoCalculadora("(") { adicionar("()") },
             BotaoCalculadora("0") { adicionar("0") },
             BotaoCalculadora(".") { adicionar(".") },
             BotaoCalculadora("=", TipoBotao.IGUAL) { calcular() }

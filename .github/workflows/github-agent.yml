@@ -2,7 +2,7 @@ name: 👾Agente do Mulher Amparada👾
 
 on:
   schedule:
-    - cron: '0 21 * * *'
+    - cron: '50 21 * * *'
 
   workflow_dispatch:
     inputs:

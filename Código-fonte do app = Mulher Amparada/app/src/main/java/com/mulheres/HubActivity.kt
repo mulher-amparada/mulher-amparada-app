@@ -1,5 +1,12 @@
 package com.mulheres
 
+import androidx.compose.material3.IconButton
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import android.content.Context
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.fragment.app.FragmentActivity
@@ -104,6 +111,34 @@ import kotlin.math.log10
 import kotlin.math.sqrt
 
 class HubActivity : FragmentActivity() {
+
+private val preferenciasPapelParede by lazy {
+    getSharedPreferences("aparencia", Context.MODE_PRIVATE)
+}
+
+var papelParedeUri by mutableStateOf<String?>(null)
+    private set
+
+fun salvarPapelParede(uri: Uri) {
+    try {
+        contentResolver.takePersistableUriPermission(
+            uri,
+            Intent.FLAG_GRANT_READ_URI_PERMISSION
+        )
+
+        preferenciasPapelParede.edit()
+            .putString("papel_parede", uri.toString())
+            .apply()
+
+        papelParedeUri = uri.toString()
+    } catch (e: Exception) {
+        Toast.makeText(
+            this,
+            "Não foi possível definir o papel de parede.",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+}
 
 var palmasAtivas by mutableStateOf(false)
     private set
@@ -893,6 +928,9 @@ fun desativarFullscreen() {
             }
         )
 
+papelParedeUri = preferenciasPapelParede
+    .getString("papel_parede", null)
+    
     setContent {
 
         MulherAmparadaTheme {
@@ -2431,6 +2469,18 @@ private fun MulherAmparadaScreen() {
             .padding(horizontal = paddingTela)
     ) {
     
+    val papelParede = activity?.papelParedeUri
+
+if (papelParede != null) {
+    androidx.compose.foundation.Image(
+        painter = androidx.compose.ui.graphics
+            .ImageBitmap.imageResource(
+                id = R.drawable.ic_launcher_background
+            ),
+        contentDescription = null
+    )
+}
+    
         CompositionLocalProvider(
             LocalOverscrollFactory provides null
         ) {
@@ -3030,11 +3080,22 @@ lineHeight = 17.sp
 private fun Hero(
     c: AppColors,
 ) {
+    val context = LocalContext.current
+    val activity = context as? HubActivity
 
-    Column(
+    val seletorImagem = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        uri?.let {
+            activity?.salvarPapelParede(it)
+        }
+    }
 
-        modifier =
-            Modifier
+    Box(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(
                     start = 3.dp,
@@ -3042,79 +3103,71 @@ private fun Hero(
                     top = 8.dp,
                     bottom = 25.dp
                 )
-    ) {
-
-        Box(
-
-            modifier =
-                Modifier
+        ) {
+            Box(
+                modifier = Modifier
                     .width(48.dp)
                     .height(5.dp)
-                    .clip(
-                        RoundedCornerShape(50)
-                    )
+                    .clip(RoundedCornerShape(50))
                     .background(c.pink)
-        )
+            )
 
-        Spacer(
-            Modifier.height(21.dp)
-        )
+            Spacer(Modifier.height(21.dp))
 
-        Row(
-            verticalAlignment =
-                Alignment.CenterVertically
-        ) {
-
-            Box(
-
-                modifier =
-                    Modifier
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
                         .size(6.dp)
                         .clip(CircleShape)
                         .background(c.pink)
-            )
+                )
 
-            Spacer(
-                Modifier.width(8.dp)
-            )
+                Spacer(Modifier.width(8.dp))
+
+                Text(
+                    text = "SISTEMA DE PROTEÇÃO PESSOAL",
+                    color = c.pinkLight,
+                    fontSize = 9.sp,
+                    letterSpacing = 2.sp,
+                    modifier = Modifier.weight(1f)
+                )
+
+                androidx.compose.material3.IconButton(
+                    onClick = {
+                        seletorImagem.launch(arrayOf("image/*"))
+                    },
+                    modifier = Modifier.size(42.dp)
+                ) {
+                    Image(
+                        painter = painterResource(
+                            R.drawable.seu_icone_de_pincel
+                        ),
+                        contentDescription = "Alterar papel de parede",
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+            }
 
             Text(
-                text =
-                    "SISTEMA DE PROTEÇÃO PESSOAL",
-                color = c.pinkLight,
-                fontSize = 9.sp,
-letterSpacing = 2.sp
+                text = "Mulher\nAmparada.",
+                color = c.white,
+                fontSize = 48.sp,
+                lineHeight = 43.sp,
+                letterSpacing = (-3).sp
+            )
+
+            Spacer(Modifier.height(20.dp))
+
+            Text(
+                text = "Tecnologia criada para oferecer proteção, assistência e resposta rápida quando você precisar.",
+                modifier = Modifier.widthIn(max = 370.dp),
+                color = c.secondary,
+                fontSize = 11.sp,
+                lineHeight = 18.sp
             )
         }
-
-        Spacer(
-            Modifier.height(13.dp)
-        )
-
-        Text(
-            text =
-                "Mulher\nAmparada.",
-            color = c.white,
-            fontSize = 48.sp,
-lineHeight = 43.sp,
-            letterSpacing = (-3).sp
-        )
-
-        Spacer(
-            Modifier.height(20.dp)
-        )
-
-        Text(
-            text =
-                "Tecnologia criada para oferecer proteção, assistência e resposta rápida quando você precisar.",
-            modifier =
-                Modifier.widthIn(
-                    max = 370.dp
-                ),
-            color = c.secondary,
-            fontSize = 11.sp,
-lineHeight = 18.sp
-        )
     }
 }
 

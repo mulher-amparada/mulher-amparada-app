@@ -113,8 +113,8 @@ if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
         params.setMargins(
             38.dp() + barras.left,
             28.dp() + barras.top,
-            16.dp() + barras.right,
-            32.dp() + barras.bottom
+            10.dp() + barras.right,
+            20.dp() + barras.bottom
         )
  } else {
     params.setMargins(

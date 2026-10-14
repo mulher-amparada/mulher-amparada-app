@@ -298,6 +298,9 @@ private val FILE_CHOOSER_REQUEST_CODE = 1001
         settings.javaScriptCanOpenWindowsAutomatically = false
         settings.setSupportMultipleWindows(false)
 
+settings.useWideViewPort = true
+settings.loadWithOverviewMode = true
+
         // WEB CHROME CLIENT
         webView.webChromeClient = object : WebChromeClient() {
 

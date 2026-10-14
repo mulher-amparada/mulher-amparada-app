@@ -402,6 +402,9 @@ private fun configurarWebView() {
         settings.setSupportMultipleWindows(
             false
         )
+        
+        settings.useWideViewPort = true
+settings.loadWithOverviewMode = true
 
 
         // =====================================================

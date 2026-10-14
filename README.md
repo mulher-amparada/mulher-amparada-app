@@ -846,9 +846,6 @@ settings.mixedContentMode =
         false  
     )  
 
-settings.useWideViewPort = true
-settings.loadWithOverviewMode = true
-
 ```
 
 ```kotlin

@@ -85,9 +85,9 @@ private val FILE_CHOOSER_REQUEST_CODE = 1001
             if (paisagem) {
                 params.setMargins(
                     38.dp() + barras.left,
-                    28.dp() + barras.top,
-                    16.dp() + barras.right,
-                    28.dp() + barras.bottom
+                    20.dp() + barras.top,
+                    10.dp() + barras.right,
+                    20.dp() + barras.bottom
                 )
             } else {
                 params.setMargins(

@@ -127,6 +127,45 @@ private enum class Ordem {
     NOVO,
     ANTIGO,
     DOR
+
+
+    private fun carregarWallpaperFullscreen(): android.graphics.Bitmap? {
+        return runCatching {
+            val uriString = Cripto(this).carregar("papel_parede")
+            if (uriString.isBlank()) return null
+
+            val bitmap = contentResolver.openInputStream(
+                android.net.Uri.parse(uriString)
+            )?.use {
+                android.graphics.BitmapFactory.decodeStream(it)
+            } ?: return null
+
+            val largura = resources.displayMetrics.widthPixels
+            val altura = resources.displayMetrics.heightPixels
+
+            val escala = maxOf(
+                largura.toFloat() / bitmap.width,
+                altura.toFloat() / bitmap.height
+            )
+
+            val larguraNova = (bitmap.width * escala).toInt()
+            val alturaNova = (bitmap.height * escala).toInt()
+
+            val ampliado = android.graphics.Bitmap.createScaledBitmap(
+                bitmap, larguraNova, alturaNova, true
+            )
+
+            val x = ((larguraNova - largura) / 2).coerceAtLeast(0)
+            val y = ((alturaNova - altura) / 2).coerceAtLeast(0)
+
+            android.graphics.Bitmap.createBitmap(
+                ampliado, x, y,
+                minOf(largura, ampliado.width - x),
+                minOf(altura, ampliado.height - y)
+            )
+        }.getOrNull()
+    }
+
 }
 
 private fun CicloRegistro.toJson(): JSONObject {

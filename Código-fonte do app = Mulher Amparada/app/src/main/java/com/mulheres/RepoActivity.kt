@@ -86,7 +86,7 @@ private val FILE_CHOOSER_REQUEST_CODE = 1001
                 params.setMargins(
                     38.dp() + barras.left,
                     14.dp() + barras.top,
-                    4.dp() + barras.right,
+                    0.dp() + barras.right,
                     20.dp() + barras.bottom
                 )
             } else {

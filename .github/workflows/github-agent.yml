@@ -2,10 +2,9 @@ name: 👾Agente do Mulher Amparada👾
 
 on:
   schedule:
-    - cron: '0 18 * * *'
-      timezone: 'America/Sao_Paulo'
-
+    - cron: '*/5 * * * *'
   workflow_dispatch:
+
     inputs:
       action:
         description: Ação do agente

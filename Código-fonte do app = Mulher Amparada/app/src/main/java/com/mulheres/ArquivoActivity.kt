@@ -1,8 +1,5 @@
 package com.mulheres
 
-import android.graphics.BitmapFactory
-import androidx.compose.foundation.Image
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.foundation.layout.navigationBarsPadding
 import android.graphics.Color as AndroidColor
@@ -110,45 +107,6 @@ class ArquivoActivity : ComponentActivity() {
             ArquivoSeguro()
         }
     }
-
-
-    private fun carregarWallpaperFullscreen(): android.graphics.Bitmap? {
-        return runCatching {
-            val uriString = Cripto(this).carregar("papel_parede")
-            if (uriString.isBlank()) return null
-
-            val bitmap = contentResolver.openInputStream(
-                android.net.Uri.parse(uriString)
-            )?.use {
-                android.graphics.BitmapFactory.decodeStream(it)
-            } ?: return null
-
-            val largura = resources.displayMetrics.widthPixels
-            val altura = resources.displayMetrics.heightPixels
-
-            val escala = maxOf(
-                largura.toFloat() / bitmap.width,
-                altura.toFloat() / bitmap.height
-            )
-
-            val larguraNova = (bitmap.width * escala).toInt()
-            val alturaNova = (bitmap.height * escala).toInt()
-
-            val ampliado = android.graphics.Bitmap.createScaledBitmap(
-                bitmap, larguraNova, alturaNova, true
-            )
-
-            val x = ((larguraNova - largura) / 2).coerceAtLeast(0)
-            val y = ((alturaNova - altura) / 2).coerceAtLeast(0)
-
-            android.graphics.Bitmap.createBitmap(
-                ampliado, x, y,
-                minOf(largura, ampliado.width - x),
-                minOf(altura, ampliado.height - y)
-            )
-        }.getOrNull()
-    }
-
 }
 
 
@@ -228,23 +186,6 @@ val paddingHorizontal =
     
     val context =
         androidx.compose.ui.platform.LocalContext.current
-
-val wallpaperUri = remember {
-    Cripto(context).carregar("papel_parede")
-}
-
-val wallpaperBitmap = remember(wallpaperUri) {
-    runCatching {
-        if (wallpaperUri.isNullOrBlank()) {
-            null
-        } else {
-            context.contentResolver
-                .openInputStream(Uri.parse(wallpaperUri))
-                ?.use { BitmapFactory.decodeStream(it) }
-                ?.asImageBitmap()
-        }
-    }.getOrNull()
-}
 
     val dark =
         isSystemInDarkTheme()
@@ -587,25 +528,11 @@ val wallpaperBitmap = remember(wallpaperUri) {
     ) {
 
         Box(
-    modifier = Modifier
-        .fillMaxSize()
-        .background(
-            if (wallpaperBitmap == null) {
-                fundo
-            } else {
-                Color.Transparent
-            }
-        )
-) {
-
-    if (wallpaperBitmap != null) {
-        Image(
-            bitmap = wallpaperBitmap,
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
-    }
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(fundo)
+        ) {
 
             LazyColumn(
                 modifier =

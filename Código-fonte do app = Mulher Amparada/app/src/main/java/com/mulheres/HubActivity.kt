@@ -1,14 +1,5 @@
 package com.mulheres
 
-import com.mulheres.Cripto
-import android.graphics.BitmapFactory
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.runtime.remember
-import androidx.compose.material3.IconButton
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.activity.compose.rememberLauncherForActivityResult
-import android.content.Context
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.fragment.app.FragmentActivity
@@ -33,6 +24,7 @@ import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color as AndroidColor
@@ -113,38 +105,6 @@ import kotlin.math.sqrt
 
 class HubActivity : FragmentActivity() {
 
-private lateinit var cripto: Cripto
-
-var papelParedeUri by mutableStateOf<String?>(null)
-    private set
-
-fun salvarPapelParede(uri: Uri) {
-    try {
-        try {
-            contentResolver.takePersistableUriPermission(
-                uri,
-                Intent.FLAG_GRANT_READ_URI_PERMISSION
-            )
-        } catch (_: Exception) {
-            // A URI ainda será salva; a permissão persistente
-            // pode não ser oferecida por alguns seletores.
-        }
-
-        cripto.salvar(
-            "papel_parede",
-            uri.toString()
-        )
-
-        papelParedeUri = uri.toString()
-    } catch (_: Exception) {
-        Toast.makeText(
-            this,
-            "Não foi possível salvar o papel de parede.",
-            Toast.LENGTH_SHORT
-        ).show()
-    }
-}
-
 var palmasAtivas by mutableStateOf(false)
     private set
 
@@ -153,7 +113,7 @@ private var palmasEmExecucao = false
 var permissoesConcedidas by mutableStateOf(false)
     private set
 
-
+private lateinit var cripto: Cripto
 
 private lateinit var telephonyManager: TelephonyManager
 
@@ -933,9 +893,6 @@ fun desativarFullscreen() {
             }
         )
 
-papelParedeUri = cripto.carregar("papel_parede")
-    .takeIf { it.isNotBlank() }
-    
     setContent {
 
         MulherAmparadaTheme {
@@ -2474,27 +2431,6 @@ private fun MulherAmparadaScreen() {
             .padding(horizontal = paddingTela)
     ) {
     
-    val papelParede = activity?.papelParedeUri
-
-val bitmapPapelParede = remember(papelParede) {
-    papelParede?.let { caminho ->
-        runCatching {
-            context.contentResolver
-                .openInputStream(Uri.parse(caminho))
-                ?.use { BitmapFactory.decodeStream(it)?.asImageBitmap() }
-        }.getOrNull()
-    }
-}
-
-if (bitmapPapelParede != null) {
-    Image(
-        bitmap = bitmapPapelParede,
-        contentDescription = null,
-        modifier = Modifier.fillMaxSize(),
-        contentScale = ContentScale.Crop
-    )
-}
-    
         CompositionLocalProvider(
             LocalOverscrollFactory provides null
         ) {
@@ -2503,13 +2439,7 @@ if (bitmapPapelParede != null) {
                 modifier =
                     Modifier
                         .fillMaxSize()
-                        .background(
-    if (bitmapPapelParede == null) {
-        c.background
-    } else {
-        Color.Transparent
-    }
-)
+                        .background(c.background)
                         .verticalScroll(
                             rememberScrollState()
                         )
@@ -3100,22 +3030,11 @@ lineHeight = 17.sp
 private fun Hero(
     c: AppColors,
 ) {
-    val context = LocalContext.current
-    val activity = context as? HubActivity
 
-    val seletorImagem = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.OpenDocument()
-    ) { uri ->
-        uri?.let {
-            activity?.salvarPapelParede(it)
-        }
-    }
+    Column(
 
-    Box(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier
+        modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(
                     start = 3.dp,
@@ -3123,71 +3042,79 @@ private fun Hero(
                     top = 8.dp,
                     bottom = 25.dp
                 )
-        ) {
-            Box(
-                modifier = Modifier
+    ) {
+
+        Box(
+
+            modifier =
+                Modifier
                     .width(48.dp)
                     .height(5.dp)
-                    .clip(RoundedCornerShape(50))
+                    .clip(
+                        RoundedCornerShape(50)
+                    )
                     .background(c.pink)
-            )
+        )
 
-            Spacer(Modifier.height(21.dp))
+        Spacer(
+            Modifier.height(21.dp)
+        )
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
+        Row(
+            verticalAlignment =
+                Alignment.CenterVertically
+        ) {
+
+            Box(
+
+                modifier =
+                    Modifier
                         .size(6.dp)
                         .clip(CircleShape)
                         .background(c.pink)
-                )
-
-                Spacer(Modifier.width(8.dp))
-
-                Text(
-                    text = "SISTEMA DE PROTEÇÃO PESSOAL",
-                    color = c.pinkLight,
-                    fontSize = 9.sp,
-                    letterSpacing = 2.sp,
-                    modifier = Modifier.weight(1f)
-                )
-
-                androidx.compose.material3.IconButton(
-                    onClick = {
-                        seletorImagem.launch(arrayOf("image/*"))
-                    },
-                    modifier = Modifier.size(42.dp)
-                ) {
-                    Image(
-                        painter = painterResource(
-                            R.drawable.ic_pincel
-                        ),
-                        contentDescription = "Alterar papel de parede",
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
-            }
-
-            Text(
-                text = "Mulher\nAmparada.",
-                color = c.white,
-                fontSize = 48.sp,
-                lineHeight = 43.sp,
-                letterSpacing = (-3).sp
             )
 
-            Spacer(Modifier.height(20.dp))
+            Spacer(
+                Modifier.width(8.dp)
+            )
 
             Text(
-                text = "Tecnologia criada para oferecer proteção, assistência e resposta rápida quando você precisar.",
-                modifier = Modifier.widthIn(max = 370.dp),
-                color = c.secondary,
-                fontSize = 11.sp,
-                lineHeight = 18.sp
+                text =
+                    "SISTEMA DE PROTEÇÃO PESSOAL",
+                color = c.pinkLight,
+                fontSize = 9.sp,
+letterSpacing = 2.sp
             )
         }
+
+        Spacer(
+            Modifier.height(13.dp)
+        )
+
+        Text(
+            text =
+                "Mulher\nAmparada.",
+            color = c.white,
+            fontSize = 48.sp,
+lineHeight = 43.sp,
+            letterSpacing = (-3).sp
+        )
+
+        Spacer(
+            Modifier.height(20.dp)
+        )
+
+        Text(
+            text =
+                "Tecnologia criada para oferecer proteção, assistência e resposta rápida quando você precisar.",
+            modifier =
+                Modifier.widthIn(
+                    max = 370.dp
+                ),
+            color = c.secondary,
+            fontSize = 11.sp,
+lineHeight = 18.sp
+        )
     }
 }
 

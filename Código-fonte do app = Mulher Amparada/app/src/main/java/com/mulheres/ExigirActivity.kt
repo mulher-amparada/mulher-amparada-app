@@ -1,12 +1,5 @@
 package com.mulheres
 
-import android.graphics.BitmapFactory
-import android.net.Uri
-import androidx.compose.foundation.Image
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
 import android.os.Bundle
 import androidx.core.view.WindowInsetsControllerCompat
@@ -80,70 +73,12 @@ window.navigationBarColor = android.graphics.Color.BLACK
             }
         }
     }
-
-
-    private fun carregarWallpaperFullscreen(): android.graphics.Bitmap? {
-        return runCatching {
-            val uriString = Cripto(this).carregar("papel_parede")
-            if (uriString.isBlank()) return null
-
-            val bitmap = contentResolver.openInputStream(
-                android.net.Uri.parse(uriString)
-            )?.use {
-                android.graphics.BitmapFactory.decodeStream(it)
-            } ?: return null
-
-            val largura = resources.displayMetrics.widthPixels
-            val altura = resources.displayMetrics.heightPixels
-
-            val escala = maxOf(
-                largura.toFloat() / bitmap.width,
-                altura.toFloat() / bitmap.height
-            )
-
-            val larguraNova = (bitmap.width * escala).toInt()
-            val alturaNova = (bitmap.height * escala).toInt()
-
-            val ampliado = android.graphics.Bitmap.createScaledBitmap(
-                bitmap, larguraNova, alturaNova, true
-            )
-
-            val x = ((larguraNova - largura) / 2).coerceAtLeast(0)
-            val y = ((alturaNova - altura) / 2).coerceAtLeast(0)
-
-            android.graphics.Bitmap.createBitmap(
-                ampliado, x, y,
-                minOf(largura, ampliado.width - x),
-                minOf(altura, ampliado.height - y)
-            )
-        }.getOrNull()
-    }
-
 }
 
 @Composable
 private fun ExigirScreen() {
 
 val configuration = LocalConfiguration.current
-
-val context = LocalContext.current
-
-val wallpaperUri = remember {
-    Cripto(context).carregar("papel_parede")
-}
-
-val wallpaperBitmap = remember(wallpaperUri) {
-    runCatching {
-        if (wallpaperUri.isBlank()) {
-            null
-        } else {
-            context.contentResolver
-                .openInputStream(Uri.parse(wallpaperUri))
-                ?.use { BitmapFactory.decodeStream(it) }
-                ?.asImageBitmap()
-        }
-    }.getOrNull()
-}
 
 val paisagem =
     configuration.screenWidthDp > configuration.screenHeightDp
@@ -197,38 +132,20 @@ val paddingHorizontal =
     CompositionLocalProvider(
     LocalOverscrollFactory provides null
 ) {
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        if (wallpaperBitmap != null) {
-            Image(
-                bitmap = wallpaperBitmap,
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
-        }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    if (wallpaperBitmap == null) {
-                        background
-                    } else {
-                        Color.Transparent
-                    }
-                )
-                .verticalScroll(rememberScrollState())
-                .padding(
-                    start = paddingHorizontal,
-                    end = paddingHorizontal,
-                    top = 25.dp,
-                    bottom = 70.dp
-                )
-                .windowInsetsPadding(WindowInsets.statusBars)
-        ) {
-
+    Column(
+    modifier = Modifier
+        .fillMaxSize()
+        .background(background)
+        .verticalScroll(rememberScrollState())
+        .padding(
+            start = paddingHorizontal,
+            end = paddingHorizontal,
+            top = 25.dp,
+            bottom = 70.dp
+        )
+        .windowInsetsPadding(WindowInsets.statusBars)
+) {
 
 
 

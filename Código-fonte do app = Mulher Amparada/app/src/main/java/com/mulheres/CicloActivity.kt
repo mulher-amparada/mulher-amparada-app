@@ -1,5 +1,10 @@
 package com.mulheres
 
+import android.graphics.BitmapFactory
+import android.net.Uri
+import androidx.compose.foundation.Image
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.runtime.CompositionLocalProvider
@@ -340,6 +345,24 @@ window.isNavigationBarContrastEnforced = false
 private fun CicloApp() {
 
     val ctx = LocalContext.current
+    
+    val wallpaperUri = remember {
+    Cripto(ctx).carregar("papel_parede")
+}
+
+val wallpaperBitmap = remember(wallpaperUri) {
+    runCatching {
+        if (wallpaperUri.isBlank()) {
+            null
+        } else {
+            ctx.contentResolver
+                .openInputStream(Uri.parse(wallpaperUri))
+                ?.use { BitmapFactory.decodeStream(it) }
+                ?.asImageBitmap()
+        }
+    }.getOrNull()
+}
+
     val dark = isSystemInDarkTheme()
 
     val fundo =
@@ -501,11 +524,21 @@ private fun CicloApp() {
             }
 
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(fundo)
-                
-        ) {
+    modifier = Modifier
+        .fillMaxSize()
+        .background(
+            if (wallpaperBitmap == null) fundo
+            else Color.Transparent
+        )
+) {
+    if (wallpaperBitmap != null) {
+        Image(
+            bitmap = wallpaperBitmap,
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+    }
 
             if (telaDetalhes != null) {
 

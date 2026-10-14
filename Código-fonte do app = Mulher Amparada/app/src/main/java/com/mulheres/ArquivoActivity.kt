@@ -1,5 +1,8 @@
 package com.mulheres
 
+import android.graphics.BitmapFactory
+import androidx.compose.foundation.Image
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.foundation.layout.navigationBarsPadding
 import android.graphics.Color as AndroidColor
@@ -186,6 +189,23 @@ val paddingHorizontal =
     
     val context =
         androidx.compose.ui.platform.LocalContext.current
+
+val wallpaperUri = remember {
+    Cripto(context).carregar("papel_parede")
+}
+
+val wallpaperBitmap = remember(wallpaperUri) {
+    runCatching {
+        if (wallpaperUri.isNullOrBlank()) {
+            null
+        } else {
+            context.contentResolver
+                .openInputStream(Uri.parse(wallpaperUri))
+                ?.use { BitmapFactory.decodeStream(it) }
+                ?.asImageBitmap()
+        }
+    }.getOrNull()
+}
 
     val dark =
         isSystemInDarkTheme()
@@ -528,11 +548,25 @@ val paddingHorizontal =
     ) {
 
         Box(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(fundo)
-        ) {
+    modifier = Modifier
+        .fillMaxSize()
+        .background(
+            if (wallpaperBitmap == null) {
+                fundo
+            } else {
+                Color.Transparent
+            }
+        )
+) {
+
+    if (wallpaperBitmap != null) {
+        Image(
+            bitmap = wallpaperBitmap,
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+    }
 
             LazyColumn(
                 modifier =

@@ -1,5 +1,9 @@
 package com.mulheres
 
+import android.graphics.BitmapFactory
+import android.net.Uri
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.delay
@@ -396,6 +400,25 @@ fun AssistenteSaude() {
     val context =
         androidx.compose.ui.platform.LocalContext.current
 
+val wallpaperUri = remember {
+    Cripto(context).carregar("papel_parede")
+}
+
+val wallpaperBitmap = remember(wallpaperUri) {
+    runCatching {
+        if (wallpaperUri.isNullOrBlank()) {
+            null
+        } else {
+            context.contentResolver
+                .openInputStream(Uri.parse(wallpaperUri))
+                ?.use {
+                    BitmapFactory.decodeStream(it)
+                }
+                ?.asImageBitmap()
+        }
+    }.getOrNull()
+}
+
     var batimentos by remember {
         mutableStateOf(
             72f
@@ -488,6 +511,24 @@ fun AssistenteSaude() {
         LocalOverscrollFactory provides null
     ) {
 
+Box(
+    modifier = Modifier
+        .fillMaxSize()
+        .background(
+            if (wallpaperBitmap == null) cores.fundo
+            else Color.Transparent
+        )
+) {
+    if (wallpaperBitmap != null) {
+        Image(
+            bitmap = wallpaperBitmap,
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+    }
+
+    // Coloque sua LazyColumn existente aqui.
         LazyColumn(
 
             modifier =
@@ -715,6 +756,9 @@ fun AssistenteSaude() {
             }
         }
     }
+}
+
+}
 }
 
 /* =========================================================

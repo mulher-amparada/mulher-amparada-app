@@ -1,23 +1,22 @@
 FROM ://microsoft.com
 
-# Evita perguntas interativas durante a instalação
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Instala Java 17, Gradle, dependências de interface gráfica e ferramentas Android
+# Instala Java 17, ferramentas de compilação do Android e servidores de interface gráfica
 RUN apt-get update && apt-get install -y \
     openjdk-17-jdk \
-    sdkmanager \
     gradle \
     python3 \
     xvfb \
     x11vnc \
     fluxbox \
     websockify \
+    novnc \
     curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Configurações de ambiente do Mulher Amparada
-ENV ALLOW_BACKUP=false
-ENV TARGET_SDK=37
-
+# Configurações de diretório do projeto Mulher Amparada
 WORKDIR /workspace/mulher-amparada-app
+
+ENV ALLOW_BACKUP=false
+ENV SECURITY_FLAG=secure

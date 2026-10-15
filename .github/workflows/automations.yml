@@ -754,7 +754,7 @@ jobs:
   atualizar-readme-versao-app:
     name: 📱 Atualizar versão do app no README
     runs-on: ubuntu-24.04
-    needs: build
+    needs: dependabot-merge
     permissions:
       contents: read
     steps:

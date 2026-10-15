@@ -2,7 +2,7 @@ FROM ://microsoft.com
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Instala Java 17, ferramentas de compilação do Android e servidores de interface gráfica
+# Instala Java, ferramentas de renderização e servidores de transmissão Web
 RUN apt-get update && apt-get install -y \
     openjdk-17-jdk \
     gradle \
@@ -15,7 +15,6 @@ RUN apt-get update && apt-get install -y \
     curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Configurações de diretório do projeto Mulher Amparada
 WORKDIR /workspace/mulher-amparada-app
 
 ENV ALLOW_BACKUP=false

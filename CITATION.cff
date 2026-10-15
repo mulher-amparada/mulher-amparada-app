@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "💜 Cite o projeto Mulher Amparada ao utilizá-lo em trabalhos, pesquisas ou outros projetos."
-title: "♀️ Mulher Amparada"
+title: "Mulher Amparada"
 type: software
 url: "https://github.com/mulher-amparada/mulher-amparada-app"
 repository-code: "https://github.com/mulher-amparada/mulher-amparada-app"
@@ -9,10 +9,13 @@ abstract: >-
   em situações de emergência, com recursos destinados ao amparo de mulheres
   em situações de risco ou vulnerabilidade.
 keywords:
-  - "♀️ Proteção de mulheres"
-  - "🛡️ Segurança"
-  - "💜 Amparo"
-  - "📱 Aplicativo Android"
-  - "🚨 Emergências"
+  - "Proteção de mulheres"
+  - "Segurança"
+  - "Amparo"
+  - "Aplicativo Android"
+  - "Emergências"
+  - "Acolhimento"
+  - "Conhecimentos públicos"
+
 license: GPL-3.0-only
 lang: "pt-BR"

@@ -32,4 +32,4 @@ jobs:
           # Executa a compilação do seu app em Kotlin/Compose direto na esteira
           runCmd: |
             echo "🔨 Automatizando processos do aplicativo Mulher Amparada..."
-            gradle assembleDebug
+            cd "Código-fonte do app = Mulher Amparada" && gradle assembleDebug

@@ -458,6 +458,18 @@
 }
 
 /* AUTO-LINGUAGENS: INICIO */
+/* Bourne Shell */
+.language-bourne-shell .dot,
+.dot.language-bourne-shell,
+.language-bourne-shell.bar-segment,
+.bar-segment.language-bourne-shell,
+[data-language="Bourne Shell"] .dot,
+.dot[data-language="Bourne Shell"],
+[data-language="Bourne Shell"] .bar-segment,
+.bar-segment[data-language="Bourne Shell"] {
+    background-color: #2739ce;
+}
+
 /* C */
 .language-c .dot,
 .dot.language-c,

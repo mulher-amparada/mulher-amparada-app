@@ -18,7 +18,7 @@ e pra ser sincero, comecei esse projeto no dia 13/05/2026 e terminei no dia 12/1
 
 Os contribuidores ajudaram também!, além de mim e dos bots:
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 5711**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 5708**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
@@ -212,22 +212,6 @@ O projeto também conta com o Dependabot, ferramenta do GitHub que verifica depe
 
 e ele roda diariamente!
 
-atualizar-readme-agp-kotlin:
-
-Atualiza as versões do Android Gradle Plugin (AGP) e do Kotlin no README.
-
-atualizar-readme-gradle:
-
-Atualiza a versão do Gradle no README.
-Validar versões documentadas
-
-validar-readme-versoes:
-
-Verifica se as versões e as informações obrigatórias estão documentadas corretamente no README.
-
-finalizar-readme-versoes:
-
-Finaliza e registra o resumo da atualização do README validado.
 
 Resultado final:
 
@@ -258,9 +242,7 @@ e as páginas desse site estão indexadas no google search console também!
 
 O app já está na versão:
 
-versionCode = 1
-
-versionName = "1.0"
+`Versão 33 (versão final)`
 
 ele tem o TargetSdkVersion 37
 

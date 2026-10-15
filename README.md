@@ -210,6 +210,23 @@ O projeto também conta com o Dependabot, ferramenta do GitHub que verifica depe
 
 e ele roda diariamente!
 
+atualizar-readme-agp-kotlin:
+
+Atualiza as versões do Android Gradle Plugin (AGP) e do Kotlin no README.
+
+atualizar-readme-gradle:
+
+Atualiza a versão do Gradle no README.
+Validar versões documentadas
+
+validar-readme-versoes:
+
+Verifica se as versões e as informações obrigatórias estão documentadas corretamente no README.
+
+finalizar-readme-versoes:
+
+Finaliza e registra o resumo da atualização do README validado.
+
 Resultado final:
 
 O workflow automatiza tarefas de compilação, análise, documentação, publicação e manutenção do projeto. Ao final, o Mulher-Amparada-Bot grava os artifacts na branch "main", conforme as dependências e condições definidas no workflow.

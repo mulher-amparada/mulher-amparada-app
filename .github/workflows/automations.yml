@@ -1949,7 +1949,7 @@ jobs:
   # SALVAR NA BRANCH MAIN
   # =========================================================
 
-    salvar-na-main:
+  salvar-na-main:
     name: 💾 Salvar artifacts na main pelo Mulher Amparada Bot
     runs-on: ubuntu-24.04
     needs:

@@ -2795,7 +2795,7 @@ height: auto !important;
     min-height: 0;
     max-height: none !important;
     overflow-y: visible !important;
-    gap: 5px;
+    gap: 25px;
 }
 
 footer::before {

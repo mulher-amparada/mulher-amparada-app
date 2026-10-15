@@ -1,9 +1,9 @@
 {
-    "name": "Mulher Amparada - Executar no Codespaces",
+    "name": "Mulher Amparada - Execução Pública",
     "build": {
         "dockerfile": "Dockerfile"
     },
-        "forwardPorts":,
+    "forwardPorts":,
     "portsAttributes": {
         "6080": {
             "label": "Tela do Mulher Amparada",
@@ -11,6 +11,5 @@
             "visibility": "public"
         }
     },
-
-    "postCreateCommand": "echo 'Compilando o projeto Mulher Amparada...' && gradle assembleDebug && echo 'Iniciando servidor de tela virtual...' && Xvfb :1 -screen 0 1080x1920x24 & sleep 2 && export DISPLAY=:1 && fluxbox & x11vnc -forever -shared -rfbport 5900 -display :1 & websockify --web /usr/share/novnc 6080 localhost:5900 &"
+    "postCreateCommand": "echo '🔨 Compilando o APK do Mulher Amparada...' && gradle assembleDebug && echo '🖥️ Iniciando Display Virtual e Servidor Web Graphics...' && Xvfb :1 -screen 0 1080x1920x24 & sleep 2 && export DISPLAY=:1 && fluxbox & x11vnc -forever -shared -rfbport 5900 -display :1 & websockify --web /usr/share/novnc 6080 localhost:5900 &"
 }

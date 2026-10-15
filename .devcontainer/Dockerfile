@@ -17,7 +17,22 @@ RUN apt-get update && apt-get install -y \
     curl \
     unzip \
     wget \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p "${ANDROID_HOME}/cmdline-tools" \
+    && wget -q https://dl.google.com/android/repository/commandlinetools-linux-13114758_latest.zip \
+       -O /tmp/android-tools.zip \
+    && unzip -q /tmp/android-tools.zip -d /tmp/android-tools \
+    && mkdir -p "${ANDROID_HOME}/cmdline-tools/latest" \
+    && mv /tmp/android-tools/cmdline-tools/* "${ANDROID_HOME}/cmdline-tools/latest/" \
+    && rm -rf /tmp/android-tools /tmp/android-tools.zip
+
+RUN yes | sdkmanager --licenses >/dev/null \
+    && sdkmanager \
+       "platform-tools" \
+       "platforms;android-37" \
+       "build-tools;37.0.0"
 
 WORKDIR /workspace/mulher-amparada-app
 

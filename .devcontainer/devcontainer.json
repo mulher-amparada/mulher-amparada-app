@@ -13,6 +13,6 @@
       "visibility": "public"
     }
   },
-  "postCreateCommand": "gradle assembleDebug",
+  "postCreateCommand": "echo 'Ambiente AmparadaOS preparado'",
   "postStartCommand": "bash .devcontainer/start-display.sh"
 }

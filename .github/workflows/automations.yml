@@ -700,7 +700,7 @@ jobs:
             >> "$GITHUB_STEP_SUMMARY"
 
 # =========================================================
-      # DEPENDABOT E ESPECIFICAÇÕES DO PROJETO
+      # DEPENDABOT
       # =========================================================
 
   executar-dependabot-maintenance:
@@ -751,315 +751,6 @@ jobs:
               --squash || true
           done
 
-  atualizar-readme-versao-app:
-    name: 📱 Atualizar versão do app no README
-    runs-on: ubuntu-24.04
-    needs: dependabot-merge
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          ref: main
-          fetch-depth: 0
-
-      - name: Atualizar versão
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-
-          app = Path("Código-fonte do app = Mulher Amparada")
-          p = Path("README.md")
-
-          if not app.is_dir():
-              raise SystemExit(f"Pasta do app não encontrada: {app}")
-
-          arquivos = sorted(
-              list(app.rglob("build.gradle.kts")) +
-              list(app.rglob("build.gradle"))
-          )
-
-          def buscar(padrao):
-              for f in arquivos:
-                  m = re.search(padrao, f.read_text(encoding="utf-8"))
-                  if m:
-                      return m.group(1)
-              raise SystemExit(f"Não encontrado: {padrao}")
-
-          versao = buscar(r'\bversionCode\s*=\s*(\d+)')
-          target = buscar(r'\btargetSdk\s*=\s*(\d+)')
-          compile_sdk = buscar(r'\bcompileSdk\s*=\s*(\d+)')
-
-          t = p.read_text(encoding="utf-8")
-          inicio = t.find("### Sobre as atualizações do app:")
-          if inicio < 0:
-              raise SystemExit("Seção não encontrada.")
-
-          fim = t.find("\n### ", inicio + 1)
-          if fim < 0:
-              fim = len(t)
-
-          s = t[inicio:fim]
-
-          s, a = re.subn(
-              r'(?m)^`[^`\n]*`$',
-              f'`{versao} (versão final)`',
-              s,
-              count=1
-          )
-          s, b = re.subn(
-              r'(?m)^(ele tem o TargetSdkVersion\s+)\d+',
-              lambda m: m.group(1) + target,
-              s,
-              count=1
-          )
-          s, c = re.subn(
-              r'(?m)^(ele tem o CompileSdkVersion\s+)\d+',
-              lambda m: m.group(1) + compile_sdk,
-              s,
-              count=1
-          )
-
-          if not all((a, b, c)):
-              raise SystemExit("Não foi possível atualizar todas as versões.")
-
-          p.write_text(t[:inicio] + s + t[fim:], encoding="utf-8")
-          PY
-
-      - name: Gerar artifact do README
-        uses: actions/upload-artifact@v6
-        with:
-          name: readme-versao-app
-          path: README.md
-          if-no-files-found: error
-          retention-days: 7
-
-  atualizar-readme-agp-kotlin:
-    name: 🛠️ Atualizar AGP e Kotlin no README
-    runs-on: ubuntu-24.04
-    needs: atualizar-readme-versao-app
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          ref: main
-          fetch-depth: 0
-
-      - name: Baixar README anterior
-        uses: actions/download-artifact@v7
-        with:
-          name: readme-versao-app
-          path: .
-
-      - name: Atualizar AGP e Kotlin
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-          import tomllib
-
-          app = Path("Código-fonte do app = Mulher Amparada")
-          tomls = sorted(app.rglob("libs.versions.toml"))
-
-          if not tomls:
-              raise SystemExit("libs.versions.toml não encontrado.")
-
-          versoes = {}
-          for f in tomls:
-              dados = tomllib.loads(f.read_text(encoding="utf-8"))
-              versoes.update(dados.get("versions", {}))
-
-          agp = versoes.get("agp")
-          kotlin = versoes.get("kotlin")
-
-          if not agp or not kotlin:
-              raise SystemExit("AGP ou Kotlin não encontrados no TOML.")
-
-          p = Path("README.md")
-          t = p.read_text(encoding="utf-8")
-
-          t, n = re.subn(
-              r'(Versão agp no toml de )[\d.]+( e versão kotlin é a )[\d.]+',
-              lambda m: m.group(1) + agp + m.group(2) + kotlin,
-              t,
-              count=1,
-              flags=re.IGNORECASE
-          )
-
-          if not n:
-              raise SystemExit("Linha AGP/Kotlin não encontrada.")
-
-          p.write_text(t, encoding="utf-8")
-          PY
-
-      - name: Gerar artifact do README
-        uses: actions/upload-artifact@v6
-        with:
-          name: readme-agp-kotlin
-          path: README.md
-          if-no-files-found: error
-          retention-days: 7
-
-  atualizar-readme-gradle:
-    name: 🐘 Atualizar Gradle no README
-    runs-on: ubuntu-24.04
-    needs: atualizar-readme-agp-kotlin
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          ref: main
-          fetch-depth: 0
-
-      - name: Baixar README anterior
-        uses: actions/download-artifact@v7
-        with:
-          name: readme-agp-kotlin
-          path: .
-
-      - name: Atualizar Gradle
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-
-          app = Path("Código-fonte do app = Mulher Amparada")
-          wrapper = app / "gradle/wrapper/gradle-wrapper.properties"
-
-          if not wrapper.is_file():
-              raise SystemExit(f"Arquivo não encontrado: {wrapper}")
-
-          t = wrapper.read_text(encoding="utf-8")
-          m = re.search(r'gradle-([0-9.]+)-(?:bin|all)\.zip', t)
-
-          if not m:
-              raise SystemExit("Versão do Gradle não encontrada.")
-
-          versao_gradle = m.group(1)
-          readme = Path("README.md")
-          t = readme.read_text(encoding="utf-8")
-
-          t, n = re.subn(
-              r'(e a versão do gradle é )[\d.]+',
-              lambda x: x.group(1) + versao_gradle,
-              t,
-              count=1,
-              flags=re.IGNORECASE
-          )
-
-          if not n:
-              raise SystemExit("Linha do Gradle não encontrada.")
-
-          readme.write_text(t, encoding="utf-8")
-          PY
-
-      - name: Gerar artifact para publicação
-        uses: actions/upload-artifact@v6
-        with:
-          name: arquivo-readme
-          path: README.md
-          if-no-files-found: error
-          retention-days: 7
-
-  validar-readme-versoes:
-    name: ✅ Validar versões documentadas
-    runs-on: ubuntu-24.04
-    needs: atualizar-readme-gradle
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          ref: main
-          fetch-depth: 0
-
-      - name: Baixar README atualizado
-        uses: actions/download-artifact@v7
-        with:
-          name: arquivo-readme
-          path: .
-
-      - name: Validar seção do README
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-
-          t = Path("README.md").read_text(encoding="utf-8")
-          inicio = t.find("### Sobre as atualizações do app:")
-
-          if inicio < 0:
-              raise SystemExit("Seção ausente.")
-
-          fim = t.find("\n### ", inicio + 1)
-          s = t[inicio:fim] if fim >= 0 else t[inicio:]
-
-          obrigatorios = [
-              r'(?m)^`\d+ \(versão final\)`$',
-              r'(?im)^ele tem o TargetSdkVersion\s+\d+',
-              r'(?im)^ele tem o CompileSdkVersion\s+\d+',
-              r'(?i)Versão agp no toml de [\d.]+ e versão kotlin é a [\d.]+',
-              r'(?i)Jetpack Compose',
-              r'(?i)e a versão do gradle é [\d.]+',
-          ]
-
-          if any(not re.search(padrao, s) for padrao in obrigatorios):
-              raise SystemExit("README contém versões ausentes ou inválidas.")
-
-          print("Seção do README validada.")
-          print("Linha sobre Jetpack Compose e estilo via XML preservada.")
-          PY
-
-      - name: Gerar artifact validado
-        uses: actions/upload-artifact@v6
-        with:
-          name: arquivo-readme-validado
-          path: README.md
-          if-no-files-found: error
-          retention-days: 7
-
-  finalizar-readme-versoes:
-    name: 📄 Finalizar atualização do README
-    runs-on: ubuntu-24.04
-    needs: validar-readme-versoes
-    permissions:
-      contents: read
-    steps:
-      - name: Baixar README validado
-        uses: actions/download-artifact@v7
-        with:
-          name: arquivo-readme-validado
-          path: .
-
-      - name: Registrar resumo
-        shell: bash
-        run: |
-          set -euo pipefail
-          test -s README.md
-
-          {
-            echo "## README atualizado"
-            echo
-            echo "Versões do app, SDKs, AGP, Kotlin e Gradle atualizadas e validadas."
-            echo "Artifact final: arquivo-readme-validado."
-            echo "A linha sobre Jetpack Compose e estilo via XML foi preservada."
-          } >> "$GITHUB_STEP_SUMMARY"
-          
   # =========================================================
   # ANALISAR LINGUAGENS E ATUALIZAR CORES AUTOMATICAMENTE
   # =========================================================
@@ -1950,7 +1641,7 @@ jobs:
   # =========================================================
 
   salvar-na-main:
-    name: 💾 Salvar artifacts na main pelo Mulher Amparada Bot
+    name: 💾Salvar artifacts na main pelo Mulher Amparada Bot
     runs-on: ubuntu-24.04
     needs:
       - build
@@ -1962,29 +1653,19 @@ jobs:
       - atualizar-relatorio-commits
       - pesquisar-projeto
       - observatorio
-      - atualizar-readme-versao-app
-      - atualizar-readme-agp-kotlin
-      - atualizar-readme-gradle
-      - validar-readme-versoes
-      - finalizar-readme-versoes
-
     if: >-
       ${{
         !cancelled() &&
         needs.build.result == 'success' &&
         needs.linguagens.result == 'success' &&
         needs.bot.result == 'success' &&
+        
         needs.atualizar-commits.result == 'success' &&
         needs.sitemap.result == 'success' &&
         needs.atualizar-footer.result == 'success' &&
         needs.atualizar-relatorio-commits.result == 'success' &&
         needs.pesquisar-projeto.result == 'success' &&
-        needs.observatorio.result == 'success' &&
-        needs.atualizar-readme-versao-app.result == 'success' &&
-        needs.atualizar-readme-agp-kotlin.result == 'success' &&
-        needs.atualizar-readme-gradle.result == 'success' &&
-        needs.validar-readme-versoes.result == 'success' &&
-        needs.finalizar-readme-versoes.result == 'success'
+        needs.observatorio.result == 'success'
       }}
 
     permissions:
@@ -2004,12 +1685,6 @@ jobs:
           path: ${{ runner.temp }}/mulher-amparada-artifacts
           merge-multiple: false
 
-      - name: Preparar README validado para o publicador
-        uses: actions/download-artifact@v7
-        with:
-          name: arquivo-readme-validado
-          path: .
-
       - name: Consultar workflow atual
         shell: bash
         run: |
@@ -2022,6 +1697,7 @@ jobs:
             exit 1
           fi
 
+          echo "Workflow consultado:"
           wc -l "$WORKFLOW"
 
       - name: Compilar o publicador C++
@@ -2046,6 +1722,7 @@ jobs:
 
       - name: Publicar na main pelo GitHub App
         shell: bash
+        
         env:
           GH_TOKEN: ${{ github.token }}
           MULHER_AMPARADA_APP_ID: ${{ secrets.MULHER_AMPARADA_APP_ID }}

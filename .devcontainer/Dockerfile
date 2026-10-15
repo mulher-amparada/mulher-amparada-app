@@ -1,31 +1,23 @@
-FROM ubuntu:22.04
+FROM ://microsoft.com
 
 # Evita perguntas interativas durante a instalação
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Instala o sistema base, interface gráfica leve e ferramentas web
+# Instala Java 17, Gradle, dependências de interface gráfica e ferramentas Android
 RUN apt-get update && apt-get install -y \
-    xfce4 \
-    xfce4-goodies \
+    openjdk-17-jdk \
+    sdkmanager \
+    gradle \
+    python3 \
     xvfb \
     x11vnc \
-    novnc \
-    supervisor \
+    fluxbox \
+    websockify \
     curl \
-    git \
-    chromium-browser \
-    && apt-get clean
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Configura as variáveis de ambiente para a tela do OS
-ENV DISPLAY=:1
-ENV RESOLUTION=1280x720x24
+# Configurações de ambiente do Mulher Amparada
+ENV ALLOW_BACKUP=false
+ENV TARGET_SDK=37
 
-# Copia os arquivos do projeto para dentro do sistema do OS
-WORKDIR /home/mulher-amparada
-COPY . .
-
-# Expõe a porta do sistema operacional para acesso web
-EXPOSE 6080
-
-# Comando para iniciar os serviços do OS
-CMD ["/bin/bash", "start-os.sh"]
+WORKDIR /workspace/mulher-amparada-app

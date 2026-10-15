@@ -239,7 +239,9 @@ e as páginas desse site estão indexadas no google search console também!
 
 O app já está na versão:
 
-`33 (versão final)`
+versionCode = 1
+
+versionName = "1.0"
 
 ele tem o TargetSdkVersion 37
 

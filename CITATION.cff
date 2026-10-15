@@ -4,10 +4,6 @@ title: "Mulher Amparada"
 type: software
 url: "https://github.com/mulher-amparada/mulher-amparada-app"
 repository-code: "https://github.com/mulher-amparada/mulher-amparada-app"
-abstract: >-
-  🛡️ Projeto de tecnologia voltado à proteção, segurança e assistência
-  em situações de emergência, com recursos destinados ao amparo de mulheres
-  em situações de risco ou vulnerabilidade.
 keywords:
   - "Proteção de mulheres"
   - "Segurança"
@@ -16,5 +12,4 @@ keywords:
   - "Emergências"
   - "Acolhimento"
   - "Conhecimentos públicos"
-
 license: GPL-3.0-only

@@ -1,0 +1,16 @@
+{
+    "name": "Mulher Amparada - Execução de App",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "forwardPorts":,
+    "portsAttributes": {
+        "6080": {
+            "label": "Interface Visual do App",
+            "onAutoForward": "openBrowser",
+            "visibility": "private"
+        }
+    },
+    "updateContentCommand": "gradle build",
+    "postCreateCommand": "echo 'Compilando APK e iniciando ambiente seguro...' && Xvfb :1 -screen 0 1080x1920x24 & export DISPLAY=:1 && fluxbox & x11vnc -forever -shared -rfbport 5900 -display :1 & websockify --web /usr/share/novnc 6080 localhost:5900 &"
+}

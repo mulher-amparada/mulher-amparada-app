@@ -1,8 +1,7 @@
-FROM ://microsoft.com
+FROM mcr.microsoft.com/devcontainers/base:ubuntu
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Instala Java, ferramentas de renderização e servidores de transmissão Web
 RUN apt-get update && apt-get install -y \
     openjdk-17-jdk \
     gradle \

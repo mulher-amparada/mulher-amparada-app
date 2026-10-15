@@ -779,8 +779,8 @@ jobs:
               raise SystemExit(f"Pasta do app não encontrada: {app}")
 
           arquivos = sorted(
-              list(app.rglob("build.gradle.kts")) +
-              list(app.rglob("build.gradle"))
+              list(app.rglob("build.gradle")) +
+              list(app.rglob("build.gradle.kts"))
           )
 
           def buscar(padrao, nome):
@@ -793,17 +793,17 @@ jobs:
               raise SystemExit(f"Não encontrado: {nome}")
 
           versao = buscar(
-              r'\bversionCode\s*(?:=\s*|\(\s*)(\d+)',
+              r'\bversionCode\s*(?:=\s*)?(\d+)',
               "versionCode"
           )
 
           target = buscar(
-              r'\btargetSdk(?:Version)?\s*(?:=\s*|\(\s*)(\d+)',
+              r'\btargetSdk(?:Version)?\s*(?:=\s*)?(\d+)',
               "targetSdk"
           )
 
           compile_sdk = buscar(
-              r'\bcompileSdk(?:Version)?\s*(?:=\s*|\(\s*)(\d+)',
+              r'\bcompileSdk(?:Version)?\s*(?:=\s*)?(\d+)',
               "compileSdk"
           )
 

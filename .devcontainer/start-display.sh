@@ -15,7 +15,4 @@ x11vnc \
   -display :1 \
   >/tmp/x11vnc.log 2>&1 &
 
-exec websockify \
-  --web /usr/share/novnc \
-  6080 \
-  localhost:5900
+websockify --daemon --web=/usr/share/novnc 6080 localhost:5900

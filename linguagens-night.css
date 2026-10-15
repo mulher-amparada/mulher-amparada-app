@@ -506,6 +506,18 @@
     background-color: #ce2777;
 }
 
+/* Dockerfile */
+.language-dockerfile .dot,
+.dot.language-dockerfile,
+.language-dockerfile.bar-segment,
+.bar-segment.language-dockerfile,
+[data-language="Dockerfile"] .dot,
+.dot[data-language="Dockerfile"],
+[data-language="Dockerfile"] .bar-segment,
+.bar-segment[data-language="Dockerfile"] {
+    background-color: #ce27af;
+}
+
 /* HTML */
 .language-html .dot,
 .dot.language-html,

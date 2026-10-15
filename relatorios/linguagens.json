@@ -1,11 +1,11 @@
 {"header" : {
   "cloc_url"           : "github.com/AlDanial/cloc",
   "cloc_version"       : "1.98",
-  "elapsed_seconds"    : 0.0790419578552246,
-  "n_files"            : 145,
-  "n_lines"            : 39568,
-  "files_per_second"   : 1834.46872945108,
-  "lines_per_second"   : 500594.887496003,
+  "elapsed_seconds"    : 0.104803085327148,
+  "n_files"            : 148,
+  "n_lines"            : 39624,
+  "files_per_second"   : 1412.17216590533,
+  "lines_per_second"   : 378080.47230968,
   "report_file"        : "relatorios/linguagens.json"},
 "CSS" :{
   "nFiles": 18,
@@ -13,15 +13,15 @@
   "comment": 863,
   "code": 10229},
 "Markdown" :{
-  "nFiles": 100,
-  "blank": 2142,
+  "nFiles": 101,
+  "blank": 2144,
   "comment": 6,
-  "code": 9818},
+  "code": 9834},
 "HTML" :{
   "nFiles": 11,
   "blank": 1455,
   "comment": 87,
-  "code": 3143},
+  "code": 3144},
 "C++" :{
   "nFiles": 2,
   "blank": 391,
@@ -48,10 +48,10 @@
   "comment": 26,
   "code": 134},
 "JSON" :{
-  "nFiles": 2,
+  "nFiles": 3,
   "blank": 0,
   "comment": 0,
-  "code": 97},
+  "code": 112},
 "Ruby" :{
   "nFiles": 1,
   "blank": 21,
@@ -72,13 +72,18 @@
   "blank": 10,
   "comment": 0,
   "code": 22},
+"Dockerfile" :{
+  "nFiles": 1,
+  "blank": 4,
+  "comment": 2,
+  "code": 16},
 "TOML" :{
   "nFiles": 1,
   "blank": 2,
   "comment": 0,
   "code": 7},
 "SUM": {
-  "blank": 10971,
-  "comment": 1223,
-  "code": 27374,
-  "nFiles": 145} }
+  "blank": 10977,
+  "comment": 1225,
+  "code": 27422,
+  "nFiles": 148} }

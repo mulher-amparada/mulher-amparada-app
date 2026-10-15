@@ -46,19 +46,29 @@ private val FILE_CHOOSER_REQUEST_CODE = 1001
         window.addFlags(
             WindowManager.LayoutParams.FLAG_SECURE
         )
-
         // CONFIGURAÇÃO DA JANELA
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            true
-        )
+WindowCompat.setDecorFitsSystemWindows(
+    window,
+    true
+)
 
-        window.statusBarColor = Color.TRANSPARENT
-        window.navigationBarColor = Color.TRANSPARENT
+window.statusBarColor = Color.TRANSPARENT
+window.navigationBarColor = Color.TRANSPARENT
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-            window.isNavigationBarContrastEnforced = false
-        }
+if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+    window.isNavigationBarContrastEnforced = false
+}
+
+// REMOVE A BARRA/INDICADOR DE NAVEGAÇÃO
+WindowCompat.getInsetsController(
+    window,
+    window.decorView
+).apply {
+    hide(WindowInsetsCompat.Type.navigationBars())
+    systemBarsBehavior =
+        androidx.core.view.WindowInsetsControllerCompat
+            .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+}
 
         // LAYOUT
         setContentView(R.layout.activity_repo)

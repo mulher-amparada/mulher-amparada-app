@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /workspace/mulher-amparada-app
+WORKDIR /workspace/mulher-amparada-app/Código-fonte do app = Mulher Amparada
 
 ENV ALLOW_BACKUP=false
 ENV SECURITY_FLAG=secure

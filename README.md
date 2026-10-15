@@ -90,30 +90,156 @@ No dia 13/10/2026, teve uma imagem de varios homems numa mesa em um escritorio t
 >Caso o dispositivo não possua nenhum dos métodos de autenticação aceitos configurado, não existe um método válido para desbloquear a área protegida. Nesse cenário, o aplicativo não deve considerar a autenticação como concluída nem liberar a área protegida simplesmente porque a biometria não está disponível.
 
 # 🔗Seção de links e paginas:
+---
 
-### Direitos que toda mulher tem!
+♿ Acessibilidade:
 
-Conheça 100 direitos e garantias assegurados às mulheres pela legislação brasileira.
+Documenta recursos como redução de animações, modo claro, modo escuro e adaptação do ícone ao Material You.
 
-Para consultar a legislação completa e as referências utilizadas nesta seção, acesse**[LEIS.md](LEIS.md)**.
+🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/ACCESSIBILITY.md
 
-Conhecer seus direitos é importante para reconhecer situações de proteção, buscar ajuda quando necessário e entender as garantias previstas em lei.
+---
 
-### Conhecimentos para recuperar sua autonomia
+🧑‍🤝‍🧑 Código de Conduta:
 
-Conhecimentos e informações para ajudar você a compreender melhor sua vida financeira, organizar seu dinheiro e fortalecer sua autonomia.
+Define regras de convivência, respeito e colaboração, além de comportamentos não aceitos e formas de comunicar possíveis violações.
 
-Para acessar o conteúdo completo sobre finanças, consulte**[Finanças](FINANÇAS.md)**.
+🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/CODE_OF_CONDUCT.md
 
-### Mensagem de apoio e acolhimento para as usuárias
+---
 
-Uma carta para você
+🤝 Contribuições:
 
-Esta carta foi feita para apoiar você em sua caminhada, trazendo conhecimentos e informações que podem ajudar a compreender melhor sua vida financeira, organizar seu dinheiro e fortalecer, cada vez mais, sua autonomia.
+Explica como participar do projeto por meio de issues, pull requests, documentação, sugestões e código, incluindo orientações sobre segurança e privacidade.
 
-Você não precisa saber tudo de uma vez. Conhecimento também é uma forma de proteção, e entender suas próprias finanças pode ajudar você a tomar decisões com mais segurança e independência.
+🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/CONTRIBUTING.md
 
-Para acessar o conteúdo completo sobre finanças, consulte a [Carta do desenvolvedor](ABOUT.md).
+---
+
+💰 Finanças:
+
+Reúne informações sobre segurança financeira, cartões, contas, biometria, limites, cartão virtual, juros, CDB, impostos, liquidez, fundos e riscos.
+
+🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/FINAN%C3%87AS.md
+
+---
+
+⚖️ Leis e direitos:
+
+Apresenta informações sobre 100 direitos das mulheres e suas respectivas referências na legislação brasileira.
+
+🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/LEIS.md
+
+---
+
+📜 Licença:
+
+Estabelece as condições jurídicas para utilização, modificação e distribuição do projeto.
+
+🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/LICENSE
+
+---
+
+📖 README:
+
+É a principal apresentação do projeto, reunindo sua história, desenvolvimento, estrutura, características, avisos e limitações.
+
+🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/README.md
+
+---
+
+🔐 Segurança:
+
+Apresenta a política de segurança, incluindo comunicação de vulnerabilidades, versões suportadas, severidade, análise, testes autorizados e proteção de dados.
+
+🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/SECURITY.md
+
+---
+
+💌 Mensagem para as usuárias:
+
+O "ABOUT.md" apresenta uma mensagem do autor às mulheres para quem o projeto foi criado, além de informações e números de apoio.
+
+🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/ABOUT.md
+
+---
+
+📚 Citação do projeto:
+
+Disponibiliza os metadados de citação do Mulher Amparada para referenciar o projeto em trabalhos, pesquisas e outras publicações.
+
+🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/CITATION.cff
+
+---
+
+⚖️ Termos e políticas:
+
+Reúne os termos e as políticas relacionados ao projeto.
+
+🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/TERMS%20AND%20POLICY.md
+
+---
+
+🏛️ Governança:
+
+Apresenta os princípios de governança, tomada de decisões e evolução do projeto, com foco na autonomia das mulheres e na clareza do aplicativo.
+
+🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/GOVERNANCE.md
+
+---
+
+✍️ Autoria:
+
+Apresenta os canais públicos de identificação e contato do projeto.
+
+🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/AUTHORS.md
+
+---
+
+🆘 Suporte:
+
+Reúne links de divulgação, redes sociais, referências públicas e canais de ajuda relacionados ao Mulher Amparada.
+
+🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/SUPPORT.md
+
+---
+
+💻 Projeto no GitHub:
+
+O código-fonte e a documentação ficam organizados publicamente no GitHub.
+
+🔗 https://github.com/mulher-amparada/mulher-amparada-app
+
+---
+
+🌐 Site:
+
+O projeto também possui um site próprio.
+
+🔗 https://mulher-amparada.github.io/mulher-amparada-app/
+
+---
+
+🧩 Documentação:
+
+Cada arquivo possui uma finalidade específica:
+
+- "README.md" → apresentação do projeto
+- "ACCESSIBILITY.md" → acessibilidade
+- "CODE_OF_CONDUCT.md" → convivência e respeito
+- "CONTRIBUTING.md" → contribuições
+- "FINANÇAS.md" → informações financeiras
+- "LEIS.md" → direitos e legislação
+- "LICENSE" → condições de uso
+- "SECURITY.md" → segurança
+- "ABOUT.md" → mensagem às usuárias
+- "CITATION.cff" → citação e referência do projeto
+- "TERMS AND POLICY.md" → termos e políticas
+- "GOVERNANCE.md" → governança do projeto
+- "AUTHORS.md" → autoria e contato
+- "SUPPORT.md" → suporte, divulgação e canais de ajuda
+
+---
 
 # 🏗Estrutura do projeto:
 

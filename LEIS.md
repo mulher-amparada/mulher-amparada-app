@@ -1,4 +1,4 @@
-### 💜 100 DIREITOS DAS MULHERES GARANTIDOS PELA LEGISLAÇÃO BRASILEIRA
+# 💜 100 DIREITOS DAS MULHERES GARANTIDOS PELA LEGISLAÇÃO BRASILEIRA!
 
 >📚 Conheça seus direitos. Conhecimento também é proteção.
 >
@@ -6,9 +6,7 @@
 
 ---
 
-### ⚖️ 1. Igualdade, liberdade e dignidade
-
-🟣 Igualdade e direitos fundamentais:
+### ⚖️ 1. Igualdade, liberdade e dignidade:
 
 1. ⚖️ Direito à igualdade perante a lei
 📖 Base legal: Constituição Federal, art. 5º, caput.

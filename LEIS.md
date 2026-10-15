@@ -6,9 +6,9 @@
 
 ---
 
-⚖️ 1. Igualdade, liberdade e dignidade
+### ⚖️ 1. Igualdade, liberdade e dignidade
 
-🟣 Igualdade e direitos fundamentais
+🟣 Igualdade e direitos fundamentais:
 
 1. ⚖️ Direito à igualdade perante a lei
 📖 Base legal: Constituição Federal, art. 5º, caput.
@@ -45,7 +45,7 @@
 
 ---
 
-🏛️ 2. Justiça, defesa e cidadania
+### 🏛️ 2. Justiça, defesa e cidadania:
 
 12. ⚖️ Direito de acesso à Justiça
 📖 Base legal: Constituição Federal, art. 5º, XXXV.
@@ -76,7 +76,7 @@
 
 ---
 
-🎓 3. Direitos sociais
+### 🎓 3. Direitos sociais:
 
 21. 📚 Direito à educação
 📖 Base legal: Constituição Federal, arts. 6º e 205.
@@ -107,7 +107,7 @@
 
 ---
 
-👨‍👩‍👧 4. Família, casamento e vida familiar
+### 👨‍👩‍👧 4. Família, casamento e vida familiar:
 
 30. 👨‍👩‍👧‍👦 Direito à proteção da família
 📖 Base legal: Constituição Federal, art. 226.
@@ -129,7 +129,7 @@
 
 ---
 
-🛡️ 5. Proteção contra a violência doméstica
+### 🛡️ 5. Proteção contra a violência doméstica:
 
 💜 Lei Maria da Penha
 
@@ -180,7 +180,7 @@
 
 ---
 
-🏥 6. Atendimento após violência sexual
+### 🏥 6. Atendimento após violência sexual:
 
 51. 💊 Direito ao acesso a serviços de contracepção de emergência nos casos previstos em lei após violência sexual
 📖 Base legal: Lei nº 11.340/2006, art. 9º, §3º; Lei nº 12.845/2013.
@@ -205,7 +205,7 @@
 
 ---
 
-🏥 7. Direitos das mulheres na saúde
+### 🏥 7. Direitos das mulheres na saúde:
 
 58. 🏥 Direito ao atendimento especializado no SUS em caso de violência
 📖 Base legal: Lei nº 8.080/1990, art. 7º, XIV.
@@ -227,15 +227,15 @@
 
 ---
 
-🎗️ 8. Prevenção e tratamento do câncer
+### 🩺 8. Prevenção e tratamento do câncer:
 
-64. 🎗️ Direito à prevenção, detecção e tratamento do câncer do colo do útero
+64. 🩺 Direito à prevenção, detecção e tratamento do câncer do colo do útero
 📖 Base legal: Lei nº 11.664/2008, com alterações da Lei nº 14.335/2022.
 
-65. 🎗️ Direito à prevenção, detecção e tratamento do câncer de mama
+65. 🩺 Direito à prevenção, detecção e tratamento do câncer de mama
 📖 Base legal: Lei nº 11.664/2008, com alterações da Lei nº 14.335/2022.
 
-66. 🎗️ Direito à prevenção, detecção e tratamento do câncer colorretal, conforme a legislação do SUS
+66. 🩺 Direito à prevenção, detecção e tratamento do câncer colorretal, conforme a legislação do SUS
 📖 Base legal: Lei nº 11.664/2008, com alterações da Lei nº 14.335/2022.
 
 67. 🩺 Direito à realização de exames previstos na legislação para prevenção e detecção desses cânceres
@@ -252,7 +252,7 @@
 
 ---
 
-💼 9. Direitos das mulheres no trabalho
+### 💼 9. Direitos das mulheres no trabalho:
 
 ⚖️ Igualdade profissional
 
@@ -279,7 +279,7 @@
 
 ---
 
-🤰 10. Direitos relacionados à maternidade
+### 🤰 10. Direitos relacionados à maternidade:
 
 78. 🤰 Direito à licença-maternidade
 📖 Base legal: Constituição Federal, art. 7º, XVIII; CLT, art. 392.
@@ -316,7 +316,7 @@
 
 ---
 
-🚨 11. Proteção contra crimes e violência
+### 🚨 11. Proteção contra crimes e violência:
 
 89. 🚫 Direito à proteção contra assédio sexual no ambiente de trabalho, conforme a legislação aplicável
 📖 Base legal: Código Penal, art. 216-A; Lei nº 14.540/2023, quando aplicável.
@@ -345,7 +345,7 @@
 
 ---
 
-🛡️ 13. Garantias adicionais de proteção
+### 🛡️ 13. Garantias adicionais de proteção:
 
 96. 🏠 Direito à proteção contra violência doméstica independentemente da condição pessoal da vítima ou do agressor, nas hipóteses abrangidas pela Lei Maria da Penha
 📖 Base legal: Lei nº 11.340/2006, com alterações da Lei nº 14.550/2023.
@@ -366,9 +366,9 @@
 
 💜 Mulher Amparada
 
-«Conhecer seus direitos é conhecer as ferramentas que a lei oferece para sua proteção.
+*Conhecer seus direitos é conhecer as ferramentas que a lei oferece para sua proteção.*
 
-⚠️ A aplicação de cada direito pode depender da situação concreta, dos requisitos previstos em lei e das circunstâncias do caso. Esta lista tem finalidade informativa e não substitui orientação jurídica profissional.
+> ⚠️ A aplicação de cada direito pode depender da situação concreta, dos requisitos previstos em lei e das circunstâncias do caso. Esta lista tem finalidade informativa e não substitui orientação jurídica profissional.
 
 📞 Ligue 180 — Central de Atendimento à Mulher: atendimento gratuito para orientação e encaminhamento em situações de violência contra a mulher.»
 

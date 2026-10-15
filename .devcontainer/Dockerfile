@@ -1,3 +1,4 @@
+
 FROM mcr.microsoft.com/devcontainers/base:ubuntu
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -31,8 +32,10 @@ RUN mkdir -p "${ANDROID_HOME}/cmdline-tools" \
 RUN yes | sdkmanager --licenses >/dev/null \
     && sdkmanager \
        "platform-tools" \
-       "platforms;android-37" \
-       "build-tools;37.0.0"
+       "platforms;android-37.0" \
+       "build-tools;37.0.0" \
+    && ln -s /opt/android-sdk/platforms/android-37.0 \
+       /opt/android-sdk/platforms/android-37
 
 WORKDIR /workspace/mulher-amparada-app
 

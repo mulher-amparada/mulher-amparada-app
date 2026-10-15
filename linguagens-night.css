@@ -458,18 +458,6 @@
 }
 
 /* AUTO-LINGUAGENS: INICIO */
-/* Bourne Shell */
-.language-bourne-shell .dot,
-.dot.language-bourne-shell,
-.language-bourne-shell.bar-segment,
-.bar-segment.language-bourne-shell,
-[data-language="Bourne Shell"] .dot,
-.dot[data-language="Bourne Shell"],
-[data-language="Bourne Shell"] .bar-segment,
-.bar-segment[data-language="Bourne Shell"] {
-    background-color: #2739ce;
-}
-
 /* C */
 .language-c .dot,
 .dot.language-c,
@@ -516,18 +504,6 @@
 [data-language="CSV"] .bar-segment,
 .bar-segment[data-language="CSV"] {
     background-color: #ce2777;
-}
-
-/* Dockerfile */
-.language-dockerfile .dot,
-.dot.language-dockerfile,
-.language-dockerfile.bar-segment,
-.bar-segment.language-dockerfile,
-[data-language="Dockerfile"] .dot,
-.dot[data-language="Dockerfile"],
-[data-language="Dockerfile"] .bar-segment,
-.bar-segment[data-language="Dockerfile"] {
-    background-color: #ce27af;
 }
 
 /* HTML */

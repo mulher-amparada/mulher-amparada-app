@@ -751,13 +751,12 @@ jobs:
               --squash || true
           done
 
-atualizar-readme-versao-app:
+  atualizar-readme-versao-app:
     name: 📱 Atualizar versão do app no README
     runs-on: ubuntu-24.04
     needs: dependabot-merge
     permissions:
       contents: read
-
     steps:
       - uses: actions/checkout@v7
         with:
@@ -786,14 +785,12 @@ atualizar-readme-versao-app:
 
           def buscar(padrao, nome):
               for f in arquivos:
-                  texto = f.read_text(encoding="utf-8")
-                  m = re.search(padrao, texto)
+                  conteudo = f.read_text(encoding="utf-8")
+                  m = re.search(padrao, conteudo)
                   if m:
                       return m.group(1)
 
-              raise SystemExit(
-                  f"{nome} não encontrado nos arquivos Gradle do app."
-              )
+              raise SystemExit(f"Não encontrado: {nome}")
 
           versao = buscar(
               r'\bversionCode\s*(?:=\s*|\(\s*)(\d+)',
@@ -814,9 +811,10 @@ atualizar-readme-versao-app:
           inicio = t.find("### Sobre as atualizações do app:")
 
           if inicio < 0:
-              raise SystemExit("Seção não encontrada no README.")
+              raise SystemExit("Seção não encontrada.")
 
           fim = t.find("\n### ", inicio + 1)
+
           if fim < 0:
               fim = len(t)
 
@@ -830,14 +828,14 @@ atualizar-readme-versao-app:
           )
 
           s, b = re.subn(
-              r'(?im)^(ele tem o TargetSdkVersion\s+)\d+',
+              r'(?m)^(ele tem o TargetSdkVersion\s+)\d+',
               lambda m: m.group(1) + target,
               s,
               count=1
           )
 
           s, c = re.subn(
-              r'(?im)^(ele tem o CompileSdkVersion\s+)\d+',
+              r'(?m)^(ele tem o CompileSdkVersion\s+)\d+',
               lambda m: m.group(1) + compile_sdk,
               s,
               count=1
@@ -845,18 +843,21 @@ atualizar-readme-versao-app:
 
           if not all((a, b, c)):
               raise SystemExit(
-                  "Não foi possível atualizar todas as versões no README."
+                  "Não foi possível atualizar todas as versões."
               )
 
-          p.write_text(t[:inicio] + s + t[fim:], encoding="utf-8")
+          p.write_text(
+              t[:inicio] + s + t[fim:],
+              encoding="utf-8"
+          )
 
           print(f"versionCode: {versao}")
           print(f"targetSdk: {target}")
           print(f"compileSdk: {compile_sdk}")
-          print("README atualizado.")
+          PY
 
       - name: Gerar artifact do README
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v6
         with:
           name: readme-versao-app
           path: README.md

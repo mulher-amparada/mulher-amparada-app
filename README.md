@@ -227,6 +227,10 @@ finalizar-readme-versoes:
 
 Finaliza e registra o resumo da atualização do README validado.
 
+build-os:
+
+Prepara o ambiente DevContainer, cria e publica sua imagem no GitHub Container Registry (GHCR) e compila o aplicativo Mulher Amparada em Kotlin/Compose com Gradle. A porta de acesso remoto está privada.
+
 Resultado final:
 
 O workflow automatiza tarefas de compilação, análise, documentação, publicação e manutenção do projeto. Ao final, o Mulher-Amparada-Bot grava os artifacts na branch "main", conforme as dependências e condições definidas no workflow.

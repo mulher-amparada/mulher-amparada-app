@@ -1,12 +1,12 @@
-🏛️ Governança do Mulher Amparada
+# 🏛️ Governança do Mulher Amparada
 
-💜 1. Propósito
+### 💜 1. Propósito
 
 O Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança, acolhimento e assistência de mulheres em situações de risco ou vulnerabilidade.
 
 Sua governança é orientada pelo respeito à autonomia das usuárias, pela clareza das funcionalidades e pelo compromisso de oferecer uma experiência compreensível e acolhedora.
 
-🫂 2. Princípio fundamental: a usuária está no controle
+### 🫂 2. Princípio fundamental: a usuária está no controle
 
 O Mulher Amparada reconhece que cada mulher é a protagonista da própria vida.
 
@@ -18,7 +18,7 @@ O Mulher Amparada reconhece que cada mulher é a protagonista da própria vida.
 
 A tecnologia deve estar a serviço das mulheres, nunca assumir o controle de suas vidas.
 
-🧭 3. Responsabilidade pelo software
+### 🧭 3. Responsabilidade pelo software
 
 O mantenedor do Mulher Amparada assume a responsabilidade de buscar uma experiência clara, previsível e compreensível.
 
@@ -34,7 +34,7 @@ Isso inclui:
 
 A responsabilidade de tornar o software compreensível pertence ao desenvolvimento do projeto, não às mulheres que o utilizam.
 
-🗳️ 4. Tomada de decisões
+### 🗳️ 4. Tomada de decisões
 
 As decisões de desenvolvimento devem considerar:
 
@@ -46,7 +46,7 @@ As decisões de desenvolvimento devem considerar:
 
 Quando uma funcionalidade puder gerar confusão ou comprometer a segurança, sua implementação deverá ser reavaliada.
 
-🛠️ 5. Manutenção do projeto
+### 🛠️ 5. Manutenção do projeto
 
 O mantenedor é responsável por orientar o desenvolvimento, avaliar alterações e buscar a consistência do software.
 
@@ -54,7 +54,7 @@ As contribuições podem ser analisadas conforme sua utilidade, qualidade técni
 
 Nenhuma contribuição deve ser considerada obrigatória apenas por ter sido proposta.
 
-🫶 6. Respeito às usuárias
+### 🫶 6. Respeito às usuárias
 
 O projeto não deve culpabilizar, constranger, intimidar ou pressionar mulheres em razão de suas circunstâncias pessoais.
 
@@ -62,19 +62,19 @@ A comunicação deve evitar julgamentos, promessas irreais de proteção e mensa
 
 O acolhimento deve respeitar os limites individuais e a liberdade de escolha.
 
-🔒 7. Segurança e privacidade
+### 🔒 7. Segurança e privacidade
 
 As funcionalidades devem ser desenvolvidas com atenção à proteção de dados, à transparência e à redução de riscos.
 
 Alterações que afetem informações pessoais, permissões ou recursos de proteção devem ser avaliadas cuidadosamente e comunicadas de maneira compreensível.
 
-🔄 8. Evolução da governança
+### 🔄 8. Evolução da governança
 
 Este documento poderá ser atualizado conforme o Mulher Amparada evoluir.
 
 As mudanças devem preservar o propósito central do projeto: acolher mulheres, respeitar sua autonomia e oferecer uma ferramenta cuja utilização seja clara e confiável.
 
-🌷 9. Compromisso final
+### 🌷 9. Compromisso final
 
 O Mulher Amparada existe para apoiar mulheres, não para decidir por elas.
 

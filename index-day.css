@@ -2854,7 +2854,8 @@ footer h3,
 footer h4 {
     color: #351b28;
     line-height: 1.35;
-    letter-spacing: -0.025em;
+    margin-top: 25px;
+    margin-bottom: 25px;
 }
 
 footer h1,

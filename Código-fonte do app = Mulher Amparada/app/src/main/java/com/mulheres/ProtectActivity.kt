@@ -178,6 +178,15 @@ abrirRepo = {
     )
 }
 
+abrirHabilidades = {
+    startActivity(
+        Intent(
+            this,
+            HabilidadesActivity::class.java
+        )
+    )
+},
+
             )
         }
     }
@@ -311,6 +320,8 @@ abrirArquivoSeguro: () -> Unit,
     abrirTarefa: () -> Unit,
 
     abrirGeo: () -> Unit,
+    
+    abrirGeo: () -> Unit,
 
 
 
@@ -349,6 +360,11 @@ val paddingHorizontal =
         Acesso(
     "Raio seguro",
     "Defina e acompanhe sua área segura"
+),
+
+Acesso(
+    "Árvore de habilidades",
+    "Desbloqueie novos conhecimentos e recursos"
 ),
 
         Acesso(
@@ -572,6 +588,10 @@ val outrasFuncoes = listOf(
 
 "Arquivo seguro" -> {
     abrirArquivoSeguro()
+}
+
+"Árvore de habilidades" -> {
+    abrirHabilidades()
 }
                                 
                             }

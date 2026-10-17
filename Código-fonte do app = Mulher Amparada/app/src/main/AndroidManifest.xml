@@ -204,10 +204,7 @@
             
                      android:exported="false" />
                      
-                          <activity
-            android:name=".HabilidadesActivity"
-            
-                     android:exported="false" />
+                    
                      
                      
 <!-- ================================================= -->

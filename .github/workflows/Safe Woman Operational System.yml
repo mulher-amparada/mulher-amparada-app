@@ -1,7 +1,7 @@
 name: 💻Mesclar código da Mulher Amparada no os💻
 
 on:
-  workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: write

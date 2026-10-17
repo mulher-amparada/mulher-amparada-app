@@ -1,9 +1,20 @@
 android_app {
     name: "MulherAmparada",
-    privileged: true,
+
+    manifest: "app/src/main/AndroidManifest.xml",
+
     srcs: [
-        "src/**/*.kt",
-        "src/**/*.java",
+        "app/src/main/java/**/*.java",
+        "app/src/main/java/**/*.kt",
+        "app/src/main/kotlin/**/*.java",
+        "app/src/main/kotlin/**/*.kt",
     ],
-    manifest: "AndroidManifest.xml",
+
+    resource_dirs: [
+        "app/src/main/res",
+    ],
+
+    privileged: true,
+
+    platform_apis: true,
 }

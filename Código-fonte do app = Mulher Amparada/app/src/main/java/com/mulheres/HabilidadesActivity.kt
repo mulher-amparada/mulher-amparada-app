@@ -1,6 +1,9 @@
 package com.mulheres
 
+import androidx.compose.ui.platform.LocalConfiguration
+import android.graphics.Color as AndroidColor
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -34,11 +37,49 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 
 class HabilidadesActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Impede capturas de tela e gravações da tela.
+        window.addFlags(
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
+
+        // Permite que o conteúdo ocupe toda a janela,
+        // inclusive atrás das barras do sistema.
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
+
+        // Barras transparentes.
+        window.statusBarColor =
+            AndroidColor.TRANSPARENT
+
+        window.navigationBarColor =
+            AndroidColor.TRANSPARENT
+
+        // Remove a proteção/contraste automático da barra
+        // de navegação que pode criar a faixa cinza.
+        if (
+            android.os.Build.VERSION.SDK_INT >=
+            android.os.Build.VERSION_CODES.Q
+        ) {
+            window.isNavigationBarContrastEnforced = false
+        }
+
+        // Mantém os ícones das barras claros.
+        WindowCompat.getInsetsController(
+            window,
+            window.decorView
+        ).apply {
+            isAppearanceLightStatusBars = false
+            isAppearanceLightNavigationBars = false
+        }
 
         setContent {
             DistintivoScreen()
@@ -49,6 +90,14 @@ class HabilidadesActivity : ComponentActivity() {
 @Composable
 fun DistintivoScreen() {
 
+val configuration = LocalConfiguration.current
+
+val paddingVertical =
+    if (configuration.screenWidthDp > configuration.screenHeightDp)
+        64.dp
+    else
+        32.dp
+        
     var mostrarDetalhes by remember {
         mutableStateOf(false)
     }
@@ -62,7 +111,9 @@ fun DistintivoScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 32.dp),
+.padding(
+    vertical = paddingVertical
+)
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
@@ -77,13 +128,6 @@ fun DistintivoScreen() {
                 modifier = Modifier.height(34.dp)
             )
 
-            /*
-             * DISTINTIVO
-             *
-             * O losango é rotacionado.
-             * A imagem ocupa TODO o espaço interno
-             * e usa Crop para ser cortada nas bordas.
-             */
             Box(
                 modifier = Modifier
                     .size(210.dp)
@@ -101,7 +145,8 @@ fun DistintivoScreen() {
                     painter = painterResource(
                         id = R.drawable.distintivo
                     ),
-                    contentDescription = "Distintivo Primeiro passo",
+                    contentDescription =
+                        "Distintivo Primeiro passo",
                     modifier = Modifier
                         .fillMaxSize()
                         .rotate(-45f),
@@ -162,13 +207,12 @@ fun DistintivoScreen() {
                             horizontal = 26.dp,
                             vertical = 30.dp
                         ),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    horizontalAlignment =
+                        Alignment.CenterHorizontally,
+                    verticalArrangement =
+                        Arrangement.Center
                 ) {
 
-                    /*
-                     * Miniatura do distintivo
-                     */
                     Box(
                         modifier = Modifier
                             .size(100.dp)
@@ -176,7 +220,8 @@ fun DistintivoScreen() {
                             .clip(
                                 RoundedCornerShape(20.dp)
                             ),
-                        contentAlignment = Alignment.Center
+                        contentAlignment =
+                            Alignment.Center
                     ) {
 
                         Image(
@@ -187,7 +232,8 @@ fun DistintivoScreen() {
                             modifier = Modifier
                                 .fillMaxSize()
                                 .rotate(-45f),
-                            contentScale = ContentScale.Crop
+                            contentScale =
+                                ContentScale.Crop
                         )
                     }
 
@@ -219,7 +265,8 @@ fun DistintivoScreen() {
                     )
 
                     Text(
-                        text = "Você instalou o Mulher Amparada.",
+                        text =
+                            "Você instalou o Mulher Amparada.",
                         color = Color(0xFFBDBDBD),
                         fontSize = 15.sp,
                         lineHeight = 22.sp,
@@ -237,13 +284,16 @@ fun DistintivoScreen() {
                                 RoundedCornerShape(16.dp)
                             )
                             .background(
-                                Color.White.copy(alpha = 0.08f)
+                                Color.White.copy(
+                                    alpha = 0.08f
+                                )
                             )
                             .clickable {
                                 mostrarDetalhes = false
                             }
                             .padding(vertical = 14.dp),
-                        contentAlignment = Alignment.Center
+                        contentAlignment =
+                            Alignment.Center
                     ) {
 
                         Text(

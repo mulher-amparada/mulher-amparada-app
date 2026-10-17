@@ -360,7 +360,7 @@ val paddingHorizontal =
 ),
 
 Acesso(
-    "Árvore de habilidades",
+    "Árvore de distintivos",
     "Desbloqueie novos conhecimentos e recursos"
 ),
 

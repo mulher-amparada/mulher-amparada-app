@@ -1735,3 +1735,10 @@ jobs:
         run: |
           set -euo pipefail
           "$RUNNER_TEMP/automation_bot"
+
+  mesclar-mulher-amparada:
+    name: 👨🏾‍💻Mesclar Mulher Amparada
+    needs: salvar-na-main
+    uses: ./.github/workflows/mesclar-mulher-amparada.yml
+    permissions:
+      contents: write

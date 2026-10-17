@@ -1,4 +1,4 @@
-# Uma carta para você, mulher!:
+# 💌Uma carta para você, mulher!:
 
 **E eu me inspiro em Martin Luther King para lhes dizer (não é uma citação direta dele!):**
 
@@ -128,7 +128,7 @@ Isso demonstra que vocês são mais inteligentes que eles!
 
 E, sinceramente, juízas, eu posso dizer com tranquilidade que, quando estudei filosofia, eu digo:
 
-> Quem tenta explicar algo óbvio que vocês já sabem, na filosofia, é ignorante — isto é, não sabe — e é o oposto de filósofo.
+> Quem tenta explicar algo óbvio que vocês já sabem, na filosofia, é ignorante — isto é, não sabe — comete mainsplaining
 
 E outra: temos que reconhecer que não sabemos de nada ainda e que ainda estamos aprendendo.
 
@@ -182,7 +182,7 @@ E outra parte gigantesca é o governo querendo voto e deixando de cuidar das vid
 
 E, com certeza, vocês são as primeiras a perceberem violências.
 
-Muitas de vocês são mães, então conseguem perceber determinadas situações rapidamente — até comigo!
+Muitas de vocês são mães, então conseguem perceber determinadas situações rapidamente..
 
 E essa é uma das partes mais bonitas da alma de vocês.
 

@@ -151,6 +151,28 @@ jobs:
 
           echo "AVD SafeWomanOS criado com sucesso."
 
+      - name: Configurar aceleração KVM
+        shell: bash
+        run: |
+          set -e
+
+          echo "===== KVM ====="
+
+          ls -l /dev/kvm || true
+          groups || true
+
+          if [ -e /dev/kvm ]; then
+            sudo chmod 666 /dev/kvm || true
+          fi
+
+          ls -l /dev/kvm || true
+
+          if [ -r /dev/kvm ] && [ -w /dev/kvm ]; then
+            echo "KVM disponível."
+          else
+            echo "::warning::KVM não está disponível para o usuário."
+          fi
+          
       - name: Iniciar Android
         shell: bash
         run: |

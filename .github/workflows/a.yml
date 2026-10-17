@@ -1,0 +1,159 @@
+name: Boot do OS e Screenshot
+
+on:
+  workflow_dispatch:
+
+jobs:
+  boot-os:
+    name: Iniciar OS no QEMU
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout completo
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Instalar QEMU e ferramentas
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            qemu-system-x86 \
+            qemu-utils \
+            tigervnc-tools \
+            imagemagick
+
+      - name: Encontrar imagem do OS
+        id: image
+        shell: bash
+        run: |
+          set -e
+
+          IMAGE="$(find . -type f \
+            \( \
+              -iname '*.iso' \
+              -o -iname '*.img' \
+              -o -iname '*.qcow2' \
+            \) \
+            -print -quit)"
+
+          if [ -z "$IMAGE" ]; then
+            echo "::error::Nenhuma imagem ISO, IMG ou QCOW2 foi encontrada."
+            echo "Arquivos encontrados:"
+            find . -type f | head -100
+            exit 1
+          fi
+
+          echo "Imagem encontrada: $IMAGE"
+          echo "path=$IMAGE" >> "$GITHUB_OUTPUT"
+
+      - name: Criar diretório de saída
+        run: |
+          mkdir -p boot-output
+
+      - name: Iniciar QEMU
+        shell: bash
+        run: |
+          IMAGE="${{ steps.image.outputs.path }}"
+
+          FORMAT="raw"
+
+          case "$IMAGE" in
+            *.qcow2)
+              FORMAT="qcow2"
+              ;;
+            *.iso)
+              FORMAT="raw"
+              ;;
+          esac
+
+          echo "Iniciando:"
+          echo "$IMAGE"
+          echo "Formato: $FORMAT"
+
+          qemu-system-x86_64 \
+            -m 2048 \
+            -smp 2 \
+            -drive "file=$IMAGE,format=$FORMAT,if=ide" \
+            -boot order=c \
+            -vnc 127.0.0.1:0 \
+            -monitor unix:/tmp/qemu-monitor.sock,server,nowait \
+            -serial file:boot-output/serial.log \
+            -D boot-output/qemu-debug.log \
+            -d guest_errors \
+            -no-reboot \
+            -no-shutdown \
+            > boot-output/qemu.log 2>&1 &
+
+          echo $! > boot-output/qemu.pid
+
+          echo "QEMU PID:"
+          cat boot-output/qemu.pid
+
+          echo "Aguardando QEMU..."
+          sleep 5
+
+          if ! kill -0 "$(cat boot-output/qemu.pid)" 2>/dev/null; then
+            echo "::error::QEMU encerrou antes da captura."
+            cat boot-output/qemu.log || true
+            exit 1
+          fi
+
+      - name: Verificar VNC
+        run: |
+          echo "Verificando porta 5900..."
+
+          for i in {1..20}; do
+            if timeout 1 bash -c '</dev/tcp/127.0.0.1/5900' 2>/dev/null; then
+              echo "VNC disponível."
+              exit 0
+            fi
+
+            sleep 1
+          done
+
+          echo "::error::Servidor VNC não ficou disponível."
+          cat boot-output/qemu.log || true
+          exit 1
+
+      - name: Capturar screenshot
+        shell: bash
+        run: |
+          echo "Capturando tela do OS..."
+
+          for i in {1..10}; do
+            if timeout 10 \
+              vncdo \
+                -s 127.0.0.1:5900 \
+                capture boot-output/boot-screenshot.png; then
+              echo "Screenshot capturado."
+              exit 0
+            fi
+
+            sleep 2
+          done
+
+          echo "::error::Não foi possível capturar o screenshot."
+          exit 1
+
+      - name: Verificar screenshot
+        run: |
+          file boot-output/boot-screenshot.png
+          identify boot-output/boot-screenshot.png || true
+          ls -lh boot-output/
+
+      - name: Parar QEMU
+        if: always()
+        run: |
+          if [ -f boot-output/qemu.pid ]; then
+            kill "$(cat boot-output/qemu.pid)" 2>/dev/null || true
+          fi
+
+      - name: Publicar screenshot e logs
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: OS-boot-screenshot
+          path: boot-output/
+          if-no-files-found: warn

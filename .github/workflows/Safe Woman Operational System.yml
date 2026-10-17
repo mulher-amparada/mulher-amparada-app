@@ -1,0 +1,65 @@
+name: 💻Mesclar código da Mulher Amparada no os💻
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  mesclar:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout completo
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          submodules: false
+
+      - name: Mesclar código
+        shell: bash
+        run: |
+          set -e
+
+          ORIGEM="Código-fonte do app = Mulher Amparada"
+          DESTINO="Safe Woman Operational System/packages/apps/MulherAmparada"
+
+          echo "Origem:"
+          echo "$ORIGEM"
+
+          echo "Destino:"
+          echo "$DESTINO"
+
+          mkdir -p "$DESTINO"
+
+          # Copia tudo, incluindo arquivos ocultos,
+          # preservando o que já existe no destino.
+          cp -a "$ORIGEM/." "$DESTINO/"
+
+          echo
+          echo "Mesclagem concluída."
+
+      - name: Verificar resultado
+        run: |
+          echo "Arquivos no destino:"
+          find "Safe Woman Operational System/packages/apps/MulherAmparada" \
+            -type f | sort
+
+      - name: Commit na main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add \
+            "Safe Woman Operational System/packages/apps/MulherAmparada"
+
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteração para salvar."
+            exit 0
+          fi
+
+          git commit \
+            -m "Mesclar código da Mulher Amparada ao Safe Woman OS"
+
+          git push origin HEAD:main

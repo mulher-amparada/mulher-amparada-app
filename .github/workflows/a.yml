@@ -1,13 +1,17 @@
-name: Boot do OS e Screenshot
+name: Boot do Safe Woman OS e Screenshot
 
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  actions: write
+
 jobs:
-  boot-os:
-    name: Iniciar OS no QEMU
+  build-and-boot:
+    name: Compilar, iniciar e capturar o OS
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 45
 
     steps:
       - name: Checkout completo
@@ -15,145 +19,346 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Instalar QEMU e ferramentas
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            qemu-system-x86 \
-            qemu-utils \
-            tigervnc-tools \
-            imagemagick
-
-      - name: Encontrar imagem do OS
-        id: image
+      - name: Verificar estrutura do OS
         shell: bash
         run: |
           set -e
 
-          IMAGE="$(find . -type f \
-            \( \
-              -iname '*.iso' \
-              -o -iname '*.img' \
-              -o -iname '*.qcow2' \
-            \) \
-            -print -quit)"
+          OS_DIR="Safe Woman Operational System"
 
-          if [ -z "$IMAGE" ]; then
-            echo "::error::Nenhuma imagem ISO, IMG ou QCOW2 foi encontrada."
-            echo "Arquivos encontrados:"
-            find . -type f | head -100
+          if [ ! -d "$OS_DIR" ]; then
+            echo "::error::Diretório '$OS_DIR' não encontrado."
             exit 1
           fi
 
-          echo "Imagem encontrada: $IMAGE"
-          echo "path=$IMAGE" >> "$GITHUB_OUTPUT"
+          echo "Diretório do OS:"
+          pwd
+          echo
 
-      - name: Criar diretório de saída
+          echo "Estrutura:"
+          ls -la "$OS_DIR"
+
+          echo
+          echo "Android build:"
+          ls -la "$OS_DIR"/build/envsetup.sh \
+            "$OS_DIR"/build/soong \
+            "$OS_DIR"/packages/apps/MulherAmparada \
+            2>/dev/null || true
+
+      - name: Instalar dependências
         run: |
+          sudo apt-get update
+
+          sudo apt-get install -y \
+            adb \
+            bc \
+            bison \
+            build-essential \
+            ccache \
+            curl \
+            flex \
+            g++-multilib \
+            gcc-multilib \
+            git \
+            gnupg \
+            gperf \
+            imagemagick \
+            lib32ncurses6 \
+            lib32z1 \
+            libelf-dev \
+            liblz4-tool \
+            libncurses6 \
+            libncurses-dev \
+            libssl-dev \
+            lzop \
+            pngcrush \
+            rsync \
+            schedtool \
+            squashfs-tools \
+            unzip \
+            xsltproc \
+            zip \
+            zlib1g-dev \
+            qemu-system-x86 \
+            qemu-utils \
+            xvfb
+
+      - name: Configurar Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Configurar ccache
+        run: |
+          ccache --max-size=5G
+          ccache --zero-stats
+
+      - name: Cache do ccache
+        uses: actions/cache@v4
+        with:
+          path: ~/.ccache
+          key: safe-woman-os-ccache-${{ runner.os }}-${{ github.ref_name }}
+          restore-keys: |
+            safe-woman-os-ccache-${{ runner.os }}-
+
+      - name: Preparar ambiente Android
+        working-directory: Safe Woman Operational System
+        shell: bash
+        run: |
+          set -e
+
+          if [ ! -f build/envsetup.sh ]; then
+            echo "::error::build/envsetup.sh não existe."
+            exit 1
+          fi
+
+          source build/envsetup.sh
+
+          echo "Ambiente Android carregado."
+
+      - name: Detectar targets disponíveis
+        working-directory: Safe Woman Operational System
+        shell: bash
+        run: |
+          set -e
+
+          source build/envsetup.sh
+
+          lunch --help || true
+
+          echo
+          echo "Targets encontrados no código:"
+          find device vendor product -type f \
+            \( -name "AndroidProducts.mk" -o -name "*_device.mk" \) \
+            2>/dev/null | head -100 || true
+
+      - name: Selecionar target
+        working-directory: Safe Woman Operational System
+        shell: bash
+        run: |
+          set -e
+
+          source build/envsetup.sh
+
+          # Tenta localizar automaticamente um target x86_64.
+          TARGET="$(
+            find device vendor product \
+              -type f \
+              \( -name "AndroidProducts.mk" -o -name "*_device.mk" \) \
+              -print 2>/dev/null |
+            grep -Ei 'x86_64|goldfish|ranchu|emu' |
+            head -1 || true
+          )"
+
+          if [ -z "$TARGET" ]; then
+            echo "::warning::Nenhum target x86_64 de emulador foi detectado automaticamente."
+            echo "O código precisa possuir um target Android compatível com QEMU."
+            exit 1
+          fi
+
+          echo "Arquivo de target:"
+          echo "$TARGET"
+
+          # Extrai o diretório e tenta descobrir um produto.
+          DIR="$(dirname "$TARGET")"
+
+          PRODUCT="$(
+            grep -hE 'PRODUCT_NAME[[:space:]]*[:?+]?=' \
+              "$DIR"/*.mk 2>/dev/null |
+            sed -E 's/.*PRODUCT_NAME[[:space:]]*[:?+]?=[[:space:]]*//' |
+            head -1 |
+            tr -d '[:space:]'
+          )"
+
+          if [ -z "$PRODUCT" ]; then
+            echo "::error::Não foi possível descobrir PRODUCT_NAME."
+            exit 1
+          fi
+
+          echo "Produto detectado: $PRODUCT"
+          echo "PRODUCT=$PRODUCT" >> "$GITHUB_ENV"
+
+      - name: Compilar imagem do OS
+        working-directory: Safe Woman Operational System
+        shell: bash
+        run: |
+          set -e
+
+          source build/envsetup.sh
+
+          lunch "${PRODUCT}-userdebug"
+
+          echo "Compilando $PRODUCT..."
+
+          m -j"$(nproc)" \
+            bootimage \
+            systemimage \
+            vendorimage \
+            userdataimage
+
+      - name: Localizar imagens geradas
+        id: images
+        working-directory: Safe Woman Operational System
+        shell: bash
+        run: |
+          set -e
+
+          echo "Imagens geradas:"
+          find out/target/product \
+            -type f \
+            \( \
+              -name "system.img" \
+              -o -name "vendor.img" \
+              -o -name "userdata.img" \
+              -o -name "boot.img" \
+              -o -name "super.img" \
+              -o -name "*.qcow2" \
+              -o -name "*.img" \
+            \) \
+            -print
+
+          PRODUCT_OUT="$(find out/target/product \
+            -maxdepth 2 \
+            -type d \
+            -name "$PRODUCT" \
+            -print -quit)"
+
+          if [ -z "$PRODUCT_OUT" ]; then
+            echo "::error::Diretório de saída do produto não encontrado."
+            exit 1
+          fi
+
+          echo "PRODUCT_OUT=$PRODUCT_OUT" >> "$GITHUB_ENV"
+
+      - name: Preparar imagem para QEMU
+        shell: bash
+        run: |
+          set -e
+
           mkdir -p boot-output
+
+          echo "Produto:"
+          echo "$PRODUCT"
+
+          echo "Diretório:"
+          echo "$PRODUCT_OUT"
+
+          ls -lah "$PRODUCT_OUT"
+
+          if [ -f "$PRODUCT_OUT/emulator" ]; then
+            cp "$PRODUCT_OUT/emulator" boot-output/
+          fi
+
+          if [ -f "$PRODUCT_OUT/system.img" ]; then
+            cp "$PRODUCT_OUT/system.img" boot-output/
+          fi
+
+          if [ -f "$PRODUCT_OUT/vendor.img" ]; then
+            cp "$PRODUCT_OUT/vendor.img" boot-output/
+          fi
+
+          if [ -f "$PRODUCT_OUT/userdata.img" ]; then
+            cp "$PRODUCT_OUT/userdata.img" boot-output/
+          fi
+
+          if [ -f "$PRODUCT_OUT/boot.img" ]; then
+            cp "$PRODUCT_OUT/boot.img" boot-output/
+          fi
+
+      - name: Verificar suporte ao QEMU
+        shell: bash
+        run: |
+          set -e
+
+          qemu-system-x86_64 --version
+
+          echo
+          echo "Imagens disponíveis para boot:"
+          ls -lah boot-output
 
       - name: Iniciar QEMU
         shell: bash
         run: |
-          IMAGE="${{ steps.image.outputs.path }}"
+          set -e
 
-          FORMAT="raw"
+          mkdir -p boot-output
 
-          case "$IMAGE" in
-            *.qcow2)
-              FORMAT="qcow2"
-              ;;
-            *.iso)
-              FORMAT="raw"
-              ;;
-          esac
+          if [ ! -f boot-output/system.img ]; then
+            echo "::error::system.img não foi gerado."
+            exit 1
+          fi
 
-          echo "Iniciando:"
-          echo "$IMAGE"
-          echo "Formato: $FORMAT"
+          # Cria um disco de usuário para o QEMU.
+          qemu-img create \
+            -f qcow2 \
+            boot-output/userdata.qcow2 \
+            4G
 
           qemu-system-x86_64 \
+            -enable-kvm \
             -m 2048 \
             -smp 2 \
-            -drive "file=$IMAGE,format=$FORMAT,if=ide" \
-            -boot order=c \
-            -vnc 127.0.0.1:0 \
-            -monitor unix:/tmp/qemu-monitor.sock,server,nowait \
+            -machine q35 \
+            -drive file=boot-output/system.img,format=raw,if=virtio,readonly=on \
+            -drive file=boot-output/userdata.qcow2,format=qcow2,if=virtio \
+            -display gtk \
             -serial file:boot-output/serial.log \
-            -D boot-output/qemu-debug.log \
-            -d guest_errors \
+            -monitor stdio \
             -no-reboot \
             -no-shutdown \
             > boot-output/qemu.log 2>&1 &
 
           echo $! > boot-output/qemu.pid
 
-          echo "QEMU PID:"
-          cat boot-output/qemu.pid
-
-          echo "Aguardando QEMU..."
-          sleep 5
-
-          if ! kill -0 "$(cat boot-output/qemu.pid)" 2>/dev/null; then
-            echo "::error::QEMU encerrou antes da captura."
-            cat boot-output/qemu.log || true
-            exit 1
-          fi
-
-      - name: Verificar VNC
-        run: |
-          echo "Verificando porta 5900..."
-
-          for i in {1..20}; do
-            if timeout 1 bash -c '</dev/tcp/127.0.0.1/5900' 2>/dev/null; then
-              echo "VNC disponível."
-              exit 0
-            fi
-
-            sleep 1
-          done
-
-          echo "::error::Servidor VNC não ficou disponível."
-          cat boot-output/qemu.log || true
-          exit 1
+          echo "QEMU iniciado."
+          sleep 15
 
       - name: Capturar screenshot
         shell: bash
         run: |
-          echo "Capturando tela do OS..."
+          set -e
 
-          for i in {1..10}; do
-            if timeout 10 \
-              vncdo \
-                -s 127.0.0.1:5900 \
-                capture boot-output/boot-screenshot.png; then
-              echo "Screenshot capturado."
-              exit 0
-            fi
+          mkdir -p boot-output
 
-            sleep 2
-          done
+          echo "Capturando tela..."
 
-          echo "::error::Não foi possível capturar o screenshot."
-          exit 1
+          # Captura a tela do desktop virtual.
+          DISPLAY=:99 \
+          import \
+            -window root \
+            boot-output/boot-screenshot.png \
+            2>/dev/null || true
 
-      - name: Verificar screenshot
-        run: |
-          file boot-output/boot-screenshot.png
-          identify boot-output/boot-screenshot.png || true
-          ls -lh boot-output/
+          if [ ! -f boot-output/boot-screenshot.png ]; then
+            echo "::warning::Screenshot não pôde ser capturado."
+          else
+            file boot-output/boot-screenshot.png
+            identify boot-output/boot-screenshot.png || true
+          fi
 
-      - name: Parar QEMU
+      - name: Encerrar QEMU
         if: always()
+        shell: bash
         run: |
           if [ -f boot-output/qemu.pid ]; then
             kill "$(cat boot-output/qemu.pid)" 2>/dev/null || true
           fi
 
-      - name: Publicar screenshot e logs
+      - name: Mostrar logs
+        if: always()
+        run: |
+          echo "===== QEMU LOG ====="
+          cat boot-output/qemu.log 2>/dev/null || true
+
+          echo
+          echo "===== SERIAL ====="
+          cat boot-output/serial.log 2>/dev/null || true
+
+      - name: Publicar resultado
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: OS-boot-screenshot
-          path: boot-output/
+          name: Safe-Woman-OS-Boot
+          path: |
+            boot-output/
           if-no-files-found: warn

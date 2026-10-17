@@ -1,0 +1,65 @@
+name: Baixar AOSP
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  baixar-aosp:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Instalar dependências
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            git \
+            curl \
+            python3 \
+            rsync \
+            unzip
+
+      - name: Instalar repo
+        run: |
+          mkdir -p "$HOME/bin"
+
+          curl -L \
+            https://storage.googleapis.com/git-repo-downloads/repo \
+            -o "$HOME/bin/repo"
+
+          chmod +x "$HOME/bin/repo"
+
+          echo "$HOME/bin" >> "$GITHUB_PATH"
+
+      - name: Baixar AOSP
+        working-directory: Safe Woman Operational System
+        run: |
+          repo init \
+            -u https://android.googlesource.com/platform/manifest \
+            -b android-latest-release
+
+          repo sync \
+            -c \
+            --no-tags \
+            -j2 \
+            --fail-fast
+
+      - name: Salvar na main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add "Safe Woman Operational System"
+
+          git commit \
+            -m "Adicionar AOSP ao Safe Woman Operational System" \
+            || echo "Nenhuma alteração para commit"
+
+          git push origin HEAD:main

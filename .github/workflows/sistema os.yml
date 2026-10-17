@@ -1,4 +1,4 @@
-name: Baixar AOSP
+name: Preparar Safe Woman Operational System
 
 on:
   workflow_dispatch:
@@ -7,49 +7,75 @@ permissions:
   contents: write
 
 jobs:
-  baixar-aosp:
+  preparar-os:
     runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
-      - name: Instalar dependências
+      - name: Criar estrutura do OS
         run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            git \
-            curl \
-            python3 \
-            rsync \
-            unzip
+          mkdir -p \
+            "Safe Woman Operational System/packages/apps/MulherAmparada" \
+            "Safe Woman Operational System/device/cuttlefish" \
+            "Safe Woman Operational System/product/etc/permissions"
 
-      - name: Instalar repo
+      - name: Baixar configuração do Cuttlefish
         run: |
-          mkdir -p "$HOME/bin"
+          git clone \
+            --depth=1 \
+            https://android.googlesource.com/device/google/cuttlefish \
+            /tmp/cuttlefish
 
-          curl -L \
-            https://storage.googleapis.com/git-repo-downloads/repo \
-            -o "$HOME/bin/repo"
+          cp -a /tmp/cuttlefish/. \
+            "Safe Woman Operational System/device/cuttlefish/"
 
-          chmod +x "$HOME/bin/repo"
+          rm -rf /tmp/cuttlefish
 
-          echo "$HOME/bin" >> "$GITHUB_PATH"
-
-      - name: Baixar AOSP
-        working-directory: Safe Woman Operational System
+      - name: Criar Android.bp do Mulher Amparada
         run: |
-          repo init \
-            -u https://android.googlesource.com/platform/manifest \
-            -b android-latest-release
+          cat > \
+            "Safe Woman Operational System/packages/apps/MulherAmparada/Android.bp" <<'EOF'
+          android_app {
+              name: "MulherAmparada",
+              privileged: true,
+              srcs: [
+                  "src/**/*.kt",
+                  "src/**/*.java",
+              ],
+              manifest: "AndroidManifest.xml",
+          }
+          EOF
 
-          repo sync \
-            -c \
-            --no-tags \
-            -j2 \
-            --fail-fast
+      - name: Criar allowlist de permissões privilegiadas
+        run: |
+          cat > \
+            "Safe Woman Operational System/product/etc/permissions/privapp-permissions-mulher-amparada.xml" <<'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <permissions>
+              <privapp-permissions package="com.mulheres">
+              </privapp-permissions>
+          </permissions>
+          EOF
+
+      - name: Criar AndroidManifest inicial
+        run: |
+          cat > \
+            "Safe Woman Operational System/packages/apps/MulherAmparada/AndroidManifest.xml" <<'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+              package="com.mulheres">
+
+              <application
+                  android:label="Mulher Amparada"
+                  android:hasCode="true">
+              </application>
+
+          </manifest>
+          EOF
 
       - name: Salvar na main
         run: |
@@ -59,7 +85,7 @@ jobs:
           git add "Safe Woman Operational System"
 
           git commit \
-            -m "Adicionar AOSP ao Safe Woman Operational System" \
+            -m "Preparar integração do Mulher Amparada ao Safe Woman Operational System" \
             || echo "Nenhuma alteração para commit"
 
           git push origin HEAD:main

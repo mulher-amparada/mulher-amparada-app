@@ -176,7 +176,7 @@ abrirRepo = {
             GeoActivity::class.java
         )
     )
-}
+},
 
 abrirHabilidades = {
     startActivity(
@@ -185,8 +185,7 @@ abrirHabilidades = {
             HabilidadesActivity::class.java
         )
     )
-},
-
+}
             )
         }
     }
@@ -313,17 +312,15 @@ private fun MeusAcessos(
 
     abrirArquivos: () -> Unit,
 
-abrirRepo: () -> Unit,
+    abrirRepo: () -> Unit,
 
-abrirArquivoSeguro: () -> Unit,
+    abrirArquivoSeguro: () -> Unit,
 
     abrirTarefa: () -> Unit,
 
     abrirGeo: () -> Unit,
-    
-    abrirGeo: () -> Unit,
 
-
+    abrirHabilidades: () -> Unit
 
 ) {
 
@@ -528,6 +525,11 @@ val outrasFuncoes = listOf(
                                 "Raio seguro" -> {
     abrirGeo()
 }
+
+
+"Árvore de habilidades" -> {
+    abrirHabilidades()
+}
                                 
                             }
                         }
@@ -590,9 +592,6 @@ val outrasFuncoes = listOf(
     abrirArquivoSeguro()
 }
 
-"Árvore de habilidades" -> {
-    abrirHabilidades()
-}
                                 
                             }
                         }

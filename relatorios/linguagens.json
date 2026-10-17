@@ -1,11 +1,11 @@
 {"header" : {
   "cloc_url"           : "github.com/AlDanial/cloc",
   "cloc_version"       : "1.98",
-  "elapsed_seconds"    : 1.09500980377197,
-  "n_files"            : 280,
-  "n_lines"            : 71908,
-  "files_per_second"   : 255.705473170638,
-  "lines_per_second"   : 65668.8184455509,
+  "elapsed_seconds"    : 1.18600797653198,
+  "n_files"            : 283,
+  "n_lines"            : 75184,
+  "files_per_second"   : 238.615595847444,
+  "lines_per_second"   : 63392.4910183541,
   "report_file"        : "relatorios/linguagens.json"},
 "Kotlin" :{
   "nFiles": 25,
@@ -13,40 +13,40 @@
   "comment": 2104,
   "code": 20306},
 "Markdown" :{
-  "nFiles": 118,
-  "blank": 2323,
+  "nFiles": 119,
+  "blank": 2392,
   "comment": 6,
-  "code": 10270},
+  "code": 10414},
 "CSS" :{
   "nFiles": 18,
-  "blank": 6186,
-  "comment": 863,
-  "code": 10229},
+  "blank": 6198,
+  "comment": 875,
+  "code": 10349},
 "HTML" :{
   "nFiles": 11,
   "blank": 1456,
   "comment": 87,
   "code": 3213},
+"YAML" :{
+  "nFiles": 6,
+  "blank": 901,
+  "comment": 256,
+  "code": 2570},
 "C++" :{
   "nFiles": 2,
   "blank": 391,
   "comment": 5,
   "code": 1586},
+"Bourne Shell" :{
+  "nFiles": 3,
+  "blank": 292,
+  "comment": 276,
+  "code": 1582},
 "XML" :{
   "nFiles": 80,
   "blank": 430,
   "comment": 112,
   "code": 1364},
-"YAML" :{
-  "nFiles": 5,
-  "blank": 466,
-  "comment": 127,
-  "code": 1362},
-"Bourne Shell" :{
-  "nFiles": 2,
-  "blank": 174,
-  "comment": 129,
-  "code": 730},
 "C" :{
   "nFiles": 1,
   "blank": 195,
@@ -62,16 +62,16 @@
   "blank": 54,
   "comment": 26,
   "code": 134},
+"JSON" :{
+  "nFiles": 2,
+  "blank": 0,
+  "comment": 0,
+  "code": 127},
 "Gradle" :{
   "nFiles": 3,
   "blank": 38,
   "comment": 13,
   "code": 112},
-"JSON" :{
-  "nFiles": 2,
-  "blank": 0,
-  "comment": 0,
-  "code": 97},
 "Ruby" :{
   "nFiles": 1,
   "blank": 21,
@@ -108,7 +108,7 @@
   "comment": 20,
   "code": 9},
 "SUM": {
-  "blank": 17788,
-  "comment": 3610,
-  "code": 50510,
-  "nFiles": 280} }
+  "blank": 18422,
+  "comment": 3898,
+  "code": 52864,
+  "nFiles": 283} }

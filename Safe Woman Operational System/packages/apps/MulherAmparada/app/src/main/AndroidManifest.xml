@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ===================================================== -->
+    <!-- PERMISSÕES -->
+    <!-- ===================================================== -->
+
+<!-- Internet / WebView -->
+<uses-permission android:name="android.permission.INTERNET" />
+
+<!-- Localização -->
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+<!-- Contatos -->
+<uses-permission android:name="android.permission.READ_CONTACTS" />
+
+<!-- Ligações -->
+<uses-permission android:name="android.permission.CALL_PHONE" />
+
+<!-- Microfone -->
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+<!-- Vibração -->
+<uses-permission android:name="android.permission.VIBRATE" />
+
+<!-- Foreground Service -->
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+
+<!-- Wake Lock -->
+<uses-permission android:name="android.permission.WAKE_LOCK" />
+
+<!-- Armazenamento -->
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+<uses-permission
+    android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    android:maxSdkVersion="28" />
+
+<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+
+
+
+    <!-- ===================================================== -->
+    <!-- APPLICATION -->
+    <!-- ===================================================== -->
+
+    <application
+        android:theme="@style/Theme.App"
+        android:label="Assistente de saúde"
+        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="false"
+        android:supportsRtl="true">
+
+
+        <!-- ================================================= -->
+        <!-- MAIN ACTIVITY E ENTRADA ACTIVITY -->
+        <!-- ================================================= -->
+
+        <activity
+            android:name=".MainActivity"
+            
+            android:exported="false"
+            android:autoVerify="true">
+
+        </activity>
+        
+                <activity
+            android:name=".RepoActivity"
+            
+            android:exported="false"
+            android:autoVerify="true">
+
+        </activity>
+
+<activity
+    android:name=".EntradaActivity"
+    
+    android:exported="true"
+    android:theme="@style/Theme.App.Splash">
+
+    <!-- Abrir o aplicativo normalmente -->
+    <intent-filter>
+
+        <action android:name="android.intent.action.MAIN" />
+
+        <category android:name="android.intent.category.LAUNCHER" />
+
+    </intent-filter>
+
+    <!-- Deep Link: com.mulheres://abrir -->
+    <intent-filter>
+
+        <action android:name="android.intent.action.VIEW" />
+
+        <category android:name="android.intent.category.DEFAULT" />
+
+        <category android:name="android.intent.category.BROWSABLE" />
+
+        <data android:scheme="com.mulheres" />
+
+    </intent-filter>
+
+</activity>
+
+
+        <!-- ================================================= -->
+        <!-- SERVIÇO DE DETECÇÃO DE PALMAS -->
+        <!-- ================================================= -->
+
+        <service
+            android:name=".PalmaService"
+            android:exported="false"
+            android:foregroundServiceType="microphone" />
+
+
+        <!-- ================================================= -->
+        <!-- TELAS -->
+        <!-- ================================================= -->
+
+        <activity
+            android:name=".FileActivity"
+            
+                     android:exported="false" />
+                     
+        <activity
+            android:name=".AssistenteActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".NeoCalcActivity"
+            
+                     android:exported="false" />
+                     
+                             <activity
+            android:name=".HubActivity"
+            
+                     android:exported="false" />
+
+        <activity
+            android:name=".GravarActivity"
+            
+            android:exported="false" />
+            
+                    <activity
+            android:name=".HomeActivity"
+            
+            android:exported="false" />
+
+
+                             <activity
+            android:name=".GestoActivity"
+            
+                     android:exported="false" />
+
+                           <activity
+            android:name=".ExigirActivity"
+            
+                     android:exported="false" />
+                     
+                                                <activity
+            android:name=".ProtectActivity"
+            
+                     android:exported="false" />
+                     
+                             <activity
+            android:name=".MapaActivity"
+            
+                     android:exported="false" />
+                     
+                                                  <activity
+            android:name=".DiarioActivity"
+            
+                     android:exported="false" />
+                    
+
+                                          <activity
+            android:name=".CicloActivity"
+            
+                     android:exported="false" />
+                     
+                                                               
+                     
+                                                               <activity
+            android:name=".TarefaActivity"
+            
+                     android:exported="false" />
+                     
+                             <activity
+            android:name=".ArquivoActivity"
+            
+                     android:exported="false" />
+                     
+                                                  <activity
+            android:name=".GeoActivity"
+            
+                     android:exported="false" />
+                     
+                                                                       <activity
+            android:name=".UpdateActivity"
+            
+                     android:exported="false" />
+                     
+                    
+                     
+                     
+<!-- ================================================= -->
+        <!-- SD FILE PROVIDER -->
+        <!-- ================================================= -->
+
+<provider
+    android:name=".SdFileProvider"
+    android:authorities="${applicationId}.provider"
+    android:exported="false"
+    android:grantUriPermissions="true" />
+
+    </application>
+
+</manifest>

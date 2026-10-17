@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fileCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="0dp"
+    app:strokeColor="#E9EAEF"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingEnd="10dp">
+
+        <!-- Preview / ícone -->
+        <FrameLayout
+            android:id="@+id/previewContainer"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/file_preview_background">
+
+            <ImageView
+                android:id="@+id/filePreview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="12dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_file"
+                android:tint="#5967C7"/>
+
+        </FrameLayout>
+
+
+        <!-- Informações -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/fileName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="middle"
+                android:maxLines="1"
+                android:text="documento.pdf"
+                android:textColor="#181A20"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:includeFontPadding="false"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/fileInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PDF"
+                    android:textColor="#858A96"
+                    android:textSize="12sp"
+                    android:includeFontPadding="false"/>
+
+                <TextView
+                    android:id="@+id/fileSeparator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:text="·"
+                    android:textColor="#B4B7BF"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:id="@+id/fileSize"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2,4 MB"
+                    android:textColor="#858A96"
+                    android:textSize="12sp"
+                    android:includeFontPadding="false"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <!-- Ação -->
+        <ImageView
+            android:id="@+id/fileMenu"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:background="@drawable/file_menu_background"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="11dp"
+            android:src="@drawable/ic_more"
+            android:tint="#777C88"
+            android:contentDescription="Opções"/>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

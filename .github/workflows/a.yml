@@ -32,10 +32,19 @@ jobs:
           echo "$SDK/platform-tools" >> "$GITHUB_PATH"
           echo "$SDK/emulator" >> "$GITHUB_PATH"
 
-          CMDLINE_TOOLS="$(find "$SDK/cmdline-tools" -mindepth 2 -maxdepth 2 -type f -name sdkmanager -print -quit)"
+          CMDLINE_TOOLS="$(find "$SDK/cmdline-tools" \
+            -mindepth 3 \
+            -maxdepth 3 \
+            -type f \
+            -name sdkmanager \
+            -print -quit)"
 
           if [ -z "$CMDLINE_TOOLS" ]; then
             echo "::error::sdkmanager não encontrado."
+
+            echo "Conteúdo de cmdline-tools:"
+            find "$SDK/cmdline-tools" -maxdepth 4 -type f -print || true
+
             exit 1
           fi
 

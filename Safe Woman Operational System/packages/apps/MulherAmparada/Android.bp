@@ -1,0 +1,9 @@
+android_app {
+    name: "MulherAmparada",
+    privileged: true,
+    srcs: [
+        "src/**/*.kt",
+        "src/**/*.java",
+    ],
+    manifest: "AndroidManifest.xml",
+}

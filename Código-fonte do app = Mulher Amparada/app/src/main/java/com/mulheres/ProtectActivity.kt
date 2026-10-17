@@ -176,16 +176,8 @@ abrirRepo = {
             GeoActivity::class.java
         )
     )
-},
-
-abrirHabilidades = {
-    startActivity(
-        Intent(
-            this,
-            HabilidadesActivity::class.java
-        )
-    )
 }
+
             )
         }
     }
@@ -312,15 +304,15 @@ private fun MeusAcessos(
 
     abrirArquivos: () -> Unit,
 
-    abrirRepo: () -> Unit,
+abrirRepo: () -> Unit,
 
-    abrirArquivoSeguro: () -> Unit,
+abrirArquivoSeguro: () -> Unit,
 
     abrirTarefa: () -> Unit,
 
     abrirGeo: () -> Unit,
 
-    abrirHabilidades: () -> Unit
+
 
 ) {
 
@@ -357,11 +349,6 @@ val paddingHorizontal =
         Acesso(
     "Raio seguro",
     "Defina e acompanhe sua área segura"
-),
-
-Acesso(
-    "Árvore de distintivos",
-    "Desbloqueie novos conhecimentos e recursos"
 ),
 
         Acesso(
@@ -525,11 +512,6 @@ val outrasFuncoes = listOf(
                                 "Raio seguro" -> {
     abrirGeo()
 }
-
-
-"Árvore de distintivos" -> {
-    abrirHabilidades()
-}
                                 
                             }
                         }
@@ -591,7 +573,6 @@ val outrasFuncoes = listOf(
 "Arquivo seguro" -> {
     abrirArquivoSeguro()
 }
-
                                 
                             }
                         }

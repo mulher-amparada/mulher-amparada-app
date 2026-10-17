@@ -1,5 +1,7 @@
 # 💌Uma carta para você, mulher!:
 
+> Prefiro manter os erros de português porque isso indica que o texto é autêntico e não foi adulterado!
+
 **E eu me inspiro em Martin Luther King para lhes dizer (não é uma citação direta dele!):**
 
 "eu tenho um sonho, que as mulheres vivam em paz, sem nenhuma violência, porque todos somos iguais..."

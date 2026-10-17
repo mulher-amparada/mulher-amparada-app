@@ -1,13 +1,13 @@
-name: Integrar Mulher Amparada ao Safe Woman Operational System
+name: Build Safe Woman OS
 
 on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  integrar:
+  build:
     runs-on: ubuntu-24.04
 
     steps:
@@ -16,44 +16,24 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Clonar projeto do Mulher Amparada
+      - name: Preparar ambiente
         run: |
-          git clone --depth=1 \
-            https://github.com/mulher-amparada/mulher-amparada-app.git \
-            /tmp/mulher-amparada
+          sudo apt-get update
+          sudo apt-get install -y \
+            openjdk-17-jdk \
+            git \
+            python3 \
+            rsync
 
-      - name: Copiar código-fonte
+      - name: Configurar AOSP
+        working-directory: Safe Woman Operational System
         run: |
-          SOURCE="/tmp/mulher-amparada/Código-fonte do app = Mulher Amparada"
-          DEST="Safe Woman Operational System/packages/apps/MulherAmparada"
+          source build/envsetup.sh
+          lunch safe_woman-userdebug
 
-          mkdir -p "$DEST"
-
-          rsync -a \
-            --exclude='*.apk' \
-            --exclude='**/*.apk' \
-            --exclude='.gradle/' \
-            --exclude='build/' \
-            --exclude='**/build/' \
-            "$SOURCE/" \
-            "$DEST/"
-
-      - name: Remover APKs restantes
+      - name: Compilar Mulher Amparada
+        working-directory: Safe Woman Operational System
         run: |
-          find "Safe Woman Operational System/packages/apps/MulherAmparada" \
-            -type f \
-            \( -iname "*.apk" -o -iname "*.aab" \) \
-            -delete
-
-      - name: Salvar na main
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add "Safe Woman Operational System/packages/apps/MulherAmparada"
-
-          git commit \
-            -m "Adicionar código-fonte do Mulher Amparada ao Safe Woman Operational System" \
-            || echo "Nenhuma alteração para commit"
-
-          git push origin HEAD:main
+          source build/envsetup.sh
+          lunch safe_woman-userdebug
+          m MulherAmparada

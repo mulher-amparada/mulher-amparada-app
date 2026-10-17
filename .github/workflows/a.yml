@@ -124,11 +124,32 @@ jobs:
         run: |
           set -e
 
+          export ANDROID_AVD_HOME="$HOME/.android/avd"
+          mkdir -p "$ANDROID_AVD_HOME"
+
+          echo "ANDROID_AVD_HOME=$ANDROID_AVD_HOME"
+
           echo "no" | avdmanager create avd \
             --force \
             --name SafeWomanOS \
             --package "system-images;android-35;default;x86_64" \
             --device "pixel_2"
+
+          echo
+          echo "===== AVDs DISPONÍVEIS ====="
+          emulator -list-avds
+
+          if ! emulator -list-avds | grep -qx "SafeWomanOS"; then
+            echo "::error::AVD SafeWomanOS não foi criado corretamente."
+
+            echo
+            echo "===== CONTEÚDO DO AVD ====="
+            find "$ANDROID_AVD_HOME" -maxdepth 2 -type f -print || true
+
+            exit 1
+          fi
+
+          echo "AVD SafeWomanOS criado com sucesso."
 
       - name: Iniciar Android
         shell: bash
@@ -137,7 +158,21 @@ jobs:
 
           mkdir -p simulation
 
+          export ANDROID_AVD_HOME="$HOME/.android/avd"
+
+          echo "ANDROID_AVD_HOME=$ANDROID_AVD_HOME"
+
+          echo "===== AVDS DISPONÍVEIS ====="
+          emulator -list-avds
+
+          if ! emulator -list-avds | grep -qx "SafeWomanOS"; then
+            echo "::error::AVD SafeWomanOS não está disponível."
+            exit 1
+          fi
+
+          echo
           echo "===== VERIFICANDO ADB ====="
+
           command -v adb
           adb version
 
@@ -170,9 +205,11 @@ jobs:
 
             if ! kill -0 "$EMULATOR_PID" 2>/dev/null; then
               echo "::error::O processo do emulador encerrou antes de o ADB detectá-lo."
+
               echo
               echo "===== LOG DO EMULADOR ====="
               cat simulation/emulator.log || true
+
               exit 1
             fi
 

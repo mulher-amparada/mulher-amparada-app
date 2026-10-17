@@ -458,6 +458,18 @@
 }
 
 /* AUTO-LINGUAGENS: INICIO */
+/* Bourne Shell */
+.language-bourne-shell .dot,
+.dot.language-bourne-shell,
+.language-bourne-shell.bar-segment,
+.bar-segment.language-bourne-shell,
+[data-language="Bourne Shell"] .dot,
+.dot[data-language="Bourne Shell"],
+[data-language="Bourne Shell"] .bar-segment,
+.bar-segment[data-language="Bourne Shell"] {
+    background-color: #2739ce;
+}
+
 /* C */
 .language-c .dot,
 .dot.language-c,
@@ -506,6 +518,30 @@
     background-color: #ce2777;
 }
 
+/* DOS Batch */
+.language-dos-batch .dot,
+.dot.language-dos-batch,
+.language-dos-batch.bar-segment,
+.bar-segment.language-dos-batch,
+[data-language="DOS Batch"] .dot,
+.dot[data-language="DOS Batch"],
+[data-language="DOS Batch"] .bar-segment,
+.bar-segment[data-language="DOS Batch"] {
+    background-color: #ce5427;
+}
+
+/* Gradle */
+.language-gradle .dot,
+.dot.language-gradle,
+.language-gradle.bar-segment,
+.bar-segment.language-gradle,
+[data-language="Gradle"] .dot,
+.dot[data-language="Gradle"],
+[data-language="Gradle"] .bar-segment,
+.bar-segment[data-language="Gradle"] {
+    background-color: #27ce55;
+}
+
 /* HTML */
 .language-html .dot,
 .dot.language-html,
@@ -542,6 +578,18 @@
     background-color: #ce2782;
 }
 
+/* Kotlin */
+.language-kotlin .dot,
+.dot.language-kotlin,
+.language-kotlin.bar-segment,
+.bar-segment.language-kotlin,
+[data-language="Kotlin"] .dot,
+.dot[data-language="Kotlin"],
+[data-language="Kotlin"] .bar-segment,
+.bar-segment[data-language="Kotlin"] {
+    background-color: #9827ce;
+}
+
 /* Markdown */
 .language-markdown .dot,
 .dot.language-markdown,
@@ -564,6 +612,18 @@
 [data-language="PHP"] .bar-segment,
 .bar-segment[data-language="PHP"] {
     background-color: #ce5027;
+}
+
+/* Properties */
+.language-properties .dot,
+.dot.language-properties,
+.language-properties.bar-segment,
+.bar-segment.language-properties,
+[data-language="Properties"] .dot,
+.dot[data-language="Properties"],
+[data-language="Properties"] .bar-segment,
+.bar-segment[data-language="Properties"] {
+    background-color: #3527ce;
 }
 
 /* Python */
@@ -624,6 +684,18 @@
 [data-language="YAML"] .bar-segment,
 .bar-segment[data-language="YAML"] {
     background-color: #2763ce;
+}
+
+/* make */
+.language-make .dot,
+.dot.language-make,
+.language-make.bar-segment,
+.bar-segment.language-make,
+[data-language="make"] .dot,
+.dot[data-language="make"],
+[data-language="make"] .bar-segment,
+.bar-segment[data-language="make"] {
+    background-color: #ba27ce;
 }
 
 /* AUTO-LINGUAGENS: FIM */

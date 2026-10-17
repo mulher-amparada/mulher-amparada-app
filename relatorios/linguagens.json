@@ -1,17 +1,22 @@
 {"header" : {
   "cloc_url"           : "github.com/AlDanial/cloc",
   "cloc_version"       : "1.98",
-  "elapsed_seconds"    : 0.112046957015991,
-  "n_files"            : 165,
-  "n_lines"            : 40363,
-  "files_per_second"   : 1472.59688611134,
-  "lines_per_second"   : 360232.897661285,
+  "elapsed_seconds"    : 1.09500980377197,
+  "n_files"            : 280,
+  "n_lines"            : 71908,
+  "files_per_second"   : 255.705473170638,
+  "lines_per_second"   : 65668.8184455509,
   "report_file"        : "relatorios/linguagens.json"},
+"Kotlin" :{
+  "nFiles": 25,
+  "blank": 5955,
+  "comment": 2104,
+  "code": 20306},
 "Markdown" :{
-  "nFiles": 117,
-  "blank": 2321,
+  "nFiles": 118,
+  "blank": 2323,
   "comment": 6,
-  "code": 10257},
+  "code": 10270},
 "CSS" :{
   "nFiles": 18,
   "blank": 6186,
@@ -27,11 +32,21 @@
   "blank": 391,
   "comment": 5,
   "code": 1586},
+"XML" :{
+  "nFiles": 80,
+  "blank": 430,
+  "comment": 112,
+  "code": 1364},
 "YAML" :{
   "nFiles": 5,
-  "blank": 473,
+  "blank": 466,
   "comment": 127,
-  "code": 1409},
+  "code": 1362},
+"Bourne Shell" :{
+  "nFiles": 2,
+  "blank": 174,
+  "comment": 129,
+  "code": 730},
 "C" :{
   "nFiles": 1,
   "blank": 195,
@@ -47,6 +62,11 @@
   "blank": 54,
   "comment": 26,
   "code": 134},
+"Gradle" :{
+  "nFiles": 3,
+  "blank": 38,
+  "comment": 13,
+  "code": 112},
 "JSON" :{
   "nFiles": 2,
   "blank": 0,
@@ -57,11 +77,16 @@
   "blank": 21,
   "comment": 0,
   "code": 71},
-"XML" :{
-  "nFiles": 3,
-  "blank": 2,
+"DOS Batch" :{
+  "nFiles": 1,
+  "blank": 21,
+  "comment": 2,
+  "code": 66},
+"TOML" :{
+  "nFiles": 2,
+  "blank": 4,
   "comment": 0,
-  "code": 60},
+  "code": 37},
 "CSV" :{
   "nFiles": 1,
   "blank": 0,
@@ -72,13 +97,18 @@
   "blank": 10,
   "comment": 0,
   "code": 22},
-"TOML" :{
-  "nFiles": 1,
-  "blank": 2,
-  "comment": 0,
-  "code": 7},
+"make" :{
+  "nFiles": 3,
+  "blank": 5,
+  "comment": 7,
+  "code": 17},
+"Properties" :{
+  "nFiles": 2,
+  "blank": 0,
+  "comment": 20,
+  "code": 9},
 "SUM": {
-  "blank": 11170,
-  "comment": 1223,
-  "code": 27970,
-  "nFiles": 165} }
+  "blank": 17788,
+  "comment": 3610,
+  "code": 50510,
+  "nFiles": 280} }

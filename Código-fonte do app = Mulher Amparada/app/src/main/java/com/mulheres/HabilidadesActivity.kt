@@ -9,21 +9,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,11 +26,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -48,83 +41,17 @@ class HabilidadesActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            DistintivosScreen()
+            DistintivoScreen()
         }
     }
 }
 
-data class Distintivo(
-    val id: Int,
-    val titulo: String,
-    val descricao: String,
-    val desbloqueado: Boolean
-)
-
 @Composable
-fun DistintivosScreen() {
+fun DistintivoScreen() {
 
-    var distintivoSelecionado by remember {
-        mutableStateOf<Distintivo?>(null)
+    var mostrarDetalhes by remember {
+        mutableStateOf(false)
     }
-
-    val distintivos = listOf(
-
-        Distintivo(
-            id = 1,
-            titulo = "Primeiro passo",
-            descricao = "Você instalou o Mulher Amparada.",
-            desbloqueado = true
-        ),
-
-        Distintivo(
-            id = 2,
-            titulo = "Conhecendo o amparo",
-            descricao = "Você começou a conhecer os recursos do aplicativo.",
-            desbloqueado = true
-        ),
-
-        Distintivo(
-            id = 3,
-            titulo = "Proteção",
-            descricao = "Conheça os recursos de proteção disponíveis.",
-            desbloqueado = false
-        ),
-
-        Distintivo(
-            id = 4,
-            titulo = "Emergência",
-            descricao = "Conheça os recursos de emergência.",
-            desbloqueado = false
-        ),
-
-        Distintivo(
-            id = 5,
-            titulo = "Privacidade",
-            descricao = "Aprenda sobre proteção e privacidade.",
-            desbloqueado = false
-        ),
-
-        Distintivo(
-            id = 6,
-            titulo = "Conhecimento",
-            descricao = "Aprenda sobre violência e seus ciclos.",
-            desbloqueado = false
-        ),
-
-        Distintivo(
-            id = 7,
-            titulo = "Rede de apoio",
-            descricao = "Conheça a importância de uma rede de apoio.",
-            desbloqueado = false
-        ),
-
-        Distintivo(
-            id = 8,
-            titulo = "Autonomia",
-            descricao = "Continue construindo conhecimento e autonomia.",
-            desbloqueado = false
-        )
-    )
 
     Box(
         modifier = Modifier
@@ -147,219 +74,187 @@ fun DistintivosScreen() {
             )
 
             Spacer(
+                modifier = Modifier.height(34.dp)
+            )
+
+            /*
+             * DISTINTIVO
+             *
+             * O losango é rotacionado.
+             * A imagem ocupa TODO o espaço interno
+             * e usa Crop para ser cortada nas bordas.
+             */
+            Box(
+                modifier = Modifier
+                    .size(210.dp)
+                    .rotate(45f)
+                    .clip(
+                        RoundedCornerShape(34.dp)
+                    )
+                    .clickable {
+                        mostrarDetalhes = true
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+
+                Image(
+                    painter = painterResource(
+                        id = R.drawable.distintivo
+                    ),
+                    contentDescription = "Distintivo Primeiro passo",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .rotate(-45f),
+                    contentScale = ContentScale.Crop
+                )
+            }
+
+            Spacer(
+                modifier = Modifier.height(34.dp)
+            )
+
+            Text(
+                text = "Primeiro passo",
+                color = Color.White,
+                fontSize = 23.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(
                 modifier = Modifier.height(8.dp)
             )
 
             Text(
-                text = "Conquistas que você desbloqueia ao longo da sua jornada.",
-                color = Color.LightGray,
-                fontSize = 14.sp
+                text = "Você instalou o Mulher Amparada.",
+                color = Color(0xFFAAAAAA),
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center
             )
-
-            Spacer(
-                modifier = Modifier.height(24.dp)
-            )
-
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(
-                    start = 24.dp,
-                    end = 24.dp,
-                    bottom = 40.dp
-                ),
-                horizontalArrangement = Arrangement.spacedBy(18.dp),
-                verticalArrangement = Arrangement.spacedBy(24.dp)
-            ) {
-
-                items(
-                    items = distintivos,
-                    key = {
-                        it.id
-                    }
-                ) { distintivo ->
-
-                    DistintivoCard(
-                        distintivo = distintivo,
-                        onClick = {
-                            if (distintivo.desbloqueado) {
-                                distintivoSelecionado = distintivo
-                            }
-                        }
-                    )
-                }
-            }
         }
 
-        distintivoSelecionado?.let { distintivo ->
+        if (mostrarDetalhes) {
 
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
-                        Color.Black.copy(alpha = 0.78f)
+                        Color.Black.copy(alpha = 0.82f)
                     ),
                 contentAlignment = Alignment.Center
             ) {
 
                 Column(
                     modifier = Modifier
-                        .padding(28.dp)
-                        .background(
-                            Color(0xFF151515),
-                            MaterialTheme.shapes.large
+                        .fillMaxWidth()
+                        .padding(horizontal = 28.dp)
+                        .clip(
+                            RoundedCornerShape(30.dp)
                         )
-                        .padding(25.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .background(
+                            Brush.verticalGradient(
+                                listOf(
+                                    Color(0xFF202020),
+                                    Color(0xFF111111)
+                                )
+                            )
+                        )
+                        .padding(
+                            horizontal = 26.dp,
+                            vertical = 30.dp
+                        ),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
 
-                    DistintivoImagem(
-                        distintivo = distintivo,
-                        tamanho = 100.dp
-                    )
+                    /*
+                     * Miniatura do distintivo
+                     */
+                    Box(
+                        modifier = Modifier
+                            .size(100.dp)
+                            .rotate(45f)
+                            .clip(
+                                RoundedCornerShape(20.dp)
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+
+                        Image(
+                            painter = painterResource(
+                                id = R.drawable.distintivo
+                            ),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .rotate(-45f),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
 
                     Spacer(
-                        modifier = Modifier.height(18.dp)
+                        modifier = Modifier.height(28.dp)
                     )
 
                     Text(
-                        text = distintivo.titulo,
-                        color = Color.White,
-                        fontSize = 22.sp,
+                        text = "Distintivo desbloqueado",
+                        color = Color(0xFFB8B8B8),
+                        fontSize = 11.sp,
                         fontWeight = FontWeight.Bold
                     )
 
                     Spacer(
-                        modifier = Modifier.height(8.dp)
+                        modifier = Modifier.height(7.dp)
                     )
 
                     Text(
-                        text = distintivo.descricao,
-                        color = Color.LightGray,
-                        fontSize = 15.sp
+                        text = "Primeiro passo",
+                        color = Color.White,
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
                     )
 
                     Spacer(
-                        modifier = Modifier.height(22.dp)
+                        modifier = Modifier.height(12.dp)
                     )
 
                     Text(
-                        text = "FECHAR",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.clickable {
-                            distintivoSelecionado = null
-                        }
+                        text = "Você instalou o Mulher Amparada.",
+                        color = Color(0xFFBDBDBD),
+                        fontSize = 15.sp,
+                        lineHeight = 22.sp,
+                        textAlign = TextAlign.Center
                     )
+
+                    Spacer(
+                        modifier = Modifier.height(28.dp)
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(
+                                RoundedCornerShape(16.dp)
+                            )
+                            .background(
+                                Color.White.copy(alpha = 0.08f)
+                            )
+                            .clickable {
+                                mostrarDetalhes = false
+                            }
+                            .padding(vertical = 14.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+
+                        Text(
+                            text = "FECHAR",
+                            color = Color.White,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun DistintivoCard(
-    distintivo: Distintivo,
-    onClick: () -> Unit
-) {
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(
-                enabled = distintivo.desbloqueado,
-                onClick = onClick
-            ),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        DistintivoImagem(
-            distintivo = distintivo,
-            tamanho = 125.dp
-        )
-
-        Spacer(
-            modifier = Modifier.height(10.dp)
-        )
-
-        Text(
-            text = distintivo.titulo,
-            color = if (distintivo.desbloqueado) {
-                Color.White
-            } else {
-                Color.Gray
-            },
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(
-            modifier = Modifier.height(3.dp)
-        )
-
-        Text(
-            text = if (distintivo.desbloqueado) {
-                "DESBLOQUEADO"
-            } else {
-                "BLOQUEADO"
-            },
-            color = if (distintivo.desbloqueado) {
-                Color(0xFFBDBDBD)
-            } else {
-                Color(0xFF555555)
-            },
-            fontSize = 9.sp,
-            fontWeight = FontWeight.Bold
-        )
-    }
-}
-
-@Composable
-private fun DistintivoImagem(
-    distintivo: Distintivo,
-    tamanho: Dp
-) {
-
-    Box(
-        modifier = Modifier
-            .size(tamanho)
-            .rotate(45f)
-            .clip(
-                RoundedCornerShape(22.dp)
-            )
-            .background(
-                if (distintivo.desbloqueado) {
-                    Color(0xFF7C4DFF)
-                } else {
-                    Color(0xFF242424)
-                }
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-
-        if (distintivo.desbloqueado) {
-
-            Image(
-                painter = painterResource(
-                    id = R.drawable.distintivo
-                ),
-                contentDescription = distintivo.titulo,
-                modifier = Modifier
-                    .size(tamanho * 0.70f)
-                    .rotate(-45f),
-                contentScale = ContentScale.Fit
-            )
-
-        } else {
-
-            Icon(
-                imageVector = Icons.Default.Lock,
-                contentDescription = "Distintivo bloqueado",
-                tint = Color.Gray,
-                modifier = Modifier
-                    .size(28.dp)
-                    .rotate(-45f)
-            )
         }
     }
 }

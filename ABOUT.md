@@ -34,6 +34,8 @@ e se  eu fosse escolher a palavra mais bonita da língua portuguesa, seria:
 
 # Autoridades políticas, escutem bem!:
 
+> Essa seção é apartidária, vejam isso como uma reflexão, nao julgamento!
+
 Voces tem que entender que as mulheres não precisam de discursos longos e frios, elas precisam de ações, acolhimento sem julgamento, um tanque de guerra blindado contra a violência e uma armadura calorosa 
 
 Elas não precisam dos seus votos, elas precisam de políticas públicas fortes que não quebram na primeira brecha

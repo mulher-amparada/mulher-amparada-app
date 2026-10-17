@@ -1133,13 +1133,13 @@ a pessoa instala pelo github releases!
 
 e quem publica e atualiza essa release é o proprio workflow!
 
-# 👨🏾‍💻Safe Woman Operational System
+# 👨🏾‍💻Safe Woman Operational System:
 
 O **Safe Woman Operational System** é um projeto experimental de sistema operacional baseado no Android Open Source Project (AOSP).
 
 O objetivo é criar uma versão personalizada do Android voltada para integrar o projeto **Mulher Amparada** diretamente ao sistema.
 
-## Importante
+## Importante:
 
 Este repositório **não contém o AOSP completo**.
 
@@ -1147,7 +1147,7 @@ A estrutura presente aqui representa apenas **uma pequena parte de todo o AOSP**
 
 O Safe Woman OS contém somente os arquivos específicos necessários para definir a personalização do sistema.
 
-## Estrutura
+## Estrutura:
 
     Safe Woman Operational System/
     ├── device/
@@ -1165,21 +1165,21 @@ O Safe Woman OS contém somente os arquivos específicos necessários para defin
                     └── src/
                         └── main/
 
-## Device
+## Device:
 
 O diretório `device/safe_woman` contém a configuração específica do dispositivo/produto Safe Woman OS.
 
-### AndroidProducts.mk
+### AndroidProducts.mk:
 
 Define os arquivos de produto disponíveis e o alvo:
 
     safe_woman-userdebug
 
-### BoardConfig.mk
+### BoardConfig.mk:
 
 Define as características básicas da plataforma utilizada para o sistema experimental, atualmente preparada para arquitetura x86_64 e execução em ambiente virtual.
 
-### safe_woman.mk
+### safe_woman.mk:
 
 Define o produto Safe Woman OS e integra componentes específicos ao sistema.
 
@@ -1187,7 +1187,7 @@ Entre eles está o aplicativo:
 
     MulherAmparada
 
-## Mulher Amparada
+## Mulher Amparada:
 
 O aplicativo Mulher Amparada é integrado ao sistema em:
 
@@ -1199,7 +1199,7 @@ Seu pacote Android é:
 
 O objetivo dessa integração é permitir que o aplicativo faça parte da imagem do sistema em vez de existir somente como um aplicativo instalado posteriormente pelo usuário.
 
-## Android.bp
+## Android.bp:
 
 O arquivo `Android.bp` define o módulo do aplicativo para o sistema de build do AOSP, o Soong.
 
@@ -1215,7 +1215,7 @@ Isso significa que o aplicativo pode ser tratado como um aplicativo privilegiado
 
 Isso não significa que todas as permissões do aplicativo sejam concedidas automaticamente. Permissões perigosas/runtime continuam seguindo o modelo de permissões do Android.
 
-## Privapp permissions
+## Privapp permissions:
 
 O arquivo:
 
@@ -1229,7 +1229,7 @@ Somente permissões compatíveis com o mecanismo de allowlist de permissões pri
 
 Permissões comuns de runtime, como localização, contatos ou microfone, não se tornam automaticamente privilegiadas apenas por serem colocadas nesse XML.
 
-## Cuttlefish
+## Cuttlefish:
 
 O Safe Woman OS foi planejado inicialmente para execução em um dispositivo Android virtual utilizando o **Cuttlefish**.
 
@@ -1249,7 +1249,7 @@ O objetivo experimental é chegar a uma configuração semelhante a:
           ↓
     Cuttlefish
 
-## Relação com o AOSP
+## Relação com o AOSP:
 
 O Safe Woman OS não substitui o AOSP.
 
@@ -1274,7 +1274,7 @@ A árvore completa do AOSP possui componentes como:
 
 O Safe Woman OS contém apenas uma pequena fração dessa estrutura.
 
-## Estado atual
+## Estado atual:
 
 O projeto é experimental.
 
@@ -1284,13 +1284,13 @@ A existência desses arquivos, por si só, não significa que o sistema completo
 
 Ainda são necessários todos os componentes correspondentes da árvore AOSP e as dependências utilizadas pelo aplicativo.
 
-## Objetivo futuro
+## Objetivo futuro:
 
 A ideia é utilizar uma árvore AOSP completa como base e adicionar o Safe Woman OS como uma configuração personalizada, integrando o Mulher Amparada diretamente ao sistema.
 
 O resultado esperado é um Android personalizado executável em ambiente virtual, inicialmente através do Cuttlefish.
 
-## Natureza do projeto
+## Natureza do projeto:
 
 O Safe Woman Operational System é um experimento de desenvolvimento de sistema operacional baseado em AOSP.
 

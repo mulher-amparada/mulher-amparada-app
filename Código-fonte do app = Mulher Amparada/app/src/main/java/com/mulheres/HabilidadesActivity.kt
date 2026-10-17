@@ -21,8 +21,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Shield
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -46,9 +44,7 @@ class HabilidadesActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            MulherAmparadaTheme {
-                ArvoreDeHabilidades()
-            }
+            ArvoreDeHabilidades()
         }
     }
 }
@@ -63,13 +59,6 @@ data class Habilidade(
 
 @Composable
 fun ArvoreDeHabilidades() {
-
-    /*
-     * O primeiro nó já começa desbloqueado.
-     *
-     * Depois podemos ligar isso ao DataStore/SharedPreferences
-     * para salvar permanentemente o progresso.
-     */
 
     var habilidadeSelecionada by remember {
         mutableStateOf<Habilidade?>(null)
@@ -173,9 +162,6 @@ fun ArvoreDeHabilidades() {
 
             Spacer(modifier = Modifier.height(35.dp))
 
-            /*
-             * Raiz
-             */
             HabilidadeNode(
                 habilidade = habilidades[0],
                 onClick = {
@@ -194,9 +180,6 @@ fun ArvoreDeHabilidades() {
 
             LinhaVertical()
 
-            /*
-             * Bifurcação
-             */
             Row(
                 modifier = Modifier.fillMaxSize(),
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -258,9 +241,6 @@ fun ArvoreDeHabilidades() {
             Spacer(modifier = Modifier.height(50.dp))
         }
 
-        /*
-         * Detalhes da habilidade selecionada
-         */
         habilidadeSelecionada?.let { habilidade ->
 
             Box(
@@ -341,10 +321,11 @@ fun HabilidadeNode(
                 .size(72.dp)
                 .clip(CircleShape)
                 .background(
-                    if (ativo)
+                    if (ativo) {
                         Color(0xFF7C4DFF)
-                    else
+                    } else {
                         Color(0xFF242424)
+                    }
                 ),
             contentAlignment = Alignment.Center
         ) {

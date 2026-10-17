@@ -3,22 +3,23 @@ package com.mulheres
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Icon
@@ -32,9 +33,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -44,90 +48,81 @@ class HabilidadesActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            ArvoreDeHabilidades()
+            DistintivosScreen()
         }
     }
 }
 
-data class Habilidade(
+data class Distintivo(
     val id: Int,
     val titulo: String,
     val descricao: String,
-    val desbloqueada: Boolean,
-    val icone: String
+    val desbloqueado: Boolean
 )
 
 @Composable
-fun ArvoreDeHabilidades() {
+fun DistintivosScreen() {
 
-    var habilidadeSelecionada by remember {
-        mutableStateOf<Habilidade?>(null)
+    var distintivoSelecionado by remember {
+        mutableStateOf<Distintivo?>(null)
     }
 
-    val habilidades = listOf(
+    val distintivos = listOf(
 
-        Habilidade(
+        Distintivo(
             id = 1,
             titulo = "Primeiro passo",
             descricao = "Você instalou o Mulher Amparada.",
-            desbloqueada = true,
-            icone = "🌱"
+            desbloqueado = true
         ),
 
-        Habilidade(
+        Distintivo(
             id = 2,
-            titulo = "Conhecer o amparo",
-            descricao = "Conheça os recursos disponíveis no aplicativo.",
-            desbloqueada = true,
-            icone = "❤️"
+            titulo = "Conhecendo o amparo",
+            descricao = "Você começou a conhecer os recursos do aplicativo.",
+            desbloqueado = true
         ),
 
-        Habilidade(
+        Distintivo(
             id = 3,
             titulo = "Proteção",
             descricao = "Conheça os recursos de proteção disponíveis.",
-            desbloqueada = false,
-            icone = "🛡️"
+            desbloqueado = false
         ),
 
-        Habilidade(
+        Distintivo(
             id = 4,
             titulo = "Emergência",
-            descricao = "Conheça os recursos para situações de emergência.",
-            desbloqueada = false,
-            icone = "🚨"
+            descricao = "Conheça os recursos de emergência.",
+            desbloqueado = false
         ),
 
-        Habilidade(
+        Distintivo(
             id = 5,
             titulo = "Privacidade",
             descricao = "Aprenda sobre proteção e privacidade.",
-            desbloqueada = false,
-            icone = "🔐"
+            desbloqueado = false
         ),
 
-        Habilidade(
+        Distintivo(
             id = 6,
             titulo = "Conhecimento",
             descricao = "Aprenda sobre violência e seus ciclos.",
-            desbloqueada = false,
-            icone = "📚"
+            desbloqueado = false
         ),
 
-        Habilidade(
+        Distintivo(
             id = 7,
             titulo = "Rede de apoio",
             descricao = "Conheça a importância de uma rede de apoio.",
-            desbloqueada = false,
-            icone = "🤝"
+            desbloqueado = false
         ),
 
-        Habilidade(
+        Distintivo(
             id = 8,
             titulo = "Autonomia",
             descricao = "Continue construindo conhecimento e autonomia.",
-            desbloqueada = false,
-            icone = "✨"
+            desbloqueado = false
         )
     )
 
@@ -140,113 +135,70 @@ fun ArvoreDeHabilidades() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(20.dp),
+                .padding(top = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Text(
-                text = "🌳 Árvore de habilidades",
+                text = "Distintivos",
                 color = Color.White,
-                fontSize = 26.sp,
+                fontSize = 30.sp,
                 fontWeight = FontWeight.Bold
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(
+                modifier = Modifier.height(8.dp)
+            )
 
             Text(
-                text = "Cada habilidade representa um passo no conhecimento e na preparação.",
+                text = "Conquistas que você desbloqueia ao longo da sua jornada.",
                 color = Color.LightGray,
                 fontSize = 14.sp
             )
 
-            Spacer(modifier = Modifier.height(35.dp))
-
-            HabilidadeNode(
-                habilidade = habilidades[0],
-                onClick = {
-                    habilidadeSelecionada = habilidades[0]
-                }
+            Spacer(
+                modifier = Modifier.height(24.dp)
             )
 
-            LinhaVertical()
-
-            HabilidadeNode(
-                habilidade = habilidades[1],
-                onClick = {
-                    habilidadeSelecionada = habilidades[1]
-                }
-            )
-
-            LinhaVertical()
-
-            Row(
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
                 modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                contentPadding = PaddingValues(
+                    start = 24.dp,
+                    end = 24.dp,
+                    bottom = 40.dp
+                ),
+                horizontalArrangement = Arrangement.spacedBy(18.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
 
-                HabilidadeNode(
-                    habilidade = habilidades[2],
-                    onClick = {
-                        habilidadeSelecionada = habilidades[2]
+                items(
+                    items = distintivos,
+                    key = {
+                        it.id
                     }
-                )
+                ) { distintivo ->
 
-                HabilidadeNode(
-                    habilidade = habilidades[6],
-                    onClick = {
-                        habilidadeSelecionada = habilidades[6]
-                    }
-                )
-            }
-
-            Spacer(modifier = Modifier.height(15.dp))
-
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-
-                HabilidadeNode(
-                    habilidade = habilidades[3],
-                    onClick = {
-                        habilidadeSelecionada = habilidades[3]
-                    }
-                )
-
-                HabilidadeNode(
-                    habilidade = habilidades[4],
-                    onClick = {
-                        habilidadeSelecionada = habilidades[4]
-                    }
-                )
-
-                HabilidadeNode(
-                    habilidade = habilidades[5],
-                    onClick = {
-                        habilidadeSelecionada = habilidades[5]
-                    }
-                )
-            }
-
-            LinhaVertical()
-
-            HabilidadeNode(
-                habilidade = habilidades[7],
-                onClick = {
-                    habilidadeSelecionada = habilidades[7]
+                    DistintivoCard(
+                        distintivo = distintivo,
+                        onClick = {
+                            if (distintivo.desbloqueado) {
+                                distintivoSelecionado = distintivo
+                            }
+                        }
+                    )
                 }
-            )
-
-            Spacer(modifier = Modifier.height(50.dp))
+            }
         }
 
-        habilidadeSelecionada?.let { habilidade ->
+        distintivoSelecionado?.let { distintivo ->
 
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.75f)),
+                    .background(
+                        Color.Black.copy(alpha = 0.78f)
+                    ),
                 contentAlignment = Alignment.Center
             ) {
 
@@ -261,36 +213,42 @@ fun ArvoreDeHabilidades() {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    Text(
-                        text = habilidade.icone,
-                        fontSize = 48.sp
+                    DistintivoImagem(
+                        distintivo = distintivo,
+                        tamanho = 100.dp
                     )
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(
+                        modifier = Modifier.height(18.dp)
+                    )
 
                     Text(
-                        text = habilidade.titulo,
+                        text = distintivo.titulo,
                         color = Color.White,
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold
                     )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(
+                        modifier = Modifier.height(8.dp)
+                    )
 
                     Text(
-                        text = habilidade.descricao,
+                        text = distintivo.descricao,
                         color = Color.LightGray,
                         fontSize = 15.sp
                     )
 
-                    Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(
+                        modifier = Modifier.height(22.dp)
+                    )
 
                     Text(
                         text = "FECHAR",
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.clickable {
-                            habilidadeSelecionada = null
+                            distintivoSelecionado = null
                         }
                     )
                 }
@@ -300,85 +258,108 @@ fun ArvoreDeHabilidades() {
 }
 
 @Composable
-fun HabilidadeNode(
-    habilidade: Habilidade,
+private fun DistintivoCard(
+    distintivo: Distintivo,
     onClick: () -> Unit
 ) {
 
-    val ativo = habilidade.desbloqueada
-
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .width(105.dp)
-            .clickable(enabled = ativo) {
-                onClick()
-            }
+            .fillMaxWidth()
+            .clickable(
+                enabled = distintivo.desbloqueado,
+                onClick = onClick
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Box(
-            modifier = Modifier
-                .size(72.dp)
-                .clip(CircleShape)
-                .background(
-                    if (ativo) {
-                        Color(0xFF7C4DFF)
-                    } else {
-                        Color(0xFF242424)
-                    }
-                ),
-            contentAlignment = Alignment.Center
-        ) {
+        DistintivoImagem(
+            distintivo = distintivo,
+            tamanho = 125.dp
+        )
 
-            if (ativo) {
-
-                Text(
-                    text = habilidade.icone,
-                    fontSize = 30.sp
-                )
-
-            } else {
-
-                Icon(
-                    imageVector = Icons.Default.Lock,
-                    contentDescription = "Bloqueada",
-                    tint = Color.Gray,
-                    modifier = Modifier.size(25.dp)
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(7.dp))
+        Spacer(
+            modifier = Modifier.height(10.dp)
+        )
 
         Text(
-            text = habilidade.titulo,
-            color = if (ativo) Color.White else Color.Gray,
-            fontSize = 13.sp,
+            text = distintivo.titulo,
+            color = if (distintivo.desbloqueado) {
+                Color.White
+            } else {
+                Color.Gray
+            },
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(
+            modifier = Modifier.height(3.dp)
+        )
+
+        Text(
+            text = if (distintivo.desbloqueado) {
+                "DESBLOQUEADO"
+            } else {
+                "BLOQUEADO"
+            },
+            color = if (distintivo.desbloqueado) {
+                Color(0xFFBDBDBD)
+            } else {
+                Color(0xFF555555)
+            },
+            fontSize = 9.sp,
             fontWeight = FontWeight.Bold
         )
     }
 }
 
 @Composable
-fun LinhaVertical() {
+private fun DistintivoImagem(
+    distintivo: Distintivo,
+    tamanho: Dp
+) {
 
-    Canvas(
+    Box(
         modifier = Modifier
-            .height(35.dp)
-            .width(2.dp)
+            .size(tamanho)
+            .rotate(45f)
+            .clip(
+                RoundedCornerShape(22.dp)
+            )
+            .background(
+                if (distintivo.desbloqueado) {
+                    Color(0xFF7C4DFF)
+                } else {
+                    Color(0xFF242424)
+                }
+            ),
+        contentAlignment = Alignment.Center
     ) {
 
-        drawLine(
-            color = Color(0xFF555555),
-            start = Offset(
-                size.width / 2,
-                0f
-            ),
-            end = Offset(
-                size.width / 2,
-                size.height
-            ),
-            strokeWidth = 5f
-        )
+        if (distintivo.desbloqueado) {
+
+            Image(
+                painter = painterResource(
+                    id = R.drawable.distintivo
+                ),
+                contentDescription = distintivo.titulo,
+                modifier = Modifier
+                    .size(tamanho * 0.70f)
+                    .rotate(-45f),
+                contentScale = ContentScale.Fit
+            )
+
+        } else {
+
+            Icon(
+                imageVector = Icons.Default.Lock,
+                contentDescription = "Distintivo bloqueado",
+                tint = Color.Gray,
+                modifier = Modifier
+                    .size(28.dp)
+                    .rotate(-45f)
+            )
+        }
     }
 }

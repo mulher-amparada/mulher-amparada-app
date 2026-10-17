@@ -1,90 +1,37 @@
-name: Build Safe Woman OS
+name: Baixar envsetup
 
 on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  build:
+  baixar:
     runs-on: ubuntu-24.04
 
     steps:
-      - name: Checkout do projeto
+      - name: Checkout
         uses: actions/checkout@v6
-        with:
-          fetch-depth: 1
-          submodules: false
 
-      - name: Instalar dependências
+      - name: Baixar build/envsetup.sh
         run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            git \
-            curl \
-            unzip \
-            rsync \
-            python3 \
-            openjdk-17-jdk \
-            bc \
-            bison \
-            build-essential \
-            flex \
-            gperf \
-            libxml2-utils \
-            zip
+          mkdir -p "Safe Woman Operational System/build"
 
-      - name: Instalar Repo
+          curl -L \
+            https://android.googlesource.com/platform/build/+/refs/heads/main/envsetup.sh?format=TEXT \
+            | base64 -d \
+            > "Safe Woman Operational System/build/envsetup.sh"
+
+      - name: Salvar na main
         run: |
-          mkdir -p "$HOME/bin"
-          curl -L https://storage.googleapis.com/git-repo-downloads/repo \
-            -o "$HOME/bin/repo"
-          chmod +x "$HOME/bin/repo"
-          echo "$HOME/bin" >> "$GITHUB_PATH"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Baixar AOSP
-        run: |
-          mkdir -p "$RUNNER_TEMP/aosp"
-          cd "$RUNNER_TEMP/aosp"
+          git add "Safe Woman Operational System/build/envsetup.sh"
 
-          repo init \
-            -u https://android.googlesource.com/platform/manifest \
-            -b android-latest-release \
-            --depth=1
+          git commit \
+            -m "Adicionar build/envsetup.sh do AOSP" \
+            || echo "Nenhuma alteração para commit"
 
-          repo sync -c -j2 --no-tags
-
-      - name: Integrar Safe Woman OS
-        run: |
-          AOSP="$RUNNER_TEMP/aosp"
-          PROJECT="$GITHUB_WORKSPACE/Safe Woman Operational System"
-
-          rsync -a \
-            "$PROJECT/packages/" \
-            "$AOSP/packages/"
-
-          rsync -a \
-            "$PROJECT/device/safe_woman/" \
-            "$AOSP/device/safe_woman/"
-
-          mkdir -p "$AOSP/product/etc/permissions"
-
-          if [ -f "$PROJECT/product/etc/permissions/privapp-permissions-mulher-amparada.xml" ]; then
-            cp \
-              "$PROJECT/product/etc/permissions/privapp-permissions-mulher-amparada.xml" \
-              "$AOSP/product/etc/permissions/"
-          fi
-
-      - name: Configurar AOSP
-        working-directory: ${{ runner.temp }}/aosp
-        run: |
-          source build/envsetup.sh
-          lunch safe_woman-userdebug
-
-      - name: Compilar Mulher Amparada
-        working-directory: ${{ runner.temp }}/aosp
-        run: |
-          source build/envsetup.sh
-          lunch safe_woman-userdebug
-          m MulherAmparada
+          git push origin HEAD:main

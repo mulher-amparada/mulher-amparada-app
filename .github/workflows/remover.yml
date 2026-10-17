@@ -1,0 +1,45 @@
+name: Remover submodule Cuttlefish
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  remover:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          submodules: false
+
+      - name: Remover Cuttlefish do índice Git
+        run: |
+          git rm --cached "Safe Woman Operational System/device/cuttlefish" || true
+
+      - name: Remover configuração inválida do .gitmodules
+        run: |
+          if [ -f .gitmodules ]; then
+            git config -f .gitmodules --remove-section \
+              "submodule.Safe Woman Operational System/device/cuttlefish" \
+              2>/dev/null || true
+          fi
+
+          git add .gitmodules 2>/dev/null || true
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git commit \
+            -m "Remover submodule Cuttlefish inválido" \
+            || echo "Nenhuma alteração para commit"
+
+      - name: Push para main
+        run: |
+          git push origin HEAD:main

@@ -1,11 +1,11 @@
 {"header" : {
   "cloc_url"           : "github.com/AlDanial/cloc",
   "cloc_version"       : "1.98",
-  "elapsed_seconds"    : 0.11491322517395,
+  "elapsed_seconds"    : 0.0825440883636475,
   "n_files"            : 158,
   "n_lines"            : 40196,
-  "files_per_second"   : 1374.95053124501,
-  "lines_per_second"   : 349794.376923572,
+  "files_per_second"   : 1914.12859639242,
+  "lines_per_second"   : 486964.006712592,
   "report_file"        : "relatorios/linguagens.json"},
 "CSS" :{
   "nFiles": 18,

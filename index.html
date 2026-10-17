@@ -574,7 +574,7 @@ Mais informações
 <p>E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)</p>
 <p>e pra ser sincero, comecei esse projeto no dia 13/05/2026 e terminei no dia 12/10/2026!</p>
 <p>Os contribuidores ajudaram também!, além de mim e dos bots:</p>
-<p><strong>Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 5850</strong></p>
+<p><strong>Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 5855</strong></p>
 <p>E o projeto é = Open-source! (aderido no dia 02/10/2026)</p>
 <h1>🎉Projeto Finalizado:</h1>
 <p>https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Projeto-Finalizado</p>
@@ -1407,14 +1407,14 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
 </blockquote>
 <p>a pessoa instala pelo github releases!</p>
 <p>e quem publica e atualiza essa release é o proprio workflow!</p>
-<h1>👨🏾‍💻Safe Woman Operational System</h1>
+<h1>👨🏾‍💻Safe Woman Operational System:</h1>
 <p>O <strong>Safe Woman Operational System</strong> é um projeto experimental de sistema operacional baseado no Android Open Source Project (AOSP).</p>
 <p>O objetivo é criar uma versão personalizada do Android voltada para integrar o projeto <strong>Mulher Amparada</strong> diretamente ao sistema.</p>
-<h2>Importante</h2>
+<h2>Importante:</h2>
 <p>Este repositório <strong>não contém o AOSP completo</strong>.</p>
 <p>A estrutura presente aqui representa apenas <strong>uma pequena parte de todo o AOSP</strong>. O AOSP completo possui centenas de componentes, incluindo framework, bibliotecas, ferramentas de compilação, HALs, componentes do sistema, kernel, Cuttlefish, aplicações e diversos outros projetos.</p>
 <p>O Safe Woman OS contém somente os arquivos específicos necessários para definir a personalização do sistema.</p>
-<h2>Estrutura</h2>
+<h2>Estrutura:</h2>
 <pre><code>Safe Woman Operational System/
 ├── device/
 │   └── safe_woman/
@@ -1431,20 +1431,20 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
                 └── src/
                     └── main/
 </code></pre>
-<h2>Device</h2>
+<h2>Device:</h2>
 <p>O diretório <code>device/safe_woman</code> contém a configuração específica do dispositivo/produto Safe Woman OS.</p>
-<h3>AndroidProducts.mk</h3>
+<h3>AndroidProducts.mk:</h3>
 <p>Define os arquivos de produto disponíveis e o alvo:</p>
 <pre><code>safe_woman-userdebug
 </code></pre>
-<h3>BoardConfig.mk</h3>
+<h3>BoardConfig.mk:</h3>
 <p>Define as características básicas da plataforma utilizada para o sistema experimental, atualmente preparada para arquitetura x86_64 e execução em ambiente virtual.</p>
-<h3>safe_woman.mk</h3>
+<h3>safe_woman.mk:</h3>
 <p>Define o produto Safe Woman OS e integra componentes específicos ao sistema.</p>
 <p>Entre eles está o aplicativo:</p>
 <pre><code>MulherAmparada
 </code></pre>
-<h2>Mulher Amparada</h2>
+<h2>Mulher Amparada:</h2>
 <p>O aplicativo Mulher Amparada é integrado ao sistema em:</p>
 <pre><code>packages/apps/MulherAmparada
 </code></pre>
@@ -1452,7 +1452,7 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
 <pre><code>com.mulheres
 </code></pre>
 <p>O objetivo dessa integração é permitir que o aplicativo faça parte da imagem do sistema em vez de existir somente como um aplicativo instalado posteriormente pelo usuário.</p>
-<h2>Android.bp</h2>
+<h2>Android.bp:</h2>
 <p>O arquivo <code>Android.bp</code> define o módulo do aplicativo para o sistema de build do AOSP, o Soong.</p>
 <p>O módulo é chamado:</p>
 <pre><code>MulherAmparada
@@ -1462,7 +1462,7 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
 </code></pre>
 <p>Isso significa que o aplicativo pode ser tratado como um aplicativo privilegiado do sistema.</p>
 <p>Isso não significa que todas as permissões do aplicativo sejam concedidas automaticamente. Permissões perigosas/runtime continuam seguindo o modelo de permissões do Android.</p>
-<h2>Privapp permissions</h2>
+<h2>Privapp permissions:</h2>
 <p>O arquivo:</p>
 <pre><code>privapp-permissions-mulher-amparada.xml
 </code></pre>
@@ -1471,7 +1471,7 @@ onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
 </code></pre>
 <p>Somente permissões compatíveis com o mecanismo de allowlist de permissões privilegiadas devem ser adicionadas nesse arquivo.</p>
 <p>Permissões comuns de runtime, como localização, contatos ou microfone, não se tornam automaticamente privilegiadas apenas por serem colocadas nesse XML.</p>
-<h2>Cuttlefish</h2>
+<h2>Cuttlefish:</h2>
 <p>O Safe Woman OS foi planejado inicialmente para execução em um dispositivo Android virtual utilizando o <strong>Cuttlefish</strong>.</p>
 <p>Isso permite testar a estrutura do sistema sem depender de um aparelho físico.</p>
 <p>O objetivo experimental é chegar a uma configuração semelhante a:</p>
@@ -1487,7 +1487,7 @@ imagem do sistema
       ↓
 Cuttlefish
 </code></pre>
-<h2>Relação com o AOSP</h2>
+<h2>Relação com o AOSP:</h2>
 <p>O Safe Woman OS não substitui o AOSP.</p>
 <p>Ele funciona como uma camada de personalização sobre uma árvore AOSP completa.</p>
 <p>A árvore completa do AOSP possui componentes como:</p>
@@ -1508,15 +1508,15 @@ Cuttlefish
 <li>ferramentas de desenvolvimento</li>
 </ul>
 <p>O Safe Woman OS contém apenas uma pequena fração dessa estrutura.</p>
-<h2>Estado atual</h2>
+<h2>Estado atual:</h2>
 <p>O projeto é experimental.</p>
 <p>A estrutura atual foi organizada para que seus arquivos específicos possam ser colocados dentro de uma árvore AOSP completa.</p>
 <p>A existência desses arquivos, por si só, não significa que o sistema completo já possa ser compilado.</p>
 <p>Ainda são necessários todos os componentes correspondentes da árvore AOSP e as dependências utilizadas pelo aplicativo.</p>
-<h2>Objetivo futuro</h2>
+<h2>Objetivo futuro:</h2>
 <p>A ideia é utilizar uma árvore AOSP completa como base e adicionar o Safe Woman OS como uma configuração personalizada, integrando o Mulher Amparada diretamente ao sistema.</p>
 <p>O resultado esperado é um Android personalizado executável em ambiente virtual, inicialmente através do Cuttlefish.</p>
-<h2>Natureza do projeto</h2>
+<h2>Natureza do projeto:</h2>
 <p>O Safe Woman Operational System é um experimento de desenvolvimento de sistema operacional baseado em AOSP.</p>
 <p>O projeto não pretende reproduzir o AOSP inteiro dentro deste repositório.</p>
 <p>Ele mantém somente os arquivos próprios do Safe Woman OS e a integração planejada com o aplicativo Mulher Amparada</p>

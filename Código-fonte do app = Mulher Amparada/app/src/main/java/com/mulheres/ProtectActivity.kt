@@ -527,7 +527,7 @@ val outrasFuncoes = listOf(
 }
 
 
-"Árvore de habilidades" -> {
+"Árvore de distintivos" -> {
     abrirHabilidades()
 }
                                 

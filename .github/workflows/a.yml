@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0
 
       - name: Instalar Android SDK
-        uses: android-actions/setup-android@v6
+        uses: android-actions/setup-android@v3
 
       - name: Instalar ferramentas Android
         shell: bash

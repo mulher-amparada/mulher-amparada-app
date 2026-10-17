@@ -113,7 +113,7 @@ val paddingVertical =
                 .fillMaxSize()
 .padding(
     vertical = paddingVertical
-)
+),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 

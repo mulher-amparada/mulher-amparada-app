@@ -1296,4 +1296,7 @@ O Safe Woman Operational System é um experimento de desenvolvimento de sistema 
 
 O projeto não pretende reproduzir o AOSP inteiro dentro deste repositório.
 
-Ele mantém somente os arquivos próprios do Safe Woman OS e a integração planejada com o aplicativo Mulher Amparada.
+Ele mantém somente os arquivos próprios do Safe Woman OS e a integração planejada com o aplicativo Mulher Amparada
+
+Link:
+https://github.com/mulher-amparada/mulher-amparada-app/tree/main/Safe%20Woman%20Operational%20System

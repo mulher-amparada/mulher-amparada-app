@@ -133,7 +133,16 @@ jobs:
       - name: Iniciar Android
         shell: bash
         run: |
+          set -e
+
           mkdir -p simulation
+
+          echo "===== VERIFICANDO ADB ====="
+          command -v adb
+          adb version
+
+          echo
+          echo "===== INICIANDO EMULADOR ====="
 
           nohup emulator \
             -avd SafeWomanOS \
@@ -145,26 +154,93 @@ jobs:
             -no-snapshot \
             > simulation/emulator.log 2>&1 &
 
-          echo $! > simulation/emulator.pid
+          EMULATOR_PID=$!
+          echo "$EMULATOR_PID" > simulation/emulator.pid
 
-          adb wait-for-device
+          echo "PID do emulador: $EMULATOR_PID"
 
-          echo "Aguardando boot..."
+          echo
+          echo "===== AGUARDANDO ADB ====="
 
-          for i in {1..90}; do
+          for i in {1..60}; do
+            if adb get-state >/dev/null 2>&1; then
+              echo "ADB detectou o emulador."
+              break
+            fi
+
+            if ! kill -0 "$EMULATOR_PID" 2>/dev/null; then
+              echo "::error::O processo do emulador encerrou antes de o ADB detectá-lo."
+              echo
+              echo "===== LOG DO EMULADOR ====="
+              cat simulation/emulator.log || true
+              exit 1
+            fi
+
+            echo "ADB ainda não detectou o emulador... tentativa $i/60"
+            sleep 2
+          done
+
+          if ! adb get-state >/dev/null 2>&1; then
+            echo "::error::ADB não detectou o emulador após 120 segundos."
+
+            echo
+            echo "===== PROCESSO ====="
+            ps -ef | grep -E "[e]mulator|[q]emu" || true
+
+            echo
+            echo "===== DISPOSITIVOS ADB ====="
+            adb devices -l || true
+
+            echo
+            echo "===== LOG DO EMULADOR ====="
+            cat simulation/emulator.log || true
+
+            exit 1
+          fi
+
+          echo
+          echo "===== AGUARDANDO BOOT DO ANDROID ====="
+
+          for i in {1..120}; do
             BOOT="$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')"
 
+            echo "Boot: ${BOOT:-aguardando} — tentativa $i/120"
+
             if [ "$BOOT" = "1" ]; then
-              echo "Android iniciou."
+              echo
+              echo "Android iniciou corretamente."
               break
+            fi
+
+            if ! kill -0 "$EMULATOR_PID" 2>/dev/null; then
+              echo "::error::O emulador encerrou durante o boot."
+
+              echo
+              echo "===== LOG DO EMULADOR ====="
+              cat simulation/emulator.log || true
+
+              exit 1
             fi
 
             sleep 2
           done
 
-          if [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" != "1" ]; then
-            echo "::error::Android não terminou o boot."
+          if [ "$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" != "1" ]; then
+            echo "::error::Android não terminou o boot após 240 segundos."
+
+            echo
+            echo "===== DISPOSITIVOS ADB ====="
+            adb devices -l || true
+
+            echo
+            echo "===== PROPRIEDADES ====="
+            adb shell getprop sys.boot_completed || true
+            adb shell getprop dev.bootcomplete || true
+
+            echo
+            echo "===== LOG DO EMULADOR ====="
             cat simulation/emulator.log || true
+
             exit 1
           fi
 

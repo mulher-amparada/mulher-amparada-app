@@ -6,6 +6,8 @@ android_app {
     srcs: [
         "app/src/main/java/**/*.kt",
         "app/src/main/java/**/*.java",
+        "app/src/main/kotlin/**/*.kt",
+        "app/src/main/kotlin/**/*.java",
     ],
 
     resource_dirs: [
@@ -14,11 +16,21 @@ android_app {
 
     privileged: true,
 
-    platform_apis: true,
+    sdk_version: "current",
 
-    certificate: "platform",
+    min_sdk_version: "23",
 
     kotlincflags: [
         "-jvm-target 17",
     ],
+
+    optimize: {
+        enabled: true,
+        shrink: true,
+        obfuscate: true,
+        shrink_resources: true,
+        proguard_flags_files: [
+            "app/proguard-rules.pro",
+        ],
+    },
 }

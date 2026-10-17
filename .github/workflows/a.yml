@@ -1,4 +1,4 @@
-name: Boot do Safe Woman OS e Screenshot
+name: Simular Safe Woman OS
 
 on:
   workflow_dispatch:
@@ -8,357 +8,336 @@ permissions:
   actions: write
 
 jobs:
-  build-and-boot:
-    name: Compilar, iniciar e capturar o OS
+  simulate:
+    name: Android virtual + app privilegiado
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
+    timeout-minutes: 30
 
     steps:
-      - name: Checkout completo
+      - name: Checkout
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - name: Verificar estrutura do OS
+      - name: Instalar Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Instalar ferramentas Android
+        shell: bash
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+
+          sdkmanager --install \
+            "platform-tools" \
+            "platforms;android-35" \
+            "build-tools;35.0.0" \
+            "emulator" \
+            "system-images;android-35;default;x86_64"
+
+      - name: Encontrar projeto Gradle
+        id: project
         shell: bash
         run: |
           set -e
 
-          OS_DIR="Safe Woman Operational System"
-
-          if [ ! -d "$OS_DIR" ]; then
-            echo "::error::Diretório '$OS_DIR' não encontrado."
-            exit 1
-          fi
-
-          echo "Diretório do OS:"
-          pwd
-          echo
-
-          echo "Estrutura:"
-          ls -la "$OS_DIR"
-
-          echo
-          echo "Android build:"
-          ls -la "$OS_DIR"/build/envsetup.sh \
-            "$OS_DIR"/build/soong \
-            "$OS_DIR"/packages/apps/MulherAmparada \
-            2>/dev/null || true
-
-      - name: Instalar dependências
-        run: |
-          sudo apt-get update
-
-          sudo apt-get install -y \
-            adb \
-            bc \
-            bison \
-            build-essential \
-            ccache \
-            curl \
-            flex \
-            g++-multilib \
-            gcc-multilib \
-            git \
-            gnupg \
-            gperf \
-            imagemagick \
-            lib32ncurses6 \
-            lib32z1 \
-            libelf-dev \
-            liblz4-tool \
-            libncurses6 \
-            libncurses-dev \
-            libssl-dev \
-            lzop \
-            pngcrush \
-            rsync \
-            schedtool \
-            squashfs-tools \
-            unzip \
-            xsltproc \
-            zip \
-            zlib1g-dev \
-            qemu-system-x86 \
-            qemu-utils \
-            xvfb
-
-      - name: Configurar Git
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-
-      - name: Configurar ccache
-        run: |
-          ccache --max-size=5G
-          ccache --zero-stats
-
-      - name: Cache do ccache
-        uses: actions/cache@v4
-        with:
-          path: ~/.ccache
-          key: safe-woman-os-ccache-${{ runner.os }}-${{ github.ref_name }}
-          restore-keys: |
-            safe-woman-os-ccache-${{ runner.os }}-
-
-      - name: Preparar ambiente Android
-        working-directory: Safe Woman Operational System
-        shell: bash
-        run: |
-          set -e
-
-          if [ ! -f build/envsetup.sh ]; then
-            echo "::error::build/envsetup.sh não existe."
-            exit 1
-          fi
-
-          source build/envsetup.sh
-
-          echo "Ambiente Android carregado."
-
-      - name: Detectar targets disponíveis
-        working-directory: Safe Woman Operational System
-        shell: bash
-        run: |
-          set -e
-
-          source build/envsetup.sh
-
-          lunch --help || true
-
-          echo
-          echo "Targets encontrados no código:"
-          find device vendor product -type f \
-            \( -name "AndroidProducts.mk" -o -name "*_device.mk" \) \
-            2>/dev/null | head -100 || true
-
-      - name: Selecionar target
-        working-directory: Safe Woman Operational System
-        shell: bash
-        run: |
-          set -e
-
-          source build/envsetup.sh
-
-          # Tenta localizar automaticamente um target x86_64.
-          TARGET="$(
-            find device vendor product \
-              -type f \
-              \( -name "AndroidProducts.mk" -o -name "*_device.mk" \) \
-              -print 2>/dev/null |
-            grep -Ei 'x86_64|goldfish|ranchu|emu' |
-            head -1 || true
-          )"
-
-          if [ -z "$TARGET" ]; then
-            echo "::warning::Nenhum target x86_64 de emulador foi detectado automaticamente."
-            echo "O código precisa possuir um target Android compatível com QEMU."
-            exit 1
-          fi
-
-          echo "Arquivo de target:"
-          echo "$TARGET"
-
-          # Extrai o diretório e tenta descobrir um produto.
-          DIR="$(dirname "$TARGET")"
-
-          PRODUCT="$(
-            grep -hE 'PRODUCT_NAME[[:space:]]*[:?+]?=' \
-              "$DIR"/*.mk 2>/dev/null |
-            sed -E 's/.*PRODUCT_NAME[[:space:]]*[:?+]?=[[:space:]]*//' |
-            head -1 |
-            tr -d '[:space:]'
-          )"
-
-          if [ -z "$PRODUCT" ]; then
-            echo "::error::Não foi possível descobrir PRODUCT_NAME."
-            exit 1
-          fi
-
-          echo "Produto detectado: $PRODUCT"
-          echo "PRODUCT=$PRODUCT" >> "$GITHUB_ENV"
-
-      - name: Compilar imagem do OS
-        working-directory: Safe Woman Operational System
-        shell: bash
-        run: |
-          set -e
-
-          source build/envsetup.sh
-
-          lunch "${PRODUCT}-userdebug"
-
-          echo "Compilando $PRODUCT..."
-
-          m -j"$(nproc)" \
-            bootimage \
-            systemimage \
-            vendorimage \
-            userdataimage
-
-      - name: Localizar imagens geradas
-        id: images
-        working-directory: Safe Woman Operational System
-        shell: bash
-        run: |
-          set -e
-
-          echo "Imagens geradas:"
-          find out/target/product \
+          GRADLEW="$(find "Safe Woman Operational System" \
             -type f \
-            \( \
-              -name "system.img" \
-              -o -name "vendor.img" \
-              -o -name "userdata.img" \
-              -o -name "boot.img" \
-              -o -name "super.img" \
-              -o -name "*.qcow2" \
-              -o -name "*.img" \
-            \) \
-            -print
-
-          PRODUCT_OUT="$(find out/target/product \
-            -maxdepth 2 \
-            -type d \
-            -name "$PRODUCT" \
+            -name gradlew \
             -print -quit)"
 
-          if [ -z "$PRODUCT_OUT" ]; then
-            echo "::error::Diretório de saída do produto não encontrado."
+          if [ -z "$GRADLEW" ]; then
+            echo "::error::gradlew não encontrado."
             exit 1
           fi
 
-          echo "PRODUCT_OUT=$PRODUCT_OUT" >> "$GITHUB_ENV"
+          PROJECT_DIR="$(dirname "$GRADLEW")"
 
-      - name: Preparar imagem para QEMU
+          echo "Projeto: $PROJECT_DIR"
+          echo "dir=$PROJECT_DIR" >> "$GITHUB_OUTPUT"
+
+      - name: Compilar APK
+        working-directory: ${{ steps.project.outputs.dir }}
+        shell: bash
+        run: |
+          chmod +x gradlew
+
+          ./gradlew assembleDebug --stacktrace
+
+      - name: Encontrar APK
+        id: apk
+        working-directory: ${{ steps.project.outputs.dir }}
         shell: bash
         run: |
           set -e
 
-          mkdir -p boot-output
+          APK="$(find . \
+            -type f \
+            -name '*.apk' \
+            -path '*/build/outputs/*' \
+            -print -quit)"
 
-          echo "Produto:"
-          echo "$PRODUCT"
-
-          echo "Diretório:"
-          echo "$PRODUCT_OUT"
-
-          ls -lah "$PRODUCT_OUT"
-
-          if [ -f "$PRODUCT_OUT/emulator" ]; then
-            cp "$PRODUCT_OUT/emulator" boot-output/
+          if [ -z "$APK" ]; then
+            echo "::error::APK não encontrado."
+            find . -type f -name '*.apk' -print
+            exit 1
           fi
 
-          if [ -f "$PRODUCT_OUT/system.img" ]; then
-            cp "$PRODUCT_OUT/system.img" boot-output/
-          fi
+          echo "APK: $APK"
+          echo "path=$PWD/$APK" >> "$GITHUB_OUTPUT"
 
-          if [ -f "$PRODUCT_OUT/vendor.img" ]; then
-            cp "$PRODUCT_OUT/vendor.img" boot-output/
-          fi
-
-          if [ -f "$PRODUCT_OUT/userdata.img" ]; then
-            cp "$PRODUCT_OUT/userdata.img" boot-output/
-          fi
-
-          if [ -f "$PRODUCT_OUT/boot.img" ]; then
-            cp "$PRODUCT_OUT/boot.img" boot-output/
-          fi
-
-      - name: Verificar suporte ao QEMU
+      - name: Criar AVD
         shell: bash
         run: |
           set -e
 
-          qemu-system-x86_64 --version
+          echo "no" | avdmanager create avd \
+            --force \
+            --name SafeWomanOS \
+            --package "system-images;android-35;default;x86_64" \
+            --device "pixel_2"
+
+      - name: Iniciar Android
+        shell: bash
+        run: |
+          mkdir -p simulation
+
+          nohup emulator \
+            -avd SafeWomanOS \
+            -no-window \
+            -no-audio \
+            -no-boot-anim \
+            -gpu swiftshader_indirect \
+            -wipe-data \
+            -no-snapshot \
+            > simulation/emulator.log 2>&1 &
+
+          echo $! > simulation/emulator.pid
+
+          adb wait-for-device
+
+          echo "Aguardando boot..."
+
+          for i in {1..90}; do
+            BOOT="$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')"
+
+            if [ "$BOOT" = "1" ]; then
+              echo "Android iniciou."
+              break
+            fi
+
+            sleep 2
+          done
+
+          if [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" != "1" ]; then
+            echo "::error::Android não terminou o boot."
+            cat simulation/emulator.log || true
+            exit 1
+          fi
+
+      - name: Obter acesso root
+        shell: bash
+        run: |
+          set -e
+
+          adb root
+
+          sleep 3
+
+          adb wait-for-device
+
+          echo "UID:"
+          adb shell id
+
+      - name: Tornar /system gravável
+        shell: bash
+        run: |
+          set -e
+
+          adb disable-verity || true
+          adb reboot
+
+          adb wait-for-device
+
+          for i in {1..60}; do
+            if [ "$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = "1" ]; then
+              break
+            fi
+            sleep 2
+          done
+
+          adb root
+          sleep 3
+
+          adb remount
+
+          echo "Montagem:"
+          adb shell mount | grep system || true
+
+      - name: Instalar como aplicativo privilegiado
+        shell: bash
+        run: |
+          set -e
+
+          APK="${{ steps.apk.outputs.path }}"
+
+          adb shell mkdir -p /system/priv-app/MulherAmparada
+
+          adb push "$APK" \
+            /system/priv-app/MulherAmparada/MulherAmparada.apk
+
+          adb shell chmod 755 \
+            /system/priv-app/MulherAmparada
+
+          adb shell chmod 644 \
+            /system/priv-app/MulherAmparada/MulherAmparada.apk
+
+          echo "APK colocado em /system/priv-app."
+
+      - name: Reiniciar Android
+        shell: bash
+        run: |
+          adb reboot
+
+          adb wait-for-device
+
+          for i in {1..90}; do
+            BOOT="$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')"
+
+            if [ "$BOOT" = "1" ]; then
+              echo "Android iniciou novamente."
+              break
+            fi
+
+            sleep 2
+          done
+
+          if [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" != "1" ]; then
+            echo "::error::Android não terminou o segundo boot."
+            exit 1
+          fi
+
+      - name: Verificar se é aplicativo do sistema
+        shell: bash
+        run: |
+          set -e
+
+          mkdir -p simulation
+
+          adb shell pm path com.mulheres \
+            | tee simulation/pm-path.txt
+
+          adb shell dumpsys package com.mulheres \
+            | tee simulation/package-info.txt
 
           echo
-          echo "Imagens disponíveis para boot:"
-          ls -lah boot-output
+          echo "===== SYSTEM APPS ====="
 
-      - name: Iniciar QEMU
-        shell: bash
-        run: |
-          set -e
+          adb shell pm list packages -s \
+            | tee simulation/system-packages.txt
 
-          mkdir -p boot-output
+          echo
+          echo "===== PRIV-APP ====="
 
-          if [ ! -f boot-output/system.img ]; then
-            echo "::error::system.img não foi gerado."
+          adb shell pm path com.mulheres \
+            | grep '/system/priv-app/' \
+            | tee simulation/priv-app-check.txt
+
+          if ! grep -q '/system/priv-app/' simulation/priv-app-check.txt; then
+            echo "::error::Mulher Amparada NÃO está em /system/priv-app."
             exit 1
           fi
 
-          # Cria um disco de usuário para o QEMU.
-          qemu-img create \
-            -f qcow2 \
-            boot-output/userdata.qcow2 \
-            4G
+          echo "OK: Mulher Amparada é priv-app."
 
-          qemu-system-x86_64 \
-            -enable-kvm \
-            -m 2048 \
-            -smp 2 \
-            -machine q35 \
-            -drive file=boot-output/system.img,format=raw,if=virtio,readonly=on \
-            -drive file=boot-output/userdata.qcow2,format=qcow2,if=virtio \
-            -display gtk \
-            -serial file:boot-output/serial.log \
-            -monitor stdio \
-            -no-reboot \
-            -no-shutdown \
-            > boot-output/qemu.log 2>&1 &
-
-          echo $! > boot-output/qemu.pid
-
-          echo "QEMU iniciado."
-          sleep 15
-
-      - name: Capturar screenshot
+      - name: Verificar permissões
         shell: bash
         run: |
           set -e
 
-          mkdir -p boot-output
+          adb shell dumpsys package com.mulheres \
+            > simulation/permissions.txt
 
-          echo "Capturando tela..."
+          echo "===== PERMISSÕES DO APLICATIVO ====="
 
-          # Captura a tela do desktop virtual.
-          DISPLAY=:99 \
-          import \
-            -window root \
-            boot-output/boot-screenshot.png \
-            2>/dev/null || true
+          grep -A100 -B10 \
+            "requested permissions" \
+            simulation/permissions.txt \
+            || true
 
-          if [ ! -f boot-output/boot-screenshot.png ]; then
-            echo "::warning::Screenshot não pôde ser capturado."
+          echo
+          echo "===== PERMISSÕES PRIVILEGIADAS ====="
+
+          grep -Ei \
+            "granted=true|privileged|INSTALL|LOCATION|RECORD_AUDIO|READ_CONTACTS|CALL_PHONE" \
+            simulation/permissions.txt \
+            || true
+
+      - name: Capturar tela inicial
+        shell: bash
+        run: |
+          mkdir -p simulation
+
+          adb exec-out screencap -p \
+            > simulation/boot-screenshot.png
+
+      - name: Abrir gaveta de aplicativos
+        shell: bash
+        run: |
+          # Garante que o launcher esteja na tela.
+          adb shell input keyevent KEYCODE_HOME
+
+          sleep 3
+
+          # Desliza de baixo para cima para abrir a gaveta.
+          adb shell input swipe \
+            540 1800 \
+            540 500 \
+            700
+
+          sleep 3
+
+          adb exec-out screencap -p \
+            > simulation/app-drawer.png
+
+      - name: Verificar presença na gaveta
+        shell: bash
+        run: |
+          adb shell pm list packages \
+            | tee simulation/all-packages.txt
+
+          if grep -q "com.mulheres" simulation/all-packages.txt; then
+            echo "Mulher Amparada está instalada."
           else
-            file boot-output/boot-screenshot.png
-            identify boot-output/boot-screenshot.png || true
+            echo "::error::Mulher Amparada não está instalada."
+            exit 1
           fi
 
-      - name: Encerrar QEMU
+      - name: Informações finais
         if: always()
         shell: bash
         run: |
-          if [ -f boot-output/qemu.pid ]; then
-            kill "$(cat boot-output/qemu.pid)" 2>/dev/null || true
-          fi
-
-      - name: Mostrar logs
-        if: always()
-        run: |
-          echo "===== QEMU LOG ====="
-          cat boot-output/qemu.log 2>/dev/null || true
+          echo "===== PACOTE ====="
+          adb shell dumpsys package com.mulheres || true
 
           echo
-          echo "===== SERIAL ====="
-          cat boot-output/serial.log 2>/dev/null || true
+          echo "===== CAMINHO ====="
+          adb shell pm path com.mulheres || true
 
-      - name: Publicar resultado
+          echo
+          echo "===== BOOT ====="
+          adb shell getprop sys.boot_completed || true
+
+      - name: Parar emulador
+        if: always()
+        run: |
+          if [ -f simulation/emulator.pid ]; then
+            kill "$(cat simulation/emulator.pid)" 2>/dev/null || true
+          fi
+
+      - name: Publicar resultados
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: Safe-Woman-OS-Boot
-          path: |
-            boot-output/
+          name: Safe-Woman-OS-Simulacao
+          path: simulation/
           if-no-files-found: warn

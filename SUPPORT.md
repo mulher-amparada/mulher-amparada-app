@@ -1,4 +1,4 @@
-# 🔗 Suporte, redes sociais e referências — Mulher Amparada:÷
+# 🔗 Suporte, redes sociais e referências — Mulher Amparada:
 
 Central de links oficiais, divulgação e referências públicas do projeto Mulher Amparada.
 

@@ -326,6 +326,10 @@ ele aoenas chama outro workflow que pega todo o codigo-fonte do app do mulher am
 
 O publicador utiliza os Secrets "MULHER_AMPARADA_APP_ID", "MULHER_AMPARADA_INSTALLATION_ID" e "MULHER_AMPARADA_PRIVATE_KEY" para autenticação.
 
+simular-os:
+
+executa o simular-os.yml, vocês entenderão dele no final!
+
 executar-dependabot-maintenance:
 
 ele executa o workflow que faz uma solicitação para disparar o dependabot!

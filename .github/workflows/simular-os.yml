@@ -224,6 +224,10 @@ jobs:
 
           cd "$TMP_LP"
 
+          echo "===== CORRIGINDO UTILITY.CPP ====="
+
+          sed -i '1i#include <algorithm>' liblp/utility.cpp
+
           echo "===== COMPILANDO ANDROID LP TOOLS ====="
 
           chmod +x make.sh
@@ -232,17 +236,9 @@ jobs:
 
           echo "===== INSTALANDO ====="
 
-          sudo install -m 0755 \
-            bin/lpunpack \
-            /usr/local/bin/lpunpack
-
-          sudo install -m 0755 \
-            bin/lpdump \
-            /usr/local/bin/lpdump
-
-          sudo install -m 0755 \
-            bin/lpmake \
-            /usr/local/bin/lpmake
+          sudo install -m 0755 bin/lpunpack /usr/local/bin/lpunpack
+          sudo install -m 0755 bin/lpdump /usr/local/bin/lpdump
+          sudo install -m 0755 bin/lpmake /usr/local/bin/lpmake
 
           echo "===== EXECUTANDO ====="
 

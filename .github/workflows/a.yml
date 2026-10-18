@@ -225,6 +225,7 @@ jobs:
             -no-audio \
             -no-boot-anim \
             -gpu swiftshader_indirect \
+            -writable-system \
             -wipe-data \
             -no-snapshot \
             > simulation/emulator.log 2>&1 &
@@ -388,23 +389,41 @@ jobs:
           echo
           echo "===== ROOT ====="
 
-          adb root
+          ROOT_OK=false
+
+          for i in {1..10}; do
+            echo "Tentativa de adb root: $i/10"
+
+            if adb root; then
+              ROOT_OK=true
+              break
+            fi
+
+            sleep 3
+          done
+
+          if [ "$ROOT_OK" != "true" ]; then
+            echo "::error::Não foi possível obter root."
+
+            adb devices -l || true
+            adb shell id || true
+
+            exit 1
+          fi
+
+          echo
+          echo "===== AGUARDANDO ADB ROOT ====="
 
           sleep 5
 
           adb wait-for-device
 
           echo
-          echo "===== DISPOSITIVO ====="
-
-          adb devices -l
-
-          echo
           echo "===== UID ====="
 
           adb shell id
 
-      - name: Preparar sistema para escrita
+      - name: Tornar system gravável
         shell: bash
         run: |
           set -e
@@ -416,63 +435,6 @@ jobs:
           sleep 5
 
           adb wait-for-device
-
-          echo
-          echo "===== DESABILITANDO VERITY ====="
-
-          if adb disable-verity; then
-            echo "disable-verity executado."
-          else
-            echo "::warning::disable-verity não foi aceito pela imagem."
-            echo "Continuando para testar o remount."
-          fi
-
-          echo
-          echo "===== REBOOT PARA APLICAR ALTERAÇÕES ====="
-
-          adb reboot
-
-          adb wait-for-device
-
-          BOOT_COMPLETED=false
-
-          for i in {1..120}; do
-            BOOT="$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')"
-
-            echo "Boot: ${BOOT:-aguardando} — tentativa $i/120"
-
-            if [ "$BOOT" = "1" ]; then
-              BOOT_COMPLETED=true
-              break
-            fi
-
-            sleep 2
-          done
-
-          if [ "$BOOT_COMPLETED" != "true" ]; then
-            echo "::error::Android não terminou o boot após a alteração de verity."
-
-            echo
-            echo "===== LOG ====="
-
-            cat simulation/emulator.log || true
-
-            exit 1
-          fi
-
-          echo
-          echo "===== ROOT NOVAMENTE ====="
-
-          adb root
-
-          sleep 5
-
-          adb wait-for-device
-
-          echo
-          echo "===== UID ====="
-
-          adb shell id
 
           echo
           echo "===== REMOUNT ====="
@@ -488,11 +450,16 @@ jobs:
             adb shell mount || true
 
             echo
-            echo "===== PROPRIEDADES DE BUILD ====="
+            echo "===== PROPRIEDADES ====="
 
             adb shell getprop ro.build.type || true
             adb shell getprop ro.debuggable || true
             adb shell getprop ro.boot.verifiedbootstate || true
+
+            echo
+            echo "===== LOG DO EMULADOR ====="
+
+            cat simulation/emulator.log || true
 
             exit 1
           fi
@@ -517,7 +484,7 @@ jobs:
           echo "$APK"
 
           if [ ! -f "$APK" ]; then
-            echo "::error::APK não existe no caminho informado."
+            echo "::error::APK não existe."
             exit 1
           fi
 
@@ -531,7 +498,7 @@ jobs:
           adb wait-for-device
 
           echo
-          echo "===== CRIANDO DIRETÓRIO PRIV-APP ====="
+          echo "===== CRIANDO PRIV-APP ====="
 
           adb shell mkdir -p \
             /system/priv-app/MulherAmparada
@@ -544,7 +511,7 @@ jobs:
             /system/priv-app/MulherAmparada/MulherAmparada.apk
 
           echo
-          echo "===== PERMISSÕES DO APK ====="
+          echo "===== PERMISSÕES ====="
 
           adb shell chmod 0644 \
             /system/priv-app/MulherAmparada/MulherAmparada.apk
@@ -553,10 +520,13 @@ jobs:
             /system/priv-app/MulherAmparada/MulherAmparada.apk
 
           echo
-          echo "===== ARQUIVO NO SYSTEM ====="
+          echo "===== ARQUIVO ====="
 
-          adb shell ls -l \
+          adb shell ls -la \
             /system/priv-app/MulherAmparada/
+
+          echo
+          echo "APK colocado em /system/priv-app."
 
           echo
           echo "===== REINICIANDO ANDROID ====="
@@ -630,7 +600,9 @@ jobs:
           fi
 
           echo
-          echo "OK: Mulher Amparada está em /system/priv-app."
+          echo "======================================"
+          echo " MULHER AMPARADA É PRIV-APP"
+          echo "======================================"
 
       - name: Verificar permissões
         shell: bash
@@ -659,8 +631,6 @@ jobs:
         shell: bash
         run: |
           set -e
-
-          mkdir -p simulation
 
           adb exec-out screencap -p \
             > simulation/boot-screenshot.png

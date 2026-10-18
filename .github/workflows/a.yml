@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   simulate:
-    name: Android virtual + app privilegiado
+    name: Android virtual + system.img modificada
     runs-on: ubuntu-24.04
     timeout-minutes: 30
 
@@ -23,9 +23,6 @@ jobs:
         shell: bash
         run: |
           set -e
-
-          echo "ANDROID_HOME=$ANDROID_HOME"
-          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
 
           SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
 
@@ -41,17 +38,8 @@ jobs:
 
           if [ -z "$CMDLINE_TOOLS" ]; then
             echo "::error::sdkmanager não encontrado."
-
-            echo "Conteúdo de cmdline-tools:"
-            find "$SDK/cmdline-tools" \
-              -maxdepth 4 \
-              -type f \
-              -print || true
-
             exit 1
           fi
-
-          echo "sdkmanager: $CMDLINE_TOOLS"
 
           echo "$(dirname "$CMDLINE_TOOLS")" >> "$GITHUB_PATH"
 
@@ -117,16 +105,10 @@ jobs:
 
           if [ -z "$APK" ]; then
             echo "::error::APK não encontrado."
-
-            find . \
-              -type f \
-              -name '*.apk' \
-              -print || true
-
             exit 1
           fi
 
-          echo "APK: $APK"
+          echo "APK: $PWD/$APK"
           echo "path=$PWD/$APK" >> "$GITHUB_OUTPUT"
 
       - name: Criar AVD
@@ -138,44 +120,247 @@ jobs:
 
           mkdir -p "$ANDROID_AVD_HOME"
 
-          echo "ANDROID_AVD_HOME=$ANDROID_AVD_HOME"
-
           echo "no" | avdmanager create avd \
             --force \
             --name SafeWomanOS \
             --package "system-images;android-35;aosp_atd;x86_64" \
             --device "pixel_2"
 
-          echo
-          echo "===== AVDs DISPONÍVEIS ====="
-
           emulator -list-avds
 
           if ! emulator -list-avds | grep -qx "SafeWomanOS"; then
-            echo "::error::AVD SafeWomanOS não foi criado corretamente."
+            echo "::error::AVD SafeWomanOS não foi criado."
+            exit 1
+          fi
 
-            echo
-            echo "===== CONTEÚDO DO AVD ====="
+      - name: Localizar system.img
+        id: system
+        shell: bash
+        run: |
+          set -e
 
-            find "$ANDROID_AVD_HOME" \
-              -maxdepth 3 \
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+
+          SYSTEM_IMAGE_DIR="$SDK/system-images/android-35/aosp_atd/x86_64"
+
+          echo "Diretório:"
+          echo "$SYSTEM_IMAGE_DIR"
+
+          if [ ! -d "$SYSTEM_IMAGE_DIR" ]; then
+            echo "::error::Diretório da system image não encontrado."
+            exit 1
+          fi
+
+          echo
+          echo "===== CONTEÚDO ====="
+
+          find "$SYSTEM_IMAGE_DIR" \
+            -maxdepth 2 \
+            -type f \
+            -print
+
+          SYSTEM_IMG="$SYSTEM_IMAGE_DIR/system.img"
+
+          if [ ! -f "$SYSTEM_IMG" ]; then
+            echo "::error::system.img não encontrada."
+
+            find "$SYSTEM_IMAGE_DIR" \
               -type f \
-              -print || true
+              -name '*.img' \
+              -print
 
             exit 1
           fi
 
-          echo "AVD SafeWomanOS criado com sucesso."
+          echo
+          echo "system.img:"
+          ls -lh "$SYSTEM_IMG"
+
+          echo "path=$SYSTEM_IMG" >> "$GITHUB_OUTPUT"
+
+      - name: Instalar ferramentas de imagem
+        shell: bash
+        run: |
+          set -e
+
+          sudo apt-get update
+
+          sudo apt-get install -y \
+            e2fsprogs \
+            android-sdk-libsparse-utils
+
+          command -v debugfs
+          command -v file
+          command -v simg2img
+          command -v img2simg
+
+      - name: Modificar system.img
+        shell: bash
+        run: |
+          set -e
+
+          mkdir -p simulation/image
+
+          ORIGINAL_SYSTEM="${{ steps.system.outputs.path }}"
+          APK="${{ steps.apk.outputs.path }}"
+
+          cp "$ORIGINAL_SYSTEM" \
+            simulation/image/system-original.img
+
+          echo
+          echo "===== TIPO DA SYSTEM IMAGE ====="
+
+          file "$ORIGINAL_SYSTEM"
+
+          echo
+          echo "===== TAMANHO ORIGINAL ====="
+
+          ls -lh "$ORIGINAL_SYSTEM"
+
+          echo
+          echo "===== PREPARANDO IMAGEM ====="
+
+          if file "$ORIGINAL_SYSTEM" | grep -qi "Android sparse image"; then
+
+            echo "Imagem sparse detectada."
+
+            simg2img \
+              "$ORIGINAL_SYSTEM" \
+              simulation/image/system.raw.img
+
+          else
+
+            echo "Imagem não-sparse detectada."
+
+            cp \
+              "$ORIGINAL_SYSTEM" \
+              simulation/image/system.raw.img
+
+          fi
+
+          echo
+          echo "===== SISTEMA DE ARQUIVOS ====="
+
+          file simulation/image/system.raw.img
+
+          echo
+          echo "===== VERIFICANDO EXT4 ====="
+
+          if ! sudo e2fsck -fn \
+            simulation/image/system.raw.img; then
+
+            echo "::warning::e2fsck retornou código diferente de zero."
+          fi
+
+          echo
+          echo "===== CRIANDO DIRETÓRIOS ====="
+
+          sudo debugfs -w \
+            -R "mkdir /priv-app" \
+            simulation/image/system.raw.img \
+            || true
+
+          sudo debugfs -w \
+            -R "mkdir /priv-app/MulherAmparada" \
+            simulation/image/system.raw.img
+
+          echo
+          echo "===== INSERINDO APK ====="
+
+          sudo debugfs -w \
+            -R "write $APK /priv-app/MulherAmparada/MulherAmparada.apk" \
+            simulation/image/system.raw.img
+
+          echo
+          echo "===== VERIFICANDO APK ====="
+
+          sudo debugfs \
+            -R "ls -l /priv-app/MulherAmparada" \
+            simulation/image/system.raw.img
+
+          echo
+          echo "===== AJUSTANDO PERMISSÕES ====="
+
+          sudo debugfs -w \
+            -R "set_inode_field /priv-app/MulherAmparada/MulherAmparada.apk mode 0100644" \
+            simulation/image/system.raw.img
+
+          sudo debugfs -w \
+            -R "set_inode_field /priv-app/MulherAmparada/MulherAmparada.apk uid 0" \
+            simulation/image/system.raw.img
+
+          sudo debugfs -w \
+            -R "set_inode_field /priv-app/MulherAmparada/MulherAmparada.apk gid 0" \
+            simulation/image/system.raw.img
+
+          echo
+          echo "===== VERIFICAÇÃO FINAL DA IMAGEM ====="
+
+          sudo debugfs \
+            -R "ls -l /priv-app/MulherAmparada" \
+            simulation/image/system.raw.img
+
+          echo
+          echo "===== RECRIANDO SYSTEM.IMG ====="
+
+          if file "$ORIGINAL_SYSTEM" | grep -qi "Android sparse image"; then
+
+            img2simg \
+              simulation/image/system.raw.img \
+              simulation/image/system.img
+
+          else
+
+            cp \
+              simulation/image/system.raw.img \
+              simulation/image/system.img
+
+          fi
+
+          echo
+          echo "===== SYSTEM.IMG MODIFICADA ====="
+
+          ls -lh \
+            simulation/image/system.img
+
+      - name: Substituir system.img do AVD
+        shell: bash
+        run: |
+          set -e
+
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+
+          SYSTEM_IMAGE_DIR="$SDK/system-images/android-35/aosp_atd/x86_64"
+
+          MODIFIED="simulation/image/system.img"
+
+          if [ ! -f "$MODIFIED" ]; then
+            echo "::error::system.img modificada não encontrada."
+            exit 1
+          fi
+
+          echo "Substituindo:"
+          echo "$SYSTEM_IMAGE_DIR/system.img"
+
+          cp \
+            "$MODIFIED" \
+            "$SYSTEM_IMAGE_DIR/system.img"
+
+          echo
+          echo "===== SYSTEM IMAGE FINAL ====="
+
+          ls -lh \
+            "$SYSTEM_IMAGE_DIR/system.img"
+
+          echo
+          echo "===== AVD ====="
+
+          emulator -list-avds
 
       - name: Configurar aceleração KVM
         shell: bash
         run: |
           set -e
-
-          echo "===== KVM ====="
-
-          ls -l /dev/kvm || true
-          groups || true
 
           if [ -e /dev/kvm ]; then
             sudo chmod 666 /dev/kvm || true
@@ -183,13 +368,7 @@ jobs:
 
           ls -l /dev/kvm || true
 
-          if [ -r /dev/kvm ] && [ -w /dev/kvm ]; then
-            echo "KVM disponível."
-          else
-            echo "::warning::KVM não está disponível para o usuário."
-          fi
-
-      - name: Iniciar Android
+      - name: Iniciar Safe Woman OS
         shell: bash
         run: |
           set -e
@@ -198,34 +377,12 @@ jobs:
 
           export ANDROID_AVD_HOME="$HOME/.android/avd"
 
-          echo "ANDROID_AVD_HOME=$ANDROID_AVD_HOME"
-
-          echo
-          echo "===== AVDs DISPONÍVEIS ====="
-
-          emulator -list-avds
-
-          if ! emulator -list-avds | grep -qx "SafeWomanOS"; then
-            echo "::error::AVD SafeWomanOS não está disponível."
-            exit 1
-          fi
-
-          echo
-          echo "===== ADB ====="
-
-          command -v adb
-          adb version
-
-          echo
-          echo "===== INICIANDO EMULADOR ====="
-
           nohup emulator \
             -avd SafeWomanOS \
             -no-window \
             -no-audio \
             -no-boot-anim \
             -gpu swiftshader_indirect \
-            -writable-system \
             -wipe-data \
             -no-snapshot \
             > simulation/emulator.log 2>&1 &
@@ -234,7 +391,7 @@ jobs:
 
           echo "$EMULATOR_PID" > simulation/emulator.pid
 
-          echo "PID do emulador: $EMULATOR_PID"
+          echo "PID: $EMULATOR_PID"
 
           echo
           echo "===== AGUARDANDO ADB ====="
@@ -242,43 +399,29 @@ jobs:
           ADB_READY=false
 
           for i in {1..60}; do
+
             if adb get-state >/dev/null 2>&1; then
-              echo "ADB detectou o emulador."
               ADB_READY=true
+              echo "ADB disponível."
               break
             fi
 
             if ! kill -0 "$EMULATOR_PID" 2>/dev/null; then
-              echo "::error::O processo do emulador encerrou antes de o ADB detectá-lo."
-
-              echo
-              echo "===== LOG DO EMULADOR ====="
+              echo "::error::Emulador encerrou."
 
               cat simulation/emulator.log || true
 
               exit 1
             fi
 
-            echo "ADB ainda não detectou o emulador... tentativa $i/60"
+            echo "ADB aguardando — tentativa $i/60"
 
             sleep 2
+
           done
 
           if [ "$ADB_READY" != "true" ]; then
-            echo "::error::ADB não detectou o emulador após 120 segundos."
-
-            echo
-            echo "===== PROCESSOS ====="
-
-            ps -ef | grep -E "[e]mulator|[q]emu" || true
-
-            echo
-            echo "===== DISPOSITIVOS ADB ====="
-
-            adb devices -l || true
-
-            echo
-            echo "===== LOG DO EMULADOR ====="
+            echo "::error::ADB não ficou disponível."
 
             cat simulation/emulator.log || true
 
@@ -286,230 +429,12 @@ jobs:
           fi
 
           echo
-          echo "===== AGUARDANDO BOOT DO ANDROID ====="
+          echo "===== BOOT ====="
 
           BOOT_COMPLETED=false
 
           for i in {1..120}; do
-            BOOT="$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')"
 
-            echo "Boot: ${BOOT:-aguardando} — tentativa $i/120"
-
-            if [ "$BOOT" = "1" ]; then
-              echo
-              echo "Android iniciou corretamente."
-
-              BOOT_COMPLETED=true
-
-              break
-            fi
-
-            if ! kill -0 "$EMULATOR_PID" 2>/dev/null; then
-              echo "::error::O emulador encerrou durante o boot."
-
-              echo
-              echo "===== LOG DO EMULADOR ====="
-
-              cat simulation/emulator.log || true
-
-              exit 1
-            fi
-
-            sleep 2
-          done
-
-          if [ "$BOOT_COMPLETED" != "true" ]; then
-            echo "::error::Android não terminou o boot após 240 segundos."
-
-            echo
-            echo "===== DISPOSITIVOS ADB ====="
-
-            adb devices -l || true
-
-            echo
-            echo "===== PROPRIEDADES ====="
-
-            adb shell getprop sys.boot_completed || true
-            adb shell getprop dev.bootcomplete || true
-
-            echo
-            echo "===== PROCESSOS ====="
-
-            ps -ef | grep -E "[e]mulator|[q]emu" || true
-
-            echo
-            echo "===== LOG DO EMULADOR ====="
-
-            cat simulation/emulator.log || true
-
-            exit 1
-          fi
-
-          echo
-          echo "===== ADB APÓS BOOT ====="
-
-          adb devices -l
-
-          adb get-state
-
-          echo
-          echo "===== TESTE DE SHELL ====="
-
-          adb shell id
-          adb shell getprop ro.build.version.release
-          adb shell getprop ro.build.version.sdk
-
-      - name: Obter acesso root
-        shell: bash
-        run: |
-          set -e
-
-          echo "===== VERIFICANDO EMULADOR ====="
-
-          adb devices -l
-
-          if ! adb get-state >/dev/null 2>&1; then
-            echo "::error::Nenhum dispositivo Android está conectado ao ADB."
-
-            echo
-            echo "===== PROCESSOS ====="
-
-            ps -ef | grep -E "[e]mulator|[q]emu" || true
-
-            echo
-            echo "===== LOG DO EMULADOR ====="
-
-            cat simulation/emulator.log || true
-
-            exit 1
-          fi
-
-          echo "Emulador encontrado."
-
-          echo
-          echo "===== ROOT ====="
-
-          ROOT_OK=false
-
-          for i in {1..10}; do
-            echo "Tentativa de adb root: $i/10"
-
-            if adb root; then
-              ROOT_OK=true
-              break
-            fi
-
-            sleep 3
-          done
-
-          if [ "$ROOT_OK" != "true" ]; then
-            echo "::error::Não foi possível obter root."
-
-            adb devices -l || true
-            adb shell id || true
-
-            exit 1
-          fi
-
-          echo
-          echo "===== AGUARDANDO ADB ROOT ====="
-
-          sleep 5
-
-          adb wait-for-device
-
-          echo
-          echo "===== UID ====="
-
-          adb shell id
-
-      - name: Diagnosticar partições graváveis
-        shell: bash
-        run: |
-          set -e
-
-          echo "===== MONTAGENS ====="
-          adb shell mount
-
-          echo
-          echo "===== TESTANDO /DATA ====="
-          adb shell 'touch /data/safe-woman-test && rm /data/safe-woman-test'
-          echo "/data: OK"
-
-          echo
-          echo "===== TESTANDO /CACHE ====="
-          adb shell 'touch /cache/safe-woman-test && rm /cache/safe-woman-test' \
-            && echo "/cache: OK" \
-            || echo "/cache: somente leitura ou inexistente"
-
-          echo
-          echo "===== TESTANDO /METADATA ====="
-          adb shell 'touch /metadata/safe-woman-test && rm /metadata/safe-woman-test' \
-            && echo "/metadata: OK" \
-            || echo "/metadata: somente leitura ou inexistente"
-
-          echo
-          echo "===== OVERLAY SYSTEM ====="
-          adb shell 'mount | grep " /system " || true'
-
-          echo
-          echo "===== UPPERDIR ====="
-          adb shell 'ls -ld /mnt/scratch /mnt/scratch/overlay /mnt/scratch/overlay/system /mnt/scratch/overlay/system/upper' \
-            || true
-            
-      - name: Tornar system gravável
-        shell: bash
-        run: |
-          set -e
-
-          echo "===== ROOT ====="
-
-          adb root
-
-          sleep 5
-
-          adb wait-for-device
-
-          echo
-          echo "===== REMOUNT ====="
-
-          if adb remount; then
-            echo "adb remount funcionou."
-          else
-            echo "::error::adb remount falhou."
-
-            echo
-            echo "===== MONTAGENS ====="
-
-            adb shell mount || true
-
-            echo
-            echo "===== PROPRIEDADES ====="
-
-            adb shell getprop ro.build.type || true
-            adb shell getprop ro.debuggable || true
-            adb shell getprop ro.boot.verifiedbootstate || true
-
-            echo
-            echo "===== LOG DO EMULADOR ====="
-
-            cat simulation/emulator.log || true
-
-            exit 1
-          fi
-
-          echo
-          echo "===== REBOOT PARA ATIVAR OVERLAYFS ====="
-
-          adb reboot
-
-          echo "Aguardando dispositivo..."
-
-          adb wait-for-device
-
-          BOOT_COMPLETED=false
-
-          for i in {1..120}; do
             BOOT="$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')"
 
             echo "Boot: ${BOOT:-aguardando} — tentativa $i/120"
@@ -520,13 +445,14 @@ jobs:
             fi
 
             sleep 2
+
           done
 
           if [ "$BOOT_COMPLETED" != "true" ]; then
-            echo "::error::Android não terminou o boot após ativar OverlayFS."
+            echo "::error::Android não terminou o boot."
 
             echo
-            echo "===== LOG DO EMULADOR ====="
+            echo "===== LOG ====="
 
             cat simulation/emulator.log || true
 
@@ -534,219 +460,57 @@ jobs:
           fi
 
           echo
-          echo "===== ROOT NOVAMENTE ====="
+          echo "Android iniciou."
 
-          ROOT_OK=false
+          adb devices -l
 
-          for i in {1..15}; do
-            echo "Tentativa de adb root: $i/15"
-
-            if adb root; then
-              ROOT_OK=true
-              break
-            fi
-
-            sleep 3
-          done
-
-          if [ "$ROOT_OK" != "true" ]; then
-            echo "::error::Não foi possível recuperar root após reboot."
-
-            adb devices -l || true
-            adb shell id || true
-
-            exit 1
-          fi
-
-          sleep 5
-
-          adb wait-for-device
-
-          echo
-          echo "===== UID ====="
-
-          adb shell id
-
-          echo
-          echo "===== MONTAGENS ====="
-
-          adb shell mount \
-            | grep -E ' /system | /system_ext | /product | /vendor ' \
-            || true
-
-          echo
-          echo "===== TESTANDO /DATA ====="
-
-          if adb shell 'touch /data/safe-woman-test && rm /data/safe-woman-test'; then
-            echo "/data: OK"
-          else
-            echo "/data: FALHOU"
-          fi
-
-          echo
-          echo "===== TESTANDO /CACHE ====="
-
-          if adb shell 'touch /cache/safe-woman-test && rm /cache/safe-woman-test'; then
-            echo "/cache: OK"
-          else
-            echo "/cache: FALHOU"
-          fi
-
-          echo
-          echo "===== TESTANDO /METADATA ====="
-
-          if adb shell 'touch /metadata/safe-woman-test && rm /metadata/safe-woman-test'; then
-            echo "/metadata: OK"
-          else
-            echo "/metadata: FALHOU"
-          fi
-
-          echo
-          echo "===== SYSTEM ====="
-
-          adb shell 'mount | grep " /system " || true'
-
-          echo
-          echo "===== UPPERDIR ====="
-
-          adb shell \
-            'ls -ld /mnt/scratch /mnt/scratch/overlay /mnt/scratch/overlay/system /mnt/scratch/overlay/system/upper' \
-            || true
-
-      - name: Instalar APK como priv-app
+      - name: Verificar app privilegiado
         shell: bash
         run: |
           set -e
 
           mkdir -p simulation
 
-          APK="${{ steps.apk.outputs.path }}"
+          echo "===== UID ====="
 
-          echo "APK:"
-          echo "$APK"
-
-          if [ ! -f "$APK" ]; then
-            echo "::error::APK não existe."
-            exit 1
-          fi
+          adb shell id
 
           echo
-          echo "===== ROOT ====="
-
-          adb root
-
-          sleep 5
-
-          adb wait-for-device
-
-          echo
-          echo "===== CRIANDO PRIV-APP ====="
-
-          adb shell mkdir -p \
-            /system/priv-app/MulherAmparada
-
-          echo
-          echo "===== COPIANDO APK ====="
-
-          adb push \
-            "$APK" \
-            /system/priv-app/MulherAmparada/MulherAmparada.apk
-
-          echo
-          echo "===== PERMISSÕES ====="
-
-          adb shell chmod 0644 \
-            /system/priv-app/MulherAmparada/MulherAmparada.apk
-
-          adb shell chown root:root \
-            /system/priv-app/MulherAmparada/MulherAmparada.apk
-
-          echo
-          echo "===== ARQUIVO ====="
-
-          adb shell ls -la \
-            /system/priv-app/MulherAmparada/
-
-          echo
-          echo "APK colocado em /system/priv-app."
-
-          echo
-          echo "===== REINICIANDO ANDROID ====="
-
-          adb reboot
-
-          adb wait-for-device
-
-          BOOT_COMPLETED=false
-
-          for i in {1..120}; do
-            BOOT="$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')"
-
-            echo "Boot: ${BOOT:-aguardando} — tentativa $i/120"
-
-            if [ "$BOOT" = "1" ]; then
-              BOOT_COMPLETED=true
-              break
-            fi
-
-            sleep 2
-          done
-
-          if [ "$BOOT_COMPLETED" != "true" ]; then
-            echo "::error::Android não terminou o boot após instalar o priv-app."
-
-            echo
-            echo "===== LOG DO EMULADOR ====="
-
-            cat simulation/emulator.log || true
-
-            exit 1
-          fi
-
-      - name: Verificar se é aplicativo do sistema
-        shell: bash
-        run: |
-          set -e
-
-          mkdir -p simulation
-
           echo "===== CAMINHO DO PACOTE ====="
 
           adb shell pm path com.mulheres \
             | tee simulation/pm-path.txt
 
           echo
-          echo "===== INFORMAÇÕES DO PACOTE ====="
-
-          adb shell dumpsys package com.mulheres \
-            | tee simulation/package-info.txt
-
-          echo
-          echo "===== SYSTEM APPS ====="
+          echo "===== PACOTES DO SISTEMA ====="
 
           adb shell pm list packages -s \
             | tee simulation/system-packages.txt
 
           echo
-          echo "===== PRIV-APP ====="
+          echo "===== DUMPSYS ====="
 
-          adb shell pm path com.mulheres \
-            | tee simulation/priv-app-check.txt
+          adb shell dumpsys package com.mulheres \
+            | tee simulation/package-info.txt
 
-          if ! grep -q '/system/priv-app/' \
-            simulation/priv-app-check.txt; then
+          echo
+          echo "===== VERIFICAÇÃO ====="
 
-            echo "::error::Mulher Amparada NÃO está em /system/priv-app."
+          if ! grep -q \
+            '/system/priv-app/MulherAmparada/' \
+            simulation/pm-path.txt; then
+
+            echo "::error::Mulher Amparada não foi reconhecido em /system/priv-app."
 
             exit 1
           fi
 
           echo
-          echo "======================================"
-          echo " MULHER AMPARADA É PRIV-APP"
-          echo "======================================"
+          echo "=========================================="
+          echo " MULHER AMPARADA ESTÁ EM PRIV-APP"
+          echo "=========================================="
 
-      - name: Verificar permissões
+      - name: Verificar permissões privilegiadas
         shell: bash
         run: |
           set -e
@@ -754,7 +518,7 @@ jobs:
           adb shell dumpsys package com.mulheres \
             > simulation/permissions.txt
 
-          echo "===== PERMISSÕES DO APLICATIVO ====="
+          echo "===== PERMISSÕES ====="
 
           grep -A100 -B10 \
             "requested permissions" \
@@ -762,59 +526,20 @@ jobs:
             || true
 
           echo
-          echo "===== PERMISSÕES PRIVILEGIADAS ====="
+          echo "===== PRIVILEGIADAS ====="
 
           grep -Ei \
             "granted=true|privileged|INSTALL|LOCATION|RECORD_AUDIO|READ_CONTACTS|CALL_PHONE" \
             simulation/permissions.txt \
             || true
 
-      - name: Capturar tela inicial
+      - name: Capturar tela
         shell: bash
         run: |
           set -e
 
           adb exec-out screencap -p \
             > simulation/boot-screenshot.png
-
-      - name: Abrir gaveta de aplicativos
-        shell: bash
-        run: |
-          set -e
-
-          adb shell input keyevent KEYCODE_HOME
-
-          sleep 3
-
-          adb shell input swipe \
-            540 1800 \
-            540 500 \
-            700
-
-          sleep 3
-
-          adb exec-out screencap -p \
-            > simulation/app-drawer.png
-
-      - name: Verificar presença na gaveta
-        shell: bash
-        run: |
-          set -e
-
-          adb shell pm list packages \
-            | tee simulation/all-packages.txt
-
-          if grep -q "com.mulheres" \
-            simulation/all-packages.txt; then
-
-            echo "Mulher Amparada está instalada."
-
-          else
-
-            echo "::error::Mulher Amparada não está instalada."
-
-            exit 1
-          fi
 
       - name: Informações finais
         if: always()
@@ -852,15 +577,8 @@ jobs:
           adb shell getprop ro.boot.verifiedbootstate \
             || true
 
-          echo
-          echo "===== ADB ====="
-
-          adb devices -l \
-            || true
-
       - name: Parar emulador
         if: always()
-        shell: bash
         run: |
           if [ -f simulation/emulator.pid ]; then
             kill "$(cat simulation/emulator.pid)" 2>/dev/null || true

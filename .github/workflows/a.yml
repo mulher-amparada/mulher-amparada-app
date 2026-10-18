@@ -575,11 +575,43 @@ jobs:
             || true
 
           echo
-          echo "===== TESTE DE ESCRITA ====="
+          echo "===== TESTANDO /DATA ====="
 
-          adb shell mkdir -p /system/priv-app/MulherAmparada
+          if adb shell 'touch /data/safe-woman-test && rm /data/safe-woman-test'; then
+            echo "/data: OK"
+          else
+            echo "/data: FALHOU"
+          fi
 
-          echo "OverlayFS está gravável."
+          echo
+          echo "===== TESTANDO /CACHE ====="
+
+          if adb shell 'touch /cache/safe-woman-test && rm /cache/safe-woman-test'; then
+            echo "/cache: OK"
+          else
+            echo "/cache: FALHOU"
+          fi
+
+          echo
+          echo "===== TESTANDO /METADATA ====="
+
+          if adb shell 'touch /metadata/safe-woman-test && rm /metadata/safe-woman-test'; then
+            echo "/metadata: OK"
+          else
+            echo "/metadata: FALHOU"
+          fi
+
+          echo
+          echo "===== SYSTEM ====="
+
+          adb shell 'mount | grep " /system " || true'
+
+          echo
+          echo "===== UPPERDIR ====="
+
+          adb shell \
+            'ls -ld /mnt/scratch /mnt/scratch/overlay /mnt/scratch/overlay/system /mnt/scratch/overlay/system/upper' \
+            || true
 
       - name: Instalar APK como priv-app
         shell: bash

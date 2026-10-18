@@ -66,7 +66,7 @@ jobs:
             "platforms;android-35" \
             "build-tools;35.0.0" \
             "emulator" \
-            "system-images;android-35;default;x86_64"
+            "system-images;android-35;aosp_atd;x86_64"
 
       - name: Encontrar projeto Gradle
         id: project
@@ -119,6 +119,51 @@ jobs:
           echo "APK: $APK"
           echo "path=$PWD/$APK" >> "$GITHUB_OUTPUT"
 
+      - name: Preparar sistema para escrita
+        shell: bash
+        run: |
+          set -e
+
+          echo "===== ROOT ====="
+          adb root
+          sleep 5
+          adb wait-for-device
+
+          echo "===== DESABILITANDO VERITY ====="
+          adb disable-verity || true
+
+          echo "===== REBOOT PARA APLICAR VERITY ====="
+          adb reboot
+
+          adb wait-for-device
+
+          for i in {1..120}; do
+            BOOT="$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')"
+
+            if [ "$BOOT" = "1" ]; then
+              echo "Android iniciou novamente."
+              break
+            fi
+
+            sleep 2
+          done
+
+          if [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" != "1" ]; then
+            echo "::error::Android não terminou o boot."
+            exit 1
+          fi
+
+          echo "===== ROOT NOVAMENTE ====="
+          adb root
+          sleep 5
+          adb wait-for-device
+
+          echo "===== REMOUNT ====="
+          adb remount
+
+          echo "===== MONTAGENS ====="
+          adb shell mount | grep -E ' /system | /system_ext | /product ' || true
+          
       - name: Criar AVD
         shell: bash
         run: |
@@ -132,7 +177,7 @@ jobs:
           echo "no" | avdmanager create avd \
             --force \
             --name SafeWomanOS \
-            --package "system-images;android-35;default;x86_64" \
+            --package "system-images;android-35;aosp_atd;x86_64" \
             --device "pixel_2"
 
           echo

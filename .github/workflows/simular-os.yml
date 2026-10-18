@@ -14,6 +14,7 @@ jobs:
     timeout-minutes: 35
 
     steps:
+
       - name: Checkout
         uses: actions/checkout@v6
         with:
@@ -108,8 +109,10 @@ jobs:
             exit 1
           fi
 
-          echo "APK: $PWD/$APK"
-          echo "path=$PWD/$APK" >> "$GITHUB_OUTPUT"
+          APK="$(realpath "$APK")"
+
+          echo "APK: $APK"
+          echo "path=$APK" >> "$GITHUB_OUTPUT"
 
       - name: Criar AVD
         shell: bash
@@ -132,7 +135,6 @@ jobs:
           fi
 
       - name: Inspecionar imagens disponíveis
-        id: images
         shell: bash
         run: |
           set -e
@@ -147,7 +149,7 @@ jobs:
           echo "$SYSTEM_IMAGE_DIR"
 
           echo
-          echo "===== TODOS OS ARQUIVOS ====="
+          echo "===== ARQUIVOS ====="
 
           find "$SYSTEM_IMAGE_DIR" \
             -maxdepth 3 \
@@ -177,527 +179,6 @@ jobs:
             file "$IMAGE"
             ls -lh "$IMAGE"
           done < simulation/image/images.txt
-
-          SYSTEM_IMG="$SYSTEM_IMAGE_DIR/system.img"
-
-          if [ -f "$SYSTEM_IMG" ]; then
-            echo
-            echo "system.img encontrada:"
-            ls -lh "$SYSTEM_IMG"
-            echo "system=$SYSTEM_IMG" >> "$GITHUB_OUTPUT"
-          fi
-
-          SUPER_IMG="$SYSTEM_IMAGE_DIR/super.img"
-
-          if [ -f "$SUPER_IMG" ]; then
-            echo
-            echo "super.img encontrada:"
-            ls -lh "$SUPER_IMG"
-            echo "super=$SUPER_IMG" >> "$GITHUB_OUTPUT"
-          fi
-          
-      - name: Instalar ferramentas de imagem
-        shell: bash
-        run: |
-          set -e
-
-          sudo apt-get update
-
-          sudo apt-get install -y \
-            e2fsprogs \
-            android-sdk-libsparse-utils \
-            lvm2 \
-            gdisk \
-            git \
-            build-essential \
-            clang
-
-          echo "===== BAIXANDO ANDROID LP TOOLS ====="
-
-          TMP_LP="$RUNNER_TEMP/android-lptools"
-
-          rm -rf "$TMP_LP"
-
-          git clone --depth 1 \
-            https://github.com/itsNileshHere/android-lptools.git \
-            "$TMP_LP"
-
-          cd "$TMP_LP"
-
-          echo "===== COMPILANDO ANDROID LP TOOLS ====="
-
-          chmod +x make.sh
-
-          ./make.sh
-
-          echo "===== INSTALANDO ====="
-
-          sudo install -m 0755 bin/lpunpack /usr/local/bin/lpunpack
-          sudo install -m 0755 bin/lpdump /usr/local/bin/lpdump
-          sudo install -m 0755 bin/lpmake /usr/local/bin/lpmake
-
-          echo "===== EXECUTANDO ====="
-
-          lpunpack --help >/dev/null
-          lpdump --help >/dev/null
-          lpmake --help >/dev/null
-
-          echo "lpunpack OK"
-          echo "lpdump OK"
-          echo "lpmake OK"
-
-      - name: Preparar e reconstruir system.img dinâmica
-        if: steps.images.outputs.system != ''
-        shell: bash
-        run: |
-          set -e
-
-          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
-          APK="${{ steps.apk.outputs.path }}"
-          SYSTEM_IMG="${{ steps.images.outputs.system }}"
-
-          WORK="$GITHUB_WORKSPACE/simulation/dynamic"
-          LP="$WORK/partitions"
-          mkdir -p "$LP"
-
-          echo "===== SYSTEM.IMG ORIGINAL ====="
-
-          file "$SYSTEM_IMG"
-          ls -lh "$SYSTEM_IMG"
-
-          echo
-          echo "===== LOCALIZANDO FERRAMENTAS LP ====="
-
-          LPUNPACK="$(command -v lpunpack || true)"
-          LPDUMP="$(command -v lpdump || true)"
-          LPMAKE="$(command -v lpmake || true)"
-
-          if [ -z "$LPUNPACK" ]; then
-            LPUNPACK="$(find "$SDK" -type f -name lpunpack -print -quit)"
-          fi
-
-          if [ -z "$LPDUMP" ]; then
-            LPDUMP="$(find "$SDK" -type f -name lpdump -print -quit)"
-          fi
-
-          if [ -z "$LPMAKE" ]; then
-            LPMAKE="$(find "$SDK" -type f -name lpmake -print -quit)"
-          fi
-
-          if [ -z "$LPUNPACK" ] || [ -z "$LPDUMP" ] || [ -z "$LPMAKE" ]; then
-            echo "::error::lpunpack, lpdump ou lpmake não encontrado."
-            exit 1
-          fi
-
-          echo "lpunpack: $LPUNPACK"
-          echo "lpdump:   $LPDUMP"
-          echo "lpmake:   $LPMAKE"
-
-          echo
-          echo "===== LPDUMP ORIGINAL ====="
-
-          "$LPDUMP" "$SYSTEM_IMG" \
-            | tee simulation/image/lpdump.txt
-
-          echo
-          echo "===== LPDUMP JSON ====="
-
-          "$LPDUMP" --json "$SYSTEM_IMG" \
-            > simulation/image/lpdump.json
-
-          cat simulation/image/lpdump.json
-
-          echo
-          echo "===== VALIDANDO JSON ====="
-
-          python3 - <<'PY'
-          import json
-
-          with open("simulation/image/lpdump.json", "r", encoding="utf-8") as f:
-              data = json.load(f)
-
-          if not data:
-              raise SystemExit("lpdump.json vazio")
-
-          print("JSON válido.")
-          PY
-
-          echo
-          echo "===== EXTRAINDO TODAS AS PARTIÇÕES ====="
-
-          "$LPUNPACK" \
-            "$SYSTEM_IMG" \
-            "$LP"
-
-          echo
-          echo "===== PARTIÇÕES EXTRAÍDAS ====="
-
-          find "$LP" \
-            -maxdepth 1 \
-            -type f \
-            -printf '%f | %s bytes\n' \
-            | tee simulation/image/logical-partitions.txt
-
-          echo
-          echo "===== LOCALIZANDO SYSTEM ====="
-
-          SYSTEM_PART=""
-
-          for candidate in \
-            "$LP/system_a.img" \
-            "$LP/system.img" \
-            "$LP/system_b.img"
-          do
-            if [ -f "$candidate" ]; then
-              SYSTEM_PART="$candidate"
-              break
-            fi
-          done
-
-          if [ -z "$SYSTEM_PART" ]; then
-            echo "::error::Partição system não foi extraída."
-            exit 1
-          fi
-
-          echo "System encontrada: $SYSTEM_PART"
-
-          echo
-          echo "===== TIPO DA SYSTEM ====="
-
-          file "$SYSTEM_PART"
-
-          echo
-          echo "===== PREPARANDO SYSTEM EXT4 ====="
-
-          SYSTEM_RAW="$LP/system-working.img"
-
-          if file "$SYSTEM_PART" | grep -qi "Android sparse image"; then
-            simg2img "$SYSTEM_PART" "$SYSTEM_RAW"
-          else
-            cp "$SYSTEM_PART" "$SYSTEM_RAW"
-          fi
-
-          if ! file "$SYSTEM_RAW" | grep -Eqi 'ext[234] filesystem'; then
-            echo "::error::A partição system não é ext4."
-            file "$SYSTEM_RAW"
-            exit 1
-          fi
-
-          echo
-          echo "===== VERIFICANDO FILESYSTEM ====="
-
-          sudo e2fsck -fn "$SYSTEM_RAW" || true
-
-          echo
-          echo "===== CRIANDO PRIV-APP ====="
-
-          sudo debugfs -w \
-            -R "mkdir /priv-app" \
-            "$SYSTEM_RAW" \
-            || true
-
-          sudo debugfs -w \
-            -R "mkdir /priv-app/MulherAmparada" \
-            "$SYSTEM_RAW" \
-            || true
-
-          sudo debugfs -w \
-            -R "write $APK /priv-app/MulherAmparada/MulherAmparada.apk" \
-            "$SYSTEM_RAW"
-
-          sudo debugfs -w \
-            -R "set_inode_field /priv-app/MulherAmparada/MulherAmparada.apk mode 0100644" \
-            "$SYSTEM_RAW"
-
-          sudo debugfs -w \
-            -R "set_inode_field /priv-app/MulherAmparada/MulherAmparada.apk uid 0" \
-            "$SYSTEM_RAW"
-
-          sudo debugfs -w \
-            -R "set_inode_field /priv-app/MulherAmparada/MulherAmparada.apk gid 0" \
-            "$SYSTEM_RAW"
-
-          echo
-          echo "===== PROVA DA INJEÇÃO ====="
-
-          sudo debugfs \
-            -R "ls -l /priv-app/MulherAmparada" \
-            "$SYSTEM_RAW" \
-            | tee simulation/image/priv-app-in-image.txt
-
-          if ! grep -q "MulherAmparada.apk" \
-            simulation/image/priv-app-in-image.txt; then
-            echo "::error::APK não encontrado dentro da system modificada."
-            exit 1
-          fi
-
-          echo
-          echo "===== RECRIANDO SYSTEM ====="
-
-          SYSTEM_NEW="$LP/system_new.img"
-
-          cp "$SYSTEM_RAW" "$SYSTEM_NEW"
-
-          echo
-          echo "===== CONSTRUINDO ARGUMENTOS DO LPMake ====="
-
-          python3 - <<'PY'
-          import json
-          import os
-          import subprocess
-
-          with open("simulation/image/lpdump.json", "r", encoding="utf-8") as f:
-              data = json.load(f)
-
-          def first(d, *names, default=None):
-              for n in names:
-                  if n in d:
-                      return d[n]
-              return default
-
-          block = data.get("block_devices", [])[0]
-
-          super_name = first(
-              block,
-              "name",
-              "partition_name",
-              default="super"
-          )
-
-          device_size = first(
-              block,
-              "size",
-              "size_bytes"
-          )
-
-          alignment = first(block, "alignment")
-          alignment_offset = first(block, "alignment_offset")
-          block_size = first(block, "block_size")
-
-          metadata_size = first(
-              data,
-              "metadata_max_size",
-              "metadata_size"
-          )
-
-          metadata_slots = first(
-              data,
-              "metadata_slot_count",
-              "metadata_slots"
-          )
-
-          if device_size is None or metadata_size is None or metadata_slots is None:
-              raise SystemExit(
-                  "Não foi possível obter device-size, metadata-size "
-                  "ou metadata-slots do lpdump."
-              )
-
-          groups = data.get("groups", [])
-          partitions = data.get("partitions", [])
-
-          with open("simulation/image/lpmake-args.sh", "w") as out:
-              out.write("#!/usr/bin/env bash\n")
-              out.write("set -e\n\n")
-
-              out.write(
-                  f'LPMAKE_ARGS=( '
-                  f'--device-size={device_size} '
-                  f'--metadata-size={metadata_size} '
-                  f'--metadata-slots={metadata_slots} '
-              )
-
-              if super_name:
-                  out.write(f'--super-name={super_name} ')
-
-              if alignment is not None:
-                  out.write(f'--alignment={alignment} ')
-
-              if alignment_offset is not None:
-                  out.write(f'--alignment-offset={alignment_offset} ')
-
-              if block_size is not None:
-                  out.write(f'--block-size={block_size} ')
-
-              out.write(")\n\n")
-
-              for group in groups:
-                  name = first(group, "name")
-                  size = first(group, "maximum_size", "size")
-
-                  if not name or size is None:
-                      continue
-
-                  out.write(
-                      f'LPMAKE_ARGS+=( '
-                      f'--group="{name}:{size}" )\n'
-                  )
-
-              for partition in partitions:
-                  name = first(partition, "name")
-                  size = first(partition, "size")
-
-                  if not name or size is None:
-                      continue
-
-                  group = first(
-                      partition,
-                      "group_name",
-                      "group"
-                  )
-
-                  attrs = first(
-                      partition,
-                      "attributes",
-                      default=""
-                  )
-
-                  if isinstance(attrs, int):
-                      attrs = "readonly" if attrs & 1 else "none"
-
-                  if attrs not in ("readonly", "none"):
-                      attrs = "none"
-
-                  image = f"simulation/dynamic/partitions/{name}.img"
-
-                  if not os.path.exists(image):
-                      base = name
-
-                      for suffix in ("_a", "_b"):
-                          if base.endswith(suffix):
-                              base = base[:-2]
-                              break
-
-                      candidates = [
-                          f"simulation/dynamic/partitions/{base}.img",
-                          f"simulation/dynamic/partitions/{name}.img",
-                      ]
-
-                      image = next(
-                          (x for x in candidates if os.path.exists(x)),
-                          ""
-                      )
-
-                  if not image:
-                      out.write(
-                          f'LPMAKE_ARGS+=( '
-                          f'--partition="{name}:{attrs}:{size}:{group}" )\n'
-                      )
-                      continue
-
-                  out.write(
-                      f'LPMAKE_ARGS+=( '
-                      f'--partition="{name}:{attrs}:{size}:{group}" )\n'
-                  )
-
-                  out.write(
-                      f'LPMAKE_ARGS+=( '
-                      f'--image="{name}={image}" )\n'
-                  )
-
-              out.write(
-                  'LPMAKE_ARGS+=( --sparse '
-                  '--output=simulation/image/system.img )\n'
-              )
-
-          os.chmod(
-              "simulation/image/lpmake-args.sh",
-              0o755
-          )
-          PY
-
-          echo
-          echo "===== COPIANDO IMAGENS PARA O REBUILD ====="
-
-          # O lpunpack usa os nomes reais das partições.
-          # Mantemos todas as imagens originais.
-          find "$LP" \
-            -maxdepth 1 \
-            -type f \
-            -name '*.img' \
-            ! -name 'system-working.img' \
-            ! -name 'system_new.img' \
-            -exec cp {} simulation/dynamic/partitions/ \;
-
-          # Substitui somente a imagem system pela modificada.
-          SYSTEM_NAME="$(basename "$SYSTEM_PART")"
-
-          cp \
-            "$SYSTEM_NEW" \
-            "simulation/dynamic/partitions/$SYSTEM_NAME"
-
-          echo
-          echo "===== RECONSTRUINDO SUPER ====="
-
-          source simulation/image/lpmake-args.sh
-
-          "$LPMAKE" \
-            "${LPMAKE_ARGS[@]}"
-
-          echo
-          echo "===== SYSTEM.IMG FINAL ====="
-
-          file simulation/image/system.img
-          ls -lh simulation/image/system.img
-
-          echo
-          echo "===== VALIDANDO LAYOUT FINAL ====="
-
-          "$LPDUMP" \
-            simulation/image/system.img \
-            | tee simulation/image/lpdump-final.txt
-
-          echo
-          echo "===== VALIDANDO SYSTEM NO FINAL ====="
-
-          rm -rf "$WORK/verify"
-          mkdir -p "$WORK/verify"
-
-          "$LPUNPACK" \
-            simulation/image/system.img \
-            "$WORK/verify"
-
-          VERIFY_SYSTEM=""
-
-          for candidate in \
-            "$WORK/verify/system_a.img" \
-            "$WORK/verify/system.img" \
-            "$WORK/verify/system_b.img"
-          do
-            if [ -f "$candidate" ]; then
-              VERIFY_SYSTEM="$candidate"
-              break
-            fi
-          done
-
-          if [ -z "$VERIFY_SYSTEM" ]; then
-            echo "::error::system não existe na super reconstruída."
-            exit 1
-          fi
-
-          VERIFY_RAW="$WORK/verify-system.raw.img"
-
-          if file "$VERIFY_SYSTEM" | grep -qi "Android sparse image"; then
-            simg2img "$VERIFY_SYSTEM" "$VERIFY_RAW"
-          else
-            cp "$VERIFY_SYSTEM" "$VERIFY_RAW"
-          fi
-
-          sudo debugfs \
-            -R "ls -l /priv-app/MulherAmparada" \
-            "$VERIFY_RAW" \
-            | tee simulation/image/priv-app-final.txt
-
-          if ! grep -q "MulherAmparada.apk" \
-            simulation/image/priv-app-final.txt; then
-            echo "::error::APK não sobreviveu à reconstrução da system/super."
-            exit 1
-          fi
-
-          echo
-          echo "=========================================="
-          echo " SUPER IMAGE RECONSTRUÍDA COM SUCESSO"
-          echo "=========================================="
-          echo "/system/priv-app/MulherAmparada/MulherAmparada.apk"
 
       - name: Configurar aceleração KVM
         shell: bash
@@ -737,7 +218,7 @@ jobs:
 
           ADB_READY=false
 
-          for i in {1..60}; do
+          for i in {1..90}; do
 
             if adb get-state >/dev/null 2>&1; then
               ADB_READY=true
@@ -751,7 +232,7 @@ jobs:
               exit 1
             fi
 
-            echo "ADB aguardando — tentativa $i/60"
+            echo "ADB aguardando — tentativa $i/90"
 
             sleep 2
           done
@@ -763,7 +244,7 @@ jobs:
           fi
 
           echo
-          echo "===== BOOT ====="
+          echo "===== AGUARDANDO BOOT ====="
 
           BOOT_COMPLETED=false
 
@@ -792,6 +273,225 @@ jobs:
 
           adb devices -l
 
+      - name: Preparar sistema Android
+        shell: bash
+        run: |
+          set -e
+
+          mkdir -p simulation/system
+
+          echo "===== ROOT ====="
+
+          adb root || true
+
+          sleep 3
+
+          adb wait-for-device
+
+          echo
+          echo "===== REMOUNT ====="
+
+          adb remount || true
+
+          echo
+          echo "===== MOUNT ====="
+
+          adb shell mount \
+            | tee simulation/system/mount-before.txt
+
+          echo
+          echo "===== SYSTEM ====="
+
+          adb shell ls -la /system \
+            | tee simulation/system/system-before.txt
+
+      - name: Instalar APK como priv-app
+        shell: bash
+        run: |
+          set -e
+
+          APK="${{ steps.apk.outputs.path }}"
+
+          echo "===== APK ====="
+          echo "$APK"
+
+          echo
+          echo "===== CRIANDO PRIV-APP ====="
+
+          adb shell mkdir -p \
+            /system/priv-app/MulherAmparada
+
+          echo
+          echo "===== ENVIANDO APK ====="
+
+          adb push \
+            "$APK" \
+            /system/priv-app/MulherAmparada/MulherAmparada.apk
+
+          echo
+          echo "===== PERMISSÕES ====="
+
+          adb shell chmod 0644 \
+            /system/priv-app/MulherAmparada/MulherAmparada.apk
+
+          adb shell chown 0:0 \
+            /system/priv-app/MulherAmparada/MulherAmparada.apk
+
+          echo
+          echo "===== ARQUIVO ====="
+
+          adb shell ls -la \
+            /system/priv-app/MulherAmparada/
+
+          echo
+          echo "===== REINICIANDO PACKAGE MANAGER ====="
+
+          adb shell cmd package scan \
+            /system/priv-app/MulherAmparada \
+            || true
+
+          adb shell cmd package reconcile-secondary-dex-files \
+            || true
+
+      - name: Verificar registro do pacote
+        shell: bash
+        run: |
+          set -e
+
+          echo "===== PACKAGE MANAGER ====="
+
+          adb shell pm path com.mulheres 2>&1 \
+            | tr -d '\r' \
+            | tee simulation/pm-path.txt
+
+          if ! grep -q '^package:' simulation/pm-path.txt; then
+            echo "::error::PackageManagerService não registrou com.mulheres."
+            exit 1
+          fi
+
+          echo
+          echo "===== PACOTE REGISTRADO ====="
+
+          cat simulation/pm-path.txt
+
+          if grep -q '/priv-app/' simulation/pm-path.txt; then
+            echo
+            echo "✓ com.mulheres registrado como priv-app."
+          else
+            echo "::error::com.mulheres não está em priv-app."
+            exit 1
+          fi
+
+      - name: Verificar permissões
+        shell: bash
+        run: |
+          set +e
+
+          adb shell dumpsys package com.mulheres \
+            > simulation/permissions.txt
+
+          echo "===== PERMISSÕES ====="
+
+          grep -A100 -B10 \
+            "requested permissions" \
+            simulation/permissions.txt \
+            || true
+
+          echo
+          echo "===== PRIVILEGIADAS ====="
+
+          grep -Ei \
+            "granted=true|privileged|INSTALL|LOCATION|RECORD_AUDIO|READ_CONTACTS|CALL_PHONE" \
+            simulation/permissions.txt \
+            || true
+
+      - name: Criar system-modified.img
+        shell: bash
+        run: |
+          set -e
+
+          echo "===== PREPARANDO SYSTEM.IMG ====="
+
+          mkdir -p simulation/image
+
+          echo
+          echo "===== EXTRAINDO /SYSTEM DO EMULADOR ====="
+
+          rm -rf simulation/system/root
+
+          mkdir -p simulation/system/root
+
+          adb pull /system/. \
+            simulation/system/root/
+
+          echo
+          echo "===== CONTEÚDO EXTRAÍDO ====="
+
+          du -sh simulation/system/root
+
+          echo
+          echo "===== TAMANHO DA IMAGEM ====="
+
+          SYSTEM_SIZE="$(du -sk simulation/system/root | awk '{print $1}')"
+
+          MIN_SIZE=$((SYSTEM_SIZE + 262144))
+
+          echo "Conteúdo: ${SYSTEM_SIZE} KB"
+          echo "Imagem:   ${MIN_SIZE} KB"
+
+          echo
+          echo "===== CRIANDO system-modified.img ====="
+
+          truncate -s "${MIN_SIZE}K" \
+            simulation/image/system-modified.img
+
+          mkfs.ext4 -F \
+            simulation/image/system-modified.img
+
+          echo
+          echo "===== COPIANDO SYSTEM PARA A IMG ====="
+
+          sudo mkdir -p /mnt/safe-woman-system
+
+          sudo mount \
+            -o loop \
+            simulation/image/system-modified.img \
+            /mnt/safe-woman-system
+
+          sudo cp -a \
+            simulation/system/root/. \
+            /mnt/safe-woman-system/
+
+          sudo sync
+
+          sudo umount \
+            /mnt/safe-woman-system
+
+          echo
+          echo "===== SYSTEM.IMG FINAL ====="
+
+          file simulation/image/system-modified.img
+          ls -lh simulation/image/system-modified.img
+
+          echo
+          echo "===== VERIFICANDO APK NA IMG ====="
+
+          sudo debugfs \
+            -R "ls -l /priv-app/MulherAmparada" \
+            simulation/image/system-modified.img \
+            | tee simulation/image/priv-app-in-image.txt
+
+          if ! grep -q "MulherAmparada.apk" \
+            simulation/image/priv-app-in-image.txt; then
+            echo "::error::APK não encontrado na system-modified.img."
+            exit 1
+          fi
+
+          echo
+          echo "=========================================="
+          echo " SYSTEM.IMG MODIFICADA CRIADA"
+          echo "=========================================="
+
       - name: Diagnosticar partições reais
         shell: bash
         run: |
@@ -817,7 +517,7 @@ jobs:
           echo
           echo "===== /PRIV-APP ====="
 
-          adb shell ls -la /priv-app \
+          adb shell ls -la /system/priv-app \
             | tee simulation/priv-app-list.txt
 
           echo
@@ -852,75 +552,6 @@ jobs:
 
           adb shell getprop ro.debuggable \
             | tee simulation/debuggable.txt
-
-          echo
-          echo "===== PROCURANDO MULHER AMPARADA ====="
-
-          adb shell find /system \
-            -maxdepth 5 \
-            -iname '*Mulher*' \
-            2>/dev/null \
-            | tee simulation/system-search.txt
-
-          echo
-          echo "===== DIRETÓRIO ESPERADO ====="
-
-          adb shell ls -la \
-            /priv-app/MulherAmparada
-            2>&1 \
-            | tee simulation/expected-directory.txt
-
-      - name: Verificar registro do pacote
-        shell: bash
-        run: |
-          set -e
-
-          echo "===== PACKAGE MANAGER ====="
-
-          adb shell pm path com.mulheres 2>&1 \
-            | tr -d '\r' \
-            | tee simulation/pm-path.txt
-
-          if ! grep -q '^package:' simulation/pm-path.txt; then
-            echo "::error::PackageManagerService não registrou com.mulheres."
-            exit 1
-          fi
-
-          echo
-          echo "===== PACOTE REGISTRADO ====="
-
-          cat simulation/pm-path.txt
-
-          if grep -q '/priv-app/' simulation/pm-path.txt; then
-            echo
-            echo "✓ com.mulheres registrado como priv-app."
-          else
-            echo "::error::com.mulheres foi registrado, mas não está em um caminho priv-app."
-            exit 1
-          fi
-
-      - name: Verificar permissões
-        shell: bash
-        run: |
-          set +e
-
-          adb shell dumpsys package com.mulheres \
-            > simulation/permissions.txt
-
-          echo "===== PERMISSÕES ====="
-
-          grep -A100 -B10 \
-            "requested permissions" \
-            simulation/permissions.txt \
-            || true
-
-          echo
-          echo "===== PRIVILEGIADAS ====="
-
-          grep -Ei \
-            "granted=true|privileged|INSTALL|LOCATION|RECORD_AUDIO|READ_CONTACTS|CALL_PHONE" \
-            simulation/permissions.txt \
-            || true
 
       - name: Informações finais
         if: always()
@@ -976,11 +607,9 @@ jobs:
           DESTINO="Imagem do Safe Woman OS"
 
           echo "===== SALVANDO RESULTADOS ====="
-          echo "Destino: $DESTINO"
 
           mkdir -p "$DESTINO"
 
-          # Sobrescreve os arquivos existentes e mantém a estrutura.
           cp -a simulation/. "$DESTINO/"
 
           echo

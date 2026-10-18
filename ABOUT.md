@@ -8,6 +8,9 @@
 
 e eu me sinto lisongeado de fazer esse projeto para todas essas usuárias, (vocês são mulheres do jeitinho que são!)
 
+E usuarias, ao dormir, durmam em paz, a justiça está sendo feita, vocês já deram grandes passos, e vocês não estão sozinhas, vocês tem um desenvolvedor que nao busca dinheiro ou fama, só o bem-estar de vocês!
+
+
 e honestamente, cada uma de vocês são importantes (tanto em talento e etc), e pelo amor de Deus, não deixem que esses agressores tirem o brilho de vocês..., vocês são as pessoas mais maravilhosas!, cada uma de vocês existe um valor que as vezes não conseguem perceber pela violência, mas ele existe, ele está aí, então nunca desista de você mesma, ainda tem gente que te ama e quer o seu bem!, (não precisa ter culpa ou vergonha por essa violência, você NÃO TEM CULPA DISSO!), lembre-se que você é forte, só de pedir ajuda já fez um grande passo!, e lembre-se que você é uma pessoa virtuosa, e que seu valor excede a de muitos rubis, e fica com esse fato aqui: QUEM TEM CULPA DA VIOLÊNCIA É O AGRESSOR, NÃO VOCÊ!, 
 
 Geralmente, o padrão do agressor é assim, mas isso varia: te humilha, pede desculpas e fala que vai mudar, você acredita, te humilha denovo... (Esse comportamento é um padrão reconhecido pela psicologia como o Ciclo da Violência)

@@ -26,7 +26,7 @@
 | `atualizar-relatorio-commits` | 📄Atualizar relatório de commits | ubuntu-24.04 | `atualizar-commits` | 1. Baixar repositório (`actions/checkout@v7`); 2. Instalar Ruby (`ruby/setup-ruby@v1`); 3. Gerar relatório de commits — executa comandos; 4. arquivos-relatorio-commits (`actions/upload-artifact@v7`) |
 | `pesquisar-projeto` | 🎲Documentar workflow YAML | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v7`); 2. Instalar PHP — executa comandos; 3. Gerar documentação do workflow — executa comandos; 4. arquivos-pesquisas (`actions/upload-artifact@v7`) |
 | `salvar-na-main` | 💾Salvar artifacts na main pelo Mulher Amparada Bot | ubuntu-24.04 | `build`, `linguagens`, `bot`, `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`, `observatorio` | 1. Baixar código-fonte da main (`actions/checkout@v7`); 2. Baixar todos os artifacts desta execução (`actions/download-artifact@v8`); 3. Consultar workflow atual — executa comandos; 4. Compilar o publicador C++ — executa comandos; 5. Publicar na main pelo GitHub App — executa comandos |
-| `mesclar-mulher-amparada` | 👨🏾‍💻Mesclar Mulher Amparada | Não identificado | `salvar-na-main` | Nenhuma identificada |
+| `mesclar-mulher-amparada` | 👨🏾‍💻Mesclar Mulher Amparada | Não identificado | Nenhuma | Nenhuma identificada |
 | `simular-os` | 👨🏾‍💻Executar simular-os.yml | ubuntu-24.04 | `mesclar-mulher-amparada` | 1. Executar simular-os.yml — executa comandos |
 
 ## Grafo completo de dependências
@@ -79,7 +79,6 @@ flowchart TD
     job_atualizar_relatorio_commits --> job_salvar_na_main
     job_pesquisar_projeto --> job_salvar_na_main
     job_observatorio --> job_salvar_na_main
-    job_salvar_na_main --> job_mesclar_mulher_amparada
     job_mesclar_mulher_amparada --> job_simular_os
 ```
 
@@ -318,7 +317,7 @@ flowchart TD
 
 - **ID:** `mesclar-mulher-amparada`
 - **Runner:** `Não identificado`
-- **Dependências:** `salvar-na-main`
+- **Dependências:** Nenhuma
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
@@ -2079,7 +2078,7 @@ jobs:
 
   mesclar-mulher-amparada:
     name: 👨🏾‍💻Mesclar Mulher Amparada
-    needs: salvar-na-main
+    
     uses: ./.github/workflows/mesclar-mulher-amparada.yml
     permissions:
       contents: write

@@ -474,9 +474,9 @@ jobs:
             | tee simulation/system-list.txt
 
           echo
-          echo "===== /SYSTEM/PRIV-APP ====="
+          echo "===== /PRIV-APP ====="
 
-          adb shell ls -la /system/priv-app \
+          adb shell ls -la /priv-app \
             | tee simulation/priv-app-list.txt
 
           echo
@@ -525,7 +525,7 @@ jobs:
           echo "===== DIRETÓRIO ESPERADO ====="
 
           adb shell ls -la \
-            /system/priv-app/MulherAmparada \
+            /priv-app/MulherAmparada
             2>&1 \
             | tee simulation/expected-directory.txt
 
@@ -560,9 +560,9 @@ jobs:
           echo
           echo "===== RESULTADO ====="
 
-          if grep -q \
-            '/system/priv-app/MulherAmparada/' \
-            simulation/pm-path.txt; then
+          if ! grep -q \
+             '/priv-app/MulherAmparada/' \
+             simulation/pm-path.txt; then
 
             echo "=========================================="
             echo " MULHER AMPARADA ESTÁ EM PRIV-APP"

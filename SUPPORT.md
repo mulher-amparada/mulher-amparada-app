@@ -49,8 +49,7 @@ https://coderlegion.com/31456/o-que-diferencia-o-mulher-amparada
 - 📰 TabNews — Desenvolvimento de um aplicativo Android independente:
 https://www.tabnews.com.br/projetomulheramparadaapp/mulher-amparada-desenvolvimento-de-um-aplicativo-android-independente
 
-- 📰 TabNews — Programar o Mulher Amparada foi um dos maiores infernos que já enfrentei em um projeto, porque o ChatGPT e a pior inteligência artificial
-
+- 📰 TabNews — Programar o Mulher Amparada foi um dos maiores infernos que já enfrentei em um projeto, porque o ChatGPT e a pior inteligência artificial:
 https://www.tabnews.com.br/projetomulheramparadaapp/mulher-amparada-programar-o-mulher-amparada-foi-um-dos-maiores-infernos-que-ja-enfrentei-em-um-projeto-porque-o-chatgpt-e-a-pior-inteligencia-artific
 
 - 🚀 Safe Woman Operational System: começando a criar um sistema baseado no AOSP:

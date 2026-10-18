@@ -197,7 +197,7 @@ jobs:
             echo "super=$SUPER_IMG" >> "$GITHUB_OUTPUT"
           fi
           
-     - name: Instalar ferramentas de imagem
+    - name: Instalar ferramentas de imagem
         shell: bash
         run: |
           set -e

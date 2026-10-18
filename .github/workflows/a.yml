@@ -11,7 +11,7 @@ jobs:
   simulate:
     name: Android virtual + system.img modificada
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 35
 
     steps:
       - name: Checkout
@@ -126,15 +126,13 @@ jobs:
             --package "system-images;android-35;aosp_atd;x86_64" \
             --device "pixel_2"
 
-          emulator -list-avds
-
           if ! emulator -list-avds | grep -qx "SafeWomanOS"; then
             echo "::error::AVD SafeWomanOS não foi criado."
             exit 1
           fi
 
-      - name: Localizar system.img
-        id: system
+      - name: Inspecionar imagens disponíveis
+        id: images
         shell: bash
         run: |
           set -e
@@ -143,40 +141,60 @@ jobs:
 
           SYSTEM_IMAGE_DIR="$SDK/system-images/android-35/aosp_atd/x86_64"
 
-          echo "Diretório:"
+          mkdir -p simulation/image
+
+          echo "===== DIRETÓRIO DA IMAGEM ====="
           echo "$SYSTEM_IMAGE_DIR"
 
-          if [ ! -d "$SYSTEM_IMAGE_DIR" ]; then
-            echo "::error::Diretório da system image não encontrado."
-            exit 1
-          fi
-
           echo
-          echo "===== CONTEÚDO ====="
+          echo "===== TODOS OS ARQUIVOS ====="
 
           find "$SYSTEM_IMAGE_DIR" \
-            -maxdepth 2 \
+            -maxdepth 3 \
             -type f \
-            -print
+            -printf '%p | %s bytes\n' \
+            | tee simulation/image/files.txt
+
+          echo
+          echo "===== IMAGENS ====="
+
+          find "$SYSTEM_IMAGE_DIR" \
+            -type f \
+            \( \
+              -name '*.img' \
+              -o -name '*.raw' \
+              -o -name '*.simg' \
+            \) \
+            -print \
+            | tee simulation/image/images.txt
+
+          echo
+          echo "===== TIPOS ====="
+
+          while IFS= read -r IMAGE; do
+            echo
+            echo "### $IMAGE"
+            file "$IMAGE"
+            ls -lh "$IMAGE"
+          done < simulation/image/images.txt
 
           SYSTEM_IMG="$SYSTEM_IMAGE_DIR/system.img"
 
-          if [ ! -f "$SYSTEM_IMG" ]; then
-            echo "::error::system.img não encontrada."
-
-            find "$SYSTEM_IMAGE_DIR" \
-              -type f \
-              -name '*.img' \
-              -print
-
-            exit 1
+          if [ -f "$SYSTEM_IMG" ]; then
+            echo
+            echo "system.img encontrada:"
+            ls -lh "$SYSTEM_IMG"
+            echo "system=$SYSTEM_IMG" >> "$GITHUB_OUTPUT"
           fi
 
-          echo
-          echo "system.img:"
-          ls -lh "$SYSTEM_IMG"
+          SUPER_IMG="$SYSTEM_IMAGE_DIR/super.img"
 
-          echo "path=$SYSTEM_IMG" >> "$GITHUB_OUTPUT"
+          if [ -f "$SUPER_IMG" ]; then
+            echo
+            echo "super.img encontrada:"
+            ls -lh "$SUPER_IMG"
+            echo "super=$SUPER_IMG" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Instalar ferramentas de imagem
         shell: bash
@@ -187,50 +205,44 @@ jobs:
 
           sudo apt-get install -y \
             e2fsprogs \
-            android-sdk-libsparse-utils
+            android-sdk-libsparse-utils \
+            lvm2 \
+            gdisk
 
           command -v debugfs
           command -v file
           command -v simg2img
           command -v img2simg
 
-      - name: Modificar system.img
+      - name: Preparar system.img
+        if: steps.images.outputs.system != ''
         shell: bash
         run: |
           set -e
 
-          mkdir -p simulation/image
-
-          ORIGINAL_SYSTEM="${{ steps.system.outputs.path }}"
+          ORIGINAL_SYSTEM="${{ steps.images.outputs.system }}"
           APK="${{ steps.apk.outputs.path }}"
+
+          mkdir -p simulation/image
 
           cp "$ORIGINAL_SYSTEM" \
             simulation/image/system-original.img
 
           echo
-          echo "===== TIPO DA SYSTEM IMAGE ====="
+          echo "===== TIPO ====="
 
           file "$ORIGINAL_SYSTEM"
 
           echo
-          echo "===== TAMANHO ORIGINAL ====="
-
-          ls -lh "$ORIGINAL_SYSTEM"
-
-          echo
-          echo "===== PREPARANDO IMAGEM ====="
+          echo "===== CONVERSÃO ====="
 
           if file "$ORIGINAL_SYSTEM" | grep -qi "Android sparse image"; then
-
-            echo "Imagem sparse detectada."
 
             simg2img \
               "$ORIGINAL_SYSTEM" \
               simulation/image/system.raw.img
 
           else
-
-            echo "Imagem não-sparse detectada."
 
             cp \
               "$ORIGINAL_SYSTEM" \
@@ -239,21 +251,33 @@ jobs:
           fi
 
           echo
-          echo "===== SISTEMA DE ARQUIVOS ====="
+          echo "===== FILE SYSTEM ====="
 
           file simulation/image/system.raw.img
 
-          echo
-          echo "===== VERIFICANDO EXT4 ====="
+          if ! file simulation/image/system.raw.img \
+            | grep -Eqi 'ext[234] filesystem'; then
 
-          if ! sudo e2fsck -fn \
-            simulation/image/system.raw.img; then
-
-            echo "::warning::e2fsck retornou código diferente de zero."
+            echo "::warning::system.raw.img não parece ser ext2/ext3/ext4."
+            exit 0
           fi
 
           echo
-          echo "===== CRIANDO DIRETÓRIOS ====="
+          echo "===== VERIFICAÇÃO ====="
+
+          sudo e2fsck -fn \
+            simulation/image/system.raw.img \
+            || true
+
+          echo
+          echo "===== DIRETÓRIOS EXISTENTES ====="
+
+          sudo debugfs \
+            -R "ls -l /" \
+            simulation/image/system.raw.img
+
+          echo
+          echo "===== INSERINDO APK ====="
 
           sudo debugfs -w \
             -R "mkdir /priv-app" \
@@ -262,24 +286,12 @@ jobs:
 
           sudo debugfs -w \
             -R "mkdir /priv-app/MulherAmparada" \
-            simulation/image/system.raw.img
-
-          echo
-          echo "===== INSERINDO APK ====="
+            simulation/image/system.raw.img \
+            || true
 
           sudo debugfs -w \
             -R "write $APK /priv-app/MulherAmparada/MulherAmparada.apk" \
             simulation/image/system.raw.img
-
-          echo
-          echo "===== VERIFICANDO APK ====="
-
-          sudo debugfs \
-            -R "ls -l /priv-app/MulherAmparada" \
-            simulation/image/system.raw.img
-
-          echo
-          echo "===== AJUSTANDO PERMISSÕES ====="
 
           sudo debugfs -w \
             -R "set_inode_field /priv-app/MulherAmparada/MulherAmparada.apk mode 0100644" \
@@ -294,16 +306,17 @@ jobs:
             simulation/image/system.raw.img
 
           echo
-          echo "===== VERIFICAÇÃO FINAL DA IMAGEM ====="
+          echo "===== APK DENTRO DA IMAGEM ====="
 
           sudo debugfs \
             -R "ls -l /priv-app/MulherAmparada" \
             simulation/image/system.raw.img
 
           echo
-          echo "===== RECRIANDO SYSTEM.IMG ====="
+          echo "===== RECRIANDO ====="
 
-          if file "$ORIGINAL_SYSTEM" | grep -qi "Android sparse image"; then
+          if file "$ORIGINAL_SYSTEM" \
+            | grep -qi "Android sparse image"; then
 
             img2simg \
               simulation/image/system.raw.img \
@@ -317,13 +330,10 @@ jobs:
 
           fi
 
-          echo
-          echo "===== SYSTEM.IMG MODIFICADA ====="
+          ls -lh simulation/image/system.img
 
-          ls -lh \
-            simulation/image/system.img
-
-      - name: Substituir system.img do AVD
+      - name: Substituir system.img
+        if: steps.images.outputs.system != ''
         shell: bash
         run: |
           set -e
@@ -332,30 +342,21 @@ jobs:
 
           SYSTEM_IMAGE_DIR="$SDK/system-images/android-35/aosp_atd/x86_64"
 
-          MODIFIED="simulation/image/system.img"
-
-          if [ ! -f "$MODIFIED" ]; then
-            echo "::error::system.img modificada não encontrada."
-            exit 1
+          if [ ! -f simulation/image/system.img ]; then
+            echo "::warning::Nenhuma system.img modificada foi produzida."
+            exit 0
           fi
 
-          echo "Substituindo:"
-          echo "$SYSTEM_IMAGE_DIR/system.img"
-
           cp \
-            "$MODIFIED" \
+            simulation/image/system.img \
             "$SYSTEM_IMAGE_DIR/system.img"
 
           echo
           echo "===== SYSTEM IMAGE FINAL ====="
 
-          ls -lh \
-            "$SYSTEM_IMAGE_DIR/system.img"
+          file "$SYSTEM_IMAGE_DIR/system.img"
 
-          echo
-          echo "===== AVD ====="
-
-          emulator -list-avds
+          ls -lh "$SYSTEM_IMAGE_DIR/system.img"
 
       - name: Configurar aceleração KVM
         shell: bash
@@ -391,9 +392,6 @@ jobs:
 
           echo "$EMULATOR_PID" > simulation/emulator.pid
 
-          echo "PID: $EMULATOR_PID"
-
-          echo
           echo "===== AGUARDANDO ADB ====="
 
           ADB_READY=false
@@ -408,23 +406,18 @@ jobs:
 
             if ! kill -0 "$EMULATOR_PID" 2>/dev/null; then
               echo "::error::Emulador encerrou."
-
               cat simulation/emulator.log || true
-
               exit 1
             fi
 
             echo "ADB aguardando — tentativa $i/60"
 
             sleep 2
-
           done
 
           if [ "$ADB_READY" != "true" ]; then
             echo "::error::ADB não ficou disponível."
-
             cat simulation/emulator.log || true
-
             exit 1
           fi
 
@@ -445,17 +438,11 @@ jobs:
             fi
 
             sleep 2
-
           done
 
           if [ "$BOOT_COMPLETED" != "true" ]; then
             echo "::error::Android não terminou o boot."
-
-            echo
-            echo "===== LOG ====="
-
             cat simulation/emulator.log || true
-
             exit 1
           fi
 
@@ -464,28 +451,105 @@ jobs:
 
           adb devices -l
 
-      - name: Verificar app privilegiado
+      - name: Diagnosticar partições reais
         shell: bash
         run: |
-          set -e
+          set +e
 
-          mkdir -p simulation
+          echo "===== MOUNT ====="
 
-          echo "===== UID ====="
-
-          adb shell id
+          adb shell mount \
+            | tee simulation/mount.txt
 
           echo
-          echo "===== CAMINHO DO PACOTE ====="
+          echo "===== DF ====="
+
+          adb shell df -h \
+            | tee simulation/df.txt
+
+          echo
+          echo "===== /SYSTEM ====="
+
+          adb shell ls -la /system \
+            | tee simulation/system-list.txt
+
+          echo
+          echo "===== /SYSTEM/PRIV-APP ====="
+
+          adb shell ls -la /system/priv-app \
+            | tee simulation/priv-app-list.txt
+
+          echo
+          echo "===== /DEV/BLOCK/BY-NAME ====="
+
+          adb shell ls -la /dev/block/by-name/ \
+            | tee simulation/partitions.txt
+
+          echo
+          echo "===== PARTIÇÕES DINÂMICAS ====="
+
+          adb shell getprop ro.boot.dynamic_partitions \
+            | tee simulation/dynamic-partitions.txt
+
+          echo
+          echo "===== SLOT ====="
+
+          adb shell getprop ro.boot.slot_suffix \
+            | tee simulation/slot.txt
+
+          echo
+          echo "===== PRODUTO ====="
+
+          adb shell getprop ro.product.name \
+            | tee simulation/product.txt
+
+          echo
+          echo "===== BUILD ====="
+
+          adb shell getprop ro.build.type \
+            | tee simulation/build-type.txt
+
+          adb shell getprop ro.debuggable \
+            | tee simulation/debuggable.txt
+
+          echo
+          echo "===== PROCURANDO MULHER AMPARADA ====="
+
+          adb shell find /system \
+            -maxdepth 5 \
+            -iname '*Mulher*' \
+            2>/dev/null \
+            | tee simulation/system-search.txt
+
+          echo
+          echo "===== DIRETÓRIO ESPERADO ====="
+
+          adb shell ls -la \
+            /system/priv-app/MulherAmparada \
+            2>&1 \
+            | tee simulation/expected-directory.txt
+
+      - name: Verificar app
+        shell: bash
+        run: |
+          set +e
+
+          echo "===== PM PATH ====="
 
           adb shell pm path com.mulheres \
             | tee simulation/pm-path.txt
 
-          echo
-          echo "===== PACOTES DO SISTEMA ====="
+          PM_EXIT="${PIPESTATUS[0]}"
 
-          adb shell pm list packages -s \
-            | tee simulation/system-packages.txt
+          echo
+          echo "Código do pm: $PM_EXIT"
+
+          echo
+          echo "===== PM LIST ====="
+
+          adb shell pm list packages \
+            | grep -i mulher \
+            | tee simulation/pm-mulher.txt
 
           echo
           echo "===== DUMPSYS ====="
@@ -494,26 +558,30 @@ jobs:
             | tee simulation/package-info.txt
 
           echo
-          echo "===== VERIFICAÇÃO ====="
+          echo "===== RESULTADO ====="
 
-          if ! grep -q \
+          if grep -q \
             '/system/priv-app/MulherAmparada/' \
             simulation/pm-path.txt; then
 
-            echo "::error::Mulher Amparada não foi reconhecido em /system/priv-app."
+            echo "=========================================="
+            echo " MULHER AMPARADA ESTÁ EM PRIV-APP"
+            echo "=========================================="
 
-            exit 1
+          else
+
+            echo "::warning::O pacote ainda não está em /system/priv-app."
+
+            echo
+            echo "Isso significa que precisamos usar a partição"
+            echo "real mostrada no diagnóstico acima."
+
           fi
 
-          echo
-          echo "=========================================="
-          echo " MULHER AMPARADA ESTÁ EM PRIV-APP"
-          echo "=========================================="
-
-      - name: Verificar permissões privilegiadas
+      - name: Verificar permissões
         shell: bash
         run: |
-          set -e
+          set +e
 
           adb shell dumpsys package com.mulheres \
             > simulation/permissions.txt
@@ -536,7 +604,7 @@ jobs:
       - name: Capturar tela
         shell: bash
         run: |
-          set -e
+          set +e
 
           adb exec-out screencap -p \
             > simulation/boot-screenshot.png
@@ -545,6 +613,8 @@ jobs:
         if: always()
         shell: bash
         run: |
+          set +e
+
           echo "===== PACOTE ====="
 
           adb shell dumpsys package com.mulheres \

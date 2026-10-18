@@ -41,7 +41,7 @@ fun EmergencyOverlay(
                 .align(Alignment.BottomEnd)
                 .padding(
                     end = 64.dp,
-                    bottom = 140.dp
+                    bottom = 160.dp
                 )
                 .size(86.dp)
                 .shadow(

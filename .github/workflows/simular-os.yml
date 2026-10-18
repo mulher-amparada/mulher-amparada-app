@@ -196,26 +196,8 @@ jobs:
             ls -lh "$SUPER_IMG"
             echo "super=$SUPER_IMG" >> "$GITHUB_OUTPUT"
           fi
-
-      - name: Instalar ferramentas de imagem
-        shell: bash
-        run: |
-          set -e
-
-          sudo apt-get update
-
-          sudo apt-get install -y \
-            e2fsprogs \
-            android-sdk-libsparse-utils \
-            lvm2 \
-            gdisk
-
-          command -v debugfs
-          command -v file
-          command -v simg2img
-          command -v img2simg
           
-                - name: Instalar ferramentas de imagem
+     - name: Instalar ferramentas de imagem
         shell: bash
         run: |
           set -e

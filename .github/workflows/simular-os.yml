@@ -208,7 +208,7 @@ jobs:
             android-sdk-libsparse-utils \
             lvm2 \
             gdisk \
-            wget \
+            curl \
             unzip
 
           echo "===== BAIXANDO ANDROID LP TOOLS ====="
@@ -217,10 +217,8 @@ jobs:
           rm -rf "$TMP_LP"
           mkdir -p "$TMP_LP"
 
-          wget \
-            --fail \
-            --show-progress \
-            -O "$TMP_LP/android-lptools.zip" \
+          curl -L \
+            -o "$TMP_LP/android-lptools.zip" \
             "https://github.com/itsNileshHere/android-lptools/releases/latest/download/android-lptools-linux-x86_64.zip"
 
           echo "===== EXTRAINDO ANDROID LP TOOLS ====="
@@ -231,33 +229,24 @@ jobs:
 
           echo "===== INSTALANDO ====="
 
+          mkdir -p "$HOME/.local/bin"
+
           install -m 0755 \
-            "$TMP_LP/extracted/bin/lpunpack" \
-            "$TMP_LP/extracted/bin/lpdump" \
-            "$TMP_LP/extracted/bin/lpmake" \
-            "$HOME/.local/bin/" 2>/dev/null || true
+            "$(find "$TMP_LP/extracted" -type f -name lpunpack -print -quit)" \
+            "$HOME/.local/bin/lpunpack"
 
-          if [ ! -x "$HOME/.local/bin/lpunpack" ]; then
-            install -m 0755 \
-              "$(find "$TMP_LP/extracted" -type f -name lpunpack | head -n 1)" \
-              "$HOME/.local/bin/lpunpack"
-          fi
+          install -m 0755 \
+            "$(find "$TMP_LP/extracted" -type f -name lpdump -print -quit)" \
+            "$HOME/.local/bin/lpdump"
 
-          if [ ! -x "$HOME/.local/bin/lpdump" ]; then
-            install -m 0755 \
-              "$(find "$TMP_LP/extracted" -type f -name lpdump | head -n 1)" \
-              "$HOME/.local/bin/lpdump"
-          fi
-
-          if [ ! -x "$HOME/.local/bin/lpmake" ]; then
-            install -m 0755 \
-              "$(find "$TMP_LP/extracted" -type f -name lpmake | head -n 1)" \
-              "$HOME/.local/bin/lpmake"
-          fi
+          install -m 0755 \
+            "$(find "$TMP_LP/extracted" -type f -name lpmake -print -quit)" \
+            "$HOME/.local/bin/lpmake"
 
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.local/bin:$PATH"
 
-          echo "===== FERRAMENTAS PRONTAS ====="
+          echo "===== EXECUTANDO ====="
 
           lpunpack --help >/dev/null
           lpdump --help >/dev/null

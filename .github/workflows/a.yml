@@ -465,11 +465,87 @@ jobs:
           fi
 
           echo
-          echo "===== MONTAGENS APÓS REMOUNT ====="
+          echo "===== REBOOT PARA ATIVAR OVERLAYFS ====="
+
+          adb reboot
+
+          echo "Aguardando dispositivo..."
+
+          adb wait-for-device
+
+          BOOT_COMPLETED=false
+
+          for i in {1..120}; do
+            BOOT="$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')"
+
+            echo "Boot: ${BOOT:-aguardando} — tentativa $i/120"
+
+            if [ "$BOOT" = "1" ]; then
+              BOOT_COMPLETED=true
+              break
+            fi
+
+            sleep 2
+          done
+
+          if [ "$BOOT_COMPLETED" != "true" ]; then
+            echo "::error::Android não terminou o boot após ativar OverlayFS."
+
+            echo
+            echo "===== LOG DO EMULADOR ====="
+
+            cat simulation/emulator.log || true
+
+            exit 1
+          fi
+
+          echo
+          echo "===== ROOT NOVAMENTE ====="
+
+          ROOT_OK=false
+
+          for i in {1..15}; do
+            echo "Tentativa de adb root: $i/15"
+
+            if adb root; then
+              ROOT_OK=true
+              break
+            fi
+
+            sleep 3
+          done
+
+          if [ "$ROOT_OK" != "true" ]; then
+            echo "::error::Não foi possível recuperar root após reboot."
+
+            adb devices -l || true
+            adb shell id || true
+
+            exit 1
+          fi
+
+          sleep 5
+
+          adb wait-for-device
+
+          echo
+          echo "===== UID ====="
+
+          adb shell id
+
+          echo
+          echo "===== MONTAGENS ====="
 
           adb shell mount \
-            | grep -E ' /system | /system_ext | /product ' \
+            | grep -E ' /system | /system_ext | /product | /vendor ' \
             || true
+
+          echo
+          echo "===== TESTE DE ESCRITA ====="
+
+          adb shell mkdir -p /system/priv-app/MulherAmparada
+
+          echo "OverlayFS está gravável."
 
       - name: Instalar APK como priv-app
         shell: bash

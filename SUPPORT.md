@@ -66,6 +66,9 @@ https://www.tabnews.com.br/projetomulheramparadaapp/o-que-aprendi-construindo-um
 - 🇷🇺 Página russa — TabNews:
 https://m.vk.ru/wall-230312324_10327
 
+- 💡 Dicas em geral — Mulher Amparada, posts do tabnews:
+https://dicasemgeral.com/pt-br/buscar/?q=Mulher+amparada+
+
 ### 🆘 Canais de ajuda:
 
 - 🇧🇷 Ligue 180 — Central de Atendimento à Mulher: orientação e informações sobre serviços de atendimento à mulher.

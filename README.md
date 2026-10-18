@@ -38,6 +38,8 @@ https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Pro
 
 >Nossos termos e políticas: https://github.com/mulher-amparada/mulher-amparada-app/blob/main/TERMS%20AND%20POLICY.md
 
+> o EmergencyOverlay só funciona dentro da HubActivity!
+
 >Sobre as permissões: infelizmente, foi necessário configurar a HubActivity para não solicitar permissões automaticamente. Por isso, as permissões necessárias deverão ser concedidas manualmente pela usuária nas configurações do dispositivo. As permissões utilizadas por outras Activitys continuam sendo solicitadas normalmente pelo aplicativo.
 >
 > Ao entrar no aplicativo após sair dos disfarces, um aviso é exibido, bloqueando o acesso até que todas as permissões necessárias estejam concedidas. O aviso oferece à usuária a opção de acessar diretamente o popup de permissões do sistema. E se ainda houver alguma permissão necessária que não tenha sido concedida, o aviso continuará sendo exibido e o acesso permanecerá bloqueado. O aviso só desaparecerá quando todas as permissões necessárias estiverem concedidas. (caso o sistema nao consiga mostrar o popup de permissão novamente, ele abre a tela de configurações do app!)

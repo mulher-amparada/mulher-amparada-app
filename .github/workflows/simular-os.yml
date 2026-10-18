@@ -2,6 +2,7 @@ name: 🫆Simular Safe Woman OS🫆
 
 on:
   workflow_call:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -889,14 +890,6 @@ jobs:
             "granted=true|privileged|INSTALL|LOCATION|RECORD_AUDIO|READ_CONTACTS|CALL_PHONE" \
             simulation/permissions.txt \
             || true
-
-      - name: Capturar tela
-        shell: bash
-        run: |
-          set +e
-
-          adb exec-out screencap -p \
-            > simulation/boot-screenshot.png
 
       - name: Informações finais
         if: always()

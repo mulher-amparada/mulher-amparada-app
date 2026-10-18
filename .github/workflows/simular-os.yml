@@ -1,6 +1,5 @@
 name: 🫆Simular Safe Woman OS🫆
 
-
 on:
   workflow_dispatch:
 

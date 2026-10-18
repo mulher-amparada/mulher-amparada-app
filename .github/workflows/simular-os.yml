@@ -214,6 +214,67 @@ jobs:
           command -v file
           command -v simg2img
           command -v img2simg
+          
+                - name: Instalar ferramentas de imagem
+        shell: bash
+        run: |
+          set -e
+
+          sudo apt-get update
+
+          sudo apt-get install -y \
+            e2fsprogs \
+            android-sdk-libsparse-utils \
+            lvm2 \
+            gdisk \
+            wget \
+            unzip
+
+          command -v debugfs
+          command -v file
+          command -v simg2img
+          command -v img2simg
+
+          echo "===== INSTALANDO FERRAMENTAS DE DYNAMIC PARTITIONS ====="
+
+          TMP_LP="$(mktemp -d)"
+
+          wget -q \
+            https://github.com/itsNileshHere/android-lptools/releases/latest/download/android-lptools-linux-x86_64.zip \
+            -O "$TMP_LP/android-lptools.zip"
+
+          unzip -q \
+            "$TMP_LP/android-lptools.zip" \
+            -d "$TMP_LP/extracted"
+
+          LP_DIR="$(find "$TMP_LP/extracted" \
+            -type f \
+            -name lpunpack \
+            -printf '%h\n' \
+            -quit)"
+
+          if [ -z "$LP_DIR" ]; then
+            echo "::error::Não foi possível localizar os binários lpunpack."
+            exit 1
+          fi
+
+          sudo install -m 0755 "$LP_DIR/lpunpack" /usr/local/bin/lpunpack
+          sudo install -m 0755 "$LP_DIR/lpdump" /usr/local/bin/lpdump
+          sudo install -m 0755 "$LP_DIR/lpmake" /usr/local/bin/lpmake
+
+          echo "===== FERRAMENTAS INSTALADAS ====="
+
+          command -v lpunpack
+          command -v lpdump
+          command -v lpmake
+
+          lpunpack --help >/dev/null
+          lpdump --help >/dev/null
+          lpmake --help >/dev/null
+
+          echo "lpunpack OK"
+          echo "lpdump OK"
+          echo "lpmake OK"
 
       - name: Preparar e reconstruir system.img dinâmica
         if: steps.images.outputs.system != ''

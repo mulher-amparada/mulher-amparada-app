@@ -1,8 +1,7 @@
 name: 🫆Simular Safe Woman OS🫆
 
-"on":
+on:
   workflow_dispatch:
-  workflow-call:
 
 permissions:
   contents: read

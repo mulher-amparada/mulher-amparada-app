@@ -652,6 +652,18 @@
     background-color: #ce6827;
 }
 
+/* SVG */
+.language-svg .dot,
+.dot.language-svg,
+.language-svg.bar-segment,
+.bar-segment.language-svg,
+[data-language="SVG"] .dot,
+.dot[data-language="SVG"],
+[data-language="SVG"] .bar-segment,
+.bar-segment[data-language="SVG"] {
+    background-color: #7fce27;
+}
+
 /* TOML */
 .language-toml .dot,
 .dot.language-toml,

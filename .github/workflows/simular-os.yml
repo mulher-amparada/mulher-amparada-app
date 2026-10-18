@@ -224,12 +224,6 @@ jobs:
 
           cd "$TMP_LP"
 
-          echo "===== CORRIGINDO INCLUDES DO LIBLP ====="
-
-          sed -i '/#include <algorithm>/d' liblp/utility.cpp
-
-          sed -i '1i#include <algorithm>' liblp/utility.cpp
-
           echo "===== COMPILANDO ANDROID LP TOOLS ====="
 
           chmod +x make.sh

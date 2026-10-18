@@ -43,7 +43,10 @@ jobs:
             echo "::error::sdkmanager não encontrado."
 
             echo "Conteúdo de cmdline-tools:"
-            find "$SDK/cmdline-tools" -maxdepth 4 -type f -print || true
+            find "$SDK/cmdline-tools" \
+              -maxdepth 4 \
+              -type f \
+              -print || true
 
             exit 1
           fi
@@ -93,6 +96,8 @@ jobs:
         working-directory: ${{ steps.project.outputs.dir }}
         shell: bash
         run: |
+          set -e
+
           chmod +x gradlew
 
           ./gradlew assembleDebug --stacktrace
@@ -112,64 +117,25 @@ jobs:
 
           if [ -z "$APK" ]; then
             echo "::error::APK não encontrado."
-            find . -type f -name '*.apk' -print
+
+            find . \
+              -type f \
+              -name '*.apk' \
+              -print || true
+
             exit 1
           fi
 
           echo "APK: $APK"
           echo "path=$PWD/$APK" >> "$GITHUB_OUTPUT"
 
-      - name: Preparar sistema para escrita
-        shell: bash
-        run: |
-          set -e
-
-          echo "===== ROOT ====="
-          adb root
-          sleep 5
-          adb wait-for-device
-
-          echo "===== DESABILITANDO VERITY ====="
-          adb disable-verity || true
-
-          echo "===== REBOOT PARA APLICAR VERITY ====="
-          adb reboot
-
-          adb wait-for-device
-
-          for i in {1..120}; do
-            BOOT="$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')"
-
-            if [ "$BOOT" = "1" ]; then
-              echo "Android iniciou novamente."
-              break
-            fi
-
-            sleep 2
-          done
-
-          if [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" != "1" ]; then
-            echo "::error::Android não terminou o boot."
-            exit 1
-          fi
-
-          echo "===== ROOT NOVAMENTE ====="
-          adb root
-          sleep 5
-          adb wait-for-device
-
-          echo "===== REMOUNT ====="
-          adb remount
-
-          echo "===== MONTAGENS ====="
-          adb shell mount | grep -E ' /system | /system_ext | /product ' || true
-          
       - name: Criar AVD
         shell: bash
         run: |
           set -e
 
           export ANDROID_AVD_HOME="$HOME/.android/avd"
+
           mkdir -p "$ANDROID_AVD_HOME"
 
           echo "ANDROID_AVD_HOME=$ANDROID_AVD_HOME"
@@ -182,6 +148,7 @@ jobs:
 
           echo
           echo "===== AVDs DISPONÍVEIS ====="
+
           emulator -list-avds
 
           if ! emulator -list-avds | grep -qx "SafeWomanOS"; then
@@ -189,7 +156,11 @@ jobs:
 
             echo
             echo "===== CONTEÚDO DO AVD ====="
-            find "$ANDROID_AVD_HOME" -maxdepth 2 -type f -print || true
+
+            find "$ANDROID_AVD_HOME" \
+              -maxdepth 3 \
+              -type f \
+              -print || true
 
             exit 1
           fi
@@ -217,7 +188,7 @@ jobs:
           else
             echo "::warning::KVM não está disponível para o usuário."
           fi
-          
+
       - name: Iniciar Android
         shell: bash
         run: |
@@ -229,7 +200,9 @@ jobs:
 
           echo "ANDROID_AVD_HOME=$ANDROID_AVD_HOME"
 
-          echo "===== AVDS DISPONÍVEIS ====="
+          echo
+          echo "===== AVDs DISPONÍVEIS ====="
+
           emulator -list-avds
 
           if ! emulator -list-avds | grep -qx "SafeWomanOS"; then
@@ -238,7 +211,7 @@ jobs:
           fi
 
           echo
-          echo "===== VERIFICANDO ADB ====="
+          echo "===== ADB ====="
 
           command -v adb
           adb version
@@ -257,6 +230,7 @@ jobs:
             > simulation/emulator.log 2>&1 &
 
           EMULATOR_PID=$!
+
           echo "$EMULATOR_PID" > simulation/emulator.pid
 
           echo "PID do emulador: $EMULATOR_PID"
@@ -264,9 +238,12 @@ jobs:
           echo
           echo "===== AGUARDANDO ADB ====="
 
+          ADB_READY=false
+
           for i in {1..60}; do
             if adb get-state >/dev/null 2>&1; then
               echo "ADB detectou o emulador."
+              ADB_READY=true
               break
             fi
 
@@ -275,28 +252,33 @@ jobs:
 
               echo
               echo "===== LOG DO EMULADOR ====="
+
               cat simulation/emulator.log || true
 
               exit 1
             fi
 
             echo "ADB ainda não detectou o emulador... tentativa $i/60"
+
             sleep 2
           done
 
-          if ! adb get-state >/dev/null 2>&1; then
+          if [ "$ADB_READY" != "true" ]; then
             echo "::error::ADB não detectou o emulador após 120 segundos."
 
             echo
-            echo "===== PROCESSO ====="
+            echo "===== PROCESSOS ====="
+
             ps -ef | grep -E "[e]mulator|[q]emu" || true
 
             echo
             echo "===== DISPOSITIVOS ADB ====="
+
             adb devices -l || true
 
             echo
             echo "===== LOG DO EMULADOR ====="
+
             cat simulation/emulator.log || true
 
             exit 1
@@ -304,6 +286,8 @@ jobs:
 
           echo
           echo "===== AGUARDANDO BOOT DO ANDROID ====="
+
+          BOOT_COMPLETED=false
 
           for i in {1..120}; do
             BOOT="$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')"
@@ -313,6 +297,9 @@ jobs:
             if [ "$BOOT" = "1" ]; then
               echo
               echo "Android iniciou corretamente."
+
+              BOOT_COMPLETED=true
+
               break
             fi
 
@@ -321,6 +308,7 @@ jobs:
 
               echo
               echo "===== LOG DO EMULADOR ====="
+
               cat simulation/emulator.log || true
 
               exit 1
@@ -329,48 +317,162 @@ jobs:
             sleep 2
           done
 
-          if [ "$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" != "1" ]; then
+          if [ "$BOOT_COMPLETED" != "true" ]; then
             echo "::error::Android não terminou o boot após 240 segundos."
 
             echo
             echo "===== DISPOSITIVOS ADB ====="
+
             adb devices -l || true
 
             echo
             echo "===== PROPRIEDADES ====="
+
             adb shell getprop sys.boot_completed || true
             adb shell getprop dev.bootcomplete || true
 
             echo
+            echo "===== PROCESSOS ====="
+
+            ps -ef | grep -E "[e]mulator|[q]emu" || true
+
+            echo
             echo "===== LOG DO EMULADOR ====="
+
             cat simulation/emulator.log || true
 
             exit 1
           fi
+
+          echo
+          echo "===== ADB APÓS BOOT ====="
+
+          adb devices -l
+
+          adb get-state
+
+          echo
+          echo "===== TESTE DE SHELL ====="
+
+          adb shell id
+          adb shell getprop ro.build.version.release
+          adb shell getprop ro.build.version.sdk
 
       - name: Obter acesso root
         shell: bash
         run: |
           set -e
 
+          echo "===== VERIFICANDO EMULADOR ====="
+
+          adb devices -l
+
+          if ! adb get-state >/dev/null 2>&1; then
+            echo "::error::Nenhum dispositivo Android está conectado ao ADB."
+
+            echo
+            echo "===== PROCESSOS ====="
+
+            ps -ef | grep -E "[e]mulator|[q]emu" || true
+
+            echo
+            echo "===== LOG DO EMULADOR ====="
+
+            cat simulation/emulator.log || true
+
+            exit 1
+          fi
+
+          echo "Emulador encontrado."
+
+          echo
+          echo "===== ROOT ====="
+
           adb root
 
-          sleep 3
+          sleep 5
 
           adb wait-for-device
 
-          echo "UID:"
+          echo
+          echo "===== DISPOSITIVO ====="
+
+          adb devices -l
+
+          echo
+          echo "===== UID ====="
+
           adb shell id
 
-      - name: Tornar /system gravável
+      - name: Preparar sistema para escrita
         shell: bash
         run: |
           set -e
 
           echo "===== ROOT ====="
+
           adb root
-          sleep 3
+
+          sleep 5
+
           adb wait-for-device
+
+          echo
+          echo "===== DESABILITANDO VERITY ====="
+
+          if adb disable-verity; then
+            echo "disable-verity executado."
+          else
+            echo "::warning::disable-verity não foi aceito pela imagem."
+            echo "Continuando para testar o remount."
+          fi
+
+          echo
+          echo "===== REBOOT PARA APLICAR ALTERAÇÕES ====="
+
+          adb reboot
+
+          adb wait-for-device
+
+          BOOT_COMPLETED=false
+
+          for i in {1..120}; do
+            BOOT="$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')"
+
+            echo "Boot: ${BOOT:-aguardando} — tentativa $i/120"
+
+            if [ "$BOOT" = "1" ]; then
+              BOOT_COMPLETED=true
+              break
+            fi
+
+            sleep 2
+          done
+
+          if [ "$BOOT_COMPLETED" != "true" ]; then
+            echo "::error::Android não terminou o boot após a alteração de verity."
+
+            echo
+            echo "===== LOG ====="
+
+            cat simulation/emulator.log || true
+
+            exit 1
+          fi
+
+          echo
+          echo "===== ROOT NOVAMENTE ====="
+
+          adb root
+
+          sleep 5
+
+          adb wait-for-device
+
+          echo
+          echo "===== UID ====="
+
+          adb shell id
 
           echo
           echo "===== REMOUNT ====="
@@ -379,36 +481,113 @@ jobs:
             echo "adb remount funcionou."
           else
             echo "::error::adb remount falhou."
+
             echo
             echo "===== MONTAGENS ====="
+
             adb shell mount || true
+
+            echo
+            echo "===== PROPRIEDADES DE BUILD ====="
+
+            adb shell getprop ro.build.type || true
+            adb shell getprop ro.debuggable || true
+            adb shell getprop ro.boot.verifiedbootstate || true
+
             exit 1
           fi
 
           echo
-          echo "===== SYSTEM ====="
-          adb shell mount | grep -E ' /system | /system_ext | /product ' || true
+          echo "===== MONTAGENS APÓS REMOUNT ====="
 
-      - name: Reiniciar Android
+          adb shell mount \
+            | grep -E ' /system | /system_ext | /product ' \
+            || true
+
+      - name: Instalar APK como priv-app
         shell: bash
         run: |
+          set -e
+
+          mkdir -p simulation
+
+          APK="${{ steps.apk.outputs.path }}"
+
+          echo "APK:"
+          echo "$APK"
+
+          if [ ! -f "$APK" ]; then
+            echo "::error::APK não existe no caminho informado."
+            exit 1
+          fi
+
+          echo
+          echo "===== ROOT ====="
+
+          adb root
+
+          sleep 5
+
+          adb wait-for-device
+
+          echo
+          echo "===== CRIANDO DIRETÓRIO PRIV-APP ====="
+
+          adb shell mkdir -p \
+            /system/priv-app/MulherAmparada
+
+          echo
+          echo "===== COPIANDO APK ====="
+
+          adb push \
+            "$APK" \
+            /system/priv-app/MulherAmparada/MulherAmparada.apk
+
+          echo
+          echo "===== PERMISSÕES DO APK ====="
+
+          adb shell chmod 0644 \
+            /system/priv-app/MulherAmparada/MulherAmparada.apk
+
+          adb shell chown root:root \
+            /system/priv-app/MulherAmparada/MulherAmparada.apk
+
+          echo
+          echo "===== ARQUIVO NO SYSTEM ====="
+
+          adb shell ls -l \
+            /system/priv-app/MulherAmparada/
+
+          echo
+          echo "===== REINICIANDO ANDROID ====="
+
           adb reboot
 
           adb wait-for-device
 
-          for i in {1..90}; do
+          BOOT_COMPLETED=false
+
+          for i in {1..120}; do
             BOOT="$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')"
 
+            echo "Boot: ${BOOT:-aguardando} — tentativa $i/120"
+
             if [ "$BOOT" = "1" ]; then
-              echo "Android iniciou novamente."
+              BOOT_COMPLETED=true
               break
             fi
 
             sleep 2
           done
 
-          if [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" != "1" ]; then
-            echo "::error::Android não terminou o segundo boot."
+          if [ "$BOOT_COMPLETED" != "true" ]; then
+            echo "::error::Android não terminou o boot após instalar o priv-app."
+
+            echo
+            echo "===== LOG DO EMULADOR ====="
+
+            cat simulation/emulator.log || true
+
             exit 1
           fi
 
@@ -419,8 +598,13 @@ jobs:
 
           mkdir -p simulation
 
+          echo "===== CAMINHO DO PACOTE ====="
+
           adb shell pm path com.mulheres \
             | tee simulation/pm-path.txt
+
+          echo
+          echo "===== INFORMAÇÕES DO PACOTE ====="
 
           adb shell dumpsys package com.mulheres \
             | tee simulation/package-info.txt
@@ -435,15 +619,18 @@ jobs:
           echo "===== PRIV-APP ====="
 
           adb shell pm path com.mulheres \
-            | grep '/system/priv-app/' \
             | tee simulation/priv-app-check.txt
 
-          if ! grep -q '/system/priv-app/' simulation/priv-app-check.txt; then
+          if ! grep -q '/system/priv-app/' \
+            simulation/priv-app-check.txt; then
+
             echo "::error::Mulher Amparada NÃO está em /system/priv-app."
+
             exit 1
           fi
 
-          echo "OK: Mulher Amparada é priv-app."
+          echo
+          echo "OK: Mulher Amparada está em /system/priv-app."
 
       - name: Verificar permissões
         shell: bash
@@ -471,6 +658,8 @@ jobs:
       - name: Capturar tela inicial
         shell: bash
         run: |
+          set -e
+
           mkdir -p simulation
 
           adb exec-out screencap -p \
@@ -479,6 +668,8 @@ jobs:
       - name: Abrir gaveta de aplicativos
         shell: bash
         run: |
+          set -e
+
           adb shell input keyevent KEYCODE_HOME
 
           sleep 3
@@ -496,13 +687,20 @@ jobs:
       - name: Verificar presença na gaveta
         shell: bash
         run: |
+          set -e
+
           adb shell pm list packages \
             | tee simulation/all-packages.txt
 
-          if grep -q "com.mulheres" simulation/all-packages.txt; then
+          if grep -q "com.mulheres" \
+            simulation/all-packages.txt; then
+
             echo "Mulher Amparada está instalada."
+
           else
+
             echo "::error::Mulher Amparada não está instalada."
+
             exit 1
           fi
 
@@ -511,18 +709,46 @@ jobs:
         shell: bash
         run: |
           echo "===== PACOTE ====="
-          adb shell dumpsys package com.mulheres || true
+
+          adb shell dumpsys package com.mulheres \
+            || true
 
           echo
           echo "===== CAMINHO ====="
-          adb shell pm path com.mulheres || true
+
+          adb shell pm path com.mulheres \
+            || true
 
           echo
           echo "===== BOOT ====="
-          adb shell getprop sys.boot_completed || true
+
+          adb shell getprop sys.boot_completed \
+            || true
+
+          echo
+          echo "===== BUILD ====="
+
+          adb shell getprop ro.build.type \
+            || true
+
+          adb shell getprop ro.debuggable \
+            || true
+
+          echo
+          echo "===== VERITY ====="
+
+          adb shell getprop ro.boot.verifiedbootstate \
+            || true
+
+          echo
+          echo "===== ADB ====="
+
+          adb devices -l \
+            || true
 
       - name: Parar emulador
         if: always()
+        shell: bash
         run: |
           if [ -f simulation/emulator.pid ]; then
             kill "$(cat simulation/emulator.pid)" 2>/dev/null || true

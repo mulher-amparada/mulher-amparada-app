@@ -2,6 +2,7 @@ name: 🫆Simular Safe Woman OS🫆
 
 on:
   workflow_dispatch:
+  workflow-call:
 
 permissions:
   contents: read
@@ -211,43 +212,53 @@ jobs:
             wget \
             unzip
 
-          command -v debugfs
-          command -v file
-          command -v simg2img
-          command -v img2simg
+          echo "===== BAIXANDO ANDROID LP TOOLS ====="
 
-          echo "===== INSTALANDO FERRAMENTAS DE DYNAMIC PARTITIONS ====="
+          TMP_LP="$RUNNER_TEMP/android-lptools"
+          rm -rf "$TMP_LP"
+          mkdir -p "$TMP_LP"
 
-          TMP_LP="$(mktemp -d)"
+          wget \
+            --fail \
+            --show-progress \
+            -O "$TMP_LP/android-lptools.zip" \
+            "https://github.com/itsNileshHere/android-lptools/releases/latest/download/android-lptools-linux-x86_64.zip"
 
-          wget -q \
-            https://github.com/itsNileshHere/android-lptools/releases/latest/download/android-lptools-linux-x86_64.zip \
-            -O "$TMP_LP/android-lptools.zip"
+          echo "===== EXTRAINDO ANDROID LP TOOLS ====="
 
-          unzip -q \
+          unzip -o \
             "$TMP_LP/android-lptools.zip" \
             -d "$TMP_LP/extracted"
 
-          LP_DIR="$(find "$TMP_LP/extracted" \
-            -type f \
-            -name lpunpack \
-            -printf '%h\n' \
-            -quit)"
+          echo "===== INSTALANDO ====="
 
-          if [ -z "$LP_DIR" ]; then
-            echo "::error::Não foi possível localizar os binários lpunpack."
-            exit 1
+          install -m 0755 \
+            "$TMP_LP/extracted/bin/lpunpack" \
+            "$TMP_LP/extracted/bin/lpdump" \
+            "$TMP_LP/extracted/bin/lpmake" \
+            "$HOME/.local/bin/" 2>/dev/null || true
+
+          if [ ! -x "$HOME/.local/bin/lpunpack" ]; then
+            install -m 0755 \
+              "$(find "$TMP_LP/extracted" -type f -name lpunpack | head -n 1)" \
+              "$HOME/.local/bin/lpunpack"
           fi
 
-          sudo install -m 0755 "$LP_DIR/lpunpack" /usr/local/bin/lpunpack
-          sudo install -m 0755 "$LP_DIR/lpdump" /usr/local/bin/lpdump
-          sudo install -m 0755 "$LP_DIR/lpmake" /usr/local/bin/lpmake
+          if [ ! -x "$HOME/.local/bin/lpdump" ]; then
+            install -m 0755 \
+              "$(find "$TMP_LP/extracted" -type f -name lpdump | head -n 1)" \
+              "$HOME/.local/bin/lpdump"
+          fi
 
-          echo "===== FERRAMENTAS INSTALADAS ====="
+          if [ ! -x "$HOME/.local/bin/lpmake" ]; then
+            install -m 0755 \
+              "$(find "$TMP_LP/extracted" -type f -name lpmake | head -n 1)" \
+              "$HOME/.local/bin/lpmake"
+          fi
 
-          command -v lpunpack
-          command -v lpdump
-          command -v lpmake
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+          echo "===== FERRAMENTAS PRONTAS ====="
 
           lpunpack --help >/dev/null
           lpdump --help >/dev/null

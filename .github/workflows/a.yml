@@ -214,123 +214,139 @@ jobs:
           command -v simg2img
           command -v img2simg
 
-      - name: Preparar system.img
-        if: steps.images.outputs.system != ''
+      - name: Preparar imagens do sistema
         shell: bash
         run: |
           set -e
 
-          ORIGINAL_SYSTEM="${{ steps.images.outputs.system }}"
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
           APK="${{ steps.apk.outputs.path }}"
+          SYSTEM_IMAGE_DIR="$SDK/system-images/android-35/aosp_atd/x86_64"
 
           mkdir -p simulation/image
 
-          cp "$ORIGINAL_SYSTEM" \
-            simulation/image/system-original.img
+          echo "===== PROCURANDO IMAGENS ====="
 
-          echo
-          echo "===== TIPO ====="
+          find "$SYSTEM_IMAGE_DIR" \
+            -maxdepth 1 \
+            -type f \
+            -name '*.img' \
+            -print
 
-          file "$ORIGINAL_SYSTEM"
+          inject_priv_app() {
+            IMAGE="$1"
+            PARTITION="$2"
 
-          echo
-          echo "===== CONVERSÃO ====="
+            if [ ! -f "$IMAGE" ]; then
+              return 1
+            fi
 
-          if file "$ORIGINAL_SYSTEM" | grep -qi "Android sparse image"; then
+            echo
+            echo "=========================================="
+            echo "PARTIÇÃO: $PARTITION"
+            echo "IMAGEM: $IMAGE"
+            echo "=========================================="
 
-            simg2img \
-              "$ORIGINAL_SYSTEM" \
-              simulation/image/system.raw.img
+            file "$IMAGE"
 
-          else
+            RAW="simulation/image/${PARTITION}.raw.img"
+            FINAL="simulation/image/${PARTITION}.img"
 
-            cp \
-              "$ORIGINAL_SYSTEM" \
-              simulation/image/system.raw.img
+            cp "$IMAGE" "simulation/image/${PARTITION}-original.img"
 
+            if file "$IMAGE" | grep -qi "Android sparse image"; then
+              simg2img "$IMAGE" "$RAW"
+            else
+              cp "$IMAGE" "$RAW"
+            fi
+
+            if ! file "$RAW" | grep -Eqi 'ext[234] filesystem'; then
+              echo "::notice::${PARTITION}.img não é ext4; ignorando."
+              return 1
+            fi
+
+            echo
+            echo "===== ESTRUTURA ${PARTITION} ====="
+
+            sudo debugfs \
+              -R "ls -l /" \
+              "$RAW" || true
+
+            echo
+            echo "===== CRIANDO PRIV-APP ====="
+
+            sudo debugfs -w \
+              -R "mkdir /priv-app" \
+              "$RAW" || true
+
+            sudo debugfs -w \
+              -R "mkdir /priv-app/MulherAmparada" \
+              "$RAW" || true
+
+            sudo debugfs -w \
+              -R "write $APK /priv-app/MulherAmparada/MulherAmparada.apk" \
+              "$RAW"
+
+            sudo debugfs -w \
+              -R "set_inode_field /priv-app/MulherAmparada/MulherAmparada.apk mode 0100644" \
+              "$RAW"
+
+            sudo debugfs -w \
+              -R "set_inode_field /priv-app/MulherAmparada/MulherAmparada.apk uid 0" \
+              "$RAW"
+
+            sudo debugfs -w \
+              -R "set_inode_field /priv-app/MulherAmparada/MulherAmparada.apk gid 0" \
+              "$RAW"
+
+            echo
+            echo "===== APK INJETADO ====="
+
+            sudo debugfs \
+              -R "ls -l /priv-app/MulherAmparada" \
+              "$RAW"
+
+            if file "$IMAGE" | grep -qi "Android sparse image"; then
+              img2simg "$RAW" "$FINAL"
+            else
+              cp "$RAW" "$FINAL"
+            fi
+
+            cp "$FINAL" "$IMAGE"
+
+            echo
+            echo "===== IMAGEM FINAL ====="
+
+            file "$IMAGE"
+            ls -lh "$IMAGE"
+
+            return 0
+          }
+
+          FOUND=false
+
+          if inject_priv_app \
+            "$SYSTEM_IMAGE_DIR/system.img" \
+            "system"; then
+            FOUND=true
           fi
 
-          echo
-          echo "===== FILE SYSTEM ====="
-
-          file simulation/image/system.raw.img
-
-          if ! file simulation/image/system.raw.img \
-            | grep -Eqi 'ext[234] filesystem'; then
-
-            echo "::warning::system.raw.img não parece ser ext2/ext3/ext4."
-            exit 0
+          if inject_priv_app \
+            "$SYSTEM_IMAGE_DIR/product.img" \
+            "product"; then
+            FOUND=true
           fi
 
-          echo
-          echo "===== VERIFICAÇÃO ====="
-
-          sudo e2fsck -fn \
-            simulation/image/system.raw.img \
-            || true
-
-          echo
-          echo "===== DIRETÓRIOS EXISTENTES ====="
-
-          sudo debugfs \
-            -R "ls -l /" \
-            simulation/image/system.raw.img
-
-          echo
-          echo "===== INSERINDO APK ====="
-
-          sudo debugfs -w \
-            -R "mkdir /priv-app" \
-            simulation/image/system.raw.img \
-            || true
-
-          sudo debugfs -w \
-            -R "mkdir /priv-app/MulherAmparada" \
-            simulation/image/system.raw.img \
-            || true
-
-          sudo debugfs -w \
-            -R "write $APK /priv-app/MulherAmparada/MulherAmparada.apk" \
-            simulation/image/system.raw.img
-
-          sudo debugfs -w \
-            -R "set_inode_field /priv-app/MulherAmparada/MulherAmparada.apk mode 0100644" \
-            simulation/image/system.raw.img
-
-          sudo debugfs -w \
-            -R "set_inode_field /priv-app/MulherAmparada/MulherAmparada.apk uid 0" \
-            simulation/image/system.raw.img
-
-          sudo debugfs -w \
-            -R "set_inode_field /priv-app/MulherAmparada/MulherAmparada.apk gid 0" \
-            simulation/image/system.raw.img
-
-          echo
-          echo "===== APK DENTRO DA IMAGEM ====="
-
-          sudo debugfs \
-            -R "ls -l /priv-app/MulherAmparada" \
-            simulation/image/system.raw.img
-
-          echo
-          echo "===== RECRIANDO ====="
-
-          if file "$ORIGINAL_SYSTEM" \
-            | grep -qi "Android sparse image"; then
-
-            img2simg \
-              simulation/image/system.raw.img \
-              simulation/image/system.img
-
-          else
-
-            cp \
-              simulation/image/system.raw.img \
-              simulation/image/system.img
-
+          if inject_priv_app \
+            "$SYSTEM_IMAGE_DIR/system_ext.img" \
+            "system_ext"; then
+            FOUND=true
           fi
 
-          ls -lh simulation/image/system.img
+          if [ "$FOUND" != "true" ]; then
+            echo "::error::Nenhuma imagem de sistema compatível foi encontrada para receber o priv-app."
+            exit 1
+          fi
 
       - name: Substituir system.img
         if: steps.images.outputs.system != ''
@@ -529,53 +545,33 @@ jobs:
             2>&1 \
             | tee simulation/expected-directory.txt
 
-      - name: Verificar app
+      - name: Verificar registro do pacote
         shell: bash
         run: |
-          set +e
+          set -e
 
-          echo "===== PM PATH ====="
+          echo "===== PACKAGE MANAGER ====="
 
-          adb shell pm path com.mulheres \
+          adb shell pm path com.mulheres 2>&1 \
+            | tr -d '\r' \
             | tee simulation/pm-path.txt
 
-          PM_EXIT="${PIPESTATUS[0]}"
+          if ! grep -q '^package:' simulation/pm-path.txt; then
+            echo "::error::PackageManagerService não registrou com.mulheres."
+            exit 1
+          fi
 
           echo
-          echo "Código do pm: $PM_EXIT"
+          echo "===== PACOTE REGISTRADO ====="
 
-          echo
-          echo "===== PM LIST ====="
+          cat simulation/pm-path.txt
 
-          adb shell pm list packages \
-            | grep -i mulher \
-            | tee simulation/pm-mulher.txt
-
-          echo
-          echo "===== DUMPSYS ====="
-
-          adb shell dumpsys package com.mulheres \
-            | tee simulation/package-info.txt
-
-          echo
-          echo "===== RESULTADO ====="
-
-          if ! grep -q \
-             '/priv-app/MulherAmparada/' \
-             simulation/pm-path.txt; then
-
-            echo "=========================================="
-            echo " MULHER AMPARADA ESTÁ EM PRIV-APP"
-            echo "=========================================="
-
-          else
-
-            echo "::warning::O pacote ainda não está em /system/priv-app."
-
+          if grep -q '/priv-app/' simulation/pm-path.txt; then
             echo
-            echo "Isso significa que precisamos usar a partição"
-            echo "real mostrada no diagnóstico acima."
-
+            echo "✓ com.mulheres registrado como priv-app."
+          else
+            echo "::error::com.mulheres foi registrado, mas não está em um caminho priv-app."
+            exit 1
           fi
 
       - name: Verificar permissões

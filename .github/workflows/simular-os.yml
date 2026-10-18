@@ -209,7 +209,8 @@ jobs:
             lvm2 \
             gdisk \
             git \
-            build-essential
+            build-essential \
+            clang
 
           echo "===== BAIXANDO ANDROID LP TOOLS ====="
 
@@ -221,9 +222,15 @@ jobs:
             https://github.com/itsNileshHere/android-lptools.git \
             "$TMP_LP"
 
-          echo "===== COMPILANDO ANDROID LP TOOLS ====="
-
           cd "$TMP_LP"
+
+          echo "===== CORRIGINDO INCLUDES DO LIBLP ====="
+
+          sed -i '/#include <algorithm>/d' liblp/utility.cpp
+
+          sed -i '1i#include <algorithm>' liblp/utility.cpp
+
+          echo "===== COMPILANDO ANDROID LP TOOLS ====="
 
           chmod +x make.sh
 
@@ -231,9 +238,17 @@ jobs:
 
           echo "===== INSTALANDO ====="
 
-          sudo install -m 0755 bin/lpunpack /usr/local/bin/lpunpack
-          sudo install -m 0755 bin/lpdump /usr/local/bin/lpdump
-          sudo install -m 0755 bin/lpmake /usr/local/bin/lpmake
+          sudo install -m 0755 \
+            bin/lpunpack \
+            /usr/local/bin/lpunpack
+
+          sudo install -m 0755 \
+            bin/lpdump \
+            /usr/local/bin/lpdump
+
+          sudo install -m 0755 \
+            bin/lpmake \
+            /usr/local/bin/lpmake
 
           echo "===== EXECUTANDO ====="
 

@@ -208,43 +208,32 @@ jobs:
             android-sdk-libsparse-utils \
             lvm2 \
             gdisk \
-            curl \
-            unzip
+            git \
+            build-essential
 
           echo "===== BAIXANDO ANDROID LP TOOLS ====="
 
           TMP_LP="$RUNNER_TEMP/android-lptools"
+
           rm -rf "$TMP_LP"
-          mkdir -p "$TMP_LP"
 
-          curl -L \
-            -o "$TMP_LP/android-lptools.zip" \
-            "https://github.com/itsNileshHere/android-lptools/releases/latest/download/android-lptools-linux-x86_64.zip"
+          git clone --depth 1 \
+            https://github.com/itsNileshHere/android-lptools.git \
+            "$TMP_LP"
 
-          echo "===== EXTRAINDO ANDROID LP TOOLS ====="
+          echo "===== COMPILANDO ANDROID LP TOOLS ====="
 
-          unzip -o \
-            "$TMP_LP/android-lptools.zip" \
-            -d "$TMP_LP/extracted"
+          cd "$TMP_LP"
+
+          chmod +x make.sh
+
+          ./make.sh
 
           echo "===== INSTALANDO ====="
 
-          mkdir -p "$HOME/.local/bin"
-
-          install -m 0755 \
-            "$(find "$TMP_LP/extracted" -type f -name lpunpack -print -quit)" \
-            "$HOME/.local/bin/lpunpack"
-
-          install -m 0755 \
-            "$(find "$TMP_LP/extracted" -type f -name lpdump -print -quit)" \
-            "$HOME/.local/bin/lpdump"
-
-          install -m 0755 \
-            "$(find "$TMP_LP/extracted" -type f -name lpmake -print -quit)" \
-            "$HOME/.local/bin/lpmake"
-
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-          export PATH="$HOME/.local/bin:$PATH"
+          sudo install -m 0755 bin/lpunpack /usr/local/bin/lpunpack
+          sudo install -m 0755 bin/lpdump /usr/local/bin/lpdump
+          sudo install -m 0755 bin/lpmake /usr/local/bin/lpmake
 
           echo "===== EXECUTANDO ====="
 

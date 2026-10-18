@@ -322,45 +322,27 @@ jobs:
         run: |
           set -e
 
-          adb disable-verity || true
-          adb reboot
-
-          adb wait-for-device
-
-          for i in {1..60}; do
-            if [ "$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = "1" ]; then
-              break
-            fi
-            sleep 2
-          done
-
+          echo "===== ROOT ====="
           adb root
           sleep 3
+          adb wait-for-device
 
-          adb remount
+          echo
+          echo "===== REMOUNT ====="
 
-          echo "Montagem:"
-          adb shell mount | grep system || true
+          if adb remount; then
+            echo "adb remount funcionou."
+          else
+            echo "::error::adb remount falhou."
+            echo
+            echo "===== MONTAGENS ====="
+            adb shell mount || true
+            exit 1
+          fi
 
-      - name: Instalar como aplicativo privilegiado
-        shell: bash
-        run: |
-          set -e
-
-          APK="${{ steps.apk.outputs.path }}"
-
-          adb shell mkdir -p /system/priv-app/MulherAmparada
-
-          adb push "$APK" \
-            /system/priv-app/MulherAmparada/MulherAmparada.apk
-
-          adb shell chmod 755 \
-            /system/priv-app/MulherAmparada
-
-          adb shell chmod 644 \
-            /system/priv-app/MulherAmparada/MulherAmparada.apk
-
-          echo "APK colocado em /system/priv-app."
+          echo
+          echo "===== SYSTEM ====="
+          adb shell mount | grep -E ' /system | /system_ext | /product ' || true
 
       - name: Reiniciar Android
         shell: bash

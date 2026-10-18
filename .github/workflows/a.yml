@@ -1,0 +1,273 @@
+name: Safe Woman OS
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: safe-woman-os-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-safe-woman-os:
+    name: AOSP mínimo + Safe Woman OS
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout do projeto
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Liberar espaço
+        run: |
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          df -h
+
+      - name: Instalar dependências
+        run: |
+          sudo apt-get update
+
+          sudo apt-get install -y \
+            git \
+            gnupg \
+            flex \
+            bison \
+            build-essential \
+            zip \
+            curl \
+            zlib1g-dev \
+            libc6-dev-i386 \
+            libx11-dev \
+            lib32z1-dev \
+            libgl1-mesa-dev \
+            libxml2-utils \
+            xsltproc \
+            unzip \
+            fontconfig \
+            rsync \
+            lz4 \
+            bc \
+            python3 \
+            python3-pip \
+            ccache
+
+      - name: Instalar repo
+        run: |
+          mkdir -p "$HOME/bin"
+
+          curl -fsSL \
+            https://storage.googleapis.com/git-repo-downloads/repo \
+            -o "$HOME/bin/repo"
+
+          chmod +x "$HOME/bin/repo"
+
+          echo "$HOME/bin" >> "$GITHUB_PATH"
+
+          repo --version
+
+      - name: Criar árvore inicial AOSP
+        env:
+          AOSP_BRANCH: android-17.0.0_r1
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/aosp"
+
+          cd "$GITHUB_WORKSPACE/aosp"
+
+          repo init \
+            --partial-clone \
+            --depth=1 \
+            -u https://android.googlesource.com/platform/manifest \
+            -b "$AOSP_BRANCH"
+
+      - name: Criar manifest inicial mínimo
+        working-directory: aosp
+        run: |
+          mkdir -p .repo/local_manifests
+
+          cat > .repo/local_manifests/safe_woman.xml <<'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <manifest>
+
+              <project
+                  path="build/make"
+                  name="platform/build"
+                  revision="refs/heads/android-17.0.0_r1" />
+
+              <project
+                  path="build/soong"
+                  name="platform/build/soong"
+                  revision="refs/heads/android-17.0.0_r1" />
+
+              <project
+                  path="build/bazel"
+                  name="platform/build/bazel"
+                  revision="refs/heads/android-17.0.0_r1" />
+
+              <project
+                  path="art"
+                  name="platform/art"
+                  revision="refs/heads/android-17.0.0_r1" />
+
+              <project
+                  path="bionic"
+                  name="platform/bionic"
+                  revision="refs/heads/android-17.0.0_r1" />
+
+              <project
+                  path="frameworks/base"
+                  name="platform/frameworks/base"
+                  revision="refs/heads/android-17.0.0_r1" />
+
+              <project
+                  path="frameworks/native"
+                  name="platform/frameworks/native"
+                  revision="refs/heads/android-17.0.0_r1" />
+
+              <project
+                  path="system/core"
+                  name="platform/system/core"
+                  revision="refs/heads/android-17.0.0_r1" />
+
+              <project
+                  path="system/libbase"
+                  name="platform/system/libbase"
+                  revision="refs/heads/android-17.0.0_r1" />
+
+              <project
+                  path="system/logging"
+                  name="platform/system/logging"
+                  revision="refs/heads/android-17.0.0_r1" />
+
+              <project
+                  path="packages/apps"
+                  name="platform/packages/apps"
+                  revision="refs/heads/android-17.0.0_r1" />
+
+              <project
+                  path="packages/modules"
+                  name="platform/packages/modules"
+                  revision="refs/heads/android-17.0.0_r1" />
+
+              <project
+                  path="hardware/interfaces"
+                  name="platform/hardware/interfaces"
+                  revision="refs/heads/android-17.0.0_r1" />
+
+              <project
+                  path="hardware/libhardware"
+                  name="platform/hardware/libhardware"
+                  revision="refs/heads/android-17.0.0_r1" />
+
+              <project
+                  path="prebuilts/build-tools"
+                  name="platform/prebuilts/build-tools"
+                  revision="refs/heads/android-17.0.0_r1" />
+
+              <project
+                  path="prebuilts/jdk"
+                  name="platform/prebuilts/jdk"
+                  revision="refs/heads/android-17.0.0_r1" />
+
+              <project
+                  path="prebuilts/clang"
+                  name="platform/prebuilts/clang"
+                  revision="refs/heads/android-17.0.0_r1" />
+
+              <project
+                  path="device/google/cuttlefish"
+                  name="device/google/cuttlefish"
+                  revision="refs/heads/android-17.0.0_r1" />
+
+          </manifest>
+          EOF
+
+      - name: Sincronizar componentes iniciais
+        working-directory: aosp
+        run: |
+          repo sync \
+            --current-branch \
+            --no-tags \
+            --optimized-fetch \
+            --prune \
+            --force-sync \
+            -j2
+
+      - name: Integrar Safe Woman OS
+        run: |
+          test -d "Safe Woman Operational System"
+
+          mkdir -p aosp/device
+          mkdir -p aosp/packages/apps
+
+          rsync -a \
+            "Safe Woman Operational System/device/" \
+            "aosp/device/"
+
+          rsync -a \
+            "Safe Woman Operational System/packages/apps/MulherAmparada/" \
+            "aosp/packages/apps/MulherAmparada/"
+
+      - name: Verificar produto
+        working-directory: aosp
+        run: |
+          test -f device/safe_woman/AndroidProducts.mk
+          test -f device/safe_woman/BoardConfig.mk
+          test -f device/safe_woman/safe_woman.mk
+          test -f packages/apps/MulherAmparada/Android.bp
+
+      - name: Inicializar Soong
+        working-directory: aosp
+        run: |
+          source build/envsetup.sh
+
+      - name: Resolver dependências do produto
+        working-directory: aosp
+        run: |
+          source build/envsetup.sh
+          lunch safe_woman-userdebug
+
+          echo "Produto:"
+          echo "$TARGET_PRODUCT"
+
+          echo "Dispositivo:"
+          echo "$TARGET_DEVICE"
+
+      - name: Compilar
+        working-directory: aosp
+        run: |
+          source build/envsetup.sh
+          lunch safe_woman-userdebug
+
+          m -j2
+
+      - name: Verificar imagens
+        working-directory: aosp
+        run: |
+          source build/envsetup.sh
+          lunch safe_woman-userdebug
+
+          PRODUCT_OUT="out/target/product/$TARGET_DEVICE"
+
+          test -d "$PRODUCT_OUT"
+
+          find "$PRODUCT_OUT" \
+            -maxdepth 1 \
+            -type f \
+            -name "*.img" \
+            -print
+
+      - name: Publicar imagens
+        uses: actions/upload-artifact@v6
+        with:
+          name: Safe-Woman-OS-Android-17
+          path: |
+            aosp/out/target/product/*/*.img
+          if-no-files-found: error
+          retention-days: 14

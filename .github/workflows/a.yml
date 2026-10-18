@@ -423,6 +423,40 @@ jobs:
 
           adb shell id
 
+      - name: Diagnosticar partições graváveis
+        shell: bash
+        run: |
+          set -e
+
+          echo "===== MONTAGENS ====="
+          adb shell mount
+
+          echo
+          echo "===== TESTANDO /DATA ====="
+          adb shell 'touch /data/safe-woman-test && rm /data/safe-woman-test'
+          echo "/data: OK"
+
+          echo
+          echo "===== TESTANDO /CACHE ====="
+          adb shell 'touch /cache/safe-woman-test && rm /cache/safe-woman-test' \
+            && echo "/cache: OK" \
+            || echo "/cache: somente leitura ou inexistente"
+
+          echo
+          echo "===== TESTANDO /METADATA ====="
+          adb shell 'touch /metadata/safe-woman-test && rm /metadata/safe-woman-test' \
+            && echo "/metadata: OK" \
+            || echo "/metadata: somente leitura ou inexistente"
+
+          echo
+          echo "===== OVERLAY SYSTEM ====="
+          adb shell 'mount | grep " /system " || true'
+
+          echo
+          echo "===== UPPERDIR ====="
+          adb shell 'ls -ld /mnt/scratch /mnt/scratch/overlay /mnt/scratch/overlay/system /mnt/scratch/overlay/system/upper' \
+            || true
+            
       - name: Tornar system gravável
         shell: bash
         run: |

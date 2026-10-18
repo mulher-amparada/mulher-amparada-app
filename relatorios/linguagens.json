@@ -1,11 +1,11 @@
 {"header" : {
   "cloc_url"           : "github.com/AlDanial/cloc",
   "cloc_version"       : "1.98",
-  "elapsed_seconds"    : 1.18633317947388,
-  "n_files"            : 294,
-  "n_lines"            : 74317,
-  "files_per_second"   : 247.822454169566,
-  "lines_per_second"   : 62644.2902262572,
+  "elapsed_seconds"    : 1.13736891746521,
+  "n_files"            : 295,
+  "n_lines"            : 74555,
+  "files_per_second"   : 259.37054852655,
+  "lines_per_second"   : 65550.4110013456,
   "report_file"        : "relatorios/linguagens.json"},
 "Kotlin" :{
   "nFiles": 25,
@@ -13,10 +13,10 @@
   "comment": 2104,
   "code": 20306},
 "Markdown" :{
-  "nFiles": 130,
-  "blank": 2428,
+  "nFiles": 131,
+  "blank": 2430,
   "comment": 6,
-  "code": 10587},
+  "code": 10597},
 "CSS" :{
   "nFiles": 18,
   "blank": 6198,
@@ -29,9 +29,9 @@
   "code": 3330},
 "YAML" :{
   "nFiles": 6,
-  "blank": 614,
+  "blank": 717,
   "comment": 129,
-  "code": 1789},
+  "code": 1912},
 "C++" :{
   "nFiles": 2,
   "blank": 391,
@@ -108,7 +108,7 @@
   "comment": 20,
   "code": 9},
 "SUM": {
-  "blank": 18173,
+  "blank": 18278,
   "comment": 3771,
-  "code": 52373,
-  "nFiles": 294} }
+  "code": 52506,
+  "nFiles": 295} }

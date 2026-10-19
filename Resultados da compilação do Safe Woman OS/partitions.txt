@@ -1,0 +1,8 @@
+total 0
+drwxr-xr-x 2 root root  140 2026-10-19 11:16 .
+drwxr-xr-x 6 root root 2300 2026-10-19 11:16 ..
+lrwxrwxrwx 1 root root   15 2026-10-19 11:16 metadata -> /dev/block/vdd1
+lrwxrwxrwx 1 root root   15 2026-10-19 11:16 super -> /dev/block/vda2
+lrwxrwxrwx 1 root root   15 2026-10-19 11:16 vbmeta -> /dev/block/vda1
+lrwxrwxrwx 1 root root   14 2026-10-19 11:16 vda -> /dev/block/vda
+lrwxrwxrwx 1 root root   14 2026-10-19 11:16 vdd -> /dev/block/vdd

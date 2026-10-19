@@ -20,30 +20,6 @@ Os contribuidores ajudaram também!, além de mim e dos bots:
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
-# 💭ANTES DE MAIS NADA, SAIBAM:
-
-Mulheres,
-
-O objetivo deste projeto é falar sobre violência contra a mulher — **com** vocês, não **por** vocês.
-
-Eu sei que pode parecer que estou falando por vocês. Por isso, abri a aba de Discussões (link), dividi o poder de decisão (as decisões sobre conteúdo passam por mulheres), e estou reescrevendo o ABOUT com base no que vocês disserem.
-
-Meu objetivo é amplificar as vozes de vocês — não substituir. Vocês falam. O projeto amplifica. Vocês decidem. O projeto executa.
-
-Exemplos concretos:
-- Quando uma mulher me disse pra entrar em certo local pro meu trabalho, eu entrei.
-- Quando uma mulher no projeto quis fazer um commit por uma pull request, eu aceitei.
-
-Pode parecer que fiz o projeto sozinho. Mas a única coisa que quero é preparar a base pra vocês construírem — **comigo como dev, não como dono**.
-
-O ABOUT.md é um exemplo do que eu acho que pode ser. Mas eu quero que vocês reescrevam — com as palavras de vocês. É como construir a fundação de uma casa: a fundação está pronta. Mas a casa — o que ela vai ser, como ela vai ser — quem decide são vocês.
-
-Participe da Discussão: https://github.com/mulher-amparada/mulher-amparada-app/discussions/10
-
-Se eu errar, me diga. Eu ajusto.
-
-— O desenvolvedor
-
 # 🎉Projeto Finalizado:
 
 https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Projeto-Finalizado

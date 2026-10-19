@@ -6,14 +6,14 @@
   <img src="https://mulher-amparada.github.io/mulher-amparada-app/title.png">
 </div>
 
-# 💌 Sobre o Mulher Amparada
+# 💌 Sobre o Mulher Amparada:
 
 > 🚨 **Em emergência, ligue 190 (Polícia) ou 180 (Central de Atendimento à Mulher).**  
 > Este app não substitui serviços oficiais de proteção, orientação jurídica ou financeira.
 
 ---
 
-## 💬 Uma mensagem antes de tudo
+## 💬 Uma mensagem antes de tudo:
 
 Mulheres,
 

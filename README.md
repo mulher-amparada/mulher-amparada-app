@@ -27,6 +27,28 @@ Pode parecer que estou falando no lugar de vocês — por isso abri as Discussõ
 - Quando uma mulher quis enviar um commit via pull request, eu aceitei.
 - Antes de o projeto existir, ouvi mulheres do meu convívio e da minha escola sobre o que precisavam. Em um caso, respeitei o limite de segurança e **não me aproximei** — porque proteger também é uma forma de cuidar.
 
+## 🧑‍🤝‍🧑 Escuta ativa e validação real
+
+O projeto não foi construído sozinho. Desde o início, busquei ouvir mulheres reais e apresentar o projeto a diferentes contextos:
+
+- **Mãe** — perguntei quase todos os dias, do início ao fim, o que ela achava do projeto.
+- **Escola** — apresentei à vice-diretora, à coordenação pedagógica, à professora de itinerância dos alunos com deficiência e a professoras de língua portuguesa. Elas elogiaram o projeto, especialmente o modo claro e escuro.
+- **Família** — mostrei para minhas tias, que também vivem situações dolorosas de relacionamento.
+- **Comunidade** — meu tio divulgou para uma mulher que cuida de um projeto social no meu bairro.
+- **Instituto de vítimas de violência** — apresentei o projeto para uma instituição que cuida de vítimas de violência.
+- **Canais de notícias** — apresentei o projeto a vários canais de notícias.
+- **Interesse externo** — mulheres entraram em contato por e-mail interessadas no projeto. Eram propostas de serviços de divulgação, que não aceitei porque não posso lidar com contratos.
+- **Avaliação** — pedi nota a uma mulher sobre o projeto, e ela respondeu: **99,5%**.
+
+**Sobre o alcance:**
+
+- Não consegui alcançar mais mulheres por limitações de alcance, não por falta de vontade.
+- Outras mulheres não foram citadas por respeito à privacidade e à segurança delas.
+- O projeto não expõe histórias sem consentimento.
+- Também precisei respeitar meus próprios limites: não é possível ouvir tudo, e está tudo bem.
+
+**Desculpem por não ter conseguido alcançar mais mulheres.** Cada conversa que aconteceu ajudou a ajustar o projeto — e o compromisso com a escuta continua.
+
 Este ABOUT é uma proposta — quero que vocês reescrevam com as palavras de vocês. A fundação está pronta; a casa, vocês decidem.
 
 👉 **Participe:** [Discussão #10](https://github.com/mulher-amparada/mulher-amparada-app/discussions/10)

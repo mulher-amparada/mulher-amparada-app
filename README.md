@@ -206,7 +206,6 @@ uma iniciativa vinculada ao projeto Mulher Amparada, destinada à divulgação d
 🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/Portal%20de%20not%C3%ADcias%20do%20Mulher%20Amparada%2FREADME.md
 
 
-
 💻 Projeto no GitHub:
 
 O código-fonte e a documentação ficam organizados publicamente no GitHub.
@@ -220,14 +219,6 @@ O código-fonte e a documentação ficam organizados publicamente no GitHub.
 O projeto também possui um site próprio.
 
 🔗 https://mulher-amparada.github.io/mulher-amparada-app/
-
-
-
-# 📰 Portal de Notícias do Mulher Amparada:
-
-Este é o **Portal de Notícias do Mulher Amparada**, uma iniciativa vinculada ao projeto Mulher Amparada, destinada à divulgação de notícias e informações relevantes.
-
-🔗 **Acesse o portal:** [Portal de Notícias do Mulher Amparada](https://github.com/mulher-amparada/mulher-amparada-app/blob/main/Portal%20de%20not%C3%ADcias%20do%20Mulher%20Amparada%2FREADME.md)
 
 
 

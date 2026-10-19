@@ -98,23 +98,7 @@ E talvez essa seja a parte mais curiosa do projeto:
 
 Às vezes dá vontade de mandar tudo para o inferno.
 
-Mas o projeto continua.
-
-## ❤️ Mulher Amparada
-
-**Gratuito.**  
-**Livre de anúncios.**  
-**Com documentação pública.**  
-**Desenvolvido por um adolescente de 15 anos.**  
-**Com apoio do ChatGPT.**
-
-Um projeto construído na base de muito aprendizado, tentativa, erro, correção e persistência.
-
-🔗 https://github.com/mulher-amparada/mulher-amparada-app
-
-🌐 https://mulher-amparada.github.io/mulher-amparada-app/
-
-# 📄Quando uma simples atualização vira 412 alterações
+# 📄Quando uma simples atualização vira 412 alterações:
 
 ## Dia 19/10/2026:
 

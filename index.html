@@ -574,7 +574,7 @@ Mais informações
 <p>E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)</p>
 <p>e pra ser sincero, comecei esse projeto no dia 13/05/2026 e terminei no dia 12/10/2026!</p>
 <p>Os contribuidores ajudaram também!, além de mim e dos bots:</p>
-<p><strong>Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 6036</strong></p>
+<p><strong>Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 6046</strong></p>
 <p>E o projeto é = Open-source! (aderido no dia 02/10/2026)</p>
 <h1>🎉Projeto Finalizado:</h1>
 <p>https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Projeto-Finalizado</p>
@@ -1520,6 +1520,87 @@ Cuttlefish
 <p>Ele mantém somente os arquivos próprios do Safe Woman OS e a integração planejada com o aplicativo Mulher Amparada</p>
 <p>Link:
 https://github.com/mulher-amparada/mulher-amparada-app/tree/main/Safe%20Woman%20Operational%20System</p>
+<h1>simular-os.yml:</h1>
+<p>O workflow <code>simular-os.yml</code> automatiza a compilação, a inicialização de um ambiente Android virtual e a verificação do aplicativo Safe Woman OS por meio do GitHub Actions.</p>
+<h2>Objetivo:</h2>
+<ul>
+<li>Compilar o APK do projeto Android.</li>
+<li>Criar um dispositivo virtual com Android 15 (API 35) e arquitetura x86_64.</li>
+<li>Iniciar o emulador com suporte à escrita na imagem do sistema.</li>
+<li>Tentar instalar o APK <code>com.mulheres</code> como aplicativo privilegiado (<code>priv-app</code>).</li>
+<li>Criar o arquivo XML de configuração de permissões privilegiadas.</li>
+<li>Reiniciar os serviços do Android para solicitar a releitura dos pacotes.</li>
+<li>Verificar o registro do aplicativo e o caminho de instalação.</li>
+<li>Registrar informações sobre partições, permissões e estado do sistema.</li>
+<li>Salvar os resultados na branch <code>main</code> e publicar um artefato do GitHub Actions.</li>
+</ul>
+<h2>Funcionamento:</h2>
+<h3>1. Preparação do ambiente:</h3>
+<p>Executa o workflow no Ubuntu 24.04 e configura o Android SDK, as ferramentas de plataforma e o emulador.</p>
+<h3>2. Compilação do APK:</h3>
+<p>Localiza o <code>gradlew</code> dentro da pasta <code>Safe Woman Operational System</code> e executa:</p>
+<p><code>./gradlew assembleDebug --stacktrace</code></p>
+<p>Depois, procura o APK gerado nos diretórios de saída do Gradle.</p>
+<h3>3. Criação do emulador:</h3>
+<p>Cria um dispositivo virtual chamado <code>SafeWomanOS</code>, utilizando a imagem <code>aosp_atd</code> do Android 15 para x86_64.</p>
+<h3>4. Preparação para alterações no sistema:</h3>
+<p>Instala ferramentas de manipulação de imagens Android, configura a aceleração KVM quando disponível e inicia o emulador com a opção <code>-writable-system</code>.</p>
+<p>O workflow tenta desativar o verity e remontar o sistema com permissão de escrita.</p>
+<h3>5. Injeção do APK:</h3>
+<p>Tenta criar o diretório <code>/system/priv-app/MulherAmparada</code> e copia o APK para <code>/system/priv-app/MulherAmparada/MulherAmparada.apk</code>.</p>
+<p>Também cria o arquivo <code>privapp-permissions-com.mulheres.xml</code> em <code>/system/etc/permissions/</code>, destinado à configuração de permissões privilegiadas do pacote <code>com.mulheres</code>.</p>
+<p>A cópia do APK e a criação desse XML não garantem, por si só, que o aplicativo seja reconhecido como privilegiado ou receba permissões especiais. Isso depende da configuração e das políticas de segurança da imagem Android.</p>
+<h3>6. Reinicialização dos serviços:</h3>
+<p>Executa <code>stop</code> e <code>start</code> para solicitar a reinicialização dos serviços do Android e aguarda a conclusão da inicialização.</p>
+<h3>7. Verificação do pacote:</h3>
+<p>Consulta <code>pm path com.mulheres</code> para verificar se o Android registrou o pacote e se o caminho retornado contém <code>/priv-app/</code>.</p>
+<p>Se o pacote não estiver registrado ou o caminho não corresponder ao esperado, a etapa falha.</p>
+<h3>8. Verificação de permissões:</h3>
+<p>Obtém informações do pacote com <code>dumpsys package com.mulheres</code> e registra dados relacionados às permissões solicitadas e concedidas.</p>
+<h3>9. Informações finais:</h3>
+<p>Registra informações sobre o pacote, seu caminho de instalação, o estado de inicialização do Android, o tipo de compilação e o estado do Verified Boot.</p>
+<h3>10. Publicação dos resultados:</h3>
+<p>Copia os arquivos disponíveis em <code>simulation/</code> para a pasta <code>Resultados da compilação do Safe Woman OS</code> na branch <code>main</code>.</p>
+<p>Se a pasta não existir, ela será criada. Se já existir, os novos arquivos serão mesclados aos existentes, sem apagar os demais arquivos da pasta.</p>
+<p>Quando houver alterações, o workflow cria um commit e tenta enviá-lo para a <code>main</code>.</p>
+<p>Além disso, publica os arquivos de <code>simulation/</code> como um artefato chamado <code>Safe-Woman-OS-Simulacao</code> no GitHub Actions.</p>
+<h2>Arquivos gerados:</h2>
+<ul>
+<li><code>emulator.log</code>: saída do emulador.</li>
+<li><code>emulator.pid</code>: PID registrado do processo do emulador.</li>
+<li><code>mount.txt</code>: sistemas de arquivos montados.</li>
+<li><code>df.txt</code>: utilização de espaço.</li>
+<li><code>system-list.txt</code>: conteúdo de <code>/system</code>.</li>
+<li><code>priv-app-list.txt</code>: conteúdo de <code>/priv-app</code>.</li>
+<li><code>partitions.txt</code>: entradas de <code>/dev/block/by-name/</code>.</li>
+<li><code>dynamic-partitions.txt</code>: propriedade de partições dinâmicas.</li>
+<li><code>slot.txt</code>: sufixo do slot de inicialização.</li>
+<li><code>product.txt</code>: nome do produto Android.</li>
+<li><code>build-type.txt</code>: tipo de compilação.</li>
+<li><code>debuggable.txt</code>: propriedade de depuração.</li>
+<li><code>system-search.txt</code>: resultados da busca pelo aplicativo.</li>
+<li><code>expected-directory.txt</code>: conteúdo do diretório esperado.</li>
+<li><code>pm-path.txt</code>: caminho registrado pelo Package Manager.</li>
+<li><code>permissions.txt</code>: informações do pacote e permissões.</li>
+</ul>
+<h2>Permissões do workflow:</h2>
+<ul>
+<li><code>contents: write</code>: permite gravar alterações no repositório.</li>
+<li><code>actions: write</code>: permite operações autorizadas relacionadas às execuções e aos artefatos do GitHub Actions.</li>
+</ul>
+<p>A gravação na branch <code>main</code> também depende das regras de proteção e das permissões efetivas do repositório.</p>
+<h2>Limitações:</h2>
+<ul>
+<li>O ambiente é um emulador, não um dispositivo físico.</li>
+<li>A opção <code>-writable-system</code> não garante que todas as partições possam ser modificadas.</li>
+<li><code>adb disable-verity</code>, <code>adb remount</code> e a reinicialização dos serviços podem falhar dependendo da imagem.</li>
+<li>O XML criado contém a estrutura da lista de permissões, mas não declara permissões individuais.</li>
+<li>O sucesso da compilação não comprova o funcionamento integral do aplicativo.</li>
+<li>A instalação em <code>/system/priv-app/</code> não garante a concessão de permissões privilegiadas.</li>
+<li>Como a publicação utiliza <code>if: always()</code>, ela é tentada mesmo quando etapas anteriores falham; os resultados podem representar uma execução incompleta.</li>
+</ul>
+<p>Link:
+https://github.com/mulher-amparada/mulher-amparada-app/tree/main/Resultados%20da%20compila%C3%A7%C3%A3o%20do%20Safe%20Woman%20OS</p>
 <!-- README-FOOTER-END -->
 </footer>
 

@@ -8,6 +8,53 @@
 
 Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista laudado nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!
 
+```
+# Autoria e Propósito do Mulher Amparada
+
+## Quem criou
+
+O Mulher Amparada foi criado por um desenvolvedor independente, sem formação profissional em programação.
+
+## O que eu fiz
+
+Eu criei o projeto sozinho. Não consultei mulheres. Não perguntei o que elas precisavam. Eu decidi o que o app teria, como o ABOUT.md seria escrito, quais leis entrariam, como o acolhimento funcionaria.
+
+**Isso foi um erro de processo.** Não de caráter. Mas um erro. Um projeto sobre mulheres não deveria ser feito sem mulheres.
+
+## O que eu reconheço
+
+O Mulher Amparada não é sobre mim. É sobre vocês. A dor é de vocês. O espaço é de vocês. A verdade sobre violência de gênero é de vocês.
+
+**Eu não sei o que é ser mulher. Eu não vivi o que vocês vivem. Eu só sei o que é ser invalidado. E eu criei este projeto porque ninguém deveria passar pelo que eu passei — nem mulheres, nem homens, nem crianças.**
+
+## O que eu ofereço
+
+**Mulheres, o espaço é de vocês. Vocês mandam aqui.**
+
+Isso não é uma frase vazia. É um compromisso. A partir de agora:
+
+- As decisões sobre **conteúdo** (ABOUT.md, LEIS.md, FINANÇAS.md, acolhimento) passam por mulheres.
+- As decisões sobre **prioridades** do app passam por mulheres.
+- As decisões sobre **tom** e **linguagem** passam por mulheres.
+- Eu continuo como **desenvolvedor** — mas **não** como **dono** do propósito.
+
+## O que eu peço
+
+Se você é mulher e quer assumir a liderança, a curadoria, a revisão ou qualquer parte do projeto, **me diga**. Eu apoio.
+
+Se você é mulher e acha que o projeto não te representa, **me diga**. Eu ouço.
+
+Se você é mulher e quer contribuir, **me diga**. Eu abro espaço.
+
+**O projeto é de vocês. Eu só ajudei a construir.**
+
+---
+
+*Este documento foi escrito pelo desenvolvedor do Mulher Amparada em 19 de outubro de 2026.*
+
+*Ele pode ser atualizado a qualquer momento — especialmente se mulheres quiserem assumir o protagonismo.*
+```
+
 e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, onde nem tinha os recursos, ja programei ele num app de A-IDE, num A05, e eu ja perdi vários projetos porque o celular nao aguentava, matava o projeto porque matou o processo de compilação!, e uma vez eu fiz o projeto do mulher amparada e eu mesmo fiz o app do mulher amparada (primeiro eu refiz porque o family link apagou a pasta segura samsung, depois na 2 vez que perdi portei tudo do apk compilado para descompilado, e depois perdi denovo mas ai eu ja tinha o código-fonte!)
 
 E vale lembrar que antes todas as páginas eram html com webview, agora não são mais, só a função de navegador usa webview sem html, tudo é compose (no primeiro dia foram 10h de trabalho no segundo foram 7h se trabalho!)

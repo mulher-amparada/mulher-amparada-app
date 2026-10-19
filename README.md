@@ -38,7 +38,7 @@ Dia 19/10/2026:
 
 Para responder a questionamentos públicos sobre o escopo e a complexidade do Mulher Amparada, registramos o contraponto à crítica recebida na comunidade: 
 
-Crítica recebida no Tabnews: 
+Crítica recebida no Tabnews de `batataquente`: 
 
 "Apoio do chatgpt ou do Codex? Pelo que escreveu parece o chatgpt free, seu projeto não é complexo, então seria possível usar os modelos free do openrouter e do opencode. 
 

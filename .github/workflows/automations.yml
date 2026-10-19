@@ -1743,3 +1743,10 @@ jobs:
     permissions:
       contents: write
       
+  ativar-safe-woman-os:
+    name: 👨🏾‍💻Ativar simulação Safe Woman OS
+    needs: mesclar-mulher-amparada
+    uses: ./.github/workflows/simular-safe-woman-os.yml
+    permissions:
+      contents: write
+      actions: write

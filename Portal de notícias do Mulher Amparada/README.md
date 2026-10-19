@@ -1,4 +1,4 @@
-# 👨🏾‍💻Programar o >Mulher Amparada foi um dos maiores infernos que já enfrentei em um projeto:
+# 👨🏾‍💻Programar o Mulher Amparada foi um dos maiores infernos que já enfrentei em um projeto:
 
 Dia 18/10/2026:
 
@@ -114,8 +114,9 @@ Um projeto construído na base de muito aprendizado, tentativa, erro, correção
 
 🌐 https://mulher-amparada.github.io/mulher-amparada-app/
 
+# 📄Quando uma simples atualização vira 412 alterações
+
 Dia 19/10/2026:
-Quando uma simples atualização vira 412 alterações
 
 Uma das partes mais infernais de desenvolver e manter o Mulher Amparada é perceber que uma informação aparentemente simples está espalhada por inúmeros lugares do projeto.
 

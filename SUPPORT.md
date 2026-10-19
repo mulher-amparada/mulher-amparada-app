@@ -46,17 +46,25 @@ https://projetomulheramparada.hashnode.dev/eu-n-o-tinha-computador-para-desenvol
 - 💻 CoderLegion — O que diferencia o Mulher Amparada
 https://coderlegion.com/31456/o-que-diferencia-o-mulher-amparada
 
-- 📰 TabNews — Desenvolvimento de um aplicativo Android independente:
-https://www.tabnews.com.br/projetomulheramparadaapp/mulher-amparada-desenvolvimento-de-um-aplicativo-android-independente
+- 📰 Vergonha do TabNews:
 
-- 📰 TabNews — Programar o Mulher Amparada foi um dos maiores infernos que já enfrentei em um projeto, porque o ChatGPT e a pior inteligência artificial:
-https://www.tabnews.com.br/projetomulheramparadaapp/mulher-amparada-programar-o-mulher-amparada-foi-um-dos-maiores-infernos-que-ja-enfrentei-em-um-projeto-porque-o-chatgpt-e-a-pior-inteligencia-artific
+```
+Apoio do chatgpt ou do Codex? Pelo que escreveu parece o chatgpt free, seu projeto não é complexo, então seria possível usar os modelos free do openrouter e do opencode. 
 
-- 🚀 Safe Woman Operational System: começando a criar um sistema baseado no AOSP:
-https://www.tabnews.com.br/projetomulheramparadaapp/safe-woman-operational-system-comecando-a-criar-um-sistema-baseado-no-aosp
+Ah, então meu projeto não é complexo? Você tem certeza de que leu o README até o final e viu todos os códigos de automação, sistema operacional, engenharia, disfarces, integração com o sistema e muito mais? 
 
-- 📱 O que aprendi construindo um aplicativo Android do zero aos 15 anos:
-https://www.tabnews.com.br/projetomulheramparadaapp/o-que-aprendi-construindo-um-aplicativo-android-do-zero-aos-15-anos
+Ps. O projeto tá ruim, não tem um objetivo claro, mistura um bando de coisa, informações obvias, ferramentas sem nexo, informação de programação que não interessa a quem seria o público. 
+
+Não tem um objetivo claro? Se fosse para ter um objetivo frio, eu nem faria o projeto. Eu NÃO me importo com um objetivo frio e sim com o bem-estar das usuárias como um todo. Você só fala isso porque é uma limitação sua. Eu não estou a fim de criar mais um sistema que, no fim, falha porque não acolhe a usuária antes, durante e depois do pânico. 
+
+Se fosse para fazer um projeto mal feito, eu nem colocava tanta documentação. Como eu penso no bem-estar delas, coloco conteúdo para que as pessoas possam auditar o projeto e verificar sua consistência. O ABOUT e o FINANÇAS estão ali para acolhê-las e protegê-las da dependência econômica. 
+
+O que você chama de "ferramentas sem nexo" é apenas a sua limitação em perceber o tamanho do ecossistema e entender que cada recurso foi pensado para quebrar o ciclo da violência. Outra limitação sua é não perceber que o projeto é Open-source; ele precisa acolher desenvolvedores e auditores para garantir a segurança de tudo. Se fosse para criar algo mal feito, era só abandonar ou nem ter criado. 
+
+Além da quantidade absurda de texto cuspido pela IA, não é errado usar IA, mas atualmente só tem lixo de IA no site. 
+
+Lixo de IA? Por acaso você leu o ABOUT e percebeu os erros de português legítimos que deixei lá de propósito? Por acaso foi a IA que criou a engenharia dos disfarces e a arquitetura do projeto? A IA é uma ferramenta de suporte, a engenharia e o propósito são humanos.
+```
 
 ### 🌱 Agregadores e referências:
 

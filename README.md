@@ -32,33 +32,6 @@ https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Pro
 
 <img src="https://raw.githubusercontent.com/mulher-amparada/mulher-amparada-app/main/relatorios/graficos/ligue180-2019.png" alt="Gráfico do Ligue 180 — 2019" width="100%" />
 
-# 📰 Sobre a Autenticidade, Engenharia e Escopo do Projeto:
-
-Dia 19/10/2026:
-
-Para responder a questionamentos públicos sobre o escopo e a complexidade do Mulher Amparada, registramos o contraponto à crítica recebida na comunidade: 
-
-Crítica recebida no Tabnews de `batataquente`: 
-
-"Apoio do chatgpt ou do Codex? Pelo que escreveu parece o chatgpt free, seu projeto não é complexo, então seria possível usar os modelos free do openrouter e do opencode. 
-
-Ps. O projeto tá ruim, não tem um objetivo claro, mistura um bando de coisa, informações obvias, ferramentas sem nexo, informação de programação que não interessa a quem seria o público. 
-
-Além da quantidade absurda de texto cuspido pela IA, não é errado usar IA, mas atualmente só tem lixo de IA no site." 
-
-### Nota Oficial sobre a Engenharia e Autenticidade do Projeto:
-
-Diante de leituras superficiais sobre o escopo do Mulher Amparada, o projeto esclarece os seguintes pilares de sua arquitetura e desenvolvimento de forma transparente para auditores e desenvolvedores: 
-
-* **Complexidade Técnica Real:** Este ecossistema não se limita a uma interface simples. O projeto integra automações avançadas de CI/CD (GitHub Actions), desenvolvimento reativo nativo (Jetpack Compose), persistência segura com criptografia simétrica AES-256 acoplada ao Android Keystore e uma camada de customização do sistema operacional baseada em AOSP (Safe Woman OS), validada em ambiente virtual via Cuttlefish. Toda a engenharia de sensores e disfarces visuais foi projetada manualmente diretamente em ambiente mobile.
-* **Propósito do Escopo Amplo:** O Mulher Amparada rejeita a ideia de ser apenas um "software frio com objetivo único". Um botão de pânico isolado falha se não acolher a usuária antes, durante e depois do risco. O ecossistema é amplo porque a violência é multifacetada; as seções de finanças e legislação existem estrategicamente para combater a dependência econômica e fornecer ferramentas reais de emancipação.
-* **Transparência Open-Source e Auditoria:** A vasta documentação e a abertura do código-fonte servem para que a comunidade de tecnologia e peritos independentes possam auditar a consistência e a segurança de dados do aplicativo. Não criamos um sistema raso para ser abandonado; criamos uma rede estável.
-* **Uso de IA vs. Autoria Humana:** A inteligência artificial é utilizada estritamente como ferramenta de suporte, aceleração e otimização de rotinas de código no smartphone. O propósito e a arquitetura lógica são estritamente humanos. Arquivos fundamentais de acolhimento (como o ABOUT.md) contêm marcas legítimas de escrita e expressões humanas que atestam a autoria orgânica do desenvolvedor, diferenciando o projeto de textos puramente automatizados.
-
-### 💜 Pras usuárias:
-
-Não tenham medo de pedir ajuda ou se assustem com as discussões técnicas deste ecossistema. Qualquer projeto de código aberto atrai debates de quem analisa a estrutura de forma superficial e não entende a dor ou a urgência do que vocês passam.
-
 # ⚠️MURAL DE AVISOS:
 
 ### Sobre como o projeto foi estruturado:
@@ -115,7 +88,7 @@ Não tenham medo de pedir ajuda ou se assustem com as discussões técnicas dest
 >Caso o dispositivo não possua nenhum dos métodos de autenticação aceitos configurado, não existe um método válido para desbloquear a área protegida. Nesse cenário, o aplicativo não deve considerar a autenticação como concluída nem liberar a área protegida simplesmente porque a biometria não está disponível.
 
 # 🔗Seção de links e paginas:
----
+
 
 ♿ Acessibilidade:
 
@@ -123,7 +96,7 @@ Documenta recursos como redução de animações, modo claro, modo escuro e adap
 
 🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/ACCESSIBILITY.md
 
----
+
 
 🧑‍🤝‍🧑 Código de Conduta:
 
@@ -131,7 +104,7 @@ Define regras de convivência, respeito e colaboração, além de comportamentos
 
 🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/CODE_OF_CONDUCT.md
 
----
+
 
 🤝 Contribuições:
 
@@ -139,15 +112,13 @@ Explica como participar do projeto por meio de issues, pull requests, documenta�
 
 🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/CONTRIBUTING.md
 
----
-
 💰 Finanças:
 
 Reúne informações sobre segurança financeira, cartões, contas, biometria, limites, cartão virtual, juros, CDB, impostos, liquidez, fundos e riscos.
 
 🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/FINAN%C3%87AS.md
 
----
+
 
 ⚖️ Leis e direitos:
 
@@ -155,7 +126,7 @@ Apresenta informações sobre 100 direitos das mulheres e suas respectivas refer
 
 🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/LEIS.md
 
----
+
 
 📜 Licença:
 
@@ -163,7 +134,7 @@ Estabelece as condições jurídicas para utilização, modificação e distribu
 
 🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/LICENSE
 
----
+
 
 📖 README:
 
@@ -171,7 +142,7 @@ Estabelece as condições jurídicas para utilização, modificação e distribu
 
 🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/README.md
 
----
+
 
 🔐 Segurança:
 
@@ -179,7 +150,7 @@ Apresenta a política de segurança, incluindo comunicação de vulnerabilidades
 
 🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/SECURITY.md
 
----
+
 
 💌 Mensagem para as usuárias:
 
@@ -187,7 +158,7 @@ O "ABOUT.md" apresenta uma mensagem do autor às mulheres para quem o projeto fo
 
 🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/ABOUT.md
 
----
+
 
 📚 Citação do projeto:
 
@@ -195,7 +166,7 @@ Disponibiliza os metadados de citação do Mulher Amparada para referenciar o pr
 
 🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/CITATION.cff
 
----
+
 
 ⚖️ Termos e políticas:
 
@@ -203,7 +174,6 @@ Reúne os termos e as políticas relacionados ao projeto.
 
 🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/TERMS%20AND%20POLICY.md
 
----
 
 🏛️ Governança:
 
@@ -211,7 +181,7 @@ Apresenta os princípios de governança, tomada de decisões e evolução do pro
 
 🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/GOVERNANCE.md
 
----
+
 
 ✍️ Autoria:
 
@@ -219,7 +189,7 @@ Apresenta os canais públicos de identificação e contato do projeto.
 
 🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/AUTHORS.md
 
----
+
 
 🆘 Suporte:
 
@@ -227,7 +197,7 @@ Reúne links de divulgação, redes sociais, referências públicas e canais de 
 
 🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/SUPPORT.md
 
----
+
 
 💻 Projeto no GitHub:
 
@@ -235,7 +205,7 @@ O código-fonte e a documentação ficam organizados publicamente no GitHub.
 
 🔗 https://github.com/mulher-amparada/mulher-amparada-app
 
----
+
 
 🌐 Site:
 
@@ -243,7 +213,7 @@ O projeto também possui um site próprio.
 
 🔗 https://mulher-amparada.github.io/mulher-amparada-app/
 
----
+
 
 🧩 Documentação:
 
@@ -264,7 +234,15 @@ Cada arquivo possui uma finalidade específica:
 - "AUTHORS.md" → autoria e contato
 - "SUPPORT.md" → suporte, divulgação e canais de ajuda
 
----
+
+
+# 📰 Portal de Notícias do Mulher Amparada:
+
+Este é o **Portal de Notícias do Mulher Amparada**, uma iniciativa vinculada ao projeto Mulher Amparada, destinada à divulgação de notícias e informações relevantes.
+
+🔗 **Acesse o portal:** [Portal de Notícias do Mulher Amparada](https://github.com/mulher-amparada/mulher-amparada-app/blob/main/Portal%20de%20not%C3%ADcias%20do%20Mulher%20Amparada%2FREADME.md)
+
+
 
 # 🏗Estrutura do projeto:
 
@@ -1079,59 +1057,6 @@ com.mulheres://abrir
 funciona como uma forma direta de solicitar a abertura do aplicativo Mulher Amparada.
 
 e temos um botão no index.html no site do github pages que leva pro app usando esse link também!
-
-# 🔗Central de links e referências do projeto **Mulher Amparada**.
-
-```
-
----
-
-## 📱 Redes sociais:
-
-- 🐦 [X — @mulheramparada](https://x.com/mulheramparada/status/2105045353615761521?s=20)
-- 🌷 [Tumblr — Mulher Amparada: um projeto gratuito e livre](https://www.tumblr.com/mulheramparada/829407067773255680/mulher-amparada-um-projeto-gratuito-e-livre)
-- 📰 [Blogger — Links do Projeto Mulher Amparada](https://mulheramparada.blogspot.com/2026/10/projeto-mulher-amparada-links.html?m=1)
-
----
-
-## 📰 Imprensa e divulgação:
-
-- 📢 [SubmitPR — Mulher Amparada](https://submitpr.org/press-release/mulheramparada)
-
----
-
-## 🚀 Product Hunt:
-
-- 🟣 [Product Hunt — Mulher Amparada](https://www.producthunt.com/products/mulher-amparada?launch=mulher-amparada)
-
-- 📃 [Paper WF — Projeto Mulher Amparada](https://paper.wf/mulheramparada/projeto-mulher-amparada)
-
----
-## 👨🏾‍💻 DEV Community:
-
-- 📝 [DEV Community — Projeto Mulher Amparada](https://dev.to/mulher_amparada/projeto-mulher-amparada-1c49)
-
----
-## 💻 CoderLegion:
-
-- 🔗 [Links do Projeto Mulher Amparada](https://coderlegion.com/29843/links-do-projeto-mulher-amparada)
-
----
-## 📰 Tabnews:
-
-- 🔗 [Mulher Amparada — Desenvolvimento de um aplicativo Android independente](https://www.tabnews.com.br/projetomulheramparadaapp/mulher-amparada-desenvolvimento-de-um-aplicativo-android-independente)
-
----
-
-## 🌱 Agregadores:
-
-- 🚀 [NicheLoom — Mulher Amparada](https://www.nicheloom.com/launches/40835/)
-
-- ⚠️ [Observatório Blockchain — link atualmente retorna 404](https://observatorioblockchain.com/newsfeed/item/23123e760a8918f1/)
-
----
-
-```
 
 # 📦Packpage do repositório no github:
 

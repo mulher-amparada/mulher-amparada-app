@@ -48,12 +48,17 @@ https://coderlegion.com/31456/o-que-diferencia-o-mulher-amparada
 
 - 📰 Vergonha do TabNews:
 
+Comentário de `batataquente`:
+
 ```
 Apoio do chatgpt ou do Codex? Pelo que escreveu parece o chatgpt free, seu projeto não é complexo, então seria possível usar os modelos free do openrouter e do opencode. 
+```
 
 Ah, então meu projeto não é complexo? Você tem certeza de que leu o README até o final e viu todos os códigos de automação, sistema operacional, engenharia, disfarces, integração com o sistema e muito mais? 
 
+```
 Ps. O projeto tá ruim, não tem um objetivo claro, mistura um bando de coisa, informações obvias, ferramentas sem nexo, informação de programação que não interessa a quem seria o público. 
+```
 
 Não tem um objetivo claro? Se fosse para ter um objetivo frio, eu nem faria o projeto. Eu NÃO me importo com um objetivo frio e sim com o bem-estar das usuárias como um todo. Você só fala isso porque é uma limitação sua. Eu não estou a fim de criar mais um sistema que, no fim, falha porque não acolhe a usuária antes, durante e depois do pânico. 
 
@@ -61,7 +66,9 @@ Se fosse para fazer um projeto mal feito, eu nem colocava tanta documentação. 
 
 O que você chama de "ferramentas sem nexo" é apenas a sua limitação em perceber o tamanho do ecossistema e entender que cada recurso foi pensado para quebrar o ciclo da violência. Outra limitação sua é não perceber que o projeto é Open-source; ele precisa acolher desenvolvedores e auditores para garantir a segurança de tudo. Se fosse para criar algo mal feito, era só abandonar ou nem ter criado. 
 
+```
 Além da quantidade absurda de texto cuspido pela IA, não é errado usar IA, mas atualmente só tem lixo de IA no site. 
+```
 
 Lixo de IA? Por acaso você leu o ABOUT e percebeu os erros de português legítimos que deixei lá de propósito? Por acaso foi a IA que criou a engenharia dos disfarces e a arquitetura do projeto? A IA é uma ferramenta de suporte, a engenharia e o propósito são humanos.
 ```

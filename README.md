@@ -8,25 +8,25 @@
 
 Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista laudado nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!
 
-# ♀️Autoria e Propósito do Mulher Amparada
+# ♀️Autoria e Propósito do Mulher Amparada:
 
-## Quem criou
+## Quem criou:
 
 O Mulher Amparada foi criado por um desenvolvedor independente, sem formação profissional em programação.
 
-## O que eu fiz
+## O que eu fiz:
 
 Eu criei o projeto sozinho. Não consultei mulheres. Não perguntei o que elas precisavam. Eu decidi o que o app teria, como o ABOUT.md seria escrito, quais leis entrariam, como o acolhimento funcionaria.
 
 **Isso foi um erro de processo.** Não de caráter. Mas um erro. Um projeto sobre mulheres não deveria ser feito sem mulheres.
 
-## O que eu reconheço
+## O que eu reconheço:
 
 O Mulher Amparada não é sobre mim. É sobre vocês. A dor é de vocês. O espaço é de vocês. A verdade sobre violência de gênero é de vocês.
 
-**Eu não sei o que é ser mulher. Eu não vivi o que vocês vivem. Eu só sei o que é ser invalidado. E eu criei este projeto porque ninguém deveria passar pelo que eu passei — nem mulheres, nem homens, nem crianças.**
+**Eu não sei o que é ser mulher. Eu não vivi o que vocês vivem...**
 
-## O que eu ofereço
+## O que eu ofereço:
 
 **Mulheres, o espaço é de vocês. Vocês mandam aqui.**
 
@@ -37,7 +37,7 @@ Isso não é uma frase vazia. É um compromisso. A partir de agora:
 - As decisões sobre **tom** e **linguagem** passam por mulheres.
 - Eu continuo como **desenvolvedor** — mas **não** como **dono** do propósito.
 
-## O que eu peço
+## O que eu peço:
 
 Se você é mulher e quer assumir a liderança, a curadoria, a revisão ou qualquer parte do projeto, **me diga**. Eu apoio.
 

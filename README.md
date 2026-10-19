@@ -6,6 +6,35 @@
   <img src="https://mulher-amparada.github.io/mulher-amparada-app/title.png">
 </div>
 
+# 💌 Sobre o Mulher Amparada
+
+> 🚨 **Em emergência, ligue 190 (Polícia) ou 180 (Central de Atendimento à Mulher).**  
+> Este app não substitui serviços oficiais de proteção, orientação jurídica ou financeira.
+
+---
+
+## 💬 Uma mensagem antes de tudo
+
+Mulheres,
+
+Este projeto fala sobre violência contra a mulher **com vocês, não por vocês**.
+
+Pode parecer que estou falando no lugar de vocês — por isso abri as Discussões, compartilhei o poder de decisão sobre conteúdo e estou reescrevendo este ABOUT com base no que vocês disserem. Meu papel é ser dev, não dono.
+
+**Exemplos concretos:**
+
+- Quando uma mulher me pediu para entrar em certo local pelo projeto, eu entrei.
+- Quando uma mulher quis enviar um commit via pull request, eu aceitei.
+- Antes de o projeto existir, ouvi mulheres do meu convívio e da minha escola sobre o que precisavam. Em um caso, respeitei o limite de segurança e **não me aproximei** — porque proteger também é uma forma de cuidar.
+
+Este ABOUT é uma proposta — quero que vocês reescrevam com as palavras de vocês. A fundação está pronta; a casa, vocês decidem.
+
+👉 **Participe:** [Discussão #10](https://github.com/mulher-amparada/mulher-amparada-app/discussions/10)
+
+Se eu errar, me diga. Eu ajusto.
+
+— O desenvolvedor
+
 Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista laudado nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!
 
 e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, onde nem tinha os recursos, ja programei ele num app de A-IDE, num A05, e eu ja perdi vários projetos porque o celular nao aguentava, matava o projeto porque matou o processo de compilação!, e uma vez eu fiz o projeto do mulher amparada e eu mesmo fiz o app do mulher amparada (primeiro eu refiz porque o family link apagou a pasta segura samsung, depois na 2 vez que perdi portei tudo do apk compilado para descompilado, e depois perdi denovo mas ai eu ja tinha o código-fonte!)

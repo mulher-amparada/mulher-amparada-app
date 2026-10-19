@@ -1,10 +1,10 @@
-cloc|github.com/AlDanial/cloc v 1.98  T=1.16 s (285.3 files/s, 63660.7 lines/s)
+cloc|github.com/AlDanial/cloc v 1.98  T=1.15 s (290.1 files/s, 64583.2 lines/s)
 --- | ---
 
 Language|files|blank|comment|code
 :-------|-------:|-------:|-------:|-------:
 Kotlin|25|5955|2104|20306
-Markdown|167|2536|6|11086
+Markdown|168|2551|6|11117
 CSS|18|5681|920|10028
 HTML|11|1406|84|3301
 YAML|6|615|133|1819
@@ -25,4 +25,4 @@ make|3|5|7|17
 Properties|2|0|20|9
 SVG|1|0|0|1
 --------|--------|--------|--------|--------
-SUM:|332|17713|3817|52558
+SUM:|333|17728|3817|52589

@@ -27,7 +27,7 @@ Pode parecer que estou falando no lugar de vocês — por isso abri as Discussõ
 - Quando uma mulher quis enviar um commit via pull request, eu aceitei.
 - Antes de o projeto existir, ouvi mulheres do meu convívio e da minha escola sobre o que precisavam. Em um caso, respeitei o limite de segurança e **não me aproximei** — porque proteger também é uma forma de cuidar.
 
-## 🧑‍🤝‍🧑 Escuta ativa e validação real
+## 🧑‍🤝‍🧑 Escuta ativa e validação real:
 
 O projeto não foi construído sozinho. Desde o início, busquei ouvir mulheres reais e apresentar o projeto a diferentes contextos:
 

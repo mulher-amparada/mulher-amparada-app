@@ -43,7 +43,7 @@ https://projetomulheramparada.hashnode.dev/eu-n-o-tinha-computador-para-desenvol
 - 💻 CoderLegion — Links do Projeto Mulher Amparada:
   https://coderlegion.com/29843/links-do-projeto-mulher-amparada
   
-- 💻 CoderLegion — O que diferencia o Mulher Amparada
+- 💻 CoderLegion — O que diferencia o Mulher Amparada:
 https://coderlegion.com/31456/o-que-diferencia-o-mulher-amparada
 
 ### 🌱 Agregadores e referências:

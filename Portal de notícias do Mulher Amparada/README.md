@@ -1,4 +1,4 @@
-# 👨🏾‍💻Programar o **Mulher Amparada** foi um dos maiores infernos que já enfrentei em um projeto:
+# 👨🏾‍💻Programar o `Mulher Amparada` foi um dos maiores infernos que já enfrentei em um projeto:
 
 Dia 18/10/2026:
 
@@ -114,6 +114,34 @@ Um projeto construído na base de muito aprendizado, tentativa, erro, correção
 
 🌐 https://mulher-amparada.github.io/mulher-amparada-app/
 
+Dia 19/10/2026:
+Quando uma simples atualização vira 412 alterações
+
+Uma das partes mais infernais de desenvolver e manter o Mulher Amparada é perceber que uma informação aparentemente simples está espalhada por inúmeros lugares do projeto.
+
+Às vezes penso:
+
+«“Ah, vou atualizar isso.”»
+
+Parece uma tarefa simples. Até eu descobrir que aquela mesma informação precisa ser atualizada em 412 lugares diferentes.
+
+E então uma alteração que deveria levar alguns minutos se transforma em uma verdadeira operação de manutenção.
+
+É README, documentação, páginas, arquivos de configuração, workflows, textos, referências, notícias e vários outros pontos do projeto. E não basta simplesmente substituir o texto: é preciso verificar se a alteração não quebrou alguma coisa ou deixou informações diferentes entre si.
+
+Esse é um dos problemas que aparecem quando um projeto cresce. Quanto mais documentação, recursos e arquivos existem, maior fica a quantidade de coisas que precisam permanecer consistentes.
+
+E é aí que surge uma das grandes ironias de desenvolver com inteligência artificial: você pensa que a IA vai facilitar essa manutenção, mas precisa supervisionar cuidadosamente o que ela altera. Se eu pedir uma mudança em 412 lugares e ela interpretar errado o pedido, posso acabar com 412 alterações para revisar — e talvez mais algumas que nem deveriam ter sido feitas.
+
+No fim, uma simples frase pode esconder uma quantidade absurda de trabalho.
+
+“Vou atualizar isso.”
+
+Às vezes, no Mulher Amparada, essa frase significa:
+
+“Agora preciso revisar 412 lugares.”
+
+E é justamente esse tipo de situação que torna a manutenção do projeto tão cansativa — e que também mostra por que organização, automação e uma boa estrutura de documentação são tão importantes conforme um projeto cresce.
 # 📰 Sobre a Autenticidade, Engenharia e Escopo do Projeto:
 
 Dia 19/10/2026:

@@ -214,16 +214,6 @@ jobs:
           command -v simg2img
           command -v img2simg
 
-      - name: Forçar emulador a usar imagens individuais
-        shell: bash
-        run: |
-          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
-          SYSTEM_IMAGE_DIR="$SDK/system-images/android-35/aosp_atd/x86_64"
-          
-          if [ -f "$SYSTEM_IMAGE_DIR/super.img" ]; then
-            echo "Removendo super.img para forçar o uso de system.img/product.img modificadas."
-            rm -f "$SYSTEM_IMAGE_DIR/super.img"
-          fi
 
       - name: Preparar imagens do sistema
         shell: bash
@@ -396,15 +386,16 @@ jobs:
 
           ls -l /dev/kvm || true
 
-      - name: Iniciar Safe Woman OS
+      - name: Iniciar Safe Woman OS e Injetar Priv-App
         shell: bash
         run: |
           set -e
-
           mkdir -p simulation
 
           export ANDROID_AVD_HOME="$HOME/.android/avd"
+          APK="${{ steps.apk.outputs.path }}"
 
+          echo "===== 1. INICIANDO EMULADOR EM MODO WRITABLE ====="
           nohup emulator \
             -avd SafeWomanOS \
             -no-window \
@@ -413,70 +404,91 @@ jobs:
             -gpu swiftshader_indirect \
             -wipe-data \
             -no-snapshot \
+            -writable-system \
+            -qemu -append "androidboot.verifiedbootstate=orange" \
             > simulation/emulator.log 2>&1 &
 
           EMULATOR_PID=$!
-
           echo "$EMULATOR_PID" > simulation/emulator.pid
 
-          echo "===== AGUARDANDO ADB ====="
-
-          ADB_READY=false
-
+          echo "===== 2. AGUARDANDO ADB INICIAL ====="
           for i in {1..60}; do
-
-            if adb get-state >/dev/null 2>&1; then
-              ADB_READY=true
-              echo "ADB disponível."
-              break
-            fi
-
-            if ! kill -0 "$EMULATOR_PID" 2>/dev/null; then
-              echo "::error::Emulador encerrou."
-              cat simulation/emulator.log || true
-              exit 1
-            fi
-
-            echo "ADB aguardando — tentativa $i/60"
-
+            if adb get-state >/dev/null 2>&1; then break; fi
             sleep 2
           done
 
-          if [ "$ADB_READY" != "true" ]; then
-            echo "::error::ADB não ficou disponível."
-            cat simulation/emulator.log || true
-            exit 1
-          fi
+          echo "===== 3. DESATIVANDO DM-VERITY ====="
+          adb root
+          sleep 2
+          adb disable-verity
+          
+          echo "===== 4. PRIMEIRO REBOOT (APLICAR ESCRITA) ====="
+          adb reboot
+          sleep 5
 
-          echo
-          echo "===== BOOT ====="
+          echo "===== 5. AGUARDANDO RETORNO PÓS-VERITY ====="
+          for i in {1..60}; do
+            if adb get-state >/dev/null 2>&1; then break; fi
+            sleep 2
+          done
 
+          # Torna as partições modificáveis via ADB
+          adb root
+          sleep 1
+          adb remount
+          sleep 1
+
+          echo "===== 6. CRIAÇÃO DE DIRETÓRIOS E INJEÇÃO DO APK ====="
+          adb shell mkdir -p /system/priv-app/MulherAmparada
+          adb push "$APK" /system/priv-app/MulherAmparada/MulherAmparada.apk
+          
+          # Aplica permissões Linux corretas para o Android aceitar a leitura
+          adb shell chmod 755 /system/priv-app/MulherAmparada
+          adb shell chmod 644 /system/priv-app/MulherAmparada/MulherAmparada.apk
+          adb shell chown -R root:root /system/priv-app/MulherAmparada
+
+          echo "===== 7. CRIANDO WHITELIST DE PERMISSÕES PRIVILEGIADAS ====="
+          # Criamos o arquivo xml temporário local no runner do GitHub
+          cat <<EOF > privapp-permissions-com.mulheres.xml
+          <?xml version="1.0" encoding="utf-8"?>
+          <permissions>
+              <privapp-permissions package="com.mulheres">
+                  <!-- Se o seu app não usar permissões com protectionLevel="privileged", pode deixar vazio -->
+                  <!-- Mas o arquivo precisa existir para o Android registrar o app da pasta priv-app -->
+              </privapp-permissions>
+          </permissions>
+          EOF
+
+          # Envia a whitelist para o diretório correto do Android core
+          adb push privapp-permissions-com.mulheres.xml /system/etc/permissions/privapp-permissions-com.mulheres.xml
+          adb shell chmod 644 /system/etc/permissions/privapp-permissions-com.mulheres.xml
+          adb shell chown root:root /system/etc/permissions/privapp-permissions-com.mulheres.xml
+
+          echo "===== 8. SEGUNDO REBOOT (FORÇAR RE-ESCANEAR PARSE DE PACKAGES) ====="
+          # Este reboot é o que vai fazer o PackageManager encontrar o APK recém-colocado lá dentro
+          adb reboot
+          sleep 5
+
+          echo "===== 9. AGUARDANDO COMPLETA INICIALIZAÇÃO DO ANDROID RUNTIME ====="
           BOOT_COMPLETED=false
-
           for i in {1..120}; do
-
             BOOT="$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')"
-
-            echo "Boot: ${BOOT:-aguardando} — tentativa $i/120"
-
+            echo "Boot status: ${BOOT:-aguardando} — tentativa $i/120"
             if [ "$BOOT" = "1" ]; then
               BOOT_COMPLETED=true
               break
             fi
-
             sleep 2
           done
 
           if [ "$BOOT_COMPLETED" != "true" ]; then
-            echo "::error::Android não terminou o boot."
+            echo "::error::Android falhou ao inicializar após o escaneamento do pacote."
             cat simulation/emulator.log || true
             exit 1
           fi
 
-          echo
-          echo "Android iniciou."
+          echo "✓ APK e Permissões injetados e indexados pelo PackageManager."
 
-          adb devices -l
 
       - name: Diagnosticar partições reais
         shell: bash

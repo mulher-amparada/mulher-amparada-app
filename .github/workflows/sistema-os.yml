@@ -1,10 +1,10 @@
-name: Simular Safe Woman OS
+name: 🫆Simular Safe Woman OS🫆
 
 on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   actions: write
 
 jobs:
@@ -485,9 +485,27 @@ jobs:
         shell: bash
         run: |
           set +e
+          echo "===== ACORDANDO A TELA E RENDERIZADOR ====="
+          # Envia comandos de input para simular que o usuário clicou para desbloquear a tela
+          # Isso obriga o Android a desenhar a interface no buffer gráfico
+          adb shell input keyevent KEYCODE_WAKE
+          sleep 1
+          adb shell input keyevent KEYCODE_HOME
+          sleep 2
 
-          adb exec-out screencap -p \
-            > simulation/boot-screenshot.png
+          echo "===== CAPTURANDO SCREENSHOT FORÇADO ====="
+          # Tiramos o print primeiro salvando internamente na partição temporária /sdcard/
+          # e depois puxamos o arquivo. Isso costuma ignorar o problema de stream bruto preto
+          adb shell screencap -p /sdcard/boot-screenshot.png
+          sleep 1
+          adb pull /sdcard/boot-screenshot.png simulation/boot-screenshot.png
+
+          # Backup caso o de cima falhe
+          if [ ! -s "simulation/boot-screenshot.png" ]; then
+            echo "Tentando método alternativo de captura direta..."
+            adb exec-out screencap -p > simulation/boot-screenshot.png
+          fi
+
 
       - name: Informações finais
         if: always()
@@ -534,7 +552,38 @@ jobs:
             kill "$(cat simulation/emulator.pid)" 2>/dev/null || true
           fi
 
-      - name: Publicar resultados
+      - name: Publicar resultados na main
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          DESTINO="Imagem do Safe Woman OS"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin main
+          git checkout -B main origin/main
+
+          mkdir -p "$DESTINO"
+
+          if [ -d simulation ]; then
+            cp -a simulation/. "$DESTINO/"
+          fi
+
+          git add "$DESTINO"
+
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteração nos resultados."
+          else
+            git commit -m "Atualizar resultados da simulação Safe Woman OS"
+            git push origin main
+          fi
+
+      - name: Publicar resultados como artefato
         if: always()
         uses: actions/upload-artifact@v6
         with:

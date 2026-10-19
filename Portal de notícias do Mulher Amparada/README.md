@@ -1,4 +1,4 @@
-> Aqui é para ser mostrado os bastidores do projeto!, e tem certos pontos que prefiro ser defensivo do qur acabar atacando!
+> Este é o meu diário de desenvolvimento. Aqui eu falo das dificuldades técnicas de construir o projeto. Não é sobre a dor das mulheres — é sobre o processo de quem está tentando ajudar. Se você é mulher e chegou aqui buscando acolhimento, vá para o ABOUT.md.
 
 # 👨🏾‍💻Programar o Mulher Amparada foi um dos maiores infernos que já enfrentei em um projeto:
 

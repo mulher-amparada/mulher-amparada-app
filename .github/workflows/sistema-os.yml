@@ -264,9 +264,24 @@ jobs:
           sleep 2
           adb disable-verity
           
-          echo "===== 4. PRIMEIRO REBOOT (APLICAR ESCRITA) ====="
-          adb reboot
+          echo "===== 4. REINICIANDO EMULADOR PARA APLICAR OVERLAYFS ====="
+          # Como adb reboot mata o emulador no GitHub Actions, vamos parar e iniciar o processo formalmente
+          kill "$EMULATOR_PID" || true
           sleep 5
+
+          nohup emulator \
+            -avd SafeWomanOS \
+            -no-window \
+            -no-audio \
+            -no-boot-anim \
+            -gpu swiftshader_indirect \
+            -no-snapshot \
+            -writable-system \
+            -qemu -append "androidboot.verifiedbootstate=orange" \
+            >> simulation/emulator.log 2>&1 &
+          
+          EMULATOR_PID=$!
+          echo "$EMULATOR_PID" > simulation/emulator.pid
 
           echo "===== 5. AGUARDANDO RETORNO PÓS-VERITY ====="
           for i in {1..60}; do
@@ -274,46 +289,49 @@ jobs:
             sleep 2
           done
 
-          # Torna as partições modificáveis via ADB
           adb root
-          sleep 1
+          sleep 2
           adb remount
-          sleep 1
+          sleep 2
 
           echo "===== 6. CRIAÇÃO DE DIRETÓRIOS E INJEÇÃO DO APK ====="
           adb shell mkdir -p /system/priv-app/MulherAmparada
           adb push "$APK" /system/priv-app/MulherAmparada/MulherAmparada.apk
           
-          # Aplica permissões Linux corretas para o Android aceitar a leitura
           adb shell chmod 755 /system/priv-app/MulherAmparada
           adb shell chmod 644 /system/priv-app/MulherAmparada/MulherAmparada.apk
           adb shell chown -R root:root /system/priv-app/MulherAmparada
 
           echo "===== 7. CRIANDO WHITELIST DE PERMISSÕES PRIVILEGIADAS ====="
-          # Criamos o arquivo xml temporário local no runner do GitHub
           cat <<EOF > privapp-permissions-com.mulheres.xml
           <?xml version="1.0" encoding="utf-8"?>
           <permissions>
               <privapp-permissions package="com.mulheres">
-                  <!-- Se o seu app não usar permissões com protectionLevel="privileged", pode deixar vazio -->
-                  <!-- Mas o arquivo precisa existir para o Android registrar o app da pasta priv-app -->
               </privapp-permissions>
           </permissions>
           EOF
 
-          # Envia a whitelist para o diretório correto do Android core
           adb push privapp-permissions-com.mulheres.xml /system/etc/permissions/privapp-permissions-com.mulheres.xml
           adb shell chmod 644 /system/etc/permissions/privapp-permissions-com.mulheres.xml
           adb shell chown root:root /system/etc/permissions/privapp-permissions-com.mulheres.xml
 
-          echo "===== 8. SEGUNDO REBOOT (FORÇAR RE-ESCANEAR PARSE DE PACKAGES) ====="
-          # Este reboot é o que vai fazer o PackageManager encontrar o APK recém-colocado lá dentro
-          adb reboot
-          sleep 5
+          echo "===== 8. REINICIANDO RUNTIME (FORÇAR RE-ESCANEAR PARSE DE PACKAGES) ====="
+          # Em vez de adb reboot, reiniciamos apenas o ambiente gráfico/framework (zygote/system_server)
+          # Isso é muito mais rápido e não derruba o processo do QEMU
+          adb shell stop
+          sleep 3
+          adb shell start
 
           echo "===== 9. AGUARDANDO COMPLETA INICIALIZAÇÃO DO ANDROID RUNTIME ====="
           BOOT_COMPLETED=false
           for i in {1..120}; do
+            # Verifica se o emulador ainda está vivo na pipeline
+            if ! kill -0 "$EMULATOR_PID" 2>/dev/null; then
+              echo "::error::O processo do emulador morreu durante o ciclo."
+              cat simulation/emulator.log || true
+              exit 1
+            fi
+
             BOOT="$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')"
             echo "Boot status: ${BOOT:-aguardando} — tentativa $i/120"
             if [ "$BOOT" = "1" ]; then
@@ -330,6 +348,7 @@ jobs:
           fi
 
           echo "✓ APK e Permissões injetados e indexados pelo PackageManager."
+
 
 
       - name: Diagnosticar partições reais

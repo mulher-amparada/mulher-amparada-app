@@ -16,7 +16,7 @@ e pra ser sincero, comecei esse projeto no dia 13/05/2026 e terminei no dia 12/1
 
 Os contribuidores ajudaram também!, além de mim e dos bots:
 
-**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 6029**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 6027**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
@@ -327,10 +327,6 @@ mesclar-mulher-amparada:
 ele aoenas chama outro workflow que pega todo o codigo-fonte do app do mulher amparada e copia e mescla para o nosso sistema operacional (que contém só uma pequena parte de todo o AOSP!)
 
 O publicador utiliza os Secrets "MULHER_AMPARADA_APP_ID", "MULHER_AMPARADA_INSTALLATION_ID" e "MULHER_AMPARADA_PRIVATE_KEY" para autenticação.
-
-ativar-safe-woman-os:
-
-ele executa o simular-os.yml
 
 executar-dependabot-maintenance:
 

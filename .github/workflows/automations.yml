@@ -705,7 +705,7 @@ jobs:
 
   executar-dependabot-maintenance:
     name: 🤖 Executar dependabot-maintenance.yml
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     permissions:
       actions: write
@@ -724,7 +724,7 @@ jobs:
   dependabot-merge:
     name: 🤖 Merge das PRs do Dependabot
     needs: executar-dependabot-maintenance
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     
     permissions:
       contents: write

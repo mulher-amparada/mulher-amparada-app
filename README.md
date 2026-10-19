@@ -1413,3 +1413,4 @@ A gravação na branch `main` também depende das regras de proteção e das per
 - Como a publicação utiliza `if: always()`, ela é tentada mesmo quando etapas anteriores falham; os resultados podem representar uma execução incompleta.
 
 Link:
+https://github.com/mulher-amparada/mulher-amparada-app/tree/main/Resultados%20da%20compila%C3%A7%C3%A3o%20do%20Safe%20Woman%20OS

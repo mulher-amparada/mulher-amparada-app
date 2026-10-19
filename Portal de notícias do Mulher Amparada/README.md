@@ -54,7 +54,7 @@ Mesmo assim, o **Mulher Amparada** continua.
 
 ❤️
 
-## O projeto
+### O projeto:
 
 O **Mulher Amparada** é um projeto gratuito e livre de anúncios, desenvolvido por um adolescente de 15 anos, com apoio do ChatGPT e sem formação profissional em programação.
 

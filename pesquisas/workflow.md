@@ -2,7 +2,7 @@
 
 - **Arquivo de origem:** `.github/workflows/automations.yml`
 - **Arquivo gerado:** `.github/workflows/workflow.md`
-- **Jobs identificados:** 18
+- **Jobs identificados:** 19
 - **Etapas identificadas:** 76
 
 ## Tabela completa de jobs e etapas
@@ -27,6 +27,7 @@
 | `pesquisar-projeto` | 🎲Documentar workflow YAML | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v7`); 2. Instalar PHP — executa comandos; 3. Gerar documentação do workflow — executa comandos; 4. arquivos-pesquisas (`actions/upload-artifact@v7`) |
 | `salvar-na-main` | 💾Salvar artifacts na main pelo Mulher Amparada Bot | ubuntu-24.04 | `build`, `linguagens`, `bot`, `atualizar-commits`, `sitemap`, `atualizar-footer`, `atualizar-relatorio-commits`, `pesquisar-projeto`, `observatorio` | 1. Baixar código-fonte da main (`actions/checkout@v7`); 2. Baixar todos os artifacts desta execução (`actions/download-artifact@v8`); 3. Consultar workflow atual — executa comandos; 4. Compilar o publicador C++ — executa comandos; 5. Publicar na main pelo GitHub App — executa comandos |
 | `mesclar-mulher-amparada` | 👨🏾‍💻Mesclar Mulher Amparada | Não identificado | Nenhuma | Nenhuma identificada |
+| `ativar-safe-woman-os` | 👨🏾‍💻Ativar simulação Safe Woman OS | Não identificado | `mesclar-mulher-amparada` | Nenhuma identificada |
 
 ## Grafo completo de dependências
 
@@ -52,6 +53,7 @@ flowchart TD
     job_pesquisar_projeto["🎲Documentar workflow YAML"]
     job_salvar_na_main["💾Salvar artifacts na main pelo Mulher Amparada Bot"]
     job_mesclar_mulher_amparada["👨🏾‍💻Mesclar Mulher Amparada"]
+    job_ativar_safe_woman_os["👨🏾‍💻Ativar simulação Safe Woman OS"]
     job_executar_dependabot_maintenance --> job_dependabot_merge
     job_build --> job_linguagens
     job_publicar_divulgacao --> job_linguagens
@@ -77,6 +79,7 @@ flowchart TD
     job_atualizar_relatorio_commits --> job_salvar_na_main
     job_pesquisar_projeto --> job_salvar_na_main
     job_observatorio --> job_salvar_na_main
+    job_mesclar_mulher_amparada --> job_ativar_safe_woman_os
 ```
 
 ## Detalhamento dos jobs
@@ -315,6 +318,16 @@ flowchart TD
 - **ID:** `mesclar-mulher-amparada`
 - **Runner:** `Não identificado`
 - **Dependências:** Nenhuma
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### 👨🏾‍💻Ativar simulação Safe Woman OS
+
+- **ID:** `ativar-safe-woman-os`
+- **Runner:** `Não identificado`
+- **Dependências:** `mesclar-mulher-amparada`
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
@@ -2069,4 +2082,12 @@ jobs:
     uses: ./.github/workflows/mesclar-mulher-amparada.yml
     permissions:
       contents: write
+      
+  ativar-safe-woman-os:
+    name: 👨🏾‍💻Ativar simulação Safe Woman OS
+    needs: mesclar-mulher-amparada
+    uses: ./.github/workflows/simular-os.yml
+    permissions:
+      contents: write
+      actions: write
 ````

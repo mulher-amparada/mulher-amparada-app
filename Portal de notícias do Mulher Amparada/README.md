@@ -1,6 +1,6 @@
 # 👨🏾‍💻Programar o Mulher Amparada foi um dos maiores infernos que já enfrentei em um projeto:
 
-Dia 18/10/2026:
+## Dia 18/10/2026:
 
 Não porque eu não goste de programar. Pelo contrário.
 
@@ -116,7 +116,7 @@ Um projeto construído na base de muito aprendizado, tentativa, erro, correção
 
 # 📄Quando uma simples atualização vira 412 alterações
 
-Dia 19/10/2026:
+## Dia 19/10/2026:
 
 Uma das partes mais infernais de desenvolver e manter o Mulher Amparada é perceber que uma informação aparentemente simples está espalhada por inúmeros lugares do projeto.
 
@@ -143,9 +143,10 @@ No fim, uma simples frase pode esconder uma quantidade absurda de trabalho.
 “Agora preciso revisar 412 lugares.”
 
 E é justamente esse tipo de situação que torna a manutenção do projeto tão cansativa — e que também mostra por que organização, automação e uma boa estrutura de documentação são tão importantes conforme um projeto cresce.
+
 # 📰 Sobre a Autenticidade, Engenharia e Escopo do Projeto:
 
-Dia 19/10/2026:
+## Dia 19/10/2026:
 
 Para responder a questionamentos públicos sobre o escopo e a complexidade do Mulher Amparada, registramos o contraponto à crítica recebida na comunidade: 
 

@@ -35,7 +35,7 @@ O projeto não foi construído sozinho. Desde o início, busquei ouvir mulheres 
 - **Escola** — apresentei à vice-diretora, à coordenação pedagógica, à professora de itinerância dos alunos com deficiência e a professoras de língua portuguesa. Elas elogiaram o projeto, especialmente o modo claro e escuro.
 - **Família** — mostrei para minhas tias, que também vivem situações dolorosas de relacionamento.
 - **Comunidade** — meu tio divulgou para uma mulher que cuida de um projeto social no meu bairro.
-- **Instituto de vítimas de violência** — apresentei o projeto para uma instituição que cuida de vítimas de violência.
+- **Instituto de vítimas de violência** — apresentei o projeto para uma instituição que cuida de vítimas de violência, e em um espaço que acolhe jovens, mulheres, crianças e adultos, oferecendo lazer e um espaço para a livre expressão no meu bairro.
 - **Canais de notícias** — apresentei o projeto a vários canais de notícias.
 - **Interesse externo** — mulheres entraram em contato por e-mail interessadas no projeto. Eram propostas de serviços de divulgação, que não aceitei porque não posso lidar com contratos.
 - **Avaliação** — pedi nota a uma mulher sobre o projeto, e ela respondeu: **99,5%**.

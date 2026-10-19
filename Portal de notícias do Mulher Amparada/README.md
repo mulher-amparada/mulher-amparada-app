@@ -1,3 +1,5 @@
+> Aqui é para ser mostrado os bastidores do projeto!, e tem certos pontos que prefiro ser defensivo do qur acabar atacando!
+
 # 👨🏾‍💻Programar o Mulher Amparada foi um dos maiores infernos que já enfrentei em um projeto:
 
 ## Dia 18/10/2026:

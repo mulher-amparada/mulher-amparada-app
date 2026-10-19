@@ -1,4 +1,4 @@
-# 👨🏾‍💻Programar o **Mulher Amparada** foi um dos maiores infernos que já enfrentei em um projeto.
+# 👨🏾‍💻Programar o **Mulher Amparada** foi um dos maiores infernos que já enfrentei em um projeto:
 
 Dia 18/10/2026:
 

@@ -352,7 +352,7 @@ e também temos um agente que eu escolho manualmente qual ele vai ativar, se é 
 
 ### Sobre o site que está hospedado pelo github pages:
 
-Na primeira página do site, tem 3 botoes que ligam para (180, 190 e 192), e usam o tel: do navegador para abrir o telefone nativo do celular com esses números já discados de acordo com o que você escolheu!
+Na primeira página do site, tem um botão de pânico que liga para o 180 e usa o tel: do navegador para abrir o telefone nativo do celular com esse número já discado!
 
 embaixo, tem um botão que leva pro repositório 
 

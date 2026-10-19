@@ -16,7 +16,7 @@ e pra ser sincero, comecei esse projeto no dia 13/05/2026 e terminei no dia 12/1
 
 Os contribuidores ajudaram também!, além de mim e dos bots:
 
-**Commits totais de toda a história do projeto = 6088**
+**Commits totais de toda a história do projeto, (feitos por mim e pelos workflows do github actions!) = 6072**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
@@ -199,6 +199,14 @@ Reúne links de divulgação, redes sociais, referências públicas e canais de 
 
 
 
+📰 Portal de notícias:
+
+uma iniciativa vinculada ao projeto Mulher Amparada, destinada à divulgação de notícias e informações relevantes.
+
+🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/Portal%20de%20not%C3%ADcias%20do%20Mulher%20Amparada%2FREADME.md
+
+
+
 💻 Projeto no GitHub:
 
 O código-fonte e a documentação ficam organizados publicamente no GitHub.
@@ -212,27 +220,6 @@ O código-fonte e a documentação ficam organizados publicamente no GitHub.
 O projeto também possui um site próprio.
 
 🔗 https://mulher-amparada.github.io/mulher-amparada-app/
-
-
-
-🧩 Documentação:
-
-Cada arquivo possui uma finalidade específica:
-
-- "README.md" → apresentação do projeto
-- "ACCESSIBILITY.md" → acessibilidade
-- "CODE_OF_CONDUCT.md" → convivência e respeito
-- "CONTRIBUTING.md" → contribuições
-- "FINANÇAS.md" → informações financeiras
-- "LEIS.md" → direitos e legislação
-- "LICENSE" → condições de uso
-- "SECURITY.md" → segurança
-- "ABOUT.md" → mensagem às usuárias
-- "CITATION.cff" → citação e referência do projeto
-- "TERMS AND POLICY.md" → termos e políticas
-- "GOVERNANCE.md" → governança do projeto
-- "AUTHORS.md" → autoria e contato
-- "SUPPORT.md" → suporte, divulgação e canais de ajuda
 
 
 

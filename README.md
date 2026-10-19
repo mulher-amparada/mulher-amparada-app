@@ -390,6 +390,8 @@ embaixo, tem um botão que leva pro repositório
 
 depois um gerador de qr code
 
+e uma página mostrando todas as linguagens de programação utilizadas
+
 depois uma página com imagens dos apks de todas as versões do app (só as imagens)
 
 o nome verdadeiro do app = Mulher Amparada Pela Liberdade Feminina 

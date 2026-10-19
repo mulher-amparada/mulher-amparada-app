@@ -1,0 +1,3 @@
+/system/etc/permissions/privapp-permissions-com.mulheres.xml
+/system/priv-app/MulherAmparada
+/system/priv-app/MulherAmparada/MulherAmparada.apk

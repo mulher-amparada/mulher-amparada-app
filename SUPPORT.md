@@ -48,6 +48,8 @@ https://coderlegion.com/31456/o-que-diferencia-o-mulher-amparada
 
 - 📰 Vergonha do TabNews:
 
+> Coloquei aqui pra acolher as usuárias...
+
 Comentário de `batataquente`:
 
 ```

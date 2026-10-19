@@ -10,8 +10,8 @@
 | ID do job | Nome | Runner | Dependências | Etapas |
 |---|---|---|---|---|
 | `build` | 📦Compilar APK Kotlin | ubuntu-24.04 | Nenhuma | 1. Baixar código (`actions/checkout@v7`); 2. Verificar projeto — executa comandos; 3. Configurar Java 17 (`actions/setup-java@v6`); 4. Verificar Android SDK 37 — executa comandos; 5. Dar permissão ao Gradle — executa comandos; 6. Compilar APK — executa comandos; 7. Localizar APK — executa comandos; 8. Assinar APK — executa comandos; 9. Preparar APK da Release — executa comandos; 10. APK-Kotlin-Assinado (`actions/upload-artifact@v7`); 11. Calcular tamanho real do APK — executa comandos; 12. Calcular SHA-256 — executa comandos; 13. Atualizar APK no main — executa comandos; 14. Verificar Release — executa comandos; 15. Excluir APK antigo da Release — executa comandos; 16. Enviar APK para a Release — executa comandos; 17. Atualizar SHA-256 da Release — executa comandos; 18. Atualizar link, tamanho e SHA-256 no download.html — executa comandos; 19. Enviar download.html atualizado para o main — executa comandos; 20. Mostrar resumo — executa comandos |
-| `executar-dependabot-maintenance` | 🤖 Executar dependabot-maintenance.yml | ubuntu-latest | Nenhuma | 1. Executar workflow — executa comandos |
-| `dependabot-merge` | 🤖 Merge das PRs do Dependabot | ubuntu-latest | `executar-dependabot-maintenance` | 1. 🔀 Fazer merge das PRs — executa comandos |
+| `executar-dependabot-maintenance` | 🤖 Executar dependabot-maintenance.yml | ubuntu-26.04 | Nenhuma | 1. Executar workflow — executa comandos |
+| `dependabot-merge` | 🤖 Merge das PRs do Dependabot | ubuntu-26.04 | `executar-dependabot-maintenance` | 1. 🔀 Fazer merge das PRs — executa comandos |
 | `linguagens` | 💬Analisar linguagens e atualizar estilos | ubuntu-24.04 | `build`, `publicar-divulgacao` | 1. Baixar repositório completo (`actions/checkout@v7`); 2. Instalar cloc — executa comandos; 3. Analisar arquivos e linguagens — executa comandos; 4. Gerar cores e atualizar os dois temas — executa comandos; 5. Validar relatórios, CSS e pacote — executa comandos; 6. relatorio-linguagens (`actions/upload-artifact@v7`) |
 | `bot` | 🎲Análise de dados em Julia | ubuntu-24.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v7`); 2. Instalar Julia (`julia-actions/setup-julia@v3`); 3. Instalar dependências Julia — executa comandos; 4. Executar análise de dados em Julia — executa comandos; 5. Validar e preparar resultados — executa comandos; 6. resultados-ligue180 (`actions/upload-artifact@v7`) |
 | `build-site` | 🌐Montar site | ubuntu-24.04 | `build` | 1. Checkout (`actions/checkout@v7`); 2. Setup Pages (`actions/configure-pages@v6`); 3. Build with Jekyll (`actions/jekyll-build-pages@v1`); 4. Upload Pages artifact (`actions/upload-pages-artifact@v5`) |
@@ -116,7 +116,7 @@ flowchart TD
 ### 🤖 Executar dependabot-maintenance.yml
 
 - **ID:** `executar-dependabot-maintenance`
-- **Runner:** `ubuntu-latest`
+- **Runner:** `ubuntu-26.04`
 - **Dependências:** Nenhuma
 
 | # | Etapa | Ação | Execução |
@@ -126,7 +126,7 @@ flowchart TD
 ### 🤖 Merge das PRs do Dependabot
 
 - **ID:** `dependabot-merge`
-- **Runner:** `ubuntu-latest`
+- **Runner:** `ubuntu-26.04`
 - **Dependências:** `executar-dependabot-maintenance`
 
 | # | Etapa | Ação | Execução |
@@ -1045,7 +1045,7 @@ jobs:
 
   executar-dependabot-maintenance:
     name: 🤖 Executar dependabot-maintenance.yml
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     permissions:
       actions: write
@@ -1064,7 +1064,7 @@ jobs:
   dependabot-merge:
     name: 🤖 Merge das PRs do Dependabot
     needs: executar-dependabot-maintenance
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     
     permissions:
       contents: write
@@ -1622,13 +1622,11 @@ jobs:
           texto = arquivo.read_text(encoding="utf-8")
 
           padrao = (
-              r"\*\*Commits totais de toda a história do projeto, "
-              r"\(feitos por mim e pelos workflows do github actions!\) =.*?\*\*"
+              r"\*\*Commits totais de toda a história do projeto =.*?\*\*"
           )
 
           novo = (
-              "**Commits totais de toda a história do projeto, "
-              "(feitos por mim e pelos workflows do github actions!) = "
+              "**Commits totais de toda a história do projeto = "
               + total
               + "**"
           )

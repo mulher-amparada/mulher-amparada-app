@@ -70,7 +70,7 @@ e pra ser sincero, comecei esse projeto no dia 13/05/2026 e terminei no dia 12/1
 
 Os contribuidores ajudaram também!, além de mim e dos bots:
 
-**Commits totais de toda a história do projeto = 6146**
+**Commits totais de toda a história do projeto = 6117**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
@@ -251,13 +251,6 @@ Reúne links de divulgação, redes sociais, referências públicas e canais de 
 
 🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/SUPPORT.md
 
-
-
-📰 Portal de notícias:
-
-uma iniciativa vinculada ao projeto Mulher Amparada, destinada à divulgação de notícias e informações relevantes.
-
-🔗 https://github.com/mulher-amparada/mulher-amparada-app/blob/main/Portal%20de%20not%C3%ADcias%20do%20Mulher%20Amparada%2FREADME.md
 
 
 💻 Projeto no GitHub:

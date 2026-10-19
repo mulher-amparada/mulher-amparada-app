@@ -34,6 +34,8 @@ https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Pro
 
 # 📰 Sobre a Autenticidade, Engenharia e Escopo do Projeto:
 
+Dia 19/10/2026:
+
 Para responder a questionamentos públicos sobre o escopo e a complexidade do Mulher Amparada, registramos o contraponto à crítica recebida na comunidade: 
 
 Crítica recebida no Tabnews: 

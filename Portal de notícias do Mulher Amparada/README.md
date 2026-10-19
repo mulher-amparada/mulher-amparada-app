@@ -1,3 +1,118 @@
+# 👨🏾‍💻Programar o **Mulher Amparada** foi um dos maiores infernos que já enfrentei em um projeto.
+
+Dia 18/10/2026:
+
+Não porque eu não goste de programar. Pelo contrário.
+
+O problema é que estou desenvolvendo um projeto grande, com muita documentação, funcionalidades, regras, segurança, acessibilidade e organização, sendo um adolescente de 15 anos, sem formação profissional em programação e contando com o apoio do ChatGPT.
+
+E usar IA para programar não é simplesmente:
+
+> "ChatGPT, faça isso."
+
+Pronto.
+
+A IA erra.
+
+E alguns dos erros mais irritantes são justamente os que parecem pequenos:
+
+- Toda hora erra e depois pede desculpa.
+- Não entende o contexto.
+- Altera coisas que eu não pedi.
+- Quando escrevo um texto, pode alterar partes do meu próprio conteúdo.
+- Esquece decisões anteriores.
+- Interpreta uma coisa de maneira completamente diferente do que foi explicado.
+- Com memória, pode acabar ficando hiperfocada em determinados conteúdos antigos e deixar isso interferir no chat atual.
+
+E parece que essa IA é surda.
+
+Tem que falar várias vezes a mesma coisa, repetir o contexto, explicar novamente o que já tinha sido explicado e, em alguns momentos, ficar reclamando ou até xingando para ela finalmente fazer aquilo que já tinha sido pedido desde o começo.
+
+Você explica exatamente o que quer, ela faz outra coisa, você corrige, ela altera outra parte, você explica novamente, ela pede desculpas e, no fim, você ainda precisa conferir tudo para descobrir o que ela mudou sem autorização.
+
+Isso é extremamente frustrante.
+
+Ou seja: além de programar, muitas vezes preciso ficar **fiscalizando a própria IA para garantir que ela não desfaça alguma coisa que eu não pedi para alterar**.
+
+Isso gera retrabalho.
+
+Muito retrabalho.
+
+E não é só a IA.
+
+O próprio aplicativo pode ficar travado e lento quando existe muito conteúdo e produção. Algumas ferramentas são burocráticas demais, existem limitações dependendo do plano e, em vez de a ferramenta simplesmente ajudar, às vezes ela acaba criando mais obstáculos.
+
+E ainda existe a questão do controle parental.
+
+Já tive uma experiência ruim com isso antes: o Family Link acabou deletando uma pasta segura e tudo que estava dentro dela.
+
+Então existe uma frustração adicional quando ferramentas que deveriam facilitar o desenvolvimento acabam impondo mais limitações ou interferindo na forma como o projeto é construído.
+
+E isso foi um dos infernos de programar esse projeto.
+
+Mesmo assim, o **Mulher Amparada** continua.
+
+❤️
+
+## O projeto
+
+O **Mulher Amparada** é um projeto gratuito e livre de anúncios, desenvolvido por um adolescente de 15 anos, com apoio do ChatGPT e sem formação profissional em programação.
+
+O aplicativo reúne recursos relacionados a proteção, segurança e organização em um único lugar.
+
+Além do aplicativo, existe uma preocupação grande com documentação pública.
+
+O projeto possui documentação sobre:
+
+- ♿ Acessibilidade
+- 🧑‍🤝‍🧑 Código de Conduta
+- 🤝 Contribuições
+- 💰 Finanças
+- ⚖️ Leis e direitos
+- 📜 Licença
+- 🔐 Segurança
+- 💌 Mensagem para as usuárias
+- 📚 Citação do projeto
+- ⚖️ Termos e políticas
+- 🏛️ Governança
+- ✍️ Autoria
+- 🆘 Suporte
+
+A ideia é que não seja simplesmente um aplicativo jogado na internet.
+
+Quero que seja possível entender **como ele funciona, como é desenvolvido, quais são suas regras, quais são suas limitações e como outras pessoas podem contribuir**.
+
+Tudo isso enquanto ainda estou aprendendo.
+
+E talvez essa seja a parte mais curiosa do projeto:
+
+> **Um adolescente de 15 anos, sem formação profissional em programação, tentando construir algo grande com ferramentas que nem sempre facilitam o trabalho.**
+
+Às vezes dá certo.
+
+Às vezes dá errado.
+
+Às vezes a IA muda uma coisa que não deveria.
+
+Às vezes eu preciso refazer.
+
+Às vezes dá vontade de mandar tudo para o inferno.
+
+Mas o projeto continua.
+
+## ❤️ Mulher Amparada
+
+**Gratuito.**  
+**Livre de anúncios.**  
+**Com documentação pública.**  
+**Desenvolvido por um adolescente de 15 anos.**  
+**Com apoio do ChatGPT.**
+
+Um projeto construído na base de muito aprendizado, tentativa, erro, correção e persistência.
+
+🔗 https://github.com/mulher-amparada/mulher-amparada-app
+
+🌐 https://mulher-amparada.github.io/mulher-amparada-app/
 
 # 📰 Sobre a Autenticidade, Engenharia e Escopo do Projeto:
 

@@ -14,7 +14,7 @@ INFO         |      Ok: Hardware GPU compatibility checks are not required
 INFO         |   Checking: hasSufficientSystem
 INFO         |      Ok: System requirements to run avd: `SafeWomanOS` are met
 WARNING      | Feature QuickbootFileBacked is disabled due to stability issues, if you really want that, the environment variable ANDROID_EMU_FORCE_QUICKBOOT_FILE_BACKED need to set to 1
-INFO         | Storing crashdata in: /tmp/android-runner/emu-crash-37.2.12.db, detection is enabled for process: 3224
+INFO         | Storing crashdata in: /tmp/android-runner/emu-crash-37.2.12.db, detection is enabled for process: 3491
 INFO         | Initializing gfxstream backend
 INFO         | startOpenglesRendererImpl: gpu info
 INFO         | 
@@ -53,7 +53,7 @@ INFO         | Graphics API Version OpenGL ES 3.0 (OpenGL ES 3.0 SwiftShader 4.0
 INFO         | Graphics API Extensions GL_OES_EGL_sync GL_OES_EGL_image GL_OES_EGL_image_external GL_OES_depth24 GL_OES_depth32 GL_OES_element_index_uint GL_OES_texture_float GL_OES_texture_float_linear GL_OES_compressed_paletted_texture GL_OES_compressed_ETC1_RGB8_texture GL_OES_depth_texture GL_OES_texture_half_float GL_OES_texture_half_float_linear GL_OES_packed_depth_stencil GL_OES_vertex_half_float GL_OES_standard_derivatives GL_OES_texture_npot GL_OES_rgb8_rgba8 GL_EXT_color_buffer_float GL_EXT_color_buffer_half_float GL_EXT_texture_format_BGRA8888 GL_APPLE_texture_format_BGRA8888 
 INFO         | Graphics Device Extensions N/A
 INFO         | Disabling sparse binding feature support
-INFO         | Sending adb public key [QAAAADlTE5P3VGzN/LSrOgzJk/Q0WOG40MSo05+kGN1qz69oE9Gb2GrhkcmX1TbfzjfPZIXVPQfTzrbQhScJnHyTMGM6/PSkx/oHzbrlJTZKy6cV/ZdSQ/+82ZrMv2YBfYM9QgOg6bnCc9yWjbXHN3P/bGZaaa3hpyXJjU2YK9yAbCMuvTaVVRKRmqptObxUZIagtASw6UB7bG3WIk0lP/imJtgIeTf7N7lxh4NykTZX0KEuRQGOmfnq8YIICCkbdbxWtGT/diWhWp+wXVbQcJTIsc2oLSQ0P+QErA7T6eVANHOiKeqHYua9D/q2icCjewypQkZHqEC2Xr/MdWRR0PCSif1OW7m5ebCglT3m4oa+2ACYY7l7039ipmP3fc5Q9ZlmxtwUcLnT+flp3eInMCJjGrFS56/fZq6alEdmTX/i+Z4UyPJV+O+PLsPI/CFBo61zc/JV08hUeDfTil6xYyAw8B70XnS5aIrFJFsxb4bxMYcKxPpFwhUEYalZVjSN3XOL25I24zepKrEsnuk3eB9oQFOm+l1RNlkt7BZNEGx5pBFN53peMEm0654k3frGYHFn9z05DlB/QEDkLwlNCWzrXzE0BjoHh/3PLgUFu/HyABQjOkeGTc0wgCYUkHmyCJORhb+gA9s36nCAFbxqJqu1wX3jxZQhCFMXiaH0I5T46oNtptdAtAEAAQA= runner@unknown]
+INFO         | Sending adb public key [QAAAAI25w8K7zphQZvWnEDJA7AOykWPCZ7r7btDVAd2lVw9FwrOQYLpkTpyXLSuAtmUyEJtoInA6qZ3yHXi23FC8Oavc2Fs7h4KUEogABd8phCq349/6JOCs4mzoyrMYyFJPoLPI88oediYuY3Zkr9ixqjiqPpruq/uiAwp1tXPvOty7C0oKlpy8Whi+NnEnmfFSCVA4SVEveqP4mEUFlNYkkKJ+ym5vpMRbx41b80ltWfzWTQBw/nKRdHjVyEhc1cveoYOGmowBltPjkfT2jc2PlMnDfOyOz3AWAGc52K4iBz9uNx9nd2uS5g6ez97/HbzidRd1d3EIV3fglIRgKuKvU2d2KW7upgKqXpggH9q2wfj0dVdVM22MIFcah23uEFAx9pyC/O4YdMKMvJGUIO9xjZyzJwiObrG29WJ7h5/qVyR+MR7qmwhA19jNiEZEyJjEeHoAhA5l0BAs8Rl+P0Nm4S7mfzLue6zOLP6y2iBczPTZCkg1XlBoIsK1iUUQa2XKCjnaBUSDk624XaKEaRrqlEqE8DQkZ0SOVclCr64oJxBFMJVrjBO575Bz5Zde2Tw5MJxAQotpfjCMg5GMCJedAlurJ2NNct22JAKYPGHaLrFWAVBki1c1V9KwPpXVLYS3FsqLdrKj6RKv8MYnX4A9oFh1qPcLUxFAyJsptksVACz5ioYrrAEAAQA= runner@unknown]
 INFO         | Userspace boot properties:
 INFO         |   androidboot.boot_devices=pci0000:00/0000:00:03.0 pci0000:00/0000:00:06.0
 INFO         |   androidboot.dalvik.vm.heapsize=576m
@@ -65,7 +65,7 @@ INFO         |   androidboot.hardware.vulkan=ranchu
 INFO         |   androidboot.logcat=*:V
 INFO         |   androidboot.opengles.version=196608
 INFO         |   androidboot.qemu=1
-INFO         |   androidboot.qemu.adb.pubkey=QAAAADlTE5P3VGzN/LSrOgzJk/Q0WOG40MSo05+kGN1qz69oE9Gb2GrhkcmX1TbfzjfPZIXVPQfTzrbQhScJnHyTMGM6/PSkx/oHzbrlJTZKy6cV/ZdSQ/+82ZrMv2YBfYM9QgOg6bnCc9yWjbXHN3P/bGZaaa3hpyXJjU2YK9yAbCMuvTaVVRKRmqptObxUZIagtASw6UB7bG3WIk0lP/imJtgIeTf7N7lxh4NykTZX0KEuRQGOmfnq8YIICCkbdbxWtGT/diWhWp+wXVbQcJTIsc2oLSQ0P+QErA7T6eVANHOiKeqHYua9D/q2icCjewypQkZHqEC2Xr/MdWRR0PCSif1OW7m5ebCglT3m4oa+2ACYY7l7039ipmP3fc5Q9ZlmxtwUcLnT+flp3eInMCJjGrFS56/fZq6alEdmTX/i+Z4UyPJV+O+PLsPI/CFBo61zc/JV08hUeDfTil6xYyAw8B70XnS5aIrFJFsxb4bxMYcKxPpFwhUEYalZVjSN3XOL25I24zepKrEsnuk3eB9oQFOm+l1RNlkt7BZNEGx5pBFN53peMEm0654k3frGYHFn9z05DlB/QEDkLwlNCWzrXzE0BjoHh/3PLgUFu/HyABQjOkeGTc0wgCYUkHmyCJORhb+gA9s36nCAFbxqJqu1wX3jxZQhCFMXiaH0I5T46oNtptdAtAEAAQA= runner@unknown
+INFO         |   androidboot.qemu.adb.pubkey=QAAAAI25w8K7zphQZvWnEDJA7AOykWPCZ7r7btDVAd2lVw9FwrOQYLpkTpyXLSuAtmUyEJtoInA6qZ3yHXi23FC8Oavc2Fs7h4KUEogABd8phCq349/6JOCs4mzoyrMYyFJPoLPI88oediYuY3Zkr9ixqjiqPpruq/uiAwp1tXPvOty7C0oKlpy8Whi+NnEnmfFSCVA4SVEveqP4mEUFlNYkkKJ+ym5vpMRbx41b80ltWfzWTQBw/nKRdHjVyEhc1cveoYOGmowBltPjkfT2jc2PlMnDfOyOz3AWAGc52K4iBz9uNx9nd2uS5g6ez97/HbzidRd1d3EIV3fglIRgKuKvU2d2KW7upgKqXpggH9q2wfj0dVdVM22MIFcah23uEFAx9pyC/O4YdMKMvJGUIO9xjZyzJwiObrG29WJ7h5/qVyR+MR7qmwhA19jNiEZEyJjEeHoAhA5l0BAs8Rl+P0Nm4S7mfzLue6zOLP6y2iBczPTZCkg1XlBoIsK1iUUQa2XKCjnaBUSDk624XaKEaRrqlEqE8DQkZ0SOVclCr64oJxBFMJVrjBO575Bz5Zde2Tw5MJxAQotpfjCMg5GMCJedAlurJ2NNct22JAKYPGHaLrFWAVBki1c1V9KwPpXVLYS3FsqLdrKj6RKv8MYnX4A9oFh1qPcLUxFAyJsptksVACz5ioYrrAEAAQA= runner@unknown
 INFO         |   androidboot.qemu.avd_name=SafeWomanOS
 INFO         |   androidboot.qemu.camera_hq_edge_processing=0
 INFO         |   androidboot.qemu.camera_protocol_ver=1
@@ -85,29 +85,30 @@ INFO         |   androidboot.vbmeta.hash_alg=sha256
 INFO         |   androidboot.vbmeta.size=6720
 INFO         |   androidboot.verifiedbootstate=orange
 INFO         |   androidboot.veritymode=enforcing
-WARNING: cannnot unmap ptr 0x7fd5de601000 as it is in the protected range from 0x7fd53e600000 to 0x7fd5de800000
+WARNING: cannnot unmap ptr 0x7fabf9801000 as it is in the protected range from 0x7fab59800000 to 0x7fabf9a00000
 INFO         | Monitoring duration of emulator setup.
 WARNING      | The emulator now requires a signed jwt token for gRPC access! Use the -grpc flag if you really want an open unprotected grpc port
 INFO         | Using security allow list from: /usr/local/lib/android/sdk/emulator/lib/emulator_access.json
-INFO         | The active JSON Web Key Sets can be found here: /run/user/1001/avd/running/3224/jwks/cffa35d4-d343-46a6-87a6-5b8921492da9/active.jwk
-INFO         | Scanning /run/user/1001/avd/running/3224/jwks/cffa35d4-d343-46a6-87a6-5b8921492da9 for jwk keys.
+INFO         | The active JSON Web Key Sets can be found here: /run/user/1001/avd/running/3491/jwks/d57ad516-5448-479c-83a6-8454a9665392/active.jwk
+INFO         | Scanning /run/user/1001/avd/running/3491/jwks/d57ad516-5448-479c-83a6-8454a9665392 for jwk keys.
 INFO         | Started GRPC server at 127.0.0.1:8554, security: Local, auth: +token
-INFO         | Advertising in: /run/user/1001/avd/running/pid_3224.ini
-INFO         | Successfully initialized netsim WiFi
+INFO         | Advertising in: /run/user/1001/avd/running/pid_3491.ini
 INFO         | Activated packet streamer for bluetooth emulation
+INFO         | Successfully initialized netsim WiFi
 INFO         | Setting display: 0 configuration to: 1080x1920, dpi: 420x420 
 INFO         | setDisplayActiveConfig: id:0, 1080x1920
 INFO         | emulatorSetupEnvironment: Environment scene is not required
 USER_INFO    | Emulator is performing a full startup. This may take upto two minutes, or more.
 WARNING      | Failed to process .ini file /home/runner/.android/emu-update-last-check.ini for reading.
 WARNING      | Failed to process .ini file /home/runner/.android/emu-update-last-check.ini for reading.
-INFO         | Wait for emulator (pid 3224) 20 seconds to shutdown gracefully before kill;you can set environment variable ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL(in seconds) to change the default value (20 seconds)
+INFO         | Wait for emulator (pid 3491) 20 seconds to shutdown gracefully before kill;you can set environment variable ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL(in seconds) to change the default value (20 seconds)
 
 USER_INFO    | Snapshots have been disabled by the user, save request is ignored.
 INFO         | Saving snapshot 'default_boot' took 0 ms
 ERROR        | stop: Not implemented
 INFO         | removeAll
-WARNING      | Netsim Wifi dns:///localhost:33173 is gone due to CANCELLED
+WARNING      | Netsim Wifi dns:///localhost:36329 is gone due to CANCELLED
+INFO         | ipv6:%5B::1%5D:36329: Got goaway [2] err=UNAVAILABLE:GOAWAY received; Error code: 2; Debug Text: Cancelling all calls {http2_error:2}
 INFO         | Android emulator version 37.2.12.0 (build_id 16428233) (CL:N/A)
 INFO         | Graphics backend: gfxstream
 INFO         | Found systemPath /usr/local/lib/android/sdk/system-images/android-35/aosp_atd/x86_64/
@@ -123,7 +124,7 @@ INFO         |      Ok: Hardware GPU compatibility checks are not required
 INFO         |   Checking: hasSufficientSystem
 INFO         |      Ok: System requirements to run avd: `SafeWomanOS` are met
 WARNING      | Feature QuickbootFileBacked is disabled due to stability issues, if you really want that, the environment variable ANDROID_EMU_FORCE_QUICKBOOT_FILE_BACKED need to set to 1
-INFO         | Storing crashdata in: /tmp/android-runner/emu-crash-37.2.12.db, detection is enabled for process: 3423
+INFO         | Storing crashdata in: /tmp/android-runner/emu-crash-37.2.12.db, detection is enabled for process: 3664
 INFO         | Initializing gfxstream backend
 INFO         | startOpenglesRendererImpl: gpu info
 INFO         | 
@@ -162,7 +163,7 @@ INFO         | Graphics API Version OpenGL ES 3.0 (OpenGL ES 3.0 SwiftShader 4.0
 INFO         | Graphics API Extensions GL_OES_EGL_sync GL_OES_EGL_image GL_OES_EGL_image_external GL_OES_depth24 GL_OES_depth32 GL_OES_element_index_uint GL_OES_texture_float GL_OES_texture_float_linear GL_OES_compressed_paletted_texture GL_OES_compressed_ETC1_RGB8_texture GL_OES_depth_texture GL_OES_texture_half_float GL_OES_texture_half_float_linear GL_OES_packed_depth_stencil GL_OES_vertex_half_float GL_OES_standard_derivatives GL_OES_texture_npot GL_OES_rgb8_rgba8 GL_EXT_color_buffer_float GL_EXT_color_buffer_half_float GL_EXT_texture_format_BGRA8888 GL_APPLE_texture_format_BGRA8888 
 INFO         | Graphics Device Extensions N/A
 INFO         | Disabling sparse binding feature support
-INFO         | Sending adb public key [QAAAADlTE5P3VGzN/LSrOgzJk/Q0WOG40MSo05+kGN1qz69oE9Gb2GrhkcmX1TbfzjfPZIXVPQfTzrbQhScJnHyTMGM6/PSkx/oHzbrlJTZKy6cV/ZdSQ/+82ZrMv2YBfYM9QgOg6bnCc9yWjbXHN3P/bGZaaa3hpyXJjU2YK9yAbCMuvTaVVRKRmqptObxUZIagtASw6UB7bG3WIk0lP/imJtgIeTf7N7lxh4NykTZX0KEuRQGOmfnq8YIICCkbdbxWtGT/diWhWp+wXVbQcJTIsc2oLSQ0P+QErA7T6eVANHOiKeqHYua9D/q2icCjewypQkZHqEC2Xr/MdWRR0PCSif1OW7m5ebCglT3m4oa+2ACYY7l7039ipmP3fc5Q9ZlmxtwUcLnT+flp3eInMCJjGrFS56/fZq6alEdmTX/i+Z4UyPJV+O+PLsPI/CFBo61zc/JV08hUeDfTil6xYyAw8B70XnS5aIrFJFsxb4bxMYcKxPpFwhUEYalZVjSN3XOL25I24zepKrEsnuk3eB9oQFOm+l1RNlkt7BZNEGx5pBFN53peMEm0654k3frGYHFn9z05DlB/QEDkLwlNCWzrXzE0BjoHh/3PLgUFu/HyABQjOkeGTc0wgCYUkHmyCJORhb+gA9s36nCAFbxqJqu1wX3jxZQhCFMXiaH0I5T46oNtptdAtAEAAQA= runner@unknown]
+INFO         | Sending adb public key [QAAAAI25w8K7zphQZvWnEDJA7AOykWPCZ7r7btDVAd2lVw9FwrOQYLpkTpyXLSuAtmUyEJtoInA6qZ3yHXi23FC8Oavc2Fs7h4KUEogABd8phCq349/6JOCs4mzoyrMYyFJPoLPI88oediYuY3Zkr9ixqjiqPpruq/uiAwp1tXPvOty7C0oKlpy8Whi+NnEnmfFSCVA4SVEveqP4mEUFlNYkkKJ+ym5vpMRbx41b80ltWfzWTQBw/nKRdHjVyEhc1cveoYOGmowBltPjkfT2jc2PlMnDfOyOz3AWAGc52K4iBz9uNx9nd2uS5g6ez97/HbzidRd1d3EIV3fglIRgKuKvU2d2KW7upgKqXpggH9q2wfj0dVdVM22MIFcah23uEFAx9pyC/O4YdMKMvJGUIO9xjZyzJwiObrG29WJ7h5/qVyR+MR7qmwhA19jNiEZEyJjEeHoAhA5l0BAs8Rl+P0Nm4S7mfzLue6zOLP6y2iBczPTZCkg1XlBoIsK1iUUQa2XKCjnaBUSDk624XaKEaRrqlEqE8DQkZ0SOVclCr64oJxBFMJVrjBO575Bz5Zde2Tw5MJxAQotpfjCMg5GMCJedAlurJ2NNct22JAKYPGHaLrFWAVBki1c1V9KwPpXVLYS3FsqLdrKj6RKv8MYnX4A9oFh1qPcLUxFAyJsptksVACz5ioYrrAEAAQA= runner@unknown]
 INFO         | Userspace boot properties:
 INFO         |   androidboot.boot_devices=pci0000:00/0000:00:03.0 pci0000:00/0000:00:06.0
 INFO         |   androidboot.dalvik.vm.heapsize=576m
@@ -174,7 +175,7 @@ INFO         |   androidboot.hardware.vulkan=ranchu
 INFO         |   androidboot.logcat=*:V
 INFO         |   androidboot.opengles.version=196608
 INFO         |   androidboot.qemu=1
-INFO         |   androidboot.qemu.adb.pubkey=QAAAADlTE5P3VGzN/LSrOgzJk/Q0WOG40MSo05+kGN1qz69oE9Gb2GrhkcmX1TbfzjfPZIXVPQfTzrbQhScJnHyTMGM6/PSkx/oHzbrlJTZKy6cV/ZdSQ/+82ZrMv2YBfYM9QgOg6bnCc9yWjbXHN3P/bGZaaa3hpyXJjU2YK9yAbCMuvTaVVRKRmqptObxUZIagtASw6UB7bG3WIk0lP/imJtgIeTf7N7lxh4NykTZX0KEuRQGOmfnq8YIICCkbdbxWtGT/diWhWp+wXVbQcJTIsc2oLSQ0P+QErA7T6eVANHOiKeqHYua9D/q2icCjewypQkZHqEC2Xr/MdWRR0PCSif1OW7m5ebCglT3m4oa+2ACYY7l7039ipmP3fc5Q9ZlmxtwUcLnT+flp3eInMCJjGrFS56/fZq6alEdmTX/i+Z4UyPJV+O+PLsPI/CFBo61zc/JV08hUeDfTil6xYyAw8B70XnS5aIrFJFsxb4bxMYcKxPpFwhUEYalZVjSN3XOL25I24zepKrEsnuk3eB9oQFOm+l1RNlkt7BZNEGx5pBFN53peMEm0654k3frGYHFn9z05DlB/QEDkLwlNCWzrXzE0BjoHh/3PLgUFu/HyABQjOkeGTc0wgCYUkHmyCJORhb+gA9s36nCAFbxqJqu1wX3jxZQhCFMXiaH0I5T46oNtptdAtAEAAQA= runner@unknown
+INFO         |   androidboot.qemu.adb.pubkey=QAAAAI25w8K7zphQZvWnEDJA7AOykWPCZ7r7btDVAd2lVw9FwrOQYLpkTpyXLSuAtmUyEJtoInA6qZ3yHXi23FC8Oavc2Fs7h4KUEogABd8phCq349/6JOCs4mzoyrMYyFJPoLPI88oediYuY3Zkr9ixqjiqPpruq/uiAwp1tXPvOty7C0oKlpy8Whi+NnEnmfFSCVA4SVEveqP4mEUFlNYkkKJ+ym5vpMRbx41b80ltWfzWTQBw/nKRdHjVyEhc1cveoYOGmowBltPjkfT2jc2PlMnDfOyOz3AWAGc52K4iBz9uNx9nd2uS5g6ez97/HbzidRd1d3EIV3fglIRgKuKvU2d2KW7upgKqXpggH9q2wfj0dVdVM22MIFcah23uEFAx9pyC/O4YdMKMvJGUIO9xjZyzJwiObrG29WJ7h5/qVyR+MR7qmwhA19jNiEZEyJjEeHoAhA5l0BAs8Rl+P0Nm4S7mfzLue6zOLP6y2iBczPTZCkg1XlBoIsK1iUUQa2XKCjnaBUSDk624XaKEaRrqlEqE8DQkZ0SOVclCr64oJxBFMJVrjBO575Bz5Zde2Tw5MJxAQotpfjCMg5GMCJedAlurJ2NNct22JAKYPGHaLrFWAVBki1c1V9KwPpXVLYS3FsqLdrKj6RKv8MYnX4A9oFh1qPcLUxFAyJsptksVACz5ioYrrAEAAQA= runner@unknown
 INFO         |   androidboot.qemu.avd_name=SafeWomanOS
 INFO         |   androidboot.qemu.camera_hq_edge_processing=0
 INFO         |   androidboot.qemu.camera_protocol_ver=1
@@ -194,26 +195,23 @@ INFO         |   androidboot.vbmeta.hash_alg=sha256
 INFO         |   androidboot.vbmeta.size=6720
 INFO         |   androidboot.verifiedbootstate=orange
 INFO         |   androidboot.veritymode=enforcing
-WARNING: cannnot unmap ptr 0x7f3afb801000 as it is in the protected range from 0x7f3a5b800000 to 0x7f3afba00000
+WARNING: cannnot unmap ptr 0x7f4787c01000 as it is in the protected range from 0x7f46e7c00000 to 0x7f4787e00000
 INFO         | Monitoring duration of emulator setup.
 WARNING      | The emulator now requires a signed jwt token for gRPC access! Use the -grpc flag if you really want an open unprotected grpc port
 INFO         | Using security allow list from: /usr/local/lib/android/sdk/emulator/lib/emulator_access.json
-INFO         | The active JSON Web Key Sets can be found here: /run/user/1001/avd/running/3423/jwks/89ddd965-5067-4b24-92ea-95dd220ea452/active.jwk
-INFO         | Scanning /run/user/1001/avd/running/3423/jwks/89ddd965-5067-4b24-92ea-95dd220ea452 for jwk keys.
+INFO         | The active JSON Web Key Sets can be found here: /run/user/1001/avd/running/3664/jwks/8ca48d39-8558-4928-83a8-a3b9b4e38349/active.jwk
+INFO         | Scanning /run/user/1001/avd/running/3664/jwks/8ca48d39-8558-4928-83a8-a3b9b4e38349 for jwk keys.
 INFO         | Started GRPC server at 127.0.0.1:8554, security: Local, auth: +token
-INFO         | Advertising in: /run/user/1001/avd/running/pid_3423.ini
-INFO         | Activated packet streamer for bluetooth emulation
+INFO         | Advertising in: /run/user/1001/avd/running/pid_3664.ini
 INFO         | Successfully initialized netsim WiFi
+INFO         | Activated packet streamer for bluetooth emulation
 INFO         | Setting display: 0 configuration to: 1080x1920, dpi: 420x420 
 INFO         | setDisplayActiveConfig: id:0, 1080x1920
 INFO         | emulatorSetupEnvironment: Environment scene is not required
 USER_INFO    | Emulator is performing a full startup. This may take upto two minutes, or more.
-INFO         | Boot completed in 29640 ms
+INFO         | Boot completed in 34774 ms
 INFO         | Increasing screen off timeout, logcat buffer size to 2M.
-INFO         | Wait for emulator (pid 3423) 20 seconds to shutdown gracefully before kill;you can set environment variable ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL(in seconds) to change the default value (20 seconds)
+INFO         | Wait for emulator (pid 3664) 20 seconds to shutdown gracefully before kill;you can set environment variable ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL(in seconds) to change the default value (20 seconds)
 
 USER_INFO    | Snapshots have been disabled by the user, save request is ignored.
 INFO         | Saving snapshot 'default_boot' took 0 ms
-ERROR        | stop: Not implemented
-INFO         | removeAll
-WARNING      | Netsim Wifi dns:///localhost:36585 is gone due to Stream removed (CANCELLED)

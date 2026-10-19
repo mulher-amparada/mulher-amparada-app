@@ -51,6 +51,8 @@ O projeto não foi construído sozinho. Desde o início, busquei ouvir mulheres 
 
 Este ABOUT é uma proposta — quero que vocês reescrevam com as palavras de vocês. A fundação está pronta; a casa, vocês decidem.
 
+e assim como o about, vocês podem decidir qualquer outra coisa que quiserem no projeto!
+
 👉 **Participe:** [Discussão #10](https://github.com/mulher-amparada/mulher-amparada-app/discussions/10)
 
 Se eu errar, me diga. Eu ajusto.

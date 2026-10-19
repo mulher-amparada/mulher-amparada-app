@@ -8,8 +8,7 @@
 
 Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista laudado nível 1 de 15 anos!, usando o apoio do chatgpt, sem curso formal!
 
-```
-# Autoria e Propósito do Mulher Amparada
+# ♀️Autoria e Propósito do Mulher Amparada
 
 ## Quem criou
 
@@ -53,7 +52,6 @@ Se você é mulher e quer contribuir, **me diga**. Eu abro espaço.
 *Este documento foi escrito pelo desenvolvedor do Mulher Amparada em 19 de outubro de 2026.*
 
 *Ele pode ser atualizado a qualquer momento — especialmente se mulheres quiserem assumir o protagonismo.*
-```
 
 e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, onde nem tinha os recursos, ja programei ele num app de A-IDE, num A05, e eu ja perdi vários projetos porque o celular nao aguentava, matava o projeto porque matou o processo de compilação!, e uma vez eu fiz o projeto do mulher amparada e eu mesmo fiz o app do mulher amparada (primeiro eu refiz porque o family link apagou a pasta segura samsung, depois na 2 vez que perdi portei tudo do apk compilado para descompilado, e depois perdi denovo mas ai eu ja tinha o código-fonte!)
 

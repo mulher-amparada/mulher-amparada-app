@@ -1744,7 +1744,7 @@ jobs:
   ativar-safe-woman-os:
     name: 👨🏾‍💻Ativar simulação Safe Woman OS
     needs: mesclar-mulher-amparada
-    uses: ./.github/workflows/si-safe-woman-os.yml
+    uses: ./.github/workflows/simular-os.yml
     permissions:
       contents: write
       actions: write

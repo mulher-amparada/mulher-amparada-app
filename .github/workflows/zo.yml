@@ -1,0 +1,46 @@
+name: Delete All Actions Artifacts
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  delete-artifacts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Delete all artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          page=1
+          deleted=0
+
+          while true; do
+            response=$(gh api \
+              "repos/$GH_REPO/actions/artifacts?per_page=100&page=$page")
+
+            count=$(echo "$response" | jq '.artifacts | length')
+
+            if [ "$count" -eq 0 ]; then
+              break
+            fi
+
+            while IFS= read -r id; do
+              gh api -X DELETE \
+                "repos/$GH_REPO/actions/artifacts/$id"
+
+              echo "Deleted artifact: $id"
+              deleted=$((deleted + 1))
+            done < <(echo "$response" | jq -r '.artifacts[].id')
+
+            page=$((page + 1))
+          done
+
+          echo "Total deleted: $deleted"

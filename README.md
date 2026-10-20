@@ -36,7 +36,7 @@ O projeto não foi construído sozinho. Desde o início, busquei ouvir mulheres 
 - **Família** — mostrei para minhas tias, que também vivem situações dolorosas de relacionamento.
 - **Comunidade** — meu tio divulgou para uma mulher que cuida de um projeto social no meu bairro.
 - **Instituto de vítimas de violência** — apresentei o projeto para uma instituição que cuida de vítimas de violência,
-- **Espaço perto do meu bairro** apresentei o projeto em um espaço que acolhe jovens, mulheres, crianças e adultos, oferecendo lazer e um espaço para a livre expressão no meu bairro.
+- **Espaço perto do meu bairro:** apresentei o projeto em um espaço que acolhe jovens, mulheres, crianças e adultos, oferecendo lazer e um espaço para a livre expressão no meu bairro.
 - No dia 20/10/2026, uma mulher me sugeriu formatar e limpar os links do texto de divulgação, deixando apenas um link no texto — principalmente no WhatsApp — e trocar o botão de "ir para o código-fonte" no index.html por vários botões que levem para finanças, a carta de acolhimento, canais oficiais do projeto eo readme; fiz tudo isso na hora.
 - **Canais de notícias** — apresentei o projeto a vários canais de notícias.
 - **Interesse externo** — mulheres entraram em contato por e-mail interessadas no projeto. Eram propostas de serviços de divulgação, que não aceitei porque não posso lidar com contratos.

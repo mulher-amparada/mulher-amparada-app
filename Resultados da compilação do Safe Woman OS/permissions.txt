@@ -1,7 +1,7 @@
 Activity Resolver Table:
   Schemes:
       com.mulheres:
-        4fb1f1a com.mulheres/.EntradaActivity filter 2057c28
+        5e0948f com.mulheres/.EntradaActivity filter 6d50b25
           Action: "android.intent.action.VIEW"
           Category: "android.intent.category.DEFAULT"
           Category: "android.intent.category.BROWSABLE"
@@ -9,56 +9,56 @@ Activity Resolver Table:
 
   Non-Data Actions:
       android.intent.action.MAIN:
-        4fb1f1a com.mulheres/.EntradaActivity filter a825a4b
+        5e0948f com.mulheres/.EntradaActivity filter 37d031c
           Action: "android.intent.action.MAIN"
           Category: "android.intent.category.LAUNCHER"
 
 Receiver Resolver Table:
   Non-Data Actions:
       androidx.profileinstaller.action.SAVE_PROFILE:
-        71a3d41 com.mulheres/androidx.profileinstaller.ProfileInstallReceiver filter a4a32d4
+        5b934fa com.mulheres/androidx.profileinstaller.ProfileInstallReceiver filter 3f034a1
           Action: "androidx.profileinstaller.action.SAVE_PROFILE"
       androidx.profileinstaller.action.INSTALL_PROFILE:
-        71a3d41 com.mulheres/androidx.profileinstaller.ProfileInstallReceiver filter 61c12e6
+        5b934fa com.mulheres/androidx.profileinstaller.ProfileInstallReceiver filter 15beaab
           Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
       androidx.profileinstaller.action.SKIP_FILE:
-        71a3d41 com.mulheres/androidx.profileinstaller.ProfileInstallReceiver filter b9a5027
+        5b934fa com.mulheres/androidx.profileinstaller.ProfileInstallReceiver filter e53508
           Action: "androidx.profileinstaller.action.SKIP_FILE"
       androidx.profileinstaller.action.BENCHMARK_OPERATION:
-        71a3d41 com.mulheres/androidx.profileinstaller.ProfileInstallReceiver filter 10c6c7d
+        5b934fa com.mulheres/androidx.profileinstaller.ProfileInstallReceiver filter 2d5a6c6
           Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
 
 Domain verification status:
 
 Permissions:
-  Permission [com.mulheres.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (d62c0b):
+  Permission [com.mulheres.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (296355):
     sourcePackage=com.mulheres
     uid=10138 gids=[] type=0 prot=signature
-    perm=PermissionInfo{81e4ae8 com.mulheres.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+    perm=PermissionInfo{6a1616a com.mulheres.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
     flags=0x0
 
 Registered ContentProviders:
   com.mulheres/androidx.startup.InitializationProvider:
-    Provider{9012d94 com.mulheres/androidx.startup.InitializationProvider}
+    Provider{9bacef8 com.mulheres/androidx.startup.InitializationProvider}
   com.mulheres/.SdFileProvider:
-    Provider{5dbb03d com.mulheres/.SdFileProvider}
+    Provider{b69dfd1 com.mulheres/.SdFileProvider}
 
 ContentProvider Authorities:
   [com.mulheres.provider]:
-    Provider{5dbb03d com.mulheres/.SdFileProvider}
-      applicationInfo=ApplicationInfo{a6ad032 com.mulheres}
+    Provider{b69dfd1 com.mulheres/.SdFileProvider}
+      applicationInfo=ApplicationInfo{aec2a36 com.mulheres}
   [com.mulheres.androidx-startup]:
-    Provider{9012d94 com.mulheres/androidx.startup.InitializationProvider}
-      applicationInfo=ApplicationInfo{3961183 com.mulheres}
+    Provider{9bacef8 com.mulheres/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{72e9d37 com.mulheres}
 
 Key Set Manager:
   [com.mulheres]
       Signing KeySets: 20
 
 Packages:
-  Package [com.mulheres] (1f1bd7e):
+  Package [com.mulheres] (249e2a4):
     appId=10138
-    pkg=Package{91e42df com.mulheres}
+    pkg=Package{b5ba80d com.mulheres}
     codePath=/system/priv-app/MulherAmparada
     resourcePath=/system/priv-app/MulherAmparada
     legacyNativeLibraryDir=/system/priv-app/MulherAmparada/lib
@@ -78,8 +78,8 @@ Packages:
     forceQueryable=false
     scannedAsStoppedSystemApp=true
     supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
-    timeStamp=2026-10-20 23:38:44
-    lastUpdateTime=2026-10-20 23:39:46
+    timeStamp=2026-10-20 23:58:38
+    lastUpdateTime=2026-10-20 23:59:34
     installerPackageName=null
     installerPackageUid=-1
     initiatingPackageName=null
@@ -87,7 +87,7 @@ Packages:
     packageSource=0
     appMetadataFilePath=null
     appMetadataSource=0
-    signatures=PackageSignatures{b3275c version:2, signatures:[2d007508], past signatures:[]}
+    signatures=PackageSignatures{a48b3c2 version:2, signatures:[f70cd80], past signatures:[]}
     installPermissionsFixed=false
     pkgFlags=[ SYSTEM DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ]
     privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
@@ -122,10 +122,10 @@ Packages:
       android.permission.VIBRATE: granted=true
       android.permission.USE_BIOMETRIC: granted=true
       android.permission.WAKE_LOCK: granted=true
-    User 0: ceDataInode=344495 deDataInode=131098 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+    User 0: ceDataInode=344495 deDataInode=41491 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=false enabled=0 instant=false virtual=false quarantined=false
       installReason=0
       dataDir=/data/user/0/com.mulheres
-      firstInstallTime=2026-10-20 23:39:46
+      firstInstallTime=2026-10-20 23:59:34
       uninstallReason=0
       gids=[3003]
       runtime permissions:

@@ -1,5 +1,6 @@
 name: Delete All Actions Artifacts
 
+
 on:
   workflow_dispatch:
 

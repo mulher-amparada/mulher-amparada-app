@@ -37,7 +37,7 @@ O projeto não foi construído sozinho. Desde o início, busquei ouvir mulheres 
 - **Comunidade** — meu tio divulgou para uma mulher que cuida de um projeto social no meu bairro.
 - **Instituto de vítimas de violência** — apresentei o projeto para uma instituição que cuida de vítimas de violência,
 - **Espaço perto do meu bairro** apresentei o projeto em um espaço que acolhe jovens, mulheres, crianças e adultos, oferecendo lazer e um espaço para a livre expressão no meu bairro.
-- No dia 20/10/2026, uma mulher me sugeriu formatar e limpar os links do texto de divulgação, deixando apenas um link no texto — principalmente no WhatsApp — e trocar o botão de "ir para o código-fonte" no index.html por vários botões que levem para finanças, a carta de acolhimento e outros conteúdos; fiz tudo isso na hora.
+- No dia 20/10/2026, uma mulher me sugeriu formatar e limpar os links do texto de divulgação, deixando apenas um link no texto — principalmente no WhatsApp — e trocar o botão de "ir para o código-fonte" no index.html por vários botões que levem para finanças, a carta de acolhimento, canais oficiais do projeto eo readme; fiz tudo isso na hora.
 - **Canais de notícias** — apresentei o projeto a vários canais de notícias.
 - **Interesse externo** — mulheres entraram em contato por e-mail interessadas no projeto. Eram propostas de serviços de divulgação, que não aceitei porque não posso lidar com contratos.
 - **Avaliação** — pedi nota a uma mulher sobre o projeto, e ela respondeu: **99,5%**.
@@ -549,7 +549,7 @@ e tambem, reforcando que no canto superior direito tem um icone de calculadora q
 
 > no disfarce de calculadora, caso a usuaria esqueça tudo, existe um popup que usa o BiometricPrompt que poderá resetar tanto a senha tanto a pergunta de recuperação (e ele usa APENAS o device credencial!), porém, quando utiliza o BiometricPrompt e é validado, ele pergunta a pergunta de recuperação e a senha!
 
-> Agora, saiba que tem 3 tipos de autenticação nesse app (o esqueci tudo, o toque no visor e a senha no teclado), quando voce digita a senha no teclado, toda a tela fica preta, e ao dar 5 toques na tela ela volta ao normal e vai pra HubActivity, no esqueci tudo, voce valida e confirma no popup, ai vem a tela preta e voce da 5 toques, e digita a nova senha e a nova pergunta de recuperação, agora nos 5 toques no visor, voce coloca sua pergunta de recuperação, e so depois dela vem a tela preta em que você dá 5 toques, depois dela você coloca sua nova senha!
+> Agora, saiba que tem 3 tipos de autenticação nesse app (o esqueci tudo, o toque no visor e a senha no teclado), quando voce digita a senha no teclado, toda a tela fica preta ou branca, dependendo do modo do visor do celular, e ao dar 5 toques na tela ela volta ao normal e vai pra HubActivity, no esqueci tudo, voce valida e confirma no popup, ai vem a tela preta e voce da 5 toques, e digita a nova senha e a nova pergunta de recuperação, agora nos 5 toques no visor, voce coloca sua pergunta de recuperação, e so depois dela vem a tela preta em que você dá 5 toques, depois dela você coloca sua nova senha!
 
 ### Versão do app:
 

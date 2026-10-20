@@ -57,6 +57,9 @@ https://m.vk.ru/wall-230312324_10327
 - 💡 Dicas em geral — Mulher Amparada, posts do tabnews:
 https://dicasemgeral.com/pt-br/buscar/?q=Mulher+amparada+
 
+- ⚙️ Deepnlp - Pub Mulher Amparada:
+https://www.deepnlp.org/store/developer-tools/github/pub-mulher-amparada/mulher-amparada
+
 ### 🆘 Canais de ajuda:
 
 - 🇧🇷 Ligue 180 — Central de Atendimento à Mulher: orientação e informações sobre serviços de atendimento à mulher.

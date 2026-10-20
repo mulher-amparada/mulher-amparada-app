@@ -1,4 +1,3 @@
-
 package com.mulheres
 
 import android.content.Context
@@ -287,10 +286,30 @@ private fun NeoCalcScreen() {
     if (telaPreta) {
         var toquesTela by remember { mutableIntStateOf(0) }
 
+        val corTelaBloqueio =
+            if (escuro)
+                Color.Black
+            else
+                Color.White
+
+        LaunchedEffect(corTelaBloqueio) {
+            val activity = context as? FragmentActivity
+            activity?.let { act ->
+                WindowCompat.getInsetsController(
+                    act.window,
+                    act.window.decorView
+                ).apply {
+                    val claro = corTelaBloqueio == Color.White
+                    isAppearanceLightStatusBars = claro
+                    isAppearanceLightNavigationBars = claro
+                }
+            }
+        }
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black)
+                .background(corTelaBloqueio)
                 .pointerInput(Unit) {
                     detectTapGestures {
                         toquesTela++

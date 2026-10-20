@@ -1,7 +1,7 @@
 Activity Resolver Table:
   Schemes:
       com.mulheres:
-        5c466b5 com.mulheres/.EntradaActivity filter fbd18bb
+        4fb1f1a com.mulheres/.EntradaActivity filter 2057c28
           Action: "android.intent.action.VIEW"
           Category: "android.intent.category.DEFAULT"
           Category: "android.intent.category.BROWSABLE"
@@ -9,56 +9,56 @@ Activity Resolver Table:
 
   Non-Data Actions:
       android.intent.action.MAIN:
-        5c466b5 com.mulheres/.EntradaActivity filter e9114a
+        4fb1f1a com.mulheres/.EntradaActivity filter a825a4b
           Action: "android.intent.action.MAIN"
           Category: "android.intent.category.LAUNCHER"
 
 Receiver Resolver Table:
   Non-Data Actions:
       androidx.profileinstaller.action.SAVE_PROFILE:
-        caeb1d8 com.mulheres/androidx.profileinstaller.ProfileInstallReceiver filter f9a8597
+        71a3d41 com.mulheres/androidx.profileinstaller.ProfileInstallReceiver filter a4a32d4
           Action: "androidx.profileinstaller.action.SAVE_PROFILE"
       androidx.profileinstaller.action.INSTALL_PROFILE:
-        caeb1d8 com.mulheres/androidx.profileinstaller.ProfileInstallReceiver filter 5a1b931
+        71a3d41 com.mulheres/androidx.profileinstaller.ProfileInstallReceiver filter 61c12e6
           Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
       androidx.profileinstaller.action.SKIP_FILE:
-        caeb1d8 com.mulheres/androidx.profileinstaller.ProfileInstallReceiver filter 92ef816
+        71a3d41 com.mulheres/androidx.profileinstaller.ProfileInstallReceiver filter b9a5027
           Action: "androidx.profileinstaller.action.SKIP_FILE"
       androidx.profileinstaller.action.BENCHMARK_OPERATION:
-        caeb1d8 com.mulheres/androidx.profileinstaller.ProfileInstallReceiver filter 3491384
+        71a3d41 com.mulheres/androidx.profileinstaller.ProfileInstallReceiver filter 10c6c7d
           Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
 
 Domain verification status:
 
 Permissions:
-  Permission [com.mulheres.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (feb4540):
+  Permission [com.mulheres.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (d62c0b):
     sourcePackage=com.mulheres
     uid=10138 gids=[] type=0 prot=signature
-    perm=PermissionInfo{5c62c79 com.mulheres.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+    perm=PermissionInfo{81e4ae8 com.mulheres.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
     flags=0x0
 
 Registered ContentProviders:
   com.mulheres/androidx.startup.InitializationProvider:
-    Provider{583fdbe com.mulheres/androidx.startup.InitializationProvider}
+    Provider{9012d94 com.mulheres/androidx.startup.InitializationProvider}
   com.mulheres/.SdFileProvider:
-    Provider{f771e1f com.mulheres/.SdFileProvider}
+    Provider{5dbb03d com.mulheres/.SdFileProvider}
 
 ContentProvider Authorities:
   [com.mulheres.provider]:
-    Provider{f771e1f com.mulheres/.SdFileProvider}
-      applicationInfo=ApplicationInfo{bdf756c com.mulheres}
+    Provider{5dbb03d com.mulheres/.SdFileProvider}
+      applicationInfo=ApplicationInfo{a6ad032 com.mulheres}
   [com.mulheres.androidx-startup]:
-    Provider{583fdbe com.mulheres/androidx.startup.InitializationProvider}
-      applicationInfo=ApplicationInfo{1741735 com.mulheres}
+    Provider{9012d94 com.mulheres/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{3961183 com.mulheres}
 
 Key Set Manager:
   [com.mulheres]
       Signing KeySets: 20
 
 Packages:
-  Package [com.mulheres] (57e37ca):
+  Package [com.mulheres] (1f1bd7e):
     appId=10138
-    pkg=Package{bf97d3b com.mulheres}
+    pkg=Package{91e42df com.mulheres}
     codePath=/system/priv-app/MulherAmparada
     resourcePath=/system/priv-app/MulherAmparada
     legacyNativeLibraryDir=/system/priv-app/MulherAmparada/lib
@@ -78,8 +78,8 @@ Packages:
     forceQueryable=false
     scannedAsStoppedSystemApp=true
     supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
-    timeStamp=2026-10-20 22:06:14
-    lastUpdateTime=2026-10-20 22:07:14
+    timeStamp=2026-10-20 23:38:44
+    lastUpdateTime=2026-10-20 23:39:46
     installerPackageName=null
     installerPackageUid=-1
     initiatingPackageName=null
@@ -87,7 +87,7 @@ Packages:
     packageSource=0
     appMetadataFilePath=null
     appMetadataSource=0
-    signatures=PackageSignatures{e89526e version:2, signatures:[13f9801e], past signatures:[]}
+    signatures=PackageSignatures{b3275c version:2, signatures:[2d007508], past signatures:[]}
     installPermissionsFixed=false
     pkgFlags=[ SYSTEM DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ]
     privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
@@ -122,27 +122,20 @@ Packages:
       android.permission.VIBRATE: granted=true
       android.permission.USE_BIOMETRIC: granted=true
       android.permission.WAKE_LOCK: granted=true
-    User 0: ceDataInode=344495 deDataInode=40963 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+    User 0: ceDataInode=344495 deDataInode=131098 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=false enabled=0 instant=false virtual=false quarantined=false
       installReason=0
       dataDir=/data/user/0/com.mulheres
-      firstInstallTime=2026-10-20 22:07:14
+      firstInstallTime=2026-10-20 23:39:46
       uninstallReason=0
       gids=[3003]
       runtime permissions:
-        android.permission.ACCESS_FINE_LOCATION: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
-        android.permission.READ_EXTERNAL_STORAGE: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|RESTRICTION_UPGRADE_EXEMPT]
-        android.permission.ACCESS_COARSE_LOCATION: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
-        android.permission.CALL_PHONE: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
-        android.permission.RECORD_AUDIO: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
-        android.permission.READ_CONTACTS: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.READ_EXTERNAL_STORAGE: granted=false, flags=[ RESTRICTION_UPGRADE_EXEMPT]
 
 Queries:
   system apps queryable: false
   queries via forceQueryable:
   queries via package name:
   queries via component:
-    com.android.settings.intelligence:
-      com.mulheres
   queryable via interaction:
     User 0:
   queryable via uses-library:

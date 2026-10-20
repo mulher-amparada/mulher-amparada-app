@@ -82,3 +82,13 @@ Evite publicar dados pessoais, endereços, telefones ou relatos sensíveis em es
 O Mulher Amparada busca oferecer recursos e informações claras, respeitando a autonomia de cada mulher. Cada mulher tem o direito de tomar suas próprias decisões e buscar o apoio que considerar adequado.
 
 O aplicativo não substitui serviços públicos de emergência ou atendimento especializado.
+
+### ⚠️ Aviso sobre página de terceiros
+
+O projeto Mulher Amparada foi listado em um site de terceiros (deepnlp.org) sem nossa autorização.
+
+Essa página exibe anúncios e não representa o projeto. O Mulher Amparada continua sendo gratuito, livre de anúncios e sem fins lucrativos.
+
+Não temos controle sobre o conteúdo ou os anúncios exibidos nessa página. Para informações oficiais, consulte apenas o repositório oficial e o site do projeto.
+
+Página não oficial: https://www.deepnlp.org/store/developer-tools/github/pub-mulher-amparada/mulher-amparada

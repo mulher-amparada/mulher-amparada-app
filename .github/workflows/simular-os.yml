@@ -559,7 +559,7 @@ jobs:
 
       - name: Publicar resultados como artefato
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: Safe-Woman-OS-Simulacao
           path: simulation/

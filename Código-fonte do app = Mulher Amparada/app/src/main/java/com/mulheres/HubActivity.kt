@@ -2871,30 +2871,35 @@ Spacer(
                     }
                 )
             }
+if (
+    activity != null &&
+    !activity.permissoesConcedidas
+) {
 
-            if (
-                activity != null &&
-                !activity.permissoesConcedidas
-            ) {
+    Box(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(
+                    if (isSystemInDarkTheme())
+                        Color(0xE6050507)   // scrim escuro
+                    else
+                        Color(0xE6FFFFFF)   // scrim claro
+                )
+                .zIndex(100f),
 
-                Box(
-                    modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .background(Color.Black)
-                            .zIndex(100f),
+        contentAlignment =
+            Alignment.Center
+    ) {
 
-                    contentAlignment =
-                        Alignment.Center
-                ) {
-
-                    PermissionCard(
-                        onAbrirPermissoes = {
-                            activity.solicitarPermissoes()
-                        }
-                    )
-                }
+        PermissionCard(
+            c = c,
+            onAbrirPermissoes = {
+                activity.solicitarPermissoes()
             }
+        )
+    }
+}
         }
     }
 }
@@ -2905,9 +2910,61 @@ Spacer(
 
 @Composable
 private fun PermissionCard(
+    c: AppColors,
     onAbrirPermissoes: () -> Unit
 ) {
 
+    val dark =
+        isSystemInDarkTheme()
+
+    // Gradiente de fundo do popup
+    val fundo =
+        if (dark)
+            listOf(
+                Color(0xFF151318),
+                Color(0xFF0B0A0E)
+            )
+        else
+            listOf(
+                Color(0xFFFFFFFF),
+                Color(0xFFF6F3F8)
+            )
+
+    val corBorda =
+        if (dark)
+            Color(0xFF302B35)
+        else
+            Color(0xFFE6E0EA)
+
+    val corTitulo =
+        if (dark)
+            Color.White
+        else
+            c.text
+
+    val corTexto =
+        if (dark)
+            Color(0xFF85858E)
+        else
+            c.secondary
+
+    val corBarra =
+        if (dark)
+            Color(0xFFFF3F82)
+        else
+            c.pink
+
+    val gradienteBotao =
+        if (dark)
+            listOf(
+                Color(0xFFFF3F82),
+                Color(0xFFDB2C6D)
+            )
+        else
+            listOf(
+                c.pink,
+                Color(0xFFC22563)
+            )
 
     Column(
         modifier =
@@ -2919,16 +2976,11 @@ private fun PermissionCard(
                     RoundedCornerShape(28.dp)
                 )
                 .background(
-                    Brush.linearGradient(
-                        listOf(
-                            Color(0xFF151318),
-                            Color(0xFF0B0A0E)
-                        )
-                    )
+                    Brush.linearGradient(fundo)
                 )
                 .border(
                     1.dp,
-                    Color(0xFF302B35),
+                    corBorda,
                     RoundedCornerShape(28.dp)
                 )
                 .padding(
@@ -2945,9 +2997,7 @@ private fun PermissionCard(
                     .width(42.dp)
                     .height(3.dp)
                     .clip(CircleShape)
-                    .background(
-                        Color(0xFFFF3F82)
-                    )
+                    .background(corBarra)
         )
 
         Spacer(
@@ -2956,9 +3006,9 @@ private fun PermissionCard(
 
         Text(
             text = "Permissões necessárias",
-            color = Color.White,
+            color = corTitulo,
             fontSize = 24.sp,
-lineHeight = 25.sp,
+            lineHeight = 25.sp,
             letterSpacing = (-0.5).sp
         )
 
@@ -2970,9 +3020,9 @@ lineHeight = 25.sp,
             text =
                 "Para aproveitar todos os recursos do Mulher Amparada, " +
                 "conceda as permissões necessárias ao aplicativo.",
-            color = Color(0xFF85858E),
+            color = corTexto,
             fontSize = 11.sp,
-lineHeight = 17.sp
+            lineHeight = 17.sp
         )
 
         Spacer(
@@ -2989,8 +3039,7 @@ lineHeight = 17.sp
                 RoundedCornerShape(17.dp),
             colors =
                 ButtonDefaults.buttonColors(
-                    containerColor =
-                        Color(0xFFFF3F82)
+                    containerColor = Color.Transparent
                 ),
             contentPadding =
                 PaddingValues(0.dp)
@@ -3002,10 +3051,7 @@ lineHeight = 17.sp
                         .fillMaxSize()
                         .background(
                             Brush.linearGradient(
-                                listOf(
-                                    Color(0xFFFF3F82),
-                                    Color(0xFFDB2C6D)
-                                )
+                                gradienteBotao
                             )
                         ),
                 contentAlignment =
@@ -3015,8 +3061,8 @@ lineHeight = 17.sp
                 Text(
                     text = "Abrir permissões",
                     color = Color.White,
-                    fontSize = 12.sp,
-)
+                    fontSize = 12.sp
+                )
             }
         }
     }

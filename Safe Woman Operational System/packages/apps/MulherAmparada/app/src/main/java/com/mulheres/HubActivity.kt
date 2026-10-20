@@ -2885,7 +2885,7 @@ if (
                     if (isSystemInDarkTheme())
                         Color(0xE6050507)   // scrim escuro
                     else
-                        Color(0xE6FFFFFF)   // scrim claro
+                        Color(0xFFFFFFFF)   // scrim claro
                 )
                 .zIndex(100f),
 

@@ -1,4 +1,4 @@
-# 💰 Educação financeira e proteção do seu dinheiro
+# 💰 Educação financeira e proteção do seu dinheiro:
 
 **Usuárias, vou ensinar tudo o que eu sei sobre finanças para vocês, começando pelo mais urgente: como proteger o seu dinheiro.**
 

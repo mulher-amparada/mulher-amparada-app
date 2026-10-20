@@ -83,7 +83,7 @@ O Mulher Amparada busca oferecer recursos e informações claras, respeitando a 
 
 O aplicativo não substitui serviços públicos de emergência ou atendimento especializado.
 
-### ⚠️ Aviso sobre página de terceiros
+### ⚠️ Aviso sobre página de terceiros:
 
 O projeto Mulher Amparada foi listado em um site de terceiros (deepnlp.org) sem nossa autorização.
 

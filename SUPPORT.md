@@ -46,6 +46,9 @@ https://projetomulheramparada.hashnode.dev/eu-n-o-tinha-computador-para-desenvol
 - 💻 CoderLegion — O que diferencia o Mulher Amparada:
 https://coderlegion.com/31456/o-que-diferencia-o-mulher-amparada
 
+- 💻 CoderLegion — Safe Woman OS:
+https://coderlegion.com/31887/safe-woman-operational-system-experimento-de-aosp-feito-por-um-garoto-autista-de-15-anos
+
 ### 🌱 Agregadores e referências:
 
 - ⚠️ Observatório Blockchain — link atualmente retorna erro 404:

@@ -2,7 +2,7 @@
 
 ### Sobre como o projeto foi estruturado:
 
->Nossos termos e políticas: https://github.com/mulher-amparada/mulher-amparada-app/blob/main/TERMS%20AND%20POLICY.md
+> Quando a usuária arrasta pro lado no AssistenteActivity, valida o BiometricPrompt e acessa a HubActivity, ao clicar no botão fechar, ele fecha o app não a activity, preferi manter para caso a usuária querer fechar o app rapidamente...
 
 > o EmergencyOverlay só funciona dentro da HubActivity!
 

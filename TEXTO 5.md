@@ -220,6 +220,8 @@ o proprio qr do site do giithub pages;
 
 banners do projeto, tanto png, tanto um código para html;
 
+posters de divulgação para o projeto;
+
 icones para sites e para usos no geral, tanto o do mulher amparada tanto o ic_launcher do app, versão normal e monocromático;
 
 o ícone do mulher-amparada-bot

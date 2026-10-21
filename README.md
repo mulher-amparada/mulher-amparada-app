@@ -32,7 +32,7 @@ Pode parecer que estou falando no lugar de vocês — por isso abri as Discussõ
 O projeto não foi construído sozinho. Desde o início, busquei ouvir mulheres reais e apresentar o projeto a diferentes contextos:
 
 - **Mãe** — perguntei quase todos os dias, do início ao fim, o que ela achava do projeto.
-- **Escola:** — apresentei à vice-diretora, à coordenação pedagógica, à professora de itinerância dos alunos com deficiência e a professoras de língua portuguesa. Elas elogiaram o projeto, especialmente o modo claro e escuro.
+- **Escola:** apresentei à vice-diretora, à coordenação pedagógica, à professora de itinerância dos alunos com deficiência e a professoras de língua portuguesa. Elas elogiaram o projeto, especialmente o modo claro e escuro.
 - Inclusive, no dia 21/10/2026, eu perguntei a uma professora de português o que ela achava do app. Ela recomendou que eu fizesse uma consulta com mulheres — e que eu registrasse as palavras reais delas. Sugeriu que eu conversasse com mulheres maduras, que já passaram por sofrimentos, porque os alunos e as alunas da minha sala... (sim, ela disse exatamente isso!)
 - **Igreja** — Também no dia 21/10/2026 eu perguntei a uma mulher da minha igreja o que ela achava do disfarce. Ela disse que é bom, mas prefere que seja prático. Pensando nisso, agora, ao arrastar para o lado na `AssistenteActivity`, o app solicita o `BiometricPrompt`; quando validado, leva para a `HubActivity`.
 - **Família** — mostrei para minhas tias, que também vivem situações dolorosas de relacionamento.

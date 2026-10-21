@@ -1635,11 +1635,7 @@ footer .footer-bottom {
 
     color: #ffffff;
 
-    font-family:
-        Inter,
-        "Segoe UI",
-        system-ui,
-        sans-serif;
+    
 
     font-size: clamp(25px, 6vw, 30px);
     font-weight: 650;

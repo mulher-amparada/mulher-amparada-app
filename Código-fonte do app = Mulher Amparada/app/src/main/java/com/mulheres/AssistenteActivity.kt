@@ -1,17 +1,23 @@
 package com.mulheres
 
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import kotlinx.coroutines.delay
-import android.view.WindowManager
-import android.os.Bundle
 import android.content.Intent
 import android.graphics.Color as AndroidColor
-import androidx.activity.ComponentActivity
+import android.os.Bundle
+import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricPrompt
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,7 +37,11 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -39,82 +49,122 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import kotlinx.coroutines.delay
+import kotlin.math.abs
 import kotlin.math.roundToInt
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.LocalOverscrollFactory
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import kotlin.random.Random
-import androidx.activity.enableEdgeToEdge
+
 
 /* =========================================================
    ACTIVITY
 ========================================================= */
 
-class AssistenteActivity : ComponentActivity() {
+class AssistenteActivity : AppCompatActivity() {
 
-    override fun onCreate(
-    savedInstanceState: Bundle?
-) {
-    super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    enableEdgeToEdge()
+        enableEdgeToEdge()
 
-    window.addFlags(
-        WindowManager.LayoutParams.FLAG_SECURE
-    )
+        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
 
-    WindowCompat.setDecorFitsSystemWindows(
-        window,
-        false
-    )
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
-    window.statusBarColor =
-        AndroidColor.TRANSPARENT
+        window.statusBarColor = AndroidColor.TRANSPARENT
+        window.navigationBarColor = AndroidColor.TRANSPARENT
 
-    window.navigationBarColor =
-        AndroidColor.TRANSPARENT
+        if (android.os.Build.VERSION.SDK_INT >= 29) {
+            window.isNavigationBarContrastEnforced = false
+            window.isStatusBarContrastEnforced = false
+        }
 
-    if (android.os.Build.VERSION.SDK_INT >= 29) {
-        window.isNavigationBarContrastEnforced = false
-        window.isStatusBarContrastEnforced = false
-    }
+        val modoEscuro =
+            (resources.configuration.uiMode and
+                android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
+                android.content.res.Configuration.UI_MODE_NIGHT_YES
 
-    val modoEscuro =
-        (
-            resources.configuration.uiMode and
-                android.content.res.Configuration.UI_MODE_NIGHT_MASK
-        ) ==
-            android.content.res.Configuration.UI_MODE_NIGHT_YES
+        val controller = WindowInsetsControllerCompat(window, window.decorView)
+        controller.isAppearanceLightStatusBars = !modoEscuro
+        controller.isAppearanceLightNavigationBars = !modoEscuro
 
-    val controller =
-        WindowInsetsControllerCompat(
-            window,
-            window.decorView
-        )
-
-    controller.isAppearanceLightStatusBars =
-        !modoEscuro
-
-    controller.isAppearanceLightNavigationBars =
-        !modoEscuro
-
-    setContent {
-        AssistenteTheme {
-            AssistenteSaude()
+        setContent {
+            AssistenteTheme {
+                AssistenteSaude(
+                    onAutenticar = { autenticar() }
+                )
+            }
         }
     }
-}
+
+    /* ---------------------------------------------------------
+       BIOMETRIC PROMPT
+    --------------------------------------------------------- */
+
+    private fun autenticar() {
+        val executor = ContextCompat.getMainExecutor(this)
+
+        val autenticadores =
+            BiometricManager.Authenticators.BIOMETRIC_STRONG or
+                BiometricManager.Authenticators.DEVICE_CREDENTIAL
+
+        val manager = BiometricManager.from(this)
+
+        if (manager.canAuthenticate(autenticadores) != BiometricManager.BIOMETRIC_SUCCESS) {
+            Toast.makeText(
+                this,
+                "Configure biometria ou bloqueio de tela nas configurações do dispositivo.",
+                Toast.LENGTH_LONG
+            ).show()
+            return
+        }
+
+        val biometricPrompt = BiometricPrompt(
+            this,
+            executor,
+            object : BiometricPrompt.AuthenticationCallback() {
+
+                override fun onAuthenticationSucceeded(
+                    result: BiometricPrompt.AuthenticationResult
+                ) {
+                    super.onAuthenticationSucceeded(result)
+                    startActivity(Intent(this@AssistenteActivity, HubActivity::class.java))
+                    finish()
+                }
+
+                override fun onAuthenticationError(
+                    errorCode: Int,
+                    errString: CharSequence
+                ) {
+                    super.onAuthenticationError(errorCode, errString)
+                    // Usuário cancelou ou houve erro — não faz nada
+                }
+
+                override fun onAuthenticationFailed() {
+                    super.onAuthenticationFailed()
+                    // Biometria não reconhecida — prompt continua aberto
+                }
+            }
+        )
+
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Autenticação necessária")
+            .setSubtitle("Use biometria, PIN, padrão ou senha")
+            .setAllowedAuthenticators(autenticadores)
+            .build()
+
+        biometricPrompt.authenticate(promptInfo)
+    }
 }
 
 
@@ -123,132 +173,60 @@ class AssistenteActivity : ComponentActivity() {
 ========================================================= */
 
 data class CoresAssistente(
-
     val fundo: Color,
     val card: Color,
     val cardSecundario: Color,
     val borda: Color,
     val bordaForte: Color,
-
     val textoPrincipal: Color,
     val textoSecundario: Color,
     val textoEscuro: Color,
     val textoMuitoEscuro: Color,
-
     val icone: Color,
     val fundoIcone: Color,
     val bordaIcone: Color,
-
     val azul: Color,
     val azulClaro: Color,
     val linhaFundo: Color
 )
 
+private val CoresEscuras = CoresAssistente(
+    fundo = Color.Black,
+    card = Color(0xFF050505),
+    cardSecundario = Color(0xFF040404),
+    borda = Color(0xFF181818),
+    bordaForte = Color(0xFF1D1D1D),
+    textoPrincipal = Color(0xFFF5F5F5),
+    textoSecundario = Color(0xFF999999),
+    textoEscuro = Color(0xFF454545),
+    textoMuitoEscuro = Color(0xFF3B3B3B),
+    icone = Color.White,
+    fundoIcone = Color(0xFF0C0C0C),
+    bordaIcone = Color(0xFF202020),
+    azul = Color(0xFF5666FF),
+    azulClaro = Color(0xFF6070FF),
+    linhaFundo = Color(0xFF111111)
+)
 
-private val CoresEscuras =
-    CoresAssistente(
+private val CoresClaras = CoresAssistente(
+    fundo = Color(0xFFF7F7F7),
+    card = Color.White,
+    cardSecundario = Color(0xFFF2F2F2),
+    borda = Color(0xFFE2E2E2),
+    bordaForte = Color(0xFFD7D7D7),
+    textoPrincipal = Color(0xFF111111),
+    textoSecundario = Color(0xFF777777),
+    textoEscuro = Color(0xFF777777),
+    textoMuitoEscuro = Color(0xFF999999),
+    icone = Color.Black,
+    fundoIcone = Color(0xFFF1F1F1),
+    bordaIcone = Color(0xFFDCDCDC),
+    azul = Color(0xFF5666FF),
+    azulClaro = Color(0xFF6070FF),
+    linhaFundo = Color(0xFFE8E8E8)
+)
 
-        fundo =
-            Color.Black,
-
-        card =
-            Color(0xFF050505),
-
-        cardSecundario =
-            Color(0xFF040404),
-
-        borda =
-            Color(0xFF181818),
-
-        bordaForte =
-            Color(0xFF1D1D1D),
-
-        textoPrincipal =
-            Color(0xFFF5F5F5),
-
-        textoSecundario =
-            Color(0xFF999999),
-
-        textoEscuro =
-            Color(0xFF454545),
-
-        textoMuitoEscuro =
-            Color(0xFF3B3B3B),
-
-        icone =
-            Color.White,
-
-        fundoIcone =
-            Color(0xFF0C0C0C),
-
-        bordaIcone =
-            Color(0xFF202020),
-
-        azul =
-            Color(0xFF5666FF),
-
-        azulClaro =
-            Color(0xFF6070FF),
-
-        linhaFundo =
-            Color(0xFF111111)
-    )
-
-
-private val CoresClaras =
-    CoresAssistente(
-
-        fundo =
-            Color(0xFFF7F7F7),
-
-        card =
-            Color.White,
-
-        cardSecundario =
-            Color(0xFFF2F2F2),
-
-        borda =
-            Color(0xFFE2E2E2),
-
-        bordaForte =
-            Color(0xFFD7D7D7),
-
-        textoPrincipal =
-            Color(0xFF111111),
-
-        textoSecundario =
-            Color(0xFF777777),
-
-        textoEscuro =
-            Color(0xFF777777),
-
-        textoMuitoEscuro =
-            Color(0xFF999999),
-
-        icone =
-            Color.Black,
-
-        fundoIcone =
-            Color(0xFFF1F1F1),
-
-        bordaIcone =
-            Color(0xFFDCDCDC),
-
-        azul =
-            Color(0xFF5666FF),
-
-        azulClaro =
-            Color(0xFF6070FF),
-
-        linhaFundo =
-            Color(0xFFE8E8E8)
-    )
-
-
-private val LocalCoresAssistente =
-    compositionLocalOf<CoresAssistente> {
-        CoresEscuras
-    }
+private val LocalCoresAssistente = compositionLocalOf<CoresAssistente> { CoresEscuras }
 
 
 /* =========================================================
@@ -256,32 +234,17 @@ private val LocalCoresAssistente =
 ========================================================= */
 
 @Composable
-private fun AssistenteTheme(
-    content: @Composable () -> Unit
-) {
+private fun AssistenteTheme(content: @Composable () -> Unit) {
+    val modoEscuro = isSystemInDarkTheme()
+    val cores = if (modoEscuro) CoresEscuras else CoresClaras
 
-    val modoEscuro =
-        isSystemInDarkTheme()
-
-    val cores =
-        if (modoEscuro) {
-            CoresEscuras
-        } else {
-            CoresClaras
-        }
-
-    CompositionLocalProvider(
-        LocalCoresAssistente provides cores
-    ) {
+    CompositionLocalProvider(LocalCoresAssistente provides cores) {
         content()
     }
 }
 
-
 @Composable
-private fun coresAssistente(): CoresAssistente {
-    return LocalCoresAssistente.current
-}
+private fun coresAssistente(): CoresAssistente = LocalCoresAssistente.current
 
 
 /* =========================================================
@@ -289,22 +252,8 @@ private fun coresAssistente(): CoresAssistente {
 ========================================================= */
 
 @Composable
-private fun corIcone(): Color {
-
-    return if (
-        isSystemInDarkTheme()
-    ) {
-        Color.White
-    } else {
-        Color.Black
-    }
-}
-
-
-/* =========================================================
-   FONTE
-========================================================= */
-
+private fun corIcone(): Color =
+    if (isSystemInDarkTheme()) Color.White else Color.Black
 
 
 /* =========================================================
@@ -319,45 +268,11 @@ data class Indicador(
 )
 
 data class DadosSaude(
-    val batimentos: Indicador =
-        Indicador(
-            72f,
-            60f,
-            100f,
-            3f
-        ),
-
-    val respiracao: Indicador =
-        Indicador(
-            16f,
-            12f,
-            20f,
-            0.8f
-        ),
-
-    val temperatura: Indicador =
-        Indicador(
-            36.5f,
-            36.1f,
-            37.0f,
-            0.1f
-        ),
-
-    val hidratacao: Indicador =
-        Indicador(
-            68f,
-            50f,
-            90f,
-            3f
-        ),
-
-    val bemEstar: Indicador =
-        Indicador(
-            72f,
-            60f,
-            88f,
-            4f
-        )
+    val batimentos: Indicador = Indicador(72f, 60f, 100f, 3f),
+    val respiracao: Indicador = Indicador(16f, 12f, 20f, 0.8f),
+    val temperatura: Indicador = Indicador(36.5f, 36.1f, 37.0f, 0.1f),
+    val hidratacao: Indicador = Indicador(68f, 50f, 90f, 3f),
+    val bemEstar: Indicador = Indicador(72f, 60f, 88f, 4f)
 )
 
 
@@ -365,21 +280,9 @@ data class DadosSaude(
    VARIAÇÃO
 ========================================================= */
 
-private fun variar(
-    indicador: Indicador
-): Float {
-
-    val variacao =
-        (
-            Random.nextFloat() * 2f - 1f
-        ) * indicador.passo
-
-    return (
-        indicador.valor + variacao
-    ).coerceIn(
-        indicador.min,
-        indicador.max
-    )
+private fun variar(indicador: Indicador): Float {
+    val variacao = (Random.nextFloat() * 2f - 1f) * indicador.passo
+    return (indicador.valor + variacao).coerceIn(indicador.min, indicador.max)
 }
 
 
@@ -388,478 +291,199 @@ private fun variar(
 ========================================================= */
 
 @Composable
-fun AssistenteSaude() {
+fun AssistenteSaude(onAutenticar: () -> Unit) {
 
-    val cores =
-        coresAssistente()
+    val cores = coresAssistente()
+    val context = LocalContext.current
+    val configuracao = LocalConfiguration.current
 
-    val context =
-        androidx.compose.ui.platform.LocalContext.current
-
-    var batimentos by remember {
-        mutableStateOf(
-            72f
-        )
-    }
-
-    var respiracao by remember {
-        mutableStateOf(
-            16f
-        )
-    }
-
-    var temperatura by remember {
-        mutableStateOf(
-            36.5f
-        )
-    }
-
-    var hidratacao by remember {
-        mutableStateOf(
-            68f
-        )
-    }
-
-    var bemEstar by remember {
-        mutableStateOf(
-            72f
-        )
-    }
+    var batimentos by remember { mutableStateOf(72f) }
+    var respiracao by remember { mutableStateOf(16f) }
+    var temperatura by remember { mutableStateOf(36.5f) }
+    var hidratacao by remember { mutableStateOf(68f) }
+    var bemEstar by remember { mutableStateOf(72f) }
 
     LaunchedEffect(Unit) {
-
         while (true) {
-
             delay(4000)
-
-            batimentos =
-                variar(
-                    Indicador(
-                        batimentos,
-                        60f,
-                        100f,
-                        3f
-                    )
-                )
-
-            respiracao =
-                variar(
-                    Indicador(
-                        respiracao,
-                        12f,
-                        20f,
-                        0.8f
-                    )
-                )
-
-            temperatura =
-                variar(
-                    Indicador(
-                        temperatura,
-                        36.1f,
-                        37.0f,
-                        0.1f
-                    )
-                )
-
-            hidratacao =
-                variar(
-                    Indicador(
-                        hidratacao,
-                        50f,
-                        90f,
-                        3f
-                    )
-                )
-
-            bemEstar =
-                variar(
-                    Indicador(
-                        bemEstar,
-                        60f,
-                        88f,
-                        4f
-                    )
-                )
+            batimentos = variar(Indicador(batimentos, 60f, 100f, 3f))
+            respiracao = variar(Indicador(respiracao, 12f, 20f, 0.8f))
+            temperatura = variar(Indicador(temperatura, 36.1f, 37.0f, 0.1f))
+            hidratacao = variar(Indicador(hidratacao, 50f, 90f, 3f))
+            bemEstar = variar(Indicador(bemEstar, 60f, 88f, 4f))
         }
     }
 
-    CompositionLocalProvider(
-        LocalOverscrollFactory provides null
-    ) {
+    CompositionLocalProvider(LocalOverscrollFactory provides null) {
 
-        LazyColumn(
-
-            modifier =
-    Modifier
-        .fillMaxSize()
-        .background(cores.fundo)
-        .padding(
-            horizontal = if (
-                androidx.compose.ui.platform.LocalConfiguration.current.orientation ==
-                    android.content.res.Configuration.ORIENTATION_LANDSCAPE
-            ) {
-                64.dp
-            } else {
-                24.dp
-            }
-        ),
-
-            verticalArrangement =
-                Arrangement.spacedBy(
-                    0.dp
-                )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(cores.fundo)
+                .pointerInput(Unit) {
+                    var totalDrag = 0f
+                    detectDragGestures(
+                        onDragStart = { totalDrag = 0f },
+                        onDragEnd = {
+                            if (abs(totalDrag) > 150f) {
+                                onAutenticar()
+                            }
+                        }
+                    ) { change, dragAmount ->
+                        // NÃO consome o evento — permite o LazyColumn rolar
+                        totalDrag += dragAmount.x + dragAmount.y
+                    }
+                }
         ) {
 
-            item {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        horizontal = if (
+                            configuracao.orientation ==
+                            android.content.res.Configuration.ORIENTATION_LANDSCAPE
+                        ) 64.dp else 24.dp
+                    ),
+                verticalArrangement = Arrangement.spacedBy(0.dp)
+            ) {
 
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            48.dp
-                        )
-                )
+                item {
+                    Spacer(modifier = Modifier.height(48.dp))
 
-                Cabecalho(
-                    onSecretClick = {
-
-                        context.startActivity(
-                            Intent(
-                                context,
-                                NeoCalcActivity::class.java
+                    Cabecalho(
+                        onSecretClick = {
+                            context.startActivity(
+                                Intent(context, NeoCalcActivity::class.java)
                             )
+                        }
+                    )
+
+                    Spacer(modifier = Modifier.height(28.dp))
+                }
+
+                item {
+                    Hero(bemEstar = bemEstar)
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+
+                item {
+                    Resumo(
+                        batimentos = batimentos,
+                        respiracao = respiracao,
+                        temperatura = temperatura
+                    )
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(36.dp))
+
+                    SecaoTitulo(
+                        titulo = "Indicadores",
+                        direita = "Atualização contínua"
+                    )
+
+                    Spacer(modifier = Modifier.height(14.dp))
+
+                    Indicadores(
+                        dados = DadosSaude(
+                            batimentos = Indicador(batimentos, 60f, 100f, 3f),
+                            respiracao = Indicador(respiracao, 12f, 20f, 0.8f),
+                            temperatura = Indicador(temperatura, 36.1f, 37.0f, 0.1f),
+                            hidratacao = Indicador(hidratacao, 50f, 90f, 3f),
+                            bemEstar = Indicador(bemEstar, 60f, 88f, 4f)
                         )
-                    }
-                )
+                    )
+                }
 
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            28.dp
-                        )
-                )
-            }
+                item {
+                    Spacer(modifier = Modifier.height(36.dp))
 
-            item {
+                    SecaoTitulo(
+                        titulo = "Bem-estar",
+                        direita = "Índice geral"
+                    )
 
-                Hero(
-                    bemEstar =
-                        bemEstar
-                )
+                    Spacer(modifier = Modifier.height(14.dp))
 
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            12.dp
-                        )
-                )
-            }
+                    BemEstar(valor = bemEstar)
+                }
 
-            item {
+                item {
+                    Spacer(modifier = Modifier.height(36.dp))
 
-                Resumo(
+                    SecaoTitulo(titulo = "Atividade")
 
-                    batimentos =
-                        batimentos,
+                    Spacer(modifier = Modifier.height(14.dp))
 
-                    respiracao =
-                        respiracao,
+                    Atividade()
 
-                    temperatura =
-                        temperatura
-                )
-            }
+                    Spacer(modifier = Modifier.height(14.dp))
+                }
 
-            item {
-
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            36.dp
-                        )
-                )
-
-                SecaoTitulo(
-                    titulo =
-                        "Indicadores",
-
-                    direita =
-                        "Atualização contínua"
-                )
-
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            14.dp
-                        )
-                )
-
-                Indicadores(
-
-                    dados =
-                        DadosSaude(
-
-                            batimentos =
-                                Indicador(
-                                    batimentos,
-                                    60f,
-                                    100f,
-                                    3f
-                                ),
-
-                            respiracao =
-                                Indicador(
-                                    respiracao,
-                                    12f,
-                                    20f,
-                                    0.8f
-                                ),
-
-                            temperatura =
-                                Indicador(
-                                    temperatura,
-                                    36.1f,
-                                    37.0f,
-                                    0.1f
-                                ),
-
-                            hidratacao =
-                                Indicador(
-                                    hidratacao,
-                                    50f,
-                                    90f,
-                                    3f
-                                ),
-
-                            bemEstar =
-                                Indicador(
-                                    bemEstar,
-                                    60f,
-                                    88f,
-                                    4f
-                                )
-                        )
-                )
-            }
-
-            item {
-
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            36.dp
-                        )
-                )
-
-                SecaoTitulo(
-
-                    titulo =
-                        "Bem-estar",
-
-                    direita =
-                        "Índice geral"
-                )
-
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            14.dp
-                        )
-                )
-
-                BemEstar(
-                    valor =
-                        bemEstar
-                )
-            }
-
-            item {
-
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            36.dp
-                        )
-                )
-
-                SecaoTitulo(
-                    titulo =
-                        "Atividade"
-                )
-
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            14.dp
-                        )
-                )
-
-                Atividade()
-
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            14.dp
-                        )
-                )
-            }
-
-            item {
-
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            60.dp
-                        )
-                )
+                item {
+                    Spacer(modifier = Modifier.height(60.dp))
+                }
             }
         }
     }
 }
+
 
 /* =========================================================
    CABEÇALHO
 ========================================================= */
 
 @Composable
-private fun Cabecalho(
-    onSecretClick: () -> Unit
-) {
+private fun Cabecalho(onSecretClick: () -> Unit) {
 
-    val cores =
-        coresAssistente()
-
+    val cores = coresAssistente()
 
     Row(
-
-        modifier =
-            Modifier.fillMaxWidth(),
-
-        verticalAlignment =
-            Alignment.CenterVertically,
-
-        horizontalArrangement =
-            Arrangement.SpaceBetween
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
-        Column(
-            modifier =
-                Modifier.weight(
-                    1f
-                )
-        ) {
+        Column(modifier = Modifier.weight(1f)) {
 
             Text(
-
-                text =
-                    "Assistente de Saúde",
-
-                color =
-                    cores.textoPrincipal,
-
-
-                fontSize =
-                    24.sp,
-letterSpacing =
-                    (-1.1).sp,
-
-                lineHeight =
-                    25.sp
+                text = "Assistente de Saúde",
+                color = cores.textoPrincipal,
+                fontSize = 24.sp,
+                letterSpacing = (-1.1).sp,
+                lineHeight = 25.sp
             )
 
-
-            Spacer(
-                modifier =
-                    Modifier.height(
-                        9.dp
-                    )
-            )
-
+            Spacer(modifier = Modifier.height(9.dp))
 
             Text(
-
-                text =
-                    "Um espaço para acompanhar seu bem-estar.",
-
-                color =
-                    cores.textoEscuro,
-
-
-                fontSize =
-                    9.sp,
-lineHeight =
-                    14.sp,
-
-                maxLines =
-                    2
+                text = "Um espaço para acompanhar seu bem-estar.",
+                color = cores.textoEscuro,
+                fontSize = 9.sp,
+                lineHeight = 14.sp,
+                maxLines = 2
             )
         }
 
-
-        Spacer(
-            modifier =
-                Modifier.width(
-                    20.dp
-                )
-        )
-
+        Spacer(modifier = Modifier.width(20.dp))
 
         Card(
-
-            onClick =
-                onSecretClick,
-
-            modifier =
-                Modifier.size(
-                    42.dp
-                ),
-
-            shape =
-                RoundedCornerShape(
-                    14.dp
-                ),
-
-            colors =
-                CardDefaults.cardColors(
-                    containerColor =
-                        cores.fundoIcone
-                ),
-
-            border =
-                BorderStroke(
-                    1.dp,
-                    cores.bordaIcone
-                )
+            onClick = onSecretClick,
+            modifier = Modifier.size(42.dp),
+            shape = RoundedCornerShape(14.dp),
+            colors = CardDefaults.cardColors(containerColor = cores.fundoIcone),
+            border = BorderStroke(1.dp, cores.bordaIcone)
         ) {
-
             Box(
-
-                modifier =
-                    Modifier.fillMaxSize(),
-
-                contentAlignment =
-                    Alignment.Center
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
             ) {
-
                 Image(
-
-                    painter =
-                        painterResource(
-                            R.drawable.ic_8
-                        ),
-
-                    contentDescription =
-                        null,
-
-                    modifier =
-                        Modifier.size(
-                            19.dp
-                        ),
-
-                    colorFilter =
-                        ColorFilter.tint(
-                            corIcone()
-                        )
+                    painter = painterResource(R.drawable.ic_8),
+                    contentDescription = null,
+                    modifier = Modifier.size(19.dp),
+                    colorFilter = ColorFilter.tint(corIcone())
                 )
             }
         }
@@ -872,324 +496,129 @@ lineHeight =
 ========================================================= */
 
 @Composable
-private fun Hero(
-    bemEstar: Float
-) {
+private fun Hero(bemEstar: Float) {
 
-    val cores =
-        coresAssistente()
-
-
-    
+    val cores = coresAssistente()
 
     Card(
-
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .height(
-                    315.dp
-                ),
-
-        shape =
-            RoundedCornerShape(
-                26.dp
-            ),
-
-        colors =
-            CardDefaults.cardColors(
-                containerColor =
-                    cores.card
-            ),
-
-        border =
-            BorderStroke(
-                1.dp,
-                cores.bordaForte
-            )
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(315.dp),
+        shape = RoundedCornerShape(26.dp),
+        colors = CardDefaults.cardColors(containerColor = cores.card),
+        border = BorderStroke(1.dp, cores.bordaForte)
     ) {
 
-        Box(
-            modifier =
-                Modifier.fillMaxSize()
-        ) {
+        Box(modifier = Modifier.fillMaxSize()) {
 
             Row(
-
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = 19.dp,
-                            start = 21.dp,
-                            end = 21.dp
-                        ),
-
-                horizontalArrangement =
-                    Arrangement.SpaceBetween,
-
-                verticalAlignment =
-                    Alignment.CenterVertically
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 19.dp, start = 21.dp, end = 21.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
 
                 Text(
-
-                    text =
-                        "ESTADO GERAL",
-
-                    color =
-                        cores.textoEscuro,
-
-
-                    fontSize =
-                        7.sp,
-letterSpacing =
-                        1.2.sp
+                    text = "ESTADO GERAL",
+                    color = cores.textoEscuro,
+                    fontSize = 7.sp,
+                    letterSpacing = 1.2.sp
                 )
 
-
-                Row(
-
-                    verticalAlignment =
-                        Alignment.CenterVertically
-                ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
 
                     Box(
-
-                        modifier =
-                            Modifier
-                                .size(5.dp)
-                                .clip(
-                                    CircleShape
-                                )
-                          .background(
-    cores.azul.copy(
-        alpha = 0.8f
-    )
-)
+                        modifier = Modifier
+                            .size(5.dp)
+                            .clip(CircleShape)
+                            .background(cores.azul.copy(alpha = 0.8f))
                     )
 
-
-                    Spacer(
-                        modifier =
-                            Modifier.width(
-                                6.dp
-                            )
-                    )
-
+                    Spacer(modifier = Modifier.width(6.dp))
 
                     Text(
-
-                        text =
-                            "ATIVO",
-
-                        color =
-                            cores.textoEscuro,
-
-
-                        fontSize =
-                            7.sp,
-letterSpacing =
-                            .8.sp
+                        text = "ATIVO",
+                        color = cores.textoEscuro,
+                        fontSize = 7.sp,
+                        letterSpacing = .8.sp
                     )
                 }
             }
 
-
             Column(
-
-                modifier =
-                    Modifier
-                        .align(
-                            Alignment.Center
-                        )
-                        .padding(
-                            top = 5.dp
-                        ),
-
-                horizontalAlignment =
-                    Alignment.CenterHorizontally
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(top = 5.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 Box(
-
-                    modifier =
-                        Modifier
-                            .size(62.dp)
-                            .clip(
-                                RoundedCornerShape(
-                                    20.dp
-                                )
-                            )
-                            .background(
-                                if (
-                                    isSystemInDarkTheme()
-                                ) {
-                                    Color(
-                                        0xFF0B0D17
-                                    )
-                                } else {
-                                    Color(
-                                        0xFFF0F1F8
-                                    )
-                                }
-                            )
-                            .border(
-
-                                1.dp,
-
-                                if (
-                                    isSystemInDarkTheme()
-                                ) {
-                                    Color(
-                                        0xFF282B40
-                                    )
-                                } else {
-                                    Color(
-                                        0xFFD9DBE8
-                                    )
-                                },
-
-                                RoundedCornerShape(
-                                    20.dp
-                                )
-                            ),
-
-                    contentAlignment =
-                        Alignment.Center
+                    modifier = Modifier
+                        .size(62.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(
+                            if (isSystemInDarkTheme()) Color(0xFF0B0D17)
+                            else Color(0xFFF0F1F8)
+                        )
+                        .border(
+                            1.dp,
+                            if (isSystemInDarkTheme()) Color(0xFF282B40)
+                            else Color(0xFFD9DBE8),
+                            RoundedCornerShape(20.dp)
+                        ),
+                    contentAlignment = Alignment.Center
                 ) {
-
                     Image(
-
-                        painter =
-                            painterResource(
-                                R.drawable.assistente1
-                            ),
-
-                        contentDescription =
-                            null,
-
-                        modifier =
-                            Modifier.size(
-                                30.dp
-                            ),
-
-                        contentScale =
-                            ContentScale.Fit,
-
-                        colorFilter =
-                            ColorFilter.tint(
-                                corIcone()
-                            )
+                        painter = painterResource(R.drawable.assistente1),
+                        contentDescription = null,
+                        modifier = Modifier.size(30.dp),
+                        contentScale = ContentScale.Fit,
+                        colorFilter = ColorFilter.tint(corIcone())
                     )
                 }
 
+                Spacer(modifier = Modifier.height(17.dp))
 
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            17.dp
-                        )
-                )
-
-
-                Row(
-
-                    verticalAlignment =
-                        Alignment.Bottom
-                ) {
+                Row(verticalAlignment = Alignment.Bottom) {
 
                     Text(
-
-                        text =
-                            bemEstar
-                                .roundToInt()
-                                .toString(),
-
-                        color =
-                            cores.textoPrincipal,
-
-
-                        fontSize =
-                            30.sp,
-letterSpacing =
-                            (-1.2).sp
+                        text = bemEstar.roundToInt().toString(),
+                        color = cores.textoPrincipal,
+                        fontSize = 30.sp,
+                        letterSpacing = (-1.2).sp
                     )
 
-
-                    Spacer(
-                        modifier =
-                            Modifier.width(
-                                4.dp
-                            )
-                    )
-
+                    Spacer(modifier = Modifier.width(4.dp))
 
                     Text(
-
-                        text =
-                            "/ 100",
-
-                        color =
-                            cores.textoEscuro,
-
-
-                        fontSize =
-                            8.sp,
-)
+                        text = "/ 100",
+                        color = cores.textoEscuro,
+                        fontSize = 8.sp
+                    )
                 }
             }
 
-
             Column(
-
-                modifier =
-                    Modifier
-                        .align(
-                            Alignment.BottomCenter
-                        )
-                        .padding(
-                            bottom = 30.dp
-                        ),
-
-                horizontalAlignment =
-                    Alignment.CenterHorizontally
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 30.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 Text(
-
-                    text =
-                        "Tudo tranquilo.",
-
-                    color =
-                        cores.textoPrincipal,
-
-
-                    fontSize =
-                        15.sp,
-)
-
-
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            6.dp
-                        )
+                    text = "Tudo tranquilo.",
+                    color = cores.textoPrincipal,
+                    fontSize = 15.sp
                 )
 
+                Spacer(modifier = Modifier.height(6.dp))
 
                 Text(
-
-                    text =
-                        "Acompanhamento em andamento",
-
-                    color =
-                        cores.textoEscuro,
-
-
-                    fontSize =
-                        8.sp,
-)
+                    text = "Acompanhamento em andamento",
+                    color = cores.textoEscuro,
+                    fontSize = 8.sp
+                )
             }
         }
     }
@@ -1201,198 +630,76 @@ letterSpacing =
 ========================================================= */
 
 @Composable
-private fun Resumo(
-
-    batimentos: Float,
-
-    respiracao: Float,
-
-    temperatura: Float
-) {
+private fun Resumo(batimentos: Float, respiracao: Float, temperatura: Float) {
 
     Row(
-
-        modifier =
-            Modifier.fillMaxWidth(),
-
-        horizontalArrangement =
-            Arrangement.spacedBy(
-                10.dp
-            )
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
 
         ResumoItem(
-
-            modifier =
-                Modifier.weight(
-                    1f
-                ),
-
-            label =
-                "BATIMENTOS",
-
-            value =
-                batimentos
-                    .roundToInt()
-                    .toString(),
-
-            unit =
-                "bpm"
+            modifier = Modifier.weight(1f),
+            label = "BATIMENTOS",
+            value = batimentos.roundToInt().toString(),
+            unit = "bpm"
         )
 
-
         ResumoItem(
-
-            modifier =
-                Modifier.weight(
-                    1f
-                ),
-
-            label =
-                "RESPIRAÇÃO",
-
-            value =
-                "%.1f".format(
-                    respiracao
-                ),
-
-            unit =
-                "rpm"
+            modifier = Modifier.weight(1f),
+            label = "RESPIRAÇÃO",
+            value = "%.1f".format(respiracao),
+            unit = "rpm"
         )
 
-
         ResumoItem(
-
-            modifier =
-                Modifier.weight(
-                    1f
-                ),
-
-            label =
-                "TEMPERATURA",
-
-            value =
-                "%.1f".format(
-                    temperatura
-                ),
-
-            unit =
-                "°C"
+            modifier = Modifier.weight(1f),
+            label = "TEMPERATURA",
+            value = "%.1f".format(temperatura),
+            unit = "°C"
         )
     }
 }
 
-
 @Composable
-private fun ResumoItem(
+private fun ResumoItem(modifier: Modifier, label: String, value: String, unit: String) {
 
-    modifier: Modifier,
-
-    label: String,
-
-    value: String,
-
-    unit: String
-) {
-
-    val cores =
-        coresAssistente()
-
+    val cores = coresAssistente()
 
     Card(
-
-        modifier =
-            modifier.height(
-                79.dp
-            ),
-
-        shape =
-            RoundedCornerShape(
-                17.dp
-            ),
-
-        colors =
-            CardDefaults.cardColors(
-                containerColor =
-                    cores.card
-            ),
-
-        border =
-            BorderStroke(
-                1.dp,
-                cores.borda
-            )
+        modifier = modifier.height(79.dp),
+        shape = RoundedCornerShape(17.dp),
+        colors = CardDefaults.cardColors(containerColor = cores.card),
+        border = BorderStroke(1.dp, cores.borda)
     ) {
-
         Column(
-
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(
-                        13.dp
-                    ),
-
-            verticalArrangement =
-                Arrangement.SpaceBetween
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(13.dp),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
 
             Text(
-
-                text =
-                    label,
-
-                color =
-                    cores.textoEscuro,
-
-
-                fontSize =
-                    7.sp,
-letterSpacing =
-                    .7.sp
+                text = label,
+                color = cores.textoEscuro,
+                fontSize = 7.sp,
+                letterSpacing = .7.sp
             )
 
-
-            Row(
-
-                verticalAlignment =
-                    Alignment.Bottom
-            ) {
+            Row(verticalAlignment = Alignment.Bottom) {
 
                 Text(
-
-                    text =
-                        value,
-
-                    color =
-                        cores.textoPrincipal,
-
-
-                    fontSize =
-                        17.sp,
-)
-
-
-                Spacer(
-                    modifier =
-                        Modifier.width(
-                            4.dp
-                        )
+                    text = value,
+                    color = cores.textoPrincipal,
+                    fontSize = 17.sp
                 )
 
+                Spacer(modifier = Modifier.width(4.dp))
 
                 Text(
-
-                    text =
-                        unit,
-
-                    color =
-                        cores.textoEscuro,
-
-
-                    fontSize =
-                        7.sp,
-)
+                    text = unit,
+                    color = cores.textoEscuro,
+                    fontSize = 7.sp
+                )
             }
         }
     }
@@ -1404,65 +711,31 @@ letterSpacing =
 ========================================================= */
 
 @Composable
-private fun SecaoTitulo(
+private fun SecaoTitulo(titulo: String, direita: String? = null) {
 
-    titulo: String,
-
-    direita: String? = null
-) {
-
-    val cores =
-        coresAssistente()
-
+    val cores = coresAssistente()
 
     Row(
-
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(
-                    start = 3.dp,
-                    end = 3.dp
-                ),
-
-        verticalAlignment =
-            Alignment.CenterVertically,
-
-        horizontalArrangement =
-            Arrangement.SpaceBetween
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 3.dp, end = 3.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
         Text(
-
-            text =
-                titulo,
-
-            color =
-                cores.textoPrincipal,
-
-
-            fontSize =
-                14.sp,
-letterSpacing =
-                (-.25).sp
+            text = titulo,
+            color = cores.textoPrincipal,
+            fontSize = 14.sp,
+            letterSpacing = (-.25).sp
         )
 
-
         if (direita != null) {
-
             Text(
-
-                text =
-                    direita,
-
-                color =
-                    cores.textoEscuro,
-
-
-                fontSize =
-                    7.sp,
-letterSpacing =
-                    .7.sp
+                text = direita,
+                color = cores.textoEscuro,
+                fontSize = 7.sp,
+                letterSpacing = .7.sp
             )
         }
     }
@@ -1474,185 +747,66 @@ letterSpacing =
 ========================================================= */
 
 @Composable
-private fun Indicadores(
-    dados: DadosSaude
-) {
+private fun Indicadores(dados: DadosSaude) {
 
-    Column(
-
-        verticalArrangement =
-            Arrangement.spacedBy(
-                11.dp
-            )
-    ) {
+    Column(verticalArrangement = Arrangement.spacedBy(11.dp)) {
 
         Row(
-
-            modifier =
-                Modifier.fillMaxWidth(),
-
-            horizontalArrangement =
-                Arrangement.spacedBy(
-                    11.dp
-                )
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(11.dp)
         ) {
 
             IndicadorCard(
-
-                modifier =
-                    Modifier.weight(
-                        1f
-                    ),
-
-                numero =
-                    "01",
-
-                nome =
-                    "Batimentos",
-
-                valor =
-                    dados.batimentos.valor
-                        .roundToInt()
-                        .toString(),
-
-                unidade =
-                    "bpm",
-
-                percentual =
-                    percentual(
-                        dados.batimentos
-                    ),
-
-                icone =
-                    R.drawable.batimentos1
+                modifier = Modifier.weight(1f),
+                numero = "01",
+                nome = "Batimentos",
+                valor = dados.batimentos.valor.roundToInt().toString(),
+                unidade = "bpm",
+                percentual = percentual(dados.batimentos),
+                icone = R.drawable.batimentos1
             )
 
-
             IndicadorCard(
-
-                modifier =
-                    Modifier.weight(
-                        1f
-                    ),
-
-                numero =
-                    "02",
-
-                nome =
-                    "Respiração",
-
-                valor =
-                    "%.1f".format(
-                        dados.respiracao.valor
-                    ),
-
-                unidade =
-                    "rpm",
-
-                percentual =
-                    percentual(
-                        dados.respiracao
-                    ),
-
-                icone =
-                    R.drawable.respiracao1
+                modifier = Modifier.weight(1f),
+                numero = "02",
+                nome = "Respiração",
+                valor = "%.1f".format(dados.respiracao.valor),
+                unidade = "rpm",
+                percentual = percentual(dados.respiracao),
+                icone = R.drawable.respiracao1
             )
         }
 
-
         Row(
-
-            modifier =
-                Modifier.fillMaxWidth(),
-
-            horizontalArrangement =
-                Arrangement.spacedBy(
-                    11.dp
-                )
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(11.dp)
         ) {
 
             IndicadorCard(
-
-                modifier =
-                    Modifier.weight(
-                        1f
-                    ),
-
-                numero =
-                    "03",
-
-                nome =
-                    "Temperatura",
-
-                valor =
-                    "%.1f".format(
-                        dados.temperatura.valor
-                    ),
-
-                unidade =
-                    "°C",
-
-                percentual =
-                    percentual(
-                        dados.temperatura
-                    ),
-
-                icone =
-                    R.drawable.temperatura1
+                modifier = Modifier.weight(1f),
+                numero = "03",
+                nome = "Temperatura",
+                valor = "%.1f".format(dados.temperatura.valor),
+                unidade = "°C",
+                percentual = percentual(dados.temperatura),
+                icone = R.drawable.temperatura1
             )
 
-
             IndicadorCard(
-
-                modifier =
-                    Modifier.weight(
-                        1f
-                    ),
-
-                numero =
-                    "04",
-
-                nome =
-                    "Hidratação",
-
-                valor =
-                    dados.hidratacao.valor
-                        .roundToInt()
-                        .toString(),
-
-                unidade =
-                    "%",
-
-                percentual =
-                    percentual(
-                        dados.hidratacao
-                    ),
-
-                icone =
-                    R.drawable.hidratacao1
+                modifier = Modifier.weight(1f),
+                numero = "04",
+                nome = "Hidratação",
+                valor = dados.hidratacao.valor.roundToInt().toString(),
+                unidade = "%",
+                percentual = percentual(dados.hidratacao),
+                icone = R.drawable.hidratacao1
             )
         }
     }
 }
 
-
-private fun percentual(
-    indicador: Indicador
-): Float {
-
-    return (
-
-        (indicador.valor - indicador.min) /
-            (
-                indicador.max -
-                    indicador.min
-            )
-
-        ).coerceIn(
-            0f,
-            1f
-        )
-}
+private fun percentual(indicador: Indicador): Float =
+    ((indicador.valor - indicador.min) / (indicador.max - indicador.min)).coerceIn(0f, 1f)
 
 
 /* =========================================================
@@ -1661,277 +815,114 @@ private fun percentual(
 
 @Composable
 private fun IndicadorCard(
-
     modifier: Modifier,
-
     numero: String,
-
     nome: String,
-
     valor: String,
-
     unidade: String,
-
     percentual: Float,
-
     icone: Int
 ) {
 
-    val cores =
-        coresAssistente()
-
+    val cores = coresAssistente()
 
     Card(
-
-        modifier =
-            modifier.height(
-                148.dp
-            ),
-
-        shape =
-            RoundedCornerShape(
-                20.dp
-            ),
-
-        colors =
-            CardDefaults.cardColors(
-                containerColor =
-                    cores.card
-            ),
-
-        border =
-            BorderStroke(
-                1.dp,
-                cores.borda
-            )
+        modifier = modifier.height(148.dp),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = cores.card),
+        border = BorderStroke(1.dp, cores.borda)
     ) {
 
-        Box(
-            modifier =
-                Modifier.fillMaxSize()
-        ) {
+        Box(modifier = Modifier.fillMaxSize()) {
 
             Column(
-
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(
-                            16.dp
-                        )
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
             ) {
 
                 Row(
-
-                    modifier =
-                        Modifier.fillMaxWidth(),
-
-                    horizontalArrangement =
-                        Arrangement.SpaceBetween,
-
-                    verticalAlignment =
-                        Alignment.CenterVertically
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
 
                     Box(
-
-                        modifier =
-                            Modifier
-                                .size(38.dp)
-                                .clip(
-                                    RoundedCornerShape(
-                                        12.dp
-                                    )
-                                )
-                                .background(
-                                    cores.fundoIcone
-                                )
-                                .border(
-                                    1.dp,
-                                    cores.bordaIcone,
-                                    RoundedCornerShape(
-                                        12.dp
-                                    )
-                                ),
-
-                        contentAlignment =
-                            Alignment.Center
+                        modifier = Modifier
+                            .size(38.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(cores.fundoIcone)
+                            .border(
+                                1.dp,
+                                cores.bordaIcone,
+                                RoundedCornerShape(12.dp)
+                            ),
+                        contentAlignment = Alignment.Center
                     ) {
-
                         Image(
-
-                            painter =
-                                painterResource(
-                                    icone
-                                ),
-
-                            contentDescription =
-                                null,
-
-                            modifier =
-                                Modifier.size(
-                                    21.dp
-                                ),
-
-                            contentScale =
-                                ContentScale.Fit,
-
-                            colorFilter =
-                                ColorFilter.tint(
-                                    corIcone()
-                                )
+                            painter = painterResource(icone),
+                            contentDescription = null,
+                            modifier = Modifier.size(21.dp),
+                            contentScale = ContentScale.Fit,
+                            colorFilter = ColorFilter.tint(corIcone())
                         )
                     }
 
-
                     Text(
-
-                        text =
-                            numero,
-
-                        color =
-                            cores.textoMuitoEscuro,
-
-
-                        fontSize =
-                            7.sp,
-)
+                        text = numero,
+                        color = cores.textoMuitoEscuro,
+                        fontSize = 7.sp
+                    )
                 }
 
-
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            15.dp
-                        )
-                )
-
+                Spacer(modifier = Modifier.height(15.dp))
 
                 Text(
-
-                    text =
-                        nome,
-
-                    color =
-                        cores.textoSecundario,
-
-
-                    fontSize =
-                        9.sp,
-)
-
-
-                Spacer(
-                    modifier =
-                        Modifier.weight(
-                            1f
-                        )
+                    text = nome,
+                    color = cores.textoSecundario,
+                    fontSize = 9.sp
                 )
 
+                Spacer(modifier = Modifier.weight(1f))
 
                 Row(
-
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                bottom = 8.dp
-                            ),
-
-                    horizontalArrangement =
-                        Arrangement.SpaceBetween,
-
-                    verticalAlignment =
-                        Alignment.Bottom
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Bottom
                 ) {
 
                     Text(
-
-                        text =
-                            valor,
-
-                        color =
-                            cores.textoPrincipal,
-
-
-                        fontSize =
-                            22.sp,
-letterSpacing =
-                            (-.8).sp
+                        text = valor,
+                        color = cores.textoPrincipal,
+                        fontSize = 22.sp,
+                        letterSpacing = (-.8).sp
                     )
 
-
                     Text(
-
-                        text =
-                            unidade,
-
-                        color =
-                            cores.textoEscuro,
-
-
-                        fontSize =
-                            8.sp,
-)
+                        text = unidade,
+                        color = cores.textoEscuro,
+                        fontSize = 8.sp
+                    )
                 }
             }
 
-
-            /*
-             * TRILHO DA BARRA:
-             * totalmente transparente.
-             */
             Box(
-
-                modifier =
-                    Modifier
-                        .align(
-                            Alignment.BottomCenter
-                        )
-                        .fillMaxWidth()
-                        .padding(
-                            start = 16.dp,
-                            end = 16.dp,
-                            bottom = 10.dp
-                        )
-                        .height(
-                            2.dp
-                        )
-                        .clip(
-                            RoundedCornerShape(
-                                999.dp
-                            )
-                        )
-                        .background(
-                            Color.Transparent
-                        )
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, bottom = 10.dp)
+                    .height(2.dp)
+                    .clip(RoundedCornerShape(999.dp))
+                    .background(Color.Transparent)
             ) {
-
                 Box(
-
-                    modifier =
-                        Modifier
-                            .fillMaxWidth(
-                                percentual
-                                    .coerceIn(
-                                        .08f,
-                                        1f
-                                    )
-                            )
-                            .height(
-                                2.dp
-                            )
-                            .clip(
-                                RoundedCornerShape(
-                                    999.dp
-                                )
-                            )
-                            .background(
-                                cores.azul.copy(
-                                    alpha =
-                                        .5f
-                                )
-                            )
+                    modifier = Modifier
+                        .fillMaxWidth(percentual.coerceIn(.08f, 1f))
+                        .height(2.dp)
+                        .clip(RoundedCornerShape(999.dp))
+                        .background(cores.azul.copy(alpha = .5f))
                 )
             }
         }
@@ -1944,330 +935,132 @@ letterSpacing =
 ========================================================= */
 
 @Composable
-private fun BemEstar(
-    valor: Float
-) {
+private fun BemEstar(valor: Float) {
 
-    val cores =
-        coresAssistente()
-
+    val cores = coresAssistente()
 
     Card(
-
-        modifier =
-            Modifier.fillMaxWidth(),
-
-        shape =
-            RoundedCornerShape(
-                22.dp
-            ),
-
-        colors =
-            CardDefaults.cardColors(
-                containerColor =
-                    cores.card
-            ),
-
-        border =
-            BorderStroke(
-                1.dp,
-                cores.borda
-            )
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(containerColor = cores.card),
+        border = BorderStroke(1.dp, cores.borda)
     ) {
 
         Column(
-
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        20.dp
-                    )
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
         ) {
 
             Row(
-
-                modifier =
-                    Modifier.fillMaxWidth(),
-
-                horizontalArrangement =
-                    Arrangement.SpaceBetween,
-
-                verticalAlignment =
-                    Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
 
                 Row(
-
-                    modifier =
-                        Modifier.weight(
-                            1f
-                        ),
-
-                    verticalAlignment =
-                        Alignment.CenterVertically
+                    modifier = Modifier.weight(1f),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
 
                     Box(
-
-                        modifier =
-                            Modifier
-                                .size(40.dp)
-                                .clip(
-                                    RoundedCornerShape(
-                                        13.dp
-                                    )
-                                )
-                                .background(
-                                    cores.fundoIcone
-                                )
-                                .border(
-                                    1.dp,
-                                    cores.bordaIcone,
-                                    RoundedCornerShape(
-                                        13.dp
-                                    )
-                                ),
-
-                        contentAlignment =
-                            Alignment.Center
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(RoundedCornerShape(13.dp))
+                            .background(cores.fundoIcone)
+                            .border(
+                                1.dp,
+                                cores.bordaIcone,
+                                RoundedCornerShape(13.dp)
+                            ),
+                        contentAlignment = Alignment.Center
                     ) {
-
                         Image(
-
-                            painter =
-                                painterResource(
-                                    R.drawable.bemestar1
-                                ),
-
-                            contentDescription =
-                                null,
-
-                            modifier =
-                                Modifier.size(
-                                    22.dp
-                                ),
-
-                            colorFilter =
-                                ColorFilter.tint(
-                                    corIcone()
-                                )
+                            painter = painterResource(R.drawable.bemestar1),
+                            contentDescription = null,
+                            modifier = Modifier.size(22.dp),
+                            colorFilter = ColorFilter.tint(corIcone())
                         )
                     }
 
-
-                    Spacer(
-                        modifier =
-                            Modifier.width(
-                                12.dp
-                            )
-                    )
-
+                    Spacer(modifier = Modifier.width(12.dp))
 
                     Column {
 
                         Text(
-
-                            text =
-                                "Estado geral",
-
-                            color =
-                                cores.textoPrincipal,
-
-
-                            fontSize =
-                                10.sp,
-)
-
-
-                        Spacer(
-                            modifier =
-                                Modifier.height(
-                                    6.dp
-                                )
+                            text = "Estado geral",
+                            color = cores.textoPrincipal,
+                            fontSize = 10.sp
                         )
 
+                        Spacer(modifier = Modifier.height(6.dp))
 
                         Text(
-
-                            text =
-                                "Estimativa demonstrativa",
-
-                            color =
-                                cores.textoEscuro,
-
-
-                            fontSize =
-                                7.sp,
-)
+                            text = "Estimativa demonstrativa",
+                            color = cores.textoEscuro,
+                            fontSize = 7.sp
+                        )
                     }
                 }
 
-
-                Row(
-
-                    verticalAlignment =
-                        Alignment.Bottom
-                ) {
+                Row(verticalAlignment = Alignment.Bottom) {
 
                     Text(
-
-                        text =
-                            valor
-                                .roundToInt()
-                                .toString(),
-
-                        color =
-                            cores.textoPrincipal,
-
-
-                        fontSize =
-                            27.sp,
-letterSpacing =
-                            (-1.2).sp
+                        text = valor.roundToInt().toString(),
+                        color = cores.textoPrincipal,
+                        fontSize = 27.sp,
+                        letterSpacing = (-1.2).sp
                     )
 
-
-                    Spacer(
-                        modifier =
-                            Modifier.width(
-                                3.dp
-                            )
-                    )
-
+                    Spacer(modifier = Modifier.width(3.dp))
 
                     Text(
-
-                        text =
-                            "/100",
-
-                        color =
-                            cores.textoEscuro,
-
-
-                        fontSize =
-                            8.sp,
-)
+                        text = "/100",
+                        color = cores.textoEscuro,
+                        fontSize = 8.sp
+                    )
                 }
             }
 
-
-            Spacer(
-                modifier =
-                    Modifier.height(
-                        25.dp
-                    )
-            )
-
+            Spacer(modifier = Modifier.height(25.dp))
 
             Row(
-
-                modifier =
-                    Modifier.fillMaxWidth(),
-
-                horizontalArrangement =
-                    Arrangement.SpaceBetween
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
-                BemEstarInfo(
-                    titulo =
-                        "MÍNIMO",
-
-                    valor =
-                        "60"
-                )
-
+                BemEstarInfo(titulo = "MÍNIMO", valor = "60")
 
                 BemEstarInfo(
-
-                    titulo =
-                        "ATUAL",
-
-                    valor =
-                        valor
-                            .roundToInt()
-                            .toString()
+                    titulo = "ATUAL",
+                    valor = valor.roundToInt().toString()
                 )
 
-
-                BemEstarInfo(
-                    titulo =
-                        "MÁXIMO",
-
-                    valor =
-                        "88"
-                )
+                BemEstarInfo(titulo = "MÁXIMO", valor = "88")
             }
 
+            Spacer(modifier = Modifier.height(19.dp))
 
-            Spacer(
-                modifier =
-                    Modifier.height(
-                        19.dp
-                    )
-            )
-
-
-            /*
-             * TRILHO DA BARRA:
-             * totalmente transparente.
-             */
             Box(
-
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .height(
-                            5.dp
-                        )
-                        .clip(
-                            RoundedCornerShape(
-                                999.dp
-                            )
-                        )
-                        .background(
-                            Color.Transparent
-                        )
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(5.dp)
+                    .clip(RoundedCornerShape(999.dp))
+                    .background(Color.Transparent)
             ) {
 
-                val progresso =
-                    animateFloatAsState(
-
-                        targetValue =
-                            (valor / 100f)
-                                .coerceIn(
-                                    0f,
-                                    1f
-                                ),
-
-                        animationSpec =
-                            tween(
-                                800
-                            ),
-
-                        label =
-                            "bem-estar"
-                    )
-
+                val progresso = animateFloatAsState(
+                    targetValue = (valor / 100f).coerceIn(0f, 1f),
+                    animationSpec = tween(800),
+                    label = "bem-estar"
+                )
 
                 Box(
-
-                    modifier =
-                        Modifier
-                            .fillMaxWidth(
-                                progresso.value
-                            )
-                            .height(
-                                5.dp
-                            )
-                            .clip(
-                                RoundedCornerShape(
-                                    999.dp
-                                )
-                            )
-                            .background(
-                                cores.azulClaro
-                            )
+                    modifier = Modifier
+                        .fillMaxWidth(progresso.value)
+                        .height(5.dp)
+                        .clip(RoundedCornerShape(999.dp))
+                        .background(cores.azulClaro)
                 )
             }
         }
@@ -2280,51 +1073,23 @@ letterSpacing =
 ========================================================= */
 
 @Composable
-private fun BemEstarInfo(
+private fun BemEstarInfo(titulo: String, valor: String) {
 
-    titulo: String,
+    val cores = coresAssistente()
 
-    valor: String
-) {
-
-    val cores =
-        coresAssistente()
-
-
-    Column(
-
-        verticalArrangement =
-            Arrangement.spacedBy(
-                5.dp
-            )
-    ) {
+    Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
 
         Text(
-
-            text =
-                titulo,
-
-            color =
-                cores.textoMuitoEscuro,
-
-
-            fontSize =
-                7.sp,
-)
-
+            text = titulo,
+            color = cores.textoMuitoEscuro,
+            fontSize = 7.sp
+        )
 
         Text(
-
-            text =
-                valor,
-
-            color =
-                cores.textoSecundario,
-
-
-            fontSize =
-                9.sp,
-)
+            text = valor,
+            color = cores.textoSecundario,
+            fontSize = 9.sp
+        )
     }
 }
 
@@ -2336,50 +1101,24 @@ private fun BemEstarInfo(
 @Composable
 private fun Atividade() {
 
-    Column(
-
-        verticalArrangement =
-            Arrangement.spacedBy(
-                9.dp
-            )
-    ) {
+    Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
 
         AtividadeRow(
-
-            titulo =
-                "Indicadores atualizados",
-
-            descricao =
-                "Dados renovados automaticamente",
-
-            tempo =
-                "agora"
+            titulo = "Indicadores atualizados",
+            descricao = "Dados renovados automaticamente",
+            tempo = "agora"
         )
 
-
         AtividadeRow(
-
-            titulo =
-                "Bem-estar recalculado",
-
-            descricao =
-                "Índice atualizado",
-
-            tempo =
-                "3 min"
+            titulo = "Bem-estar recalculado",
+            descricao = "Índice atualizado",
+            tempo = "3 min"
         )
 
-
         AtividadeRow(
-
-            titulo =
-                "Monitoramento iniciado",
-
-            descricao =
-                "Sessão atual do assistente",
-
-            tempo =
-                "hoje"
+            titulo = "Monitoramento iniciado",
+            descricao = "Sessão atual do assistente",
+            tempo = "hoje"
         )
     }
 }
@@ -2390,159 +1129,64 @@ private fun Atividade() {
 ========================================================= */
 
 @Composable
-private fun AtividadeRow(
+private fun AtividadeRow(titulo: String, descricao: String, tempo: String) {
 
-    titulo: String,
-
-    descricao: String,
-
-    tempo: String
-) {
-
-    val cores =
-        coresAssistente()
-
+    val cores = coresAssistente()
 
     Card(
-
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .height(
-                    65.dp
-                ),
-
-        shape =
-            RoundedCornerShape(
-                17.dp
-            ),
-
-        colors =
-            CardDefaults.cardColors(
-                containerColor =
-                    cores.cardSecundario
-            ),
-
-        border =
-            BorderStroke(
-                1.dp,
-                cores.borda
-            )
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(65.dp),
+        shape = RoundedCornerShape(17.dp),
+        colors = CardDefaults.cardColors(containerColor = cores.cardSecundario),
+        border = BorderStroke(1.dp, cores.borda)
     ) {
 
         Row(
-
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(
-                        horizontal = 14.dp,
-                        vertical = 12.dp
-                    ),
-
-            verticalAlignment =
-                Alignment.CenterVertically
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 14.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
 
             Box(
-
-                modifier =
-                    Modifier
-                        .size(7.dp)
-                        .clip(
-                            CircleShape
-                        )
-                        .background(
-                            cores.azul
-                        )
+                modifier = Modifier
+                    .size(7.dp)
+                    .clip(CircleShape)
+                    .background(cores.azul)
             )
 
+            Spacer(modifier = Modifier.width(13.dp))
 
-            Spacer(
-                modifier =
-                    Modifier.width(
-                        13.dp
-                    )
-            )
-
-
-            Column(
-                modifier =
-                    Modifier.weight(
-                        1f
-                    )
-            ) {
+            Column(modifier = Modifier.weight(1f)) {
 
                 Text(
-
-                    text =
-                        titulo,
-
-                    color =
-                        cores.textoSecundario,
-
-
-                    fontSize =
-                        9.sp,
-maxLines =
-                        1,
-
-                    overflow =
-                        TextOverflow.Ellipsis
+                    text = titulo,
+                    color = cores.textoSecundario,
+                    fontSize = 9.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
 
-
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            5.dp
-                        )
-                )
-
+                Spacer(modifier = Modifier.height(5.dp))
 
                 Text(
-
-                    text =
-                        descricao,
-
-                    color =
-                        cores.textoMuitoEscuro,
-
-
-                    fontSize =
-                        7.sp,
-lineHeight =
-                        10.sp,
-
-                    maxLines =
-                        1,
-
-                    overflow =
-                        TextOverflow.Ellipsis
+                    text = descricao,
+                    color = cores.textoMuitoEscuro,
+                    fontSize = 7.sp,
+                    lineHeight = 10.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
 
-
-            Spacer(
-                modifier =
-                    Modifier.width(
-                        13.dp
-                    )
-            )
-
+            Spacer(modifier = Modifier.width(13.dp))
 
             Text(
-
-                text =
-                    tempo,
-
-                color =
-                    cores.textoMuitoEscuro,
-
-
-                fontSize =
-                    7.sp,
-)
+                text = tempo,
+                color = cores.textoMuitoEscuro,
+                fontSize = 7.sp
+            )
         }
     }
 }

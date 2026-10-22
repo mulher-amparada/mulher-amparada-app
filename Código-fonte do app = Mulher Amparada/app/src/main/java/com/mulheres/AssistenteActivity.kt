@@ -143,13 +143,14 @@ class AssistenteActivity : AppCompatActivity() {
                 }
 
                 override fun onAuthenticationError(
-                    errorCode: Int,
-                    errString: CharSequence
-                ) {
-                    super.onAuthenticationError(errorCode, errString)
-                    // Usuário cancelou ou houve erro — não faz nada
-                }
+    errorCode: Int,
+    errString: CharSequence
+) {
+    super.onAuthenticationError(errorCode, errString)
 
+    startActivity(Intent(this@AssistenteActivity, HubActivity::class.java))
+    finish()
+}
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
                     // Biometria não reconhecida — prompt continua aberto

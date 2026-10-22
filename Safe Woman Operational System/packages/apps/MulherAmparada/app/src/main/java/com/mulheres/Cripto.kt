@@ -1,415 +1,486 @@
-
 package com.mulheres
 
-import android.os.Bundle
-import android.content.pm.ActivityInfo
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.compose.BackHandler
-import androidx.biometric.BiometricManager
-import androidx.biometric.BiometricPrompt
-import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.fragment.app.FragmentActivity
+import android.content.Context
+import android.util.Base64
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStoreFile
+import androidx.datastore.preferences.SharedPreferencesMigration
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import java.io.File
+import java.nio.charset.StandardCharsets
+import java.security.KeyStore
+import javax.crypto.Cipher
+import javax.crypto.CipherInputStream
+import javax.crypto.CipherOutputStream
+import javax.crypto.KeyGenerator
+import javax.crypto.SecretKey
+import javax.crypto.spec.GCMParameterSpec
 
-class NeoCalcActivity : FragmentActivity() {
+class Cripto(context: Context) {
 
-    private lateinit var cripto: Cripto
+    private val appContext =
+        context.applicationContext
 
-    private var biometricPrompt: BiometricPrompt? = null
+    companion object {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        private const val DATASTORE_NAME =
+            "dados_seguro"
 
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        private const val KEYSTORE_ALIAS =
+            "Cripto_AES256_Key"
 
-        cripto = Cripto(applicationContext)
+        @Volatile
+        private var dataStoreInstance:
+            DataStore<Preferences>? = null
 
-        WindowCompat.setDecorFitsSystemWindows(window, true)
-        window.statusBarColor = android.graphics.Color.BLACK
-        window.navigationBarColor = android.graphics.Color.BLACK
+        private fun getDataStore(
+            context: Context
+        ): DataStore<Preferences> {
 
-        WindowInsetsControllerCompat(
-            window,
-            window.decorView
-        ).show(WindowInsetsCompat.Type.systemBars())
+            return dataStoreInstance
+                ?: synchronized(this) {
 
-        configurarBiometria()
-
-        setContent {
-            MaterialTheme {
-                NeoCalcScreen(
-                    cripto = cripto,
-                    onFiveTaps = { abrirBiometria() }
-                )
-            }
+                    dataStoreInstance
+                        ?: PreferenceDataStoreFactory.create(
+                            migrations = listOf(
+                                SharedPreferencesMigration(
+                                    context.applicationContext,
+                                    DATASTORE_NAME
+                                )
+                            ),
+                            produceFile = {
+                                context.applicationContext
+                                    .preferencesDataStoreFile(
+                                        DATASTORE_NAME
+                                    )
+                            }
+                        ).also {
+                            dataStoreInstance = it
+                        }
+                }
         }
     }
 
-    private fun configurarBiometria() {
-        val executor = ContextCompat.getMainExecutor(this)
+    private val dataStore:
+        DataStore<Preferences> by lazy {
 
-        biometricPrompt = BiometricPrompt(
-            this,
-            executor,
-            object : BiometricPrompt.AuthenticationCallback() {
-                override fun onAuthenticationSucceeded(
-                    result: BiometricPrompt.AuthenticationResult
-                ) {
-                    super.onAuthenticationSucceeded(result)
-                    // Autenticação biométrica concluída.
-                }
-
-                override fun onAuthenticationFailed() {
-                    super.onAuthenticationFailed()
-                    // A biometria não foi reconhecida.
-                }
-
-                override fun onAuthenticationError(
-                    errorCode: Int,
-                    errString: CharSequence
-                ) {
-                    super.onAuthenticationError(errorCode, errString)
-                    // O usuário cancelou ou ocorreu um erro.
-                }
-            }
+        getDataStore(
+            appContext
         )
     }
 
-    private fun abrirBiometria() {
-        val authenticators =
-            BiometricManager.Authenticators.BIOMETRIC_STRONG or
-                BiometricManager.Authenticators.DEVICE_CREDENTIAL
-
-        val manager = BiometricManager.from(this)
-
-        when (manager.canAuthenticate(authenticators)) {
-            BiometricManager.BIOMETRIC_SUCCESS -> {
-                val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                    .setTitle("Autenticação")
-                    .setSubtitle("Confirme sua identidade para continuar")
-                    .setAllowedAuthenticators(authenticators)
-                    .build()
-
-                biometricPrompt?.authenticate(promptInfo)
-            }
-
-            else -> {
-                // Não há biometria ou credencial compatível configurada.
-            }
+    private val keyStore: KeyStore =
+        KeyStore.getInstance(
+            "AndroidKeyStore"
+        ).apply {
+            load(null)
         }
-    }
-}
 
-@Composable
-private fun NeoCalcScreen(
-    cripto: Cripto,
-    onFiveTaps: () -> Unit
-) {
-    var pin by remember { mutableStateOf("") }
-    var savedMessage by remember { mutableStateOf(false) }
-    var screenTaps by remember { mutableIntStateOf(0) }
+    private fun getOrCreateKey(): SecretKey {
 
-    val configuration = LocalConfiguration.current
-    val landscape =
-        configuration.orientation ==
-            android.content.res.Configuration.ORIENTATION_LANDSCAPE
-
-    val background = Color.Black
-    val keyColor = Color(0xFF202124)
-    val keyPressed = Color(0xFF45464A)
-    val textColor = Color(0xFFF5F5F5)
-    val secondaryColor = Color(0xFFAAAAAA)
-
-    fun addDigit(digit: String) {
-        if (pin.length >= 6) return
-
-        val newPin = pin + digit
-        pin = newPin
-        savedMessage = false
-
-        if (newPin.length == 6) {
-            cripto.salvar("neocalc_pin", newPin)
-            savedMessage = true
-        }
-    }
-
-    fun deleteDigit() {
-        if (pin.isNotEmpty()) {
-            pin = pin.dropLast(1)
-            savedMessage = false
-        }
-    }
-
-    BackHandler(enabled = pin.isNotEmpty()) {
-        deleteDigit()
-    }
-
-    val titleArea: @Composable (Modifier) -> Unit = { modifier ->
-        Column(
-            modifier = modifier,
-            horizontalAlignment = Alignment.CenterHorizontally
+        if (
+            keyStore.containsAlias(
+                KEYSTORE_ALIAS
+            )
         ) {
-            Text(
-                text = "Insira seu PIN",
-                color = textColor,
-                fontSize = 25.sp,
-                fontWeight = FontWeight.Normal,
-                textAlign = TextAlign.Center
+
+            return (
+                keyStore.getEntry(
+                    KEYSTORE_ALIAS,
+                    null
+                ) as KeyStore.SecretKeyEntry
+            ).secretKey
+        }
+
+        val keyGenerator =
+            KeyGenerator.getInstance(
+                "AES",
+                "AndroidKeyStore"
             )
 
-            Spacer(Modifier.height(14.dp))
-
-            Text(
-                text = "Use o teclado para continuar",
-                color = secondaryColor,
-                fontSize = 14.sp,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(Modifier.height(30.dp))
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                repeat(6) { index ->
-                    Box(
-                        Modifier
-                            .size(11.dp)
-                            .clip(CircleShape)
-                            .background(
-                                if (index < pin.length) textColor
-                                else Color(0xFF383838)
-                            )
+        keyGenerator.init(
+            android.security.keystore
+                .KeyGenParameterSpec.Builder(
+                    KEYSTORE_ALIAS,
+                    android.security.keystore
+                        .KeyProperties.PURPOSE_ENCRYPT or
+                        android.security.keystore
+                            .KeyProperties.PURPOSE_DECRYPT
+                )
+                    .setKeySize(256)
+                    .setBlockModes(
+                        android.security.keystore
+                            .KeyProperties.BLOCK_MODE_GCM
                     )
-                }
+                    .setEncryptionPaddings(
+                        android.security.keystore
+                            .KeyProperties.ENCRYPTION_PADDING_NONE
+                    )
+                    .build()
+        )
+
+        return keyGenerator.generateKey()
+    }
+
+    private fun criptografar(
+        valor: String
+    ): String {
+
+        val cipher =
+            Cipher.getInstance(
+                "AES/GCM/NoPadding"
+            )
+
+        cipher.init(
+            Cipher.ENCRYPT_MODE,
+            getOrCreateKey()
+        )
+
+        val iv =
+            cipher.iv
+
+        val encrypted =
+            cipher.doFinal(
+                valor.toByteArray(
+                    StandardCharsets.UTF_8
+                )
+            )
+
+        val resultado =
+            ByteArray(
+                iv.size +
+                    encrypted.size
+            )
+
+        System.arraycopy(
+            iv,
+            0,
+            resultado,
+            0,
+            iv.size
+        )
+
+        System.arraycopy(
+            encrypted,
+            0,
+            resultado,
+            iv.size,
+            encrypted.size
+        )
+
+        return Base64.encodeToString(
+            resultado,
+            Base64.NO_WRAP
+        )
+    }
+
+    private fun descriptografar(
+        valor: String
+    ): String {
+
+        val dados =
+            Base64.decode(
+                valor,
+                Base64.NO_WRAP
+            )
+
+        if (
+            dados.size < 13
+        ) {
+            throw IllegalStateException(
+                "Dados criptografados inválidos."
+            )
+        }
+
+        val iv =
+            dados.copyOfRange(
+                0,
+                12
+            )
+
+        val encrypted =
+            dados.copyOfRange(
+                12,
+                dados.size
+            )
+
+        val cipher =
+            Cipher.getInstance(
+                "AES/GCM/NoPadding"
+            )
+
+        cipher.init(
+            Cipher.DECRYPT_MODE,
+            getOrCreateKey(),
+            GCMParameterSpec(
+                128,
+                iv
+            )
+        )
+
+        return String(
+            cipher.doFinal(
+                encrypted
+            ),
+            StandardCharsets.UTF_8
+        )
+    }
+
+    fun salvar(
+        chave: String,
+        valor: String
+    ) {
+
+        runBlocking(
+            Dispatchers.IO
+        ) {
+
+            val valorCriptografado =
+                criptografar(
+                    valor
+                )
+
+            dataStore.edit { preferences ->
+
+                preferences[
+                    stringPreferencesKey(
+                        chave
+                    )
+                ] =
+                    valorCriptografado
+            }
+        }
+    }
+
+    fun carregar(
+        chave: String
+    ): String {
+
+        return runBlocking(
+            Dispatchers.IO
+        ) {
+
+            val preferences =
+                dataStore.data.first()
+
+            val valorCriptografado =
+                preferences[
+                    stringPreferencesKey(
+                        chave
+                    )
+                ]
+
+            if (
+                valorCriptografado.isNullOrEmpty()
+            ) {
+                return@runBlocking ""
             }
 
-            if (savedMessage) {
-                Spacer(Modifier.height(14.dp))
-                Text(
-                    text = "PIN salvo com segurança",
-                    color = secondaryColor,
-                    fontSize = 12.sp
+            try {
+
+                descriptografar(
+                    valorCriptografado
+                )
+
+            } catch (
+                e: Exception
+            ) {
+
+                ""
+            }
+        }
+    }
+
+    fun remover(
+        chave: String
+    ) {
+
+        runBlocking(
+            Dispatchers.IO
+        ) {
+
+            dataStore.edit { preferences ->
+
+                preferences.remove(
+                    stringPreferencesKey(
+                        chave
+                    )
                 )
             }
-
-            Spacer(Modifier.height(20.dp))
-
-            Text(
-                text = "Toque cinco vezes aqui para autenticar",
-                color = Color(0xFF626262),
-                fontSize = 11.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.pointerInput(Unit) {
-                    detectTapGestures {
-                        screenTaps++
-                        if (screenTaps >= 5) {
-                            screenTaps = 0
-                            onFiveTaps()
-                        }
-                    }
-                }
-            )
         }
     }
 
-    val keypad: @Composable (Modifier) -> Unit = { modifier ->
-        Column(
-            modifier = modifier,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+    fun limparTudo() {
+
+        runBlocking(
+            Dispatchers.IO
         ) {
-            val rows = listOf(
-                listOf("1", "2", "3"),
-                listOf("4", "5", "6"),
-                listOf("7", "8", "9")
+
+            dataStore.edit { preferences ->
+
+                preferences.clear()
+            }
+        }
+    }
+
+    fun criptografarArquivo(
+        arquivoEntrada: File,
+        arquivoSaida: File
+    ) {
+
+        val cipher =
+            Cipher.getInstance(
+                "AES/GCM/NoPadding"
             )
 
-            rows.forEach { row ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    row.forEach { number ->
-                        NeoCalcKey(
-                            number = number,
-                            subtitle = when (number) {
-                                "2" -> "ABC"
-                                "3" -> "DEF"
-                                "4" -> "GHI"
-                                "5" -> "JKL"
-                                "6" -> "MNO"
-                                "7" -> "PQRS"
-                                "8" -> "TUV"
-                                "9" -> "WXYZ"
-                                else -> ""
-                            },
-                            color = keyColor,
-                            pressedColor = keyPressed,
-                            textColor = textColor,
-                            onClick = { addDigit(number) }
+        cipher.init(
+            Cipher.ENCRYPT_MODE,
+            getOrCreateKey()
+        )
+
+        val iv =
+            cipher.iv
+
+        arquivoEntrada.inputStream().use { input ->
+
+            arquivoSaida.outputStream().use { output ->
+
+                output.write(
+                    iv.size
+                )
+
+                output.write(
+                    iv
+                )
+
+                CipherOutputStream(
+                    output,
+                    cipher
+                ).use { encryptedOutput ->
+
+                    val buffer =
+                        ByteArray(
+                            8192
+                        )
+
+                    var bytesLidos: Int
+
+                    while (
+                        input.read(
+                            buffer
+                        ).also {
+                            bytesLidos = it
+                        } != -1
+                    ) {
+
+                        encryptedOutput.write(
+                            buffer,
+                            0,
+                            bytesLidos
                         )
                     }
                 }
-
-                Spacer(Modifier.height(if (landscape) 5.dp else 13.dp))
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier.size(76.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Emergência",
-                        color = secondaryColor,
-                        fontSize = 11.sp,
-                        textAlign = TextAlign.Center
-                    )
-                }
-
-                NeoCalcKey(
-                    number = "0",
-                    subtitle = "+",
-                    color = keyColor,
-                    pressedColor = keyPressed,
-                    textColor = textColor,
-                    onClick = { addDigit("0") }
-                )
-
-                Box(
-                    modifier = Modifier
-                        .size(76.dp)
-                        .clip(CircleShape)
-                        .clickable { deleteDigit() },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "⌫",
-                        color = textColor,
-                        fontSize = 27.sp
-                    )
-                }
             }
         }
     }
 
-    BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(background)
-            .windowInsetsPadding(WindowInsets.safeDrawing)
-            .padding(
-                horizontal = if (landscape) 18.dp else 28.dp,
-                vertical = if (landscape) 4.dp else 8.dp
-            )
+    fun descriptografarArquivo(
+        arquivoEntrada: File,
+        arquivoSaida: File
     ) {
-        if (landscape) {
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .weight(0.85f)
-                        .fillMaxHeight(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    titleArea(Modifier.fillMaxWidth())
-                }
 
-                Box(
-                    modifier = Modifier
-                        .weight(1.15f)
-                        .fillMaxHeight(),
-                    contentAlignment = Alignment.Center
+        arquivoEntrada.inputStream().use { input ->
+
+            val ivSize =
+                input.read()
+
+            if (
+                ivSize <= 0
+            ) {
+                throw IllegalStateException(
+                    "IV inválido."
+                )
+            }
+
+            val iv =
+                ByteArray(
+                    ivSize
+                )
+
+            var total =
+                0
+
+            while (
+                total < ivSize
+            ) {
+
+                val lidos =
+                    input.read(
+                        iv,
+                        total,
+                        ivSize - total
+                    )
+
+                if (
+                    lidos == -1
                 ) {
-                    keypad(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 2.dp)
+                    throw IllegalStateException(
+                        "Arquivo criptografado incompleto."
                     )
                 }
+
+                total += lidos
             }
-        } 
-    }
-}
 
-@Composable
-private fun NeoCalcKey(
-    number: String,
-    subtitle: String,
-    color: Color,
-    pressedColor: Color,
-    textColor: Color,
-    onClick: () -> Unit
-) {
-    var pressed by remember { mutableStateOf(false) }
+            val cipher =
+                Cipher.getInstance(
+                    "AES/GCM/NoPadding"
+                )
 
-    val animatedColor by animateColorAsState(
-        targetValue = if (pressed) pressedColor else color,
-        label = "keyColor"
-    )
-
-    Box(
-        modifier = Modifier
-            .size(76.dp)
-            .clip(CircleShape)
-            .background(animatedColor)
-            .clickable {
-                onClick()
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = number,
-                color = textColor,
-                fontSize = 29.sp,
-                fontWeight = FontWeight.Normal,
-                lineHeight = 32.sp
+            cipher.init(
+                Cipher.DECRYPT_MODE,
+                getOrCreateKey(),
+                GCMParameterSpec(
+                    128,
+                    iv
+                )
             )
 
-            if (subtitle.isNotEmpty()) {
-                Text(
-                    text = subtitle,
-                    color = Color(0xFFBDBDBD),
-                    fontSize = 9.sp,
-                    letterSpacing = 1.5.sp,
-                    lineHeight = 12.sp
-                )
+            CipherInputStream(
+                input,
+                cipher
+            ).use { encryptedInput ->
+
+                arquivoSaida.outputStream().use { output ->
+
+                    val buffer =
+                        ByteArray(
+                            8192
+                        )
+
+                    var bytesLidos: Int
+
+                    while (
+                        encryptedInput.read(
+                            buffer
+                        ).also {
+                            bytesLidos = it
+                        } != -1
+                    ) {
+
+                        output.write(
+                            buffer,
+                            0,
+                            bytesLidos
+                        )
+                    }
+                }
             }
         }
     }

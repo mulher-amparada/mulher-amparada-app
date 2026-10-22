@@ -2,7 +2,7 @@
 
 ### Sobre como o projeto foi estruturado:
 
-> Quando a usuária arrasta pro lado no AssistenteActivity, valida o BiometricPrompt e acessa a HubActivity, ao apertar voltar na barra de navegação do sistema dentro da HubActivity, o app vai para o background em vez de retornar à AssistenteActivity; ao reabrir pelo ícone, volta direto na HubActivity com sessão viva, e para exigir biometria é preciso remover dos recentes — decisão que prioriza a saída rápida para pedir ajuda em situação de risco, já que voltar à biometria criaria um loop que impediria a usuária de sair, aceitando o trade-off de não reautenticar a cada retorno (mitigável com timeout de sessão de 1–2 min).
+> Quando a usuária arrasta pro lado no AssistenteActivity, valida o BiometricPrompt e acessa a HubActivity, ao apertar voltar na barra de navegação do sistema dentro da HubActivity, o app vai para o background em vez de retornar à AssistenteActivity; ao reabrir pelo ícone, volta direto na HubActivity com sessão viva, e para exigir biometria é preciso remover dos recentes — decisão que prioriza a saída rápida para pedir ajuda em situação de risco, já que voltar à biometria criaria um loop que impediria a usuária de sair, aceitando o trade-off de não reautenticar a cada retorno (mitigável com timeout de sessão de 1–2 min). E se não tiver biometria ou padrao/pin/senha, ele vai pra tela do mesmo jeito!
 
 > o EmergencyOverlay só funciona dentro da HubActivity!
 

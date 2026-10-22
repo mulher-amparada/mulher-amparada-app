@@ -392,7 +392,7 @@ val visorScrollVertical = rememberScrollState()
                 registrarToque()
             }
         }
-        .padding(start = 4.dp, end = 4.dp)
+        .padding(start = 14.dp, end = 4.dp)
         .verticalScroll(visorScrollVertical)
         .horizontalScroll(visorScroll),
     contentAlignment = Alignment.CenterEnd

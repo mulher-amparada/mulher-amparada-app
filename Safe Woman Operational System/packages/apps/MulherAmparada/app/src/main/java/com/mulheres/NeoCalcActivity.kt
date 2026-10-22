@@ -1,17 +1,13 @@
 
 package com.mulheres
 
-import android.os.Bundle
+import android.content.Intent
 import android.content.pm.ActivityInfo
-import androidx.activity.ComponentActivity
+import android.content.res.Configuration
+import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.activity.compose.BackHandler
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
-import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,13 +27,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.FragmentActivity
+import kotlinx.coroutines.delay
 
 class NeoCalcActivity : FragmentActivity() {
 
     private lateinit var cripto: Cripto
 
     private var biometricPrompt: BiometricPrompt? = null
+
+    private val resetSignal = mutableIntStateOf(0)
+    private val biometricError = mutableStateOf<String?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,29 +65,34 @@ class NeoCalcActivity : FragmentActivity() {
             MaterialTheme {
                 NeoCalcScreen(
                     cripto = cripto,
-                    onFiveTaps = { abrirBiometria() }
+                    resetSignal = resetSignal.intValue,
+                    biometricError = biometricError.value,
+                    onFiveTaps = { abrirBiometria() },
+                    onSuccess = { abrirHub() }
                 )
             }
         }
     }
 
     private fun configurarBiometria() {
-        val executor = ContextCompat.getMainExecutor(this)
-
         biometricPrompt = BiometricPrompt(
             this,
-            executor,
+            ContextCompat.getMainExecutor(this),
             object : BiometricPrompt.AuthenticationCallback() {
+
                 override fun onAuthenticationSucceeded(
                     result: BiometricPrompt.AuthenticationResult
                 ) {
                     super.onAuthenticationSucceeded(result)
-                    // Autenticação biométrica concluída.
+
+                    // Autoriza o reset somente após autenticação.
+                    biometricError.value = null
+                    resetSignal.intValue++
                 }
 
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
-                    // A biometria não foi reconhecida.
+                    // O usuário pode tentar novamente.
                 }
 
                 override fun onAuthenticationError(
@@ -91,13 +100,17 @@ class NeoCalcActivity : FragmentActivity() {
                     errString: CharSequence
                 ) {
                     super.onAuthenticationError(errorCode, errString)
-                    // O usuário cancelou ou ocorreu um erro.
+
+                    biometricError.value =
+                        "Autenticação cancelada ou indisponível."
                 }
             }
         )
     }
 
     private fun abrirBiometria() {
+        biometricError.value = null
+
         val authenticators =
             BiometricManager.Authenticators.BIOMETRIC_STRONG or
                 BiometricManager.Authenticators.DEVICE_CREDENTIAL
@@ -106,35 +119,48 @@ class NeoCalcActivity : FragmentActivity() {
 
         when (manager.canAuthenticate(authenticators)) {
             BiometricManager.BIOMETRIC_SUCCESS -> {
-                val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                    .setTitle("Autenticação")
-                    .setSubtitle("Confirme sua identidade para continuar")
-                    .setAllowedAuthenticators(authenticators)
-                    .build()
+                val promptInfo =
+                    BiometricPrompt.PromptInfo.Builder()
+                        .setTitle("Redefinir PIN")
+                        .setSubtitle(
+                            "Confirme sua identidade para cadastrar um novo PIN"
+                        )
+                        .setAllowedAuthenticators(authenticators)
+                        .build()
 
                 biometricPrompt?.authenticate(promptInfo)
             }
 
             else -> {
-                // Não há biometria ou credencial compatível configurada.
+                biometricError.value =
+                    "Configure a biometria ou o bloqueio do dispositivo."
             }
         }
+    }
+
+    private fun abrirHub() {
+        startActivity(
+            Intent(this, HubActivity::class.java)
+        )
+        finish()
     }
 }
 
 @Composable
 private fun NeoCalcScreen(
     cripto: Cripto,
-    onFiveTaps: () -> Unit
+    resetSignal: Int,
+    biometricError: String?,
+    onFiveTaps: () -> Unit,
+    onSuccess: () -> Unit
 ) {
     var pin by remember { mutableStateOf("") }
-    var savedMessage by remember { mutableStateOf(false) }
+    var status by remember { mutableStateOf("neutral") }
     var screenTaps by remember { mutableIntStateOf(0) }
 
     val configuration = LocalConfiguration.current
     val landscape =
-        configuration.orientation ==
-            android.content.res.Configuration.ORIENTATION_LANDSCAPE
+        configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     val background = Color.Black
     val keyColor = Color(0xFF202124)
@@ -142,28 +168,65 @@ private fun NeoCalcScreen(
     val textColor = Color(0xFFF5F5F5)
     val secondaryColor = Color(0xFFAAAAAA)
 
+    // Após autenticação biométrica, remove o PIN salvo.
+    LaunchedEffect(resetSignal) {
+        if (resetSignal > 0) {
+            cripto.remover("neocalc_pin")
+            pin = ""
+            status = "neutral"
+        }
+    }
+
+    // Dá tempo para o usuário ver as bolinhas vermelhas ou verdes.
+    LaunchedEffect(status) {
+        when (status) {
+            "wrong" -> {
+                delay(850)
+                pin = ""
+                status = "neutral"
+            }
+
+            "correct" -> {
+                delay(450)
+                onSuccess()
+            }
+        }
+    }
+
     fun addDigit(digit: String) {
+        if (status == "correct" || status == "wrong") return
         if (pin.length >= 6) return
 
         val newPin = pin + digit
         pin = newPin
-        savedMessage = false
 
         if (newPin.length == 6) {
-            cripto.salvar("neocalc_pin", newPin)
-            savedMessage = true
+            val savedPin = cripto.carregar("neocalc_pin")
+
+            if (savedPin.isEmpty()) {
+                // Primeiro uso: cadastra o PIN.
+                cripto.salvar("neocalc_pin", newPin)
+                status = "correct"
+            } else if (newPin == savedPin) {
+                status = "correct"
+            } else {
+                status = "wrong"
+            }
         }
     }
 
     fun deleteDigit() {
+        if (status == "correct" || status == "wrong") return
+
         if (pin.isNotEmpty()) {
             pin = pin.dropLast(1)
-            savedMessage = false
         }
     }
 
-    BackHandler(enabled = pin.isNotEmpty()) {
-        deleteDigit()
+    val dotColor = when (status) {
+        "correct" -> Color(0xFF36D66B)
+        "wrong" -> Color(0xFFFF453A)
+        else -> textColor
     }
 
     val titleArea: @Composable (Modifier) -> Unit = { modifier ->
@@ -196,34 +259,41 @@ private fun NeoCalcScreen(
             ) {
                 repeat(6) { index ->
                     Box(
-                        Modifier
+                        modifier = Modifier
                             .size(11.dp)
                             .clip(CircleShape)
                             .background(
-                                if (index < pin.length) textColor
+                                if (index < pin.length) dotColor
                                 else Color(0xFF383838)
                             )
                     )
                 }
             }
 
-            if (savedMessage) {
-                Spacer(Modifier.height(14.dp))
-                Text(
-                    text = "PIN salvo com segurança",
-                    color = secondaryColor,
-                    fontSize = 12.sp
-                )
-            }
-
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(18.dp))
 
             Text(
-                text = "Toque cinco vezes aqui para autenticar",
-                color = Color(0xFF626262),
+                text = when (status) {
+                    "correct" -> "PIN correto"
+                    "wrong" -> "PIN incorreto"
+                    else -> " "
+                },
+                color = when (status) {
+                    "correct" -> Color(0xFF36D66B)
+                    "wrong" -> Color(0xFFFF453A)
+                    else -> secondaryColor
+                },
+                fontSize = 13.sp
+            )
+
+            Spacer(Modifier.height(14.dp))
+
+            Text(
+                text = "Toque cinco vezes aqui para redefinir o PIN",
+                color = Color(0xFF777777),
                 fontSize = 11.sp,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.pointerInput(Unit) {
+                modifier = Modifier.pointerInput(resetSignal) {
                     detectTapGestures {
                         screenTaps++
                         if (screenTaps >= 5) {
@@ -233,6 +303,16 @@ private fun NeoCalcScreen(
                     }
                 }
             )
+
+            if (biometricError != null) {
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = biometricError,
+                    color = Color(0xFFFF453A),
+                    fontSize = 11.sp,
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
 
@@ -271,12 +351,17 @@ private fun NeoCalcScreen(
                             color = keyColor,
                             pressedColor = keyPressed,
                             textColor = textColor,
+                            enabled = status == "neutral",
                             onClick = { addDigit(number) }
                         )
                     }
                 }
 
-                Spacer(Modifier.height(if (landscape) 5.dp else 13.dp))
+                Spacer(
+                    Modifier.height(
+                        if (landscape) 4.dp else 13.dp
+                    )
+                )
             }
 
             Row(
@@ -302,6 +387,7 @@ private fun NeoCalcScreen(
                     color = keyColor,
                     pressedColor = keyPressed,
                     textColor = textColor,
+                    enabled = status == "neutral",
                     onClick = { addDigit("0") }
                 )
 
@@ -309,7 +395,10 @@ private fun NeoCalcScreen(
                     modifier = Modifier
                         .size(76.dp)
                         .clip(CircleShape)
-                        .clickable { deleteDigit() },
+                        .clickable(
+                            enabled = status == "neutral",
+                            onClick = { deleteDigit() }
+                        ),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -395,12 +484,11 @@ private fun NeoCalcKey(
     color: Color,
     pressedColor: Color,
     textColor: Color,
+    enabled: Boolean = true,
     onClick: () -> Unit
 ) {
-    var pressed by remember { mutableStateOf(false) }
-
     val animatedColor by animateColorAsState(
-        targetValue = if (pressed) pressedColor else color,
+        targetValue = color,
         label = "keyColor"
     )
 
@@ -408,10 +496,13 @@ private fun NeoCalcKey(
         modifier = Modifier
             .size(76.dp)
             .clip(CircleShape)
-            .background(animatedColor)
-            .clickable {
-                onClick()
-            },
+            .background(
+                if (enabled) animatedColor else Color(0xFF181818)
+            )
+            .clickable(
+                enabled = enabled,
+                onClick = onClick
+            ),
         contentAlignment = Alignment.Center
     ) {
         Column(

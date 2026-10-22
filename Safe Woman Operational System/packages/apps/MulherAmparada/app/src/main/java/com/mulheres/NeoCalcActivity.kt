@@ -1,6 +1,7 @@
 package com.mulheres
 
 import android.content.Context
+import androidx.compose.foundation.verticalScroll
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
@@ -153,11 +154,17 @@ private fun NeoCalcScreen() {
     var contadorToques by remember { mutableIntStateOf(0) }
     var ultimoToque by remember { mutableLongStateOf(0L) }
     val visorScroll = rememberScrollState()
+val visorScrollVertical = rememberScrollState()
 
+    
     LaunchedEffect(expr, mensagemTemporaria) {
-        delay(1)
-        visorScroll.scrollTo(visorScroll.maxValue)
-    }
+    delay(1)
+
+    visorScroll.scrollTo(visorScroll.maxValue)
+    visorScrollVertical.scrollTo(
+        visorScrollVertical.maxValue
+    )
+}
 
     fun atualizar() {
         mensagemTemporaria = null
@@ -377,26 +384,28 @@ private fun NeoCalcScreen() {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Box(
-                        modifier = Modifier
-                            .weight(0.9f)
-                            .fillMaxHeight()
-                            .pointerInput(Unit) {
-                                detectTapGestures {
-                                    registrarToque()
-                                }
-                            }
-                            .padding(start = 4.dp, end = 4.dp),
-                        contentAlignment = Alignment.CenterEnd
-                    ) {
-                        Text(
-                            text = mensagemTemporaria ?: expr.ifEmpty { "0" },
-                            color = cores.texto,
-                            fontSize = 36.sp,
-                            lineHeight = 40.sp,
-                            textAlign = TextAlign.End,
-                            maxLines = 3
-                        )
-                    }
+    modifier = Modifier
+        .weight(0.9f)
+        .fillMaxHeight()
+        .pointerInput(Unit) {
+            detectTapGestures {
+                registrarToque()
+            }
+        }
+        .padding(start = 4.dp, end = 4.dp)
+        .verticalScroll(visorScrollVertical)
+        .horizontalScroll(visorScroll),
+    contentAlignment = Alignment.CenterEnd
+) {
+    Text(
+        text = mensagemTemporaria ?: expr.ifEmpty { "0" },
+        color = cores.texto,
+        fontSize = 36.sp,
+        lineHeight = 40.sp,
+        textAlign = TextAlign.End,
+        softWrap = true
+    )
+}
 
                     Column(
                         modifier = Modifier

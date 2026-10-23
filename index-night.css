@@ -7,7 +7,9 @@
     src: url("font.ttf") format("truetype");
     font-weight: 400 800;
     font-display: swap;
-}
+
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;}
 
 /* =========================================================
    VARIÁVEIS

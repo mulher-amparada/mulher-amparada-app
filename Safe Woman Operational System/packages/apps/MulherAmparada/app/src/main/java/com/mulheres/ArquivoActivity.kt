@@ -582,6 +582,11 @@ val paddingHorizontal =
 
                 item {
 
+                    Spacer(
+                        modifier =
+                            Modifier.height(30.dp)
+                    )
+                    
                     TituloSecao(
                         titulo =
                             "Arquivos protegidos",

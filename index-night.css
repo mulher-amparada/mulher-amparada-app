@@ -1759,3 +1759,8 @@ footer .footer-bottom {
         animation-name: none !important;
     }
 }
+html,
+body {
+    overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
+}

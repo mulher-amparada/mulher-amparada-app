@@ -628,3 +628,8 @@ body.fade-out .container {
     }
 
 }
+html,
+body {
+    overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
+}

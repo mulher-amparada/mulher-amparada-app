@@ -869,3 +869,8 @@ margin-right: 1%;
                     none !important;
             }
         }
+html,
+body {
+    overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
+}

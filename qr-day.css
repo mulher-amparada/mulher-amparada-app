@@ -1001,3 +1001,8 @@ button:active {
     }
 
 }
+html,
+body {
+    overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
+}

@@ -595,7 +595,7 @@ val paddingHorizontal =
 
                     Spacer(
                         modifier =
-                            Modifier.height(4.dp)
+                            Modifier.height(15.dp)
                     )
                 }
 

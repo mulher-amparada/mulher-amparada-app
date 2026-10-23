@@ -121,7 +121,7 @@ class AssistenteActivity : AppCompatActivity() {
         val manager = BiometricManager.from(this)
 
         if (manager.canAuthenticate(autenticadores) != BiometricManager.BIOMETRIC_SUCCESS) {
-    startActivity(Intent(this, BioActivity::class.java))
+    startActivity(Intent(this, HubActivity::class.java))
     finish()
     return
 }

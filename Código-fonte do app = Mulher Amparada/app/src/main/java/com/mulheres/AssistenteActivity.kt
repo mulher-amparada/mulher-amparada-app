@@ -121,13 +121,10 @@ class AssistenteActivity : AppCompatActivity() {
         val manager = BiometricManager.from(this)
 
         if (manager.canAuthenticate(autenticadores) != BiometricManager.BIOMETRIC_SUCCESS) {
-            Toast.makeText(
-                this,
-                "Configure biometria ou bloqueio de tela nas configurações do dispositivo.",
-                Toast.LENGTH_LONG
-            ).show()
-            return
-        }
+    startActivity(Intent(this, BioActivity::class.java))
+    finish()
+    return
+}
 
         val biometricPrompt = BiometricPrompt(
             this,

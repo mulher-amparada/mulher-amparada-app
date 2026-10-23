@@ -49,6 +49,9 @@ https://coderlegion.com/31456/o-que-diferencia-o-mulher-amparada
 - 💻 CoderLegion — Safe Woman OS:
 https://coderlegion.com/31887/safe-woman-operational-system-experimento-de-aosp-feito-por-um-garoto-autista-de-15-anos
 
+- 💻 CoderLegion — Como um adolescente autista de nível 1 de suporte, aos 15 anos, criou o Mulher Amparada:
+https://coderlegion.com/32194/como-um-adolescente-autista-de-nivel-1-de-suporte-aos-15-anos-criou-o-mulher-amparada
+
 ### 🌱 Agregadores e referências:
 
 - ⚠️ Observatório Blockchain — link atualmente retorna erro 404:

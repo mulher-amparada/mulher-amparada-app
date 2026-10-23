@@ -55,6 +55,9 @@ https://coderlegion.com/31887/safe-woman-operational-system-experimento-de-aosp-
 - 💻 CoderLegion — Como um adolescente autista de nível 1 de suporte, aos 15 anos, criou o Mulher Amparada:
 https://coderlegion.com/32194/como-um-adolescente-autista-de-nivel-1-de-suporte-aos-15-anos-criou-o-mulher-amparada
 
+- 💻 CoderLegion — 📢 Comunicado sobre o tabnews!:
+https://coderlegion.com/32225/comunicado-sobre-o-tabnews
+
 ### 🌱 Agregadores e referências:
 
 - ⚠️ Observatório Blockchain — link atualmente retorna erro 404:

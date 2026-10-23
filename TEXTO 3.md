@@ -109,7 +109,7 @@ e também temos um agente que eu escolho manualmente qual ele vai ativar, se é 
 
 Na primeira página do site, tem um botão de pânico que liga para o 180 e usa o tel: do navegador para abrir o telefone nativo do celular com esse número já discado!
 
-embaixo, tem um botão que leva pro repositório 
+embaixo, tem um botão que leva pro financas md, depois pro leis md, depois pro readme md, e depois pro suport md
 
 depois um gerador de qr code
 
@@ -120,6 +120,8 @@ depois uma página com imagens dos apks de todas as versões do app (só as imag
 o nome verdadeiro do app = Mulher Amparada Pela Liberdade Feminina 
 
 E uma página mostrando o trabalho de uma mulher empoderada (e eu estava mostrando sobre as vendas dela, para dizer que todas as mulheres podem crescer!, e ela não tem relação com a questão do projeto ser gratuito, essa página é algo separado, o app ainda é totalmente grátis!)
+
+e depois o conteúdo do readme em convertido para html!
 
 e as páginas desse site estão indexadas no google search console também!
 
@@ -214,44 +216,3 @@ Em:
 E também as barras tanto de status tanto de navegação são transparentes, porém o fundo atrás do WebView e preto, espaçado dos lados e de cima e com um raio de borda!, e o webview não fica mais embaixo das duas barras, ele respeita elas!
 
 ----
-
-### Sobre como foi escrito o texto do biometricPrompt do app:
-
-- HubActivity:
-
-#### Disfarce da calculadora:
-
-**Título:**
-> Confirmar identidade
-
-**Subtítulo:**
-> Use o bloqueio de tela do dispositivo
-
-**Descrição:**
-> Confirme sua identidade para redefinir a senha.
-
-**Método:** somente `DEVICE_CREDENTIAL`.
-
-#### Área protegida:
-
-**Título:**
->Desbloquear a área protegida
-
-**Descrição:**
->🌸 Apenas a usuária cadastrada pode acessar este local
-
-#### Área do amparo:
-
-**Título:**
-
->Desbloquear o espaço do amparo
-
-**Descrição:**
-
->🌸 Acesso protegido por biometria
-
-#### E nos dois tem embaixo (Use sua impressão digital., Usar o reconhecimento facial.)
-
-O método de autenticação é definido pelo próprio Android de acordo com os autenticadores disponíveis no dispositivo, utilizando "BIOMETRIC_WEAK" e "DEVICE_CREDENTIAL".
-
-

@@ -8,8 +8,7 @@
     font-weight: 400 800;
     font-display: swap;
 
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;}
+}
 
 /* =========================================================
    VARIÁVEIS
@@ -63,7 +62,6 @@
     margin: 0;
     padding: 0;
 
-    -webkit-tap-highlight-color: transparent;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 }
@@ -117,7 +115,6 @@ body {
 
 button,
 a {
-    -webkit-tap-highlight-color: transparent;
 }
 
 button:focus-visible,
@@ -1507,7 +1504,6 @@ footer .footer-bottom {
         inset 0 1px 0 rgba(255, 255, 255, 0.22);
 
     cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
 
     transition:
         transform 220ms ease,

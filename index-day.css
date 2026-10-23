@@ -18,8 +18,7 @@
         swap;
 
 
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;}
+}
 
 
 /* =========================================================
@@ -2623,7 +2622,6 @@ body {
         inset 0 1px 0 rgba(255, 255, 255, 0.22);
 
     cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
 
     transition:
         transform 220ms ease,

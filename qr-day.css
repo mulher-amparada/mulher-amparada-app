@@ -10,8 +10,7 @@
 
     font-display: swap;
 
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;}
+}
 
 
 /* =========================================================
@@ -59,7 +58,6 @@ body {
 
     overflow-x: hidden;
 
-    -webkit-tap-highlight-color: transparent;
 
     animation:
         fadeUp .75s ease both;

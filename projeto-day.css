@@ -7,9 +7,7 @@
     src: url("font.ttf") format("truetype");
     font-display: swap;
 
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;}
-
+}
 
 /* =========================================================
    RESET
@@ -23,7 +21,6 @@
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 
-    -webkit-tap-highlight-color: transparent;
 }
 
 

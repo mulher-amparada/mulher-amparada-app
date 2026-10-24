@@ -8,7 +8,7 @@ https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Pro
 
 # 🩸 Sofrimento das mulheres:
 
-<img src="https://raw.githubusercontent.com/mulher-amparada/mulher-amparada-app/main/relatorios/graficos/ligue180-2019.png" alt="Gráfico do Ligue 180 — 2019" width="100%" />
+<img src="https://github.com/mulher-amparada/mulher-amparada-app/blob/code/dados/processados/ligue180-2019-processado.csv" alt="Gráfico do Ligue 180 — 2019" width="100%" />
 
 # 🎙️ O Pronunciamento das Juízas: "A Lei é o Seu Escudo":
 

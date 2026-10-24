@@ -76,6 +76,9 @@ Se eu errar, me diga. Eu ajusto.
 
 ----
 
+> Agora, na branch main, temos apenas os arquivos markdown, os arquivos dos sites e toda a pasta (.github), todo o resto está na branch code!, e nela também tem toda a pasta .github, menos o dependabot!
+----
+
 # 📚 Informações do projeto:
 
 Nesta seção, você encontrará informações sobre a finalização do projeto, nossas contribuições e dados relacionados ao sofrimento das mulheres.

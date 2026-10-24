@@ -1,9 +1,9 @@
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 public class Automacao {
 
@@ -16,27 +16,6 @@ public class Automacao {
 
     private static final HttpClient CLIENT =
         HttpClient.newHttpClient();
-
-    private static String obterToken() {
-        String tokenBase64 = System.getenv("GH_TOKEN_B64");
-
-        if (tokenBase64 == null || tokenBase64.isBlank()) {
-            throw new IllegalStateException(
-                "Configure o segredo GH_TOKEN_B64 no GitHub."
-            );
-        }
-
-        try {
-            return new String(
-                Base64.getDecoder().decode(tokenBase64),
-                StandardCharsets.UTF_8
-            ).trim();
-        } catch (IllegalArgumentException e) {
-            throw new IllegalStateException(
-                "O segredo GH_TOKEN_B64 não contém Base64 válido."
-            );
-        }
-    }
 
     private static void executar(
             String token,
@@ -70,13 +49,17 @@ public class Automacao {
             );
         }
 
-        System.out.println(
-            "Workflow solicitado: " + workflow
-        );
+        System.out.println("Workflow solicitado: " + workflow);
     }
 
     public static void main(String[] args) throws Exception {
-        String token = obterToken();
+        String token = System.getenv("GH_TOKEN");
+
+        if (token == null || token.isBlank()) {
+            throw new IllegalStateException(
+                "Configure o segredo GH_TOKEN no GitHub."
+            );
+        }
 
         executar(
             token,
@@ -90,8 +73,6 @@ public class Automacao {
             "{}"
         );
 
-        System.out.println(
-            "Solicitações de automação enviadas."
-        );
+        System.out.println("Solicitações enviadas.");
     }
 }

@@ -238,7 +238,7 @@ Copia os arquivos disponíveis em `simulation/` para a pasta `Resultados da comp
 
 Se a pasta não existir, ela será criada. Se já existir, os novos arquivos serão mesclados aos existentes, sem apagar os demais arquivos da pasta.
 
-Quando houver alterações, o workflow cria um commit e tenta enviá-lo para a `main`.
+Quando houver alterações, o workflow cria um commit e tenta enviá-lo para a `code`.
 
 Além disso, publica os arquivos de `simulation/` como um artefato chamado `Safe-Woman-OS-Simulacao` no GitHub Actions.
 

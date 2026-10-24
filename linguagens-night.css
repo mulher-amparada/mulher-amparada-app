@@ -674,6 +674,18 @@
     background-color: #cec327;
 }
 
+/* TypeScript */
+.language-typescript .dot,
+.dot.language-typescript,
+.language-typescript.bar-segment,
+.bar-segment.language-typescript,
+[data-language="TypeScript"] .dot,
+.dot[data-language="TypeScript"],
+[data-language="TypeScript"] .bar-segment,
+.bar-segment[data-language="TypeScript"] {
+    background-color: #ce2771;
+}
+
 /* XML */
 .language-xml .dot,
 .dot.language-xml,

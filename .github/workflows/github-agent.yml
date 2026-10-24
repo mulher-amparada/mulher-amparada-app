@@ -120,7 +120,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 
+      - name: Baixar arquivos da code
+        uses: actions/checkout@v7
+        with:
+          ref: code
+          path: codigo-code
+          
       - name: Validar QR Codes das Imagens
+        working-directory: codigo-code
+        shell: bash
         run: |
+          set -euo pipefail
           chmod +x ./executar-validacao.sh
           ./executar-validacao.sh

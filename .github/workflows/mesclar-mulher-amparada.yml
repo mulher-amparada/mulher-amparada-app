@@ -14,6 +14,7 @@ jobs:
       - name: Checkout completo
         uses: actions/checkout@v7
         with:
+          ref: code
           fetch-depth: 0
           submodules: false
 
@@ -46,7 +47,7 @@ jobs:
           find "Safe Woman Operational System/packages/apps/MulherAmparada" \
             -type f | sort
 
-      - name: Commit na main
+      - name: Commit na code
         run: |
           set -e
 
@@ -64,7 +65,7 @@ jobs:
           git commit \
             -m "Mesclar código da Mulher Amparada ao Safe Woman OS"
 
-          git fetch origin main
-          git rebase origin/main
+          git fetch origin code
+          git rebase origin/code
 
-          git push origin HEAD:main
+          git push origin HEAD:code

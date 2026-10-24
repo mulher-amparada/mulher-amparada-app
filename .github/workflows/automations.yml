@@ -1235,7 +1235,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
-          ref: code
+          ref: main
           
       - name: Atualizar total de commits
         run: |

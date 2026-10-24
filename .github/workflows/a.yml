@@ -1,0 +1,42 @@
+name: 📂 Mover commits para code
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  mover-commits:
+    name: 📦 Mover pasta commits
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Baixar repositório
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: 🔄 Configurar Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: 📂 Mover commits da main para code
+        run: |
+          git fetch origin main code
+
+          git checkout origin/main -- commits/
+
+          git switch -C code origin/code
+
+          git checkout origin/main -- commits/
+
+          git rm -r commits/
+          git add commits/ || true
+
+          if [ -d commits ]; then
+            git commit -m "chore: mover pasta commits para code"
+            git push origin code
+          fi

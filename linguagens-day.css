@@ -568,6 +568,18 @@
     background-color: #ce27b7;
 }
 
+/* Java */
+.language-java .dot,
+.dot.language-java,
+.language-java.bar-segment,
+.bar-segment.language-java,
+[data-language="Java"] .dot,
+.dot[data-language="Java"],
+[data-language="Java"] .bar-segment,
+.bar-segment[data-language="Java"] {
+    background-color: #8127ce;
+}
+
 /* JavaScript */
 .language-javascript .dot,
 .dot.language-javascript,

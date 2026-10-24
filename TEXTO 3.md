@@ -102,6 +102,8 @@ O workflow automatiza tarefas de compilação, análise, documentação, publica
 
 e também temos um agente que eu escolho manualmente qual ele vai ativar, se é o dependabot por meio de um yml que faz a solicitação, ou o proprio automations..., e eu escolho a branch também!, e ele também usa o typescript e bash para validar o qr code de todas as imagens!
 
+e temos o atualizar-repo yml, ele ativa o yml do dependabot, do automations e do agente, usando o java!
+
 ```
 
 

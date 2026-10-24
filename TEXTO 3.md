@@ -82,6 +82,8 @@ Publicação pelo Mulher Amparada Bot:
 
 O job "salvar-na-main" baixa os artifacts gerados pelos outros jobs, compila o publicador em C++ e utiliza as credenciais de um GitHub App para publicar os arquivos na branch "main".
 
+embora ele salve em todas as branches...
+
 mesclar-mulher-amparada:
     
 ele aoenas chama outro workflow que pega todo o codigo-fonte do app do mulher amparada e copia e mescla para o nosso sistema operacional (que contém só uma pequena parte de todo o AOSP!)

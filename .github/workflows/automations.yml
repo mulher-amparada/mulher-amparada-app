@@ -764,7 +764,7 @@ jobs:
     steps:
       - name: Baixar repositório completo
         run: |
-    git fetch --all --prune
+         git fetch --all --prune
         uses: actions/checkout@v7
         with:
           fetch-depth: 0

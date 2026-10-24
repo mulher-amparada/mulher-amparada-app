@@ -566,6 +566,18 @@
     background-color: #ce27b7;
 }
 
+/* JavaScript */
+.language-javascript .dot,
+.dot.language-javascript,
+.language-javascript.bar-segment,
+.bar-segment.language-javascript,
+[data-language="JavaScript"] .dot,
+.dot[data-language="JavaScript"],
+[data-language="JavaScript"] .bar-segment,
+.bar-segment[data-language="JavaScript"] {
+    background-color: #4627ce;
+}
+
 /* Julia */
 .language-julia .dot,
 .dot.language-julia,

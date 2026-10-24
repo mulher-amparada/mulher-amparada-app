@@ -396,6 +396,66 @@
   </main>
 
     <script src="linguagens.js"></script>
+
+<script id="AUTO-LINGUAGENS-CORES-V1">
+(() => {
+  const slug = name => name.normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .toLowerCase() || "linguagem";
+
+  const aplicar = (elemento, nome) => {
+    if (!elemento || !nome) return;
+    elemento.classList.add("language-" + slug(nome));
+    elemento.dataset.language = nome;
+  };
+
+  const legenda = [...document.querySelectorAll(".legend-item")];
+  const nomes = [];
+
+  legenda.forEach(item => {
+    const strong = item.querySelector("strong");
+    if (!strong) return;
+
+    const nome = strong.textContent.trim();
+    if (!nome) return;
+
+    nomes.push(nome);
+    aplicar(item, nome);
+    aplicar(item.querySelector(".dot"), nome);
+  });
+
+  document.querySelectorAll("tbody tr").forEach(row => {
+    const elemento = row.querySelector(".language");
+    if (!elemento) return;
+
+    const nome = elemento.textContent.trim();
+    if (!nome) return;
+
+    aplicar(row, nome);
+    aplicar(elemento, nome);
+    aplicar(elemento.querySelector(".dot"), nome);
+  });
+
+  const segmentos = [
+    ...document.querySelectorAll(".bar-segment")
+  ];
+
+  segmentos.forEach((segmento, indice) => {
+    const nome = segmento.dataset.language ||
+      segmento.getAttribute("aria-label") ||
+      segmento.getAttribute("title");
+
+    if (nome) {
+      aplicar(segmento, nome.trim());
+    } else if (nomes[indice]) {
+      aplicar(segmento, nomes[indice]);
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
 

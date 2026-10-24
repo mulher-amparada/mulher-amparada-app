@@ -80,9 +80,7 @@ Basicamente é um job que faz auto-merge de todas as pull request do dependabot,
 
 Publicação pelo Mulher Amparada Bot:
 
-O job "salvar-na-main" baixa os artifacts gerados pelos outros jobs, compila o publicador em C++ e utiliza as credenciais de um GitHub App para publicar os arquivos na branch "main".
-
-embora ele salve em todas as branches...
+O job "salvar-nas-branches" baixa os artifacts gerados pelos outros jobs, compila o publicador em C++ e utiliza as credenciais de um GitHub App para publicar os arquivos na branch "main".
 
 mesclar-mulher-amparada:
     

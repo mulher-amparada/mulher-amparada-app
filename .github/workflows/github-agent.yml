@@ -2,7 +2,6 @@ name: 👾Agente do Mulher Amparada👾
 
 on:
   workflow_dispatch:
-
     inputs:
       action:
         description: Ação do agente
@@ -116,12 +115,12 @@ jobs:
             exit 1
           fi
 
-    - name: Instalar Dependências de Sistema para Imagem
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+      - name: Instalar Dependências de Sistema para Imagem
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 
-    - name: Validar QR Codes das Imagens
-      run: |
-        chmod +x ./executar-validacao.sh
-        ./executar-validacao.sh
+      - name: Validar QR Codes das Imagens
+        run: |
+          chmod +x ./executar-validacao.sh
+          ./executar-validacao.sh

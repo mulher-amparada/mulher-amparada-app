@@ -762,12 +762,19 @@ jobs:
       - publicar-divulgacao
 
     steps:
+
       - name: Baixar repositório completo
-        run: |
-         git fetch --all --prune
-       - uses: actions/checkout@v7
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
+      - name: Buscar todas as branches remotas
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --all --prune
+          git branch -r
+
           
           
       - name: Instalar cloc

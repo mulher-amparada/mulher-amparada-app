@@ -24,15 +24,11 @@
     href="https://mulher-amparada.github.io/mulher-amparada-app/"
 >
 
-
-
 <meta charset="UTF-8" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <meta name="description" content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência." />
-
-
 
 <title />Mulher Amparada</title>
 
@@ -41,17 +37,13 @@
 
 </head>
 
-
 <body>
 
-
 <main class="page">
-
 
     <!-- =====================================================
          TOPO
     ====================================================== -->
-
 
     <!-- =====================================================
          CARD PRINCIPAL
@@ -59,31 +51,25 @@
 
     <section class="app">
 
-
         <img
             class="app-image"
             src="user1.png"
             alt="Mulher Amparada"
         >
 
-
         <div class="app-content">
-
 
             <h1 class="app-title">
                 ✅️Mulher Amparada
             </h1>
 
-
             <p class="author">
                 mulher-amparada
             </p>
 
-
             <p class="category">
                 Segurança e proteção
             </p>
-
 
             <div class="rating">
 
@@ -97,13 +83,9 @@
 
             </div>
 
-
         </div>
 
-
     </section>
-
-
 
     <!-- =====================================================
          DOWNLOAD
@@ -113,21 +95,17 @@
 
 <a class="download" href="https://github.com/mulher-amparada/mulher-amparada-app/releases/download/app/app-debug-assinado.apk" onclick="event.preventDefault(); baixarArquivo(this.href);">
 
-
             Baixar e instalar
 
         </a>
 
     </div>
 
-
-
     <!-- =====================================================
          SUMMARY
     ====================================================== -->
 
     <section class="summary">
-
 
         <div class="summary-item">
 
@@ -141,7 +119,6 @@
 
         </div>
 
-
         <div class="summary-item">
 
             <strong class="summary-value">
@@ -153,7 +130,6 @@
             </span>
 
         </div>
-
 
         <div class="summary-item">
 
@@ -167,11 +143,7 @@
 
         </div>
 
-
-
     </section>
-
-
 
     <!-- =====================================================
          SOBRE
@@ -179,11 +151,9 @@
 
     <section class="section">
 
-
         <h2 class="section-title">
             Sobre este app:
         </h2>
-
 
         <p class="section-text">
 
@@ -192,7 +162,6 @@
             para Android.
 
         </p>
-
 
         <div class="tags">
 
@@ -214,10 +183,7 @@
 
         </div>
 
-
     </section>
-
-
 
     <!-- =====================================================
          INFORMAÇÕES
@@ -225,14 +191,11 @@
 
     <section class="section">
 
-
         <h2 class="section-title">
             Informações do app:
         </h2>
 
-
         <div class="details">
-
 
             <div class="detail">
 
@@ -246,7 +209,6 @@
 
             </div>
 
-
             <div class="detail">
 
                 <span class="detail-title">
@@ -259,7 +221,6 @@
 
             </div>
 
-
             <div class="detail">
 
                 <span class="detail-title">
@@ -271,7 +232,6 @@
                 </strong>
 
             </div>
-
 
             <div class="detail">
 
@@ -297,13 +257,9 @@
 
             </div>
 
-
         </div>
 
-
     </section>
-
-
 
     <!-- =====================================================
          DESENVOLVEDOR
@@ -311,14 +267,11 @@
 
     <section class="section">
 
-
         <h2 class="section-title">
             Desenvolvedor:
         </h2>
 
-
         <div class="developer">
-
 
             <div>
 
@@ -332,18 +285,13 @@
 
             </div>
 
-
             <span class="github">
                 GitHub
             </span>
 
-
         </div>
 
-
     </section>
-
-
 
     <!-- =====================================================
          SEGURANÇA
@@ -351,14 +299,11 @@
 
     <section class="section">
 
-
         <div class="security">
-
 
             <div class="security-mark">
                 ✓
             </div>
-
 
             <div>
 
@@ -373,13 +318,9 @@
 
             </div>
 
-
         </div>
 
-
     </section>
-
-
 
     <footer>
 
@@ -387,93 +328,8 @@
 
     </footer>
 
-
 </main>
 
-<script>
-function baixarArquivo(url) {
-
-    const overlay = document.createElement("div");
-
-    overlay.className = "download-overlay";
-
-    overlay.innerHTML = `
-        <div class="download-popup">
-
-            <h2>Antes de instalar</h2>
-
-            <p>
-                Para sua proteção, o aplicativo será instalado
-                com o nome <strong>"Assistente de saúde"</strong>
-                e utilizará um ícone correspondente.
-            </p>
-
-            <div class="aviso">
-                A primeira página do aplicativo contém informações
-                fictícias usadas apenas para a apresentação do app.
-                Elas não representam dados reais.
-            </div>
-
-            <div class="download-botoes">
-
-                <button
-                    class="download-cancelar"
-                    onclick="this.closest('.download-overlay').remove()"
-                >
-                    Cancelar
-                </button>
-
-                <button
-                    class="download-confirmar"
-                    onclick="confirmarDownload('${url.replace(/'/g, "\\'")}')"
-                >
-                    Continuar
-                </button>
-
-            </div>
-
-        </div>
-    `;
-
-    document.body.appendChild(overlay);
-}
-
-function confirmarDownload(url) {
-    window.location.href = url;
-}
-</script>
-
-<script>
-(function () {
-
-    const cssClaro = "download-day.css";
-    const cssEscuro = "download-night.css";
-
-    const link = document.createElement("link");
-
-    link.rel = "stylesheet";
-    link.id = "tema-css";
-
-    document.head.appendChild(link);
-
-    function aplicarTema() {
-
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-            link.href = cssEscuro;
-        } else {
-            link.href = cssClaro;
-        }
-
-    }
-
-    aplicarTema();
-
-    const sistema = window.matchMedia("(prefers-color-scheme: dark)");
-
-    sistema.addEventListener("change", aplicarTema);
-
-})();
-</script>
-
+    <script src="download.js"></script>
 </body>
 </html>

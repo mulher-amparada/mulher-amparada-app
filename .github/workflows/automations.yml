@@ -45,6 +45,7 @@ jobs:
       - name: Baixar código
         uses: actions/checkout@v7
         with:
+          ref: code
           fetch-depth: 1
 
 
@@ -355,32 +356,29 @@ jobs:
 
 
       # =========================================================
-      # ATUALIZAR APK NO MAIN
+      # ATUALIZAR APK NO CODE
       # =========================================================
 
-      - name: Atualizar APK no main
+      - name: Atualizar APK na code
         run: |
-
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           TARGET="${App1_DIR}/app-release.apk"
 
-          cp "$GITHUB_WORKSPACE/$RELEASE_APK_NAME" "$TARGET"
+          git fetch origin code
+          git reset --hard origin/code
 
-          git fetch origin main
-
-          git reset --hard origin/main
-
+          mkdir -p "$(dirname "$TARGET")"
           cp "$GITHUB_WORKSPACE/$RELEASE_APK_NAME" "$TARGET"
 
           git add "$TARGET"
 
           if git diff --cached --quiet; then
-            echo "APK já está atualizado."
+            echo "APK já está atualizado na code."
           else
             git commit -m "Atualizar APK assinado [skip ci]"
-            git push origin main
+            git push origin HEAD:code
           fi
 
 
@@ -768,7 +766,8 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
-
+          ref: code
+          
       - name: Instalar cloc
         run: |
           set -euo pipefail
@@ -1100,6 +1099,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 1
+          ref: code
 
       - name: Instalar Julia
         uses: julia-actions/setup-julia@v3
@@ -1226,7 +1226,8 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
-
+          ref: code
+          
       - name: Atualizar total de commits
         run: |
           TOTAL=$(git rev-list --all --count)
@@ -1330,7 +1331,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 1
-          ref: main
+          ref: code
 
       - name: Gerar Sitemap
         uses: cicirello/generate-sitemap@v1
@@ -1363,6 +1364,7 @@ jobs:
       - name: Enviar Sitemap ao IndexNow
         uses: bojieyang/indexnow-action@v3
         with:
+          ref: code
           sitemap-location: https://mulher-amparada.github.io/mulher-amparada-app/sitemap.xml
           key: ${{ secrets.INDEXNOW_KEY }}
 
@@ -1381,6 +1383,7 @@ jobs:
       - name: Lighthouse
         uses: treosh/lighthouse-ci-action@v12
         with:
+          ref: code
           urls: |
             https://mulher-amparada.github.io/mulher-amparada-app/
           uploadArtifacts: true
@@ -1402,7 +1405,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 1
-          ref: main
+          ref: code
 
       - name: Configurar Node.js
         uses: actions/setup-node@v7
@@ -1437,7 +1440,8 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
-
+          ref: code
+          
       - name: Instalar dependências do Observatório
         run: |
           set -e
@@ -1564,7 +1568,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
-          ref: main
+          ref: code
 
       - name: Instalar Ruby
         uses: ruby/setup-ruby@v1
@@ -1597,7 +1601,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 1
-          ref: main
+          ref: code
 
       - name: Instalar PHP
         run: |
@@ -1639,7 +1643,7 @@ jobs:
   # =========================================================
 
   salvar-na-main:
-    name: 💾Salvar artifacts na main pelo Mulher Amparada Bot
+    name: 💾 Salvar artifacts na code pelo Mulher Amparada Bot
     runs-on: ubuntu-24.04
     needs:
       - build
@@ -1657,7 +1661,6 @@ jobs:
         needs.build.result == 'success' &&
         needs.linguagens.result == 'success' &&
         needs.bot.result == 'success' &&
-        
         needs.atualizar-commits.result == 'success' &&
         needs.sitemap.result == 'success' &&
         needs.atualizar-footer.result == 'success' &&
@@ -1675,6 +1678,14 @@ jobs:
         uses: actions/checkout@v7
         with:
           ref: main
+          path: main
+          fetch-depth: 0
+
+      - name: Baixar código-fonte da code
+        uses: actions/checkout@v7
+        with:
+          ref: code
+          path: code
           fetch-depth: 0
 
       - name: Baixar todos os artifacts desta execução
@@ -1688,7 +1699,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          WORKFLOW=".github/workflows/automations.yml"
+          WORKFLOW="code/.github/workflows/automations.yml"
 
           if [[ ! -f "$WORKFLOW" ]]; then
             echo "::error::Workflow não encontrado: $WORKFLOW"
@@ -1714,13 +1725,12 @@ jobs:
           g++ -std=c++17 -g -O1 \
             -fsanitize=address,undefined \
             -fno-omit-frame-pointer \
-            tools/automation_bot.cpp \
+            code/tools/automation_bot.cpp \
             -o "$RUNNER_TEMP/automation_bot" \
             $(pkg-config --cflags --libs libcurl openssl)
 
-      - name: Publicar na main pelo GitHub App
+      - name: Publicar arquivos na main e na code pelo GitHub App
         shell: bash
-        
         env:
           GH_TOKEN: ${{ github.token }}
           MULHER_AMPARADA_APP_ID: ${{ secrets.MULHER_AMPARADA_APP_ID }}
@@ -1729,7 +1739,7 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_RUN_ID: ${{ github.run_id }}
           GITHUB_WORKSPACE: ${{ github.workspace }}
-          MULHER_AMPARADA_ARTIFACT_MAP: "arquivo-readme:.;arquivo-sitemap:.;arquivo-footer:.;arquivos-relatorio-commits:commits;arquivos-pesquisas:pesquisas;observatorio:docs/observatorio;resultados-ligue180:.;relatorio-linguagens:."
+          MULHER_AMPARADA_ARTIFACT_MAP: "arquivo-readme:main;arquivo-sitemap:code;arquivo-footer:code;arquivos-relatorio-commits:code/commits;arquivos-pesquisas:code/pesquisas;observatorio:code/docs/observatorio;resultados-ligue180:code;relatorio-linguagens:code"
         run: |
           set -euo pipefail
           "$RUNNER_TEMP/automation_bot"

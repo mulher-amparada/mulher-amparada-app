@@ -100,7 +100,7 @@ Resultado final:
 
 O workflow automatiza tarefas de compilação, análise, documentação, publicação e manutenção do projeto. Ao final, o Mulher-Amparada-Bot grava os artifacts na branch "main", conforme as dependências e condições definidas no workflow.
 
-e também temos um agente que eu escolho manualmente qual ele vai ativar, se é o dependabot por meio de um yml que faz a solicitação, ou o proprio automations..., e eu escolho a branch também!
+e também temos um agente que eu escolho manualmente qual ele vai ativar, se é o dependabot por meio de um yml que faz a solicitação, ou o proprio automations..., e eu escolho a branch também!, e ele também usa o typescript e bash para validar o qr code de todas as imagens!
 
 ```
 

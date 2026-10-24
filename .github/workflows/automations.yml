@@ -1080,7 +1080,7 @@ jobs:
           echo "Todos os arquivos foram validados."
 
       # =======================================================
-      # ENVIAR ARTIFACT PARA SALVAR-NA-MAIN
+      # ENVIAR ARTIFACT PARA salvar-nas-branches
       # =======================================================
 
       - name: Enviar relatórios, CSS e HTML como artifact
@@ -1651,7 +1651,7 @@ jobs:
   # SALVAR NA BRANCH MAIN
   # =========================================================
 
-  salvar-na-main:
+  salvar-nas-branches:
     name: 💾 Salvar artifacts nas branches pelo Mulher Amparada Bot
     runs-on: ubuntu-24.04
     needs:

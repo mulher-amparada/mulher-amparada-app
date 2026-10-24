@@ -1652,7 +1652,7 @@ jobs:
   # =========================================================
 
   salvar-na-main:
-    name: 💾 Salvar artifacts na code pelo Mulher Amparada Bot
+    name: 💾 Salvar artifacts nas branches pelo Mulher Amparada Bot
     runs-on: ubuntu-24.04
     needs:
       - build

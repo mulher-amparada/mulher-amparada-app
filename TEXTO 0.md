@@ -4,7 +4,7 @@ https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Pro
 
 # 👾Nossas contribuições!:
 
-<img src="https://raw.githubusercontent.com/mulher-amparada/mulher-amparada-app/main/docs/observatorio/observatorio-001.png" alt="Observatório do Mulher Amparada" width="100%" />
+<img src="https://github.com/mulher-amparada/mulher-amparada-app/blob/code/docs/observatorio/observatorio-001.png" alt="Observatório do Mulher Amparada" width="100%" />
 
 # 🩸 Sofrimento das mulheres:
 

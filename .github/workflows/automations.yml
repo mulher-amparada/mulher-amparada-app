@@ -1117,7 +1117,7 @@ jobs:
       - name: Executar análise de dados em Julia
         run: |
           set -euo pipefail
-          julia --project=. src/main.jl
+          julia --project=. src/code.jl
 
       - name: Validar e preparar resultados
         shell: bash

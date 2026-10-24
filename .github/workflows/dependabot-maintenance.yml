@@ -1,0 +1,52 @@
+name: Dependabot Maintenance
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: Ação de manutenção
+        required: true
+        type: choice
+        options:
+          - rebase
+        default: rebase
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  maintain:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Solicitar rebase dos PRs do Dependabot
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const { data: prs } = await github.rest.pulls.list({
+              owner,
+              repo,
+              state: "open",
+              per_page: 100
+            });
+
+            const dependabotPRs = prs.filter(pr =>
+              pr.user?.login === "dependabot[bot]"
+            );
+
+            if (dependabotPRs.length === 0) {
+              core.info("Nenhum pull request aberto do Dependabot foi encontrado.");
+              return;
+            }
+
+            for (const pr of dependabotPRs) {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: pr.number,
+                body: "@dependabot rebase"
+              });
+              core.info(`Solicitado rebase do PR #${pr.number}`);
+            }

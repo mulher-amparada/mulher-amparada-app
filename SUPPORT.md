@@ -7,12 +7,6 @@ Central de links oficiais, divulgação e referências públicas do projeto Mulh
 - 🌷 Tumblr — Mulher Amparada: um projeto gratuito e livre de anúncios:
   https://www.tumblr.com/mulheramparada/829407067773255680/mulher-amparada-um-projeto-gratuito-e-livre
 
-- 📰 Blogger — Links do Projeto Mulher Amparada:
-  https://mulheramparada.blogspot.com/2026/10/projeto-mulher-amparada-links.html?m=1
-  
-- 📰 Blogger —  Este aplicativo tem 15 anos de idade, mas não estou falando da versão:
-https://mulheramparada.blogspot.com/2026/10/este-aplicativo-tem-15-anos-de-idade.html?m=1
-
 - 🗞 WordPress — Adolescente autista nível 1 de suporte de 15 anos desenvolve o projeto Mulher Amparada, voltado à proteção e ao apoio às mulheres:
 https://mulheramparada.wordpress.com/2026/10/23/adolescente-autista-nivel-1-de-suporte-de-15-anos-desenvolve-o-projeto-mulher-amparada-voltado-a-protecao-e-ao-apoio-as-mulheres/
 

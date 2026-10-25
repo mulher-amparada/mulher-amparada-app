@@ -1,0 +1,94 @@
+name: Organizar e sincronizar código do app
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Código-fonte do app = Mulher Amparada/**'
+      - '.github/workflows/sincronizar-app.yml'
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sincronizar-mulher-amparada
+  cancel-in-progress: false
+
+jobs:
+  sincronizar:
+    name: Organizar e atualizar arquivos
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verificar pasta de origem
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ORIGEM="Código-fonte do app = Mulher Amparada"
+
+          if [ ! -d "$ORIGEM" ]; then
+            echo "::error::Pasta de origem não encontrada: $ORIGEM"
+            exit 1
+          fi
+
+          if [ -z "$(find "$ORIGEM" -mindepth 1 -print -quit)" ]; then
+            echo "::error::A pasta de origem está vazia."
+            exit 1
+          fi
+
+      - name: Copiar e sobrescrever arquivos
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ORIGEM="Código-fonte do app = Mulher Amparada"
+          DESTINO="Safe Woman Operational System/packages/apps/MulherAmparada"
+
+          mkdir -p "$DESTINO"
+
+          cp -a "$ORIGEM/." "$DESTINO/"
+
+          echo "Arquivos copiados e atualizados."
+          echo "Os arquivos exclusivos do destino foram preservados."
+
+      - name: Verificar alterações
+        id: alteracoes
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if git diff --quiet -- \
+            "Safe Woman Operational System/packages/apps/MulherAmparada" \
+            && [ -z "$(git ls-files --others --exclude-standard -- \
+              "Safe Woman Operational System/packages/apps/MulherAmparada")" ]; then
+            echo "mudou=false" >> "$GITHUB_OUTPUT"
+            echo "Nenhuma alteração encontrada."
+          else
+            echo "mudou=true" >> "$GITHUB_OUTPUT"
+            echo "Alterações encontradas."
+          fi
+
+      - name: Salvar alterações no GitHub
+        if: steps.alteracoes.outputs.mudou == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add -A -- \
+            "Safe Woman Operational System/packages/apps/MulherAmparada"
+
+          git commit -m "Sincronizar código do app Mulher Amparada"
+          git push origin HEAD:main

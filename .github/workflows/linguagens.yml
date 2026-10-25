@@ -9,6 +9,7 @@ on:
       - '.github/workflows/linguagens.yml'
 
   workflow_dispatch:
+
   schedule:
     - cron: '0 6 * * 1'
 
@@ -23,392 +24,158 @@ jobs:
   analisar:
     name: Analisar linguagens da main
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
 
     steps:
-      - name: Baixar repositório completo
+      - name: Baixar repositório
         uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 0
 
-      - name: Instalar ferramentas de análise
+      - name: Instalar dependências do Linguist
         run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            cloc \
-            jq \
-            python3
+          set -euo pipefail
 
-      - name: Analisar arquivos e gerar relatórios
+          sudo apt-get update
+
+          sudo apt-get install -y \
+            ruby-full \
+            build-essential \
+            cmake \
+            pkg-config \
+            libicu-dev \
+            zlib1g-dev \
+            libcurl4-openssl-dev \
+            libssl-dev \
+            jq
+
+      - name: Instalar GitHub Linguist
+        run: |
+          set -euo pipefail
+          gem install github-linguist --no-document
+
+      - name: Analisar linguagens do repositório
         shell: bash
         run: |
           set -euo pipefail
 
           mkdir -p relatorios
 
-          python3 <<'PY'
-          import os
-          import json
-          import subprocess
-          from pathlib import Path
-          from collections import Counter, defaultdict
-          from datetime import datetime, timezone
+          github-linguist \
+            --breakdown \
+            --json \
+            > /tmp/linguagens.json
 
-          raiz = Path(".")
-          relatorios = raiz / "relatorios"
-          relatorios.mkdir(parents=True, exist_ok=True)
+          jq -e 'type == "object"' /tmp/linguagens.json > /dev/null
 
-          extensoes = {
-              ".py": "Python",
-              ".pyw": "Python",
-              ".jl": "Julia",
-              ".kt": "Kotlin",
-              ".kts": "Kotlin Script",
-              ".java": "Java",
-              ".class": "Java Bytecode",
-              ".scala": "Scala",
-              ".sc": "Scala Script",
-              ".groovy": "Groovy",
-              ".gradle": "Gradle",
-              ".js": "JavaScript",
-              ".mjs": "JavaScript",
-              ".cjs": "JavaScript",
-              ".jsx": "JSX",
-              ".ts": "TypeScript",
-              ".tsx": "TSX",
-              ".vue": "Vue",
-              ".svelte": "Svelte",
-              ".html": "HTML",
-              ".htm": "HTML",
-              ".css": "CSS",
-              ".scss": "SCSS",
-              ".sass": "Sass",
-              ".less": "Less",
-              ".php": "PHP",
-              ".phtml": "PHP",
-              ".rb": "Ruby",
-              ".erb": "ERB",
-              ".go": "Go",
-              ".rs": "Rust",
-              ".c": "C",
-              ".h": "C Header",
-              ".cc": "C++",
-              ".cpp": "C++",
-              ".cxx": "C++",
-              ".hpp": "C++ Header",
-              ".hh": "C++ Header",
-              ".cs": "C#",
-              ".fs": "F#",
-              ".fsx": "F# Script",
-              ".vb": "Visual Basic",
-              ".swift": "Swift",
-              ".m": "Objective-C",
-              ".mm": "Objective-C++",
-              ".dart": "Dart",
-              ".r": "R",
-              ".R": "R",
-              ".rmd": "R Markdown",
-              ".lua": "Lua",
-              ".pl": "Perl",
-              ".pm": "Perl",
-              ".ex": "Elixir",
-              ".exs": "Elixir",
-              ".erl": "Erlang",
-              ".hrl": "Erlang Header",
-              ".hs": "Haskell",
-              ".lhs": "Literate Haskell",
-              ".clj": "Clojure",
-              ".cljs": "ClojureScript",
-              ".cljc": "Clojure",
-              ".edn": "EDN",
-              ".elm": "Elm",
-              ".purs": "PureScript",
-              ".php3": "PHP",
-              ".sql": "SQL",
-              ".psql": "SQL",
-              ".sh": "Shell",
-              ".bash": "Bash",
-              ".zsh": "Zsh",
-              ".fish": "Fish",
-              ".ps1": "PowerShell",
-              ".psm1": "PowerShell",
-              ".bat": "Batch",
-              ".cmd": "Batch",
-              ".awk": "AWK",
-              ".sed": "sed",
-              ".pl6": "Raku",
-              ".raku": "Raku",
-              ".f": "Fortran",
-              ".f90": "Fortran",
-              ".f95": "Fortran",
-              ".for": "Fortran",
-              ".cob": "COBOL",
-              ".cbl": "COBOL",
-              ".pas": "Pascal",
-              ".pp": "Pascal",
-              ".d": "D",
-              ".nim": "Nim",
-              ".cr": "Crystal",
-              ".zig": "Zig",
-              ".v": "V",
-              ".sv": "SystemVerilog",
-              ".vhd": "VHDL",
-              ".vhdl": "VHDL",
-              ".asm": "Assembly",
-              ".s": "Assembly",
-              ".S": "Assembly",
-              ".proto": "Protocol Buffers",
-              ".graphql": "GraphQL",
-              ".gql": "GraphQL",
-              ".tf": "Terraform",
-              ".hcl": "HCL",
-              ".nix": "Nix",
-              ".dockerfile": "Dockerfile",
-              ".toml": "TOML",
-              ".ini": "INI",
-              ".cfg": "Config",
-              ".conf": "Config",
-              ".properties": "Properties",
-              ".xml": "XML",
-              ".xsd": "XML Schema",
-              ".xsl": "XSLT",
-              ".xslt": "XSLT",
-              ".json": "JSON",
-              ".jsonc": "JSON with Comments",
-              ".json5": "JSON5",
-              ".yaml": "YAML",
-              ".yml": "YAML",
-              ".md": "Markdown",
-              ".mdx": "MDX",
-              ".rst": "reStructuredText",
-              ".txt": "Text",
-              ".adoc": "AsciiDoc",
-              ".tex": "LaTeX",
-              ".bib": "BibTeX",
-              ".csv": "CSV",
-              ".tsv": "TSV",
-              ".ipynb": "Jupyter Notebook",
-              ".diff": "Diff",
-              ".patch": "Patch",
-              ".make": "Makefile",
-              ".mk": "Makefile",
-              ".cmake": "CMake",
-              ".gradle.kts": "Kotlin Gradle",
-              ".lock": "Lockfile",
-              ".svg": "SVG",
-              ".webmanifest": "Web App Manifest",
-              ".plist": "Property List",
-              ".xaml": "XAML",
-              ".razor": "Razor",
-              ".cshtml": "Razor",
-              ".resx": "RESX",
-              ".wasm": "WebAssembly",
-              ".wat": "WebAssembly Text",
-              ".sol": "Solidity",
-              ".vy": "Vyper",
-              ".move": "Move",
-              ".ipynb": "Jupyter Notebook",
+          ruby <<'RUBY'
+          require "json"
+          require "time"
+
+          origem = "/tmp/linguagens.json"
+          destino_json = "relatorios/linguagens.json"
+          destino_md = "relatorios/linguagens.md"
+
+          dados_linguist = JSON.parse(File.read(origem))
+
+          linguagens = dados_linguist.map do |nome, dados|
+            {
+              "nome" => nome,
+              "tamanho_bytes" => dados["size"] || 0,
+              "percentual" => dados["percentage"] || "0",
+              "arquivos" => dados["files"] || []
+            }
+          end
+
+          linguagens.sort_by! { |item| item["nome"].downcase }
+
+          total_bytes = linguagens.sum { |item| item["tamanho_bytes"].to_i }
+          total_arquivos = linguagens.sum { |item| item["arquivos"].length }
+
+          relatorio = {
+            "repositorio" => "mulher-amparada/mulher-amparada-app",
+            "branch" => "main",
+            "fonte_classificacao" => "GitHub Linguist",
+            "fonte_lista_linguagens" =>
+              "https://github.com/github-linguist/linguist",
+            "gerado_em_utc" => Time.now.utc.iso8601,
+            "total_linguagens" => linguagens.length,
+            "total_arquivos_classificados" => total_arquivos,
+            "total_bytes_classificados" => total_bytes,
+            "linguagens" => linguagens
           }
 
-          nomes_especiais = {
-              "Dockerfile": "Dockerfile",
-              "Containerfile": "Containerfile",
-              "Makefile": "Makefile",
-              "GNUmakefile": "Makefile",
-              "Justfile": "Just",
-              "Jenkinsfile": "Groovy",
-              "Vagrantfile": "Ruby",
-              "Gemfile": "Ruby",
-              "Rakefile": "Ruby",
-              "Procfile": "Procfile",
-              "CMakeLists.txt": "CMake",
-              "meson.build": "Meson",
-              "BUILD": "Bazel",
-              "BUILD.bazel": "Bazel",
-              "WORKSPACE": "Bazel",
-              "WORKSPACE.bazel": "Bazel",
-              "Brewfile": "Ruby",
-              ".gitignore": "Git Ignore",
-              ".gitattributes": "Git Attributes",
-              ".editorconfig": "EditorConfig",
-              ".prettierrc": "Prettier Config",
-              ".eslintrc": "ESLint Config",
-              ".babelrc": "Babel Config",
-              ".npmrc": "NPM Config",
-              ".nvmrc": "NVM Config",
-              ".python-version": "Python Config",
-              ".ruby-version": "Ruby Config",
-              ".java-version": "Java Config",
-          }
-
-          ignorar_diretorios = {
-              ".git",
-              ".gradle",
-              ".idea",
-              ".vscode",
-              "__pycache__",
-              "node_modules",
-              "vendor",
-              "build",
-              "dist",
-              "target",
-              ".venv",
-              "venv",
-              "coverage",
-          }
-
-          arquivos = []
-          contagem = Counter()
-          por_linguagem = defaultdict(list)
-          bytes_por_linguagem = Counter()
-
-          for caminho in raiz.rglob("*"):
-              if not caminho.is_file():
-                  continue
-
-              relativo = caminho.as_posix()
-
-              if any(
-                  parte in ignorar_diretorios
-                  for parte in caminho.parts
-              ):
-                  continue
-
-              if relativo.startswith(".git/"):
-                  continue
-
-              if relativo in {
-                  "relatorios/linguagens.md",
-                  "relatorios/linguagens.json",
-              }:
-                  continue
-
-              nome = caminho.name
-              sufixo_duplo = next(
-                  (
-                      ext for ext in extensoes
-                      if nome.lower().endswith(ext.lower())
-                      and ext.count(".") > 1
-                  ),
-                  None,
-              )
-
-              if nome in nomes_especiais:
-                  linguagem = nomes_especiais[nome]
-              elif sufixo_duplo:
-                  linguagem = extensoes[sufixo_duplo]
-              elif caminho.suffix in extensoes:
-                  linguagem = extensoes[caminho.suffix]
-              elif nome.lower().startswith("dockerfile"):
-                  linguagem = "Dockerfile"
-              elif nome.lower().endswith(".gradle.kts"):
-                  linguagem = "Kotlin Gradle"
-              else:
-                  linguagem = None
-
-              if linguagem is None:
-                  continue
-
-              try:
-                  tamanho = caminho.stat().st_size
-              except OSError:
-                  tamanho = 0
-
-              contagem[linguagem] += 1
-              bytes_por_linguagem[linguagem] += tamanho
-              por_linguagem[linguagem].append(relativo)
-              arquivos.append({
-                  "arquivo": relativo,
-                  "linguagem": linguagem,
-                  "bytes": tamanho,
-              })
-
-          linguagens = []
-          for nome in sorted(contagem, key=str.casefold):
-              linguagens.append({
-                  "nome": nome,
-                  "quantidade_arquivos": contagem[nome],
-                  "tamanho_total_bytes": bytes_por_linguagem[nome],
-                  "arquivos": sorted(por_linguagem[nome]),
-              })
-
-          dados = {
-              "repositorio": "mulher-amparada/mulher-amparada-app",
-              "branch": "main",
-              "gerado_em_utc": datetime.now(timezone.utc).isoformat(),
-              "metodo": (
-                  "Identificação por extensão e nomes especiais. "
-                  "Não equivale à classificação oficial do GitHub Linguist."
-              ),
-              "total_arquivos_identificados": len(arquivos),
-              "total_linguagens_identificadas": len(linguagens),
-              "linguagens": linguagens,
-              "arquivos": sorted(arquivos, key=lambda item: item["arquivo"]),
-          }
-
-          arquivo_json = relatorios / "linguagens.json"
-          arquivo_md = relatorios / "linguagens.md"
-
-          arquivo_json.write_text(
-              json.dumps(dados, ensure_ascii=False, indent=2) + "\n",
-              encoding="utf-8",
+          File.write(
+            destino_json,
+            JSON.pretty_generate(relatorio) + "\n"
           )
 
           linhas = [
-              "# Relatório de linguagens do repositório",
-              "",
-              f"- **Repositório:** `mulher-amparada/mulher-amparada-app`",
-              "- **Branch analisada:** `main`",
-              f"- **Gerado em (UTC):** {dados['gerado_em_utc']}",
-              f"- **Arquivos identificados:** {len(arquivos)}",
-              f"- **Linguagens e formatos identificados:** {len(linguagens)}",
-              "",
-              "> A identificação é baseada em extensões e nomes conhecidos. "
-              "Um arquivo pode conter mais de uma linguagem, e esta análise "
-              "não substitui a classificação oficial do GitHub Linguist.",
-              "",
-              "## Resumo por linguagem",
-              "",
-              "| Linguagem ou formato | Arquivos | Tamanho total (bytes) |",
-              "|---|---:|---:|",
+            "# Relatório de linguagens",
+            "",
+            "- **Repositório:** `mulher-amparada/mulher-amparada-app`",
+            "- **Branch:** `main`",
+            "- **Classificador:** GitHub Linguist",
+            "- **Lista oficial:** https://github.com/github-linguist/linguist",
+            "- **Gerado em UTC:** #{relatorio["gerado_em_utc"]}",
+            "- **Linguagens identificadas:** #{linguagens.length}",
+            "- **Arquivos classificados:** #{total_arquivos}",
+            "- **Tamanho classificado:** #{total_bytes} bytes",
+            "",
+            "> O Linguist aplica suas regras de classificação e pode excluir",
+            "> arquivos binários, gerados, vendorizados ou não contabilizados",
+            "> nas estatísticas de linguagens.",
+            "",
+            "## Resumo",
+            "",
+            "| Linguagem | Arquivos | Bytes | Percentual |",
+            "|---|---:|---:|---:|"
           ]
 
-          for item in sorted(
-              linguagens,
-              key=lambda item: (
-                  -item["quantidade_arquivos"],
-                  item["nome"].casefold(),
-              ),
-          ):
-              linhas.append(
-                  f"| {item['nome']} | {item['quantidade_arquivos']} "
-                  f"| {item['tamanho_total_bytes']} |"
-              )
+          linguagens
+            .sort_by { |item| [-item["tamanho_bytes"].to_i, item["nome"].downcase] }
+            .each do |item|
+              linhas << "| #{item["nome"]} | #{item["arquivos"].length} | #{item["tamanho_bytes"]} | #{item["percentual"]}% |"
+            end
 
-          linhas.extend(["", "## Arquivos identificados", ""])
+          linhas << ""
+          linhas << "## Arquivos por linguagem"
+          linhas << ""
 
-          for item in sorted(linguagens, key=lambda item: item["nome"].casefold()):
-              linhas.extend([
-                  f"### {item['nome']}",
-                  "",
-                  f"Arquivos: **{item['quantidade_arquivos']}**",
-                  "",
-              ])
-              for arquivo in sorted(por_linguagem[item["nome"]]):
-                  linhas.append(f"- `{arquivo}`")
-              linhas.append("")
+          linguagens.each do |item|
+            linhas << "### #{item["nome"]}"
+            linhas << ""
+            linhas << "- **Arquivos:** #{item["arquivos"].length}"
+            linhas << "- **Tamanho:** #{item["tamanho_bytes"]} bytes"
+            linhas << "- **Percentual:** #{item["percentual"]}%"
+            linhas << ""
 
-          arquivo_md.write_text(
-              "\n".join(linhas).rstrip() + "\n",
-              encoding="utf-8",
-          )
+            item["arquivos"].sort.each do |arquivo|
+              linhas << "- `#{arquivo}`"
+            end
 
-          print(f"Arquivos identificados: {len(arquivos)}")
-          print(f"Linguagens e formatos: {len(linguagens)}")
-          print(f"Markdown atualizado: {arquivo_md}")
-          print(f"JSON atualizado: {arquivo_json}")
-          PY
+            linhas << ""
+          end
+
+          File.write(destino_md, linhas.join("\n") + "\n")
+
+          puts "Linguagens: #{linguagens.length}"
+          puts "Arquivos classificados: #{total_arquivos}"
+          puts "Relatórios gerados com sucesso."
+          RUBY
+
+      - name: Validar relatórios
+        run: |
+          set -euo pipefail
+
+          test -s relatorios/linguagens.md
+          test -s relatorios/linguagens.json
+
+          jq -e '
+            .fonte_classificacao == "GitHub Linguist"
+            and (.linguagens | type == "array")
+          ' relatorios/linguagens.json > /dev/null
 
       - name: Verificar alterações
         id: alteracoes
@@ -420,12 +187,11 @@ jobs:
             relatorios/linguagens.md \
             relatorios/linguagens.json; then
             echo "mudou=false" >> "$GITHUB_OUTPUT"
-            echo "Os relatórios já estão atualizados."
           else
             echo "mudou=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Publicar relatórios atualizados
+      - name: Publicar relatórios
         if: steps.alteracoes.outputs.mudou == 'true'
         shell: bash
         run: |
@@ -440,4 +206,9 @@ jobs:
             relatorios/linguagens.json
 
           git commit -m "Atualizar relatório de linguagens"
+
+          git fetch origin main
+
+          git rebase origin/main
+
           git push origin HEAD:main

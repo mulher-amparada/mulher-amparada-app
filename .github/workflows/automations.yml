@@ -85,6 +85,7 @@ jobs:
 
   atualizar-total-commits:
     name: Atualizar total de commits
+    needs: gerar_commits
     runs-on: ubuntu-26.04
 
     permissions:

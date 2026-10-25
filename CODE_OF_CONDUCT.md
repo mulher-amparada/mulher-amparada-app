@@ -8,7 +8,7 @@ Esta não é uma lista completa de tudo o que não pode ser feito. Em vez disso,
 
 Este código de conduta se aplica a todos os espaços administrados pelo projeto Mulher Amparada App. Isso inclui canais de comunicação, listas de discussão, sistema de issues e quaisquer outros fóruns criados pela equipe do projeto que sejam utilizados pela comunidade para comunicação. Além disso, violações deste código fora desses espaços podem afetar a capacidade de uma pessoa de participar deles.
 
-Se você acredita que alguém está violando o código de conduta, pedimos que denuncie enviando um e-mail para "mulheramparada@gmail.com" (mailto:mulheramparada@gmail.com).
+Se você acredita que alguém está violando o código de conduta, pedimos que denuncie enviando um e-mail para "projetomulheramparada@gmail.com" (mailto:projetomulheramparada@gmail.com).
 
 > ⚠️Não compartilhe seu nome em lugar nenhum!
 - Seja amigável e paciente.

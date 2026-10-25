@@ -8,7 +8,7 @@ on:
       - 'Código-fonte do app = Mulher Amparada/**'
       - '.github/workflows/sincronizar-app.yml'
 
-  workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: write

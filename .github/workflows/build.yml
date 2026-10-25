@@ -2,7 +2,17 @@
 name: Mulher Amparada - Android
 
 on:
-  workflow_call:
+    workflow_call:
+    secrets:
+      KEYSTORE_BASE64:
+        required: true
+      KEYSTORE_PASSWORD:
+        required: true
+      KEY_ALIAS:
+        required: true
+      KEY_PASSWORD:
+        required: true
+        
   push:
     branches:
       - main
@@ -138,22 +148,7 @@ jobs:
             --no-daemon \
             assembleRelease
 
-      - name: Verificar secrets
-        shell: bash
-        env:
-          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: |
-          set -euo pipefail
 
-          for NAME in KEYSTORE_BASE64 KEYSTORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do
-            if [ -z "${!NAME:-}" ]; then
-              echo "::error::Secret ausente: $NAME"
-              exit 1
-            fi
-          done
 
       - name: Preparar keystore
         shell: bash
@@ -360,6 +355,58 @@ jobs:
           print(f"SHA-256 atualizado: {sha256}")
           PY
 
+      - name: Atualizar tamanho do APK no HTML
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          APK="Código-fonte do app = Mulher Amparada/app-release.apk"
+          HTML="download.html"
+
+          TAMANHO_BYTES="$(stat -c '%s' "$APK")"
+          TAMANHO_MB="$(awk -v bytes="$TAMANHO_BYTES" \
+            'BEGIN { printf "%.2f", bytes / 1048576 }')"
+
+          export TAMANHO_MB
+
+          python3 - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+
+          arquivo = Path("download.html")
+          html = arquivo.read_text(encoding="utf-8")
+          tamanho = os.environ["TAMANHO_MB"]
+
+          html, resumo = re.subn(
+              r'(<strong class="summary-value">\s*)'
+              r'\d+(?:\.\d+)?\s*MB'
+              r'(\s*</strong>\s*<span class="summary-label">'
+              r'\s*Tamanho\s*</span>)',
+              lambda m: m.group(1) + tamanho + " MB" + m.group(2),
+              html,
+              count=1
+          )
+
+          html, detalhes = re.subn(
+              r'(<span class="detail-title">\s*Tamanho\s*</span>'
+              r'\s*<strong class="detail-value">\s*≈?\s*)'
+              r'\d+(?:\.\d+)?\s*MB'
+              r'(\s*</strong>)',
+              lambda m: m.group(1) + tamanho + " MB" + m.group(2),
+              html,
+              count=1
+          )
+
+          if resumo != 1 or detalhes != 1:
+              raise SystemExit(
+                  "Erro: não foi possível atualizar os dois campos de tamanho."
+              )
+
+          arquivo.write_text(html, encoding="utf-8")
+          print(f"Tamanho atualizado: {tamanho} MB")
+          PY
+          
       - name: Salvar atualização no GitHub
         run: |
           set -euo pipefail

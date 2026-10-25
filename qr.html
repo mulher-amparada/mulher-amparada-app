@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta property="og:image" content="https://mulher-amparada.github.io/mulher-amparada-app/user1.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="1200" />
+<meta property="og:image:alt" content="Mulher Amparada" />
+
+<link
+    rel="apple-touch-icon"
+    href="apple-touch-icon.png"
+ />
+
+<link
+    rel="icon"
+    type="image/png"
+    href="favicon.ico"
+>
+
+<link
+    rel="canonical"
+    href="https://mulher-amparada.github.io/mulher-amparada-app/"
+>
+
+<meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <meta name="description" content="Mulher Amparada é um projeto de tecnologia voltado à proteção, segurança e assistência em situações de emergência." />
+
+<title />Mulher Amparada</title>
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+
+<link rel="stylesheet" href="qr-day.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="qr-night.css" media="(prefers-color-scheme: dark)">
+
+</head>
+
+<body>
+
+<div class="background"></div>
+
+<main class="app">
+
+    <header class="header">
+
+        <div class="logo">
+            Mulher Amparada
+        </div>
+
+        <h1>
+            Crie seu <span>QR Code</span>
+        </h1>
+
+        <p>
+            Gere códigos QR rapidamente, copie o conteúdo
+            ou salve a imagem para usar onde quiser.
+        </p>
+
+    </header>
+
+    <!-- GERADOR -->
+
+    <section class="card">
+
+        <label
+            class="label"
+            for="text"
+        >
+            Conteúdo
+        </label>
+
+        <div class="input-wrap">
+
+            <input
+                id="text"
+                type="text"
+                autocomplete="off"
+                placeholder="Digite um link ou texto..."
+                onkeydown="handleKey(event)"
+            >
+
+        </div>
+
+        <div class="buttons">
+
+            <button
+                class="primary"
+                onclick="generate()"
+            >
+                Gerar QR
+            </button>
+
+            <button
+                class="dark"
+                onclick="clearAll()"
+            >
+                Limpar
+            </button>
+
+        </div>
+
+        <div
+            id="qrBox"
+            class="qr-area"
+        ></div>
+
+        <div
+            id="qrActions"
+            class="qr-actions"
+        >
+
+            <button
+                class="dark"
+                onclick="downloadQR()"
+            >
+                Baixar QR
+            </button>
+
+            <button
+                class="dark"
+                onclick="copyText()"
+            >
+                Copiar texto
+            </button>
+
+        </div>
+
+    </section>
+
+    <!-- HISTÓRICO -->
+
+    <section class="card">
+
+        <div class="history-header">
+
+            <h2>
+                Histórico
+            </h2>
+
+            <span
+                id="historyCount"
+                class="history-count"
+            >
+                0 itens
+            </span>
+
+        </div>
+
+        <div
+            id="history"
+            class="history"
+        ></div>
+
+    </section>
+
+    <footer class="footer">
+
+        Mulher Amparada
+
+    </footer>
+
+</main>
+
+<div
+    id="toast"
+    class="toast"
+></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script src="qr.js"></script>
+</body>
+</html>

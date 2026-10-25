@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ffffff">
+
+  <title>Linguagens do repositório | Code Observatory</title>
+
+  <meta
+    name="description"
+    content="Estatísticas atualizadas automaticamente das linguagens, arquivos e linhas de código do projeto Mulher Amparada."
+  >
+
+  <meta
+    property="og:title"
+    content="Linguagens do repositório | Code Observatory"
+  >
+  <meta
+    property="og:description"
+    content="Estatísticas das linguagens de programação do projeto Mulher Amparada."
+  >
+  <meta
+    property="og:image"
+    content="https://mulher-amparada.github.io/mulher-amparada-app/user1.png"
+  >
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="1200">
+  <meta property="og:image:alt" content="Mulher Amparada">
+
+  <link
+    rel="canonical"
+    href="https://mulher-amparada.github.io/mulher-amparada-app/"
+  >
+
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="linguagens-day.css"
+    media="(prefers-color-scheme: light)"
+  >
+
+  <link
+    rel="stylesheet"
+    href="linguagens-night.css"
+    media="(prefers-color-scheme: dark)"
+  >
+
+  <style>
+    :root {
+      font-family: "Quicksand", sans-serif;
+    }
+
+    body {
+      font-family: "Quicksand", sans-serif;
+    }
+
+    .loading-state,
+    .error-state {
+      padding: 24px;
+      text-align: center;
+      color: var(--muted, #59636e);
+      font-size: 13px;
+    }
+
+    .error-state {
+      color: #cf222e;
+    }
+
+    .refresh-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 13px;
+      border: 1px solid var(--border, #d1d9e0);
+      border-radius: 8px;
+      background: var(--surface, #ffffff);
+      color: var(--text, #1f2328);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .refresh-button:hover {
+      background: var(--surface-hover, #f6f8fa);
+    }
+
+    .refresh-button:disabled {
+      cursor: wait;
+      opacity: 0.65;
+    }
+
+    .refresh-icon {
+      display: inline-block;
+      font-size: 15px;
+    }
+
+    .refresh-button:disabled .refresh-icon {
+      animation: rotate 1s linear infinite;
+    }
+
+    .data-status {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+      color: var(--muted, #59636e);
+      font-size: 11px;
+    }
+
+    .data-status .status-dot {
+      flex-shrink: 0;
+    }
+
+    .language-count {
+      white-space: nowrap;
+    }
+
+    .bar-segment {
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .legend-item {
+      min-width: 0;
+    }
+
+    .legend-item strong {
+      min-width: 0;
+    }
+
+    .empty-state[hidden] {
+      display: none;
+    }
+
+    @keyframes rotate {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">⌘</div>
+
+        <div>
+          <div class="brand-name">Code Observatory</div>
+          <div class="brand-subtitle">
+            Estatísticas do repositório
+          </div>
+        </div>
+      </div>
+
+      <span class="version" id="cloc-version">
+        cloc
+      </span>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow">
+        <span class="status-dot"></span>
+        Análise de código
+      </div>
+
+      <h1>Linguagens do repositório</h1>
+
+      <p class="description">
+        Uma visão geral dos arquivos, linhas em branco, comentários
+        e código identificado pelo cloc.
+      </p>
+
+      <div class="data-status" aria-live="polite">
+        <span class="status-dot"></span>
+        <span id="update-status">
+          Carregando dados do relatório...
+        </span>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Resumo do projeto">
+
+      <article class="stat-card">
+        <div class="stat-label">
+          Linguagens identificadas
+        </div>
+
+        <strong
+          class="stat-value"
+          id="language-total"
+        >—</strong>
+
+        <span class="stat-detail">
+          Tipos de arquivo reconhecidos
+        </span>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-label">
+          Arquivos analisados
+        </div>
+
+        <strong
+          class="stat-value"
+          id="file-total"
+        >—</strong>
+
+        <span class="stat-detail">
+          Arquivos contabilizados pelo cloc
+        </span>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-label">
+          Linhas de código
+        </div>
+
+        <strong
+          class="stat-value"
+          id="code-total"
+        >—</strong>
+
+        <span class="stat-detail">
+          Total informado pelo relatório
+        </span>
+      </article>
+
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title">
+            Distribuição de código
+          </h2>
+
+          <div class="panel-subtitle">
+            Participação de cada linguagem nas linhas de código
+          </div>
+        </div>
+      </div>
+
+      <div class="distribution">
+
+        <div
+          class="bar"
+          id="distribution-bar"
+          role="img"
+          aria-label="Distribuição proporcional das linhas de código por linguagem"
+        ></div>
+
+        <div
+          class="legend"
+          id="legend"
+        ></div>
+
+      </div>
+    </section>
+
+    <section class="panel">
+
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title">
+            Detalhamento das linguagens
+          </h2>
+
+          <div class="panel-subtitle">
+            Arquivos, linhas em branco, comentários e código
+          </div>
+        </div>
+
+        <span
+          class="language-count"
+          id="table-language-count"
+        >— linguagens</span>
+      </div>
+
+      <div class="table-tools">
+
+        <input
+          id="search"
+          class="search"
+          type="search"
+          placeholder="Pesquisar linguagem..."
+          aria-label="Pesquisar linguagem"
+          autocomplete="off"
+        >
+
+        <button
+          class="refresh-button"
+          id="refresh-button"
+          type="button"
+        >
+          <span class="refresh-icon" aria-hidden="true">↻</span>
+          Atualizar
+        </button>
+
+      </div>
+
+      <div
+        id="loading-state"
+        class="loading-state"
+        role="status"
+      >
+        Carregando relatório de linguagens...
+      </div>
+
+      <div
+        id="error-state"
+        class="error-state"
+        role="alert"
+        hidden
+      >
+        Não foi possível carregar o relatório.
+        Verifique se o arquivo JSON foi publicado no GitHub Pages.
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Linguagem</th>
+              <th scope="col">Arquivos</th>
+              <th scope="col">Em branco</th>
+              <th scope="col">Comentários</th>
+              <th scope="col">Código</th>
+            </tr>
+          </thead>
+
+          <tbody id="language-rows"></tbody>
+
+          <tfoot>
+            <tr>
+              <td>TOTAL</td>
+              <td id="total-files">—</td>
+              <td id="total-blank">—</td>
+              <td id="total-comments">—</td>
+              <td id="total-code">—</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div
+        id="empty-state"
+        class="empty-state"
+        hidden
+      >
+        Nenhuma linguagem encontrada.
+      </div>
+
+    </section>
+
+    <footer class="footer">
+      <span>
+        Gerado a partir dos dados do
+        <strong id="footer-cloc-version">cloc</strong>
+      </span>
+
+      <span id="footer-updated">
+        Aguardando relatório
+      </span>
+    </footer>
+
+  </main>
+
+    <script src="linguagens.js"></script>
+
+<script id="AUTO-LINGUAGENS-CORES-V1">
+(() => {
+  const slug = name => name.normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .toLowerCase() || "linguagem";
+
+  const aplicar = (elemento, nome) => {
+    if (!elemento || !nome) return;
+    elemento.classList.add("language-" + slug(nome));
+    elemento.dataset.language = nome;
+  };
+
+  const legenda = [...document.querySelectorAll(".legend-item")];
+  const nomes = [];
+
+  legenda.forEach(item => {
+    const strong = item.querySelector("strong");
+    if (!strong) return;
+
+    const nome = strong.textContent.trim();
+    if (!nome) return;
+
+    nomes.push(nome);
+    aplicar(item, nome);
+    aplicar(item.querySelector(".dot"), nome);
+  });
+
+  document.querySelectorAll("tbody tr").forEach(row => {
+    const elemento = row.querySelector(".language");
+    if (!elemento) return;
+
+    const nome = elemento.textContent.trim();
+    if (!nome) return;
+
+    aplicar(row, nome);
+    aplicar(elemento, nome);
+    aplicar(elemento.querySelector(".dot"), nome);
+  });
+
+  const segmentos = [
+    ...document.querySelectorAll(".bar-segment")
+  ];
+
+  segmentos.forEach((segmento, indice) => {
+    const nome = segmento.dataset.language ||
+      segmento.getAttribute("aria-label") ||
+      segmento.getAttribute("title");
+
+    if (nome) {
+      aplicar(segmento, nome.trim());
+    } else if (nomes[indice]) {
+      aplicar(segmento, nomes[indice]);
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
+

@@ -1,7 +1,7 @@
 name: Gerar relatórios de commits
 
 on:
-  workflow_dispatch:
+  workflow_call:
   push:
     branches:
       - main

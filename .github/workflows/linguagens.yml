@@ -187,6 +187,7 @@ jobs:
 
           ruby <<'RUBY'
           require "json"
+          require "time"
 
           arquivos = IO.popen(
             ["git", "ls-files", "-z"],

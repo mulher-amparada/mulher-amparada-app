@@ -10,7 +10,7 @@ on:
       - 'scripts/atualizar_footer.py'
       - '.github/workflows/atualizar-footer.yml'
 
-  workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: write

@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-10-25T17:32:20Z
+- **Gerado em UTC:** 2026-10-25T17:34:22Z
 - **Linguagens identificadas:** 12
 - **Arquivos classificados:** 96
-- **Tamanho classificado:** 1801488 bytes
+- **Tamanho classificado:** 1801490 bytes
 
 > O Linguist aplica suas regras de classificação e pode excluir
 > arquivos binários, gerados, vendorizados ou não contabilizados
@@ -21,7 +21,7 @@
 | CSS | 18 | 235771 | 13.09% |
 | Shell | 4 | 90469 | 5.02% |
 | HTML | 11 | 68255 | 3.79% |
-| JavaScript | 4 | 26566 | 1.47% |
+| JavaScript | 4 | 26568 | 1.47% |
 | C | 1 | 18374 | 1.02% |
 | PHP | 1 | 9342 | 0.52% |
 | Julia | 1 | 5989 | 0.33% |
@@ -86,7 +86,7 @@
 ### JavaScript
 
 - **Arquivos:** 4
-- **Tamanho:** 26566 bytes
+- **Tamanho:** 26568 bytes
 - **Percentual:** 1.47%
 
 - `download.js`

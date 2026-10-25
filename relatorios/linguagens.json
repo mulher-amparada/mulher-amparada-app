@@ -3,10 +3,10 @@
   "branch": "main",
   "fonte_classificacao": "GitHub Linguist",
   "fonte_lista_linguagens": "https://github.com/github-linguist/linguist",
-  "gerado_em_utc": "2026-10-25T17:32:20Z",
+  "gerado_em_utc": "2026-10-25T17:34:22Z",
   "total_linguagens": 12,
   "total_arquivos_classificados": 96,
-  "total_bytes_classificados": 1801488,
+  "total_bytes_classificados": 1801490,
   "linguagens": [
     {
       "nome": "C",
@@ -61,7 +61,7 @@
     },
     {
       "nome": "JavaScript",
-      "tamanho_bytes": 26566,
+      "tamanho_bytes": 26568,
       "percentual": "1.47",
       "arquivos": [
         "download.js",

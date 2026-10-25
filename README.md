@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://mulher-amparada.github.io/mulher-amparada-app/user1.png" width="250">
+  <img src="https://github.com/mulher-amparada/mulher-amparada-app/blob/main/user1.png" width="250">
 </div>
 
 <div align="center">

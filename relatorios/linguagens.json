@@ -3,10 +3,10 @@
   "branch": "main",
   "fonte_classificacao": "GitHub Linguist",
   "fonte_lista_linguagens": "https://github.com/github-linguist/linguist",
-  "gerado_em_utc": "2026-10-25T17:34:22Z",
+  "gerado_em_utc": "2026-10-25T17:48:28Z",
   "total_linguagens": 12,
   "total_arquivos_classificados": 96,
-  "total_bytes_classificados": 1801490,
+  "total_bytes_classificados": 1806466,
   "linguagens": [
     {
       "nome": "C",
@@ -19,7 +19,7 @@
     {
       "nome": "CSS",
       "tamanho_bytes": 235771,
-      "percentual": "13.09",
+      "percentual": "13.05",
       "arquivos": [
         "app1-day.css",
         "app1-night.css",
@@ -44,7 +44,7 @@
     {
       "nome": "HTML",
       "tamanho_bytes": 68255,
-      "percentual": "3.79",
+      "percentual": "3.78",
       "arquivos": [
         "app1.html",
         "divulgacao/html/banner.html",
@@ -61,8 +61,8 @@
     },
     {
       "nome": "JavaScript",
-      "tamanho_bytes": 26568,
-      "percentual": "1.47",
+      "tamanho_bytes": 31544,
+      "percentual": "1.75",
       "arquivos": [
         "download.js",
         "index.js",
@@ -81,7 +81,7 @@
     {
       "nome": "Kotlin",
       "tamanho_bytes": 1340096,
-      "percentual": "74.39",
+      "percentual": "74.18",
       "arquivos": [
         "Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt",
         "Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt",
@@ -172,7 +172,7 @@
     {
       "nome": "Shell",
       "tamanho_bytes": 90469,
-      "percentual": "5.02",
+      "percentual": "5.01",
       "arquivos": [
         "Código-fonte do app = Mulher Amparada/make.sh",
         "Safe Woman Operational System/build/envsetup.sh",

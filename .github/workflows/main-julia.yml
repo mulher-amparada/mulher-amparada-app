@@ -35,17 +35,39 @@ jobs:
 
       - name: Verificar arquivo principal
         run: |
-          test -f src/main.jl || {
+          set -eu
+
+          if [ ! -f src/main.jl ]; then
             echo "Erro: src/main.jl nao encontrado."
             exit 1
-          }
+          fi
 
       - name: Instalar dependencias Julia
         run: |
           julia --startup-file=no -e '
             using Pkg
-            Pkg.add(["CSV", "DataFrames"])
+
+            Pkg.add([
+              "CSV",
+              "DataFrames",
+              "Plots"
+            ])
           '
 
       - name: Executar programa
-        run: julia --startup-file=no src/main.jl
+        env:
+          GKSwstype: "100"
+        run: |
+          julia --startup-file=no src/main.jl
+
+      - name: Disponibilizar resultados
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: resultados-ligue180-2019
+          path: |
+            dados/brutos/ligue180-2019.csv
+            dados/processados/ligue180-2019-processado.csv
+            relatorios/graficos/ligue180-2019.png
+          if-no-files-found: warn
+          retention-days: 30

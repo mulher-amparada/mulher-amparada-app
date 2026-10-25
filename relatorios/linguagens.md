@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-10-25T15:44:03Z
+- **Gerado em UTC:** 2026-10-25T15:46:04Z
 - **Linguagens identificadas:** 12
 - **Arquivos classificados:** 95
-- **Tamanho classificado:** 1800928 bytes
+- **Tamanho classificado:** 1801136 bytes
 
 > O Linguist aplica suas regras de classificação e pode excluir
 > arquivos binários, gerados, vendorizados ou não contabilizados
@@ -17,11 +17,11 @@
 
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
-| Kotlin | 50 | 1340096 | 74.41% |
+| Kotlin | 50 | 1340096 | 74.40% |
 | CSS | 18 | 235771 | 13.09% |
 | Shell | 4 | 90469 | 5.02% |
-| HTML | 10 | 67825 | 3.77% |
-| JavaScript | 4 | 26566 | 1.48% |
+| HTML | 10 | 68033 | 3.78% |
+| JavaScript | 4 | 26566 | 1.47% |
 | C | 1 | 18374 | 1.02% |
 | PHP | 1 | 9212 | 0.51% |
 | Julia | 1 | 5989 | 0.33% |
@@ -68,8 +68,8 @@
 ### HTML
 
 - **Arquivos:** 10
-- **Tamanho:** 67825 bytes
-- **Percentual:** 3.77%
+- **Tamanho:** 68033 bytes
+- **Percentual:** 3.78%
 
 - `app1.html`
 - `divulgacao/html/banner.html`
@@ -86,7 +86,7 @@
 
 - **Arquivos:** 4
 - **Tamanho:** 26566 bytes
-- **Percentual:** 1.48%
+- **Percentual:** 1.47%
 
 - `download.js`
 - `index.js`
@@ -105,7 +105,7 @@
 
 - **Arquivos:** 50
 - **Tamanho:** 1340096 bytes
-- **Percentual:** 74.41%
+- **Percentual:** 74.40%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt`

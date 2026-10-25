@@ -10,8 +10,7 @@ on:
 
 permissions:
   contents: write
-  workflows: write
-
+  
 concurrency:
   group: pesquisar-projeto
   cancel-in-progress: false

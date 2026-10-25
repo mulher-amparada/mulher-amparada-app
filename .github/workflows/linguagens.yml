@@ -34,6 +34,7 @@ jobs:
           fetch-depth: 0
 
       - name: Instalar dependências do Linguist
+        shell: bash
         run: |
           set -euo pipefail
 
@@ -51,6 +52,7 @@ jobs:
             jq
 
       - name: Instalar GitHub Linguist
+        shell: bash
         run: |
           set -euo pipefail
 
@@ -59,7 +61,6 @@ jobs:
             --user-install
 
           echo "$(ruby -e 'puts Gem.user_dir')/bin" >> "$GITHUB_PATH"
-
 
       - name: Analisar linguagens do repositório
         shell: bash
@@ -79,33 +80,39 @@ jobs:
           require "json"
           require "time"
 
-          origem = "/tmp/linguagens.json"
-          destino_json = "relatorios/linguagens.json"
-          destino_md = "relatorios/linguagens.md"
-
-          dados_linguist = JSON.parse(File.read(origem))
+          dados_linguist = JSON.parse(
+            File.read("/tmp/linguagens.json")
+          )
 
           linguagens = dados_linguist.map do |nome, dados|
+            arquivos = dados["files"] || []
+
             {
               "nome" => nome,
               "tamanho_bytes" => dados["size"] || 0,
               "percentual" => dados["percentage"] || "0",
-              "arquivos" => dados["files"] || []
+              "arquivos" => arquivos.sort
             }
           end
 
           linguagens.sort_by! { |item| item["nome"].downcase }
 
-          total_bytes = linguagens.sum { |item| item["tamanho_bytes"].to_i }
-          total_arquivos = linguagens.sum { |item| item["arquivos"].length }
+          total_bytes = linguagens.sum do |item|
+            item["tamanho_bytes"].to_i
+          end
+
+          total_arquivos = linguagens.sum do |item|
+            item["arquivos"].length
+          end
+
+          gerado_em = Time.now.utc.iso8601
 
           relatorio = {
             "repositorio" => "mulher-amparada/mulher-amparada-app",
             "branch" => "main",
             "fonte_classificacao" => "GitHub Linguist",
-            "fonte_lista_linguagens" =>
-              "https://github.com/github-linguist/linguist",
-            "gerado_em_utc" => Time.now.utc.iso8601,
+            "fonte_lista_linguagens" => "https://github.com/github-linguist/linguist",
+            "gerado_em_utc" => gerado_em,
             "total_linguagens" => linguagens.length,
             "total_arquivos_classificados" => total_arquivos,
             "total_bytes_classificados" => total_bytes,
@@ -113,7 +120,7 @@ jobs:
           }
 
           File.write(
-            destino_json,
+            "relatorios/linguagens.json",
             JSON.pretty_generate(relatorio) + "\n"
           )
 
@@ -124,14 +131,13 @@ jobs:
             "- **Branch:** `main`",
             "- **Classificador:** GitHub Linguist",
             "- **Lista oficial:** https://github.com/github-linguist/linguist",
-            "- **Gerado em UTC:** #{relatorio["gerado_em_utc"]}",
+            "- **Gerado em UTC:** #{gerado_em}",
             "- **Linguagens identificadas:** #{linguagens.length}",
             "- **Arquivos classificados:** #{total_arquivos}",
             "- **Tamanho classificado:** #{total_bytes} bytes",
             "",
-            "> O Linguist aplica suas regras de classificação e pode excluir",
-            "> arquivos binários, gerados, vendorizados ou não contabilizados",
-            "> nas estatísticas de linguagens.",
+            "> O Linguist pode excluir arquivos binários, gerados, vendorizados",
+            "> ou não contabilizados nas estatísticas de linguagens.",
             "",
             "## Resumo",
             "",
@@ -157,31 +163,163 @@ jobs:
             linhas << "- **Percentual:** #{item["percentual"]}%"
             linhas << ""
 
-            item["arquivos"].sort.each do |arquivo|
+            item["arquivos"].each do |arquivo|
               linhas << "- `#{arquivo}`"
             end
 
             linhas << ""
           end
 
-          File.write(destino_md, linhas.join("\n") + "\n")
+          File.write(
+            "relatorios/linguagens.md",
+            linhas.join("\n") + "\n"
+          )
 
           puts "Linguagens: #{linguagens.length}"
           puts "Arquivos classificados: #{total_arquivos}"
-          puts "Relatórios gerados com sucesso."
+          puts "Relatório de linguagens gerado."
+          RUBY
+
+      - name: Inventariar extensões de todo o repositório
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ruby <<'RUBY'
+          require "json"
+
+          arquivos = IO.popen(
+            ["git", "ls-files", "-z"],
+            &:read
+          ).split("\0")
+
+          inventario = Hash.new do |hash, extensao|
+            hash[extensao] = {
+              "extensao" => extensao,
+              "quantidade_arquivos" => 0,
+              "tamanho_bytes" => 0
+            }
+          end
+
+          total_arquivos = 0
+          total_bytes = 0
+
+          arquivos.each do |caminho|
+            next unless File.file?(caminho)
+
+            nome = File.basename(caminho)
+
+            extensao =
+              if nome.start_with?(".") && nome.count(".") == 1
+                nome.downcase
+              else
+                File.extname(nome).downcase
+              end
+
+            extensao = "[sem extensão]" if extensao.empty?
+
+            tamanho = File.size(caminho)
+
+            inventario[extensao]["quantidade_arquivos"] += 1
+            inventario[extensao]["tamanho_bytes"] += tamanho
+
+            total_arquivos += 1
+            total_bytes += tamanho
+          end
+
+          extensoes = inventario.values.sort_by do |item|
+            [-item["quantidade_arquivos"], item["extensao"]]
+          end
+
+          extensoes.each do |item|
+            item["percentual_arquivos"] =
+              if total_arquivos.zero?
+                0
+              else
+                (
+                  item["quantidade_arquivos"].to_f /
+                  total_arquivos * 100
+                ).round(2)
+              end
+
+            item["percentual_bytes"] =
+              if total_bytes.zero?
+                0
+              else
+                (
+                  item["tamanho_bytes"].to_f /
+                  total_bytes * 100
+                ).round(2)
+              end
+          end
+
+          relatorio = {
+            "repositorio" => "mulher-amparada/mulher-amparada-app",
+            "branch" => "main",
+            "gerado_em_utc" => Time.now.utc.iso8601,
+            "total_arquivos" => total_arquivos,
+            "total_bytes" => total_bytes,
+            "total_extensoes" => extensoes.length,
+            "extensoes" => extensoes
+          }
+
+          File.write(
+            "relatorios/extensoes.json",
+            JSON.pretty_generate(relatorio) + "\n"
+          )
+
+          linhas = [
+            "# Inventário de extensões",
+            "",
+            "- **Repositório:** `mulher-amparada/mulher-amparada-app`",
+            "- **Branch:** `main`",
+            "- **Gerado em UTC:** #{relatorio["gerado_em_utc"]}",
+            "- **Arquivos analisados:** #{total_arquivos}",
+            "- **Tamanho total:** #{total_bytes} bytes",
+            "- **Extensões encontradas:** #{extensoes.length}",
+            "",
+            "> Inventário dos arquivos rastreados pelo Git que existem no checkout.",
+            "",
+            "## Resumo",
+            "",
+            "| Extensão | Arquivos | Bytes | % dos arquivos | % dos bytes |",
+            "|---|---:|---:|---:|---:|"
+          ]
+
+          extensoes.each do |item|
+            linhas << "| `#{item["extensao"]}` | #{item["quantidade_arquivos"]} | #{item["tamanho_bytes"]} | #{item["percentual_arquivos"]}% | #{item["percentual_bytes"]}% |"
+          end
+
+          File.write(
+            "relatorios/extensoes.md",
+            linhas.join("\n") + "\n"
+          )
+
+          puts "Arquivos inventariados: #{total_arquivos}"
+          puts "Extensões encontradas: #{extensoes.length}"
+          puts "Relatório de extensões gerado."
           RUBY
 
       - name: Validar relatórios
+        shell: bash
         run: |
           set -euo pipefail
 
           test -s relatorios/linguagens.md
           test -s relatorios/linguagens.json
+          test -s relatorios/extensoes.md
+          test -s relatorios/extensoes.json
 
           jq -e '
             .fonte_classificacao == "GitHub Linguist"
             and (.linguagens | type == "array")
           ' relatorios/linguagens.json > /dev/null
+
+          jq -e '
+            (.extensoes | type == "array")
+            and (.total_arquivos | type == "number")
+            and (.total_extensoes | type == "number")
+          ' relatorios/extensoes.json > /dev/null
 
       - name: Verificar alterações
         id: alteracoes
@@ -191,7 +329,9 @@ jobs:
 
           if git diff --quiet -- \
             relatorios/linguagens.md \
-            relatorios/linguagens.json; then
+            relatorios/linguagens.json \
+            relatorios/extensoes.md \
+            relatorios/extensoes.json; then
             echo "mudou=false" >> "$GITHUB_OUTPUT"
           else
             echo "mudou=true" >> "$GITHUB_OUTPUT"
@@ -209,12 +349,13 @@ jobs:
 
           git add \
             relatorios/linguagens.md \
-            relatorios/linguagens.json
+            relatorios/linguagens.json \
+            relatorios/extensoes.md \
+            relatorios/extensoes.json
 
-          git commit -m "Atualizar relatório de linguagens"
+          git commit -m "Atualizar relatórios de linguagens e extensões"
 
           git fetch origin main
-
           git rebase origin/main
-
           git push origin HEAD:main
+

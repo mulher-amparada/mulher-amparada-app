@@ -10,7 +10,7 @@
      */
 
     const REPORT_URL =
-  "https://raw.githubusercontent.com/mulher-amparada/mulher-amparada-app/main/relatorios/linguagens.json";
+  "https://raw.githubusercontent.com/mulher-amparada/mulher-amparada-app/main/relatorios%2Flinguagens.json";
 
     /*
      * Cores conhecidas das linguagens no GitHub Linguist.

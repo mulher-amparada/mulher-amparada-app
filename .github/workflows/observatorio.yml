@@ -1,0 +1,77 @@
+name: Gerar Observatorio
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'tools/observatorio.c'
+      - '.github/workflows/observatorio.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: observatorio-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  gerar-observatorio:
+    name: Compilar e gerar mapas de calor
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Baixar repositorio
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Instalar dependencias
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang libcairo2-dev pkg-config
+
+      - name: Compilar observatorio.c
+        run: |
+          clang -O2 -Wall -Wextra \
+            tools/observatorio.c \
+            -o observatorio \
+            $(pkg-config --cflags --libs cairo) \
+            -lm
+
+      - name: Executar observatorio
+        run: |
+          ./observatorio
+
+      - name: Verificar imagens geradas
+        run: |
+          set -eu
+
+          if ! find docs/observatorio -maxdepth 1 \
+            -type f -name 'observatorio-*.png' \
+            -print -quit | grep -q .; then
+            echo "Erro: nenhuma imagem foi gerada."
+            exit 1
+          fi
+
+          echo "Imagens geradas:"
+          find docs/observatorio -maxdepth 1 \
+            -type f -name 'observatorio-*.png' \
+            -print | sort
+
+      - name: Salvar imagens no repositorio
+        run: |
+          git add docs/observatorio/
+
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteracao nas imagens."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git commit -m "chore: atualizar observatorio"
+          git push

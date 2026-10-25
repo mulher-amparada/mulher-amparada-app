@@ -3,6 +3,7 @@ name: Mulher Amparada - Android 17
 
 on:
   workflow_dispatch:
+
   push:
     branches:
       - main
@@ -16,58 +17,72 @@ permissions:
 jobs:
   build:
     name: Compilar e assinar APK
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     env:
       PROJECT_DIR: 'Código-fonte do app = Mulher Amparada'
 
     steps:
       - name: Baixar código
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Configurar Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '17'
 
       - name: Configurar Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
+        with:
+          packages: ''
 
-      - name: Instalar Android SDK
+      - name: Instalar componentes Android
+        shell: bash
         run: |
-          sdkmanager --install "platforms;android-37" "platform-tools"
-          sdkmanager --licenses
+          set -euo pipefail
 
-      - name: Localizar Gradle Wrapper
+          sdkmanager --install \
+            "platforms;android-37" \
+            "build-tools;37.0.0" \
+            "platform-tools"
+
+      - name: Localizar projeto Gradle
         id: gradle
         shell: bash
         run: |
           set -euo pipefail
 
           if [ -f "$PROJECT_DIR/gradlew" ]; then
-            echo "wrapper=$GITHUB_WORKSPACE/$PROJECT_DIR/gradlew" >> "$GITHUB_OUTPUT"
-            echo "project=$GITHUB_WORKSPACE/$PROJECT_DIR" >> "$GITHUB_OUTPUT"
-          elif [ -f "gradlew" ]; then
-            echo "wrapper=$GITHUB_WORKSPACE/gradlew" >> "$GITHUB_OUTPUT"
-            echo "project=$GITHUB_WORKSPACE" >> "$GITHUB_OUTPUT"
+            WRAPPER="$GITHUB_WORKSPACE/$PROJECT_DIR/gradlew"
+          elif [ -f "$GITHUB_WORKSPACE/gradlew" ]; then
+            WRAPPER="$GITHUB_WORKSPACE/gradlew"
           else
             echo "::error::Gradle Wrapper não encontrado."
             exit 1
           fi
+
+          if [ ! -d "$PROJECT_DIR" ]; then
+            echo "::error::Pasta do projeto não encontrada: $PROJECT_DIR"
+            exit 1
+          fi
+
+          chmod +x "$WRAPPER"
+
+          echo "wrapper=$WRAPPER" >> "$GITHUB_OUTPUT"
+          echo "project=$GITHUB_WORKSPACE/$PROJECT_DIR" >> "$GITHUB_OUTPUT"
 
       - name: Compilar APK Release
         shell: bash
         run: |
           set -euo pipefail
 
-          chmod +x "${{ steps.gradle.outputs.wrapper }}"
-
           bash "${{ steps.gradle.outputs.wrapper }}" \
             -p "${{ steps.gradle.outputs.project }}" \
-            --no-daemon assembleRelease
+            --no-daemon \
+            assembleRelease
 
-      - name: Verificar secrets de assinatura
+      - name: Validar secrets
         shell: bash
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
@@ -77,14 +92,19 @@ jobs:
         run: |
           set -euo pipefail
 
-          for name in KEYSTORE_BASE64 KEYSTORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do
-            if [ -z "${!name:-}" ]; then
-              echo "::error::O secret $name não está configurado."
+          for NAME in \
+            KEYSTORE_BASE64 \
+            KEYSTORE_PASSWORD \
+            KEY_ALIAS \
+            KEY_PASSWORD
+          do
+            if [ -z "${!NAME:-}" ]; then
+              echo "::error::Configure o secret $NAME."
               exit 1
             fi
           done
 
-      - name: Decodificar keystore
+      - name: Preparar keystore
         shell: bash
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
@@ -92,11 +112,51 @@ jobs:
           set -euo pipefail
 
           printf '%s' "$KEYSTORE_BASE64" \
-            | base64 --decode > "$RUNNER_TEMP/mulher-amparada.p12"
+            | base64 --decode \
+            > "$RUNNER_TEMP/mulher-amparada.p12"
 
           chmod 600 "$RUNNER_TEMP/mulher-amparada.p12"
 
-      - name: Assinar APK
+      - name: Localizar ferramentas e APK
+        id: files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
+
+          if [ -z "$SDK_ROOT" ]; then
+            echo "::error::Android SDK não encontrado."
+            exit 1
+          fi
+
+          BUILD_TOOLS="$SDK_ROOT/build-tools/37.0.0"
+
+          if [ ! -x "$BUILD_TOOLS/apksigner" ]; then
+            echo "::error::apksigner não encontrado."
+            exit 1
+          fi
+
+          if [ ! -x "$BUILD_TOOLS/zipalign" ]; then
+            echo "::error::zipalign não encontrado."
+            exit 1
+          fi
+
+          APK="$(find "$PROJECT_DIR" \
+            -type f \
+            -path '*/build/outputs/apk/release/*.apk' \
+            ! -name '*androidTest*' \
+            -print -quit)"
+
+          if [ -z "$APK" ]; then
+            echo "::error::APK Release não encontrado."
+            exit 1
+          fi
+
+          echo "apk=$APK" >> "$GITHUB_OUTPUT"
+          echo "build_tools=$BUILD_TOOLS" >> "$GITHUB_OUTPUT"
+
+      - name: Alinhar e assinar APK
         shell: bash
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -105,40 +165,33 @@ jobs:
         run: |
           set -euo pipefail
 
-          APK="$(find "$PROJECT_DIR" -type f \
-            -path '*/build/outputs/apk/release/*.apk' \
-            ! -name '*androidTest*' | head -n 1)"
-
-          if [ -z "$APK" ]; then
-            echo "::error::Nenhum APK Release foi encontrado."
-            exit 1
-          fi
-
           mkdir -p "$GITHUB_WORKSPACE/artefatos"
 
-          BUILD_TOOLS="$(find "$ANDROID_HOME/build-tools" \
-            -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
+          "${{ steps.files.outputs.build_tools }}/zipalign" \
+            -f -p 4 \
+            "${{ steps.files.outputs.apk }}" \
+            "$RUNNER_TEMP/aligned.apk"
 
-          if [ -z "$BUILD_TOOLS" ] || [ ! -x "$BUILD_TOOLS/apksigner" ]; then
-            echo "::error::apksigner não encontrado no Android SDK."
-            exit 1
-          fi
-
-          "$BUILD_TOOLS/apksigner" sign \
+          "${{ steps.files.outputs.build_tools }}/apksigner" sign \
             --ks "$RUNNER_TEMP/mulher-amparada.p12" \
             --ks-type PKCS12 \
             --ks-key-alias "$KEY_ALIAS" \
             --ks-pass env:KEYSTORE_PASSWORD \
             --key-pass env:KEY_PASSWORD \
             --out "$GITHUB_WORKSPACE/artefatos/mulher-amparada-release.apk" \
-            "$APK"
+            "$RUNNER_TEMP/aligned.apk"
 
-          "$BUILD_TOOLS/apksigner" verify \
+      - name: Verificar assinatura
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          "${{ steps.files.outputs.build_tools }}/apksigner" verify \
             --verbose \
             "$GITHUB_WORKSPACE/artefatos/mulher-amparada-release.apk"
 
-      - name: Disponibilizar APK para download
-        uses: actions/upload-artifact@v4
+      - name: Disponibilizar APK
+        uses: actions/upload-artifact@v7
         with:
           name: mulher-amparada-android-17
           path: artefatos/mulher-amparada-release.apk

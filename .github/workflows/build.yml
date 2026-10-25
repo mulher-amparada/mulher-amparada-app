@@ -2,7 +2,7 @@
 name: Mulher Amparada - Android
 
 on:
-  workflow_dispatch:
+  workflow_call:
   push:
     branches:
       - main

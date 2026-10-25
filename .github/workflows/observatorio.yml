@@ -7,7 +7,7 @@ on:
     paths:
       - 'tools/observatorio.c'
       - '.github/workflows/observatorio.yml'
-  workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: write

@@ -1,4 +1,4 @@
-name: Executar todos os workflows
+name: ⚙️Executar todos os workflows
 
 on:
   workflow_dispatch:

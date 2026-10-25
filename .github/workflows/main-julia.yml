@@ -9,7 +9,7 @@ on:
       - 'Project.toml'
       - 'Manifest.toml'
       - '.github/workflows/main-julia.yml'
-  workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read

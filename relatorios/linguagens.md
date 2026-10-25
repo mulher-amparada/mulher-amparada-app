@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-10-25T17:56:56Z
+- **Gerado em UTC:** 2026-10-25T18:12:31Z
 - **Linguagens identificadas:** 12
 - **Arquivos classificados:** 96
-- **Tamanho classificado:** 1806466 bytes
+- **Tamanho classificado:** 1809124 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -16,11 +16,11 @@
 
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
-| Kotlin | 50 | 1340096 | 74.18% |
-| CSS | 18 | 235771 | 13.05% |
-| Shell | 4 | 90469 | 5.01% |
-| HTML | 11 | 68255 | 3.78% |
-| JavaScript | 4 | 31544 | 1.75% |
+| Kotlin | 50 | 1340096 | 74.07% |
+| CSS | 18 | 235771 | 13.03% |
+| Shell | 4 | 90469 | 5.00% |
+| HTML | 11 | 68641 | 3.79% |
+| JavaScript | 4 | 33816 | 1.87% |
 | C | 1 | 18374 | 1.02% |
 | PHP | 1 | 9342 | 0.52% |
 | Julia | 1 | 5989 | 0.33% |
@@ -43,7 +43,7 @@
 
 - **Arquivos:** 18
 - **Tamanho:** 235771 bytes
-- **Percentual:** 13.05%
+- **Percentual:** 13.03%
 
 - `app1-day.css`
 - `app1-night.css`
@@ -67,8 +67,8 @@
 ### HTML
 
 - **Arquivos:** 11
-- **Tamanho:** 68255 bytes
-- **Percentual:** 3.78%
+- **Tamanho:** 68641 bytes
+- **Percentual:** 3.79%
 
 - `app1.html`
 - `divulgacao/html/banner.html`
@@ -85,8 +85,8 @@
 ### JavaScript
 
 - **Arquivos:** 4
-- **Tamanho:** 31544 bytes
-- **Percentual:** 1.75%
+- **Tamanho:** 33816 bytes
+- **Percentual:** 1.87%
 
 - `download.js`
 - `index.js`
@@ -105,7 +105,7 @@
 
 - **Arquivos:** 50
 - **Tamanho:** 1340096 bytes
-- **Percentual:** 74.18%
+- **Percentual:** 74.07%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt`
@@ -196,7 +196,7 @@
 
 - **Arquivos:** 4
 - **Tamanho:** 90469 bytes
-- **Percentual:** 5.01%
+- **Percentual:** 5.00%
 
 - `Código-fonte do app = Mulher Amparada/make.sh`
 - `Safe Woman Operational System/build/envsetup.sh`

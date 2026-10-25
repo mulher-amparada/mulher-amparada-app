@@ -1,58 +1,58 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-10-25T17:56:56Z",
-  "total_arquivos": 476,
-  "total_bytes": 55122485,
+  "gerado_em_utc": "2026-10-25T18:12:31Z",
+  "total_arquivos": 478,
+  "total_bytes": 55142127,
   "total_extensoes": 32,
   "extensoes": [
     {
       "extensao": ".xml",
       "quantidade_arquivos": 170,
       "tamanho_bytes": 211934,
-      "percentual_arquivos": 35.71,
+      "percentual_arquivos": 35.56,
       "percentual_bytes": 0.38
     },
     {
       "extensao": ".md",
-      "quantidade_arquivos": 86,
-      "tamanho_bytes": 268509,
-      "percentual_arquivos": 18.07,
-      "percentual_bytes": 0.49
+      "quantidade_arquivos": 87,
+      "tamanho_bytes": 276729,
+      "percentual_arquivos": 18.2,
+      "percentual_bytes": 0.5
     },
     {
       "extensao": ".png",
       "quantidade_arquivos": 74,
       "tamanho_bytes": 40314250,
-      "percentual_arquivos": 15.55,
-      "percentual_bytes": 73.14
+      "percentual_arquivos": 15.48,
+      "percentual_bytes": 73.11
     },
     {
       "extensao": ".kt",
       "quantidade_arquivos": 50,
       "tamanho_bytes": 1340096,
-      "percentual_arquivos": 10.5,
+      "percentual_arquivos": 10.46,
       "percentual_bytes": 2.43
     },
     {
       "extensao": ".css",
       "quantidade_arquivos": 18,
       "tamanho_bytes": 235771,
-      "percentual_arquivos": 3.78,
+      "percentual_arquivos": 3.77,
       "percentual_bytes": 0.43
     },
     {
       "extensao": ".yml",
       "quantidade_arquivos": 14,
       "tamanho_bytes": 93066,
-      "percentual_arquivos": 2.94,
+      "percentual_arquivos": 2.93,
       "percentual_bytes": 0.17
     },
     {
       "extensao": ".html",
       "quantidade_arquivos": 11,
-      "tamanho_bytes": 68255,
-      "percentual_arquivos": 2.31,
+      "tamanho_bytes": 68641,
+      "percentual_arquivos": 2.3,
       "percentual_bytes": 0.12
     },
     {
@@ -72,7 +72,7 @@
     {
       "extensao": ".js",
       "quantidade_arquivos": 4,
-      "tamanho_bytes": 31544,
+      "tamanho_bytes": 33816,
       "percentual_arquivos": 0.84,
       "percentual_bytes": 0.06
     },
@@ -89,6 +89,13 @@
       "tamanho_bytes": 90469,
       "percentual_arquivos": 0.84,
       "percentual_bytes": 0.16
+    },
+    {
+      "extensao": ".json",
+      "quantidade_arquivos": 3,
+      "tamanho_bytes": 14683,
+      "percentual_arquivos": 0.63,
+      "percentual_bytes": 0.03
     },
     {
       "extensao": ".mk",
@@ -109,7 +116,7 @@
       "quantidade_arquivos": 2,
       "tamanho_bytes": 11448622,
       "percentual_arquivos": 0.42,
-      "percentual_bytes": 20.77
+      "percentual_bytes": 20.76
     },
     {
       "extensao": ".bat",
@@ -131,13 +138,6 @@
       "tamanho_bytes": 118406,
       "percentual_arquivos": 0.42,
       "percentual_bytes": 0.21
-    },
-    {
-      "extensao": ".json",
-      "quantidade_arquivos": 2,
-      "tamanho_bytes": 5919,
-      "percentual_arquivos": 0.42,
-      "percentual_bytes": 0.01
     },
     {
       "extensao": ".pro",

@@ -44,8 +44,7 @@ jobs:
         run: |
           julia --startup-file=no -e '
             using Pkg
-            Pkg.add("CSV")
-            Pkg.instantiate()
+            Pkg.add(["CSV", "DataFrames"])
           '
 
       - name: Executar programa

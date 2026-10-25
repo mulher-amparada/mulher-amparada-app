@@ -1,0 +1,56 @@
+name: Validar QR Codes
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'scripts/validar-qrs.ts'
+      - 'executar-validacao.sh'
+      - '*.png'
+      - '*.jpg'
+      - '*.jpeg'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/validar-qrs.yml'
+
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validar-qrs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Instalar dependências do sistema
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            libcairo2-dev \
+            libpango1.0-dev \
+            libjpeg-dev \
+            libgif-dev \
+            librsvg2-dev \
+            pkg-config
+
+      - name: Executar validação
+        run: |
+          chmod +x executar-validacao.sh
+          ./executar-validacao.sh

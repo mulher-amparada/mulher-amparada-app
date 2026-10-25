@@ -229,3 +229,150 @@ jobs:
           path: artefatos/mulher-amparada-release.apk
           if-no-files-found: error
           retention-days: 14
+
+  publicar-apk-no-repositorio:
+    name: Sobrescrever APK no repositório
+    runs-on: ubuntu-26.04
+    needs: build
+    permissions:
+      contents: write
+
+    steps:
+      - name: Baixar o código do repositório
+        uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - name: Baixar APK gerado
+        uses: actions/download-artifact@v7
+        with:
+          name: mulher-amparada-release
+          path: apk-gerado
+
+      - name: Sobrescrever APK e enviar para o GitHub
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          DESTINO="Código-fonte do app = Mulher Amparada/app-release.apk"
+
+          APK="$(find apk-gerado -type f -name '*.apk' -print -quit)"
+
+          if [ -z "$APK" ]; then
+            echo "ERRO: nenhum APK foi encontrado."
+            exit 1
+          fi
+
+          mkdir -p "$(dirname "$DESTINO")"
+          cp "$APK" "$DESTINO"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add "$DESTINO"
+
+          if git diff --cached --quiet; then
+            echo "O APK já é idêntico ao arquivo publicado."
+            exit 0
+          fi
+
+          git commit -m "build: atualizar app-release.apk"
+          git push origin HEAD:main
+
+  atualizar-sha256-download:
+    name: Atualizar SHA-256 do download.html
+    runs-on: ubuntu-26.04
+    needs: publicar-apk-no-repositorio
+    permissions:
+      contents: write
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - name: Calcular SHA-256 do APK
+        id: hash
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          APK="Código-fonte do app = Mulher Amparada/app-release.apk"
+
+          if [ ! -f "$APK" ]; then
+            echo "ERRO: APK não encontrado: $APK"
+            exit 1
+          fi
+
+          SHA256="$(sha256sum "$APK" | awk '{print $1}')"
+
+          echo "sha256=$SHA256" >> "$GITHUB_OUTPUT"
+          echo "Novo SHA-256: $SHA256"
+
+      - name: Atualizar hash no HTML
+        env:
+          SHA256: ${{ steps.hash.outputs.sha256 }}
+        run: |
+          set -euo pipefail
+
+          HTML="download.html"
+
+          if [ ! -f "$HTML" ]; then
+            echo "ERRO: download.html não encontrado."
+            exit 1
+          fi
+
+          export SHA256
+
+          python3 - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+
+          arquivo = Path("download.html")
+          html = arquivo.read_text(encoding="utf-8")
+          sha256 = os.environ["SHA256"]
+
+          padrao = (
+              r'(<span class="detail-title">\s*'
+              r'Código SHA-256\s*</span>\s*'
+              r'<strong class="detail-value">\s*)'
+              r'[0-9a-fA-F]{64}'
+              r'(\s*</strong>)'
+          )
+
+          atualizado, quantidade = re.subn(
+              padrao,
+              lambda m: m.group(1) + sha256 + m.group(2),
+              html,
+              count=1
+          )
+
+          if quantidade != 1:
+              raise SystemExit(
+                  "ERRO: não foi possível localizar exatamente "
+                  "o campo Código SHA-256 no download.html."
+              )
+
+          arquivo.write_text(atualizado, encoding="utf-8")
+          print(f"SHA-256 atualizado: {sha256}")
+          PY
+
+      - name: Salvar atualização no GitHub
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add download.html
+
+          if git diff --cached --quiet; then
+            echo "O SHA-256 já está atualizado."
+            exit 0
+          fi
+
+          git commit -m "chore: atualizar SHA-256 do APK"
+          git push origin HEAD:main

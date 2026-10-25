@@ -1,52 +1,57 @@
 "use strict";
 
 /*
- * Relatório de linguagens do repositório GitHub.
+ * Inventário de extensões do repositório GitHub.
  */
+
 const REPORT_URL =
-  "https://raw.githubusercontent.com/mulher-amparada/mulher-amparada-app/main/relatorios/linguagens.json";
+  "https://raw.githubusercontent.com/mulher-amparada/mulher-amparada-app/main/relatorios/extensoes.json";
+
+const REQUEST_TIMEOUT = 15000;
+const REFRESH_INTERVAL = 5 * 60 * 1000;
 
 const LANGUAGE_COLORS = {
-  "Kotlin": "#A97BFF",
-  "Markdown": "#083FA1",
-  "CSS": "#663399",
-  "HTML": "#E34C26",
-  "XML": "#0060AC",
-  "YAML": "#CB171E",
+  Kotlin: "#A97BFF",
+  Markdown: "#083FA1",
+  CSS: "#663399",
+  HTML: "#E34C26",
+  XML: "#0060AC",
+  YAML: "#CB171E",
   "Bourne Shell": "#89E051",
-  "Shell": "#89E051",
-  "Bash": "#89E051",
-  "C": "#555555",
+  Shell: "#89E051",
+  Bash: "#89E051",
+  C: "#555555",
   "C++": "#F34B7D",
-  "PHP": "#4F5D95",
-  "Julia": "#A270BA",
-  "Gradle": "#02303A",
-  "Ruby": "#701516",
+  PHP: "#4F5D95",
+  Julia: "#A270BA",
+  Gradle: "#02303A",
+  Ruby: "#701516",
   "DOS Batch": "#C1F12E",
-  "TOML": "#9C4221",
-  "CSV": "#237346",
-  "Python": "#3572A5",
-  "JSON": "#292929",
-  "Properties": "#2A6277",
-  "Java": "#B07219",
-  "JavaScript": "#F1E05A",
-  "TypeScript": "#3178C6",
-  "Dart": "#00B4AB",
-  "Go": "#00ADD8",
-  "Rust": "#DEA584",
-  "Swift": "#F05138",
+  TOML: "#9C4221",
+  CSV: "#237346",
+  Python: "#3572A5",
+  JSON: "#292929",
+  Properties: "#2A6277",
+  Java: "#B07219",
+  JavaScript: "#F1E05A",
+  TypeScript: "#3178C6",
+  Dart: "#00B4AB",
+  Go: "#00ADD8",
+  Rust: "#DEA584",
+  Swift: "#F05138",
   "Kotlin Script": "#A97BFF",
   "Gradle Kotlin DSL": "#02303A",
-  "Makefile": "#427819",
-  "Dockerfile": "#384D54",
-  "SQL": "#E38C00",
-  "PowerShell": "#012456",
-  "R": "#198CE7",
-  "Lua": "#000080",
-  "Perl": "#0298C3",
-  "HCL": "#844FBA",
+  Makefile: "#427819",
+  Dockerfile: "#384D54",
+  SQL: "#E38C00",
+  PowerShell: "#012456",
+  R: "#198CE7",
+  Lua: "#000080",
+  Perl: "#0298C3",
+  HCL: "#844FBA",
   "Markdown Extra": "#083FA1",
-  "Text": "#777777"
+  Text: "#777777",
+  "[sem extensão]": "#777777"
 };
 
 const FALLBACK_COLORS = [
@@ -73,10 +78,7 @@ const elements = {
   status: document.getElementById("update-status"),
   footerUpdated: document.getElementById("footer-updated"),
 
-  tableLanguageCount: document.getElementById(
-    "table-language-count"
-  ),
-
+  tableLanguageCount: document.getElementById("table-language-count"),
   rows: document.getElementById("language-rows"),
   bar: document.getElementById("distribution-bar"),
   legend: document.getElementById("legend"),
@@ -101,11 +103,12 @@ let totals = {
   blank: null,
   comment: null,
   code: null,
-  bytes: null
+  bytes: 0
 };
 
-let reportType = "linguist";
+let reportType = "extensions";
 let requestController = null;
+let refreshTimer = null;
 
 /*
  * Formatação e utilitários.
@@ -130,38 +133,37 @@ function formatPercentage(value) {
     return "0%";
   }
 
-  return number.toLocaleString("pt-BR", {
-    minimumFractionDigits: 1,
-    maximumFractionDigits: 2
-  }) + "%";
+  return (
+    number.toLocaleString("pt-BR", {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 2
+    }) + "%"
+  );
 }
 
 function escapeHTML(value) {
-  return String(value).replace(/[&<>"']/g, character => ({
+  const entities = {
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
     '"': "&quot;",
     "'": "&#39;"
-  })[character]);
+  };
+
+  return String(value).replace(/[&<>"']/g, character => {
+    return entities[character];
+  });
 }
 
 function slugify(name) {
-  return String(name)
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-zA-Z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .toLowerCase() || "linguagem";
-}
-
-function applyLanguageClass(element, name) {
-  if (!element || !name) {
-    return;
-  }
-
-  element.classList.add("language-" + slugify(name));
-  element.dataset.language = name;
+  return (
+    String(name)
+      .normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .toLowerCase() || "extensao"
+  );
 }
 
 function getLanguageColor(name, index = 0) {
@@ -169,14 +171,15 @@ function getLanguageColor(name, index = 0) {
     return LANGUAGE_COLORS[name];
   }
 
-  const position = Math.abs(
-    [...String(name)].reduce(
-      (total, character) => total + character.charCodeAt(0),
-      0
-    )
-  ) % FALLBACK_COLORS.length;
+  const position =
+    [...String(name)].reduce((total, character) => {
+      return total + character.charCodeAt(0);
+    }, 0) % FALLBACK_COLORS.length;
 
-  return FALLBACK_COLORS[position] || FALLBACK_COLORS[index % FALLBACK_COLORS.length];
+  return (
+    FALLBACK_COLORS[position] ||
+    FALLBACK_COLORS[index % FALLBACK_COLORS.length]
+  );
 }
 
 function parsePercentage(value) {
@@ -194,34 +197,78 @@ function parsePercentage(value) {
   return Number.isFinite(number) ? number : 0;
 }
 
-function getVersion(header) {
-  if (!Array.isArray(header)) {
-    return "cloc";
+function getNumericValue(value, fallback = 0) {
+  if (value === null || value === undefined || value === "") {
+    return fallback;
   }
 
-  const text = header.join(" ");
-  const match = text.match(/cloc\s+v?([\d.]+)/i);
+  const number = Number(value);
 
-  return match ? `cloc v${match[1]}` : "cloc";
+  return Number.isFinite(number) ? number : fallback;
 }
 
 /*
- * Converte o JSON do GitHub Linguist.
- *
- * Estrutura:
- * {
- *   "total_linguagens": 12,
- *   "total_arquivos_classificados": 96,
- *   "total_bytes_classificados": 1801488,
- *   "linguagens": [
- *     {
- *       "nome": "Kotlin",
- *       "tamanho_bytes": 12345,
- *       "percentual": "50.00",
- *       "arquivos": ["arquivo.kt"]
- *     }
- *   ]
- * }
+ * Converte o inventário de extensões.
+ */
+
+function parseExtensionsReport(report) {
+  if (!Array.isArray(report.extensoes)) {
+    throw new Error(
+      "O JSON não contém uma lista válida de extensões."
+    );
+  }
+
+  const parsedLanguages = report.extensoes
+    .filter(item => item && typeof item === "object")
+    .map((item, index) => {
+      const name = String(item.extensao || "[sem extensão]");
+
+      return {
+        name,
+        files: getNumericValue(item.quantidade_arquivos),
+        blank: null,
+        comment: null,
+        code: null,
+        bytes: getNumericValue(item.tamanho_bytes),
+        percentage: parsePercentage(item.percentual_bytes),
+        filePercentage: parsePercentage(item.percentual_arquivos),
+        paths: [],
+        color: getLanguageColor(name, index)
+      };
+    });
+
+  const computedFiles = parsedLanguages.reduce((sum, item) => {
+    return sum + item.files;
+  }, 0);
+
+  const computedBytes = parsedLanguages.reduce((sum, item) => {
+    return sum + item.bytes;
+  }, 0);
+
+  const totalFiles = Number(report.total_arquivos);
+  const totalBytes = Number(report.total_bytes);
+  const totalExtensions = Number(report.total_extensoes);
+
+  return {
+    type: "extensions",
+    languages: parsedLanguages,
+    totals: {
+      files: Number.isFinite(totalFiles) ? totalFiles : computedFiles,
+      blank: null,
+      comment: null,
+      code: null,
+      bytes: Number.isFinite(totalBytes) ? totalBytes : computedBytes
+    },
+    version: "Inventário de extensões",
+    totalExtensions: Number.isFinite(totalExtensions)
+      ? totalExtensions
+      : parsedLanguages.length,
+    generatedAt: report.gerado_em_utc || null
+  };
+}
+
+/*
+ * Compatibilidade com relatórios antigos do Linguist.
  */
 
 function parseLinguistReport(report) {
@@ -238,65 +285,62 @@ function parseLinguistReport(report) {
         ? item.arquivos
         : [];
 
+      const name = String(item.nome || "Desconhecida");
+
       return {
-        name: String(item.nome || "Desconhecida"),
+        name,
         files: Array.isArray(item.arquivos)
           ? paths.length
-          : Number(item.quantidade_arquivos) || 0,
+          : getNumericValue(item.quantidade_arquivos),
         blank: null,
         comment: null,
         code: null,
-        bytes: Number(item.tamanho_bytes) || 0,
+        bytes: getNumericValue(item.tamanho_bytes),
         percentage: parsePercentage(item.percentual),
         paths,
-        color: getLanguageColor(item.nome, index)
+        color: getLanguageColor(name, index)
       };
     });
 
-  const computedFiles = parsedLanguages.reduce(
-    (sum, language) => sum + language.files,
-    0
-  );
+  const computedFiles = parsedLanguages.reduce((sum, item) => {
+    return sum + item.files;
+  }, 0);
 
-  const computedBytes = parsedLanguages.reduce(
-    (sum, language) => sum + language.bytes,
-    0
-  );
+  const computedBytes = parsedLanguages.reduce((sum, item) => {
+    return sum + item.bytes;
+  }, 0);
 
-  /*
-   * Usa os totais do próprio relatório quando disponíveis.
-   */
-
-  const totalFiles =
-    Number(report.total_arquivos_classificados);
-
-  const totalBytes =
-    Number(report.total_bytes_classificados);
-
-  const totalLanguages =
-    Number(report.total_linguagens);
+  const totalFiles = Number(report.total_arquivos_classificados);
+  const totalBytes = Number(report.total_bytes_classificados);
 
   return {
     type: "linguist",
     languages: parsedLanguages,
     totals: {
-      files: Number.isFinite(totalFiles)
-        ? totalFiles
-        : computedFiles,
+      files: Number.isFinite(totalFiles) ? totalFiles : computedFiles,
       blank: null,
       comment: null,
       code: null,
-      bytes: Number.isFinite(totalBytes)
-        ? totalBytes
-        : computedBytes
+      bytes: Number.isFinite(totalBytes) ? totalBytes : computedBytes
     },
-    version: report.fonte_classificacao || "GitHub Linguist"
+    version: report.fonte_classificacao || "GitHub Linguist",
+    generatedAt: report.gerado_em_utc || null
   };
 }
 
 /*
- * Converte relatórios produzidos pelo cloc.
+ * Compatibilidade com relatórios produzidos pelo cloc.
  */
+
+function getVersion(header) {
+  if (!Array.isArray(header)) {
+    return "cloc";
+  }
+
+  const match = header.join(" ").match(/cloc\s+v?([\d.]+)/i);
+
+  return match ? `cloc v${match[1]}` : "cloc";
+}
 
 function parseClocReport(report) {
   const parsedLanguages = Object.entries(report)
@@ -317,10 +361,10 @@ function parseClocReport(report) {
     })
     .map(([name, value], index) => ({
       name,
-      files: Number(value.nFiles) || 0,
-      blank: Number(value.blank) || 0,
-      comment: Number(value.comment) || 0,
-      code: Number(value.code) || 0,
+      files: getNumericValue(value.nFiles),
+      blank: getNumericValue(value.blank),
+      comment: getNumericValue(value.comment),
+      code: getNumericValue(value.code),
       bytes: null,
       percentage: 0,
       paths: [],
@@ -329,16 +373,16 @@ function parseClocReport(report) {
 
   if (parsedLanguages.length === 0) {
     throw new Error(
-      "Nenhuma linguagem foi encontrada no formato Linguist ou cloc."
+      "O JSON não possui um formato válido de extensões, Linguist ou cloc."
     );
   }
 
   const computedTotals = parsedLanguages.reduce(
-    (result, language) => {
-      result.files += language.files;
-      result.blank += language.blank;
-      result.comment += language.comment;
-      result.code += language.code;
+    (result, item) => {
+      result.files += item.files;
+      result.blank += item.blank;
+      result.comment += item.comment;
+      result.code += item.code;
 
       return result;
     },
@@ -352,19 +396,17 @@ function parseClocReport(report) {
 
   const sum = report.SUM || {};
 
-  const resultTotals = {
-    files: Number(sum.nFiles ?? computedTotals.files),
-    blank: Number(sum.blank ?? computedTotals.blank),
-    comment: Number(sum.comment ?? computedTotals.comment),
-    code: Number(sum.code ?? computedTotals.code),
+  const totals = {
+    files: getNumericValue(sum.nFiles, computedTotals.files),
+    blank: getNumericValue(sum.blank, computedTotals.blank),
+    comment: getNumericValue(sum.comment, computedTotals.comment),
+    code: getNumericValue(sum.code, computedTotals.code),
     bytes: null
   };
 
-  const totalCode = resultTotals.code;
-
-  parsedLanguages.forEach(language => {
-    language.percentage = totalCode > 0
-      ? language.code / totalCode * 100
+  parsedLanguages.forEach(item => {
+    item.percentage = totals.code > 0
+      ? (item.code / totals.code) * 100
       : 0;
   });
 
@@ -373,18 +415,27 @@ function parseClocReport(report) {
   return {
     type: "cloc",
     languages: parsedLanguages,
-    totals: resultTotals,
-    version: getVersion(report.header)
+    totals,
+    version: getVersion(report.header),
+    generatedAt: null
   };
 }
 
 /*
- * Detecta automaticamente qual formato foi recebido.
+ * Detecta automaticamente o formato do JSON.
  */
 
 function parseReport(report) {
-  if (!report || typeof report !== "object" || Array.isArray(report)) {
+  if (
+    !report ||
+    typeof report !== "object" ||
+    Array.isArray(report)
+  ) {
     throw new Error("O relatório JSON não é válido.");
+  }
+
+  if (Array.isArray(report.extensoes)) {
+    return parseExtensionsReport(report);
   }
 
   if (Array.isArray(report.linguagens)) {
@@ -395,11 +446,50 @@ function parseReport(report) {
 }
 
 /*
- * Atualiza os rótulos para não confundir bytes com linhas.
+ * Métrica principal do relatório.
+ */
+
+function getMetric(item) {
+  if (
+    reportType === "extensions" ||
+    reportType === "linguist"
+  ) {
+    return item.bytes;
+  }
+
+  return item.code;
+}
+
+function getTotalMetric() {
+  if (
+    reportType === "extensions" ||
+    reportType === "linguist"
+  ) {
+    return totals.bytes;
+  }
+
+  return totals.code;
+}
+
+function getMetricLabel() {
+  if (
+    reportType === "extensions" ||
+    reportType === "linguist"
+  ) {
+    return "bytes";
+  }
+
+  return "linhas de código";
+}
+
+/*
+ * Atualiza os rótulos da interface.
  */
 
 function updateReportLabels() {
-  const linguist = reportType === "linguist";
+  const isExtensions = reportType === "extensions";
+  const isLinguist = reportType === "linguist";
+  const isByteReport = isExtensions || isLinguist;
 
   const table = elements.rows?.closest("table");
   const headers = table
@@ -408,88 +498,64 @@ function updateReportLabels() {
 
   if (headers.length >= 5) {
     headers[1].textContent = "Arquivos";
-    headers[2].textContent = linguist
+    headers[2].textContent = isByteReport
       ? "Linhas em branco"
       : "Linhas em branco";
-    headers[3].textContent = linguist
-      ? "Comentários"
-      : "Comentários";
-    headers[4].textContent = linguist
+    headers[3].textContent = "Comentários";
+    headers[4].textContent = isByteReport
       ? "Tamanho (bytes)"
       : "Linhas de código";
   }
 
-  /*
-   * Atualiza rótulos de métricas quando o HTML utiliza
-   * label[for], data-label-for ou classes comuns de rótulos.
-   */
-
-  const updateLabel = (id, text) => {
+  const updateLabel = (id, labelText) => {
     const label = document.querySelector(
       `label[for="${id}"], [data-label-for="${id}"]`
     );
 
     if (label) {
-      label.textContent = text;
+      label.textContent = labelText;
       return;
     }
 
-    const valueElement = document.getElementById(id);
+    const value = document.getElementById(id);
 
-    if (!valueElement?.parentElement) {
+    if (!value?.parentElement) {
       return;
     }
 
-    const parent = valueElement.parentElement;
-
-    const candidate = parent.querySelector(
+    const candidate = value.parentElement.querySelector(
       ".metric-label, .stat-label, .card-label, [data-metric-label]"
     );
 
-    if (candidate && candidate !== valueElement) {
-      candidate.textContent = text;
+    if (candidate && candidate !== value) {
+      candidate.textContent = labelText;
     }
   };
 
-  updateLabel(
-    "code-total",
-    linguist ? "Tamanho total (bytes)" : "Linhas de código"
-  );
+  const metricLabel = isByteReport
+    ? "Tamanho total (bytes)"
+    : "Linhas de código";
 
-  updateLabel(
-    "total-code",
-    linguist ? "Tamanho total (bytes)" : "Linhas de código"
-  );
+  updateLabel("code-total", metricLabel);
+  updateLabel("total-code", metricLabel);
 
   updateLabel(
     "total-blank",
-    linguist ? "Linhas em branco (indisponível)" : "Linhas em branco"
+    isByteReport
+      ? "Linhas em branco (indisponível)"
+      : "Linhas em branco"
   );
 
   updateLabel(
     "total-comments",
-    linguist ? "Comentários (indisponível)" : "Comentários"
+    isByteReport
+      ? "Comentários (indisponível)"
+      : "Comentários"
   );
 }
 
 /*
- * Retorna a métrica usada para ordenar e desenhar o gráfico.
- */
-
-function getMetric(language) {
-  return reportType === "linguist"
-    ? language.bytes
-    : language.code;
-}
-
-function getTotalMetric() {
-  return reportType === "linguist"
-    ? totals.bytes
-    : totals.code;
-}
-
-/*
- * Resumo.
+ * Resumo do inventário.
  */
 
 function renderSummary() {
@@ -499,24 +565,30 @@ function renderSummary() {
     elements.languageTotal.textContent = formatNumber(
       languages.length
     );
+
+    elements.languageTotal.title = reportType === "extensions"
+      ? "Quantidade de extensões identificadas"
+      : "Quantidade de linguagens identificadas";
   }
 
   if (elements.fileTotal) {
-    elements.fileTotal.textContent = formatNumber(
-      totals.files
-    );
+    elements.fileTotal.textContent = formatNumber(totals.files);
   }
 
   if (elements.codeTotal) {
     elements.codeTotal.textContent = formatNumber(metricTotal);
-    elements.codeTotal.title = reportType === "linguist"
-      ? "Tamanho total classificado em bytes"
-      : "Total de linhas de código";
+    elements.codeTotal.title = reportType === "cloc"
+      ? "Total de linhas de código"
+      : "Tamanho total em bytes";
   }
 
   if (elements.tableLanguageCount) {
+    const label = reportType === "extensions"
+      ? "extensões"
+      : "linguagens";
+
     elements.tableLanguageCount.textContent =
-      `${formatNumber(languages.length)} linguagens`;
+      `${formatNumber(languages.length)} ${label}`;
   }
 
   if (elements.totalFiles) {
@@ -528,21 +600,23 @@ function renderSummary() {
   }
 
   if (elements.totalComments) {
-    elements.totalComments.textContent = formatNumber(totals.comment);
+    elements.totalComments.textContent = formatNumber(
+      totals.comment
+    );
   }
 
   if (elements.totalCode) {
     elements.totalCode.textContent = formatNumber(metricTotal);
-    elements.totalCode.title = reportType === "linguist"
-      ? "Tamanho total classificado em bytes"
-      : "Total de linhas de código";
+    elements.totalCode.title = reportType === "cloc"
+      ? "Total de linhas de código"
+      : "Tamanho total em bytes";
   }
 
   updateReportLabels();
 }
 
 /*
- * Tabela de linguagens.
+ * Renderiza a tabela.
  */
 
 function renderTable(filter = "") {
@@ -555,45 +629,37 @@ function renderTable(filter = "") {
     .toLocaleLowerCase("pt-BR");
 
   const filtered = [...languages]
-    .filter(language =>
-      language.name.toLocaleLowerCase("pt-BR").includes(query)
+    .filter(item =>
+      item.name.toLocaleLowerCase("pt-BR").includes(query)
     )
     .sort((a, b) => getMetric(b) - getMetric(a));
 
-  elements.rows.innerHTML = filtered.map(language => {
-    const metric = getMetric(language);
+  elements.rows.innerHTML = filtered.map(item => {
+    const metric = getMetric(item);
+    const name = escapeHTML(item.name);
+    const slug = slugify(item.name);
 
     return `
-      <tr class="language-${slugify(language.name)}"
-          data-language="${escapeHTML(language.name)}">
+      <tr class="language-${slug}" data-language="${name}">
         <td>
-          <span class="language language-${slugify(language.name)}"
-                data-language="${escapeHTML(language.name)}">
+          <span
+            class="language language-${slug}"
+            data-language="${name}"
+          >
             <span
-              class="dot language-${slugify(language.name)}"
-              data-language="${escapeHTML(language.name)}"
-              style="background:${language.color}"
+              class="dot language-${slug}"
+              data-language="${name}"
+              style="background:${item.color}"
               aria-hidden="true"
             ></span>
-            ${escapeHTML(language.name)}
+            ${name}
           </span>
         </td>
 
-        <td class="number">
-          ${formatNumber(language.files)}
-        </td>
-
-        <td class="number">
-          ${formatNumber(language.blank)}
-        </td>
-
-        <td class="number">
-          ${formatNumber(language.comment)}
-        </td>
-
-        <td class="code-number">
-          ${formatNumber(metric)}
-        </td>
+        <td class="number">${formatNumber(item.files)}</td>
+        <td class="number">${formatNumber(item.blank)}</td>
+        <td class="number">${formatNumber(item.comment)}</td>
+        <td class="code-number">${formatNumber(metric)}</td>
       </tr>
     `;
   }).join("");
@@ -604,7 +670,7 @@ function renderTable(filter = "") {
 }
 
 /*
- * Gráfico de distribuição.
+ * Gráfico de distribuição por bytes ou linhas.
  */
 
 function renderDistribution() {
@@ -626,36 +692,34 @@ function renderDistribution() {
     return;
   }
 
-  const metricName = reportType === "linguist"
-    ? "bytes"
-    : "linhas de código";
+  const metricName = getMetricLabel();
 
   elements.bar.setAttribute(
     "aria-label",
-    `Distribuição de ${formatNumber(totalMetric)} ${metricName} entre ${languages.length} linguagens.`
+    `Distribuição de ${formatNumber(totalMetric)} ${metricName} entre ${languages.length} itens.`
   );
 
   const sortedLanguages = [...languages]
-    .filter(language => getMetric(language) > 0)
+    .filter(item => getMetric(item) > 0)
     .sort((a, b) => getMetric(b) - getMetric(a));
 
   const barFragment = document.createDocumentFragment();
 
-  sortedLanguages.forEach(language => {
-    const metric = getMetric(language);
-    const percentage = metric / totalMetric * 100;
+  sortedLanguages.forEach(item => {
+    const metric = getMetric(item);
+    const percentage = (metric / totalMetric) * 100;
 
     const segment = document.createElement("div");
 
     segment.className =
-      `bar-segment language-${slugify(language.name)}`;
+      `bar-segment language-${slugify(item.name)}`;
 
-    segment.dataset.language = language.name;
+    segment.dataset.language = item.name;
     segment.style.width = `${percentage}%`;
-    segment.style.backgroundColor = language.color;
+    segment.style.backgroundColor = item.color;
 
     segment.title =
-      `${language.name}: ${formatNumber(metric)} ${metricName} ` +
+      `${item.name}: ${formatNumber(metric)} ${metricName} ` +
       `(${formatPercentage(percentage)})`;
 
     segment.setAttribute("aria-label", segment.title);
@@ -667,46 +731,43 @@ function renderDistribution() {
 
   const legendFragment = document.createDocumentFragment();
 
-  sortedLanguages.slice(0, 6).forEach(language => {
-    const metric = getMetric(language);
-    const percentage = metric / totalMetric * 100;
+  sortedLanguages.slice(0, 6).forEach(item => {
+    const metric = getMetric(item);
+    const percentage = (metric / totalMetric) * 100;
 
-    const item = document.createElement("div");
+    const legendItem = document.createElement("div");
 
-    item.className =
-      `legend-item language-${slugify(language.name)}`;
+    legendItem.className =
+      `legend-item language-${slugify(item.name)}`;
 
-    item.dataset.language = language.name;
+    legendItem.dataset.language = item.name;
 
     const dot = document.createElement("span");
 
-    dot.className =
-      `dot language-${slugify(language.name)}`;
-
-    dot.dataset.language = language.name;
-    dot.style.backgroundColor = language.color;
+    dot.className = `dot language-${slugify(item.name)}`;
+    dot.dataset.language = item.name;
+    dot.style.backgroundColor = item.color;
     dot.setAttribute("aria-hidden", "true");
 
     const name = document.createElement("strong");
 
-    name.textContent = language.name;
-    name.title = language.name;
+    name.textContent = item.name;
+    name.title = item.name;
 
     const percent = document.createElement("span");
 
     percent.textContent = formatPercentage(percentage);
-    percent.title =
-      `${formatNumber(metric)} ${metricName}`;
+    percent.title = `${formatNumber(metric)} ${metricName}`;
 
-    item.append(dot, name, percent);
-    legendFragment.appendChild(item);
+    legendItem.append(dot, name, percent);
+    legendFragment.appendChild(legendItem);
   });
 
   elements.legend.appendChild(legendFragment);
 }
 
 /*
- * Versão e estado da atualização.
+ * Atualiza a versão exibida.
  */
 
 function updateVersion(version) {
@@ -718,6 +779,10 @@ function updateVersion(version) {
     elements.footerVersion.textContent = version;
   }
 }
+
+/*
+ * Estados de carregamento e erro.
+ */
 
 function setLoading(isLoading) {
   if (elements.refreshButton) {
@@ -749,7 +814,9 @@ function showError(message) {
 }
 
 /*
- * Carrega o JSON diretamente do GitHub.
+ * Busca o JSON publicado no GitHub.
+ *
+ * O tempo limite evita uma requisição presa indefinidamente.
  */
 
 async function loadReport() {
@@ -760,6 +827,8 @@ async function loadReport() {
   const controller = new AbortController();
   requestController = controller;
 
+  let timeoutId = null;
+
   setLoading(true);
 
   if (elements.error) {
@@ -769,18 +838,18 @@ async function loadReport() {
   try {
     const url = new URL(REPORT_URL);
 
-    /*
-     * Evita reaproveitar uma resposta antiga em cache.
-     */
-
     url.searchParams.set("_", Date.now().toString());
+
+    timeoutId = window.setTimeout(() => {
+      controller.abort();
+    }, REQUEST_TIMEOUT);
 
     const response = await fetch(url.toString(), {
       method: "GET",
       cache: "no-store",
       signal: controller.signal,
       headers: {
-        "Accept": "application/json"
+        Accept: "application/json"
       }
     });
 
@@ -792,10 +861,6 @@ async function loadReport() {
 
     const report = await response.json();
     const result = parseReport(report);
-
-    /*
-     * Não atualiza a interface se outra consulta já começou.
-     */
 
     if (requestController !== controller) {
       return;
@@ -820,15 +885,13 @@ async function loadReport() {
     }
 
     if (elements.footerUpdated) {
-      const generatedAt = report.gerado_em_utc;
-
-      if (generatedAt) {
-        const date = new Date(generatedAt);
+      if (result.generatedAt) {
+        const date = new Date(result.generatedAt);
 
         elements.footerUpdated.textContent =
           `Relatório gerado em: ${
             Number.isNaN(date.getTime())
-              ? generatedAt
+              ? result.generatedAt
               : date.toLocaleString("pt-BR")
           }`;
       } else {
@@ -840,25 +903,36 @@ async function loadReport() {
     if (elements.error) {
       elements.error.hidden = true;
     }
-
   } catch (error) {
-    if (error.name === "AbortError") {
+    if (requestController !== controller) {
       return;
     }
 
     console.error(
-      "Erro ao carregar o relatório de linguagens:",
+      "Erro ao carregar o inventário do repositório:",
       error
     );
 
-    showError(
-      "Não foi possível carregar o relatório. " +
-      "Verifique se o arquivo existe, se o repositório é público " +
-      "e se o JSON possui uma estrutura válida. " +
-      error.message
-    );
+    let message;
 
+    if (error.name === "AbortError") {
+      message =
+        "A requisição demorou demais ou foi cancelada. " +
+        "Verifique a conexão e tente novamente.";
+    } else {
+      message =
+        "Não foi possível carregar o relatório. " +
+        "Verifique se o arquivo existe, se o repositório é público " +
+        "e se o JSON possui uma estrutura válida. " +
+        error.message;
+    }
+
+    showError(message);
   } finally {
+    if (timeoutId !== null) {
+      window.clearTimeout(timeoutId);
+    }
+
     if (requestController === controller) {
       requestController = null;
       setLoading(false);
@@ -867,7 +941,7 @@ async function loadReport() {
 }
 
 /*
- * Pesquisa local na tabela.
+ * Pesquisa local.
  */
 
 if (elements.search) {
@@ -877,7 +951,7 @@ if (elements.search) {
 }
 
 /*
- * Botão para atualizar manualmente.
+ * Atualização manual.
  */
 
 if (elements.refreshButton) {
@@ -887,28 +961,43 @@ if (elements.refreshButton) {
 }
 
 /*
- * Primeira consulta.
+ * Carregamento inicial.
  */
 
 loadReport();
 
 /*
- * Atualiza a cada cinco minutos enquanto a página
- * estiver visível.
+ * Atualização automática a cada cinco minutos.
  */
 
-window.setInterval(() => {
+refreshTimer = window.setInterval(() => {
   if (!document.hidden) {
     loadReport();
   }
-}, 5 * 60 * 1000);
+}, REFRESH_INTERVAL);
 
 /*
- * Atualiza quando o usuário volta à página.
+ * Atualização ao voltar para a página.
  */
 
 document.addEventListener("visibilitychange", () => {
   if (!document.hidden) {
     loadReport();
+  }
+});
+
+/*
+ * Evita manter o temporizador ativo em páginas descartadas.
+ */
+
+window.addEventListener("pagehide", () => {
+  if (requestController) {
+    requestController.abort();
+    requestController = null;
+  }
+
+  if (refreshTimer !== null) {
+    window.clearInterval(refreshTimer);
+    refreshTimer = null;
   }
 });

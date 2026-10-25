@@ -166,7 +166,6 @@
     }
   </style>
 </head>
-
 <body>
   <main class="container">
 
@@ -183,21 +182,23 @@
       </div>
 
       <span class="version" id="cloc-version">
-        cloc
+        Inventário de extensões
       </span>
     </header>
 
     <section class="hero">
       <div class="eyebrow">
         <span class="status-dot"></span>
-        Análise de código
+        Análise do repositório
       </div>
 
-      <h1>Linguagens do repositório</h1>
+      <h1>Extensões do repositório</h1>
 
       <p class="description">
-        Uma visão geral dos arquivos, linhas em branco, comentários
-        e código identificado pelo cloc.
+        Inventário dos tipos de arquivo encontrados no repositório,
+        com a quantidade de arquivos e o tamanho total em bytes.
+        Os dados são apresentados conforme o relatório publicado,
+        sem confundir extensões com linguagens ou tamanho com linhas de código.
       </p>
 
       <div class="data-status" aria-live="polite">
@@ -208,11 +209,11 @@
       </div>
     </section>
 
-    <section class="stats" aria-label="Resumo do projeto">
+    <section class="stats" aria-label="Resumo do inventário">
 
       <article class="stat-card">
         <div class="stat-label">
-          Linguagens identificadas
+          Extensões identificadas
         </div>
 
         <strong
@@ -221,13 +222,13 @@
         >—</strong>
 
         <span class="stat-detail">
-          Tipos de arquivo reconhecidos
+          Tipos de arquivo encontrados no inventário
         </span>
       </article>
 
       <article class="stat-card">
         <div class="stat-label">
-          Arquivos analisados
+          Arquivos contabilizados
         </div>
 
         <strong
@@ -236,13 +237,13 @@
         >—</strong>
 
         <span class="stat-detail">
-          Arquivos contabilizados pelo cloc
+          Arquivos incluídos no relatório
         </span>
       </article>
 
       <article class="stat-card">
         <div class="stat-label">
-          Linhas de código
+          Tamanho total (bytes)
         </div>
 
         <strong
@@ -251,7 +252,7 @@
         >—</strong>
 
         <span class="stat-detail">
-          Total informado pelo relatório
+          Soma dos tamanhos registrados no inventário
         </span>
       </article>
 
@@ -261,11 +262,11 @@
       <div class="panel-header">
         <div>
           <h2 class="panel-title">
-            Distribuição de código
+            Distribuição por tamanho
           </h2>
 
           <div class="panel-subtitle">
-            Participação de cada linguagem nas linhas de código
+            Participação de cada extensão no total de bytes contabilizados
           </div>
         </div>
       </div>
@@ -276,7 +277,7 @@
           class="bar"
           id="distribution-bar"
           role="img"
-          aria-label="Distribuição proporcional das linhas de código por linguagem"
+          aria-label="Distribuição proporcional do tamanho dos arquivos por extensão"
         ></div>
 
         <div
@@ -292,18 +293,18 @@
       <div class="panel-header">
         <div>
           <h2 class="panel-title">
-            Detalhamento das linguagens
+            Detalhamento das extensões
           </h2>
 
           <div class="panel-subtitle">
-            Arquivos, linhas em branco, comentários e código
+            Quantidade de arquivos e tamanho total de cada extensão
           </div>
         </div>
 
         <span
           class="language-count"
           id="table-language-count"
-        >— linguagens</span>
+        >— extensões</span>
       </div>
 
       <div class="table-tools">
@@ -312,8 +313,8 @@
           id="search"
           class="search"
           type="search"
-          placeholder="Pesquisar linguagem..."
-          aria-label="Pesquisar linguagem"
+          placeholder="Pesquisar extensão..."
+          aria-label="Pesquisar extensão"
           autocomplete="off"
         >
 
@@ -333,7 +334,7 @@
         class="loading-state"
         role="status"
       >
-        Carregando relatório de linguagens...
+        Carregando inventário de extensões...
       </div>
 
       <div
@@ -342,19 +343,19 @@
         role="alert"
         hidden
       >
-        Não foi possível carregar o relatório.
-        Verifique se o arquivo JSON foi publicado no GitHub Pages.
+        Não foi possível carregar o inventário.
+        Verifique se o arquivo JSON existe e está acessível.
       </div>
 
       <div class="table-wrapper">
         <table>
           <thead>
             <tr>
-              <th scope="col">Linguagem</th>
+              <th scope="col">Extensão</th>
               <th scope="col">Arquivos</th>
-              <th scope="col">Em branco</th>
+              <th scope="col">Linhas em branco</th>
               <th scope="col">Comentários</th>
-              <th scope="col">Código</th>
+              <th scope="col">Tamanho (bytes)</th>
             </tr>
           </thead>
 
@@ -377,15 +378,17 @@
         class="empty-state"
         hidden
       >
-        Nenhuma linguagem encontrada.
+        Nenhuma extensão encontrada.
       </div>
 
     </section>
 
     <footer class="footer">
       <span>
-        Gerado a partir dos dados do
-        <strong id="footer-cloc-version">cloc</strong>
+        Fonte:
+        <strong id="footer-cloc-version">
+          Inventário de extensões
+        </strong>
       </span>
 
       <span id="footer-updated">
@@ -395,66 +398,67 @@
 
   </main>
 
-    <script src="linguagens.js"></script>
+  <script src="linguagens.js"></script>
 
-<script id="AUTO-LINGUAGENS-CORES-V1">
-(() => {
-  const slug = name => name.normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-zA-Z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .toLowerCase() || "linguagem";
+  <script id="AUTO-LINGUAGENS-CORES-V1">
+    (() => {
+      const slug = name => name.normalize("NFKD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-zA-Z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .toLowerCase() || "extensao";
 
-  const aplicar = (elemento, nome) => {
-    if (!elemento || !nome) return;
-    elemento.classList.add("language-" + slug(nome));
-    elemento.dataset.language = nome;
-  };
+      const aplicar = (elemento, nome) => {
+        if (!elemento || !nome) return;
 
-  const legenda = [...document.querySelectorAll(".legend-item")];
-  const nomes = [];
+        elemento.classList.add("language-" + slug(nome));
+        elemento.dataset.language = nome;
+      };
 
-  legenda.forEach(item => {
-    const strong = item.querySelector("strong");
-    if (!strong) return;
+      const atualizarCores = () => {
+        document.querySelectorAll(".legend-item").forEach(item => {
+          const strong = item.querySelector("strong");
 
-    const nome = strong.textContent.trim();
-    if (!nome) return;
+          if (!strong) return;
 
-    nomes.push(nome);
-    aplicar(item, nome);
-    aplicar(item.querySelector(".dot"), nome);
-  });
+          const nome = strong.textContent.trim();
 
-  document.querySelectorAll("tbody tr").forEach(row => {
-    const elemento = row.querySelector(".language");
-    if (!elemento) return;
+          aplicar(item, nome);
+          aplicar(item.querySelector(".dot"), nome);
+        });
 
-    const nome = elemento.textContent.trim();
-    if (!nome) return;
+        document.querySelectorAll("#language-rows tr").forEach(row => {
+          const elemento = row.querySelector(".language");
 
-    aplicar(row, nome);
-    aplicar(elemento, nome);
-    aplicar(elemento.querySelector(".dot"), nome);
-  });
+          if (!elemento) return;
 
-  const segmentos = [
-    ...document.querySelectorAll(".bar-segment")
-  ];
+          const nome = elemento.dataset.language ||
+            elemento.textContent.trim();
 
-  segmentos.forEach((segmento, indice) => {
-    const nome = segmento.dataset.language ||
-      segmento.getAttribute("aria-label") ||
-      segmento.getAttribute("title");
+          aplicar(row, nome);
+          aplicar(elemento, nome);
+          aplicar(elemento.querySelector(".dot"), nome);
+        });
 
-    if (nome) {
-      aplicar(segmento, nome.trim());
-    } else if (nomes[indice]) {
-      aplicar(segmento, nomes[indice]);
-    }
-  });
-})();
-</script>
+        document.querySelectorAll(".bar-segment").forEach(segmento => {
+          const nome = segmento.dataset.language;
+
+          if (nome) {
+            aplicar(segmento, nome);
+          }
+        });
+      };
+
+      const observer = new MutationObserver(atualizarCores);
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+
+      atualizarCores();
+    })();
+  </script>
 
 </body>
 </html>

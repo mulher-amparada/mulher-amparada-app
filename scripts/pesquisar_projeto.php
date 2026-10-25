@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 $raiz = dirname(__DIR__);
 $workflow = $raiz . '/.github/workflows/automations.yml';
-$saida = $raiz . '/.github/workflows/workflow.md';
+$saida = $raiz . '/pesquisas/workflow.md';
+
+if (!is_dir(dirname($saida)) && !mkdir(dirname($saida), 0755, true)) {
+    fwrite(STDERR, "Erro: não foi possível criar a pasta pesquisas.\n");
+    exit(1);
+}
 
 if (!is_file($workflow)) {
     fwrite(STDERR, "Erro: automations.yml não encontrado.\n");
@@ -189,7 +194,7 @@ $totalEtapas = array_sum(
 
 $md = "# Documentação do workflow — Mulher Amparada\n\n";
 $md .= "- **Arquivo de origem:** `.github/workflows/automations.yml`\n";
-$md .= "- **Arquivo gerado:** `.github/workflows/workflow.md`\n";
+$md .= "- **Arquivo gerado:** `pesquisas/workflow.md`\n";
 $md .= "- **Jobs identificados:** " . count($jobs) . "\n";
 $md .= "- **Etapas identificadas:** {$totalEtapas}\n\n";
 
@@ -311,10 +316,10 @@ $md .= rtrim($yaml) . "\n";
 $md .= "````\n";
 
 if (file_put_contents($saida, $md) === false) {
-    fwrite(STDERR, "Erro: não foi possível gravar .github/workflows/workflow.md.\n");
+    fwrite(STDERR, "Erro: não foi possível gravar pesquisas/workflow.md.\n");
     exit(1);
 }
 
-echo "Documentação gerada: .github/workflows/workflow.md\n";
+echo "Documentação gerada: pesquisas/workflow.md\n";
 echo "Jobs identificados: " . count($jobs) . "\n";
 echo "Etapas identificadas: {$totalEtapas}\n";

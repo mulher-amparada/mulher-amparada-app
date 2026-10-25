@@ -1,0 +1,83 @@
+name: Executar todos os workflows
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: write
+  actions: write
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    name: "1 - Build"
+    uses: ./.github/workflows/build.yml
+    permissions:
+      contents: write
+
+  jekyll:
+    name: "2 - Jekyll GitHub Pages"
+    needs: build
+    uses: ./.github/workflows/jekyll-gh-pages.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+  sincronizar_app:
+    name: "3 - Sincronizar app"
+    needs: jekyll
+    uses: ./.github/workflows/sincronizar-app.yml
+    permissions:
+      contents: write
+
+  validar_qrs:
+    name: "4 - Validar QR Codes"
+    needs: sincronizar_app
+    uses: ./.github/workflows/validar-qrs.yml
+    permissions:
+      contents: write
+
+  pesquisar_projeto:
+    name: "5 - Pesquisar projeto"
+    needs: validar_qrs
+    uses: ./.github/workflows/pesquisar-projeto.yml
+    permissions:
+      contents: write
+
+  linguagens:
+    name: "6 - Atualizar linguagens"
+    needs: pesquisar_projeto
+    uses: ./.github/workflows/linguagens.yml
+    permissions:
+      contents: write
+
+  main_julia:
+    name: "7 - Executar Julia"
+    needs: linguagens
+    uses: ./.github/workflows/main-julia.yml
+    permissions:
+      contents: read
+
+  observatorio:
+    name: "8 - Gerar observatório"
+    needs: main_julia
+    uses: ./.github/workflows/observatorio.yml
+    permissions:
+      contents: write
+
+  atualizar_footer:
+    name: "9 - Atualizar footer"
+    needs: observatorio
+    uses: ./.github/workflows/atualizar-footer.yml
+    permissions:
+      contents: write
+
+  gerar_commits:
+    name: "10 - Gerar commits"
+    needs: atualizar_footer
+    uses: ./.github/workflows/gerar-commits.yml
+    permissions:
+      contents: write

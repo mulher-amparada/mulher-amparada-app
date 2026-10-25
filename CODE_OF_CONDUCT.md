@@ -30,4 +30,4 @@ Texto original inspirado no "projeto Speak Up!" (http://web.archive.org/web/2014
 
 Dúvidas?
 
-Se você tiver dúvidas sobre este código de conduta, entre em contato conosco pelo e-mail "mulheramparada@gmail.com" (mailto:mulheramparada@gmail.com).
+Se você tiver dúvidas sobre este código de conduta, entre em contato conosco pelo e-mail "projetomulheramparada@gmail.com" (mailto:projetomulheramparada@gmail.com).

@@ -1,7 +1,5 @@
 name: Mulher Amparada - Android
 
-name: Mulher Amparada - Android
-
 on:
   workflow_call:
     secrets:

@@ -53,7 +53,13 @@ jobs:
       - name: Instalar GitHub Linguist
         run: |
           set -euo pipefail
-          gem install github-linguist --no-document
+
+          gem install github-linguist \
+            --no-document \
+            --user-install
+
+          echo "$(ruby -e 'puts Gem.user_dir')/bin" >> "$GITHUB_PATH"
+
 
       - name: Analisar linguagens do repositório
         shell: bash

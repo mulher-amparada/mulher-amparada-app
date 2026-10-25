@@ -3,7 +3,7 @@
 </div>
 
 <div align="center">
-  <img src="https://mulher-amparada.github.io/mulher-amparada-app/title.png">
+  <img src="https://github.com/mulher-amparada/mulher-amparada-app/blob/main/title.png">
 </div>
 
 ---

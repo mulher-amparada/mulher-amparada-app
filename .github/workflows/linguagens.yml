@@ -1,0 +1,443 @@
+name: Atualizar relatório de linguagens
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**'
+      - '.github/workflows/linguagens.yml'
+
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: relatorio-linguagens
+  cancel-in-progress: false
+
+jobs:
+  analisar:
+    name: Analisar linguagens da main
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Baixar repositório completo
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Instalar ferramentas de análise
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            cloc \
+            jq \
+            python3
+
+      - name: Analisar arquivos e gerar relatórios
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p relatorios
+
+          python3 <<'PY'
+          import os
+          import json
+          import subprocess
+          from pathlib import Path
+          from collections import Counter, defaultdict
+          from datetime import datetime, timezone
+
+          raiz = Path(".")
+          relatorios = raiz / "relatorios"
+          relatorios.mkdir(parents=True, exist_ok=True)
+
+          extensoes = {
+              ".py": "Python",
+              ".pyw": "Python",
+              ".jl": "Julia",
+              ".kt": "Kotlin",
+              ".kts": "Kotlin Script",
+              ".java": "Java",
+              ".class": "Java Bytecode",
+              ".scala": "Scala",
+              ".sc": "Scala Script",
+              ".groovy": "Groovy",
+              ".gradle": "Gradle",
+              ".js": "JavaScript",
+              ".mjs": "JavaScript",
+              ".cjs": "JavaScript",
+              ".jsx": "JSX",
+              ".ts": "TypeScript",
+              ".tsx": "TSX",
+              ".vue": "Vue",
+              ".svelte": "Svelte",
+              ".html": "HTML",
+              ".htm": "HTML",
+              ".css": "CSS",
+              ".scss": "SCSS",
+              ".sass": "Sass",
+              ".less": "Less",
+              ".php": "PHP",
+              ".phtml": "PHP",
+              ".rb": "Ruby",
+              ".erb": "ERB",
+              ".go": "Go",
+              ".rs": "Rust",
+              ".c": "C",
+              ".h": "C Header",
+              ".cc": "C++",
+              ".cpp": "C++",
+              ".cxx": "C++",
+              ".hpp": "C++ Header",
+              ".hh": "C++ Header",
+              ".cs": "C#",
+              ".fs": "F#",
+              ".fsx": "F# Script",
+              ".vb": "Visual Basic",
+              ".swift": "Swift",
+              ".m": "Objective-C",
+              ".mm": "Objective-C++",
+              ".dart": "Dart",
+              ".r": "R",
+              ".R": "R",
+              ".rmd": "R Markdown",
+              ".lua": "Lua",
+              ".pl": "Perl",
+              ".pm": "Perl",
+              ".ex": "Elixir",
+              ".exs": "Elixir",
+              ".erl": "Erlang",
+              ".hrl": "Erlang Header",
+              ".hs": "Haskell",
+              ".lhs": "Literate Haskell",
+              ".clj": "Clojure",
+              ".cljs": "ClojureScript",
+              ".cljc": "Clojure",
+              ".edn": "EDN",
+              ".elm": "Elm",
+              ".purs": "PureScript",
+              ".php3": "PHP",
+              ".sql": "SQL",
+              ".psql": "SQL",
+              ".sh": "Shell",
+              ".bash": "Bash",
+              ".zsh": "Zsh",
+              ".fish": "Fish",
+              ".ps1": "PowerShell",
+              ".psm1": "PowerShell",
+              ".bat": "Batch",
+              ".cmd": "Batch",
+              ".awk": "AWK",
+              ".sed": "sed",
+              ".pl6": "Raku",
+              ".raku": "Raku",
+              ".f": "Fortran",
+              ".f90": "Fortran",
+              ".f95": "Fortran",
+              ".for": "Fortran",
+              ".cob": "COBOL",
+              ".cbl": "COBOL",
+              ".pas": "Pascal",
+              ".pp": "Pascal",
+              ".d": "D",
+              ".nim": "Nim",
+              ".cr": "Crystal",
+              ".zig": "Zig",
+              ".v": "V",
+              ".sv": "SystemVerilog",
+              ".vhd": "VHDL",
+              ".vhdl": "VHDL",
+              ".asm": "Assembly",
+              ".s": "Assembly",
+              ".S": "Assembly",
+              ".proto": "Protocol Buffers",
+              ".graphql": "GraphQL",
+              ".gql": "GraphQL",
+              ".tf": "Terraform",
+              ".hcl": "HCL",
+              ".nix": "Nix",
+              ".dockerfile": "Dockerfile",
+              ".toml": "TOML",
+              ".ini": "INI",
+              ".cfg": "Config",
+              ".conf": "Config",
+              ".properties": "Properties",
+              ".xml": "XML",
+              ".xsd": "XML Schema",
+              ".xsl": "XSLT",
+              ".xslt": "XSLT",
+              ".json": "JSON",
+              ".jsonc": "JSON with Comments",
+              ".json5": "JSON5",
+              ".yaml": "YAML",
+              ".yml": "YAML",
+              ".md": "Markdown",
+              ".mdx": "MDX",
+              ".rst": "reStructuredText",
+              ".txt": "Text",
+              ".adoc": "AsciiDoc",
+              ".tex": "LaTeX",
+              ".bib": "BibTeX",
+              ".csv": "CSV",
+              ".tsv": "TSV",
+              ".ipynb": "Jupyter Notebook",
+              ".diff": "Diff",
+              ".patch": "Patch",
+              ".make": "Makefile",
+              ".mk": "Makefile",
+              ".cmake": "CMake",
+              ".gradle.kts": "Kotlin Gradle",
+              ".lock": "Lockfile",
+              ".svg": "SVG",
+              ".webmanifest": "Web App Manifest",
+              ".plist": "Property List",
+              ".xaml": "XAML",
+              ".razor": "Razor",
+              ".cshtml": "Razor",
+              ".resx": "RESX",
+              ".wasm": "WebAssembly",
+              ".wat": "WebAssembly Text",
+              ".sol": "Solidity",
+              ".vy": "Vyper",
+              ".move": "Move",
+              ".ipynb": "Jupyter Notebook",
+          }
+
+          nomes_especiais = {
+              "Dockerfile": "Dockerfile",
+              "Containerfile": "Containerfile",
+              "Makefile": "Makefile",
+              "GNUmakefile": "Makefile",
+              "Justfile": "Just",
+              "Jenkinsfile": "Groovy",
+              "Vagrantfile": "Ruby",
+              "Gemfile": "Ruby",
+              "Rakefile": "Ruby",
+              "Procfile": "Procfile",
+              "CMakeLists.txt": "CMake",
+              "meson.build": "Meson",
+              "BUILD": "Bazel",
+              "BUILD.bazel": "Bazel",
+              "WORKSPACE": "Bazel",
+              "WORKSPACE.bazel": "Bazel",
+              "Brewfile": "Ruby",
+              ".gitignore": "Git Ignore",
+              ".gitattributes": "Git Attributes",
+              ".editorconfig": "EditorConfig",
+              ".prettierrc": "Prettier Config",
+              ".eslintrc": "ESLint Config",
+              ".babelrc": "Babel Config",
+              ".npmrc": "NPM Config",
+              ".nvmrc": "NVM Config",
+              ".python-version": "Python Config",
+              ".ruby-version": "Ruby Config",
+              ".java-version": "Java Config",
+          }
+
+          ignorar_diretorios = {
+              ".git",
+              ".gradle",
+              ".idea",
+              ".vscode",
+              "__pycache__",
+              "node_modules",
+              "vendor",
+              "build",
+              "dist",
+              "target",
+              ".venv",
+              "venv",
+              "coverage",
+          }
+
+          arquivos = []
+          contagem = Counter()
+          por_linguagem = defaultdict(list)
+          bytes_por_linguagem = Counter()
+
+          for caminho in raiz.rglob("*"):
+              if not caminho.is_file():
+                  continue
+
+              relativo = caminho.as_posix()
+
+              if any(
+                  parte in ignorar_diretorios
+                  for parte in caminho.parts
+              ):
+                  continue
+
+              if relativo.startswith(".git/"):
+                  continue
+
+              if relativo in {
+                  "relatorios/linguagens.md",
+                  "relatorios/linguagens.json",
+              }:
+                  continue
+
+              nome = caminho.name
+              sufixo_duplo = next(
+                  (
+                      ext for ext in extensoes
+                      if nome.lower().endswith(ext.lower())
+                      and ext.count(".") > 1
+                  ),
+                  None,
+              )
+
+              if nome in nomes_especiais:
+                  linguagem = nomes_especiais[nome]
+              elif sufixo_duplo:
+                  linguagem = extensoes[sufixo_duplo]
+              elif caminho.suffix in extensoes:
+                  linguagem = extensoes[caminho.suffix]
+              elif nome.lower().startswith("dockerfile"):
+                  linguagem = "Dockerfile"
+              elif nome.lower().endswith(".gradle.kts"):
+                  linguagem = "Kotlin Gradle"
+              else:
+                  linguagem = None
+
+              if linguagem is None:
+                  continue
+
+              try:
+                  tamanho = caminho.stat().st_size
+              except OSError:
+                  tamanho = 0
+
+              contagem[linguagem] += 1
+              bytes_por_linguagem[linguagem] += tamanho
+              por_linguagem[linguagem].append(relativo)
+              arquivos.append({
+                  "arquivo": relativo,
+                  "linguagem": linguagem,
+                  "bytes": tamanho,
+              })
+
+          linguagens = []
+          for nome in sorted(contagem, key=str.casefold):
+              linguagens.append({
+                  "nome": nome,
+                  "quantidade_arquivos": contagem[nome],
+                  "tamanho_total_bytes": bytes_por_linguagem[nome],
+                  "arquivos": sorted(por_linguagem[nome]),
+              })
+
+          dados = {
+              "repositorio": "mulher-amparada/mulher-amparada-app",
+              "branch": "main",
+              "gerado_em_utc": datetime.now(timezone.utc).isoformat(),
+              "metodo": (
+                  "Identificação por extensão e nomes especiais. "
+                  "Não equivale à classificação oficial do GitHub Linguist."
+              ),
+              "total_arquivos_identificados": len(arquivos),
+              "total_linguagens_identificadas": len(linguagens),
+              "linguagens": linguagens,
+              "arquivos": sorted(arquivos, key=lambda item: item["arquivo"]),
+          }
+
+          arquivo_json = relatorios / "linguagens.json"
+          arquivo_md = relatorios / "linguagens.md"
+
+          arquivo_json.write_text(
+              json.dumps(dados, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8",
+          )
+
+          linhas = [
+              "# Relatório de linguagens do repositório",
+              "",
+              f"- **Repositório:** `mulher-amparada/mulher-amparada-app`",
+              "- **Branch analisada:** `main`",
+              f"- **Gerado em (UTC):** {dados['gerado_em_utc']}",
+              f"- **Arquivos identificados:** {len(arquivos)}",
+              f"- **Linguagens e formatos identificados:** {len(linguagens)}",
+              "",
+              "> A identificação é baseada em extensões e nomes conhecidos. "
+              "Um arquivo pode conter mais de uma linguagem, e esta análise "
+              "não substitui a classificação oficial do GitHub Linguist.",
+              "",
+              "## Resumo por linguagem",
+              "",
+              "| Linguagem ou formato | Arquivos | Tamanho total (bytes) |",
+              "|---|---:|---:|",
+          ]
+
+          for item in sorted(
+              linguagens,
+              key=lambda item: (
+                  -item["quantidade_arquivos"],
+                  item["nome"].casefold(),
+              ),
+          ):
+              linhas.append(
+                  f"| {item['nome']} | {item['quantidade_arquivos']} "
+                  f"| {item['tamanho_total_bytes']} |"
+              )
+
+          linhas.extend(["", "## Arquivos identificados", ""])
+
+          for item in sorted(linguagens, key=lambda item: item["nome"].casefold()):
+              linhas.extend([
+                  f"### {item['nome']}",
+                  "",
+                  f"Arquivos: **{item['quantidade_arquivos']}**",
+                  "",
+              ])
+              for arquivo in sorted(por_linguagem[item["nome"]]):
+                  linhas.append(f"- `{arquivo}`")
+              linhas.append("")
+
+          arquivo_md.write_text(
+              "\n".join(linhas).rstrip() + "\n",
+              encoding="utf-8",
+          )
+
+          print(f"Arquivos identificados: {len(arquivos)}")
+          print(f"Linguagens e formatos: {len(linguagens)}")
+          print(f"Markdown atualizado: {arquivo_md}")
+          print(f"JSON atualizado: {arquivo_json}")
+          PY
+
+      - name: Verificar alterações
+        id: alteracoes
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if git diff --quiet -- \
+            relatorios/linguagens.md \
+            relatorios/linguagens.json; then
+            echo "mudou=false" >> "$GITHUB_OUTPUT"
+            echo "Os relatórios já estão atualizados."
+          else
+            echo "mudou=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publicar relatórios atualizados
+        if: steps.alteracoes.outputs.mudou == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add \
+            relatorios/linguagens.md \
+            relatorios/linguagens.json
+
+          git commit -m "Atualizar relatório de linguagens"
+          git push origin HEAD:main

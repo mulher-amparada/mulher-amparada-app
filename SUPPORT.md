@@ -4,9 +4,6 @@ Central de links oficiais, divulgação e referências públicas do projeto Mulh
 
 ### 📱 Redes sociais:
 
-- 🐦 X — @mulheramparada:
-  https://x.com/mulheramparada/status/2105045353615761521?s=20
-
 - 🌷 Tumblr — Mulher Amparada: um projeto gratuito e livre de anúncios:
   https://www.tumblr.com/mulheramparada/829407067773255680/mulher-amparada-um-projeto-gratuito-e-livre
 

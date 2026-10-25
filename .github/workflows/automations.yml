@@ -81,3 +81,76 @@ jobs:
     uses: ./.github/workflows/gerar-commits.yml
     permissions:
       contents: write
+
+  atualizar-total-commits:
+    name: Atualizar total de commits
+    runs-on: ubuntu-26.04
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Baixar histórico completo
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Atualizar total de commits
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ARQUIVO="README.md"
+          BASE=6385
+
+          if [ ! -f "$ARQUIVO" ]; then
+            echo "Erro: README.md não encontrado."
+            exit 1
+          fi
+
+          TOTAL_ATUAL=$(git rev-list --count HEAD)
+          TOTAL=$((BASE + TOTAL_ATUAL))
+
+          export TOTAL
+
+          python3 - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+
+          arquivo = Path("README.md")
+          conteudo = arquivo.read_text(encoding="utf-8")
+
+          padrao = r"(?m)^(\*\*Commits totais de toda a história do projeto\s*=\s*)\d+(\*\*)$"
+
+          atualizado, quantidade = re.subn(
+              padrao,
+              lambda m: f"{m.group(1)}{os.environ['TOTAL']}{m.group(2)}",
+              conteudo,
+          )
+
+          if quantidade == 0:
+              raise SystemExit(
+                  "Erro: a linha de total de commits não foi encontrada no README.md."
+              )
+
+          arquivo.write_text(atualizado, encoding="utf-8")
+          PY
+
+          git add "$ARQUIVO"
+
+          if git diff --cached --quiet; then
+            echo "O total de commits já está atualizado."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git commit -m "docs: atualizar total de commits"
+
+          git fetch origin main
+          git rebase origin/main
+
+          git push origin HEAD:main

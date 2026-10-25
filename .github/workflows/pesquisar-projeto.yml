@@ -39,8 +39,8 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [ ! -f ".github/pesquisar_projeto.php" ]; then
-            echo "Erro: .github/pesquisar_projeto.php não encontrado."
+          if [ ! -f "scripts/pesquisar_projeto.php" ]; then
+            echo "Erro: scripts/pesquisar_projeto.php não encontrado."
             exit 1
           fi
 
@@ -54,8 +54,8 @@ jobs:
         run: |
           set -euo pipefail
 
-          php -l .github/pesquisar_projeto.php
-          php .github/pesquisar_projeto.php
+          php -l scripts/pesquisar_projeto.php
+          php scripts/pesquisar_projeto.php
 
           if [ ! -s ".github/workflows/workflow.md" ]; then
             echo "Erro: workflow.md não foi gerado corretamente."

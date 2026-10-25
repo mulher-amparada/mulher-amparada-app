@@ -38,9 +38,6 @@ https://projetomulheramparada.hashnode.dev/eu-n-o-tinha-computador-para-desenvol
 
 - ⚠️ Observatório Blockchain — link atualmente retorna erro 404:
   https://observatorioblockchain.com/newsfeed/item/23123e760a8918f1/
-  
-- 🇷🇺 Página russa — TabNews:
-https://m.vk.ru/wall-230312324_10327
 
 - 💡 Dicas em geral — Mulher Amparada, posts do tabnews:
 https://dicasemgeral.com/pt-br/buscar/?q=Mulher+amparada+

@@ -1,6 +1,6 @@
 # 🎉Projeto Finalizado:
 
-https://github.com/mulher-amparada/mulher-amparada-app/wiki/%23-%F0%9F%8E%89-Projeto-Finalizado
+https://github.com/mulher-amparada/mulher-amparada-app/wiki/%E2%9C%85%EF%B8%8F-Projeto-finalizado
 
 # 👾Nossas contribuições!:
 

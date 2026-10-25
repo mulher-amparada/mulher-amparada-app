@@ -1,9 +1,9 @@
 <div align="center">
-  <img src="https://github.com/mulher-amparada/mulher-amparada-app/blob/main/user1.png" width="250">
+  <img src="https://mulher-amparada.github.io/mulher-amparada-app/user1.png" width="250">
 </div>
 
 <div align="center">
-  <img src="https://github.com/mulher-amparada/mulher-amparada-app/blob/main/title.png">
+  <img src="https://mulher-amparada.github.io/mulher-amparada-app/title.png">
 </div>
 
 ---
@@ -21,6 +21,8 @@ Os contribuidores ajudaram também!, além de mim e dos bots:
 **Commits totais de toda a história do projeto = 6385**
 
 E o projeto é = Open-source! (aderido no dia 02/10/2026)
+
+No dia 24/10/2026, eu acabei errando a automação da branch main e code, eu queria separar o que é codigo e o que é site, entao deletei na noite desse dia, agora, temos uma versão nova em um repo novo com o memso nome!
 
 ----
 

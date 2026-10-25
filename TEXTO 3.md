@@ -22,17 +22,13 @@ Artifacts:
 
 Disponibiliza os arquivos produzidos pelas automações como artifacts do GitHub Actions, incluindo o APK assinado, relatórios, gráficos, documentação, sitemap e arquivos do site.
 
-GitHub Releases:
-
-Atualiza a Release identificada pela tag "app", substitui o APK anterior, publica a nova versão e atualiza o SHA-256 nas notas da Release.
-
 Página de download:
 
-Atualiza automaticamente o "download.html" com o link do APK, o tamanho real do arquivo e seu SHA-256.
+Atualiza automaticamente o "download.html" com o tamanho real do arquivo e seu SHA-256.
 
 Análise de linguagens:
 
-Utiliza o "cloc" para identificar as linguagens presentes no repositório e gerar relatórios em JSON e Markdown. Também atualiza os arquivos CSS dos temas claro e escuro, atribuindo cores determinísticas às linguagens e atualizando as páginas HTML compatíveis.
+Utiliza o "cloc" para identificar as linguagens presentes no repositório e gerar relatórios em JSON e Markdown. atribuindo cores determinísticas às linguagens e atualizando as páginas HTML compatíveis.
 
 Análise de dados em Julia:
 
@@ -41,22 +37,6 @@ Instala as dependências do projeto Julia, executa "src/main.jl" e valida os res
 GitHub Pages:
 
 Gera o site com Jekyll, prepara os arquivos para publicação e realiza o deploy no GitHub Pages.
-
-Contagem de commits:
-
-Calcula o total de commits existentes no histórico do repositório e atualiza o número correspondente no "README.md".
-
-Sitemap e IndexNow:
-
-Gera o sitemap do site e utiliza o IndexNow para comunicar a existência de atualizações aos mecanismos de busca compatíveis.
-
-Lighthouse:
-
-Executa uma análise de desempenho e qualidade da página publicada no GitHub Pages e disponibiliza os artifacts produzidos pela ferramenta.
-
-Kit de divulgação:
-
-Empacota os arquivos do diretório "divulgacao" com o npm e publica o pacote na GitHub Release identificada pela tag "divulgacao".
 
 Observatório:
 
@@ -82,7 +62,7 @@ Publicação pelo Mulher Amparada Bot:
 
 O job "salvar-na-main" baixa os artifacts gerados pelos outros jobs, compila o publicador em C++ e utiliza as credenciais de um GitHub App para publicar os arquivos na branch "main".
 
-mesclar-mulher-amparada:
+sincronizar-app:
     
 ele aoenas chama outro workflow que pega todo o codigo-fonte do app do mulher amparada e copia e mescla para o nosso sistema operacional (que contém só uma pequena parte de todo o AOSP!)
 
@@ -100,8 +80,9 @@ Resultado final:
 
 O workflow automatiza tarefas de compilação, análise, documentação, publicação e manutenção do projeto. Ao final, o Mulher-Amparada-Bot grava os artifacts na branch "main", conforme as dependências e condições definidas no workflow.
 
-e também temos um agente que eu escolho manualmente qual ele vai ativar, se é o dependabot por meio de um yml que faz a solicitação, ou o proprio automations..., e eu escolho a branch também!, e ele também usa o typescript e bash para validar o qr code de todas as imagens!
+e o yml também usa o typescript e bash para validar o qr code de todas as imagens!
 
+e no final do automations yml, ele atualiza o total de commits la no readme (existem tanto em outro repo antigo do projeto + a versão nova!)
 ```
 
 

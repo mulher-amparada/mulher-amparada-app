@@ -55,11 +55,12 @@ jobs:
         run: |
           set -euo pipefail
 
+          mkdir -p docs
           php -l scripts/pesquisar_projeto.php
           php scripts/pesquisar_projeto.php
 
-          if [ ! -s ".github/workflows/workflow.md" ]; then
-            echo "Erro: workflow.md não foi gerado corretamente."
+          if [ ! -s "docs/workflow.md" ]; then
+            echo "Erro: docs/workflow.md não foi gerado corretamente."
             exit 1
           fi
 
@@ -71,7 +72,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add .github/workflows/workflow.md
+          git add docs/workflow.md
 
           if git diff --cached --quiet; then
             echo "A documentação já está atualizada."

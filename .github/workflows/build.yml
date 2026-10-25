@@ -1,0 +1,147 @@
+name: Mulher Amparada — Android 17
+
+on:
+workflow_dispatch:
+push:
+branches:
+- main
+paths:
+- "Código-fonte do app = Mulher Amparada/**"
+- ".github/workflows/android17.yml"
+
+permissions:
+contents: read
+
+jobs:
+build:
+runs-on: ubuntu-latest
+
+env:
+  PROJECT_DIR: "Código-fonte do app = Mulher Amparada"
+
+steps:
+  - name: Baixar repositório
+    uses: actions/checkout@v4
+
+  - name: Configurar Java
+    uses: actions/setup-java@v4
+    with:
+      distribution: temurin
+      java-version: "17"
+
+  - name: Instalar Android 17 SDK
+    shell: bash
+    run: |
+      set -euo pipefail
+
+      SDKMANAGER="${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager"
+
+      if [ ! -x "$SDKMANAGER" ]; then
+        SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" \
+          -type f -name sdkmanager 2>/dev/null | head -n 1)"
+      fi
+
+      test -x "$SDKMANAGER" || {
+        echo "::error::sdkmanager não encontrado"
+        exit 1
+      }
+
+      yes | "$SDKMANAGER" --licenses >/dev/null || true
+
+      "$SDKMANAGER" \
+        "platforms;android-37" \
+        "build-tools;37.0.0"
+
+  - name: Localizar Gradle Wrapper
+    id: gradle
+    shell: bash
+    run: |
+      set -euo pipefail
+
+      if [ -f "$PROJECT_DIR/gradlew" ]; then
+        echo "wrapper=$PROJECT_DIR/gradlew" >> "$GITHUB_OUTPUT"
+        echo "project=$PROJECT_DIR" >> "$GITHUB_OUTPUT"
+      elif [ -f "gradlew" ]; then
+        echo "wrapper=$GITHUB_WORKSPACE/gradlew" >> "$GITHUB_OUTPUT"
+        echo "project=$GITHUB_WORKSPACE/$PROJECT_DIR" >> "$GITHUB_OUTPUT"
+      else
+        echo "::error::Gradle Wrapper não encontrado"
+        exit 1
+      fi
+
+      chmod +x "$(cat "$GITHUB_OUTPUT" | sed -n 's/^wrapper=//p')"
+
+  - name: Compilar versão Release
+    shell: bash
+    env:
+      GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g"
+    run: |
+      set -euo pipefail
+
+      bash "${{ steps.gradle.outputs.wrapper }}" \
+        -p "${{ steps.gradle.outputs.project }}" \
+        --no-daemon \
+        assembleRelease
+
+  - name: Assinar APK
+    shell: bash
+    env:
+      KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+      KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+    run: |
+      set -euo pipefail
+
+      for secret in KEYSTORE_BASE64 KEYSTORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do
+        if [ -z "${!secret:-}" ]; then
+          echo "::error::Secret $secret não configurado"
+          exit 1
+        fi
+      done
+
+      KEYSTORE="$RUNNER_TEMP/mulher-amparada.p12"
+      mkdir -p "$RUNNER_TEMP/signed"
+
+      printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$KEYSTORE"
+      chmod 600 "$KEYSTORE"
+
+      APK="$(find "$PROJECT_DIR" -type f \
+        -path '*/build/outputs/apk/release/*.apk' \
+        ! -name '*-androidTest.apk' \
+        | head -n 1)"
+
+      if [ -z "$APK" ]; then
+        echo "::error::Nenhum APK Release foi encontrado"
+        exit 1
+      fi
+
+      APKSIGNER="$(find "$ANDROID_HOME/build-tools" \
+        -type f -name apksigner | sort -V | tail -n 1)"
+
+      test -x "$APKSIGNER" || {
+        echo "::error::apksigner não encontrado"
+        exit 1
+      }
+
+      "$APKSIGNER" sign \
+        --ks "$KEYSTORE" \
+        --ks-type PKCS12 \
+        --ks-key-alias "$KEY_ALIAS" \
+        --ks-pass env:KEYSTORE_PASSWORD \
+        --key-pass env:KEY_PASSWORD \
+        --out "$RUNNER_TEMP/signed/Mulher-Amparada-release.apk" \
+        "$APK"
+
+      "$APKSIGNER" verify --verbose \
+        "$RUNNER_TEMP/signed/Mulher-Amparada-release.apk"
+
+      rm -f "$KEYSTORE"
+
+  - name: Disponibilizar APK assinado
+    uses: actions/upload-artifact@v4
+    with:
+      name: Mulher-Amparada-Android17
+      path: ${{ runner.temp }}/signed/Mulher-Amparada-release.apk
+      if-no-files-found: error
+      retention-days: 14

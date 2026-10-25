@@ -1,0 +1,52 @@
+name: Executar Main Julia
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/main.jl'
+      - 'Project.toml'
+      - 'Manifest.toml'
+      - '.github/workflows/main-julia.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: main-julia-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  executar-julia:
+    name: Executar src/main.jl
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Baixar repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar Julia
+        uses: julia-actions/setup-julia@v3
+        with:
+          version: '1'
+
+      - name: Verificar arquivo principal
+        run: |
+          test -f src/main.jl || {
+            echo "Erro: src/main.jl nao encontrado."
+            exit 1
+          }
+
+      - name: Instalar dependencias Julia
+        run: |
+          julia --startup-file=no -e '
+            using Pkg
+            Pkg.add("CSV")
+            Pkg.instantiate()
+          '
+
+      - name: Executar programa
+        run: julia --startup-file=no src/main.jl

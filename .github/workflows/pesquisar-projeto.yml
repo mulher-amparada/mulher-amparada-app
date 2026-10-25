@@ -78,4 +78,8 @@ jobs:
           fi
 
           git commit -m "docs: atualizar documentação dos workflows"
+
+          git fetch origin main
+          git rebase origin/main
+
           git push origin HEAD:main

@@ -37,15 +37,18 @@ jobs:
         run: python scripts/atualizar_footer.py
 
       - name: Salvar alterações no GitHub
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+    run: |
+      git config user.name "github-actions[bot]"
+      git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add index.html
+      git fetch origin main
+      git reset --soft origin/main
 
-          if ! git diff --cached --quiet; then
-            git commit -m "chore: atualizar footer com README"
-            git push
-          else
-            echo "O footer já está atualizado."
-          fi
+      git add index.html
+
+      if ! git diff --cached --quiet; then
+        git commit -m "chore: atualizar footer com README"
+        git push origin HEAD:main
+      else
+        echo "O footer já está atualizado."
+      fi

@@ -1,0 +1,88 @@
+name: "🐛 Relatar um problema"
+description: "Reporte um erro ou comportamento inesperado no Mulher Amparada."
+title: "[BUG] "
+labels:
+  - bug
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por ajudar a melhorar o Mulher Amparada!
+        Preencha as informações abaixo para facilitar a análise do problema.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrição do problema
+      description: Explique o que aconteceu.
+      placeholder: Descreva o problema encontrado...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Como reproduzir
+      description: Informe os passos para reproduzir o problema.
+      placeholder: |
+        1. Acesse...
+        2. Clique em...
+        3. Observe o erro.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportamento esperado
+      description: O que deveria acontecer?
+      placeholder: Descreva o resultado esperado...
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Capturas de tela
+      description: Adicione imagens que ajudem a entender o problema.
+      placeholder: Opcional
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Plataforma
+      description: Onde o problema acontece?
+      options:
+        - Site
+        - Aplicativo Android
+        - GitHub Actions
+        - API ou integração
+        - Outro
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Versão
+      description: Informe a versão utilizada, se souber.
+      placeholder: "Ex.: 1.0.0"
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs ou mensagens de erro
+      description: Cole mensagens de erro relevantes. Remova senhas, tokens e dados pessoais.
+      render: text
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Verificação
+      options:
+        - label: Verifiquei se já existe uma issue sobre este problema.
+          required: true
+        - label: Forneci informações suficientes para analisar o problema.
+          required: true

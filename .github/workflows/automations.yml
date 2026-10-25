@@ -11,7 +11,7 @@ permissions:
   id-token: write
 
 jobs:
-    build:
+  build:
     name: "1 - Build"
     uses: ./.github/workflows/build.yml
     secrets: inherit

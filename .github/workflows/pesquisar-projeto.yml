@@ -1,7 +1,7 @@
 name: Pesquisar projeto
 
 on:
-  workflow_dispatch:
+  workflow_call:
   push:
     branches:
       - main

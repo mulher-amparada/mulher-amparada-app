@@ -37,34 +37,63 @@ jobs:
         with:
           packages: ''
 
-      - name: Instalar SDK Android 17 e Build Tools
+      - name: Instalar plataforma Android
+        id: android-sdk
         shell: bash
         run: |
           set -euo pipefail
 
+          sdkmanager --channel=3 --list --include_obsolete \
+            > "$RUNNER_TEMP/sdk-packages.txt"
+
+          if grep -qE 'platforms;android-37[[:space:]]*\|' "$RUNNER_TEMP/sdk-packages.txt"; then
+            PLATFORM="platforms;android-37"
+          else
+            PLATFORM="$(
+              grep -oE 'platforms;android-[0-9]+' "$RUNNER_TEMP/sdk-packages.txt" \
+                | sort -Vu \
+                | tail -n 1
+            )"
+          fi
+
+          if [ -z "$PLATFORM" ]; then
+            echo "::error::Nenhuma plataforma Android disponível."
+            exit 1
+          fi
+
+          echo "Plataforma selecionada: $PLATFORM"
+          echo "platform=$PLATFORM" >> "$GITHUB_OUTPUT"
+
           sdkmanager --channel=3 --install \
-            "platforms;android-37" \
+            "$PLATFORM" \
             "platform-tools"
 
-          PACKAGE_LIST="$RUNNER_TEMP/sdk-packages.txt"
+          sdkmanager --licenses
 
-          sdkmanager --channel=3 --list > "$PACKAGE_LIST"
+      - name: Instalar Build Tools
+        id: build-tools
+        shell: bash
+        run: |
+          set -euo pipefail
 
-          BUILD_TOOLS_VERSION="$(
-            grep -oE 'build-tools;37\.[0-9.]+' "$PACKAGE_LIST" \
+          sdkmanager --channel=3 --list --include_obsolete \
+            > "$RUNNER_TEMP/sdk-packages.txt"
+
+          VERSION="$(
+            grep -oE 'build-tools;[0-9]+\.[0-9]+\.[0-9]+' "$RUNNER_TEMP/sdk-packages.txt" \
+              | sed 's/^build-tools;//' \
               | sort -Vu \
               | tail -n 1
           )"
 
-          if [ -z "$BUILD_TOOLS_VERSION" ]; then
-            echo "::error::Não foi encontrada uma versão dos Build Tools 37."
+          if [ -z "$VERSION" ]; then
+            echo "::error::Nenhuma versão do Build Tools encontrada."
             exit 1
           fi
 
-          sdkmanager --channel=3 --install "$BUILD_TOOLS_VERSION"
+          sdkmanager --channel=3 --install "build-tools;$VERSION"
 
-          echo "BUILD_TOOLS_VERSION=${BUILD_TOOLS_VERSION#build-tools;}" \
-            >> "$GITHUB_ENV"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Localizar Gradle Wrapper
         id: gradle
@@ -74,10 +103,10 @@ jobs:
 
           if [ -f "$PROJECT_DIR/gradlew" ]; then
             WRAPPER="$GITHUB_WORKSPACE/$PROJECT_DIR/gradlew"
-            PROJECT_ROOT="$GITHUB_WORKSPACE/$PROJECT_DIR"
+            ROOT="$GITHUB_WORKSPACE/$PROJECT_DIR"
           elif [ -f "$GITHUB_WORKSPACE/gradlew" ]; then
             WRAPPER="$GITHUB_WORKSPACE/gradlew"
-            PROJECT_ROOT="$GITHUB_WORKSPACE"
+            ROOT="$GITHUB_WORKSPACE"
           else
             echo "::error::Gradle Wrapper não encontrado."
             exit 1
@@ -86,7 +115,7 @@ jobs:
           chmod +x "$WRAPPER"
 
           echo "wrapper=$WRAPPER" >> "$GITHUB_OUTPUT"
-          echo "project=$PROJECT_ROOT" >> "$GITHUB_OUTPUT"
+          echo "root=$ROOT" >> "$GITHUB_OUTPUT"
 
       - name: Compilar APK Release
         shell: bash
@@ -94,11 +123,11 @@ jobs:
           set -euo pipefail
 
           bash "${{ steps.gradle.outputs.wrapper }}" \
-            -p "${{ steps.gradle.outputs.project }}" \
+            -p "${{ steps.gradle.outputs.root }}" \
             --no-daemon \
             assembleRelease
 
-      - name: Verificar secrets
+      - name: Validar secrets
         shell: bash
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
@@ -115,7 +144,7 @@ jobs:
             KEY_PASSWORD
           do
             if [ -z "${!NAME:-}" ]; then
-              echo "::error::Configure o secret $NAME nas configurações do repositório."
+              echo "::error::Configure o secret $NAME."
               exit 1
             fi
           done
@@ -133,27 +162,14 @@ jobs:
 
           chmod 600 "$RUNNER_TEMP/mulher-amparada.p12"
 
-      - name: Localizar APK e ferramentas
-        id: files
+      - name: Localizar APK
+        id: apk
         shell: bash
         run: |
           set -euo pipefail
 
-          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
-          BUILD_TOOLS="$SDK_ROOT/build-tools/$BUILD_TOOLS_VERSION"
-
-          if [ ! -x "$BUILD_TOOLS/apksigner" ]; then
-            echo "::error::apksigner não encontrado."
-            exit 1
-          fi
-
-          if [ ! -x "$BUILD_TOOLS/zipalign" ]; then
-            echo "::error::zipalign não encontrado."
-            exit 1
-          fi
-
           APK="$(
-            find "${{ steps.gradle.outputs.project }}" \
+            find "${{ steps.gradle.outputs.root }}" \
               -type f \
               -path '*/build/outputs/apk/release/*.apk' \
               ! -name '*androidTest*' \
@@ -161,12 +177,11 @@ jobs:
           )"
 
           if [ -z "$APK" ]; then
-            echo "::error::Nenhum APK Release foi encontrado."
+            echo "::error::APK Release não encontrado."
             exit 1
           fi
 
-          echo "apk=$APK" >> "$GITHUB_OUTPUT"
-          echo "build_tools=$BUILD_TOOLS" >> "$GITHUB_OUTPUT"
+          echo "path=$APK" >> "$GITHUB_OUTPUT"
 
       - name: Alinhar e assinar APK
         shell: bash
@@ -177,14 +192,16 @@ jobs:
         run: |
           set -euo pipefail
 
+          BUILD_TOOLS="$ANDROID_HOME/build-tools/${{ steps.build-tools.outputs.version }}"
+
           mkdir -p "$GITHUB_WORKSPACE/artefatos"
 
-          "${{ steps.files.outputs.build_tools }}/zipalign" \
+          "$BUILD_TOOLS/zipalign" \
             -f -p 4 \
-            "${{ steps.files.outputs.apk }}" \
+            "${{ steps.apk.outputs.path }}" \
             "$RUNNER_TEMP/aligned.apk"
 
-          "${{ steps.files.outputs.build_tools }}/apksigner" sign \
+          "$BUILD_TOOLS/apksigner" sign \
             --ks "$RUNNER_TEMP/mulher-amparada.p12" \
             --ks-type PKCS12 \
             --ks-key-alias "$KEY_ALIAS" \
@@ -198,14 +215,16 @@ jobs:
         run: |
           set -euo pipefail
 
-          "${{ steps.files.outputs.build_tools }}/apksigner" verify \
+          BUILD_TOOLS="$ANDROID_HOME/build-tools/${{ steps.build-tools.outputs.version }}"
+
+          "$BUILD_TOOLS/apksigner" verify \
             --verbose \
             "$GITHUB_WORKSPACE/artefatos/mulher-amparada-release.apk"
 
-      - name: Publicar APK como artefato
+      - name: Publicar APK
         uses: actions/upload-artifact@v7
         with:
-          name: mulher-amparada-android-17
+          name: mulher-amparada-android
           path: artefatos/mulher-amparada-release.apk
           if-no-files-found: error
           retention-days: 14

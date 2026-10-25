@@ -70,7 +70,7 @@ Este ABOUT é uma proposta — quero que vocês reescrevam com as palavras de vo
 
 e assim como o about, vocês podem decidir qualquer outra coisa que quiserem no projeto!
 
-👉 **Participe:** [Discussão #10](https://github.com/mulher-amparada/mulher-amparada-app/discussions/10)
+👉 **Participe:** [Discussão #10](https://github.com/mulher-amparada/mulher-amparada-app/discussions/3)
 
 Se eu errar, me diga. Eu ajusto.
 

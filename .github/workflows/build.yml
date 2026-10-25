@@ -37,17 +37,36 @@ jobs:
         with:
           packages: ''
 
-      - name: Instalar componentes Android
+      - name: Instalar SDK Android 17 e Build Tools
         shell: bash
         run: |
           set -euo pipefail
 
-          sdkmanager --install \
+          sdkmanager --channel=3 --install \
             "platforms;android-37" \
-            "build-tools;37.0.0" \
             "platform-tools"
 
-      - name: Localizar projeto Gradle
+          PACKAGE_LIST="$RUNNER_TEMP/sdk-packages.txt"
+
+          sdkmanager --channel=3 --list > "$PACKAGE_LIST"
+
+          BUILD_TOOLS_VERSION="$(
+            grep -oE 'build-tools;37\.[0-9.]+' "$PACKAGE_LIST" \
+              | sort -Vu \
+              | tail -n 1
+          )"
+
+          if [ -z "$BUILD_TOOLS_VERSION" ]; then
+            echo "::error::Não foi encontrada uma versão dos Build Tools 37."
+            exit 1
+          fi
+
+          sdkmanager --channel=3 --install "$BUILD_TOOLS_VERSION"
+
+          echo "BUILD_TOOLS_VERSION=${BUILD_TOOLS_VERSION#build-tools;}" \
+            >> "$GITHUB_ENV"
+
+      - name: Localizar Gradle Wrapper
         id: gradle
         shell: bash
         run: |
@@ -55,22 +74,19 @@ jobs:
 
           if [ -f "$PROJECT_DIR/gradlew" ]; then
             WRAPPER="$GITHUB_WORKSPACE/$PROJECT_DIR/gradlew"
+            PROJECT_ROOT="$GITHUB_WORKSPACE/$PROJECT_DIR"
           elif [ -f "$GITHUB_WORKSPACE/gradlew" ]; then
             WRAPPER="$GITHUB_WORKSPACE/gradlew"
+            PROJECT_ROOT="$GITHUB_WORKSPACE"
           else
             echo "::error::Gradle Wrapper não encontrado."
-            exit 1
-          fi
-
-          if [ ! -d "$PROJECT_DIR" ]; then
-            echo "::error::Pasta do projeto não encontrada: $PROJECT_DIR"
             exit 1
           fi
 
           chmod +x "$WRAPPER"
 
           echo "wrapper=$WRAPPER" >> "$GITHUB_OUTPUT"
-          echo "project=$GITHUB_WORKSPACE/$PROJECT_DIR" >> "$GITHUB_OUTPUT"
+          echo "project=$PROJECT_ROOT" >> "$GITHUB_OUTPUT"
 
       - name: Compilar APK Release
         shell: bash
@@ -82,7 +98,7 @@ jobs:
             --no-daemon \
             assembleRelease
 
-      - name: Validar secrets
+      - name: Verificar secrets
         shell: bash
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
@@ -99,7 +115,7 @@ jobs:
             KEY_PASSWORD
           do
             if [ -z "${!NAME:-}" ]; then
-              echo "::error::Configure o secret $NAME."
+              echo "::error::Configure o secret $NAME nas configurações do repositório."
               exit 1
             fi
           done
@@ -117,20 +133,14 @@ jobs:
 
           chmod 600 "$RUNNER_TEMP/mulher-amparada.p12"
 
-      - name: Localizar ferramentas e APK
+      - name: Localizar APK e ferramentas
         id: files
         shell: bash
         run: |
           set -euo pipefail
 
           SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
-
-          if [ -z "$SDK_ROOT" ]; then
-            echo "::error::Android SDK não encontrado."
-            exit 1
-          fi
-
-          BUILD_TOOLS="$SDK_ROOT/build-tools/37.0.0"
+          BUILD_TOOLS="$SDK_ROOT/build-tools/$BUILD_TOOLS_VERSION"
 
           if [ ! -x "$BUILD_TOOLS/apksigner" ]; then
             echo "::error::apksigner não encontrado."
@@ -142,14 +152,16 @@ jobs:
             exit 1
           fi
 
-          APK="$(find "$PROJECT_DIR" \
-            -type f \
-            -path '*/build/outputs/apk/release/*.apk' \
-            ! -name '*androidTest*' \
-            -print -quit)"
+          APK="$(
+            find "${{ steps.gradle.outputs.project }}" \
+              -type f \
+              -path '*/build/outputs/apk/release/*.apk' \
+              ! -name '*androidTest*' \
+              -print -quit
+          )"
 
           if [ -z "$APK" ]; then
-            echo "::error::APK Release não encontrado."
+            echo "::error::Nenhum APK Release foi encontrado."
             exit 1
           fi
 
@@ -190,7 +202,7 @@ jobs:
             --verbose \
             "$GITHUB_WORKSPACE/artefatos/mulher-amparada-release.apk"
 
-      - name: Disponibilizar APK
+      - name: Publicar APK como artefato
         uses: actions/upload-artifact@v7
         with:
           name: mulher-amparada-android-17

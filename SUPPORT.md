@@ -71,6 +71,6 @@ O projeto Mulher Amparada foi listado em um site de terceiros (deepnlp.org) sem 
 
 Essa página exibe anúncios e não representa o projeto. O Mulher Amparada continua sendo gratuito, livre de anúncios e sem fins lucrativos.
 
-Não temos controle sobre o conteúdo ou os anúncios exibidos nessa página. Para informações oficiais, consulte apenas o repositório oficial, o site do projeto e os links acima.
+Não temos controle sobre o conteúdo ou os anúncios exibidos nessa página. Para informações oficiais, consulte apenas o repositório oficial e o site do projeto.
 
 Página não oficial: https://www.deepnlp.org/store/developer-tools/github/pub-mulher-amparada/mulher-amparada

@@ -236,3 +236,5 @@ a pessoa instala pelo github releases!
 
 e quem publica e atualiza essa release é o proprio workflow!
 
+[📦link do packpage!](https://github.com/mulher-amparada/mulher-amparada-app/pkgs/npm/divulgacao)
+

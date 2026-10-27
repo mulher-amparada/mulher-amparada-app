@@ -16,6 +16,9 @@ https://projetomulheramparada.hashnode.dev/
 - 🌐 Hashnode — Eu não tinha computador para desenvolver este aplicativo:
 https://projetomulheramparada.hashnode.dev/eu-n-o-tinha-computador-para-desenvolver-este-aplicativo
 
+- 💻 Coderlegion — Quais IAs foram usadas no Mulher Amparada:
+https://coderlegion.com/32731/quais-ias-foram-usadas-no-mulher-amparada
+
 ### 📰 Imprensa e divulgação:
 
 - 📢 SubmitPR — Mulher Amparada:

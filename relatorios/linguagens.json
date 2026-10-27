@@ -3,10 +3,10 @@
   "branch": "main",
   "fonte_classificacao": "GitHub Linguist",
   "fonte_lista_linguagens": "https://github.com/github-linguist/linguist",
-  "gerado_em_utc": "2026-10-27T17:15:48Z",
+  "gerado_em_utc": "2026-10-27T17:24:04Z",
   "total_linguagens": 12,
   "total_arquivos_classificados": 96,
-  "total_bytes_classificados": 1809124,
+  "total_bytes_classificados": 1809140,
   "linguagens": [
     {
       "nome": "C",
@@ -43,8 +43,8 @@
     },
     {
       "nome": "HTML",
-      "tamanho_bytes": 68641,
-      "percentual": "3.79",
+      "tamanho_bytes": 68657,
+      "percentual": "3.80",
       "arquivos": [
         "app1.html",
         "divulgacao/html/banner.html",

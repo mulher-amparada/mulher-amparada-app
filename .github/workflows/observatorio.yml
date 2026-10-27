@@ -61,6 +61,7 @@ jobs:
             -type f -name 'observatorio-*.png' \
             -print | sort
 
+
       - name: Salvar imagens no repositorio
         run: |
           set -eu
@@ -75,9 +76,17 @@ jobs:
             exit 0
           fi
 
-          git commit -m "chore: atualizar observatorio"
-
           git fetch origin main
-          git rebase origin/main
+
+          git reset --soft origin/main
+
+          git add docs/observatorio/
+
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteracao nas imagens apos sincronizar."
+            exit 0
+          fi
+
+          git commit -m "chore: atualizar observatorio"
 
           git push origin HEAD:main

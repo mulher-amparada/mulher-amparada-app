@@ -29,7 +29,7 @@ https://coderlegion.com/32731/quais-ias-foram-usadas-no-mulher-amparada
 - 🟣 Product Hunt — Mulher Amparada:
   https://www.producthunt.com/products/mulher-amparada?launch=mulher-amparada
 
-- 🚀 NicheLoom — Mulher Amparada:
+- 🚀 Nicheloom — Mulher Amparada:
   https://www.nicheloom.com/launches/40835/
 
 ### 📃 Publicações e comunidades:

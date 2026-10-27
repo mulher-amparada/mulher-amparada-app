@@ -82,7 +82,7 @@ O workflow automatiza tarefas de compilação, análise, documentação, publica
 
 e o yml também usa o typescript e bash para validar o qr code de todas as imagens!
 
-e no final do automations yml, ele atualiza o total de commits la no readme (existem tanto em outro repo antigo do projeto + a versão nova!)
+e no final do automations yml, ele atualiza o total de commits la no readme (existem tanto em outro repo antigo do projeto + a versão nova!), e também publica nosso packpage!
 ```
 
 

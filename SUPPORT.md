@@ -19,6 +19,9 @@ https://projetomulheramparada.hashnode.dev/eu-n-o-tinha-computador-para-desenvol
 - 💻 Coderlegion — Quais IAs foram usadas no Mulher Amparada:
 https://coderlegion.com/32731/quais-ias-foram-usadas-no-mulher-amparada
 
+- 💻 Coderlegion — 📢 NOVOS PÔSTERES DO MULHER AMPARADA:
+https://coderlegion.com/32748/novos-posteres-do-mulher-amparada
+
 - 📰 Blogger — ⚒️ Funções do aplicativo Mulher Amparada:
 https://projetomulheramparadaapp.blogspot.com/2026/10/funcoes-do-aplicativo-mulher-amparada.html?m=1
 

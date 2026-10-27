@@ -2,8 +2,8 @@
 
 - **Arquivo de origem:** `.github/workflows/automations.yml`
 - **Arquivo gerado:** `pesquisas/workflow.md`
-- **Jobs identificados:** 11
-- **Etapas identificadas:** 2
+- **Jobs identificados:** 12
+- **Etapas identificadas:** 8
 
 ## Tabela completa de jobs e etapas
 
@@ -20,6 +20,7 @@
 | `atualizar_footer` | 9 - Atualizar footer | Não identificado | `observatorio` | Nenhuma identificada |
 | `gerar_commits` | 10 - Gerar commits | Não identificado | `atualizar_footer` | Nenhuma identificada |
 | `atualizar-total-commits` | Atualizar total de commits | ubuntu-26.04 | `gerar_commits` | 1. Baixar histórico completo (`actions/checkout@v7`); 2. Atualizar total de commits — executa comandos |
+| `publicar` | Publicar pacote npm | ubuntu-26.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v7`); 2. Configurar Node.js (`actions/setup-node@v7`); 3. Configurar autenticação — executa comandos; 4. Calcular próxima versão — executa comandos; 5. Atualizar versão — executa comandos; 6. Publicar pacote — executa comandos |
 
 ## Grafo completo de dependências
 
@@ -38,6 +39,7 @@ flowchart TD
     job_atualizar_footer["9 - Atualizar footer"]
     job_gerar_commits["10 - Gerar commits"]
     job_atualizar_total_commits["Atualizar total de commits"]
+    job_publicar["Publicar pacote npm"]
     job_build --> job_jekyll
     job_jekyll --> job_sincronizar_app
     job_sincronizar_app --> job_validar_qrs
@@ -162,6 +164,21 @@ flowchart TD
 |---:|---|---|---|
 | 1 | Baixar histórico completo | `actions/checkout@v7` | — |
 | 2 | Atualizar total de commits | — | \| |
+
+### Publicar pacote npm
+
+- **ID:** `publicar`
+- **Runner:** `ubuntu-26.04`
+- **Dependências:** Nenhuma
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| 1 | Baixar repositório | `actions/checkout@v7` | — |
+| 2 | Configurar Node.js | `actions/setup-node@v7` | — |
+| 3 | Configurar autenticação | — | \| |
+| 4 | Calcular próxima versão | — | \| |
+| 5 | Atualizar versão | — | \| |
+| 6 | Publicar pacote | — | npm publish |
 
 ## YAML original completo
 
@@ -326,4 +343,62 @@ jobs:
           git rebase origin/main
 
           git push origin HEAD:main
+
+  publicar:
+    name: Publicar pacote npm
+    runs-on: ubuntu-26.04
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v7
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24.x"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@mulher-amparada"
+          package-manager-cache: false
+
+      - name: Configurar autenticação
+        working-directory: divulgacao
+        run: |
+          npm config set //npm.pkg.github.com/:_authToken "${NODE_AUTH_TOKEN}"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Calcular próxima versão
+        id: versao
+        working-directory: divulgacao
+        shell: bash
+        run: |
+          NOME=$(node -p "require('./package.json').name")
+          ATUAL=$(node -p "require('./package.json').version")
+
+          PUBLICADA=$(npm view "$NOME" version \
+            --registry=https://npm.pkg.github.com 2>/dev/null || true)
+
+          if [ -n "$PUBLICADA" ]; then
+            IFS='.' read -r MAJOR MINOR PATCH <<< "$PUBLICADA"
+            NOVA="${MAJOR}.${MINOR}.$((PATCH + 1))"
+          else
+            NOVA="$ATUAL"
+          fi
+
+          echo "version=$NOVA" >> "$GITHUB_OUTPUT"
+
+      - name: Atualizar versão
+        working-directory: divulgacao
+        shell: bash
+        env:
+          NOVA_VERSAO: ${{ steps.versao.outputs.version }}
+        run: |
+          npm pkg set version="$NOVA_VERSAO"
+
+
+      - name: Publicar pacote
+        working-directory: divulgacao
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ````

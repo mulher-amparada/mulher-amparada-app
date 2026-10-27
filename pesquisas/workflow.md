@@ -365,7 +365,7 @@ jobs:
         run: |
           npm config set //npm.pkg.github.com/:_authToken "${NODE_AUTH_TOKEN}"
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
 
       - name: Calcular próxima versão
         id: versao
@@ -395,10 +395,9 @@ jobs:
         run: |
           npm pkg set version="$NOVA_VERSAO"
 
-
       - name: Publicar pacote
         working-directory: divulgacao
         run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
 ````

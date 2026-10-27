@@ -156,3 +156,56 @@ jobs:
           git rebase origin/main
 
           git push origin HEAD:main
+
+  publicar:
+    name: Publicar pacote npm
+    runs-on: ubuntu-26.04
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v7
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24.x"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@mulher-amparada"
+          package-manager-cache: false
+
+      - name: Configurar autenticação
+        working-directory: divulgacao
+        run: |
+          npm config set //npm.pkg.github.com/:_authToken "${NODE_AUTH_TOKEN}"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Calcular próxima versão
+        id: versao
+        working-directory: divulgacao
+        shell: bash
+        run: |
+          NOME=$(node -p "require('./package.json').name")
+          ATUAL=$(node -p "require('./package.json').version")
+
+          PUBLICADA=$(npm view "$NOME" version \
+            --registry=https://npm.pkg.github.com 2>/dev/null || true)
+
+          if [ -n "$PUBLICADA" ]; then
+            IFS='.' read -r MAJOR MINOR PATCH <<< "$PUBLICADA"
+            NOVA="${MAJOR}.${MINOR}.$((PATCH + 1))"
+          else
+            NOVA="$ATUAL"
+          fi
+
+          echo "version=$NOVA" >> "$GITHUB_OUTPUT"
+
+      - name: Atualizar versão
+        working-directory: divulgacao
+        run: npm version "${{ steps.versao.outputs.version }}" --no-git-tag-version
+
+      - name: Publicar pacote
+        working-directory: divulgacao
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -4,8 +4,6 @@ https://github.com/mulher-amparada/mulher-amparada-app/wiki/%E2%9C%85%EF%B8%8F-P
 
 # 👾Nossas contribuições!:
 
-<img src="https://raw.githubusercontent.com/mulher-amparada/mulher-amparada-app/main/docs/observatorio/observatorio-01.png" alt="Observatório do Mulher Amparada" width="100%" />
-
 <img src="https://raw.githubusercontent.com/mulher-amparada/mulher-amparada-app/main/docs/observatorio/observatorio-001.png" alt="Observatório do Mulher Amparada" width="100%" />
 
 # 🩸 Sofrimento das mulheres:

@@ -1,0 +1,44 @@
+
+name: Publicar pacote npm
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "divulgacao/**"
+      - ".github/workflows/publicar-npm.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publicar:
+    name: Publicar pacote no GitHub Packages
+    runs-on: ubuntu-26.04
+
+    defaults:
+      run:
+        working-directory: divulgacao
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v7
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24.x"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@mulher-amparada"
+          package-manager-cache: false
+
+      - name: Validar package.json
+        run: npm pkg get name version
+
+      - name: Publicar pacote
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

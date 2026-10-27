@@ -8,7 +8,7 @@
 
 ---
 
-Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista (nível 1 de suporte) de 15 anos!, usando o apoio do chatgpt, sem curso formal!
+Um projeto totalmente gratuito e livre de anúncios, projetado por um menino autista (nível 1 de suporte) de 15 anos!, usando o apoio do chatgpt, gemini e luzia, sem curso formal!
 
 e eu programei todo esse projeto no A16 5g da samsung, e nas primeiras versoes, onde nem tinha os recursos, ja programei ele num app de A-IDE, num A05, e eu ja perdi vários projetos porque o celular nao aguentava, matava o projeto porque matou o processo de compilação!, e uma vez eu fiz o projeto do mulher amparada e eu mesmo fiz o app do mulher amparada (primeiro eu refiz porque o family link apagou a pasta segura samsung, depois na 2 vez que perdi portei tudo do apk compilado para descompilado, e depois perdi denovo mas ai eu ja tinha o código-fonte!)
 

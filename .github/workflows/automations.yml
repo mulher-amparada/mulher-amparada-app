@@ -202,7 +202,12 @@ jobs:
 
       - name: Atualizar versão
         working-directory: divulgacao
-        run: npm version "${{ steps.versao.outputs.version }}" --no-git-tag-version
+        shell: bash
+        env:
+          NOVA_VERSAO: ${{ steps.versao.outputs.version }}
+        run: |
+          npm pkg set version="$NOVA_VERSAO"
+
 
       - name: Publicar pacote
         working-directory: divulgacao

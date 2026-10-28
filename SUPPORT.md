@@ -25,6 +25,12 @@ https://coderlegion.com/32748/novos-posteres-do-mulher-amparada
 - 💻 Coderlegion — 👨🏾💻🚀 Safe Woman Operational System: levando o Mulher Amparada para dentro do Android:
 https://coderlegion.com/32858/safe-woman-operational-system-levando-o-mulher-amparada-para-dentro-do-android
 
+- 💻 Coderlegion — 🖥️ Safe Woman Operational System: um experimento de AOSP feito por um garoto autista de 15 anos:
+https://coderlegion.com/31887/safe-woman-operational-system-um-experimento-de-aosp-feito-por-um-garoto-autista-de-15-anos
+
+- 💻 Coderlegion — 📢 Comunicado sobre o tabnews!:
+https://coderlegion.com/32225/comunicado-sobre-o-tabnews
+
 
 - 📰 Blogger — ⚒️ Funções do aplicativo Mulher Amparada:
 https://projetomulheramparadaapp.blogspot.com/2026/10/funcoes-do-aplicativo-mulher-amparada.html?m=1

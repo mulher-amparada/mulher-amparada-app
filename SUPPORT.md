@@ -37,6 +37,9 @@ https://coderlegion.com/32865/o-mulher-amparada-tambem-tem-o-financas-md
 - 💻 Coderlegion — 💻🌐 Quantas linguagens e tecnologias existem no Mulher Amparada?:
 https://coderlegion.com/32873/quantas-linguagens-e-tecnologias-existem-no-mulher-amparada
 
+- 💻 Coderlegion — 🌐 Nem todo "OS" é um sistema do zero: Entenda a arquitetura por trás do Safe Woman OS e do AOSP:
+https://coderlegion.com/32878/nem-todo-os-e-um-sistema-do-zero-entenda-a-arquitetura-por-tras-do-safe-woman-os-e-do-aosp
+
 - 📰 Blogger — ⚒️ Funções do aplicativo Mulher Amparada:
 https://projetomulheramparadaapp.blogspot.com/2026/10/funcoes-do-aplicativo-mulher-amparada.html?m=1
 

@@ -112,6 +112,11 @@ class AssistenteActivity : ComponentActivity() {
 
     controller.isAppearanceLightNavigationBars =
         !modoEscuro
+        
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_SECURE,
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
 
     setContent {
         AssistenteTheme {
@@ -756,7 +761,7 @@ Box(
         }
     }
 }
-
+}
 
 /* =========================================================
    CABEÇALHO
@@ -2586,5 +2591,4 @@ lineHeight =
 )
         }
     }
-}
 }

@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-10-28T17:04:52Z
+- **Gerado em UTC:** 2026-10-28T19:13:02Z
 - **Linguagens identificadas:** 12
 - **Arquivos classificados:** 96
-- **Tamanho classificado:** 1809171 bytes
+- **Tamanho classificado:** 1782873 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -16,17 +16,17 @@
 
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
-| Kotlin | 50 | 1340096 | 74.07% |
-| CSS | 18 | 235771 | 13.03% |
-| Shell | 4 | 90469 | 5.00% |
-| HTML | 11 | 68688 | 3.80% |
-| JavaScript | 4 | 33816 | 1.87% |
-| C | 1 | 18374 | 1.02% |
+| Kotlin | 50 | 1313798 | 73.69% |
+| CSS | 18 | 235771 | 13.22% |
+| Shell | 4 | 90469 | 5.07% |
+| HTML | 11 | 68688 | 3.85% |
+| JavaScript | 4 | 33816 | 1.90% |
+| C | 1 | 18374 | 1.03% |
 | PHP | 1 | 9342 | 0.52% |
-| Julia | 1 | 5989 | 0.33% |
+| Julia | 1 | 5989 | 0.34% |
 | TypeScript | 1 | 3052 | 0.17% |
 | Ruby | 1 | 2025 | 0.11% |
-| Makefile | 3 | 806 | 0.04% |
+| Makefile | 3 | 806 | 0.05% |
 | Python | 1 | 743 | 0.04% |
 
 ## Arquivos por linguagem
@@ -35,7 +35,7 @@
 
 - **Arquivos:** 1
 - **Tamanho:** 18374 bytes
-- **Percentual:** 1.02%
+- **Percentual:** 1.03%
 
 - `tools/observatorio.c`
 
@@ -43,7 +43,7 @@
 
 - **Arquivos:** 18
 - **Tamanho:** 235771 bytes
-- **Percentual:** 13.03%
+- **Percentual:** 13.22%
 
 - `app1-day.css`
 - `app1-night.css`
@@ -68,7 +68,7 @@
 
 - **Arquivos:** 11
 - **Tamanho:** 68688 bytes
-- **Percentual:** 3.80%
+- **Percentual:** 3.85%
 
 - `app1.html`
 - `divulgacao/html/banner.html`
@@ -86,7 +86,7 @@
 
 - **Arquivos:** 4
 - **Tamanho:** 33816 bytes
-- **Percentual:** 1.87%
+- **Percentual:** 1.90%
 
 - `download.js`
 - `index.js`
@@ -97,15 +97,15 @@
 
 - **Arquivos:** 1
 - **Tamanho:** 5989 bytes
-- **Percentual:** 0.33%
+- **Percentual:** 0.34%
 
 - `src/main.jl`
 
 ### Kotlin
 
 - **Arquivos:** 50
-- **Tamanho:** 1340096 bytes
-- **Percentual:** 74.07%
+- **Tamanho:** 1313798 bytes
+- **Percentual:** 73.69%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt`
@@ -162,7 +162,7 @@
 
 - **Arquivos:** 3
 - **Tamanho:** 806 bytes
-- **Percentual:** 0.04%
+- **Percentual:** 0.05%
 
 - `Safe Woman Operational System/device/safe_woman/AndroidProducts.mk`
 - `Safe Woman Operational System/device/safe_woman/BoardConfig.mk`
@@ -196,7 +196,7 @@
 
 - **Arquivos:** 4
 - **Tamanho:** 90469 bytes
-- **Percentual:** 5.00%
+- **Percentual:** 5.07%
 
 - `Código-fonte do app = Mulher Amparada/make.sh`
 - `Safe Woman Operational System/build/envsetup.sh`

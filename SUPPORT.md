@@ -28,9 +28,11 @@ https://coderlegion.com/32858/safe-woman-operational-system-levando-o-mulher-amp
 - 💻 Coderlegion — 🖥️ Safe Woman Operational System: um experimento de AOSP feito por um garoto autista de 15 anos:
 https://coderlegion.com/31887/safe-woman-operational-system-um-experimento-de-aosp-feito-por-um-garoto-autista-de-15-anos
 
-- 💻 Coderlegion — 📢 Comunicado sobre o tabnews!:
+- 💻 Coderlegion — 📢 Comunicado sobre o tabnews:
 https://coderlegion.com/32225/comunicado-sobre-o-tabnews
 
+- 💻 Coderlegion — 💰🌷 O Mulher Amparada também tem o FINANÇAS.md:
+https://coderlegion.com/32865/o-mulher-amparada-tambem-tem-o-financas-md
 
 - 📰 Blogger — ⚒️ Funções do aplicativo Mulher Amparada:
 https://projetomulheramparadaapp.blogspot.com/2026/10/funcoes-do-aplicativo-mulher-amparada.html?m=1

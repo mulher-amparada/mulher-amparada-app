@@ -3,6 +3,7 @@ package com.mulheres
 
 import android.graphics.Color as AndroidColor
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -12,12 +13,9 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,31 +33,53 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.foundation.isSystemInDarkTheme
 import kotlinx.coroutines.delay
 
-private val Fundo = Color(0xFFF8F7FC)
-private val Roxo = Color(0xFF7048D8)
-private val RoxoEscuro = Color(0xFF5932BB)
-private val TextoPrincipal = Color(0xFF191725)
-private val TextoSecundario = Color(0xFF777383)
+private val RoxoClaro = Color(0xFF7048D8)
+private val RoxoEscuro = Color(0xFFB9A0FF)
+
+private val EsquemaClaro = lightColorScheme(
+    primary = RoxoClaro,
+    onPrimary = Color.White,
+    background = Color(0xFFF8F7FC),
+    onBackground = Color(0xFF191725),
+    surface = Color(0xFFFCFBFF),
+    onSurface = Color(0xFF191725),
+    secondary = Color(0xFF777383)
+)
+
+private val EsquemaEscuro = darkColorScheme(
+    primary = RoxoEscuro,
+    onPrimary = Color(0xFF241044),
+    background = Color(0xFF111016),
+    onBackground = Color(0xFFF4F0FC),
+    surface = Color(0xFF191720),
+    onSurface = Color(0xFFF4F0FC),
+    secondary = Color(0xFFB8B1C7)
+)
 
 class AssistenteActivity : ComponentActivity() {
 
@@ -71,16 +91,41 @@ class AssistenteActivity : ComponentActivity() {
         window.statusBarColor = AndroidColor.TRANSPARENT
         window.navigationBarColor = AndroidColor.TRANSPARENT
 
-        window.decorView.systemUiVisibility =
-            window.decorView.systemUiVisibility or
-                android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or
-                android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+if (android.os.Build.VERSION.SDK_INT >=
+    android.os.Build.VERSION_CODES.Q
+) {
+    window.isNavigationBarContrastEnforced = false
+}
 
         setContent {
-            MaterialTheme {
+            val modoEscuro = isSystemInDarkTheme()
+
+            SideEffect {
+                @Suppress("DEPRECATION")
+                run {
+                    val flags =
+                        android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or
+                            android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+
+                    window.decorView.systemUiVisibility =
+                        if (modoEscuro) {
+                            window.decorView.systemUiVisibility and flags.inv()
+                        } else {
+                            window.decorView.systemUiVisibility or flags
+                        }
+                }
+            }
+
+            MaterialTheme(
+                colorScheme = if (modoEscuro) {
+                    EsquemaEscuro
+                } else {
+                    EsquemaClaro
+                }
+            ) {
                 TelaBoasVindas(
                     onComecar = {
-                        // Defina aqui a próxima tela do assistente.
+                        // Configure aqui a próxima tela.
                     }
                 )
             }
@@ -92,7 +137,32 @@ class AssistenteActivity : ComponentActivity() {
 private fun TelaBoasVindas(
     onComecar: () -> Unit
 ) {
-    var visivel by remember { mutableStateOf(false) }
+    val contexto = LocalContext.current
+    val modoEscuro = isSystemInDarkTheme()
+    val esquema = MaterialTheme.colorScheme
+
+    val fundo = esquema.background
+    val textoPrincipal = esquema.onBackground
+    val textoSecundario = esquema.secondary
+    val roxo = esquema.primary
+
+    val gradiente = if (modoEscuro) {
+        listOf(
+            Color(0xFF17141F),
+            Color(0xFF111016),
+            Color(0xFF211832)
+        )
+    } else {
+        listOf(
+            Color(0xFFFCFBFF),
+            Color(0xFFF8F7FC),
+            Color(0xFFF0EAFB)
+        )
+    }
+
+    var visivel by remember {
+        mutableStateOf(false)
+    }
 
     LaunchedEffect(Unit) {
         delay(120)
@@ -110,19 +180,13 @@ private fun TelaBoasVindas(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Fundo
+        color = fundo
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            Color(0xFFFCFBFF),
-                            Fundo,
-                            Color(0xFFF2EEFC)
-                        )
-                    )
+                    Brush.verticalGradient(gradiente)
                 )
         ) {
             Column(
@@ -133,7 +197,9 @@ private fun TelaBoasVindas(
                     .padding(horizontal = 28.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.weight(0.75f))
+                Spacer(
+                    modifier = Modifier.weight(0.75f)
+                )
 
                 AnimatedVisibility(
                     visible = visivel,
@@ -142,7 +208,7 @@ private fun TelaBoasVindas(
                     ) + slideInVertically(
                         initialOffsetY = { it / 7 },
                         animationSpec = tween(
-                            650,
+                            durationMillis = 650,
                             easing = FastOutSlowInEasing
                         )
                     )
@@ -157,40 +223,62 @@ private fun TelaBoasVindas(
                                     scaleX = escala
                                     scaleY = escala
                                 }
-                                .clip(RoundedCornerShape(36.dp))
-                                .background(Color.White),
+                                .clip(
+                                    RoundedCornerShape(36.dp)
+                                )
+                                .background(
+                                    if (modoEscuro) {
+                                        Color(0xFF292333)
+                                    } else {
+                                        Color.White
+                                    }
+                                ),
                             contentAlignment = Alignment.Center
                         ) {
-                            Image(
-                                painter = painterResource(
-                                    id = R.mipmap.ic_launcher
-                                ),
-                                contentDescription =
-                                    "Mulher Amparada",
+                            AndroidView(
+                                factory = { ctx ->
+                                    ImageView(ctx).apply {
+                                        scaleType =
+                                            ImageView.ScaleType.FIT_CENTER
+
+                                        setImageDrawable(
+                                            ctx.packageManager
+                                                .getApplicationIcon(
+                                                    ctx.packageName
+                                                )
+                                        )
+                                    }
+                                },
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .clip(RoundedCornerShape(36.dp))
+                                    .clip(
+                                        RoundedCornerShape(36.dp)
+                                    )
                             )
                         }
 
-                        Spacer(modifier = Modifier.height(48.dp))
+                        Spacer(
+                            modifier = Modifier.height(48.dp)
+                        )
 
                         Text(
                             text = "Boas-vindas ao",
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Medium,
-                            color = TextoSecundario,
+                            color = textoSecundario,
                             textAlign = TextAlign.Center,
                             letterSpacing = 0.1.sp
                         )
 
-                        Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(
+                            modifier = Modifier.height(12.dp)
+                        )
 
                         Text(
                             text = "Mulher Amparada",
                             fontSize = 34.sp,
                             fontWeight = FontWeight.Bold,
-                            color = TextoPrincipal,
+                            color = textoPrincipal,
                             textAlign = TextAlign.Center,
                             lineHeight = 40.sp,
                             letterSpacing = (-0.8).sp
@@ -200,35 +288,42 @@ private fun TelaBoasVindas(
                             text = "UI 2",
                             fontSize = 35.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Roxo,
+                            color = roxo,
                             textAlign = TextAlign.Center,
                             lineHeight = 42.sp,
                             letterSpacing = (-0.6).sp
                         )
 
-                        Spacer(modifier = Modifier.height(22.dp))
+                        Spacer(
+                            modifier = Modifier.height(22.dp)
+                        )
 
                         Text(
                             text = "Uma nova experiência de proteção, cuidado e simplicidade começa aqui.",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal,
-                            color = TextoSecundario,
+                            color = textoSecundario,
                             textAlign = TextAlign.Center,
                             lineHeight = 25.sp
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.weight(1f))
+                Spacer(
+                    modifier = Modifier.weight(1f)
+                )
 
                 AnimatedVisibility(
                     visible = visivel,
                     enter = fadeIn(
-                        animationSpec = tween(700, delayMillis = 150)
+                        animationSpec = tween(
+                            durationMillis = 700,
+                            delayMillis = 150
+                        )
                     ) + slideInVertically(
                         initialOffsetY = { it / 3 },
                         animationSpec = tween(
-                            700,
+                            durationMillis = 700,
                             delayMillis = 150,
                             easing = FastOutSlowInEasing
                         )
@@ -245,8 +340,8 @@ private fun TelaBoasVindas(
                                 .height(60.dp),
                             shape = CircleShape,
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Roxo,
-                                contentColor = Color.White
+                                containerColor = roxo,
+                                contentColor = esquema.onPrimary
                             ),
                             elevation = ButtonDefaults.buttonElevation(
                                 defaultElevation = 0.dp,
@@ -261,18 +356,24 @@ private fun TelaBoasVindas(
                             )
                         }
 
-                        Spacer(modifier = Modifier.height(18.dp))
+                        Spacer(
+                            modifier = Modifier.height(18.dp)
+                        )
 
                         Text(
                             text = "MULHER AMPARADA  •  UI 2",
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Medium,
-                            color = TextoSecundario.copy(alpha = 0.75f),
+                            color = textoSecundario.copy(
+                                alpha = 0.75f
+                            ),
                             letterSpacing = 1.4.sp,
                             textAlign = TextAlign.Center
                         )
 
-                        Spacer(modifier = Modifier.height(18.dp))
+                        Spacer(
+                            modifier = Modifier.height(18.dp)
+                        )
                     }
                 }
             }

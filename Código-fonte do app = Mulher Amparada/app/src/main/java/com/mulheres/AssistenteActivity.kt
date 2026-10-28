@@ -1,5 +1,6 @@
 package com.mulheres
 
+import android.view.WindowManager
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.Arrangement
@@ -97,6 +98,11 @@ if (android.os.Build.VERSION.SDK_INT >=
 
         window.statusBarColor = AndroidColor.TRANSPARENT
         window.navigationBarColor = AndroidColor.TRANSPARENT
+
+window.setFlags(
+    android.view.WindowManager.LayoutParams.FLAG_SECURE,
+    android.view.WindowManager.LayoutParams.FLAG_SECURE
+)
 
         setContent {
             val modoEscuro = isSystemInDarkTheme()
@@ -587,4 +593,5 @@ private fun TelaBoasVindas(
                 }
             }
         }
+    }
     }

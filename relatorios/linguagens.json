@@ -3,15 +3,15 @@
   "branch": "main",
   "fonte_classificacao": "GitHub Linguist",
   "fonte_lista_linguagens": "https://github.com/github-linguist/linguist",
-  "gerado_em_utc": "2026-10-28T19:36:51Z",
+  "gerado_em_utc": "2026-10-28T19:40:57Z",
   "total_linguagens": 12,
   "total_arquivos_classificados": 96,
-  "total_bytes_classificados": 1827833,
+  "total_bytes_classificados": 1846497,
   "linguagens": [
     {
       "nome": "C",
       "tamanho_bytes": 18374,
-      "percentual": "1.01",
+      "percentual": "1.00",
       "arquivos": [
         "tools/observatorio.c"
       ]
@@ -19,7 +19,7 @@
     {
       "nome": "CSS",
       "tamanho_bytes": 235771,
-      "percentual": "12.90",
+      "percentual": "12.77",
       "arquivos": [
         "app1-day.css",
         "app1-night.css",
@@ -44,7 +44,7 @@
     {
       "nome": "HTML",
       "tamanho_bytes": 68688,
-      "percentual": "3.76",
+      "percentual": "3.72",
       "arquivos": [
         "app1.html",
         "divulgacao/html/banner.html",
@@ -62,7 +62,7 @@
     {
       "nome": "JavaScript",
       "tamanho_bytes": 33816,
-      "percentual": "1.85",
+      "percentual": "1.83",
       "arquivos": [
         "download.js",
         "index.js",
@@ -73,15 +73,15 @@
     {
       "nome": "Julia",
       "tamanho_bytes": 5989,
-      "percentual": "0.33",
+      "percentual": "0.32",
       "arquivos": [
         "src/main.jl"
       ]
     },
     {
       "nome": "Kotlin",
-      "tamanho_bytes": 1358758,
-      "percentual": "74.34",
+      "tamanho_bytes": 1377422,
+      "percentual": "74.60",
       "arquivos": [
         "Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt",
         "Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt",
@@ -172,7 +172,7 @@
     {
       "nome": "Shell",
       "tamanho_bytes": 90469,
-      "percentual": "4.95",
+      "percentual": "4.90",
       "arquivos": [
         "Código-fonte do app = Mulher Amparada/make.sh",
         "Safe Woman Operational System/build/envsetup.sh",

@@ -3,15 +3,15 @@
   "branch": "main",
   "fonte_classificacao": "GitHub Linguist",
   "fonte_lista_linguagens": "https://github.com/github-linguist/linguist",
-  "gerado_em_utc": "2026-10-28T20:18:57Z",
+  "gerado_em_utc": "2026-10-28T20:07:08Z",
   "total_linguagens": 12,
   "total_arquivos_classificados": 96,
-  "total_bytes_classificados": 1809171,
+  "total_bytes_classificados": 1827981,
   "linguagens": [
     {
       "nome": "C",
       "tamanho_bytes": 18374,
-      "percentual": "1.02",
+      "percentual": "1.01",
       "arquivos": [
         "tools/observatorio.c"
       ]
@@ -19,7 +19,7 @@
     {
       "nome": "CSS",
       "tamanho_bytes": 235771,
-      "percentual": "13.03",
+      "percentual": "12.90",
       "arquivos": [
         "app1-day.css",
         "app1-night.css",
@@ -44,7 +44,7 @@
     {
       "nome": "HTML",
       "tamanho_bytes": 68688,
-      "percentual": "3.80",
+      "percentual": "3.76",
       "arquivos": [
         "app1.html",
         "divulgacao/html/banner.html",
@@ -62,7 +62,7 @@
     {
       "nome": "JavaScript",
       "tamanho_bytes": 33816,
-      "percentual": "1.87",
+      "percentual": "1.85",
       "arquivos": [
         "download.js",
         "index.js",
@@ -80,8 +80,8 @@
     },
     {
       "nome": "Kotlin",
-      "tamanho_bytes": 1340096,
-      "percentual": "74.07",
+      "tamanho_bytes": 1358906,
+      "percentual": "74.34",
       "arquivos": [
         "Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt",
         "Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt",
@@ -148,7 +148,7 @@
     {
       "nome": "PHP",
       "tamanho_bytes": 9342,
-      "percentual": "0.52",
+      "percentual": "0.51",
       "arquivos": [
         "scripts/pesquisar_projeto.php"
       ]
@@ -172,7 +172,7 @@
     {
       "nome": "Shell",
       "tamanho_bytes": 90469,
-      "percentual": "5.00",
+      "percentual": "4.95",
       "arquivos": [
         "Código-fonte do app = Mulher Amparada/make.sh",
         "Safe Woman Operational System/build/envsetup.sh",

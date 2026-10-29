@@ -1,37 +1,37 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-10-29T14:52:25Z",
-  "total_arquivos": 550,
-  "total_bytes": 88747300,
+  "gerado_em_utc": "2026-10-29T14:55:46Z",
+  "total_arquivos": 551,
+  "total_bytes": 88751649,
   "total_extensoes": 32,
   "extensoes": [
     {
       "extensao": ".xml",
       "quantidade_arquivos": 174,
       "tamanho_bytes": 217574,
-      "percentual_arquivos": 31.64,
+      "percentual_arquivos": 31.58,
       "percentual_bytes": 0.25
     },
     {
       "extensao": ".md",
-      "quantidade_arquivos": 134,
-      "tamanho_bytes": 322860,
-      "percentual_arquivos": 24.36,
-      "percentual_bytes": 0.36
+      "quantidade_arquivos": 135,
+      "tamanho_bytes": 326193,
+      "percentual_arquivos": 24.5,
+      "percentual_bytes": 0.37
     },
     {
       "extensao": ".png",
       "quantidade_arquivos": 91,
       "tamanho_bytes": 73644668,
-      "percentual_arquivos": 16.55,
+      "percentual_arquivos": 16.52,
       "percentual_bytes": 82.98
     },
     {
       "extensao": ".kt",
       "quantidade_arquivos": 54,
-      "tamanho_bytes": 1392523,
-      "percentual_arquivos": 9.82,
+      "tamanho_bytes": 1393539,
+      "percentual_arquivos": 9.8,
       "percentual_bytes": 1.57
     },
     {
@@ -45,7 +45,7 @@
       "extensao": ".yml",
       "quantidade_arquivos": 14,
       "tamanho_bytes": 94923,
-      "percentual_arquivos": 2.55,
+      "percentual_arquivos": 2.54,
       "percentual_bytes": 0.11
     },
     {
@@ -94,21 +94,21 @@
       "extensao": ".json",
       "quantidade_arquivos": 3,
       "tamanho_bytes": 15120,
-      "percentual_arquivos": 0.55,
+      "percentual_arquivos": 0.54,
       "percentual_bytes": 0.02
     },
     {
       "extensao": ".mk",
       "quantidade_arquivos": 3,
       "tamanho_bytes": 806,
-      "percentual_arquivos": 0.55,
+      "percentual_arquivos": 0.54,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".toml",
       "quantidade_arquivos": 3,
       "tamanho_bytes": 3828,
-      "percentual_arquivos": 0.55,
+      "percentual_arquivos": 0.54,
       "percentual_bytes": 0.0
     },
     {

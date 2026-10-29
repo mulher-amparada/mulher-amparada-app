@@ -1,5 +1,6 @@
 package com.mulheres
 
+import android.view.WindowManager
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -51,6 +52,11 @@ class PinPadActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
 
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+
+window.setFlags(
+    WindowManager.LayoutParams.FLAG_SECURE,
+    WindowManager.LayoutParams.FLAG_SECURE
+)
 
         cripto = Cripto(applicationContext)
 
@@ -325,7 +331,11 @@ Text(
                             .clip(CircleShape)
                             .background(
                                 if (index < pin.length) dotColor
-                                else Color(0xFF383838)
+                                else if (darkMode) {
+    Color(0xFF383838)
+} else {
+    Color(0xFFFFFFFF)
+}
                             )
                     )
                 }

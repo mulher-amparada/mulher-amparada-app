@@ -371,17 +371,7 @@ Text(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(
-                    modifier = Modifier.size(76.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Emergência",
-                        color = secondaryColor,
-                        fontSize = 11.sp,
-                        textAlign = TextAlign.Center
-                    )
-                }
+                
 
                 NeoCalcKey(
                     number = "0",

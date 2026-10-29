@@ -166,6 +166,8 @@ PinPadActivity = (compose) Tela de autenticação da área de distintivos
 
 RankingActivity = (compose) Tela de distintivos
 
+WelcomeActivity = (compose) Tela que aparece antes de qualquer disfarce na primeira vez do app, ajudando mais ainda a impressão que o app é apenas mais um!
+
  # Sobre como o aplicativo é compilado:
 
 Proteção da Activity de Entrada:

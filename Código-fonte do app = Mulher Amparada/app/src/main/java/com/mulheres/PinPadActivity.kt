@@ -404,7 +404,7 @@ Box(
     contentAlignment = Alignment.Center
 ) {
     Image(
-        painter = painterResource(id = R.drawable.ic_delete),
+        painter = painterResource(id = R.drawable.ic_apagarsenha),
         contentDescription = "Apagar",
         modifier = Modifier.size(30.dp)
     )

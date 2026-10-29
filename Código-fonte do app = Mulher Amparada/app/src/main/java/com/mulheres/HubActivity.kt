@@ -2491,11 +2491,7 @@ private fun MulherAmparadaScreen() {
                         Modifier.height(30.dp)
                     )
                     
-                    PinpadArea(c = c)
-
-Spacer(
-    Modifier.height(30.dp)
-)
+                    
 
                     SectionTitle(
                         text = "Espaços protegidos",
@@ -2535,6 +2531,15 @@ Spacer(
     Modifier.height(30.dp)
 )
 
+                    PinpadArea(
+                        c = c
+                    )
+
+                    Spacer(
+                        Modifier.height(30.dp)
+                    )
+
+
                 } else {
 
                     Hero(
@@ -2560,12 +2565,6 @@ Spacer(
                     Spacer(
                         Modifier.height(30.dp)
                     )
-
-PinpadArea(c = c)
-
-Spacer(
-    Modifier.height(30.dp)
-)
 
                     SectionTitle(
                         text = "Resposta imediata",
@@ -4157,9 +4156,9 @@ private fun PinpadArea(
     val context = LocalContext.current
 
     ActionPortal(
-        title = "PIN Pad",
-        subtitle = "Acesse o painel de PIN",
-        meta = "ACESSO AO PIN PAD",
+        title = "Distintivos",
+        subtitle = "Acesse o painel de conquistas",
+        meta = "ACESSO AOS DINSTINTIVOS",
         icon = R.drawable.ic_win,
         accent = if (isSystemInDarkTheme()) {
             Color(0xFF8DD8FF)

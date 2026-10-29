@@ -374,6 +374,6 @@ Estamos aqui para ajudar.
 
 e a imagem troca a cada dia depois das meia-noite, até chegar na ranking6 png, e o estado de qual imagem está é salvo na classe cripto!
 
-e a usuária tem que entrar nessa tela todos os dias pra ter garantia de ganhar todos os dinstintivos!
+> a verificação é pela data do dispositivo, entao provavelmente ele atualiza sem precisar da usuária entrar, mas isso depende do sistema operacional do dispositivo da mulher, se acontecer algo com o dispositivo da usuária, eu, como desenvolvedor, nao me responsabilizo pelo sistema Android e a interface do usuario correspondente, apenas pelo projeto mulher amparada 
 
 e ao clicar no botão voltar nessa tela, ela volta direto pra HubActivity!

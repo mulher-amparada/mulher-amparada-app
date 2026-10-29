@@ -1,5 +1,8 @@
 package com.mulheres
 
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
 import android.content.Intent
@@ -62,17 +65,17 @@ class PinPadActivity : FragmentActivity() {
 
         configurarBiometria()
 
-        setContent {
-            MaterialTheme {
-                NeoCalcScreen(
-                    cripto = cripto,
-                    resetSignal = resetSignal.intValue,
-                    biometricError = biometricError.value,
-                    onFiveTaps = { abrirBiometria() },
-                    onSuccess = { abrirHub() }
-                )
-            }
-        }
+    setContent {
+    PinPadTheme {
+        NeoCalcScreen(
+            cripto = cripto,
+            resetSignal = resetSignal.intValue,
+            biometricError = biometricError.value,
+            onFiveTaps = { abrirBiometria() },
+            onSuccess = { abrirHub() }
+        )
+    }
+}
     }
 
     private fun configurarBiometria() {
@@ -147,6 +150,34 @@ class PinPadActivity : FragmentActivity() {
 }
 
 @Composable
+private fun PinPadTheme(
+    content: @Composable () -> Unit
+) {
+    val darkMode = isSystemInDarkTheme()
+
+    val colors = if (darkMode) {
+        darkColorScheme(
+            background = Color(0xFF000000),
+            surface = Color(0xFF000000),
+            onBackground = Color(0xFFF5F5F5),
+            onSurface = Color(0xFFF5F5F5)
+        )
+    } else {
+        lightColorScheme(
+            background = Color(0xFFF8F8FC),
+            surface = Color(0xFFF8F8FC),
+            onBackground = Color(0xFF17171C),
+            onSurface = Color(0xFF17171C)
+        )
+    }
+
+    MaterialTheme(
+        colorScheme = colors,
+        content = content
+    )
+}
+
+@Composable
 private fun NeoCalcScreen(
     cripto: Cripto,
     resetSignal: Int,
@@ -162,11 +193,25 @@ private fun NeoCalcScreen(
     val landscape =
         configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    val background = Color.Black
-    val keyColor = Color(0xFF202124)
-    val keyPressed = Color(0xFF45464A)
-    val textColor = Color(0xFFF5F5F5)
-    val secondaryColor = Color(0xFFAAAAAA)
+val darkMode = isSystemInDarkTheme()
+
+val background = MaterialTheme.colorScheme.background
+val keyColor = if (darkMode) {
+    Color(0xFF202124)
+} else {
+    Color(0xFFE4E5EC)
+}
+val keyPressed = if (darkMode) {
+    Color(0xFF45464A)
+} else {
+    Color(0xFFCFD1DC)
+}
+val textColor = MaterialTheme.colorScheme.onBackground
+val secondaryColor = if (darkMode) {
+    Color(0xFFAAAAAA)
+} else {
+    Color(0xFF666671)
+}
 
     // Após autenticação biométrica, remove o PIN salvo.
     LaunchedEffect(resetSignal) {
@@ -498,9 +543,14 @@ private fun NeoCalcKey(
         modifier = Modifier
             .size(76.dp)
             .clip(CircleShape)
-            .background(
-                if (enabled) animatedColor else Color(0xFF181818)
-            )
+.background(
+    if (enabled) animatedColor
+    else if (isSystemInDarkTheme()) {
+        Color(0xFF181818)
+    } else {
+        Color(0xFFE0E0E6)
+    }
+)
             .clickable(
                 enabled = enabled,
                 onClick = onClick

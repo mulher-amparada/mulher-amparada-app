@@ -213,6 +213,11 @@
             android:name=".RankingActivity"
             
                      android:exported="false" />
+
+<activity
+            android:name=".WelcomeActivity"
+            
+                     android:exported="false" />
                      
                     
                      

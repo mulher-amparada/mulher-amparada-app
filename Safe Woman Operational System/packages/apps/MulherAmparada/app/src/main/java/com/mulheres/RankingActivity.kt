@@ -1,6 +1,6 @@
-
 package com.mulheres
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import android.content.pm.ActivityInfo
 import android.graphics.Color as AndroidColor
 import android.os.Bundle
@@ -86,10 +86,23 @@ class RankingActivity : ComponentActivity() {
         }
 
         setContent {
-            MaterialTheme {
-                RankingScreen()
-            }
+    val modoEscuro = androidx.compose.foundation.isSystemInDarkTheme()
+
+    androidx.compose.runtime.SideEffect {
+        WindowInsetsControllerCompat(
+            window,
+            window.decorView
+        ).apply {
+            isAppearanceLightStatusBars = !modoEscuro
+            isAppearanceLightNavigationBars = !modoEscuro
         }
+    }
+
+    MaterialTheme {
+        RankingScreen()
+    }
+}
+        
     }
 }
 
@@ -102,9 +115,26 @@ private fun RankingScreen() {
         mostrarConteudo = true
     }
 
-    val fundo = Color(0xFFFFF7FA)
-    val rosa = Color(0xFFCE668F)
-    val texto = Color(0xFF493640)
+    
+    val modoEscuro = isSystemInDarkTheme()
+
+val fundo = if (modoEscuro) {
+    Color(0xFF181218)
+} else {
+    Color(0xFFFFF7FA)
+}
+
+val rosa = if (modoEscuro) {
+    Color(0xFFFFA6CA)
+} else {
+    Color(0xFFCE668F)
+}
+
+val texto = if (modoEscuro) {
+    Color(0xFFF3E8EF)
+} else {
+    Color(0xFF493640)
+}
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -172,7 +202,7 @@ private fun RankingScreen() {
                                 .weight(1f)
                         )
 
-                        Spacer(modifier = Modifier.height(18.dp))
+                        Spacer(modifier = Modifier.height(9.dp))
 
                         MensagemAcolhimento(
                             modifier = Modifier

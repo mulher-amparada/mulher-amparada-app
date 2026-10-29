@@ -31,7 +31,7 @@ class EntradaActivity : ComponentActivity() {
         }
 
         val destino = if (primeiraVez) {
-            VersaoActivity::class.java
+            WelcomeActivity::class.java
         } else {
             AssistenteActivity::class.java
         }

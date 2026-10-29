@@ -1,37 +1,37 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-10-29T20:01:15Z",
-  "total_arquivos": 586,
-  "total_bytes": 94972962,
+  "gerado_em_utc": "2026-10-29T20:22:33Z",
+  "total_arquivos": 587,
+  "total_bytes": 94990918,
   "total_extensoes": 32,
   "extensoes": [
     {
       "extensao": ".xml",
       "quantidade_arquivos": 174,
       "tamanho_bytes": 217808,
-      "percentual_arquivos": 29.69,
+      "percentual_arquivos": 29.64,
       "percentual_bytes": 0.23
     },
     {
       "extensao": ".md",
-      "quantidade_arquivos": 158,
-      "tamanho_bytes": 351279,
-      "percentual_arquivos": 26.96,
+      "quantidade_arquivos": 159,
+      "tamanho_bytes": 352850,
+      "percentual_arquivos": 27.09,
       "percentual_bytes": 0.37
     },
     {
       "extensao": ".png",
       "quantidade_arquivos": 101,
       "tamanho_bytes": 76847070,
-      "percentual_arquivos": 17.24,
-      "percentual_bytes": 80.91
+      "percentual_arquivos": 17.21,
+      "percentual_bytes": 80.9
     },
     {
       "extensao": ".kt",
       "quantidade_arquivos": 56,
       "tamanho_bytes": 1449064,
-      "percentual_arquivos": 9.56,
+      "percentual_arquivos": 9.54,
       "percentual_bytes": 1.53
     },
     {
@@ -52,7 +52,7 @@
       "extensao": ".html",
       "quantidade_arquivos": 11,
       "tamanho_bytes": 68698,
-      "percentual_arquivos": 1.88,
+      "percentual_arquivos": 1.87,
       "percentual_bytes": 0.07
     },
     {
@@ -93,7 +93,7 @@
     {
       "extensao": ".json",
       "quantidade_arquivos": 3,
-      "tamanho_bytes": 15339,
+      "tamanho_bytes": 15340,
       "percentual_arquivos": 0.51,
       "percentual_bytes": 0.02
     },
@@ -114,9 +114,9 @@
     {
       "extensao": ".apk",
       "quantidade_arquivos": 2,
-      "tamanho_bytes": 14554286,
+      "tamanho_bytes": 14570670,
       "percentual_arquivos": 0.34,
-      "percentual_bytes": 15.32
+      "percentual_bytes": 15.34
     },
     {
       "extensao": ".bat",

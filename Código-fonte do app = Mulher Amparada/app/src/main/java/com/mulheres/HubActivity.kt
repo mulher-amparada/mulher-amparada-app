@@ -2490,6 +2490,12 @@ private fun MulherAmparadaScreen() {
                     Spacer(
                         Modifier.height(30.dp)
                     )
+                    
+                    PinpadArea(c = c)
+
+Spacer(
+    Modifier.height(30.dp)
+)
 
                     SectionTitle(
                         text = "Espaços protegidos",
@@ -2554,6 +2560,12 @@ Spacer(
                     Spacer(
                         Modifier.height(30.dp)
                     )
+
+PinpadArea(c = c)
+
+Spacer(
+    Modifier.height(30.dp)
+)
 
                     SectionTitle(
                         text = "Resposta imediata",
@@ -4134,6 +4146,35 @@ onClick = {
     )
 }
 
+/* =========================================================
+   PIN PAD
+========================================================= */
+
+@Composable
+private fun PinpadArea(
+    c: AppColors
+) {
+    val context = LocalContext.current
+
+    ActionPortal(
+        title = "PIN Pad",
+        subtitle = "Acesse o painel de PIN",
+        meta = "ACESSO AO PIN PAD",
+        icon = R.drawable.ic_win,
+        accent = if (isSystemInDarkTheme()) {
+            Color(0xFF8DD8FF)
+        } else {
+            Color(0xFF287BB5)
+        },
+        gradient = c.actionBlueGradient,
+        c = c,
+        onClick = {
+            context.startActivity(
+                Intent(context, PinpadActivity::class.java)
+            )
+        }
+    )
+}
 
 /* =========================================================
    PORTAL

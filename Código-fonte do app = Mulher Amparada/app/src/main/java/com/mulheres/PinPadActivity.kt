@@ -371,7 +371,17 @@ Text(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                
+                Box(
+                    modifier = Modifier.size(76.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "OK",
+                        color = secondaryColor,
+                        fontSize = 11.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
 
                 NeoCalcKey(
                     number = "0",
@@ -394,7 +404,7 @@ Box(
     contentAlignment = Alignment.Center
 ) {
     Image(
-        painter = painterResource(id = R.drawable.ic_apagarsenha),
+        painter = painterResource(id = R.drawable.ic_delete),
         contentDescription = "Apagar",
         modifier = Modifier.size(30.dp)
     )

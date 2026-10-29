@@ -1,5 +1,6 @@
 package com.mulheres
 
+import android.content.Intent
 import android.view.WindowManager
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.width

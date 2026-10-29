@@ -27,6 +27,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: main
 
       - name: Verificar pasta de origem
         shell: bash
@@ -66,10 +67,11 @@ jobs:
         run: |
           set -euo pipefail
 
-          if git diff --quiet -- \
-            "Safe Woman Operational System/packages/apps/MulherAmparada" \
-            && [ -z "$(git ls-files --others --exclude-standard -- \
-              "Safe Woman Operational System/packages/apps/MulherAmparada")" ]; then
+          DESTINO="Safe Woman Operational System/packages/apps/MulherAmparada"
+
+          git add -A -- "$DESTINO"
+
+          if git diff --cached --quiet; then
             echo "mudou=false" >> "$GITHUB_OUTPUT"
             echo "Nenhuma alteração encontrada."
           else
@@ -87,8 +89,28 @@ jobs:
           git config user.email \
             "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add -A -- \
-            "Safe Woman Operational System/packages/apps/MulherAmparada"
-
           git commit -m "Sincronizar código do app Mulher Amparada"
-          git push origin HEAD:main
+
+          for tentativa in 1 2 3 4 5; do
+            git fetch origin main
+
+            if git rebase origin/main; then
+              if git push origin HEAD:main; then
+                echo "Sincronização concluída com sucesso."
+                exit 0
+              fi
+            else
+              echo "::error::Conflito durante o rebase. É necessária uma resolução manual."
+              git rebase --abort || true
+              exit 1
+            fi
+
+            echo "Tentativa $tentativa falhou. Atualizando a branch novamente."
+
+            if [ "$tentativa" -lt 5 ]; then
+              sleep 2
+            fi
+          done
+
+          echo "::error::Não foi possível enviar as alterações após 5 tentativas."
+          exit 1

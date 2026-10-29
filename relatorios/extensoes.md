@@ -2,9 +2,9 @@
 
 - **Repositório:** `mulher-amparada/mulher-amparada-app`
 - **Branch:** `main`
-- **Gerado em UTC:** 2026-10-29T19:55:48Z
+- **Gerado em UTC:** 2026-10-29T19:59:33Z
 - **Arquivos analisados:** 584
-- **Tamanho total:** 94955136 bytes
+- **Tamanho total:** 94971559 bytes
 - **Extensões encontradas:** 32
 
 > Inventário dos arquivos rastreados pelo Git que existem no checkout.
@@ -14,8 +14,8 @@
 | Extensão | Arquivos | Bytes | % dos arquivos | % dos bytes |
 |---|---:|---:|---:|---:|
 | `.xml` | 174 | 217808 | 29.79% | 0.23% |
-| `.md` | 156 | 349837 | 26.71% | 0.37% |
-| `.png` | 101 | 76847070 | 17.29% | 80.93% |
+| `.md` | 156 | 349876 | 26.71% | 0.37% |
+| `.png` | 101 | 76847070 | 17.29% | 80.92% |
 | `.kt` | 56 | 1449064 | 9.59% | 1.53% |
 | `.css` | 18 | 235632 | 3.08% | 0.25% |
 | `.yml` | 14 | 95451 | 2.4% | 0.1% |
@@ -28,7 +28,7 @@
 | `.json` | 3 | 15339 | 0.51% | 0.02% |
 | `.mk` | 3 | 806 | 0.51% | 0.0% |
 | `.toml` | 3 | 3828 | 0.51% | 0.0% |
-| `.apk` | 2 | 14537902 | 0.34% | 15.31% |
+| `.apk` | 2 | 14554286 | 0.34% | 15.32% |
 | `.bat` | 2 | 5526 | 0.34% | 0.01% |
 | `.ico` | 2 | 30812 | 0.34% | 0.03% |
 | `.jar` | 2 | 118406 | 0.34% | 0.12% |

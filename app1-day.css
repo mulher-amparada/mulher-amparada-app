@@ -22,9 +22,7 @@
 
     padding: 0;
 
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-
+    -webkit-tap-highlight-color: transparent;
 }
 
 

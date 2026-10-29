@@ -356,8 +356,6 @@ O gesto é um sinal silencioso de pedido de ajuda e pode ser utilizado em difere
 
 # 🏅Área de distintivos:
 
-> Aviso: antes dessa tela, existe o disfarce de assistente de saúde e depois o de calculadora!
-
 ele é mais uma área protegida independente, quando clica no botão da HubActivity correspondente a área, ele abre a PinpadActivity, ele tem um texto em que quando toca 5 vezes chama o BiometricPrompt com device credential e biometric weak, e você pode resetar a senha, no início você cria uma senha..., ao digitar a senha correta, as bolinhas ficam verdes e aparece = "pin correto", ao digitar a senha errada, as bolinhas ficam vermelhas e aparece = "pin incorreto", ao desbloquear, aparece a RankingActivity, em que tem o ranking1 png, ate o ranking 6 png, e aparece essa mensagem abaixo:
 
 ```

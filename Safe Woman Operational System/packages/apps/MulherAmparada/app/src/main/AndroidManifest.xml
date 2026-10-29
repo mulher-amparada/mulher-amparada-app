@@ -208,6 +208,11 @@
             android:name=".PinPadActivity"
             
                      android:exported="false" />
+
+<activity
+            android:name=".RankingActivity"
+            
+                     android:exported="false" />
                      
                     
                      

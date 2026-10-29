@@ -140,7 +140,7 @@ class PinPadActivity : FragmentActivity() {
 
     private fun abrirHub() {
         startActivity(
-            Intent(this, HubActivity::class.java)
+            Intent(this, RankingActivity::class.java)
         )
         finish()
     }

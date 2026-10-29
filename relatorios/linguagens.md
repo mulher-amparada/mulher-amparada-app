@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-10-29T19:52:08Z
+- **Gerado em UTC:** 2026-10-29T19:53:49Z
 - **Linguagens identificadas:** 12
 - **Arquivos classificados:** 102
-- **Tamanho classificado:** 1918002 bytes
+- **Tamanho classificado:** 1918010 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -16,7 +16,7 @@
 
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
-| Kotlin | 56 | 1449056 | 75.55% |
+| Kotlin | 56 | 1449064 | 75.55% |
 | CSS | 18 | 235632 | 12.29% |
 | Shell | 4 | 90469 | 4.72% |
 | HTML | 11 | 68698 | 3.58% |
@@ -104,7 +104,7 @@
 ### Kotlin
 
 - **Arquivos:** 56
-- **Tamanho:** 1449056 bytes
+- **Tamanho:** 1449064 bytes
 - **Percentual:** 75.55%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`

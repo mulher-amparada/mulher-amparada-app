@@ -299,7 +299,7 @@ private fun TelaBoasVindas(
                                 )
 
                                 Text(
-                                    text = "Mulher Amparada",
+                                    text = "Assistente",
                                     fontSize = 26.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = textoPrincipal,
@@ -393,7 +393,7 @@ private fun TelaBoasVindas(
                                 )
 
                                 Text(
-                                    text = "MULHER AMPARADA  •  UI 2",
+                                    text = "Assistente  •  UI 2",
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight.Medium,
                                     color = textoSecundario.copy(
@@ -495,7 +495,7 @@ private fun TelaBoasVindas(
                             )
 
                             Text(
-                                text = "Mulher Amparada",
+                                text = "Assistente",
                                 fontSize = 34.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = textoPrincipal,
@@ -582,7 +582,7 @@ private fun TelaBoasVindas(
                             )
 
                             Text(
-                                text = "MULHER AMPARADA  •  UI 2",
+                                text = "Assistente  •  UI 2",
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Medium,
                                 color = textoSecundario.copy(

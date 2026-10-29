@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-10-28T20:07:08Z
+- **Gerado em UTC:** 2026-10-29T14:01:01Z
 - **Linguagens identificadas:** 12
-- **Arquivos classificados:** 96
-- **Tamanho classificado:** 1827981 bytes
+- **Arquivos classificados:** 97
+- **Tamanho classificado:** 1825407 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -16,9 +16,9 @@
 
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
-| Kotlin | 50 | 1358906 | 74.34% |
-| CSS | 18 | 235771 | 12.90% |
-| Shell | 4 | 90469 | 4.95% |
+| Kotlin | 51 | 1356332 | 74.30% |
+| CSS | 18 | 235771 | 12.92% |
+| Shell | 4 | 90469 | 4.96% |
 | HTML | 11 | 68688 | 3.76% |
 | JavaScript | 4 | 33816 | 1.85% |
 | C | 1 | 18374 | 1.01% |
@@ -43,7 +43,7 @@
 
 - **Arquivos:** 18
 - **Tamanho:** 235771 bytes
-- **Percentual:** 12.90%
+- **Percentual:** 12.92%
 
 - `app1-day.css`
 - `app1-night.css`
@@ -103,9 +103,9 @@
 
 ### Kotlin
 
-- **Arquivos:** 50
-- **Tamanho:** 1358906 bytes
-- **Percentual:** 74.34%
+- **Arquivos:** 51
+- **Tamanho:** 1356332 bytes
+- **Percentual:** 74.30%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt`
@@ -126,6 +126,7 @@
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/MapaActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/NeoCalcActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/PalmaService.kt`
+- `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/PinPadActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ProtectActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/RepoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/SdFileProvider.kt`
@@ -196,7 +197,7 @@
 
 - **Arquivos:** 4
 - **Tamanho:** 90469 bytes
-- **Percentual:** 4.95%
+- **Percentual:** 4.96%
 
 - `Código-fonte do app = Mulher Amparada/make.sh`
 - `Safe Woman Operational System/build/envsetup.sh`

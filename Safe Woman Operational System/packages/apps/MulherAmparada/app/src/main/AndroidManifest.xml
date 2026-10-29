@@ -204,6 +204,11 @@
             
                      android:exported="false" />
                      
+                                                                                            <activity
+            android:name=".PinPadActivity"
+            
+                     android:exported="false" />
+                     
                     
                      
                      

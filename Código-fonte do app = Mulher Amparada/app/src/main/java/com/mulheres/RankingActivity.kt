@@ -117,9 +117,9 @@ private fun RankingScreen() {
     val modoEscuro = isSystemInDarkTheme()
 
     val fundo = if (modoEscuro) {
-        Color(0xFF181218)
+       Color(0xFF000000)
     } else {
-        Color(0xFFFFF7FA)
+        Color(0xFFFFFFFF)
     }
 
     val rosa = if (modoEscuro) {
@@ -289,7 +289,9 @@ private fun MensagemAcolhimento(
     paisagem: Boolean
 ) {
     Column(
-        modifier = modifier,
+    modifier = modifier.padding(
+        end = if (paisagem) 16.dp else 0.dp
+    ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

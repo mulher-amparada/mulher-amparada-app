@@ -162,6 +162,10 @@ NeoCalcActivity (compose) = Tela que contém o disfarce de calculadora
  
  GeoActivity = (compose) Tela da funcao de raio seguro com georreferenciamento seguro da área protegida!
  
+PinPadActivity = (compose) Tela de autenticação da área de distintivos
+
+RankingActivity = (compose) Tela de distintivos
+
  # Sobre como o aplicativo é compilado:
 
 Proteção da Activity de Entrada:

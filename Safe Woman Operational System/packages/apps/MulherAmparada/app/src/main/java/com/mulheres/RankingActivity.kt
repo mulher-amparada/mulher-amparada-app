@@ -1,10 +1,8 @@
+
 package com.mulheres
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import android.content.pm.ActivityInfo
 import android.graphics.Color as AndroidColor
 import android.os.Bundle
-import android.view.View
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,25 +13,31 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -42,99 +46,93 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
+import java.time.LocalDate
 
 class RankingActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Impede capturas de tela e gravações comuns da tela.
         window.setFlags(
             WindowManager.LayoutParams.FLAG_SECURE,
             WindowManager.LayoutParams.FLAG_SECURE
         )
 
-        // Permite que o conteúdo ocupe a área das barras do sistema.
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        // Fundo do sistema combinando com a tela.
         window.statusBarColor = AndroidColor.TRANSPARENT
         window.navigationBarColor = AndroidColor.TRANSPARENT
 
-        // Remove a faixa de contraste que pode deixar a navegação cinza.
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
             window.isNavigationBarContrastEnforced = false
             window.isStatusBarContrastEnforced = false
         }
 
-        // Mantém os ícones do sistema escuros sobre o fundo claro.
-        WindowInsetsControllerCompat(
-            window,
-            window.decorView
-        ).apply {
-            isAppearanceLightStatusBars = true
-            isAppearanceLightNavigationBars = true
-        }
-
         setContent {
-    val modoEscuro = androidx.compose.foundation.isSystemInDarkTheme()
+            val modoEscuro = androidx.compose.foundation.isSystemInDarkTheme()
 
-    androidx.compose.runtime.SideEffect {
-        WindowInsetsControllerCompat(
-            window,
-            window.decorView
-        ).apply {
-            isAppearanceLightStatusBars = !modoEscuro
-            isAppearanceLightNavigationBars = !modoEscuro
+            SideEffect {
+                WindowInsetsControllerCompat(
+                    window,
+                    window.decorView
+                ).apply {
+                    isAppearanceLightStatusBars = !modoEscuro
+                    isAppearanceLightNavigationBars = !modoEscuro
+                }
+            }
+
+            MaterialTheme {
+                RankingScreen()
+            }
         }
     }
-
-    MaterialTheme {
-        RankingScreen()
-    }
-}
-        
-    }
 }
 
-@androidx.compose.runtime.Composable
+@Composable
 private fun RankingScreen() {
+    val contexto = LocalContext.current.applicationContext
     var mostrarConteudo by remember { mutableStateOf(false) }
+    var indiceRanking by remember { mutableIntStateOf(1) }
 
     LaunchedEffect(Unit) {
+        indiceRanking = withContext(Dispatchers.IO) {
+            obterRankingDoDia(Cripto(contexto))
+        }
+
         delay(120)
         mostrarConteudo = true
     }
 
-    
     val modoEscuro = isSystemInDarkTheme()
 
-val fundo = if (modoEscuro) {
-    Color(0xFF181218)
-} else {
-    Color(0xFFFFF7FA)
-}
+    val fundo = if (modoEscuro) {
+       Color(0xFF000000)
+    } else {
+        Color(0xFFFFFFFF)
+    }
 
-val rosa = if (modoEscuro) {
-    Color(0xFFFFA6CA)
-} else {
-    Color(0xFFCE668F)
-}
+    val rosa = if (modoEscuro) {
+        Color(0xFFFFA6CA)
+    } else {
+        Color(0xFFCE668F)
+    }
 
-val texto = if (modoEscuro) {
-    Color(0xFFF3E8EF)
-} else {
-    Color(0xFF493640)
-}
+    val texto = if (modoEscuro) {
+        Color(0xFFF3E8EF)
+    } else {
+        Color(0xFF493640)
+    }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -145,10 +143,14 @@ val texto = if (modoEscuro) {
                 .fillMaxSize()
                 .background(fundo)
                 .padding(
+                    top = WindowInsets.statusBars
+                        .asPaddingValues()
+                        .calculateTopPadding() + 14.dp,
+                    bottom = WindowInsets.navigationBars
+                        .asPaddingValues()
+                        .calculateBottomPadding() + 28.dp,
                     start = 12.dp,
-                    end = 24.dp,
-                    top = 14.dp,
-                    bottom = 28.dp
+                    end = 24.dp
                 ),
             contentAlignment = Alignment.Center
         ) {
@@ -176,6 +178,7 @@ val texto = if (modoEscuro) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         ImagemRanking(
+                            indice = indiceRanking,
                             modifier = Modifier
                                 .weight(1f)
                                 .fillMaxHeight()
@@ -197,6 +200,7 @@ val texto = if (modoEscuro) {
                         verticalArrangement = Arrangement.Center
                     ) {
                         ImagemRanking(
+                            indice = indiceRanking,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f)
@@ -219,16 +223,54 @@ val texto = if (modoEscuro) {
     }
 }
 
-@androidx.compose.runtime.Composable
+private fun obterRankingDoDia(cripto: Cripto): Int {
+    val hoje = LocalDate.now().toString()
+    val ultimaData = cripto.carregar("ranking_ultima_data")
+    val indiceSalvo = cripto.carregar("ranking_indice")
+        .toIntOrNull()
+        ?.coerceIn(1, 6)
+        ?: 1
+
+    val indice = when {
+        ultimaData.isEmpty() -> indiceSalvo
+        hoje > ultimaData -> (indiceSalvo + 1).coerceAtMost(6)
+        else -> indiceSalvo
+    }
+
+    if (ultimaData != hoje) {
+        cripto.salvar("ranking_indice", indice.toString())
+
+        // Evita substituir a data mais recente por uma data anterior.
+        if (ultimaData.isEmpty() || hoje > ultimaData) {
+            cripto.salvar("ranking_ultima_data", hoje)
+        }
+    }
+
+    return indice
+}
+
+@Composable
 private fun ImagemRanking(
+    indice: Int,
     modifier: Modifier = Modifier
 ) {
+    val imagens = listOf(
+        R.drawable.ranking1,
+        R.drawable.ranking2,
+        R.drawable.ranking3,
+        R.drawable.ranking4,
+        R.drawable.ranking5,
+        R.drawable.ranking6
+    )
+
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ranking1),
+            painter = painterResource(
+                id = imagens[(indice - 1).coerceIn(0, 5)]
+            ),
             contentDescription = "Ilustração do ranking",
             modifier = Modifier
                 .fillMaxWidth()
@@ -239,7 +281,7 @@ private fun ImagemRanking(
     }
 }
 
-@androidx.compose.runtime.Composable
+@Composable
 private fun MensagemAcolhimento(
     modifier: Modifier = Modifier,
     rosa: Color,
@@ -247,7 +289,9 @@ private fun MensagemAcolhimento(
     paisagem: Boolean
 ) {
     Column(
-        modifier = modifier,
+    modifier = modifier.padding(
+        end = if (paisagem) 16.dp else 0.dp
+    ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -264,7 +308,7 @@ private fun MensagemAcolhimento(
         Text(
             text = "O Mulher Amparada foi criado pensando em você. " +
                 "Agradecemos por confiar em nosso aplicativo e permitir " +
-                "que ele faça parte da sua jornada.", 
+                "que ele faça parte da sua jornada.",
             color = texto,
             fontSize = if (paisagem) 15.sp else 17.sp,
             lineHeight = if (paisagem) 23.sp else 27.sp,

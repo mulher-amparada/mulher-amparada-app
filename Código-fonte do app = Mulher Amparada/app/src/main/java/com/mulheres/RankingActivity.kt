@@ -148,8 +148,8 @@ private fun RankingScreen() {
                     bottom = WindowInsets.navigationBars
                         .asPaddingValues()
                         .calculateBottomPadding() + 28.dp,
-                    start = 12.dp,
-                    end = 24.dp
+                    start = 18.dp,
+                    end = 18.dp
                 ),
             contentAlignment = Alignment.Center
         ) {

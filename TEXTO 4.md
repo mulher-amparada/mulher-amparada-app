@@ -367,4 +367,10 @@ Você merece acolhimento, respeito e segurança.
 Estamos aqui para ajudar.
 ```
 
+### Especificações da RankingActivity:
+
 e a imagem troca a cada dia depois das meia-noite, até chegar na ranking6 png, e o estado de qual imagem está é salvo na classe cripto!
+
+e a usuária tem que entrar nessa tela todos os dias pra ter garantia de ganhar todos os dinstintivos!
+
+e ao clicar no botão voltar nessa tela, ela volta direto pra HubActivity!

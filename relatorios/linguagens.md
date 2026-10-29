@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-10-29T14:41:53Z
+- **Gerado em UTC:** 2026-10-29T14:43:40Z
 - **Linguagens identificadas:** 12
-- **Arquivos classificados:** 98
-- **Tamanho classificado:** 1843568 bytes
+- **Arquivos classificados:** 100
+- **Tamanho classificado:** 1861589 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -16,15 +16,15 @@
 
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
-| Kotlin | 52 | 1374493 | 74.56% |
-| CSS | 18 | 235771 | 12.79% |
-| Shell | 4 | 90469 | 4.91% |
-| HTML | 11 | 68688 | 3.73% |
-| JavaScript | 4 | 33816 | 1.83% |
-| C | 1 | 18374 | 1.00% |
-| PHP | 1 | 9342 | 0.51% |
+| Kotlin | 54 | 1392514 | 74.80% |
+| CSS | 18 | 235771 | 12.67% |
+| Shell | 4 | 90469 | 4.86% |
+| HTML | 11 | 68688 | 3.69% |
+| JavaScript | 4 | 33816 | 1.82% |
+| C | 1 | 18374 | 0.99% |
+| PHP | 1 | 9342 | 0.50% |
 | Julia | 1 | 5989 | 0.32% |
-| TypeScript | 1 | 3052 | 0.17% |
+| TypeScript | 1 | 3052 | 0.16% |
 | Ruby | 1 | 2025 | 0.11% |
 | Makefile | 3 | 806 | 0.04% |
 | Python | 1 | 743 | 0.04% |
@@ -35,7 +35,7 @@
 
 - **Arquivos:** 1
 - **Tamanho:** 18374 bytes
-- **Percentual:** 1.00%
+- **Percentual:** 0.99%
 
 - `tools/observatorio.c`
 
@@ -43,7 +43,7 @@
 
 - **Arquivos:** 18
 - **Tamanho:** 235771 bytes
-- **Percentual:** 12.79%
+- **Percentual:** 12.67%
 
 - `app1-day.css`
 - `app1-night.css`
@@ -68,7 +68,7 @@
 
 - **Arquivos:** 11
 - **Tamanho:** 68688 bytes
-- **Percentual:** 3.73%
+- **Percentual:** 3.69%
 
 - `app1.html`
 - `divulgacao/html/banner.html`
@@ -86,7 +86,7 @@
 
 - **Arquivos:** 4
 - **Tamanho:** 33816 bytes
-- **Percentual:** 1.83%
+- **Percentual:** 1.82%
 
 - `download.js`
 - `index.js`
@@ -103,9 +103,9 @@
 
 ### Kotlin
 
-- **Arquivos:** 52
-- **Tamanho:** 1374493 bytes
-- **Percentual:** 74.56%
+- **Arquivos:** 54
+- **Tamanho:** 1392514 bytes
+- **Percentual:** 74.80%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt`
@@ -128,6 +128,7 @@
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/PalmaService.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/PinPadActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ProtectActivity.kt`
+- `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/RankingActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/RepoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/SdFileProvider.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/TarefaActivity.kt`
@@ -154,6 +155,7 @@
 - `Safe Woman Operational System/packages/apps/MulherAmparada/app/src/main/java/com/mulheres/PalmaService.kt`
 - `Safe Woman Operational System/packages/apps/MulherAmparada/app/src/main/java/com/mulheres/PinPadActivity.kt`
 - `Safe Woman Operational System/packages/apps/MulherAmparada/app/src/main/java/com/mulheres/ProtectActivity.kt`
+- `Safe Woman Operational System/packages/apps/MulherAmparada/app/src/main/java/com/mulheres/RankingActivity.kt`
 - `Safe Woman Operational System/packages/apps/MulherAmparada/app/src/main/java/com/mulheres/RepoActivity.kt`
 - `Safe Woman Operational System/packages/apps/MulherAmparada/app/src/main/java/com/mulheres/SdFileProvider.kt`
 - `Safe Woman Operational System/packages/apps/MulherAmparada/app/src/main/java/com/mulheres/TarefaActivity.kt`
@@ -174,7 +176,7 @@
 
 - **Arquivos:** 1
 - **Tamanho:** 9342 bytes
-- **Percentual:** 0.51%
+- **Percentual:** 0.50%
 
 - `scripts/pesquisar_projeto.php`
 
@@ -198,7 +200,7 @@
 
 - **Arquivos:** 4
 - **Tamanho:** 90469 bytes
-- **Percentual:** 4.91%
+- **Percentual:** 4.86%
 
 - `Código-fonte do app = Mulher Amparada/make.sh`
 - `Safe Woman Operational System/build/envsetup.sh`
@@ -209,7 +211,7 @@
 
 - **Arquivos:** 1
 - **Tamanho:** 3052 bytes
-- **Percentual:** 0.17%
+- **Percentual:** 0.16%
 
 - `scripts/validar-qrs.ts`
 

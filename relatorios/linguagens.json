@@ -3,15 +3,15 @@
   "branch": "main",
   "fonte_classificacao": "GitHub Linguist",
   "fonte_lista_linguagens": "https://github.com/github-linguist/linguist",
-  "gerado_em_utc": "2026-10-29T15:12:02Z",
+  "gerado_em_utc": "2026-10-29T15:17:37Z",
   "total_linguagens": 12,
   "total_arquivos_classificados": 100,
-  "total_bytes_classificados": 1865187,
+  "total_bytes_classificados": 1866598,
   "linguagens": [
     {
       "nome": "C",
       "tamanho_bytes": 18374,
-      "percentual": "0.99",
+      "percentual": "0.98",
       "arquivos": [
         "tools/observatorio.c"
       ]
@@ -19,7 +19,7 @@
     {
       "nome": "CSS",
       "tamanho_bytes": 235771,
-      "percentual": "12.64",
+      "percentual": "12.63",
       "arquivos": [
         "app1-day.css",
         "app1-night.css",
@@ -80,8 +80,8 @@
     },
     {
       "nome": "Kotlin",
-      "tamanho_bytes": 1396112,
-      "percentual": "74.85",
+      "tamanho_bytes": 1397523,
+      "percentual": "74.87",
       "arquivos": [
         "Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt",
         "Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt",

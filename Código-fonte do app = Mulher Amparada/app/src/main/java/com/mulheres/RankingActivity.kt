@@ -145,9 +145,9 @@ val texto = if (modoEscuro) {
                 .fillMaxSize()
                 .background(fundo)
                 .padding(
-                    start = 24.dp,
+                    start = 12.dp,
                     end = 24.dp,
-                    top = 28.dp,
+                    top = 14.dp,
                     bottom = 28.dp
                 ),
             contentAlignment = Alignment.Center

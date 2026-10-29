@@ -3,10 +3,10 @@
   "branch": "main",
   "fonte_classificacao": "GitHub Linguist",
   "fonte_lista_linguagens": "https://github.com/github-linguist/linguist",
-  "gerado_em_utc": "2026-10-29T17:28:06Z",
+  "gerado_em_utc": "2026-10-29T17:29:37Z",
   "total_linguagens": 12,
   "total_arquivos_classificados": 100,
-  "total_bytes_classificados": 1868125,
+  "total_bytes_classificados": 1868096,
   "linguagens": [
     {
       "nome": "C",
@@ -18,7 +18,7 @@
     },
     {
       "nome": "CSS",
-      "tamanho_bytes": 235771,
+      "tamanho_bytes": 235742,
       "percentual": "12.62",
       "arquivos": [
         "app1-day.css",

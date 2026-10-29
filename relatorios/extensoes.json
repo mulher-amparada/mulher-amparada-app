@@ -1,58 +1,58 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-10-29T19:41:58Z",
-  "total_arquivos": 577,
-  "total_bytes": 94899658,
+  "gerado_em_utc": "2026-10-29T19:43:38Z",
+  "total_arquivos": 579,
+  "total_bytes": 94949471,
   "total_extensoes": 32,
   "extensoes": [
     {
       "extensao": ".xml",
       "quantidade_arquivos": 174,
       "tamanho_bytes": 217574,
-      "percentual_arquivos": 30.16,
+      "percentual_arquivos": 30.05,
       "percentual_bytes": 0.23
     },
     {
       "extensao": ".md",
       "quantidade_arquivos": 151,
-      "tamanho_bytes": 344225,
-      "percentual_arquivos": 26.17,
+      "tamanho_bytes": 344434,
+      "percentual_arquivos": 26.08,
       "percentual_bytes": 0.36
     },
     {
       "extensao": ".png",
       "quantidade_arquivos": 101,
       "tamanho_bytes": 76847070,
-      "percentual_arquivos": 17.5,
-      "percentual_bytes": 80.98
+      "percentual_arquivos": 17.44,
+      "percentual_bytes": 80.93
     },
     {
       "extensao": ".kt",
-      "quantidade_arquivos": 54,
-      "tamanho_bytes": 1399655,
-      "percentual_arquivos": 9.36,
-      "percentual_bytes": 1.47
+      "quantidade_arquivos": 56,
+      "tamanho_bytes": 1449036,
+      "percentual_arquivos": 9.67,
+      "percentual_bytes": 1.53
     },
     {
       "extensao": ".css",
       "quantidade_arquivos": 18,
       "tamanho_bytes": 235632,
-      "percentual_arquivos": 3.12,
+      "percentual_arquivos": 3.11,
       "percentual_bytes": 0.25
     },
     {
       "extensao": ".yml",
       "quantidade_arquivos": 14,
       "tamanho_bytes": 95451,
-      "percentual_arquivos": 2.43,
+      "percentual_arquivos": 2.42,
       "percentual_bytes": 0.1
     },
     {
       "extensao": ".html",
       "quantidade_arquivos": 11,
       "tamanho_bytes": 68698,
-      "percentual_arquivos": 1.91,
+      "percentual_arquivos": 1.9,
       "percentual_bytes": 0.07
     },
     {
@@ -93,7 +93,7 @@
     {
       "extensao": ".json",
       "quantidade_arquivos": 3,
-      "tamanho_bytes": 15116,
+      "tamanho_bytes": 15339,
       "percentual_arquivos": 0.52,
       "percentual_bytes": 0.02
     },
@@ -116,7 +116,7 @@
       "quantidade_arquivos": 2,
       "tamanho_bytes": 14537902,
       "percentual_arquivos": 0.35,
-      "percentual_bytes": 15.32
+      "percentual_bytes": 15.31
     },
     {
       "extensao": ".bat",

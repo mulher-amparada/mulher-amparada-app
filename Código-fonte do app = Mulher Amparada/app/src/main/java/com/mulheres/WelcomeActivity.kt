@@ -310,7 +310,7 @@ private fun TelaBoasVindas(
                                 )
 
                                 Text(
-                                    text = "UI 2",
+                                    text = "UI 33",
                                     fontSize = 28.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = roxo,
@@ -394,7 +394,7 @@ private fun TelaBoasVindas(
                                 )
 
                                 Text(
-                                    text = "Assistente  •  UI 2",
+                                    text = "Assistente  •  UI 33",
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight.Medium,
                                     color = textoSecundario.copy(
@@ -506,7 +506,7 @@ private fun TelaBoasVindas(
                             )
 
                             Text(
-                                text = "UI 2",
+                                text = "UI 33",
                                 fontSize = 35.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = roxo,
@@ -583,7 +583,7 @@ private fun TelaBoasVindas(
                             )
 
                             Text(
-                                text = "Assistente  •  UI 2",
+                                text = "Assistente  •  UI 33",
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Medium,
                                 color = textoSecundario.copy(

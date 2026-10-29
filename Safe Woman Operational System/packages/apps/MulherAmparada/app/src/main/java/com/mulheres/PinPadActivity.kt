@@ -376,7 +376,7 @@ Text(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Emergência",
+                        text = "OK",
                         color = secondaryColor,
                         fontSize = 11.sp,
                         textAlign = TextAlign.Center

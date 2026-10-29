@@ -4170,7 +4170,7 @@ private fun PinpadArea(
         c = c,
         onClick = {
             context.startActivity(
-                Intent(context, PinpadActivity::class.java)
+                Intent(context, PinPadActivity::class.java)
             )
         }
     )

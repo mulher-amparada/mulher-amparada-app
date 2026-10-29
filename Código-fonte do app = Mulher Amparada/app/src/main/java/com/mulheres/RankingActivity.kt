@@ -1,4 +1,3 @@
-
 package com.mulheres
 
 import android.graphics.Color as AndroidColor
@@ -290,7 +289,7 @@ private fun MensagemAcolhimento(
 ) {
     Column(
     modifier = modifier.padding(
-        end = if (paisagem) 16.dp else 0.dp
+        end = if (paisagem) 32.dp else 0.dp
     ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center

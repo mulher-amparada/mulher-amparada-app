@@ -100,15 +100,8 @@
 
     box-sizing:
         border-box;
-
-    -webkit-tap-highlight-color:
-        transparent;
-
-    -webkit-backface-visibility:
-        hidden;
-
-    backface-visibility:
-        hidden;
+        
+    -webkit-tap-highlight-color: transparent;
 
 }
 

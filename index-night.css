@@ -7,7 +7,6 @@
     src: url("font.ttf") format("truetype");
     font-weight: 400 800;
     font-display: swap;
-
 }
 
 /* =========================================================
@@ -62,8 +61,7 @@
     margin: 0;
     padding: 0;
 
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* =========================================================
@@ -115,6 +113,7 @@ body {
 
 button,
 a {
+    -webkit-tap-highlight-color: transparent;
 }
 
 button:focus-visible,
@@ -1504,6 +1503,7 @@ footer .footer-bottom {
         inset 0 1px 0 rgba(255, 255, 255, 0.22);
 
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 
     transition:
         transform 220ms ease,
@@ -1633,7 +1633,11 @@ footer .footer-bottom {
 
     color: #ffffff;
 
-    
+    font-family:
+        Inter,
+        "Segoe UI",
+        system-ui,
+        sans-serif;
 
     font-size: clamp(25px, 6vw, 30px);
     font-weight: 650;
@@ -1756,9 +1760,4 @@ footer .footer-bottom {
     * {
         animation-name: none !important;
     }
-}
-html,
-body {
-    overscroll-behavior-y: none;
-    overscroll-behavior-x: none;
 }

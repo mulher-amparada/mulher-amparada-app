@@ -24,10 +24,8 @@
     padding: 0;
 
     box-sizing: border-box;
-
-    -webkit-backface-visibility: hidden;
-
-    backface-visibility: hidden;
+    
+    -webkit-tap-highlight-color: transparent;
 
 }
 

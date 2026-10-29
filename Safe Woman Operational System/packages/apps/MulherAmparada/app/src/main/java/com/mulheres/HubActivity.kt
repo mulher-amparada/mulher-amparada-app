@@ -2513,7 +2513,7 @@ purple = true,
                     )
 
                     SectionTitle(
-                        text = "Espaço de acolhimento",
+                        text = "Espaços de acolhimento",
                         c = c,
 purple = true,
                         compactBottom = true

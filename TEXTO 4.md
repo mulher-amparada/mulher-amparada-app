@@ -350,3 +350,21 @@ Após o desbloqueio, é exibida uma carteirinha informativa que não constitui u
 Também há uma segunda carteirinha que, ao ser selecionada, direciona para um tutorial sobre como realizar o gesto internacional de combate à violência.
 
 O gesto é um sinal silencioso de pedido de ajuda e pode ser utilizado em diferentes situações de violência. Ele não é exclusivo de mulheres: qualquer pessoa, independentemente de ser homem ou mulher, pode realizá-lo quando precisar sinalizar que necessita de ajuda.
+
+# 🏅Área de distintivos:
+
+ele é mais uma área protegida independente, quando clica no botão da HubActivity correspondente a área, ele abre a PinpadActivity, ele tem um texto em que quando toca 5 vezes chama o BiometricPrompt com device credential e biometric weak, e você pode resetar a senha, no início você cria uma senha..., ao digitar a senha correta, as bolinhas ficam verdes e aparece = "pin correto", ao digitar a senha errada, as bolinhas ficam vermelhas e aparece = "pin incorreto", ao desbloquear, aparece a RankingActivity, em que tem o ranking1 png, ate o ranking 6 png, e aparece essa mensagem abaixo:
+
+```
+Você é bem-vinda!
+
+O Mulher Amparada foi criado pensando em você.
+
+Agradecemos por confiar em nosso aplicativo e permitir que ele faça parte da sua jornada.
+
+Você merece acolhimento, respeito e segurança.
+
+Estamos aqui para ajudar.
+```
+
+e a imagem troca a cada dia depois das meia-noite, até chegar na ranking6 png, e o estado de qual imagem está é salvo na classe cripto!

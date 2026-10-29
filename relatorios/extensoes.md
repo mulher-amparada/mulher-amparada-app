@@ -2,9 +2,9 @@
 
 - **Repositório:** `mulher-amparada/mulher-amparada-app`
 - **Branch:** `main`
-- **Gerado em UTC:** 2026-10-29T19:59:33Z
-- **Arquivos analisados:** 584
-- **Tamanho total:** 94971559 bytes
+- **Gerado em UTC:** 2026-10-29T20:01:15Z
+- **Arquivos analisados:** 586
+- **Tamanho total:** 94972962 bytes
 - **Extensões encontradas:** 32
 
 > Inventário dos arquivos rastreados pelo Git que existem no checkout.
@@ -13,14 +13,14 @@
 
 | Extensão | Arquivos | Bytes | % dos arquivos | % dos bytes |
 |---|---:|---:|---:|---:|
-| `.xml` | 174 | 217808 | 29.79% | 0.23% |
-| `.md` | 156 | 349876 | 26.71% | 0.37% |
-| `.png` | 101 | 76847070 | 17.29% | 80.92% |
-| `.kt` | 56 | 1449064 | 9.59% | 1.53% |
-| `.css` | 18 | 235632 | 3.08% | 0.25% |
-| `.yml` | 14 | 95451 | 2.4% | 0.1% |
+| `.xml` | 174 | 217808 | 29.69% | 0.23% |
+| `.md` | 158 | 351279 | 26.96% | 0.37% |
+| `.png` | 101 | 76847070 | 17.24% | 80.91% |
+| `.kt` | 56 | 1449064 | 9.56% | 1.53% |
+| `.css` | 18 | 235632 | 3.07% | 0.25% |
+| `.yml` | 14 | 95451 | 2.39% | 0.1% |
 | `.html` | 11 | 68698 | 1.88% | 0.07% |
-| `.gradle` | 6 | 8170 | 1.03% | 0.01% |
+| `.gradle` | 6 | 8170 | 1.02% | 0.01% |
 | `.jpg` | 4 | 663516 | 0.68% | 0.7% |
 | `.js` | 4 | 33816 | 0.68% | 0.04% |
 | `.properties` | 4 | 3156 | 0.68% | 0.0% |

@@ -14,7 +14,7 @@ O Impacto Visual: O ícone deixa de depender exclusivamente de suas cores origin
 
 ### Disfarce do app (assistente de saúde falso!):
 
-ao entrar pela primeiríssima vez no app, aparece a WelcomeActivity, que é uma tela de boas-vindas para o "Assistente UI 2", ajudando a disfarçar  ainda mais!
+ao entrar pela primeiríssima vez no app, aparece a WelcomeActivity, que é uma tela de boas-vindas para o "Assistente UI 2", ajudando a disfarçar  ainda mais porém, na segunda vez e nas próximas, ele leva para a AssistenteActivity!
 
 tutorial: ao entrar no app, clique no canto superior direito com o icone de calculadora, isso é o disfarce do assistente de saude,  ao arrastar para o lado na `AssistenteActivity`, o app solicita o `BiometricPrompt`; quando validado, leva para a `HubActivity`.
 

@@ -14,15 +14,6 @@
 }
 
 
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 1;
-    }
-}
 /* =========================================================
    RESET
 ========================================================= */
@@ -67,7 +58,8 @@ body {
 
 margin-left: 2.5%;
 margin-right: 2.5%;
-        animation: fadeIn .55s ease both;
+    animation:
+        fadeUp 0.55s ease both;
           display: flex;
     flex-direction: column;
 }

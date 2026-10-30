@@ -9,19 +9,9 @@
     src: url("font.ttf") format("truetype");
 
     font-display: swap;
+
+
 }
-
-
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 1;
-    }
-}
-
 /* =========================================================
    RESET
 ========================================================= */
@@ -63,7 +53,8 @@ body {
     overflow-x: hidden;
 
 
-        animation: fadeIn .55s ease both;
+    animation:
+        fadeUp .75s ease both;
 }
 
 

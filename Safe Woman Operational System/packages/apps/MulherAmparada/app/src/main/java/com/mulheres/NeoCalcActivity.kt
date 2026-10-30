@@ -734,8 +734,16 @@ private fun LinhaBotoes(
         botoes.forEachIndexed { indice, botao ->
             val ordemGlobal = indiceInicial + indice
 
-            val alpha = 1f
-            
+            val alpha by animateFloatAsState(
+                targetValue = if (iniciarAnimacao) 1f else 0f,
+                animationSpec = tween(
+                    durationMillis = 10,
+                    delayMillis = ordemGlobal * 10,
+                    easing = FastOutSlowInEasing
+                ),
+                label = "fade-botao-$ordemGlobal"
+            )
+
             val cor = when (botao.tipo) {
                 TipoBotao.ACAO -> cores.acao
                 TipoBotao.OPERADOR,

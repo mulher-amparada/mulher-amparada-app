@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-10-30T19:25:10Z
+- **Gerado em UTC:** 2026-10-30T19:26:48Z
 - **Linguagens identificadas:** 12
 - **Arquivos classificados:** 102
-- **Tamanho classificado:** 1938146 bytes
+- **Tamanho classificado:** 1943612 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -16,10 +16,10 @@
 
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
-| Kotlin | 56 | 1469200 | 75.80% |
-| CSS | 18 | 235632 | 12.16% |
-| Shell | 4 | 90469 | 4.67% |
-| HTML | 11 | 68698 | 3.54% |
+| Kotlin | 56 | 1474666 | 75.87% |
+| CSS | 18 | 235632 | 12.12% |
+| Shell | 4 | 90469 | 4.65% |
+| HTML | 11 | 68698 | 3.53% |
 | JavaScript | 4 | 33816 | 1.74% |
 | C | 1 | 18374 | 0.95% |
 | PHP | 1 | 9342 | 0.48% |
@@ -43,7 +43,7 @@
 
 - **Arquivos:** 18
 - **Tamanho:** 235632 bytes
-- **Percentual:** 12.16%
+- **Percentual:** 12.12%
 
 - `app1-day.css`
 - `app1-night.css`
@@ -68,7 +68,7 @@
 
 - **Arquivos:** 11
 - **Tamanho:** 68698 bytes
-- **Percentual:** 3.54%
+- **Percentual:** 3.53%
 
 - `app1.html`
 - `divulgacao/html/banner.html`
@@ -104,8 +104,8 @@
 ### Kotlin
 
 - **Arquivos:** 56
-- **Tamanho:** 1469200 bytes
-- **Percentual:** 75.80%
+- **Tamanho:** 1474666 bytes
+- **Percentual:** 75.87%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt`
@@ -202,7 +202,7 @@
 
 - **Arquivos:** 4
 - **Tamanho:** 90469 bytes
-- **Percentual:** 4.67%
+- **Percentual:** 4.65%
 
 - `Código-fonte do app = Mulher Amparada/make.sh`
 - `Safe Woman Operational System/build/envsetup.sh`

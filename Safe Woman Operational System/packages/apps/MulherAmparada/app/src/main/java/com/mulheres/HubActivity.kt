@@ -2460,7 +2460,7 @@ private fun TypewriterText(
 
         for (i in 1..text.length) {
             caracteresVisiveis = i
-            delay(22)
+            delay(3)
         }
     }
 
@@ -3847,42 +3847,80 @@ private fun SensorCard(
 SWITCH
 ========================================================= */
 
+
 @Composable
 private fun FakeSwitch(
     color: Color,
     active: Boolean,
     c: AppColors
 ) {
+    val thumbOffset by animateDpAsState(
+        targetValue = if (active) 19.dp else 0.dp,
+        animationSpec = tween(
+            durationMillis = 350,
+            easing = FastOutSlowInEasing
+        ),
+        label = "fake_switch_position"
+    )
+
+    val trackColor by androidx.compose.animation.animateColorAsState(
+        targetValue = if (active) {
+            color.copy(alpha = 0.35f)
+        } else {
+            c.surfaceLight
+        },
+        animationSpec = tween(
+            durationMillis = 350,
+            easing = FastOutSlowInEasing
+        ),
+        label = "fake_switch_track_color"
+    )
+
+    val borderColor by androidx.compose.animation.animateColorAsState(
+        targetValue = if (active) {
+            color.copy(alpha = 0.75f)
+        } else {
+            c.borderLight
+        },
+        animationSpec = tween(
+            durationMillis = 350,
+            easing = FastOutSlowInEasing
+        ),
+        label = "fake_switch_border_color"
+    )
+
+    val thumbColor by androidx.compose.animation.animateColorAsState(
+        targetValue = if (active) color else c.muted,
+        animationSpec = tween(
+            durationMillis = 350,
+            easing = FastOutSlowInEasing
+        ),
+        label = "fake_switch_thumb_color"
+    )
+
     Box(
         modifier = Modifier
             .width(55.dp)
             .height(36.dp)
             .clip(CircleShape)
-            .background(
-                if (active) color.copy(.35f)
-                else c.surfaceLight
-            )
+            .background(trackColor)
             .border(
                 1.dp,
-                if (active) color.copy(.75f)
-                else c.borderLight,
+                borderColor,
                 CircleShape
             )
-            .padding(3.dp),
-        contentAlignment =
-            if (active) Alignment.CenterEnd
-            else Alignment.CenterStart
+            .padding(3.dp)
     ) {
         Box(
             modifier = Modifier
+                .offset(x = thumbOffset)
                 .size(28.dp)
                 .clip(CircleShape)
-                .background(
-                    if (active) color else c.muted
-                )
+                .background(thumbColor)
         )
     }
 }
+
 
 /* =========================================================
 CARDS DE AÇÃO

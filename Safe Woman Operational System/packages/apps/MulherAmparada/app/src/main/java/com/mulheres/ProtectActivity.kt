@@ -1,5 +1,15 @@
 package com.mulheres
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.graphics.ColorFilter
 import android.graphics.Color as AndroidColor
@@ -597,7 +607,6 @@ val outrasFuncoes = listOf(
 /* =========================================================
    HERO
 ========================================================= */
-
 @androidx.compose.runtime.Composable
 private fun Hero(
     dark: Boolean
@@ -609,13 +618,11 @@ private fun Hero(
         else
             TextoClaro
 
-
     val textoSuave =
         if (dark)
             TextoSuaveEscuro
         else
             TextoSuaveClaro
-
 
     val selo =
         if (dark)
@@ -623,9 +630,15 @@ private fun Hero(
         else
             Color(0xFF77717F)
 
+    var mostrarIcone by remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(Unit) {
+        mostrarIcone = true
+    }
 
     Column(
-
         modifier =
             Modifier
                 .fillMaxWidth()
@@ -642,165 +655,132 @@ private fun Hero(
             Arrangement.Center
     ) {
 
-        Box(
+        AnimatedVisibility(
+            visible = mostrarIcone,
 
-            modifier =
-                Modifier
-                    .size(104.dp)
-                    .shadow(
-                        elevation = 14.dp,
-                        shape =
-                            RoundedCornerShape(
-                                30.dp
-                            )
+            enter =
+                scaleIn(
+                    initialScale = 0.55f,
+                    animationSpec = spring(
+                        dampingRatio = 0.45f,
+                        stiffness = 500f
                     )
-                    .clip(
-                        RoundedCornerShape(
-                            30.dp
-                        )
-                    )
-                    .background(
-                        Brush.linearGradient(
-                            listOf(
-                                RoxoInicio,
-                                RoxoFim
-                            )
-                        )
-                    )
-                    .border(
-                        width = 1.dp,
-
-                        color =
-                            Color.White.copy(
-                                alpha =
-                                    if (dark)
-                                        0.16f
-                                    else
-                                        0.30f
-                            ),
-
-                        shape =
-                            RoundedCornerShape(
-                                30.dp
-                            )
-                    ),
-
-            contentAlignment =
-                Alignment.Center
+                ) + fadeIn(
+                    animationSpec = tween(350)
+                )
         ) {
 
-            Image(
-    painter =
-        painterResource(
-            id =
-                R.drawable.ic_lock
-        ),
+            Box(
+                modifier =
+                    Modifier
+                        .size(104.dp)
+                        .shadow(
+                            elevation = 14.dp,
+                            shape =
+                                RoundedCornerShape(30.dp)
+                        )
+                        .clip(
+                            RoundedCornerShape(30.dp)
+                        )
+                        .background(
+                            Brush.linearGradient(
+                                listOf(
+                                    RoxoInicio,
+                                    RoxoFim
+                                )
+                            )
+                        )
+                        .border(
+                            width = 1.dp,
 
-    contentDescription =
-        null,
+                            color =
+                                Color.White.copy(
+                                    alpha =
+                                        if (dark)
+                                            0.16f
+                                        else
+                                            0.30f
+                                ),
 
-    modifier =
-        Modifier.size(
-            50.dp
-        ),
+                            shape =
+                                RoundedCornerShape(30.dp)
+                        ),
 
-    colorFilter =
-        ColorFilter.tint(
-            if (dark)
-                Color.White
-            else
-                Color.Black
-        ),
+                contentAlignment =
+                    Alignment.Center
+            ) {
 
-    contentScale =
-        ContentScale.Fit
-)
+                Image(
+                    painter =
+                        painterResource(
+                            id = R.drawable.ic_lock
+                        ),
+
+                    contentDescription = null,
+
+                    modifier =
+                        Modifier.size(50.dp),
+
+                    colorFilter =
+                        ColorFilter.tint(
+                            if (dark)
+                                Color.White
+                            else
+                                Color.Black
+                        ),
+
+                    contentScale =
+                        ContentScale.Fit
+                )
+            }
         }
-
 
         Spacer(
             modifier =
                 Modifier.height(24.dp)
         )
 
-
         androidx.compose.material3.Text(
-
-            text =
-                "Meus Acessos",
-
-            color =
-                texto,
-
-
-            fontSize =
-                38.sp,
-letterSpacing =
-                (-1.2).sp,
-
-            lineHeight =
-                40.sp,
-
-            textAlign =
-                TextAlign.Center
+            text = "Meus Acessos",
+            color = texto,
+            fontSize = 38.sp,
+            letterSpacing = (-1.2).sp,
+            lineHeight = 40.sp,
+            textAlign = TextAlign.Center
         )
-
 
         Spacer(
             modifier =
                 Modifier.height(15.dp)
         )
 
-
         androidx.compose.material3.Text(
-
-            text =
-                "Tudo o que você precisar.",
+            text = "Tudo o que você precisar.",
 
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(
-                        horizontal = 12.dp
-                    ),
+                    .padding(horizontal = 12.dp),
 
-            color =
-                textoSuave,
-
-
-            fontSize =
-                15.sp,
-lineHeight =
-                23.sp,
-
-            textAlign =
-                TextAlign.Center
+            color = textoSuave,
+            fontSize = 15.sp,
+            lineHeight = 23.sp,
+            textAlign = TextAlign.Center
         )
-
 
         Spacer(
             modifier =
                 Modifier.height(16.dp)
         )
 
-
         androidx.compose.material3.Text(
-
-            text =
-                "•  ÁREA PROTEGIDA",
-
-            color =
-                selo,
-
-
-            fontSize =
-                10.sp,
-letterSpacing =
-                1.7.sp
+            text = "•  ÁREA PROTEGIDA",
+            color = selo,
+            fontSize = 10.sp,
+            letterSpacing = 1.7.sp
         )
     }
 }
-
 
 /* =========================================================
    TÍTULO DA SEÇÃO
@@ -874,7 +854,6 @@ letterSpacing =
 /* =========================================================
    CARTÃO
 ========================================================= */
-
 @androidx.compose.runtime.Composable
 private fun Cartao(
 
@@ -892,67 +871,62 @@ private fun Cartao(
         else
             CartaoClaro
 
-
     val borda =
         if (dark)
             BordaCartaoEscuro
         else
             BordaCartaoClaro
 
+    var visivel by remember {
+        mutableStateOf(false)
+    }
 
-    Row(
+    LaunchedEffect(Unit) {
+        visivel = true
+    }
 
-        modifier =
-            Modifier
-                .fillMaxWidth()
+    AnimatedVisibility(
+        visible = visivel,
 
-                .clip(
-                    RoundedCornerShape(
-                        21.dp
-                    )
+        enter =
+            fadeIn(
+                animationSpec = tween(
+                    durationMillis = 550
                 )
-
-                .background(
-                    fundoCartao
-                )
-
-                .border(
-
-                    width = 1.dp,
-
-                    color =
-                        borda,
-
-                    shape =
-                        RoundedCornerShape(
-                            21.dp
-                        )
-                )
-
-                .clickable {
-                    onClick()
-                }
-
-                .padding(
-                    horizontal = 16.dp,
-                    vertical = 15.dp
-                ),
-
-        verticalAlignment =
-            Alignment.CenterVertically
+            )
     ) {
 
-        ConteudoCartao(
-
-            acesso =
-                acesso,
-
-            dark =
-                dark,
-
+        Row(
             modifier =
-                Modifier.fillMaxWidth()
-        )
+                Modifier
+                    .fillMaxWidth()
+                    .clip(
+                        RoundedCornerShape(21.dp)
+                    )
+                    .background(fundoCartao)
+                    .border(
+                        width = 1.dp,
+                        color = borda,
+                        shape = RoundedCornerShape(21.dp)
+                    )
+                    .clickable {
+                        onClick()
+                    }
+                    .padding(
+                        horizontal = 16.dp,
+                        vertical = 15.dp
+                    ),
+
+            verticalAlignment =
+                Alignment.CenterVertically
+        ) {
+
+            ConteudoCartao(
+                acesso = acesso,
+                dark = dark,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }
 

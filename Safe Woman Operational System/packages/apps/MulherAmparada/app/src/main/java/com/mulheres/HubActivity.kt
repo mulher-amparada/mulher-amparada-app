@@ -2439,7 +2439,6 @@ private fun BottomAreaSelector(
 /* =========================================================
    TEMA
 ========================================================= */
-
 @Composable
 private fun TypewriterText(
     text: String,
@@ -2451,22 +2450,29 @@ private fun TypewriterText(
     textAlign: TextAlign? = null,
     maxLines: Int = Int.MAX_VALUE
 ) {
-    var caracteresVisiveis by remember(text) {
-        mutableIntStateOf(0)
+    var visible by remember(text) {
+        mutableStateOf(false)
     }
 
     LaunchedEffect(text) {
-        caracteresVisiveis = 0
-
-        for (i in 1..text.length) {
-            caracteresVisiveis = i
-            delay(1)
-        }
+        visible = false
+        visible = true
     }
 
+    val alpha by animateFloatAsState(
+        targetValue = if (visible) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 450,
+            easing = androidx.compose.animation.core.LinearEasing
+        ),
+        label = "text_fade_in"
+    )
+
     Text(
-        text = text.take(caracteresVisiveis),
-        modifier = modifier,
+        text = text,
+        modifier = modifier.graphicsLayer {
+            this.alpha = alpha
+        },
         color = color,
         fontSize = fontSize,
         lineHeight = lineHeight,
@@ -3986,10 +3992,7 @@ private fun FakeSwitch(
         } else {
             c.surfaceLight
         },
-        animationSpec = tween(
-            durationMillis = 350,
-            easing = FastOutSlowInEasing
-        ),
+        animationSpec = tween(350),
         label = "fake_switch_track_color"
     )
 
@@ -3999,19 +4002,13 @@ private fun FakeSwitch(
         } else {
             c.borderLight
         },
-        animationSpec = tween(
-            durationMillis = 350,
-            easing = FastOutSlowInEasing
-        ),
+        animationSpec = tween(350),
         label = "fake_switch_border_color"
     )
 
     val thumbColor by androidx.compose.animation.animateColorAsState(
         targetValue = if (active) color else c.muted,
-        animationSpec = tween(
-            durationMillis = 350,
-            easing = FastOutSlowInEasing
-        ),
+        animationSpec = tween(350),
         label = "fake_switch_thumb_color"
     )
 
@@ -4026,7 +4023,8 @@ private fun FakeSwitch(
                 borderColor,
                 CircleShape
             )
-            .padding(3.dp)
+            .padding(3.dp),
+        contentAlignment = Alignment.CenterStart
     ) {
         Box(
             modifier = Modifier

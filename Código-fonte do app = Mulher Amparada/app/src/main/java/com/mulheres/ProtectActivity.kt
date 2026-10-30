@@ -1,5 +1,6 @@
 package com.mulheres
 
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
@@ -194,9 +195,7 @@ abrirRepo = {
 }
 
 
-/* =========================================================
-   FONTE
-========================================================= */
+
 
 
 
@@ -630,13 +629,13 @@ private fun Hero(
         else
             Color(0xFF77717F)
 
-    var mostrarIcone by remember {
-        mutableStateOf(false)
-    }
+    var mostrarIcone by rememberSaveable {
+    mutableStateOf(false)
+}
 
-    LaunchedEffect(Unit) {
-        mostrarIcone = true
-    }
+LaunchedEffect(Unit) {
+    mostrarIcone = true
+}
 
     Column(
         modifier =
@@ -877,13 +876,13 @@ private fun Cartao(
         else
             BordaCartaoClaro
 
-    var visivel by remember {
-        mutableStateOf(false)
-    }
+    var visivel by rememberSaveable(acesso.titulo) {
+    mutableStateOf(false)
+}
 
-    LaunchedEffect(Unit) {
-        visivel = true
-    }
+LaunchedEffect(Unit) {
+    visivel = true
+}
 
     AnimatedVisibility(
         visible = visivel,

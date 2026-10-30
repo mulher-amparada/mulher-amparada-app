@@ -3,20 +3,6 @@
 
 lembre-se que hoje em dia uso github para compilar os apps e o a16 5g da samsung, então ele nao mata o processo de compilação mais!
 
-### Porque usei webview e html?
-
-porque ele e mais fluido, e também deixa o aplicativo mais leve em tamanho, um exemplo disso e o instagram lite, e porque nao precisa gerar muitos arquivos XMLs ou muito texto em kotlin para fazer todas as telas e além disso html com WebView é mais difícil de manter, mas eu tenho sim activitys em kotlin em xml e compose (mas não necessariamente o webview é mais leve universalmente!)
-
-ah, mas o webview carrega uma versão cromium inteira...
-
-e as activitys em kotlin e jetpack compose ou xml carrega imports do build, muitos arquivos e muitos textos para algo que dá para ser feito facilmente em html, e para determinadas telas, HTML/CSS/JavaScript permite implementar a interface com menos código específico de Android..., 
-
-Mas a proposta e ele ser otimizado para ser mais rápido!
-
-### Sobre injeção de código:
-
-o app guarda os dados usando criptografia..., mas isso não garante que xss aconteça, mas eu só estou dizendo que ele guarda texto do diário por exemplo em criptografia, mas isso poderá acontecer como em qualquer outro app em certas condições..., e também eu uso o proguard8
-
 ### Sobre o WebView do app:
 
 e APENAS A FUNÇÃO DE NAVEGADOR, AS OUTRAS SÃO OU FEITAS COM COMPOSE OU FEITAS COM XML, usa este webview:
@@ -183,10 +169,6 @@ E o site do github pages usa essa estrutura (os nomes dos arquivos podem varias)
 <link rel="stylesheet" href="claro.css" media="(prefers-color-scheme: light)">
 <link rel="stylesheet" href="escuro.css" media="(prefers-color-scheme: dark)">
 ```
-
-## Sobre as animações e o desempenho:
-
-Além disso, as animações foram amplamente reduzidas, principalmente as animações de entrada. O projeto prioriza transições rápidas e discretas, mantendo apenas algumas animações pontuais quando elas contribuem para a experiência de uso. Dessa forma, a interface permanece visualmente agradável sem comprometer a agilidade e a responsividade do aplicativo.
 
 # 🔗 Deep Link do aplicativo:
 

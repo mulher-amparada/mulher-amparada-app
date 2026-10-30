@@ -97,7 +97,7 @@ Nesta seção, você encontrará informações sobre o **sistema operacional**, 
 
 <div align="center">
 
-# Mulher Amparada, uma demonstração da identidade do nosso aplicativo (não é uma tela de atualização de software oficial!)
+# ✨️Mulher Amparada, uma demonstração da identidade do nosso aplicativo (não é uma tela de atualização de software oficial!)
 
 <picture>
   <source
@@ -114,7 +114,5 @@ Nesta seção, você encontrará informações sobre o **sistema operacional**, 
     width="700"
   />
 </picture>
-
-**Versão 33**
 
 </div>

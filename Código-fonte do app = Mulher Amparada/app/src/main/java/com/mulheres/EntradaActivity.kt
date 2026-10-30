@@ -20,24 +20,8 @@ class EntradaActivity : ComponentActivity() {
             WindowManager.LayoutParams.FLAG_SECURE
         )
 
-        val cripto = Cripto(this)
-
-        val chave = "primeira_abertura_concluida"
-
-        val primeiraVez = cripto.carregar(chave).isEmpty()
-
-        if (primeiraVez) {
-            cripto.salvar(chave, "sim")
-        }
-
-        val destino = if (primeiraVez) {
-            WelcomeActivity::class.java
-        } else {
-            AssistenteActivity::class.java
-        }
-
         startActivity(
-            Intent(this, destino)
+            Intent(this, WelcomeActivity::class.java)
         )
 
         finish()

@@ -3547,11 +3547,70 @@ private fun SectionTitle(
 PANIC
 ========================================================= */
 
+
 @Composable
 private fun PanicCard(
     c: AppColors,
 ) {
     val context = LocalContext.current
+
+    val transition = rememberInfiniteTransition(
+        label = "panic_bubbles"
+    )
+
+    val bubbleScale by transition.animateFloat(
+        initialValue = 0.85f,
+        targetValue = 1.35f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = 2200,
+                easing = FastOutSlowInEasing
+            ),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "panic_bubble_scale"
+    )
+
+    val bubbleAlpha by transition.animateFloat(
+        initialValue = 0.35f,
+        targetValue = 0.08f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = 2200,
+                easing = FastOutSlowInEasing
+            ),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "panic_bubble_alpha"
+    )
+
+    val secondBubbleScale by transition.animateFloat(
+        initialValue = 0.85f,
+        targetValue = 1.35f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = 2200,
+                delayMillis = 700,
+                easing = FastOutSlowInEasing
+            ),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "panic_second_bubble_scale"
+    )
+
+    val secondBubbleAlpha by transition.animateFloat(
+        initialValue = 0.35f,
+        targetValue = 0.08f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = 2200,
+                delayMillis = 700,
+                easing = FastOutSlowInEasing
+            ),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "panic_second_bubble_alpha"
+    )
 
     Box(
         modifier = Modifier
@@ -3585,6 +3644,11 @@ private fun PanicCard(
                     x = 75.dp,
                     y = (-125).dp
                 )
+                .graphicsLayer {
+                    scaleX = bubbleScale
+                    scaleY = bubbleScale
+                    alpha = bubbleAlpha
+                }
                 .clip(CircleShape)
                 .background(
                     if (isSystemInDarkTheme())
@@ -3601,6 +3665,11 @@ private fun PanicCard(
                     x = (-105).dp,
                     y = 170.dp
                 )
+                .graphicsLayer {
+                    scaleX = secondBubbleScale
+                    scaleY = secondBubbleScale
+                    alpha = secondBubbleAlpha
+                }
                 .clip(CircleShape)
                 .background(
                     if (isSystemInDarkTheme())

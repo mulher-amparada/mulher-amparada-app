@@ -46,6 +46,9 @@ https://coderlegion.com/32992/nova-area-segura-do-mulher-amparada-area-de-distin
 - 💻 Coderlegion — 🛡️ Mulher Amparada | Personalização, Discrição e Camadas de Autenticação:
 https://coderlegion.com/33118/mulher-amparada-personalizacao-discricao-e-camadas-de-autenticacao
 
+- 💻 Coderlegion — 👤 Acessibilidade | Mulher Amparada:
+https://coderlegion.com/33153/acessibilidade-mulher-amparada
+
 - 📰 Blogger — ⚒️ Funções do aplicativo Mulher Amparada:
 https://projetomulheramparadaapp.blogspot.com/2026/10/funcoes-do-aplicativo-mulher-amparada.html?m=1
 

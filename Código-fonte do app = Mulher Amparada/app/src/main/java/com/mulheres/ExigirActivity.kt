@@ -1,5 +1,9 @@
 package com.mulheres
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import android.os.Bundle
 import androidx.core.view.WindowInsetsControllerCompat
@@ -89,6 +93,20 @@ val paddingHorizontal =
     val dark =
         androidx.compose.foundation.isSystemInDarkTheme()
 
+val alphaTela = androidx.compose.runtime.remember {
+    androidx.compose.animation.core.Animatable(0f)
+}
+
+LaunchedEffect(Unit) {
+    alphaTela.animateTo(
+        targetValue = 1f,
+        animationSpec = tween(
+            durationMillis = 850,
+            easing = LinearEasing
+        )
+    )
+}
+
     val background =
         if (dark) Color(0xFF000000)
         else Color(0xFFFFFFFF)
@@ -136,6 +154,9 @@ val paddingHorizontal =
     Column(
     modifier = Modifier
         .fillMaxSize()
+        .graphicsLayer {
+            alpha = alphaTela.value
+        }
         .background(background)
         .verticalScroll(rememberScrollState())
         .padding(

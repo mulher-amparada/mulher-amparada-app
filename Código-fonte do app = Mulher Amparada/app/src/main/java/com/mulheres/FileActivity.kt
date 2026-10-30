@@ -1,5 +1,6 @@
 package com.mulheres
 
+import android.view.animation.AlphaAnimation
 import android.graphics.drawable.Drawable
 import android.animation.ValueAnimator
 import android.content.ClipData
@@ -215,6 +216,16 @@ class FileActivity : AppCompatActivity() {
         setContentView(
             R.layout.activity_file
         )
+
+val tela = findViewById<View>(
+    android.R.id.content
+)
+
+AlphaAnimation(0f, 1f).apply {
+    duration = 850
+    fillAfter = true
+    tela.startAnimation(this)
+}
 
         aplicarFonte(
             findViewById(

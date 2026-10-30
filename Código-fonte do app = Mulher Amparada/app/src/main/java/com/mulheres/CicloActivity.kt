@@ -1,5 +1,9 @@
 package com.mulheres
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.runtime.CompositionLocalProvider
@@ -342,6 +346,20 @@ private fun CicloApp() {
     val ctx = LocalContext.current
     val dark = isSystemInDarkTheme()
 
+val alphaTela = remember {
+    Animatable(0f)
+}
+
+LaunchedEffect(Unit) {
+    alphaTela.animateTo(
+        targetValue = 1f,
+        animationSpec = tween(
+            durationMillis = 850,
+            easing = LinearEasing
+        )
+    )
+}
+
     val fundo =
         if (dark) {
             Color.Black
@@ -501,11 +519,13 @@ private fun CicloApp() {
             }
 
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(fundo)
-                
-        ) {
+    modifier = Modifier
+        .fillMaxSize()
+        .graphicsLayer {
+            alpha = alphaTela.value
+        }
+        .background(fundo)
+) {
 
             if (telaDetalhes != null) {
 

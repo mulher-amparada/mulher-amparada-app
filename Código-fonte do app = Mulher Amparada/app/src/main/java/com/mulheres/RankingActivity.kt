@@ -96,6 +96,7 @@ class RankingActivity : ComponentActivity() {
             }
         }
     }
+    overridePendingTransition(0, 0)
 }
 
 @Composable

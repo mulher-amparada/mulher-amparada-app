@@ -1,5 +1,9 @@
 package com.mulheres
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.foundation.isSystemInDarkTheme
 import android.Manifest
 import android.content.Context
@@ -588,6 +592,20 @@ class GeoActivity : ComponentActivity() {
         val context =
             LocalContext.current
             
+            val alphaTela = remember {
+    Animatable(0f)
+}
+
+LaunchedEffect(Unit) {
+    alphaTela.animateTo(
+        targetValue = 1f,
+        animationSpec = tween(
+            durationMillis = 850,
+            easing = LinearEasing
+        )
+    )
+}
+
             val darkTheme = isSystemInDarkTheme()
 
 val SurfaceColor =
@@ -649,9 +667,12 @@ val mutedColor =
         }
 
         Box(
-            modifier =
-                Modifier.fillMaxSize()
-        ) {
+    modifier = Modifier
+        .fillMaxSize()
+        .graphicsLayer {
+            alpha = alphaTela.value
+        }
+) {
 
             AndroidView(
                 factory = {

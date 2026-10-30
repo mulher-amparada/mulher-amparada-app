@@ -1,5 +1,8 @@
 package com.mulheres
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.foundation.layout.navigationBarsPadding
 import android.graphics.Color as AndroidColor
@@ -186,6 +189,18 @@ val paddingHorizontal =
     
     val context =
         androidx.compose.ui.platform.LocalContext.current
+
+val alphaTela = remember { Animatable(0f) }
+
+LaunchedEffect(Unit) {
+    alphaTela.animateTo(
+        targetValue = 1f,
+        animationSpec = tween(
+            durationMillis = 700,
+            easing = androidx.compose.animation.core.LinearEasing
+        )
+    )
+}
 
     val dark =
         isSystemInDarkTheme()
@@ -529,9 +544,12 @@ val paddingHorizontal =
 
         Box(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(fundo)
+    Modifier
+        .fillMaxSize()
+        .graphicsLayer {
+            alpha = alphaTela.value
+        }
+        .background(fundo)
         ) {
 
             LazyColumn(

@@ -660,9 +660,9 @@ private fun Hero(
 
             enter =
                 scaleIn(
-                    initialScale = 0.55f,
+                    initialScale = 0.35f,
                     animationSpec = spring(
-                        dampingRatio = 0.45f,
+                        dampingRatio = 0.65f,
                         stiffness = 500f
                     )
                 ) + fadeIn(

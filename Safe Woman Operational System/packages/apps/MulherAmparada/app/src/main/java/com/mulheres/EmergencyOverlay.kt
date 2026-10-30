@@ -1,7 +1,9 @@
+
 package com.mulheres
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -32,9 +34,9 @@ fun EmergencyOverlay(
                 durationMillis = 850
             )
         ),
-        exit = fadeIn(
+        exit = fadeOut(
             animationSpec = tween(
-                durationMillis = 0
+                durationMillis = 850
             )
         )
     ) {

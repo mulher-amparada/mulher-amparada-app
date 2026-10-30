@@ -1,5 +1,8 @@
 package com.mulheres
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.graphics.graphicsLayer
 import android.view.WindowManager
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.darkColorScheme
@@ -194,6 +197,9 @@ private fun NeoCalcScreen(
 ) {
     var pin by remember { mutableStateOf("") }
     var status by remember { mutableStateOf("neutral") }
+    var unlocking by remember { mutableStateOf(false) }
+val screenScale = remember { Animatable(1f) }
+val screenAlpha = remember { Animatable(1f) }
     var screenTaps by remember { mutableIntStateOf(0) }
 
     val configuration = LocalConfiguration.current
@@ -231,21 +237,46 @@ val secondaryColor = if (darkMode) {
 
     // Dá tempo para o usuário ver as bolinhas vermelhas ou verdes.
     LaunchedEffect(status) {
-        when (status) {
-            "wrong" -> {
-                delay(850)
-                pin = ""
-                status = "neutral"
+    when (status) {
+        "wrong" -> {
+            delay(850)
+            pin = ""
+            status = "neutral"
+        }
+
+        "correct" -> {
+            unlocking = true
+
+            // Cresce além do tamanho normal enquanto desaparece.
+            kotlinx.coroutines.coroutineScope {
+                launch {
+                    screenScale.animateTo(
+                        targetValue = 1.45f,
+                        animationSpec = tween(
+                            durationMillis = 650,
+                            easing = androidx.compose.animation.core.FastOutSlowInEasing
+                        )
+                    )
+                }
+
+                launch {
+                    screenAlpha.animateTo(
+                        targetValue = 0f,
+                        animationSpec = tween(
+                            durationMillis = 650,
+                            easing = androidx.compose.animation.core.LinearEasing
+                        )
+                    )
+                }
             }
 
-            "correct" -> {
-                delay(450)
-                onSuccess()
-            }
+            onSuccess()
         }
     }
+}
 
     fun addDigit(digit: String) {
+    if (unlocking) return
         if (status == "correct" || status == "wrong") return
         if (pin.length >= 6) return
 
@@ -268,6 +299,7 @@ val secondaryColor = if (darkMode) {
     }
 
     fun deleteDigit() {
+    if (unlocking) return
         if (status == "correct" || status == "wrong") return
 
         if (pin.isNotEmpty()) {
@@ -470,15 +502,21 @@ Box(
     }
 
     BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(background)
-            .windowInsetsPadding(WindowInsets.safeDrawing)
-            .padding(
-                horizontal = if (landscape) 18.dp else 28.dp,
-                vertical = if (landscape) 4.dp else 8.dp
-            )
-    ) {
+    modifier = Modifier
+        .fillMaxSize()
+        .graphicsLayer {
+            scaleX = screenScale.value
+            scaleY = screenScale.value
+            alpha = screenAlpha.value
+            transformOrigin = androidx.compose.ui.graphics.TransformOrigin.Center
+        }
+        .background(background)
+        .windowInsetsPadding(WindowInsets.safeDrawing)
+        .padding(
+            horizontal = if (landscape) 18.dp else 28.dp,
+            vertical = if (landscape) 4.dp else 8.dp
+        )
+) {
         if (landscape) {
             Row(
                 modifier = Modifier.fillMaxSize(),

@@ -1,65 +1,65 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-10-30T18:55:58Z",
-  "total_arquivos": 596,
-  "total_bytes": 95001978,
+  "gerado_em_utc": "2026-10-30T18:57:51Z",
+  "total_arquivos": 598,
+  "total_bytes": 95003285,
   "total_extensoes": 32,
   "extensoes": [
     {
       "extensao": ".xml",
       "quantidade_arquivos": 174,
       "tamanho_bytes": 217808,
-      "percentual_arquivos": 29.19,
+      "percentual_arquivos": 29.1,
       "percentual_bytes": 0.23
     },
     {
       "extensao": ".md",
-      "quantidade_arquivos": 168,
-      "tamanho_bytes": 362979,
-      "percentual_arquivos": 28.19,
+      "quantidade_arquivos": 170,
+      "tamanho_bytes": 364381,
+      "percentual_arquivos": 28.43,
       "percentual_bytes": 0.38
     },
     {
       "extensao": ".png",
       "quantidade_arquivos": 101,
       "tamanho_bytes": 76847070,
-      "percentual_arquivos": 16.95,
+      "percentual_arquivos": 16.89,
       "percentual_bytes": 80.89
     },
     {
       "extensao": ".kt",
       "quantidade_arquivos": 56,
-      "tamanho_bytes": 1449998,
-      "percentual_arquivos": 9.4,
+      "tamanho_bytes": 1449904,
+      "percentual_arquivos": 9.36,
       "percentual_bytes": 1.53
     },
     {
       "extensao": ".css",
       "quantidade_arquivos": 18,
       "tamanho_bytes": 235632,
-      "percentual_arquivos": 3.02,
+      "percentual_arquivos": 3.01,
       "percentual_bytes": 0.25
     },
     {
       "extensao": ".yml",
       "quantidade_arquivos": 14,
       "tamanho_bytes": 95451,
-      "percentual_arquivos": 2.35,
+      "percentual_arquivos": 2.34,
       "percentual_bytes": 0.1
     },
     {
       "extensao": ".html",
       "quantidade_arquivos": 11,
       "tamanho_bytes": 68698,
-      "percentual_arquivos": 1.85,
+      "percentual_arquivos": 1.84,
       "percentual_bytes": 0.07
     },
     {
       "extensao": ".gradle",
       "quantidade_arquivos": 6,
       "tamanho_bytes": 8170,
-      "percentual_arquivos": 1.01,
+      "percentual_arquivos": 1.0,
       "percentual_bytes": 0.01
     },
     {
@@ -93,7 +93,7 @@
     {
       "extensao": ".json",
       "quantidade_arquivos": 3,
-      "tamanho_bytes": 15337,
+      "tamanho_bytes": 15336,
       "percentual_arquivos": 0.5,
       "percentual_bytes": 0.02
     },
@@ -115,42 +115,42 @@
       "extensao": ".apk",
       "quantidade_arquivos": 2,
       "tamanho_bytes": 14570670,
-      "percentual_arquivos": 0.34,
+      "percentual_arquivos": 0.33,
       "percentual_bytes": 15.34
     },
     {
       "extensao": ".bat",
       "quantidade_arquivos": 2,
       "tamanho_bytes": 5526,
-      "percentual_arquivos": 0.34,
+      "percentual_arquivos": 0.33,
       "percentual_bytes": 0.01
     },
     {
       "extensao": ".ico",
       "quantidade_arquivos": 2,
       "tamanho_bytes": 30812,
-      "percentual_arquivos": 0.34,
+      "percentual_arquivos": 0.33,
       "percentual_bytes": 0.03
     },
     {
       "extensao": ".jar",
       "quantidade_arquivos": 2,
       "tamanho_bytes": 118406,
-      "percentual_arquivos": 0.34,
+      "percentual_arquivos": 0.33,
       "percentual_bytes": 0.12
     },
     {
       "extensao": ".pro",
       "quantidade_arquivos": 2,
       "tamanho_bytes": 0,
-      "percentual_arquivos": 0.34,
+      "percentual_arquivos": 0.33,
       "percentual_bytes": 0.0
     },
     {
       "extensao": "[sem extensão]",
       "quantidade_arquivos": 2,
       "tamanho_bytes": 11532,
-      "percentual_arquivos": 0.34,
+      "percentual_arquivos": 0.33,
       "percentual_bytes": 0.01
     },
     {

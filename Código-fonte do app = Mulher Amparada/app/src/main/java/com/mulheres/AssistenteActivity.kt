@@ -1,10 +1,10 @@
+
 package com.mulheres
 
 import android.content.Intent
 import android.graphics.Color as AndroidColor
 import android.os.Bundle
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -49,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -94,7 +95,11 @@ class AssistenteActivity : AppCompatActivity() {
                 android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
                 android.content.res.Configuration.UI_MODE_NIGHT_YES
 
-        val controller = WindowInsetsControllerCompat(window, window.decorView)
+        val controller = WindowInsetsControllerCompat(
+            window,
+            window.decorView
+        )
+
         controller.isAppearanceLightStatusBars = !modoEscuro
         controller.isAppearanceLightNavigationBars = !modoEscuro
 
@@ -115,16 +120,21 @@ class AssistenteActivity : AppCompatActivity() {
         val executor = ContextCompat.getMainExecutor(this)
 
         val autenticadores =
-    BiometricManager.Authenticators.BIOMETRIC_WEAK or
-        BiometricManager.Authenticators.DEVICE_CREDENTIAL
+            BiometricManager.Authenticators.BIOMETRIC_WEAK or
+                BiometricManager.Authenticators.DEVICE_CREDENTIAL
 
         val manager = BiometricManager.from(this)
 
-        if (manager.canAuthenticate(autenticadores) != BiometricManager.BIOMETRIC_SUCCESS) {
-    startActivity(Intent(this, HubActivity::class.java))
-    finish()
-    return
-}
+        if (
+            manager.canAuthenticate(autenticadores) !=
+            BiometricManager.BIOMETRIC_SUCCESS
+        ) {
+            startActivity(
+                Intent(this, HubActivity::class.java)
+            )
+            finish()
+            return
+        }
 
         val biometricPrompt = BiometricPrompt(
             this,
@@ -135,22 +145,38 @@ class AssistenteActivity : AppCompatActivity() {
                     result: BiometricPrompt.AuthenticationResult
                 ) {
                     super.onAuthenticationSucceeded(result)
-                    startActivity(Intent(this@AssistenteActivity, HubActivity::class.java))
+
+                    startActivity(
+                        Intent(
+                            this@AssistenteActivity,
+                            HubActivity::class.java
+                        )
+                    )
+
                     finish()
                 }
 
                 override fun onAuthenticationError(
-    errorCode: Int,
-    errString: CharSequence
-) {
-    super.onAuthenticationError(errorCode, errString)
+                    errorCode: Int,
+                    errString: CharSequence
+                ) {
+                    super.onAuthenticationError(
+                        errorCode,
+                        errString
+                    )
 
-    startActivity(Intent(this@AssistenteActivity, HubActivity::class.java))
-    finish()
-}
+                    startActivity(
+                        Intent(
+                            this@AssistenteActivity,
+                            HubActivity::class.java
+                        )
+                    )
+
+                    finish()
+                }
+
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
-                    // Biometria não reconhecida — prompt continua aberto
                 }
             }
         )
@@ -224,7 +250,8 @@ private val CoresClaras = CoresAssistente(
     linhaFundo = Color(0xFFE8E8E8)
 )
 
-private val LocalCoresAssistente = compositionLocalOf<CoresAssistente> { CoresEscuras }
+private val LocalCoresAssistente =
+    compositionLocalOf<CoresAssistente> { CoresEscuras }
 
 
 /* =========================================================
@@ -232,17 +259,22 @@ private val LocalCoresAssistente = compositionLocalOf<CoresAssistente> { CoresEs
 ========================================================= */
 
 @Composable
-private fun AssistenteTheme(content: @Composable () -> Unit) {
+private fun AssistenteTheme(
+    content: @Composable () -> Unit
+) {
     val modoEscuro = isSystemInDarkTheme()
     val cores = if (modoEscuro) CoresEscuras else CoresClaras
 
-    CompositionLocalProvider(LocalCoresAssistente provides cores) {
+    CompositionLocalProvider(
+        LocalCoresAssistente provides cores
+    ) {
         content()
     }
 }
 
 @Composable
-private fun coresAssistente(): CoresAssistente = LocalCoresAssistente.current
+private fun coresAssistente(): CoresAssistente =
+    LocalCoresAssistente.current
 
 
 /* =========================================================
@@ -266,11 +298,20 @@ data class Indicador(
 )
 
 data class DadosSaude(
-    val batimentos: Indicador = Indicador(72f, 60f, 100f, 3f),
-    val respiracao: Indicador = Indicador(16f, 12f, 20f, 0.8f),
-    val temperatura: Indicador = Indicador(36.5f, 36.1f, 37.0f, 0.1f),
-    val hidratacao: Indicador = Indicador(68f, 50f, 90f, 3f),
-    val bemEstar: Indicador = Indicador(72f, 60f, 88f, 4f)
+    val batimentos: Indicador =
+        Indicador(72f, 60f, 100f, 3f),
+
+    val respiracao: Indicador =
+        Indicador(16f, 12f, 20f, 0.8f),
+
+    val temperatura: Indicador =
+        Indicador(36.5f, 36.1f, 37.0f, 0.1f),
+
+    val hidratacao: Indicador =
+        Indicador(68f, 50f, 90f, 3f),
+
+    val bemEstar: Indicador =
+        Indicador(72f, 60f, 88f, 4f)
 )
 
 
@@ -279,8 +320,11 @@ data class DadosSaude(
 ========================================================= */
 
 private fun variar(indicador: Indicador): Float {
-    val variacao = (Random.nextFloat() * 2f - 1f) * indicador.passo
-    return (indicador.valor + variacao).coerceIn(indicador.min, indicador.max)
+    val variacao =
+        (Random.nextFloat() * 2f - 1f) * indicador.passo
+
+    return (indicador.valor + variacao)
+        .coerceIn(indicador.min, indicador.max)
 }
 
 
@@ -301,35 +345,77 @@ fun AssistenteSaude(onAutenticar: () -> Unit) {
     var hidratacao by remember { mutableStateOf(68f) }
     var bemEstar by remember { mutableStateOf(72f) }
 
+    // Estado inicial do fade
+    var telaVisivel by remember {
+        mutableStateOf(false)
+    }
+
+    // Fade-in da tela inteira
+    val alphaTela by animateFloatAsState(
+        targetValue = if (telaVisivel) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 900
+        ),
+        label = "fade-in-tela"
+    )
+
     LaunchedEffect(Unit) {
+
+        telaVisivel = true
+
         while (true) {
             delay(4000)
-            batimentos = variar(Indicador(batimentos, 60f, 100f, 3f))
-            respiracao = variar(Indicador(respiracao, 12f, 20f, 0.8f))
-            temperatura = variar(Indicador(temperatura, 36.1f, 37.0f, 0.1f))
-            hidratacao = variar(Indicador(hidratacao, 50f, 90f, 3f))
-            bemEstar = variar(Indicador(bemEstar, 60f, 88f, 4f))
+
+            batimentos = variar(
+                Indicador(batimentos, 60f, 100f, 3f)
+            )
+
+            respiracao = variar(
+                Indicador(respiracao, 12f, 20f, 0.8f)
+            )
+
+            temperatura = variar(
+                Indicador(temperatura, 36.1f, 37.0f, 0.1f)
+            )
+
+            hidratacao = variar(
+                Indicador(hidratacao, 50f, 90f, 3f)
+            )
+
+            bemEstar = variar(
+                Indicador(bemEstar, 60f, 88f, 4f)
+            )
         }
     }
 
-    CompositionLocalProvider(LocalOverscrollFactory provides null) {
+    CompositionLocalProvider(
+        LocalOverscrollFactory provides null
+    ) {
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .graphicsLayer {
+                    alpha = alphaTela
+                }
                 .background(cores.fundo)
                 .pointerInput(Unit) {
+
                     var totalDrag = 0f
+
                     detectDragGestures(
-                        onDragStart = { totalDrag = 0f },
+                        onDragStart = {
+                            totalDrag = 0f
+                        },
                         onDragEnd = {
                             if (abs(totalDrag) > 150f) {
                                 onAutenticar()
                             }
                         }
                     ) { change, dragAmount ->
-                        // NÃO consome o evento — permite o LazyColumn rolar
-                        totalDrag += dragAmount.x + dragAmount.y
+
+                        totalDrag +=
+                            dragAmount.x + dragAmount.y
                     }
                 }
         ) {
@@ -347,22 +433,32 @@ fun AssistenteSaude(onAutenticar: () -> Unit) {
             ) {
 
                 item {
-                    Spacer(modifier = Modifier.height(48.dp))
+                    Spacer(
+                        modifier = Modifier.height(48.dp)
+                    )
 
                     Cabecalho(
                         onSecretClick = {
                             context.startActivity(
-                                Intent(context, NeoCalcActivity::class.java)
+                                Intent(
+                                    context,
+                                    NeoCalcActivity::class.java
+                                )
                             )
                         }
                     )
 
-                    Spacer(modifier = Modifier.height(28.dp))
+                    Spacer(
+                        modifier = Modifier.height(28.dp)
+                    )
                 }
 
                 item {
                     Hero(bemEstar = bemEstar)
-                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Spacer(
+                        modifier = Modifier.height(12.dp)
+                    )
                 }
 
                 item {
@@ -374,53 +470,96 @@ fun AssistenteSaude(onAutenticar: () -> Unit) {
                 }
 
                 item {
-                    Spacer(modifier = Modifier.height(36.dp))
+                    Spacer(
+                        modifier = Modifier.height(36.dp)
+                    )
 
                     SecaoTitulo(
                         titulo = "Indicadores",
                         direita = "Atualização contínua"
                     )
 
-                    Spacer(modifier = Modifier.height(14.dp))
+                    Spacer(
+                        modifier = Modifier.height(14.dp)
+                    )
 
                     Indicadores(
                         dados = DadosSaude(
-                            batimentos = Indicador(batimentos, 60f, 100f, 3f),
-                            respiracao = Indicador(respiracao, 12f, 20f, 0.8f),
-                            temperatura = Indicador(temperatura, 36.1f, 37.0f, 0.1f),
-                            hidratacao = Indicador(hidratacao, 50f, 90f, 3f),
-                            bemEstar = Indicador(bemEstar, 60f, 88f, 4f)
+                            batimentos = Indicador(
+                                batimentos,
+                                60f,
+                                100f,
+                                3f
+                            ),
+                            respiracao = Indicador(
+                                respiracao,
+                                12f,
+                                20f,
+                                0.8f
+                            ),
+                            temperatura = Indicador(
+                                temperatura,
+                                36.1f,
+                                37.0f,
+                                0.1f
+                            ),
+                            hidratacao = Indicador(
+                                hidratacao,
+                                50f,
+                                90f,
+                                3f
+                            ),
+                            bemEstar = Indicador(
+                                bemEstar,
+                                60f,
+                                88f,
+                                4f
+                            )
                         )
                     )
                 }
 
                 item {
-                    Spacer(modifier = Modifier.height(36.dp))
+                    Spacer(
+                        modifier = Modifier.height(36.dp)
+                    )
 
                     SecaoTitulo(
                         titulo = "Bem-estar",
                         direita = "Índice geral"
                     )
 
-                    Spacer(modifier = Modifier.height(14.dp))
+                    Spacer(
+                        modifier = Modifier.height(14.dp)
+                    )
 
                     BemEstar(valor = bemEstar)
                 }
 
                 item {
-                    Spacer(modifier = Modifier.height(36.dp))
+                    Spacer(
+                        modifier = Modifier.height(36.dp)
+                    )
 
-                    SecaoTitulo(titulo = "Atividade")
+                    SecaoTitulo(
+                        titulo = "Atividade"
+                    )
 
-                    Spacer(modifier = Modifier.height(14.dp))
+                    Spacer(
+                        modifier = Modifier.height(14.dp)
+                    )
 
                     Atividade()
 
-                    Spacer(modifier = Modifier.height(14.dp))
+                    Spacer(
+                        modifier = Modifier.height(14.dp)
+                    )
                 }
 
                 item {
-                    Spacer(modifier = Modifier.height(60.dp))
+                    Spacer(
+                        modifier = Modifier.height(60.dp)
+                    )
                 }
             }
         }
@@ -433,7 +572,9 @@ fun AssistenteSaude(onAutenticar: () -> Unit) {
 ========================================================= */
 
 @Composable
-private fun Cabecalho(onSecretClick: () -> Unit) {
+private fun Cabecalho(
+    onSecretClick: () -> Unit
+) {
 
     val cores = coresAssistente()
 
@@ -443,7 +584,9 @@ private fun Cabecalho(onSecretClick: () -> Unit) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
-        Column(modifier = Modifier.weight(1f)) {
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
 
             Text(
                 text = "Assistente de Saúde",
@@ -453,7 +596,9 @@ private fun Cabecalho(onSecretClick: () -> Unit) {
                 lineHeight = 25.sp
             )
 
-            Spacer(modifier = Modifier.height(9.dp))
+            Spacer(
+                modifier = Modifier.height(9.dp)
+            )
 
             Text(
                 text = "Um espaço para acompanhar seu bem-estar.",
@@ -464,19 +609,28 @@ private fun Cabecalho(onSecretClick: () -> Unit) {
             )
         }
 
-        Spacer(modifier = Modifier.width(20.dp))
+        Spacer(
+            modifier = Modifier.width(20.dp)
+        )
 
         Card(
             onClick = onSecretClick,
             modifier = Modifier.size(42.dp),
             shape = RoundedCornerShape(14.dp),
-            colors = CardDefaults.cardColors(containerColor = cores.fundoIcone),
-            border = BorderStroke(1.dp, cores.bordaIcone)
+            colors = CardDefaults.cardColors(
+                containerColor = cores.fundoIcone
+            ),
+            border = BorderStroke(
+                1.dp,
+                cores.bordaIcone
+            )
         ) {
+
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
+
                 Image(
                     painter = painterResource(R.drawable.ic_8),
                     contentDescription = null,
@@ -503,16 +657,27 @@ private fun Hero(bemEstar: Float) {
             .fillMaxWidth()
             .height(315.dp),
         shape = RoundedCornerShape(26.dp),
-        colors = CardDefaults.cardColors(containerColor = cores.card),
-        border = BorderStroke(1.dp, cores.bordaForte)
+        colors = CardDefaults.cardColors(
+            containerColor = cores.card
+        ),
+        border = BorderStroke(
+            1.dp,
+            cores.bordaForte
+        )
     ) {
 
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 19.dp, start = 21.dp, end = 21.dp),
+                    .padding(
+                        top = 19.dp,
+                        start = 21.dp,
+                        end = 21.dp
+                    ),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -524,16 +689,22 @@ private fun Hero(bemEstar: Float) {
                     letterSpacing = 1.2.sp
                 )
 
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
 
                     Box(
                         modifier = Modifier
                             .size(5.dp)
                             .clip(CircleShape)
-                            .background(cores.azul.copy(alpha = 0.8f))
+                            .background(
+                                cores.azul.copy(alpha = 0.8f)
+                            )
                     )
 
-                    Spacer(modifier = Modifier.width(6.dp))
+                    Spacer(
+                        modifier = Modifier.width(6.dp)
+                    )
 
                     Text(
                         text = "ATIVO",
@@ -554,21 +725,32 @@ private fun Hero(bemEstar: Float) {
                 Box(
                     modifier = Modifier
                         .size(62.dp)
-                        .clip(RoundedCornerShape(20.dp))
+                        .clip(
+                            RoundedCornerShape(20.dp)
+                        )
                         .background(
-                            if (isSystemInDarkTheme()) Color(0xFF0B0D17)
-                            else Color(0xFFF0F1F8)
+                            if (isSystemInDarkTheme()) {
+                                Color(0xFF0B0D17)
+                            } else {
+                                Color(0xFFF0F1F8)
+                            }
                         )
                         .border(
                             1.dp,
-                            if (isSystemInDarkTheme()) Color(0xFF282B40)
-                            else Color(0xFFD9DBE8),
+                            if (isSystemInDarkTheme()) {
+                                Color(0xFF282B40)
+                            } else {
+                                Color(0xFFD9DBE8)
+                            },
                             RoundedCornerShape(20.dp)
                         ),
                     contentAlignment = Alignment.Center
                 ) {
+
                     Image(
-                        painter = painterResource(R.drawable.assistente1),
+                        painter = painterResource(
+                            R.drawable.assistente1
+                        ),
                         contentDescription = null,
                         modifier = Modifier.size(30.dp),
                         contentScale = ContentScale.Fit,
@@ -576,9 +758,13 @@ private fun Hero(bemEstar: Float) {
                     )
                 }
 
-                Spacer(modifier = Modifier.height(17.dp))
+                Spacer(
+                    modifier = Modifier.height(17.dp)
+                )
 
-                Row(verticalAlignment = Alignment.Bottom) {
+                Row(
+                    verticalAlignment = Alignment.Bottom
+                ) {
 
                     Text(
                         text = bemEstar.roundToInt().toString(),
@@ -587,7 +773,9 @@ private fun Hero(bemEstar: Float) {
                         letterSpacing = (-1.2).sp
                     )
 
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(
+                        modifier = Modifier.width(4.dp)
+                    )
 
                     Text(
                         text = "/ 100",
@@ -610,7 +798,9 @@ private fun Hero(bemEstar: Float) {
                     fontSize = 15.sp
                 )
 
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(
+                    modifier = Modifier.height(6.dp)
+                )
 
                 Text(
                     text = "Acompanhamento em andamento",
@@ -628,7 +818,11 @@ private fun Hero(bemEstar: Float) {
 ========================================================= */
 
 @Composable
-private fun Resumo(batimentos: Float, respiracao: Float, temperatura: Float) {
+private fun Resumo(
+    batimentos: Float,
+    respiracao: Float,
+    temperatura: Float
+) {
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -659,16 +853,27 @@ private fun Resumo(batimentos: Float, respiracao: Float, temperatura: Float) {
 }
 
 @Composable
-private fun ResumoItem(modifier: Modifier, label: String, value: String, unit: String) {
+private fun ResumoItem(
+    modifier: Modifier,
+    label: String,
+    value: String,
+    unit: String
+) {
 
     val cores = coresAssistente()
 
     Card(
         modifier = modifier.height(79.dp),
         shape = RoundedCornerShape(17.dp),
-        colors = CardDefaults.cardColors(containerColor = cores.card),
-        border = BorderStroke(1.dp, cores.borda)
+        colors = CardDefaults.cardColors(
+            containerColor = cores.card
+        ),
+        border = BorderStroke(
+            1.dp,
+            cores.borda
+        )
     ) {
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -683,7 +888,9 @@ private fun ResumoItem(modifier: Modifier, label: String, value: String, unit: S
                 letterSpacing = .7.sp
             )
 
-            Row(verticalAlignment = Alignment.Bottom) {
+            Row(
+                verticalAlignment = Alignment.Bottom
+            ) {
 
                 Text(
                     text = value,
@@ -691,7 +898,9 @@ private fun ResumoItem(modifier: Modifier, label: String, value: String, unit: S
                     fontSize = 17.sp
                 )
 
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(
+                    modifier = Modifier.width(4.dp)
+                )
 
                 Text(
                     text = unit,
@@ -709,14 +918,20 @@ private fun ResumoItem(modifier: Modifier, label: String, value: String, unit: S
 ========================================================= */
 
 @Composable
-private fun SecaoTitulo(titulo: String, direita: String? = null) {
+private fun SecaoTitulo(
+    titulo: String,
+    direita: String? = null
+) {
 
     val cores = coresAssistente()
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 3.dp, end = 3.dp),
+            .padding(
+                start = 3.dp,
+                end = 3.dp
+            ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -729,6 +944,7 @@ private fun SecaoTitulo(titulo: String, direita: String? = null) {
         )
 
         if (direita != null) {
+
             Text(
                 text = direita,
                 color = cores.textoEscuro,
@@ -745,9 +961,13 @@ private fun SecaoTitulo(titulo: String, direita: String? = null) {
 ========================================================= */
 
 @Composable
-private fun Indicadores(dados: DadosSaude) {
+private fun Indicadores(
+    dados: DadosSaude
+) {
 
-    Column(verticalArrangement = Arrangement.spacedBy(11.dp)) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(11.dp)
+    ) {
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -803,8 +1023,13 @@ private fun Indicadores(dados: DadosSaude) {
     }
 }
 
-private fun percentual(indicador: Indicador): Float =
-    ((indicador.valor - indicador.min) / (indicador.max - indicador.min)).coerceIn(0f, 1f)
+private fun percentual(
+    indicador: Indicador
+): Float =
+    (
+        (indicador.valor - indicador.min) /
+            (indicador.max - indicador.min)
+    ).coerceIn(0f, 1f)
 
 
 /* =========================================================
@@ -827,11 +1052,18 @@ private fun IndicadorCard(
     Card(
         modifier = modifier.height(148.dp),
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = cores.card),
-        border = BorderStroke(1.dp, cores.borda)
+        colors = CardDefaults.cardColors(
+            containerColor = cores.card
+        ),
+        border = BorderStroke(
+            1.dp,
+            cores.borda
+        )
     ) {
 
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
 
             Column(
                 modifier = Modifier
@@ -848,7 +1080,9 @@ private fun IndicadorCard(
                     Box(
                         modifier = Modifier
                             .size(38.dp)
-                            .clip(RoundedCornerShape(12.dp))
+                            .clip(
+                                RoundedCornerShape(12.dp)
+                            )
                             .background(cores.fundoIcone)
                             .border(
                                 1.dp,
@@ -857,6 +1091,7 @@ private fun IndicadorCard(
                             ),
                         contentAlignment = Alignment.Center
                     ) {
+
                         Image(
                             painter = painterResource(icone),
                             contentDescription = null,
@@ -873,7 +1108,9 @@ private fun IndicadorCard(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(15.dp))
+                Spacer(
+                    modifier = Modifier.height(15.dp)
+                )
 
                 Text(
                     text = nome,
@@ -881,7 +1118,9 @@ private fun IndicadorCard(
                     fontSize = 9.sp
                 )
 
-                Spacer(modifier = Modifier.weight(1f))
+                Spacer(
+                    modifier = Modifier.weight(1f)
+                )
 
                 Row(
                     modifier = Modifier
@@ -910,17 +1149,30 @@ private fun IndicadorCard(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp, bottom = 10.dp)
+                    .padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        bottom = 10.dp
+                    )
                     .height(2.dp)
-                    .clip(RoundedCornerShape(999.dp))
+                    .clip(
+                        RoundedCornerShape(999.dp)
+                    )
                     .background(Color.Transparent)
             ) {
+
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth(percentual.coerceIn(.08f, 1f))
+                        .fillMaxWidth(
+                            percentual.coerceIn(.08f, 1f)
+                        )
                         .height(2.dp)
-                        .clip(RoundedCornerShape(999.dp))
-                        .background(cores.azul.copy(alpha = .5f))
+                        .clip(
+                            RoundedCornerShape(999.dp)
+                        )
+                        .background(
+                            cores.azul.copy(alpha = .5f)
+                        )
                 )
             }
         }
@@ -933,15 +1185,22 @@ private fun IndicadorCard(
 ========================================================= */
 
 @Composable
-private fun BemEstar(valor: Float) {
+private fun BemEstar(
+    valor: Float
+) {
 
     val cores = coresAssistente()
 
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(containerColor = cores.card),
-        border = BorderStroke(1.dp, cores.borda)
+        colors = CardDefaults.cardColors(
+            containerColor = cores.card
+        ),
+        border = BorderStroke(
+            1.dp,
+            cores.borda
+        )
     ) {
 
         Column(
@@ -964,7 +1223,9 @@ private fun BemEstar(valor: Float) {
                     Box(
                         modifier = Modifier
                             .size(40.dp)
-                            .clip(RoundedCornerShape(13.dp))
+                            .clip(
+                                RoundedCornerShape(13.dp)
+                            )
                             .background(cores.fundoIcone)
                             .border(
                                 1.dp,
@@ -973,15 +1234,20 @@ private fun BemEstar(valor: Float) {
                             ),
                         contentAlignment = Alignment.Center
                     ) {
+
                         Image(
-                            painter = painterResource(R.drawable.bemestar1),
+                            painter = painterResource(
+                                R.drawable.bemestar1
+                            ),
                             contentDescription = null,
                             modifier = Modifier.size(22.dp),
                             colorFilter = ColorFilter.tint(corIcone())
                         )
                     }
 
-                    Spacer(modifier = Modifier.width(12.dp))
+                    Spacer(
+                        modifier = Modifier.width(12.dp)
+                    )
 
                     Column {
 
@@ -991,7 +1257,9 @@ private fun BemEstar(valor: Float) {
                             fontSize = 10.sp
                         )
 
-                        Spacer(modifier = Modifier.height(6.dp))
+                        Spacer(
+                            modifier = Modifier.height(6.dp)
+                        )
 
                         Text(
                             text = "Estimativa demonstrativa",
@@ -1001,7 +1269,9 @@ private fun BemEstar(valor: Float) {
                     }
                 }
 
-                Row(verticalAlignment = Alignment.Bottom) {
+                Row(
+                    verticalAlignment = Alignment.Bottom
+                ) {
 
                     Text(
                         text = valor.roundToInt().toString(),
@@ -1010,7 +1280,9 @@ private fun BemEstar(valor: Float) {
                         letterSpacing = (-1.2).sp
                     )
 
-                    Spacer(modifier = Modifier.width(3.dp))
+                    Spacer(
+                        modifier = Modifier.width(3.dp)
+                    )
 
                     Text(
                         text = "/100",
@@ -1020,35 +1292,48 @@ private fun BemEstar(valor: Float) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(25.dp))
+            Spacer(
+                modifier = Modifier.height(25.dp)
+            )
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
-                BemEstarInfo(titulo = "MÍNIMO", valor = "60")
+                BemEstarInfo(
+                    titulo = "MÍNIMO",
+                    valor = "60"
+                )
 
                 BemEstarInfo(
                     titulo = "ATUAL",
                     valor = valor.roundToInt().toString()
                 )
 
-                BemEstarInfo(titulo = "MÁXIMO", valor = "88")
+                BemEstarInfo(
+                    titulo = "MÁXIMO",
+                    valor = "88"
+                )
             }
 
-            Spacer(modifier = Modifier.height(19.dp))
+            Spacer(
+                modifier = Modifier.height(19.dp)
+            )
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(5.dp)
-                    .clip(RoundedCornerShape(999.dp))
+                    .clip(
+                        RoundedCornerShape(999.dp)
+                    )
                     .background(Color.Transparent)
             ) {
 
                 val progresso = animateFloatAsState(
-                    targetValue = (valor / 100f).coerceIn(0f, 1f),
+                    targetValue = (valor / 100f)
+                        .coerceIn(0f, 1f),
                     animationSpec = tween(800),
                     label = "bem-estar"
                 )
@@ -1057,7 +1342,9 @@ private fun BemEstar(valor: Float) {
                     modifier = Modifier
                         .fillMaxWidth(progresso.value)
                         .height(5.dp)
-                        .clip(RoundedCornerShape(999.dp))
+                        .clip(
+                            RoundedCornerShape(999.dp)
+                        )
                         .background(cores.azulClaro)
                 )
             }
@@ -1071,11 +1358,16 @@ private fun BemEstar(valor: Float) {
 ========================================================= */
 
 @Composable
-private fun BemEstarInfo(titulo: String, valor: String) {
+private fun BemEstarInfo(
+    titulo: String,
+    valor: String
+) {
 
     val cores = coresAssistente()
 
-    Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(5.dp)
+    ) {
 
         Text(
             text = titulo,
@@ -1099,7 +1391,9 @@ private fun BemEstarInfo(titulo: String, valor: String) {
 @Composable
 private fun Atividade() {
 
-    Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(9.dp)
+    ) {
 
         AtividadeRow(
             titulo = "Indicadores atualizados",
@@ -1127,7 +1421,11 @@ private fun Atividade() {
 ========================================================= */
 
 @Composable
-private fun AtividadeRow(titulo: String, descricao: String, tempo: String) {
+private fun AtividadeRow(
+    titulo: String,
+    descricao: String,
+    tempo: String
+) {
 
     val cores = coresAssistente()
 
@@ -1136,14 +1434,22 @@ private fun AtividadeRow(titulo: String, descricao: String, tempo: String) {
             .fillMaxWidth()
             .height(65.dp),
         shape = RoundedCornerShape(17.dp),
-        colors = CardDefaults.cardColors(containerColor = cores.cardSecundario),
-        border = BorderStroke(1.dp, cores.borda)
+        colors = CardDefaults.cardColors(
+            containerColor = cores.cardSecundario
+        ),
+        border = BorderStroke(
+            1.dp,
+            cores.borda
+        )
     ) {
 
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 14.dp, vertical = 12.dp),
+                .padding(
+                    horizontal = 14.dp,
+                    vertical = 12.dp
+                ),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -1154,9 +1460,13 @@ private fun AtividadeRow(titulo: String, descricao: String, tempo: String) {
                     .background(cores.azul)
             )
 
-            Spacer(modifier = Modifier.width(13.dp))
+            Spacer(
+                modifier = Modifier.width(13.dp)
+            )
 
-            Column(modifier = Modifier.weight(1f)) {
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
 
                 Text(
                     text = titulo,
@@ -1166,7 +1476,9 @@ private fun AtividadeRow(titulo: String, descricao: String, tempo: String) {
                     overflow = TextOverflow.Ellipsis
                 )
 
-                Spacer(modifier = Modifier.height(5.dp))
+                Spacer(
+                    modifier = Modifier.height(5.dp)
+                )
 
                 Text(
                     text = descricao,
@@ -1178,7 +1490,9 @@ private fun AtividadeRow(titulo: String, descricao: String, tempo: String) {
                 )
             }
 
-            Spacer(modifier = Modifier.width(13.dp))
+            Spacer(
+                modifier = Modifier.width(13.dp)
+            )
 
             Text(
                 text = tempo,

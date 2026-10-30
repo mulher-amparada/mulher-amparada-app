@@ -1,93 +1,93 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-10-30T12:42:10Z",
-  "total_arquivos": 589,
-  "total_bytes": 94994056,
+  "gerado_em_utc": "2026-10-30T18:26:35Z",
+  "total_arquivos": 593,
+  "total_bytes": 94997215,
   "total_extensoes": 32,
   "extensoes": [
     {
       "extensao": ".xml",
       "quantidade_arquivos": 174,
       "tamanho_bytes": 217808,
-      "percentual_arquivos": 29.54,
+      "percentual_arquivos": 29.34,
       "percentual_bytes": 0.23
     },
     {
       "extensao": ".md",
-      "quantidade_arquivos": 161,
-      "tamanho_bytes": 355999,
-      "percentual_arquivos": 27.33,
-      "percentual_bytes": 0.37
+      "quantidade_arquivos": 165,
+      "tamanho_bytes": 359515,
+      "percentual_arquivos": 27.82,
+      "percentual_bytes": 0.38
     },
     {
       "extensao": ".png",
       "quantidade_arquivos": 101,
       "tamanho_bytes": 76847070,
-      "percentual_arquivos": 17.15,
-      "percentual_bytes": 80.9
+      "percentual_arquivos": 17.03,
+      "percentual_bytes": 80.89
     },
     {
       "extensao": ".kt",
       "quantidade_arquivos": 56,
-      "tamanho_bytes": 1449054,
-      "percentual_arquivos": 9.51,
-      "percentual_bytes": 1.53
+      "tamanho_bytes": 1448697,
+      "percentual_arquivos": 9.44,
+      "percentual_bytes": 1.52
     },
     {
       "extensao": ".css",
       "quantidade_arquivos": 18,
       "tamanho_bytes": 235632,
-      "percentual_arquivos": 3.06,
+      "percentual_arquivos": 3.04,
       "percentual_bytes": 0.25
     },
     {
       "extensao": ".yml",
       "quantidade_arquivos": 14,
       "tamanho_bytes": 95451,
-      "percentual_arquivos": 2.38,
+      "percentual_arquivos": 2.36,
       "percentual_bytes": 0.1
     },
     {
       "extensao": ".html",
       "quantidade_arquivos": 11,
       "tamanho_bytes": 68698,
-      "percentual_arquivos": 1.87,
+      "percentual_arquivos": 1.85,
       "percentual_bytes": 0.07
     },
     {
       "extensao": ".gradle",
       "quantidade_arquivos": 6,
       "tamanho_bytes": 8170,
-      "percentual_arquivos": 1.02,
+      "percentual_arquivos": 1.01,
       "percentual_bytes": 0.01
     },
     {
       "extensao": ".jpg",
       "quantidade_arquivos": 4,
       "tamanho_bytes": 663516,
-      "percentual_arquivos": 0.68,
+      "percentual_arquivos": 0.67,
       "percentual_bytes": 0.7
     },
     {
       "extensao": ".js",
       "quantidade_arquivos": 4,
       "tamanho_bytes": 33816,
-      "percentual_arquivos": 0.68,
+      "percentual_arquivos": 0.67,
       "percentual_bytes": 0.04
     },
     {
       "extensao": ".properties",
       "quantidade_arquivos": 4,
       "tamanho_bytes": 3156,
-      "percentual_arquivos": 0.68,
+      "percentual_arquivos": 0.67,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".sh",
       "quantidade_arquivos": 4,
       "tamanho_bytes": 90469,
-      "percentual_arquivos": 0.68,
+      "percentual_arquivos": 0.67,
       "percentual_bytes": 0.1
     },
     {

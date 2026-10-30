@@ -141,9 +141,10 @@ window.setFlags(
             }
 
             else -> {
-                biometricError.value =
-                    "Configure a biometria ou o bloqueio do dispositivo."
-            }
+    // Sem biometria ou credencial: permite redefinir o PIN.
+    biometricError.value = null
+    resetSignal.intValue++
+}
         }
     }
 

@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-10-30T18:45:01Z
+- **Gerado em UTC:** 2026-10-30T18:55:58Z
 - **Linguagens identificadas:** 12
 - **Arquivos classificados:** 102
-- **Tamanho classificado:** 1918162 bytes
+- **Tamanho classificado:** 1918944 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -16,9 +16,9 @@
 
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
-| Kotlin | 56 | 1449216 | 75.55% |
+| Kotlin | 56 | 1449998 | 75.56% |
 | CSS | 18 | 235632 | 12.28% |
-| Shell | 4 | 90469 | 4.72% |
+| Shell | 4 | 90469 | 4.71% |
 | HTML | 11 | 68698 | 3.58% |
 | JavaScript | 4 | 33816 | 1.76% |
 | C | 1 | 18374 | 0.96% |
@@ -104,8 +104,8 @@
 ### Kotlin
 
 - **Arquivos:** 56
-- **Tamanho:** 1449216 bytes
-- **Percentual:** 75.55%
+- **Tamanho:** 1449998 bytes
+- **Percentual:** 75.56%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt`
@@ -202,7 +202,7 @@
 
 - **Arquivos:** 4
 - **Tamanho:** 90469 bytes
-- **Percentual:** 4.72%
+- **Percentual:** 4.71%
 
 - `Código-fonte do app = Mulher Amparada/make.sh`
 - `Safe Woman Operational System/build/envsetup.sh`

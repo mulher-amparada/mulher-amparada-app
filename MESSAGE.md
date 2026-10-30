@@ -1,6 +1,4 @@
-# 💬 Uma mensagem antes de tudo:
-
-Mulheres,
+# 🌷Mulheres:
 
 Este projeto fala sobre violência contra a mulher **com vocês, não por vocês**.
 

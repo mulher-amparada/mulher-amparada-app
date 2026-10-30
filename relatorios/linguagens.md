@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-10-30T19:13:57Z
+- **Gerado em UTC:** 2026-10-30T19:20:38Z
 - **Linguagens identificadas:** 12
 - **Arquivos classificados:** 102
-- **Tamanho classificado:** 1925275 bytes
+- **Tamanho classificado:** 1928696 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -16,16 +16,16 @@
 
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
-| Kotlin | 56 | 1456329 | 75.64% |
-| CSS | 18 | 235632 | 12.24% |
-| Shell | 4 | 90469 | 4.70% |
-| HTML | 11 | 68698 | 3.57% |
-| JavaScript | 4 | 33816 | 1.76% |
+| Kotlin | 56 | 1459750 | 75.69% |
+| CSS | 18 | 235632 | 12.22% |
+| Shell | 4 | 90469 | 4.69% |
+| HTML | 11 | 68698 | 3.56% |
+| JavaScript | 4 | 33816 | 1.75% |
 | C | 1 | 18374 | 0.95% |
-| PHP | 1 | 9342 | 0.49% |
+| PHP | 1 | 9342 | 0.48% |
 | Julia | 1 | 5989 | 0.31% |
 | TypeScript | 1 | 3052 | 0.16% |
-| Ruby | 1 | 2025 | 0.11% |
+| Ruby | 1 | 2025 | 0.10% |
 | Makefile | 3 | 806 | 0.04% |
 | Python | 1 | 743 | 0.04% |
 
@@ -43,7 +43,7 @@
 
 - **Arquivos:** 18
 - **Tamanho:** 235632 bytes
-- **Percentual:** 12.24%
+- **Percentual:** 12.22%
 
 - `app1-day.css`
 - `app1-night.css`
@@ -68,7 +68,7 @@
 
 - **Arquivos:** 11
 - **Tamanho:** 68698 bytes
-- **Percentual:** 3.57%
+- **Percentual:** 3.56%
 
 - `app1.html`
 - `divulgacao/html/banner.html`
@@ -86,7 +86,7 @@
 
 - **Arquivos:** 4
 - **Tamanho:** 33816 bytes
-- **Percentual:** 1.76%
+- **Percentual:** 1.75%
 
 - `download.js`
 - `index.js`
@@ -104,8 +104,8 @@
 ### Kotlin
 
 - **Arquivos:** 56
-- **Tamanho:** 1456329 bytes
-- **Percentual:** 75.64%
+- **Tamanho:** 1459750 bytes
+- **Percentual:** 75.69%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt`
@@ -178,7 +178,7 @@
 
 - **Arquivos:** 1
 - **Tamanho:** 9342 bytes
-- **Percentual:** 0.49%
+- **Percentual:** 0.48%
 
 - `scripts/pesquisar_projeto.php`
 
@@ -194,7 +194,7 @@
 
 - **Arquivos:** 1
 - **Tamanho:** 2025 bytes
-- **Percentual:** 0.11%
+- **Percentual:** 0.10%
 
 - `scripts/commits.rb`
 
@@ -202,7 +202,7 @@
 
 - **Arquivos:** 4
 - **Tamanho:** 90469 bytes
-- **Percentual:** 4.70%
+- **Percentual:** 4.69%
 
 - `Código-fonte do app = Mulher Amparada/make.sh`
 - `Safe Woman Operational System/build/envsetup.sh`

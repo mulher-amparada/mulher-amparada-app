@@ -1,5 +1,18 @@
 package com.mulheres
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
+import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.hoverable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.unit.TextUnit
+import kotlinx.coroutines.delay
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.fragment.app.FragmentActivity
@@ -2207,49 +2220,171 @@ private fun BottomAreaSelector(
 
     val shape = RoundedCornerShape(50.dp)
 
-    val barHeight = if (isLandscape) 76.dp else 76.dp
+    val barHeight = 76.dp
     val thumbSize = if (isLandscape) 96.dp else 76.dp
     val horizontalPadding = 5.dp
+
+    val availableLabel = if (areaProtegidaSelecionada) "Áreas" else "Ajuda"
+
+    var visibleCharacters by remember(availableLabel) {
+        mutableIntStateOf(0)
+    }
+
+    LaunchedEffect(availableLabel) {
+        visibleCharacters = 0
+
+        for (i in 1..availableLabel.length) {
+            visibleCharacters = i
+            delay(35)
+        }
+    }
+
+    var appeared by remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(Unit) {
+        appeared = true
+    }
+
+    val fadeIn by animateFloatAsState(
+        targetValue = if (appeared) 1f else 0f,
+        animationSpec = tween(450),
+        label = "selector_fade_in"
+    )
+
+    val offsetX by animateDpAsState(
+        targetValue = if (areaProtegidaSelecionada) {
+            1.dp
+        } else {
+            0.dp
+        },
+        animationSpec = tween(
+            durationMillis = 280,
+            easing = FastOutSlowInEasing
+        ),
+        label = "selector_offset"
+    )
 
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxWidth(if (isLandscape) 0.55f else 0.80f)
             .height(barHeight)
+            .graphicsLayer {
+                alpha = fadeIn
+            }
             .clip(shape)
             .background(
                 if (isDark) Color(0xFF17171A) else Color.White
             )
             .border(1.dp, c.borderLight, shape)
-            .padding(horizontal = horizontalPadding, vertical = 5.dp)
+            .padding(
+                horizontal = horizontalPadding,
+                vertical = 5.dp
+            )
     ) {
         val availableWidth = maxWidth
         val halfWidth = availableWidth / 2
 
-        val offsetX =
-            if (areaProtegidaSelecionada) halfWidth else 0.dp
+        val thumbOffset by animateDpAsState(
+            targetValue = if (areaProtegidaSelecionada) {
+                halfWidth
+            } else {
+                0.dp
+            },
+            animationSpec = tween(
+                durationMillis = 320,
+                easing = FastOutSlowInEasing
+            ),
+            label = "selector_thumb"
+        )
 
-        Row(modifier = Modifier.fillMaxSize()) {
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .clickable(
-                        indication = null,
-                        interactionSource = androidx.compose.foundation.interaction
-                            .MutableInteractionSource()
-                    ) {
-                        onSelecionarConteudo()
-                    }
+        Row(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            val contentInteraction = remember {
+                MutableInteractionSource()
+            }
+
+            val contentPressed by
+                contentInteraction.collectIsPressedAsState()
+
+            val contentHovered by
+                contentInteraction.collectIsHoveredAsState()
+
+            val contentScale by animateFloatAsState(
+                targetValue = when {
+                    contentPressed -> 0.94f
+                    contentHovered -> 1.025f
+                    else -> 1f
+                },
+                animationSpec = tween(160),
+                label = "content_scale"
+            )
+
+            val contentAlpha by animateFloatAsState(
+                targetValue = if (contentPressed) 0.75f else 1f,
+                animationSpec = tween(160),
+                label = "content_alpha"
             )
 
             Box(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
+                    .graphicsLayer {
+                        scaleX = contentScale
+                        scaleY = contentScale
+                        alpha = contentAlpha
+                    }
+                    .hoverable(contentInteraction)
                     .clickable(
-                        indication = null,
-                        interactionSource = androidx.compose.foundation.interaction
-                            .MutableInteractionSource()
+                        interactionSource = contentInteraction,
+                        indication = null
+                    ) {
+                        onSelecionarConteudo()
+                    }
+            )
+
+            val protectedInteraction = remember {
+                MutableInteractionSource()
+            }
+
+            val protectedPressed by
+                protectedInteraction.collectIsPressedAsState()
+
+            val protectedHovered by
+                protectedInteraction.collectIsHoveredAsState()
+
+            val protectedScale by animateFloatAsState(
+                targetValue = when {
+                    protectedPressed -> 0.94f
+                    protectedHovered -> 1.025f
+                    else -> 1f
+                },
+                animationSpec = tween(160),
+                label = "protected_scale"
+            )
+
+            val protectedAlpha by animateFloatAsState(
+                targetValue = if (protectedPressed) 0.75f else 1f,
+                animationSpec = tween(160),
+                label = "protected_alpha"
+            )
+
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .graphicsLayer {
+                        scaleX = protectedScale
+                        scaleY = protectedScale
+                        alpha = protectedAlpha
+                    }
+                    .hoverable(protectedInteraction)
+                    .clickable(
+                        interactionSource = protectedInteraction,
+                        indication = null
                     ) {
                         onSelecionarProtegidas()
                     }
@@ -2258,7 +2393,7 @@ private fun BottomAreaSelector(
 
         Box(
             modifier = Modifier
-                .offset(x = offsetX)
+                .offset(x = thumbOffset)
                 .size(
                     width = halfWidth,
                     height = thumbSize
@@ -2276,10 +2411,11 @@ private fun BottomAreaSelector(
             ) {
                 Image(
                     painter = painterResource(
-                        if (areaProtegidaSelecionada)
+                        if (areaProtegidaSelecionada) {
                             R.drawable.ic_secret
-                        else
+                        } else {
                             R.drawable.ic_protecoes
+                        }
                     ),
                     contentDescription = null,
                     modifier = Modifier.size(
@@ -2288,10 +2424,7 @@ private fun BottomAreaSelector(
                 )
 
                 Text(
-                    text = if (areaProtegidaSelecionada)
-                        "Áreas"
-                    else
-                        "Ajuda",
+                    text = availableLabel.take(visibleCharacters),
                     color = Color.White,
                     fontSize = if (isLandscape) 13.sp else 20.sp,
                     maxLines = 1
@@ -2300,9 +2433,81 @@ private fun BottomAreaSelector(
         }
     }
 }
+
 /* =========================================================
    TEMA
 ========================================================= */
+
+@Composable
+private fun TypewriterText(
+    text: String,
+    modifier: Modifier = Modifier,
+    color: Color = Color.Unspecified,
+    fontSize: TextUnit = TextUnit.Unspecified,
+    lineHeight: TextUnit = TextUnit.Unspecified,
+    letterSpacing: TextUnit = TextUnit.Unspecified,
+    textAlign: TextAlign? = null,
+    maxLines: Int = Int.MAX_VALUE
+) {
+    var caracteresVisiveis by remember(text) {
+        mutableIntStateOf(0)
+    }
+
+    LaunchedEffect(text) {
+        caracteresVisiveis = 0
+
+        for (i in 1..text.length) {
+            caracteresVisiveis = i
+            delay(22)
+        }
+    }
+
+    Text(
+        text = text.take(caracteresVisiveis),
+        modifier = modifier,
+        color = color,
+        fontSize = fontSize,
+        lineHeight = lineHeight,
+        letterSpacing = letterSpacing,
+        textAlign = textAlign,
+        maxLines = maxLines
+    )
+}
+
+@Composable
+private fun Modifier.fadeAndPress(): Modifier {
+
+    val interactionSource = remember {
+        MutableInteractionSource()
+    }
+
+    val pressionado by
+        interactionSource.collectIsPressedAsState()
+
+    val hover by
+        interactionSource.collectIsHoveredAsState()
+
+    val escala by animateFloatAsState(
+        targetValue = when {
+            pressionado -> 0.97f
+            hover -> 1.015f
+            else -> 1f
+        },
+        animationSpec = tween(180),
+        label = "press_scale"
+    )
+
+    val alpha by animateFloatAsState(
+        targetValue = if (pressionado) 0.88f else 1f,
+        animationSpec = tween(180),
+        label = "press_alpha"
+    )
+
+    return this
+        .scale(escala)
+        .alpha(alpha)
+        .hoverable(interactionSource)
+}
 
 @Composable
 private fun MulherAmparadaTheme(
@@ -2399,12 +2604,6 @@ private fun MulherAmparadaTheme(
         content = content
     )
 }
-
-/* =========================================================
-   FONTE
-========================================================= */
-
-
 
 /* =========================================================
    TELA PRINCIPAL
@@ -3081,104 +3280,77 @@ private fun PermissionCard(
 }
 
 /* =========================================================
-   HERO
+HERO
 ========================================================= */
 
 @Composable
 private fun Hero(
     c: AppColors,
 ) {
-
     Column(
-
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(
-                    start = 3.dp,
-                    end = 3.dp,
-                    top = 8.dp,
-                    bottom = 25.dp
-                )
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                start = 3.dp,
+                end = 3.dp,
+                top = 8.dp,
+                bottom = 25.dp
+            )
     ) {
-
         Box(
-
-            modifier =
-                Modifier
-                    .width(48.dp)
-                    .height(5.dp)
-                    .clip(
-                        RoundedCornerShape(50)
-                    )
-                    .background(c.pink)
+            modifier = Modifier
+                .width(48.dp)
+                .height(5.dp)
+                .clip(RoundedCornerShape(50))
+                .background(c.pink)
         )
 
-        Spacer(
-            Modifier.height(21.dp)
-        )
+        Spacer(Modifier.height(21.dp))
 
         Row(
-            verticalAlignment =
-                Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically
         ) {
-
             Box(
-
-                modifier =
-                    Modifier
-                        .size(6.dp)
-                        .clip(CircleShape)
-                        .background(c.pink)
+                modifier = Modifier
+                    .size(6.dp)
+                    .clip(CircleShape)
+                    .background(c.pink)
             )
 
-            Spacer(
-                Modifier.width(8.dp)
-            )
+            Spacer(Modifier.width(8.dp))
 
-            Text(
-                text =
-                    "SISTEMA DE PROTEÇÃO PESSOAL",
+            TypewriterText(
+                text = "SISTEMA DE PROTEÇÃO PESSOAL",
                 color = c.pinkLight,
                 fontSize = 9.sp,
-letterSpacing = 2.sp
+                letterSpacing = 2.sp
             )
         }
 
-        Spacer(
-            Modifier.height(13.dp)
-        )
+        Spacer(Modifier.height(13.dp))
 
-        Text(
-            text =
-                "Mulher\nAmparada.",
+        TypewriterText(
+            text = "Mulher\nAmparada.",
             color = c.white,
             fontSize = 48.sp,
-lineHeight = 43.sp,
+            lineHeight = 43.sp,
             letterSpacing = (-3).sp
         )
 
-        Spacer(
-            Modifier.height(20.dp)
-        )
+        Spacer(Modifier.height(20.dp))
 
-        Text(
-            text =
-                "Tecnologia criada para oferecer proteção, assistência e resposta rápida quando você precisar.",
-            modifier =
-                Modifier.widthIn(
-                    max = 370.dp
-                ),
+        TypewriterText(
+            text = "Tecnologia criada para oferecer proteção, assistência e resposta rápida quando você precisar.",
+            modifier = Modifier.widthIn(max = 370.dp),
             color = c.secondary,
             fontSize = 11.sp,
-lineHeight = 18.sp
+            lineHeight = 18.sp
         )
     }
 }
 
-
 /* =========================================================
-   VISÃO GERAL
+VISÃO GERAL
 ========================================================= */
 
 @Composable
@@ -3186,14 +3358,10 @@ private fun SystemOverview(
     c: AppColors,
     onClick: () -> Unit
 ) {
-
     Box(
-    modifier =
-        Modifier
+        modifier = Modifier
             .fillMaxWidth()
-            .clip(
-                RoundedCornerShape(32.dp)
-            )
+            .clip(RoundedCornerShape(32.dp))
             .background(
                 Brush.linearGradient(
                     listOf(
@@ -3207,126 +3375,86 @@ private fun SystemOverview(
                 c.borderLight,
                 RoundedCornerShape(32.dp)
             )
-            .clickable {
-                onClick()
-            }
+            .animatedPress(onClick)
             .padding(22.dp)
-) {
-
+    ) {
         Row(
-
-            modifier =
-                Modifier.fillMaxWidth(),
-
-            verticalAlignment =
-                Alignment.CenterVertically,
-
-            horizontalArrangement =
-                Arrangement.SpaceBetween
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-
             Column(
-
-                modifier =
-                    Modifier.weight(1f),
-
-                verticalArrangement =
-                    Arrangement.spacedBy(8.dp)
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-
-                Text(
+                TypewriterText(
                     "ESTADO DO SISTEMA",
                     color = c.muted,
                     fontSize = 9.sp,
-letterSpacing = 1.5.sp
+                    letterSpacing = 1.5.sp
                 )
 
-                Text(
+                TypewriterText(
                     "Versão do app",
                     color = c.text,
-                    fontSize = 21.sp,
-)
+                    fontSize = 21.sp
+                )
 
-                Text(
+                TypewriterText(
                     "Veja as informações técnicas do seu aplicativo!",
                     color = c.secondary,
                     fontSize = 10.sp,
-lineHeight = 15.sp
+                    lineHeight = 15.sp
                 )
 
                 Row(
-                    verticalAlignment =
-                        Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-
                     Box(
-
-                        modifier =
-                            Modifier
-                                .size(7.dp)
-                                .clip(CircleShape)
-                                .background(c.green)
+                        modifier = Modifier
+                            .size(7.dp)
+                            .clip(CircleShape)
+                            .background(c.green)
                     )
 
-                    Spacer(
-                        Modifier.width(8.dp)
-                    )
+                    Spacer(Modifier.width(8.dp))
 
-                    Text(
+                    TypewriterText(
                         "SISTEMA DISPONÍVEL",
                         color = c.green,
                         fontSize = 9.sp,
-letterSpacing = .8.sp
+                        letterSpacing = .8.sp
                     )
                 }
             }
 
             Box(
-
-                modifier =
-                    Modifier
-                        .size(67.dp)
-                        .clip(
-                            RoundedCornerShape(24.dp)
-                        )
-                        .background(
-                            c.pink.copy(.10f)
-                        )
+                modifier = Modifier
+                    .size(67.dp)
+                    .clip(RoundedCornerShape(24.dp))
+                    .background(c.pink.copy(.10f))
+                    .border(
+                        1.dp,
+                        c.pink.copy(.35f),
+                        RoundedCornerShape(24.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(49.dp)
                         .border(
                             1.dp,
-                            c.pink.copy(.35f),
-                            RoundedCornerShape(24.dp)
+                            c.pink.copy(.25f),
+                            RoundedCornerShape(19.dp)
                         ),
-
-                contentAlignment =
-                    Alignment.Center
-            ) {
-
-                Box(
-
-                    modifier =
-                        Modifier
-                            .size(49.dp)
-                            .border(
-                                1.dp,
-                                c.pink.copy(.25f),
-                                RoundedCornerShape(19.dp)
-                            ),
-
-                    contentAlignment =
-                        Alignment.Center
+                    contentAlignment = Alignment.Center
                 ) {
-
                     Image(
-                        painter =
-                            painterResource(
-                                R.drawable.ic_0001
-                            ),
+                        painter = painterResource(R.drawable.ic_0001),
                         contentDescription = null,
-                        modifier =
-                            Modifier.size(32.dp),
-                        contentScale =
-                            ContentScale.Fit
+                        modifier = Modifier.size(32.dp),
+                        contentScale = ContentScale.Fit
                     )
                 }
             }
@@ -3334,194 +3462,139 @@ letterSpacing = .8.sp
     }
 }
 
-
 /* =========================================================
-   TÍTULO DE SEÇÃO
+TÍTULO DE SEÇÃO
 ========================================================= */
 
 @Composable
 private fun SectionTitle(
     text: String,
     c: AppColors,
-purple: Boolean = false,
+    purple: Boolean = false,
     compactBottom: Boolean = false
 ) {
-
     Row(
-        verticalAlignment =
-            Alignment.CenterVertically,
-
-        
-    
+        verticalAlignment = Alignment.CenterVertically
     ) {
-
         Box(
-            modifier =
-                Modifier
-                    .size(7.dp)
-                    .clip(
-                        RoundedCornerShape(2.dp)
-                    )
-                    .background(
-                        if (purple)
-                            c.purple
-                        else
-                            c.pink
-                    )
+            modifier = Modifier
+                .size(7.dp)
+                .clip(RoundedCornerShape(2.dp))
+                .background(
+                    if (purple) c.purple else c.pink
+                )
         )
 
-        Spacer(
-            Modifier.width(10.dp)
-        )
+        Spacer(Modifier.width(10.dp))
 
-        Text(
-            text =
-                text.uppercase(),
+        TypewriterText(
+            text = text.uppercase(),
             color = c.muted,
             fontSize = 9.sp,
-letterSpacing = 2.sp
+            letterSpacing = 2.sp
         )
     }
 }
 
-
 /* =========================================================
-   PANIC
+PANIC
 ========================================================= */
 
 @Composable
 private fun PanicCard(
     c: AppColors,
 ) {
-
-    val context =
-        LocalContext.current
+    val context = LocalContext.current
 
     Box(
-
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .height(260.dp)
-                .clip(
-                    RoundedCornerShape(32.dp)
-                )
-                .background(
-                    if (
-                        isSystemInDarkTheme()
-                    )
-                        Color(0xFFFF315D)
-                    else
-                        Color(0xFFE7354D)
-                )
-                .border(
-                    1.dp,
-                    if (
-                        isSystemInDarkTheme()
-                    )
-                        Color(0xFFFF6B87)
-                    else
-                        Color(0xFFFF7184),
-                    RoundedCornerShape(32.dp)
-                )
-                .clickable {
-
-                    (context as? HubActivity)
-                        ?.ligarDireto("180")
-                },
-
-        contentAlignment =
-            Alignment.Center
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(260.dp)
+            .clip(RoundedCornerShape(32.dp))
+            .background(
+                if (isSystemInDarkTheme())
+                    Color(0xFFFF315D)
+                else
+                    Color(0xFFE7354D)
+            )
+            .border(
+                1.dp,
+                if (isSystemInDarkTheme())
+                    Color(0xFFFF6B87)
+                else
+                    Color(0xFFFF7184),
+                RoundedCornerShape(32.dp)
+            )
+            .animatedPress {
+                (context as? HubActivity)
+                    ?.ligarDireto("180")
+            },
+        contentAlignment = Alignment.Center
     ) {
-
         Box(
-
-            modifier =
-                Modifier
-                    .size(210.dp)
-                    .offset(
-                        x = 75.dp,
-                        y = (-125).dp
-                    )
-                    .clip(CircleShape)
-                    .background(
-                        if (
-                            isSystemInDarkTheme()
-                        )
-                            Color(0xFFFF6684)
-                        else
-                            Color(0xFFF75A76)
-                    )
+            modifier = Modifier
+                .size(210.dp)
+                .offset(
+                    x = 75.dp,
+                    y = (-125).dp
+                )
+                .clip(CircleShape)
+                .background(
+                    if (isSystemInDarkTheme())
+                        Color(0xFFFF6684)
+                    else
+                        Color(0xFFF75A76)
+                )
         )
 
         Box(
-
-            modifier =
-                Modifier
-                    .size(250.dp)
-                    .offset(
-                        x = (-105).dp,
-                        y = 170.dp
-                    )
-                    .clip(CircleShape)
-                    .background(
-                        if (
-                            isSystemInDarkTheme()
-                        )
-                            Color(0xFFE91E4F)
-                        else
-                            Color(0xFFD82C49)
-                    )
+            modifier = Modifier
+                .size(250.dp)
+                .offset(
+                    x = (-105).dp,
+                    y = 170.dp
+                )
+                .clip(CircleShape)
+                .background(
+                    if (isSystemInDarkTheme())
+                        Color(0xFFE91E4F)
+                    else
+                        Color(0xFFD82C49)
+                )
         )
 
         Column(
-
-            horizontalAlignment =
-                Alignment.CenterHorizontally,
-
-            verticalArrangement =
-                Arrangement.spacedBy(14.dp)
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-
             Image(
-                painter =
-                    painterResource(
-                        R.drawable.ic_0002
-                    ),
+                painter = painterResource(R.drawable.ic_0002),
                 contentDescription = null,
-                modifier =
-                    Modifier.size(62.dp)
+                modifier = Modifier.size(62.dp)
             )
 
-            Text(
-                "Precisa de ajuda?",
+            TypewriterText(
+                text = "Precisa de ajuda?",
                 color = Color.White,
                 fontSize = 30.sp,
-letterSpacing = (-1.2).sp,
+                letterSpacing = (-1.2).sp,
                 textAlign = TextAlign.Center
             )
 
-            Text(
-                "Toque aqui para acionar o suporte de emergência.",
-                modifier =
-                    Modifier.widthIn(
-                        max = 280.dp
-                    ),
-                color =
-                    Color.White.copy(
-                        alpha = .92f
-                    ),
+            TypewriterText(
+                text = "Toque aqui para acionar o suporte de emergência.",
+                modifier = Modifier.widthIn(max = 280.dp),
+                color = Color.White.copy(alpha = .92f),
                 fontSize = 14.sp,
-lineHeight = 20.sp,
+                lineHeight = 20.sp,
                 textAlign = TextAlign.Center
             )
         }
     }
 }
 
-
 /* =========================================================
-   SENSOR
+SENSOR
 ========================================================= */
 
 @Composable
@@ -3536,7 +3609,6 @@ private fun SensorCard(
     onClick: () -> Unit,
     c: AppColors,
 ) {
-
     val background =
         if (active) {
             Brush.linearGradient(
@@ -3556,251 +3628,159 @@ private fun SensorCard(
         }
 
     Box(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .height(210.dp)
-                .clip(
-                    RoundedCornerShape(25.dp)
-                )
-                .background(background)
-                .border(
-                    1.dp,
-                    color.copy(
-                        alpha =
-                            if (active)
-                                .56f
-                            else
-                                .19f
-                    ),
-                    RoundedCornerShape(25.dp)
-                )
-                .clickable {
-                    onClick()
-                }
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(210.dp)
+            .clip(RoundedCornerShape(25.dp))
+            .background(background)
+            .border(
+                1.dp,
+                color.copy(
+                    alpha = if (active) .56f else .19f
+                ),
+                RoundedCornerShape(25.dp)
+            )
+            .animatedPress(onClick)
     ) {
-
         if (active) {
+            val transition = rememberInfiniteTransition(
+                label = "sensor_image"
+            )
 
-            val transition =
-                rememberInfiniteTransition(
-                    label = "sensor_image"
-                )
+            val scale by transition.animateFloat(
+                initialValue = 1f,
+                targetValue = 1.08f,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(durationMillis = 1800),
+                    repeatMode = RepeatMode.Reverse
+                ),
+                label = "sensor_scale"
+            )
 
-            val scale by
-                transition.animateFloat(
-                    initialValue = 1f,
-                    targetValue = 1.08f,
-                    animationSpec =
-                        infiniteRepeatable(
-                            animation =
-                                tween(
-                                    durationMillis = 1800
-                                ),
-                            repeatMode =
-                                RepeatMode.Reverse
-                        ),
-                    label = "sensor_scale"
-                )
-
-            val alpha by
-                transition.animateFloat(
-                    initialValue = 0.08f,
-                    targetValue = 0.22f,
-                    animationSpec =
-                        infiniteRepeatable(
-                            animation =
-                                tween(
-                                    durationMillis = 1800
-                                ),
-                            repeatMode =
-                                RepeatMode.Reverse
-                        ),
-                    label = "sensor_alpha"
-                )
+            val alpha by transition.animateFloat(
+                initialValue = 0.08f,
+                targetValue = 0.22f,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(durationMillis = 1800),
+                    repeatMode = RepeatMode.Reverse
+                ),
+                label = "sensor_alpha"
+            )
 
             Image(
-                painter =
-                    painterResource(
-                        activeImage
-                    ),
-
+                painter = painterResource(activeImage),
                 contentDescription = null,
-
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .graphicsLayer {
-                            scaleX = scale
-                            scaleY = scale
-                            this.alpha = alpha
-                        },
-
-                contentScale =
-                    ContentScale.Crop
+                modifier = Modifier
+                    .fillMaxSize()
+                    .graphicsLayer {
+                        scaleX = scale
+                        scaleY = scale
+                        this.alpha = alpha
+                    },
+                contentScale = ContentScale.Crop
             )
         }
 
         Column(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(22.dp),
-
-            verticalArrangement =
-                Arrangement.SpaceBetween
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(22.dp),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-
             Row(
-                modifier =
-                    Modifier.fillMaxWidth(),
-
-                verticalAlignment =
-                    Alignment.Top
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.Top
             ) {
-
                 Column(
-                    modifier =
-                        Modifier.weight(1f),
-
-                    verticalArrangement =
-                        Arrangement.spacedBy(8.dp)
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-
-                    Text(
+                    TypewriterText(
                         text = number,
                         color = c.muted,
                         fontSize = 9.sp,
                         letterSpacing = 1.5.sp
                     )
 
-                    Text(
+                    TypewriterText(
                         text = title,
                         color = c.text,
                         fontSize = 22.sp,
                         lineHeight = 25.sp,
                         letterSpacing = (-.7).sp,
-                        modifier =
-                            Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
 
-                Spacer(
-                    Modifier.width(14.dp)
-                )
+                Spacer(Modifier.width(14.dp))
 
                 Box(
-                    modifier =
-                        Modifier
-                            .size(55.dp)
-                            .clip(
-                                RoundedCornerShape(20.dp)
-                            )
-                            .background(
-                                color.copy(.075f)
-                            )
+                    modifier = Modifier
+                        .size(55.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(color.copy(.075f))
+                        .border(
+                            1.dp,
+                            color.copy(.27f),
+                            RoundedCornerShape(20.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(39.dp)
                             .border(
                                 1.dp,
-                                color.copy(.27f),
-                                RoundedCornerShape(20.dp)
+                                c.borderLight,
+                                RoundedCornerShape(16.dp)
                             ),
-
-                    contentAlignment =
-                        Alignment.Center
-                ) {
-
-                    Box(
-                        modifier =
-                            Modifier
-                                .size(39.dp)
-                                .border(
-                                    1.dp,
-                                    c.borderLight,
-                                    RoundedCornerShape(16.dp)
-                                ),
-
-                        contentAlignment =
-                            Alignment.Center
+                        contentAlignment = Alignment.Center
                     ) {
-
                         Image(
-                            painter =
-                                painterResource(icon),
-
+                            painter = painterResource(icon),
                             contentDescription = null,
-
-                            modifier =
-                                Modifier.size(24.dp)
+                            modifier = Modifier.size(24.dp)
                         )
                     }
                 }
             }
 
-            Text(
+            TypewriterText(
                 text = description,
-
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = 4.dp,
-                            end = 4.dp
-                        ),
-
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 4.dp,
+                        end = 4.dp
+                    ),
                 color = c.secondary,
-
                 fontSize = 10.sp,
                 lineHeight = 16.sp,
-
                 maxLines = 3
             )
 
             Row(
-                modifier =
-                    Modifier.fillMaxWidth(),
-
-                verticalAlignment =
-                    Alignment.CenterVertically,
-
-                horizontalArrangement =
-                    Arrangement.SpaceBetween
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-
                 Row(
-                    verticalAlignment =
-                        Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-
                     Box(
-                        modifier =
-                            Modifier
-                                .size(6.dp)
-                                .clip(CircleShape)
-                                .background(
-                                    if (active)
-                                        color
-                                    else
-                                        c.muted
-                                )
+                        modifier = Modifier
+                            .size(6.dp)
+                            .clip(CircleShape)
+                            .background(
+                                if (active) color else c.muted
+                            )
                     )
 
-                    Spacer(
-                        Modifier.width(8.dp)
-                    )
+                    Spacer(Modifier.width(8.dp))
 
-                    Text(
-                        text =
-                            if (active)
-                                "ATIVADO"
-                            else
-                                "DESATIVADO",
-
-                        color =
-                            if (active)
-                                color
-                            else
-                                c.muted,
-
+                    TypewriterText(
+                        text = if (active) "ATIVADO" else "DESATIVADO",
+                        color = if (active) color else c.muted,
                         fontSize = 9.sp,
                         letterSpacing = 1.2.sp
                     )
@@ -3817,7 +3797,7 @@ private fun SensorCard(
 }
 
 /* =========================================================
-   SWITCH
+SWITCH
 ========================================================= */
 
 @Composable
@@ -3826,56 +3806,39 @@ private fun FakeSwitch(
     active: Boolean,
     c: AppColors
 ) {
-
     Box(
-
-        modifier =
-            Modifier
-                .width(55.dp)
-                .height(36.dp)
+        modifier = Modifier
+            .width(55.dp)
+            .height(36.dp)
+            .clip(CircleShape)
+            .background(
+                if (active) color.copy(.35f)
+                else c.surfaceLight
+            )
+            .border(
+                1.dp,
+                if (active) color.copy(.75f)
+                else c.borderLight,
+                CircleShape
+            )
+            .padding(3.dp),
+        contentAlignment =
+            if (active) Alignment.CenterEnd
+            else Alignment.CenterStart
+    ) {
+        Box(
+            modifier = Modifier
+                .size(28.dp)
                 .clip(CircleShape)
                 .background(
-                    if (active)
-                        color.copy(.35f)
-                    else
-                        c.surfaceLight
+                    if (active) color else c.muted
                 )
-                .border(
-                    1.dp,
-                    if (active)
-                        color.copy(.75f)
-                    else
-                        c.borderLight,
-                    CircleShape
-                )
-                .padding(3.dp),
-
-        contentAlignment =
-            if (active)
-                Alignment.CenterEnd
-            else
-                Alignment.CenterStart
-    ) {
-
-        Box(
-
-            modifier =
-                Modifier
-                    .size(28.dp)
-                    .clip(CircleShape)
-                    .background(
-                        if (active)
-                            color
-                        else
-                            c.muted
-                    )
         )
     }
 }
 
-
 /* =========================================================
-   CARDS DE AÇÃO
+CARDS DE AÇÃO
 ========================================================= */
 
 @Composable
@@ -3887,155 +3850,106 @@ private fun ActionCard(
     gradient: List<Color>,
     accent: Color,
     c: AppColors,
-onClick: () -> Unit = {}
+    onClick: () -> Unit = {}
 ) {
-
     Row(
-
-    modifier =
-        Modifier
+        modifier = Modifier
             .fillMaxWidth()
             .height(128.dp)
-            .clip(
-                RoundedCornerShape(27.dp)
-            )
-            .background(
-                Brush.linearGradient(gradient)
-            )
+            .clip(RoundedCornerShape(27.dp))
+            .background(Brush.linearGradient(gradient))
             .border(
                 1.dp,
                 accent.copy(.31f),
                 RoundedCornerShape(27.dp)
             )
-            .clickable {
-                onClick()
-            }
+            .animatedPress(onClick)
             .padding(20.dp),
-
-    verticalAlignment =
-        Alignment.CenterVertically
-) {
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Box(
-
-            modifier =
-                Modifier
-                    .size(66.dp)
-                    .clip(
-                        RoundedCornerShape(23.dp)
-                    )
-                    .background(
-                        accent.copy(.09f)
-                    )
-                    .border(
-                        1.dp,
-                        accent.copy(.32f),
-                        RoundedCornerShape(23.dp)
-                    ),
-
-            contentAlignment =
-                Alignment.Center
+            modifier = Modifier
+                .size(66.dp)
+                .clip(RoundedCornerShape(23.dp))
+                .background(accent.copy(.09f))
+                .border(
+                    1.dp,
+                    accent.copy(.32f),
+                    RoundedCornerShape(23.dp)
+                ),
+            contentAlignment = Alignment.Center
         ) {
-
             Image(
-                painter =
-                    painterResource(icon),
+                painter = painterResource(icon),
                 contentDescription = null,
-                modifier =
-                    Modifier.size(35.dp)
+                modifier = Modifier.size(35.dp)
             )
         }
 
-        Spacer(
-            Modifier.width(16.dp)
-        )
+        Spacer(Modifier.width(16.dp))
 
         Column(
-
-            modifier =
-                Modifier.weight(1f),
-
-            verticalArrangement =
-                Arrangement.spacedBy(8.dp)
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-
-            Text(
-                title,
-                color =
-                    if (
-                        isSystemInDarkTheme()
-                    )
-                        Color.White
-                    else
-                        c.text,
+            TypewriterText(
+                text = title,
+                color = if (isSystemInDarkTheme())
+                    Color.White
+                else
+                    c.text,
                 fontSize = 16.sp,
-lineHeight = 18.sp
+                lineHeight = 18.sp
             )
 
-            Text(
-                description,
-                color =
-                    if (
-                        isSystemInDarkTheme()
-                    )
-                        Color.White.copy(.66f)
-                    else
-                        c.secondary,
+            TypewriterText(
+                text = description,
+                color = if (isSystemInDarkTheme())
+                    Color.White.copy(.66f)
+                else
+                    c.secondary,
                 fontSize = 10.sp,
-lineHeight = 15.sp
+                lineHeight = 15.sp
             )
 
-            Text(
-                "ATENDIMENTO DISPONÍVEL",
+            TypewriterText(
+                text = "ATENDIMENTO DISPONÍVEL",
                 color = accent,
                 fontSize = 7.sp,
-letterSpacing = 1.sp
+                letterSpacing = 1.sp
             )
         }
 
-        Spacer(
-            Modifier.width(16.dp)
-        )
+        Spacer(Modifier.width(16.dp))
 
         Box(
-
-            modifier =
-                Modifier
-                    .size(43.dp)
-                    .clip(
-                        RoundedCornerShape(16.dp)
-                    )
-                    .background(
-                        if (
-                            isSystemInDarkTheme()
-                        )
-                            Color.Black.copy(.13f)
-                        else
-                            Color.Black.copy(.05f)
-                    )
-                    .border(
-                        1.dp,
-                        accent.copy(.22f),
-                        RoundedCornerShape(16.dp)
-                    ),
-
-            contentAlignment =
-                Alignment.Center
+            modifier = Modifier
+                .size(43.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .background(
+                    if (isSystemInDarkTheme())
+                        Color.Black.copy(.13f)
+                    else
+                        Color.Black.copy(.05f)
+                )
+                .border(
+                    1.dp,
+                    accent.copy(.22f),
+                    RoundedCornerShape(16.dp)
+                ),
+            contentAlignment = Alignment.Center
         ) {
-
             Image(
-                painter =
-                    painterResource(arrow),
+                painter = painterResource(arrow),
                 contentDescription = null,
-                modifier =
-                    Modifier.size(19.dp)
+                modifier = Modifier.size(19.dp)
             )
         }
     }
 }
 
-
 /* =========================================================
-   ACESSO DE EMERGÊNCIA
+ACESSO DE EMERGÊNCIA
 ========================================================= */
 
 @Composable
@@ -4049,104 +3963,74 @@ private fun EmergencyAccess(
         subtitle = "Exiba o botão flutuante para pedir ajuda mesmo fora do aplicativo.",
         meta = "ACESSO EXTERNO",
         icon = R.drawable.ic_0013,
-        accent =
-            if (isSystemInDarkTheme())
-                Color(0xFFFFCF66)
-            else
-                Color(0xFFB87900),
+        accent = if (isSystemInDarkTheme())
+            Color(0xFFFFCF66)
+        else
+            Color(0xFFB87900),
         gradient = c.emergencyGradient,
         c = c,
-onClick = {
+        onClick = {
             activity?.mostrarBotaoEmergencia()
         }
     )
 }
 
 /* =========================================================
-   ÁREA PROTEGIDA
+ÁREA PROTEGIDA
 ========================================================= */
 
 @Composable
 private fun ProtectedArea(
     c: AppColors,
 ) {
+    val activity = LocalContext.current as? HubActivity
 
-val activity =
-    LocalContext.current as? HubActivity
-    
     ActionPortal(
-    title =
-        "Área protegida",
-
-    subtitle =
-        "Acesso protegido por biometria",
-
-    meta =
-        "AMBIENTE SEGURO",
-
-    icon =
-        R.drawable.ic_lock,
-
-    accent =
-        if (isSystemInDarkTheme())
+        title = "Área protegida",
+        subtitle = "Acesso protegido por biometria",
+        meta = "AMBIENTE SEGURO",
+        icon = R.drawable.ic_lock,
+        accent = if (isSystemInDarkTheme())
             Color(0xFFB9A7FF)
         else
             Color(0xFF684EC4),
-
-    gradient =
-        c.protectedGradient,
-
-    c = c,
-onClick = {
-        activity?.abrirAreaProtegida()
-    }
-)
+        gradient = c.protectedGradient,
+        c = c,
+        onClick = {
+            activity?.abrirAreaProtegida()
+        }
+    )
 }
 
 /* =========================================================
-   ÁREA DO AMPARO
+ÁREA DO AMPARO
 ========================================================= */
 
 @Composable
 private fun AmparoArea(
     c: AppColors,
 ) {
-
-    val activity =
-        LocalContext.current as? HubActivity
+    val activity = LocalContext.current as? HubActivity
 
     ActionPortal(
-
-        title =
-            "Área do amparo",
-
-        subtitle =
-            "Acesso protegido por biometria",
-
-        meta =
-            "ESPAÇO RESERVADO",
-
-        icon =
-            R.drawable.ic_0015,
-
-        accent =
-            if (isSystemInDarkTheme())
-                Color(0xFFE2A2F0)
-            else
-                Color(0xFFAD62C2),
-
-        gradient =
-            c.amparoGradient,
-
+        title = "Área do amparo",
+        subtitle = "Acesso protegido por biometria",
+        meta = "ESPAÇO RESERVADO",
+        icon = R.drawable.ic_0015,
+        accent = if (isSystemInDarkTheme())
+            Color(0xFFE2A2F0)
+        else
+            Color(0xFFAD62C2),
+        gradient = c.amparoGradient,
         c = c,
-onClick = {
+        onClick = {
             activity?.abrirHomeActivity()
         }
     )
 }
 
 /* =========================================================
-   PIN PAD
+PIN PAD
 ========================================================= */
 
 @Composable
@@ -4176,7 +4060,7 @@ private fun PinpadArea(
 }
 
 /* =========================================================
-   PORTAL
+PORTAL
 ========================================================= */
 
 @Composable
@@ -4188,181 +4072,121 @@ private fun ActionPortal(
     accent: Color,
     gradient: List<Color>,
     c: AppColors,
-onClick: () -> Unit = {}
+    onClick: () -> Unit = {}
 ) {
-
     Row(
-
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .height(185.dp)
-                .clip(
-                    RoundedCornerShape(28.dp)
-                )
-                .background(
-                    Brush.linearGradient(gradient)
-                )
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(185.dp)
+            .clip(RoundedCornerShape(28.dp))
+            .background(Brush.linearGradient(gradient))
+            .border(
+                1.dp,
+                accent.copy(.43f),
+                RoundedCornerShape(28.dp)
+            )
+            .animatedPress(onClick)
+            .padding(20.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(59.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .background(accent.copy(.09f))
                 .border(
                     1.dp,
-                    accent.copy(.43f),
-                    RoundedCornerShape(28.dp)
-                )
-                .clickable {
-    onClick()
-}
-                .padding(20.dp),
-
-        verticalAlignment =
-            Alignment.CenterVertically
-    ) {
-
-        Box(
-
-            modifier =
-                Modifier
-                    .size(59.dp)
-                    .clip(
-                        RoundedCornerShape(20.dp)
-                    )
-                    .background(
-                        accent.copy(.09f)
-                    )
+                    accent.copy(.45f),
+                    RoundedCornerShape(20.dp)
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(47.dp)
                     .border(
                         1.dp,
-                        accent.copy(.45f),
-                        RoundedCornerShape(20.dp)
+                        accent.copy(.25f),
+                        RoundedCornerShape(16.dp)
                     ),
-
-            contentAlignment =
-                Alignment.Center
-        ) {
-
-            Box(
-
-                modifier =
-                    Modifier
-                        .size(47.dp)
-                        .border(
-                            1.dp,
-                            accent.copy(.25f),
-                            RoundedCornerShape(16.dp)
-                        ),
-
-                contentAlignment =
-                    Alignment.Center
+                contentAlignment = Alignment.Center
             ) {
-
                 Image(
-                    painter =
-                        painterResource(icon),
+                    painter = painterResource(icon),
                     contentDescription = null,
-                    modifier =
-                        Modifier.size(31.dp)
+                    modifier = Modifier.size(31.dp)
                 )
             }
         }
 
-        Spacer(
-            Modifier.width(12.dp)
-        )
+        Spacer(Modifier.width(12.dp))
 
         Column(
-
-            modifier =
-                Modifier.weight(1f),
-
-            verticalArrangement =
-                Arrangement.spacedBy(9.dp)
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(9.dp)
         ) {
-
-            Text(
-                title,
-                color =
-                    if (
-                        isSystemInDarkTheme()
-                    )
-                        Color.White
-                    else
-                        c.text,
+            TypewriterText(
+                text = title,
+                color = if (isSystemInDarkTheme())
+                    Color.White
+                else
+                    c.text,
                 fontSize = 20.sp,
-letterSpacing = (-1).sp
+                letterSpacing = (-1).sp
             )
 
-            Text(
-                subtitle,
+            TypewriterText(
+                text = subtitle,
                 color = accent.copy(.85f),
                 fontSize = 9.sp,
-lineHeight = 14.sp
+                lineHeight = 14.sp
             )
 
             Row(
-                verticalAlignment =
-                    Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically
             ) {
-
                 Box(
-
-                    modifier =
-                        Modifier
-                            .size(6.dp)
-                            .border(
-                                1.dp,
-                                accent,
-                                RoundedCornerShape(2.dp)
-                            )
+                    modifier = Modifier
+                        .size(6.dp)
+                        .border(
+                            1.dp,
+                            accent,
+                            RoundedCornerShape(2.dp)
+                        )
                 )
 
-                Spacer(
-                    Modifier.width(8.dp)
-                )
+                Spacer(Modifier.width(8.dp))
 
-                Text(
-                    meta,
+                TypewriterText(
+                    text = meta,
                     color = accent,
                     fontSize = 7.sp,
-letterSpacing = 1.3.sp
+                    letterSpacing = 1.3.sp
                 )
             }
         }
 
-        Spacer(
-            Modifier.width(12.dp)
-        )
+        Spacer(Modifier.width(12.dp))
 
         Box(
-
-            modifier =
-                Modifier
-                    .size(39.dp)
-                    .clip(
-                        RoundedCornerShape(14.dp)
-                    )
-                    .background(
-                        accent.copy(.08f)
-                    )
-                    .border(
-                        1.dp,
-                        accent.copy(.32f),
-                        RoundedCornerShape(14.dp)
-                    ),
-
-            contentAlignment =
-                Alignment.Center
+            modifier = Modifier
+                .size(39.dp)
+                .clip(RoundedCornerShape(14.dp))
+                .background(accent.copy(.08f))
+                .border(
+                    1.dp,
+                    accent.copy(.32f),
+                    RoundedCornerShape(14.dp)
+                ),
+            contentAlignment = Alignment.Center
         ) {
-
             Image(
-                painter =
-                    painterResource(
-                        R.drawable.ic_arrow
-                    ),
+                painter = painterResource(R.drawable.ic_arrow),
                 contentDescription = null,
-                modifier =
-                    Modifier.size(17.dp)
+                modifier = Modifier.size(17.dp)
             )
         }
     }
-    
-    
+}
 
 }

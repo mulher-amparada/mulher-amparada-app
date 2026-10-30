@@ -95,7 +95,7 @@ Nesta seção, você encontrará informações sobre o **sistema operacional**, 
 
 ----
 
-# ✨️Mulher Amparada, uma demonstração da identidade do nosso aplicativo (não é uma tela de atualização de software oficial!)
+# ✨️Mulher Amparada, uma demonstração da identidade do nosso aplicativo (não é uma tela de atualização de software oficial!):
 
 <div align="center">
 

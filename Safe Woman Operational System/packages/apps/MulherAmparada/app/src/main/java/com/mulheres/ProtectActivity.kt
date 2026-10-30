@@ -2,8 +2,7 @@ package com.mulheres
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -659,14 +658,11 @@ private fun Hero(
             visible = mostrarIcone,
 
             enter =
-                scaleIn(
-                    initialScale = 0.35f,
-                    animationSpec = spring(
-                        dampingRatio = 0.65f,
-                        stiffness = 500f
+                fadeIn(
+                    animationSpec = tween(
+                        durationMillis = 550,
+                        easing = FastOutSlowInEasing
                     )
-                ) + fadeIn(
-                    animationSpec = tween(350)
                 )
         ) {
 
@@ -781,7 +777,6 @@ private fun Hero(
         )
     }
 }
-
 /* =========================================================
    TÍTULO DA SEÇÃO
 ========================================================= */

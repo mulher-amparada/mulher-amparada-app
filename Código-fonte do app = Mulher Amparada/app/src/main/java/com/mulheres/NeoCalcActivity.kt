@@ -1,5 +1,9 @@
 package com.mulheres
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.graphics.graphicsLayer
 import android.content.Context
 import androidx.compose.foundation.verticalScroll
 import android.content.Intent
@@ -289,6 +293,15 @@ val visorScrollVertical = rememberScrollState()
         mensagemTemporaria = "Erro"
         expr = ""
     }
+    
+    var iniciarAnimacao by remember {
+    mutableStateOf(false)
+}
+
+LaunchedEffect(Unit) {
+    delay(100)
+    iniciarAnimacao = true
+}
 
     if (telaPreta) {
         var toquesTela by remember { mutableIntStateOf(0) }
@@ -424,14 +437,16 @@ val visorScrollVertical = rememberScrollState()
                             calcular = ::calcular
                         )
 
-                        botoes.forEach { linha ->
-                            LinhaBotoes(
-                                cores = cores,
-                                botoes = linha,
-                                modifier = Modifier.weight(1f),
-                                paisagem = true
-                            )
-                        }
+                        botoes.forEachIndexed { indiceLinha, linha ->
+    LinhaBotoes(
+        cores = cores,
+        botoes = linha,
+        modifier = Modifier.weight(1f),
+        paisagem = true,
+        iniciarAnimacao = iniciarAnimacao,
+        indiceInicial = indiceLinha * 4
+    )
+}
                     }
                 }
             } else {
@@ -479,12 +494,14 @@ val visorScrollVertical = rememberScrollState()
                             calcular = ::calcular
                         )
 
-                        botoes.forEach { linha ->
-                            LinhaBotoes(
-                                cores = cores,
-                                botoes = linha
-                            )
-                        }
+                        botoes.forEachIndexed { indiceLinha, linha ->
+    LinhaBotoes(
+        cores = cores,
+        botoes = linha,
+        iniciarAnimacao = iniciarAnimacao,
+        indiceInicial = indiceLinha * 4
+    )
+}
                     }
                 }
             }
@@ -703,7 +720,9 @@ private fun LinhaBotoes(
     cores: CoresNeoCalc,
     botoes: List<BotaoCalculadora>,
     modifier: Modifier = Modifier,
-    paisagem: Boolean = false
+    paisagem: Boolean = false,
+    iniciarAnimacao: Boolean,
+    indiceInicial: Int = 0
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -712,7 +731,19 @@ private fun LinhaBotoes(
         ),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        botoes.forEach { botao ->
+        botoes.forEachIndexed { indice, botao ->
+            val ordemGlobal = indiceInicial + indice
+
+            val alpha by animateFloatAsState(
+                targetValue = if (iniciarAnimacao) 1f else 0f,
+                animationSpec = tween(
+                    durationMillis = 500,
+                    delayMillis = ordemGlobal * 70,
+                    easing = FastOutSlowInEasing
+                ),
+                label = "fade-botao-$ordemGlobal"
+            )
+
             val cor = when (botao.tipo) {
                 TipoBotao.ACAO -> cores.acao
                 TipoBotao.OPERADOR,
@@ -730,6 +761,9 @@ private fun LinhaBotoes(
                             Modifier.aspectRatio(1f)
                         }
                     )
+                    .graphicsLayer {
+                        this.alpha = alpha
+                    }
                     .clip(CircleShape)
                     .background(cor)
                     .clickable { botao.acao() },

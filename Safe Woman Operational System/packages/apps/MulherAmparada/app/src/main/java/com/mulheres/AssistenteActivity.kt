@@ -117,78 +117,74 @@ class AssistenteActivity : AppCompatActivity() {
     --------------------------------------------------------- */
 
     private fun autenticar() {
-        val executor = ContextCompat.getMainExecutor(this)
+    val executor = ContextCompat.getMainExecutor(this)
 
-        val autenticadores =
-            BiometricManager.Authenticators.BIOMETRIC_WEAK or
-                BiometricManager.Authenticators.DEVICE_CREDENTIAL
+    val autenticadores =
+        BiometricManager.Authenticators.BIOMETRIC_WEAK or
+            BiometricManager.Authenticators.DEVICE_CREDENTIAL
 
-        val manager = BiometricManager.from(this)
+    val manager = BiometricManager.from(this)
 
-        if (
-            manager.canAuthenticate(autenticadores) !=
-            BiometricManager.BIOMETRIC_SUCCESS
-        ) {
-            startActivity(
-                Intent(this, HubActivity::class.java)
-            )
-            finish()
+    when (manager.canAuthenticate(autenticadores)) {
+
+        BiometricManager.BIOMETRIC_SUCCESS -> {
+            // Continua para autenticação abaixo.
+        }
+
+        BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED,
+        BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE,
+        BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
+            entrarNaHub()
             return
         }
 
-        val biometricPrompt = BiometricPrompt(
-            this,
-            executor,
-            object : BiometricPrompt.AuthenticationCallback() {
-
-                override fun onAuthenticationSucceeded(
-                    result: BiometricPrompt.AuthenticationResult
-                ) {
-                    super.onAuthenticationSucceeded(result)
-
-                    startActivity(
-                        Intent(
-                            this@AssistenteActivity,
-                            HubActivity::class.java
-                        )
-                    )
-
-                    finish()
-                }
-
-                override fun onAuthenticationError(
-                    errorCode: Int,
-                    errString: CharSequence
-                ) {
-                    super.onAuthenticationError(
-                        errorCode,
-                        errString
-                    )
-
-                    startActivity(
-                        Intent(
-                            this@AssistenteActivity,
-                            HubActivity::class.java
-                        )
-                    )
-
-                    finish()
-                }
-
-                override fun onAuthenticationFailed() {
-                    super.onAuthenticationFailed()
-                }
-            }
-        )
-
-        val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Autenticação necessária")
-            .setSubtitle("Use biometria, PIN, padrão ou senha")
-            .setAllowedAuthenticators(autenticadores)
-            .build()
-
-        biometricPrompt.authenticate(promptInfo)
+        else -> {
+            finish()
+            return
+        }
     }
+
+    val biometricPrompt = BiometricPrompt(
+        this,
+        executor,
+        object : BiometricPrompt.AuthenticationCallback() {
+
+            override fun onAuthenticationSucceeded(
+                result: BiometricPrompt.AuthenticationResult
+            ) {
+                super.onAuthenticationSucceeded(result)
+                entrarNaHub()
+            }
+
+            override fun onAuthenticationError(
+                errorCode: Int,
+                errString: CharSequence
+            ) {
+                super.onAuthenticationError(errorCode, errString)
+
+                finish()
+            }
+
+            override fun onAuthenticationFailed() {
+                super.onAuthenticationFailed()
+            }
+        }
+    )
+
+    val promptInfo = BiometricPrompt.PromptInfo.Builder()
+        .setTitle("Autenticação necessária")
+        .setSubtitle("Use biometria, PIN, padrão ou senha")
+        .setAllowedAuthenticators(autenticadores)
+        .build()
+
+    biometricPrompt.authenticate(promptInfo)
+}
+
+private fun entrarNaHub() {
+    startActivity(
+        Intent(this, HubActivity::class.java)
+    )
+    finish()
 }
 
 

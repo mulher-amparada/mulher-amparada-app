@@ -1,5 +1,7 @@
 package com.mulheres
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -2475,6 +2477,51 @@ private fun TypewriterText(
 }
 
 @Composable
+private fun Modifier.animatedPress(
+    onClick: () -> Unit
+): Modifier {
+
+    val interactionSource = remember {
+        MutableInteractionSource()
+    }
+
+    val pressionado by
+        interactionSource.collectIsPressedAsState()
+
+    val hover by
+        interactionSource.collectIsHoveredAsState()
+
+    val escala by animateFloatAsState(
+        targetValue = when {
+            pressionado -> 0.97f
+            hover -> 1.015f
+            else -> 1f
+        },
+        animationSpec = tween(180),
+        label = "animated_press_scale"
+    )
+
+    val alpha by animateFloatAsState(
+        targetValue = if (pressionado) 0.88f else 1f,
+        animationSpec = tween(180),
+        label = "animated_press_alpha"
+    )
+
+    return this
+        .graphicsLayer {
+            scaleX = escala
+            scaleY = escala
+            this.alpha = alpha
+        }
+        .hoverable(interactionSource)
+        .clickable(
+            interactionSource = interactionSource,
+            indication = null,
+            onClick = onClick
+        )
+}
+
+@Composable
 private fun Modifier.fadeAndPress(): Modifier {
 
     val interactionSource = remember {
@@ -4187,6 +4234,4 @@ private fun ActionPortal(
             )
         }
     }
-}
-
 }

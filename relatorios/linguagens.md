@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-10-30T19:26:48Z
+- **Gerado em UTC:** 2026-10-30T19:42:08Z
 - **Linguagens identificadas:** 12
 - **Arquivos classificados:** 102
-- **Tamanho classificado:** 1943612 bytes
+- **Tamanho classificado:** 1944824 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -16,12 +16,12 @@
 
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
-| Kotlin | 56 | 1474666 | 75.87% |
+| Kotlin | 56 | 1475878 | 75.89% |
 | CSS | 18 | 235632 | 12.12% |
 | Shell | 4 | 90469 | 4.65% |
 | HTML | 11 | 68698 | 3.53% |
 | JavaScript | 4 | 33816 | 1.74% |
-| C | 1 | 18374 | 0.95% |
+| C | 1 | 18374 | 0.94% |
 | PHP | 1 | 9342 | 0.48% |
 | Julia | 1 | 5989 | 0.31% |
 | TypeScript | 1 | 3052 | 0.16% |
@@ -35,7 +35,7 @@
 
 - **Arquivos:** 1
 - **Tamanho:** 18374 bytes
-- **Percentual:** 0.95%
+- **Percentual:** 0.94%
 
 - `tools/observatorio.c`
 
@@ -104,8 +104,8 @@
 ### Kotlin
 
 - **Arquivos:** 56
-- **Tamanho:** 1474666 bytes
-- **Percentual:** 75.87%
+- **Tamanho:** 1475878 bytes
+- **Percentual:** 75.89%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt`

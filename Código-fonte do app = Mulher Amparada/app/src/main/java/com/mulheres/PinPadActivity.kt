@@ -200,7 +200,16 @@ private fun NeoCalcScreen(
     var status by remember { mutableStateOf("neutral") }
     var unlocking by remember { mutableStateOf(false) }
 val screenScale = remember { Animatable(1f) }
-val screenAlpha = remember { Animatable(1f) }
+val screenAlpha = remember { Animatable(0f) }
+LaunchedEffect(Unit) {
+    screenAlpha.animateTo(
+        targetValue = 1f,
+        animationSpec = tween(
+            durationMillis = 700,
+            easing = androidx.compose.animation.core.LinearEasing
+        )
+    )
+}
     var screenTaps by remember { mutableIntStateOf(0) }
 
     val configuration = LocalConfiguration.current
@@ -254,7 +263,7 @@ val secondaryColor = if (darkMode) {
                     screenScale.animateTo(
                         targetValue = 1.45f,
                         animationSpec = tween(
-                            durationMillis = 650,
+                            durationMillis = 450,
                             easing = androidx.compose.animation.core.FastOutSlowInEasing
                         )
                     )
@@ -264,7 +273,7 @@ val secondaryColor = if (darkMode) {
                     screenAlpha.animateTo(
                         targetValue = 0f,
                         animationSpec = tween(
-                            durationMillis = 650,
+                            durationMillis = 450,
                             easing = androidx.compose.animation.core.LinearEasing
                         )
                     )

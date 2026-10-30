@@ -156,20 +156,20 @@ private fun RankingScreen() {
             val paisagem = maxWidth > maxHeight
 
             AnimatedVisibility(
-                visible = mostrarConteudo,
-                enter = fadeIn(
-                    animationSpec = tween(
-                        durationMillis = 850,
-                        easing = FastOutSlowInEasing
-                    )
-                ) + slideInVertically(
-                    initialOffsetY = { it / 8 },
-                    animationSpec = tween(
-                        durationMillis = 850,
-                        easing = FastOutSlowInEasing
-                    )
-                )
-            ) {
+    visible = mostrarConteudo,
+    enter = fadeIn(
+        animationSpec = tween(
+            durationMillis = 850,
+            easing = FastOutSlowInEasing
+        )
+    ) + slideInVertically(
+        initialOffsetY = { fullHeight -> fullHeight / 8 },
+        animationSpec = tween(
+            durationMillis = 850,
+            easing = FastOutSlowInEasing
+        )
+    )
+) {
                 if (paisagem) {
                     Row(
                         modifier = Modifier.fillMaxSize(),

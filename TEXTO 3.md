@@ -122,7 +122,7 @@ e ele tem o jetpack compose e estilo via xml ativados!
 
 e a versão do gradle é 9.6!
 
-## Sobre as telas do aplicativo;
+## Sobre as telas do aplicativo:
 
 Temos elas (está organizado conforme foi adicionado, de forma cronológica):
 

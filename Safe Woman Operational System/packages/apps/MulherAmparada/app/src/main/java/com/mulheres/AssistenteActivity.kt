@@ -1,4 +1,3 @@
-
 package com.mulheres
 
 import android.content.Intent
@@ -162,7 +161,7 @@ class AssistenteActivity : AppCompatActivity() {
             ) {
                 super.onAuthenticationError(errorCode, errString)
 
-                finish()
+                
             }
 
             override fun onAuthenticationFailed() {

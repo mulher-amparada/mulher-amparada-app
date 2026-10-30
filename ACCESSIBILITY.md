@@ -1,4 +1,4 @@
-# Acessibilidade
+# 👤Acessibilidade:
 
 O Mulher Amparada possui recursos voltados à adaptação da experiência visual e de interação:
 

@@ -655,19 +655,14 @@ LaunchedEffect(Unit) {
     ) {
 
         AnimatedVisibility(
-            visible = mostrarIcone,
+    visible = mostrarIcone,
 
-            enter =
-                scaleIn(
-                    initialScale = 0.35f,
-                    animationSpec = spring(
-                        dampingRatio = 0.65f,
-                        stiffness = 500f
-                    )
-                ) + fadeIn(
-                    animationSpec = tween(350)
-                )
-        ) {
+    enter = fadeIn(
+        animationSpec = tween(
+            durationMillis = 550
+        )
+    )
+) {
 
             Box(
                 modifier =

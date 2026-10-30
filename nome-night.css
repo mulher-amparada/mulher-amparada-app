@@ -3,6 +3,16 @@
    FONTE
 ========================================================= */
 
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 @font-face {
 
     font-family: "Quicksand";
@@ -66,6 +76,7 @@ body {
 
     overflow-x: hidden;
 
+animation: fadeIn .55s ease both;
 
     display: flex;
 

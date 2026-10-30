@@ -2,6 +2,16 @@
    FONTE
 ========================================================= */
 
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 @font-face {
 
     font-family: "Quicksand";
@@ -66,7 +76,7 @@ body {
         
         sans-serif;
 
-    
+    animation: fadeIn .55s ease both;
         
         margin-left: 2.5%;
         margin-right: 2.5%;

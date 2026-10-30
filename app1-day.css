@@ -2,6 +2,18 @@
    FONTE
 ========================================================= */
 
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+
+
 @font-face {
     font-family: "Quicksand";
     src: url("font.ttf") format("truetype");
@@ -39,6 +51,7 @@ body {
 
     min-height: 100%;
 
+animation: fadeIn .55s ease both;
 }
 
 body {

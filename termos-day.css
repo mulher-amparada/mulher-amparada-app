@@ -6,6 +6,16 @@
     font-display: swap;
 }
 
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 * {
     box-sizing: border-box;
         -webkit-tap-highlight-color: transparent;   
@@ -25,6 +35,7 @@ body {
     background: #ffffff;
     color: #171717;
     font-family: "Quicksand", sans-serif;
+    animation: fadeIn .55s ease both;
 }
 
 .screen {

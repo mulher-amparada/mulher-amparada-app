@@ -2,6 +2,16 @@
    FONTE
 ========================================================= */
 
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 @font-face {
     font-family: "Quicksand";
     src: url("font.ttf") format("truetype");
@@ -50,7 +60,7 @@ body {
     font-family: "Quicksand", sans-serif;
 
     overflow-x: hidden;
-
+animation: fadeIn .55s ease both;
     display: flex;
     flex-direction: column;
 }

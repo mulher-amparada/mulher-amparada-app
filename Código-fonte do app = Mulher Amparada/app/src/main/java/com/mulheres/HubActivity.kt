@@ -2460,7 +2460,7 @@ private fun TypewriterText(
 
         for (i in 1..text.length) {
             caracteresVisiveis = i
-            delay(3)
+            delay(1)
         }
     }
 
@@ -3548,11 +3548,19 @@ PANIC
 ========================================================= */
 
 
+
 @Composable
 private fun PanicCard(
     c: AppColors,
 ) {
     val context = LocalContext.current
+
+    val interactionSource = remember {
+        MutableInteractionSource()
+    }
+
+    val pressionado by
+        interactionSource.collectIsPressedAsState()
 
     val transition = rememberInfiniteTransition(
         label = "panic_bubbles"
@@ -3563,7 +3571,7 @@ private fun PanicCard(
         targetValue = 1.35f,
         animationSpec = infiniteRepeatable(
             animation = tween(
-                durationMillis = 2200,
+                durationMillis = 1100,
                 easing = FastOutSlowInEasing
             ),
             repeatMode = RepeatMode.Restart
@@ -3576,7 +3584,7 @@ private fun PanicCard(
         targetValue = 0.08f,
         animationSpec = infiniteRepeatable(
             animation = tween(
-                durationMillis = 2200,
+                durationMillis = 1100,
                 easing = FastOutSlowInEasing
             ),
             repeatMode = RepeatMode.Restart
@@ -3589,8 +3597,8 @@ private fun PanicCard(
         targetValue = 1.35f,
         animationSpec = infiniteRepeatable(
             animation = tween(
-                durationMillis = 2200,
-                delayMillis = 700,
+                durationMillis = 1100,
+                delayMillis = 350,
                 easing = FastOutSlowInEasing
             ),
             repeatMode = RepeatMode.Restart
@@ -3603,13 +3611,43 @@ private fun PanicCard(
         targetValue = 0.08f,
         animationSpec = infiniteRepeatable(
             animation = tween(
-                durationMillis = 2200,
-                delayMillis = 700,
+                durationMillis = 1100,
+                delayMillis = 350,
                 easing = FastOutSlowInEasing
             ),
             repeatMode = RepeatMode.Restart
         ),
         label = "panic_second_bubble_alpha"
+    )
+
+    val scale by animateFloatAsState(
+        targetValue = if (pressionado) 1f else 1f,
+        animationSpec = tween(180),
+        label = "panic_scale"
+    )
+
+    val bubbleScaleFinal by animateFloatAsState(
+        targetValue = if (pressionado) bubbleScale else 1f,
+        animationSpec = tween(180),
+        label = "panic_bubble_final"
+    )
+
+    val bubbleAlphaFinal by animateFloatAsState(
+        targetValue = if (pressionado) bubbleAlpha else 0.35f,
+        animationSpec = tween(180),
+        label = "panic_alpha_final"
+    )
+
+    val secondBubbleScaleFinal by animateFloatAsState(
+        targetValue = if (pressionado) secondBubbleScale else 1f,
+        animationSpec = tween(180),
+        label = "panic_second_final"
+    )
+
+    val secondBubbleAlphaFinal by animateFloatAsState(
+        targetValue = if (pressionado) secondBubbleAlpha else 0.35f,
+        animationSpec = tween(180),
+        label = "panic_second_alpha_final"
     )
 
     Box(
@@ -3631,12 +3669,20 @@ private fun PanicCard(
                     Color(0xFFFF7184),
                 RoundedCornerShape(32.dp)
             )
-            .animatedPress {
+            .graphicsLayer {
+                scaleX = scale
+                scaleY = scale
+            }
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) {
                 (context as? HubActivity)
                     ?.ligarDireto("180")
             },
         contentAlignment = Alignment.Center
     ) {
+
         Box(
             modifier = Modifier
                 .size(210.dp)
@@ -3645,9 +3691,9 @@ private fun PanicCard(
                     y = (-125).dp
                 )
                 .graphicsLayer {
-                    scaleX = bubbleScale
-                    scaleY = bubbleScale
-                    alpha = bubbleAlpha
+                    scaleX = bubbleScaleFinal
+                    scaleY = bubbleScaleFinal
+                    alpha = bubbleAlphaFinal
                 }
                 .clip(CircleShape)
                 .background(
@@ -3666,9 +3712,9 @@ private fun PanicCard(
                     y = 170.dp
                 )
                 .graphicsLayer {
-                    scaleX = secondBubbleScale
-                    scaleY = secondBubbleScale
-                    alpha = secondBubbleAlpha
+                    scaleX = secondBubbleScaleFinal
+                    scaleY = secondBubbleScaleFinal
+                    alpha = secondBubbleAlphaFinal
                 }
                 .clip(CircleShape)
                 .background(
@@ -3683,6 +3729,7 @@ private fun PanicCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
+
             Image(
                 painter = painterResource(R.drawable.ic_0002),
                 contentDescription = null,
@@ -3708,6 +3755,7 @@ private fun PanicCard(
         }
     }
 }
+
 
 /* =========================================================
 SENSOR

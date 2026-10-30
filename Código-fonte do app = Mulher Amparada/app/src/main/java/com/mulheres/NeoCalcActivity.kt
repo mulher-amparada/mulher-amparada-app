@@ -737,8 +737,8 @@ private fun LinhaBotoes(
             val alpha by animateFloatAsState(
                 targetValue = if (iniciarAnimacao) 1f else 0f,
                 animationSpec = tween(
-                    durationMillis = 500,
-                    delayMillis = ordemGlobal * 70,
+                    durationMillis = 150,
+                    delayMillis = ordemGlobal * 30,
                     easing = FastOutSlowInEasing
                 ),
                 label = "fade-botao-$ordemGlobal"

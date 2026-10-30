@@ -94,21 +94,3 @@ Nesta seção, você encontrará informações sobre o **sistema operacional**, 
 ➡️ [TEXTO 6.md](https://github.com/mulher-amparada/mulher-amparada-app/blob/main/TEXTO%206.md)
 
 ----
-
-# ✨️Mulher Amparada, uma demonstração da identidade do nosso aplicativo (não é uma tela de atualização de software oficial!):
-
-<div align="center">
-
-<img
-  src="https://raw.githubusercontent.com/mulher-amparada/mulher-amparada-app/main/update-day.png"
-  alt="Mulher Amparada — versão 33"
-  width="700"
-  />
-
-<img
-  src="https://raw.githubusercontent.com/mulher-amparada/mulher-amparada-app/main/update-night.png"
-  alt="Mulher Amparada — versão 33"
-  width="700"
-  />
-
-</div>

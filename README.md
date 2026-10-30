@@ -26,7 +26,11 @@ No dia 24/10/2026, eu acabei errando a automação da branch main e code, eu que
 
 ----
 
+# 💬 Uma mensagem antes de tudo:
 
+Nesta seção, você encontrará a mensagem destinada às mulheres, com o propósito do projeto, sua proposta de acolhimento e o convite à participação das usuárias.
+
+➡️ [MESSAGE.md](https://github.com/mulher-amparada/mulher-amparada-app/blob/main/MESSAGE.md)
 
 ----
 

@@ -1,5 +1,6 @@
 package com.mulheres
 
+import android.view.animation.AlphaAnimation
 import android.Manifest
 import android.content.Context
 import android.content.Intent
@@ -178,6 +179,7 @@ controller.isAppearanceLightNavigationBars =
             R.layout.activity_gravar
         )
 
+
         cripto =
             Cripto(this)
 
@@ -186,6 +188,13 @@ controller.isAppearanceLightNavigationBars =
                 android.R.id.content
             )
 
+
+
+AlphaAnimation(0f, 1f).apply {
+    duration = 850
+    fillAfter = true
+    raiz.startAnimation(this)
+}
       
 
         btnRecord =

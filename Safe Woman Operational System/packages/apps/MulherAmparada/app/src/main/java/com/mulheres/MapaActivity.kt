@@ -1,5 +1,9 @@
 package com.mulheres
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.ui.graphics.graphicsLayer
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.ui.text.font.FontWeight
@@ -203,6 +207,20 @@ private fun MapaTela(
     val context =
         androidx.compose.ui.platform.LocalContext.current
 
+    val alphaTela = remember {
+        Animatable(0f)
+    }
+
+    LaunchedEffect(Unit) {
+        alphaTela.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(
+                durationMillis = 850,
+                easing = LinearEasing
+            )
+        )
+    }
+    
 val paisagem =
     LocalConfiguration.current.orientation ==
         AndroidConfiguration.ORIENTATION_LANDSCAPE
@@ -371,16 +389,20 @@ val paisagem =
     }
 
 
-    Box(
-    modifier = Modifier
-        .fillMaxSize()
-        .background(
-            if (dark) FundoEscuro else FundoClaro
-        )
-        .windowInsetsPadding(
-            WindowInsets.systemBars
-        )
-) {
+        Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .graphicsLayer {
+                alpha = alphaTela.value
+            }
+            .background(
+                if (dark) FundoEscuro else FundoClaro
+            )
+            .windowInsetsPadding(
+                WindowInsets.systemBars
+            )
+    ) {
+    
     val paddingHorizontal =
         if (paisagem) 64.dp else 10.dp
 

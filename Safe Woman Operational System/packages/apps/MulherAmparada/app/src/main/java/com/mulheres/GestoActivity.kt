@@ -1,5 +1,11 @@
 package com.mulheres
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import android.os.Bundle
 import androidx.core.view.WindowInsetsControllerCompat
@@ -80,6 +86,20 @@ private fun GestoScreen() {
 
 val configuration = LocalConfiguration.current
 
+val alphaTela = remember {
+    Animatable(0f)
+}
+
+LaunchedEffect(Unit) {
+    alphaTela.animateTo(
+        targetValue = 1f,
+        animationSpec = tween(
+            durationMillis = 850,
+            easing = LinearEasing
+        )
+    )
+}
+
 val paisagem =
     configuration.screenWidthDp > configuration.screenHeightDp
 
@@ -144,11 +164,15 @@ val paddingHorizontal =
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .background(background)
-            .verticalScroll(
-                rememberScrollState()
-            )
+    .fillMaxSize()
+    .graphicsLayer {
+        alpha = alphaTela.value
+    }
+    .background(background)
+    .verticalScroll(
+        rememberScrollState()
+    )
+    
 .padding(
     start = paddingHorizontal,
     end = paddingHorizontal,

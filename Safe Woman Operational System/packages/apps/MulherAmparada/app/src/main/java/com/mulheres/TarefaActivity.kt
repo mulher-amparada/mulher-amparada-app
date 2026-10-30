@@ -1,5 +1,9 @@
 package com.mulheres
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import android.content.Context
 import android.graphics.Color as AndroidColor
@@ -213,6 +217,20 @@ val paisagem =
     
     val context = LocalContext.current
 
+    val alphaTela = remember {
+        Animatable(0f)
+    }
+
+    LaunchedEffect(Unit) {
+        alphaTela.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(
+                durationMillis = 850,
+                easing = LinearEasing
+            )
+        )
+    }
+    
     val dark =
         androidx.compose.foundation.isSystemInDarkTheme()
 
@@ -357,9 +375,12 @@ CompositionLocalProvider(
     }
 ) {
 
-    Box(
+        Box(
         modifier = Modifier
             .fillMaxSize()
+            .graphicsLayer {
+                alpha = alphaTela.value
+            }
             .background(background)
     ) {
 

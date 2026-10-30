@@ -1,5 +1,11 @@
 package com.mulheres
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.graphicsLayer
 import android.graphics.Color as AndroidColor
 import android.os.Build
 import android.os.Bundle
@@ -102,6 +108,20 @@ val paisagem =
 val context = LocalContext.current
 val dark = isSystemInDarkTheme()
 
+val alphaTela = remember {
+    Animatable(0f)
+}
+
+LaunchedEffect(Unit) {
+    alphaTela.animateTo(
+        targetValue = 1f,
+        animationSpec = tween(
+            durationMillis = 850,
+            easing = LinearEasing
+        )
+    )
+}
+
 val background =
     if (dark) DarkBackground else LightBackground
 
@@ -138,7 +158,11 @@ CompositionLocalProvider(
     LocalOverscrollFactory provides null
 ) {
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+    .fillMaxSize()
+    .graphicsLayer {
+        alpha = alphaTela.value
+    },
         containerColor = Color.Transparent
     ) { paddingValues ->
 

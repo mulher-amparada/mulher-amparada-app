@@ -1,5 +1,8 @@
 package com.mulheres
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.LinearEasing
 import android.content.res.Configuration
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.withStyle
@@ -626,6 +629,20 @@ val landscape =
 
     val dark = isSystemInDarkTheme()
 
+val alphaTela = remember {
+    Animatable(0f)
+}
+
+LaunchedEffect(Unit) {
+    alphaTela.animateTo(
+        targetValue = 1f,
+        animationSpec = tween(
+            durationMillis = 850,
+            easing = LinearEasing
+        )
+    )
+}
+
     val pages = remember {
         mutableStateListOf<String>().also { list ->
             list.addAll(storage.loadPages())
@@ -660,7 +677,11 @@ val landscape =
         LocalOverscrollFactory provides null
     ) {
         Surface(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+    .fillMaxSize()
+    .graphicsLayer {
+        alpha = alphaTela.value
+    },
             color = if (dark) DarkBackground else LightBackground
         ) {
             Column(

@@ -49,6 +49,9 @@ https://coderlegion.com/33118/mulher-amparada-personalizacao-discricao-e-camadas
 - 💻 Coderlegion — 👤 Acessibilidade | Mulher Amparada:
 https://coderlegion.com/33153/acessibilidade-mulher-amparada
 
+- 💻 Coderlegion — 🌷Mulheres:
+https://coderlegion.com/33213/mulheres
+
 - 📰 Blogger — ⚒️ Funções do aplicativo Mulher Amparada:
 https://projetomulheramparadaapp.blogspot.com/2026/10/funcoes-do-aplicativo-mulher-amparada.html?m=1
 

@@ -55,6 +55,9 @@ https://coderlegion.com/33213/mulheres
 - 💻 Coderlegion — 🌷 Mulher Amparada: uma história de dedicação, reconstrução e tecnologia:
 https://coderlegion.com/33221/mulher-amparada-uma-historia-de-dedicacao-reconstrucao-e-tecnologia
 
+- 💻 Coderlegion — ⚠️MURAL DE AVISOS:
+https://coderlegion.com/33223/mural-de-avisos
+
 - 📰 Blogger — ⚒️ Funções do aplicativo Mulher Amparada:
 https://projetomulheramparadaapp.blogspot.com/2026/10/funcoes-do-aplicativo-mulher-amparada.html?m=1
 

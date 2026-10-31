@@ -3978,7 +3978,7 @@ private fun FakeSwitch(
     c: AppColors
 ) {
     val thumbOffset by animateDpAsState(
-        targetValue = if (active) 19.dp else 0.dp,
+        targetValue = if (active) 21.dp else 0.dp,
         animationSpec = tween(
             durationMillis = 350,
             easing = FastOutSlowInEasing

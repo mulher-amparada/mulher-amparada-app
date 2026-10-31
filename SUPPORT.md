@@ -6,6 +6,8 @@ Central de links oficiais, divulgação e referências públicas do projeto Mulh
 
 - 💬 Comunidade do WhatsApp: https://chat.whatsapp.com/GOhkROzwmGyBMUdKbmBLRt
 
+- 📨 Reddit: https://www.reddit.com/r/mulheramparada/?solution=bcd2003275ae0837bcd2003275ae0837&js_challenge=1&jsc_token=2824be10929bdc604753c70a67a1c331778fb9c662ab3584445d397ba371f543&jsc_orig_r=
+
 - 🌷 Tumblr — Mulher Amparada: um projeto gratuito e livre de anúncios:
   https://www.tumblr.com/mulheramparada/829407067773255680/mulher-amparada-um-projeto-gratuito-e-livre
 

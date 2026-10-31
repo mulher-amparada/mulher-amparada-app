@@ -65,6 +65,9 @@ https://coderlegion.com/33223/mural-de-avisos
 - 💻 Coderlegion — ⚒️Todas as funções do aplicativo:
 https://coderlegion.com/33225/todas-as-funcoes-do-aplicativo
 
+- 💻 Coderlegion — ⚙️Decisões técnicas:
+https://coderlegion.com/33233/decisoes-tecnicas
+
 - 📰 Blogger — ⚒️ Funções do aplicativo Mulher Amparada:
 https://projetomulheramparadaapp.blogspot.com/2026/10/funcoes-do-aplicativo-mulher-amparada.html?m=1
 

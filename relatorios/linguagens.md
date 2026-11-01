@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-11-01T19:06:52Z
+- **Gerado em UTC:** 2026-11-01T19:08:21Z
 - **Linguagens identificadas:** 13
-- **Arquivos classificados:** 103
-- **Tamanho classificado:** 1955097 bytes
+- **Arquivos classificados:** 105
+- **Tamanho classificado:** 1958223 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -16,9 +16,9 @@
 
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
-| Kotlin | 56 | 1488306 | 76.12% |
-| CSS | 18 | 237514 | 12.15% |
-| Shell | 4 | 90469 | 4.63% |
+| Kotlin | 56 | 1488306 | 76.00% |
+| CSS | 18 | 237514 | 12.13% |
+| Shell | 5 | 92475 | 4.72% |
 | HTML | 11 | 64333 | 3.29% |
 | JavaScript | 4 | 33816 | 1.73% |
 | C | 1 | 18374 | 0.94% |
@@ -26,9 +26,9 @@
 | Julia | 1 | 5989 | 0.31% |
 | TypeScript | 1 | 3052 | 0.16% |
 | Ruby | 1 | 2025 | 0.10% |
-| Makefile | 3 | 806 | 0.04% |
+| Java | 2 | 1150 | 0.06% |
+| Makefile | 3 | 1104 | 0.06% |
 | Python | 1 | 743 | 0.04% |
-| Java | 1 | 328 | 0.02% |
 
 ## Arquivos por linguagem
 
@@ -44,7 +44,7 @@
 
 - **Arquivos:** 18
 - **Tamanho:** 237514 bytes
-- **Percentual:** 12.15%
+- **Percentual:** 12.13%
 
 - `app1-day.css`
 - `app1-night.css`
@@ -85,11 +85,12 @@
 
 ### Java
 
-- **Arquivos:** 1
-- **Tamanho:** 328 bytes
-- **Percentual:** 0.02%
+- **Arquivos:** 2
+- **Tamanho:** 1150 bytes
+- **Percentual:** 0.06%
 
 - `Safe Woman Operational System/packages/apps/MulherAmparadaProfileAdmin/src/com/mulheres/profileadmin/MulherAmparadaProfileAdminReceiver.java`
+- `Safe Woman Operational System/packages/apps/MulherAmparadaProfileAdmin/src/com/mulheres/profileadmin/ProfileProvisioningActivity.java`
 
 ### JavaScript
 
@@ -114,7 +115,7 @@
 
 - **Arquivos:** 56
 - **Tamanho:** 1488306 bytes
-- **Percentual:** 76.12%
+- **Percentual:** 76.00%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt`
@@ -176,8 +177,8 @@
 ### Makefile
 
 - **Arquivos:** 3
-- **Tamanho:** 806 bytes
-- **Percentual:** 0.04%
+- **Tamanho:** 1104 bytes
+- **Percentual:** 0.06%
 
 - `Safe Woman Operational System/device/safe_woman/AndroidProducts.mk`
 - `Safe Woman Operational System/device/safe_woman/BoardConfig.mk`
@@ -209,12 +210,13 @@
 
 ### Shell
 
-- **Arquivos:** 4
-- **Tamanho:** 90469 bytes
-- **Percentual:** 4.63%
+- **Arquivos:** 5
+- **Tamanho:** 92475 bytes
+- **Percentual:** 4.72%
 
 - `Código-fonte do app = Mulher Amparada/make.sh`
 - `Safe Woman Operational System/build/envsetup.sh`
+- `Safe Woman Operational System/device/safe_woman/provision-mulher-amparada-profile.sh`
 - `Safe Woman Operational System/packages/apps/MulherAmparada/make.sh`
 - `executar-validacao.sh`
 

@@ -1,0 +1,25 @@
+# Jekyll / GitHub Pages
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+.jekyll-assets-cache/
+
+# Ruby / Bundler
+.bundle/
+vendor/bundle/
+
+# Android / Gradle
+.gradle/
+**/build/
+**/.gradle/
+local.properties
+*.iml
+
+# IDE
+.idea/
+.vscode/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db

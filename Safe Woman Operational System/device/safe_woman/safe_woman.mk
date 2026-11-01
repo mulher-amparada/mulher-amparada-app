@@ -12,10 +12,13 @@ PRODUCT_BRAND := SafeWoman
 PRODUCT_MODEL := Safe Woman Operational System
 PRODUCT_MANUFACTURER := SafeWoman
 
-# Mulher Amparada integrado ao sistema
+# Aplicativos integrados ao sistema
 PRODUCT_PACKAGES += \
-    MulherAmparada
+    MulherAmparada \
+    MulherAmparadaProfileAdmin
 
-# Allowlist de permissões privilegiadas
+# Arquivos de permissões, inicialização e provisionamento do perfil gerenciado
 PRODUCT_COPY_FILES += \
-    device/safe_woman/privapp-permissions-mulher-amparada.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp-permissions-mulher-amparada.xml
+    device/safe_woman/privapp-permissions-mulher-amparada.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp-permissions-mulher-amparada.xml \
+    device/safe_woman/init.safe_woman.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.safe_woman.rc \
+    device/safe_woman/provision-mulher-amparada-profile.sh:$(TARGET_COPY_OUT_PRODUCT)/bin/provision-mulher-amparada-profile.sh

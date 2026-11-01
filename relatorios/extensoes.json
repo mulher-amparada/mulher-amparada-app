@@ -1,37 +1,37 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-01T18:27:01Z",
-  "total_arquivos": 640,
-  "total_bytes": 95088384,
+  "gerado_em_utc": "2026-11-01T18:40:58Z",
+  "total_arquivos": 641,
+  "total_bytes": 95089181,
   "total_extensoes": 32,
   "extensoes": [
     {
       "extensao": ".md",
-      "quantidade_arquivos": 211,
-      "tamanho_bytes": 410413,
-      "percentual_arquivos": 32.97,
+      "quantidade_arquivos": 212,
+      "tamanho_bytes": 411217,
+      "percentual_arquivos": 33.07,
       "percentual_bytes": 0.43
     },
     {
       "extensao": ".xml",
       "quantidade_arquivos": 174,
       "tamanho_bytes": 217808,
-      "percentual_arquivos": 27.19,
+      "percentual_arquivos": 27.15,
       "percentual_bytes": 0.23
     },
     {
       "extensao": ".png",
       "quantidade_arquivos": 101,
       "tamanho_bytes": 76847070,
-      "percentual_arquivos": 15.78,
+      "percentual_arquivos": 15.76,
       "percentual_bytes": 80.82
     },
     {
       "extensao": ".kt",
       "quantidade_arquivos": 56,
       "tamanho_bytes": 1488306,
-      "percentual_arquivos": 8.75,
+      "percentual_arquivos": 8.74,
       "percentual_bytes": 1.57
     },
     {
@@ -44,7 +44,7 @@
     {
       "extensao": ".yml",
       "quantidade_arquivos": 15,
-      "tamanho_bytes": 98598,
+      "tamanho_bytes": 98588,
       "percentual_arquivos": 2.34,
       "percentual_bytes": 0.1
     },
@@ -66,34 +66,34 @@
       "extensao": ".jpg",
       "quantidade_arquivos": 4,
       "tamanho_bytes": 663516,
-      "percentual_arquivos": 0.63,
+      "percentual_arquivos": 0.62,
       "percentual_bytes": 0.7
     },
     {
       "extensao": ".js",
       "quantidade_arquivos": 4,
       "tamanho_bytes": 33816,
-      "percentual_arquivos": 0.63,
+      "percentual_arquivos": 0.62,
       "percentual_bytes": 0.04
     },
     {
       "extensao": ".properties",
       "quantidade_arquivos": 4,
       "tamanho_bytes": 3156,
-      "percentual_arquivos": 0.63,
+      "percentual_arquivos": 0.62,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".sh",
       "quantidade_arquivos": 4,
       "tamanho_bytes": 90469,
-      "percentual_arquivos": 0.63,
+      "percentual_arquivos": 0.62,
       "percentual_bytes": 0.1
     },
     {
       "extensao": ".json",
       "quantidade_arquivos": 3,
-      "tamanho_bytes": 15337,
+      "tamanho_bytes": 15340,
       "percentual_arquivos": 0.47,
       "percentual_bytes": 0.02
     },

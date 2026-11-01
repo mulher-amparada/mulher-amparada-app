@@ -65,7 +65,10 @@ jobs:
 
           mkdir -p "$destino"
 
-          rsync -a /tmp/aosp-components/ "$destino/"
+          # Copia o conteúdo dos repositórios, mas não os metadados Git
+          # internos de cada clone. Assim, os diretórios serão arquivos
+          # normais do repositório Safe Woman, e não submódulos Git.
+          rsync -a --exclude='.git' /tmp/aosp-components/ "$destino/"
 
       - name: Configurar Git LFS para arquivos grandes
         shell: bash
@@ -99,4 +102,11 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git commit -m "Importa componentes AOSP do Android 17"
+
+          # Integra commits que chegaram à main durante a execução,
+          # evitando rejeição por non-fast-forward. Conflitos interrompem
+          # o workflow; nenhum arquivo remoto é sobrescrito à força.
+          git fetch origin main
+          git rebase origin/main
+
           git push origin HEAD:main

@@ -1,0 +1,127 @@
+name: Compilar Android 17 para Cuttlefish
+
+on:
+  workflow_dispatch:
+    inputs:
+      jobs:
+        description: "Número de tarefas paralelas da compilação"
+        required: true
+        default: "8"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: compilar-cuttlefish-android17
+  cancel-in-progress: false
+
+jobs:
+  compilar:
+    name: Sincronizar e compilar AOSP Android 17
+    runs-on:
+      - self-hosted
+      - linux
+      - x64
+      - aosp-builder
+    timeout-minutes: 360
+
+    steps:
+      - name: Baixar o repositório
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          lfs: true
+
+      - name: Verificar os requisitos da máquina
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          [[ "$(uname -s)" == "Linux" ]] || {
+            echo "::error::O compilador exige Linux."
+            exit 1
+          }
+
+          [[ "$(uname -m)" == "x86_64" ]] || {
+            echo "::error::O host precisa ser x86_64."
+            exit 1
+          }
+
+          disco_kb="$(df -Pk "$HOME" | awk 'NR==2 {print $4}')"
+          disco_gb="$((disco_kb / 1024 / 1024))"
+
+          memoria_kb="$(awk '/MemTotal/ {print $2}' /proc/meminfo)"
+          memoria_gb="$((memoria_kb / 1024 / 1024))"
+
+          echo "Espaço livre: ${disco_gb} GB"
+          echo "Memória RAM: ${memoria_gb} GB"
+
+          if (( disco_gb < 400 )); then
+            echo "::error::São necessários pelo menos 400 GB livres."
+            exit 1
+          fi
+
+          if (( memoria_gb < 64 )); then
+            echo "::error::São necessários pelo menos 64 GB de RAM."
+            exit 1
+          fi
+
+      - name: Instalar dependências do host
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          sudo apt-get update
+          sudo apt-get install -y \
+            bc \
+            bison \
+            build-essential \
+            ccache \
+            curl \
+            flex \
+            fontconfig \
+            git \
+            git-lfs \
+            gnupg \
+            lib32z1-dev \
+            libelf-dev \
+            libncurses-dev \
+            libssl-dev \
+            libxml2-utils \
+            lz4 \
+            python3 \
+            rsync \
+            unzip \
+            zip \
+            zlib1g-dev
+
+      - name: Sincronizar e compilar Android 17 Cuttlefish
+        shell: bash
+        env:
+          JOBS: ${{ inputs.jobs }}
+          AOSP_DIR: ${{ runner.temp }}/aosp-android17-cuttlefish
+        run: |
+          set -euo pipefail
+
+          [[ "$JOBS" =~ ^[1-9][0-9]*$ ]] || {
+            echo "::error::O número de tarefas precisa ser um inteiro positivo."
+            exit 1
+          }
+
+          bash "Safe Woman Operational System/preparar-cuttlefish-android17.sh"
+
+      - name: Publicar resumo da execução
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Compilação Android 17 — Cuttlefish"
+            echo
+            echo "- Alvo: `aosp_cf_x86_64_only_phone-aosp_current-userdebug`"
+            echo "- Diretório AOSP: `${{ runner.temp }}/aosp-android17-cuttlefish`"
+            echo "- Resultado: ${{ job.status }}"
+            echo
+            echo "Os artefatos permanecem na máquina self-hosted. Este workflow não os envia ao GitHub."
+          } >> "$GITHUB_STEP_SUMMARY"

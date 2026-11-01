@@ -1,4 +1,4 @@
-# 👨🏾‍💻 Safe Woman Operational System
+# 👨🏾‍💻 Safe Woman Operational System:
 
 O **Safe Woman Operational System (Safe Woman OS)** é um projeto experimental de personalização do Android, baseado no **Android Open Source Project (AOSP)**. Seu objetivo é integrar o aplicativo **Mulher Amparada** à imagem do sistema e explorar uma configuração própria para execução no **Cuttlefish**, ambiente virtual de dispositivos Android.
 

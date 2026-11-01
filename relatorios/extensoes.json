@@ -1,9 +1,9 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-01T19:52:29Z",
-  "total_arquivos": 95898,
-  "total_bytes": 2109564564,
+  "gerado_em_utc": "2026-11-01T19:58:55Z",
+  "total_arquivos": 95901,
+  "total_bytes": 2109604834,
   "total_extensoes": 239,
   "extensoes": [
     {
@@ -79,7 +79,7 @@
     {
       "extensao": ".json",
       "quantidade_arquivos": 740,
-      "tamanho_bytes": 20722954,
+      "tamanho_bytes": 20750653,
       "percentual_arquivos": 0.77,
       "percentual_bytes": 0.98
     },
@@ -99,9 +99,9 @@
     },
     {
       "extensao": ".md",
-      "quantidade_arquivos": 406,
-      "tamanho_bytes": 8347131,
-      "percentual_arquivos": 0.42,
+      "quantidade_arquivos": 408,
+      "tamanho_bytes": 8354623,
+      "percentual_arquivos": 0.43,
       "percentual_bytes": 0.4
     },
     {
@@ -371,6 +371,13 @@
       "percentual_bytes": 0.01
     },
     {
+      "extensao": ".yml",
+      "quantidade_arquivos": 16,
+      "tamanho_bytes": 104102,
+      "percentual_arquivos": 0.02,
+      "percentual_bytes": 0.0
+    },
+    {
       "extensao": ".pb",
       "quantidade_arquivos": 15,
       "tamanho_bytes": 1779276,
@@ -381,13 +388,6 @@
       "extensao": ".pk8",
       "quantidade_arquivos": 15,
       "tamanho_bytes": 22042,
-      "percentual_arquivos": 0.02,
-      "percentual_bytes": 0.0
-    },
-    {
-      "extensao": ".yml",
-      "quantidade_arquivos": 15,
-      "tamanho_bytes": 99023,
       "percentual_arquivos": 0.02,
       "percentual_bytes": 0.0
     },

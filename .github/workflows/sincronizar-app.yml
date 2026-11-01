@@ -20,11 +20,11 @@ concurrency:
 jobs:
   sincronizar:
     name: Organizar e atualizar arquivos
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Baixar repositório
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: main

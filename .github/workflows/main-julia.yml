@@ -21,12 +21,12 @@ concurrency:
 jobs:
   executar-julia:
     name: Executar src/main.jl
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-latest
     timeout-minutes: 30
 
     steps:
       - name: Baixar repositorio
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
 
       - name: Instalar Julia
         uses: julia-actions/setup-julia@v3
@@ -62,7 +62,7 @@ jobs:
 
       - name: Disponibilizar resultados
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: resultados-ligue180-2019
           path: |

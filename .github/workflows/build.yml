@@ -238,7 +238,7 @@ jobs:
           ref: main
 
       - name: Baixar APK gerado
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v7
         with:
           name: mulher-amparada-release
           path: apk-gerado

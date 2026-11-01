@@ -23,12 +23,12 @@ concurrency:
 jobs:
   analisar:
     name: Analisar linguagens da main
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-latest
     timeout-minutes: 30
 
     steps:
       - name: Baixar repositório
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 0

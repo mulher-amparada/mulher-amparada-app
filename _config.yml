@@ -1,0 +1,19 @@
+# Configuração do GitHub Pages / Jekyll
+title: Mulher Amparada
+lang: pt-BR
+
+# O repositório também contém a árvore do AOSP.
+# Ela não faz parte do site e não deve ser percorrida pelo Jekyll.
+exclude:
+  - "Safe Woman Operational System"
+  - "Safe Woman Operational System/**"
+  - ".github"
+  - ".gitignore"
+  - "README.md"
+  - "LICENSE"
+  - "Gemfile"
+  - "Gemfile.lock"
+  - "vendor"
+  - "node_modules"
+  - "scripts"
+  - "Código-fonte do app = Mulher Amparada"

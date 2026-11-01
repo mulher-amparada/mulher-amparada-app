@@ -1,23 +1,23 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-01T19:21:45Z",
-  "total_arquivos": 2709,
-  "total_bytes": 103586657,
+  "gerado_em_utc": "2026-11-01T19:31:48Z",
+  "total_arquivos": 2710,
+  "total_bytes": 103592286,
   "total_extensoes": 79,
   "extensoes": [
     {
       "extensao": ".cpp",
       "quantidade_arquivos": 416,
       "tamanho_bytes": 2670527,
-      "percentual_arquivos": 15.36,
+      "percentual_arquivos": 15.35,
       "percentual_bytes": 2.58
     },
     {
       "extensao": ".h",
       "quantidade_arquivos": 389,
       "tamanho_bytes": 978133,
-      "percentual_arquivos": 14.36,
+      "percentual_arquivos": 14.35,
       "percentual_bytes": 0.94
     },
     {
@@ -29,9 +29,9 @@
     },
     {
       "extensao": ".md",
-      "quantidade_arquivos": 236,
-      "tamanho_bytes": 565624,
-      "percentual_arquivos": 8.71,
+      "quantidade_arquivos": 237,
+      "tamanho_bytes": 568192,
+      "percentual_arquivos": 8.75,
       "percentual_bytes": 0.55
     },
     {
@@ -45,7 +45,7 @@
       "extensao": "[sem extensão]",
       "quantidade_arquivos": 134,
       "tamanho_bytes": 61560,
-      "percentual_arquivos": 4.95,
+      "percentual_arquivos": 4.94,
       "percentual_bytes": 0.06
     },
     {
@@ -59,7 +59,7 @@
       "extensao": ".mk",
       "quantidade_arquivos": 118,
       "tamanho_bytes": 245350,
-      "percentual_arquivos": 4.36,
+      "percentual_arquivos": 4.35,
       "percentual_bytes": 0.24
     },
     {
@@ -72,9 +72,9 @@
     {
       "extensao": ".json",
       "quantidade_arquivos": 108,
-      "tamanho_bytes": 186718,
+      "tamanho_bytes": 194257,
       "percentual_arquivos": 3.99,
-      "percentual_bytes": 0.18
+      "percentual_bytes": 0.19
     },
     {
       "extensao": ".cc",
@@ -149,7 +149,7 @@
     {
       "extensao": ".yml",
       "quantidade_arquivos": 15,
-      "tamanho_bytes": 102977,
+      "tamanho_bytes": 98499,
       "percentual_arquivos": 0.55,
       "percentual_bytes": 0.1
     },

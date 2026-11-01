@@ -1,26 +1,26 @@
-name: Importar Cuttlefish do Android 17
+name: Importar componentes do Android 17
 
 on:
   workflow_dispatch:
     inputs:
       limite_mb:
-        description: "Limite máximo para a importação (MB)"
+        description: "Limite total da importação em MB"
         required: true
-        default: "500"
+        default: "4000"
         type: string
 
 permissions:
   contents: write
 
 concurrency:
-  group: importar-cuttlefish-android17
+  group: importar-componentes-android17
   cancel-in-progress: false
 
 jobs:
   importar:
-    name: Importar device/google/cuttlefish
+    name: Importar componentes AOSP Android 17
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 90
 
     steps:
       - name: Baixar o repositório Safe Woman
@@ -29,20 +29,39 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Baixar Cuttlefish da branch Android 17
+      - name: Baixar componentes da branch Android 17
         shell: bash
         run: |
           set -euo pipefail
 
-          git clone \
-            --depth 1 \
-            --recurse-submodules \
-            --branch android17-release \
-            https://android.googlesource.com/device/google/cuttlefish.git \
-            /tmp/cuttlefish-android17
+          mkdir -p /tmp/aosp-components
 
-          test -d /tmp/cuttlefish-android17
-          test -f /tmp/cuttlefish-android17/Android.bp -o -f /tmp/cuttlefish-android17/Android.mk
+          while IFS='|' read -r caminho repositorio; do
+            [[ -z "$caminho" ]] && continue
+
+            destino="/tmp/aosp-components/$caminho"
+            mkdir -p "$(dirname "$destino")"
+
+            echo "Baixando $caminho ..."
+            git clone \
+              --depth 1 \
+              --branch android17-release \
+              "https://android.googlesource.com/$repositorio" \
+              "$destino"
+
+            test -d "$destino"
+          done <<'COMPONENTES'
+          device/google/cuttlefish|device/google/cuttlefish
+          frameworks/base|platform/frameworks/base
+          packages/apps/ManagedProvisioning|platform/packages/apps/ManagedProvisioning
+          packages/apps/Settings|platform/packages/apps/Settings
+          packages/apps/Launcher3|platform/packages/apps/Launcher3
+          packages/modules/Permission|platform/packages/modules/Permission
+          packages/modules/NetworkStack|platform/packages/modules/NetworkStack
+          packages/modules/HealthFitness|platform/packages/modules/HealthFitness
+          system/sepolicy|platform/system/sepolicy
+          system/core|platform/system/core
+          COMPONENTES
 
       - name: Validar tamanho e preservar arquivos existentes
         env:
@@ -56,64 +75,135 @@ jobs:
           import shutil
           from pathlib import Path
 
-          source = Path("/tmp/cuttlefish-android17")
-          destination = Path("Safe Woman Operational System/device/google/cuttlefish")
-          limit_mb = int(os.environ["LIMITE_MB"])
+          base = Path("/tmp/aosp-components")
+          destino_base = Path("Safe Woman Operational System")
+          limite_mb = int(os.environ["LIMITE_MB"])
 
-          if limit_mb < 1:
+          componentes = [
+              "device/google/cuttlefish",
+              "frameworks/base",
+              "packages/apps/ManagedProvisioning",
+              "packages/apps/Settings",
+              "packages/apps/Launcher3",
+              "packages/modules/Permission",
+              "packages/modules/NetworkStack",
+              "packages/modules/HealthFitness",
+              "system/sepolicy",
+              "system/core",
+          ]
+
+          if limite_mb < 1:
               raise SystemExit("ERRO: o limite precisa ser maior que zero.")
 
-          files = [p for p in source.rglob("*") if p.is_file() and ".git" not in p.parts]
-          total_bytes = sum(p.stat().st_size for p in files)
-          total_mb = total_bytes / (1024 * 1024)
+          arquivos = []
+          tamanho_total = 0
 
-          oversized = [p for p in files if p.stat().st_size >= 95 * 1024 * 1024]
-          if oversized:
-              names = "\\n".join(str(p.relative_to(source)) for p in oversized)
+          for componente in componentes:
+              origem = base / componente
+              if not origem.is_dir():
+                  raise SystemExit(f"ERRO: componente ausente: {componente}")
+
+              for atual in origem.rglob("*"):
+                  if ".git" in atual.parts:
+                      continue
+
+                  relativo = atual.relative_to(base)
+                  arquivos.append((atual, relativo))
+
+                  if atual.is_file() and not atual.is_symlink():
+                      tamanho_total += atual.stat().st_size
+
+          tamanho_mb = tamanho_total / (1024 * 1024)
+
+          grandes = [
+              (origem, relativo)
+              for origem, relativo in arquivos
+              if origem.is_file()
+              and not origem.is_symlink()
+              and origem.stat().st_size >= 95 * 1024 * 1024
+          ]
+
+          if grandes:
+              nomes = "\\n".join(str(relativo) for _, relativo in grandes)
               raise SystemExit(
-                  "ERRO: existem arquivos com 95 MiB ou mais, incompatíveis "
-                  "com o limite de arquivo do GitHub:\\n" + names
+                  "ERRO: arquivos com 95 MiB ou mais não serão enviados ao GitHub:\\n"
+                  + nomes
               )
 
-          if total_mb > limit_mb:
+          if tamanho_mb > limite_mb:
               raise SystemExit(
-                  f"ERRO: a árvore ocupa {total_mb:.1f} MB e excede "
-                  f"o limite configurado de {limit_mb} MB."
+                  f"ERRO: a importação ocupa {tamanho_mb:.1f} MB e excede "
+                  f"o limite configurado de {limite_mb} MB. Nada foi copiado."
               )
 
-          conflicts = []
-          for src in files:
-              relative = src.relative_to(source)
-              dst = destination / relative
-              if dst.exists() and dst.read_bytes() != src.read_bytes():
-                  conflicts.append(str(relative))
+          conflitos = []
 
-          if conflicts:
-              names = "\\n".join(conflicts[:100])
+          for origem, relativo in arquivos:
+              destino = destino_base / relativo
+
+              if not destino.exists() and not destino.is_symlink():
+                  continue
+
+              if origem.is_symlink():
+                  if not destino.is_symlink() or os.readlink(origem) != os.readlink(destino):
+                      conflitos.append(str(relativo))
+              elif origem.is_dir():
+                  if destino.is_symlink() or not destino.is_dir():
+                      conflitos.append(str(relativo))
+              elif destino.is_symlink() or not destino.is_file():
+                  conflitos.append(str(relativo))
+              elif origem.read_bytes() != destino.read_bytes():
+                  conflitos.append(str(relativo))
+
+          if conflitos:
+              nomes = "\\n".join(conflitos[:100])
               raise SystemExit(
-                  "ERRO: há arquivos existentes com conteúdo diferente. "
-                  "Nada foi sobrescrito:\\n" + names
+                  "ERRO: arquivos existentes possuem conteúdo ou tipo diferente. "
+                  "Nada foi sobrescrito:\\n" + nomes
               )
 
-          for src in files:
-              relative = src.relative_to(source)
-              dst = destination / relative
-              if not dst.exists():
-                  dst.parent.mkdir(parents=True, exist_ok=True)
-                  shutil.copy2(src, dst)
+          novos = 0
 
-          print(f"Arquivos encontrados: {len(files)}")
-          print(f"Tamanho da origem: {total_mb:.1f} MB")
-          print(f"Destino: {destination}")
-          print("Arquivos existentes foram preservados.")
+          for origem, relativo in arquivos:
+              destino = destino_base / relativo
+
+              if destino.exists() or destino.is_symlink():
+                  continue
+
+              destino.parent.mkdir(parents=True, exist_ok=True)
+
+              if origem.is_symlink():
+                  destino.symlink_to(os.readlink(origem))
+              elif origem.is_dir():
+                  destino.mkdir(exist_ok=True)
+              else:
+                  shutil.copy2(origem, destino)
+                  novos += 1
+
+          print(f"Componentes verificados: {len(componentes)}")
+          print(f"Entradas encontradas: {len(arquivos)}")
+          print(f"Novos arquivos copiados: {novos}")
+          print(f"Tamanho total: {tamanho_mb:.1f} MB")
+          print(f"Destino: {destino_base}")
+          print("Nenhum arquivo existente foi sobrescrito ou excluído.")
           PY
 
-      - name: Conferir e registrar a importação
+      - name: Registrar somente os componentes importados
         shell: bash
         run: |
           set -euo pipefail
 
-          git add -- "Safe Woman Operational System/device/google/cuttlefish"
+          git add -- \
+            "Safe Woman Operational System/device/google/cuttlefish" \
+            "Safe Woman Operational System/frameworks/base" \
+            "Safe Woman Operational System/packages/apps/ManagedProvisioning" \
+            "Safe Woman Operational System/packages/apps/Settings" \
+            "Safe Woman Operational System/packages/apps/Launcher3" \
+            "Safe Woman Operational System/packages/modules/Permission" \
+            "Safe Woman Operational System/packages/modules/NetworkStack" \
+            "Safe Woman Operational System/packages/modules/HealthFitness" \
+            "Safe Woman Operational System/system/sepolicy" \
+            "Safe Woman Operational System/system/core"
 
           if git diff --cached --quiet; then
             echo "Nenhum arquivo novo para registrar."
@@ -123,5 +213,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git commit -m "Importa Cuttlefish do Android 17"
+          git commit -m "Importa componentes AOSP do Android 17"
           git push origin HEAD:main

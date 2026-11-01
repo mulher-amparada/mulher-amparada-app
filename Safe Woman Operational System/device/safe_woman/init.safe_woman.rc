@@ -1,0 +1,10 @@
+# Provisiona o perfil gerenciado depois que o Android conclui a inicialização.
+on property:sys.boot_completed=1
+    start safe_woman_managed_profile
+
+service safe_woman_managed_profile /system/bin/sh /product/bin/provision-mulher-amparada-profile.sh
+    class late_start
+    user root
+    group root
+    disabled
+    oneshot

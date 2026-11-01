@@ -7,6 +7,13 @@
         android:label="Mulher Amparada - Administrador do perfil"
         android:supportsRtl="true">
 
+        <activity
+            android:name=".ProfileProvisioningActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <receiver
             android:name=".MulherAmparadaProfileAdminReceiver"
             android:description="@string/profile_admin_description"

@@ -37,7 +37,7 @@ jobs:
             -wipe-data
           disable-animations: true
           script: |
-            set -euo pipefail
+            set -eu
 
             APK="Código-fonte do app = Mulher Amparada/app-release.apk"
 

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_admin_label">Mulher Amparada - Administrador do perfil</string>
+    <string name="profile_admin_description">Administrador responsável pelo perfil gerenciado do Mulher Amparada no Safe Woman Operational System.</string>
+</resources>

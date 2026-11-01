@@ -1,9 +1,9 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-01T21:35:09Z",
-  "total_arquivos": 95907,
-  "total_bytes": 2109610144,
+  "gerado_em_utc": "2026-11-01T21:12:41Z",
+  "total_arquivos": 95903,
+  "total_bytes": 2109606521,
   "total_extensoes": 238,
   "extensoes": [
     {
@@ -99,8 +99,8 @@
     },
     {
       "extensao": ".md",
-      "quantidade_arquivos": 416,
-      "tamanho_bytes": 8370240,
+      "quantidade_arquivos": 414,
+      "tamanho_bytes": 8367365,
       "percentual_arquivos": 0.43,
       "percentual_bytes": 0.4
     },
@@ -281,8 +281,8 @@
     },
     {
       "extensao": ".gitignore",
-      "quantidade_arquivos": 35,
-      "tamanho_bytes": 2431,
+      "quantidade_arquivos": 34,
+      "tamanho_bytes": 2151,
       "percentual_arquivos": 0.04,
       "percentual_bytes": 0.0
     },
@@ -385,13 +385,6 @@
       "percentual_bytes": 0.0
     },
     {
-      "extensao": ".yml",
-      "quantidade_arquivos": 15,
-      "tamanho_bytes": 95918,
-      "percentual_arquivos": 0.02,
-      "percentual_bytes": 0.0
-    },
-    {
       "extensao": ".cfg",
       "quantidade_arquivos": 14,
       "tamanho_bytes": 15221,
@@ -411,6 +404,13 @@
       "tamanho_bytes": 288873,
       "percentual_arquivos": 0.01,
       "percentual_bytes": 0.01
+    },
+    {
+      "extensao": ".yml",
+      "quantidade_arquivos": 14,
+      "tamanho_bytes": 95450,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.0
     },
     {
       "extensao": ".kts",

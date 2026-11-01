@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-11-01T19:58:54Z
+- **Gerado em UTC:** 2026-11-01T20:07:01Z
 - **Linguagens identificadas:** 23
-- **Arquivos classificados:** 52594
-- **Tamanho classificado:** 495313439 bytes
+- **Arquivos classificados:** 52593
+- **Tamanho classificado:** 495311436 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -24,7 +24,7 @@
 | C | 293 | 1071541 | 0.22% |
 | Python | 112 | 675752 | 0.14% |
 | Rust | 75 | 565382 | 0.11% |
-| Shell | 179 | 520319 | 0.11% |
+| Shell | 178 | 518316 | 0.10% |
 | Makefile | 172 | 467019 | 0.09% |
 | CSS | 24 | 258911 | 0.05% |
 | Go | 20 | 212270 | 0.04% |
@@ -52588,9 +52588,9 @@
 
 ### Shell
 
-- **Arquivos:** 179
-- **Tamanho:** 520319 bytes
-- **Percentual:** 0.11%
+- **Arquivos:** 178
+- **Tamanho:** 518316 bytes
+- **Percentual:** 0.10%
 
 - `Código-fonte do app = Mulher Amparada/make.sh`
 - `Safe Woman Operational System/build/envsetup.sh`
@@ -52755,7 +52755,6 @@
 - `Safe Woman Operational System/packages/apps/Settings/tests/robotests/new_tests_hook.sh`
 - `Safe Woman Operational System/packages/modules/HealthFitness/testapps/toolbox/install_priv_toolbox.sh`
 - `Safe Woman Operational System/packages/modules/HealthFitness/tests/cts/hostsidetests/healthconnect/host/src/SaveBuildApexAndApkFile.sh`
-- `Safe Woman Operational System/preparar-cuttlefish-android17.sh`
 - `Safe Woman Operational System/system/core/bootstat/boot_reason_test.sh`
 - `Safe Woman Operational System/system/core/code_coverage/seccomp_policy/generate.sh`
 - `Safe Woman Operational System/system/core/debuggerd/seccomp_policy/generate.sh`

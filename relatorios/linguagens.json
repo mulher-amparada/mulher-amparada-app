@@ -3,10 +3,10 @@
   "branch": "main",
   "fonte_classificacao": "GitHub Linguist",
   "fonte_lista_linguagens": "https://github.com/github-linguist/linguist",
-  "gerado_em_utc": "2026-11-01T19:58:54Z",
+  "gerado_em_utc": "2026-11-01T20:07:01Z",
   "total_linguagens": 23,
-  "total_arquivos_classificados": 52594,
-  "total_bytes_classificados": 495313439,
+  "total_arquivos_classificados": 52593,
+  "total_bytes_classificados": 495311436,
   "linguagens": [
     {
       "nome": "AIDL",
@@ -52554,8 +52554,8 @@
     },
     {
       "nome": "Shell",
-      "tamanho_bytes": 520319,
-      "percentual": "0.11",
+      "tamanho_bytes": 518316,
+      "percentual": "0.10",
       "arquivos": [
         "Código-fonte do app = Mulher Amparada/make.sh",
         "Safe Woman Operational System/build/envsetup.sh",
@@ -52720,7 +52720,6 @@
         "Safe Woman Operational System/packages/apps/Settings/tests/robotests/new_tests_hook.sh",
         "Safe Woman Operational System/packages/modules/HealthFitness/testapps/toolbox/install_priv_toolbox.sh",
         "Safe Woman Operational System/packages/modules/HealthFitness/tests/cts/hostsidetests/healthconnect/host/src/SaveBuildApexAndApkFile.sh",
-        "Safe Woman Operational System/preparar-cuttlefish-android17.sh",
         "Safe Woman Operational System/system/core/bootstat/boot_reason_test.sh",
         "Safe Woman Operational System/system/core/code_coverage/seccomp_policy/generate.sh",
         "Safe Woman Operational System/system/core/debuggerd/seccomp_policy/generate.sh",

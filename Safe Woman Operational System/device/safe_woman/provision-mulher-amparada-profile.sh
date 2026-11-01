@@ -3,6 +3,7 @@
 PROFILE_NAME="Mulher Amparada"
 PROFILE_PACKAGE="com.mulheres.profileadmin"
 PROFILE_OWNER="$PROFILE_PACKAGE/.MulherAmparadaProfileAdminReceiver"
+PROFILE_SETUP_ACTIVITY="$PROFILE_PACKAGE/.ProfileProvisioningActivity"
 APP_PACKAGE="com.mulheres"
 TAG="SafeWomanProfile"
 
@@ -22,21 +23,28 @@ if [ -z "$PROFILE_ID" ]; then
     exit 1
 fi
 
-# Garante que os pacotes pré-instalados estejam disponíveis no novo usuário.
+# Inicia o perfil antes de instalar e ativar o administrador.
+am start-user "$PROFILE_ID" >/dev/null 2>&1 || true
+
+# Disponibiliza os aplicativos de sistema no perfil recém-criado.
 pm install-existing --user "$PROFILE_ID" "$PROFILE_PACKAGE" >/dev/null 2>&1 || true
 pm install-existing --user "$PROFILE_ID" "$APP_PACKAGE" >/dev/null 2>&1 || true
 
-# Define o administrador como Profile Owner. Se já estiver configurado,
-# confirma a associação antes de considerar o provisionamento concluído.
-if dpm set-profile-owner --user "$PROFILE_ID" "$PROFILE_OWNER"; then
-    log -t "$TAG" "Profile Owner configurado para o usuário $PROFILE_ID."
-else
-    OWNER_STATE="$(dpm list-owners 2>&1)"
-    if ! printf '%s\n' "$OWNER_STATE" | grep -F "$PROFILE_OWNER" >/dev/null; then
+# Registra o Profile Owner somente na primeira configuração.
+PROFILE_OWNER_SET=0
+if ! dumpsys device_policy | grep -F "$PROFILE_OWNER" >/dev/null 2>&1; then
+    if dpm set-profile-owner --user "$PROFILE_ID" "$PROFILE_OWNER"; then
+        PROFILE_OWNER_SET=1
+        log -t "$TAG" "Profile Owner configurado para o usuário $PROFILE_ID."
+    else
         log -t "$TAG" "ERRO: não foi possível definir o Profile Owner."
-        log -t "$TAG" "$OWNER_STATE"
         exit 1
     fi
+fi
+
+# O aplicativo administrador habilita o perfil após a configuração.
+if [ "$PROFILE_OWNER_SET" = "1" ]; then
+    am start --user "$PROFILE_ID" -n "$PROFILE_PACKAGE/$PROFILE_SETUP_ACTIVITY" >/dev/null 2>&1
 fi
 
 log -t "$TAG" "Perfil gerenciado do Mulher Amparada provisionado. ID=$PROFILE_ID"

@@ -2,9 +2,9 @@
 
 - **Repositório:** `mulher-amparada/mulher-amparada-app`
 - **Branch:** `main`
-- **Gerado em UTC:** 2026-11-01T21:12:41Z
-- **Arquivos analisados:** 95903
-- **Tamanho total:** 2109606521 bytes
+- **Gerado em UTC:** 2026-11-01T21:20:51Z
+- **Arquivos analisados:** 95905
+- **Tamanho total:** 2109607269 bytes
 - **Extensões encontradas:** 238
 
 > Inventário dos arquivos rastreados pelo Git que existem no checkout.
@@ -52,7 +52,7 @@
 | `.pem` | 40 | 104786 | 0.04% | 0.0% |
 | `.ttx` | 39 | 407184 | 0.04% | 0.02% |
 | `.hash` | 37 | 1517 | 0.04% | 0.0% |
-| `.gitignore` | 34 | 2151 | 0.04% | 0.0% |
+| `.gitignore` | 35 | 2431 | 0.04% | 0.0% |
 | `.textproto` | 34 | 314158 | 0.04% | 0.01% |
 | `.flags` | 30 | 33483 | 0.03% | 0.0% |
 | `.idc` | 28 | 26703 | 0.03% | 0.0% |
@@ -67,10 +67,10 @@
 | `.xsd` | 18 | 143403 | 0.02% | 0.01% |
 | `.pb` | 15 | 1779276 | 0.02% | 0.08% |
 | `.pk8` | 15 | 22042 | 0.02% | 0.0% |
+| `.yml` | 15 | 95918 | 0.02% | 0.0% |
 | `.cfg` | 14 | 15221 | 0.01% | 0.0% |
 | `.mp3` | 14 | 14126693 | 0.01% | 0.67% |
 | `.textpb` | 14 | 288873 | 0.01% | 0.01% |
-| `.yml` | 14 | 95450 | 0.01% | 0.0% |
 | `.kts` | 13 | 36847 | 0.01% | 0.0% |
 | `.clang-format` | 11 | 3834 | 0.01% | 0.0% |
 | `.svg` | 11 | 226082 | 0.01% | 0.01% |

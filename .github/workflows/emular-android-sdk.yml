@@ -1,0 +1,102 @@
+name: Emular Mulher Amparada (Android SDK)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  emular:
+    name: Iniciar Android virtual e testar o APK
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Preparar diretório de evidências
+        shell: bash
+        run: |
+          mkdir -p artefatos-emulador
+
+      - name: Iniciar Android Emulator e executar Mulher Amparada
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          emulator-options: >-
+            -no-window
+            -no-audio
+            -no-boot-anim
+            -gpu swiftshader_indirect
+            -no-snapshot
+            -wipe-data
+          disable-animations: true
+          script: |
+            set -euo pipefail
+
+            APK="Código-fonte do app = Mulher Amparada/app-release.apk"
+
+            if [ ! -s "$APK" ]; then
+              echo "ERRO: APK não encontrado ou vazio: $APK"
+              exit 1
+            fi
+
+            adb wait-for-device
+
+            for tentativa in $(seq 1 60); do
+              BOOT="$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')"
+              if [ "$BOOT" = "1" ]; then
+                break
+              fi
+              sleep 2
+            done
+
+            if [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" != "1" ]; then
+              echo "ERRO: o Android virtual não concluiu a inicialização."
+              exit 1
+            fi
+
+            adb shell settings put global window_animation_scale 0
+            adb shell settings put global transition_animation_scale 0
+            adb shell settings put global animator_duration_scale 0
+
+            adb install -r "$APK"
+
+            if adb root; then
+              adb wait-for-device
+              adb shell id > artefatos-emulador/acesso-adb.txt
+            else
+              echo "A imagem não disponibilizou adb root." > artefatos-emulador/acesso-adb.txt
+              adb shell id >> artefatos-emulador/acesso-adb.txt
+            fi
+
+            adb shell am start -n com.mulheres/.EntradaActivity
+            sleep 20
+
+            adb shell screencap -p /sdcard/mulher-amparada.png
+            adb pull /sdcard/mulher-amparada.png artefatos-emulador/tela-inicial.png
+
+            adb shell getprop > artefatos-emulador/propriedades-android.txt
+            adb logcat -d -t 5000 > artefatos-emulador/logcat.txt
+
+            echo "Emulação concluída."
+            echo "Versão Android:"
+            adb shell getprop ro.build.version.release
+            echo "Arquitetura:"
+            adb shell getprop ro.product.cpu.abi
+            echo "Pacote instalado:"
+            adb shell pm list packages | grep "com.mulheres"
+
+      - name: Publicar screenshot e logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mulher-amparada-android-emulator
+          path: artefatos-emulador/
+          if-no-files-found: warn
+          retention-days: 7

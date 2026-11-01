@@ -1,562 +1,1682 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-01T19:34:41Z",
-  "total_arquivos": 2711,
-  "total_bytes": 103593479,
-  "total_extensoes": 79,
+  "gerado_em_utc": "2026-11-01T19:52:29Z",
+  "total_arquivos": 95898,
+  "total_bytes": 2109564564,
+  "total_extensoes": 239,
   "extensoes": [
     {
-      "extensao": ".cpp",
-      "quantidade_arquivos": 416,
-      "tamanho_bytes": 2670527,
-      "percentual_arquivos": 15.34,
-      "percentual_bytes": 2.58
-    },
-    {
-      "extensao": ".h",
-      "quantidade_arquivos": 389,
-      "tamanho_bytes": 978133,
-      "percentual_arquivos": 14.35,
-      "percentual_bytes": 0.94
+      "extensao": ".java",
+      "quantidade_arquivos": 26886,
+      "tamanho_bytes": 349603466,
+      "percentual_arquivos": 28.04,
+      "percentual_bytes": 16.57
     },
     {
       "extensao": ".xml",
-      "quantidade_arquivos": 308,
-      "tamanho_bytes": 539977,
-      "percentual_arquivos": 11.36,
-      "percentual_bytes": 0.52
-    },
-    {
-      "extensao": ".md",
-      "quantidade_arquivos": 238,
-      "tamanho_bytes": 568862,
-      "percentual_arquivos": 8.78,
-      "percentual_bytes": 0.55
-    },
-    {
-      "extensao": ".bp",
-      "quantidade_arquivos": 204,
-      "tamanho_bytes": 331035,
-      "percentual_arquivos": 7.52,
-      "percentual_bytes": 0.32
-    },
-    {
-      "extensao": "[sem extensão]",
-      "quantidade_arquivos": 134,
-      "tamanho_bytes": 61560,
-      "percentual_arquivos": 4.94,
-      "percentual_bytes": 0.06
-    },
-    {
-      "extensao": ".te",
-      "quantidade_arquivos": 128,
-      "tamanho_bytes": 42223,
-      "percentual_arquivos": 4.72,
-      "percentual_bytes": 0.04
-    },
-    {
-      "extensao": ".mk",
-      "quantidade_arquivos": 118,
-      "tamanho_bytes": 245350,
-      "percentual_arquivos": 4.35,
-      "percentual_bytes": 0.24
-    },
-    {
-      "extensao": ".png",
-      "quantidade_arquivos": 110,
-      "tamanho_bytes": 77983524,
-      "percentual_arquivos": 4.06,
-      "percentual_bytes": 75.28
-    },
-    {
-      "extensao": ".json",
-      "quantidade_arquivos": 108,
-      "tamanho_bytes": 194256,
-      "percentual_arquivos": 3.98,
-      "percentual_bytes": 0.19
-    },
-    {
-      "extensao": ".cc",
-      "quantidade_arquivos": 84,
-      "tamanho_bytes": 740496,
-      "percentual_arquivos": 3.1,
-      "percentual_bytes": 0.71
+      "quantidade_arquivos": 22914,
+      "tamanho_bytes": 286508960,
+      "percentual_arquivos": 23.89,
+      "percentual_bytes": 13.58
     },
     {
       "extensao": ".kt",
-      "quantidade_arquivos": 56,
-      "tamanho_bytes": 1488306,
-      "percentual_arquivos": 2.07,
-      "percentual_bytes": 1.44
+      "quantidade_arquivos": 17518,
+      "tamanho_bytes": 106570836,
+      "percentual_arquivos": 18.27,
+      "percentual_bytes": 5.05
     },
     {
-      "extensao": ".java",
-      "quantidade_arquivos": 48,
-      "tamanho_bytes": 286379,
-      "percentual_arquivos": 1.77,
-      "percentual_bytes": 0.28
+      "extensao": ".png",
+      "quantidade_arquivos": 7295,
+      "tamanho_bytes": 122640939,
+      "percentual_arquivos": 7.61,
+      "percentual_bytes": 5.81
     },
     {
-      "extensao": ".rc",
-      "quantidade_arquivos": 44,
-      "tamanho_bytes": 31354,
-      "percentual_arquivos": 1.62,
-      "percentual_bytes": 0.03
+      "extensao": ".te",
+      "quantidade_arquivos": 3803,
+      "tamanho_bytes": 7787465,
+      "percentual_arquivos": 3.97,
+      "percentual_bytes": 0.37
     },
     {
-      "extensao": ".sh",
-      "quantidade_arquivos": 44,
-      "tamanho_bytes": 174387,
-      "percentual_arquivos": 1.62,
-      "percentual_bytes": 0.17
+      "extensao": ".aidl",
+      "quantidade_arquivos": 3591,
+      "tamanho_bytes": 5548872,
+      "percentual_arquivos": 3.74,
+      "percentual_bytes": 0.26
+    },
+    {
+      "extensao": "[sem extensão]",
+      "quantidade_arquivos": 3094,
+      "tamanho_bytes": 16039542,
+      "percentual_arquivos": 3.23,
+      "percentual_bytes": 0.76
+    },
+    {
+      "extensao": ".cpp",
+      "quantidade_arquivos": 2036,
+      "tamanho_bytes": 23497052,
+      "percentual_arquivos": 2.12,
+      "percentual_bytes": 1.11
+    },
+    {
+      "extensao": ".bp",
+      "quantidade_arquivos": 1670,
+      "tamanho_bytes": 3293476,
+      "percentual_arquivos": 1.74,
+      "percentual_bytes": 0.16
+    },
+    {
+      "extensao": ".h",
+      "quantidade_arquivos": 1545,
+      "tamanho_bytes": 5025008,
+      "percentual_arquivos": 1.61,
+      "percentual_bytes": 0.24
+    },
+    {
+      "extensao": ".json",
+      "quantidade_arquivos": 740,
+      "tamanho_bytes": 20722954,
+      "percentual_arquivos": 0.77,
+      "percentual_bytes": 0.98
+    },
+    {
+      "extensao": ".ogg",
+      "quantidade_arquivos": 517,
+      "tamanho_bytes": 35316092,
+      "percentual_arquivos": 0.54,
+      "percentual_bytes": 1.67
     },
     {
       "extensao": ".txt",
-      "quantidade_arquivos": 27,
-      "tamanho_bytes": 19167,
-      "percentual_arquivos": 1.0,
-      "percentual_bytes": 0.02
+      "quantidade_arquivos": 465,
+      "tamanho_bytes": 21439493,
+      "percentual_arquivos": 0.48,
+      "percentual_bytes": 1.02
     },
     {
-      "extensao": ".rs",
-      "quantidade_arquivos": 25,
-      "tamanho_bytes": 120658,
-      "percentual_arquivos": 0.92,
-      "percentual_bytes": 0.12
+      "extensao": ".md",
+      "quantidade_arquivos": 406,
+      "tamanho_bytes": 8347131,
+      "percentual_arquivos": 0.42,
+      "percentual_bytes": 0.4
     },
     {
-      "extensao": ".css",
-      "quantidade_arquivos": 23,
-      "tamanho_bytes": 255431,
-      "percentual_arquivos": 0.85,
-      "percentual_bytes": 0.25
+      "extensao": ".html",
+      "quantidade_arquivos": 309,
+      "tamanho_bytes": 1354587,
+      "percentual_arquivos": 0.32,
+      "percentual_bytes": 0.06
     },
     {
-      "extensao": ".js",
-      "quantidade_arquivos": 16,
-      "tamanho_bytes": 152718,
-      "percentual_arquivos": 0.59,
-      "percentual_bytes": 0.15
+      "extensao": ".aconfig",
+      "quantidade_arquivos": 252,
+      "tamanho_bytes": 600970,
+      "percentual_arquivos": 0.26,
+      "percentual_bytes": 0.03
     },
     {
       "extensao": ".proto",
-      "quantidade_arquivos": 16,
-      "tamanho_bytes": 28042,
-      "percentual_arquivos": 0.59,
+      "quantidade_arquivos": 245,
+      "tamanho_bytes": 1266337,
+      "percentual_arquivos": 0.26,
+      "percentual_bytes": 0.06
+    },
+    {
+      "extensao": ".kl",
+      "quantidade_arquivos": 183,
+      "tamanho_bytes": 291697,
+      "percentual_arquivos": 0.19,
+      "percentual_bytes": 0.01
+    },
+    {
+      "extensao": ".mk",
+      "quantidade_arquivos": 171,
+      "tamanho_bytes": 465731,
+      "percentual_arquivos": 0.18,
+      "percentual_bytes": 0.02
+    },
+    {
+      "extensao": ".sh",
+      "quantidade_arquivos": 159,
+      "tamanho_bytes": 472207,
+      "percentual_arquivos": 0.17,
+      "percentual_bytes": 0.02
+    },
+    {
+      "extensao": ".wav",
+      "quantidade_arquivos": 130,
+      "tamanho_bytes": 82970614,
+      "percentual_arquivos": 0.14,
+      "percentual_bytes": 3.93
+    },
+    {
+      "extensao": ".py",
+      "quantidade_arquivos": 114,
+      "tamanho_bytes": 690309,
+      "percentual_arquivos": 0.12,
       "percentual_bytes": 0.03
+    },
+    {
+      "extensao": ".cil",
+      "quantidade_arquivos": 101,
+      "tamanho_bytes": 12833376,
+      "percentual_arquivos": 0.11,
+      "percentual_bytes": 0.61
+    },
+    {
+      "extensao": ".cc",
+      "quantidade_arquivos": 92,
+      "tamanho_bytes": 803416,
+      "percentual_arquivos": 0.1,
+      "percentual_bytes": 0.04
+    },
+    {
+      "extensao": ".rc",
+      "quantidade_arquivos": 91,
+      "tamanho_bytes": 138368,
+      "percentual_arquivos": 0.09,
+      "percentual_bytes": 0.01
+    },
+    {
+      "extensao": ".jpg",
+      "quantidade_arquivos": 77,
+      "tamanho_bytes": 61702336,
+      "percentual_arquivos": 0.08,
+      "percentual_bytes": 2.92
+    },
+    {
+      "extensao": ".rs",
+      "quantidade_arquivos": 75,
+      "tamanho_bytes": 565382,
+      "percentual_arquivos": 0.08,
+      "percentual_bytes": 0.03
+    },
+    {
+      "extensao": ".apk",
+      "quantidade_arquivos": 64,
+      "tamanho_bytes": 38534059,
+      "percentual_arquivos": 0.07,
+      "percentual_bytes": 1.83
+    },
+    {
+      "extensao": ".ai",
+      "quantidade_arquivos": 59,
+      "tamanho_bytes": 18553832,
+      "percentual_arquivos": 0.06,
+      "percentual_bytes": 0.88
+    },
+    {
+      "extensao": ".zip",
+      "quantidade_arquivos": 59,
+      "tamanho_bytes": 161751861,
+      "percentual_arquivos": 0.06,
+      "percentual_bytes": 7.67
+    },
+    {
+      "extensao": ".c",
+      "quantidade_arquivos": 58,
+      "tamanho_bytes": 517863,
+      "percentual_arquivos": 0.06,
+      "percentual_bytes": 0.02
+    },
+    {
+      "extensao": ".kcm",
+      "quantidade_arquivos": 58,
+      "tamanho_bytes": 634857,
+      "percentual_arquivos": 0.06,
+      "percentual_bytes": 0.03
+    },
+    {
+      "extensao": ".ttf",
+      "quantidade_arquivos": 54,
+      "tamanho_bytes": 8152552,
+      "percentual_arquivos": 0.06,
+      "percentual_bytes": 0.39
+    },
+    {
+      "extensao": ".webp",
+      "quantidade_arquivos": 51,
+      "tamanho_bytes": 678676,
+      "percentual_arquivos": 0.05,
+      "percentual_bytes": 0.03
+    },
+    {
+      "extensao": ".mp4",
+      "quantidade_arquivos": 44,
+      "tamanho_bytes": 191616927,
+      "percentual_arquivos": 0.05,
+      "percentual_bytes": 9.08
+    },
+    {
+      "extensao": ".properties",
+      "quantidade_arquivos": 44,
+      "tamanho_bytes": 22396,
+      "percentual_arquivos": 0.05,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".pem",
+      "quantidade_arquivos": 40,
+      "tamanho_bytes": 104786,
+      "percentual_arquivos": 0.04,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".ttx",
+      "quantidade_arquivos": 39,
+      "tamanho_bytes": 407184,
+      "percentual_arquivos": 0.04,
+      "percentual_bytes": 0.02
+    },
+    {
+      "extensao": ".hash",
+      "quantidade_arquivos": 37,
+      "tamanho_bytes": 1517,
+      "percentual_arquivos": 0.04,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".gitignore",
+      "quantidade_arquivos": 34,
+      "tamanho_bytes": 2151,
+      "percentual_arquivos": 0.04,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".textproto",
+      "quantidade_arquivos": 34,
+      "tamanho_bytes": 314158,
+      "percentual_arquivos": 0.04,
+      "percentual_bytes": 0.01
+    },
+    {
+      "extensao": ".flags",
+      "quantidade_arquivos": 30,
+      "tamanho_bytes": 33483,
+      "percentual_arquivos": 0.03,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".idc",
+      "quantidade_arquivos": 28,
+      "tamanho_bytes": 26703,
+      "percentual_arquivos": 0.03,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".3gp",
+      "quantidade_arquivos": 26,
+      "tamanho_bytes": 188845105,
+      "percentual_arquivos": 0.03,
+      "percentual_bytes": 8.95
+    },
+    {
+      "extensao": ".css",
+      "quantidade_arquivos": 25,
+      "tamanho_bytes": 258911,
+      "percentual_arquivos": 0.03,
+      "percentual_bytes": 0.01
+    },
+    {
+      "extensao": ".logtags",
+      "quantidade_arquivos": 25,
+      "tamanho_bytes": 47347,
+      "percentual_arquivos": 0.03,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".go",
+      "quantidade_arquivos": 22,
+      "tamanho_bytes": 218938,
+      "percentual_arquivos": 0.02,
+      "percentual_bytes": 0.01
+    },
+    {
+      "extensao": ".conf",
+      "quantidade_arquivos": 21,
+      "tamanho_bytes": 895044,
+      "percentual_arquivos": 0.02,
+      "percentual_bytes": 0.04
+    },
+    {
+      "extensao": ".gradle",
+      "quantidade_arquivos": 20,
+      "tamanho_bytes": 21687,
+      "percentual_arquivos": 0.02,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".policy",
+      "quantidade_arquivos": 20,
+      "tamanho_bytes": 8396,
+      "percentual_arquivos": 0.02,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".js",
+      "quantidade_arquivos": 19,
+      "tamanho_bytes": 177192,
+      "percentual_arquivos": 0.02,
+      "percentual_bytes": 0.01
+    },
+    {
+      "extensao": ".xsd",
+      "quantidade_arquivos": 18,
+      "tamanho_bytes": 143403,
+      "percentual_arquivos": 0.02,
+      "percentual_bytes": 0.01
+    },
+    {
+      "extensao": ".pb",
+      "quantidade_arquivos": 15,
+      "tamanho_bytes": 1779276,
+      "percentual_arquivos": 0.02,
+      "percentual_bytes": 0.08
+    },
+    {
+      "extensao": ".pk8",
+      "quantidade_arquivos": 15,
+      "tamanho_bytes": 22042,
+      "percentual_arquivos": 0.02,
+      "percentual_bytes": 0.0
     },
     {
       "extensao": ".yml",
       "quantidade_arquivos": 15,
       "tamanho_bytes": 99023,
-      "percentual_arquivos": 0.55,
-      "percentual_bytes": 0.1
+      "percentual_arquivos": 0.02,
+      "percentual_bytes": 0.0
     },
     {
-      "extensao": ".html",
+      "extensao": ".cfg",
+      "quantidade_arquivos": 14,
+      "tamanho_bytes": 15221,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".mp3",
+      "quantidade_arquivos": 14,
+      "tamanho_bytes": 14126693,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.67
+    },
+    {
+      "extensao": ".textpb",
+      "quantidade_arquivos": 14,
+      "tamanho_bytes": 288873,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.01
+    },
+    {
+      "extensao": ".kts",
       "quantidade_arquivos": 13,
-      "tamanho_bytes": 83822,
-      "percentual_arquivos": 0.48,
-      "percentual_bytes": 0.08
+      "tamanho_bytes": 36847,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".clang-format",
+      "quantidade_arquivos": 11,
+      "tamanho_bytes": 3834,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.0
     },
     {
       "extensao": ".svg",
+      "quantidade_arquivos": 11,
+      "tamanho_bytes": 226082,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.01
+    },
+    {
+      "extensao": ".db",
       "quantidade_arquivos": 10,
-      "tamanho_bytes": 144931,
-      "percentual_arquivos": 0.37,
-      "percentual_bytes": 0.14
+      "tamanho_bytes": 1961984,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.09
+    },
+    {
+      "extensao": ".gen",
+      "quantidade_arquivos": 10,
+      "tamanho_bytes": 15756,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".avbpubkey",
+      "quantidade_arquivos": 9,
+      "tamanho_bytes": 9288,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.0
     },
     {
       "extensao": ".dot",
       "quantidade_arquivos": 9,
       "tamanho_bytes": 20022,
-      "percentual_arquivos": 0.33,
-      "percentual_bytes": 0.02
-    },
-    {
-      "extensao": ".c",
-      "quantidade_arquivos": 6,
-      "tamanho_bytes": 83062,
-      "percentual_arquivos": 0.22,
-      "percentual_bytes": 0.08
-    },
-    {
-      "extensao": ".gradle",
-      "quantidade_arquivos": 6,
-      "tamanho_bytes": 8170,
-      "percentual_arquivos": 0.22,
-      "percentual_bytes": 0.01
-    },
-    {
-      "extensao": ".idc",
-      "quantidade_arquivos": 6,
-      "tamanho_bytes": 882,
-      "percentual_arquivos": 0.22,
+      "percentual_arquivos": 0.01,
       "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".sysprop",
+      "quantidade_arquivos": 9,
+      "tamanho_bytes": 7413,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".ts",
+      "quantidade_arquivos": 9,
+      "tamanho_bytes": 32951,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".jar",
+      "quantidade_arquivos": 8,
+      "tamanho_bytes": 27484200,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 1.3
+    },
+    {
+      "extensao": ".obb",
+      "quantidade_arquivos": 8,
+      "tamanho_bytes": 1517963,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.07
+    },
+    {
+      "extensao": ".toml",
+      "quantidade_arquivos": 8,
+      "tamanho_bytes": 8901,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".der",
+      "quantidade_arquivos": 7,
+      "tamanho_bytes": 5962,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".pro",
+      "quantidade_arquivos": 7,
+      "tamanho_bytes": 2854,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".prop",
+      "quantidade_arquivos": 7,
+      "tamanho_bytes": 7079,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".asciipb",
+      "quantidade_arquivos": 6,
+      "tamanho_bytes": 2018,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".bin",
+      "quantidade_arquivos": 6,
+      "tamanho_bytes": 1059,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".gif",
+      "quantidade_arquivos": 6,
+      "tamanho_bytes": 703996,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.03
     },
     {
       "extensao": ".inl",
       "quantidade_arquivos": 6,
       "tamanho_bytes": 34145,
-      "percentual_arquivos": 0.22,
-      "percentual_bytes": 0.03
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".jsonl",
+      "quantidade_arquivos": 6,
+      "tamanho_bytes": 5927556,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.28
+    },
+    {
+      "extensao": ".s",
+      "quantidade_arquivos": 6,
+      "tamanho_bytes": 7893,
+      "percentual_arquivos": 0.01,
+      "percentual_bytes": 0.0
     },
     {
       "extensao": ".spv",
       "quantidade_arquivos": 6,
       "tamanho_bytes": 5252,
-      "percentual_arquivos": 0.22,
-      "percentual_bytes": 0.01
-    },
-    {
-      "extensao": ".conf",
-      "quantidade_arquivos": 5,
-      "tamanho_bytes": 5399,
-      "percentual_arquivos": 0.18,
-      "percentual_bytes": 0.01
-    },
-    {
-      "extensao": ".pem",
-      "quantidade_arquivos": 5,
-      "tamanho_bytes": 15877,
-      "percentual_arquivos": 0.18,
-      "percentual_bytes": 0.02
-    },
-    {
-      "extensao": ".prop",
-      "quantidade_arquivos": 5,
-      "tamanho_bytes": 4424,
-      "percentual_arquivos": 0.18,
+      "percentual_arquivos": 0.01,
       "percentual_bytes": 0.0
     },
     {
-      "extensao": ".py",
+      "extensao": ".bat",
       "quantidade_arquivos": 5,
-      "tamanho_bytes": 13642,
-      "percentual_arquivos": 0.18,
-      "percentual_bytes": 0.01
-    },
-    {
-      "extensao": ".jpg",
-      "quantidade_arquivos": 4,
-      "tamanho_bytes": 663516,
-      "percentual_arquivos": 0.15,
-      "percentual_bytes": 0.64
-    },
-    {
-      "extensao": ".properties",
-      "quantidade_arquivos": 4,
-      "tamanho_bytes": 3156,
-      "percentual_arquivos": 0.15,
+      "tamanho_bytes": 13591,
+      "percentual_arquivos": 0.01,
       "percentual_bytes": 0.0
     },
     {
-      "extensao": ".toml",
+      "extensao": ".csv",
       "quantidade_arquivos": 4,
-      "tamanho_bytes": 3980,
-      "percentual_arquivos": 0.15,
-      "percentual_bytes": 0.0
-    },
-    {
-      "extensao": ".ttf",
-      "quantidade_arquivos": 4,
-      "tamanho_bytes": 472356,
-      "percentual_arquivos": 0.15,
-      "percentual_bytes": 0.46
-    },
-    {
-      "extensao": ".avbpubkey",
-      "quantidade_arquivos": 3,
-      "tamanho_bytes": 3096,
-      "percentual_arquivos": 0.11,
-      "percentual_bytes": 0.0
-    },
-    {
-      "extensao": ".clang-format",
-      "quantidade_arquivos": 3,
-      "tamanho_bytes": 1385,
-      "percentual_arquivos": 0.11,
+      "tamanho_bytes": 2130,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".frag",
-      "quantidade_arquivos": 3,
-      "tamanho_bytes": 429,
-      "percentual_arquivos": 0.11,
+      "quantidade_arquivos": 4,
+      "tamanho_bytes": 746,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
-      "extensao": ".go",
-      "quantidade_arquivos": 3,
-      "tamanho_bytes": 24011,
-      "percentual_arquivos": 0.11,
+      "extensao": ".ico",
+      "quantidade_arquivos": 4,
+      "tamanho_bytes": 323198,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.02
+    },
+    {
+      "extensao": ".img",
+      "quantidade_arquivos": 4,
+      "tamanho_bytes": 78188,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".in",
+      "quantidade_arquivos": 4,
+      "tamanho_bytes": 5252,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".mod",
+      "quantidade_arquivos": 4,
+      "tamanho_bytes": 713,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".processor",
+      "quantidade_arquivos": 4,
+      "tamanho_bytes": 845,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".rules",
+      "quantidade_arquivos": 4,
+      "tamanho_bytes": 303,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".vert",
+      "quantidade_arquivos": 4,
+      "tamanho_bytes": 1125,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".aar",
+      "quantidade_arquivos": 3,
+      "tamanho_bytes": 409622,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.02
+    },
+    {
+      "extensao": ".aif",
+      "quantidade_arquivos": 3,
+      "tamanho_bytes": 177210,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.01
+    },
+    {
+      "extensao": ".compiled",
+      "quantidade_arquivos": 3,
+      "tamanho_bytes": 49081829,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 2.33
+    },
+    {
+      "extensao": ".dat",
+      "quantidade_arquivos": 3,
+      "tamanho_bytes": 194558,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.01
+    },
+    {
+      "extensao": ".dng",
+      "quantidade_arquivos": 3,
+      "tamanho_bytes": 345740,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.02
+    },
+    {
+      "extensao": ".jpeg",
+      "quantidade_arquivos": 3,
+      "tamanho_bytes": 630015,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.03
+    },
+    {
+      "extensao": ".log",
+      "quantidade_arquivos": 3,
+      "tamanho_bytes": 23892,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".mid",
+      "quantidade_arquivos": 3,
+      "tamanho_bytes": 8868,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".pbtx",
+      "quantidade_arquivos": 3,
+      "tamanho_bytes": 8776,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
     },
     {
       "extensao": ".pfw",
       "quantidade_arquivos": 3,
       "tamanho_bytes": 20915,
-      "percentual_arquivos": 0.11,
-      "percentual_bytes": 0.02
-    },
-    {
-      "extensao": ".vert",
-      "quantidade_arquivos": 3,
-      "tamanho_bytes": 810,
-      "percentual_arquivos": 0.11,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
-      "extensao": ".apk",
+      "extensao": ".ab",
       "quantidade_arquivos": 2,
-      "tamanho_bytes": 14570670,
-      "percentual_arquivos": 0.07,
-      "percentual_bytes": 14.07
+      "tamanho_bytes": 4522,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
     },
     {
-      "extensao": ".bat",
+      "extensao": ".arsc",
       "quantidade_arquivos": 2,
-      "tamanho_bytes": 5526,
-      "percentual_arquivos": 0.07,
-      "percentual_bytes": 0.01
+      "tamanho_bytes": 1376,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".binpb",
+      "quantidade_arquivos": 2,
+      "tamanho_bytes": 13831,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
     },
     {
       "extensao": ".blocklist",
       "quantidade_arquivos": 2,
       "tamanho_bytes": 1157,
-      "percentual_arquivos": 0.07,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
-      "extensao": ".cfg",
+      "extensao": ".def",
       "quantidade_arquivos": 2,
-      "tamanho_bytes": 7430,
-      "percentual_arquivos": 0.07,
-      "percentual_bytes": 0.01
-    },
-    {
-      "extensao": ".ico",
-      "quantidade_arquivos": 2,
-      "tamanho_bytes": 30812,
-      "percentual_arquivos": 0.07,
-      "percentual_bytes": 0.03
-    },
-    {
-      "extensao": ".jar",
-      "quantidade_arquivos": 2,
-      "tamanho_bytes": 118406,
-      "percentual_arquivos": 0.07,
-      "percentual_bytes": 0.11
-    },
-    {
-      "extensao": ".mod",
-      "quantidade_arquivos": 2,
-      "tamanho_bytes": 286,
-      "percentual_arquivos": 0.07,
+      "tamanho_bytes": 3188,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
-      "extensao": ".pro",
+      "extensao": ".dict",
       "quantidade_arquivos": 2,
-      "tamanho_bytes": 0,
-      "percentual_arquivos": 0.07,
+      "tamanho_bytes": 377,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
-      "extensao": ".aidl",
+      "extensao": ".emd",
+      "quantidade_arquivos": 2,
+      "tamanho_bytes": 30207,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".evemu",
+      "quantidade_arquivos": 2,
+      "tamanho_bytes": 5459,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".gld",
+      "quantidade_arquivos": 2,
+      "tamanho_bytes": 330,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".map",
+      "quantidade_arquivos": 2,
+      "tamanho_bytes": 675,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".options",
+      "quantidade_arquivos": 2,
+      "tamanho_bytes": 518,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".prof",
+      "quantidade_arquivos": 2,
+      "tamanho_bytes": 78,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".proguard",
+      "quantidade_arquivos": 2,
+      "tamanho_bytes": 668,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".sum",
+      "quantidade_arquivos": 2,
+      "tamanho_bytes": 6998,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".types",
+      "quantidade_arquivos": 2,
+      "tamanho_bytes": 6085,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".activityinvoker",
       "quantidade_arquivos": 1,
-      "tamanho_bytes": 356,
-      "percentual_arquivos": 0.04,
+      "tamanho_bytes": 54,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".adbd-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 100,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".adservices-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 43,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".ahv",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 2096,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".amr",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 59910,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".android",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 520,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".apex",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 967811,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.05
+    },
+    {
+      "extensao": ".appsearch-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 43,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".art-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 649,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".arw",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 20706816,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.98
+    },
+    {
+      "extensao": ".bash",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 5320,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".bettertogether-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 48,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".bootanimation-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 51,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".bootstrap-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 43,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".brushfamily",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 95,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".bt-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 100,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".btservices-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 100,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".cellbroadcast-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 48,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".cff",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 548,
-      "percentual_arquivos": 0.04,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".compos-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 274,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".config",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 235,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".configinfrastructure-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 164,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".conscrypt-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 313,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".controlledlooper",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 54,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".converted",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 864,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".cr2",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 31306554,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 1.48
+    },
+    {
+      "extensao": ".crashrecovery-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 48,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".crt",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 1220,
-      "percentual_arquivos": 0.04,
-      "percentual_bytes": 0.0
-    },
-    {
-      "extensao": ".csv",
-      "quantidade_arquivos": 1,
-      "tamanho_bytes": 643,
-      "percentual_arquivos": 0.04,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".cts",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 42,
-      "percentual_arquivos": 0.04,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
-      "extensao": ".dat",
+      "extensao": ".debug-file_contexts",
       "quantidade_arquivos": 1,
-      "tamanho_bytes": 194214,
-      "percentual_arquivos": 0.04,
-      "percentual_bytes": 0.19
+      "tamanho_bytes": 649,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".deprecated",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 660,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".devicelock-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 51,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".dex",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 18,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".documentsuibundle-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 100,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
     },
     {
       "extensao": ".dts",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 56,
-      "percentual_arquivos": 0.04,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".exp",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 1225,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".ext4",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 189,
-      "percentual_arquivos": 0.04,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".extservices-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 48,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".f2fs",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 238,
-      "percentual_arquivos": 0.04,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
-      "extensao": ".flags",
+      "extensao": ".face-file_contexts",
       "quantidade_arquivos": 1,
-      "tamanho_bytes": 1392,
-      "percentual_arquivos": 0.04,
+      "tamanho_bytes": 245,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".federatedcompute-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 43,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".fingerprint-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 157,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".framework-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 100,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".geotz-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 105,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".gitattributes",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 153,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".gki-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 95,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".gmssystem-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 47,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".graffle",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 29194642,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 1.38
+    },
+    {
+      "extensao": ".graph",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 1742,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".gz",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 799,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".hctr2",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 44,
-      "percentual_arquivos": 0.04,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".healthfitness-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 43,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".heic",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 15769,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".hibernationswap",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 45,
-      "percentual_arquivos": 0.04,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".hpp",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 858,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".i18n-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 159,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".idmap",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 736,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".ids",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 1933,
-      "percentual_arquivos": 0.04,
-      "percentual_bytes": 0.0
-    },
-    {
-      "extensao": ".img",
-      "quantidade_arquivos": 1,
-      "tamanho_bytes": 72,
-      "percentual_arquivos": 0.04,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".imp",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 1515,
-      "percentual_arquivos": 0.04,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
-      "extensao": ".in",
+      "extensao": ".inc",
       "quantidade_arquivos": 1,
-      "tamanho_bytes": 3065,
-      "percentual_arquivos": 0.04,
+      "tamanho_bytes": 7241,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".ipr",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 25246,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".ipsec-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 120,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".jl",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 5989,
-      "percentual_arquivos": 0.04,
-      "percentual_bytes": 0.01
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
     },
     {
       "extensao": ".key",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 1679,
-      "percentual_arquivos": 0.04,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".lds",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 126,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".lock",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 20890,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".m4a",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 17333,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".mailmap",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 58,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".media-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 216,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".mediaprovider-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 100,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".metadata",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 428,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".mf",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 35,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".minidroid",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 569,
-      "percentual_arquivos": 0.04,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
-      "extensao": ".options",
+      "extensao": ".mock",
       "quantidade_arquivos": 1,
-      "tamanho_bytes": 277,
-      "percentual_arquivos": 0.04,
+      "tamanho_bytes": 1120,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".nef",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 14594276,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.69
+    },
+    {
+      "extensao": ".neuralnetworks-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 100,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".nfcservices-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 100,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".npumanager-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 48,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".nrw",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 26981315,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 1.28
+    },
+    {
+      "extensao": ".ondevicepersonalization-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 43,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".orf",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 11089969,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.53
     },
     {
       "extensao": ".p12",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 2536,
-      "percentual_arquivos": 0.04,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".pdf",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 317985,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.02
+    },
+    {
+      "extensao": ".pef",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 18508879,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.88
+    },
+    {
+      "extensao": ".permission-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 48,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".permissiongranter",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 56,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".pgcfg",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 292,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".php",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 9342,
-      "percentual_arquivos": 0.04,
-      "percentual_bytes": 0.01
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
     },
     {
-      "extensao": ".pk8",
+      "extensao": ".prettierrc",
       "quantidade_arquivos": 1,
-      "tamanho_bytes": 2375,
-      "percentual_arquivos": 0.04,
+      "tamanho_bytes": 169,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".profiling-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 102,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".prop-sample-cuttlefish",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 5113,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".raf",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 19061248,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.9
     },
     {
       "extensao": ".rb",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 2025,
-      "percentual_arquivos": 0.04,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
-      "extensao": ".s",
+      "extensao": ".readme",
       "quantidade_arquivos": 1,
-      "tamanho_bytes": 788,
-      "percentual_arquivos": 0.04,
+      "tamanho_bytes": 176,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
-      "extensao": ".sysprop",
+      "extensao": ".refaster",
       "quantidade_arquivos": 1,
-      "tamanho_bytes": 249,
-      "percentual_arquivos": 0.04,
+      "tamanho_bytes": 39441,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
-      "extensao": ".ts",
+      "extensao": ".resolv-file_contexts",
       "quantidade_arquivos": 1,
-      "tamanho_bytes": 3052,
-      "percentual_arquivos": 0.04,
+      "tamanho_bytes": 149,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".rkpd-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 90,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".runtime-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 323,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".rw2",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 19495936,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.92
+    },
+    {
+      "extensao": ".scheduling-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 43,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".sdkext-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 179,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".sed",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 1709,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".sql",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 1426,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".srw",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 20660957,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.98
+    },
+    {
+      "extensao": ".statsd-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 148,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".swcodec-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 154,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".telecom-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 48,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".telephonycore-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 48,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".test-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 122,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".tethering-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 328,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".threadchecker",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 58,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".ttc",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 9048,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".tzdata-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 112,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".uicontroller",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 51,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".uprobestats-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 179,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".uwb-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 100,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".virt-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 789,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".vndk-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 100,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".wbmp",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 32774,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".webapp-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 48,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".webm",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 2165175,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.1
+    },
+    {
+      "extensao": ".wifi-file_contexts",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 127,
+      "percentual_arquivos": 0.0,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".work",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 442,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".zram",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 49,
-      "percentual_arquivos": 0.04,
+      "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     }
   ]

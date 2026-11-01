@@ -2,10 +2,10 @@
 
 - **Repositório:** `mulher-amparada/mulher-amparada-app`
 - **Branch:** `main`
-- **Gerado em UTC:** 2026-11-01T20:15:03Z
+- **Gerado em UTC:** 2026-11-01T20:20:43Z
 - **Arquivos analisados:** 95902
-- **Tamanho total:** 2109605220 bytes
-- **Extensões encontradas:** 239
+- **Tamanho total:** 2109605950 bytes
+- **Extensões encontradas:** 238
 
 > Inventário dos arquivos rastreados pelo Git que existem no checkout.
 
@@ -26,7 +26,7 @@
 | `.json` | 740 | 20750579 | 0.77% | 0.98% |
 | `.ogg` | 517 | 35316092 | 0.54% | 1.67% |
 | `.txt` | 465 | 21439493 | 0.48% | 1.02% |
-| `.md` | 412 | 8365737 | 0.43% | 0.4% |
+| `.md` | 413 | 8366620 | 0.43% | 0.4% |
 | `.html` | 309 | 1354587 | 0.32% | 0.06% |
 | `.aconfig` | 252 | 600970 | 0.26% | 0.03% |
 | `.proto` | 245 | 1266337 | 0.26% | 0.06% |
@@ -172,7 +172,6 @@
 | `.fingerprint-file_contexts` | 1 | 157 | 0.0% | 0.0% |
 | `.framework-file_contexts` | 1 | 100 | 0.0% | 0.0% |
 | `.geotz-file_contexts` | 1 | 105 | 0.0% | 0.0% |
-| `.gitattributes` | 1 | 153 | 0.0% | 0.0% |
 | `.gki-file_contexts` | 1 | 95 | 0.0% | 0.0% |
 | `.gmssystem-file_contexts` | 1 | 47 | 0.0% | 0.0% |
 | `.graffle` | 1 | 29194642 | 0.0% | 1.38% |

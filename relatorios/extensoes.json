@@ -1,10 +1,10 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-01T20:15:03Z",
+  "gerado_em_utc": "2026-11-01T20:20:43Z",
   "total_arquivos": 95902,
-  "total_bytes": 2109605220,
-  "total_extensoes": 239,
+  "total_bytes": 2109605950,
+  "total_extensoes": 238,
   "extensoes": [
     {
       "extensao": ".java",
@@ -99,8 +99,8 @@
     },
     {
       "extensao": ".md",
-      "quantidade_arquivos": 412,
-      "tamanho_bytes": 8365737,
+      "quantidade_arquivos": 413,
+      "tamanho_bytes": 8366620,
       "percentual_arquivos": 0.43,
       "percentual_bytes": 0.4
     },
@@ -1116,13 +1116,6 @@
       "extensao": ".geotz-file_contexts",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 105,
-      "percentual_arquivos": 0.0,
-      "percentual_bytes": 0.0
-    },
-    {
-      "extensao": ".gitattributes",
-      "quantidade_arquivos": 1,
-      "tamanho_bytes": 153,
       "percentual_arquivos": 0.0,
       "percentual_bytes": 0.0
     },

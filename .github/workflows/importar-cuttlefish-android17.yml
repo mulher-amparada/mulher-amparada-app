@@ -1,0 +1,127 @@
+name: Importar Cuttlefish do Android 17
+
+on:
+  workflow_dispatch:
+    inputs:
+      limite_mb:
+        description: "Limite máximo para a importação (MB)"
+        required: true
+        default: "500"
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: importar-cuttlefish-android17
+  cancel-in-progress: false
+
+jobs:
+  importar:
+    name: Importar device/google/cuttlefish
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    steps:
+      - name: Baixar o repositório Safe Woman
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Baixar Cuttlefish da branch Android 17
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git clone \
+            --depth 1 \
+            --recurse-submodules \
+            --branch android17-release \
+            https://android.googlesource.com/device/google/cuttlefish.git \
+            /tmp/cuttlefish-android17
+
+          test -d /tmp/cuttlefish-android17
+          test -f /tmp/cuttlefish-android17/Android.bp -o -f /tmp/cuttlefish-android17/Android.mk
+
+      - name: Validar tamanho e preservar arquivos existentes
+        env:
+          LIMITE_MB: ${{ inputs.limite_mb }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 - <<'PY'
+          import os
+          import shutil
+          from pathlib import Path
+
+          source = Path("/tmp/cuttlefish-android17")
+          destination = Path("Safe Woman Operational System/device/google/cuttlefish")
+          limit_mb = int(os.environ["LIMITE_MB"])
+
+          if limit_mb < 1:
+              raise SystemExit("ERRO: o limite precisa ser maior que zero.")
+
+          files = [p for p in source.rglob("*") if p.is_file() and ".git" not in p.parts]
+          total_bytes = sum(p.stat().st_size for p in files)
+          total_mb = total_bytes / (1024 * 1024)
+
+          oversized = [p for p in files if p.stat().st_size >= 95 * 1024 * 1024]
+          if oversized:
+              names = "\\n".join(str(p.relative_to(source)) for p in oversized)
+              raise SystemExit(
+                  "ERRO: existem arquivos com 95 MiB ou mais, incompatíveis "
+                  "com o limite de arquivo do GitHub:\\n" + names
+              )
+
+          if total_mb > limit_mb:
+              raise SystemExit(
+                  f"ERRO: a árvore ocupa {total_mb:.1f} MB e excede "
+                  f"o limite configurado de {limit_mb} MB."
+              )
+
+          conflicts = []
+          for src in files:
+              relative = src.relative_to(source)
+              dst = destination / relative
+              if dst.exists() and dst.read_bytes() != src.read_bytes():
+                  conflicts.append(str(relative))
+
+          if conflicts:
+              names = "\\n".join(conflicts[:100])
+              raise SystemExit(
+                  "ERRO: há arquivos existentes com conteúdo diferente. "
+                  "Nada foi sobrescrito:\\n" + names
+              )
+
+          for src in files:
+              relative = src.relative_to(source)
+              dst = destination / relative
+              if not dst.exists():
+                  dst.parent.mkdir(parents=True, exist_ok=True)
+                  shutil.copy2(src, dst)
+
+          print(f"Arquivos encontrados: {len(files)}")
+          print(f"Tamanho da origem: {total_mb:.1f} MB")
+          print(f"Destino: {destination}")
+          print("Arquivos existentes foram preservados.")
+          PY
+
+      - name: Conferir e registrar a importação
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git add -- "Safe Woman Operational System/device/google/cuttlefish"
+
+          if git diff --cached --quiet; then
+            echo "Nenhum arquivo novo para registrar."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git commit -m "Importa Cuttlefish do Android 17"
+          git push origin HEAD:main

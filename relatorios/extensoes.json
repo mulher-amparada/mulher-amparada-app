@@ -1,58 +1,58 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-01T18:53:53Z",
-  "total_arquivos": 645,
-  "total_bytes": 95090553,
-  "total_extensoes": 32,
+  "gerado_em_utc": "2026-11-01T19:06:52Z",
+  "total_arquivos": 648,
+  "total_bytes": 95092588,
+  "total_extensoes": 33,
   "extensoes": [
     {
       "extensao": ".md",
       "quantidade_arquivos": 215,
-      "tamanho_bytes": 413046,
-      "percentual_arquivos": 33.33,
+      "tamanho_bytes": 413298,
+      "percentual_arquivos": 33.18,
       "percentual_bytes": 0.43
     },
     {
       "extensao": ".xml",
-      "quantidade_arquivos": 174,
-      "tamanho_bytes": 217808,
-      "percentual_arquivos": 26.98,
+      "quantidade_arquivos": 175,
+      "tamanho_bytes": 218752,
+      "percentual_arquivos": 27.01,
       "percentual_bytes": 0.23
     },
     {
       "extensao": ".png",
       "quantidade_arquivos": 101,
       "tamanho_bytes": 76847070,
-      "percentual_arquivos": 15.66,
+      "percentual_arquivos": 15.59,
       "percentual_bytes": 80.81
     },
     {
       "extensao": ".kt",
       "quantidade_arquivos": 56,
       "tamanho_bytes": 1488306,
-      "percentual_arquivos": 8.68,
+      "percentual_arquivos": 8.64,
       "percentual_bytes": 1.57
     },
     {
       "extensao": ".css",
       "quantidade_arquivos": 18,
       "tamanho_bytes": 237514,
-      "percentual_arquivos": 2.79,
+      "percentual_arquivos": 2.78,
       "percentual_bytes": 0.25
     },
     {
       "extensao": ".yml",
       "quantidade_arquivos": 15,
       "tamanho_bytes": 96660,
-      "percentual_arquivos": 2.33,
+      "percentual_arquivos": 2.31,
       "percentual_bytes": 0.1
     },
     {
       "extensao": ".html",
       "quantidade_arquivos": 11,
       "tamanho_bytes": 64333,
-      "percentual_arquivos": 1.71,
+      "percentual_arquivos": 1.7,
       "percentual_bytes": 0.07
     },
     {
@@ -66,7 +66,7 @@
       "extensao": ".sh",
       "quantidade_arquivos": 5,
       "tamanho_bytes": 91941,
-      "percentual_arquivos": 0.78,
+      "percentual_arquivos": 0.77,
       "percentual_bytes": 0.1
     },
     {
@@ -93,22 +93,22 @@
     {
       "extensao": ".json",
       "quantidade_arquivos": 3,
-      "tamanho_bytes": 15339,
-      "percentual_arquivos": 0.47,
+      "tamanho_bytes": 15610,
+      "percentual_arquivos": 0.46,
       "percentual_bytes": 0.02
     },
     {
       "extensao": ".mk",
       "quantidade_arquivos": 3,
       "tamanho_bytes": 806,
-      "percentual_arquivos": 0.47,
+      "percentual_arquivos": 0.46,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".toml",
       "quantidade_arquivos": 3,
       "tamanho_bytes": 3828,
-      "percentual_arquivos": 0.47,
+      "percentual_arquivos": 0.46,
       "percentual_bytes": 0.0
     },
     {
@@ -124,6 +124,13 @@
       "tamanho_bytes": 5526,
       "percentual_arquivos": 0.31,
       "percentual_bytes": 0.01
+    },
+    {
+      "extensao": ".bp",
+      "quantidade_arquivos": 2,
+      "tamanho_bytes": 908,
+      "percentual_arquivos": 0.31,
+      "percentual_bytes": 0.0
     },
     {
       "extensao": ".ico",
@@ -154,80 +161,80 @@
       "percentual_bytes": 0.01
     },
     {
-      "extensao": ".bp",
-      "quantidade_arquivos": 1,
-      "tamanho_bytes": 668,
-      "percentual_arquivos": 0.16,
-      "percentual_bytes": 0.0
-    },
-    {
       "extensao": ".c",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 18374,
-      "percentual_arquivos": 0.16,
+      "percentual_arquivos": 0.15,
       "percentual_bytes": 0.02
     },
     {
       "extensao": ".cff",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 548,
-      "percentual_arquivos": 0.16,
+      "percentual_arquivos": 0.15,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".csv",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 643,
-      "percentual_arquivos": 0.16,
+      "percentual_arquivos": 0.15,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".java",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 328,
+      "percentual_arquivos": 0.15,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".jl",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 5989,
-      "percentual_arquivos": 0.16,
+      "percentual_arquivos": 0.15,
       "percentual_bytes": 0.01
     },
     {
       "extensao": ".php",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 9342,
-      "percentual_arquivos": 0.16,
+      "percentual_arquivos": 0.15,
       "percentual_bytes": 0.01
     },
     {
       "extensao": ".py",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 743,
-      "percentual_arquivos": 0.16,
+      "percentual_arquivos": 0.15,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".rb",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 2025,
-      "percentual_arquivos": 0.16,
+      "percentual_arquivos": 0.15,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".svg",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 290,
-      "percentual_arquivos": 0.16,
+      "percentual_arquivos": 0.15,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".ts",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 3052,
-      "percentual_arquivos": 0.16,
+      "percentual_arquivos": 0.15,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".ttf",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 126624,
-      "percentual_arquivos": 0.16,
+      "percentual_arquivos": 0.15,
       "percentual_bytes": 0.13
     }
   ]

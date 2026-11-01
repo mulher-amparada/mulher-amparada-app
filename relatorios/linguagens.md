@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-11-01T18:53:53Z
-- **Linguagens identificadas:** 12
-- **Arquivos classificados:** 102
-- **Tamanho classificado:** 1954769 bytes
+- **Gerado em UTC:** 2026-11-01T19:06:52Z
+- **Linguagens identificadas:** 13
+- **Arquivos classificados:** 103
+- **Tamanho classificado:** 1955097 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -16,7 +16,7 @@
 
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
-| Kotlin | 56 | 1488306 | 76.14% |
+| Kotlin | 56 | 1488306 | 76.12% |
 | CSS | 18 | 237514 | 12.15% |
 | Shell | 4 | 90469 | 4.63% |
 | HTML | 11 | 64333 | 3.29% |
@@ -28,6 +28,7 @@
 | Ruby | 1 | 2025 | 0.10% |
 | Makefile | 3 | 806 | 0.04% |
 | Python | 1 | 743 | 0.04% |
+| Java | 1 | 328 | 0.02% |
 
 ## Arquivos por linguagem
 
@@ -82,6 +83,14 @@
 - `termos.html`
 - `trabalhar.html`
 
+### Java
+
+- **Arquivos:** 1
+- **Tamanho:** 328 bytes
+- **Percentual:** 0.02%
+
+- `Safe Woman Operational System/packages/apps/MulherAmparadaProfileAdmin/src/com/mulheres/profileadmin/MulherAmparadaProfileAdminReceiver.java`
+
 ### JavaScript
 
 - **Arquivos:** 4
@@ -105,7 +114,7 @@
 
 - **Arquivos:** 56
 - **Tamanho:** 1488306 bytes
-- **Percentual:** 76.14%
+- **Percentual:** 76.12%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt`

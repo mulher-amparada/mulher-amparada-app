@@ -1,127 +1,145 @@
-name: Compilar Android 17 para Cuttlefish
+name: Baixar runtime Android 17 Cuttlefish
 
 on:
   workflow_dispatch:
     inputs:
-      jobs:
-        description: "Número de tarefas paralelas da compilação"
+      branch:
+        description: "Branch do Android CI"
         required: true
-        default: "8"
+        default: "aosp-android-latest-release"
         type: string
 
 permissions:
   contents: read
 
 concurrency:
-  group: compilar-cuttlefish-android17
+  group: baixar-cuttlefish-runtime
   cancel-in-progress: false
 
 jobs:
-  compilar:
-    name: Sincronizar e compilar AOSP Android 17
-    runs-on:
-      - self-hosted
-      - linux
-      - x64
-      - aosp-builder
-    timeout-minutes: 360
+  baixar-runtime:
+    name: Baixar imagem Android e ferramentas Cuttlefish
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
 
     steps:
-      - name: Baixar o repositório
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 1
-          lfs: true
-
-      - name: Verificar os requisitos da máquina
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          [[ "$(uname -s)" == "Linux" ]] || {
-            echo "::error::O compilador exige Linux."
-            exit 1
-          }
-
-          [[ "$(uname -m)" == "x86_64" ]] || {
-            echo "::error::O host precisa ser x86_64."
-            exit 1
-          }
-
-          disco_kb="$(df -Pk "$HOME" | awk 'NR==2 {print $4}')"
-          disco_gb="$((disco_kb / 1024 / 1024))"
-
-          memoria_kb="$(awk '/MemTotal/ {print $2}' /proc/meminfo)"
-          memoria_gb="$((memoria_kb / 1024 / 1024))"
-
-          echo "Espaço livre: ${disco_gb} GB"
-          echo "Memória RAM: ${memoria_gb} GB"
-
-          if (( disco_gb < 400 )); then
-            echo "::error::São necessários pelo menos 400 GB livres."
-            exit 1
-          fi
-
-          if (( memoria_gb < 64 )); then
-            echo "::error::São necessários pelo menos 64 GB de RAM."
-            exit 1
-          fi
-
-      - name: Instalar dependências do host
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          sudo apt-get update
-          sudo apt-get install -y \
-            bc \
-            bison \
-            build-essential \
-            ccache \
-            curl \
-            flex \
-            fontconfig \
-            git \
-            git-lfs \
-            gnupg \
-            lib32z1-dev \
-            libelf-dev \
-            libncurses-dev \
-            libssl-dev \
-            libxml2-utils \
-            lz4 \
-            python3 \
-            rsync \
-            unzip \
-            zip \
-            zlib1g-dev
-
-      - name: Sincronizar e compilar Android 17 Cuttlefish
+      - name: Identificar a última compilação bem-sucedida
+        id: build
         shell: bash
         env:
-          JOBS: ${{ inputs.jobs }}
-          AOSP_DIR: ${{ runner.temp }}/aosp-android17-cuttlefish
+          BRANCH: ${{ inputs.branch }}
         run: |
-          set -euo pipefail
+          set -Eeuo pipefail
 
-          [[ "$JOBS" =~ ^[1-9][0-9]*$ ]] || {
-            echo "::error::O número de tarefas precisa ser um inteiro positivo."
+          TARGET="aosp_cf_x86_64_only_phone-userdebug"
+          BUILD_INFO_URL="https://ci.android.com/builds/latest/branches/${BRANCH}/targets/${TARGET}/view/BUILD_INFO"
+
+          FINAL_URL="$(curl -fsSL -o /dev/null -w '%{url_effective}' "${BUILD_INFO_URL}")"
+          BUILD_ID="$(printf '%s' "${FINAL_URL}" | sed -nE 's#^.*/submitted/([0-9]+)/.*#\1#p')"
+
+          if [[ -z "${BUILD_ID}" ]]; then
+            echo "::error::Não foi possível identificar uma compilação concluída para branch ${BRANCH} e alvo ${TARGET}."
+            echo "URL final recebida: ${FINAL_URL}"
             exit 1
-          }
+          fi
 
-          bash "Safe Woman Operational System/preparar-cuttlefish-android17.sh"
+          echo "build_id=${BUILD_ID}" >> "${GITHUB_OUTPUT}"
+          echo "target=${TARGET}" >> "${GITHUB_OUTPUT}"
 
-      - name: Publicar resumo da execução
+          {
+            echo "## Runtime Cuttlefish"
+            echo
+            echo "- Branch: ${BRANCH}"
+            echo "- Alvo: ${TARGET}"
+            echo "- Build ID: ${BUILD_ID}"
+            echo "- Origem: Android Continuous Integration"
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+      - name: Baixar imagem do Android e pacote host da mesma build
+        shell: bash
+        env:
+          BUILD_ID: ${{ steps.build.outputs.build_id }}
+          TARGET: ${{ steps.build.outputs.target }}
+        run: |
+          set -Eeuo pipefail
+
+          mkdir -p runtime/downloads runtime/cuttlefish
+
+          BASE_URL="https://ci.android.com/builds/submitted/${BUILD_ID}/${TARGET}/latest"
+          IMAGE_PREFIX="${TARGET%-userdebug}"
+          IMAGE_FILE="${IMAGE_PREFIX}-img-${BUILD_ID}.zip"
+
+          echo "Baixando imagem do sistema: ${IMAGE_FILE}"
+          curl --fail --location --show-error --retry 5 --retry-all-errors \
+            "${BASE_URL}/${IMAGE_FILE}" \
+            --output "runtime/downloads/${IMAGE_FILE}"
+
+          echo "Baixando ferramentas host Cuttlefish..."
+          curl --fail --location --show-error --retry 5 --retry-all-errors \
+            "${BASE_URL}/cvd-host_package.tar.gz" \
+            --output "runtime/downloads/cvd-host_package.tar.gz"
+
+          test -s "runtime/downloads/${IMAGE_FILE}"
+          test -s "runtime/downloads/cvd-host_package.tar.gz"
+
+          echo "Extraindo ferramentas host..."
+          tar -xzf "runtime/downloads/cvd-host_package.tar.gz" \
+            -C "runtime/cuttlefish"
+
+          echo "Extraindo imagens Android..."
+          unzip -q "runtime/downloads/${IMAGE_FILE}" \
+            -d "runtime/cuttlefish"
+
+          if ! find runtime/cuttlefish -type f \
+            \( -name "launch_cvd" -o -name "cvd" \) -print -quit | grep -q .; then
+            echo "::error::O pacote host não contém launch_cvd nem cvd."
+            exit 1
+          fi
+
+          cat > runtime/cuttlefish/BUILD-INFO.txt <<EOF
+          Android Cuttlefish runtime
+          Branch: ${{ inputs.branch }}
+          Target: ${TARGET}
+          Build ID: ${BUILD_ID}
+          Image archive: ${IMAGE_FILE}
+          Host archive: cvd-host_package.tar.gz
+
+          Os arquivos foram obtidos da mesma compilação do Android CI.
+          Este pacote contém imagens pré-compiladas e ferramentas host.
+          Ele não contém a árvore de código-fonte AOSP nem permite reconstruir a ROM.
+          EOF
+
+          (
+            cd runtime/cuttlefish
+            find . -type f -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS
+          )
+
+          rm -rf runtime/downloads
+
+      - name: Publicar runtime como artefato do GitHub Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: mulher-amparada-cuttlefish-android17
+          path: runtime/cuttlefish/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
+
+      - name: Resumo final
         if: always()
         shell: bash
+        env:
+          BUILD_ID: ${{ steps.build.outputs.build_id }}
+          TARGET: ${{ steps.build.outputs.target }}
         run: |
           {
-            echo "## Compilação Android 17 — Cuttlefish"
             echo
-            echo "- Alvo: `aosp_cf_x86_64_only_phone-aosp_current-userdebug`"
-            echo "- Diretório AOSP: `${{ runner.temp }}/aosp-android17-cuttlefish`"
-            echo "- Resultado: ${{ job.status }}"
-            echo
-            echo "Os artefatos permanecem na máquina self-hosted. Este workflow não os envia ao GitHub."
-          } >> "$GITHUB_STEP_SUMMARY"
+            echo "### Resultado"
+            echo "- Build ID: ${BUILD_ID:-não identificado}"
+            echo "- Alvo: ${TARGET:-não identificado}"
+            echo "- Download: ${{ job.status }}"
+            echo "- Clone AOSP: não executado"
+            echo "- repo sync: não executado"
+            echo "- Código-fonte completo: não baixado"
+            echo "- Saída: artefato do GitHub Actions, sem adicionar binários grandes ao histórico Git"
+          } >> "${GITHUB_STEP_SUMMARY}"

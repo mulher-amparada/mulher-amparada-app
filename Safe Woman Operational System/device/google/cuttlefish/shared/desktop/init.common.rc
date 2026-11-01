@@ -1,0 +1,61 @@
+# This file is loaded on all desktop devices including ika.
+
+on init
+    mkdir /dev/socket/pdx 0775 system system
+    mkdir /dev/socket/pdx/system 0775 system system
+    mkdir /dev/socket/pdx/system/buffer_hub 0775 system system
+    mkdir /dev/socket/pdx/system/performance 0775 system system
+    mkdir /dev/socket/pdx/system/vr 0775 system system
+    mkdir /dev/socket/pdx/system/vr/display 0775 system system
+    mkdir /dev/socket/pdx/system/vr/pose 0775 system system
+    mkdir /dev/socket/pdx/system/vr/sensors 0775 system system
+
+    # Set primary_display_orientation before surface_flinger starts in late-init.
+    setprop ro.surface_flinger.primary_display_orientation ${ro.boot.surface_flinger.primary_display_orientation}
+
+    # Prefer using zram over evicting page cache. The refault path is latency sensitive
+    # and refaulting a file from disk is generally going to be at least 10x as expensive
+    # as refaulting from disk. Swapping out a page to zram is more expensive and doesn't
+    # reclaim as much memory as evicting a file page, but is generally done in the
+    # background. Overall, treating a page cache eviction as 3x as expensive as using zram
+    # is a reasonable default.
+    write /proc/sys/vm/swappiness 150
+
+    # Allow usbauthorization to disable USB devices by default.
+    chown root system /sys/module/usbcore/parameters/authorized_default
+    chmod 0664 /sys/module/usbcore/parameters/authorized_default
+
+on late-fs
+    mount_all --late
+
+on post-fs-data
+    # Create the directories used by the Wireless subsystem
+    mkdir /data/vendor/wifi 0771 wifi wifi
+    mkdir /data/vendor/wifi/wpa 0770 wifi wifi
+    mkdir /data/vendor/wifi/wpa/sockets 0770 wifi wifi
+    # Create directories used by Camera service
+    mkdir /data/vendor/camera 0775 system camera
+
+on boot
+    # Force adbd to also listen on TCP, no matter the adb-over-usb status. Also
+    # see b/365444427.
+    setprop service.adb.tcp.port 5555
+
+on early-init && property:ro.prefetch_boot.enabled=true
+    start prefetch_replay
+
+on init && property:ro.prefetch_boot.enabled=true
+    start prefetch_record
+
+# Start apex prefetching once the /apex directory is mounted.
+on post-fs-data && property:ro.prefetch_boot.enabled=true
+    start prefetch_apex_replay
+    start prefetch_apex_record
+
+on property:sys.boot_completed=1 && property:ro.prefetch_boot.enabled=true
+    setprop prefetch_boot.record_stop 1
+
+on property:sys.boot_completed=1
+    # Change the group to 'wifi' so the HAL process has write access.
+    chown system wifi /sys/class/net/wlan0/../../coredump
+    chmod 0220 /sys/class/net/wlan0/../../coredump

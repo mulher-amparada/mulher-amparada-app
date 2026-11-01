@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*
+ * Copyright (C) 2026 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<SharedCameraSessionConfigurations colorSpace="-1">
+    <!-- colorSpace: ANDROID_REQUEST_AVAILABLE_COLOR_SPACE_PROFILES_MAP_UNSPECIFIED -->
+    <SharedCameraSessionConfiguration cameraId="0">
+        <!-- First OutputConfiguration: All optional fields are provided -->
+        <OutputConfiguration>
+            <!-- surfaceType: SURFACE_TYPE_IMAGE_READER -->
+            <surfaceType>4</surfaceType>
+            <width>1920</width>
+            <height>1080</height>
+            <!-- physicalCameraId is omitted; defaults to "" -->
+            <!-- streamUseCase: ANDROID_SCALER_AVAILABLE_STREAM_USE_CASES_DEFAULT -->
+            <streamUseCase>0</streamUseCase>
+            <!-- timestampBase: TIMESTAMP_BASE_DEFAULT -->
+            <timestampBase>0</timestampBase>
+            <!-- mirrorMode: MIRROR_MODE_AUTO -->
+            <mirrorMode>0</mirrorMode>
+            <useReadoutTimestamp>0</useReadoutTimestamp>
+            <!-- format: HAL_PIXEL_FORMAT_RGBA_8888 -->
+            <format>1</format>
+            <!-- usage: AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN -->
+            <usage>3</usage>
+            <!-- dataSpace: HAL_DATASPACE_UNKNOWN -->
+            <dataSpace>0</dataSpace>
+        </OutputConfiguration>
+        <!-- Second OutputConfiguration: All optional fields are provided -->
+        <OutputConfiguration>
+            <!-- surfaceType: SURFACE_TYPE_SURFACE_VIEW -->
+            <surfaceType>0</surfaceType>
+            <width>1920</width>
+            <height>1080</height>
+            <!-- physicalCameraId is omitted; defaults to "" -->
+            <!-- streamUseCase: ANDROID_SCALER_AVAILABLE_STREAM_USE_CASES_DEFAULT -->
+            <streamUseCase>0</streamUseCase>
+            <!-- timestampBase: TIMESTAMP_BASE_DEFAULT -->
+            <timestampBase>0</timestampBase>
+            <!-- mirrorMode: MIRROR_MODE_AUTO -->
+            <mirrorMode>0</mirrorMode>
+            <useReadoutTimestamp>0</useReadoutTimestamp>
+            <!-- format: HAL_PIXEL_FORMAT_IMPLEMENTATION_DEFINED -->
+            <format>34</format>
+            <!-- usage: AHARDWAREBUFFER_USAGE_GPU_SAMPLED_IMAGE|AHARDWAREBUFFER_USAGE_COMPOSER_OVERLAY -->
+            <usage>256|2048</usage>
+            <!-- dataSpace: HAL_DATASPACE_UNKNOWN -->
+
+            <dataSpace>0</dataSpace>
+        </OutputConfiguration>
+      </SharedCameraSessionConfiguration>
+          <SharedCameraSessionConfiguration cameraId="1">
+        <!-- First OutputConfiguration: All optional fields are provided -->
+        <OutputConfiguration>
+            <!-- surfaceType: SURFACE_TYPE_IMAGE_READER -->
+            <surfaceType>4</surfaceType>
+            <width>1920</width>
+            <height>1080</height>
+            <!-- physicalCameraId is omitted; defaults to "" -->
+            <!-- streamUseCase: ANDROID_SCALER_AVAILABLE_STREAM_USE_CASES_DEFAULT -->
+            <streamUseCase>0</streamUseCase>
+            <!-- timestampBase: TIMESTAMP_BASE_DEFAULT -->
+            <timestampBase>0</timestampBase>
+            <!-- mirrorMode: MIRROR_MODE_AUTO -->
+            <mirrorMode>0</mirrorMode>
+            <useReadoutTimestamp>0</useReadoutTimestamp>
+            <!-- format: HAL_PIXEL_FORMAT_RGBA_8888 -->
+            <format>1</format>
+            <!-- usage: AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN -->
+            <usage>3</usage>
+            <!-- dataSpace: HAL_DATASPACE_UNKNOWN -->
+            <dataSpace>0</dataSpace>
+        </OutputConfiguration>
+        <!-- Second OutputConfiguration: All optional fields are provided -->
+        <OutputConfiguration>
+            <!-- surfaceType: SURFACE_TYPE_SURFACE_VIEW -->
+            <surfaceType>0</surfaceType>
+            <width>1920</width>
+            <height>1080</height>
+            <!-- physicalCameraId is omitted; defaults to "" -->
+            <!-- streamUseCase: ANDROID_SCALER_AVAILABLE_STREAM_USE_CASES_DEFAULT -->
+            <streamUseCase>0</streamUseCase>
+            <!-- timestampBase: TIMESTAMP_BASE_DEFAULT -->
+            <timestampBase>0</timestampBase>
+            <!-- mirrorMode: MIRROR_MODE_AUTO -->
+            <mirrorMode>0</mirrorMode>
+            <useReadoutTimestamp>0</useReadoutTimestamp>
+            <!-- format: HAL_PIXEL_FORMAT_IMPLEMENTATION_DEFINED -->
+            <format>34</format>
+            <!-- usage: AHARDWAREBUFFER_USAGE_GPU_SAMPLED_IMAGE|AHARDWAREBUFFER_USAGE_COMPOSER_OVERLAY -->
+            <usage>256|2048</usage>
+            <!-- dataSpace: HAL_DATASPACE_UNKNOWN -->
+
+            <dataSpace>0</dataSpace>
+        </OutputConfiguration>
+    </SharedCameraSessionConfiguration>
+    <SharedCameraSessionConfiguration cameraId="2">
+        <!-- First OutputConfiguration: All optional fields are provided -->
+        <OutputConfiguration>
+            <!-- surfaceType: SURFACE_TYPE_IMAGE_READER -->
+            <surfaceType>4</surfaceType>
+            <width>1920</width>
+            <height>1080</height>
+            <!-- physicalCameraId is omitted; defaults to "" -->
+            <!-- streamUseCase: ANDROID_SCALER_AVAILABLE_STREAM_USE_CASES_DEFAULT -->
+            <streamUseCase>0</streamUseCase>
+            <!-- timestampBase: TIMESTAMP_BASE_DEFAULT -->
+            <timestampBase>0</timestampBase>
+            <!-- mirrorMode: MIRROR_MODE_AUTO -->
+            <mirrorMode>0</mirrorMode>
+            <useReadoutTimestamp>0</useReadoutTimestamp>
+            <!-- format: HAL_PIXEL_FORMAT_RGBA_8888 -->
+            <format>1</format>
+            <!-- usage: AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN -->
+            <usage>3</usage>
+            <!-- dataSpace: HAL_DATASPACE_UNKNOWN -->
+            <dataSpace>0</dataSpace>
+        </OutputConfiguration>
+        <!-- Second OutputConfiguration: All optional fields are provided -->
+        <OutputConfiguration>
+            <!-- surfaceType: SURFACE_TYPE_SURFACE_VIEW -->
+            <surfaceType>0</surfaceType>
+            <width>1920</width>
+            <height>1080</height>
+            <!-- physicalCameraId is omitted; defaults to "" -->
+            <!-- streamUseCase: ANDROID_SCALER_AVAILABLE_STREAM_USE_CASES_DEFAULT -->
+            <streamUseCase>0</streamUseCase>
+            <!-- timestampBase: TIMESTAMP_BASE_DEFAULT -->
+            <timestampBase>0</timestampBase>
+            <!-- mirrorMode: MIRROR_MODE_AUTO -->
+            <mirrorMode>0</mirrorMode>
+            <useReadoutTimestamp>0</useReadoutTimestamp>
+            <!-- format: HAL_PIXEL_FORMAT_IMPLEMENTATION_DEFINED -->
+            <format>34</format>
+            <!-- usage: AHARDWAREBUFFER_USAGE_GPU_SAMPLED_IMAGE|AHARDWAREBUFFER_USAGE_COMPOSER_OVERLAY -->
+            <usage>256|2048</usage>
+            <!-- dataSpace: HAL_DATASPACE_UNKNOWN -->
+
+            <dataSpace>0</dataSpace>
+        </OutputConfiguration>
+    </SharedCameraSessionConfiguration>
+    <SharedCameraSessionConfiguration cameraId="3">
+        <!-- First OutputConfiguration: All optional fields are provided -->
+        <OutputConfiguration>
+            <!-- surfaceType: SURFACE_TYPE_IMAGE_READER -->
+            <surfaceType>4</surfaceType>
+            <width>1920</width>
+            <height>1080</height>
+            <!-- physicalCameraId is omitted; defaults to "" -->
+            <!-- streamUseCase: ANDROID_SCALER_AVAILABLE_STREAM_USE_CASES_DEFAULT -->
+            <streamUseCase>0</streamUseCase>
+            <!-- timestampBase: TIMESTAMP_BASE_DEFAULT -->
+            <timestampBase>0</timestampBase>
+            <!-- mirrorMode: MIRROR_MODE_AUTO -->
+            <mirrorMode>0</mirrorMode>
+            <useReadoutTimestamp>0</useReadoutTimestamp>
+            <!-- format: HAL_PIXEL_FORMAT_RGBA_8888 -->
+            <format>1</format>
+            <!-- usage: AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN -->
+            <usage>3</usage>
+            <!-- dataSpace: HAL_DATASPACE_UNKNOWN -->
+            <dataSpace>0</dataSpace>
+        </OutputConfiguration>
+        <!-- Second OutputConfiguration: All optional fields are provided -->
+        <OutputConfiguration>
+            <!-- surfaceType: SURFACE_TYPE_SURFACE_VIEW -->
+            <surfaceType>0</surfaceType>
+            <width>1920</width>
+            <height>1080</height>
+            <!-- physicalCameraId is omitted; defaults to "" -->
+            <!-- streamUseCase: ANDROID_SCALER_AVAILABLE_STREAM_USE_CASES_DEFAULT -->
+            <streamUseCase>0</streamUseCase>
+            <!-- timestampBase: TIMESTAMP_BASE_DEFAULT -->
+            <timestampBase>0</timestampBase>
+            <!-- mirrorMode: MIRROR_MODE_AUTO -->
+            <mirrorMode>0</mirrorMode>
+            <useReadoutTimestamp>0</useReadoutTimestamp>
+            <!-- format: HAL_PIXEL_FORMAT_IMPLEMENTATION_DEFINED -->
+            <format>34</format>
+            <!-- usage: AHARDWAREBUFFER_USAGE_GPU_SAMPLED_IMAGE|AHARDWAREBUFFER_USAGE_COMPOSER_OVERLAY -->
+            <usage>256|2048</usage>
+            <!-- dataSpace: HAL_DATASPACE_UNKNOWN -->
+
+            <dataSpace>0</dataSpace>
+        </OutputConfiguration>
+    </SharedCameraSessionConfiguration>
+
+</SharedCameraSessionConfigurations>

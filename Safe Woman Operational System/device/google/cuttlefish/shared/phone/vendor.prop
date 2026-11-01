@@ -1,0 +1,15 @@
+# Enable LE Audio and its related profiles
+bluetooth.profile.bap.broadcast.assist.enabled=false
+bluetooth.profile.bap.unicast.client.enabled=true
+bluetooth.profile.bas.client.enabled=true
+bluetooth.profile.ccp.server.enabled=true
+bluetooth.profile.csip.set_coordinator.enabled=true
+bluetooth.profile.hap.client.enabled=true
+bluetooth.profile.mcp.server.enabled=true
+bluetooth.profile.vcp.controller.enabled=true
+
+# Enable software offload
+persist.vendor.audio.leaudio_sw_offload=true
+
+# Enable software offload for A2DP
+persist.vendor.audio.a2dp_codec_extensibility=true

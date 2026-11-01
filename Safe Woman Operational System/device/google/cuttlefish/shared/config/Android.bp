@@ -1,0 +1,282 @@
+//
+// Copyright (C) 2019 The Android Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package {
+    default_applicable_licenses: ["Android-Apache-2.0"],
+}
+
+prebuilt_root {
+    name: "device_google_cuttlefish_shared_config_pci_ids",
+    src: "pci.ids",
+    vendor: true,
+    filename_from_src: true,
+    licenses: ["device_google_cuttlefish_shared_config_pci_ids_license"],
+    enabled: select(soong_config_variable("cuttlefish_config", "use_pci_ids"), {
+        true: true,
+        default: false,
+    }),
+}
+
+license {
+    name: "device_google_cuttlefish_shared_config_pci_ids_license",
+    package_name: "PCI IDS",
+    license_kinds: ["SPDX-license-identifier-BSD-3-Clause"],
+    license_text: ["LICENSE_BSD"],
+}
+
+prebuilt_etc {
+    name: "wpa_supplicant_overlay.conf.cf",
+    src: "wpa_supplicant_overlay.conf",
+    filename_from_src: true,
+    relative_install_path: "wifi",
+    installable: false,
+}
+
+prebuilt_etc {
+    name: "p2p_supplicant.conf.cf",
+    src: "p2p_supplicant.conf",
+    filename_from_src: true,
+    relative_install_path: "wifi",
+    installable: false,
+}
+
+genrule {
+    name: "gen_fstab_cf_f2fs_hctr2",
+    srcs: ["fstab.in"],
+    out: ["fstab.cf.f2fs.hctr2"],
+    tool_files: [
+        "sed.f2fs",
+        "sed.hctr2",
+    ],
+    cmd: "sed -f $(location sed.f2fs) -f $(location sed.hctr2) $(in) > $(out)",
+}
+
+genrule {
+    name: "gen_fstab_cf_f2fs_cts",
+    srcs: ["fstab.in"],
+    out: ["fstab.cf.f2fs.cts"],
+    tool_files: [
+        "sed.cts",
+        "sed.f2fs",
+    ],
+    cmd: "sed -f $(location sed.f2fs) -f $(location sed.cts) $(in) > $(out)",
+}
+
+genrule {
+    name: "gen_fstab_cf_ext4_hctr2",
+    srcs: ["fstab.in"],
+    out: ["fstab.cf.ext4.hctr2"],
+    tool_files: [
+        "sed.ext4",
+        "sed.hctr2",
+    ],
+    cmd: "sed -f $(location sed.ext4) -f $(location sed.hctr2) $(in) > $(out)",
+}
+
+genrule {
+    name: "gen_fstab_cf_ext4_cts",
+    srcs: ["fstab.in"],
+    out: ["fstab.cf.ext4.cts"],
+    tool_files: [
+        "sed.cts",
+        "sed.ext4",
+    ],
+    cmd: "sed -f $(location sed.ext4) -f $(location sed.cts) $(in) > $(out)",
+}
+
+prebuilt_etc {
+    name: "fstab.cf.f2fs.hctr2",
+    src: ":gen_fstab_cf_f2fs_hctr2",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "fstab.cf.f2fs.hctr2.vendor_ramdisk",
+    srcs: [
+        ":gen_fstab_cf_f2fs_hctr2",
+    ],
+    dsts: [
+        "fstab.cf.f2fs.hctr2",
+    ],
+    vendor_ramdisk: true,
+}
+
+prebuilt_etc {
+    name: "fstab.cf.f2fs.cts",
+    src: ":gen_fstab_cf_f2fs_cts",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "fstab.cf.f2fs.cts.vendor_ramdisk",
+    srcs: [
+        ":gen_fstab_cf_f2fs_cts",
+    ],
+    dsts: [
+        "fstab.cf.f2fs.cts",
+    ],
+    vendor_ramdisk: true,
+}
+
+prebuilt_etc {
+    name: "fstab.cf.ext4.hctr2",
+    src: ":gen_fstab_cf_ext4_hctr2",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "fstab.cf.ext4.hctr2.vendor_ramdisk",
+    srcs: [
+        ":gen_fstab_cf_ext4_hctr2",
+    ],
+    dsts: [
+        "fstab.cf.ext4.hctr2",
+    ],
+    vendor_ramdisk: true,
+}
+
+prebuilt_etc {
+    name: "fstab.cf.ext4.cts",
+    src: ":gen_fstab_cf_ext4_cts",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "fstab.cf.ext4.cts.vendor_ramdisk",
+    srcs: [
+        ":gen_fstab_cf_ext4_cts",
+    ],
+    dsts: [
+        "fstab.cf.ext4.cts",
+    ],
+    vendor_ramdisk: true,
+}
+
+prebuilt_etc {
+    name: "device_google_cuttlefish_shared_config_audio_policy",
+    srcs: [
+        "audio/policy/audio_policy_configuration.xml",
+        "audio/policy/primary_audio_policy_configuration.xml",
+    ],
+    vendor: true,
+    enabled: select(soong_config_variable("cuttlefish_config", "use_audio_policy"), {
+        true: true,
+        default: false,
+    }),
+}
+
+prebuilt_etc {
+    name: "device_google_cuttlefish_shared_config_init_graphics_vendor_rc",
+    srcs: ["graphics/init_graphics.vendor.rc"],
+    vendor: true,
+    relative_install_path: "init",
+    enabled: select(soong_config_variable("cuttlefish_config", "use_init_graphics_vendor_rc"), {
+        true: true,
+        default: false,
+    }),
+}
+
+prebuilt_defaults {
+    name: "cuttlefish_config_general_files_defaults",
+    enabled: select(soong_config_variable("cuttlefish_config", "use_general_files"), {
+        true: true,
+        default: false,
+    }),
+}
+
+prebuilt_etc {
+    name: "device_google_cuttlefish_shared_config_init_vendor_rc",
+    defaults: ["cuttlefish_config_general_files_defaults"],
+    srcs: ["init.vendor.rc"],
+    dsts: ["init.cutf_cvm.rc"],
+    vendor: true,
+    relative_install_path: "init",
+}
+
+prebuilt_etc {
+    name: "device_google_cuttlefish_shared_config_init_product_rc",
+    defaults: ["cuttlefish_config_general_files_defaults"],
+    srcs: ["init.product.rc"],
+    dsts: ["init.rc"],
+    product_specific: true,
+    relative_install_path: "init",
+}
+
+prebuilt_etc {
+    name: "device_google_cuttlefish_shared_config_media_codecs",
+    defaults: ["cuttlefish_config_general_files_defaults"],
+    srcs: [
+        "media_codecs.xml",
+        "media_codecs_google_video.xml",
+        "media_codecs_performance.xml",
+    ],
+    dsts: [
+        "media_codecs.xml",
+        "media_codecs_google_video.xml",
+        "media_codecs_performance.xml",
+    ],
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "device_google_cuttlefish_shared_config_media_profiles",
+    defaults: ["cuttlefish_config_general_files_defaults"],
+    srcs: select(soong_config_variable("ANDROID", "board_is_automotive"), {
+        true: ["media_profiles_automotive.xml"],
+        default: ["media_profiles.xml"],
+    }),
+    dsts: [
+        "media_profiles_V1_0.xml",
+    ],
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "device_google_cuttlefish_shared_config_media_profiles_vendor",
+    defaults: ["cuttlefish_config_general_files_defaults"],
+    srcs: [
+        "media_profiles.xml",
+    ],
+    dsts: [
+        "media_profiles_vendor.xml",
+    ],
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "device_google_cuttlefish_shared_config_seriallogging_rc",
+    defaults: ["cuttlefish_config_general_files_defaults"],
+    srcs: [
+        "seriallogging.rc",
+    ],
+    relative_install_path: "init",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "device_google_cuttlefish_shared_config_ueventd_rc",
+    defaults: ["cuttlefish_config_general_files_defaults"],
+    srcs: [
+        "ueventd.rc",
+    ],
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "device_google_cuttlefish_shared_config_dma_heap_config",
+    defaults: ["cuttlefish_config_general_files_defaults"],
+    srcs: ["dma_heap.json"],
+    vendor: true,
+}

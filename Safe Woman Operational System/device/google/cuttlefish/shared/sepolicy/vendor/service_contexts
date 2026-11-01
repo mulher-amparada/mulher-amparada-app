@@ -1,0 +1,21 @@
+android.hardware.drm.IDrmFactory/widevine    u:object_r:hal_drm_service:s0
+android.hardware.neuralnetworks.IDevice/nnapi-sample_all u:object_r:hal_neuralnetworks_service:s0
+android.hardware.neuralnetworks.IDevice/nnapi-sample_quant    u:object_r:hal_neuralnetworks_service:s0
+android.hardware.neuralnetworks.IDevice/nnapi-sample_sl_shim  u:object_r:hal_neuralnetworks_service:s0
+android.hardware.security.keymint.IKeyMintDevice/strongbox      u:object_r:hal_keymint_service:s0
+android.hardware.security.sharedsecret.ISharedSecret/strongbox  u:object_r:hal_sharedsecret_service:s0
+android.hardware.security.keymint.IRemotelyProvisionedComponent/strongbox u:object_r:hal_keymint_service:s0
+android.hardware.secure_element.ISecureElement/eSE1 u:object_r:hal_secure_element_service:s0
+
+# Binder service mappings
+gce                                       u:object_r:gce_service:s0
+
+# WLC
+vendor.google.wireless_charger.IWirelessCharger/default                      u:object_r:hal_wireless_charger_service:s0
+
+# google_battery
+vendor.google.google_battery.IGoogleBattery/default                          u:object_r:hal_googlebattery_service:s0
+
+# shared secret implementation for on-device gatekeeper
+android.hardware.security.sharedsecret.ISharedSecret/gatekeeper u:object_r:hal_gatekeeper_service:s0
+

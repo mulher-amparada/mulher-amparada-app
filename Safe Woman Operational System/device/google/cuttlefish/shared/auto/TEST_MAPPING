@@ -1,0 +1,96 @@
+{
+  "auto-presubmit": [
+    {
+      "name": "CarHiddenApiTest"
+    },
+    {
+      "name": "CarExtendedApiTest"
+    },
+    {
+      "name": "CarSecurityPermissionTest"
+    },
+    {
+      "name": "CtsCarTestCases"
+    },
+    {
+      "name": "CtsCarBuiltinApiTestCases"
+    },
+    {
+      "name": "CtsCarHostTestCases"
+    },
+    {
+      "name": "CtsCarBuiltinApiHostTestCases"
+    },
+    {
+      "name": "CarServiceAudioTest"
+    },
+    {
+      "name": "CarServiceCarTest"
+    },
+    {
+      "name": "CarServiceClusterTest"
+    },
+    {
+      "name": "CarServiceDiagnosticTest"
+    },
+    {
+      "name": "CarServiceDrivingStateTest"
+    },
+    {
+      "name": "CarServiceEvsTest"
+    },
+    {
+      "name": "CarServiceGarageModeTest"
+    },
+    {
+      "name": "CarServiceInputTest"
+    },
+    {
+      "name": "CarServiceOsTest"
+    },
+    {
+      "name": "CarServicePmTest"
+    },
+    {
+      "name": "CarServicePowerTest"
+    },
+    {
+      "name": "CarServicePropertyTest"
+    },
+    {
+      "name": "CarServiceRemoteAccessTest"
+    },
+    {
+      "name": "CarServiceStorageMonitoringTest"
+    },
+    {
+      "name": "CarServiceTelemetryTest"
+    },
+    {
+      "name": "VtsHalAutomotiveVehicle_TargetTest"
+    }
+  ],
+  "auto-presubmit-all-ui-targets": [
+    {
+      "name": "CarExtendedApiTest"
+    },
+    {
+      "name": "CarHiddenApiTest"
+    },
+    {
+      "name": "CarServiceAudioTest"
+    },
+    {
+      "name": "CarServiceDrivingStateTest"
+    },
+    {
+      "name": "CarServiceInputTest"
+    },
+    {
+      "name": "CarServicePmTest"
+    },
+    {
+      "name": "CtsCarTestCases"
+    }
+  ]
+}

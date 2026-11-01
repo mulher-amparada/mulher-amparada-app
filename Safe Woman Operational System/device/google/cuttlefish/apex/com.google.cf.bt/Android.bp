@@ -1,0 +1,137 @@
+// Copyright (C) 2021 The Android Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package {
+    default_applicable_licenses: ["Android-Apache-2.0"],
+}
+
+prebuilt_etc {
+    name: "com.google.cf.bt.default.rc",
+    src: "com.google.cf.bt.default.rc",
+    installable: false,
+}
+
+prebuilt_etc {
+    name: "com.google.cf.bt.lpp.rc",
+    src: "com.google.cf.bt.lpp.rc",
+    installable: false,
+}
+
+prebuilt_etc {
+    name: "android.hardware.bluetooth.finder-service.default.xml",
+    src: ":manifest_android.hardware.bluetooth.finder-service.default.xml",
+    sub_dir: "vintf",
+    installable: false,
+}
+
+prebuilt_etc {
+    name: "android.hardware.bluetooth.ranging-service.default.xml",
+    src: ":manifest_android.hardware.bluetooth.ranging-service.default.xml",
+    sub_dir: "vintf",
+    installable: false,
+}
+
+prebuilt_etc {
+    name: "android.hardware.bluetooth.lmp_event-service.default.xml",
+    src: ":manifest_android.hardware.bluetooth.lmp_event-service.default.xml",
+    sub_dir: "vintf",
+    installable: false,
+}
+
+prebuilt_etc {
+    name: "android.hardware.bluetooth.socket-service.default.xml",
+    src: ":manifest_android.hardware.bluetooth.socket-service.default.xml",
+    sub_dir: "vintf",
+    installable: false,
+}
+
+prebuilt_etc {
+    name: "android.hardware.bluetooth.socket-service.lpp.xml",
+    src: ":manifest_android.hardware.bluetooth.socket-service.lpp.xml",
+    sub_dir: "vintf",
+    installable: false,
+}
+
+prebuilt_etc {
+    name: "android.hardware.bluetooth.gatt-service.default.xml",
+    src: ":manifest_android.hardware.bluetooth.gatt-service.default.xml",
+    sub_dir: "vintf",
+    installable: false,
+}
+
+bt_binaries_default = [
+    "android.hardware.bluetooth-service.cuttlefish",
+    "android.hardware.bluetooth.finder-service.default",
+    "android.hardware.bluetooth.lmp_event-service.default",
+    "android.hardware.bluetooth.ranging-service.default",
+    "android.hardware.bluetooth.socket-service.default",
+]
+
+bt_binaries_lpp = bt_binaries_default + [
+    "android.hardware.bluetooth.socket-service.lpp",
+    "android.hardware.bluetooth.gatt-service.default",
+]
+
+bt_prebuilts_default = [
+    // permissions
+    "android.hardware.bluetooth.prebuilt.xml",
+    "android.hardware.bluetooth_le.prebuilt.xml",
+    // vintf
+    "android.hardware.bluetooth-service.cuttlefish.xml",
+    "android.hardware.bluetooth.finder-service.default.xml",
+    "android.hardware.bluetooth.lmp_event-service.default.xml",
+    "android.hardware.bluetooth.ranging-service.default.xml",
+    "android.hardware.bluetooth.socket-service.default.xml",
+    "com.google.cf.bt.default.rc",
+]
+
+bt_prebuilts_lpp = bt_prebuilts_default + [
+    "android.hardware.bluetooth.socket-service.lpp.xml",
+    "android.hardware.bluetooth.gatt-service.default.xml",
+    "com.google.cf.bt.lpp.rc",
+]
+
+soong_config_module_type {
+    name: "bt_apex_configurable",
+    module_type: "apex",
+    config_namespace: "cuttlefish_config",
+    bool_variables: [
+        "bt_lpp_service_instance_enabled",
+    ],
+    properties: [
+        "file_contexts",
+        "binaries",
+        "prebuilts",
+    ],
+}
+
+bt_apex_configurable {
+    name: "com.google.cf.bt",
+    manifest: "manifest.json",
+    key: "com.google.cf.apex.key",
+    certificate: ":com.google.cf.apex.certificate",
+    updatable: false,
+    soc_specific: true,
+    file_contexts: "file_contexts_default",
+    binaries: bt_binaries_default,
+    prebuilts: bt_prebuilts_default,
+
+    soong_config_variables: {
+        bt_lpp_service_instance_enabled: {
+            file_contexts: "file_contexts_lpp",
+            binaries: bt_binaries_lpp,
+            prebuilts: bt_prebuilts_lpp,
+        },
+    },
+}

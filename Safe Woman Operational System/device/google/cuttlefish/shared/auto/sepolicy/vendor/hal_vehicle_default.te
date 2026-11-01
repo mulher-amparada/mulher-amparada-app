@@ -1,0 +1,8 @@
+# The sepolicy defines rules for default Vehicle HAL on Automotive devices
+typeattribute hal_vehicle_default hal_automotive_socket_exemption;
+
+net_domain(hal_vehicle_default)
+get_prop(hal_vehicle_default, vendor_vhal_proxy_server_port_prop)
+get_prop(hal_vehicle_default, auto_eth_namespace_setup_complete_prop)
+# Required for set ctl.oneshot_off
+set_prop(hal_vehicle_default, ctl_default_prop)

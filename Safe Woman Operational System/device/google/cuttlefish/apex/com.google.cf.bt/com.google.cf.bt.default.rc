@@ -1,0 +1,27 @@
+service bt_hci /apex/com.google.cf.bt/bin/hw/android.hardware.bluetooth-service.cuttlefish --serial ${vendor.ser.bt-uart}
+    class hal
+    user bluetooth
+    group bluetooth
+
+service bt_finder /apex/com.google.cf.bt/bin/hw/android.hardware.bluetooth.finder-service.default
+    class hal
+    user bluetooth
+    group bluetooth net_admin net_bt_admin
+    capabilities NET_ADMIN
+
+service bt_ranging /apex/com.google.cf.bt/bin/hw/android.hardware.bluetooth.ranging-service.default
+    class hal
+    user bluetooth
+    group bluetooth net_admin net_bt_admin
+    capabilities NET_ADMIN
+
+service bt_lmp_event /apex/com.google.cf.bt/bin/hw/android.hardware.bluetooth.lmp_event-service.default
+    class hal
+    user bluetooth
+    group bluetooth net_admin net_bt_admin
+    capabilities NET_ADMIN
+
+service bt_socket /apex/com.google.cf.bt/bin/hw/android.hardware.bluetooth.socket-service.default
+    class hal
+    user bluetooth
+    group bluetooth

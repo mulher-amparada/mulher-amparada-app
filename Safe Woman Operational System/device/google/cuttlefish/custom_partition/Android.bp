@@ -1,0 +1,16 @@
+android_filesystem {
+    name: "cuttlefish_example_custom",
+
+    mount_point: "/cuttlefish_example_custom",
+    partition_size: 1048576, // 1 MB
+    type: "ext4",
+
+    dists: [
+        {
+            targets: [
+                "droidcore",
+                "droidcore-unbundled",
+            ],
+        },
+    ],
+}

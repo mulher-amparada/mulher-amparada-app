@@ -1,0 +1,10 @@
+{
+  "desktop-postsubmit-latest-kernel": [
+    {
+      "name": "CfVkmsDisplaysTest"
+    },
+    {
+      "name": "CfVkmsCursorTest"
+    }
+  ]
+}

@@ -1,0 +1,645 @@
+#
+# Copyright (C) 2017 The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# Include all languages
+$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
+
+# Enable updating of APEXes
+$(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
+
+# Enforce generic ramdisk allow list
+$(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
+
+# Set Vendor SPL to match platform
+VENDOR_SECURITY_PATCH = $(PLATFORM_SECURITY_PATCH)
+
+# Set boot SPL
+BOOT_SECURITY_PATCH = $(PLATFORM_SECURITY_PATCH)
+
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.vendor.boot_security_patch=$(BOOT_SECURITY_PATCH)
+
+PRODUCT_SOONG_NAMESPACES += device/generic/goldfish # for audio, wifi and sensors
+
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
+PRODUCT_SET_DEBUGFS_RESTRICTIONS := true
+
+PRODUCT_FS_COMPRESSION := 1
+TARGET_RO_FILE_SYSTEM_TYPE ?= erofs
+BOARD_EROFS_COMPRESS_HINTS := device/google/cuttlefish/shared/erofs_compress_hints.txt
+TARGET_USERDATAIMAGE_FILE_SYSTEM_TYPE ?= f2fs
+TARGET_USERDATAIMAGE_PARTITION_SIZE ?= 8589934592
+
+TARGET_VULKAN_SUPPORT ?= true
+
+ifneq ($(RELEASE_ADBD_OPEN_VSOCK_PORT),)
+PRODUCT_SYSTEM_PROPERTIES += service.adb.listen_addrs=vsock:8382,vsock:5555
+endif
+
+# Increase the HCI timeout to 5 seconds to prevent from timeout.
+PRODUCT_SYSTEM_EXT_PROPERTIES += bluetooth.hci.timeout_milliseconds=5000
+
+# Enable Virtual A/B
+$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/vabc_features.mk)
+PRODUCT_VIRTUAL_AB_COMPRESSION_METHOD := lz4
+PRODUCT_VIRTUAL_AB_COW_VERSION := 3
+PRODUCT_VIRTUAL_AB_COMPRESSION_FACTOR := 65536
+
+PRODUCT_VENDOR_PROPERTIES += ro.virtual_ab.compression.threads=true
+PRODUCT_VENDOR_PROPERTIES += ro.virtual_ab.batch_writes=true
+# Opt in for ublk based OTA for testing
+PRODUCT_VENDOR_PROPERTIES += ro.virtual_ab.ublk.enabled=true
+
+# Enable Scoped Storage related
+$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
+
+# Properties that are not vendor-specific. These will go in the product
+# partition, instead of the vendor partition, and do not need vendor
+# sepolicy
+PRODUCT_PRODUCT_PROPERTIES += \
+    remote_provisioning.hostname=preprod-remoteprovisioning.googleapis.com \
+    persist.adb.tcp.port=5555 \
+    ro.com.google.locationfeatures=1 \
+    persist.sys.fuse.passthrough.enable=true \
+    remote_provisioning.tee.rkp_only=1
+
+# Until we support adb keys on user builds, and fix logcat over serial,
+# spawn adbd by default without authorization for "adb logcat"
+ifeq ($(TARGET_BUILD_VARIANT),user)
+PRODUCT_PRODUCT_PROPERTIES += \
+    ro.adb.secure=0
+
+PRODUCT_PACKAGES += \
+    logpersist.start
+
+PRODUCT_ARTIFACT_PATH_REQUIREMENT_ALLOWED_LIST += \
+    $(TARGET_COPY_OUT_SYSTEM)/bin/logcatd \
+    $(TARGET_COPY_OUT_SYSTEM)/bin/logpersist.cat \
+    $(TARGET_COPY_OUT_SYSTEM)/bin/logpersist.start \
+    $(TARGET_COPY_OUT_SYSTEM)/bin/logpersist.stop \
+    $(TARGET_COPY_OUT_SYSTEM)/etc/init/logcatd.rc
+endif
+
+# Use AIDL for media.c2 HAL
+PRODUCT_VENDOR_PROPERTIES += media.c2.hal.selection?=aidl
+
+# Explanation of specific properties:
+#   ro.hardware.keystore_desede=true needed for CtsKeystoreTestCases
+PRODUCT_VENDOR_PROPERTIES += \
+    tombstoned.max_tombstone_count=100 \
+    ro.carrier=unknown \
+    ro.com.android.dataroaming?=false \
+    ro.hardware.virtual_device=1 \
+    ro.logd.size=1M \
+    wifi.interface=wlan0 \
+    wifi.direct.interface=p2p-dev-wlan0 \
+    persist.sys.zram_enabled=1 \
+    ro.hardware.keystore_desede=true \
+    ro.incremental.enable=1 \
+    debug.c2.use_dmabufheaps=1
+
+# Below is a list of properties we probably should get rid of.
+PRODUCT_VENDOR_PROPERTIES += \
+    wlan.driver.status=ok
+
+PRODUCT_VENDOR_PROPERTIES += \
+    debug.stagefright.c2inputsurface=-1
+
+# Enforce privapp permissions control.
+PRODUCT_VENDOR_PROPERTIES += ro.control_privapp_permissions?=enforce
+
+# Copy preopted files from system_b on first boot
+PRODUCT_VENDOR_PROPERTIES += ro.cp_system_other_odex=1
+
+AB_OTA_POSTINSTALL_CONFIG += \
+    RUN_POSTINSTALL_system=true \
+    POSTINSTALL_PATH_system=system/bin/otapreopt_script \
+    FILESYSTEM_TYPE_system=erofs \
+    POSTINSTALL_OPTIONAL_system=true
+
+AB_OTA_POSTINSTALL_CONFIG += \
+    RUN_POSTINSTALL_vendor=true \
+    POSTINSTALL_PATH_vendor=bin/checkpoint_gc \
+    FILESYSTEM_TYPE_vendor=erofs \
+    POSTINSTALL_OPTIONAL_vendor=true
+
+# Userdata Checkpointing OTA GC
+PRODUCT_PACKAGES += \
+    checkpoint_gc \
+    vkms_controller \
+
+# DRM service opt-in
+PRODUCT_VENDOR_PROPERTIES += drm.service.enabled=true
+
+# Call deleteAllKeys if vold detects a factory reset
+PRODUCT_VENDOR_PROPERTIES += ro.crypto.metadata_init_delete_all_keys.enabled=true
+
+#
+# Packages for various GCE-specific utilities
+#
+PRODUCT_PACKAGES += \
+    CuttlefishService \
+    socket_vsock_proxy \
+    tombstone_transmit \
+    tombstone_producer \
+    suspend_blocker \
+    metrics_helper \
+    snapshot_hook_post_resume \
+    snapshot_hook_pre_suspend
+
+$(call soong_config_append,cvd,launch_configs,cvd_config_auto.json cvd_config_auto_portrait.json cvd_config_auto_md.json cvd_config_foldable.json cvd_config_go.json cvd_config_phone.json cvd_config_slim.json cvd_config_tablet.json cvd_config_tv.json cvd_config_wear.json)
+$(call soong_config_append,cvd,grub_config,grub.cfg)
+
+#
+# Packages for AOSP-available stuff we use from the framework
+#
+PRODUCT_PACKAGES += \
+    e2fsck \
+    ip \
+    sleep \
+    tcpdump \
+
+#
+# Package for AOSP QNS
+#
+PRODUCT_PACKAGES += \
+    QualifiedNetworksService
+
+#
+# Package for AOSP GBA
+#
+PRODUCT_PACKAGES += \
+    GbaService
+
+#
+# Packages for testing
+#
+PRODUCT_PACKAGES += \
+    aidl_lazy_test_server \
+    aidl_lazy_cb_test_server \
+
+# Runtime Resource Overlays
+PRODUCT_PACKAGES += \
+    cuttlefish_overlay_connectivity \
+    cuttlefish_overlay_frameworks_base_core \
+    cuttlefish_overlay_nfc \
+    cuttlefish_overlay_nfc_gsi \
+    cuttlefish_overlay_settings_provider \
+
+#
+# Satellite vendor service for CF
+#
+PRODUCT_PACKAGES += CFSatelliteService
+
+# PRODUCT_AAPT_CONFIG and PRODUCT_AAPT_PREF_CONFIG are intentionally not set to
+# pick up every density resources.
+
+#
+# Common manifest for all targets
+#
+
+ifeq ($(RELEASE_AIDL_USE_UNFROZEN),true)
+PRODUCT_SHIPPING_API_LEVEL := 37
+LOCAL_DEVICE_FCM_MANIFEST_FILE ?= device/google/cuttlefish/shared/config/manifest.xml
+else
+PRODUCT_SHIPPING_API_LEVEL := 37
+LOCAL_DEVICE_FCM_MANIFEST_FILE ?= device/google/cuttlefish/shared/config/previous_manifest.xml
+endif
+DEVICE_MANIFEST_FILE += $(LOCAL_DEVICE_FCM_MANIFEST_FILE)
+
+PRODUCT_CHECK_PREBUILT_MAX_PAGE_SIZE := true
+
+#
+# General files
+#
+
+$(call soong_config_set_bool,cuttlefish_config,use_general_files,true)
+PRODUCT_PACKAGES += \
+    device_google_cuttlefish_shared_config_init_vendor_rc \
+    device_google_cuttlefish_shared_config_init_product_rc \
+    device_google_cuttlefish_shared_config_media_codecs \
+    device_google_cuttlefish_shared_config_media_profiles \
+    device_google_cuttlefish_shared_config_media_profiles_vendor \
+    device_google_cuttlefish_shared_config_seriallogging_rc \
+    device_google_cuttlefish_shared_config_ueventd_rc \
+    device_google_cuttlefish_shared_default_permissions_cuttlefish \
+    device_google_cuttlefish_shared_privapp_permissions_cuttlefish
+
+PRODUCT_COPY_FILES += \
+    frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_audio.xml \
+    frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_telephony.xml \
+    frameworks/native/data/etc/android.hardware.ethernet.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.ethernet.xml \
+    frameworks/native/data/etc/android.hardware.usb.accessory.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.accessory.xml \
+    frameworks/native/data/etc/android.hardware.usb.host.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.host.xml \
+    frameworks/native/data/etc/android.hardware.wifi.direct.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.direct.xml \
+    frameworks/native/data/etc/android.hardware.wifi.passpoint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.passpoint.xml \
+    frameworks/native/data/etc/android.hardware.wifi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.xml \
+    frameworks/native/data/etc/android.software.credentials.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.credentials.xml \
+    frameworks/native/data/etc/android.software.ipsec_tunnels.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.ipsec_tunnels.xml \
+    frameworks/native/data/etc/android.software.verified_boot.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.verified_boot.xml \
+
+ifneq ($(LOCAL_USE_VENDOR_AUDIO_CONFIGURATION),true)
+$(call inherit-product, frameworks/av/services/audiopolicy/audio_policy_config_vendor_1.mk)
+endif
+
+#
+# Device input config
+# Install .kcm/.kl/.idc files via input.config apex
+#
+PRODUCT_PACKAGES += com.google.cf.input.config
+
+PRODUCT_PACKAGES += \
+    fstab.cf.f2fs.hctr2 \
+    fstab.cf.f2fs.hctr2.vendor_ramdisk \
+    fstab.cf.f2fs.cts \
+    fstab.cf.f2fs.cts.vendor_ramdisk \
+    fstab.cf.ext4.hctr2 \
+    fstab.cf.ext4.hctr2.vendor_ramdisk \
+    fstab.cf.ext4.cts \
+    fstab.cf.ext4.cts.vendor_ramdisk \
+
+# Packages for HAL implementations
+
+# TODO(b/218588089) remove this once cuttlefish can drop HIDL.
+# This adds hwservicemanager and the allocator service to the device.
+PRODUCT_PACKAGES += \
+    hwservicemanager \
+    android.hidl.allocator@1.0-service
+
+#
+# Weaver aidl HAL
+#
+# TODO(b/262418065) Add a real weaver implementation
+
+
+#
+# Authsecret AIDL HAL
+#
+PRODUCT_PACKAGES += \
+    com.android.hardware.authsecret
+
+ifndef LOCAL_AUDIO_PRODUCT_PACKAGE
+#
+# Still use HIDL Audio HAL on 'next'
+#
+LOCAL_AUDIO_PRODUCT_PACKAGE += \
+    android.hardware.audio.parameter_parser.example_service \
+    com.android.hardware.audio
+PRODUCT_SYSTEM_EXT_PROPERTIES += \
+    ro.audio.ihaladaptervendorextension_enabled=true
+PRODUCT_PRODUCT_PROPERTIES += \
+    aaudio.mmap_policy=2 \
+    aaudio.mmap_exclusive_policy=2 \
+    aaudio.hw_burst_min_usec=2000
+endif
+
+ifneq ($(LOCAL_USE_VENDOR_AUDIO_CONFIGURATION),true)
+ifndef LOCAL_AUDIO_PRODUCT_COPY_FILES
+PRODUCT_PACKAGES += device_google_cuttlefish_shared_config_audio_policy
+$(call soong_config_set_bool,cuttlefish_config,use_audio_policy,true)
+
+$(call inherit-product, hardware/interfaces/audio/aidl/default/audio_effects.mk)
+endif
+endif
+
+PRODUCT_PACKAGES += $(LOCAL_AUDIO_PRODUCT_PACKAGE)
+PRODUCT_COPY_FILES += $(LOCAL_AUDIO_PRODUCT_COPY_FILES)
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_AUDIO_DEVICE_PACKAGE_OVERLAYS)
+
+#
+# Contexthub HAL
+#
+LOCAL_CONTEXTHUB_PRODUCT_PACKAGE ?= \
+    com.android.hardware.contexthub
+PRODUCT_PACKAGES += $(LOCAL_CONTEXTHUB_PRODUCT_PACKAGE)
+
+#
+# Drm HAL
+#
+ifeq ($(TARGET_USE_LAZY_CLEARKEY),true)
+PRODUCT_PACKAGES += \
+    com.android.hardware.drm.clearkey.lazy
+else
+PRODUCT_PACKAGES += \
+    android.hardware.drm@latest-service.clearkey
+endif
+
+LOCAL_ENABLE_WIDEVINE ?= true
+ifeq ($(LOCAL_ENABLE_WIDEVINE),true)
+-include vendor/widevine/libwvdrmengine/apex/device/device.mk
+-include vendor/google/widevine/cdm/android/level3/generic/widevine_release_level3.mk
+
+ifeq ($(RELEASE_WIDEVINE_CUTTLEFISH_L1),true)
+    ifndef TARGET_BUILD_WIDEVINE_BUILD_CONFIG
+        PRODUCT_SOONG_NAMESPACES += vendor/google/widevine/cdm
+        PRODUCT_PACKAGES += liboemcrypto_no_ipc_test_only
+    endif
+endif
+
+endif
+
+#
+# Confirmation UI HAL
+#
+ifeq ($(LOCAL_CONFIRMATIONUI_PRODUCT_PACKAGE),)
+    LOCAL_CONFIRMATIONUI_PRODUCT_PACKAGE := com.google.cf.confirmationui
+endif
+PRODUCT_PACKAGES += $(LOCAL_CONFIRMATIONUI_PRODUCT_PACKAGE)
+
+#
+# Dumpstate HAL
+#
+ifeq ($(LOCAL_DUMPSTATE_PRODUCT_PACKAGE),)
+    LOCAL_DUMPSTATE_PRODUCT_PACKAGE += com.android.hardware.dumpstate
+endif
+PRODUCT_PACKAGES += $(LOCAL_DUMPSTATE_PRODUCT_PACKAGE)
+
+#
+# Gatekeeper
+#
+PRODUCT_PACKAGES += \
+  com.android.hardware.gatekeeper.cf_remote \
+  com.android.hardware.gatekeeper.nonsecure \
+
+#
+# Oemlock
+#
+LOCAL_ENABLE_OEMLOCK ?= true
+ifeq ($(LOCAL_ENABLE_OEMLOCK),true)
+ifeq ($(LOCAL_OEMLOCK_PRODUCT_PACKAGE),)
+    LOCAL_OEMLOCK_PRODUCT_PACKAGE := com.google.cf.oemlock
+endif
+PRODUCT_PACKAGES += \
+    $(LOCAL_OEMLOCK_PRODUCT_PACKAGE)
+
+PRODUCT_VENDOR_PROPERTIES += ro.oem_unlock_supported=1
+endif
+
+# Health
+ifeq ($(LOCAL_HEALTH_PRODUCT_PACKAGE),)
+    LOCAL_HEALTH_PRODUCT_PACKAGE := \
+    com.google.cf.health \
+    android.hardware.health-service.cuttlefish_recovery \
+
+endif
+PRODUCT_PACKAGES += $(LOCAL_HEALTH_PRODUCT_PACKAGE)
+
+PRODUCT_PACKAGES += \
+    com.android.hardware.input.processor
+
+# Netlink Interceptor HAL
+PRODUCT_PACKAGES += \
+    com.android.hardware.net.nlinterceptor
+
+#
+# Lights
+#
+LOCAL_ENABLE_LIGHT ?= true
+ifeq ($(LOCAL_ENABLE_LIGHT),true)
+PRODUCT_PACKAGES += \
+    com.google.cf.light \
+
+endif
+
+#
+# Trusty VM for Keymint and Gatekeeper HAL
+#
+ifeq ($(RELEASE_AVF_ENABLE_EARLY_VM),true)
+  TRUSTY_KEYMINT_IMPL ?= rust
+  TRUSTY_SYSTEM_VM ?= enabled_with_placeholder_trusted_hal
+endif
+ifeq ($(TRUSTY_SYSTEM_VM), enabled_with_placeholder_trusted_hal)
+    $(call soong_config_set_bool, trusty_system_vm, enabled, true)
+    $(call soong_config_set_bool, trusty_system_vm, placeholder_trusted_hal, true)
+    $(call soong_config_set, trusty_system_vm, buildtype, $(TARGET_BUILD_VARIANT))
+    $(call inherit-product, system/core/trusty/keymint/trusty-keymint-apex.mk)
+    $(call inherit-product, system/core/trusty/trusty-storage-cf.mk)
+    $(call inherit-product, packages/modules/Virtualization/guest/trusty/security_vm/security_vm.mk)
+
+endif
+
+#
+# KeyMint HAL
+#
+PRODUCT_PACKAGES += \
+	com.android.hardware.keymint.rust_cf_remote \
+	com.android.hardware.keymint.rust_nonsecure \
+	com.android.hardware.keymint.rust_cf_guest_trusty_nonsecure \
+
+# Indicate that KeyMint includes support for the ATTEST_KEY key purpose.
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.keystore.app_attest_key.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.keystore.app_attest_key.xml
+# Indicate that KeyMint includes (emulated) support for device ID attestation.
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.software.device_id_attestation.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.device_id_attestation.xml
+
+#
+# Non-secure implementation of AuthGraph HAL for compliance.
+#
+PRODUCT_PACKAGES += \
+    com.android.hardware.security.authgraph
+
+#
+# Non-secure implementation of Secretkeeper HAL for compliance.
+#
+PRODUCT_PACKAGES += \
+    com.android.hardware.security.secretkeeper
+
+#
+# Power and PowerStats HALs
+#
+PRODUCT_PACKAGES += com.android.hardware.power
+
+#
+# Tetheroffload HAL
+#
+PRODUCT_PACKAGES += \
+    com.android.hardware.tetheroffload
+
+#
+# Thermal HAL
+#
+LOCAL_THERMAL_HAL_PRODUCT_PACKAGE ?= com.android.hardware.thermal
+PRODUCT_PACKAGES += $(LOCAL_THERMAL_HAL_PRODUCT_PACKAGE)
+
+#
+# NeuralNetworks HAL
+#
+PRODUCT_PACKAGES += \
+    com.android.hardware.neuralnetworks
+
+#
+# NPU HAL
+#
+ifeq ($(RELEASE_AIDL_USE_UNFROZEN),true)
+    PRODUCT_PACKAGES += \
+        com.android.hardware.npu.cf
+
+    # Indicates that Cuttlefish has NPU support
+    PRODUCT_COPY_FILES += \
+        frameworks/native/data/etc/android.hardware.npu.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.npu.xml
+endif
+
+# USB
+PRODUCT_PACKAGES += \
+    com.android.hardware.usb
+
+# BootControl HAL
+PRODUCT_PACKAGES += \
+    com.android.hardware.boot \
+    android.hardware.boot-service.default_recovery
+
+
+# Memtrack HAL
+PRODUCT_PACKAGES += \
+    com.android.hardware.memtrack
+
+# Fastboot HAL & fastbootd
+PRODUCT_PACKAGES += \
+    android.hardware.fastboot@1.1-impl-mock \
+    fastbootd
+
+# Recovery mode
+ifneq ($(TARGET_NO_RECOVERY),true)
+
+PRODUCT_COPY_FILES += \
+    device/google/cuttlefish/shared/config/init.recovery.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.cutf_cvm.rc \
+    device/google/cuttlefish/shared/config/cgroups.json:$(TARGET_COPY_OUT_RECOVERY)/root/vendor/etc/cgroups.json \
+    device/google/cuttlefish/shared/config/ueventd.rc:$(TARGET_COPY_OUT_RECOVERY)/root/ueventd.cutf_cvm.rc \
+
+PRODUCT_PACKAGES += \
+    update_engine_sideload
+
+endif
+
+ifdef TARGET_DEDICATED_RECOVERY
+PRODUCT_BUILD_RECOVERY_IMAGE := true
+PRODUCT_PACKAGES += linker.vendor_ramdisk shell_and_utilities_vendor_ramdisk
+else
+PRODUCT_PACKAGES += linker.recovery shell_and_utilities_recovery
+endif
+
+# wifi
+# Add com.android.hardware.wifi for android.hardware.wifi-service
+PRODUCT_PACKAGES += com.android.hardware.wifi
+# Add com.google.cf.wifi and com.google.cf.wpa_supplicant for hostapd and wpa_supplicant
+PRODUCT_PACKAGES += com.google.cf.wifi
+PRODUCT_PACKAGES += com.google.cf.wpa_supplicant
+$(call add_soong_config_namespace, wpa_supplicant)
+$(call add_soong_config_var_value, wpa_supplicant, platform_version, $(PLATFORM_VERSION))
+$(call add_soong_config_var_value, wpa_supplicant, nl80211_driver, CONFIG_DRIVER_NL80211_QCA)
+
+# VirtWifi interface configuration
+ifeq ($(DEVICE_VIRTWIFI_PORT),)
+    DEVICE_VIRTWIFI_PORT := eth2
+endif
+PRODUCT_VENDOR_PROPERTIES += ro.vendor.virtwifi.port=${DEVICE_VIRTWIFI_PORT}
+
+# Wifi Runtime Resource Overlay
+PRODUCT_PACKAGES += \
+    CuttlefishTetheringOverlay \
+    CuttlefishWifiOverlay
+
+# Host packages to install
+PRODUCT_HOST_PACKAGES += socket_vsock_proxy
+
+#for Confirmation UI
+PRODUCT_SOONG_NAMESPACES += vendor/google_devices/common/proprietary/confirmatioui_hal
+
+# Need this so that the application's loop on reading input can be synchronized
+# with HW VSYNC
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.surface_flinger.running_without_sync_framework=true
+
+# Enable GPU-intensive background blur support on Cuttlefish when requested by apps
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.surface_flinger.supports_background_blur=1
+
+# Set Game Default Frame Rate
+# See b/286084594
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    ro.surface_flinger.game_default_frame_rate_override=60
+
+# Disable GPU-intensive background blur for widget picker
+PRODUCT_SYSTEM_EXT_PROPERTIES += \
+    ro.launcher.depth.widget=0
+
+# Start fingerprint virtual HAL process
+PRODUCT_VENDOR_PROPERTIES += ro.vendor.fingerprint_virtual_hal_start=true
+
+# Vendor Dlkm Locader
+PRODUCT_PACKAGES += \
+   dlkm_loader
+
+# CAS AIDL HAL
+PRODUCT_PACKAGES += \
+    com.android.hardware.cas
+
+PRODUCT_PACKAGES += \
+    device_google_cuttlefish_shared_config_pci_ids
+$(call soong_config_set_bool,cuttlefish_config,use_pci_ids,true)
+
+ifneq ($(CF_VENDOR_NO_UWB), true)
+# Enable UWB
+PRODUCT_PACKAGES += \
+    cuttlefish_overlay_uwb \
+    cuttlefish_overlay_uwb_gsi
+
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.uwb.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.uwb.xml
+
+PRODUCT_PACKAGES += com.android.hardware.uwb
+PRODUCT_VENDOR_PROPERTIES += ro.vendor.uwb.dev=/dev/hvc9
+endif
+
+ifneq ($(CF_VENDOR_NO_THREADNETWORK), true)
+# Thread Network AIDL HAL and Demo App
+PRODUCT_PACKAGES += \
+    com.android.hardware.threadnetwork \
+    ThreadNetworkDemoApp
+endif
+
+# Enable adb debugging
+PRODUCT_PACKAGES += set_adb
+
+#
+# virtio-media utils
+#
+PRODUCT_PACKAGES += \
+    v4l2-ctl
+
+PRODUCT_CHECK_VENDOR_SEAPP_VIOLATIONS := true
+
+PRODUCT_CHECK_DEV_TYPE_VIOLATIONS := true
+
+PRODUCT_COMPRESSED_APEX := false
+
+TARGET_BOARD_FASTBOOT_INFO_FILE = device/google/cuttlefish/shared/fastboot-info.txt
+
+PRODUCT_ENFORCE_SELINUX_TREBLE_LABELING := true
+
+# Install com.google.cf.disabled APEX to demonstrate init_dev_config
+LOCAL_ENABLE_INIT_DEV_CONFIG ?= true
+ifeq ($(LOCAL_ENABLE_INIT_DEV_CONFIG),true)
+    PRODUCT_PACKAGES += \
+        com.google.cf.disabled \
+        com.google.cf.init_dev_config
+    PRODUCT_VENDOR_PROPERTIES += \
+        ro.vendor.init_dev_config.path=/vendor/bin/init_dev_config
+endif
+
+PRODUCT_PACKAGES += \
+    device_google_cuttlefish_shared_config_dma_heap_config

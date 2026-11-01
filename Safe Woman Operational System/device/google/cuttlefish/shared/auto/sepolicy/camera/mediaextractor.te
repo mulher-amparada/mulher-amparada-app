@@ -1,0 +1,15 @@
+# Allow to use the media extractor
+allow hal_camera_default mediaextractor_service:service_manager find;
+binder_call(hal_camera_default, mediaextractor)
+binder_call(mediaextractor, hal_camera_default)
+
+# Allow to use the media server (for AMediaCodec)
+allow hal_camera_default mediaserver_service:service_manager find;
+binder_call(hal_camera_default, mediaserver)
+
+# Allow to find and use Codec2 services (for software decoders)
+hal_client_domain(hal_camera_default, hal_codec2)
+
+# Fix crash accessing /memfd:MediaBufferGroup
+allow hal_camera_default mediaextractor:memfd_file { read write getattr map };
+allow mediaextractor hal_camera_default:memfd_file { read write getattr map };

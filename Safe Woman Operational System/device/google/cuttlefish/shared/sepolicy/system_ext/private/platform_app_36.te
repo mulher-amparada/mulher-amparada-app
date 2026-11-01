@@ -1,0 +1,3 @@
+# allow platform_app/systemui access to fingerprint
+hal_client_domain(platform_app_36, hal_fingerprint)
+hal_client_domain(platform_app_36, hal_face)

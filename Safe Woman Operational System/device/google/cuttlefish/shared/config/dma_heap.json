@@ -1,0 +1,17 @@
+{
+    "devices": {
+        "/dev/dma_heap/system": {
+            "npu": [
+                {
+                    "buffer_types": [
+                        "MODEL_EXECUTABLE",
+                        "MODEL_WEIGHTS",
+                        "CACHE",
+                        "AUXILIARY"
+                    ],
+                    "device_numbers": [0]
+                }
+            ]
+        }
+    }
+}

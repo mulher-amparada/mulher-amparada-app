@@ -1,0 +1,16 @@
+service rename_eth0 /apex/com.google.cf.wifi/bin/rename_netiface eth0 buried_eth0
+    user root
+    oneshot
+
+# For legacy wifi without openwrt
+service setup_wifi /apex/com.google.cf.wifi/bin/setup_wifi --interface=${ro.vendor.virtwifi.port}
+    user root
+    oneshot
+
+# For wifi with openwrt
+service init_wifi_sh /apex/com.google.cf.wifi/bin/init.wifi
+    class late_start
+    user root
+    group root wakelock wifi
+    oneshot
+    disabled    # Started on post-fs-data

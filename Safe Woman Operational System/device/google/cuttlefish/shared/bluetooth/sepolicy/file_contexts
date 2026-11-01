@@ -1,0 +1,2 @@
+/dev/hvc5  u:object_r:bt_device:s0
+/dev/vhci  u:object_r:bt_device:s0

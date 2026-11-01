@@ -1,0 +1,5 @@
+# Read device's serial number from system properties
+get_prop(hal_keymint_system, serialno_prop)
+
+# Read the OS patch level from system properties
+get_prop(hal_keymint_system, vendor_security_patch_level_prop)

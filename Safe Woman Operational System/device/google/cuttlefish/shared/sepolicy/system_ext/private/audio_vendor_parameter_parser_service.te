@@ -1,0 +1,17 @@
+# Define a vendor parameter parser service which is used by the audio server
+type audio_vendor_parameter_parser, coredomain, domain;
+type audio_vendor_parameter_parser_exec, system_file_type, file_type, exec_type;
+init_daemon_domain(audio_vendor_parameter_parser)
+
+binder_service(audio_vendor_parameter_parser)
+
+add_service(audio_vendor_parameter_parser, audio_vendor_parameter_parser_service);
+
+binder_call(audioserver, audio_vendor_parameter_parser)
+binder_call(audio_vendor_parameter_parser, servicemanager)
+
+# Add permission to access/read and get system properties
+# ro.audio.ihaladaptervendorextension_libname
+get_prop(audio_vendor_parameter_parser, system_audio_config_prop)
+
+allow audioserver audio_vendor_parameter_parser_service:service_manager find;

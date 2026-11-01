@@ -1,0 +1,7 @@
+get_prop(platform_app_all, vendor_aware_available_prop)
+
+# allow systemui to set boot animation colors
+set_prop(platform_app_all, bootanim_system_prop);
+
+# allow systemui access to bluetooth_lea_prop
+get_prop(platform_app_all, bluetooth_lea_prop)

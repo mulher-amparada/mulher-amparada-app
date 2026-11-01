@@ -1,0 +1,52 @@
+package {
+    default_team: "trendy_team_enterprise",
+    default_applicable_licenses: ["Android-Apache-2.0"],
+}
+
+android_test {
+    name: "ManagedProvisioningTests",
+
+    platform_apis: true,
+    certificate: "platform",
+
+    static_libs: ["ManagedProvisioningTestsLib"],
+
+    instrumentation_for: "ManagedProvisioning",
+    test_suites: ["device-tests"],
+
+    // Packages to be included in code coverage runs.
+    jacoco: {
+        include_filter: ["com.android.managedprovisioning.*"],
+        exclude_filter: ["com.android.onboarding.*"],
+    },
+}
+
+android_library {
+    name: "ManagedProvisioningTestsLib",
+    srcs: [
+        "src/**/*.java",
+        "src/**/*.kt",
+    ],
+    manifest: "AndroidManifest.xml",
+    libs: [
+        "android.test.runner.stubs.system",
+        "android.test.base.stubs.system",
+        "android.test.mock.stubs.system",
+    ],
+    static_libs: [
+        "androidx.test.rules",
+        "mockito-target-minus-junit4",
+        "androidx.test.espresso.core",
+        "androidx.test.espresso.contrib",
+        "androidx.test.espresso.intents",
+        "truth",
+        "testng", // used only for assertThrows
+        "androidx.test.uiautomator_uiautomator", // used for unlocking the device
+        "TestApp",
+        "ctstestrunner-axt",
+        "bedstead",
+        "flag-junit",
+        "platform-test-annotations",
+        "ManagedProvisioningLib",
+    ],
+}

@@ -1,0 +1,13 @@
+sh_test_host {
+    name: "ravenwood-scripts-sh-golden-test",
+    src: "ravenwood-scripts-sh-golden-test.sh",
+    test_suites: ["general-tests"],
+    data: [
+        "golden-output/*.txt",
+        ":ravenwood-all-scripts",
+        ":ravenwood-all-text-files",
+    ],
+    test_options: {
+        unit_test: true,
+    },
+}

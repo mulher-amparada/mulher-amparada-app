@@ -1,0 +1,70 @@
+package: "com.android.server.usb.flags"
+container: "system"
+
+flag {
+    name: "allow_restriction_of_overlay_activities"
+    namespace: "usb"
+    description: "This flag controls the restriction of usb overlay activities"
+    bug: "307231174"
+}
+
+flag {
+    name: "check_user_action_unlocked"
+    namespace: "usb"
+    description: "This flag checks if phone is unlocked after boot"
+    bug: "73654179"
+}
+
+flag {
+    name: "wait_for_alsa_scan_results_if_has_audio_interface"
+    namespace: "usb"
+    description: "This flag waits for alsa scan results for audio device"
+    bug: "378826805"
+}
+
+# TODO(b/369430205) - Needs deletion after namespace migration.
+flag {
+    name: "enable_usb4"
+    namespace: "usb_desktop"
+    description: "This flag enables USB4 and Thunderbolt support"
+    bug: "369430205"
+}
+
+flag {
+    name: "enable_usb4_tbt"
+    namespace: "usb_desktop"
+    description: "This flag enables USB4 and Thunderbolt support"
+    bug: "369430205"
+}
+
+flag {
+    name: "enable_usb_host_authorization"
+    namespace: "usb_desktop"
+    description: "This flag enables USB host authorization"
+    bug: "409385933"
+}
+
+# TODO(b/369430205) - Needs deletion after namespace migration.
+flag {
+    name: "default_allow_pci_tunnels"
+    namespace: "usb_desktop"
+    description: "This flag allows PCI tunnels for testing and dogfooding"
+    bug: "369430205"
+}
+
+flag {
+    name: "consider_uvc_as_data_transfer_active"
+    namespace: "camera_platform"
+    description: "This flag considers UVC a valid function for the data transfer active check"
+    bug: "433613577"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "enable_camera_policy_check"
+    namespace: "usb"
+    description: "This flag enables checking DevicePolicyManager for DisallowCamera policy"
+    bug: "408983482"
+}

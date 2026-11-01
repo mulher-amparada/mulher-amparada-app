@@ -1,0 +1,147 @@
+package: "android.hardware.biometrics"
+container: "system"
+
+flag {
+  name: "add_key_agreement_crypto_object"
+  is_exported: true
+  namespace: "biometrics"
+  description: "Feature flag for adding KeyAgreement api to CryptoObject."
+  bug: "282058146"
+}
+
+flag {
+  name: "add_fallback"
+  namespace: "biometrics_framework"
+  description: "Feature flag for adding auth fallbacks to biometric prompt"
+  is_exported: true
+  bug: "391666818"
+}
+
+flag {
+  name: "add_fallback_icons"
+  namespace: "biometrics_framework"
+  description: "Feature flag for adding new fallback icons for biometric prompt"
+  is_exported: true
+  bug: "447227164"
+}
+
+flag {
+  name: "get_op_id_crypto_object"
+  is_exported: true
+  namespace: "biometrics_framework"
+  description: "Feature flag for adding a get operation id api to CryptoObject."
+  bug: "307601768"
+}
+
+flag {
+  name: "custom_biometric_prompt"
+  is_exported: true
+  namespace: "biometrics_framework"
+  description: "Feature flag for adding a custom content view API to BiometricPrompt.Builder."
+  bug: "302735104"
+}
+
+flag {
+  name: "screen_off_unlock_udfps"
+  is_exported: true
+  namespace: "biometrics_integration"
+  description: "This flag controls Whether to enable fp unlock when screen turns off on udfps devices"
+  bug: "373792870"
+}
+
+flag {
+  name: "identity_check_api"
+  namespace: "biometrics_framework"
+  description: "This flag is for API changes related to Identity Check"
+  bug: "373424727"
+  is_exported: true
+}
+
+flag {
+  name: "private_space_bp"
+  namespace: "biometrics_framework"
+  description: "Feature flag for biometric prompt improvements in private space"
+  bug: "365554098"
+}
+
+flag {
+  name: "effective_user_bp"
+  namespace: "biometrics_framework"
+  description: "Feature flag for using effective user in biometric prompt"
+  bug: "365094949"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "external_bp"
+  namespace: "biometrics_framework"
+  description: "Bug fix flag for BP on external displays"
+  bug: "463284718"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "move_fm_api_to_bm"
+  is_exported: true
+  namespace: "biometrics_framework"
+  description: "Feature flag for moving some FingerprintManager APIs to BiometricManager to unblock FM removal."
+  bug: "323957939"
+}
+
+flag {
+  name: "identity_check_test_api"
+  namespace: "biometrics_framework"
+  description: "This flag is for test API changes related to Identity Check"
+  bug: "347123256"
+}
+
+flag {
+  name: "identity_check_watch"
+  namespace: "biometrics_framework"
+  description: "This flag is for the integration of Identity Check with Watch"
+  bug: "397954948"
+}
+
+flag {
+  name: "clear_fallback_option"
+  is_exported: true
+  namespace: "biometrics_framework"
+  description: "Feature flag for removing a framework-added fallback option"
+  bug: "456265916"
+}
+
+flag {
+  name: "double_auth"
+  namespace: "biometrics_framework"
+  description: "Feature flag for adding double auth in biometric prompt for Identity Check"
+  bug: "442571994"
+}
+
+flag {
+  name: "get_biometric_sensor_strengths"
+  is_exported: true
+  namespace: "biometrics_framework"
+  description: "Feature flag for adding the getBiometricSensorStrengths API to BiometricManager."
+  bug: "454275027"
+}
+
+flag {
+    name: "agent_auth_api"
+    namespace: "biometrics_framework"
+    description: "Feature flag for internal xdevice agent auth API"
+    bug: "474639153"
+}
+
+flag {
+    name: "agent_auth_allow_auto_projected"
+    namespace: "biometrics_framework"
+    description: "Bug fix flag for auto projected role in agent auth"
+    bug: "474639153"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}

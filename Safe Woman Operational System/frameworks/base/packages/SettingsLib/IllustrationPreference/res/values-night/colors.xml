@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (C) 2021 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+
+<resources>
+    <color name="settingslib_protection_color">@android:color/black</color>
+
+    <!-- Custom semantic colors for the illustration palette. -->
+    <color name="illo_fixed_black">@android:color/black</color>
+    <color name="illo_fixed_white">@android:color/white</color>
+    <color name="illo_inverse_black">@android:color/white</color>
+    <color name="illo_inverse_white">@android:color/black</color>
+    <color name="illo_error_1">#F55E57</color>
+    <color name="illo_error_2">#93000A</color>
+    <color name="illo_error_3">#3A0A08</color>
+    <color name="illo_warning_1">#FCBD00</color>
+    <color name="illo_warning_2">#6D3901</color>
+    <color name="illo_warning_3">#2F1400</color>
+    <color name="illo_positive_1">#1AA64A</color>
+    <color name="illo_positive_2">#00522C</color>
+    <color name="illo_positive_3">#002110</color>
+</resources>

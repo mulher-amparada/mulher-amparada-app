@@ -1,0 +1,255 @@
+/*
+ * Copyright (C) 2019 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.permissioncontroller.role.ui.specialappaccess;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.os.Bundle;
+import android.os.UserHandle;
+import android.util.ArrayMap;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
+import androidx.preference.PreferenceScreen;
+import androidx.preference.TwoStatePreference;
+
+import com.android.permissioncontroller.permission.utils.Utils;
+import com.android.permissioncontroller.role.ui.ManageRoleHolderStateLiveData;
+import com.android.permissioncontroller.role.ui.RoleApplicationItem;
+import com.android.permissioncontroller.role.ui.RoleApplicationPreference;
+import com.android.permissioncontroller.role.utils.RoleUiBehaviorUtils;
+import com.android.role.controller.model.Role;
+import com.android.role.controller.model.Roles;
+
+import java.util.List;
+
+/**
+ * Child fragment for a special app access.
+ * <p>
+ * Must be added as a child fragment and its parent fragment must be a
+ * {@link PreferenceFragmentCompat} that implements {@link Parent}.
+ *
+ * @param <PF> type of the parent fragment
+ */
+public class SpecialAppAccessChildFragment<PF extends PreferenceFragmentCompat
+        & SpecialAppAccessChildFragment.Parent> extends Fragment
+        implements Preference.OnPreferenceClickListener {
+
+    private static final String PREFERENCE_EXTRA_APPLICATION_INFO =
+            SpecialAppAccessChildFragment.class.getName() + ".extra.APPLICATION_INFO";
+    private static final String PREFERENCE_KEY_DESCRIPTION =
+            SpecialAppAccessChildFragment.class.getName() + ".preference.DESCRIPTION";
+
+    @NonNull
+    private String mRoleName;
+
+    @NonNull
+    private Role mRole;
+
+    @NonNull
+    private SpecialAppAccessViewModel mViewModel;
+
+    /**
+     * Create a new instance of this fragment.
+     *
+     * @param roleName the name of the role for the special app access
+     *
+     * @return a new instance of this fragment
+     */
+    @NonNull
+    public static SpecialAppAccessChildFragment newInstance(@NonNull String roleName) {
+        SpecialAppAccessChildFragment fragment = new SpecialAppAccessChildFragment();
+        Bundle arguments = new Bundle();
+        arguments.putString(Intent.EXTRA_ROLE_NAME, roleName);
+        fragment.setArguments(arguments);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle arguments = getArguments();
+        mRoleName = arguments.getString(Intent.EXTRA_ROLE_NAME);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        PF preferenceFragment = requirePreferenceFragment();
+        Activity activity = requireActivity();
+        mRole = Roles.get(activity).get(mRoleName);
+        preferenceFragment.setTitle(getString(mRole.getLabelResource()));
+
+        ViewModelProvider.Factory viewModelFactory = new SpecialAppAccessViewModel.Factory(mRole,
+                activity.getApplication());
+        mViewModel = new ViewModelProvider(this, viewModelFactory)
+                .get(SpecialAppAccessViewModel.class);
+        mViewModel.getLiveData().observe(this, this::onApplicationListChanged);
+        mViewModel.observeManageRoleHolderState(this, this::onManageRoleHolderStateChanged);
+    }
+
+    private void onApplicationListChanged(
+            @NonNull List<RoleApplicationItem> applicationItems) {
+        PF preferenceFragment = requirePreferenceFragment();
+        PreferenceManager preferenceManager = preferenceFragment.getPreferenceManager();
+        Context context = preferenceManager.getContext();
+
+        PreferenceScreen preferenceScreen = preferenceFragment.getPreferenceScreen();
+        Preference oldDescriptionPreference = null;
+        ArrayMap<String, Preference> oldPreferences = new ArrayMap<>();
+        if (preferenceScreen == null) {
+            preferenceScreen = preferenceManager.createPreferenceScreen(context);
+            preferenceFragment.setPreferenceScreen(preferenceScreen);
+        } else {
+            oldDescriptionPreference = preferenceScreen.findPreference(PREFERENCE_KEY_DESCRIPTION);
+            if (oldDescriptionPreference != null) {
+                preferenceScreen.removePreference(oldDescriptionPreference);
+                oldDescriptionPreference.setOrder(Preference.DEFAULT_ORDER);
+            }
+            for (int i = preferenceScreen.getPreferenceCount() - 1; i >= 0; --i) {
+                Preference preference = preferenceScreen.getPreference(i);
+
+                preferenceScreen.removePreference(preference);
+                preference.setOrder(Preference.DEFAULT_ORDER);
+                oldPreferences.put(preference.getKey(), preference);
+            }
+        }
+
+        int applicationItemsSize = applicationItems.size();
+        for (int i = 0; i < applicationItemsSize; i++) {
+            RoleApplicationItem applicationItem = applicationItems.get(i);
+            ApplicationInfo applicationInfo = applicationItem.getApplicationInfo();
+            String key = applicationInfo.packageName + '_'
+                    + applicationInfo.uid;
+            RoleApplicationPreference roleApplicationPreference =
+                    (RoleApplicationPreference) oldPreferences.get(key);
+            TwoStatePreference preference;
+            if (roleApplicationPreference == null) {
+                roleApplicationPreference = preferenceFragment.createApplicationPreference();
+                preference = roleApplicationPreference.asTwoStatePreference();
+                preference.setKey(key);
+                preference.setIcon(Utils.getBadgedIcon(context, applicationInfo));
+                preference.setTitle(Utils.getFullAppLabel(applicationInfo, context));
+                preference.setPersistent(false);
+                preference.setOnPreferenceChangeListener((preference2, newValue) -> false);
+                preference.setOnPreferenceClickListener(this);
+                preference.getExtras().putParcelable(PREFERENCE_EXTRA_APPLICATION_INFO,
+                        applicationInfo);
+            } else {
+                preference = roleApplicationPreference.asTwoStatePreference();
+            }
+
+            preference.setChecked(applicationItem.isHolderApplication());
+            UserHandle user = UserHandle.getUserHandleForUid(applicationInfo.uid);
+            roleApplicationPreference.setRestrictionIntent(
+                    mRole.getApplicationRestrictionIntentAsUser(applicationInfo, user, context));
+            RoleUiBehaviorUtils.prepareApplicationPreferenceAsUser(mRole, roleApplicationPreference,
+                    applicationInfo, user, context);
+            preferenceScreen.addPreference(preference);
+        }
+
+        Preference descriptionPreference = oldDescriptionPreference;
+        if (descriptionPreference == null) {
+            descriptionPreference = preferenceFragment.createDescriptionPreference();
+            descriptionPreference.setKey(PREFERENCE_KEY_DESCRIPTION);
+            descriptionPreference.setSummary(mRole.getDescriptionResource());
+        }
+        preferenceScreen.addPreference(descriptionPreference);
+
+        preferenceFragment.onPreferenceScreenChanged();
+    }
+
+    private void onManageRoleHolderStateChanged(@NonNull ManageRoleHolderStateLiveData liveData,
+            int state) {
+        switch (state) {
+            case ManageRoleHolderStateLiveData.STATE_SUCCESS:
+                String packageName = liveData.getLastPackageName();
+                if (packageName != null && liveData.isLastAdd()) {
+                    mRole.onHolderSelectedAsUser(packageName, liveData.getLastUser(),
+                            requireContext());
+                }
+                liveData.resetState();
+                break;
+            case ManageRoleHolderStateLiveData.STATE_FAILURE:
+                liveData.resetState();
+                break;
+        }
+    }
+
+    @Override
+    public boolean onPreferenceClick(@NonNull Preference preference) {
+        ApplicationInfo applicationInfo = preference.getExtras().getParcelable(
+                PREFERENCE_EXTRA_APPLICATION_INFO);
+        String packageName = applicationInfo.packageName;
+        UserHandle user = UserHandle.getUserHandleForUid(applicationInfo.uid);
+        boolean allow = !((TwoStatePreference) preference).isChecked();
+        String key = preference.getKey();
+        mViewModel.setSpecialAppAccessAsUser(packageName, allow, user, key, this,
+                this::onManageRoleHolderStateChanged);
+        return true;
+    }
+
+    @NonNull
+    private PF requirePreferenceFragment() {
+        //noinspection unchecked
+        return (PF) requireParentFragment();
+    }
+
+    /**
+     * Interface that the parent fragment must implement.
+     */
+    public interface Parent {
+
+        /**
+         * Set the title of the current settings page.
+         *
+         * @param title the title of the current settings page
+         */
+        void setTitle(@NonNull CharSequence title);
+
+        /**
+         * Create a new preference for an application.
+         *
+         * @return a new preference for an application
+         */
+        @NonNull
+        RoleApplicationPreference createApplicationPreference();
+
+        /**
+         * Create a new preference for a description.
+         *
+         * @return a new preference for the description
+         */
+        @NonNull
+        Preference createDescriptionPreference();
+
+        /**
+         * Callback when changes have been made to the {@link PreferenceScreen} of the parent
+         * {@link PreferenceFragmentCompat}.
+         */
+        void onPreferenceScreenChanged();
+    }
+}

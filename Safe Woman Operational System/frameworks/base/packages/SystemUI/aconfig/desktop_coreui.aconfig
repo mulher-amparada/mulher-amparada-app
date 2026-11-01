@@ -1,0 +1,12 @@
+package: "com.android.systemui"
+container: "system"
+
+# go/keep-sorted start block=yes newline_separated=yes by_regex=name:\s*"([^"]+)"
+flag {
+   name: "desktop_sizing"
+   namespace: "desktop_coreui"
+   description: "Override sysui resources such as size with the values tuned for desktop."
+   bug: "399966089"
+   is_fixed_read_only: true
+}
+# go/keep-sorted end

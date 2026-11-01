@@ -1,0 +1,730 @@
+/*
+ * Copyright (C) 2019 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#define LOG_TAG "CachedAppOptimizer"
+//#define LOG_NDEBUG 0
+#define ATRACE_TAG ATRACE_TAG_ACTIVITY_MANAGER
+#define ATRACE_COMPACTION_TRACK "Compaction"
+
+#include <android-base/file.h>
+#include <android-base/logging.h>
+#include <android-base/stringprintf.h>
+#include <android-base/unique_fd.h>
+#include <android_runtime/AndroidRuntime.h>
+#include <binder/BinderNetlink.h>
+#include <cutils/compiler.h>
+#include <dirent.h>
+#include <jni.h>
+#include <linux/android/binderfs.h>
+#include <linux/errno.h>
+#include <linux/time.h>
+#include <log/log.h>
+#include <meminfo/procmeminfo.h>
+#include <meminfo/sysmeminfo.h>
+#include <nativehelper/JNIHelp.h>
+#include <processgroup/processgroup.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <sys/mman.h>
+#include <sys/pidfd.h>
+#include <sys/stat.h>
+#include <sys/syscall.h>
+#include <sys/sysinfo.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <utils/Timers.h>
+#include <utils/Trace.h>
+
+#include <algorithm>
+#include <fstream>
+#include <optional>
+#include <string>
+
+using android::base::StringPrintf;
+using android::meminfo::ProcMemInfo;
+using android::meminfo::Vma;
+
+static const size_t kPageSize = getpagesize();
+static const size_t kPageMask = ~(kPageSize - 1);
+
+#define COMPACT_ACTION_FILE_FLAG 1
+#define COMPACT_ACTION_ANON_FLAG 2
+
+using VmaToAdviseFunc = std::function<int(const Vma&)>;
+using android::base::unique_fd;
+
+#define MAX_RW_COUNT (INT_MAX & kPageMask)
+
+// Defines the maximum amount of VMAs we can send per process_madvise syscall.
+// Currently this is set to UIO_MAXIOV which is the maximum segments allowed by
+// iovec implementation used by process_madvise syscall
+#define MAX_VMAS_PER_BATCH UIO_MAXIOV
+
+// Maximum bytes that we can send per process_madvise syscall once this limit
+// is reached we split the remaining VMAs into another syscall. The MAX_RW_COUNT
+// limit is imposed by iovec implementation. However, if you want to use a smaller
+// limit, it has to be a page aligned value.
+#define MAX_BYTES_PER_BATCH MAX_RW_COUNT
+
+// Selected a high enough number to avoid clashing with linux errno codes
+#define ERROR_COMPACTION_CANCELLED -1000
+
+// Value aligned with android_util_Binder.cpp
+static const int kTransactionTooLarge = 200 * 1024;
+
+// Enable noisy binder netlink logging.
+constexpr bool ENABLE_NOISY_NETLINK = false;
+
+namespace android {
+
+static bindernetlink::BinderNetlink binderNetlink;
+
+// Signal happening in separate thread that would bail out compaction
+// before starting next VMA batch
+static std::atomic<bool> cancelRunningCompaction;
+
+// A VmaBatch represents a set of VMAs that can be processed
+// as VMAs are processed by client code it is expected that the
+// VMAs get consumed which means they are discarded as they are
+// processed so that the first element always is the next element
+// to be sent
+struct VmaBatch {
+    struct iovec* vmas;
+    // total amount of VMAs to reach the end of iovec
+    size_t totalVmas;
+    // total amount of bytes that are remaining within iovec
+    uint64_t totalBytes;
+};
+
+// Advances the iterator by the specified amount of bytes.
+// This is used to remove already processed or no longer
+// needed parts of the batch.
+// Returns total bytes consumed
+uint64_t consumeBytes(VmaBatch& batch, uint64_t bytesToConsume) {
+    if (CC_UNLIKELY(bytesToConsume) < 0) {
+        LOG(ERROR) << "Cannot consume negative bytes for VMA batch !";
+        return 0;
+    }
+
+    if (CC_UNLIKELY(bytesToConsume > batch.totalBytes)) {
+        // Avoid consuming more bytes than available
+        bytesToConsume = batch.totalBytes;
+    }
+
+    uint64_t bytesConsumed = 0;
+    while (bytesConsumed < bytesToConsume) {
+        if (CC_UNLIKELY(batch.totalVmas == 0)) {
+            // No more vmas to consume
+            break;
+        }
+        if (CC_UNLIKELY(bytesConsumed + batch.vmas[0].iov_len > bytesToConsume)) {
+            // This vma can't be fully consumed, do it partially.
+            uint64_t bytesLeftToConsume = bytesToConsume - bytesConsumed;
+            bytesConsumed += bytesLeftToConsume;
+            batch.vmas[0].iov_base = (void*)((uint64_t)batch.vmas[0].iov_base + bytesLeftToConsume);
+            batch.vmas[0].iov_len -= bytesLeftToConsume;
+            batch.totalBytes -= bytesLeftToConsume;
+            return bytesConsumed;
+        }
+        // This vma can be fully consumed
+        bytesConsumed += batch.vmas[0].iov_len;
+        batch.totalBytes -= batch.vmas[0].iov_len;
+        --batch.totalVmas;
+        ++batch.vmas;
+    }
+
+    return bytesConsumed;
+}
+
+// given a source of vmas this class will act as a factory
+// of VmaBatch objects and it will allow generating batches
+// until there are no more left in the source vector.
+// Note: the class does not actually modify the given
+// vmas vector, instead it iterates on it until the end.
+class VmaBatchCreator {
+    const std::vector<Vma>* sourceVmas;
+    const int totalVmasInSource;
+    // This is the destination array where batched VMAs will be stored
+    // it gets encapsulated into a VmaBatch which is the object
+    // meant to be used by client code.
+    struct iovec* destVmas;
+
+    // Parameters to keep track of the iterator on the source vmas
+    int currentIndex_;
+    uint64_t currentOffset_;
+
+public:
+    VmaBatchCreator(const std::vector<Vma>* vmasToBatch, struct iovec* destVmasVec,
+                    int vmasInSource)
+          : sourceVmas(vmasToBatch),
+            totalVmasInSource(vmasInSource),
+            destVmas(destVmasVec),
+            currentIndex_(0),
+            currentOffset_(0) {}
+
+    int currentIndex() { return currentIndex_; }
+    uint64_t currentOffset() { return currentOffset_; }
+
+    // Generates a batch and moves the iterator on the source vmas
+    // past the last VMA in the batch.
+    // Returns true on success, false on failure
+    bool createNextBatch(VmaBatch& batch) {
+        if (currentIndex_ >= MAX_VMAS_PER_BATCH && currentIndex_ >= sourceVmas->size()) {
+            return false;
+        }
+
+        const std::vector<Vma>& vmas = *sourceVmas;
+        batch.vmas = destVmas;
+        uint64_t totalBytesInBatch = 0;
+        int indexInBatch = 0;
+
+        // Add VMAs to the batch up until we consumed all the VMAs or
+        // reached any imposed limit of VMAs per batch.
+        while (indexInBatch < MAX_VMAS_PER_BATCH && currentIndex_ < totalVmasInSource) {
+            uint64_t vmaStart = vmas[currentIndex_].start + currentOffset_;
+            uint64_t vmaSize = vmas[currentIndex_].end - vmaStart;
+            uint64_t bytesAvailableInBatch = MAX_BYTES_PER_BATCH - totalBytesInBatch;
+
+            batch.vmas[indexInBatch].iov_base = (void*)vmaStart;
+
+            if (vmaSize > bytesAvailableInBatch) {
+                // VMA would exceed the max available bytes in batch
+                // clamp with available bytes and finish batch.
+                vmaSize = bytesAvailableInBatch;
+                currentOffset_ += bytesAvailableInBatch;
+            }
+
+            batch.vmas[indexInBatch].iov_len = vmaSize;
+            totalBytesInBatch += vmaSize;
+
+            ++indexInBatch;
+            if (totalBytesInBatch >= MAX_BYTES_PER_BATCH) {
+                // Reached max bytes quota so this marks
+                // the end of the batch
+                if (CC_UNLIKELY(vmaSize == (vmas[currentIndex_].end - vmaStart))) {
+                    // we reached max bytes exactly at the end of the vma
+                    // so advance to next one
+                    currentOffset_ = 0;
+                    ++currentIndex_;
+                }
+                break;
+            }
+            // Fully finished current VMA, move to next one
+            currentOffset_ = 0;
+            ++currentIndex_;
+        }
+        batch.totalVmas = indexInBatch;
+        batch.totalBytes = totalBytesInBatch;
+        if (batch.totalVmas == 0 || batch.totalBytes == 0) {
+            // This is an empty batch, mark as failed creating.
+            return false;
+        }
+        return true;
+    }
+};
+
+// Madvise a set of VMAs given in a batch for a specific process
+// The total number of bytes successfully madvised will be set on
+// outBytesProcessed.
+// Returns 0 on success and standard linux -errno code returned by
+// process_madvise on failure
+int madviseVmasFromBatch(unique_fd& pidfd, VmaBatch& batch, int madviseType,
+                         uint64_t* outBytesProcessed) {
+    if (batch.totalVmas == 0 || batch.totalBytes == 0) {
+        // No VMAs in Batch, skip.
+        *outBytesProcessed = 0;
+        return 0;
+    }
+
+    ATRACE_BEGIN(StringPrintf("Madvise %d: %zu VMAs.", madviseType, batch.totalVmas).c_str());
+    int64_t bytesProcessedInSend =
+            process_madvise(pidfd, batch.vmas, batch.totalVmas, madviseType, 0);
+    ATRACE_END();
+    if (CC_UNLIKELY(bytesProcessedInSend == -1)) {
+        bytesProcessedInSend = 0;
+        if (errno != EINVAL) {
+            // Forward irrecoverable errors and bail out compaction
+            *outBytesProcessed = 0;
+            return -errno;
+        }
+    }
+    if (bytesProcessedInSend == 0) {
+        // When we find a VMA with error, fully consume it as it
+        // is extremely expensive to iterate on its pages one by one
+        bytesProcessedInSend = batch.vmas[0].iov_len;
+    } else if (bytesProcessedInSend < batch.totalBytes) {
+        // Partially processed the bytes requested
+        // skip last page which is where it failed.
+        bytesProcessedInSend += kPageSize;
+    }
+    bytesProcessedInSend = consumeBytes(batch, bytesProcessedInSend);
+
+    *outBytesProcessed = bytesProcessedInSend;
+    return 0;
+}
+
+// Compacts a set of VMAs for pid using an madviseType accepted by process_madvise syscall
+// Returns the total bytes that where madvised.
+//
+// If any VMA fails compaction due to -EINVAL it will be skipped and continue.
+// However, if it fails for any other reason, it will bail out and forward the error
+static int64_t compactMemory(const std::vector<Vma>& vmas, int pid, int madviseType,
+                             int totalVmas) {
+    if (totalVmas == 0) {
+        return 0;
+    }
+
+    unique_fd pidfd(pidfd_open(pid, 0));
+    if (pidfd < 0) {
+        // Skip compaction if failed to open pidfd with any error
+        return -errno;
+    }
+
+    struct iovec destVmas[MAX_VMAS_PER_BATCH];
+
+    VmaBatch batch;
+    VmaBatchCreator batcher(&vmas, destVmas, totalVmas);
+
+    int64_t totalBytesProcessed = 0;
+    while (batcher.createNextBatch(batch)) {
+        uint64_t bytesProcessedInSend;
+        ScopedTrace batchTrace(ATRACE_TAG, "VMA Batch");
+        do {
+            if (CC_UNLIKELY(cancelRunningCompaction.load())) {
+                // There could be a significant delay between when a compaction
+                // is requested and when it is handled during this time our
+                // OOM adjust could have improved.
+                LOG(DEBUG) << "Cancelled running compaction for " << pid;
+                ATRACE_INSTANT_FOR_TRACK(ATRACE_COMPACTION_TRACK,
+                                         StringPrintf("Cancelled compaction for %d", pid).c_str());
+                return ERROR_COMPACTION_CANCELLED;
+            }
+            int error = madviseVmasFromBatch(pidfd, batch, madviseType, &bytesProcessedInSend);
+            if (error < 0) {
+                // Returns standard linux errno code
+                return error;
+            }
+            if (CC_UNLIKELY(bytesProcessedInSend == 0)) {
+                // This means there was a problem consuming bytes,
+                // bail out since no forward progress can be made with this batch
+                break;
+            }
+            totalBytesProcessed += bytesProcessedInSend;
+        } while (batch.totalBytes > 0 && batch.totalVmas > 0);
+    }
+
+    return totalBytesProcessed;
+}
+
+static int getFilePageAdvice(const Vma& vma) {
+    if (vma.inode > 0 && !vma.is_shared) {
+        return MADV_COLD;
+    }
+    return -1;
+}
+static int getAnonPageAdvice(const Vma& vma) {
+    bool hasReadFlag = (vma.flags & PROT_READ) > 0;
+    bool hasWriteFlag = (vma.flags & PROT_WRITE) > 0;
+    bool hasExecuteFlag = (vma.flags & PROT_EXEC) > 0;
+    if ((hasReadFlag || hasWriteFlag) && !hasExecuteFlag && !vma.is_shared) {
+        return MADV_PAGEOUT;
+    }
+    return -1;
+}
+static int getAnyPageAdvice(const Vma& vma) {
+    if (vma.inode == 0 && !vma.is_shared) {
+        return MADV_PAGEOUT;
+    }
+    return MADV_COLD;
+}
+
+// Perform a full process compaction using process_madvise syscall
+// using the madvise behavior defined by vmaToAdviseFunc per VMA.
+//
+// Currently supported behaviors are MADV_COLD and MADV_PAGEOUT.
+//
+// Returns the total number of bytes compacted on success. On error
+// returns process_madvise errno code or if compaction was cancelled
+// it returns ERROR_COMPACTION_CANCELLED.
+//
+// Not thread safe. We reuse vectors so we assume this is called only
+// on one thread at most.
+static int64_t compactProcess(int pid, VmaToAdviseFunc vmaToAdviseFunc) {
+    cancelRunningCompaction.store(false);
+    static std::string mapsBuffer;
+    ATRACE_BEGIN("CollectVmas");
+    ProcMemInfo meminfo(pid);
+    static std::vector<Vma> pageoutVmas(2000), coldVmas(2000);
+    int coldVmaIndex = 0;
+    int pageoutVmaIndex = 0;
+    auto vmaCollectorCb = [&vmaToAdviseFunc, &pageoutVmaIndex, &coldVmaIndex](const Vma& vma) {
+        int advice = vmaToAdviseFunc(vma);
+        switch (advice) {
+            case MADV_COLD:
+                if (coldVmaIndex < coldVmas.size()) {
+                    coldVmas[coldVmaIndex] = vma;
+                } else {
+                    coldVmas.push_back(vma);
+                }
+                ++coldVmaIndex;
+                break;
+            case MADV_PAGEOUT:
+#ifdef DEBUG_COMPACTION
+                ALOGE("Adding to compact vma=%s", vma.name.c_str());
+#endif
+                if (pageoutVmaIndex < pageoutVmas.size()) {
+                    pageoutVmas[pageoutVmaIndex] = vma;
+                } else {
+                    pageoutVmas.push_back(vma);
+                }
+                ++pageoutVmaIndex;
+                break;
+        }
+        return true;
+    };
+    meminfo.ForEachVmaFromMaps(vmaCollectorCb, mapsBuffer);
+    ATRACE_END();
+#ifdef DEBUG_COMPACTION
+    ALOGE("Total VMAs sent for compaction anon=%d file=%d", pageoutVmaIndex,
+            coldVmaIndex);
+#endif
+
+    int64_t pageoutBytes = compactMemory(pageoutVmas, pid, MADV_PAGEOUT, pageoutVmaIndex);
+    if (pageoutBytes < 0) {
+        // Error, just forward it.
+        cancelRunningCompaction.store(false);
+        return pageoutBytes;
+    }
+
+    int64_t coldBytes = compactMemory(coldVmas, pid, MADV_COLD, coldVmaIndex);
+    if (coldBytes < 0) {
+        // Error, just forward it.
+        cancelRunningCompaction.store(false);
+        return coldBytes;
+    }
+
+    return pageoutBytes + coldBytes;
+}
+
+// Compact process using process_madvise syscall
+static void compactProcess(int pid, int compactionFlags) {
+    if ((compactionFlags & (COMPACT_ACTION_ANON_FLAG | COMPACT_ACTION_FILE_FLAG)) == 0) return;
+
+    bool compactAnon = compactionFlags & COMPACT_ACTION_ANON_FLAG;
+    bool compactFile = compactionFlags & COMPACT_ACTION_FILE_FLAG;
+
+    VmaToAdviseFunc vmaToAdviseFunc;
+
+    if (compactAnon) {
+        if (compactFile) {
+            vmaToAdviseFunc = getAnyPageAdvice;
+        } else {
+            vmaToAdviseFunc = getAnonPageAdvice;
+        }
+    } else {
+        vmaToAdviseFunc = getFilePageAdvice;
+    }
+
+    compactProcess(pid, vmaToAdviseFunc);
+}
+
+static std::string profileFromCompactionFlags(int compactionFlags) {
+    const bool compactAnon = compactionFlags & COMPACT_ACTION_ANON_FLAG;
+    const bool compactFile = compactionFlags & COMPACT_ACTION_FILE_FLAG;
+
+    if (!compactAnon && !compactFile) return {};
+    std::string profile;
+    if (compactAnon && compactFile)
+        profile = "CompactFull";
+    else if (compactAnon)
+        profile = "CompactAnon";
+    else if (compactFile)
+        profile = "CompactFile";
+
+    return profile;
+}
+
+static void compactMemcg(int uid, int pid, int compactionFlags) {
+    if (std::string profile = profileFromCompactionFlags(compactionFlags); !profile.empty()) {
+        SetProcessProfiles(uid, pid, {profile});
+    }
+}
+
+// This performs per-process reclaim on all processes belonging to non-app UIDs.
+// For the most part, these are non-zygote processes like Treble HALs, but it
+// also includes zygote-derived processes that run in system UIDs, like bluetooth
+// or potentially some mainline modules. The only process that should definitely
+// not be compacted is system_server, since compacting system_server around the
+// time of BOOT_COMPLETE could result in perceptible issues.
+static void com_android_server_am_CachedAppOptimizer_compactSystem(JNIEnv *, jobject) {
+    std::unique_ptr<DIR, decltype(&closedir)> proc(opendir("/proc"), closedir);
+    struct dirent* current;
+    while ((current = readdir(proc.get()))) {
+        if (current->d_type != DT_DIR) {
+            continue;
+        }
+
+        // don't compact system_server, rely on persistent compaction during screen off
+        // in order to avoid mmap_sem-related stalls
+        if (atoi(current->d_name) == getpid()) {
+            continue;
+        }
+
+        std::string status_name = StringPrintf("/proc/%s/", current->d_name);
+        struct stat status_info;
+
+        if (stat(status_name.c_str(), &status_info) != 0) {
+            // must be some other directory that isn't a pid
+            continue;
+        }
+
+        // android.os.Process.FIRST_APPLICATION_UID
+        if (status_info.st_uid >= 10000) {
+            continue;
+        }
+
+        int pid = atoi(current->d_name);
+
+        compactProcess(pid, COMPACT_ACTION_ANON_FLAG | COMPACT_ACTION_FILE_FLAG);
+    }
+}
+
+static void com_android_server_am_CachedAppOptimizer_compactSystemWithMemcg(JNIEnv*, jobject) {
+    std::ifstream current_file("/sys/fs/cgroup/system/memory.current");
+    if (!current_file) {
+        LOG(ERROR) << "Could not open system memory.current";
+        return;
+    }
+
+    std::string current;
+    if (!std::getline(current_file, current)) {
+        LOG(ERROR) << "Could not read system memory.current";
+        return;
+    }
+
+    std::ofstream reclaim_file("/sys/fs/cgroup/system/memory.reclaim");
+    if (!reclaim_file) {
+        LOG(ERROR) << "Could not open system memory.reclaim";
+        return;
+    }
+
+    reclaim_file << current;
+    reclaim_file.flush();
+    if (!reclaim_file) {
+        LOG(ERROR) << "Could not write to system memory.reclaim";
+    }
+}
+
+static void com_android_server_am_CachedAppOptimizer_cancelCompaction(JNIEnv*, jobject) {
+    cancelRunningCompaction.store(true);
+    ATRACE_INSTANT_FOR_TRACK(ATRACE_COMPACTION_TRACK, "Cancel compaction");
+}
+
+static jlong com_android_server_am_CachedAppOptimizer_threadCpuTimeNs(JNIEnv*, jobject) {
+    int64_t currentCpuTime = systemTime(CLOCK_THREAD_CPUTIME_ID);
+
+    return currentCpuTime;
+}
+
+static jdouble com_android_server_am_CachedAppOptimizer_getFreeSwapPercent(JNIEnv*, jobject) {
+    struct sysinfo memoryInfo;
+    int error = sysinfo(&memoryInfo);
+    if(error == -1) {
+        LOG(ERROR) << "Could not check free swap space";
+        return 0;
+    }
+    return (double)memoryInfo.freeswap / (double)memoryInfo.totalswap;
+}
+
+static jlong com_android_server_am_CachedAppOptimizer_getUsedZramMemory() {
+    android::meminfo::SysMemInfo sysmeminfo;
+    return sysmeminfo.mem_zram_kb();
+}
+
+static jlong com_android_server_am_CachedAppOptimizer_getMemoryFreedCompaction() {
+    android::meminfo::SysMemInfo sysmeminfo;
+    return sysmeminfo.mem_compacted_kb("/sys/block/zram0/");
+}
+
+static void com_android_server_am_CachedAppOptimizer_compactProcessWithMemcg(JNIEnv*, jobject,
+                                                                             jint uid, jint pid,
+                                                                             jint compactionFlags) {
+    compactMemcg(uid, pid, compactionFlags);
+}
+
+static void com_android_server_am_CachedAppOptimizer_compactNativeProcess(JNIEnv*, jobject,
+                                                                          jint pid,
+                                                                          jint compactionFlags) {
+    compactProcess(pid, compactionFlags);
+}
+
+static jboolean com_android_server_am_CachedAppOptimizer_compactionFlagsValidForMemcg(
+        JNIEnv* env, jobject, jint compactionFlags) {
+    static std::array<std::optional<bool>, 3> valid;
+
+    if (compactionFlags >= valid.size() || compactionFlags < 0) {
+        jniThrowException(env, "java/lang/IllegalArgumentException", "Invalid compaction flags");
+        return false;
+    }
+
+    if (!valid[compactionFlags]) {
+        std::string profile = profileFromCompactionFlags(compactionFlags);
+        if (profile.empty()) {
+            valid[compactionFlags] = true; // NONE is a no-op
+        } else {
+            // Only call this once per flag combo, per boot, since it's not exactly cheap
+            valid[compactionFlags] = isProfileValidForProcess(profile, getuid(), getpid());
+        }
+    }
+
+    return *valid[compactionFlags];
+}
+
+static jboolean com_android_server_am_CachedAppOptimizer_enableBinderReport(JNIEnv*, jobject) {
+    if (binderNetlink.open() < 0) {
+        ALOGE("Failed to open Binder Netlink socket: %s", strerror(errno));
+        return false;
+    }
+    return true;
+}
+
+// LINT.IfChange(binderCodes)
+static constexpr int CAO_BR_REPORT_FAILED = -1;
+static constexpr int CAO_BR_FROZEN_REPLY = 1;
+static constexpr int CAO_BR_FAILED_REPLY = 2;
+static constexpr int CAO_BR_ONEWAY_SPAM_SUSPECT = 3;
+static constexpr int CAO_BR_TRANSACTION_PENDING_FROZEN = 4;
+// LINT.ThenChange(/services/core/java/com/android/server/am/CachedAppOptimizer.java:binderCodes)
+
+static int binderErrorToJava(int error_code) {
+    switch (error_code) {
+        case BR_FROZEN_REPLY:
+            return CAO_BR_FROZEN_REPLY;
+        case BR_FAILED_REPLY:
+            return CAO_BR_FAILED_REPLY;
+        case BR_ONEWAY_SPAM_SUSPECT:
+            return CAO_BR_ONEWAY_SPAM_SUSPECT;
+        case BR_TRANSACTION_PENDING_FROZEN:
+            return CAO_BR_TRANSACTION_PENDING_FROZEN;
+    }
+    return error_code;
+}
+
+static char const* binderErrorToString(int error_code) {
+    switch (error_code) {
+        case BR_FROZEN_REPLY:
+            return "binderErrorFrozen";
+        case BR_FAILED_REPLY:
+            return "binderErrorFailed";
+        case BR_ONEWAY_SPAM_SUSPECT:
+            return "binderSpamming";
+        case BR_TRANSACTION_PENDING_FROZEN:
+            return "binderPending";
+    }
+    return "binderErrorOther";
+}
+
+static void com_android_server_am_CachedAppOptimizer_handleBinderReport(JNIEnv* env, jobject thiz) {
+    jclass clazz = env->GetObjectClass(thiz);
+    jmethodID method = env->GetMethodID(clazz, "handleBinderReport", "(IIIZZ)Z");
+    if (!method) {
+        jniThrowException(env, "java/lang/RuntimeException", "Failed to find handleBinderReport");
+        return;
+    }
+
+    while (true) {
+        bindernetlink::Report report;
+        if (binderNetlink.getReport(&report) < 0) {
+            // Pass the error to the Java layer.  The Java layer can ask that the thread
+            // continue or exit.
+            if (!env->CallBooleanMethod(thiz, method, CAO_BR_REPORT_FAILED, 0, false, false)) {
+                binderNetlink.close();
+                return;
+            }
+            sleep(1);
+        } else {
+            if (ENABLE_NOISY_NETLINK) ALOGV("Binder report: %s", report.toString().c_str());
+
+            int error = report.error;
+            int ecode = binderErrorToJava(error);
+            int toPid = report.toPid;
+            int fromPid = report.fromPid;
+            int size = report.dataSize;
+            bool large = size >= kTransactionTooLarge;
+            bool oneway = report.flags & TF_ONE_WAY;
+
+            switch (error) {
+                // The errors we know how to handle
+                case BR_FROZEN_REPLY:
+                case BR_FAILED_REPLY:
+                case BR_ONEWAY_SPAM_SUSPECT:
+                case BR_TRANSACTION_PENDING_FROZEN:
+                    ATRACE_BEGIN(binderErrorToString(error));
+                    if (!env->CallBooleanMethod(thiz, method, ecode, fromPid, toPid, large,
+                                                oneway)) {
+                        // The Java layer has requested that the thread exit.
+                        return;
+                    }
+                    ATRACE_END();
+                    break;
+                // Errors we know to ignore.
+                case BR_DEAD_REPLY:
+                    break;
+                // The errors we don't know how to handle
+                default:
+                    ALOGE("Unknown binder error 0x%08x", report.error);
+                    break;
+            }
+        }
+    }
+    binderNetlink.close();
+}
+
+static const JNINativeMethod sMethods[] = {
+        /* name, signature, funcPtr */
+        {"cancelCompaction", "()V",
+         (void*)com_android_server_am_CachedAppOptimizer_cancelCompaction},
+        {"threadCpuTimeNs", "()J", (void*)com_android_server_am_CachedAppOptimizer_threadCpuTimeNs},
+        {"getFreeSwapPercent", "()D",
+         (void*)com_android_server_am_CachedAppOptimizer_getFreeSwapPercent},
+        {"getUsedZramMemory", "()J",
+         (void*)com_android_server_am_CachedAppOptimizer_getUsedZramMemory},
+        {"getMemoryFreedCompaction", "()J",
+         (void*)com_android_server_am_CachedAppOptimizer_getMemoryFreedCompaction},
+        {"compactSystem", "()V", (void*)com_android_server_am_CachedAppOptimizer_compactSystem},
+        {"compactSystemWithMemcg", "()V",
+         (void*)com_android_server_am_CachedAppOptimizer_compactSystemWithMemcg},
+        {"compactProcess", "(II)V",
+         (void*)com_android_server_am_CachedAppOptimizer_compactNativeProcess},
+        {"performNativeMemcgCompaction", "(III)V",
+         (void*)com_android_server_am_CachedAppOptimizer_compactProcessWithMemcg},
+        {"compactNativeProcess", "(II)V",
+         (void*)com_android_server_am_CachedAppOptimizer_compactNativeProcess},
+        {"compactionFlagsValidForMemcg", "(I)Z",
+         (void*)com_android_server_am_CachedAppOptimizer_compactionFlagsValidForMemcg},
+        {"enableBinderReport", "()Z",
+         (void*)com_android_server_am_CachedAppOptimizer_enableBinderReport},
+        {"handleBinderReport", "()V",
+         (void*)com_android_server_am_CachedAppOptimizer_handleBinderReport},
+};
+
+int register_android_server_am_CachedAppOptimizer(JNIEnv* env)
+{
+    return jniRegisterNativeMethods(env, "com/android/server/am/CachedAppOptimizer",
+                                    sMethods, NELEM(sMethods));
+}
+
+}

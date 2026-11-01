@@ -1,0 +1,84 @@
+package {
+    // See: http://go/android-license-faq
+    // A large-scale-change added 'default_applicable_licenses' to import
+    // all of the 'license_kinds' from "frameworks_base_license"
+    // to get the below license kinds:
+    //   SPDX-license-identifier-Apache-2.0
+    default_applicable_licenses: ["frameworks_base_license"],
+}
+
+aidl_interface {
+    name: "media_permission-aidl",
+    unstable: true,
+    host_supported: true,
+    vendor_available: true,
+    double_loadable: true,
+    local_include_dir: "aidl",
+    srcs: [
+        "aidl/android/media/permission/Identity.aidl",
+    ],
+}
+
+aidl_interface {
+    name: "soundtrigger_middleware-aidl",
+    unstable: true,
+    local_include_dir: "aidl",
+    defaults: [
+        "latest_android_media_audio_common_types_import_interface",
+        "latest_android_media_soundtrigger_types_import_interface",
+    ],
+    backend: {
+        java: {
+            sdk_version: "module_current",
+        },
+    },
+    srcs: [
+        "aidl/android/media/soundtrigger_middleware/*.aidl",
+    ],
+    imports: [
+        "media_permission-aidl",
+    ],
+}
+
+aidl_interface {
+    name: "audio-aidl",
+    unstable: true,
+    local_include_dir: "aidl",
+    srcs: [
+        "aidl/android/media/audio/*.aidl",
+    ],
+    imports: [
+        "framework-permission-aidl",
+    ],
+    backend: {
+        java: {
+            sdk_version: "module_current",
+        },
+    },
+}
+
+genrule {
+    name: "statslog-audio-java-gen",
+    tools: ["stats-log-api-gen"],
+    cmd: "$(location stats-log-api-gen) --java $(out) --module audio" +
+        " --javaPackage com.android.media.audio.metrics --javaClass AudioAtomsLog",
+    out: ["com/android/server/audio/metrics/AudioAtomsLog.java"],
+}
+
+java_library_static {
+    name: "statsd_audio_java_gen",
+    srcs: [
+        ":statslog-audio-java-gen",
+    ],
+    libs: [
+        "androidx.annotation_annotation",
+    ],
+}
+
+// TODO: broken
+// java_atomslog_library {
+//     name: "statsd_audio_java_gen",
+//     atoms_module: "audio",
+//     package_name: "com.android.media.audio.metrics",
+//     class_name: "AudioAtomsLog",
+// }

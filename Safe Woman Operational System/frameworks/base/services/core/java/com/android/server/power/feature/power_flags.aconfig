@@ -1,0 +1,142 @@
+package: "com.android.server.power.feature.flags"
+container: "system"
+
+# Important: Flags must be accessed through PowerManagerFlags.
+
+flag {
+    name: "enable_early_screen_timeout_detector"
+    namespace: "power"
+    description: "Feature flag for Early Screen Timeout detector"
+    bug: "309861917"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "separate_timeouts_flicker"
+    namespace: "lse_desktop_experience"
+    description: "Prevent timeout flicker when timing out"
+    bug: "425275163"
+    metadata {
+      purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "nudge_user_activity_on_fold"
+    namespace: "display_manager"
+    description: "Nudge user activity on fold/unfold"
+    bug: "446941468"
+    metadata {
+      purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "per_display_wake_by_touch"
+    namespace: "power"
+    description: "Feature flag to enable per-display wake by touch"
+    bug: "343295183"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "lock_on_unplug"
+    namespace: "lse_desktop_experience"
+    description: "Fixes device locking when all remaining external displays are unplugged"
+    bug: "414558760"
+    metadata {
+      purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "disable_frozen_process_wakelocks"
+    namespace: "power"
+    description: "Feature flag to disable/enable wakelocks of a process when it is frozen/unfrozen"
+    bug: "291115867"
+}
+
+flag {
+    name: "tap_to_wake_cd"
+    namespace: "lse_desktop_experience"
+    description: "Feature flag to enable tap to wake on connected displays"
+    bug: "425279223"
+    metadata {
+      purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "shutdown_system_api"
+    namespace: "power"
+    description: "Feature flag to have a system API which shuts down the device."
+    bug: "365055195"
+    is_exported: true
+}
+
+flag {
+    name: "lock_on_power_group_disconnect"
+    namespace: "lse_desktop_experience"
+    description: "Fixes device locking when all remaining power groups are disconnected"
+    bug: "449662568"
+    metadata {
+      purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "partial_sleep_wakelocks"
+    namespace: "power"
+    description: "Enable new wakelock to keep device asleep - for the user, but ensure that the CPU remains awake."
+    bug: "401624085"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    namespace: "wear_frameworks"
+    name: "interactive_doze_experience"
+    description: "Enable active user interaction in doze power state."
+    bug: "331963926"
+    metadata {
+      purpose: PURPOSE_FEATURE
+    }
+}
+
+flag {
+    name: "wait_for_user_boot_complete"
+    namespace: "power"
+    description: "When enabled, holds the BootSuspendBlocker until after the ACTION_BOOT_COMPLETED broadcast is sent. This prevents the CPU from suspending prematurely during a quiescent reboot."
+    bug: "440425374"
+    metadata {
+          purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "remove_cached_uids_from_wakelock"
+    namespace: "power"
+    description: "When enabled, removes the attribution of the cached uids from wakelock"
+    bug: "397943328"
+}
+
+flag {
+    name: "dont_churn_tag_database_on_release"
+    namespace: "power"
+    description: "When enabled, tag database will not churn old values when a non-existent tag wakelock is released"
+    bug: "478418224"
+    metadata {
+      purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "enable_inset_focus_rings_in_suw"
+    namespace: "power"
+    description: "Decides whether to enable inset focus rings in the reboot into safe mode dialog during the SuW."
+    bug: "484084632"
+    is_fixed_read_only: true
+    metadata {
+      purpose: PURPOSE_BUGFIX
+    }
+}

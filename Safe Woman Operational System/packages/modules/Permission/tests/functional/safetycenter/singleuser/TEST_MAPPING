@@ -1,0 +1,27 @@
+{
+  "presubmit": [
+    {
+      "name": "SafetyCenterFunctionalTestCases"
+    }
+  ],
+  "mainline-presubmit": [
+    {
+      "name": "SafetyCenterFunctionalTestCases[com.google.android.permission.apex]",
+      "options": [
+        {
+          "exclude-annotation": "androidx.test.filters.FlakyTest"
+        }
+      ]
+    }
+  ],
+  "permission-mainline-presubmit": [
+    {
+      "name": "SafetyCenterFunctionalTestCases",
+      "options": [
+        {
+          "exclude-annotation": "androidx.test.filters.FlakyTest"
+        }
+      ]
+    }
+  ]
+}

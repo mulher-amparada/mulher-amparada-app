@@ -1,0 +1,7 @@
+# Device types
+type udmabuf_device, dev_type, mlstrustedobject;
+
+# DM device created by apexd to represent an APEX file
+type apex_dm_device, dev_type;
+
+type wrapfd_device, dev_type;

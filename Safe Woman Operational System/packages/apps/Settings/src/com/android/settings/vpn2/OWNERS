@@ -1,0 +1,6 @@
+# People who can approve changes for submission.
+file:platform/packages/modules/Connectivity:main:/OWNERS_core_networking_xts
+hughchen@google.com
+robertluo@google.com
+timhypeng@google.com
+vincentwei@google.com

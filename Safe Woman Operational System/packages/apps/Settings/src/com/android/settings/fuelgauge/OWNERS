@@ -1,0 +1,6 @@
+# Default reviewers for this and subdirectories.
+wesleycwwang@google.com
+ykhung@google.com
+
+# BatteryStats
+per-file FakeUid.java = file:platform/frameworks/base:/BATTERY_STATS_OWNERS

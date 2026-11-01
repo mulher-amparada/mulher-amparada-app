@@ -1,0 +1,272 @@
+/*
+ * Copyright (C) 2020 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.settings.notification;
+
+import static com.android.media.flags.Flags.FLAG_FIX_OUTPUT_SWITCHER_MULTIUSER_SUPPORT;
+import static com.android.settings.core.BasePreferenceController.AVAILABLE_UNSEARCHABLE;
+import static com.android.settings.core.BasePreferenceController.CONDITIONALLY_UNAVAILABLE;
+
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageStats;
+import android.media.MediaRoute2Info;
+import android.media.MediaRouter2Manager;
+import android.media.RoutingSessionInfo;
+import android.media.session.MediaSessionManager;
+import android.os.UserHandle;
+import android.platform.test.annotations.DisableFlags;
+import android.platform.test.annotations.EnableFlags;
+import android.platform.test.flag.junit.SetFlagsRule;
+
+import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
+import androidx.preference.PreferenceManager;
+import androidx.preference.PreferenceScreen;
+
+import com.android.settings.R;
+import com.android.settings.Utils;
+import com.android.settings.testutils.shadow.ShadowBluetoothAdapter;
+import com.android.settings.testutils.shadow.ShadowInteractionJankMonitor;
+import com.android.settingslib.media.LocalMediaManager;
+import com.android.settingslib.media.MediaOutputConstants;
+import com.android.settingslib.widget.SliderPreference;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
+import org.robolectric.Shadows;
+import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowPackageManager;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@RunWith(RobolectricTestRunner.class)
+@Config(shadows = {ShadowBluetoothAdapter.class, ShadowInteractionJankMonitor.class})
+public class RemoteVolumeGroupControllerTest {
+
+    private static final String KEY_REMOTE_VOLUME_GROUP = "remote_media_group";
+    private static final String TEST_SESSION_1_ID = "test_session_1_id";
+    private static final String TEST_SESSION_1_NAME = "test_session_1_name";
+    private static final String TEST_PACKAGE_NAME = "com.test";
+    private static final String TEST_APPLICATION_LABEL = "APP Test Label";
+    private static final int CURRENT_VOLUME = 30;
+    private static final int MAX_VOLUME = 100;
+
+    @Rule
+    public final SetFlagsRule mSetFlagsRule = new SetFlagsRule();
+    @Mock
+    private LocalMediaManager mLocalMediaManager;
+    @Mock
+    private PreferenceScreen mScreen;
+    @Mock
+    private PreferenceManager mPreferenceManager;
+    @Mock
+    private SharedPreferences mSharedPreferences;
+    @Mock
+    private MediaSessionManager mMediaSessionManager;
+    @Mock
+    private MediaRouter2Manager mRouterManager;
+
+    private final List<RoutingSessionInfo> mRoutingSessionInfos = new ArrayList<>();
+
+    private Context mContext;
+    private RemoteVolumeGroupController mController;
+    private PreferenceCategory mPreferenceCategory;
+    private ShadowPackageManager mShadowPackageManager;
+    private ApplicationInfo mAppInfo;
+    private PackageInfo mPackageInfo;
+    private PackageStats mPackageStats;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+        mContext = spy(RuntimeEnvironment.application);
+        doReturn(mMediaSessionManager).when(mContext).getSystemService(
+                Context.MEDIA_SESSION_SERVICE);
+        mController =
+                new RemoteVolumeGroupController(
+                        mContext, KEY_REMOTE_VOLUME_GROUP, mLocalMediaManager, mRouterManager);
+        mPreferenceCategory = spy(new PreferenceCategory(mContext));
+        mPreferenceCategory.setKey(mController.getPreferenceKey());
+
+        when(mPreferenceCategory.getPreferenceManager()).thenReturn(mPreferenceManager);
+        when(mPreferenceManager.getSharedPreferences()).thenReturn(mSharedPreferences);
+        when(mScreen.findPreference(mController.getPreferenceKey())).thenReturn(
+                mPreferenceCategory);
+        final RoutingSessionInfo remoteSessionInfo = mock(RoutingSessionInfo.class);
+        when(remoteSessionInfo.getId()).thenReturn(TEST_SESSION_1_ID);
+        when(remoteSessionInfo.getName()).thenReturn(TEST_SESSION_1_NAME);
+        when(remoteSessionInfo.getVolumeMax()).thenReturn(MAX_VOLUME);
+        when(remoteSessionInfo.getVolume()).thenReturn(CURRENT_VOLUME);
+        when(remoteSessionInfo.getClientPackageName()).thenReturn(TEST_PACKAGE_NAME);
+        when(remoteSessionInfo.isSystemSession()).thenReturn(false);
+        mRoutingSessionInfos.add(remoteSessionInfo);
+        when(mLocalMediaManager.getRemoteRoutingSessions()).thenReturn(mRoutingSessionInfos);
+    }
+
+    @Test
+    public void getAvailabilityStatus_withActiveSession_returnAvailableUnsearchable() {
+        mController.displayPreference(mScreen);
+
+        assertThat(mController.getAvailabilityStatus()).isEqualTo(AVAILABLE_UNSEARCHABLE);
+    }
+
+    @Test
+    public void getAvailabilityStatus_noActiveSession_returnConditionallyUnavailable() {
+        mRoutingSessionInfos.clear();
+        mController.displayPreference(mScreen);
+
+        assertThat(mController.getAvailabilityStatus()).isEqualTo(CONDITIONALLY_UNAVAILABLE);
+    }
+
+    @Test
+    public void displayPreference_noActiveSession_checkPreferenceCount() {
+        mRoutingSessionInfos.clear();
+        mController.displayPreference(mScreen);
+
+        assertThat(mPreferenceCategory.getPreferenceCount()).isEqualTo(0);
+    }
+
+    @Test
+    public void displayPreference_withActiveSession_checkPreferenceCount() {
+        mController.displayPreference(mScreen);
+
+        assertThat(mPreferenceCategory.getPreferenceCount()).isEqualTo(2);
+    }
+
+    @Test
+    public void displayPreference_withActiveSession_checkSliderTitle() {
+        mController.displayPreference(mScreen);
+        final Preference preference = mPreferenceCategory.findPreference(TEST_SESSION_1_ID);
+
+        assertThat(preference.getTitle()).isEqualTo(mContext.getText(
+                R.string.remote_media_volume_option_title));
+    }
+
+    @Test
+    public void displayPreference_withActiveSession_checkSliderMaxVolume() {
+        mController.displayPreference(mScreen);
+        final SliderPreference preference = mPreferenceCategory.findPreference(TEST_SESSION_1_ID);
+
+        assertThat(preference.getMax()).isEqualTo(MAX_VOLUME);
+    }
+
+    @Test
+    public void displayPreference_withActiveSession_checkSliderCurrentVolume() {
+        mController.displayPreference(mScreen);
+        final SliderPreference preference = mPreferenceCategory.findPreference(TEST_SESSION_1_ID);
+
+        assertThat(preference.getValue()).isEqualTo(CURRENT_VOLUME);
+    }
+
+    @Test
+    public void displayPreference_withActiveSession_checkSwitcherPreferenceTitle() {
+        // Preference title needs media output to be enabled.
+        when(mRouterManager.getTransferableRoutes(TEST_PACKAGE_NAME)).thenReturn(List.of(mock(
+                MediaRoute2Info.class)));
+
+        initPackage();
+        mShadowPackageManager.addPackage(mPackageInfo, mPackageStats);
+        mController.displayPreference(mScreen);
+        final Preference preference = mPreferenceCategory.findPreference(
+                RemoteVolumeGroupController.SWITCHER_PREFIX + TEST_SESSION_1_ID);
+
+        assertThat(preference.getTitle()).isEqualTo(mContext.getString(
+                R.string.media_output_label_title, Utils.getApplicationLabel(mContext,
+                        TEST_PACKAGE_NAME)));
+    }
+
+    @Test
+    public void displayPreference_withActiveSession_checkSwitcherPreferenceSummary() {
+        mController.displayPreference(mScreen);
+        final Preference preference = mPreferenceCategory.findPreference(
+                RemoteVolumeGroupController.SWITCHER_PREFIX + TEST_SESSION_1_ID);
+
+        assertThat(preference.getSummary()).isEqualTo(TEST_SESSION_1_NAME);
+    }
+
+    @Test
+    @DisableFlags(FLAG_FIX_OUTPUT_SWITCHER_MULTIUSER_SUPPORT)
+    public void handlePreferenceTreeClick_withActiveSession_launchesOutputSwitcher() {
+        final ArgumentCaptor<Intent> intentCaptor = ArgumentCaptor.forClass(Intent.class);
+        mController.displayPreference(mScreen);
+        final Preference preference = mPreferenceCategory.findPreference(
+                RemoteVolumeGroupController.SWITCHER_PREFIX + TEST_SESSION_1_ID);
+
+        mController.handlePreferenceTreeClick(preference);
+
+        verify(mContext).sendBroadcast(intentCaptor.capture());
+        var intent = intentCaptor.getValue();
+        assertThat(intent.getAction()).isEqualTo(
+                MediaOutputConstants.ACTION_LAUNCH_MEDIA_OUTPUT_DIALOG);
+        assertThat(intent.getStringExtra(MediaOutputConstants.EXTRA_PACKAGE_NAME)).isEqualTo(
+                TEST_PACKAGE_NAME);
+    }
+
+    @Test
+    @EnableFlags(FLAG_FIX_OUTPUT_SWITCHER_MULTIUSER_SUPPORT)
+    public void handlePreferenceTreeClick_withActiveSession_multiuserFlag_launchesOutputSwitcher() {
+        final ArgumentCaptor<Intent> intentCaptor = ArgumentCaptor.forClass(Intent.class);
+        final ArgumentCaptor<UserHandle> targetUserCaptor = ArgumentCaptor.forClass(
+                UserHandle.class);
+        mController.displayPreference(mScreen);
+        final Preference preference = mPreferenceCategory.findPreference(
+                RemoteVolumeGroupController.SWITCHER_PREFIX + TEST_SESSION_1_ID);
+
+        mController.handlePreferenceTreeClick(preference);
+
+        verify(mContext).sendBroadcastAsUser(intentCaptor.capture(), targetUserCaptor.capture());
+        var intent = intentCaptor.getValue();
+        assertThat(intent.getAction()).isEqualTo(
+                MediaOutputConstants.ACTION_LAUNCH_MEDIA_OUTPUT_DIALOG);
+        assertThat(intent.getStringExtra(MediaOutputConstants.EXTRA_PACKAGE_NAME)).isEqualTo(
+                TEST_PACKAGE_NAME);
+        assertThat(intent.getParcelableExtra(MediaOutputConstants.EXTRA_USER_HANDLE,
+                UserHandle.class)).isEqualTo(mContext.getUser());
+        assertThat(targetUserCaptor.getValue()).isEqualTo(UserHandle.SYSTEM);
+    }
+
+    private void initPackage() {
+        mShadowPackageManager = Shadows.shadowOf(mContext.getPackageManager());
+        mAppInfo = new ApplicationInfo();
+        mAppInfo.flags = ApplicationInfo.FLAG_INSTALLED;
+        mAppInfo.packageName = TEST_PACKAGE_NAME;
+        mAppInfo.name = TEST_APPLICATION_LABEL;
+        mPackageInfo = new PackageInfo();
+        mPackageInfo.packageName = TEST_PACKAGE_NAME;
+        mPackageInfo.applicationInfo = mAppInfo;
+        mPackageStats = new PackageStats(TEST_PACKAGE_NAME);
+    }
+}

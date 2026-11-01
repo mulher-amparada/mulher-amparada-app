@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2024 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/import_nav_graph"
+    app:startDestination="@id/importSourceLocationFragment">
+
+    <fragment
+        android:id="@+id/importSourceLocationFragment"
+        android:name="com.android.healthconnect.controller.exportimport.ImportSourceLocationFragment">
+        <action
+            android:id="@+id/action_importSourceLocationFragment_to_playStore"
+            app:destination="@id/play_store_activity" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/importConfirmationDialogFragment"
+        android:name="com.android.healthconnect.controller.exportimport.ImportConfirmationDialogFragment">
+    </fragment>
+
+    <activity
+        android:id="@+id/play_store_activity"
+        app:action="android.intent.action.VIEW"
+        android:label="@string/playstore_app_title"
+        app:data="@string/playstore_url"
+        app:targetPackage="@string/playstore_package_name" />
+
+</navigation>

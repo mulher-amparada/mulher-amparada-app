@@ -1,0 +1,6 @@
+set noparent
+file:platform/packages/modules/Connectivity:main:/OWNERS_core_networking
+per-file NetworkPolicyManagerService.java = file:/platform/frameworks/opt/telephony:/OWNERS
+
+sudheersai@google.com
+suprabh@google.com

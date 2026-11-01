@@ -1,0 +1,66 @@
+package: "com.android.settings.flags"
+container: "system_ext"
+
+flag {
+  name: "sfps_enroll_refinement"
+  namespace: "biometrics_integration"
+  description: "This flag controls whether the sfps pause enrollment feature should be enabled"
+  bug: "288155127"
+}
+
+flag {
+  name: "enroll_layout_truncate_improvement"
+  namespace: "biometrics_integration"
+  description: "This flag controls whether the enroll layout truncate improvement feature should be enabled"
+  bug: "359149850"
+  metadata {
+      purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "biometrics_onboarding_education"
+  namespace: "biometrics_integration"
+  description: "This flag controls whether the onboarding education settings UX should be enabled"
+  bug: "370940762"
+}
+
+flag {
+  name: "biometric_onboarding_education"
+  namespace: "biometrics_integration"
+  description: "This flag controls whether the onboarding education settings UX should be enabled"
+  bug: "370940762"
+  metadata {
+      purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "remove_protection_layout"
+  namespace: "biometrics_integration"
+  description: "This flag controls whether remove protection layout in biometrics settings"
+  bug: "440023111"
+  metadata {
+      purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "enable_face_enroll_education_dynamic_colors"
+  namespace: "biometrics_integration"
+  description: "This flag controls whether Swatchie dynamic colors should be applied to Face Enroll education animation"
+  bug: "462073623"
+  metadata {
+      purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "show_face_enroll_intro_timeout_dialog"
+  namespace: "biometrics_integration"
+  description: "This flag controls whether to show an error dialog when it takes too long to be ready during Face Enroll Introduction"
+  bug: "447278355"
+  metadata {
+      purpose: PURPOSE_BUGFIX
+  }
+}

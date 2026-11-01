@@ -1,0 +1,96 @@
+// Copyright (C) 2022 The Android Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package {
+    default_applicable_licenses: ["Android-Apache-2.0"],
+}
+
+filegroup {
+    name: "service-healthfitness-sources",
+    srcs: [
+        "java/**/*.java",
+    ],
+    path: "java",
+}
+
+java_sdk_library {
+    name: "service-healthfitness",
+    permitted_packages: [
+        "com.android.server.healthconnect",
+        "com.android.healthfitness.flags",
+    ],
+    srcs: [":service-healthfitness-sources"],
+    sdk_version: "system_server_current",
+    min_sdk_version: "34",
+    defaults: [
+        "framework-system-server-module-defaults",
+        "framework-system-server-module-optimize-defaults",
+    ],
+    apex_available: ["com.android.healthfitness"],
+    libs: [
+        "framework-healthfitness.impl",
+        "androidx.annotation_annotation",
+        "framework-sdkextensions.stubs.module_lib",
+        "framework-configinfrastructure.stubs.module_lib",
+        "keepanno-annotations",
+        "modules-utils-preconditions",
+        // Keeping aconfig lib deps in "libs" instead of "static_libs" because we already have them
+        // in the framework jar which is included in this service jar.
+        // See go/fixing-strict-java-packages.
+        "healthfitness-aconfig-flags-lib",
+        "healthfitness-aconfig-flags-helper",
+    ],
+    static_libs: [
+        "modules-utils-build",
+        "modules-utils-backgroundthread",
+        "fhirspec-java-proto-lite",
+        "backup-restore-proto",
+        "serialization-proto",
+        "modules-utils-shell-command-handler",
+    ],
+    jarjar_rules: "jarjar-rules.txt",
+    installable: true,
+    optimize: {
+        // product_variable eng is true when TARGET_BUILD_VARIANT is  eng
+        optimize: select((product_variable("eng"), release_flag("RELEASE_HC_MODULE_SERVICE_OPTIMIZATION")), {
+            (false, true): true,
+            (default, default): false,
+        }),
+        proguard_flags_files: ["proguard.flags"],
+    },
+    visibility: [
+        "//packages/modules/HealthFitness/tests:__subpackages__",
+    ],
+    impl_library_visibility: [
+        // Top level directory for bivalent tests
+        "//packages/modules/HealthFitness/tests",
+        "//packages/modules/HealthFitness/tests/utils",
+        "//packages/modules/HealthFitness/tests/unittests",
+        "//packages/modules/HealthFitness/tests/integrationtests",
+    ],
+    errorprone: {
+        extra_check_modules: [
+            "//external/nullaway:nullaway_plugin",
+        ],
+        javacflags: [
+            "-Xep:DefaultLocale:ERROR",
+            "-Xep:NullAway:ERROR",
+            "-XepOpt:NullAway:AnnotatedPackages=com.android.server.healthconnect",
+        ],
+    },
+    java_resources: select(release_flag("RELEASE_HC_PHR_FHIR_STRUCTURAL_VALIDATION"), {
+        true: [":generate-fhir-spec-r4-binarypb"],
+        default: [],
+    }),
+}

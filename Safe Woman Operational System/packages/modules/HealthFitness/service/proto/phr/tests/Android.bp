@@ -1,0 +1,58 @@
+// Genrule that runs generate_fhir_spec.py to generate a FhirResourceSpec textproto file
+// This can be used to regenerate the expected_fhir_spec_r4_for_test.textproto (see details below).
+genrule {
+    name: "generate-fhir-spec-r4-textproto",
+    srcs: [
+        "//external/fhir/spec/r4:resource-definitions",
+        "//external/fhir/spec/r4:type-definitions",
+    ],
+    tools: ["generate-fhir-spec"],
+    cmd: "$(location generate-fhir-spec) $(out) $(in)",
+    out: ["fhirspec-r4.textproto"],
+}
+
+// To update the test file to the latest output you can run the following from your 'main' checkout
+// directory:
+//     m generate-fhir-spec-r4-textproto // to generate a textproto version of the proto
+//     cp $(find out/ -name "fhirspec-r4.textproto") \
+//     packages/modules/HealthFitness/service/proto/phr/tests/expected_fhir_spec_r4_for_test.textproto
+filegroup {
+    name: "expected-fhir-spec-r4-for-test",
+    srcs: [
+        "expected_fhir_spec_r4_for_test.textproto",
+    ],
+}
+
+// Tests that the contents of fhir_spec_r4.binarypb match expected_fhir_spec_r4_for_test.textproto
+python_test_host {
+    name: "generate-fhir-spec-r4-binarypb-test",
+    main: "generate_fhir_spec_r4_binarypb_test.py",
+    srcs: [
+        "generate_fhir_spec_r4_binarypb_test.py",
+    ],
+    libs: [
+        "fhirspec-py-proto",
+    ],
+    data: [
+        ":generate-fhir-spec-r4-binarypb",
+        ":expected-fhir-spec-r4-for-test",
+    ],
+    test_options: {
+        unit_test: true,
+    },
+}
+
+python_test_host {
+    name: "fhir-spec-extractor-test",
+    main: "fhir_spec_extractor_test.py",
+    srcs: [
+        "fhir_spec_extractor_test.py",
+    ],
+    libs: [
+        "fhirspec-py-proto",
+        "fhir-spec-extractor",
+    ],
+    test_options: {
+        unit_test: true,
+    },
+}

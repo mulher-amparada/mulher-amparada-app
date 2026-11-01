@@ -1,0 +1,343 @@
+<!--
+  ~ Copyright (C) 2025 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <!-- START EXPRESSIVE PERMISSION GRANT DIALOG -->
+
+    <style name="PermissionGrantTitleMessageExpressive"
+           parent="@style/TextAppearance.SettingsLib.HeadlineSmall">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="PermissionGrantDetailMessageExpressive"
+           parent="@style/TextAppearance.SettingsLib.BodyMedium">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">18dp</item>
+    </style>
+
+    <style name="PermissionGrantButtonListExpressive">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingTop">@dimen/settingslib_expressive_space_none</item>
+        <item name="android:paddingStart">@dimen/settingslib_expressive_space_small4</item>
+        <item name="android:paddingEnd">@dimen/settingslib_expressive_space_small4</item>
+        <item name="android:paddingBottom">@dimen/settingslib_expressive_space_extrasmall6</item>
+    </style>
+
+    <style name="PermissionGrantButtonExpressive"
+           parent="@android:style/Widget.DeviceDefault.Button.Borderless.Colored">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/settingslib_expressive_space_medium4</item>
+        <item name="android:layout_marginTop">@dimen/settingslib_expressive_space_none</item>
+        <item name="android:layout_marginStart">@dimen/settingslib_expressive_space_none</item>
+        <item name="android:layout_marginEnd">@dimen/settingslib_expressive_space_none</item>
+        <item name="android:layout_marginBottom">@dimen/settingslib_expressive_space_extrasmall4</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:background">@drawable/settingslib_expressive_button_background_filled</item>
+        <item name="android:textColor">@color/settingslib_materialColorOnPrimary</item>
+    </style>
+
+    <!-- END EXPRESSIVE PERMISSION GRANT DIALOG -->
+
+    <!-- START EXPRESSIVE PERMISSION RATIONALE DIALOG -->
+
+    <style name="PermissionRationaleContentExpressive">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingTop">24dp</item>
+        <item name="android:paddingHorizontal">@dimen/settingslib_expressive_space_small1</item>
+    </style>
+
+    <style name="PermissionRationaleTitleContainerExpressive">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginBottom">@dimen/settingslib_expressive_space_extrasmall6</item>
+    </style>
+
+    <style name="PermissionRationaleTitleIconExpressive">
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:layout_marginBottom">@dimen/settingslib_expressive_space_small1</item>
+        <item name="android:tint">@color/settingslib_materialColorPrimary</item>
+        <item name="android:scaleType">centerInside</item>
+    </style>
+
+    <style name="PermissionRationaleTitleMessageExpressive">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">google-sans</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:gravity">center</item>
+        <item name="android:lineHeight">32sp</item>
+        <item name="android:minHeight">32dp</item>
+        <item name="android:textColor">@color/settingslib_materialColorOnSurface</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="PermissionRationaleSectionOuterContainerExpressive">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingVertical">@dimen/settingslib_expressive_space_extrasmall6</item>
+    </style>
+
+    <style name="PermissionRationaleSectionIconExpressive">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:padding">@dimen/settingslib_expressive_space_extrasmall4</item>
+        <item name="android:tint">@color/settingslib_materialColorOnSurface</item>
+        <item name="android:scaleType">centerInside</item>
+    </style>
+
+    <style name="PermissionRationaleSectionInnerContainerExpressive">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/settingslib_expressive_space_extrasmall6</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="PermissionRationaleSectionTitleExpressive"
+           parent="@style/TextAppearance.SettingsLib.TitleMedium">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">24dp</item>
+        <item name="android:fontFamily">google-sans-flex</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:textColor">@color/settingslib_materialColorOnSurface</item>
+        <item name="android:textColorLink">@color/settingslib_materialColorOnSurfaceVariant</item>
+    </style>
+
+    <style name="PermissionRationaleSectionMessageExpressive"
+           parent="@style/TextAppearance.SettingsLib.BodyMedium">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">google-sans-flex</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textColor">@color/settingslib_materialColorOnSurfaceVariant</item>
+        <item name="android:textColorLink">@color/settingslib_materialColorPrimary</item>
+    </style>
+
+    <style name="PermissionRationaleSectionPurposeListExpressive"
+           parent="@style/PermissionRationaleSectionMessageExpressive">
+        <item name="android:layout_marginStart">@dimen/permission_rationale_purpose_list_bullet_indent</item>
+    </style>
+
+    <style name="PermissionRationaleButtonContainerExpressive">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">0</item>
+        <item name="android:layout_marginTop">@dimen/settingslib_expressive_space_extrasmall6</item>
+        <item name="android:paddingHorizontal">@dimen/settingslib_expressive_space_small4</item>
+        <item name="android:paddingTop">@dimen/settingslib_expressive_space_extrasmall4</item>
+        <item name="android:paddingBottom">@dimen/settingslib_expressive_space_small4</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">end</item>
+    </style>
+
+    <style name="PermissionRationaleBackButtonExpressive">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:minWidth">65dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/settingslib_expressive_space_medium3</item>
+        <item name="android:paddingVertical">@dimen/settingslib_expressive_space_extrasmall5</item>
+        <item name="android:paddingHorizontal">@dimen/settingslib_expressive_space_small1</item>
+        <item name="android:background">@drawable/settingslib_expressive_button_background_filled</item>
+        <item name="android:fontFamily">google-sans-flex</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:letterSpacing">0.00714286</item>
+        <item name="android:lineHeight">20sp</item>
+        <item name="android:textColor">@color/settingslib_materialColorOnPrimary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- END EXPRESSIVE PERMISSION RATIONALE DIALOG -->
+
+    <!-- START EXPRESSIVE ENHANCED CONFIRMATION DIALOG -->
+
+    <style name="EnhancedConfirmationDialogExpressive">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingTop">@dimen/settingslib_expressive_space_small4</item>
+        <item name="android:paddingHorizontal">@dimen/settingslib_expressive_space_small4</item>
+    </style>
+
+    <style name="EnhancedConfirmationDialogHeaderExpressive">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:paddingBottom">@dimen/settingslib_expressive_space_small4</item>
+    </style>
+
+    <style name="EnhancedConfirmationDialogIconExpressive">
+        <item name="android:src">@drawable/ic_safety_center_shield</item>
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:tint">@color/settingslib_materialColorPrimary</item>
+        <item name="android:contentDescription">@null</item>
+    </style>
+
+    <style name="EnhancedConfirmationDialogTitleExpressive"
+           parent="@style/TextAppearance.SettingsLib.HeadlineSmall">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/settingslib_expressive_space_small1</item>
+        <item name="android:fontFamily">google-sans-flex</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textColor">@color/settingslib_materialColorOnSurface</item>
+    </style>
+
+    <style name="EnhancedConfirmationDialogDescExpressive"
+           parent="@style/TextAppearance.SettingsLib.BodyMedium">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">google-sans-flex</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textColor">@color/settingslib_materialColorOnSurface</item>
+        <item name="android:textColorLink">@color/settingslib_materialColorOnPrimaryContainer</item>
+    </style>
+
+    <!-- END EXPRESSIVE ENHANCED CONFIRMATION DIALOG -->
+
+    <!-- START EXPRESSIVE APP DATA SHARING SCREEN -->
+
+    <style name="AppDataSharingDetailsContainerExpressive">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">@dimen/settingslib_expressive_space_small4</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:textDirection">locale</item>
+        <item name="android:layoutDirection">locale</item>
+    </style>
+
+    <style name="AppDataSharingDetailsMessageExpressive">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/settingslib_expressive_space_extrasmall6</item>
+        <item name="android:layout_marginEnd">@dimen/settingslib_expressive_space_extrasmall6</item>
+        <item name="android:textAppearance">@style/AppDataSharingDetailsTextAppearance</item>
+    </style>
+
+    <style name="AppDataSharingNoUpdatesMessageExpressive">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">28dp</item>
+        <item name="android:layout_marginBottom">24dp</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textAppearance">@style/AppDataSharingNoUpdatesTextAppearance</item>
+    </style>
+
+    <style name="AppDataSharingUpdatesFooterContainerExpressive">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingBottom">@dimen/settingslib_expressive_space_small4</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:textDirection">locale</item>
+        <item name="android:layoutDirection">locale</item>
+    </style>
+
+    <style name="AppDataSharingUpdatesFooterIconFrameExpressive">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/settingslib_expressive_space_small4</item>
+        <item name="android:layout_marginStart">@dimen/settingslib_expressive_space_extrasmall6</item>
+        <item name="android:layout_marginEnd">@dimen/settingslib_expressive_space_extrasmall6</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="AppDataSharingUpdatesFooterMessageExpressive">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/settingslib_expressive_space_small1</item>
+        <item name="android:layout_marginBottom">@dimen/settingslib_expressive_space_extrasmall4</item>
+        <item name="android:layout_marginStart">@dimen/settingslib_expressive_space_extrasmall6</item>
+        <item name="android:layout_marginEnd">@dimen/settingslib_expressive_space_extrasmall6</item>
+        <item name="android:textAppearance">@style/AppDataSharingUpdatesFooterTextAppearance</item>
+    </style>
+
+    <style name="AppDataSharingUpdatesFooterLinkExpressive"
+           parent="@android:style/TextAppearance.DeviceDefault">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/settingslib_expressive_space_extrasmall6</item>
+        <item name="android:layout_marginEnd">@dimen/settingslib_expressive_space_extrasmall6</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineHeight">20sp</item>
+        <item name="android:textColorLink">@color/permission_rationale_accent_primary_variant</item>
+    </style>
+
+    <!-- END EXPRESSIVE APP DATA SHARING SCREEN -->
+
+    <style name="PermissionGrantButtonAllowExpressive"
+           parent="@style/PermissionGrantButtonExpressive"></style>
+    <style name="PermissionGrantButtonAllowForegroundExpressive"
+           parent="@style/PermissionGrantButtonExpressive"></style>
+    <style name="PermissionGrantButtonAllowOneTimeExpressive"
+           parent="@style/PermissionGrantButtonExpressive"></style>
+    <style name="PermissionGrantButtonAllowSelectedExpressive"
+           parent="@style/PermissionGrantButtonExpressive"></style>
+    <style name="PermissionGrantButtonAllowAllExpressive"
+           parent="@style/PermissionGrantButtonExpressive"></style>
+    <style name="PermissionGrantButtonDenyExpressive"
+           parent="@style/PermissionGrantButtonExpressive"></style>
+    <style name="PermissionGrantButtonNoUpgradeExpressive"
+           parent="@style/PermissionGrantButtonExpressive"></style>
+    <style name="PermissionGrantButtonDontAllowMoreExpressive"
+           parent="@style/PermissionGrantButtonExpressive"></style>
+
+    <style name="ExpressiveStatusButton"
+        parent="@style/SettingsLibButtonStyle.Expressive.Filled.Extra">
+        <item name="materialSizeOverlay">@style/SizeOverlay.Material3Expressive.Button.Small</item>
+        <item name="backgroundTint">@color/safety_center_button_info</item>
+        <item name="android:textColor">?attr/textColorScActionButton</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/sc_spacing_xxxlarge</item>
+        <item name="layout_constraintTop_toBottomOf">@id/status_title_and_summary</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+    </style>
+    <style name="ExpressiveStatusButton.Fixed" />
+    <style name="ExpressiveStatusButton.Responsive" />
+
+    <style name="ExpressiveActionButton"
+        parent="@style/Banner.PositiveButton.SettingsLib.Expressive">
+        <item name="android:textColor">?attr/textColorScActionButton</item>
+    </style>
+    <style name="ExpressiveActionButton.Fixed" />
+    <style name="ExpressiveActionButton.Responsive" />
+
+    <style name="ExpressiveOutlineActionButton"
+        parent="@style/Banner.NegativeButton.SettingsLib.Expressive">
+        <item name="android:textColor">?attr/textColorScSecondaryActionButton</item>
+    </style>
+    <style name="ExpressiveOutlineActionButton.Fixed" />
+    <style name="ExpressiveOutlineActionButton.Responsive" />
+</resources>

@@ -1,0 +1,325 @@
+/*
+ * Copyright (C) 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.settings.connecteddevice.audiosharing.audiostreams;
+
+import static com.android.settings.connecteddevice.audiosharing.audiostreams.AudioStreamsDashboardFragment.KEY_BROADCAST_METADATA;
+import static com.android.settings.connecteddevice.audiosharing.audiostreams.AudioStreamsHelper.getEnabledScreenReaderServices;
+import static com.android.settings.connecteddevice.audiosharing.audiostreams.AudioStreamsHelper.setAccessibilityServiceOff;
+import static com.android.settingslib.bluetooth.BluetoothBroadcastUtils.SCHEME_BT_BROADCAST_METADATA;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.settings.SettingsEnums;
+import android.bluetooth.BluetoothLeBroadcastMetadata;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+
+import com.android.settings.R;
+import com.android.settings.bluetooth.Utils;
+import com.android.settings.connecteddevice.ConnectedDeviceDashboardFragment;
+import com.android.settings.core.SubSettingLauncher;
+import com.android.settings.core.instrumentation.InstrumentedDialogFragment;
+import com.android.settingslib.bluetooth.BluetoothLeBroadcastMetadataExt;
+import com.android.settingslib.bluetooth.BluetoothUtils;
+import com.android.settingslib.bluetooth.CachedBluetoothDevice;
+import com.android.settingslib.utils.ThreadUtils;
+
+public class AudioStreamConfirmDialog extends InstrumentedDialogFragment {
+    private static final String TAG = "AudioStreamConfirmDialog";
+
+    @VisibleForTesting
+    static final int DEFAULT_DEVICE_NAME = R.string.audio_streams_dialog_default_device;
+
+    private Context mContext;
+    @VisibleForTesting
+    @Nullable
+    Activity mActivity;
+    @Nullable
+    private BluetoothLeBroadcastMetadata mBroadcastMetadata;
+    @Nullable
+    private CachedBluetoothDevice mConnectedDevice;
+    private int mAudioStreamConfirmDialogId = SettingsEnums.PAGE_UNKNOWN;
+
+    @Override
+    public void onAttach(Context context) {
+        mContext = context;
+        mActivity = getActivity();
+        if (mActivity == null) {
+            Log.w(TAG, "onAttach() mActivity is null!");
+            return;
+        }
+        Intent intent = mActivity.getIntent();
+        mBroadcastMetadata = getMetadata(intent);
+        mConnectedDevice = getConnectedDevice();
+        mAudioStreamConfirmDialogId =
+                getDialogId(mBroadcastMetadata != null, mConnectedDevice != null);
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setShowsDialog(true);
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return switch (mAudioStreamConfirmDialogId) {
+            case SettingsEnums.DIALOG_AUDIO_STREAM_CONFIRM_FEATURE_UNSUPPORTED ->
+                    getUnsupportedDialog();
+            case SettingsEnums.DIALOG_AUDIO_STREAM_CONFIRM_NO_LE_DEVICE -> getNoLeDeviceDialog();
+            case SettingsEnums.DIALOG_AUDIO_STREAM_CONFIRM_TURN_OFF_TALKBACK ->
+                    getTurnOffTalkbackDialog();
+            case SettingsEnums.DIALOG_AUDIO_STREAM_CONFIRM_TURN_OFF_AUDIO_SHARING ->
+                    getTurnOffAudioSharingDialog();
+            case SettingsEnums.DIALOG_AUDIO_STREAM_CONFIRM_LISTEN -> getConfirmDialog();
+            default -> getErrorDialog();
+        };
+    }
+
+    @Override
+    public int getMetricsCategory() {
+        return mAudioStreamConfirmDialogId;
+    }
+
+    private Dialog getConfirmDialog() {
+        return new AudioStreamsDialogFragment.DialogBuilder(getActivity())
+                .setTitle(getString(R.string.audio_streams_dialog_listen_to_audio_stream))
+                .setSubTitle1(
+                        mBroadcastMetadata != null
+                                ? AudioStreamsHelper.getBroadcastName(mBroadcastMetadata)
+                                : "")
+                .setSubTitle2(
+                        getString(
+                                R.string.audio_streams_dialog_control_volume,
+                                getConnectedDeviceName()))
+                .setLeftButtonText(getString(com.android.settings.R.string.cancel))
+                .setLeftButtonOnClickListener(
+                        unused -> {
+                            dismiss();
+                            if (mActivity != null) {
+                                mActivity.finish();
+                            }
+                        })
+                .setRightButtonText(getString(R.string.audio_streams_dialog_listen))
+                .setRightButtonOnClickListener(
+                        unused -> {
+                            mMetricsFeatureProvider.action(
+                                    getActivity(),
+                                    SettingsEnums
+                                            .ACTION_AUDIO_STREAM_CONFIRM_LAUNCH_MAIN_BUTTON_CLICK);
+                            launchAudioStreamsActivity();
+                            dismiss();
+                            if (mActivity != null) {
+                                mActivity.finish();
+                            }
+                        })
+                .build();
+    }
+
+    private Dialog getUnsupportedDialog() {
+        return new AudioStreamsDialogFragment.DialogBuilder(getActivity())
+                .setTitle(getString(R.string.audio_streams_dialog_cannot_listen))
+                .setSubTitle1(
+                        mBroadcastMetadata != null
+                                ? AudioStreamsHelper.getBroadcastName(mBroadcastMetadata)
+                                : "")
+                .setSubTitle2(getString(R.string.audio_streams_dialog_unsupported_device_subtitle))
+                .setRightButtonText(getString(R.string.audio_streams_dialog_close))
+                .setRightButtonOnClickListener(
+                        unused -> {
+                            dismiss();
+                            if (mActivity != null) {
+                                mActivity.finish();
+                            }
+                        })
+                .build();
+    }
+
+    private Dialog getErrorDialog() {
+        return new AudioStreamsDialogFragment.DialogBuilder(getActivity())
+                .setTitle(getString(R.string.audio_streams_dialog_cannot_listen))
+                .setSubTitle2(
+                        getString(
+                                R.string.audio_streams_dialog_cannot_play,
+                                getConnectedDeviceName()))
+                .setRightButtonText(getString(R.string.audio_streams_dialog_close))
+                .setRightButtonOnClickListener(
+                        unused -> {
+                            dismiss();
+                            if (mActivity != null) {
+                                mActivity.finish();
+                            }
+                        })
+                .build();
+    }
+
+    private Dialog getTurnOffTalkbackDialog() {
+        return new AudioStreamsDialogFragment.DialogBuilder(getActivity())
+                .setTitle(getString(R.string.audio_streams_dialog_turn_off_talkback_title))
+                .setSubTitle2(getString(R.string.audio_streams_dialog_turn_off_talkback_subtitle))
+                .setLeftButtonText(getString(R.string.cancel))
+                .setLeftButtonOnClickListener(
+                        unused -> {
+                            dismiss();
+                            if (mActivity != null) {
+                                mActivity.finish();
+                            }
+                        })
+                .setRightButtonText(
+                        getString(R.string.audio_streams_dialog_turn_off_talkback_button))
+                .setRightButtonOnClickListener(
+                        dialog -> {
+                            var unused = ThreadUtils.postOnBackgroundThread(() -> {
+                                var enabledScreenReader = getEnabledScreenReaderServices(mContext);
+                                if (!enabledScreenReader.isEmpty()) {
+                                    setAccessibilityServiceOff(mContext, enabledScreenReader);
+                                }
+                            });
+                            dismiss();
+                            if (mActivity != null) {
+                                mActivity.finish();
+                            }
+                        })
+                .build();
+    }
+
+    private Dialog getTurnOffAudioSharingDialog() {
+        return new AudioStreamsDialogFragment.DialogBuilder(getActivity())
+                .setTitle(getString(R.string.audio_streams_dialog_turn_off_audio_sharing_title))
+                .setSubTitle1(
+                        mBroadcastMetadata != null
+                                ? AudioStreamsHelper.getBroadcastName(mBroadcastMetadata)
+                                : "")
+                .setSubTitle2(
+                        getString(R.string.audio_streams_dialog_turn_off_audio_sharing_subtitle))
+                .setRightButtonText(getString(R.string.audio_streams_dialog_close))
+                .setRightButtonOnClickListener(
+                        unused -> {
+                            dismiss();
+                            if (mActivity != null) {
+                                mActivity.finish();
+                            }
+                        })
+                .build();
+    }
+
+    private Dialog getNoLeDeviceDialog() {
+        return new AudioStreamsDialogFragment.DialogBuilder(getActivity())
+                .setTitle(getString(R.string.audio_streams_dialog_no_le_device_title))
+                .setSubTitle2(getString(R.string.audio_streams_dialog_no_le_device_subtitle))
+                .setLeftButtonText(getString(R.string.audio_streams_dialog_close))
+                .setLeftButtonOnClickListener(
+                        unused -> {
+                            dismiss();
+                            if (mActivity != null) {
+                                mActivity.finish();
+                            }
+                        })
+                .setRightButtonText(getString(R.string.audio_streams_dialog_no_le_device_button))
+                .setRightButtonOnClickListener(
+                        dialog -> {
+                            new SubSettingLauncher(mContext)
+                                    .setDestination(
+                                            ConnectedDeviceDashboardFragment.class.getName())
+                                    .setSourceMetricsCategory(
+                                            SettingsEnums.DIALOG_AUDIO_STREAM_CONFIRM_NO_LE_DEVICE)
+                                    .launch();
+                            dismiss();
+                            if (mActivity != null) {
+                                mActivity.finish();
+                            }
+                        })
+                .build();
+    }
+
+    private void launchAudioStreamsActivity() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(KEY_BROADCAST_METADATA, mBroadcastMetadata);
+        if (mContext != null) {
+            new SubSettingLauncher(mContext)
+                    .setTitleText(mContext.getString(R.string.audio_streams_activity_title))
+                    .setDestination(AudioStreamsDashboardFragment.class.getName())
+                    .setArguments(bundle)
+                    .setSourceMetricsCategory(getMetricsCategory())
+                    .launch();
+        }
+    }
+
+    private @Nullable BluetoothLeBroadcastMetadata getMetadata(Intent intent) {
+        // Get the metadata from the intent extras
+        String metadata = intent.getStringExtra(KEY_BROADCAST_METADATA);
+        if (metadata != null && !metadata.isEmpty()) {
+            return BluetoothLeBroadcastMetadataExt.INSTANCE.convertToBroadcastMetadata(metadata);
+        }
+        // Retrieve the generic data string from the intent
+        String genericData = intent.getDataString();
+        if (genericData != null && !genericData.isEmpty()) {
+            // Normalize the prefix by replacing lowercase "bluetooth" with uppercase "BLUETOOTH"
+            genericData = genericData.replaceFirst("bluetooth", "BLUETOOTH");
+            if (genericData.startsWith(SCHEME_BT_BROADCAST_METADATA)) {
+                return BluetoothLeBroadcastMetadataExt.INSTANCE.convertToBroadcastMetadata(
+                        genericData);
+            }
+        }
+        return null;
+    }
+
+    private int getDialogId(boolean hasMetadata, boolean hasConnectedDevice) {
+        if (BluetoothUtils.isAudioSharingUIAvailable(mContext)) {
+            if (!hasConnectedDevice) {
+                return SettingsEnums.DIALOG_AUDIO_STREAM_CONFIRM_NO_LE_DEVICE;
+            }
+            if (!getEnabledScreenReaderServices(mContext).isEmpty()) {
+                return SettingsEnums.DIALOG_AUDIO_STREAM_CONFIRM_TURN_OFF_TALKBACK;
+            }
+            if (BluetoothUtils.isBroadcasting(Utils.getLocalBluetoothManager(mContext))) {
+                return SettingsEnums.DIALOG_AUDIO_STREAM_CONFIRM_TURN_OFF_AUDIO_SHARING;
+            }
+            return hasMetadata
+                    ? SettingsEnums.DIALOG_AUDIO_STREAM_CONFIRM_LISTEN
+                    : SettingsEnums.DIALOG_AUDIO_STREAM_CONFIRM_DATA_ERROR;
+        } else {
+            return SettingsEnums.DIALOG_AUDIO_STREAM_CONFIRM_FEATURE_UNSUPPORTED;
+        }
+    }
+
+    @Nullable
+    private CachedBluetoothDevice getConnectedDevice() {
+        var localBluetoothManager = Utils.getLocalBluetoothManager(getActivity());
+        if (localBluetoothManager == null) {
+            return null;
+        }
+        return AudioStreamsHelper.getCachedBluetoothDeviceInSharingOrLeConnected(
+                localBluetoothManager).orElse(null);
+    }
+
+    private String getConnectedDeviceName() {
+        if (mConnectedDevice != null) {
+            String alias = mConnectedDevice.getName();
+            return TextUtils.isEmpty(alias) ? getString(DEFAULT_DEVICE_NAME) : alias;
+        }
+        Log.w(TAG, "getConnectedDeviceName : no connected device!");
+        return getString(DEFAULT_DEVICE_NAME);
+    }
+}

@@ -1,0 +1,92 @@
+/*
+ * Copyright (C) 2023 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.settings.biometrics.fingerprint;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.android.settings.biometrics.fingerprint.feature.ChallengeGeneratedInvoker;
+import com.android.settings.biometrics.fingerprint.feature.FingerprintExtPreferencesProvider;
+import com.android.settings.biometrics.fingerprint.feature.SfpsEnrollmentFeature;
+
+import java.util.Collections;
+import java.util.List;
+
+public interface FingerprintFeatureProvider {
+    /**
+     * Gets the feature implementation of SFPS enrollment.
+     * @return the feature implementation
+     */
+    SfpsEnrollmentFeature getSfpsEnrollmentFeature();
+
+    /**
+     * Gets calibrator for udfps pre-enroll
+     * @param appContext application context
+     * @param activitySavedInstanceState activity savedInstanceState
+     * @param activityIntent activity intent
+     */
+    @Nullable
+    default UdfpsEnrollCalibrator getUdfpsEnrollCalibrator(@NonNull Context appContext,
+            @Nullable Bundle activitySavedInstanceState, @Nullable Intent activityIntent) {
+        return null;
+    }
+
+    /**
+     * Gets the provider for current fingerprint enrollment activity classes
+     * @return the provider
+     */
+    @NonNull
+    default FingerprintEnrollActivityClassProvider getEnrollActivityClassProvider(@NonNull Context context) {
+        return FingerprintEnrollActivityClassProvider.getInstance();
+    }
+
+    /**
+     * Gets new Preferences in Fingerprint Settings
+     */
+    @NonNull
+    default FingerprintExtPreferencesProvider getExtPreferenceProvider(
+            @NonNull Context context
+    ) {
+        return new FingerprintExtPreferencesProvider(context);
+    }
+
+    /**
+     * Gets the feature provider for FingerprintSettings page
+     * @return the provider
+     */
+    @NonNull
+    default FingerprintSettingsFeatureProvider getFingerprintSettingsFeatureProvider() {
+        return FingerprintSettingsFeatureProvider.getInstance();
+    }
+
+    @NonNull
+    default List<ChallengeGeneratedInvoker> getChallengeGeneratedInvokers() {
+        return Collections.emptyList();
+    }
+
+    /** Returns the parental consent page. */
+    @NonNull
+    Class<? extends FingerprintEnrollParentalConsent> getParentalConsentPage();
+
+    /** Returns the string resources of the parental consent page. */
+    @NonNull
+    int[] getParentalConsentStringRes();
+}

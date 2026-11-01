@@ -1,0 +1,58 @@
+package: "com.android.media.mediasession.flags"
+container: "system"
+
+flag {
+  name: "deprecate_platform_mediasession2_apis"
+  namespace: "media_solutions"
+  description: "Deprecate platform MediaSession2 APIs"
+  bug: "436849846"
+  is_exported: true
+}
+
+flag {
+  name: "filter_session_audio_playback_by_usage"
+  namespace: "media_solutions"
+  description: "Filter audio playback uids used for session tracking by audio usage type (to e.g. ignore notification audio)."
+  bug: "432003816"
+}
+
+flag {
+  name: "sessionless_vol_key_zero_cooldown"
+  namespace: "media_solutions"
+  description: "Decrease the 'cooldown' (time since last audio playback) for routing volume "
+               "keys to a foreground session-less app (instead of an active remote session) "
+               "from infinity to zero."
+  bug: "432003816"
+}
+
+flag {
+  name: "remove_audioplayerstatemonitor_static_memoization"
+  namespace: "media_solutions"
+  description: "Remove the static memoization from AudioPlayerStateMonitor.getInstance(Context)."
+  bug: "438917725"
+}
+
+flag {
+  name: "override_media_session_owner"
+  namespace: "media_solutions"
+  description: "Allow applications with permission to register media session on behalf of other apps."
+  bug: "422078108"
+  is_exported: true
+}
+
+flag {
+  name: "fetch_media_controllers_for_app"
+  namespace: "media_solutions"
+  description: "Allow media applications to fetch their media controllers. Also allow media apps"
+               "to add and remove listener for change in their controllers."
+  bug: "422078108"
+  is_exported: true
+}
+
+flag {
+  name: "expose_bitmap_size_limit_api"
+  namespace: "media_solutions"
+  description: "API to expose bitmap size limit used in MediaSession"
+  bug: "442621818"
+  is_exported: true
+}

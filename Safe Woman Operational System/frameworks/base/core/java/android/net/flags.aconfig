@@ -1,0 +1,138 @@
+package: "android.net.platform.flags"
+container: "system"
+
+# This file contains aconfig flags used from platform code
+# Flags used for module APIs must be in aconfig files under each modules
+
+flag {
+    name: "powered_off_finding_platform"
+    namespace: "nearby"
+    description: "Controls whether the Powered Off Finding feature is enabled"
+    bug: "307898240"
+}
+
+flag {
+    name: "powered_off_finding_message_new_product_name"
+    namespace: "nearby"
+    description: "Controls whether the Powered Off Finding message uses the new product name"
+    bug: "417428201"
+}
+
+flag {
+  name: "register_nsd_offload_engine"
+  is_exported: true
+  namespace: "android_core_networking"
+  description: "Flag for registerOffloadEngine API in NsdManager"
+  bug: "294777050"
+}
+
+flag {
+  name: "deprecate_network_policy_callback"
+  namespace: "backstage_power"
+  description: "Flag for deprecating NetworkPolicyCallback and related APIs"
+  bug: "353342610"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+  is_exported: true
+}
+
+flag {
+  name: "mdns_improvement_for_25q2"
+  is_exported: true
+  namespace: "android_core_networking"
+  description: "Flag for MDNS quality, reliability and performance improvement in 25Q2"
+  bug: "373270045"
+}
+
+flag {
+  name: "vpn_type_oem_service_and_legacy"
+  namespace: "android_core_networking"
+  is_exported: true
+  description: "Flags the TYPE_VPN_OEM_SERVICE and TYPE_VPN_OEM_LEGACY VpnManager API constants"
+  bug: "389829981"
+}
+
+flag {
+  name: "avoid_bad_wifi_from_carrier_config"
+  namespace: "android_core_networking"
+  is_exported: true
+  description: "Flag for reading avoid bad Wi-Fi customization from carrier config"
+  bug: "410976315"
+}
+
+flag {
+  name: "connectivity_service_destroy_socket"
+  is_exported: true
+  namespace: "android_core_networking"
+  description: "Flag for moving the socket destroy logic in Netd to the Connectivity service"
+  bug: "314961091"
+}
+
+flag {
+  name: "create_app_specific_network_permission"
+  namespace: "android_core_networking"
+  is_exported: false
+  description: "Flag for adding CREATE_APP_SPECIFIC_NETWORK permission"
+  bug: "435313135"
+}
+
+flag {
+  name: "make_app_specific_network_permission_api"
+  namespace: "android_core_networking"
+  is_exported: true
+  description: "Flag for making CREATE_APP_SPECIFIC_NETWORK permission API"
+  bug: "435313135"
+}
+
+flag {
+  name: "delete_vpn_profile_when_app_uninstalled"
+  namespace: "android_core_networking"
+  is_exported: false
+  description: "Flag for deleting VPN profile when the provisioning app is uninstalled"
+  bug: "440083803"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "connectivity_service_modify_qdisc_clsact"
+  namespace: "android_core_networking"
+  is_exported: true
+  description: "Flag for moving the modify qdisc clsact logic in Netd to the Connectivity service"
+  bug: "430428527"
+}
+
+flag {
+  name: "autonomous_repairing_initiation"
+  is_exported: true
+  namespace: "bluetooth"
+  description: "Enable Autonomous repairing changes for Android Bluetooth from 26Q2"
+  bug: "459761960"
+}
+
+flag {
+  name: "bluetooth_pairing_hardening"
+  is_exported: true
+  namespace: "bluetooth"
+  description: "Enable pairing API hardening changes for Android Bluetooth from 26Q2"
+  bug: "461869367"
+}
+
+flag {
+    name: "use_netstats_per_query_flags"
+    namespace: "android_core_networking"
+    description: "Use NetworkStatsManager APIs with query flags"
+    bug: "453909242"
+    metadata {
+      purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+  name: "enable_multi_proxy_system_platform"
+  namespace: "android_core_networking"
+  description: "Platform-side flag to control interactions related to multi-proxy support."
+  bug: "463367733"
+}

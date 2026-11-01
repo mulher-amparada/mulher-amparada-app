@@ -1,0 +1,75 @@
+{
+  "resourceType": "Medication",
+  "id": "medication-3",
+  "identifier": [
+    {
+      "use": "usual",
+      "system": "urn:oid:1.2.345.6789",
+      "value": "10003"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "765507008",
+        "display": "Metformin hydrochloride 500 mg prolonged-release oral tablet"
+      },
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "860975",
+        "display": "24 HR metformin hydrochloride 500 MG Extended Release Oral Tablet"
+      },
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "860977",
+        "display": "Glucophage XR 500 MG 24HR Extended Release Oral Tablet"
+      }
+    ]
+  },
+  "form": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "385055001",
+        "display": "Tablet"
+      },
+      {
+        "system": "urn:oid:1.2.345.6789",
+        "code": "TABS",
+        "display": "tablet"
+      }
+    ],
+    "text": "tablet"
+  },
+  "ingredient": [
+    {
+      "itemCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+            "code": "6809",
+            "display": "Metformin"
+          }
+        ]
+      },
+      "isActive": true,
+      "strength": {
+        "numerator": {
+          "value": 500,
+          "system": "http://unitsofmeasure.org",
+          "code": "mg"
+        },
+        "denominator": {
+          "value": 1,
+          "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+          "code": "TAB"
+        }
+      }
+    }
+  ],
+  "batch": {
+    "lotNumber": "123456",
+    "expirationDate": "2025-07-31"
+  }
+}

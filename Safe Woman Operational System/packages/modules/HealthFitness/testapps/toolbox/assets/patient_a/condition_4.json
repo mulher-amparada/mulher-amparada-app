@@ -1,0 +1,58 @@
+{
+  "resourceType": "Condition",
+  "id": "condition-4",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "active",
+        "display": "Active"
+      }
+    ],
+    "text": "Active"
+  },
+  "verificationStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+        "code": "confirmed",
+        "display": "Confirmed"
+      }
+    ],
+    "text": "Confirmed"
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+          "code": "problem-list-item",
+          "display": "Problem List Item"
+        }
+      ],
+      "text": "Problem List Item"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "313436004",
+        "display": "Type II diabetes mellitus without complication"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/patient-1",
+    "display": "Example, Anne"
+  },
+  "recorder": {
+    "reference": "Practitioner/practitioner-3",
+    "type": "Practitioner",
+    "display": "Dr Wei Chen"
+  },
+  "encounter": {
+    "reference": "Encounter/encounter-1"
+  },
+  "recordedDate": "2023-11-04"
+}

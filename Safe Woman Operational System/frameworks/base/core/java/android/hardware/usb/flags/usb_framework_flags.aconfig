@@ -1,0 +1,99 @@
+package: "android.hardware.usb.flags"
+container: "system"
+
+flag {
+    name: "enable_is_pd_compliant_api"
+    is_exported: true
+    namespace: "usb"
+    description: "Feature flag for the api to check if a port is PD compliant"
+    bug: "323470419"
+}
+
+flag {
+    name: "enable_is_mode_change_supported_api"
+    is_exported: true
+    namespace: "usb"
+    description: "Feature flag for the api to check if a port supports mode change"
+    bug: "323470419"
+}
+
+flag {
+    name: "enable_interface_name_device_filter"
+    is_exported: true
+    namespace: "usb"
+    description: "Feature flag to enable interface name as a parameter for device filter"
+    bug: "312828160"
+}
+
+flag {
+    name: "enable_device_and_interface_filter_separation"
+    is_exported: false
+    namespace: "usb"
+    description: "Feature flag to enable device and interface filter separation"
+    bug: "464179952"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "expose_usb_speed_system_api"
+    namespace: "usb"
+    description: "Feature flag to enable exposing usb speed system api"
+    bug: "373653182"
+    is_exported: true
+}
+
+flag {
+    name: "enable_accessory_stream_api"
+    is_exported: true
+    namespace: "usb"
+    description: "Feature flag to enable stream APIs for Accessory mode"
+    bug: "369356693"
+}
+
+flag {
+    name: "enable_feature_usb_device"
+    is_exported: true
+    namespace: "usb"
+    description: "Feature flag to enable PackageManager feature FEATURE_USB_DEVICE"
+    bug: "457480832"
+}
+
+flag {
+    name: "enable_aoa_userspace_implementation"
+    namespace: "usb"
+    description: "Enables AOA userspace implementation"
+    bug: "407985367"
+}
+
+flag {
+    name: "enable_uaoa_p6"
+    namespace: "usb"
+    description: "Enables AOA userspace implementation only for pixel 6 series devices"
+    bug: "440091110"
+}
+
+flag {
+    name: "enable_uaoa_p8"
+    namespace: "usb"
+    description: "Enables AOA userspace implementation only for pixel 8 series devices"
+    bug: "440091110"
+}
+
+flag {
+    name: "enable_uaoa_p10"
+    namespace: "usb"
+    description: "Enables AOA userspace implementation only for pixel 10 series devices"
+    bug: "440091110"
+}
+
+flag {
+    name: "mtp_ffs_handle_close_concurrency_fix"
+    namespace: "usb"
+    description: "Fix a race condition when shutting down MtpFfsHandle while new events are being added."
+    bug: "372823688"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}

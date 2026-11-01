@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2025 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <color name="sc_expressive_semantic_green_container_high_lt">#128937</color>
+    <color name="sc_expressive_semantic_green_container_high_dt">#3CBA5A</color>
+    <!-- DT and LT yellow are the same color, this is intentional -->
+    <color name="sc_expressive_semantic_yellow_container_high_lt">#FCBD00</color>
+    <color name="sc_expressive_semantic_yellow_container_high_dt">#FCBD00</color>
+    <color name="sc_expressive_semantic_red_container_high_lt">#DB372D</color>
+    <color name="sc_expressive_semantic_red_container_high_dt">#F55E57</color>
+</resources>

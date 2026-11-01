@@ -1,0 +1,9 @@
+package: "com.android.settingslib.media.flags"
+container: "system"
+
+flag {
+    name: "enable_output_switcher_for_system_routing"
+    namespace: "media_solutions"
+    description: "Enable Output Switcher when no media is playing."
+    bug: "284227163"
+}

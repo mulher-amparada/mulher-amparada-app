@@ -1,0 +1,75 @@
+{
+  "resourceType": "Location",
+  "id": "location-2",
+  "identifier": [
+    {
+      "use": "official",
+      "system": "urn:oid:1.2.345.6789",
+      "value": "hch_ed",
+      "assigner": {
+        "reference": "Organization/organization-2"
+      }
+    }
+  ],
+  "status": "active",
+  "name": "Emergency department, Health Connect Hospital",
+  "alias": [
+    "Emergency department, HCH",
+    "ED, HCH",
+    "A&E, HCH"
+  ],
+  "description": "Emergency department at Health Connect Hospital",
+  "mode": "instance",
+  "telecom": [
+    {
+      "system": "phone",
+      "value": "01111 222224"
+    },
+    {
+      "system": "fax",
+      "value": "1112"
+    },
+    {
+      "system": "email",
+      "value": "emergencydept@healthconnecthospital.org"
+    }
+  ],
+  "address": {
+    "type": "physical",
+    "line": [
+      "6 Pancras Square"
+    ],
+    "city": "London",
+    "postalCode": "N1C 4AG",
+    "country": "UK"
+  },
+  "physicalType": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/location-physical-type",
+        "code": "wi",
+        "display": "Wing"
+      }
+    ]
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-RoleCode",
+          "code": "ER",
+          "display": "Emergency room"
+        }
+      ]
+    }
+  ],
+  "position": {
+    "longitude": -0.12504,
+    "latitude": 51.53348,
+    "altitude": 0
+  },
+  "managingOrganization": {
+    "reference": "Organization/organization-2",
+    "display": "Health Connect Hospital"
+  }
+}

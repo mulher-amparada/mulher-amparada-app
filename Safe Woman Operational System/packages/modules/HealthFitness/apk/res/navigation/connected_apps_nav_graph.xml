@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/connected_apps_nav_graph"
+    app:startDestination="@id/connectedAppsFragment">
+
+    <include app:graph="@navigation/fitness_app_nav_graph"/>
+
+    <fragment
+        android:id="@+id/connectedAppsFragment"
+        android:name="com.android.healthconnect.controller.permissions.connectedapps.ConnectedAppsFragment"
+        android:label="@string/connected_apps_title">
+        <action
+            android:id="@+id/action_connectedApps_to_helpAndFeedback"
+            app:destination="@id/helpAndFeedbackFragment" />
+        <action
+            android:id="@+id/action_connectedApps_to_fitnessApp"
+            app:destination="@id/fitness_app_nav_graph" />
+        <action
+            android:id="@+id/action_connectedApps_to_medicalApp"
+            app:destination="@id/medical_app_nav_graph" />
+        <action
+            android:id="@+id/action_connectedApps_to_combinedPermissions"
+            app:destination="@id/combined_permissions_nav_graph" />
+        <action
+            android:id="@+id/action_connectedApps_to_searchApps"
+            app:destination="@id/searchConnectedApps" />
+        <action
+            android:id="@+id/action_connected_apps_to_updated_apps"
+            app:destination="@id/update_apps_activity" />
+        <action
+            android:id="@+id/action_connected_apps_to_play_store"
+            app:destination="@id/playstore_activity" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/searchConnectedApps"
+        android:name="com.android.healthconnect.controller.permissions.connectedapps.searchapps.SearchAppsFragment">
+        <action
+            android:id="@+id/action_searchApps_to_fitnessApp"
+            app:destination="@id/fitness_app_nav_graph" />
+        <action
+            android:id="@+id/action_searchApps_to_medicalApp"
+            app:destination="@id/medical_app_nav_graph" />
+        <action
+            android:id="@+id/action_searchApps_to_combinedPermissions"
+            app:destination="@id/combined_permissions_nav_graph" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/helpAndFeedbackFragment"
+        android:name="com.android.healthconnect.controller.permissions.shared.HelpAndFeedbackFragment"
+        android:label="@string/help_and_feedback">
+        <action
+            android:id="@+id/action_cant_see_all_apps_to_play_store"
+            app:destination="@id/playstore_activity" />
+        <action
+            android:id="@+id/action_cant_see_all_apps_to_updated_apps"
+            app:destination="@id/update_apps_activity" />
+    </fragment>
+
+    <activity
+        android:id="@+id/playstore_activity"
+        android:label="@string/playstore_app_title"
+        app:action="android.intent.action.VIEW"
+        app:data="@string/playstore_collection_url"
+        app:targetPackage="@string/playstore_package_name" />
+
+    <activity
+        android:id="@+id/update_apps_activity"
+        app:action="android.intent.action.VIEW"
+        android:label="@string/playstore_app_title"
+        app:data="@string/playstore_manage_apps_url"
+        app:targetPackage="@string/playstore_package_name" />
+
+</navigation>

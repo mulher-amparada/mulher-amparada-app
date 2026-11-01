@@ -1,0 +1,123 @@
+//
+// Copyright (C) 2025 The Android Open-Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package {
+    default_applicable_licenses: ["Android-Apache-2.0"],
+    default_visibility: ["//system/zygote:__subpackages__"],
+}
+
+rust_bindgen {
+    name: "libnative_activity_thread_bindgen",
+    crate_name: "native_activity_thread_bindgen",
+    wrapper_src: "src/bindings.h",
+    source_stem: "native_activity_thread_bindings",
+    header_libs: [
+        "libandroid_headers_private",
+        "libcutils_headers",
+        "native_headers",
+    ],
+    shared_libs: [
+        "libandroid",
+        "libbinder_ndk",
+        "libcutils",
+        "libdl_android",
+    ],
+}
+
+cc_library_shared {
+    name: "libminikin_system_font_bridge",
+    srcs: [
+        "src/ffi/SystemFontsBridge.cpp",
+    ],
+    header_libs: [
+        "libminikin_headers",
+        "libhwui_internal_headers",
+        "libminikin_system_font_bridge_headers",
+    ],
+    shared_libs: [
+        "libharfbuzz_ng",
+        "libhwui",
+        "libminikin",
+    ],
+    generated_headers: [
+        "cxx-bridge-header",
+    ],
+    generated_sources: [
+        "libminikin_system_font_bridge_code",
+    ],
+}
+
+genrule {
+    name: "libminikin_system_font_bridge_code",
+    tools: ["cxxbridge"],
+    cmd: "$(location cxxbridge) $(in) > $(out)",
+    srcs: ["src/font.rs"],
+    out: ["libminikin_system_font_bridge_cxx_generated.cc"],
+}
+
+cc_library_headers {
+    name: "libminikin_system_font_bridge_headers",
+    export_include_dirs: ["src/ffi/include"],
+}
+
+rust_defaults {
+    name: "libnative_activity_thread_defaults",
+    crate_name: "native_activity_thread",
+    edition: "2021",
+    srcs: [
+        "src/lib.rs",
+    ],
+    rustlibs: [
+        "activitymanager_structured_aidl-rust",
+        "libanyhow",
+        "libatrace_rust",
+        "libbitflags",
+        "libbinder_rs",
+        "libcxx",
+        "liblogger",
+        "liblibc",
+        "libnix",
+        "liblog_rust",
+        "librustutils",
+        "native_application_thread_aidl-rust",
+        "libactivity_manager_procstate_aidl-rust",
+    ],
+    rlibs: [
+        "libnative_activity_thread_bindgen",
+    ],
+    features: select(release_flag("RELEASE_BUILD_EXECUTE_ONLY_MEMORY"), {
+        true: [
+            "build_execute_only_memory",
+        ],
+        default: [],
+    }),
+    shared_libs: [
+        "libminikin_system_font_bridge",
+        "libminikin",
+        "libharfbuzz_ng",
+    ],
+}
+
+rust_library {
+    name: "libnative_activity_thread",
+    defaults: ["libnative_activity_thread_defaults"],
+}
+
+rust_test {
+    name: "libnative_activity_thread_tests",
+    defaults: ["libnative_activity_thread_defaults"],
+    test_suites: ["general-tests"],
+    team: "trendy_team_system_performance",
+}

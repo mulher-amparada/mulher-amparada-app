@@ -1,0 +1,12 @@
+package: "com.android.server.policy.feature.flags"
+container: "system_ext"
+
+flag {
+    name: "force_foldables_tent_mode_with_screen_wakelock"
+    namespace: "windowing_frontend"
+    description: "Switching displays on a foldable device later if screen wakelock is present"
+    bug: "363174979"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}

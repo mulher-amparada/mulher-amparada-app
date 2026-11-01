@@ -1,0 +1,689 @@
+/*
+ * Copyright (C) 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.android.server.healthconnect.backuprestore;
+
+import static android.health.connect.Constants.DEFAULT_PAGE_SIZE;
+import static android.health.connect.datatypes.RecordTypeIdentifier.RECORD_TYPE_ACTIVE_CALORIES_BURNED;
+import static android.health.connect.datatypes.RecordTypeIdentifier.RECORD_TYPE_BLOOD_PRESSURE;
+import static android.health.connect.datatypes.RecordTypeIdentifier.RECORD_TYPE_STEPS;
+import static android.health.connect.datatypes.RecordTypeIdentifier.RECORD_TYPE_UNKNOWN;
+import static android.healthconnect.testing.unittest.RecordInternalFactory.buildBloodPressureRecord;
+import static android.healthconnect.testing.unittest.RecordInternalFactory.buildStepsRecord;
+
+import static com.android.healthfitness.flags.Flags.FLAG_CLOUD_BACKUP_AND_RESTORE;
+import static com.android.server.healthconnect.backuprestore.RecordProtoConverter.PROTO_VERSION;
+
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.junit.Assert.assertThrows;
+
+import static java.time.temporal.ChronoUnit.HOURS;
+
+import android.content.Context;
+import android.health.connect.DeleteUsingFiltersRequest;
+import android.health.connect.TimeInstantRangeFilter;
+import android.health.connect.aidl.DeleteUsingFiltersRequestParcel;
+import android.health.connect.backuprestore.BackupChange;
+import android.health.connect.backuprestore.GetChangesForBackupResponse;
+import android.health.connect.datatypes.BloodPressureRecord;
+import android.health.connect.datatypes.ExerciseSessionRecord;
+import android.health.connect.datatypes.ExerciseSessionType;
+import android.health.connect.datatypes.Metadata;
+import android.health.connect.datatypes.StepsRecord;
+import android.health.connect.internal.datatypes.BloodPressureRecordInternal;
+import android.health.connect.internal.datatypes.ExerciseSessionRecordInternal;
+import android.health.connect.internal.datatypes.PlannedExerciseSessionRecordInternal;
+import android.health.connect.internal.datatypes.RecordInternal;
+import android.health.connect.internal.datatypes.StepsRecordInternal;
+import android.healthconnect.testing.shared.DataFactory;
+import android.healthconnect.testing.unittest.FitnessTestUtils;
+import android.platform.test.annotations.EnableFlags;
+import android.platform.test.flag.junit.SetFlagsRule;
+
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.android.server.healthconnect.backuprestore.BackupChangeTokenHelper.BackupChangeToken;
+import com.android.server.healthconnect.common.changelog.ChangeLogsHelper;
+import com.android.server.healthconnect.common.changelog.ChangeLogsRequestHelper;
+import com.android.server.healthconnect.fitness.FitnessRecordDeleteHelper;
+import com.android.server.healthconnect.injector.HealthConnectInjector;
+import com.android.server.healthconnect.injector.HealthConnectInjectorImpl;
+import com.android.server.healthconnect.proto.backuprestore.BackupRestoreProto.BackupData;
+import com.android.server.healthconnect.storage.TransactionManager;
+import com.android.server.healthconnect.storage.request.DeleteTableRequest;
+
+import com.google.common.truth.Correspondence;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+
+/** Unit test for class {@link CloudBackupDatabaseHelper}. */
+@RunWith(AndroidJUnit4.class)
+@EnableFlags({
+    FLAG_CLOUD_BACKUP_AND_RESTORE,
+})
+public class CloudBackupDatabaseHelperTest {
+
+    private static final String TEST_PACKAGE_NAME = "test.package.name";
+    private static final long TEST_START_TIME_IN_MILLIS = 2000;
+    private static final long TEST_END_TIME_IN_MILLIS = 3000;
+    private static final int TEST_STEP_COUNT = 1345;
+    private static final int TEST_TIME_IN_MILLIS = 1234;
+    private static final double TEST_SYSTOLIC = 60.2;
+    private static final double TEST_DIASTOLIC = 92.6;
+
+    @Rule public final SetFlagsRule mSetFlagsRule = new SetFlagsRule();
+    @Rule public final MockitoRule mMockitoRule = MockitoJUnit.rule();
+    @Rule public final TemporaryFolder mEnvironmentDataDir = new TemporaryFolder();
+
+    private CloudBackupDatabaseHelper mCloudBackupDatabaseHelper;
+    private FitnessTestUtils mFitnessTestUtils;
+    private TransactionManager mTransactionManager;
+    private FitnessRecordDeleteHelper mFitnessRecordDeleteHelper;
+    private final RecordProtoConverter mRecordProtoConverter = new RecordProtoConverter();
+
+    @Before
+    public void setUp() {
+        Context context = ApplicationProvider.getApplicationContext();
+        HealthConnectInjector healthConnectInjector =
+                HealthConnectInjectorImpl.newBuilderForTest(context)
+                        .setEnvironmentDataDirectory(mEnvironmentDataDir.getRoot())
+                        .build();
+        mTransactionManager = healthConnectInjector.getTransactionManager();
+        mFitnessRecordDeleteHelper = healthConnectInjector.getFitnessRecordDeleteHelper();
+
+        mFitnessTestUtils = new FitnessTestUtils(healthConnectInjector);
+        mFitnessTestUtils.insertApp(TEST_PACKAGE_NAME);
+
+        mCloudBackupDatabaseHelper =
+                new CloudBackupDatabaseHelper(
+                        mTransactionManager,
+                        healthConnectInjector.getFitnessRecordReadHelper(),
+                        healthConnectInjector.getAppInfoHelper(),
+                        healthConnectInjector.getHealthConnectMappings(),
+                        healthConnectInjector.getInternalHealthConnectMappings(),
+                        healthConnectInjector.getChangeLogsHelper(),
+                        healthConnectInjector.getChangeLogsRequestHelper());
+    }
+
+    @Test
+    public void getChangesAndTokenFromDataTables_noRecordsInDb_noChangesReturned() {
+        List<BackupChange> changes =
+                mCloudBackupDatabaseHelper.getChangesAndTokenFromDataTables().getChanges();
+
+        assertThat(changes).isEmpty();
+    }
+
+    @Test
+    public void getChangesAndTokenFromDataTables_recordsInDb_correctRecordsReturned()
+            throws Exception {
+        mFitnessTestUtils.insertRecords(
+                TEST_PACKAGE_NAME,
+                buildStepsRecord(
+                        TEST_START_TIME_IN_MILLIS, TEST_END_TIME_IN_MILLIS, TEST_STEP_COUNT),
+                buildBloodPressureRecord(TEST_TIME_IN_MILLIS, TEST_SYSTOLIC, TEST_DIASTOLIC));
+
+        GetChangesForBackupResponse response =
+                mCloudBackupDatabaseHelper.getChangesAndTokenFromDataTables();
+        assertThat(response.getCurrentVersion()).isEqualTo(PROTO_VERSION);
+
+        List<BackupChange> changes = response.getChanges();
+        assertThat(changes.size()).isEqualTo(2);
+        BackupChange stepsRecordBackupChange = changes.get(0);
+        assertThat(stepsRecordBackupChange.isDeletion()).isEqualTo(false);
+        StepsRecordInternal stepsRecord =
+                (StepsRecordInternal) parseRecordInternal(stepsRecordBackupChange);
+        String uuid = stepsRecord.getUuid() != null ? stepsRecord.getUuid().toString() : null;
+        assertThat(stepsRecordBackupChange.getChangeId()).isEqualTo(uuid);
+        assertThat(stepsRecord.getCount()).isEqualTo(TEST_STEP_COUNT);
+        assertThat(stepsRecord.getStartTimeInMillis()).isEqualTo(TEST_START_TIME_IN_MILLIS);
+        assertThat(stepsRecord.getEndTimeInMillis()).isEqualTo(TEST_END_TIME_IN_MILLIS);
+        BackupChange bloodPressureBackupChange = changes.get(1);
+        assertThat(stepsRecordBackupChange.isDeletion()).isEqualTo(false);
+        BloodPressureRecordInternal bloodPressureRecord =
+                (BloodPressureRecordInternal) parseRecordInternal(bloodPressureBackupChange);
+        assertThat(bloodPressureRecord.getDiastolic()).isEqualTo(TEST_DIASTOLIC);
+        assertThat(bloodPressureRecord.getSystolic()).isEqualTo(TEST_SYSTOLIC);
+        assertThat(bloodPressureRecord.getTimeInMillis()).isEqualTo(TEST_TIME_IN_MILLIS);
+    }
+
+    @Test
+    public void getChangesFromDataTables_singleRecordsExceedPageSize_correctResponseReturned() {
+        List<RecordInternal<?>> records = createStepRecords(2 * DEFAULT_PAGE_SIZE);
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, records);
+
+        GetChangesForBackupResponse response =
+                mCloudBackupDatabaseHelper.getChangesAndTokenFromDataTables();
+
+        assertThat(response.getChanges().size()).isEqualTo(DEFAULT_PAGE_SIZE);
+        String nextChangeTokenRowId = response.getNextChangeToken();
+        assertThat(nextChangeTokenRowId).isEqualTo("1");
+        BackupChangeToken backupChangeToken =
+                BackupChangeTokenHelper.getBackupChangeToken(
+                        mTransactionManager, nextChangeTokenRowId);
+        // See {@link android.health.connect.PageTokenWrapper}.
+        assertThat(backupChangeToken.getDataTablePageToken()).isEqualTo(6000);
+        assertThat(backupChangeToken.getRecordType()).isEqualTo(RECORD_TYPE_STEPS);
+        assertThat(backupChangeToken.getChangeLogsRequestToken()).isEqualTo("1");
+    }
+
+    @Test
+    public void getChangesFromDataTables_withSingleRecords_usingToken_correctResponseReturned() {
+        List<RecordInternal<?>> records = createStepRecords(2 * DEFAULT_PAGE_SIZE);
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, records);
+
+        GetChangesForBackupResponse firstResponse =
+                mCloudBackupDatabaseHelper.getChangesAndTokenFromDataTables();
+        BackupChangeToken backupChangeToken =
+                BackupChangeTokenHelper.getBackupChangeToken(
+                        mTransactionManager, firstResponse.getNextChangeToken());
+        GetChangesForBackupResponse secondResponse =
+                mCloudBackupDatabaseHelper.getChangesAndTokenFromDataTables(
+                        backupChangeToken.getRecordType(),
+                        backupChangeToken.getDataTablePageToken(),
+                        backupChangeToken.getChangeLogsRequestToken());
+
+        assertThat(secondResponse.getChanges().size()).isEqualTo(DEFAULT_PAGE_SIZE);
+        String secondChangeTokenRowId = secondResponse.getNextChangeToken();
+        assertThat(secondChangeTokenRowId).isEqualTo("2");
+        BackupChangeToken secondBackupChangeToken =
+                BackupChangeTokenHelper.getBackupChangeToken(
+                        mTransactionManager, secondChangeTokenRowId);
+        assertThat(secondBackupChangeToken.getDataTablePageToken()).isEqualTo(-1);
+        assertThat(secondBackupChangeToken.getRecordType())
+                .isEqualTo(RECORD_TYPE_ACTIVE_CALORIES_BURNED);
+        // Change logs token is still the same.
+        assertThat(secondBackupChangeToken.getChangeLogsRequestToken())
+                .isEqualTo(backupChangeToken.getChangeLogsRequestToken());
+    }
+
+    @Test
+    public void getChangesFromDataTables_mixedRecordsNotInSamePage_correctChangeTokenReturned() {
+        List<RecordInternal<?>> records = createStepRecords(DEFAULT_PAGE_SIZE);
+        records.add(buildBloodPressureRecord(TEST_TIME_IN_MILLIS, TEST_SYSTOLIC, TEST_DIASTOLIC));
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, records);
+
+        GetChangesForBackupResponse response =
+                mCloudBackupDatabaseHelper.getChangesAndTokenFromDataTables();
+
+        assertThat(response.getChanges().size()).isEqualTo(DEFAULT_PAGE_SIZE);
+        String nextChangeTokenRowId = response.getNextChangeToken();
+        assertThat(nextChangeTokenRowId).isEqualTo("1");
+        BackupChangeToken backupChangeToken =
+                BackupChangeTokenHelper.getBackupChangeToken(
+                        mTransactionManager, nextChangeTokenRowId);
+        // All data in step_record_table has been returned, page token reset as -1.
+        assertThat(backupChangeToken.getDataTablePageToken()).isEqualTo(-1);
+        assertThat(backupChangeToken.getRecordType()).isEqualTo(RECORD_TYPE_ACTIVE_CALORIES_BURNED);
+        assertThat(backupChangeToken.getChangeLogsRequestToken()).isEqualTo("1");
+    }
+
+    @Test
+    public void getChangesFromDataTables_mixedRecordsNotInSamePage_usingToken_responseReturned() {
+        List<RecordInternal<?>> records = createStepRecords(DEFAULT_PAGE_SIZE);
+        records.add(buildBloodPressureRecord(TEST_TIME_IN_MILLIS, TEST_SYSTOLIC, TEST_DIASTOLIC));
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, records);
+
+        GetChangesForBackupResponse firstResponse =
+                mCloudBackupDatabaseHelper.getChangesAndTokenFromDataTables();
+        BackupChangeToken backupChangeToken =
+                BackupChangeTokenHelper.getBackupChangeToken(
+                        mTransactionManager, firstResponse.getNextChangeToken());
+        GetChangesForBackupResponse secondResponse =
+                mCloudBackupDatabaseHelper.getChangesAndTokenFromDataTables(
+                        backupChangeToken.getRecordType(),
+                        backupChangeToken.getDataTablePageToken(),
+                        backupChangeToken.getChangeLogsRequestToken());
+
+        assertThat(secondResponse.getChanges().size()).isEqualTo(1);
+        String secondChangeTokenRowId = secondResponse.getNextChangeToken();
+        assertThat(secondChangeTokenRowId).isEqualTo("2");
+        BackupChangeToken secondBackupChangeToken =
+                BackupChangeTokenHelper.getBackupChangeToken(
+                        mTransactionManager, secondChangeTokenRowId);
+        assertThat(secondBackupChangeToken.getDataTablePageToken()).isEqualTo(-1);
+        assertThat(secondBackupChangeToken.getRecordType()).isEqualTo(RECORD_TYPE_UNKNOWN);
+        // Change logs token is still the same.
+        assertThat(secondBackupChangeToken.getChangeLogsRequestToken())
+                .isEqualTo(backupChangeToken.getChangeLogsRequestToken());
+    }
+
+    @Test
+    public void getChangesFromDataTables_mixedRecordsWithinSamePage_correctChangeTokenReturned() {
+        List<RecordInternal<?>> records = createStepRecords(DEFAULT_PAGE_SIZE / 2);
+        records.addAll(createBloodPressureRecords(DEFAULT_PAGE_SIZE / 2 + 1));
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, records);
+
+        GetChangesForBackupResponse response =
+                mCloudBackupDatabaseHelper.getChangesAndTokenFromDataTables();
+
+        assertThat(response.getChanges().size()).isEqualTo(DEFAULT_PAGE_SIZE);
+        String nextChangeTokenRowId = response.getNextChangeToken();
+        assertThat(nextChangeTokenRowId).isEqualTo("1");
+        BackupChangeToken backupChangeToken =
+                BackupChangeTokenHelper.getBackupChangeToken(
+                        mTransactionManager, nextChangeTokenRowId);
+        assertThat(backupChangeToken.getDataTablePageToken()).isEqualTo(3468);
+        assertThat(backupChangeToken.getRecordType()).isEqualTo(RECORD_TYPE_BLOOD_PRESSURE);
+        assertThat(backupChangeToken.getChangeLogsRequestToken()).isEqualTo("1");
+    }
+
+    @Test
+    public void getChangesFromDataTables_returnsPlannedExerciseSessionsFirst() throws Exception {
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, buildStepsRecord(123456, 654321, 1234));
+        Metadata metadata =
+                new Metadata.Builder()
+                        .setDataOrigin(DataFactory.getDataOrigin(TEST_PACKAGE_NAME))
+                        .build();
+        PlannedExerciseSessionRecordInternal plannedExerciseSession =
+                DataFactory.plannedExerciseSession(metadata).build().toRecordInternal();
+        var plannedExerciseSessionUid =
+                mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, plannedExerciseSession).get(0);
+        ExerciseSessionRecordInternal exerciseSessionRecord =
+                new ExerciseSessionRecord.Builder(
+                                metadata,
+                                Instant.now().minus(3, HOURS),
+                                Instant.now().minus(1, HOURS),
+                                ExerciseSessionType.EXERCISE_SESSION_TYPE_BIKING)
+                        .setPlannedExerciseSessionId(plannedExerciseSessionUid)
+                        .build()
+                        .toRecordInternal();
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, exerciseSessionRecord);
+
+        List<BackupChange> changes =
+                mCloudBackupDatabaseHelper.getChangesAndTokenFromDataTables().getChanges();
+
+        assertThat(changes.size()).isEqualTo(3);
+        assertThat(parseRecordInternal(changes.get(0)))
+                .isInstanceOf(PlannedExerciseSessionRecordInternal.class);
+        assertThat(parseRecordInternal(changes.get(1)))
+                .isInstanceOf(ExerciseSessionRecordInternal.class);
+        assertThat(parseRecordInternal(changes.get(2))).isInstanceOf(StepsRecordInternal.class);
+    }
+
+    @Test
+    public void isChangeLogsTokenValid_tokenIsNull_invalid() {
+        assertThat(mCloudBackupDatabaseHelper.isChangeLogsTokenValid(null)).isFalse();
+    }
+
+    @Test
+    public void isChangeLogsTokenValid_changeLogNoLongerExists_invalid() {
+        RecordInternal<StepsRecord> stepRecord =
+                buildStepsRecord(
+                        TEST_START_TIME_IN_MILLIS, TEST_END_TIME_IN_MILLIS, TEST_STEP_COUNT);
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, stepRecord);
+        GetChangesForBackupResponse response =
+                mCloudBackupDatabaseHelper.getChangesAndTokenFromDataTables();
+        // Insert a blood pressure record and generate a change log so the previous returned token
+        // does not point to the end of the table.
+        mFitnessTestUtils.insertRecords(
+                TEST_PACKAGE_NAME,
+                buildBloodPressureRecord(TEST_TIME_IN_MILLIS, TEST_SYSTOLIC, TEST_DIASTOLIC));
+
+        // Delete the original change logs.
+        mTransactionManager.delete(new DeleteTableRequest(ChangeLogsHelper.TABLE_NAME));
+
+        assertThat(mCloudBackupDatabaseHelper.isChangeLogsTokenValid(response.getNextChangeToken()))
+                .isFalse();
+    }
+
+    @Test
+    public void isChangeLogsTokenValid_currentAndNextChangeLogBothExist_valid() {
+        RecordInternal<StepsRecord> stepRecord =
+                buildStepsRecord(
+                        TEST_START_TIME_IN_MILLIS, TEST_END_TIME_IN_MILLIS, TEST_STEP_COUNT);
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, stepRecord);
+        GetChangesForBackupResponse response =
+                mCloudBackupDatabaseHelper.getChangesAndTokenFromDataTables();
+
+        // Insert a blood pressure record and generate a change log so the previous returned token
+        // does not point to the end of the table.
+        mFitnessTestUtils.insertRecords(
+                TEST_PACKAGE_NAME,
+                buildBloodPressureRecord(TEST_TIME_IN_MILLIS, TEST_SYSTOLIC, TEST_DIASTOLIC));
+
+        assertThat(mCloudBackupDatabaseHelper.isChangeLogsTokenValid(response.getNextChangeToken()))
+                .isTrue();
+    }
+
+    @Test
+    public void isChangeLogsTokenValid_nextChangeLogExists_valid() {
+        RecordInternal<StepsRecord> stepRecord =
+                buildStepsRecord(
+                        TEST_START_TIME_IN_MILLIS, TEST_END_TIME_IN_MILLIS, TEST_STEP_COUNT);
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, stepRecord);
+        GetChangesForBackupResponse response =
+                mCloudBackupDatabaseHelper.getChangesAndTokenFromDataTables();
+        // Simulate the auto deletion requests
+        Instant now = Instant.now();
+        mTransactionManager.deleteAll(
+                List.of(
+                        new DeleteTableRequest(ChangeLogsHelper.TABLE_NAME)
+                                .setTimeFilter(
+                                        ChangeLogsHelper.TIME_COLUMN_NAME,
+                                        Instant.EPOCH.toEpochMilli(),
+                                        now.toEpochMilli()),
+                        new DeleteTableRequest(ChangeLogsRequestHelper.TABLE_NAME)
+                                .setTimeFilter(
+                                        ChangeLogsRequestHelper.TIME_COLUMN_NAME,
+                                        Instant.EPOCH.toEpochMilli(),
+                                        now.toEpochMilli())));
+
+        // Insert a blood pressure record and generate a change log so the previous returned token
+        // does not point to the end of the table.
+        mFitnessTestUtils.insertRecords(
+                TEST_PACKAGE_NAME,
+                buildBloodPressureRecord(TEST_TIME_IN_MILLIS, TEST_SYSTOLIC, TEST_DIASTOLIC));
+
+        assertThat(mCloudBackupDatabaseHelper.isChangeLogsTokenValid(response.getNextChangeToken()))
+                .isTrue();
+    }
+
+    @Test
+    public void isChangeLogsTokenValid_tokenPointsToEndOfTable_valid() {
+        RecordInternal<StepsRecord> stepRecord =
+                buildStepsRecord(
+                        TEST_START_TIME_IN_MILLIS, TEST_END_TIME_IN_MILLIS, TEST_STEP_COUNT);
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, stepRecord);
+
+        GetChangesForBackupResponse response =
+                mCloudBackupDatabaseHelper.getChangesAndTokenFromDataTables();
+
+        assertThat(mCloudBackupDatabaseHelper.isChangeLogsTokenValid(response.getNextChangeToken()))
+                .isTrue();
+    }
+
+    @Test
+    public void getIncrementalChanges_changeLogsTokenIsNull_throwsException() {
+        assertThrows(
+                IllegalStateException.class,
+                () -> mCloudBackupDatabaseHelper.getIncrementalChanges(null));
+    }
+
+    @Test
+    public void getIncrementalChanges_upsertRecords_correctChangeReturned() throws Exception {
+        mFitnessTestUtils.insertRecords(
+                TEST_PACKAGE_NAME,
+                buildStepsRecord(
+                        TEST_START_TIME_IN_MILLIS, TEST_END_TIME_IN_MILLIS, TEST_STEP_COUNT));
+        // All data tables have been iterated through.
+        GetChangesForBackupResponse response =
+                mCloudBackupDatabaseHelper.getChangesAndTokenFromDataTables();
+        BackupChangeToken backupChangeToken =
+                BackupChangeTokenHelper.getBackupChangeToken(
+                        mTransactionManager, response.getNextChangeToken());
+
+        // Insert a new record and generate access logs.
+        mFitnessTestUtils.insertRecords(
+                TEST_PACKAGE_NAME,
+                buildBloodPressureRecord(TEST_TIME_IN_MILLIS, TEST_SYSTOLIC, TEST_DIASTOLIC));
+        GetChangesForBackupResponse secondResponse =
+                mCloudBackupDatabaseHelper.getIncrementalChanges(
+                        backupChangeToken.getChangeLogsRequestToken());
+
+        assertThat(secondResponse.getCurrentVersion()).isEqualTo(PROTO_VERSION);
+        assertThat(secondResponse.getChanges().size()).isEqualTo(1);
+        BackupChange bloodPressureBackupChange = secondResponse.getChanges().get(0);
+        BloodPressureRecordInternal bloodPressureRecord =
+                (BloodPressureRecordInternal) parseRecordInternal(bloodPressureBackupChange);
+        assertThat(bloodPressureRecord.getDiastolic()).isEqualTo(TEST_DIASTOLIC);
+        assertThat(bloodPressureRecord.getSystolic()).isEqualTo(TEST_SYSTOLIC);
+        assertThat(bloodPressureRecord.getTimeInMillis()).isEqualTo(TEST_TIME_IN_MILLIS);
+    }
+
+    @Test
+    public void getIncrementalChanges_includesDeletedRecords_correctChangeReturned() {
+        RecordInternal<BloodPressureRecord> bloodPressureRecordInternal =
+                buildBloodPressureRecord(TEST_TIME_IN_MILLIS, TEST_SYSTOLIC, TEST_DIASTOLIC);
+        mFitnessTestUtils.insertRecords(
+                TEST_PACKAGE_NAME,
+                buildStepsRecord(
+                        TEST_START_TIME_IN_MILLIS, TEST_END_TIME_IN_MILLIS, TEST_STEP_COUNT),
+                bloodPressureRecordInternal);
+        // All data tables have been iterated through.
+        GetChangesForBackupResponse response =
+                mCloudBackupDatabaseHelper.getChangesAndTokenFromDataTables();
+        BackupChangeToken backupChangeToken =
+                BackupChangeTokenHelper.getBackupChangeToken(
+                        mTransactionManager, response.getNextChangeToken());
+
+        // Delete the blood pressure record.
+        DeleteUsingFiltersRequest deleteRequest =
+                new DeleteUsingFiltersRequest.Builder()
+                        .addRecordType(BloodPressureRecord.class)
+                        .setTimeRangeFilter(
+                                new TimeInstantRangeFilter.Builder()
+                                        .setStartTime(Instant.EPOCH)
+                                        .build())
+                        .build();
+        mFitnessRecordDeleteHelper.deleteRecords(
+                TEST_PACKAGE_NAME,
+                new DeleteUsingFiltersRequestParcel(deleteRequest),
+                /* grantedPerRecordWritePermissions= */ Collections.emptySet(),
+                /* holdsDataManagementPermission= */ false,
+                /* shouldRecordAccessLog= */ false);
+
+        GetChangesForBackupResponse secondResponse =
+                mCloudBackupDatabaseHelper.getIncrementalChanges(
+                        backupChangeToken.getChangeLogsRequestToken());
+
+        assertThat(secondResponse.getChanges().size()).isEqualTo(1);
+        BackupChange deletedBloodPressureBackupChange = secondResponse.getChanges().get(0);
+        UUID bloodPressureRecordUuid = bloodPressureRecordInternal.getUuid();
+        assertThat(bloodPressureRecordUuid).isNotNull();
+        assertThat(deletedBloodPressureBackupChange.isDeletion()).isTrue();
+        assertThat(deletedBloodPressureBackupChange.getChangeId())
+                .isEqualTo(bloodPressureRecordUuid.toString());
+        assertThat(deletedBloodPressureBackupChange.getData()).isNull();
+    }
+
+    @Test
+    public void getIncrementalChanges_returnsExerciseSession_afterPlannedExerciseSessionChange()
+            throws Exception {
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, buildStepsRecord(123456, 654321, 1234));
+        Metadata metadata =
+                new Metadata.Builder()
+                        .setDataOrigin(DataFactory.getDataOrigin(TEST_PACKAGE_NAME))
+                        .build();
+        PlannedExerciseSessionRecordInternal plannedExerciseSession =
+                DataFactory.plannedExerciseSession(metadata).build().toRecordInternal();
+        var plannedExerciseSessionUid =
+                mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, plannedExerciseSession).get(0);
+        ExerciseSessionRecordInternal exerciseSessionRecord =
+                new ExerciseSessionRecord.Builder(
+                                metadata,
+                                Instant.now().minus(3, HOURS),
+                                Instant.now().minus(1, HOURS),
+                                ExerciseSessionType.EXERCISE_SESSION_TYPE_BIKING)
+                        .setPlannedExerciseSessionId(plannedExerciseSessionUid)
+                        .build()
+                        .toRecordInternal();
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, exerciseSessionRecord);
+        BackupChangeToken backupChangeToken =
+                BackupChangeTokenHelper.getBackupChangeToken(
+                        mTransactionManager,
+                        mCloudBackupDatabaseHelper
+                                .getChangesAndTokenFromDataTables()
+                                .getNextChangeToken());
+        mFitnessTestUtils.updateRecords(TEST_PACKAGE_NAME, plannedExerciseSession);
+
+        List<BackupChange> changes =
+                mCloudBackupDatabaseHelper
+                        .getIncrementalChanges(backupChangeToken.getChangeLogsRequestToken())
+                        .getChanges();
+
+        assertThat(changes.size()).isEqualTo(2);
+        assertThat(parseRecordInternal(changes.get(0)))
+                .isInstanceOf(PlannedExerciseSessionRecordInternal.class);
+        assertThat(parseRecordInternal(changes.get(1)))
+                .isInstanceOf(ExerciseSessionRecordInternal.class);
+    }
+
+    @Test
+    public void getIncrementalChanges_bothUpsertAndDeletionChangesExist() {
+        // All data tables have been iterated through.
+        GetChangesForBackupResponse response =
+                mCloudBackupDatabaseHelper.getChangesAndTokenFromDataTables();
+        // Insert the step record.
+        var stepRecord =
+                buildStepsRecord(
+                        TEST_START_TIME_IN_MILLIS, TEST_END_TIME_IN_MILLIS, TEST_STEP_COUNT);
+        List<String> recordUuids = mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, stepRecord);
+        BackupChangeToken backupChangeToken =
+                BackupChangeTokenHelper.getBackupChangeToken(
+                        mTransactionManager, response.getNextChangeToken());
+        // Delete the step record.
+        DeleteUsingFiltersRequest deleteRequest =
+                new DeleteUsingFiltersRequest.Builder()
+                        .addRecordType(StepsRecord.class)
+                        .setTimeRangeFilter(
+                                new TimeInstantRangeFilter.Builder()
+                                        .setStartTime(Instant.EPOCH)
+                                        .build())
+                        .build();
+        mFitnessRecordDeleteHelper.deleteRecords(
+                TEST_PACKAGE_NAME,
+                new DeleteUsingFiltersRequestParcel(deleteRequest),
+                /* grantedPerRecordWritePermissions= */ Collections.emptySet(),
+                /* holdsDataManagementPermission= */ false,
+                /* shouldRecordAccessLog= */ false);
+        // Insert the record again with the same uuid.
+        mFitnessTestUtils.insertRecordsUnrestricted(stepRecord.setUuid(recordUuids.get(0)));
+
+        GetChangesForBackupResponse secondResponse =
+                mCloudBackupDatabaseHelper.getIncrementalChanges(
+                        backupChangeToken.getChangeLogsRequestToken());
+
+        assertThat(secondResponse.getChanges().size()).isEqualTo(2);
+        assertThat(secondResponse.getChanges())
+                .comparingElementsUsing(
+                        Correspondence.transforming(BackupChange::isDeletion, "is deletion"))
+                .containsExactly(false, true);
+    }
+
+    @Test
+    public void getIncrementalChanges_recordInsertedThenDeleted_deletedChangeKept() {
+        // All data tables have been iterated through.
+        GetChangesForBackupResponse response =
+                mCloudBackupDatabaseHelper.getChangesAndTokenFromDataTables();
+        // Insert the step record.
+        var stepRecord =
+                buildStepsRecord(
+                        TEST_START_TIME_IN_MILLIS, TEST_END_TIME_IN_MILLIS, TEST_STEP_COUNT);
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, stepRecord);
+        BackupChangeToken backupChangeToken =
+                BackupChangeTokenHelper.getBackupChangeToken(
+                        mTransactionManager, response.getNextChangeToken());
+        // Delete the step record.
+        DeleteUsingFiltersRequest deleteRequest =
+                new DeleteUsingFiltersRequest.Builder()
+                        .addRecordType(StepsRecord.class)
+                        .setTimeRangeFilter(
+                                new TimeInstantRangeFilter.Builder()
+                                        .setStartTime(Instant.EPOCH)
+                                        .build())
+                        .build();
+        mFitnessRecordDeleteHelper.deleteRecords(
+                TEST_PACKAGE_NAME,
+                new DeleteUsingFiltersRequestParcel(deleteRequest),
+                /* grantedPerRecordWritePermissions= */ Collections.emptySet(),
+                /* holdsDataManagementPermission= */ false,
+                /* shouldRecordAccessLog= */ false);
+
+        GetChangesForBackupResponse secondResponse =
+                mCloudBackupDatabaseHelper.getIncrementalChanges(
+                        backupChangeToken.getChangeLogsRequestToken());
+
+        assertThat(secondResponse.getChanges().size()).isEqualTo(1);
+        assertThat(secondResponse.getChanges().get(0).isDeletion()).isTrue();
+    }
+
+    @Test
+    public void getIncrementalChanges_recordInsertedThenUpdated_oneChangeReturned()
+            throws Exception {
+        // All data tables have been iterated through.
+        GetChangesForBackupResponse response =
+                mCloudBackupDatabaseHelper.getChangesAndTokenFromDataTables();
+        // Insert the step record.
+        var stepRecord =
+                buildStepsRecord(
+                        TEST_START_TIME_IN_MILLIS, TEST_END_TIME_IN_MILLIS, TEST_STEP_COUNT);
+        List<String> recordUuids = mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, stepRecord);
+        BackupChangeToken backupChangeToken =
+                BackupChangeTokenHelper.getBackupChangeToken(
+                        mTransactionManager, response.getNextChangeToken());
+        // Update the step record again.
+        var updatedStepRecord =
+                buildStepsRecord(
+                                TEST_START_TIME_IN_MILLIS,
+                                TEST_END_TIME_IN_MILLIS,
+                                /* stepsCount= */ 500)
+                        .setUuid(recordUuids.get(0));
+        mFitnessTestUtils.updateRecords(TEST_PACKAGE_NAME, updatedStepRecord);
+
+        GetChangesForBackupResponse secondResponse =
+                mCloudBackupDatabaseHelper.getIncrementalChanges(
+                        backupChangeToken.getChangeLogsRequestToken());
+
+        assertThat(secondResponse.getChanges().size()).isEqualTo(1);
+        assertThat(secondResponse.getChanges().get(0).isDeletion()).isFalse();
+        StepsRecordInternal stepsRecord =
+                (StepsRecordInternal) parseRecordInternal(secondResponse.getChanges().get(0));
+        assertThat(stepsRecord.getCount())
+                .isEqualTo(((StepsRecordInternal) updatedStepRecord).getCount());
+    }
+
+    private RecordInternal<?> parseRecordInternal(BackupChange change) throws Exception {
+        return mRecordProtoConverter.toRecordInternal(
+                BackupData.parseFrom(change.getData()).getRecord());
+    }
+
+    private List<RecordInternal<?>> createStepRecords(int recordSize) {
+        List<RecordInternal<?>> records = new ArrayList<>();
+        for (int recordNumber = 0; recordNumber < recordSize; recordNumber++) {
+            records.add(
+                    buildStepsRecord(
+                            // Add offsets to start time and end time for distinguishing different
+                            // records.
+                            TEST_START_TIME_IN_MILLIS + recordNumber,
+                            TEST_END_TIME_IN_MILLIS + recordNumber,
+                            TEST_STEP_COUNT));
+        }
+        return records;
+    }
+
+    private List<RecordInternal<?>> createBloodPressureRecords(int recordSize) {
+        List<RecordInternal<?>> records = new ArrayList<>();
+        for (int recordNumber = 0; recordNumber < recordSize; recordNumber++) {
+            records.add(
+                    buildBloodPressureRecord(
+                            TEST_TIME_IN_MILLIS + recordNumber, TEST_SYSTOLIC, TEST_DIASTOLIC));
+        }
+        return records;
+    }
+}

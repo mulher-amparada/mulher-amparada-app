@@ -1,0 +1,65 @@
+{
+  "resourceType": "Condition",
+  "id": "condition-3",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "active",
+        "display": "Active"
+      }
+    ],
+    "text": "Active"
+  },
+  "verificationStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+        "code": "confirmed",
+        "display": "Confirmed"
+      }
+    ],
+    "text": "Confirmed"
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+          "code": "encounter-diagnosis",
+          "display": "Encounter Diagnosis"
+        }
+      ],
+      "text": "Encounter Diagnosis"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/sid/icd-10-cm",
+        "code": "J15.3",
+        "display": "Pneumonia due to streptococcus, group B"
+      },
+      {
+        "system": "http://snomed.info/sct",
+        "code": "385093006",
+        "display": "Community acquired pneumonia"
+      }
+    ],
+    "text": "Community acquired pneumonia"
+  },
+  "subject": {
+    "reference": "Patient/patient-1",
+    "display": "Example, Anne"
+  },
+  "asserter": {
+    "reference": "Practitioner/practitioner-3",
+    "type": "Practitioner",
+    "display": "Dr Wei Chen"
+  },
+  "encounter": {
+    "reference": "Encounter/encounter-1"
+  },
+  "onsetDateTime": "2023-11-02",
+  "recordedDate": "2023-11-07"
+}

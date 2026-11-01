@@ -1,0 +1,648 @@
+/*
+ * Copyright (C) 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.server.healthconnect.exportimport;
+
+import static android.health.connect.Constants.APP_ICON_DRAWABLE_NAME;
+import static android.health.connect.exportimport.ScheduledExportStatus.DATA_EXPORT_ERROR_CLEARING_LOG_TABLES;
+import static android.health.connect.exportimport.ScheduledExportStatus.DATA_EXPORT_ERROR_NONE;
+import static android.health.connect.exportimport.ScheduledExportStatus.DATA_EXPORT_ERROR_UNKNOWN;
+import static android.health.connect.exportimport.ScheduledExportStatus.DATA_EXPORT_ERROR_UNSPECIFIED;
+import static android.health.connect.exportimport.ScheduledExportStatus.DATA_EXPORT_STARTED;
+import static android.healthconnect.testing.unittest.RecordInternalFactory.buildStepsRecord;
+import static android.healthconnect.testing.unittest.StorageUtils.queryNumEntries;
+
+import static com.android.server.healthconnect.exportimport.ExportManager.LOCAL_EXPORT_DATABASE_FILE_NAME;
+import static com.android.server.healthconnect.exportimport.ExportManager.LOCAL_EXPORT_DIR_NAME;
+import static com.android.server.healthconnect.exportimport.ExportManager.LOCAL_EXPORT_ZIP_FILE_NAME;
+
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import android.content.ContentResolver;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Icon;
+import android.health.connect.RecordIdFilter;
+import android.health.connect.datatypes.MedicalDataSource;
+import android.health.connect.datatypes.StepsRecord;
+import android.health.connect.exportimport.ScheduledExportSettings;
+import android.health.connect.exportimport.ScheduledExportStatus;
+import android.health.connect.internal.datatypes.RecordInternal;
+import android.healthconnect.testing.shared.phr.PhrDataFactory;
+import android.healthconnect.testing.unittest.FitnessTestUtils;
+import android.healthconnect.testing.unittest.PhrTestUtils;
+import android.healthconnect.testing.unittest.StorageUtils;
+import android.healthconnect.testing.unittest.fakes.FakePreferenceHelper;
+import android.net.Uri;
+import android.platform.test.annotations.DisableFlags;
+import android.platform.test.annotations.EnableFlags;
+import android.platform.test.flag.junit.SetFlagsRule;
+
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.android.healthfitness.flags.Flags;
+import com.android.server.healthconnect.exportimport.ExportManager.ErrorReporter;
+import com.android.server.healthconnect.injector.HealthConnectInjector;
+import com.android.server.healthconnect.injector.HealthConnectInjectorImpl;
+import com.android.server.healthconnect.migration.notification.HealthConnectResourcesContext;
+import com.android.server.healthconnect.storage.HealthConnectContext;
+import com.android.server.healthconnect.storage.HealthConnectDatabase;
+import com.android.server.healthconnect.utils.FilesUtil;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@RunWith(AndroidJUnit4.class)
+public class ExportManagerTest {
+    private static final String TEST_PACKAGE_NAME = "package.name";
+    private static final String REMOTE_EXPORT_DATABASE_DIR_NAME = "remote";
+    private static final String REMOTE_EXPORT_ZIP_FILE_NAME = "remote_file.zip";
+    private static final String REMOTE_EXPORT_DATABASE_FILE_NAME = "remote_file.db";
+    private static final Bitmap BITMAP = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+    private static final Icon APP_ICON = Icon.createWithBitmap(BITMAP);
+
+    @Rule public final SetFlagsRule mSetFlagsRule = new SetFlagsRule();
+    @Rule public final MockitoRule mMockitoRule = MockitoJUnit.rule();
+    @Rule public final TemporaryFolder mEnvironmentDataDirectory = new TemporaryFolder();
+
+    private Context mContext;
+    private HealthConnectInjector mHealthConnectInjector;
+    private StorageUtils mStorageUtils;
+    private FitnessTestUtils mFitnessTestUtils;
+    private ExportManager mExportManager;
+    private HealthConnectContext mExportedDbContext;
+    private Instant mTimeStamp;
+    private ExportImportSettingsStorage mExportImportSettingsStorage;
+    private PhrTestUtils mPhrTestUtils;
+
+    @Mock private ExportImportLogger mExportImportLogger;
+    @Mock private ErrorReporter mErrorReporter;
+    @Mock private HealthConnectResourcesContext mResourcesContext;
+
+    @Before
+    public void setUp() throws Exception {
+        // Return the requested name as the string resource
+        when(mResourcesContext.getStringByNameOrThrow(any()))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+        when(mResourcesContext.getStringByNameWithArgsOrThrow(any(), any()))
+                .thenAnswer(
+                        invocation -> invocation.getArgument(0) + "," + invocation.getArgument(1));
+        when(mResourcesContext.getIconByDrawableName(APP_ICON_DRAWABLE_NAME)).thenReturn(APP_ICON);
+
+        mContext = ApplicationProvider.getApplicationContext();
+        mHealthConnectInjector =
+                HealthConnectInjectorImpl.newBuilderForTest(mContext)
+                        .setPreferenceHelper(new FakePreferenceHelper())
+                        .setEnvironmentDataDirectory(mEnvironmentDataDirectory.getRoot())
+                        .setHealthConnectResourcesContext(mResourcesContext)
+                        .build();
+
+        mExportImportSettingsStorage = mHealthConnectInjector.getExportImportSettingsStorage();
+        mStorageUtils = new StorageUtils(mHealthConnectInjector);
+        mFitnessTestUtils = new FitnessTestUtils(mHealthConnectInjector);
+        mFitnessTestUtils.insertApp(TEST_PACKAGE_NAME);
+        mPhrTestUtils = new PhrTestUtils(mHealthConnectInjector);
+
+        mExportedDbContext =
+                HealthConnectContext.create(
+                        mContext,
+                        mContext.getUser(),
+                        REMOTE_EXPORT_DATABASE_DIR_NAME,
+                        mEnvironmentDataDirectory.getRoot());
+        configureExportUri();
+        initialiseExportManager(new Compressor());
+    }
+
+    private void initialiseExportManager(Compressor compressor) {
+        mTimeStamp = Instant.parse("2024-06-04T16:39:12Z");
+        Clock fakeClock = Clock.fixed(mTimeStamp, ZoneId.of("UTC"));
+        mExportManager =
+                new ExportManager(
+                        mContext,
+                        fakeClock,
+                        mExportImportSettingsStorage,
+                        mHealthConnectInjector.getTransactionManager(),
+                        mHealthConnectInjector.getExportImportNotificationSender(),
+                        mHealthConnectInjector.getEnvironmentDataDirectory(),
+                        mExportImportLogger,
+                        mErrorReporter,
+                        compressor,
+                        mHealthConnectInjector.getExportImportNotificationFactory());
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        SQLiteDatabase.deleteDatabase(
+                mExportedDbContext.getDatabasePath(REMOTE_EXPORT_DATABASE_FILE_NAME));
+        mExportedDbContext.getDatabasePath(REMOTE_EXPORT_ZIP_FILE_NAME).delete();
+    }
+
+    @Test
+    @EnableFlags({Flags.FLAG_PERSONAL_HEALTH_RECORD_ENABLE_EXPORT_IMPORT})
+    public void testWhenPhrExportImportEnableFlagIsEnabled_tableContentIsExported()
+            throws Exception {
+        MedicalDataSource dataSource =
+                mPhrTestUtils.insertR4MedicalDataSource("ds", TEST_PACKAGE_NAME);
+        mPhrTestUtils.upsertResource(PhrDataFactory::createVaccineMedicalResource, dataSource);
+        assertThat(mStorageUtils.queryNumEntries("medical_data_source_table")).isEqualTo(1);
+        assertThat(mStorageUtils.queryNumEntries("medical_resource_table")).isEqualTo(1);
+        assertThat(mStorageUtils.queryNumEntries("medical_resource_indices_table")).isEqualTo(1);
+
+        assertThat(mExportManager.runExport(mContext.getUser())).isTrue();
+
+        decompressExportedZip();
+        try (HealthConnectDatabase exportedDatabase =
+                new HealthConnectDatabase(mExportedDbContext, REMOTE_EXPORT_DATABASE_FILE_NAME)) {
+            assertThat(queryNumEntries(exportedDatabase, "medical_data_source_table")).isEqualTo(1);
+            assertThat(queryNumEntries(exportedDatabase, "medical_resource_table")).isEqualTo(1);
+            assertThat(queryNumEntries(exportedDatabase, "medical_resource_indices_table"))
+                    .isEqualTo(1);
+        }
+    }
+
+    @Test
+    @DisableFlags({Flags.FLAG_PERSONAL_HEALTH_RECORD_ENABLE_EXPORT_IMPORT})
+    public void testPhrExportImportEnableFlagIsDisabled_deletesPhrTablesContent() throws Exception {
+        MedicalDataSource dataSource =
+                mPhrTestUtils.insertR4MedicalDataSource("ds", TEST_PACKAGE_NAME);
+        mPhrTestUtils.upsertResource(PhrDataFactory::createVaccineMedicalResource, dataSource);
+        assertThat(mStorageUtils.queryNumEntries("medical_data_source_table")).isEqualTo(1);
+        assertThat(mStorageUtils.queryNumEntries("medical_resource_table")).isEqualTo(1);
+        assertThat(mStorageUtils.queryNumEntries("medical_resource_indices_table")).isEqualTo(1);
+
+        assertThat(mExportManager.runExport(mContext.getUser())).isTrue();
+
+        decompressExportedZip();
+        try (HealthConnectDatabase exportedDatabase =
+                new HealthConnectDatabase(mExportedDbContext, REMOTE_EXPORT_DATABASE_FILE_NAME)) {
+            assertThat(queryNumEntries(exportedDatabase, "medical_data_source_table")).isEqualTo(0);
+            assertThat(queryNumEntries(exportedDatabase, "medical_resource_table")).isEqualTo(0);
+            assertThat(queryNumEntries(exportedDatabase, "medical_resource_indices_table"))
+                    .isEqualTo(0);
+        }
+    }
+
+    @Test
+    public void deletesAccessLogsTableContent() throws Exception {
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, buildStepsRecord(123, 456, 7));
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, buildStepsRecord(456, 789, 17));
+        assertThat(mStorageUtils.queryNumEntries("access_logs_table")).isEqualTo(2);
+
+        assertThat(mExportManager.runExport(mContext.getUser())).isTrue();
+
+        decompressExportedZip();
+        try (HealthConnectDatabase exportedDatabase =
+                new HealthConnectDatabase(mExportedDbContext, REMOTE_EXPORT_DATABASE_FILE_NAME)) {
+            assertThat(queryNumEntries(exportedDatabase, "access_logs_table")).isEqualTo(0);
+        }
+    }
+
+    @Test
+    public void testTimeToSuccess_loggedCorrectly() {
+        // Set start time to 2s before the fixed clock to emulate time that passed
+        long exportStartTime = mTimeStamp.toEpochMilli() - 2000;
+        mExportManager.recordSuccess(exportStartTime, 100, 50, Uri.parse("uri"));
+
+        assertSuccessRecorded(Instant.parse("2024-06-04T16:39:12Z"), 2000, 100, 50);
+    }
+
+    @Test
+    public void testTimeToError_loggedCorrectly() {
+        // Set start time to 2s before the fixed clock to emulate time that passed
+        long exportStartTime = mTimeStamp.toEpochMilli() - 2000;
+        mExportManager.recordError(DATA_EXPORT_ERROR_UNKNOWN, exportStartTime, 100, 50);
+
+        assertErrorStatusStored(DATA_EXPORT_ERROR_UNKNOWN, Instant.parse("2024-06-04T16:39:12Z"));
+        verify(mExportImportLogger, times(1))
+                .logExportStatus(
+                        eq(DATA_EXPORT_ERROR_UNKNOWN),
+                        eq(/* timeToError= */ 2000),
+                        eq(/* originalFileSizeKb= */ 100),
+                        eq(/* compressedFileSizeKb= */ 50));
+    }
+
+    @Test
+    public void deletesChangeLogsTableContent() throws Exception {
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, buildStepsRecord(123, 456, 7));
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, buildStepsRecord(456, 789, 17));
+        assertThat(mStorageUtils.queryNumEntries("change_logs_table")).isEqualTo(2);
+
+        assertThat(mExportManager.runExport(mContext.getUser())).isTrue();
+
+        decompressExportedZip();
+        try (HealthConnectDatabase exportedDatabase =
+                new HealthConnectDatabase(mExportedDbContext, REMOTE_EXPORT_DATABASE_FILE_NAME)) {
+            assertThat(queryNumEntries(exportedDatabase, "change_logs_table")).isEqualTo(0);
+        }
+    }
+
+    @Test
+    public void runExport_whenCompleted_deletesLocalCopies() {
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, buildStepsRecord(123, 456, 7));
+        assertThat(mStorageUtils.queryNumEntries("steps_record_table")).isEqualTo(1);
+
+        assertThat(mExportManager.runExport(mContext.getUser())).isTrue();
+
+        HealthConnectContext hcContext =
+                HealthConnectContext.create(
+                        mContext,
+                        mContext.getUser(),
+                        LOCAL_EXPORT_DIR_NAME,
+                        mEnvironmentDataDirectory.getRoot());
+        assertThat(hcContext.getDatabasePath(LOCAL_EXPORT_DATABASE_FILE_NAME).exists()).isFalse();
+        assertThat(hcContext.getDatabasePath(LOCAL_EXPORT_ZIP_FILE_NAME).exists()).isFalse();
+    }
+
+    @Test
+    public void runExport_localExportFails_logsWithGenericError() throws IOException {
+        // Make a read only file in a read only directory. As this cannot be deleted the export is
+        // blocked.
+        File exportDir =
+                FilesUtil.getDataSystemCeHCDirectoryForUser(
+                        mHealthConnectInjector.getEnvironmentDataDirectory(),
+                        mContext.getUser().getIdentifier());
+        exportDir.mkdirs();
+        Set<PosixFilePermission> oldPerms = Files.getPosixFilePermissions(exportDir.toPath());
+        File blockingFile = new File(exportDir, LOCAL_EXPORT_DATABASE_FILE_NAME);
+        blockingFile.createNewFile();
+        try {
+            // Make the export dir read only so it can't be replaced.
+            Files.setPosixFilePermissions(
+                    blockingFile.toPath(), PosixFilePermissions.fromString("r--------"));
+            Files.setPosixFilePermissions(
+                    exportDir.toPath(), PosixFilePermissions.fromString("r--------"));
+
+            assertThat(mExportManager.runExport(mContext.getUser())).isFalse();
+
+            // Time not recorded due to fake clock.
+            assertErrorStatusStored(DATA_EXPORT_ERROR_UNKNOWN, mTimeStamp);
+            verify(mExportImportLogger, times(1))
+                    .logExportStatus(
+                            eq(ScheduledExportStatus.DATA_EXPORT_ERROR_UNKNOWN),
+                            eq(/* timeToError= */ 0),
+                            /* originalFileSizeKb= */ anyInt(),
+                            /* compressedFileSizeKb= */ anyInt());
+            verify(mErrorReporter, times(1)).failed(eq(ErrorReporter.LOCAL_FILE), any(), anyInt());
+        } finally {
+            Files.setPosixFilePermissions(exportDir.toPath(), oldPerms);
+        }
+    }
+
+    @Test
+    public void runExport_noCompressedFile_logsWithGenericError() {
+        // Compressor is mocked so no zip file will be exported.
+        initialiseExportManager(mock(Compressor.class));
+
+        boolean success = mExportManager.runExport(mContext.getUser());
+
+        assertThat(success).isFalse();
+        // Time not recorded due to fake clock.
+        assertErrorStatusStored(DATA_EXPORT_ERROR_UNKNOWN, mTimeStamp);
+        verify(mExportImportLogger, times(1))
+                .logExportStatus(
+                        eq(ScheduledExportStatus.DATA_EXPORT_ERROR_UNKNOWN),
+                        eq(/* timeToError= */ 0),
+                        /* originalFileSizeKb= */ anyInt(),
+                        /* compressedFileSizeKb= */ anyInt());
+        verify(mErrorReporter, times(1)).failed(eq(ErrorReporter.URI_EXPORT), any(), anyInt());
+    }
+
+    @Test
+    public void deleteLocalExportFiles_deletesLocalCopies() {
+        HealthConnectContext hcContext =
+                HealthConnectContext.create(
+                        mContext,
+                        mContext.getUser(),
+                        LOCAL_EXPORT_DIR_NAME,
+                        mEnvironmentDataDirectory.getRoot());
+        new File(hcContext.getDataDir(), LOCAL_EXPORT_DATABASE_FILE_NAME).mkdirs();
+        new File(hcContext.getDataDir(), LOCAL_EXPORT_ZIP_FILE_NAME).mkdirs();
+
+        mExportManager.deleteLocalExportFiles(mContext.getUser());
+
+        assertThat(hcContext.getDatabasePath(LOCAL_EXPORT_DATABASE_FILE_NAME).exists()).isFalse();
+        assertThat(hcContext.getDatabasePath(LOCAL_EXPORT_ZIP_FILE_NAME).exists()).isFalse();
+    }
+
+    @Test
+    public void makesRemoteCopyOfDatabase() throws Exception {
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, buildStepsRecord(123, 456, 7));
+        assertThat(mStorageUtils.queryNumEntries("steps_record_table")).isEqualTo(1);
+
+        assertThat(mExportManager.runExport(mContext.getUser())).isTrue();
+
+        decompressExportedZip();
+        try (HealthConnectDatabase exportedDatabase =
+                new HealthConnectDatabase(mExportedDbContext, REMOTE_EXPORT_DATABASE_FILE_NAME)) {
+            assertThat(queryNumEntries(exportedDatabase, "steps_record_table")).isEqualTo(1);
+        }
+    }
+
+    @Test
+    public void destinationUriDoesNotExist_exportFailsWithLostFileAccessError() throws IOException {
+        // Inserting multiple rows to vary the size for testing of size logging
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, buildStepsRecord(123, 456, 7));
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, buildStepsRecord(124, 457, 7));
+        assertThat(mStorageUtils.queryNumEntries("steps_record_table")).isEqualTo(2);
+
+        mExportImportSettingsStorage.setLastExportError(
+                ScheduledExportStatus.DATA_EXPORT_ERROR_NONE, mTimeStamp);
+        // Set export location to inaccessible file.
+        File inaccessibleFile = mEnvironmentDataDirectory.newFile("inaccessible");
+        inaccessibleFile.setWritable(false);
+        mExportImportSettingsStorage.configure(
+                new ScheduledExportSettings.Builder()
+                        .setUri(Uri.fromFile(inaccessibleFile))
+                        .build());
+
+        assertThat(mExportManager.runExport(mContext.getUser())).isFalse();
+        assertExportStartRecorded();
+
+        // time not recorded due to fake clock
+        assertErrorStatusStored(ScheduledExportStatus.DATA_EXPORT_LOST_FILE_ACCESS, mTimeStamp);
+        verify(mExportImportLogger, times(1))
+                .logExportStatus(
+                        eq(ScheduledExportStatus.DATA_EXPORT_LOST_FILE_ACCESS),
+                        eq(/* timeToError= */ 0),
+                        /* originalFileSizeKb= */ anyInt(),
+                        /* compressedFileSizeKb= */ anyInt());
+        verify(mErrorReporter, times(1))
+                .failed(eq(ErrorReporter.LOST_EXPORT_LOCATION_ACCESS), any(), anyInt());
+    }
+
+    @Test
+    public void updatesLastSuccessfulExport_onSuccessOnly() throws Exception {
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, buildStepsRecord(123, 456, 7));
+        assertThat(mStorageUtils.queryNumEntries("steps_record_table")).isEqualTo(1);
+
+        // running a successful export records a "last successful export"
+        assertThat(mExportManager.runExport(mContext.getUser())).isTrue();
+        assertExportStartRecorded();
+
+        // Get the actual size of the files rather than using a fixed size as the size isn't fixed
+        // across test runs.
+        decompressExportedZip();
+        int originalFileSizeInKb =
+                getFileSizeInKb(
+                        mExportedDbContext.getDatabasePath(REMOTE_EXPORT_DATABASE_FILE_NAME));
+        int compressedFileSizeInKb =
+                getFileSizeInKb(mExportedDbContext.getDatabasePath(REMOTE_EXPORT_ZIP_FILE_NAME));
+
+        // time not recorded due to fake clock
+        assertSuccessRecorded(
+                Instant.parse("2024-06-04T16:39:12Z"),
+                0,
+                originalFileSizeInKb,
+                compressedFileSizeInKb);
+
+        // Export running at a later time with an error
+        mTimeStamp = Instant.parse("2024-12-12T16:39:12Z");
+        // Set export location to inaccessible file.
+        File inaccessibleFile = mEnvironmentDataDirectory.newFile("inaccessible");
+        inaccessibleFile.setWritable(false);
+        mExportImportSettingsStorage.configure(
+                new ScheduledExportSettings.Builder()
+                        .setUri(Uri.fromFile(inaccessibleFile))
+                        .build());
+        assertThat(mExportManager.runExport(mContext.getUser())).isFalse();
+
+        // Last successful export should hold the previous timestamp as the last export failed
+        Instant lastSuccessfulExport =
+                mExportImportSettingsStorage
+                        .getScheduledExportStatus(mContext)
+                        .getLastSuccessfulExportTime();
+        assertThat(lastSuccessfulExport).isEqualTo(Instant.parse("2024-06-04T16:39:12Z"));
+    }
+
+    @Test
+    public void updatesLastExportFileName_onSuccessOnly() throws IOException {
+        Context context = mock(Context.class);
+        ContentResolver contentResolver = mock(ContentResolver.class);
+        Cursor cursor = mock(Cursor.class);
+        when(context.getContentResolver()).thenReturn(contentResolver);
+        when(contentResolver.query(any(), any(), any(), any(), any())).thenReturn(cursor);
+        when(cursor.moveToFirst()).thenReturn(true);
+        when(cursor.getString(anyInt())).thenReturn(REMOTE_EXPORT_ZIP_FILE_NAME);
+
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, buildStepsRecord(123, 456, 7));
+        assertThat(mStorageUtils.queryNumEntries("steps_record_table")).isEqualTo(1);
+
+        // Running a successful export records a "last successful export".
+        assertThat(mExportManager.runExport(mContext.getUser())).isTrue();
+        assertThat(
+                        mExportImportSettingsStorage
+                                .getScheduledExportStatus(context)
+                                .getLastExportFileName())
+                .isEqualTo(REMOTE_EXPORT_ZIP_FILE_NAME);
+
+        // Export running at a later time with an error
+        // Set export location to inaccessible file.
+        File inaccessibleFile = mEnvironmentDataDirectory.newFile("inaccessible");
+        inaccessibleFile.setWritable(false);
+        mExportImportSettingsStorage.configure(
+                new ScheduledExportSettings.Builder()
+                        .setUri(Uri.fromFile(inaccessibleFile))
+                        .build());
+        assertThat(mExportManager.runExport(mContext.getUser())).isFalse();
+
+        // Last successful export should hold the previous file name as the last export failed
+        assertThat(
+                        mExportImportSettingsStorage
+                                .getScheduledExportStatus(context)
+                                .getLastExportFileName())
+                .isEqualTo(REMOTE_EXPORT_ZIP_FILE_NAME);
+    }
+
+    @Test
+    @EnableFlags({Flags.FLAG_EXTEND_EXPORT_IMPORT_TELEMETRY})
+    public void repeatErrorCount_updatedCorrectly() {
+        assertThat(mExportImportSettingsStorage.getLastExportError())
+                .isEqualTo(DATA_EXPORT_ERROR_UNSPECIFIED);
+        assertThat(mExportImportSettingsStorage.getExportRepeatErrorOnRetryCount()).isEqualTo(0);
+
+        // The first error isn't counted as a repeat error
+        mExportManager.recordError(DATA_EXPORT_ERROR_UNKNOWN, mTimeStamp.toEpochMilli(), 100, 50);
+        assertThat(mExportImportSettingsStorage.getLastExportError())
+                .isEqualTo(DATA_EXPORT_ERROR_UNKNOWN);
+        assertThat(mExportImportSettingsStorage.getExportRepeatErrorOnRetryCount()).isEqualTo(0);
+
+        // If there is more than one of the same error, count the repeat errors
+        mExportManager.recordError(
+                DATA_EXPORT_ERROR_UNKNOWN, Instant.now().toEpochMilli(), 100, 50);
+        mExportManager.recordError(
+                DATA_EXPORT_ERROR_UNKNOWN, Instant.now().toEpochMilli(), 100, 50);
+        assertThat(mExportImportSettingsStorage.getLastExportError())
+                .isEqualTo(DATA_EXPORT_ERROR_UNKNOWN);
+        assertThat(mExportImportSettingsStorage.getExportRepeatErrorOnRetryCount()).isEqualTo(2);
+
+        // If it is not a repetition of the same error, reset the repeat error count
+        mExportManager.recordError(
+                DATA_EXPORT_ERROR_CLEARING_LOG_TABLES, mTimeStamp.toEpochMilli(), 100, 50);
+        assertThat(mExportImportSettingsStorage.getLastExportError())
+                .isEqualTo(DATA_EXPORT_ERROR_CLEARING_LOG_TABLES);
+        mExportManager.recordError(DATA_EXPORT_ERROR_UNKNOWN, mTimeStamp.toEpochMilli(), 100, 50);
+        assertThat(mExportImportSettingsStorage.getLastExportError())
+                .isEqualTo(DATA_EXPORT_ERROR_UNKNOWN);
+        assertThat(mExportImportSettingsStorage.getExportRepeatErrorOnRetryCount()).isEqualTo(0);
+
+        // If an export was successful, the next error is not considered a repeat error
+        mExportManager.recordError(DATA_EXPORT_ERROR_UNKNOWN, mTimeStamp.toEpochMilli(), 100, 50);
+        assertThat(mExportImportSettingsStorage.getExportRepeatErrorOnRetryCount()).isEqualTo(1);
+        mExportManager.recordSuccess(mTimeStamp.toEpochMilli(), 100, 50, Uri.parse("uri"));
+        assertThat(mExportImportSettingsStorage.getLastExportError())
+                .isEqualTo(DATA_EXPORT_ERROR_UNSPECIFIED);
+        assertThat(mExportImportSettingsStorage.getExportRepeatErrorOnRetryCount()).isEqualTo(0);
+    }
+
+    @Test
+    public void runExport_overwritesAndTruncatesFile() throws Exception {
+        // Insert many records to ensure a large initial export
+        for (int i = 0; i < 100; i++) {
+            mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, buildStepsRecord(i, i + 1, i));
+        }
+        assertThat(mStorageUtils.queryNumEntries("steps_record_table")).isEqualTo(100);
+
+        // First export to the configured URI
+        assertThat(mExportManager.runExport(mContext.getUser())).isTrue();
+        File exportedZip = mExportedDbContext.getDatabasePath(REMOTE_EXPORT_ZIP_FILE_NAME);
+        long initialSize = exportedZip.length();
+        assertThat(initialSize).isGreaterThan(0);
+
+        // Delete most records to ensure the next export is smaller
+        List<RecordInternal<?>> recordsToDelete =
+                mFitnessTestUtils.readAllRecordsOfType(TEST_PACKAGE_NAME, StepsRecord.class);
+        List<RecordIdFilter> idFilters =
+                recordsToDelete.stream()
+                        .map(
+                                (record) ->
+                                        RecordIdFilter.fromId(
+                                                StepsRecord.class, record.getUuid().toString()))
+                        .collect(Collectors.toList());
+        mFitnessTestUtils.deleteRecords(
+                TEST_PACKAGE_NAME, idFilters.toArray(new RecordIdFilter[0]));
+        mFitnessTestUtils.insertRecords(TEST_PACKAGE_NAME, buildStepsRecord(0, 1, 1));
+        assertThat(mStorageUtils.queryNumEntries("steps_record_table")).isEqualTo(1);
+
+        // Second export to the same URI
+        assertThat(mExportManager.runExport(mContext.getUser())).isTrue();
+
+        // Verify the file was truncated
+        long finalSize = exportedZip.length();
+        assertThat(finalSize).isGreaterThan(0);
+        assertThat(finalSize).isLessThan(initialSize);
+
+        // Verify the content of the final, smaller zip file
+        decompressExportedZip();
+        try (HealthConnectDatabase decompressedDatabase =
+                new HealthConnectDatabase(mExportedDbContext, REMOTE_EXPORT_DATABASE_FILE_NAME)) {
+            assertThat(queryNumEntries(decompressedDatabase, "steps_record_table")).isEqualTo(1);
+        }
+    }
+
+    private void configureExportUri() {
+        mExportImportSettingsStorage.configure(
+                new ScheduledExportSettings.Builder()
+                        .setUri(
+                                Uri.fromFile(
+                                        (mExportedDbContext.getDatabasePath(
+                                                REMOTE_EXPORT_ZIP_FILE_NAME))))
+                        .build());
+    }
+
+    private void assertExportStartRecorded() {
+        verify(mExportImportLogger, times(1))
+                .logExportStatus(
+                        eq(DATA_EXPORT_STARTED),
+                        eq(-1 /* no value recorded*/),
+                        eq(-1 /* no value recorded*/),
+                        eq(-1 /* no value recorded*/));
+    }
+
+    private void assertSuccessRecorded(
+            Instant timeOfSuccess,
+            int timeToSuccess,
+            int originalFileSizeKb,
+            int compressedFileSizeKb) {
+        verify(mExportImportLogger, times(1))
+                .logExportStatus(
+                        eq(DATA_EXPORT_ERROR_NONE),
+                        eq(timeToSuccess),
+                        eq(originalFileSizeKb),
+                        eq(compressedFileSizeKb));
+        Instant lastSuccessfulExport =
+                mExportImportSettingsStorage
+                        .getScheduledExportStatus(mContext)
+                        .getLastSuccessfulExportTime();
+        assertThat(lastSuccessfulExport).isEqualTo(timeOfSuccess);
+    }
+
+    private void assertErrorStatusStored(int exportStatus, Instant timeOfError) {
+        assertThat(
+                        mExportImportSettingsStorage
+                                .getScheduledExportStatus(mContext)
+                                .getDataExportError())
+                .isEqualTo(exportStatus);
+        assertThat(
+                        mExportImportSettingsStorage
+                                .getScheduledExportStatus(mContext)
+                                .getLastFailedExportTime())
+                .isEqualTo(timeOfError);
+    }
+
+    private int getFileSizeInKb(File file) {
+        return (int) (file.length() / 1024.0);
+    }
+
+    private void decompressExportedZip() throws IOException {
+        new Compressor()
+                .decompress(
+                        Uri.fromFile(
+                                mExportedDbContext.getDatabasePath(REMOTE_EXPORT_ZIP_FILE_NAME)),
+                        LOCAL_EXPORT_DATABASE_FILE_NAME,
+                        mExportedDbContext.getDatabasePath(REMOTE_EXPORT_DATABASE_FILE_NAME),
+                        mContext);
+    }
+}

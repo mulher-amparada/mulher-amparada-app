@@ -1,0 +1,196 @@
+syntax = "proto3";
+
+package com.android.server.healthconnect.proto;
+
+option java_multiple_files=true;
+
+// FHIR spec details required for Health Connect PHR validation of medical data (FHIR resources
+// received as JSON strings).
+message FhirResourceSpec {
+    // A map of the FHIR resource type int to the FHIR spec config.
+    // The resource type int has to match one of the resource types in FhirResource.java
+    map<int32, FhirComplexTypeConfig> resource_type_to_config = 1;
+
+    // The fhir data type configs for types required by resource_type_to_config above.
+    // This list will also contain any child types that are defined within a resource or complex
+    // type definition. The naming for child types is derived from the path - For example, the
+    // child type at Immunization.performer field has type R4_FHIR_TYPE_IMMUNIZATION_PERFORMER.
+    repeated FhirDataType fhir_data_type_configs = 2;
+}
+
+// Contains the type and kind for each data type and complex type config for complex types.
+message FhirDataType {
+    optional R4FhirType fhir_type = 1;
+
+    // The kind of FHIR data type.
+    Kind kind = 2;
+
+    // The complex type config, if the type is a complex-type. For primitive types this will not be
+    // set.
+    optional FhirComplexTypeConfig fhir_complex_type_config = 3;
+}
+
+// The FHIR spec config of a resource or complex type.
+message FhirComplexTypeConfig {
+    // A map of all field names to field config for this data type. The keys of this map is the list
+    // of fields that are allowed to be populated.
+    map<string, FhirFieldConfig> allowed_field_names_to_config = 1;
+
+    // The list of fields that are required to be present for this data type.
+    // Note that this does not include required multi type fields. Whether or not these are required
+    // will be contained in the multi_type_fields configs (see next field).
+    repeated string required_fields = 2;
+
+    // The list of fields where one of several data type fields can be set.
+    // This is used to validate only one of each field is set and that exactly one is set if the
+    // field is required.
+    // Note that this config needs to be used to determine whether a multi type field is required
+    // or not, as these fields will not be included in the required_fields list above.
+    repeated MultiTypeFieldConfig multi_type_fields = 3;
+
+}
+
+// Represents the config of a FHIR field where a choice of data types can be set.
+// See https://build.fhir.org/formats.html#choice for more background.
+message MultiTypeFieldConfig {
+    // The name of the field without type suffix
+    optional string name = 1;
+
+    // The possible fields of a specific type that can be set in the json resource, e.g.
+    // "occurrenceDataTime", "occurrenceString". Only one of these fields is allowed to be present.
+    repeated string typed_field_names = 2;
+
+    // Whether or not the field is a required field.
+    // If true, exactly one of the fields in type_field_names is expected to be present.
+    optional bool is_required = 3;
+}
+
+// The FHIR spec config of a FHIR field.
+message FhirFieldConfig {
+    // Whether or not the field is an array.
+    optional bool is_array = 1;
+
+    // The data type of this field.
+    R4FhirType r4_type = 2;
+}
+
+// Represents the kind of fhir data type, as found in the StructureDefinition.kind field
+// (https://hl7.org/fhir/R4/valueset-structure-definition-kind.html). See
+// https://hl7.org/fhir/R4/valueset-structure-definition-kind.html for a description of the
+// different values.
+enum Kind {
+    KIND_UNSPECIFIED = 0;
+    // The data type is a resource type.
+    KIND_RESOURCE = 1;
+    // The data type is a primitive type.
+    KIND_PRIMITIVE_TYPE = 2;
+    // The data type is a complex type. For our use case this applies to any type that is not a
+    // resource or a primitive type.
+    KIND_COMPLEX_TYPE = 3;
+}
+
+// The R4 Fhir type used to indicate the type of a field extracted from the fhir spec.
+// To update this list use the print_required_fhir_type_enums.py script.
+// Next ID: 57
+enum R4FhirType {
+    R4_FHIR_TYPE_UNSPECIFIED = 0;
+    R4_FHIR_TYPE_ADDRESS = 1;
+    R4_FHIR_TYPE_AGE = 2;
+    R4_FHIR_TYPE_ALLERGYINTOLERANCE_REACTION = 3;
+    R4_FHIR_TYPE_ANNOTATION = 4;
+    R4_FHIR_TYPE_ATTACHMENT = 5;
+    R4_FHIR_TYPE_BASE64_BINARY = 6;
+    R4_FHIR_TYPE_BOOLEAN = 7;
+    R4_FHIR_TYPE_CANONICAL = 8;
+    R4_FHIR_TYPE_CODE = 9;
+    R4_FHIR_TYPE_CODEABLE_CONCEPT = 10;
+    R4_FHIR_TYPE_CODING = 11;
+    R4_FHIR_TYPE_CONDITION_EVIDENCE = 12;
+    R4_FHIR_TYPE_CONDITION_STAGE = 13;
+    R4_FHIR_TYPE_CONTACT_DETAIL = 14;
+    R4_FHIR_TYPE_CONTACT_POINT = 15;
+    R4_FHIR_TYPE_CONTRIBUTOR = 16;
+    R4_FHIR_TYPE_COUNT = 17;
+    R4_FHIR_TYPE_DATA_REQUIREMENT = 18;
+    R4_FHIR_TYPE_DATAREQUIREMENT_CODEFILTER = 19;
+    R4_FHIR_TYPE_DATAREQUIREMENT_DATEFILTER = 20;
+    R4_FHIR_TYPE_DATAREQUIREMENT_SORT = 21;
+    R4_FHIR_TYPE_DATE = 22;
+    R4_FHIR_TYPE_DATE_TIME = 23;
+    R4_FHIR_TYPE_DECIMAL = 24;
+    R4_FHIR_TYPE_DEVICE_DEVICENAME = 25;
+    R4_FHIR_TYPE_DEVICE_PROPERTY = 26;
+    R4_FHIR_TYPE_DEVICE_SPECIALIZATION = 27;
+    R4_FHIR_TYPE_DEVICE_UDICARRIER = 28;
+    R4_FHIR_TYPE_DEVICE_VERSION = 29;
+    R4_FHIR_TYPE_DISTANCE = 30;
+    R4_FHIR_TYPE_DOSAGE = 31;
+    R4_FHIR_TYPE_DOSAGE_DOSEANDRATE = 32;
+    R4_FHIR_TYPE_DURATION = 33;
+    R4_FHIR_TYPE_ELEMENT = 34;
+    R4_FHIR_TYPE_ENCOUNTER_CLASSHISTORY = 35;
+    R4_FHIR_TYPE_ENCOUNTER_DIAGNOSIS = 36;
+    R4_FHIR_TYPE_ENCOUNTER_HOSPITALIZATION = 37;
+    R4_FHIR_TYPE_ENCOUNTER_LOCATION = 38;
+    R4_FHIR_TYPE_ENCOUNTER_PARTICIPANT = 39;
+    R4_FHIR_TYPE_ENCOUNTER_STATUSHISTORY = 40;
+    R4_FHIR_TYPE_EXPRESSION = 41;
+    R4_FHIR_TYPE_EXTENSION = 42;
+    R4_FHIR_TYPE_HUMAN_NAME = 43;
+    R4_FHIR_TYPE_ID = 44;
+    R4_FHIR_TYPE_IDENTIFIER = 45;
+    R4_FHIR_TYPE_IMMUNIZATION_EDUCATION = 46;
+    R4_FHIR_TYPE_IMMUNIZATION_PERFORMER = 47;
+    R4_FHIR_TYPE_IMMUNIZATION_PROTOCOLAPPLIED = 48;
+    R4_FHIR_TYPE_IMMUNIZATION_REACTION = 49;
+    R4_FHIR_TYPE_INSTANT = 50;
+    R4_FHIR_TYPE_INTEGER = 51;
+    R4_FHIR_TYPE_LOCATION_HOURSOFOPERATION = 52;
+    R4_FHIR_TYPE_LOCATION_POSITION = 53;
+    R4_FHIR_TYPE_MARKDOWN = 54;
+    R4_FHIR_TYPE_MEDICATION_BATCH = 55;
+    R4_FHIR_TYPE_MEDICATION_INGREDIENT = 56;
+    R4_FHIR_TYPE_MEDICATIONREQUEST_DISPENSEREQUEST = 57;
+    R4_FHIR_TYPE_MEDICATIONREQUEST_DISPENSEREQUEST_INITIALFILL = 58;
+    R4_FHIR_TYPE_MEDICATIONREQUEST_SUBSTITUTION = 59;
+    R4_FHIR_TYPE_META = 60;
+    R4_FHIR_TYPE_MONEY = 61;
+    R4_FHIR_TYPE_NARRATIVE = 62;
+    R4_FHIR_TYPE_OBSERVATION_COMPONENT = 63;
+    R4_FHIR_TYPE_OBSERVATION_REFERENCERANGE = 64;
+    R4_FHIR_TYPE_OID = 65;
+    R4_FHIR_TYPE_ORGANIZATION_CONTACT = 66;
+    R4_FHIR_TYPE_PARAMETER_DEFINITION = 67;
+    R4_FHIR_TYPE_PATIENT_COMMUNICATION = 68;
+    R4_FHIR_TYPE_PATIENT_CONTACT = 69;
+    R4_FHIR_TYPE_PATIENT_LINK = 70;
+    R4_FHIR_TYPE_PERIOD = 71;
+    R4_FHIR_TYPE_POSITIVE_INT = 72;
+    R4_FHIR_TYPE_PRACTITIONER_QUALIFICATION = 73;
+    R4_FHIR_TYPE_PRACTITIONERROLE_AVAILABLETIME = 74;
+    R4_FHIR_TYPE_PRACTITIONERROLE_NOTAVAILABLE = 75;
+    R4_FHIR_TYPE_PROCEDURE_FOCALDEVICE = 76;
+    R4_FHIR_TYPE_PROCEDURE_PERFORMER = 77;
+    R4_FHIR_TYPE_QUANTITY = 78;
+    R4_FHIR_TYPE_RANGE = 79;
+    R4_FHIR_TYPE_RATIO = 80;
+    R4_FHIR_TYPE_REFERENCE = 81;
+    R4_FHIR_TYPE_RELATED_ARTIFACT = 82;
+    R4_FHIR_TYPE_RESOURCE = 83;
+    R4_FHIR_TYPE_SAMPLED_DATA = 84;
+    R4_FHIR_TYPE_SIGNATURE = 85;
+    R4_FHIR_TYPE_STRING = 86;
+    R4_FHIR_TYPE_TIME = 87;
+    R4_FHIR_TYPE_TIMING = 88;
+    R4_FHIR_TYPE_TIMING_REPEAT = 89;
+    R4_FHIR_TYPE_TRIGGER_DEFINITION = 90;
+    R4_FHIR_TYPE_UNSIGNED_INT = 91;
+    R4_FHIR_TYPE_URI = 92;
+    R4_FHIR_TYPE_URL = 93;
+    R4_FHIR_TYPE_USAGE_CONTEXT = 94;
+    R4_FHIR_TYPE_UUID = 95;
+    R4_FHIR_TYPE_XHTML = 96;
+    // These two types are added manually to handle two additional types present in R4B.
+    R4_FHIR_TYPE_CODEABLE_REFERENCE = 97;
+    R4_FHIR_TYPE_RATIO_RANGE = 98;
+}

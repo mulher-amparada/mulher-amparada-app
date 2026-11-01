@@ -1,0 +1,65 @@
+package: "com.android.settings.flags"
+container: "system_ext"
+
+flag {
+    name: "app_archiving"
+    namespace: "android_settings"
+    description: "Feature flag to enable the archiving feature."
+    bug: "323164382"
+}
+
+flag {
+    name: "slices_retirement"
+    namespace: "android_settings"
+    description: "Feature flag to remove relevant slices dependencies."
+    bug: "297367302"
+}
+
+flag {
+    name: "updated_suggestion_card_aosp"
+    namespace: "android_settings"
+    description: "Use updated suggestion card(s) in AOSP Settings"
+    bug: "323258154"
+}
+
+flag {
+  name: "catalyst"
+  namespace: "android_settings"
+  description: "Flag for all screens"
+  bug: "323791114"
+}
+
+flag {
+  name: "catalyst_service"
+  namespace: "android_settings"
+  description: "Flag for catalyst service"
+  bug: "323791114"
+}
+
+flag {
+  name: "three_finger_tap_app_launch"
+  namespace: "android_settings"
+  description: "Use three finger tap to open a custom app"
+  bug: "399645334"
+}
+
+flag {
+  name: "action_corner_customization"
+  namespace: "android_settings"
+  description: "Use action corners to trigger a chosen action"
+  bug: "412558312"
+}
+
+flag {
+  name: "homepage_tile_alert"
+  namespace: "android_settings"
+  description: "Enables alert indicator on homepage tiles"
+  bug: "403326850"
+}
+
+flag {
+  name: "storage_summary_percentage_alignment"
+  namespace: "mediaprovider"
+  description: "Isolate percentage formatting in storage summary to ensure correct alignment in RTL locales."
+  bug: "394910107"
+}

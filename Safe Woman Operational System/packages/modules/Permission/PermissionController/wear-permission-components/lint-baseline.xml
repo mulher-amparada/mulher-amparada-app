@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 8.4.0-alpha08" type="baseline" client="" dependencies="true" name="" variant="all" version="8.4.0-alpha08">
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_primary_fixed` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_primary_fixed"&gt;@android:color/system_primary_fixed&lt;/color&gt;'
+        errorLine2="                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="82"
+            column="56"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_primary_fixed_dim` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_primary_fixed_dim"&gt;@android:color/system_primary_fixed_dim&lt;/color&gt;'
+        errorLine2="                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="83"
+            column="60"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_primary_container_dark` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_primary_container_dark"&gt;@android:color/system_primary_container_dark&lt;/color&gt;'
+        errorLine2="                                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="84"
+            column="65"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_on_primary_fixed` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_on_primary_fixed"&gt;@android:color/system_on_primary_fixed&lt;/color&gt;'
+        errorLine2="                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="85"
+            column="59"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_on_primary_container_dark` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_on_primary_container_dark"&gt;@android:color/system_on_primary_container_dark&lt;/color&gt;'
+        errorLine2="                                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="86"
+            column="68"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_secondary_fixed` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_secondary_fixed"&gt;@android:color/system_secondary_fixed&lt;/color&gt;'
+        errorLine2="                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="87"
+            column="58"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_secondary_fixed_dim` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_secondary_fixed_dim"&gt;@android:color/system_secondary_fixed_dim&lt;/color&gt;'
+        errorLine2="                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="88"
+            column="62"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_secondary_container_dark` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_secondary_container_dark"&gt;@android:color/system_secondary_container_dark&lt;/color&gt;'
+        errorLine2="                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="89"
+            column="67"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_on_secondary_fixed` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_on_secondary_fixed"&gt;@android:color/system_on_secondary_fixed&lt;/color&gt;'
+        errorLine2="                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="90"
+            column="61"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_on_secondary_container_dark` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_on_secondary_container_dark"&gt;@android:color/system_on_secondary_container_dark&lt;/color&gt;'
+        errorLine2="                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="91"
+            column="70"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_tertiary_fixed` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_tertiary_fixed"&gt;@android:color/system_tertiary_fixed&lt;/color&gt;'
+        errorLine2="                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="92"
+            column="57"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_tertiary_fixed_dim` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_tertiary_fixed_dim"&gt;@android:color/system_tertiary_fixed_dim&lt;/color&gt;'
+        errorLine2="                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="93"
+            column="61"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_tertiary_container_dark` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_tertiary_container_dark"&gt;@android:color/system_tertiary_container_dark&lt;/color&gt;'
+        errorLine2="                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="94"
+            column="66"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_on_tertiary_fixed` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_on_tertiary_fixed"&gt;@android:color/system_on_tertiary_fixed&lt;/color&gt;'
+        errorLine2="                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="95"
+            column="60"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_on_tertiary_container_dark` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_on_tertiary_container_dark"&gt;@android:color/system_on_tertiary_container_dark&lt;/color&gt;'
+        errorLine2="                                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="96"
+            column="69"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_surface_container_low_dark` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_surface_container_low_dark"&gt;@android:color/system_surface_container_low_dark&lt;/color&gt;'
+        errorLine2="                                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="97"
+            column="69"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_surface_container_dark` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_surface_container_dark"&gt;@android:color/system_surface_container_dark&lt;/color&gt;'
+        errorLine2="                                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="98"
+            column="65"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_surface_container_high_dark` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_surface_container_high_dark"&gt;@android:color/system_surface_container_high_dark&lt;/color&gt;'
+        errorLine2="                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="99"
+            column="70"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_on_surface_dark` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_on_surface_dark"&gt;@android:color/system_on_surface_dark&lt;/color&gt;'
+        errorLine2="                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="100"
+            column="58"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_on_surface_variant_dark` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_on_surface_variant_dark"&gt;@android:color/system_on_surface_variant_dark&lt;/color&gt;'
+        errorLine2="                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="101"
+            column="66"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_outline_dark` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_outline_dark"&gt;@android:color/system_outline_dark&lt;/color&gt;'
+        errorLine2="                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="102"
+            column="55"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_outline_variant_dark` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_outline_variant_dark"&gt;@android:color/system_outline_variant_dark&lt;/color&gt;'
+        errorLine2="                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="103"
+            column="63"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_background_dark` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_background_dark"&gt;@android:color/system_background_dark&lt;/color&gt;'
+        errorLine2="                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="104"
+            column="58"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_on_background_dark` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_on_background_dark"&gt;@android:color/system_on_background_dark&lt;/color&gt;'
+        errorLine2="                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="105"
+            column="61"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_error_dark` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_error_dark"&gt;@android:color/system_error_dark&lt;/color&gt;'
+        errorLine2="                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="106"
+            column="53"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_on_error_dark` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_on_error_dark"&gt;@android:color/system_on_error_dark&lt;/color&gt;'
+        errorLine2="                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="107"
+            column="56"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_error_container_dark` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_error_container_dark"&gt;@android:color/system_error_container_dark&lt;/color&gt;'
+        errorLine2="                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="108"
+            column="63"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`@android:color/system_on_error_container_dark` requires API level 34 (current min is 30)"
+        errorLine1='    &lt;color name="wear_compose_material3_on_error_container_dark"&gt;@android:color/system_on_error_container_dark&lt;/color&gt;'
+        errorLine2="                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="packages/modules/Permission/PermissionController/wear-permission-components/res/values/donottranslate.xml"
+            line="109"
+            column="66"/>
+    </issue>
+
+</issues>

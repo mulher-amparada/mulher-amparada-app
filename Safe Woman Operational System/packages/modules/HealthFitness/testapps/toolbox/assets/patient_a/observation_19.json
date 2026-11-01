@@ -1,0 +1,63 @@
+{
+  "resourceType": "Observation",
+  "id": "observation-19",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "vital-signs",
+          "display": "Vital Signs"
+        }
+      ],
+      "text": "Vital Signs"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "2708-6",
+        "display": "Oxygen saturation in Arterial blood"
+      },
+      {
+        "system": "http://loinc.org",
+        "code": "59408-5",
+        "display": "Oxygen saturation in Arterial blood by Pulse oximetry"
+      },
+      {
+        "system": "http://snomed.info/sct",
+        "code": "103228002",
+        "display": "Hemoglobin saturation with oxygen"
+      }
+    ],
+    "text": "Oxygen saturation"
+  },
+  "subject": {
+    "reference": "Patient/patient-1",
+    "display": "Example, Anne"
+  },
+  "valueQuantity": {
+    "value": 98,
+    "unit": "%",
+    "system": "http://unitsofmeasure.org",
+    "code": "%"
+  },
+  "encounter": {
+    "reference": "Encounter/encounter-4",
+    "display": "GP appointment"
+  },
+  "effectiveDateTime": "2023-06-14T12:53:49Z",
+  "performer": [
+    {
+      "reference": "Practitioner/practitioner-1",
+      "display": "Dr Maria Hernandez"
+    }
+  ],
+  "note": [
+    {
+      "text": "98% on air"
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+package {
+    default_team: "trendy_team_android_health",
+}
+
+// A group of files known not to work with deviceless (aka bivalent aka robolectric) tests
+// Please avoid adding new tests to the filegroup, we are trying to reduce it to empty.
+filegroup {
+    name: "robo-tests-sources-exclude",
+    srcs: [
+        // Explicit tests that needed resources are present in the controller APK.
+        // Not expected to be bivalent.
+        "unittests/src/com/android/server/healthconnect/migration/notification/HealthConnectResourcesContextTest.java",
+        // Doesn't work because does complicated things with Health Connect permissions on previous
+        // SDK versions for some tests.
+        // These are not represented well by Robolectric
+        "unittests/src/com/android/server/healthconnect/permission/HealthConnectPermissionHelperTest.java",
+    ],
+    path: "unittests/src",
+}
+
+// Robolectric test target for testing health connect library
+// Ideally this would be in the unittests module, but this generates an AndroidTest.xml
+// which conflicts with the existing AndroidText.xml used for mainline tests in that module.
+// So following advice from the android testing team I have moved it up one level.
+android_robolectric_test {
+    name: "HealthFitnessRoboUnitTests",
+    // This line absolutely has to be here.
+    // If it is not set, then for some classes (eg RecordTypeIdentifier) the system version is
+    // used rather than our framework code. The system version has the parent class
+    // RecordTypeIdentifier, but the @hide has taken effect on RecordType, and you get a symbol
+    // not found.
+    sdk_version: "module_current",
+    srcs: [
+        "unittests/src/**/*.java",
+        ":healthfitness-framework-test-src",
+    ],
+    exclude_srcs: [
+        "unittests/src/com/android/server/healthconnect/common/accesslog/AppOpLogsHelperTest.java",
+        ":robo-tests-sources-exclude",
+        ":healthfitness-framework-test-robo-tests-src-exclude",
+    ],
+    test_suites: [
+        "general-tests",
+    ],
+    // Enable robolectric changes we need for tests, that were contributed back and aren't default
+    // yet.
+    test_options: {
+        test_runner_options: [
+            {
+                name: "java-flags",
+                value: "-Drobolectric.useValidGetApplicationIcon=true",
+            },
+        ],
+    },
+    static_libs: [
+        // This is required to get mocking of final classes
+        "inline-mockito5-robolectric-prebuilt",
+        "framework-healthfitness.impl",
+        "service-healthfitness.impl",
+        "androidx.test.core",
+        "androidx.test.ext.junit",
+        "TestParameterInjector",
+        "flag-junit",
+        "framework-annotations-lib",
+        "healthfitness-aconfig-flags-lib",
+        "healthfitness-testing-shared",
+        "healthfitness-testing-unittest",
+        // This is needed give us AppOpsManagerLocal
+        "services.core",
+        "platform-parametric-runner-lib",
+        "guava-android-testlib", // For EqualsTester
+        "modules-utils-build",
+    ],
+    java_resources: [
+        ":generate-fhir-spec-r4-binarypb",
+    ],
+    java_resource_dirs: ["config"],
+    libs: [
+        // Needed for android.os.ext.SdkExtensions in some tests
+        "framework-sdkextensions.stubs.module_lib",
+    ],
+    instrumentation_for: "HealthConnectFakeTestApp",
+}
+
+// This is a test that runs on device with exactly the same tests as the robolectric test.
+// It is useful for a fair speed comparison
+android_test {
+    name: "HealthFitnessOnDeviceUnitTests",
+    min_sdk_version: "34",
+    sdk_version: "module_current",
+    manifest: "unittests/AndroidManifest.xml",
+    test_config: "AndroidTest_testOnDevice.xml",
+    srcs: [
+        "unittests/src/**/*.java",
+        ":healthfitness-framework-test-src",
+    ],
+    exclude_srcs: [
+        "unittests/src/com/android/server/healthconnect/common/accesslog/AppOpLogsHelperTest.java",
+        ":robo-tests-sources-exclude",
+        ":healthfitness-framework-test-robo-tests-src-exclude",
+    ],
+    defaults: [
+        "mts-target-sdk-version-current",
+        "modules-utils-testable-device-config-defaults",
+    ],
+    // This needs to be added to the unit tests as this build change is guarded by a build system
+    // flag (soong_config_bool_variable "phr_fhir_validation"), which is part of the PHR FHIR
+    // structural validation feature.
+    java_resources: [
+        ":generate-fhir-spec-r4-binarypb",
+    ],
+    static_libs: [
+        "TestParameterInjector",
+        "compatibility-device-util-axt",
+        "service-healthfitness.impl",
+        "framework-healthfitness.impl",
+        "healthfitness-aconfig-flags-lib",
+        "healthfitness-aconfig-flags-helper",
+        "healthfitness-testing-shared",
+        "healthfitness-testing-unittest",
+        "flag-junit",
+        "androidx.test.runner",
+        "mockito",
+        "truth",
+        "services.core",
+        "androidx.test.ext.truth",
+        "platform-parametric-runner-lib",
+        "framework-annotations-lib",
+        "guava-android-testlib", // For EqualsTester
+    ],
+    libs: [
+        "android.test.base.stubs.system",
+        "android.test.mock.stubs.system",
+        "android.test.runner.stubs.system",
+        "framework-sdkextensions.stubs.module_lib",
+        "framework-configinfrastructure.stubs.module_lib",
+    ],
+    // Test coverage system runs on different devices. Need to
+    // compile for all architecture.
+    compile_multilib: "both",
+}

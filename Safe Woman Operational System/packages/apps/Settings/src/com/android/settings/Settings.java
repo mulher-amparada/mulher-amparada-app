@@ -1,0 +1,821 @@
+/*
+ * Copyright (C) 2008 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.android.settings;
+
+import static android.provider.Settings.ACTION_AIRPLANE_MODE_SETTINGS;
+import static android.provider.Settings.ACTION_PRIVACY_CONTROLS;
+import static android.provider.Settings.ACTION_PRIVACY_SETTINGS;
+import static android.provider.Settings.EXTRA_AUTOMATIC_ZEN_RULE_ID;
+import static android.service.notification.ZenModeConfig.MANUAL_RULE_ID;
+
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.os.Bundle;
+import android.safetycenter.SafetyCenterManager;
+import android.telephony.SubscriptionManager;
+import android.telephony.ims.ImsRcsManager;
+import android.text.TextUtils;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.android.internal.annotations.VisibleForTesting;
+import com.android.settings.accessibility.VibrationIntensityScreen;
+import com.android.settings.accessibility.VibrationIntensitySettingsFragment;
+import com.android.settings.accessibility.VibrationScreen;
+import com.android.settings.accessibility.VibrationSettings;
+import com.android.settings.accounts.ManageAccountsDashboardFragment;
+import com.android.settings.accounts.ManageAccountsScreen;
+import com.android.settings.applications.AppStorageSettings;
+import com.android.settings.applications.specialaccess.SpecialAccessSettings;
+import com.android.settings.applications.specialaccess.SpecialAccessSettingsScreen;
+import com.android.settings.backup.AccountsAndBackupDashboardFragment;
+import com.android.settings.backup.AccountsAndBackupScreen;
+import com.android.settings.biometrics.face.FaceSettings;
+import com.android.settings.communal.CommunalPreferenceController;
+import com.android.settings.core.SubSettingLauncher;
+import com.android.settings.datausage.BillingCycleScreen;
+import com.android.settings.datausage.BillingCycleSettings;
+import com.android.settings.deviceinfo.firmwareversion.FirmwareVersionScreen;
+import com.android.settings.display.ColorModePreferenceFragment;
+import com.android.settings.display.ColorModeScreen;
+import com.android.settings.emergency.EmergencyDashboardFragment;
+import com.android.settings.emergency.EmergencyDashboardScreen;
+import com.android.settings.enterprise.EnterprisePrivacySettings;
+import com.android.settings.network.AdaptiveConnectivityScreen;
+import com.android.settings.network.AdaptiveConnectivitySettings;
+import com.android.settings.network.AirplaneModeSettingsScreen;
+import com.android.settings.network.AirplaneModeUtilKt;
+import com.android.settings.network.MobileNetworkIntentConverter;
+import com.android.settings.overlay.FeatureFactory;
+import com.android.settings.safetycenter.SafetyCenterManagerWrapper;
+import com.android.settings.safetycenter.SafetyCenterUtils;
+import com.android.settings.safetycenter.ui.PrivacyControlsFragment;
+import com.android.settings.safetycenter.ui.SafetyCenterSessionUtils;
+import com.android.settings.safetycenter.ui.SafetyCenterSubpageRegistry;
+import com.android.settings.security.SecuritySettingsFeatureProvider;
+import com.android.settings.spa.app.catalyst.AppInfoStorageScreen;
+import com.android.settings.system.ResetDashboardFragment;
+import com.android.settings.system.ResetDashboardScreen;
+import com.android.settings.system.ShadePanelsPreferenceController;
+import com.android.settings.wifi.WifiUtils;
+import com.android.settingslib.core.instrumentation.Instrumentable;
+
+import com.google.android.setupdesign.util.ThemeHelper;
+
+import java.util.Objects;
+
+/**
+ * Top-level Settings activity
+ */
+public class Settings extends SettingsActivity {
+
+    /*
+    * Settings subclasses for launching independently.
+    */
+
+    public static class MemtagPageActivity extends SettingsActivity { /* empty */}
+    public static class BluetoothSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class BluetoothDashboardActivity extends SettingsActivity { /* empty */ }
+    public static class CreateShortcutActivity extends SettingsActivity { /* empty */ }
+    public static class FaceSettingsActivity extends SettingsActivity { /* empty */ }
+    /** Container for {@link FaceSettings} to use with a pre-defined task affinity. */
+    public static class FaceSettingsInternalActivity extends SettingsActivity { /* empty */ }
+    public static class FingerprintSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class FingerprintSettingsActivityV2 extends SettingsActivity { /* empty */ }
+    public static class CombinedBiometricSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class CombinedBiometricProfileSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class TetherSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class WifiTetherSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class PrivateSpaceBiometricSettingsActivity extends SettingsActivity {
+        /* empty */
+    }
+    public static class VpnSettingsActivity extends SettingsActivity { /* empty */ }
+    /** Activity for Data saver settings. */
+    public static class DataSaverSummaryActivity extends SettingsActivity { /* empty */ }
+    public static class DateTimeSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class PrivateVolumeForgetActivity extends SettingsActivity { /* empty */ }
+    public static class PublicVolumeSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class WifiSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class NetworkProviderSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class NetworkSelectActivity extends SettingsActivity { /* empty */ }
+    /** Activity for the Wi-Fi network details settings. */
+    public static class WifiDetailsSettingsActivity extends SettingsActivity {
+        @Override
+        protected void createUiFromIntent(@Nullable Bundle savedState, Intent intent) {
+            Bundle bundle = intent.getBundleExtra(EXTRA_SHOW_FRAGMENT_ARGUMENTS);
+            if (TextUtils.isEmpty(bundle.getString(WifiUtils.KEY_CHOSEN_WIFIENTRY_KEY))) {
+                Log.e(getLocalClassName(), "The key of WifiEntry is empty!");
+                finishAndRemoveTask();
+                return;
+            }
+            super.createUiFromIntent(savedState, intent);
+        }
+    }
+    public static class WifiP2pSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class AvailableVirtualKeyboardActivity extends SettingsActivity { /* empty */ }
+    public static class KeyboardLayoutPickerActivity extends SettingsActivity { /* empty */ }
+    public static class PhysicalKeyboardActivity extends SettingsActivity { /* empty */ }
+    public static class PhysicalKeyboardLayoutPickerActivity extends SettingsActivity {
+        /* empty */
+    }
+    public static class GameControllerActivity extends SettingsActivity { /* empty */ }
+    public static class InputMethodAndSubtypeEnablerActivity extends SettingsActivity { /* empty */ }
+    public static class SpellCheckersSettingsActivity extends SettingsActivity { /* empty */ }
+    /** Activity for the language settings. */
+    public static class LocalePickerActivity extends SettingsActivity { /* empty */ }
+    public static class LanguageAndRegionSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class SystemLanguageSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class AppLanguageSettingsActivity extends SettingsActivity { /* empty */ }
+    /** Activity for the regional preferences settings. */
+    public static class RegionSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class TemperatureUnitSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class FirstDayOfWeekSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class MeasurementSystemSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class NumberingSystemSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class KeyboardSettingsActivity extends SettingsActivity { /* empty */ }
+    /** Activity for the navigation mode settings. */
+    public static class NavigationModeSettingsActivity extends SettingsActivity { /* empty */ }
+    /** Activity for the notifications and quick settings panels settings. */
+    public static class ShadeSettingsActivity extends SettingsActivity {
+        @Override
+        public void onResume() {
+            super.onResume();
+            // Re-check availability, because a configuration change (e.g. switching screens)
+            // could've changed it.
+            if (!ShadePanelsPreferenceController.isDualShadeAvailable(this)) {
+                finish();
+            }
+        }
+    }
+    public static class UserDictionarySettingsActivity extends SettingsActivity { /* empty */ }
+    public static class DarkThemeSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class DisplaySettingsActivity extends SettingsActivity { /* empty */ }
+    public static class NightDisplaySettingsActivity extends SettingsActivity { /* empty */ }
+    public static class NightDisplaySuggestionActivity extends NightDisplaySettingsActivity { /* empty */ }
+    public static class SmartAutoRotateSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class MyDeviceInfoActivity extends SettingsActivity { /* empty */ }
+    public static class FirmwareVersionActivity extends CatalystSettingsActivity {
+        public FirmwareVersionActivity() {
+            super(FirmwareVersionScreen.KEY);
+        }
+    }
+    public static class ModuleLicensesActivity extends SettingsActivity { /* empty */ }
+    public static class ApplicationSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class ManageApplicationsActivity extends SettingsActivity { /* empty */ }
+    public static class AppStorageSettingsActivity extends CatalystSettingsActivity {
+        public AppStorageSettingsActivity() {
+            super(AppInfoStorageScreen.KEY, AppStorageSettings.class);
+        }
+    }
+    public static class ManageAssistActivity extends SettingsActivity { /* empty */ }
+    public static class HighPowerApplicationsActivity extends SettingsActivity { /* empty */ }
+    public static class BackgroundCheckSummaryActivity extends SettingsActivity { /* empty */ }
+    public static class StorageUseActivity extends SettingsActivity { /* empty */ }
+    public static class DevelopmentSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class AccessibilitySettingsActivity extends SettingsActivity { /* empty */ }
+    public static class AccessibilityDetailsSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class AccessibilityEditShortcutsActivity extends SettingsActivity { /* empty */ }
+    public static class CaptioningSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class AccessibilityInversionSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class AccessibilityContrastSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class AccessibilityDaltonizerSettingsActivity extends SettingsActivity { /* empty */ }
+    /** Activity for lockscreen settings. */
+    public static class LockScreenSettingsActivity extends SettingsActivity { /* empty */ }
+    /** Activity for notifications on lockscreen settings. */
+    public static class LockScreenNotificationsSettingsActivity
+            extends SettingsActivity { /* empty */ }
+    /** Activity for bluetooth pairing settings. */
+    public static class BlueToothPairingActivity extends SettingsActivity { /* empty */ }
+    /** Activity for Reduce Bright Colors. */
+    public static class ReduceBrightColorsSettingsActivity extends SettingsActivity { /* empty */ }
+    /** Activity for text reading settings. */
+    public static class TextReadingSettingsActivity extends SettingsActivity { /* empty */ }
+    /** Activity for text color and motion settings. */
+    public static class ColorAndMotionActivity extends SettingsActivity { /* empty */ }
+    /** Activity for color contrast settings. */
+    public static class ColorContrastActivity extends SettingsActivity { /* empty */ }
+    /** Activity for the security dashboard. */
+    public static class SecurityDashboardActivity extends SettingsActivity {
+
+        private static final String TAG = "SecurityDashboardActivity";
+
+        @Override
+        protected void onCreate(Bundle savedState) {
+            super.onCreate(savedState);
+            handleSafetyCenterRedirection();
+        }
+
+        /** Redirects to SafetyCenter if enabled. */
+        @VisibleForTesting
+        public void handleSafetyCenterRedirection() {
+            if (isFinishing()) {
+                // Don't trampoline if already exiting this activity.
+                return;
+            }
+
+            if (SafetyCenterManagerWrapper.get().isEnabled(this)) {
+                if (SafetyCenterUtils.redirectToSafetyCenter(this)) {
+                    finish();
+                }
+            }
+        }
+
+        /** Whether the given fragment is allowed. */
+        @VisibleForTesting
+        @Override
+        public boolean isValidFragment(String fragmentName) {
+            return super.isValidFragment(fragmentName)
+                    || (fragmentName != null
+                            && TextUtils.equals(fragmentName, getAlternativeFragmentName()));
+        }
+
+        @Override
+        public String getInitialFragmentName(Intent intent) {
+            final String alternativeFragmentName = getAlternativeFragmentName();
+            if (alternativeFragmentName != null) {
+                return alternativeFragmentName;
+            }
+
+            return super.getInitialFragmentName(intent);
+        }
+
+        private String getAlternativeFragmentName() {
+            String alternativeFragmentClassname = null;
+            final SecuritySettingsFeatureProvider securitySettingsFeatureProvider =
+                    FeatureFactory.getFeatureFactory().getSecuritySettingsFeatureProvider();
+            if (securitySettingsFeatureProvider.hasAlternativeSecuritySettingsFragment()) {
+                alternativeFragmentClassname = securitySettingsFeatureProvider
+                        .getAlternativeSecuritySettingsFragmentClassname();
+            }
+            return alternativeFragmentClassname;
+        }
+    }
+    /** Activity for the Advanced security settings. */
+    public static class SecurityAdvancedSettings extends SettingsActivity {
+        private static final String TAG = "SecurityAdvancedSettings";
+        @Override
+        protected void onCreate(Bundle savedState) {
+            super.onCreate(savedState);
+            handleMoreSettingsRedirection();
+        }
+
+        /** Redirects to More Settings if Safety center is enabled. */
+        @VisibleForTesting
+        public void handleMoreSettingsRedirection() {
+            if (isFinishing()) {
+                // Don't trampoline if already exiting this activity.
+                return;
+            }
+
+            if (SafetyCenterManagerWrapper.get().isEnabled(this)) {
+                try {
+                    startActivity(
+                            new Intent("com.android.settings.MORE_SECURITY_PRIVACY_SETTINGS"));
+                    finish();
+                } catch (ActivityNotFoundException e) {
+                    Log.e(TAG, "Unable to open More Settings", e);
+                }
+            }
+        }
+    }
+    /** Activity for the More settings page. */
+    public static class MoreSecurityPrivacySettingsActivity extends SettingsActivity { /* empty */ }
+    public static class UsageAccessSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class AppUsageAccessSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class LocationSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class ScanningSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class WifiScanningSettingsActivity extends SettingsActivity { /* empty */ }
+    /** Activity for the privacy dashboard. */
+    public static class PrivacyDashboardActivity extends SettingsActivity {
+
+        private static final String TAG = "PrivacyDashboardActivity";
+
+        @Override
+        protected void onCreate(Bundle savedState) {
+            super.onCreate(savedState);
+            handleSafetyCenterRedirection();
+        }
+
+        /** Redirects to SafetyCenter if enabled. */
+        @VisibleForTesting
+        public void handleSafetyCenterRedirection() {
+            if (isFinishing()) {
+                // Don't trampoline if already exiting this activity.
+                return;
+            }
+
+            if (ACTION_PRIVACY_SETTINGS.equals(getIntent().getAction())
+                    && SafetyCenterManagerWrapper.get().isEnabled(this)) {
+                if (SafetyCenterUtils.redirectToSafetyCenter(this)) {
+                    finish();
+                }
+            }
+
+        }
+    }
+    public static class PrivacyControlsActivity extends SettingsActivity { /* empty */ }
+    public static class PrivacySettingsActivity extends SettingsActivity { /* empty */ }
+    public static class FactoryResetActivity extends SettingsActivity {
+        @Override
+        protected void onCreate(Bundle savedState) {
+            setTheme(SetupWizardUtils.getTheme(this, getIntent()));
+            ThemeHelper.trySetDynamicColor(this);
+            super.onCreate(savedState);
+        }
+
+        @Override
+        protected boolean isToolbarEnabled() {
+            return false;
+        }
+    }
+    public static class FactoryResetConfirmActivity extends SettingsActivity {
+        @Override
+        protected void onCreate(Bundle savedState) {
+            setTheme(SetupWizardUtils.getTheme(this, getIntent()));
+            ThemeHelper.trySetDynamicColor(this);
+            super.onCreate(savedState);
+        }
+
+        @Override
+        protected boolean isToolbarEnabled() {
+            return false;
+        }
+    }
+    public static class RunningServicesActivity extends SettingsActivity { /* empty */ }
+    public static class BatterySaverSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class BatterySaverScheduleSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class AccountSyncSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class AccountSyncSettingsInAddAccountActivity extends SettingsActivity { /* empty */ }
+    public static class DeviceAdminSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class DataUsageSummaryActivity extends SettingsActivity { /* empty */ }
+    public static class MobileDataUsageListActivity extends SettingsActivity { /* empty */ }
+    public static class BillingCycleActivity extends CatalystSettingsActivity {
+        public BillingCycleActivity() {
+            super(BillingCycleScreen.KEY, BillingCycleSettings.class);
+        }
+    }
+    public static class ConfigureWifiSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class SavedAccessPointsSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class TextToSpeechSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class WifiDisplaySettingsActivity extends SettingsActivity { /* empty */ }
+    public static class DreamSettingsActivity extends SettingsActivity { /* empty */ }
+    /** Activity to manage communal settings */
+    public static class CommunalSettingsActivity extends SettingsActivity {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            if (!CommunalPreferenceController.isAvailable(this)) {
+                finish();
+            }
+        }
+    }
+    public static class NotificationStationActivity extends SettingsActivity { /* empty */ }
+    public static class UserSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class NotificationAccessSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class NotificationAccessDetailsActivity extends SettingsActivity { /* empty */ }
+    public static class ManageAdaptiveNotificationsActivity extends SettingsActivity { /* empty */ }
+    public static class VrListenersSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class PremiumSmsAccessActivity extends SettingsActivity { /* empty */ }
+    public static class PictureInPictureSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class TurnScreenOnSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class AppTurnScreenOnSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class AppPictureInPictureSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class ZenAccessSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class ZenAccessDetailSettingsActivity extends SettingsActivity {}
+    public static class ConditionProviderSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class UsbSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class UsbDetailsActivity extends SettingsActivity { /* empty */ }
+    public static class TrustedCredentialsSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class PaymentSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class PrintSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class PrintJobSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class ModeSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class ModesSettingsActivity extends SettingsActivity { /* empty */ }
+    private static class DndBaseSettingsActivity extends SettingsActivity {
+        @Override
+        public Intent getIntent() {
+            // specify the DND id
+            return super.getIntent().putExtra(EXTRA_AUTOMATIC_ZEN_RULE_ID, MANUAL_RULE_ID);
+        }
+    }
+    public static class DndDisplaySettingsActivity extends DndBaseSettingsActivity { /* empty */ }
+    public static class DndPeopleSettingsActivity extends DndBaseSettingsActivity { /* empty */ }
+    public static class DndCallsSettingsActivity extends DndBaseSettingsActivity { /* empty */ }
+    public static class SoundSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class VibrationSettingsActivity extends CatalystSettingsActivity {
+        public VibrationSettingsActivity() {
+            super(VibrationScreen.KEY, VibrationSettings.class);
+        }
+    }
+    public static class VibrationIntensitySettingsActivity extends CatalystSettingsActivity {
+        public VibrationIntensitySettingsActivity() {
+            super(VibrationIntensityScreen.KEY, VibrationIntensitySettingsFragment.class);
+        }
+    }
+    public static class ConfigureNotificationSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class ConversationListSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class AppBubbleNotificationSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class BubbleNotificationSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class NotificationAssistantSettingsActivity extends SettingsActivity{ /* empty */ }
+    public static class NotificationAppListActivity extends SettingsActivity { /* empty */ }
+    public static class NotificationExcludeSummarizationActivity extends SettingsActivity { /* empty */ }
+    public static class NotificationExcludeClassificationActivity extends SettingsActivity { /* empty */ }
+    /** Activity to manage Cloned Apps page */
+    public static class ClonedAppsListActivity extends SettingsActivity { /* empty */ }
+    /** Activity to manage Aspect Ratio app list page */
+    public static class UserAspectRatioAppListActivity extends SettingsActivity { /* empty */ }
+    /** Activity to manage Aspect Ratio app page */
+    public static class UserAspectRatioAppActivity extends SettingsActivity { /* empty */ }
+    public static class NotificationReviewPermissionsActivity extends SettingsActivity { /* empty */ }
+    public static class AppNotificationSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class ChannelNotificationSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class ChannelGroupNotificationSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class ManageDomainUrlsActivity extends SettingsActivity { /* empty */ }
+    public static class AutomaticStorageManagerSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class GamesStorageActivity extends SettingsActivity { /* empty */ }
+    public static class GestureNavigationSettingsActivity extends SettingsActivity { /* empty */ }
+    /** Activity to manage 2-/3-button navigation configuration. */
+    public static class ButtonNavigationSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class InteractAcrossProfilesSettingsActivity extends SettingsActivity {
+        /* empty */
+    }
+    public static class AppInteractAcrossProfilesSettingsActivity extends SettingsActivity {
+        /* empty */
+    }
+
+    public static class CellularSecuritySettingsActivity extends SettingsActivity { /* empty */ }
+    public static class SatelliteSettingActivity extends SettingsActivity { /* empty */ }
+    public static class ApnSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class WifiCallingSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class MemorySettingsActivity extends SettingsActivity { /* empty */ }
+    public static class AppMemoryUsageActivity extends SettingsActivity { /* empty */ }
+    public static class OverlaySettingsActivity extends SettingsActivity { /* empty */ }
+    public static class ManageExternalStorageActivity extends SettingsActivity { /* empty */ }
+    public static class AppManageExternalStorageActivity extends SettingsActivity { /* empty */ }
+    public static class MediaManagementAppsActivity extends SettingsActivity { /* empty */ }
+    public static class AppMediaManagementAppsActivity extends SettingsActivity { /* empty */ }
+    public static class WriteSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class ChangeWifiStateActivity extends SettingsActivity { /* empty */ }
+    /** Activity to manage NFC Tag applications. */
+    public static class ChangeNfcTagAppsActivity extends SettingsActivity { /* empty */ }
+    public static class AppDrawOverlaySettingsActivity extends SettingsActivity { /* empty */ }
+    public static class AppWriteSettingsActivity extends SettingsActivity { /* empty */ }
+    /** Activity to manage app battery usage details. */
+    public static class AppBatteryUsageActivity extends SettingsActivity { /* empty */ }
+
+    public static class ManageExternalSourcesActivity extends SettingsActivity {/* empty */ }
+    public static class ManageAppExternalSourcesActivity extends SettingsActivity { /* empty */ }
+    public static class WallpaperSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class ManagedProfileSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class DeletionHelperActivity extends SettingsActivity { /* empty */ }
+
+    /** Activity to manage apps with {@link android.Manifest.permission#SCHEDULE_EXACT_ALARM} */
+    public static class AlarmsAndRemindersActivity extends SettingsActivity {/* empty */ }
+    /** App specific version of {@link AlarmsAndRemindersActivity} */
+    public static class AlarmsAndRemindersAppActivity extends SettingsActivity {/* empty */ }
+
+    public static class ApnEditorActivity extends SettingsActivity { /* empty */ }
+    public static class ChooseAccountActivity extends SettingsActivity { /* empty */ }
+    public static class IccLockSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class TestingSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class WifiAPITestActivity extends SettingsActivity { /* empty */ }
+    public static class WifiInfoActivity extends SettingsActivity { /* empty */ }
+    public static class EnterprisePrivacySettingsActivity extends SettingsActivity {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            if (FeatureFactory.getFeatureFactory().getEnterprisePrivacyFeatureProvider()
+                    .showParentalControls()) {
+                finish();
+            } else if (!EnterprisePrivacySettings.isPageEnabled(this)) {
+                finish();
+            }
+        }
+    }
+    public static class WebViewAppPickerActivity extends SettingsActivity { /* empty */ }
+    public static class AdvancedConnectedDeviceActivity extends SettingsActivity { /* empty */ }
+    public static class NfcSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class BluetoothDeviceDetailActivity extends SettingsActivity { /* empty */ }
+    public static class StylusUsiDetailsActivity extends SettingsActivity { /* empty */ }
+    public static class BluetoothBroadcastActivity extends SettingsActivity { /* empty */ }
+    public static class BluetoothFindBroadcastsActivity extends SettingsActivity { /* empty */ }
+    public static class WifiCallingDisclaimerActivity extends SettingsActivity { /* empty */ }
+    public static class MobileNetworkListActivity extends SettingsActivity {}
+    public static class PowerMenuSettingsActivity extends SettingsActivity {}
+    public static class MobileNetworkActivity extends SettingsActivity {
+        private static final String MOBILE_NETWORK_FRAGMENT_NAME =
+                "com.android.settings.network.telephony.MobileNetworkSettings";
+        public static final String TAG = "MobileNetworkActivity";
+        public static final String EXTRA_MMS_MESSAGE = "mms_message";
+        public static final String EXTRA_SHOW_CAPABILITY_DISCOVERY_OPT_IN =
+                "show_capability_discovery_opt_in";
+
+        private Intent mCachedIntent = null;
+        private MobileNetworkIntentConverter mIntentConverter;
+
+        /**
+         * Override of #onNewIntent() requires Activity to have "singleTop" launch mode within
+         * AndroidManifest.xml
+         */
+        @Override
+        protected void onNewIntent(Intent intent) {
+            super.onNewIntent(intent);
+            if (!isTargetIsMobileNetwork(intent)) {
+                finish();
+                return;
+            }
+            Log.d(TAG, "Starting onNewIntent");
+            setIntent(intent);
+            createUiFromIntent(null /* savedState */, convertIntent(intent));
+        }
+
+        @Override
+        public Intent getIntent() {
+            Intent intent = super.getIntent();
+            if (isSameSubId(intent, mCachedIntent)) {
+                return mCachedIntent;
+            } else {
+                mCachedIntent = convertIntent(intent);
+                return mCachedIntent;
+            }
+        }
+
+        private Intent convertIntent(Intent copyFrom) {
+            if (mIntentConverter == null) {
+                mIntentConverter = new MobileNetworkIntentConverter(this);
+            }
+            Intent intent = mIntentConverter.apply(copyFrom);
+            return (intent == null) ? copyFrom : intent;
+        }
+
+        public static boolean doesIntentContainOptInAction(Intent intent) {
+            String intentAction = (intent != null ? intent.getAction() : null);
+            return TextUtils.equals(intentAction,
+                    ImsRcsManager.ACTION_SHOW_CAPABILITY_DISCOVERY_OPT_IN);
+        }
+
+        private static boolean isTargetIsMobileNetwork(@NonNull Intent intent) {
+            String fragmentName = intent.getStringExtra(SettingsActivity.EXTRA_SHOW_FRAGMENT);
+            if (fragmentName != null && !fragmentName.isEmpty()) {
+                return fragmentName.equals(MOBILE_NETWORK_FRAGMENT_NAME);
+            }
+            return false;
+        }
+
+        private static boolean isSameSubId(Intent intent, Intent cachedIntent) {
+            if (intent == null || cachedIntent == null) {
+                return false;
+            }
+
+            return intent.getIntExtra(android.provider.Settings.EXTRA_SUB_ID,
+                    SubscriptionManager.INVALID_SUBSCRIPTION_ID) == cachedIntent.getIntExtra(
+                    android.provider.Settings.EXTRA_SUB_ID,
+                    SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+        }
+    }
+
+    /** Activity to manage apps with {@link android.Manifest.permission#RUN_USER_INITIATED_JOBS} */
+    public static class LongBackgroundTasksActivity extends SettingsActivity { /* empty */ }
+    /** App specific version of {@link LongBackgroundTasksActivity} */
+    public static class LongBackgroundTasksAppActivity extends SettingsActivity { /* empty */ }
+
+    /**
+     * Activity for BugReportHandlerPicker.
+     */
+    public static class BugReportHandlerPickerActivity extends SettingsActivity { /* empty */ }
+
+    // Top level categories for new IA
+    public static class NetworkDashboardActivity extends SettingsActivity {
+        private static final String TAG = "NetworkDashboardActivity";
+        @Override
+        protected void onCreate(Bundle savedState) {
+            super.onCreate(savedState);
+            if (isFinishing()) {
+                // Don't trampoline if already exiting this activity.
+                return;
+            }
+
+            if (TextUtils.equals(ACTION_AIRPLANE_MODE_SETTINGS, getIntent().getAction())
+                    && AirplaneModeUtilKt.isAirplaneModeEligible(this)
+                    && AirplaneModeUtilKt.hasPairedWatchForAirplaneModeSync(this)) {
+                try {
+                    startActivity(new Intent(this, AirplaneModeSettingsActivity.class));
+                    finish();
+                } catch (ActivityNotFoundException e) {
+                    Log.e(TAG, "Unable to open Airplane Settings", e);
+                }
+            }
+        }
+    }
+    public static class ConnectedDeviceDashboardActivity extends SettingsActivity {}
+    public static class PowerUsageSummaryActivity extends SettingsActivity { /* empty */ }
+    public static class PowerUsageAdvancedActivity extends SettingsActivity { /* empty */ }
+    public static class StorageDashboardActivity extends SettingsActivity {}
+    public static class AccountDashboardActivity extends SettingsActivity {}
+    public static class AccountsAndBackupDashboardActivity extends CatalystSettingsActivity {
+        public AccountsAndBackupDashboardActivity() {
+            super(AccountsAndBackupScreen.KEY, AccountsAndBackupDashboardFragment.class);
+        }
+    }
+    public static class ManageAccountsDashboardActivity extends CatalystSettingsActivity {
+        public ManageAccountsDashboardActivity() {
+            super(ManageAccountsScreen.KEY, ManageAccountsDashboardFragment.class);
+        }
+    }
+    public static class EmergencyDashboardActivity extends CatalystSettingsActivity {
+        public EmergencyDashboardActivity() {
+            super(EmergencyDashboardScreen.KEY, EmergencyDashboardFragment.class);
+        }
+    }
+    public static class SystemDashboardActivity extends SettingsActivity {}
+    public static class ResetDashboardActivity extends CatalystSettingsActivity {
+        public ResetDashboardActivity() {
+            super(ResetDashboardScreen.KEY, ResetDashboardFragment.class);
+        }
+    }
+
+    /**
+     * Activity for MediaControlsSettings
+     */
+    public static class MediaControlsSettingsActivity extends SettingsActivity {}
+
+    /**
+     * Activity for AppDashboard.
+     */
+    public static class AppDashboardActivity extends SettingsActivity {}
+
+    public static class AdaptiveBrightnessActivity extends SettingsActivity { /* empty */ }
+
+    /**
+     * Activity for OneHandedSettings
+     */
+    public static class OneHandedSettingsActivity extends SettingsActivity { /* empty */ }
+
+    /**
+     * Activity for Double Tap Power Settings
+     */
+    public static class DoubleTapPowerSettingsActivity extends SettingsActivity { /* empty */ }
+
+    public static class PreviouslyConnectedDeviceActivity extends SettingsActivity { /* empty */ }
+
+    public static class ScreenTimeoutActivity extends SettingsActivity { /* empty */ }
+
+    /** Activity for the Reset mobile network settings. */
+    public static class ResetMobileNetworkSettingsActivity extends SettingsActivity { /* empty */ }
+
+    public static class HearingDevicesActivity extends SettingsActivity { /* empty */ }
+    public static class HearingDevicesPairingActivity extends SettingsActivity { /* empty */ }
+    public static class ContactsStorageSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class ContentProtectionSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class MagnificationActivity extends SettingsActivity { /* empty */ }
+    public static class FlashNotificationsActivity extends SettingsActivity { /* empty */ }
+    public static class NotificationBundlesActivity extends SettingsActivity { /* empty */ }
+    public static class NotificationSummarizationActivity extends SettingsActivity { /* empty */ }
+
+    /** Activity for Adaptive Connectivity Settings. */
+    public static class AdaptiveConnectivitySettingsActivity extends CatalystSettingsActivity {
+        public AdaptiveConnectivitySettingsActivity() {
+            super(AdaptiveConnectivityScreen.KEY, AdaptiveConnectivitySettings.class);
+        }
+    }
+
+    /** Activity for Special Access Settings. */
+    public static class SpecialAccessSettingsActivity extends CatalystSettingsActivity {
+        public SpecialAccessSettingsActivity() {
+            super(SpecialAccessSettingsScreen.KEY, SpecialAccessSettings.class);
+        }
+    }
+
+    /** Activity for Display & Touch -> Colors. */
+    public static class ColorModeActivity extends CatalystSettingsActivity {
+        public ColorModeActivity() {
+            super(ColorModeScreen.KEY, ColorModePreferenceFragment.class);
+        }
+    }
+
+    public static class SafetyCenterActivity extends SettingsActivity {
+
+        private static final String TAG = "SafetyCenterActivity";
+        long mSessionId = SafetyCenterSessionUtils.INSTANCE.generateValidSessionId();
+
+        @Override
+        protected void onCreate(Bundle savedState) {
+            super.onCreate(savedState);
+            handleIntent();
+        }
+
+        @Override
+        protected void onNewIntent(Intent intent) {
+            super.onNewIntent(intent);
+            setIntent(intent);
+            handleIntent();
+        }
+
+        @Override
+        public Intent getIntent() {
+            Intent intent = super.getIntent();
+            if (intent != null && !intent.hasExtra(SafetyCenterSessionUtils.EXTRA_SESSION_ID)) {
+                intent.putExtra(SafetyCenterSessionUtils.EXTRA_SESSION_ID, mSessionId);
+                Log.d(TAG, "Added sessionId to Activity's Intent: " + mSessionId);
+            }
+            return intent;
+        }
+
+        private void handleIntent() {
+            if (getIntent() == null) {
+                return;
+            }
+
+            handlePrivacyControlsRedirection();
+            handleSubpageRedirection();
+        }
+
+        private void handlePrivacyControlsRedirection() {
+            String intentAction = getIntent().getAction();
+            if (Objects.equals(intentAction, ACTION_PRIVACY_CONTROLS)) {
+                Log.d(TAG, "Redirecting to Privacy controls subpage");
+                new SubSettingLauncher(this)
+                        .setDestination(PrivacyControlsFragment.class.getName())
+                        .setArguments(SafetyCenterSessionUtils.INSTANCE
+                                .createSessionArgs(mSessionId))
+                        .setSourceMetricsCategory(Instrumentable.METRICS_CATEGORY_UNKNOWN)
+                        .launch();
+
+                finish();
+            }
+        }
+
+        private void handleSubpageRedirection() {
+            String intentAction = getIntent().getAction();
+            if (!Objects.equals(intentAction, Intent.ACTION_SAFETY_CENTER)) {
+                return;
+            }
+
+            String subpageId =
+                    getIntent().getStringExtra(SafetyCenterManager.EXTRA_SAFETY_SOURCES_GROUP_ID);
+            if (subpageId == null) {
+                return;
+            }
+
+            String fragmentClassName =
+                    SafetyCenterSubpageRegistry.INSTANCE.getSubpageFragmentClassNameFor(
+                            this, subpageId);
+            if (fragmentClassName == null) {
+                return;
+            }
+
+            Log.d(TAG, "Redirecting to a subpage based on EXTRA_SAFETY_SOURCES_GROUP_ID");
+            new SubSettingLauncher(this)
+                    .setDestination(fragmentClassName)
+                    .setArguments(SafetyCenterSessionUtils.INSTANCE.createSessionArgs(mSessionId))
+                    .setSourceMetricsCategory(Instrumentable.METRICS_CATEGORY_UNKNOWN)
+                    .launch();
+
+            finish();
+        }
+    }
+
+    /** Activity for Network & Internet -> Airplane Mode. */
+    public static class AirplaneModeSettingsActivity extends CatalystSettingsActivity {
+        public AirplaneModeSettingsActivity() {
+            super(AirplaneModeSettingsScreen.KEY);
+        }
+
+        private static final String TAG = "AirplaneModeSettingsActivity";
+
+        @Override
+        protected void onCreate(Bundle savedState) {
+            super.onCreate(savedState);
+            if (isFinishing()) {
+                // Don't trampoline if already exiting this activity.
+                return;
+            }
+
+            // If there is no paired watch, open the Network settings instead where there is a
+            // toggle for Airplane mode.
+            if (!AirplaneModeUtilKt.hasPairedWatchForAirplaneModeSync(this)) {
+                try {
+                    startActivity(new Intent(this, NetworkDashboardActivity.class));
+                    finish();
+                } catch (ActivityNotFoundException e) {
+                    Log.e(TAG, "Unable to open Airplane Settings", e);
+                }
+            }
+        }
+    }
+}

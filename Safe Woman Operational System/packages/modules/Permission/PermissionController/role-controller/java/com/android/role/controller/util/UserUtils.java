@@ -1,0 +1,164 @@
+/*
+ * Copyright (C) 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.role.controller.util;
+
+import android.content.Context;
+import android.os.Build;
+import android.os.Process;
+import android.os.UserHandle;
+import android.os.UserManager;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.android.modules.utils.build.SdkLevel;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/** Utility class to deal with Android users. */
+public final class UserUtils {
+
+    private UserUtils() {}
+
+    /**
+     * Check whether a user is a profile.
+     *
+     * @param user    the user to check
+     * @param context the {@code Context} to retrieve system services
+     * @return whether the user is a profile
+     */
+    public static boolean isProfile(@NonNull UserHandle user, @NonNull Context context) {
+        if (SdkLevel.isAtLeastV()) {
+            Context userContext = getUserContext(context, user);
+            UserManager userUserManager = userContext.getSystemService(UserManager.class);
+            return userUserManager.isProfile();
+        } else {
+            return isManagedProfile(user, context) || isCloneProfile(user, context);
+        }
+    }
+
+    /**
+     * Check whether a user is a managed profile.
+     *
+     * @param user    the user to check
+     * @param context the {@code Context} to retrieve system services
+     * @return whether the user is a managed profile
+     */
+    public static boolean isManagedProfile(@NonNull UserHandle user, @NonNull Context context) {
+        Context userContext = getUserContext(context, user);
+        UserManager userUserManager = userContext.getSystemService(UserManager.class);
+        return userUserManager.isManagedProfile(user.getIdentifier());
+    }
+
+    /**
+     * Check whether a user is a clone profile.
+     *
+     * @param user    the user to check
+     * @param context the {@code Context} to retrieve system services
+     * @return whether the user is a clone profile
+     */
+    public static boolean isCloneProfile(@NonNull UserHandle user, @NonNull Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            return false;
+        }
+        Context userContext = getUserContext(context, user);
+        UserManager userUserManager = userContext.getSystemService(UserManager.class);
+        return userUserManager.isCloneProfile();
+    }
+
+    /**
+     * Check whether a user is a private profile.
+     *
+     * @param user    the user to check
+     * @param context the {@code Context} to retrieve system services
+     * @return whether the user is a private profile. Private profiles are
+     * allowed from Android V+ only, so this method will return false on Sdk levels below that.
+     */
+    public static boolean isPrivateProfile(@NonNull UserHandle user, @NonNull Context context) {
+        if (!SdkLevel.isAtLeastV()) {
+            return false;
+        }
+        Context userContext = getUserContext(context, user);
+        UserManager userUserManager = userContext.getSystemService(UserManager.class);
+        return userUserManager.isPrivateProfile();
+    }
+
+    /**
+     * Create a context for a user.
+     *
+     * @param context The context to clone
+     * @param user The user the new context should be for
+     *
+     * @return The context for the new user
+     */
+    @NonNull
+    public static Context getUserContext(@NonNull Context context, @NonNull UserHandle user) {
+        if (Process.myUserHandle().equals(user)) {
+            return context;
+        } else {
+            return context.createContextAsUser(user, 0);
+        }
+    }
+
+    /**
+     * Returns the parent of a given user, or user if it has no parent (e.g. it is the primary
+     * user)
+     */
+    @NonNull
+    public static UserHandle getProfileParentOrSelf(@NonNull UserHandle user,
+            @NonNull Context context) {
+        UserHandle profileParent = getProfileParent(user, context);
+        // If profile parent user is null, then original user is the parent
+        return profileParent != null ? profileParent : user;
+    }
+
+    /** Returns the parent of a given user. */
+    @Nullable
+    public static UserHandle getProfileParent(UserHandle user, @NonNull Context context) {
+        Context userContext = getUserContext(context, user);
+        UserManager userManager = userContext.getSystemService(UserManager.class);
+        return userManager.getProfileParent(user);
+    }
+
+    /**
+     * Returns all the enabled user profiles on the device
+     *
+     * @param user the {@link UserHandle} to get profiles for
+     * @param context the {@link Context}
+     * @param excludePrivate {@code true} to exclude private profiles from returned list of users
+     */
+    @NonNull
+    public static List<UserHandle> getUserProfiles(@NonNull UserHandle user,
+            @NonNull Context context, boolean excludePrivate) {
+        Context userContext = getUserContext(context, user);
+        UserManager userUserManager = userContext.getSystemService(UserManager.class);
+        List<UserHandle> profiles = userUserManager.getUserProfiles();
+        if (!excludePrivate) {
+            return profiles;
+        }
+        List<UserHandle> filteredProfiles = new ArrayList<>();
+        final int profilesSize = profiles.size();
+        for (int i = 0; i < profilesSize; i++) {
+            UserHandle profile = profiles.get(i);
+            if (!isPrivateProfile(profile, userContext)) {
+                filteredProfiles.add(profile);
+            }
+        }
+        return filteredProfiles;
+    }
+}

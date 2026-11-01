@@ -1,0 +1,25 @@
+{
+    "presubmit": [
+        {
+            "name": "CtsHibernationTestCases",
+            "options": [
+                {
+                    "include-filter": "android.hibernation.cts.AppHibernationIntegrationTest"
+                },
+                {
+                    "exclude-annotation": "androidx.test.filters.FlakyTest"
+                }
+            ]
+        }
+    ],
+    "postsubmit": [
+        {
+            "name": "PermissionControllerMockingTests",
+            "options": [
+                {
+                    "include-filter": "com.android.permissioncontroller.tests.mocking.hibernation"
+                }
+            ]
+        }
+    ]
+}

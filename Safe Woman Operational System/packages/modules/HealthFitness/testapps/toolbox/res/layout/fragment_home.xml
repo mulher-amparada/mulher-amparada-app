@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Copyright (C) 2022 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.android.healthconnect.testapps.toolbox.ui.HomeFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="40dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <Button
+            android:id="@+id/launch_health_connect_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:minWidth="250dp"
+            android:text="@string/launch_health_connect" />
+
+        <Button
+            android:id="@+id/permissions_request_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="8dp"
+            android:minWidth="250dp"
+            android:text="@string/permissions_request"/>
+
+        <Button
+            android:id="@+id/request_route_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:minWidth="250dp"
+            android:text="@string/request_route" />
+
+        <Button
+            android:id="@+id/insert_update_data_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:minWidth="250dp"
+            android:text="@string/insert_update_data" />
+
+        <Button
+            android:id="@+id/seed_random_data_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:minWidth="250dp"
+            android:text="@string/seed_random_data" />
+
+        <Button
+            android:id="@+id/seed_all_data_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:minWidth="250dp"
+            android:text="Seed All Data" />
+
+        <Button
+            android:id="@+id/seed_performance_insert_data_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:minWidth="250dp"
+            android:text="@string/seed_performance_insert_data" />
+
+        <!--  <Button-->
+        <!--      android:id="@+id/seed_performance_insert_data_button_in_parallel"-->
+        <!--      android:layout_width="wrap_content"-->
+        <!--      android:layout_height="wrap_content"-->
+        <!--      android:layout_marginTop="8dp"-->
+        <!--      android:layout_gravity="center_horizontal"-->
+        <!--      android:minWidth="250dp"-->
+        <!--      android:text="@string/seed_performance_insert_data_in_parallel" />-->
+
+        <Button
+            android:id="@+id/seed_performance_read_data_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:minWidth="250dp"
+            android:text="@string/seed_performance_read_data" />
+
+        <Button
+            android:id="@+id/toggle_permission_intent_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:minWidth="250dp"
+            android:text="@string/toggle_permission_intent_filter" />
+
+
+        <Button
+            android:id="@+id/read_data_in_background_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:minWidth="250dp"
+            android:text="@string/read_data_in_background" />
+
+        <Button
+            android:id="@+id/read_data_in_foreground_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:minWidth="250dp"
+            android:text="@string/read_data_in_foreground" />
+
+        <Button
+            android:id="@+id/phr_options_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:minWidth="250dp"
+            android:text="@string/phr_options" />
+
+        <Button
+            android:id="@+id/exit_process_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:minWidth="250dp"
+            android:text="@string/exit_process" />
+
+
+        <Button
+            android:id="@+id/new_screens_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:minWidth="250dp"
+            android:text="@string/new_screens" />
+
+        <Button
+            android:id="@+id/backup_restore_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:minWidth="250dp"
+            android:text="Backup and restore" />
+
+        <Button
+            android:id="@+id/matchmaking_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:minWidth="250dp"
+            android:text="@string/matchmaking_button"/>
+
+        <Button
+            android:id="@+id/access_log_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:minWidth="250dp"
+            android:text="@string/access_log_button"/>
+
+        <Button
+            android:id="@+id/insert_large_amount_of_heart_rate_data_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:minWidth="250dp"
+            android:text="@string/insert_large_hr_data" />
+
+        <Button
+            android:id="@+id/advertise_device_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:minWidth="250dp"
+            android:text="@string/advertise_devices"/>
+    </LinearLayout>
+
+</ScrollView>

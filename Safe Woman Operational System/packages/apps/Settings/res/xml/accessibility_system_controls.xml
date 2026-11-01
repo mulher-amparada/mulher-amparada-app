@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2021 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:settings="http://schemas.android.com/apk/res-auto"
+    android:key="accessibility_system_controls"
+    android:persistent="false"
+    android:title="@string/accessibility_system_controls_title">
+
+    <!-- The item is not specific to Accessibility.
+        The same entry is under System, which is unlikely to be removed,
+        so this is not searchable. -->
+    <Preference
+        android:fragment="com.android.settings.gestures.SystemNavigationGestureSettings"
+        android:key="gesture_system_navigation_input_summary_accessibility"
+        android:persistent="false"
+        android:title="@string/system_navigation_title"
+        settings:searchable="false"
+        settings:controller="com.android.settings.gestures.SystemNavigationPreferenceController"/>
+
+    <!-- The item is not specific to Accessibility.
+        The same entry is under System > Gesture, which is unlikely to be removed,
+        so this is not searchable. -->
+    <Preference
+        android:fragment="com.android.settings.gestures.OneHandedSettings"
+        android:key="gesture_system_navigation_one_handed_accessibility"
+        android:persistent="false"
+        android:title="@string/one_handed_title"
+        settings:searchable="false"
+        settings:controller="com.android.settings.gestures.OneHandedEnablePreferenceController"/>
+
+    <SwitchPreferenceCompat
+        android:key="incall_power_button_behavior"
+        android:title="@string/accessibility_power_button_ends_call_prerefence_title"
+        settings:controller="com.android.settings.accessibility.PowerButtonEndsCallPreferenceController"/>
+
+    <!-- Standard auto-rotation preference that will be shown when device state based auto-rotation
+         settings are NOT available.
+         The item is not specific to Accessibility.
+         The same entry is under Display & touch, which is unlikely to be removed,
+         so this is not searchable.-->
+    <SwitchPreferenceCompat
+        android:key="toggle_lock_screen_rotation_preference"
+        android:persistent="false"
+        android:title="@string/accelerometer_title"
+        settings:searchable="false"
+        settings:controller="com.android.settings.accessibility.LockScreenRotationPreferenceController"/>
+
+    <!-- Auto-rotation preference that will be shown when device state based auto-rotation settings
+         are available.
+         The item is not specific to Accessibility.
+         The same entry is under Display & touch, which is unlikely to be removed,
+         so this is not searchable. -->
+    <Preference
+        android:key="device_state_auto_rotate_accessibility"
+        android:persistent="false"
+        android:title="@string/accelerometer_title"
+        android:fragment="com.android.settings.display.DeviceStateAutoRotateDetailsFragment"
+        settings:searchable="false"
+        settings:controller="com.android.settings.display.DeviceStateAutoRotateOverviewController"/>
+
+</PreferenceScreen>

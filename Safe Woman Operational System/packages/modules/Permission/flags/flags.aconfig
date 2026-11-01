@@ -1,0 +1,211 @@
+package: "com.android.permission.flags"
+container: "com.android.permission"
+
+flag {
+    name: "private_profile_supported"
+    is_exported: true
+    namespace: "permissions"
+    description: "This flag is used to support private profile in safety center"
+    bug: "286539356"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "private_profile_title_api"
+    is_exported: true
+    namespace: "permissions"
+    description: "This flag is used to guard the private profile title api in safety center"
+    bug: "286539356"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "wear_privacy_dashboard_enabled_read_only"
+    is_exported: true
+    namespace: "wear_security"
+    description: "This flag is used to support Privacy dashboard for Wear"
+    bug: "309721061"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "archiving_read_only"
+    is_exported: true
+    namespace: "permissions"
+    description: "Feature flag to enable the archiving feature."
+    bug: "278553670"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "add_banners_to_privacy_sensitive_apps_for_aaos"
+    is_exported: true
+    namespace: "permissions"
+    description: "Flag to display warning banners to privacy sensitive apps in AAOS."
+    bug: "327489942"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "enhanced_confirmation_backport_enabled"
+    is_exported: true
+    namespace: "permissions"
+    description: "Flag to backport enhanced confirmation in permission mainline to T and U."
+    bug: "347876543"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "enable_coarse_fine_location_prompt_for_aaos"
+    is_exported: true
+    namespace: "permissions"
+    description: "Feature flag to enable downgrading to coarse location on Automotive"
+    bug: "346369736"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "odad_notifications_supported"
+    is_exported: true
+    namespace: "permissions"
+    description: "This flag is used to enable Safety Center notifications support for ODAD"
+    bug: "356910008"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "safety_center_issue_only_affects_group_status"
+    is_exported: true
+    namespace: "permissions"
+    description: "This flag is used by Safety Center to affect the status light of an entry group when an issue only source pushes a warning"
+    bug: "356910111"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "safety_center_enabled_no_device_config"
+    is_exported: true
+    namespace: "permissions"
+    description: "This flag disables the usage of DeviceConfig to enable/disable Safety Center on UDC+ (enabled by default instead)"
+    bug: "354670125"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "app_permission_fragment_uses_preferences"
+    is_exported: true
+    namespace: "permissions"
+    description: "This flag enables AppPermissionFragment rather than LegacyAppPermissionFragment"
+    bug: "349675008"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "cross_user_role_enabled"
+    is_exported: true
+    namespace: "permissions"
+    description: "This flag enables cross-user roles support and API"
+    bug: "367732307"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "cross_user_role_ux_bugfix_enabled"
+    is_exported: true
+    namespace: "permissions"
+    description: "This flag enables cross-user roles support ux bug fixes"
+    bug: "367732307"
+    is_fixed_read_only: true
+    metadata {
+      purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "permission_timeline_attribution_label_fix"
+    is_exported: true
+    namespace: "permissions"
+    description: "This flag is used for the attribution label fix on permission timeline page"
+    bug: "369606734"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "wear_compose_material3"
+    is_exported: true
+    namespace: "permissions"
+    description: "This flag enables material3 design system for wear ui components"
+    bug: "370489422"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "expressive_design_enabled"
+    is_exported: true
+    namespace: "permissions"
+    description: "This flag is used to enable Expressive Design for Settings pages inside PermissionController"
+    bug: "375480184"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "default_apps_recommendation_enabled"
+    is_exported: true
+    namespace: "permissions"
+    description: "This flag enables the recommended section in default apps"
+    bug: "388234667"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "fix_safety_center_touch_target"
+    is_exported: true
+    namespace: "permissions"
+    description: "This flag fixes an issue with the SafetyCenterTouchTarget code"
+    bug: "399872661"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "system_financed_device_controller"
+    is_exported: true
+    namespace: "growth_dlc"
+    description: "Flag to expose SYSTEM_FINANCED_DEVICE_CONTROLLER as a SystemApi"
+    bug: "402301589"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "app_function_service_enabled"
+    namespace: "permissions"
+    description: "This flag is used to enable device state app functions service"
+    bug: "409105506"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "safety_center_notification_style"
+    namespace: "permissions"
+    description: "This flag enabled big text style for safety center notification"
+    bug: "443322314"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "migrate_to_new_safety_center_ui_features"
+    namespace: "safety_center"
+    description: "Migrates permission module functionality to better support latest Safety Center UI in the Settings app"
+    bug: "424092847"
+}
+
+flag {
+    name: "better_safety_center_source_tracking_on_refresh"
+    namespace: "safety_center"
+    description: "Calculates untracked sources based on internal data presence for refresh broadcasts"
+    bug: "465410831"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}

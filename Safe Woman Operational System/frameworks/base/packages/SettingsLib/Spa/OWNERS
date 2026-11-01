@@ -1,0 +1,9 @@
+include platform/frameworks/base:/packages/SettingsLib/OWNERS
+
+liulinn@google.com
+
+# Emergency approvers in case the above are not available
+zhibinliu@google.com
+chaohuiw@google.com
+pierreqian@google.com
+lijun@google.com

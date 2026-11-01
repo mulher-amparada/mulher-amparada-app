@@ -1,0 +1,366 @@
+package: "android.view.accessibility"
+container: "system"
+
+# NOTE: Keep alphabetized to help limit merge conflicts from multiple simultaneous editors.
+
+flag {
+    name: "a11y_character_in_window_api"
+    namespace: "accessibility"
+    description: "Enables new extra data key for an AccessibilityService to request character bounds in unmagnified window coordinates."
+    bug: "375429616"
+    is_exported: true
+}
+
+flag {
+    name: "a11y_expansion_state_api"
+    namespace: "accessibility"
+    description: "Enables new APIs for an app to convey if a node is expanded or collapsed."
+    bug: "362782536"
+    is_exported: true
+}
+
+flag {
+    name: "a11y_extra_rendering_info_color_additions"
+    namespace: "accessibility"
+    is_exported: true
+    description: "Adds a public Builder API for AccessibilityNodeInfo.ExtraRenderingInfo and adds color properties"
+    bug: "452371989"
+}
+
+flag {
+    name: "a11y_is_required_api"
+    namespace: "accessibility"
+    description: "Adds an API to indicate whether a form field (or similar element) is required."
+    bug: "362784403"
+    is_exported: true
+}
+
+flag {
+    name: "a11y_is_visited_api"
+    namespace: "accessibility"
+    description: "Adds an API to indicate whether a URL has been visited or not."
+    bug: "391469786"
+    is_exported: true
+}
+
+flag {
+    name: "a11y_layout_based_actions_api"
+    namespace: "accessibility"
+    description: "Enables new extra data key for an AccessibilityService to request layout-based actions."
+    bug: "455070192"
+    is_exported: true
+}
+
+flag {
+    name: "a11y_math_api"
+    namespace: "accessibility"
+    description: "Enables new APIs for an app to convey mathematical expressions."
+    bug: "394599112"
+    is_exported: true
+}
+
+flag {
+    name: "a11y_overlay_callbacks"
+    is_exported: true
+    namespace: "accessibility"
+    description: "Whether to allow the passing of result callbacks when attaching a11y overlays."
+    bug: "304478691"
+}
+
+flag {
+    name: "a11y_selection_api"
+    namespace: "accessibility"
+    description: "Enables new APIs for an AccessibilityService to control selection across nodes."
+    bug: "362782866"
+    is_exported: true
+}
+
+flag {
+    name: "a11y_selection_api_invalid_text_selection"
+    namespace: "accessibility"
+    description: "Sets multi-node selection to null if setTextSelection called with invalid indexes."
+    bug: "464963130"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "a11y_selection_position_app_getters_api"
+    namespace: "accessibility"
+    description: "Enables new APIs for an app to get the nodes from a SelectionPosition without a direct node instance."
+    bug: "362783892"
+    is_exported: true
+}
+
+flag {
+    name: "a11y_sort_direction_api"
+    namespace: "accessibility"
+    description: "Enables new APIs to convey the sort direction applied to the data associated with this node."
+    bug: "411187064"
+    is_exported: true
+}
+
+flag {
+    name: "a11y_text_change_types_api"
+    namespace: "accessibility"
+    description: "Enables sending specific text change types (e.g., in composition, committed by IME) in AccessibilityEvent"
+    bug: "436338406"
+    is_exported: true
+}
+
+flag {
+    name: "braille_display_hid"
+    namespace: "accessibility"
+    is_exported: true
+    description: "Enables new APIs for an AccessibilityService to communicate with a HID Braille display"
+    bug: "303522222"
+}
+
+flag {
+    name: "allow_a11y_button_on_large_screen"
+    namespace: "accessibility"
+    description: "Allows the accessibility button location setting to be configured on large screen devices with gesture navigation."
+    bug: "477701122"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "collection_info_item_counts"
+    namespace: "accessibility"
+    is_exported: true
+    description: "Fields for total items and the number of important for accessibility items in a collection"
+    bug: "302376158"
+}
+
+flag {
+    name: "deprecate_accessibility_announcement_apis"
+    namespace: "accessibility"
+    description: "Controls the deprecation of platform APIs related to disruptive accessibility announcements"
+    bug: "376727542"
+    is_exported: true
+}
+
+flag {
+    name: "deprecate_ani_label_for_apis"
+    namespace: "accessibility"
+    description: "Controls the deprecation of AccessibilityNodeInfo labelFor apis"
+    bug: "333783827"
+    is_exported: true
+}
+
+flag {
+    name: "disable_edt_for_autofill_inline_view"
+    namespace: "accessibility"
+    description: "Disables expanded dark theme for the autofill inline view that is embedded in an IME"
+    bug: "438345051"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "embedded_ui_uses_host_window_id"
+    namespace: "accessibility"
+    description: "Updates A11yNodeInfos & A11yEvents from embedded windows to return the ID of their host window from getWindowId()"
+    bug: "452744032"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "enable_a11y_top_row_shortcut"
+    namespace: "accessibility"
+    description: "Support physical keyboard top row accessibility key shortcut"
+    bug: "440411783"
+}
+
+flag {
+    name: "enable_captions_easy_reader"
+    namespace: "tv_os"
+    description: "Adds easy reader (simplified language) support to caption settings."
+    bug: "478309695"
+}
+
+flag {
+    name: "enable_refresh_window_info"
+    namespace: "accessibility"
+    is_exported: true
+    description: "Makes AccessibilityWindowInfo#refresh public for window state checks"
+    bug: "405371739"
+}
+
+flag {
+    name: "enable_trusted_accessibility_service_api"
+    namespace: "accessibility"
+    description: "API that allows an app to enable its own accessibility service if that service is trusted."
+    bug: "418057329"
+    is_exported: true
+}
+
+flag {
+    name: "fix_a11y_lock_screen_jank"
+    namespace: "accessibility"
+    description: "Improves the accessibility lock screen transition by locking immediately and using the smooth 'key' animation path."
+    bug: "436933192"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "fix_add_extra_data_to_accessibility_node_info_delegation"
+    namespace: "accessibility"
+    description: "Fix missing delegation to AccessibilityDelegate in View#addExtraDataToAccessibilityNodeInfo."
+    bug: "465180578"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "flash_notification_system_api"
+    namespace: "accessibility"
+    is_exported: true
+    description: "Makes flash notification APIs as system APIs for calling from mainline module"
+    bug: "303131332"
+}
+
+flag {
+    name: "force_invert_color"
+    namespace: "accessibility"
+    description: "Enable force force-dark for smart inversion and dark theme everywhere"
+    bug: "282821643"
+}
+
+flag {
+    name: "global_action_media_play_pause"
+    namespace: "accessibility"
+    description: "Allow AccessibilityService to perform GLOBAL_ACTION_MEDIA_PLAY_PAUSE"
+    bug: "333881343"
+    is_exported: true
+}
+
+flag {
+    name: "global_action_menu"
+    namespace: "accessibility"
+    description: "Allow AccessibilityService to perform GLOBAL_ACTION_MENU"
+    bug: "333881343"
+    is_exported: true
+}
+
+flag {
+    name: "granular_scrolling"
+    namespace: "accessibility"
+    is_exported: true
+    description: "Allow the use of granular scrolling. This allows scrollable nodes to scroll by increments other than a full screen"
+    bug: "302376158"
+}
+
+flag {
+    name: "indeterminate_range_info"
+    namespace: "accessibility"
+    description: "Creates a way to create an INDETERMINATE RangeInfo"
+    bug: "376108874"
+    is_exported: true
+}
+
+flag {
+    name: "motion_event_observing"
+    is_exported: true
+    namespace: "accessibility"
+    description: "Allows accessibility services to intercept but not consume motion events from specified sources."
+    bug: "297595990"
+}
+
+flag {
+    name: "prevent_a11y_event_null_record"
+    namespace: "accessibility"
+    description: "Prevent apps adding null record via accessibilityEvent#appendRecord"
+    bug: "454269244"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "prevent_leaking_viewrootimpl"
+    namespace: "accessibility"
+    description: "Clear pending messages and callbacks of the handler in AccessibilityInteractionController when the ViewRootImpl is detached from Window to prevent leaking ViewRootImpl"
+    bug: "320701910"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "quick_access_shortcut_type"
+    namespace: "accessibility"
+    description: "Add a new QUICK_ACCESS accessibility shortcut type used by the Quick Access dialog"
+    bug: "455679688"
+}
+
+flag {
+    name: "reduce_window_content_changed_event_throttle"
+    namespace: "accessibility"
+    description: "Reduces the throttle of AccessibilityEvent of TYPE_WINDOW_CONTENT_CHANGED"
+    bug: "277305460"
+}
+
+flag {
+    name: "remove_child_hover_check_for_touch_exploration"
+    namespace: "accessibility"
+    description: "Remove a check for a hovered child that prevents touch events from being delegated to non-direct descendants"
+    bug: "304770837"
+}
+
+flag {
+    name: "request_rectangle_migrate_legacy_apis"
+    namespace: "accessibility"
+    description: "Update calls to legacy requestRectangleOnScreen APIs to use the new API and pass a source parameter"
+    bug: "456809623"
+}
+
+flag {
+    name: "restrict_viewgroup_accessibility_event_population"
+    namespace: "accessibility"
+    description: "Impose additional restrictions on which ViewGroup children may populate AccessibilityEvents based on accessibility importance and data sensitivity"
+    bug: "455971973"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "supplemental_description"
+    namespace: "accessibility"
+    description: "Feature flag for supplemental description api"
+    bug: "375266174"
+    is_exported: true
+}
+
+flag {
+    name: "support_multiple_labeledby"
+    namespace: "accessibility"
+    description: "Feature flag for supporting multiple labels in AccessibilityNodeInfo labeledby api"
+    bug: "333780959"
+    is_exported: true
+}
+
+flag {
+    name: "support_system_pinch_zoom_opt_out_apis"
+    namespace: "accessibility"
+    description: "Feature flag for declaring system pinch zoom opt-out apis"
+    bug: "315089687"
+}
+
+flag {
+    name: "tri_state_checked"
+    namespace: "accessibility"
+    description: "Feature flag for adding tri-state checked api"
+    bug: "333784774"
+    is_exported: true
+}

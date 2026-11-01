@@ -1,0 +1,118 @@
+{
+  "resourceType": "Organization",
+  "id": "organization-2",
+  "identifier": [
+    {
+      "use": "official",
+      "system": "urn:oid:1.2.345.6789",
+      "value": "HCH"
+    }
+  ],
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/organization-type",
+          "code": "prov",
+          "display": "Healthcare Provider"
+        },
+        {
+          "system": "http://snomed.info/sct",
+          "code": "405608006",
+          "display": "Academic Medical Center"
+        }
+      ]
+    }
+  ],
+  "name": "Health Connect Hospital",
+  "alias": [
+    "HCH"
+  ],
+  "telecom": [
+    {
+      "system": "phone",
+      "value": "01111 222222",
+      "use": "work"
+    },
+    {
+      "system": "email",
+      "value": "info@healthconnecthospital.org",
+      "use": "work"
+    }
+  ],
+  "address": [
+    {
+      "use": "work",
+      "type": "physical",
+      "line": [
+        "6 Pancras Square"
+      ],
+      "city": "London",
+      "postalCode": "N1C 4AG",
+      "country": "UK"
+    },
+    {
+      "use": "work",
+      "type": "postal",
+      "line": [
+        "PO Box 1234"
+      ],
+      "city": "London",
+      "postalCode": "N1C 4AG",
+      "country": "UK"
+    }
+  ],
+  "contact": [
+    {
+      "purpose": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/contactentity-type",
+            "code": "ADMIN",
+            "display": "Administrative"
+          }
+        ]
+      },
+      "telecom": [
+        {
+          "system": "email",
+          "value": "admin@healthconnecthospital.org"
+        }
+      ]
+    },
+    {
+      "purpose": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/contactentity-type",
+            "code": "PRESS",
+            "display": "Press"
+          }
+        ]
+      },
+      "telecom": [
+        {
+          "system": "email",
+          "value": "press@healthconnecthospital.org"
+        }
+      ]
+    },
+    {
+      "purpose": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/contactentity-type",
+            "code": "PATINF",
+            "display": "Patient"
+          }
+        ]
+      },
+      "telecom": [
+        {
+          "system": "email",
+          "value": "patient@healthconnecthospital.org"
+        }
+      ]
+    }
+  ]
+}

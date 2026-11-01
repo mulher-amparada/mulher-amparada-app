@@ -1,0 +1,27 @@
+{
+  "presubmit": [
+    {
+      "name": "SerialTests",
+      "file_patterns": [
+        "core/java/android/hardware/serial/.*"
+      ]
+    }
+  ],
+  "wear-robolectric-postsubmit": [
+    {
+      "name": "ClockworkSettingsRoboTests",
+      "host": true
+    },
+    {
+      "name": "ClockworkSetupWizardRoboTests",
+      "host": true
+    }
+  ],
+  "wear-robolectric-presubmit": [
+    {
+      "name": "ClockworkSettingsRoboTests",
+      "host": true
+    }
+  ]
+
+}

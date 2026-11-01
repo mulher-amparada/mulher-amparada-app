@@ -1,0 +1,21 @@
+{
+  "presubmit": [
+    {
+      "name": "CtsPermissionPolicyTestCases",
+      "options": [
+        {
+          "include-filter": "android.permissionpolicy.cts.PermissionPolicyTest#platformPermissionPolicyIsUnaltered"
+        },
+        {
+          "include-filter": "android.permissionpolicy.cts.RuntimePermissionProperties"
+        }
+      ]
+    }
+  ],
+  // v2/sysui/suite/test-mapping-sysui-screenshot-test
+  "sysui-screenshot-test": [
+    {
+      "name": "SystemUIGoogleScreenshotTests_Presubmit"
+    }
+  ]
+}

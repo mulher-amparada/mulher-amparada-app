@@ -1,0 +1,455 @@
+/*
+ * Copyright (C) 2025 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.android.healthconnect.controller.tests.datasources.api
+
+import android.content.Context
+import android.health.connect.HealthConnectException
+import android.health.connect.HealthConnectManager
+import android.health.connect.ReadRecordsRequestUsingFilters
+import android.health.connect.ReadRecordsResponse
+import android.health.connect.datatypes.Record
+import android.health.connect.datatypes.SleepSessionRecord
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import com.android.healthconnect.controller.data.entries.api.LoadEntriesHelper
+import com.android.healthconnect.controller.data.entries.datenavigation.DateNavigationPeriod
+import com.android.healthconnect.controller.data.formatters.MenstruationPeriodFormatter
+import com.android.healthconnect.controller.data.formatters.shared.HealthDataEntryFormatter
+import com.android.healthconnect.controller.datasources.api.LoadPriorityEntriesInput
+import com.android.healthconnect.controller.datasources.api.LoadPriorityEntriesUseCase
+import com.android.healthconnect.controller.permissions.data.FitnessPermissionType
+import com.android.healthconnect.controller.shared.HealthPermissionToDatatypeMapper
+import com.android.healthconnect.controller.shared.app.AppInfoReader
+import com.android.healthconnect.controller.shared.app.MedicalDataSourceReader
+import com.android.healthconnect.controller.shared.usecase.UseCaseResults
+import com.android.healthconnect.controller.tests.devices.api.FakeGetCurrentDeviceIdUseCase
+import com.android.healthconnect.controller.tests.utils.FakeUseCaseRule
+import com.android.healthconnect.controller.tests.utils.TEST_APP
+import com.android.healthconnect.controller.tests.utils.TEST_APP_2
+import com.android.healthconnect.controller.tests.utils.TEST_APP_3
+import com.android.healthconnect.controller.tests.utils.TEST_APP_PACKAGE_NAME
+import com.android.healthconnect.controller.tests.utils.TEST_APP_PACKAGE_NAME_2
+import com.android.healthconnect.controller.tests.utils.TEST_APP_PACKAGE_NAME_3
+import com.android.healthconnect.controller.tests.utils.createFakeAppInfoReader
+import com.android.healthconnect.controller.tests.utils.di.DEFAULT_USE_CASE_EXCEPTION_MESSAGE
+import com.android.healthconnect.controller.tests.utils.doReturnResult
+import com.android.healthconnect.controller.tests.utils.forDataType
+import com.android.healthconnect.controller.tests.utils.fromDataSource
+import com.android.healthconnect.controller.tests.utils.fromTimeRange
+import com.android.healthconnect.controller.tests.utils.getSleepSessionRecords
+import com.android.healthconnect.controller.tests.utils.setLocale
+import com.android.healthconnect.controller.tests.utils.verifySleepSessionListsEqual
+import com.android.healthconnect.controller.utils.toInstantAtStartOfDay
+import com.google.common.truth.Truth.assertThat
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.Locale
+import java.util.TimeZone
+import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mockito
+import org.mockito.kotlin.any
+import org.mockito.kotlin.argThat
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.stub
+import org.mockito.kotlin.times
+
+@OptIn(ExperimentalCoroutinesApi::class)
+@HiltAndroidTest
+@RunWith(AndroidJUnit4::class)
+class LoadPriorityEntriesUseCaseTest {
+
+    @get:Rule val hiltRule = HiltAndroidRule(this)
+    @get:Rule val fakeUseCaseRule = FakeUseCaseRule()
+
+    @BindValue lateinit var appInfoReader: AppInfoReader
+    private lateinit var context: Context
+
+    private val loadPriorityListUseCase = fakeUseCaseRule.watch(FakeLoadPriorityListUseCase())
+    private lateinit var loadEntriesHelper: LoadEntriesHelper
+    private val healthConnectManager: HealthConnectManager = mock()
+    private lateinit var loadPriorityEntriesUseCase: LoadPriorityEntriesUseCase
+    private val fakeGetCurrentDeviceIdUseCase =
+        fakeUseCaseRule.watch(FakeGetCurrentDeviceIdUseCase())
+
+    @Inject lateinit var healthDataEntryFormatter: HealthDataEntryFormatter
+    @Inject lateinit var menstruationPeriodFormatter: MenstruationPeriodFormatter
+    @Inject lateinit var dataSourceReader: MedicalDataSourceReader
+
+    @Before
+    fun setup() = runTest {
+        appInfoReader = createFakeAppInfoReader()
+        hiltRule.inject()
+        context = InstrumentationRegistry.getInstrumentation().context
+        context.setLocale(Locale.US)
+        TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.of("UTC")))
+        loadEntriesHelper =
+            LoadEntriesHelper(
+                context,
+                Dispatchers.Main,
+                healthDataEntryFormatter,
+                menstruationPeriodFormatter,
+                healthConnectManager,
+                dataSourceReader,
+                fakeGetCurrentDeviceIdUseCase,
+            )
+        loadPriorityEntriesUseCase =
+            LoadPriorityEntriesUseCase(loadEntriesHelper, loadPriorityListUseCase, Dispatchers.Main)
+    }
+
+    @Test
+    fun invoke_onePriorityApp_doesNotIncludeNonPriorityData() = runTest {
+        val sleepDate = LocalDate.of(2023, 2, 13)
+        loadPriorityListUseCase.setPriorityList(listOf(TEST_APP))
+
+        // 2h
+        val SLEEP_SESSION_1_START_DATE = Instant.parse("2023-02-13T16:00:00.00Z")
+        val SLEEP_SESSION_1_END_DATE = Instant.parse("2023-02-13T18:00:00.00Z")
+
+        // 5h 45m
+        val SLEEP_SESSION_2_START_DATE = Instant.parse("2023-02-13T17:30:00.00Z")
+        val SLEEP_SESSION_2_END_DATE = Instant.parse("2023-02-13T23:15:00.00Z")
+
+        // 7h 20m - not on the priority list
+        val SLEEP_SESSION_3_START_DATE = Instant.parse("2023-02-13T01:00:00.00Z")
+        val SLEEP_SESSION_3_END_DATE = Instant.parse("2023-02-13T23:20:00.00Z")
+
+        mockEntriesResult(
+            packageName = TEST_APP_PACKAGE_NAME,
+            fitnessPermissionType = FitnessPermissionType.SLEEP,
+            queryDate = sleepDate,
+            records =
+                getSleepSessionRecords(
+                    listOf(
+                        Pair(SLEEP_SESSION_1_START_DATE, SLEEP_SESSION_1_END_DATE),
+                        Pair(SLEEP_SESSION_2_START_DATE, SLEEP_SESSION_2_END_DATE),
+                    )
+                ),
+        )
+
+        mockEntriesResult(
+            packageName = TEST_APP_PACKAGE_NAME_2,
+            fitnessPermissionType = FitnessPermissionType.SLEEP,
+            queryDate = sleepDate,
+            records =
+                getSleepSessionRecords(
+                    listOf(Pair(SLEEP_SESSION_3_START_DATE, SLEEP_SESSION_3_END_DATE))
+                ),
+        )
+
+        val result =
+            loadPriorityEntriesUseCase.invoke(
+                LoadPriorityEntriesInput(FitnessPermissionType.SLEEP, sleepDate)
+            )
+        assertThat(result is UseCaseResults.Success).isTrue()
+        verifySleepSessionListsEqual(
+            actual = (result as UseCaseResults.Success).data,
+            expected =
+                getSleepSessionRecords(
+                    listOf(
+                        Pair(SLEEP_SESSION_2_START_DATE, SLEEP_SESSION_2_END_DATE),
+                        Pair(SLEEP_SESSION_1_START_DATE, SLEEP_SESSION_1_END_DATE),
+                    )
+                ),
+        )
+    }
+
+    @Test
+    fun invoke_twoPriorityApps_doesNotIncludeNonPriorityData() = runTest {
+        val sleepDate = LocalDate.of(2023, 2, 13)
+        val pastSleepDate = LocalDate.of(2023, 2, 12)
+
+        loadPriorityListUseCase.setPriorityList(listOf(TEST_APP, TEST_APP_2))
+
+        // 2h
+        val SLEEP_SESSION_1_START_DATE = Instant.parse("2023-02-13T16:00:00.00Z")
+        val SLEEP_SESSION_1_END_DATE = Instant.parse("2023-02-13T18:00:00.00Z")
+
+        // 5h 45m
+        val SLEEP_SESSION_2_START_DATE = Instant.parse("2023-02-13T17:30:00.00Z")
+        val SLEEP_SESSION_2_END_DATE = Instant.parse("2023-02-13T23:15:00.00Z")
+
+        // 7h 20m
+        val SLEEP_SESSION_3_START_DATE = Instant.parse("2023-02-13T01:00:00.00Z")
+        val SLEEP_SESSION_3_END_DATE = Instant.parse("2023-02-13T23:20:00.00Z")
+
+        // Should be partially included in aggregation
+        val SLEEP_SESSION_4_START_DATE = Instant.parse("2023-02-12T16:00:00.00Z")
+        val SLEEP_SESSION_4_END_DATE = Instant.parse("2023-02-12T23:20:00.00Z")
+
+        // Should not be included in aggregation
+        val SLEEP_SESSION_5_START_DATE = Instant.parse("2023-02-12T12:00:00.00Z")
+        val SLEEP_SESSION_5_END_DATE = Instant.parse("2023-02-12T14:20:00.00Z")
+
+        // Non priority session
+        val SLEEP_SESSION_6_START_DATE = Instant.parse("2023-02-13T00:10:00.00Z")
+        val SLEEP_SESSION_6_END_DATE = Instant.parse("2023-02-13T23:20:00.00Z")
+
+        mockEntriesResult(
+            packageName = TEST_APP_PACKAGE_NAME,
+            fitnessPermissionType = FitnessPermissionType.SLEEP,
+            queryDate = sleepDate,
+            records =
+                getSleepSessionRecords(
+                    listOf(Pair(SLEEP_SESSION_1_START_DATE, SLEEP_SESSION_1_END_DATE))
+                ),
+        )
+
+        mockEntriesResult(
+            packageName = TEST_APP_PACKAGE_NAME_2,
+            fitnessPermissionType = FitnessPermissionType.SLEEP,
+            queryDate = sleepDate,
+            records =
+                getSleepSessionRecords(
+                    listOf(Pair(SLEEP_SESSION_2_START_DATE, SLEEP_SESSION_2_END_DATE))
+                ),
+        )
+
+        mockEntriesResult(
+            packageName = TEST_APP_PACKAGE_NAME,
+            fitnessPermissionType = FitnessPermissionType.SLEEP,
+            queryDate = pastSleepDate,
+            records =
+                getSleepSessionRecords(
+                    listOf(Pair(SLEEP_SESSION_4_START_DATE, SLEEP_SESSION_4_END_DATE))
+                ),
+        )
+
+        mockEntriesResult(
+            packageName = TEST_APP_PACKAGE_NAME_2,
+            fitnessPermissionType = FitnessPermissionType.SLEEP,
+            queryDate = pastSleepDate,
+            records =
+                getSleepSessionRecords(
+                    listOf(
+                        Pair(SLEEP_SESSION_3_START_DATE, SLEEP_SESSION_3_END_DATE),
+                        Pair(SLEEP_SESSION_5_START_DATE, SLEEP_SESSION_5_END_DATE),
+                    )
+                ),
+        )
+
+        mockEntriesResult(
+            packageName = TEST_APP_PACKAGE_NAME_3,
+            fitnessPermissionType = FitnessPermissionType.SLEEP,
+            queryDate = sleepDate,
+            records =
+                getSleepSessionRecords(
+                    listOf(Pair(SLEEP_SESSION_6_START_DATE, SLEEP_SESSION_6_END_DATE))
+                ),
+        )
+
+        val result =
+            loadPriorityEntriesUseCase.invoke(
+                LoadPriorityEntriesInput(FitnessPermissionType.SLEEP, sleepDate)
+            )
+        assertThat(result is UseCaseResults.Success).isTrue()
+        verifySleepSessionListsEqual(
+            actual = (result as UseCaseResults.Success).data,
+            expected =
+                getSleepSessionRecords(
+                    listOf(
+                        Pair(SLEEP_SESSION_2_START_DATE, SLEEP_SESSION_2_END_DATE),
+                        Pair(SLEEP_SESSION_1_START_DATE, SLEEP_SESSION_1_END_DATE),
+                    )
+                ),
+        )
+    }
+
+    @Test
+    fun invoke_twoPriorityApps_noData_returnsEmptyList() = runTest {
+        // No priority sessions on this day
+        val noDataDate = LocalDate.of(2023, 2, 14)
+        val sleepDate = LocalDate.of(2023, 2, 13)
+        val pastSleepDate = LocalDate.of(2023, 2, 12)
+        loadPriorityListUseCase.setPriorityList(listOf(TEST_APP, TEST_APP_2))
+
+        // 2h
+        val SLEEP_SESSION_1_START_DATE = Instant.parse("2023-02-13T16:00:00.00Z")
+        val SLEEP_SESSION_1_END_DATE = Instant.parse("2023-02-13T18:00:00.00Z")
+
+        // 5h 45m
+        val SLEEP_SESSION_2_START_DATE = Instant.parse("2023-02-13T17:30:00.00Z")
+        val SLEEP_SESSION_2_END_DATE = Instant.parse("2023-02-13T23:15:00.00Z")
+
+        // 7h 20m
+        val SLEEP_SESSION_3_START_DATE = Instant.parse("2023-02-13T01:00:00.00Z")
+        val SLEEP_SESSION_3_END_DATE = Instant.parse("2023-02-13T23:20:00.00Z")
+
+        // Should be partially included in aggregation
+        val SLEEP_SESSION_4_START_DATE = Instant.parse("2023-02-12T16:00:00.00Z")
+        val SLEEP_SESSION_4_END_DATE = Instant.parse("2023-02-12T23:20:00.00Z")
+
+        // Should not be included in aggregation
+        val SLEEP_SESSION_5_START_DATE = Instant.parse("2023-02-12T12:00:00.00Z")
+        val SLEEP_SESSION_5_END_DATE = Instant.parse("2023-02-12T14:20:00.00Z")
+
+        // Non priority session
+        val SLEEP_SESSION_6_START_DATE = Instant.parse("2023-02-14T00:10:00.00Z")
+        val SLEEP_SESSION_6_END_DATE = Instant.parse("2023-02-14T23:20:00.00Z")
+
+        mockEntriesResult(
+            packageName = TEST_APP_PACKAGE_NAME,
+            fitnessPermissionType = FitnessPermissionType.SLEEP,
+            queryDate = noDataDate,
+            records = listOf(),
+        )
+
+        mockEntriesResult(
+            packageName = TEST_APP_PACKAGE_NAME_2,
+            fitnessPermissionType = FitnessPermissionType.SLEEP,
+            queryDate = noDataDate,
+            records = listOf(),
+        )
+
+        mockEntriesResult(
+            packageName = TEST_APP_PACKAGE_NAME,
+            fitnessPermissionType = FitnessPermissionType.SLEEP,
+            queryDate = sleepDate,
+            records =
+                getSleepSessionRecords(
+                    listOf(Pair(SLEEP_SESSION_1_START_DATE, SLEEP_SESSION_1_END_DATE))
+                ),
+        )
+
+        mockEntriesResult(
+            packageName = TEST_APP_PACKAGE_NAME_2,
+            fitnessPermissionType = FitnessPermissionType.SLEEP,
+            queryDate = sleepDate,
+            records =
+                getSleepSessionRecords(
+                    listOf(Pair(SLEEP_SESSION_2_START_DATE, SLEEP_SESSION_2_END_DATE))
+                ),
+        )
+
+        mockEntriesResult(
+            packageName = TEST_APP_PACKAGE_NAME,
+            fitnessPermissionType = FitnessPermissionType.SLEEP,
+            queryDate = pastSleepDate,
+            records =
+                getSleepSessionRecords(
+                    listOf(Pair(SLEEP_SESSION_4_START_DATE, SLEEP_SESSION_4_END_DATE))
+                ),
+        )
+
+        mockEntriesResult(
+            packageName = TEST_APP_PACKAGE_NAME_2,
+            fitnessPermissionType = FitnessPermissionType.SLEEP,
+            queryDate = pastSleepDate,
+            records =
+                getSleepSessionRecords(
+                    listOf(
+                        Pair(SLEEP_SESSION_3_START_DATE, SLEEP_SESSION_3_END_DATE),
+                        Pair(SLEEP_SESSION_5_START_DATE, SLEEP_SESSION_5_END_DATE),
+                    )
+                ),
+        )
+
+        mockEntriesResult(
+            packageName = TEST_APP_PACKAGE_NAME_3,
+            fitnessPermissionType = FitnessPermissionType.SLEEP,
+            queryDate = sleepDate,
+            records =
+                getSleepSessionRecords(
+                    listOf(Pair(SLEEP_SESSION_6_START_DATE, SLEEP_SESSION_6_END_DATE))
+                ),
+        )
+
+        val result =
+            loadPriorityEntriesUseCase.invoke(
+                LoadPriorityEntriesInput(FitnessPermissionType.SLEEP, noDataDate)
+            )
+        assertThat(result is UseCaseResults.Success).isTrue()
+        assertThat((result as UseCaseResults.Success).data).isEmpty()
+    }
+
+    @Test
+    fun invoke_whenPriorityFails_returnsFailure() = runTest {
+        val queryDate = LocalDate.of(2023, 1, 4)
+        loadPriorityListUseCase.setForceFail(true)
+
+        val result =
+            loadPriorityEntriesUseCase.invoke(
+                LoadPriorityEntriesInput(FitnessPermissionType.SLEEP, queryDate)
+            )
+        assertThat(result is UseCaseResults.Failed).isTrue()
+        assertThat((result as UseCaseResults.Failed).exception.message)
+            .isEqualTo(DEFAULT_USE_CASE_EXCEPTION_MESSAGE)
+        Mockito.verify(healthConnectManager, times(0))
+            .readRecords<SleepSessionRecord>(any(), any(), any())
+    }
+
+    @Test
+    fun invoke_whenLoadEntriesHelperFails_returnsFailure() = runTest {
+        val queryDate = LocalDate.of(2023, 1, 4)
+        loadPriorityListUseCase.setPriorityList(listOf(TEST_APP_2, TEST_APP_3))
+        healthConnectManager.stub {
+            on { readRecords<SleepSessionRecord>(any(), any(), any()) } doReturnResult
+                Result.failure<ReadRecordsResponse<SleepSessionRecord>>(
+                    HealthConnectException(HealthConnectException.ERROR_UNKNOWN)
+                )
+        }
+
+        val result =
+            loadPriorityEntriesUseCase.invoke(
+                LoadPriorityEntriesInput(FitnessPermissionType.SLEEP, queryDate)
+            )
+        assertThat(result is UseCaseResults.Failed).isTrue()
+        assertThat((result as UseCaseResults.Failed).exception is HealthConnectException).isTrue()
+        assertThat((result.exception as HealthConnectException).errorCode)
+            .isEqualTo(HealthConnectException.ERROR_UNKNOWN)
+    }
+
+    private fun mockEntriesResult(
+        packageName: String,
+        fitnessPermissionType: FitnessPermissionType,
+        queryDate: LocalDate,
+        records: List<Record>,
+    ) {
+        val timeFilterRange =
+            loadEntriesHelper.getTimeFilter(
+                queryDate.toInstantAtStartOfDay(),
+                DateNavigationPeriod.PERIOD_DAY,
+                endTimeExclusive = true,
+            )
+        val dataTypes = HealthPermissionToDatatypeMapper.getDataTypes(fitnessPermissionType)
+
+        healthConnectManager.stub {
+            dataTypes.forEach { dataType ->
+                onGeneric {
+                    readRecords(
+                        argThat<ReadRecordsRequestUsingFilters<Record>> {
+                            fromDataSource(packageName) &&
+                                fromTimeRange(timeFilterRange) &&
+                                forDataType(dataType)
+                        },
+                        any(),
+                        any(),
+                    )
+                } doReturnResult Result.success(ReadRecordsResponse(records, -1))
+            }
+        }
+    }
+}

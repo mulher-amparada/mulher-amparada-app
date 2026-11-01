@@ -1,0 +1,123 @@
+package {
+    // See: http://go/android-license-faq
+    // A large-scale-change added 'default_applicable_licenses' to import
+    // all of the 'license_kinds' from "frameworks_base_license"
+    // to get the below license kinds:
+    //   SPDX-license-identifier-Apache-2.0
+    default_applicable_licenses: ["frameworks_base_license"],
+}
+
+cc_library_shared {
+    name: "libravenwoodbivalenttest_jni",
+    host_supported: true,
+
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-Wno-unused-parameter",
+        "-Wthread-safety",
+    ],
+
+    srcs: [
+        "jni/*.cpp",
+    ],
+
+    shared_libs: [
+        "libbase",
+        "liblog",
+        "libnativehelper",
+        "libutils",
+        "libcutils",
+        "libbinder_ndk",
+    ],
+    static_libs: [
+        "ravenwood_bivalent_aidl-ndk",
+        "libaconfig_storage_read_api_cc",
+        "com.android.internal.os_flags_c_lib",
+    ],
+}
+
+java_defaults {
+    name: "ravenwood-bivalent-defaults",
+    target_sdk_version: "34", // For compat-framework tests
+    static_libs: [
+        "androidx.annotation_annotation",
+        "androidx.test.ext.junit",
+        "androidx.test.rules",
+
+        "ravenwood_bivalent_aidl-java",
+        "flag-junit",
+        "junit-params",
+        "platform-compat-test-rules",
+        "platform-parametric-runner-lib-no-robo",
+
+        // To make sure it won't cause VerifyError (b/324063814)
+        "platformprotosnano",
+
+        "com.android.internal.os.flags-aconfig-java",
+    ],
+    srcs: [
+        "src/**/*.java",
+        "src/**/*.kt",
+    ],
+    jni_libs: [
+        "libravenwoodbivalenttest_jni",
+    ],
+}
+
+android_ravenwood_test {
+    name: "RavenwoodBivalentTest",
+    defaults: ["ravenwood-bivalent-defaults"],
+    package_name: "com.android.ravenwoodtest.bivalenttest",
+    build_resources: true,
+}
+
+java_defaults {
+    name: "ravenwood-bivalent-device-defaults",
+    defaults: ["ravenwood-bivalent-defaults"],
+
+    // TODO(b/371215487): migrate bivalenttest.ravenizer tests to another architecture
+    exclude_srcs: [
+        "src/**/ravenizer/*.java",
+        "src/**/ravenizer/*.kt",
+    ],
+    static_libs: [
+        "junit",
+        "truth",
+        "flag-junit",
+        "ravenwood-junit",
+        "mockito-target-inline-minus-junit4",
+    ],
+    jni_libs: [
+        "libdexmakerjvmtiagent",
+    ],
+    test_suites: [
+        "device-tests",
+    ],
+    optimize: {
+        enabled: false,
+    },
+    test_config_template: "AndroidTestTemplate.xml",
+}
+
+android_test {
+    name: "RavenwoodBivalentTest_device",
+    defaults: ["ravenwood-bivalent-device-defaults"],
+}
+
+android_test {
+    name: "RavenwoodBivalentTest_device_ravenizer",
+    defaults: ["ravenwood-bivalent-device-defaults"],
+    ravenizer: {
+        enabled: true,
+        flags: ["--no-jdk-patch"],
+    },
+}
+
+aidl_interface {
+    name: "ravenwood_bivalent_aidl",
+    srcs: ["src/**/*.aidl"],
+    local_include_dir: "src",
+    unstable: true,
+    host_supported: true,
+}

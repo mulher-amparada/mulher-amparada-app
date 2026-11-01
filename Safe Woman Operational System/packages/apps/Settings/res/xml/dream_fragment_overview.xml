@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2017 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:settings="http://schemas.android.com/apk/res-auto"
+    android:key="screensaver"
+    android:title="@string/screensaver_settings_title"
+    settings:keywords="@string/keywords_screensaver">
+
+    <com.android.settingslib.widget.MainSwitchPreference
+        android:key="dream_main_settings_switch"
+        android:title="@string/screensaver_settings_toggle_title"
+        android:order="0"
+        settings:controller="com.android.settings.dream.DreamMainSwitchPreferenceController"
+        settings:searchable="false"/>
+
+    <PreferenceCategory
+        android:title="@string/dream_picker_category"
+        android:order="100">
+        <com.android.settingslib.widget.LayoutPreference
+            android:key="dream_picker"
+            android:selectable="false"
+            android:layout="@layout/dream_picker_layout"/>
+    </PreferenceCategory>
+
+    <Preference
+        android:key="when_to_start"
+        android:title="@string/screensaver_settings_when_to_dream"
+        android:order="200"
+        android:fragment="com.android.settings.dream.WhenToDreamPicker"/>
+
+    <SwitchPreferenceCompat
+        android:key="dream_complications_toggle"
+        android:title="@string/dream_complications_toggle_title"
+        android:order="300"
+        android:summary="@string/dream_complications_toggle_summary"
+        settings:controller="com.android.settings.dream.DreamComplicationPreferenceController"/>
+
+    <com.android.settings.dream.LowLightModePreference
+        android:key="low_light_mode"
+        android:order="350"
+        android:title="@string/screensaver_settings_low_light_mode"
+        android:fragment="com.android.settings.dream.LowLightModePicker" />
+
+    <SwitchPreferenceCompat
+        android:key="dream_home_controls_toggle"
+        android:order="400"
+        android:title="@string/dream_home_controls_toggle_title"
+        android:summary="@string/dream_home_controls_toggle_summary" />
+
+    <com.android.settings.applications.SpacePreference
+        android:key="dream_space_preference"
+        android:layout_height="16dp" />
+
+</PreferenceScreen>

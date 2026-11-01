@@ -1,0 +1,111 @@
+/*
+ * Copyright (C) 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.android.settings.notification.app;
+
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.UserHandle;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.preference.Preference;
+
+import com.android.settings.notification.NotificationBackend;
+import com.android.settingslib.RestrictedSwitchPreference;
+
+
+public class PromotedNotificationsPreferenceController extends
+        NotificationPreferenceController implements Preference.OnPreferenceChangeListener {
+    protected static final String KEY_PROMOTED_SWITCH = "promoted_switch";
+    private static final String TAG = "PromotedNotiPrefCon";
+
+    public PromotedNotificationsPreferenceController(@NonNull Context context,
+            @NonNull NotificationBackend backend) {
+        super(context, backend);
+    }
+
+    @Override
+    @NonNull
+    public String getPreferenceKey() {
+        return KEY_PROMOTED_SWITCH;
+    }
+
+    @Override
+    public boolean isAvailable() {
+        return super.isAvailable() && isPermissionRequested() && canPermissionBeRevoked();
+    }
+
+    private boolean isPermissionRequested() {
+        try {
+            PackageInfo packageInfo = mPm.getPackageInfo(
+                    mAppRow.pkg, PackageManager.GET_PERMISSIONS);
+
+            if (packageInfo.requestedPermissions != null) {
+                for (String requestedPermission : packageInfo.requestedPermissions) {
+                    if (Manifest.permission.POST_PROMOTED_NOTIFICATIONS.equals(
+                            requestedPermission)) {
+                        return true;
+                    }
+                }
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG, "isPermissionRequested failed", e);
+        }
+
+        return false;
+    }
+
+    private boolean canPermissionBeRevoked() {
+        // Permissions for packages with sharedUserId="android.uid.system" cannot be effectively
+        // taken away (PermissionManager always returns GRANTED).
+        return !UserHandle.isSameApp(mAppRow.uid, android.os.Process.SYSTEM_UID);
+    }
+
+    @Override
+    boolean isIncludedInFilter() {
+        // not a channel-specific preference; only at the app level
+        return false;
+    }
+
+    /**
+     * Updates the state of the promoted notifications switch.
+     */
+    public void updateState(@NonNull Preference preference) {
+        RestrictedSwitchPreference pref = (RestrictedSwitchPreference) preference;
+        if (pref.getParent() != null) {
+            pref.getParent().setVisible(true);
+        }
+
+        if (pref != null && mAppRow != null) {
+            pref.setDisabledByAdmin(mAdmin);
+            pref.setEnabled(!pref.isDisabledByAdmin());
+            pref.setChecked(mAppRow.canBePromoted);
+            pref.setOnPreferenceChangeListener(this);
+        }
+    }
+
+    @Override
+    public boolean onPreferenceChange(@NonNull Preference preference, @NonNull Object newValue) {
+        final boolean canBePromoted = (Boolean) newValue;
+        if (mAppRow != null && mAppRow.canBePromoted != canBePromoted) {
+            mAppRow.canBePromoted = canBePromoted;
+            mBackend.setCanBePromoted(mAppRow.pkg, mAppRow.uid, canBePromoted);
+        }
+        return true;
+    }
+}

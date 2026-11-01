@@ -1,0 +1,51 @@
+package {
+    // See: http://go/android-license-faq
+    // A large-scale-change added 'default_applicable_licenses' to import
+    // all of the 'license_kinds' from "frameworks_base_license"
+    // to get the below license kinds:
+    //   SPDX-license-identifier-Apache-2.0
+    default_applicable_licenses: ["frameworks_base_license"],
+}
+
+java_defaults {
+    name: "RavenwoodMinimumTest-defaults",
+
+    static_libs: [
+        "androidx.annotation_annotation",
+        "androidx.test.ext.junit",
+        "androidx.test.rules",
+    ],
+
+    srcs: [
+        "src/**/*.java",
+    ],
+    sdk_version: "test_current",
+}
+
+// Minimum ravenwood test according to test-authors.md.
+android_ravenwood_test {
+    name: "RavenwoodMinimumTest",
+    defaults: ["RavenwoodMinimumTest-defaults"],
+}
+
+// Make sure Ravenwood tests can use "module_current" too.
+android_ravenwood_test {
+    name: "RavenwoodMinimumTest-with-module-current",
+    defaults: ["RavenwoodMinimumTest-defaults"],
+    sdk_version: "module_current",
+}
+
+// Run RavenwoodMinimumTest on robolectric.
+// This is for internal testing. DO NOT run it in presubmit, etc.
+android_robolectric_test {
+    name: "RavenwoodMinimumTest_robo",
+    defaults: ["RavenwoodMinimumTest-defaults"],
+
+    static_libs: [
+        "ravenwood-junit",
+    ],
+
+    instrumentation_for: "RavenwoodEmptyApp",
+    strict_mode: true,
+    java_resource_dirs: ["config"],
+}

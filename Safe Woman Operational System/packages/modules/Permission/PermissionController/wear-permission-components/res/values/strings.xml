@@ -1,0 +1,7 @@
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Accessibility description indicating that a toggle control status is on. [CHAR LIMIT=NONE] -->
+    <string name="on">On</string>
+
+    <!-- Accessibility description indicating that a status is off. [CHAR LIMIT=NONE] -->
+    <string name="off">Off</string>
+</resources>

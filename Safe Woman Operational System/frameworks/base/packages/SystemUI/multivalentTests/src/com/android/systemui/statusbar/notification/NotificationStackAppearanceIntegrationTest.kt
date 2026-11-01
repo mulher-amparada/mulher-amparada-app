@@ -1,0 +1,214 @@
+/*
+ * Copyright (C) 2023 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.systemui.statusbar.notification
+
+import android.platform.test.annotations.EnableFlags
+import android.testing.TestableLooper.RunWithLooper
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.SmallTest
+import com.android.compose.animation.scene.ObservableTransitionState
+import com.android.systemui.Flags.FLAG_DUAL_SHADE
+import com.android.systemui.SysuiTestCase
+import com.android.systemui.flags.EnableSceneContainer
+import com.android.systemui.flags.Flags
+import com.android.systemui.flags.fakeFeatureFlagsClassic
+import com.android.systemui.keyguard.data.repository.fakeKeyguardRepository
+import com.android.systemui.keyguard.shared.model.StatusBarState
+import com.android.systemui.kosmos.collectLastValue
+import com.android.systemui.kosmos.runTest
+import com.android.systemui.scene.domain.interactor.sceneInteractor
+import com.android.systemui.scene.shared.model.Overlays
+import com.android.systemui.scene.shared.model.Scenes
+import com.android.systemui.shade.domain.interactor.enableDualShade
+import com.android.systemui.shade.domain.interactor.enableSingleShade
+import com.android.systemui.statusbar.notification.stack.shared.model.ShadeScrimBounds
+import com.android.systemui.statusbar.notification.stack.shared.model.ShadeScrimShape
+import com.android.systemui.statusbar.notification.stack.ui.viewmodel.notificationScrollViewModel
+import com.android.systemui.statusbar.notification.stack.ui.viewmodel.notificationsPlaceholderViewModel
+import com.android.systemui.testKosmos
+import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
+import org.junit.Test
+import org.junit.runner.RunWith
+
+@SmallTest
+@RunWith(AndroidJUnit4::class)
+@RunWithLooper
+@EnableSceneContainer
+class NotificationStackAppearanceIntegrationTest : SysuiTestCase() {
+
+    private val kosmos =
+        testKosmos().apply { fakeFeatureFlagsClassic.set(Flags.FULL_SCREEN_USER_SWITCHER, false) }
+
+    @Test
+    fun updateBoundsWithSingleShade() =
+        kosmos.runTest {
+            enableSingleShade()
+            val radius = MutableStateFlow(32)
+            val leftOffset = MutableStateFlow(0)
+            val shape by
+                collectLastValue(
+                    notificationScrollViewModel.notificationScrimShape(radius, leftOffset)
+                )
+
+            // When: receive scrim bounds
+            notificationsPlaceholderViewModel.onScrimBoundsChanged(
+                ShadeScrimBounds(left = 0f, top = 200f, right = 100f, bottom = 550f)
+            )
+            // Then: shape is updated
+            assertThat(shape)
+                .isEqualTo(
+                    ShadeScrimShape(
+                        bounds =
+                            ShadeScrimBounds(left = 0f, top = 200f, right = 100f, bottom = 550f),
+                        topRadius = 32,
+                        bottomRadius = 0,
+                    )
+                )
+
+            // When: receive new scrim bounds
+            leftOffset.value = 200
+            radius.value = 24
+            notificationsPlaceholderViewModel.onScrimBoundsChanged(
+                ShadeScrimBounds(left = 210f, top = 200f, right = 300f, bottom = 550f)
+            )
+            // Then: shape is updated
+            assertThat(shape)
+                .isEqualTo(
+                    ShadeScrimShape(
+                        bounds =
+                            ShadeScrimBounds(left = 10f, top = 200f, right = 100f, bottom = 550f),
+                        topRadius = 24,
+                        bottomRadius = 0,
+                    )
+                )
+
+            // When: QuickSettings shows up full screen on single shade.
+            fakeKeyguardRepository.setStatusBarState(StatusBarState.SHADE)
+            val transitionState =
+                MutableStateFlow<ObservableTransitionState>(
+                    ObservableTransitionState.Idle(Scenes.QuickSettings)
+                )
+            sceneInteractor.setTransitionState(transitionState)
+            // Then: shape is null
+            assertThat(shape).isNull()
+        }
+
+    @Test
+    @EnableFlags(FLAG_DUAL_SHADE)
+    fun updateBoundsWithDualShade() =
+        kosmos.runTest {
+            enableDualShade(wideLayout = false)
+            val radius = MutableStateFlow(32)
+            val leftOffset = MutableStateFlow(0)
+            val shape by
+                collectLastValue(
+                    notificationScrollViewModel.notificationScrimShape(radius, leftOffset)
+                )
+
+            // When: receive scrim bounds
+            val fullyOpenScrimBounds =
+                ShadeScrimBounds(left = 0f, top = 200f, right = 100f, bottom = 550f)
+            notificationsPlaceholderViewModel.onScrimBoundsChanged(fullyOpenScrimBounds)
+            // Then: shape is updated
+            assertThat(shape)
+                .isEqualTo(
+                    ShadeScrimShape(bounds = fullyOpenScrimBounds, topRadius = 0, bottomRadius = 32)
+                )
+
+            // When: receive new scrim bounds with an offset
+            val offset = 200
+            val shortScrimBounds = fullyOpenScrimBounds.copy(bottom = 300f)
+            leftOffset.value = offset
+            radius.value = 24
+            notificationsPlaceholderViewModel.onScrimBoundsChanged(shortScrimBounds)
+            // Then: shape is updated
+            assertThat(shape)
+                .isEqualTo(
+                    ShadeScrimShape(
+                        bounds = shortScrimBounds.minus(leftOffset = offset),
+                        topRadius = 0,
+                        bottomRadius = 24,
+                    )
+                )
+
+            // When: Idle on the Lockscreen
+            fakeKeyguardRepository.setStatusBarState(StatusBarState.KEYGUARD)
+            sceneInteractor.setTransitionState(
+                flowOf(ObservableTransitionState.Idle(Scenes.Lockscreen))
+            )
+            // And: The Scrim disappears.
+            notificationsPlaceholderViewModel.onScrimBoundsChanged(null)
+            // Then: shape is null
+            assertThat(shape).isNull()
+
+            // When: Shade starts to open over Lockscreen
+            sceneInteractor.setTransitionState(
+                flowOf(
+                    ObservableTransitionState.Transition.showOverlay(
+                        overlay = Overlays.NotificationsShade,
+                        fromScene = Scenes.Lockscreen,
+                        currentOverlays = flowOf(emptySet()),
+                        isInitiatedByUserInput = true,
+                        isUserInputOngoing = flowOf(true),
+                        progress = flowOf(0.5f),
+                    )
+                )
+            )
+            // And: the scrim starts to show
+            val halfOpenScrimBounds =
+                ShadeScrimBounds(left = 0f, top = 200f, right = 100f, bottom = 200f)
+            notificationsPlaceholderViewModel.onScrimBoundsChanged(halfOpenScrimBounds)
+            // Then: shape is null
+            assertThat(shape).isNull()
+
+            // When: shade is fully open over lockscreen
+            sceneInteractor.setTransitionState(
+                flowOf(
+                    ObservableTransitionState.Idle(
+                        currentScene = Scenes.Lockscreen,
+                        currentOverlays = setOf(Overlays.NotificationsShade),
+                    )
+                )
+            )
+            // And: the full scrim shows
+            notificationsPlaceholderViewModel.onScrimBoundsChanged(fullyOpenScrimBounds)
+            // Then: shape clips again
+            assertThat(shape)
+                .isEqualTo(
+                    ShadeScrimShape(
+                        bounds = fullyOpenScrimBounds.minus(leftOffset = offset),
+                        topRadius = 0,
+                        bottomRadius = 24,
+                    )
+                )
+        }
+
+    @Test
+    fun brightnessMirrorAlpha_updatesViewModel() =
+        kosmos.runTest {
+            val maxAlpha by collectLastValue(notificationScrollViewModel.maxAlpha)
+            assertThat(maxAlpha).isEqualTo(1f)
+            notificationsPlaceholderViewModel.setAlphaForBrightnessMirror(0.33f)
+            assertThat(maxAlpha).isEqualTo(0.33f)
+            notificationsPlaceholderViewModel.setAlphaForBrightnessMirror(0f)
+            assertThat(maxAlpha).isEqualTo(0f)
+            notificationsPlaceholderViewModel.setAlphaForBrightnessMirror(1f)
+            assertThat(maxAlpha).isEqualTo(1f)
+        }
+}

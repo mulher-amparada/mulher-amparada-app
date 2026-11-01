@@ -1,0 +1,9 @@
+package: "com.android.settings.flags"
+container: "system_ext"
+
+flag {
+  name: "enable_accounts_and_backup_screen"
+  namespace: "onboarding_experience"
+  description: "Feature flag for Accounts & backup menu in Settings"
+  bug: "436614052"
+}

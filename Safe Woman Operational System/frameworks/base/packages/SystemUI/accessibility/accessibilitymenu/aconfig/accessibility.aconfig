@@ -1,0 +1,38 @@
+package: "com.android.systemui.accessibility.accessibilitymenu"
+container: "system_ext"
+
+# go/keep-sorted start block=yes newline_separated=yes by_regex=name:\s*"([^"]+)"
+flag {
+    name: "a11y_menu_hide_before_taking_action"
+    namespace: "accessibility"
+    description: "Hides the AccessibilityMenuService UI before taking action instead of after."
+    bug: "292020123"
+}
+
+flag {
+    name: "action_bar_wrap_content"
+    namespace: "accessibility"
+    description: "Applies WRAP_CONTENT to the action bar in A11yMenu settings to better fit large fonts"
+    bug: "347911378"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "catalyst_a11y_menu"
+    namespace: "accessibility"
+    description: "Migrate a11y menu settings to catalyst"
+    bug: "450090715"
+}
+
+flag {
+    name: "hide_restricted_actions"
+    namespace: "accessibility"
+    description: "Hides shortcut buttons for possibly restricted actions like brightness/volume adjustment"
+    bug: "347269196"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+# go/keep-sorted end

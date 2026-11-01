@@ -1,0 +1,135 @@
+<!--
+  Copyright (C) 2022 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/home_screen">
+
+  <fragment
+      android:id="@+id/home_screen"
+      android:name="com.android.healthconnect.testapps.toolbox.ui.HomeFragment"
+      android:label="fragment_title_screen"
+      tools:layout="@layout/fragment_home">
+    <action
+        android:id="@+id/action_homeFragment_to_categoryList"
+        app:destination="@id/categories_list_screen" />
+    <action
+        android:id="@+id/action_homeFragment_to_routeRequest"
+        app:destination="@id/route_request_screen" />
+    <action
+        android:id="@+id/action_homeFragment_to_readDataInBackground"
+        app:destination="@id/read_data_in_background_screen" />
+    <action
+        android:id="@+id/action_homeFragment_to_readDataInForeground"
+        app:destination="@id/read_data_in_foreground_screen" />
+    <action
+        android:id="@+id/action_homeFragment_to_phrOptions"
+        app:destination="@id/phr_options_screen" />
+    <action
+        android:id="@+id/action_home_screen_to_permissionsRequestScreen"
+        app:destination="@id/permissions_request_screen" />
+    <action
+        android:id="@+id/action_home_screen_to_backupRestoreScreen"
+         app:destination="@id/backup_restore_screen" />
+    <action
+        android:id="@+id/action_homeFragment_to_advertiseDevices"
+        app:destination="@id/advertise_devices_screen" />
+  </fragment>
+
+  <fragment
+      android:id="@+id/advertise_devices_screen"
+      android:name="com.android.healthconnect.testapps.toolbox.ui.AdvertiseDevicesFragment"
+      android:label="advertise_devices"
+      tools:layout="@layout/fragment_advertise_devices">
+  </fragment>
+
+  <fragment
+      android:id="@+id/categories_list_screen"
+      android:name="com.android.healthconnect.testapps.toolbox.ui.CategoryListFragment"
+      android:label="fragment_category_list_screen"
+      tools:layout="@layout/fragment_list_screen">
+    <action
+        android:id="@+id/action_categoryList_to_dataTypeList"
+        app:destination="@id/data_type_list_screen" />
+  </fragment>
+
+  <fragment
+      android:id="@+id/data_type_list_screen"
+      android:name="com.android.healthconnect.testapps.toolbox.ui.DataTypeListFragment"
+      android:label="fragment_data_type_list_screen"
+      tools:layout="@layout/fragment_list_screen">
+    <action
+        android:id="@+id/action_dataTypeList_to_insertRecord"
+        app:destination="@id/record_entry_screen" />
+    <argument
+        android:name="category"
+        app:argType="com.android.healthconnect.testapps.toolbox.Constants$HealthDataCategory" />
+  </fragment>
+
+  <fragment
+      android:id="@+id/record_entry_screen"
+      android:name="com.android.healthconnect.testapps.toolbox.ui.InsertRecordFragment"
+      android:label="fragment_record_entry"
+      tools:layout="@layout/fragment_insert_record">
+    <argument
+        android:name="permissionType"
+        app:argType="com.android.healthconnect.testapps.toolbox.Constants$HealthPermissionType" />
+  </fragment>
+
+  <fragment
+      android:id="@+id/route_request_screen"
+      android:name="com.android.healthconnect.testapps.toolbox.ui.RouteRequestFragment"
+      android:label="fragment_route_request"
+      tools:layout="@layout/fragment_route_request">
+  </fragment>
+
+  <fragment
+      android:id="@+id/read_data_in_background_screen"
+      android:name="com.android.healthconnect.testapps.toolbox.ui.ReadDataInBackgroundFragment"
+      android:label="fragment_read_data_in_background"
+      tools:layout="@layout/fragment_read_data_in_background">
+  </fragment>
+
+  <fragment
+      android:id="@+id/read_data_in_foreground_screen"
+      android:name="com.android.healthconnect.testapps.toolbox.ui.ReadDataInForegroundFragment"
+      android:label="fragment_read_data_in_foreground"
+      tools:layout="@layout/fragment_read_data_in_foreground">
+  </fragment>
+
+  <fragment
+      android:id="@+id/phr_options_screen"
+      android:name="com.android.healthconnect.testapps.toolbox.ui.PhrOptionsFragment"
+      android:label="phr_options_request"
+      tools:layout="@layout/fragment_phr_options">
+  </fragment>
+
+  <fragment
+      android:id="@+id/permissions_request_screen"
+      android:label="permissions_request"
+      android:name="com.android.healthconnect.testapps.toolbox.ui.PermissionsRequestFragment"
+      tools:layout="@layout/fragment_permissions_request">
+  </fragment>
+
+  <fragment
+    android:id="@+id/backup_restore_screen"
+      android:label="backup_restore"
+    android:name="com.android.healthconnect.testapps.toolbox.ui.BackupRestoreFragment"
+    tools:layout="@layout/fragment_backup_restore">
+  </fragment>
+
+</navigation>

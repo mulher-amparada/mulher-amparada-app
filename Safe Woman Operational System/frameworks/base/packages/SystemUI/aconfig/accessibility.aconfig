@@ -1,0 +1,127 @@
+package: "com.android.systemui"
+container: "system"
+
+# go/keep-sorted start block=yes newline_separated=yes by_regex=name:\s*"([^"]+)"
+flag {
+    name: "accessibility_menu_inputs_for_hiding"
+    namespace: "accessibility"
+    bug: "470300647"
+    description: "allows escape key and Back system action to close A11y menu."
+    metadata {
+      purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "bouncer_accessibility_button_for_desktop"
+    namespace: "accessibility"
+    description: "Adds an accessibility button on the bouncer screen for desktop for accessing accessibility services."
+    bug: "446014706"
+}
+
+flag {
+    name: "edt_not_allowed_on_status_bar"
+    namespace: "accessibility"
+    description: "Prevents EDT from applying to the status bar and incorrectly inverting icons"
+    bug: "482405546"
+    metadata {
+      purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "floating_menu_adjust_cutout_avoidance"
+    namespace: "accessibility"
+    description: "Makes cutout avoidance behave less erratically with larger menus."
+    bug: "491674801"
+    metadata {
+      purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "floating_menu_drag_to_hide"
+    namespace: "accessibility"
+    description: "Allows users to hide the FAB then use notification to dismiss or bring it back."
+    bug: "298718415"
+}
+
+flag {
+    name: "floating_menu_hearing_device_status_icon"
+    namespace: "accessibility"
+    description: "Update hearing device icon in floating menu according to the connection status."
+    bug: "357882387"
+}
+
+flag {
+    name: "floating_menu_magnification_status"
+    namespace: "accessibility"
+    description: "Exposes magnification activated status to floating menu magnification targets"
+    bug: "449812613"
+    metadata {
+      purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "floating_menu_more_options"
+    namespace: "accessibility"
+    description: "Adds a 'More Options' button to the accessibility floating menu, which reveals additional actions like Edit, Move, and Remove all."
+    bug: "440413395"
+}
+
+flag {
+    name: "floating_menu_on_headless_user"
+    namespace: "accessibility"
+    description: "adds condition that allows the FAB to display on bouncer for headless system user."
+    bug: "452113149"
+}
+
+flag {
+    name: "floating_menu_uniform_padding"
+    namespace: "accessibility"
+    description: "Normalizes padding across all FAB buttons to ensure a minimum touch target size"
+    bug: "474236415"
+    metadata {
+      purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "hearing_device_status_notification"
+    namespace: "accessibility"
+    description: "Display a notification to show the status of a hearing device when it's connected"
+    bug: "467224908"
+}
+
+flag {
+    name: "launch_accessibility_quick_access_dialog_permission"
+    namespace: "accessibility"
+    description: "Adds a permission to allow applications to launch the accessibility quick access dialog."
+    bug: "446014706"
+}
+
+flag {
+    name: "privacy_dot_live_region"
+    namespace: "accessibility"
+    description: "Exposes the status bar privacy dot as a live region so it is announced when it appears."
+    bug: "197201744"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "redesign_magnification_window_size"
+    namespace: "accessibility"
+    description: "Redesigns the window magnification magnifier sizes provided in the settings panel."
+    bug: "288056772"
+}
+
+flag {
+    name: "status_bar_region_sampling"
+    namespace: "accessibility"
+    description: "Uses region sampling in the Status Bar to avoid contrast bugs in the status bar when expanded dark theme is enabled"
+    bug: "379760792"
+}
+# go/keep-sorted end

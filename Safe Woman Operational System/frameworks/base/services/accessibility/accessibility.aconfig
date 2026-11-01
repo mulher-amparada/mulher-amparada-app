@@ -1,0 +1,248 @@
+package: "com.android.server.accessibility"
+container: "system"
+
+# NOTE: Keep alphabetized to help limit merge conflicts from multiple simultaneous editors.
+flag {
+    name: "enable_autoclick_for_connected_displays"
+    namespace: "accessibility"
+    description: "Fix autoclick to work with connected displays."
+    bug: "407807880"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "enable_autoclick_panel_bug_fixes"
+    namespace: "accessibility"
+    description: "Fix autoclick panel to move and drag properly."
+    bug: "486977188"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "enable_a11y_checker_logging"
+    namespace: "accessibility"
+    description: "Whether to identify and log app a11y issues."
+    bug: "325420273"
+}
+
+flag {
+    name: "enable_braille_suw_immediate_connections"
+    namespace: "accessibility"
+    description: "Whether to allow Braille devices to connect automatically in the SUW."
+    bug: "400776305"
+}
+
+flag {
+    name: "enable_color_correction_saturation"
+    namespace: "accessibility"
+    description: "Feature allows users to change color correction saturation for daltonizer."
+    bug: "322829049"
+}
+
+flag {
+  name: "enable_color_inversion_in_suw"
+  namespace: "accessibility"
+  description: "Allows users to control color inversion in the SetupWizard Vision settings page."
+  bug: "453531997"
+}
+
+flag {
+    name: "enable_color_daltonizer_in_suw"
+    namespace: "accessibility"
+    description: "Allows users to control color correction in the SetupWizard Accessibility settings page."
+    bug: "447326297"
+}
+
+flag {
+    name: "enable_key_gesture_shortcut_settings"
+    namespace: "accessibility"
+    description: "Adds the keyboard gesture to relevant accessibility shortcut settings pages"
+    bug: "453743837"
+}
+
+flag {
+    name: "enable_magnification_hide_settings_button_in_temporary_mode"
+    namespace: "accessibility"
+    description: "When enabled, hides the magnification settings button while the user is interacting in temporary magnification mode."
+    bug: "473710664"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "enable_magnification_joystick"
+    namespace: "accessibility"
+    description: "Whether to enable joystick controls for magnification"
+    bug: "297211257"
+}
+
+flag {
+    name: "enable_magnification_one_finger_panning_gesture"
+    namespace: "accessibility"
+    description: "Whether to allow easy-mode (one finger panning gesture) for magnification"
+    bug: "282039824"
+}
+
+flag {
+    name: "enable_magnification_viewport_prioritization"
+    namespace: "accessibility"
+    description: "Whether to prioritize Magnification viewport movements in response to cursor and focus events"
+    bug: "432525516"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "enable_mouse_key_enhancement"
+    namespace: "accessibility"
+    description: "Whether user can change mouse key acceleration, speed and use numeric keypad."
+    bug: "409330539"
+}
+
+flag {
+    name: "fix_edt_multiuser_management"
+    namespace: "accessibility"
+    description: "Use the main current user id to identify the force invert state."
+    bug: "478227501"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+
+flag {
+    name: "fix_full_screen_magnification_event_time_corruption"
+    namespace: "accessibility"
+    description: "Fixes a bug where Full Screen Magnification corrupts event time during delegation."
+    bug: "489793123"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "fix_window_magnification_inactive_double_tap"
+    namespace: "accessibility"
+    description: "Fixes a bug where Window Magnification interferes with double-tap gestures in apps when inactive by correcting timestamp corruption and adding a bypass optimization."
+    bug: "479568199"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "flash_notifications_torch_callback_handler"
+    namespace: "accessibility"
+    description: "Provides an explicit handler for Flash Notifications torch callback"
+    bug: "484142373"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "fullscreen_fling_gesture"
+    namespace: "accessibility"
+    description: "When true, adds a fling gesture animation for fullscreen magnification"
+    bug: "319175022"
+}
+
+flag {
+    name: "ignore_input_events_from_display_without_handler"
+    namespace: "accessibility"
+    description: "Fixes a bug in AccessibilityInputFilter so that input events from a display without an EventHandler are immediately passed through"
+    bug: "438713099"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "key_event_dispatcher_fix_flush_race_condition"
+    namespace: "accessibility"
+    description: "Fix the bug that the keyevent not only toggle TalkBack off, but also passed to the rest of system."
+    bug: "475084704"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "manager_lifecycle_user_change"
+    namespace: "accessibility"
+    description: "Use A11yManagerService's Lifecycle to change users, instead of listening for user changed events."
+    bug: "393626471"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "reduce_interactive_delay_with_magnification"
+    namespace: "accessibility"
+    description: "Reduces the delay for single-tap interactions when full-screen magnification is active but the triple-tap shortcut is disabled."
+    bug: "479569749"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "reset_motion_event_sources_on_denied_permission"
+    namespace: "accessibility"
+    description: "Resets MotionEventSources when the ACCESSIBILITY_MOTION_EVENT_OBSERVING permission is denied to prevent screen freezes."
+    bug: "469177223"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "send_a11y_action_cancel_on_reset"
+    namespace: "accessibility"
+    description: "Sends ACTION_CANCEL to InputDispatcher when AccessibilityInputFilter resets with active pointers to prevent state desynchronization."
+    bug: "433890873"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "send_a11y_events_based_on_state"
+    namespace: "accessibility"
+    description: "Sends accessibility events in TouchExplorer#onAccessibilityEvent based on internal state to keep it consistent. This reduces test flakiness."
+    bug: "295575684"
+}
+
+flag {
+    name: "send_hover_exit_on_gesture_interruption"
+    namespace: "accessibility"
+    description: "Sends a hover exit event when touch exploration is interrupted by a gesture or double tap."
+    bug: "483234296"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "track_proxyed_clients_in_a11y_user_state"
+    namespace: "accessibility"
+    description: "Track proxyed A11yManagerClient clients in A11yUserState.mUserClients to fix a bug when moving apps from proxy to non-proxy"
+    bug: "475227571"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "type_speech_state_change_allowed"
+    namespace: "accessibility"
+    description: "Allow global dispatch for TYPE_SPEECH_STATE_CHANGE"
+    bug: "444032233"
+}

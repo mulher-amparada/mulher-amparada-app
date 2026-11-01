@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2026 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<configuration description="Config for Interactive CTS Permission test cases">
+    <option name="test-suite-tag" value="cts-v-host" />
+    <option name="config-descriptor:metadata" key="subplan" value="cts-v-host-interactive" />
+
+    <target_preparer class="com.android.tradefed.targetprep.DeviceSetup">
+        <option name="force-skip-system-props" value="true" /> <!-- avoid restarting device -->
+        <option name="set-global-setting" key="verifier_verify_adb_installs" value="0" />
+        <option name="restore-settings" value="true" />
+        <option name="disable-device-config-sync" value="true" />
+        <option name="screen-always-on" value="on" />
+    </target_preparer>
+
+    <target_preparer class="com.android.tradefed.targetprep.suite.SuiteApkInstaller">
+        <option name="cleanup-apks" value="true" />
+        <option name="install-arg" value="-t" />
+        <option name="test-file-name" value="CtsPermissionInteractiveTestCases.apk" />
+        <option name="test-file-name" value="CtsLocationButtonInteractiveApp.apk" />
+    </target_preparer>
+
+    <target_preparer class="com.android.tradefed.targetprep.RunCommandTargetPreparer">
+        <!-- Ensure device provisioning and user setup are marked as completed -->
+        <option name="run-command" value="settings put global device_provisioned 1" />
+        <option name="run-command" value="settings put secure user_setup_complete 1" />
+        <!-- Disable verifier target SDK warning -->
+        <option name="run-command" value="settings put global verifier_engprod 1" />
+        <option name="run-command" value="settings put global verifier_verify_adb_installs 0" />
+        <!-- Disable DeprecatedAbi warning -->
+        <option name="run-command" value="setprop debug.wm.disable_deprecated_abi_dialog 1" />
+        <!-- Disable DeprecatedTargetSdk warning -->
+        <option name="run-command" value="setprop debug.wm.disable_deprecated_target_sdk_dialog 1" />
+        <!-- Dismiss any system dialogs (e.g. crashes, ANR). -->
+        <option name="run-command" value="am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS --receiver-foreground" />
+        <!-- Ensure all broadcasts are dispatched prior to running our tests. -->
+        <option name="run-command" value="am wait-for-broadcast-idle" />
+        <option name="run-command" value="am wait-for-broadcast-barrier" />
+    </target_preparer>
+
+    <test class="com.android.tradefed.testtype.AndroidJUnitTest" >
+        <option name="package" value="android.permissioninteractive.cts" />
+        <option name="include-annotation" value="com.android.interactive.annotations.Interactive" />
+    </test>
+</configuration>

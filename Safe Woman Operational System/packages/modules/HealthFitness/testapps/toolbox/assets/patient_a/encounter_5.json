@@ -1,0 +1,135 @@
+{
+  "resourceType": "Encounter",
+  "id": "encounter-5",
+  "identifier": [
+    {
+      "use": "usual",
+      "system": "urn:oid:1.2.345.6789",
+      "value": "10005"
+    }
+  ],
+  "status": "finished",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "AMB",
+    "display": "ambulatory"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "urn:oid:1.2.345.6789",
+          "code": "2",
+          "display": "Outpatient"
+        }
+      ],
+      "text": "Outpatient"
+    },
+    {
+      "coding": [
+        {
+          "system": "urn:oid:1.2.345.6789",
+          "code": "3",
+          "display": "Hospital Encounter"
+        }
+      ],
+      "text": "Hospital Encounter"
+    }
+  ],
+  "serviceType": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/service-type",
+        "code": "169",
+        "display": "Endocrinology"
+      }
+    ]
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "80394007",
+          "display": "Hyperglycemia"
+        }
+      ]
+    }
+  ],
+  "diagnosis": [
+    {
+      "condition": {
+        "reference": "Condition/condition-2",
+        "display": "Diabetes mellitus type 2"
+      }
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-1",
+    "display": "Example, Anne"
+  },
+  "participant": [
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "REF",
+              "display": "referrer"
+            }
+          ],
+          "text": "referrer"
+        }
+      ],
+      "individual": {
+        "reference": "Practitioner/practitioner-1",
+        "type": "Practitioner",
+        "display": "Dr Maria Hernandez"
+      }
+    },
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "CON",
+              "display": "consultant"
+            }
+          ],
+          "text": "consultant"
+        }
+      ],
+      "individual": {
+        "reference": "Practitioner/practitioner-4",
+        "type": "Practitioner",
+        "display": "Dr Patrick O'Brien"
+      }
+    }
+  ],
+  "period": {
+    "start": "2022-09-28T10:00:00Z"
+  },
+  "account": [
+    {
+      "identifier": {
+        "system": "urn:oid:1.2.345.6789",
+        "value": "1000123"
+      },
+      "display": "Example, Anne"
+    }
+  ],
+  "location": [
+    {
+      "location": {
+        "reference": "Location/location-3",
+        "display": "HC Hospital Outpatient Department"
+      }
+    }
+  ],
+  "serviceProvider": {
+    "reference": "Organization/organization-2",
+    "display": "Health Connect Hospital"
+  }
+}

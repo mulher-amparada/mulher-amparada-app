@@ -1,0 +1,81 @@
+package {
+    // See: http://go/android-license-faq
+    // A large-scale-change added 'default_applicable_licenses' to import
+    // all of the 'license_kinds' from "frameworks_base_license"
+    // to get the below license kinds:
+    //   SPDX-license-identifier-Apache-2.0
+    default_applicable_licenses: ["frameworks_base_license"],
+}
+
+xsd_config {
+    name: "default-permissions",
+    srcs: ["default-permissions.xsd"],
+    api_dir: "schema",
+    package_name: "com.android.server.pm.permission.configfile",
+}
+
+xsd_config {
+    name: "memory-limiter-config",
+    srcs: ["memory-limiter-config/memory-limiter-config.xsd"],
+    api_dir: "memory-limiter-config/schema",
+    package_name: "com.android.server.am.memorylimiter.config",
+}
+
+xsd_config {
+    name: "platform-compat-config",
+    srcs: ["platform-compat/config/platform-compat-config.xsd"],
+    api_dir: "platform-compat/config/schema",
+    package_name: "com.android.server.compat.config",
+}
+
+xsd_config {
+    name: "platform-compat-overrides",
+    srcs: ["platform-compat/overrides/platform-compat-overrides.xsd"],
+    api_dir: "platform-compat/overrides/schema",
+    package_name: "com.android.server.compat.overrides",
+    gen_writer: true,
+}
+
+xsd_config {
+    name: "display-topology",
+    srcs: ["display-topology/display-topology.xsd"],
+    api_dir: "display-topology/schema",
+    package_name: "com.android.server.display.topology",
+    gen_writer: true,
+}
+
+xsd_config {
+    name: "display-device-config",
+    srcs: ["display-device-config/display-device-config.xsd"],
+    api_dir: "display-device-config/schema",
+    package_name: "com.android.server.display.config",
+}
+
+xsd_config {
+    name: "display-layout-config",
+    srcs: ["display-layout-config/display-layout-config.xsd"],
+    api_dir: "display-layout-config/schema",
+    package_name: "com.android.server.display.config.layout",
+    boolean_getter: true,
+}
+
+xsd_config {
+    name: "device-state-config",
+    srcs: ["device-state-config/device-state-config.xsd"],
+    api_dir: "device-state-config/schema",
+    package_name: "com.android.server.policy.devicestate.config",
+}
+
+xsd_config {
+    name: "supplemental_security_patches_xsd",
+    srcs: ["supplemental_security_patches/supplemental_security_patches.xsd"],
+    api_dir: "supplemental_security_patches/schema",
+    package_name: "android.security.patches",
+}
+
+xsd_config {
+    name: "advanced-protection-config",
+    srcs: ["advanced-protection-config/advanced-protection-config.xsd"],
+    api_dir: "advanced-protection-config/schema",
+    package_name: "com.android.server.security.advancedprotection.config",
+}

@@ -1,0 +1,526 @@
+/*
+ * Copyright (C) 2023 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.server.healthconnect.logging;
+
+import static android.health.HealthFitnessStatsLog.HEALTH_CONNECT_API_CALLED;
+import static android.health.HealthFitnessStatsLog.HEALTH_CONNECT_API_CALLED__API_METHOD__API_METHOD_UNKNOWN;
+import static android.health.HealthFitnessStatsLog.HEALTH_CONNECT_API_CALLED__API_METHOD__INSERT_DATA;
+import static android.health.HealthFitnessStatsLog.HEALTH_CONNECT_API_CALLED__API_STATUS__ERROR;
+import static android.health.HealthFitnessStatsLog.HEALTH_CONNECT_API_CALLED__API_STATUS__STATUS_UNKNOWN;
+import static android.health.HealthFitnessStatsLog.HEALTH_CONNECT_API_CALLED__API_STATUS__SUCCESS;
+import static android.health.HealthFitnessStatsLog.HEALTH_CONNECT_API_CALLED__CALLER_FOREGROUND_STATE__BACKGROUND;
+import static android.health.HealthFitnessStatsLog.HEALTH_CONNECT_API_CALLED__CALLER_FOREGROUND_STATE__FOREGROUND;
+import static android.health.HealthFitnessStatsLog.HEALTH_CONNECT_API_CALLED__CALLER_FOREGROUND_STATE__UNSPECIFIED;
+import static android.health.HealthFitnessStatsLog.HEALTH_CONNECT_API_CALLED__RATE_LIMIT__NOT_USED;
+import static android.health.HealthFitnessStatsLog.HEALTH_CONNECT_API_CALLED__RATE_LIMIT__RATE_LIMIT_BACKGROUND_15_MIN_ABOVE_3000;
+import static android.health.HealthFitnessStatsLog.HEALTH_CONNECT_API_CALLED__RATE_LIMIT__RATE_LIMIT_BACKGROUND_24_HRS_BW_3000_TO_4000;
+import static android.health.HealthFitnessStatsLog.HEALTH_CONNECT_API_CALLED__RATE_LIMIT__RATE_LIMIT_FOREGROUND_15_MIN_BW_3000_TO_4000;
+import static android.health.HealthFitnessStatsLog.HEALTH_CONNECT_API_CALLED__RATE_LIMIT__RATE_LIMIT_FOREGROUND_24_HRS_BW_3000_TO_4000;
+import static android.health.connect.ratelimiter.RateLimiter.QuotaBucket.QUOTA_BUCKET_READS_PER_15M_BACKGROUND;
+import static android.health.connect.ratelimiter.RateLimiter.QuotaBucket.QUOTA_BUCKET_READS_PER_15M_FOREGROUND;
+import static android.health.connect.ratelimiter.RateLimiter.QuotaBucket.QUOTA_BUCKET_READS_PER_24H_BACKGROUND;
+import static android.health.connect.ratelimiter.RateLimiter.QuotaBucket.QUOTA_BUCKET_READS_PER_24H_FOREGROUND;
+import static android.health.connect.ratelimiter.RateLimiter.QuotaBucket.QUOTA_BUCKET_WRITES_PER_15M_BACKGROUND;
+import static android.health.connect.ratelimiter.RateLimiter.QuotaBucket.QUOTA_BUCKET_WRITES_PER_15M_FOREGROUND;
+import static android.health.connect.ratelimiter.RateLimiter.QuotaBucket.QUOTA_BUCKET_WRITES_PER_24H_BACKGROUND;
+import static android.health.connect.ratelimiter.RateLimiter.QuotaBucket.QUOTA_BUCKET_WRITES_PER_24H_FOREGROUND;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+import android.health.HealthFitnessStatsLog;
+import android.platform.test.annotations.EnableFlags;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.android.healthfitness.flags.Flags;
+import com.android.server.healthconnect.common.logging.HealthConnectServiceLogger;
+import com.android.server.healthconnect.common.logging.HealthConnectServiceLogger.ApiMethods;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
+
+@RunWith(AndroidJUnit4.class)
+public class HealthConnectServiceLoggerTest {
+    private static final String TEST_SPN_PACKAGE_CANONICAL =
+            "com.android.healthconnect.phone.d59341472a9253c16b986840a324ec594";
+    private static final String TEST_SPN_PACKAGE = "com.android.healthconnect.phone";
+
+    private static final int CALLER_FOREGROUND_STATE_UNSPECIFIED =
+            HEALTH_CONNECT_API_CALLED__CALLER_FOREGROUND_STATE__UNSPECIFIED;
+    private static final int CALLER_FOREGROUND_STATE_FOREGROUND =
+            HEALTH_CONNECT_API_CALLED__CALLER_FOREGROUND_STATE__FOREGROUND;
+    private static final int CALLER_FOREGROUND_STATE_BACKGROUND =
+            HEALTH_CONNECT_API_CALLED__CALLER_FOREGROUND_STATE__BACKGROUND;
+    private static final String TEST_APP_PACKAGE_NAME = "com.test.app";
+
+    @Rule public final MockitoRule mMockitoRule = MockitoJUnit.rule();
+
+    @Mock private HealthFitnessStatsLog mHealthFitnessStatsLog;
+
+    @Test
+    public void testDoNotLog_HoldsDataManagementPermission() {
+
+        new HealthConnectServiceLogger.Builder(true, ApiMethods.API_METHOD_UNKNOWN)
+                .setHealthFitnessStatsLog(mHealthFitnessStatsLog)
+                .build()
+                .log();
+
+        // then
+        verify(mHealthFitnessStatsLog, times(0))
+                .write(
+                        anyInt(),
+                        anyInt(),
+                        anyInt(),
+                        anyInt(),
+                        anyLong(),
+                        anyInt(),
+                        anyInt(),
+                        anyInt(),
+                        anyString());
+    }
+
+    @Test
+    public void testLogs_notHoldsDataManagementPermission() {
+
+        new HealthConnectServiceLogger.Builder(false, ApiMethods.API_METHOD_UNKNOWN)
+                .setHealthFitnessStatsLog(mHealthFitnessStatsLog)
+                .setPackageName(TEST_APP_PACKAGE_NAME)
+                .build()
+                .log();
+
+        // then
+        verify(mHealthFitnessStatsLog, times(1))
+                .write(
+                        eq(HEALTH_CONNECT_API_CALLED),
+                        eq(HEALTH_CONNECT_API_CALLED__API_METHOD__API_METHOD_UNKNOWN),
+                        eq(HEALTH_CONNECT_API_CALLED__API_STATUS__STATUS_UNKNOWN),
+                        eq(0),
+                        anyLong(),
+                        eq(0),
+                        eq(RateLimitingRanges.NOT_USED),
+                        eq(CALLER_FOREGROUND_STATE_UNSPECIFIED),
+                        eq(TEST_APP_PACKAGE_NAME));
+    }
+
+    @Test
+    public void testRateLimiter_foreground15MinRead() {
+
+        new HealthConnectServiceLogger.Builder(false, ApiMethods.API_METHOD_UNKNOWN)
+                .setRateLimit(QUOTA_BUCKET_READS_PER_15M_FOREGROUND, 3000)
+                .setPackageName(TEST_APP_PACKAGE_NAME)
+                .setHealthFitnessStatsLog(mHealthFitnessStatsLog)
+                .build()
+                .log();
+
+        // then
+        verify(mHealthFitnessStatsLog, times(1))
+                .write(
+                        eq(HEALTH_CONNECT_API_CALLED),
+                        eq(HEALTH_CONNECT_API_CALLED__API_METHOD__API_METHOD_UNKNOWN),
+                        eq(HEALTH_CONNECT_API_CALLED__API_STATUS__STATUS_UNKNOWN),
+                        eq(0),
+                        anyLong(),
+                        eq(0),
+                        eq(RateLimitingRanges.FOREGROUND_15_MIN_BW_3000_TO_4000),
+                        eq(CALLER_FOREGROUND_STATE_UNSPECIFIED),
+                        eq(TEST_APP_PACKAGE_NAME));
+    }
+
+    @Test
+    public void testRateLimiter_background15MinRead() {
+
+        new HealthConnectServiceLogger.Builder(false, ApiMethods.API_METHOD_UNKNOWN)
+                .setRateLimit(QUOTA_BUCKET_READS_PER_15M_BACKGROUND, 3000)
+                .setPackageName(TEST_APP_PACKAGE_NAME)
+                .setHealthFitnessStatsLog(mHealthFitnessStatsLog)
+                .build()
+                .log();
+
+        // then
+        verify(mHealthFitnessStatsLog, times(1))
+                .write(
+                        eq(HEALTH_CONNECT_API_CALLED),
+                        eq(HEALTH_CONNECT_API_CALLED__API_METHOD__API_METHOD_UNKNOWN),
+                        eq(HEALTH_CONNECT_API_CALLED__API_STATUS__STATUS_UNKNOWN),
+                        eq(0),
+                        anyLong(),
+                        eq(0),
+                        eq(RateLimitingRanges.BACKGROUND_15_MIN_ABOVE_3000),
+                        eq(CALLER_FOREGROUND_STATE_UNSPECIFIED),
+                        eq(TEST_APP_PACKAGE_NAME));
+    }
+
+    @Test
+    public void testRateLimiter_background24hourRead() {
+
+        new HealthConnectServiceLogger.Builder(false, ApiMethods.API_METHOD_UNKNOWN)
+                .setRateLimit(QUOTA_BUCKET_READS_PER_24H_BACKGROUND, 3000)
+                .setPackageName(TEST_APP_PACKAGE_NAME)
+                .setHealthFitnessStatsLog(mHealthFitnessStatsLog)
+                .build()
+                .log();
+
+        // then
+        verify(mHealthFitnessStatsLog, times(1))
+                .write(
+                        eq(HEALTH_CONNECT_API_CALLED),
+                        eq(HEALTH_CONNECT_API_CALLED__API_METHOD__API_METHOD_UNKNOWN),
+                        eq(HEALTH_CONNECT_API_CALLED__API_STATUS__STATUS_UNKNOWN),
+                        eq(0),
+                        anyLong(),
+                        eq(0),
+                        eq(RateLimitingRanges.BACKGROUND_24_HRS_BW_3000_TO_4000),
+                        eq(CALLER_FOREGROUND_STATE_UNSPECIFIED),
+                        eq(TEST_APP_PACKAGE_NAME));
+    }
+
+    @Test
+    public void testRateLimiter_foreground24hourRead() {
+
+        new HealthConnectServiceLogger.Builder(false, ApiMethods.API_METHOD_UNKNOWN)
+                .setRateLimit(QUOTA_BUCKET_READS_PER_24H_FOREGROUND, 3000)
+                .setPackageName(TEST_APP_PACKAGE_NAME)
+                .setHealthFitnessStatsLog(mHealthFitnessStatsLog)
+                .build()
+                .log();
+
+        // then
+        verify(mHealthFitnessStatsLog, times(1))
+                .write(
+                        eq(HEALTH_CONNECT_API_CALLED),
+                        eq(HEALTH_CONNECT_API_CALLED__API_METHOD__API_METHOD_UNKNOWN),
+                        eq(HEALTH_CONNECT_API_CALLED__API_STATUS__STATUS_UNKNOWN),
+                        eq(0),
+                        anyLong(),
+                        eq(0),
+                        eq(RateLimitingRanges.FOREGROUND_24_HRS_BW_3000_TO_4000),
+                        eq(CALLER_FOREGROUND_STATE_UNSPECIFIED),
+                        eq(TEST_APP_PACKAGE_NAME));
+    }
+
+    @Test
+    public void testRateLimiter_foreground15MinWrite() {
+
+        new HealthConnectServiceLogger.Builder(false, ApiMethods.API_METHOD_UNKNOWN)
+                .setRateLimit(QUOTA_BUCKET_WRITES_PER_15M_FOREGROUND, 3000)
+                .setPackageName(TEST_APP_PACKAGE_NAME)
+                .setHealthFitnessStatsLog(mHealthFitnessStatsLog)
+                .build()
+                .log();
+
+        // then
+        verify(mHealthFitnessStatsLog, times(1))
+                .write(
+                        eq(HEALTH_CONNECT_API_CALLED),
+                        eq(HEALTH_CONNECT_API_CALLED__API_METHOD__API_METHOD_UNKNOWN),
+                        eq(HEALTH_CONNECT_API_CALLED__API_STATUS__STATUS_UNKNOWN),
+                        eq(0),
+                        anyLong(),
+                        eq(0),
+                        eq(RateLimitingRanges.FOREGROUND_15_MIN_BW_3000_TO_4000),
+                        eq(CALLER_FOREGROUND_STATE_UNSPECIFIED),
+                        eq(TEST_APP_PACKAGE_NAME));
+    }
+
+    @Test
+    public void testRateLimiter_background15MinWrite() {
+
+        new HealthConnectServiceLogger.Builder(false, ApiMethods.API_METHOD_UNKNOWN)
+                .setRateLimit(QUOTA_BUCKET_WRITES_PER_15M_BACKGROUND, 3000)
+                .setPackageName(TEST_APP_PACKAGE_NAME)
+                .setHealthFitnessStatsLog(mHealthFitnessStatsLog)
+                .build()
+                .log();
+
+        // then
+        verify(mHealthFitnessStatsLog, times(1))
+                .write(
+                        eq(HEALTH_CONNECT_API_CALLED),
+                        eq(HEALTH_CONNECT_API_CALLED__API_METHOD__API_METHOD_UNKNOWN),
+                        eq(HEALTH_CONNECT_API_CALLED__API_STATUS__STATUS_UNKNOWN),
+                        eq(0),
+                        anyLong(),
+                        eq(0),
+                        eq(RateLimitingRanges.BACKGROUND_15_MIN_ABOVE_3000),
+                        eq(CALLER_FOREGROUND_STATE_UNSPECIFIED),
+                        eq(TEST_APP_PACKAGE_NAME));
+    }
+
+    @Test
+    public void testRateLimiter_background24hourWrite() {
+
+        new HealthConnectServiceLogger.Builder(false, ApiMethods.API_METHOD_UNKNOWN)
+                .setRateLimit(QUOTA_BUCKET_WRITES_PER_24H_BACKGROUND, 3000)
+                .setPackageName(TEST_APP_PACKAGE_NAME)
+                .setHealthFitnessStatsLog(mHealthFitnessStatsLog)
+                .build()
+                .log();
+
+        // then
+        verify(mHealthFitnessStatsLog, times(1))
+                .write(
+                        eq(HEALTH_CONNECT_API_CALLED),
+                        eq(HEALTH_CONNECT_API_CALLED__API_METHOD__API_METHOD_UNKNOWN),
+                        eq(HEALTH_CONNECT_API_CALLED__API_STATUS__STATUS_UNKNOWN),
+                        eq(0),
+                        anyLong(),
+                        eq(0),
+                        eq(RateLimitingRanges.BACKGROUND_24_HRS_BW_3000_TO_4000),
+                        eq(CALLER_FOREGROUND_STATE_UNSPECIFIED),
+                        eq(TEST_APP_PACKAGE_NAME));
+    }
+
+    @Test
+    public void testRateLimiter_foreground24hourWrite() {
+
+        new HealthConnectServiceLogger.Builder(false, ApiMethods.API_METHOD_UNKNOWN)
+                .setRateLimit(QUOTA_BUCKET_WRITES_PER_24H_FOREGROUND, 3000)
+                .setPackageName(TEST_APP_PACKAGE_NAME)
+                .setHealthFitnessStatsLog(mHealthFitnessStatsLog)
+                .build()
+                .log();
+
+        // then
+        verify(mHealthFitnessStatsLog, times(1))
+                .write(
+                        eq(HEALTH_CONNECT_API_CALLED),
+                        eq(HEALTH_CONNECT_API_CALLED__API_METHOD__API_METHOD_UNKNOWN),
+                        eq(HEALTH_CONNECT_API_CALLED__API_STATUS__STATUS_UNKNOWN),
+                        eq(0),
+                        anyLong(),
+                        eq(0),
+                        eq(RateLimitingRanges.FOREGROUND_24_HRS_BW_3000_TO_4000),
+                        eq(CALLER_FOREGROUND_STATE_UNSPECIFIED),
+                        eq(TEST_APP_PACKAGE_NAME));
+    }
+
+    @Test
+    public void testApiSuccessLogs() {
+
+        new HealthConnectServiceLogger.Builder(false, ApiMethods.API_METHOD_UNKNOWN)
+                .setHealthDataServiceApiStatusSuccess()
+                .setPackageName(TEST_APP_PACKAGE_NAME)
+                .setHealthFitnessStatsLog(mHealthFitnessStatsLog)
+                .build()
+                .log();
+
+        // then
+        verify(mHealthFitnessStatsLog, times(1))
+                .write(
+                        eq(HEALTH_CONNECT_API_CALLED),
+                        eq(HEALTH_CONNECT_API_CALLED__API_METHOD__API_METHOD_UNKNOWN),
+                        eq(HEALTH_CONNECT_API_CALLED__API_STATUS__SUCCESS),
+                        eq(0),
+                        anyLong(),
+                        eq(0),
+                        eq(RateLimitingRanges.NOT_USED),
+                        eq(CALLER_FOREGROUND_STATE_UNSPECIFIED),
+                        eq(TEST_APP_PACKAGE_NAME));
+    }
+
+    @Test
+    public void testApiErrorLogs() {
+
+        new HealthConnectServiceLogger.Builder(false, ApiMethods.API_METHOD_UNKNOWN)
+                .setHealthDataServiceApiStatusError(2)
+                .setPackageName(TEST_APP_PACKAGE_NAME)
+                .setHealthFitnessStatsLog(mHealthFitnessStatsLog)
+                .build()
+                .log();
+
+        // then
+        verify(mHealthFitnessStatsLog, times(1))
+                .write(
+                        eq(HEALTH_CONNECT_API_CALLED),
+                        eq(HEALTH_CONNECT_API_CALLED__API_METHOD__API_METHOD_UNKNOWN),
+                        eq(HEALTH_CONNECT_API_CALLED__API_STATUS__ERROR),
+                        eq(2),
+                        anyLong(),
+                        eq(0),
+                        eq(RateLimitingRanges.NOT_USED),
+                        eq(CALLER_FOREGROUND_STATE_UNSPECIFIED),
+                        eq(TEST_APP_PACKAGE_NAME));
+    }
+
+    @Test
+    public void testSetNumberOfRecords() {
+
+        new HealthConnectServiceLogger.Builder(false, ApiMethods.API_METHOD_UNKNOWN)
+                .setNumberOfRecords(10)
+                .setPackageName(TEST_APP_PACKAGE_NAME)
+                .setHealthFitnessStatsLog(mHealthFitnessStatsLog)
+                .build()
+                .log();
+
+        // then
+        verify(mHealthFitnessStatsLog, times(1))
+                .write(
+                        eq(HEALTH_CONNECT_API_CALLED),
+                        eq(HEALTH_CONNECT_API_CALLED__API_METHOD__API_METHOD_UNKNOWN),
+                        eq(HEALTH_CONNECT_API_CALLED__API_STATUS__STATUS_UNKNOWN),
+                        eq(0),
+                        anyLong(),
+                        eq(10),
+                        eq(RateLimitingRanges.NOT_USED),
+                        eq(CALLER_FOREGROUND_STATE_UNSPECIFIED),
+                        eq(TEST_APP_PACKAGE_NAME));
+    }
+
+    @Test
+    public void testAllFields_successStatus() {
+
+        new HealthConnectServiceLogger.Builder(false, ApiMethods.INSERT_DATA)
+                .setHealthDataServiceApiStatusSuccess()
+                .setHealthFitnessStatsLog(mHealthFitnessStatsLog)
+                .setRateLimit(QUOTA_BUCKET_WRITES_PER_15M_BACKGROUND, 3000)
+                .setNumberOfRecords(10)
+                .setPackageName(TEST_APP_PACKAGE_NAME)
+                .build()
+                .log();
+
+        // then
+        verify(mHealthFitnessStatsLog, times(1))
+                .write(
+                        eq(HEALTH_CONNECT_API_CALLED),
+                        eq(HEALTH_CONNECT_API_CALLED__API_METHOD__INSERT_DATA),
+                        eq(HEALTH_CONNECT_API_CALLED__API_STATUS__SUCCESS),
+                        eq(0),
+                        anyLong(),
+                        eq(10),
+                        eq(RateLimitingRanges.BACKGROUND_15_MIN_ABOVE_3000),
+                        eq(CALLER_FOREGROUND_STATE_UNSPECIFIED),
+                        eq(TEST_APP_PACKAGE_NAME));
+    }
+
+    @Test
+    public void testAllFields_errorStatus() {
+
+        new HealthConnectServiceLogger.Builder(false, ApiMethods.INSERT_DATA)
+                .setHealthDataServiceApiStatusError(1)
+                .setHealthFitnessStatsLog(mHealthFitnessStatsLog)
+                .setRateLimit(QUOTA_BUCKET_WRITES_PER_15M_BACKGROUND, 3000)
+                .setNumberOfRecords(10)
+                .setPackageName(TEST_APP_PACKAGE_NAME)
+                .build()
+                .log();
+
+        // then
+        verify(mHealthFitnessStatsLog, times(1))
+                .write(
+                        eq(HEALTH_CONNECT_API_CALLED),
+                        eq(HEALTH_CONNECT_API_CALLED__API_METHOD__INSERT_DATA),
+                        eq(HEALTH_CONNECT_API_CALLED__API_STATUS__ERROR),
+                        eq(1),
+                        anyLong(),
+                        eq(10),
+                        eq(RateLimitingRanges.BACKGROUND_15_MIN_ABOVE_3000),
+                        eq(CALLER_FOREGROUND_STATE_UNSPECIFIED),
+                        eq(TEST_APP_PACKAGE_NAME));
+    }
+
+    @Test
+    public void testCallerForegroundState() {
+        new HealthConnectServiceLogger.Builder(false, ApiMethods.API_METHOD_UNKNOWN)
+                .setHealthFitnessStatsLog(mHealthFitnessStatsLog)
+                .setCallerForegroundState(true)
+                .setPackageName(TEST_APP_PACKAGE_NAME)
+                .build()
+                .log();
+
+        // then
+        verify(mHealthFitnessStatsLog, times(1))
+                .write(
+                        eq(HEALTH_CONNECT_API_CALLED),
+                        eq(HEALTH_CONNECT_API_CALLED__API_METHOD__API_METHOD_UNKNOWN),
+                        eq(HEALTH_CONNECT_API_CALLED__API_STATUS__STATUS_UNKNOWN),
+                        eq(0),
+                        anyLong(),
+                        eq(0),
+                        eq(RateLimitingRanges.NOT_USED),
+                        eq(CALLER_FOREGROUND_STATE_FOREGROUND),
+                        eq(TEST_APP_PACKAGE_NAME));
+    }
+
+    @Test
+    public void testCallerBackgroundState() {
+        new HealthConnectServiceLogger.Builder(false, ApiMethods.API_METHOD_UNKNOWN)
+                .setHealthFitnessStatsLog(mHealthFitnessStatsLog)
+                .setCallerForegroundState(false)
+                .setPackageName(TEST_APP_PACKAGE_NAME)
+                .build()
+                .log();
+
+        // then
+        verify(mHealthFitnessStatsLog)
+                .write(
+                        eq(HEALTH_CONNECT_API_CALLED),
+                        eq(HEALTH_CONNECT_API_CALLED__API_METHOD__API_METHOD_UNKNOWN),
+                        eq(HEALTH_CONNECT_API_CALLED__API_STATUS__STATUS_UNKNOWN),
+                        eq(0),
+                        anyLong(),
+                        eq(0),
+                        eq(RateLimitingRanges.NOT_USED),
+                        eq(CALLER_FOREGROUND_STATE_BACKGROUND),
+                        eq(TEST_APP_PACKAGE_NAME));
+    }
+
+    @Test
+    @EnableFlags({Flags.FLAG_DEVICE_DATA_PROVIDERS_API, Flags.FLAG_DEVICE_DATA_PROVIDERS_DB})
+    public void logsApiMetrics_logsCanonicalSpn() {
+        new HealthConnectServiceLogger.Builder(false, ApiMethods.API_METHOD_UNKNOWN)
+                .setHealthFitnessStatsLog(mHealthFitnessStatsLog)
+                .setCallerForegroundState(false)
+                .setPackageName(TEST_SPN_PACKAGE_CANONICAL)
+                .build()
+                .log();
+
+        // then
+        verify(mHealthFitnessStatsLog)
+                .write(
+                        eq(HEALTH_CONNECT_API_CALLED),
+                        eq(HEALTH_CONNECT_API_CALLED__API_METHOD__API_METHOD_UNKNOWN),
+                        eq(HEALTH_CONNECT_API_CALLED__API_STATUS__STATUS_UNKNOWN),
+                        eq(0),
+                        anyLong(),
+                        eq(0),
+                        eq(RateLimitingRanges.NOT_USED),
+                        eq(CALLER_FOREGROUND_STATE_BACKGROUND),
+                        eq(TEST_SPN_PACKAGE));
+    }
+
+    private static final class RateLimitingRanges {
+
+        private static final int NOT_USED = HEALTH_CONNECT_API_CALLED__RATE_LIMIT__NOT_USED;
+        private static final int FOREGROUND_15_MIN_BW_3000_TO_4000 =
+                HEALTH_CONNECT_API_CALLED__RATE_LIMIT__RATE_LIMIT_FOREGROUND_15_MIN_BW_3000_TO_4000;
+        private static final int BACKGROUND_15_MIN_ABOVE_3000 =
+                HEALTH_CONNECT_API_CALLED__RATE_LIMIT__RATE_LIMIT_BACKGROUND_15_MIN_ABOVE_3000;
+        private static final int FOREGROUND_24_HRS_BW_3000_TO_4000 =
+                HEALTH_CONNECT_API_CALLED__RATE_LIMIT__RATE_LIMIT_FOREGROUND_24_HRS_BW_3000_TO_4000;
+        private static final int BACKGROUND_24_HRS_BW_3000_TO_4000 =
+                HEALTH_CONNECT_API_CALLED__RATE_LIMIT__RATE_LIMIT_BACKGROUND_24_HRS_BW_3000_TO_4000;
+    }
+}

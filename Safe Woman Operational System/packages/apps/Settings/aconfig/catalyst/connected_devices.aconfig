@@ -1,0 +1,16 @@
+package: "com.android.settings.flags"
+container: "system_ext"
+
+flag {
+  name: "catalyst_bluetooth_switchbar_screen"
+  namespace: "android_settings"
+  description: "Flag for Bluetooth"
+  bug: "323791114"
+}
+
+flag {
+  name: "catalyst_bluetooth_dashboard_screen_25q4"
+  namespace: "android_settings"
+  description: "Flag for BluetoothDashboardScreen subitems migration."
+  bug: "405344827"
+}

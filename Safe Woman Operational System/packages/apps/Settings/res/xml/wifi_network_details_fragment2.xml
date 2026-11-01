@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2020 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:settings="http://schemas.android.com/apk/res-auto">
+
+    <com.android.settingslib.widget.IntroPreference
+        android:key="wifi_details_intro"/>
+
+    <com.android.settings.datausage.DataUsageSummaryPreference
+        android:key="status_header"
+        android:selectable="false"
+        settings:isPreferenceVisible="false"/>
+
+    <!-- The preference to display the second summary -->
+    <com.android.settings.widget.LinkifySummaryPreference
+        android:key="second_summary"
+        android:icon="@drawable/ic_info_outline_24dp"
+        android:selectable="false"/>
+
+    <com.android.settingslib.widget.BannerMessagePreference
+        android:key="wep_less_secure_warning"
+        android:title="@string/wep_network_less_secure_warning_title"
+        settings:controller="com.android.settings.wifi.WepLessSecureWarningController"/>
+
+    <!-- Buttons -->
+    <com.android.settingslib.widget.ActionButtonsPreference
+        android:key="buttons"
+        android:selectable="false"/>
+
+    <!-- Hotspot device details category -->
+    <PreferenceCategory
+        android:key="hotspot_device_details_category"
+        android:title="@string/hotspot_device_details_category"
+        settings:isPreferenceVisible="false">
+        <Preference
+            android:key="hotspot_device_details_internet_source"
+            android:title="@string/hotspot_device_details_internet_source"
+            android:selectable="false"
+            settings:enableCopying="true"/>
+        <Preference
+            android:key="hotspot_device_details_battery"
+            android:icon="@drawable/ic_battery_full"
+            android:title="@string/power_usage_summary_title"
+            android:selectable="false"
+            settings:enableCopying="true"/>
+    </PreferenceCategory>
+
+    <!-- Hotspot connection category -->
+    <PreferenceCategory
+        android:key="hotspot_connection_category"
+        android:title="@string/hotspot_connection_category"
+        settings:isPreferenceVisible="false">
+    </PreferenceCategory>
+
+    <!-- General Details Preferences -->
+    <PreferenceCategory>
+        <com.android.settings.widget.NonClickablePreference
+            android:key="signal_strength"
+            android:title="@string/wifi_signal" />
+
+        <com.android.settings.widget.NonClickablePreference
+            android:key="frequency"
+            android:icon="@drawable/ic_frequency_antenna"
+            android:title="@string/wifi_frequency" />
+
+        <com.android.settings.widget.NonClickablePreference
+            android:key="security"
+            android:icon="@drawable/ic_security_lock_24dp"
+            android:title="@string/wifi_security" />
+
+        <ListPreference
+            android:key="metered"
+            android:icon="@drawable/ic_attach_money_black_24dp"
+            android:title="@string/wifi_metered_title"
+            android:entries="@array/wifi_metered_entries"
+            android:entryValues="@array/wifi_metered_values"/>
+
+        <ListPreference
+            android:key="privacy"
+            android:icon="@drawable/ic_wifi_privacy_24dp"
+            android:title="@string/wifi_privacy_settings"
+            android:entries="@array/wifi_privacy_entries"
+            android:entryValues="@array/wifi_privacy_values"/>
+
+      <SwitchPreferenceCompat
+          android:key="shared"
+          android:icon="@drawable/ic_group_24dp"
+          android:title="@string/wifi_share_preference_title"
+          android:summary="@string/wifi_share_preference_summary"/>
+
+      <SwitchPreferenceCompat
+          android:key="edit_configuration"
+          android:icon="@drawable/ic_network_manage_24dp"
+          android:title="@string/wifi_allow_edit_configuration_title"
+          android:summary="@string/wifi_allow_edit_configuration_summary"
+          settings:isPreferenceVisible="true"/>
+
+        <com.android.settings.spa.preference.ComposePreference
+            android:key="privacy_settings"
+            android:title="@string/wifi_privacy_settings"
+            settings:controller="com.android.settings.wifi.details2.WifiPrivacyPreferenceController"/>
+
+        <Preference
+            android:key="subscription_detail"
+            android:title="@string/wifi_subscription"
+            android:summary="@string/wifi_subscription_summary"/>
+    </PreferenceCategory>
+
+    <com.android.settingslib.widget.UntitledPreferenceCategory>
+      <SwitchPreferenceCompat
+          android:key="auto_connect"
+          android:title="@string/wifi_auto_connect_title"
+          android:summary="@string/wifi_auto_connect_summary"/>
+
+      <com.android.settings.spa.preference.ComposePreference
+          android:key="certificate_details"
+          settings:controller="com.android.settings.wifi.details2.CertificateDetailsPreferenceController"/>
+
+      <!-- Add device Preference -->
+      <Preference
+          android:key="add_device_to_network"
+          android:title="@string/wifi_dpp_add_device"
+          android:summary="@string/wifi_dpp_connect_network_using_qr_code"/>
+    </com.android.settingslib.widget.UntitledPreferenceCategory>
+
+    <!-- Network Details -->
+    <PreferenceCategory
+            android:key="ip_details_category"
+            android:title="@string/wifi_setup_detail">
+        <com.android.settings.spa.preference.ComposePreference
+            android:key="server_name"
+            settings:controller="com.android.settings.wifi.details2.ServerNamePreferenceController"/>
+        <com.android.settings.widget.NonClickablePreference
+                android:key="type"
+                android:title="@string/wifi_type_title"
+                settings:enableCopying="true"/>
+        <com.android.settings.widget.NonClickablePreference
+                android:key="ssid"
+                android:title="@string/wifi_advanced_ssid_title"
+                settings:enableCopying="true"/>
+        <com.android.settings.widget.NonClickablePreference
+                android:key="eap_sim_subscription"
+                android:title="@string/sim_card"
+                settings:enableCopying="true"/>
+        <com.android.settings.widget.NonClickablePreference
+                android:key="mac_address"
+                android:title="@string/wifi_advanced_randomized_mac_address_title"
+                settings:enableCopying="true"/>
+        <com.android.settings.widget.NonClickablePreference
+                android:key="ip_address"
+                android:title="@string/wifi_ip_address"
+                settings:enableCopying="true"/>
+        <com.android.settings.widget.NonClickablePreference
+                android:key="gateway"
+                android:title="@string/wifi_gateway"
+                settings:enableCopying="true"/>
+        <com.android.settings.widget.NonClickablePreference
+                android:key="subnet_mask"
+                android:title="@string/wifi_details_subnet_mask"
+                settings:enableCopying="true"/>
+        <com.android.settings.widget.NonClickablePreference
+                android:key="dns"
+                android:title="@string/wifi_details_dns"
+                settings:enableCopying="true"/>
+        <com.android.settings.widget.NonClickablePreference
+                android:key="tx_link_speed"
+                android:title="@string/tx_wifi_speed"
+                settings:enableCopying="true"/>
+        <com.android.settings.widget.NonClickablePreference
+                android:key="rx_link_speed"
+                android:title="@string/rx_wifi_speed"
+                settings:enableCopying="true"/>
+        <!-- IPv6 address -->
+        <com.android.settings.widget.NonClickablePreference
+            android:title="@string/wifi_details_ipv6_address_header"
+            android:key="ipv6_addresses"
+            settings:enableCopying="true"/>
+    </PreferenceCategory>
+
+    <com.android.settingslib.widget.FooterPreference
+        android:key="shared_network_footer"
+        android:title="@string/edit_wifi_network_non_owner_message"
+        settings:isPreferenceVisible="false">
+    </com.android.settingslib.widget.FooterPreference>
+</PreferenceScreen>

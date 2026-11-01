@@ -1,0 +1,19 @@
+package: "com.android.settings.flags"
+container: "system_ext"
+
+flag {
+    name: "exclude_webcam_auth_challenge"
+    namespace: "safety_center"
+    description: "Gates whether to exclude webcam from USB preferences auth challenge."
+    bug: "349370229"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+  name: "enable_resolution_refresh_rate_setting"
+  namespace: "lse_desktop_experience"
+  description: "Show refresh rate options together with resolution options."
+  bug: "454516501"
+}

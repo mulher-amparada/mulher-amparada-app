@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2025 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License
+  -->
+
+<resources>
+    <style name="Settings.Expressive" parent="Theme.SubSettingsBase.Expressive"/>
+
+    <style name="Theme.PermissionController.Settings.Expressive" parent="Settings.Expressive">
+        <!-- These two attributes are required when using Toolbar as ActionBar. -->
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:alertDialogTheme">@style/Theme.DeviceDefault.AlertDialog.SettingsLib.Expressive</item>
+    </style>
+
+    <style name="Theme.PermissionController.Settings.Expressive.FilterTouches">
+        <item name="android:filterTouchesWhenObscured">true</item>
+    </style>
+
+    <style name="Theme.DeviceDefault.AlertDialog.DefaultAppConfirmation.Expressive" parent="@style/Theme.DeviceDefault.AlertDialog.SettingsLib.Expressive">
+        <item name="android:buttonBarPositiveButtonStyle">@style/Widget.SettingsLib.DialogButton.Outline</item>
+    </style>
+
+    <!-- START EXPRESSIVE ENHANCED CONFIRMATION DIALOG -->
+
+    <!-- This is not overlayable -->
+    <style name="Theme.EnhancedConfirmationDialogActivityExpressive.FilterTouches">
+        <item name="android:filterTouchesWhenObscured">true</item>
+    </style>
+
+    <style name="Theme.EnhancedConfirmationDialogActivityExpressive"
+           parent="@style/Theme.DeviceDefault.Dialog.NoActionBar.DayNight">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:alertDialogTheme">@style/Theme.DeviceDefault.AlertDialog.SettingsLib.Expressive</item>
+    </style>
+
+    <!-- END EXPRESSIVE ENHANCED CONFIRMATION DIALOG -->
+
+    <style name="Theme.SafetyCenterQsExpressive"
+        parent="@android:style/Theme.DeviceDefault.DayNight">
+        <item name="android:filterTouchesWhenObscured">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="ThemeOverlay.SafetyCenter.Expressive" parent="">
+        <item name="scCardSideMargin">0dp</item>
+
+        <item name="scIssueAttributionTitleMarginBottom">@dimen/sc_spacing_xsmall</item>
+        <item name="scIssueSummaryMarginTop">@dimen/sc_spacing_small</item>
+        <item name="scIssueActionButtonListMarginTop">@dimen/sc_spacing_large</item>
+
+        <item name="scStatusTitleTextAppearance">
+            @style/TextAppearance.SettingsLib.TitleLarge.Emphasized
+        </item>
+        <item name="scIssueTitleTextAppearance">
+            @style/TextAppearance.SettingsLib.TitleLarge.Emphasized
+        </item>
+        <item name="scIssueSubtitleTextAppearance">
+            @style/TextAppearance.SettingsLib.BodyLarge.Emphasized
+        </item>
+        <item name="scIssueAttributionTitleTextAppearance">
+            @style/TextAppearance.SettingsLib.LabelMedium
+        </item>
+        <item name="scMoreIssuesTitleTextAppearance">
+            @style/TextAppearance.SettingsLib.LabelLarge
+        </item>
+        <item name="scQsToggleTitleTextAppearance">
+            @style/TextAppearance.SettingsLib.LabelLarge
+        </item>
+    </style>
+
+    <style name="ThemeOverlay.SafetyCenter.ExpressiveButtons" parent="">
+        <item name="scActionButtonTheme">@style/Theme.Material3.DayNight</item>
+        <item name="scActionButtonCornerRadius">100dp</item>
+
+        <item name="scStatusButtonStyle">@style/ExpressiveStatusButton.Responsive</item>
+        <item name="scActionButtonStyle">@style/ExpressiveActionButton.Responsive</item>
+        <item name="scSecondaryActionButtonStyle">@style/ExpressiveOutlineActionButton.Responsive</item>
+    </style>
+
+    <style name="ThemeOverlay.SafetyCenter.ExpressiveButtons.QuickSettings">
+        <item name="scStatusButtonStyle">@style/ExpressiveStatusButton.Fixed</item>
+        <item name="scActionButtonStyle">@style/ExpressiveActionButton.Fixed</item>
+        <item name="scSecondaryActionButtonStyle">@style/ExpressiveOutlineActionButton.Fixed</item>
+    </style>
+
+    <!-- Contains colors whose resource name does not change between light and dark. -->
+    <style name="ThemeOverlay.SafetyCenter.ExpressiveColorsBase" parent="">
+        <item name="colorSurfaceContainerHigh">
+            @color/settingslib_materialColorSurfaceContainerHigh
+        </item>
+    </style>
+
+    <style name="ThemeOverlay.SafetyCenter.ExpressiveColors"
+        parent="ThemeOverlay.SafetyCenter.ExpressiveColorsBase">
+        <item name="textColorScActionButton">?attr/colorOnPrimary</item>
+        <item name="textColorScActionButtonRecommend">?android:attr/textColorPrimary</item>
+        <item name="textColorScSecondaryActionButton">?android:attr/textColorPrimary</item>
+        <item name="colorScButtonInfoBase">
+            @color/sc_expressive_semantic_green_container_high_lt
+        </item>
+        <item name="colorScOutlineButtonInfoBase">
+            @color/sc_expressive_semantic_green_container_high_lt
+        </item>
+        <item name="colorScButtonRecommendBase">
+            @color/sc_expressive_semantic_yellow_container_high_lt
+        </item>
+        <item name="colorScOutlineButtonRecommendBase">
+            @color/sc_expressive_semantic_yellow_container_high_lt
+        </item>
+        <item name="colorScButtonWarnBase">
+            @color/sc_expressive_semantic_red_container_high_lt
+        </item>
+        <item name="colorScOutlineButtonWarnBase">
+            @color/sc_expressive_semantic_red_container_high_lt
+        </item>
+    </style>
+</resources>

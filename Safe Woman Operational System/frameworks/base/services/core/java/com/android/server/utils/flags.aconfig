@@ -1,0 +1,10 @@
+package: "com.android.server.utils"
+container: "system"
+
+flag {
+     name: "long_method_trace"
+     namespace: "stability"
+     is_fixed_read_only: true
+     description: "Enable long method tracing when true"
+     bug: "419753987"
+}

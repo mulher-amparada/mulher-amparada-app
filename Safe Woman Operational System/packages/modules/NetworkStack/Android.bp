@@ -1,0 +1,380 @@
+//
+// Copyright (C) 2018 The Android Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+// Common defaults to define SDK level
+package {
+    default_team: "trendy_team_fwk_core_networking",
+    default_applicable_licenses: ["Android-Apache-2.0"],
+}
+
+// Common defaults for NetworkStack integration tests, root tests and coverage tests
+// to keep tests always running against the same target sdk version with NetworkStack.
+java_defaults {
+    name: "NetworkStackReleaseTargetSdk",
+    min_sdk_version: "31",
+    target_sdk_version: "37",
+}
+
+java_defaults {
+    name: "NetworkStackReleaseApiLevel",
+    defaults: ["NetworkStackReleaseTargetSdk"],
+    sdk_version: "module_current",
+    libs: [
+        "framework-configinfrastructure.stubs.module_lib",
+        "framework-connectivity.stubs.module_lib",
+        "framework-connectivity-t.stubs.module_lib",
+        "framework-statsd.stubs.module_lib",
+        "framework-telecom.stubs.module_lib",
+        "framework-tethering.stubs.module_lib",
+        "framework-wifi.stubs.module_lib",
+    ],
+}
+
+// Common defaults for android libraries containing network stack code
+java_defaults {
+    name: "NetworkStackAndroidLibraryDefaults",
+    srcs: [
+        ":framework-networkstack-shared-srcs",
+    ],
+    libs: [
+        "error_prone_annotations",
+        "framework-annotations-lib",
+        "unsupportedappusage",
+    ],
+    static_libs: [
+        "androidx.annotation_annotation",
+        "com.android.networkstack.mainline.beta.flags-aconfig-java-deprecated",
+        "com.android.networkstack.flags-aconfig-java",
+        "modules-utils-build_system",
+        "modules-utils-expresslog",
+        "modules-utils-preconditions",
+        "modules-utils-shell-command-handler",
+        "modules-utils-statemachine",
+        "netd_aidl_interface-lateststable-java",
+        "networkstack-client",
+        "net-utils-framework-common",
+        // See note on statsprotos when adding/updating proto build rules
+        "datastallprotosnano",
+        "statsprotos",
+        "captiveportal-lib",
+        "net-utils-device-common-ip",
+        "net-utils-device-common-netlink",
+        "net-utils-device-common-struct",
+        "net-utils-device-common-struct-base",
+        "net-utils-networkstack",
+    ],
+}
+
+// The versions of the android library containing network stack code compiled for each SDK variant.
+android_library {
+    name: "NetworkStackApiCurrentLib",
+    defaults: [
+        "NetworkStackReleaseApiLevel",
+        "NetworkStackAndroidLibraryDefaults",
+        "ConnectivityNextEnableDefaults",
+    ],
+    srcs: [
+        "src/**/*.java",
+        ":statslog-networkstack-java-gen-current",
+    ],
+    manifest: "AndroidManifestBase.xml",
+    visibility: [
+        "//frameworks/base/tests/net/integration",
+        "//packages/modules/Connectivity/Tethering/tests/integration",
+        "//packages/modules/NetworkStack/tests/unit",
+        "//packages/modules/NetworkStack/tests/integration",
+    ],
+    lint: {
+        baseline_filename: "lint-baseline.xml",
+    },
+}
+
+android_library {
+    name: "NetworkStackApiStableLib",
+    defaults: [
+        "NetworkStackReleaseApiLevel",
+        "NetworkStackAndroidLibraryDefaults",
+    ],
+    srcs: [
+        "src/**/*.java",
+        ":statslog-networkstack-java-gen-stable",
+    ],
+    manifest: "AndroidManifestBase.xml",
+    visibility: [
+        "//packages/modules/Connectivity/Tethering/tests/integration",
+        "//packages/modules/Connectivity/tests/integration",
+        "//packages/modules/NetworkStack/tests/unit",
+        "//packages/modules/NetworkStack/tests/integration",
+    ],
+    lint: {
+        baseline_filename: "lint-baseline.xml",
+    },
+}
+
+java_library {
+    name: "DhcpPacketLib",
+    defaults: ["NetworkStackReleaseApiLevel"],
+    srcs: [
+        "src/android/net/DhcpResults.java",
+        "src/android/net/dhcp/Dhcp*Packet.java",
+    ],
+    libs: [
+        "androidx.annotation_annotation",
+        "framework-annotations-lib",
+    ],
+    static_libs: [
+        "modules-utils-build",
+        "net-utils-framework-common",
+        "networkstack-client",
+        "net-utils-connectivity-apks",
+    ],
+    // If this library is ever used outside of tests, it should not use "Dhcp*Packet", and specify
+    // its contents explicitly.
+    visibility: [
+        "//packages/modules/Connectivity/Tethering/tests/integration",
+        "//packages/modules/Connectivity/tests/cts/net",
+    ],
+}
+
+java_library {
+    name: "ApfGeneratorLib",
+    defaults: ["NetworkStackReleaseApiLevel"],
+    srcs: [
+        "src/android/net/apf/ApfConstants.java",
+        "src/android/net/apf/ApfCounterTracker.java",
+        "src/android/net/apf/ApfV4Generator.java",
+        "src/android/net/apf/ApfV4GeneratorBase.java",
+        "src/android/net/apf/ApfV6Generator.java",
+        "src/android/net/apf/ApfV6GeneratorBase.java",
+        "src/android/net/apf/BaseApfGenerator.java",
+    ],
+    libs: [
+        "androidx.annotation_annotation",
+        "framework-annotations-lib",
+    ],
+    static_libs: [
+        "net-utils-framework-common",
+    ],
+    visibility: [
+        "//packages/modules/Connectivity/tests/cts/net",
+    ],
+}
+
+java_genrule {
+    name: "NetworkStackJarJarRules",
+    tool_files: [
+        // Use ApiStable to be based on most stable release configuration and be buildable
+        // in all branches.
+        ":NetworkStackApiStableLib{.jar}",
+        "jarjar-excludes.txt",
+    ],
+    tools: [
+        "jarjar-rules-generator",
+    ],
+    out: ["NetworkStackJarJarRules.txt"],
+    cmd: "$(location jarjar-rules-generator) " +
+        "$(location :NetworkStackApiStableLib{.jar}) " +
+        "--prefix com.android.networkstack " +
+        "--excludes $(location jarjar-excludes.txt) " +
+        "--output $(out)",
+    visibility: [
+        "//packages/modules/NetworkStack/tests/unit",
+        "//packages/modules/NetworkStack/tests/integration",
+        "//packages/modules/Connectivity/tests:__subpackages__",
+        "//packages/modules/Connectivity/Tethering/tests/integration",
+    ],
+}
+
+// Common defaults for compiling the actual APK, based on the NetworkStackApiXBase android libraries
+java_defaults {
+    name: "NetworkStackAppDefaults",
+    privileged: true,
+    jni_libs: [
+        "libnativehelper_compat_libc++",
+        "libnetworkstackutilsjni",
+        "libcom_android_networkstack_com_android_net_module_util_jni_CommonConnectivityJni",
+    ],
+    // Resources already included in NetworkStackBase
+    resource_dirs: [],
+    jarjar_rules: ":NetworkStackJarJarRules",
+    use_embedded_native_libs: true,
+    optimize: {
+        ignore_warnings: false,
+        proguard_flags_files: ["proguard.flags"],
+    },
+}
+
+filegroup {
+    name: "privapp_whitelist_com.android.networkstack",
+    srcs: ["com.android.networkstack.xml"],
+    visibility: ["//visibility:public"],
+}
+
+// Updatable network stack for finalized API
+android_app {
+    name: "NetworkStack",
+    defaults: [
+        "NetworkStackAppDefaults",
+        "NetworkStackReleaseApiLevel",
+    ],
+    static_libs: ["NetworkStackApiStableLib"],
+    certificate: "networkstack",
+    manifest: "AndroidManifest.xml",
+    privapp_allowlist: ":privapp_whitelist_com.android.networkstack",
+    updatable: true,
+    licenses: [
+        "Android-Apache-2.0",
+        "opensourcerequest",
+    ],
+}
+
+cc_library_shared {
+    name: "libnetworkstackutilsjni",
+    srcs: [
+        "jni/network_stack_utils_jni.cpp",
+    ],
+    header_libs: [
+        "bpf_headers",
+    ],
+    sdk_version: "current",
+    min_sdk_version: "31",
+    shared_libs: [
+        "liblog",
+        "libnativehelper_compat_libc++",
+    ],
+    static_libs: [
+        "libnetjniutils",
+    ],
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-Wno-unused-parameter",
+    ],
+}
+
+cc_library_shared {
+    name: "libcom_android_networkstack_com_android_net_module_util_jni_CommonConnectivityJni",
+    srcs: [
+        "jni/commonconnectivity/onload.cpp",
+    ],
+    header_libs: [
+        "jni_headers",
+    ],
+    sdk_version: "current",
+    min_sdk_version: "31",
+    shared_libs: [
+        "libbinder_ndk",
+        "liblog",
+        "libnativehelper_compat_libc++",
+    ],
+    static_libs: [
+        "libcommonconnectivityjni",
+    ],
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-Wno-unused-parameter",
+    ],
+    visibility: [
+        "//packages/modules/NetworkStack:__subpackages__",
+    ],
+}
+
+genrule {
+    name: "statslog-networkstack-java-gen-current",
+    tools: ["stats-log-api-gen"],
+    cmd: "$(location stats-log-api-gen) --java $(out) --module network_stack" +
+        " --javaPackage com.android.networkstack.metrics --javaClass NetworkStackStatsLog" +
+        " --minApiLevel 31",
+    out: ["com/android/networkstack/metrics/NetworkStackStatsLog.java"],
+}
+
+genrule {
+    name: "statslog-networkstack-java-gen-stable",
+    tools: ["stats-log-api-gen"],
+    cmd: "$(location stats-log-api-gen) --java $(out) --module network_stack" +
+        " --javaPackage com.android.networkstack.metrics --javaClass NetworkStackStatsLog" +
+        " --minApiLevel 31",
+    out: ["com/android/networkstack/metrics/NetworkStackStatsLog.java"],
+}
+
+version_code_networkstack_test = "999999999"
+
+genrule {
+    name: "NetworkStackTestAndroidManifest",
+    srcs: ["AndroidManifest.xml"],
+    out: ["TestAndroidManifest.xml"],
+    cmd: "sed -E 's/versionCode=\"[0-9]+\"/versionCode=\"" +
+        version_code_networkstack_test +
+        "\"/' $(in) > $(out)",
+    visibility: ["//visibility:private"],
+}
+
+android_app {
+    name: "TestNetworkStack",
+    defaults: [
+        "NetworkStackAppDefaults",
+        "NetworkStackReleaseApiLevel",
+    ],
+    static_libs: ["NetworkStackApiStableLib"],
+    certificate: "networkstack",
+    manifest: ":NetworkStackTestAndroidManifest",
+    privapp_allowlist: ":privapp_whitelist_com.android.networkstack",
+}
+
+// When adding or modifying protos, the jarjar rules and possibly proguard rules need
+// to be updated: proto libraries may pull additional static libraries.
+java_library_static {
+    name: "statsprotos",
+    proto: {
+        type: "lite",
+    },
+    srcs: [
+        "src/com/android/networkstack/metrics/stats.proto",
+    ],
+    static_libs: [
+        "networkstackprotos",
+    ],
+    defaults: ["NetworkStackReleaseApiLevel"],
+}
+
+aconfig_declarations {
+    name: "networkstack.mainline.beta.flags.deprecated",
+    package: "com.android.networkstack.mainline.beta",
+    container: "NetworkStack",
+    srcs: ["mainline_beta.aconfig.deprecated"],
+}
+
+java_aconfig_library {
+    name: "com.android.networkstack.mainline.beta.flags-aconfig-java-deprecated",
+    aconfig_declarations: "networkstack.mainline.beta.flags.deprecated",
+    defaults: ["framework-minus-apex-aconfig-java-defaults"],
+    min_sdk_version: "31",
+}
+
+aconfig_declarations {
+    name: "networkstack.flags-aconfig",
+    package: "com.android.networkstack.flags",
+    container: "NetworkStack",
+    srcs: ["flags.aconfig"],
+}
+
+java_aconfig_library {
+    name: "com.android.networkstack.flags-aconfig-java",
+    aconfig_declarations: "networkstack.flags-aconfig",
+    defaults: ["framework-minus-apex-aconfig-java-defaults"],
+    min_sdk_version: "31",
+}

@@ -1,0 +1,1208 @@
+/*
+ * Copyright (C) 2022 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.server.companion.virtual;
+
+import static android.content.pm.ActivityInfo.FLAG_CAN_DISPLAY_ON_REMOTE_DEVICES;
+import static android.view.WindowManager.LayoutParams.FLAG_SECURE;
+import static android.view.WindowManager.LayoutParams.SYSTEM_FLAG_HIDE_NON_SYSTEM_OVERLAY_WINDOWS;
+
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.after;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import android.app.WindowConfiguration;
+import android.companion.virtual.IVirtualDeviceIntentInterceptor;
+import android.content.AttributionSource;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentSender;
+import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
+import android.net.Uri;
+import android.os.Binder;
+import android.os.RemoteException;
+import android.os.UserHandle;
+import android.platform.test.annotations.Presubmit;
+import android.util.ArraySet;
+import android.util.Pair;
+import android.view.Display;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
+
+import com.android.internal.app.BlockedAppStreamingActivity;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+@Presubmit
+@RunWith(AndroidJUnit4.class)
+public class GenericWindowPolicyControllerTest {
+
+    private static final int TIMEOUT_MILLIS = 500;
+    private static final int DISPLAY_ID = Display.DEFAULT_DISPLAY + 1;
+    private static final int TEST_UID = 1234567;
+    private static final String DISPLAY_CATEGORY = "com.display.category";
+    private static final String NONBLOCKED_APP_PACKAGE_NAME = "com.someapp";
+    private static final String ANOTHER_NONBLOCKED_APP_PACKAGE_NAME = "com.anotherapp";
+    private static final String BLOCKED_PACKAGE_NAME = "com.blockedapp";
+    private static final int FLAG_CANNOT_DISPLAY_ON_REMOTE_DEVICES = 0x00000;
+    private static final String TEST_SITE = "http://test";
+    private static final ComponentName BLOCKED_APP_STREAMING_COMPONENT =
+            new ComponentName("android", BlockedAppStreamingActivity.class.getName());
+    private static final ComponentName BLOCKED_COMPONENT = new ComponentName(BLOCKED_PACKAGE_NAME,
+            BLOCKED_PACKAGE_NAME);
+    private static final ComponentName NONBLOCKED_COMPONENT = new ComponentName(
+            NONBLOCKED_APP_PACKAGE_NAME, NONBLOCKED_APP_PACKAGE_NAME);
+    private static final ComponentName ANOTHER_NONBLOCKED_COMPONENT = new ComponentName(
+            ANOTHER_NONBLOCKED_APP_PACKAGE_NAME, ANOTHER_NONBLOCKED_APP_PACKAGE_NAME);
+
+    @Mock
+    private GenericWindowPolicyController.ActivityListener mActivityListener;
+
+    @Before
+    public void setUp() throws Exception {
+        MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void showTasksInHostDeviceRecents() {
+        GenericWindowPolicyController gwpc = createGwpc();
+
+        gwpc.setShowInHostDeviceRecents(true);
+        assertThat(gwpc.canShowTasksInHostDeviceRecents()).isTrue();
+
+        gwpc.setShowInHostDeviceRecents(false);
+        assertThat(gwpc.canShowTasksInHostDeviceRecents()).isFalse();
+    }
+
+    @Test
+    public void containsUid() {
+        GenericWindowPolicyController gwpc = createGwpc();
+
+        assertThat(gwpc.containsUid(TEST_UID)).isFalse();
+
+        gwpc.onRunningAppsChanged(new ArraySet<>(List.of(
+                new Pair<>(TEST_UID, NONBLOCKED_APP_PACKAGE_NAME))));
+        assertThat(gwpc.containsUid(TEST_UID)).isTrue();
+
+        gwpc.onRunningAppsChanged(new ArraySet<>());
+        assertThat(gwpc.containsUid(TEST_UID)).isFalse();
+    }
+
+    @Test
+    public void isEnteringPipAllowed_falseByDefault() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        assertThat(gwpc.isEnteringPipAllowed(TEST_UID)).isFalse();
+    }
+
+    @Test
+    public void isEnteringPipAllowed_dpcSupportsPinned_allowed() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        gwpc.setSupportedWindowingModes(new HashSet<>(
+                List.of(WindowConfiguration.WINDOWING_MODE_FULLSCREEN,
+                        WindowConfiguration.WINDOWING_MODE_PINNED)));
+        assertThat(gwpc.isEnteringPipAllowed(TEST_UID)).isTrue();
+    }
+
+    @Test
+    public void userNotAllowlisted_launchIsBlocked() {
+        GenericWindowPolicyController gwpc = createGwpcWithNoAllowedUsers();
+
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null,
+                /* uid */ UserHandle.PER_USER_RANGE + 1);
+        assertActivityIsBlocked(gwpc, activityInfo);
+    }
+
+    @Test
+    public void userNotAllowlisted_systemUser_isNotBlocked() {
+        GenericWindowPolicyController gwpc = createGwpcWithNoAllowedUsers();
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        assertActivityCanBeLaunched(gwpc, activityInfo);
+    }
+
+    @Test
+    public void userNotAllowlisted_systemUserCanLaunchBlockedAppStreamingActivity() {
+        GenericWindowPolicyController gwpc = createGwpcWithNoAllowedUsers();
+        ActivityInfo activityInfo = getActivityInfo(
+                BLOCKED_APP_STREAMING_COMPONENT.getPackageName(),
+                BLOCKED_APP_STREAMING_COMPONENT.getClassName(),
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        assertActivityCanBeLaunched(gwpc, activityInfo);
+    }
+
+    @Test
+    public void userAllowlisted_launchIsNotBlocked() {
+        final UserHandle allowedUser = UserHandle.of(10);
+        final int appUid = UserHandle.getUid(allowedUser.getIdentifier(), /* appId= */ 12345);
+        GenericWindowPolicyController gwpc =
+                createGwpcWithAllowedUsers(Collections.singleton(allowedUser));
+
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null,
+                appUid);
+        assertActivityCanBeLaunched(gwpc, activityInfo);
+    }
+
+    @Test
+    public void openNonBlockedAppOnVirtualDisplay_isNotBlocked() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        assertActivityCanBeLaunched(gwpc, activityInfo);
+    }
+
+    @Test
+    public void activityDoesNotSupportDisplayOnRemoteDevices_isBlocked() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ false,
+                /* targetDisplayCategory */ null);
+        assertActivityIsBlocked(gwpc, activityInfo);
+    }
+
+    @Test
+    public void activityDoesNotSupportDisplayOnRemoteDevices_localDeviceOnly_isAllowed() {
+        GenericWindowPolicyController gwpc = createLocalDeviceOnlyGwpc();
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ false,
+                /* targetDisplayCategory */ null);
+        assertActivityCanBeLaunched(gwpc, activityInfo);
+    }
+
+    @Test
+    public void openBlockedComponentOnVirtualDisplay_isBlocked() {
+        GenericWindowPolicyController gwpc = createGwpcWithBlockedComponent(BLOCKED_COMPONENT);
+        ActivityInfo activityInfo = getActivityInfo(
+                BLOCKED_PACKAGE_NAME,
+                BLOCKED_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        assertActivityIsBlocked(gwpc, activityInfo);
+    }
+
+    @Test
+    public void addActivityPolicyExemption_openBlockedOnVirtualDisplay_isBlocked() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        gwpc.setActivityLaunchDefaultAllowed(true);
+        gwpc.addActivityPolicyExemption(BLOCKED_COMPONENT);
+
+        ActivityInfo activityInfo = getActivityInfo(
+                BLOCKED_PACKAGE_NAME,
+                BLOCKED_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        assertActivityIsBlocked(gwpc, activityInfo);
+    }
+
+    @Test
+    public void addActivityPolicyPackageExemption_openBlockedOnVirtualDisplay_isBlocked() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        gwpc.setActivityLaunchDefaultAllowed(true);
+        gwpc.addActivityPolicyExemption(BLOCKED_COMPONENT.getPackageName());
+
+        ActivityInfo activityInfo = getActivityInfo(
+                BLOCKED_COMPONENT.getPackageName(),
+                BLOCKED_COMPONENT.getClassName(),
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        assertActivityIsBlocked(gwpc, activityInfo);
+    }
+
+    @Test
+    public void openNotAllowedComponentOnBlocklistVirtualDisplay_isBlocked() {
+        GenericWindowPolicyController gwpc = createGwpcWithAllowedComponent(NONBLOCKED_COMPONENT);
+        ActivityInfo activityInfo = getActivityInfo(
+                BLOCKED_PACKAGE_NAME,
+                BLOCKED_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        assertActivityIsBlocked(gwpc, activityInfo);
+    }
+
+    @Test
+    public void addActivityPolicyExemption_openNotAllowedOnVirtualDisplay_isBlocked() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        gwpc.setActivityLaunchDefaultAllowed(false);
+        gwpc.addActivityPolicyExemption(NONBLOCKED_COMPONENT);
+
+        ActivityInfo activityInfo = getActivityInfo(
+                BLOCKED_PACKAGE_NAME,
+                BLOCKED_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        assertActivityIsBlocked(gwpc, activityInfo);
+    }
+
+    @Test
+    public void addActivityPolicyPackageExemption_openNotAllowedOnVirtualDisplay_isBlocked() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        gwpc.setActivityLaunchDefaultAllowed(false);
+        gwpc.addActivityPolicyExemption(NONBLOCKED_COMPONENT.getPackageName());
+
+        ActivityInfo activityInfo = getActivityInfo(
+                BLOCKED_PACKAGE_NAME,
+                BLOCKED_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        assertActivityIsBlocked(gwpc, activityInfo);
+    }
+
+    @Test
+    public void openAllowedComponentOnBlocklistVirtualDisplay_startsActivity() {
+        GenericWindowPolicyController gwpc = createGwpcWithAllowedComponent(NONBLOCKED_COMPONENT);
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        assertActivityCanBeLaunched(gwpc, activityInfo);
+    }
+
+    @Test
+    public void addActivityPolicyExemption_openAllowedOnVirtualDisplay_startsActivity() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        gwpc.setActivityLaunchDefaultAllowed(false);
+        gwpc.addActivityPolicyExemption(NONBLOCKED_COMPONENT);
+
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        assertActivityCanBeLaunched(gwpc, activityInfo);
+    }
+
+    @Test
+    public void addActivityPolicyPackageExemption_openAllowedOnVirtualDisplay_startsActivity() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        gwpc.setActivityLaunchDefaultAllowed(false);
+        gwpc.addActivityPolicyExemption(NONBLOCKED_COMPONENT.getPackageName());
+
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_COMPONENT.getPackageName(),
+                NONBLOCKED_COMPONENT.getClassName(),
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        assertActivityCanBeLaunched(gwpc, activityInfo);
+    }
+
+    @Test
+    public void canActivityBeLaunched_mismatchingUserHandle_isBlocked() {
+        GenericWindowPolicyController gwpc = createGwpc();
+
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null,
+                /* uid */ UserHandle.PER_USER_RANGE + 1);
+        assertActivityIsBlocked(gwpc, activityInfo);
+    }
+
+    @Test
+    public void canActivityBeLaunched_blockedAppStreamingComponent_isNeverBlocked() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        ActivityInfo activityInfo = getActivityInfo(
+                BLOCKED_APP_STREAMING_COMPONENT.getPackageName(),
+                BLOCKED_APP_STREAMING_COMPONENT.getClassName(),
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        assertActivityCanBeLaunched(gwpc, activityInfo);
+    }
+
+    @Test
+    public void canActivityBeLaunched_blockedAppStreamingComponentExplicitlyBlocked_isNeverBlocked() {
+        GenericWindowPolicyController gwpc = createGwpcWithBlockedComponent(
+                BLOCKED_APP_STREAMING_COMPONENT);
+        ActivityInfo activityInfo = getActivityInfo(
+                BLOCKED_APP_STREAMING_COMPONENT.getPackageName(),
+                BLOCKED_APP_STREAMING_COMPONENT.getClassName(),
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+
+        assertActivityCanBeLaunched(gwpc, activityInfo);
+    }
+
+    @Test
+    public void canActivityBeLaunched_blockedAppStreamingComponentExemptFromStreaming_isNeverBlocked() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        gwpc.setActivityLaunchDefaultAllowed(true);
+        gwpc.addActivityPolicyExemption(BLOCKED_APP_STREAMING_COMPONENT);
+
+        ActivityInfo activityInfo = getActivityInfo(
+                BLOCKED_APP_STREAMING_COMPONENT.getPackageName(),
+                BLOCKED_APP_STREAMING_COMPONENT.getClassName(),
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+
+        assertActivityCanBeLaunched(gwpc, activityInfo);
+    }
+
+    @Test
+    public void canActivityBeLaunched_blockedAppStreamingPackageExempt_isNeverBlocked() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        gwpc.setActivityLaunchDefaultAllowed(true);
+        gwpc.addActivityPolicyExemption(BLOCKED_APP_STREAMING_COMPONENT.getPackageName());
+
+        ActivityInfo activityInfo = getActivityInfo(
+                BLOCKED_APP_STREAMING_COMPONENT.getPackageName(),
+                BLOCKED_APP_STREAMING_COMPONENT.getClassName(),
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+
+        assertActivityCanBeLaunched(gwpc, activityInfo);
+    }
+
+    @Test
+    public void canActivityBeLaunched_blockedAppStreamingComponentNotAllowlisted_isNeverBlocked() {
+        GenericWindowPolicyController gwpc = createGwpcWithAllowedComponent(NONBLOCKED_COMPONENT);
+        ActivityInfo activityInfo = getActivityInfo(
+                BLOCKED_APP_STREAMING_COMPONENT.getPackageName(),
+                BLOCKED_APP_STREAMING_COMPONENT.getClassName(),
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+
+        assertActivityCanBeLaunched(gwpc, activityInfo);
+    }
+
+    @Test
+    public void canActivityBeLaunched_blockedAppStreamingComponentNotExemptFromBlocklist_isNeverBlocked() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        gwpc.setActivityLaunchDefaultAllowed(false);
+        gwpc.addActivityPolicyExemption(NONBLOCKED_COMPONENT);
+
+        ActivityInfo activityInfo = getActivityInfo(
+                BLOCKED_APP_STREAMING_COMPONENT.getPackageName(),
+                BLOCKED_APP_STREAMING_COMPONENT.getClassName(),
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+
+        assertActivityCanBeLaunched(gwpc, activityInfo);
+    }
+
+    @Test
+    public void canActivityBeLaunched_blockedAppStreamingPAckageNotExempt_isNeverBlocked() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        gwpc.setActivityLaunchDefaultAllowed(false);
+        gwpc.addActivityPolicyExemption(NONBLOCKED_COMPONENT.getPackageName());
+
+        ActivityInfo activityInfo = getActivityInfo(
+                BLOCKED_APP_STREAMING_COMPONENT.getPackageName(),
+                BLOCKED_APP_STREAMING_COMPONENT.getClassName(),
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+
+        assertActivityCanBeLaunched(gwpc, activityInfo);
+    }
+
+    @Test
+    public void canActivityBeLaunched_customDisplayCategoryMatches_isNotBlocked() {
+        GenericWindowPolicyController gwpc = createGwpcWithDisplayCategory(DISPLAY_CATEGORY);
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ DISPLAY_CATEGORY);
+
+        assertActivityCanBeLaunched(gwpc, activityInfo);
+    }
+
+    @Test
+    public void canActivityBeLaunched_customDisplayCategoryDoesNotMatch_isBlocked() {
+        GenericWindowPolicyController gwpc = createGwpcWithDisplayCategory(DISPLAY_CATEGORY);
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ "some.random.category");
+        assertActivityIsBlocked(gwpc, activityInfo);
+    }
+
+    @Test
+    public void canActivityBeLaunched_crossTaskLaunch_fromDefaultDisplay_isNotBlocked() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        assertActivityCanBeLaunched(gwpc, Display.DEFAULT_DISPLAY, true,
+                WindowConfiguration.WINDOWING_MODE_FULLSCREEN, activityInfo);
+    }
+
+    @Test
+    public void canActivityBeLaunched_crossTaskLaunchFromVirtualDisplay_notExplicitlyBlocked_isNotBlocked() {
+        GenericWindowPolicyController gwpc = createGwpcWithCrossTaskNavigationBlockedFor(
+                BLOCKED_COMPONENT);
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+
+        assertActivityCanBeLaunched(gwpc, DISPLAY_ID, true,
+                WindowConfiguration.WINDOWING_MODE_FULLSCREEN, activityInfo);
+    }
+
+    @Test
+    public void canActivityBeLaunched_crossTaskLaunchFromVirtualDisplay_explicitlyBlocked_isBlocked() {
+        GenericWindowPolicyController gwpc = createGwpcWithCrossTaskNavigationBlockedFor(
+                BLOCKED_COMPONENT);
+        ActivityInfo activityInfo = getActivityInfo(
+                BLOCKED_PACKAGE_NAME,
+                BLOCKED_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        assertActivityIsBlocked(gwpc, DISPLAY_ID, true,
+                WindowConfiguration.WINDOWING_MODE_FULLSCREEN, activityInfo);
+    }
+
+    @Test
+    public void canActivityBeLaunched_crossTaskLaunchFromVirtualDisplay_notAllowed_isBlocked() {
+        GenericWindowPolicyController gwpc = createGwpcWithCrossTaskNavigationAllowed(
+                NONBLOCKED_COMPONENT);
+        ActivityInfo activityInfo = getActivityInfo(
+                BLOCKED_PACKAGE_NAME,
+                BLOCKED_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        assertActivityIsBlocked(gwpc, DISPLAY_ID, true,
+                WindowConfiguration.WINDOWING_MODE_FULLSCREEN, activityInfo);
+    }
+
+    @Test
+    public void canActivityBeLaunched_crossTaskLaunchFromVirtualDisplay_allowed_isNotBlocked() {
+        GenericWindowPolicyController gwpc = createGwpcWithCrossTaskNavigationAllowed(
+                NONBLOCKED_COMPONENT);
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        assertActivityCanBeLaunched(gwpc, DISPLAY_ID, true,
+                WindowConfiguration.WINDOWING_MODE_FULLSCREEN, activityInfo);
+    }
+
+    @Test
+    public void canActivityBeLaunched_unsupportedWindowingMode_isNotBlocked() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        assertActivityCanBeLaunched(gwpc, DISPLAY_ID, true,
+                WindowConfiguration.WINDOWING_MODE_PINNED, activityInfo);
+    }
+
+    @Test
+    public void onRunningAppsChanged_listenerNotified() {
+        ArraySet<Pair<Integer, String>> runningUidPackagePairs = new ArraySet<>(List.of(
+                new Pair<>(TEST_UID, NONBLOCKED_APP_PACKAGE_NAME)));
+        GenericWindowPolicyController gwpc = createGwpc();
+        gwpc.onRunningAppsChanged(runningUidPackagePairs);
+
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onRunningAppsChanged(DISPLAY_ID, runningUidPackagePairs);
+    }
+
+    @Test
+    public void onRunningAppsChanged_empty_onDisplayEmpty() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        gwpc.onRunningAppsChanged(new ArraySet<>());
+
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS)).onDisplayEmpty(DISPLAY_ID);
+    }
+
+    @Test
+    public void canActivityBeLaunched_intentInterceptedWhenRegistered_activityNoLaunch()
+            throws RemoteException {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(TEST_SITE));
+
+        IVirtualDeviceIntentInterceptor.Stub interceptor =
+                mock(IVirtualDeviceIntentInterceptor.Stub.class);
+        doNothing().when(interceptor).onIntentIntercepted(any());
+        doReturn(interceptor).when(interceptor).asBinder();
+        doReturn(interceptor).when(interceptor).queryLocalInterface(anyString());
+
+        GenericWindowPolicyController gwpc = createGwpc();
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+
+        // register interceptor and intercept intent
+        when(mActivityListener.shouldInterceptIntent(any(Intent.class))).thenReturn(true);
+        assertThat(gwpc.canActivityBeLaunched(activityInfo, intent,
+                WindowConfiguration.WINDOWING_MODE_FULLSCREEN, DISPLAY_ID, /* isNewTask= */false,
+                /* isResultExpected = */ false, /* intentSender= */ null))
+                .isFalse();
+
+        // unregister interceptor and launch activity
+        when(mActivityListener.shouldInterceptIntent(any(Intent.class))).thenReturn(false);
+        assertThat(gwpc.canActivityBeLaunched(activityInfo, intent,
+                WindowConfiguration.WINDOWING_MODE_FULLSCREEN, DISPLAY_ID, /* isNewTask= */false,
+                /* isResultExpected = */ false, /* intentSender= */ null))
+                .isTrue();
+    }
+
+    @Test
+    public void canActivityBeLaunched_noMatchIntentFilter_activityLaunches() {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("testing"));
+
+        GenericWindowPolicyController gwpc = createGwpc();
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+
+        // register interceptor with different filter
+        when(mActivityListener.shouldInterceptIntent(any(Intent.class))).thenReturn(false);
+        assertThat(gwpc.canActivityBeLaunched(activityInfo, intent,
+                WindowConfiguration.WINDOWING_MODE_FULLSCREEN, DISPLAY_ID, /* isNewTask= */false,
+                /* isResultExpected = */ false, /* intentSender= */ null))
+                .isTrue();
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS)).shouldInterceptIntent(any(Intent.class));
+    }
+
+    @Test
+    public void canActivityBeLaunched_resultExpected_noIntentSenderInCallback() {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("testing"));
+
+        GenericWindowPolicyController gwpc = createGwpc();
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ false,
+                /* targetDisplayCategory */ null);
+
+        IntentSender intentSender = new IntentSender(new Binder());
+        assertThat(gwpc.canActivityBeLaunched(activityInfo, intent,
+                WindowConfiguration.WINDOWING_MODE_FULLSCREEN, DISPLAY_ID, /* isNewTask= */false,
+                /* isResultExpected = */ true, /* intentSender= */ () -> intentSender))
+                .isFalse();
+
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onActivityLaunchBlocked(DISPLAY_ID, activityInfo, /* intentSender= */ null);
+    }
+
+    @Test
+    public void canActivityBeLaunched_blockedActivity_invokesOnActivityLaunchRequested() {
+        GenericWindowPolicyController gwpc = createGwpcWithBlockedComponent(BLOCKED_COMPONENT);
+        ActivityInfo activityInfo = getActivityInfo(
+                BLOCKED_PACKAGE_NAME,
+                BLOCKED_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+
+        IntentSender intentSender = new IntentSender(new Binder());
+        assertThat(gwpc.canActivityBeLaunched(activityInfo, null,
+                WindowConfiguration.WINDOWING_MODE_FULLSCREEN, DISPLAY_ID, /* isNewTask= */ false,
+                /* isResultExpected= */ false, () -> intentSender)).isFalse();
+
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onActivityLaunchRequested(eq(DISPLAY_ID), eq(BLOCKED_COMPONENT), eq(0));
+    }
+
+    @Test
+    public void canActivityBeLaunched_noAllowedUsers_invokesOnActivityLaunchRequested() {
+        GenericWindowPolicyController gwpc = createGwpcWithNoAllowedUsers();
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null,
+                /* uid */ UserHandle.PER_USER_RANGE + 1);
+
+        IntentSender intentSender = new IntentSender(new Binder());
+        assertThat(gwpc.canActivityBeLaunched(activityInfo, null,
+                WindowConfiguration.WINDOWING_MODE_FULLSCREEN, DISPLAY_ID, /* isNewTask= */ false,
+                /* isResultExpected= */ false, () -> intentSender)).isFalse();
+
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onActivityLaunchRequested(eq(DISPLAY_ID), eq(NONBLOCKED_COMPONENT), anyInt());
+    }
+
+    @Test
+    public void canActivityBeLaunched_allowedActivity_invokesOnActivityLaunchRequested() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+
+        IntentSender intentSender = new IntentSender(new Binder());
+        assertThat(gwpc.canActivityBeLaunched(activityInfo, null,
+                WindowConfiguration.WINDOWING_MODE_FULLSCREEN, DISPLAY_ID, /* isNewTask= */ false,
+                /* isResultExpected= */ false, () -> intentSender)).isTrue();
+
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onActivityLaunchRequested(eq(DISPLAY_ID), eq(NONBLOCKED_COMPONENT), eq(0));
+    }
+
+    @Test
+    public void onTopActivityChanged_null_noCallback() {
+        GenericWindowPolicyController gwpc = createGwpc();
+
+        gwpc.onTopActivityChanged(null, 0, 0);
+        verify(mActivityListener, after(TIMEOUT_MILLIS).never())
+                .onTopActivityChanged(anyInt(), any(ComponentName.class), anyInt());
+    }
+
+    @Test
+    public void onTopActivityChanged_activityListenerCallbackObserved() {
+        int userId = 1000;
+        GenericWindowPolicyController gwpc = createGwpc();
+
+        gwpc.onTopActivityChanged(BLOCKED_COMPONENT, 0, userId);
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onTopActivityChanged(eq(DISPLAY_ID), eq(BLOCKED_COMPONENT), eq(userId));
+    }
+
+    @Test
+    public void keepActivityOnWindowFlagsChanged_noChange() {
+        final int userId = 2;
+        GenericWindowPolicyController gwpc = createGwpc();
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        gwpc.onTopActivityChanged(NONBLOCKED_COMPONENT, 0, userId);
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onTopActivityChanged(eq(DISPLAY_ID), eq(NONBLOCKED_COMPONENT), eq(userId));
+
+        assertThat(gwpc.keepActivityOnWindowFlagsChanged(activityInfo, 0, 0)).isTrue();
+
+        verify(mActivityListener, after(TIMEOUT_MILLIS).never())
+                .onSecureWindowShown(eq(DISPLAY_ID), eq(NONBLOCKED_COMPONENT), eq(0));
+        verify(mActivityListener, never()).onSecureWindowHidden(eq(DISPLAY_ID));
+        verify(mActivityListener, never())
+                .onActivityLaunchBlocked(eq(DISPLAY_ID), eq(activityInfo), any());
+    }
+
+    @Test
+    public void keepActivityOnWindowFlagsChanged_flagSecure_isAllowedAndCallbackInvoked() {
+        final int userId = 2;
+        GenericWindowPolicyController gwpc = createGwpc();
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        gwpc.onTopActivityChanged(NONBLOCKED_COMPONENT, 0, userId);
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onTopActivityChanged(eq(DISPLAY_ID), eq(NONBLOCKED_COMPONENT), eq(userId));
+
+        assertThat(gwpc.keepActivityOnWindowFlagsChanged(activityInfo, FLAG_SECURE, 0)).isTrue();
+
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onSecureWindowShown(eq(DISPLAY_ID), eq(NONBLOCKED_COMPONENT), eq(0));
+        verify(mActivityListener, after(TIMEOUT_MILLIS).never())
+                .onActivityLaunchBlocked(eq(DISPLAY_ID), eq(activityInfo), any());
+
+        assertThat(gwpc.keepActivityOnWindowFlagsChanged(activityInfo, 0, 0)).isTrue();
+
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS)).onSecureWindowHidden(eq(DISPLAY_ID));
+    }
+
+    @Test
+    public void keepActivityOnWindowFlagsChanged_systemFlagHideNonSystemOverlayWindows_isAllowed() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+
+        assertThat(gwpc.keepActivityOnWindowFlagsChanged(activityInfo, 0,
+                SYSTEM_FLAG_HIDE_NON_SYSTEM_OVERLAY_WINDOWS)).isTrue();
+
+        verify(mActivityListener, after(TIMEOUT_MILLIS).never())
+                .onSecureWindowShown(eq(DISPLAY_ID), eq(NONBLOCKED_COMPONENT), eq(0));
+        verify(mActivityListener, never()).onSecureWindowHidden(eq(DISPLAY_ID));
+        verify(mActivityListener, never())
+                .onActivityLaunchBlocked(eq(DISPLAY_ID), eq(activityInfo), any());
+    }
+
+    @Test
+    public void topActivityChanged_secureWindowStateOnTopChanged_secureWindowCallbacksInvoked() {
+        final int userId = 2;
+        GenericWindowPolicyController gwpc = createGwpc();
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        // Set a top activity.
+        gwpc.onTopActivityChanged(NONBLOCKED_COMPONENT, 0, userId);
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onTopActivityChanged(eq(DISPLAY_ID), eq(NONBLOCKED_COMPONENT), eq(userId));
+        // Top activity now has secure window.
+        assertThat(gwpc.keepActivityOnWindowFlagsChanged(activityInfo, FLAG_SECURE, 0)).isTrue();
+        // Verify that onSecureWindowShown is invoked.
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onSecureWindowShown(eq(DISPLAY_ID), eq(NONBLOCKED_COMPONENT), eq(0));
+
+        // Top activity now has changed (which doesn't have a secure window).
+        gwpc.onTopActivityChanged(ANOTHER_NONBLOCKED_COMPONENT, 0, userId);
+
+        // Verify that onSecureWindowHidden is invoked (as the top activity now doesn't have a
+        // secure window anymore).
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onTopActivityChanged(eq(DISPLAY_ID), eq(ANOTHER_NONBLOCKED_COMPONENT), eq(userId));
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS)).onSecureWindowHidden(eq(DISPLAY_ID));
+
+        // Top activity has again changed (which does have a secure window).
+        gwpc.onTopActivityChanged(NONBLOCKED_COMPONENT, TEST_UID, userId);
+
+        // Verify that onSecureWindowShown is invoked (as the top activity now has a secure window).
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onSecureWindowShown(eq(DISPLAY_ID), eq(NONBLOCKED_COMPONENT), eq(0));
+    }
+
+    @Test
+    public void topActivityChanged_secureWindowStateOnTopSame_secureWindowCallbacksNotInvoked() {
+        final int userId = 2;
+        GenericWindowPolicyController gwpc = createGwpc();
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        // Set a top activity.
+        gwpc.onTopActivityChanged(NONBLOCKED_COMPONENT, 0, userId);
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onTopActivityChanged(eq(DISPLAY_ID), eq(NONBLOCKED_COMPONENT), eq(userId));
+        // Top activity now has secure window.
+        assertThat(gwpc.keepActivityOnWindowFlagsChanged(activityInfo, FLAG_SECURE, 0)).isTrue();
+        // Verify that onSecureWindowShown is invoked.
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onSecureWindowShown(eq(DISPLAY_ID), eq(NONBLOCKED_COMPONENT), eq(0));
+
+        // Another activity now has secure window.
+        ActivityInfo anotherActivityInfo = getActivityInfo(
+                ANOTHER_NONBLOCKED_APP_PACKAGE_NAME,
+                ANOTHER_NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        assertThat(gwpc.keepActivityOnWindowFlagsChanged(anotherActivityInfo, FLAG_SECURE, 0))
+                .isTrue();
+        // Verify that onSecureWindowShown is not invoked (as the top activity secure window
+        // state did not change).
+        verify(mActivityListener, after(TIMEOUT_MILLIS).never())
+                .onSecureWindowShown(eq(DISPLAY_ID), eq(ANOTHER_NONBLOCKED_COMPONENT), eq(0));
+
+        // Make this the top activity.
+        gwpc.onTopActivityChanged(ANOTHER_NONBLOCKED_COMPONENT, 0, userId);
+
+        // Verify that onSecureWindowShown is still not invoked (as the top activity secure window
+        // state is still the same, even though the top activity changed).
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onTopActivityChanged(eq(DISPLAY_ID), eq(ANOTHER_NONBLOCKED_COMPONENT), eq(userId));
+        verify(mActivityListener, after(TIMEOUT_MILLIS).never())
+                .onSecureWindowShown(eq(DISPLAY_ID), eq(ANOTHER_NONBLOCKED_COMPONENT), eq(0));
+    }
+
+    @Test
+    public void windowFlagsChangedOnBottomActivity_secureWindowNotOnTop_secureWindowCallbacksNotInvoked() {
+        final int userId = 2;
+        GenericWindowPolicyController gwpc = createGwpc();
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        // Set a top activity.
+        gwpc.onTopActivityChanged(NONBLOCKED_COMPONENT, 0, userId);
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onTopActivityChanged(eq(DISPLAY_ID), eq(NONBLOCKED_COMPONENT), eq(userId));
+
+        // Set a new top activity.
+        gwpc.onTopActivityChanged(ANOTHER_NONBLOCKED_COMPONENT, 0, userId);
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onTopActivityChanged(eq(DISPLAY_ID), eq(ANOTHER_NONBLOCKED_COMPONENT), eq(userId));
+
+        // Previous activity (which is not on top anymore) now has secure window.
+        assertThat(gwpc.keepActivityOnWindowFlagsChanged(activityInfo, FLAG_SECURE, 0)).isTrue();
+
+        // Verify that onSecureWindowShown is never invoked (as the top activity never had a
+        // secure window).
+        verify(mActivityListener, after(TIMEOUT_MILLIS).never())
+                .onSecureWindowShown(eq(DISPLAY_ID), eq(NONBLOCKED_COMPONENT), eq(0));
+
+        // Previous activity (which is not on top anymore) now doesn't have secure window.
+        assertThat(gwpc.keepActivityOnWindowFlagsChanged(activityInfo, 0, 0)).isTrue();
+
+        // Verify that onSecureWindowHidden is never invoked (as the top activity secure window
+        // state never changed).
+        verify(mActivityListener, after(TIMEOUT_MILLIS).never())
+                .onSecureWindowHidden(eq(DISPLAY_ID));
+    }
+
+    @Test
+    public void windowFlagsChangedOnBottomActivity_secureWindowOnTop_secureWindowCallbacksNotInvoked() {
+        final int userId = 2;
+        GenericWindowPolicyController gwpc = createGwpc();
+        ActivityInfo activityInfo = getActivityInfo(
+                NONBLOCKED_APP_PACKAGE_NAME,
+                NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        // Set a top activity.
+        gwpc.onTopActivityChanged(NONBLOCKED_COMPONENT, 0, userId);
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onTopActivityChanged(eq(DISPLAY_ID), eq(NONBLOCKED_COMPONENT), eq(userId));
+
+        // Set a new top activity.
+        gwpc.onTopActivityChanged(ANOTHER_NONBLOCKED_COMPONENT, 0, userId);
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onTopActivityChanged(eq(DISPLAY_ID), eq(ANOTHER_NONBLOCKED_COMPONENT), eq(userId));
+        ActivityInfo topActivityInfo = getActivityInfo(
+                ANOTHER_NONBLOCKED_APP_PACKAGE_NAME,
+                ANOTHER_NONBLOCKED_APP_PACKAGE_NAME,
+                /* displayOnRemoteDevices */ true,
+                /* targetDisplayCategory */ null);
+        // Top activity now has secure window.
+        assertThat(gwpc.keepActivityOnWindowFlagsChanged(topActivityInfo, FLAG_SECURE, 0)).isTrue();
+        // Verify that onSecureWindowShown is invoked (as the top activity now has a secure window).
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onSecureWindowShown(eq(DISPLAY_ID), eq(ANOTHER_NONBLOCKED_COMPONENT), eq(0));
+
+        // Previous activity (which is not on top anymore) now has secure window.
+        assertThat(gwpc.keepActivityOnWindowFlagsChanged(activityInfo, FLAG_SECURE, 0)).isTrue();
+
+        // Verify that onSecureWindowShown is never invoked (as the top activity secure window
+        // state never changed).
+        verify(mActivityListener, after(TIMEOUT_MILLIS).never())
+                .onSecureWindowShown(eq(DISPLAY_ID), eq(NONBLOCKED_COMPONENT), eq(0));
+
+        // Previous activity (which is not on top anymore) now doesn't have secure window.
+        assertThat(gwpc.keepActivityOnWindowFlagsChanged(activityInfo, 0, 0)).isTrue();
+
+        // Verify that onSecureWindowHidden is never invoked (as the top activity secure window
+        // state never changed).
+        verify(mActivityListener, after(TIMEOUT_MILLIS).never())
+                .onSecureWindowHidden(eq(DISPLAY_ID));
+    }
+
+    @Test
+    public void getCustomHomeComponent_noneSet() {
+        GenericWindowPolicyController gwpc = createGwpc();
+        assertThat(gwpc.getCustomHomeComponent()).isNull();
+    }
+
+    @Test
+    public void getCustomHomeComponent_returnsHomeComponent() {
+        GenericWindowPolicyController gwpc = createGwpcWithCustomHomeComponent(
+                NONBLOCKED_COMPONENT);
+        assertThat(gwpc.getCustomHomeComponent()).isEqualTo(NONBLOCKED_COMPONENT);
+    }
+
+    private GenericWindowPolicyController createGwpc() {
+        var gwpc = new GenericWindowPolicyController(
+                AttributionSource.myAttributionSource(),
+                /* allowedUsers= */ new ArraySet<>(getCurrentUserId()),
+                /* activityLaunchAllowedByDefault= */ true,
+                /* activityPolicyExemptions= */ new ArraySet<>(),
+                /* activityPolicyPackageExemptions= */ new ArraySet<>(),
+                /* crossTaskNavigationAllowedByDefault= */ true,
+                /* crossTaskNavigationExemptions= */ new ArraySet<>(),
+                /* activityListener= */ mActivityListener,
+                /* displayCategories= */ new ArraySet<>(),
+                /* showTasksInHostDeviceRecents= */ true,
+                /* customHomeComponent= */ null,
+                /* localDeviceOnly */ false);
+        gwpc.setDisplayId(DISPLAY_ID, /* isSecureDisplay= */ false);
+        return gwpc;
+    }
+
+    private GenericWindowPolicyController createLocalDeviceOnlyGwpc() {
+        var gwpc = new GenericWindowPolicyController(
+                AttributionSource.myAttributionSource(),
+                /* allowedUsers= */ new ArraySet<>(getCurrentUserId()),
+                /* activityLaunchAllowedByDefault= */ true,
+                /* activityPolicyExemptions= */ new ArraySet<>(),
+                /* activityPolicyPackageExemptions= */ new ArraySet<>(),
+                /* crossTaskNavigationAllowedByDefault= */ true,
+                /* crossTaskNavigationExemptions= */ new ArraySet<>(),
+                /* activityListener= */ mActivityListener,
+                /* displayCategories= */ new ArraySet<>(),
+                /* showTasksInHostDeviceRecents= */ true,
+                /* customHomeComponent= */ null,
+                /* localDeviceOnly */ true);
+        gwpc.setDisplayId(DISPLAY_ID, /* isSecureDisplay= */ false);
+        return gwpc;
+    }
+
+    private GenericWindowPolicyController createGwpcWithNoAllowedUsers() {
+        var gwpc = new GenericWindowPolicyController(
+                AttributionSource.myAttributionSource(),
+                /* allowedUsers= */ new ArraySet<>(),
+                /* activityLaunchAllowedByDefault= */ true,
+                /* activityPolicyExemptions= */ new ArraySet<>(),
+                /* activityPolicyPackageExemptions= */ new ArraySet<>(),
+                /* crossTaskNavigationAllowedByDefault= */ true,
+                /* crossTaskNavigationExemptions= */ new ArraySet<>(),
+                /* activityListener= */ mActivityListener,
+                /* displayCategories= */ new ArraySet<>(),
+                /* showTasksInHostDeviceRecents= */ true,
+                /* customHomeComponent= */ null,
+                /* localDeviceOnly */ false);
+        gwpc.setDisplayId(DISPLAY_ID, /* isSecureDisplay= */ false);
+        return gwpc;
+    }
+
+    private GenericWindowPolicyController createGwpcWithAllowedUsers(
+            Set<UserHandle> allowedUsers) {
+        var gwpc = new GenericWindowPolicyController(
+                AttributionSource.myAttributionSource(),
+                new ArraySet<>(allowedUsers),
+                /* activityLaunchAllowedByDefault= */ true,
+                /* activityPolicyExemptions= */ new ArraySet<>(),
+                /* activityPolicyPackageExemptions= */ new ArraySet<>(),
+                /* crossTaskNavigationAllowedByDefault= */ true,
+                /* crossTaskNavigationExemptions= */ new ArraySet<>(),
+                /* activityListener= */ mActivityListener,
+                /* displayCategories= */ new ArraySet<>(),
+                /* showTasksInHostDeviceRecents= */ true,
+                /* customHomeComponent= */ null,
+                /* localDeviceOnly */ false);
+        gwpc.setDisplayId(DISPLAY_ID, /* isSecureDisplay= */ false);
+        return gwpc;
+    }
+
+    private GenericWindowPolicyController createGwpcWithCustomHomeComponent(
+            ComponentName homeComponent) {
+        var gwpc = new GenericWindowPolicyController(
+                AttributionSource.myAttributionSource(),
+                /* allowedUsers= */ new ArraySet<>(getCurrentUserId()),
+                /* activityLaunchAllowedByDefault= */ true,
+                /* activityPolicyExemptions= */ new ArraySet<>(),
+                /* activityPolicyPackageExemptions= */ new ArraySet<>(),
+                /* crossTaskNavigationAllowedByDefault= */ true,
+                /* crossTaskNavigationExemptions= */ new ArraySet<>(),
+                /* activityListener= */ mActivityListener,
+                /* displayCategories= */ new ArraySet<>(),
+                /* showTasksInHostDeviceRecents= */ true,
+                /* customHomeComponent= */ homeComponent,
+                /* localDeviceOnly */ false);
+        gwpc.setDisplayId(DISPLAY_ID, /* isSecureDisplay= */ false);
+        return gwpc;
+    }
+
+    private GenericWindowPolicyController createGwpcWithBlockedComponent(
+            ComponentName blockedComponent) {
+        var gwpc = new GenericWindowPolicyController(
+                AttributionSource.myAttributionSource(),
+                /* allowedUsers= */ new ArraySet<>(getCurrentUserId()),
+                /* activityLaunchAllowedByDefault= */ true,
+                /* activityPolicyExemptions= */ Collections.singleton(blockedComponent),
+                /* activityPolicyPackageExemptions= */ new ArraySet<>(),
+                /* crossTaskNavigationAllowedByDefault= */ true,
+                /* crossTaskNavigationExemptions= */ new ArraySet<>(),
+                /* activityListener= */ mActivityListener,
+                /* displayCategories= */ new ArraySet<>(),
+                /* showTasksInHostDeviceRecents= */ true,
+                /* customHomeComponent= */ null,
+                /* localDeviceOnly */ false);
+        gwpc.setDisplayId(DISPLAY_ID, /* isSecureDisplay= */ false);
+        return gwpc;
+    }
+
+    private GenericWindowPolicyController createGwpcWithAllowedComponent(
+            ComponentName allowedComponent) {
+        var gwpc = new GenericWindowPolicyController(
+                AttributionSource.myAttributionSource(),
+                /* allowedUsers= */ new ArraySet<>(getCurrentUserId()),
+                /* activityLaunchAllowedByDefault= */ false,
+                /* activityPolicyExemptions= */ Collections.singleton(allowedComponent),
+                /* activityPolicyPackageExemptions= */ new ArraySet<>(),
+                /* crossTaskNavigationAllowedByDefault= */ true,
+                /* crossTaskNavigationExemptions= */ new ArraySet<>(),
+                /* activityListener= */ mActivityListener,
+                /* displayCategories= */ new ArraySet<>(),
+                /* showTasksInHostDeviceRecents= */ true,
+                /* customHomeComponent= */ null,
+                /* localDeviceOnly */ false);
+        gwpc.setDisplayId(DISPLAY_ID, /* isSecureDisplay= */ false);
+        return gwpc;
+    }
+
+    private GenericWindowPolicyController createGwpcWithDisplayCategory(
+            String displayCategory) {
+        var gwpc = new GenericWindowPolicyController(
+                AttributionSource.myAttributionSource(),
+                /* allowedUsers= */ new ArraySet<>(getCurrentUserId()),
+                /* activityLaunchAllowedByDefault= */ true,
+                /* activityPolicyExemptions= */ new ArraySet<>(),
+                /* activityPolicyPackageExemptions= */ new ArraySet<>(),
+                /* crossTaskNavigationAllowedByDefault= */ true,
+                /* crossTaskNavigationExemptions= */ new ArraySet<>(),
+                /* activityListener= */ mActivityListener,
+                /* displayCategories= */ Collections.singleton(displayCategory),
+                /* showTasksInHostDeviceRecents= */ true,
+                /* customHomeComponent= */ null,
+                /* localDeviceOnly */ false);
+        gwpc.setDisplayId(DISPLAY_ID, /* isSecureDisplay= */ false);
+        return gwpc;
+    }
+
+    private GenericWindowPolicyController createGwpcWithCrossTaskNavigationBlockedFor(
+            ComponentName blockedComponent) {
+        var gwpc = new GenericWindowPolicyController(
+                AttributionSource.myAttributionSource(),
+                /* allowedUsers= */ new ArraySet<>(getCurrentUserId()),
+                /* activityLaunchAllowedByDefault= */ true,
+                /* activityPolicyExemptions= */ new ArraySet<>(),
+                /* activityPolicyPackageExemptions= */ new ArraySet<>(),
+                /* crossTaskNavigationAllowedByDefault= */ true,
+                /* crossTaskNavigationExemptions= */ Collections.singleton(blockedComponent),
+                /* activityListener= */ mActivityListener,
+                /* displayCategories= */ new ArraySet<>(),
+                /* showTasksInHostDeviceRecents= */ true,
+                /* customHomeComponent= */ null,
+                /* localDeviceOnly */ false);
+        gwpc.setDisplayId(DISPLAY_ID, /* isSecureDisplay= */ false);
+        return gwpc;
+    }
+
+    private GenericWindowPolicyController createGwpcWithCrossTaskNavigationAllowed(
+            ComponentName allowedComponent) {
+        var gwpc = new GenericWindowPolicyController(
+                AttributionSource.myAttributionSource(),
+                /* allowedUsers= */ new ArraySet<>(getCurrentUserId()),
+                /* activityLaunchAllowedByDefault= */ true,
+                /* activityPolicyExemptions= */ new ArraySet<>(),
+                /* activityPolicyPackageExemptions= */ new ArraySet<>(),
+                /* crossTaskNavigationAllowedByDefault= */ false,
+                /* crossTaskNavigationExemptions= */ Collections.singleton(allowedComponent),
+                /* activityListener= */ mActivityListener,
+                /* displayCategories= */ new ArraySet<>(),
+                /* showTasksInHostDeviceRecents= */ true,
+                /* customHomeComponent= */ null,
+                /* localDeviceOnly */ false);
+        gwpc.setDisplayId(DISPLAY_ID, /* isSecureDisplay= */ false);
+        return gwpc;
+    }
+
+    private void assertActivityCanBeLaunched(GenericWindowPolicyController gwpc,
+            ActivityInfo activityInfo) {
+        assertActivityCanBeLaunched(gwpc, DISPLAY_ID, false,
+                WindowConfiguration.WINDOWING_MODE_FULLSCREEN, activityInfo);
+    }
+
+    private void assertActivityCanBeLaunched(GenericWindowPolicyController gwpc, int fromDisplay,
+            boolean isNewTask, int windowingMode, ActivityInfo activityInfo) {
+        IntentSender intentSender = new IntentSender(new Binder());
+        assertThat(gwpc.canActivityBeLaunched(activityInfo, null, windowingMode, fromDisplay,
+                isNewTask, /* isResultExpected= */ false, () -> intentSender)).isTrue();
+
+        verify(mActivityListener, after(TIMEOUT_MILLIS).never())
+                .onActivityLaunchBlocked(fromDisplay, activityInfo, intentSender);
+        verify(mActivityListener, never()).shouldInterceptIntent(any(Intent.class));
+    }
+
+    private void assertActivityIsBlocked(GenericWindowPolicyController gwpc,
+            ActivityInfo activityInfo) {
+        assertActivityIsBlocked(gwpc, DISPLAY_ID, false,
+                WindowConfiguration.WINDOWING_MODE_FULLSCREEN, activityInfo);
+    }
+
+    private void assertActivityIsBlocked(GenericWindowPolicyController gwpc, int fromDisplay,
+            boolean isNewTask, int windowingMode, ActivityInfo activityInfo) {
+        IntentSender intentSender = new IntentSender(new Binder());
+        assertThat(gwpc.canActivityBeLaunched(activityInfo, null, windowingMode, fromDisplay,
+                isNewTask, /* isResultExpected= */ false, () -> intentSender)).isFalse();
+
+        verify(mActivityListener, timeout(TIMEOUT_MILLIS))
+                .onActivityLaunchBlocked(fromDisplay, activityInfo, intentSender);
+        verify(mActivityListener, after(TIMEOUT_MILLIS).never())
+                .shouldInterceptIntent(any(Intent.class));
+    }
+
+    private static Set<UserHandle> getCurrentUserId() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        return new ArraySet<>(List.of(context.getUser()));
+    }
+
+    private static ActivityInfo getActivityInfo(
+            String packageName, String name, boolean displayOnRemoteDevices,
+            String requiredDisplayCategory) {
+        return getActivityInfo(packageName, name, displayOnRemoteDevices, requiredDisplayCategory,
+                0);
+    }
+
+    private static ActivityInfo getActivityInfo(
+            String packageName, String name, boolean displayOnRemoteDevices,
+            String requiredDisplayCategory, int uid) {
+        ApplicationInfo applicationInfo = new ApplicationInfo();
+        applicationInfo.uid = uid;
+
+        ActivityInfo activityInfo = new ActivityInfo();
+        activityInfo.packageName = packageName;
+        activityInfo.name = name;
+        activityInfo.flags = displayOnRemoteDevices
+                ? FLAG_CAN_DISPLAY_ON_REMOTE_DEVICES : FLAG_CANNOT_DISPLAY_ON_REMOTE_DEVICES;
+        activityInfo.applicationInfo = applicationInfo;
+        activityInfo.requiredDisplayCategory = requiredDisplayCategory;
+        return activityInfo;
+    }
+}

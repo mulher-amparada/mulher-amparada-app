@@ -1,0 +1,63 @@
+package: "android.app.jank"
+container: "system"
+
+flag {
+  name: "detailed_app_jank_metrics_api"
+  namespace: "system_performance"
+  description: "Control the API portion of Detailed Application Jank Metrics"
+  bug: "366264614"
+  is_exported: true
+}
+
+flag {
+  name: "detailed_app_jank_metrics_logging_enabled"
+  namespace: "system_performance"
+  description: "Controls whether the system will log frame metrics related to app jank"
+  bug: "366265225"
+}
+
+flag {
+  name: "viewroot_choreographer"
+  namespace: "system_performance"
+  description: "when enabled janktracker will get the instance of choreographer from viewrootimpl"
+  bug: "377960907"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+ }
+
+flag {
+    name: "instrument_listview_scroll_states"
+    namespace: "system_performance"
+    description: "when enabled listview types will report scroll state changes to janktracker"
+    bug: "439161162"
+  }
+
+flag {
+    name: "instrument_scrollview_scroll_states"
+    namespace: "system_performance"
+    description: "when enabled scrollview types will report scroll state changes to janktracker"
+    bug: "440646411"
+  }
+
+ flag {
+   name: "retain_widget_parameters"
+   namespace: "system_performance"
+   description: "fixes issue where widget parameters are not retained when creating pending stats"
+   bug: "446005107"
+   metadata {
+     purpose: PURPOSE_BUGFIX
+   }
+  }
+
+flag {
+    name: "disable_user_build_jank_metrics"
+    namespace: "system_performance"
+    description: "when enabled jank metrics will not be collected on user builds"
+    bug: "450107675"
+    metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+

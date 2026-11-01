@@ -1,0 +1,77 @@
+package: "com.android.server.deviceidle"
+container: "system"
+
+flag {
+  name: "remove_idle_location"
+  namespace: "location"
+  description: "Remove DeviceIdleController usage of location"
+  bug: "332770178"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+    name: "disable_wakelocks_in_light_idle"
+    namespace: "backstage_power"
+    description: "Disable wakelocks for background apps while Light Device Idle is active"
+    bug: "326607666"
+}
+
+flag {
+    name: "enable_non_scheduled_exit_from_idle_pending"
+    namespace: "backstage_power"
+    description: "If the Device Idle state is IDLE_PENDING, allow directly going past the state if IDLE_AFTER_INACTIVE_TIMEOUT is 0."
+    bug: "431873897"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "stop_power_save_temp_whitelist_broadcast"
+    namespace: "backstage_power"
+    description: "Stop sending the power_save_temp_whitelist broadcast"
+    bug: "427275343"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "allow_non_wake_up_deep_alarms"
+    namespace: "wear_frameworks"
+    description: "Allows using non-wakeup alarms to transition between deep alarm states."
+    bug: "458144517"
+}
+
+flag {
+    name: "offload_motion_context_for_device_idle"
+    namespace: "backstage_power"
+    description: "Use Offloaded Motion Context for device idle when available"
+    bug: "450597782"
+}
+
+flag {
+    name: "remove_notification_seen_elevation"
+    namespace: "backstage_power"
+    description: "Stop promoting apps to a higher standby bucket when a notification is seen."
+    bug: "411478606"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "support_allow_while_idle_quota_zero"
+    namespace: "backstage_power"
+    description: "Allows the allow-while-idle quotas to be set to 0"
+    bug: "437418242"
+}
+
+flag {
+    name: "quick_doze_on_lid_close"
+    namespace: "backstage_power"
+    description: "Enables Quick Doze transition when the desktop device lid is closed"
+    bug: "437418242"
+}

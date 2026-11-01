@@ -1,0 +1,481 @@
+/*
+ * Copyright (C) 2022 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.settings.fuelgauge.batteryusage;
+
+import android.app.settings.SettingsEnums;
+import android.content.Context;
+import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.TextUtils;
+import android.util.ArrayMap;
+import android.util.ArraySet;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+
+import androidx.preference.Preference;
+import androidx.preference.PreferenceGroup;
+import androidx.preference.PreferenceScreen;
+
+import com.android.internal.annotations.VisibleForTesting;
+import com.android.settings.R;
+import com.android.settings.SettingsActivity;
+import com.android.settings.Utils;
+import com.android.settings.core.BasePreferenceController;
+import com.android.settings.core.InstrumentedPreferenceFragment;
+import com.android.settings.fuelgauge.AdvancedPowerUsageDetail;
+import com.android.settings.fuelgauge.BatteryUtils;
+import com.android.settings.overlay.FeatureFactory;
+import com.android.settingslib.core.instrumentation.MetricsFeatureProvider;
+import com.android.settingslib.core.lifecycle.Lifecycle;
+import com.android.settingslib.core.lifecycle.LifecycleObserver;
+import com.android.settingslib.core.lifecycle.events.OnCreate;
+import com.android.settingslib.core.lifecycle.events.OnDestroy;
+import com.android.settingslib.core.lifecycle.events.OnResume;
+import com.android.settingslib.core.lifecycle.events.OnSaveInstanceState;
+import com.android.settingslib.widget.FooterPreference;
+import com.android.settingslib.widget.SettingsSpinnerAdapter;
+import com.android.settingslib.widget.SettingsSpinnerPreference;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+/** Controller for battery usage breakdown preference group. */
+public class BatteryUsageBreakdownController extends BasePreferenceController
+        implements LifecycleObserver, OnResume, OnDestroy, OnCreate, OnSaveInstanceState {
+    private static final String TAG = "BatteryUsageBreakdownController";
+    private static final String ROOT_PREFERENCE_KEY = "battery_usage_breakdown";
+    private static final String BATTERY_ADVANCE_INFO_CATEGORY_KEY =
+            "battery_advance_info_settings_category";
+    private static final String FOOTER_PREFERENCE_KEY = "battery_usage_footer";
+    private static final String SPINNER_PREFERENCE_KEY = "battery_usage_spinner";
+    private static final String PACKAGE_NAME_NONE = "none";
+    private static final String SLOT_TIMESTAMP = "slot_timestamp";
+    private static final String ANOMALY_KEY = "anomaly_key";
+    private static final String KEY_SPINNER_POSITION = "spinner_position";
+    private static final int ENTRY_PREF_ORDER_OFFSET = 100;
+    private static final List<BatteryDiffEntry> EMPTY_ENTRY_LIST = new ArrayList<>();
+
+    private static int sUiMode = Configuration.UI_MODE_NIGHT_UNDEFINED;
+
+    private final SettingsActivity mActivity;
+    private final InstrumentedPreferenceFragment mFragment;
+    private final MetricsFeatureProvider mMetricsFeatureProvider;
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
+
+    @VisibleForTesting final Map<String, Preference> mPreferenceCache = new ArrayMap<>();
+
+    private String mSlotInformation;
+    private SettingsSpinnerPreference mSpinnerPreference;
+    private SettingsSpinnerAdapter<CharSequence> mSpinnerAdapter;
+
+    @VisibleForTesting Context mPrefContext;
+    @VisibleForTesting PreferenceGroup mRootPreferenceGroup;
+    @VisibleForTesting PreferenceGroup mBatteryAdvanceInfoPreferenceGroup;
+    @VisibleForTesting FooterPreference mFooterPreference;
+    @VisibleForTesting BatteryDiffData mBatteryDiffData;
+    @VisibleForTesting String mBatteryUsageBreakdownTitleLastFullChargeText;
+    @VisibleForTesting String mPercentLessThanThresholdText;
+    @VisibleForTesting String mPercentLessThanThresholdContentDescription;
+    @VisibleForTesting boolean mIsHighlightSlot;
+    @VisibleForTesting int mAnomalyKeyNumber;
+    @VisibleForTesting int mSpinnerPosition;
+    @VisibleForTesting String mAnomalyEntryKey;
+    @VisibleForTesting String mAnomalyHintString;
+    @VisibleForTesting String mAnomalyHintPrefKey;
+
+    public BatteryUsageBreakdownController(
+            Context context,
+            Lifecycle lifecycle,
+            SettingsActivity activity,
+            InstrumentedPreferenceFragment fragment) {
+        super(context, ROOT_PREFERENCE_KEY);
+        mActivity = activity;
+        mFragment = fragment;
+        mMetricsFeatureProvider = FeatureFactory.getFeatureFactory().getMetricsFeatureProvider();
+        if (lifecycle != null) {
+            lifecycle.addObserver(this);
+        }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            return;
+        }
+        mSpinnerPosition = savedInstanceState.getInt(KEY_SPINNER_POSITION, mSpinnerPosition);
+        Log.d(TAG, "onCreate() spinnerPosition=" + mSpinnerPosition);
+    }
+
+    @Override
+    public void onResume() {
+        final int currentUiMode =
+                mContext.getResources().getConfiguration().uiMode
+                        & Configuration.UI_MODE_NIGHT_MASK;
+        if (sUiMode != currentUiMode) {
+            sUiMode = currentUiMode;
+            BatteryDiffEntry.clearCache();
+            mPreferenceCache.clear();
+            Log.d(TAG, "clear icon and label cache since uiMode is changed");
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        mHandler.removeCallbacksAndMessages(/* token= */ null);
+        mPreferenceCache.clear();
+        mRootPreferenceGroup.removeAll();
+    }
+
+    @Override
+    public int getAvailabilityStatus() {
+        return AVAILABLE;
+    }
+
+    @Override
+    public boolean isSliceable() {
+        return false;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            return;
+        }
+        savedInstanceState.putInt(KEY_SPINNER_POSITION, mSpinnerPosition);
+        Log.d(TAG, "onSaveInstanceState() spinnerPosition=" + mSpinnerPosition);
+    }
+
+    private boolean isAnomalyBatteryDiffEntry(BatteryDiffEntry entry) {
+        return mIsHighlightSlot
+                && mAnomalyEntryKey != null
+                && mAnomalyEntryKey.equals(entry.getKey());
+    }
+
+    private void logPreferenceClickedMetrics(BatteryDiffEntry entry) {
+        final int attribution = SettingsEnums.OPEN_BATTERY_USAGE;
+        final int action =
+                entry.isSystemEntry()
+                        ? SettingsEnums.ACTION_BATTERY_USAGE_SYSTEM_ITEM
+                        : SettingsEnums.ACTION_BATTERY_USAGE_APP_ITEM;
+        final int pageId = SettingsEnums.OPEN_BATTERY_USAGE;
+        final String packageName =
+                TextUtils.isEmpty(entry.getPackageName())
+                        ? PACKAGE_NAME_NONE
+                        : entry.getPackageName();
+        final int percentage = (int) Math.round(entry.getPercentage());
+        final int slotTimestamp = (int) (mBatteryDiffData.getStartTimestamp() / 1000);
+        mMetricsFeatureProvider.action(attribution, action, pageId, packageName, percentage);
+        mMetricsFeatureProvider.action(attribution, action, pageId, SLOT_TIMESTAMP, slotTimestamp);
+
+        if (isAnomalyBatteryDiffEntry(entry)) {
+            mMetricsFeatureProvider.action(
+                    attribution, action, pageId, ANOMALY_KEY, mAnomalyKeyNumber);
+        }
+    }
+
+    @Override
+    public boolean handlePreferenceTreeClick(Preference preference) {
+        if (!(preference instanceof PowerGaugePreference)) {
+            return false;
+        }
+        final PowerGaugePreference powerPref = (PowerGaugePreference) preference;
+        final BatteryDiffEntry diffEntry = powerPref.getBatteryDiffEntry();
+        logPreferenceClickedMetrics(diffEntry);
+        Log.d(
+                TAG,
+                String.format(
+                        "handleClick() label=%s key=%s package=%s",
+                        diffEntry.getAppLabel(), diffEntry.getKey(), diffEntry.getPackageName()));
+        final String anomalyHintPrefKey =
+                isAnomalyBatteryDiffEntry(diffEntry) ? mAnomalyHintPrefKey : null;
+        final String anomalyHintText =
+                isAnomalyBatteryDiffEntry(diffEntry) ? mAnomalyHintString : null;
+        AdvancedPowerUsageDetail.startBatteryDetailPage(
+                mActivity,
+                mFragment.getMetricsCategory(),
+                diffEntry,
+                powerPref.getPercentage(),
+                mSlotInformation,
+                /* showTimeInformation= */ true,
+                anomalyHintPrefKey,
+                anomalyHintText);
+        return true;
+    }
+
+    @Override
+    public void displayPreference(PreferenceScreen screen) {
+        super.displayPreference(screen);
+        mPrefContext = screen.getContext();
+        mRootPreferenceGroup = screen.findPreference(ROOT_PREFERENCE_KEY);
+        mSpinnerPreference = screen.findPreference(SPINNER_PREFERENCE_KEY);
+        mBatteryAdvanceInfoPreferenceGroup =
+                screen.findPreference(BATTERY_ADVANCE_INFO_CATEGORY_KEY);
+        mFooterPreference = screen.findPreference(FOOTER_PREFERENCE_KEY);
+        mBatteryUsageBreakdownTitleLastFullChargeText =
+                mPrefContext.getString(
+                        R.string.battery_usage_breakdown_title_since_last_full_charge);
+        final String formatPercentage =
+                Utils.formatPercentage(BatteryDiffData.SMALL_PERCENTAGE_THRESHOLD, false);
+        mPercentLessThanThresholdText =
+                mPrefContext.getString(R.string.battery_usage_less_than_percent, formatPercentage);
+        mPercentLessThanThresholdContentDescription =
+                mPrefContext.getString(
+                        R.string.battery_usage_less_than_percent_content_description,
+                        formatPercentage);
+
+        mRootPreferenceGroup.setOrderingAsAdded(false);
+        mSpinnerAdapter = new SettingsSpinnerAdapter<>(mPrefContext);
+        mSpinnerAdapter.addAll(
+                new String[] {
+                    mPrefContext.getString(R.string.battery_usage_spinner_view_by_apps),
+                    mPrefContext.getString(R.string.battery_usage_spinner_view_by_systems)
+                });
+        mSpinnerPreference.setAdapter(mSpinnerAdapter);
+        mSpinnerPreference.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(
+                            AdapterView<?> parent, View view, int position, long id) {
+                        if (mSpinnerPosition != position) {
+                            mSpinnerPosition = position;
+                            mHandler.post(
+                                    () -> {
+                                        removeAndCacheAllUnusedPreferences();
+                                        addAllPreferences();
+                                        mMetricsFeatureProvider.action(
+                                                mPrefContext,
+                                                SettingsEnums.ACTION_BATTERY_USAGE_SPINNER,
+                                                mSpinnerPosition);
+                                    });
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {}
+                });
+        mSpinnerPreference.setSelection(mSpinnerPosition);
+    }
+
+    /**
+     * Updates UI when the battery usage is updated.
+     *
+     * @param slotUsageData The battery usage diff data for the selected slot. This is used in the
+     *     app list.
+     * @param slotTimestamp The selected slot timestamp information. This is used in the battery
+     *     usage breakdown category.
+     * @param isAllUsageDataEmpty Whether all the battery usage data is null or empty. This is used
+     *     when showing the footer.
+     */
+    void handleBatteryUsageUpdated(
+            BatteryDiffData slotUsageData,
+            String slotTimestamp,
+            String accessibilitySlotTimestamp,
+            boolean isAllUsageDataEmpty,
+            boolean isHighlightSlot,
+            Optional<AnomalyEventWrapper> optionalAnomalyEventWrapper) {
+        mBatteryDiffData = slotUsageData;
+        mSlotInformation = slotTimestamp;
+        mIsHighlightSlot = isHighlightSlot;
+
+        if (optionalAnomalyEventWrapper != null) {
+            final AnomalyEventWrapper anomalyEventWrapper =
+                    optionalAnomalyEventWrapper.orElse(null);
+            mAnomalyKeyNumber =
+                    anomalyEventWrapper != null ? anomalyEventWrapper.getAnomalyKeyNumber() : -1;
+            mAnomalyEntryKey =
+                    anomalyEventWrapper != null ? anomalyEventWrapper.getAnomalyEntryKey() : null;
+            mAnomalyHintString =
+                    anomalyEventWrapper != null ? anomalyEventWrapper.getAnomalyHintString() : null;
+            mAnomalyHintPrefKey =
+                    anomalyEventWrapper != null
+                            ? anomalyEventWrapper.getAnomalyHintPrefKey()
+                            : null;
+        }
+
+        showCategoryTitle(slotTimestamp, accessibilitySlotTimestamp);
+        showSpinnerAndAppList();
+        showFooterPreference(isAllUsageDataEmpty);
+    }
+
+    private void showCategoryTitle(String slotTimestamp, String accessibilitySlotTimestamp) {
+        final String displayTitle =
+                slotTimestamp == null
+                        ? mBatteryUsageBreakdownTitleLastFullChargeText
+                        : mPrefContext.getString(
+                                R.string.battery_usage_breakdown_title_for_slot, slotTimestamp);
+        final String accessibilityTitle =
+                accessibilitySlotTimestamp == null
+                        ? mBatteryUsageBreakdownTitleLastFullChargeText
+                        : mPrefContext.getString(
+                                R.string.battery_usage_breakdown_title_for_slot,
+                                accessibilitySlotTimestamp);
+        mRootPreferenceGroup.setTitle(
+                Utils.createAccessibleSequence(displayTitle, accessibilityTitle));
+        mRootPreferenceGroup.setVisible(true);
+    }
+
+    private void showFooterPreference(boolean isAllBatteryUsageEmpty) {
+        boolean isBatteryAdvanceInfoEnabled =
+                FeatureFactory.getFeatureFactory()
+                        .getPowerUsageFeatureProvider()
+                        .isBatteryAdvanceInfoEnabled();
+        int titleResId = R.string.battery_usage_screen_footer;
+        if (isAllBatteryUsageEmpty) {
+            titleResId = R.string.battery_usage_screen_footer_empty;
+        } else if (isBatteryAdvanceInfoEnabled) {
+            titleResId = R.string.battery_usage_screen_advance_footer;
+        }
+
+        mFooterPreference.setTitle(mPrefContext.getString(titleResId));
+        mFooterPreference.setVisible(true);
+        if (mBatteryAdvanceInfoPreferenceGroup != null) {
+            mBatteryAdvanceInfoPreferenceGroup.setVisible(isBatteryAdvanceInfoEnabled);
+        }
+    }
+
+    private void showSpinnerAndAppList() {
+        if (mBatteryDiffData == null) {
+            mHandler.post(
+                    () -> {
+                        removeAndCacheAllUnusedPreferences();
+                    });
+            return;
+        }
+        mSpinnerPreference.setVisible(true);
+        mHandler.post(
+                () -> {
+                    removeAndCacheAllUnusedPreferences();
+                    addAllPreferences();
+                });
+    }
+
+    private List<BatteryDiffEntry> getBatteryDiffEntries() {
+        if (mBatteryDiffData == null) {
+            return EMPTY_ENTRY_LIST;
+        }
+        return mSpinnerPosition == 0
+                ? mBatteryDiffData.getAppDiffEntryList()
+                : mBatteryDiffData.getSystemDiffEntryList();
+    }
+
+    @VisibleForTesting
+    void addAllPreferences() {
+        if (mBatteryDiffData == null) {
+            return;
+        }
+        final long start = System.currentTimeMillis();
+        final List<BatteryDiffEntry> entries = getBatteryDiffEntries();
+        int preferenceOrder = ENTRY_PREF_ORDER_OFFSET;
+        for (BatteryDiffEntry entry : entries) {
+            boolean isAdded = false;
+            final String appLabel = entry.getAppLabel();
+            final Drawable appIcon = entry.getAppIcon();
+            if (TextUtils.isEmpty(appLabel) || appIcon == null) {
+                Log.w(TAG, "cannot find app resource for:" + entry.getPackageName());
+                continue;
+            }
+            final String prefKey = entry.getKey();
+            PowerGaugePreference preference = mRootPreferenceGroup.findPreference(prefKey);
+            if (preference != null) {
+                isAdded = true;
+            } else {
+                preference = (PowerGaugePreference) mPreferenceCache.get(prefKey);
+            }
+            // Creates new instance if cached preference is not found.
+            if (preference == null) {
+                preference = new PowerGaugePreference(mPrefContext);
+                preference.setKey(prefKey);
+                mPreferenceCache.put(prefKey, preference);
+            }
+            preference.setIcon(appIcon);
+            preference.setTitle(appLabel);
+            preference.setOrder(++preferenceOrder);
+            preference.setSingleLineTitle(true);
+            // Updates App item preference style
+            preference.setHint(isAnomalyBatteryDiffEntry(entry) ? mAnomalyHintString : null);
+            // Sets the BatteryDiffEntry to preference for launching detailed page.
+            preference.setBatteryDiffEntry(entry);
+            preference.setSelectable(entry.validForRestriction());
+            setPreferencePercentage(preference, entry);
+            setPreferenceSummary(preference, entry);
+            if (!isAdded) {
+                mRootPreferenceGroup.addPreference(preference);
+            }
+        }
+        Log.d(
+                TAG,
+                String.format(
+                        "addAllPreferences() is finished in %d/ms",
+                        (System.currentTimeMillis() - start)));
+    }
+
+    @VisibleForTesting
+    void removeAndCacheAllUnusedPreferences() {
+        List<BatteryDiffEntry> entries = getBatteryDiffEntries();
+        Set<String> entryKeySet = new ArraySet<>(entries.size());
+        entries.forEach(entry -> entryKeySet.add(entry.getKey()));
+        final int preferenceCount = mRootPreferenceGroup.getPreferenceCount();
+        for (int index = preferenceCount - 1; index >= 0; index--) {
+            final Preference preference = mRootPreferenceGroup.getPreference(index);
+            if ((preference instanceof SettingsSpinnerPreference)
+                    || (preference instanceof FooterPreference)
+                    || (preference instanceof PreferenceGroup)) {
+                // Consider the app preference only and skip others
+                continue;
+            }
+            if (entryKeySet.contains(preference.getKey())) {
+                // Don't remove the preference if it is still in use
+                continue;
+            }
+            if (!TextUtils.isEmpty(preference.getKey())) {
+                mPreferenceCache.put(preference.getKey(), preference);
+            }
+            mRootPreferenceGroup.removePreference(preference);
+        }
+    }
+
+    @VisibleForTesting
+    void setPreferencePercentage(PowerGaugePreference preference, BatteryDiffEntry entry) {
+        if (entry.getPercentage() < BatteryDiffData.SMALL_PERCENTAGE_THRESHOLD) {
+            preference.setPercentage(mPercentLessThanThresholdText);
+            preference.setPercentageContentDescription(mPercentLessThanThresholdContentDescription);
+        } else {
+            preference.setPercentage(
+                    Utils.formatPercentage(
+                            entry.getPercentage() + entry.getAdjustPercentageOffset(),
+                            /* round= */ true));
+        }
+    }
+
+    @VisibleForTesting
+    void setPreferenceSummary(PowerGaugePreference preference, BatteryDiffEntry entry) {
+        preference.setSummary(
+                BatteryUtils.buildBatteryUsageTimeSummary(
+                        mPrefContext,
+                        entry.isSystemEntry(),
+                        entry.mForegroundUsageTimeInMs,
+                        entry.mBackgroundUsageTimeInMs + entry.mForegroundServiceUsageTimeInMs,
+                        entry.mScreenOnTimeInMs));
+    }
+}

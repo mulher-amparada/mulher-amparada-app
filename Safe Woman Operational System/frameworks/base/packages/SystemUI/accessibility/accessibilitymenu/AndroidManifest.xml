@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2023 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.android.systemui.accessibility.accessibilitymenu">
+
+    <uses-permission android:name="android.permission.CONTROL_DISPLAY_BRIGHTNESS"/>
+    <uses-permission android:name="android.permission.MANAGE_USERS"/>
+
+    <application
+        android:name=".A11yMenuApplication"
+        android:supportsRtl="true"
+        android:allowBackup="true"
+        android:label="@string/accessibility_menu_service_name"
+        android:restoreAnyVersion="true">
+
+        <!-- Provide data for searching in the Settings app -->
+        <!-- Temporarily disable search until it pass the SystemHealth's review -->
+        <provider
+            android:name=".search.SearchIndexablesProvider"
+            android:authorities="${applicationId}"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            android:multiprocess="false"
+            android:permission="android.permission.READ_SEARCH_INDEXABLES"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.content.action.SEARCH_INDEXABLES_PROVIDER" />
+            </intent-filter>
+        </provider>
+
+        <!--
+        Service based on settingslib ipc to expose PreferenceMetadata and Get/Set functionality.
+        -->
+        <service
+            android:name=".PreferenceService"
+            android:exported="true"
+            android:permission="android.permission.READ_SYSTEM_PREFERENCES">
+            <intent-filter>
+                <action android:name="com.android.settingslib.PREFERENCE_SERVICE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.android.systemui.accessibility.accessibilitymenu.AccessibilityMenuService"
+            android:exported="false"
+            android:label="@string/accessibility_menu_service_name"
+            android:icon="@drawable/ic_logo_app"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibilitymenu_service"/>
+        </service>
+
+        <!-- Accessibility Menu Settings -->
+        <activity
+            android:name="com.android.systemui.accessibility.accessibilitymenu.activity.A11yMenuSettingsActivity"
+            android:exported="true"
+            android:label="@string/accessibility_menu_settings_name"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.SubSettingsBase">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.accessibilityservice.SERVICE_SETTINGS"/>
+            </intent-filter>
+        </activity>
+    </application>
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VOICE_COMMAND" />
+        </intent>
+    </queries>
+</manifest>

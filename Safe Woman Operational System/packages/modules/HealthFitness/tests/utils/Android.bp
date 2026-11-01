@@ -1,0 +1,114 @@
+// Copyright (C) 2025 The Android Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package {
+    default_applicable_licenses: ["Android-Apache-2.0"],
+}
+
+// Library for testing helpers that can be used across unittests and integration tests (also cts).
+// We shouldn't depend on framework/service impl since this is used in cts tests.
+java_library {
+    name: "healthfitness-testing-shared",
+    srcs: [
+        "src/android/healthconnect/testing/shared/**/*.java",
+    ],
+    static_libs: [
+        "androidx.test.ext.junit",
+        "androidx.test.ext.truth",
+        "androidx.test.rules",
+        "healthfitness-aconfig-flags-lib",
+    ],
+    sdk_version: "test_current",
+    jarjar_rules: ":health-cts-jarjar-rules",
+    visibility: [
+        "//vendor:__subpackages__",
+        "//packages/modules/HealthFitness:__subpackages__",
+    ],
+}
+
+// Library for testing helpers that can only be used in unittests.
+// This can depend on framework/service impl since this is for unit tests.
+android_library {
+    name: "healthfitness-testing-unittest",
+    manifest: "AndroidManifest_unittest.xml",
+    srcs: [
+        "src/android/healthconnect/testing/unittest/**/*.java",
+    ],
+    static_libs: [
+        "androidx.test.ext.junit",
+        "androidx.test.ext.truth",
+        "androidx.test.rules",
+        "framework-healthfitness.impl",
+        "healthfitness-testing-shared",
+        "mockito",
+        "service-healthfitness.impl",
+    ],
+    min_sdk_version: "34",
+    sdk_version: "module_current",
+}
+
+// Library for testing helpers that can only be used in cts / integration tests.
+// We shouldn't depend on framework/service impl since this is used in cts tests.
+android_library {
+    name: "healthfitness-testing-cts",
+    manifest: "AndroidManifest_cts.xml",
+    srcs: [
+        "src/android/healthconnect/testing/cts/**/*.java",
+        "src/android/healthconnect/testing/cts/**/*.kt",
+    ],
+    static_libs: [
+        "modules-utils-build",
+        "androidx.test.ext.junit",
+        "androidx.test.ext.truth",
+        "androidx.test.rules",
+        "compatibility-device-util-axt",
+        "healthfitness-aconfig-flags-lib",
+        "healthfitness-aconfig-flags-helper",
+        "healthfitness-testing-shared",
+    ],
+    min_sdk_version: "34",
+    sdk_version: "test_current",
+    visibility: [
+        "//vendor:__subpackages__",
+        "//packages/modules/HealthFitness:__subpackages__",
+    ],
+}
+
+// Library for testing APIs which are hidden, only meant for integration tests and not cts tests
+android_library {
+    name: "healthfitness-testing-integration",
+    manifest: "AndroidManifest_integration.xml",
+    srcs: [
+        "src/android/healthconnect/testing/integration/**/*.java",
+        "src/android/healthconnect/testing/integration/**/*.kt",
+    ],
+    static_libs: [
+        "compatibility-device-util-axt",
+        "androidx.test.ext.junit",
+        "androidx.test.ext.truth",
+        "androidx.test.rules",
+        "healthfitness-testing-shared",
+    ],
+    libs: [
+        "framework-healthfitness.impl",
+        "android_test_stubs_current",
+    ],
+    sdk_version: "core_platform",
+
+    min_sdk_version: "34",
+    visibility: [
+        "//vendor:__subpackages__",
+        "//packages/modules/HealthFitness:__subpackages__",
+    ],
+}

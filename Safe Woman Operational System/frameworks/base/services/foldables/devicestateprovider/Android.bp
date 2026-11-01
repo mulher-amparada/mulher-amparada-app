@@ -1,0 +1,18 @@
+package {
+    default_applicable_licenses: ["frameworks_base_license"],
+}
+
+java_library {
+    name: "foldable-device-state-provider",
+    srcs: [
+        "src/**/*.java",
+    ],
+    libs: [
+        // Use `services.impl` to avoid a dependency cycle when tracing
+        // downstream refs that feed into `services` during dex optimization.
+        "services.impl",
+    ],
+    static_libs: [
+        "device_state_flags_lib",
+    ],
+}

@@ -1,0 +1,212 @@
+#!/bin/bash
+# Copyright (C) 2024 The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+set -e
+
+SCRIPT_NAME="${0##*/}"
+
+usage() {
+    cat <<"EOF"
+
+$SCRIPT_NAME: Shrink / unshrink SystemUiRavenTests.
+
+    SystemUiRavenTests has a lot of kotlin source files, so it's slow to build,
+    which is painful when you want to run it after updating ravenwood code
+    that SystemUiRavenTests depends on. (example: junit-src/)
+
+    This script basically removes the test files in SystemUI/multivalentTests
+    that don't have @SysUiRavenwoodPresubmit. But if we actaully remove them,
+    soong would re-generate the ninja file, which will take a long time,
+    so instead it'll truncate them.
+
+    This script will also tell git to ignore these files, so they won't shw up
+    in `git status`.
+    (Use `git ls-files -v | sed -ne "s/^[a-zS] //p"` to show ignored filse.)
+
+Usage:
+    $SCRIPT_NAME -s [FILES] # Shrink the test files.
+
+    $SCRIPT_NAME -u [FILES] # Undo it.
+
+    If [FILES] are specified, only process those files.
+    Filenames must be relative to f/b/p/SystemUI.
+
+    Options:
+      -d: dry-run
+      -l: list already shrunk files (alias to '-ud')
+
+EOF
+    exit 1
+}
+
+cd "${ANDROID_BUILD_TOP:?}/frameworks/base/packages/SystemUI"
+
+# Make grep a bit faster.
+export LC_ALL=C
+
+command="usage" # Default command, show usage.
+dry=0
+filter_re=""
+while getopts "sudlf:" opt; do
+case "$opt" in
+    s) # Shrink the files.
+        command=shrink
+        ;;
+    u) # Unshrink the files.
+        command=unshrink
+        ;;
+    d) # Dry-run, only print the target files.
+        dry=1
+        ;;
+    l) # List already shrunk files.
+        command=unshrink
+        dry=1
+        ;;
+    f) # Filter regex (case insensitive)
+        filter_re="$OPTARG"
+        ;;
+    '?')
+        usage
+        ;;
+esac
+done
+shift $(($OPTIND - 1))
+
+# Remaining
+direct_targets=("$@")
+
+# Never-shrink classes.
+# These classes may be used by un-shrunk classes, so shrinking them would break the build.
+# (case insensitive)
+exemption='(BaseHeadsUpManagerTest|LeakCheckedTest|SysuiBaseFragmentTest|MobileConnectionRepositoryTest)'
+
+# Print the command and then execute.
+run() {
+    {
+        # Print the command line
+        echo -n "Running: "
+
+        # Use printf "%q" to shell-escape each word, so we can
+        # copy the whole command and just run it.
+        printf '%q ' "$@"
+        echo
+    } 1>&2
+
+    # Actually run it.
+    "$@"
+}
+
+find_targets() {
+    # If the argument is "1", find the files to shrink.
+    # If not, find the files to un-shrink.
+    local shrink="$1"
+
+    echo "Finding target files...." 1>&2
+
+    if (( ${#direct_targets[@]} > 0)) ; then
+        echo "${direct_targets[@]}" | tr ' ' '\n'
+        return 0
+    fi
+
+    # Only look for regular files, no symlinks
+    local find_opts=(-type f)
+
+    # Basic options
+    find_opts+=(-regextype posix-extended)
+
+    # Look for test files
+    find_opts+=(-regex '.*Tests?\.(kt|java)')
+
+    # When shrinking:
+    # - ignore empty files and exempted files.
+    # When unshrinking, only look for empty files.
+    if (( $shrink )) ; then
+        find_opts+=('!' -empty)
+        find_opts+=('!' -iregex ".*$exemption.*")
+    else
+        find_opts+=(-empty)
+    fi
+
+    # Maybe apply filter
+    if [[ "$filter_re" != "" ]] ; then
+        find_opts+=(-iregex ".*$filter_re.*")
+    fi
+
+    {
+        # Find the files under the following directories.
+        run find tests "${find_opts[@]}"
+        run find multivalentTests "${find_opts[@]}"
+
+    } | {
+        if (( shrink )) ; then
+            # We're shrinking. Do not print the files with this annotation.
+            # Use -l to only show the filenames.
+            xargs fgrep -L '@SysUiRavenwoodPresubmit'
+        else
+            # We're unshrinking, so don't check the annoation.
+            cat
+        fi
+    }
+}
+
+shrink() {
+    local target=( $(find_targets 1) )
+
+    if (( ${#target[@]} == 0 )) ; then
+        echo "No files to empty." 1>&2
+        return 0
+    fi
+    if (( $dry )) ; then
+        # Dry-run, only print the target filenames.
+        echo "${target[@]}" | tr ' ' '\n'
+        return 0
+    fi
+
+    # Collect empty files
+    for file in "${target[@]}" ; do
+        echo "Emptying $file"
+
+        # It's a non ravenwood test file. Empty it.
+        : > $file
+    done
+
+    # Tell git to ignore changes to them.
+    git update-index --skip-worktree "${target[@]}"
+
+    echo "Emptied ${#target[@]} files"
+    return 0
+}
+
+unshrink() {
+    local target=( $(find_targets 0) )
+
+    if (( ${#target[@]} == 0 )) ; then
+        echo "No files to restore." 1>&2
+        return 0
+    fi
+    if (( $dry )) ; then
+        # Dry-run, only print the target filenames.
+        echo "${target[@]}" | tr ' ' '\n'
+        return 0
+    fi
+
+    # Un-ignore the files, and check out the original files
+    echo "Restoring ${#target[@]} files..."
+    git update-index --no-skip-worktree "${target[@]}"
+    git checkout goog/main "${target[@]}"
+    return 0
+}
+
+$command

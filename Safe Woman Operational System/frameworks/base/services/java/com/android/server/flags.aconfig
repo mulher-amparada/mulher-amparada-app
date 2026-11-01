@@ -1,0 +1,38 @@
+package: "android.server"
+container: "system"
+
+flag {
+     namespace: "system_performance"
+     name: "enable_theme_service"
+     description: "Switches from SystemUi's ThemeOverlayController to Server's ThemeService."
+     bug: "333694176"
+}
+
+flag {
+     namespace: "system_performance"
+     name: "enable_wear_theme_service"
+     description: "Controls whether the Theme Service should be enabled on Wear."
+     bug: "394565651"
+}
+
+flag {
+     name: "remove_app_integrity_manager_service"
+     namespace: "package_manager_service"
+     description: "Remove AppIntegrityManagerService"
+     bug: "364200023"
+}
+
+flag {
+     name: "wear_gesture_api"
+     namespace: "wear_frameworks"
+     description: "Whether the Wear Gesture API is available."
+     bug: "396154116"
+     is_exported: true
+}
+
+flag {
+     name: "remove_ad_services_manager_service_from_wear"
+     namespace: "wear_frameworks"
+     description: "Remove AdServicesManagerService from Wear"
+     bug: "340928611"
+}

@@ -1,0 +1,2218 @@
+/*
+ * Copyright (C) 2023 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package android.net.apf
+
+import android.net.apf.ApfCounterTracker.Counter
+import android.net.apf.ApfCounterTracker.Counter.CORRUPT_DNS_PACKET
+import android.net.apf.ApfCounterTracker.Counter.DROPPED_ETHERTYPE_NOT_ALLOWED
+import android.net.apf.ApfCounterTracker.Counter.DROPPED_ETH_BROADCAST
+import android.net.apf.ApfCounterTracker.Counter.DROPPED_RA
+import android.net.apf.ApfCounterTracker.Counter.PASSED_ALLOCATE_FAILURE
+import android.net.apf.ApfCounterTracker.Counter.PASSED_ARP_REQUEST
+import android.net.apf.ApfCounterTracker.Counter.PASSED_MDNS
+import android.net.apf.ApfCounterTracker.Counter.PASSED_TRANSMIT_FAILURE
+import android.net.apf.ApfCounterTracker.Counter.TOTAL_PACKETS
+import android.net.apf.ApfTestHelpers.Companion.DROP
+import android.net.apf.ApfTestHelpers.Companion.MIN_PKT_SIZE
+import android.net.apf.ApfTestHelpers.Companion.PASS
+import android.net.apf.ApfTestHelpers.Companion.decodeCountersIntoMap
+import android.net.apf.BaseApfGenerator.APF_VERSION_2
+import android.net.apf.BaseApfGenerator.APF_VERSION_3
+import android.net.apf.BaseApfGenerator.DROP_LABEL
+import android.net.apf.BaseApfGenerator.IllegalInstructionException
+import android.net.apf.BaseApfGenerator.MemorySlot
+import android.net.apf.BaseApfGenerator.PASS_LABEL
+import android.net.apf.BaseApfGenerator.Register.R0
+import android.net.apf.BaseApfGenerator.Register.R1
+import androidx.test.filters.SmallTest
+import com.android.net.module.util.HexDump
+import com.android.net.module.util.Struct
+import com.android.net.module.util.structs.EthernetHeader
+import com.android.net.module.util.structs.Ipv4Header
+import com.android.net.module.util.structs.UdpHeader
+import com.android.testutils.DevSdkIgnoreRule
+import com.android.testutils.DevSdkIgnoreRunner
+import java.nio.ByteBuffer
+import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import org.junit.After
+import org.junit.Assume.assumeTrue
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
+
+const val ETH_HLEN = 14
+const val IPV4_HLEN = 20
+const val IPPROTO_UDP = 17
+
+/**
+ * Tests for APF generator instructions.
+ */
+@RunWith(DevSdkIgnoreRunner::class)
+@SmallTest
+class ApfGeneratorTest {
+
+    companion object {
+        @Parameterized.Parameters
+        @JvmStatic
+        fun data(): Iterable<Any?> {
+            return mutableListOf<Int?>(
+                ApfJniUtils.APF_INTERPRETER_VERSION_V6,
+                ApfJniUtils.APF_INTERPRETER_VERSION_NEXT
+            )
+        }
+    }
+
+    @get:Rule val ignoreRule = DevSdkIgnoreRule()
+
+    // Indicates which apfInterpreter to load.
+    @Parameterized.Parameter(0)
+    @JvmField
+    var apfInterpreterVersion: Int = ApfJniUtils.APF_INTERPRETER_VERSION_NEXT
+
+    private val ramSize = 2048
+    private val clampSize = 2048
+
+    private val testPacket = byteArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
+
+    @After
+    fun tearDown() {
+        ApfJniUtils.resetTransmittedPacketMemory()
+    }
+
+    @Test
+    fun testDataInstructionMustComeFirst() {
+        var gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addAllocateR0()
+        assertFailsWith<IllegalInstructionException> { gen.addData(ByteArray(3) { 0x01 }) }
+    }
+
+    @Test
+    fun testApfInstructionEncodingSizeCheck() {
+        var gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        assertFailsWith<IllegalArgumentException> {
+            ApfV6Generator(ByteArray(65536) { 0x01 }, apfInterpreterVersion, ramSize, clampSize)
+        }
+        assertFailsWith<IllegalArgumentException> { gen.addAllocate(65536) }
+        assertFailsWith<IllegalArgumentException> { gen.addAllocate(-1) }
+        assertFailsWith<IllegalArgumentException> { gen.addDataCopy(-1, 1) }
+        assertFailsWith<IllegalArgumentException> { gen.addPacketCopy(-1, 1) }
+        assertFailsWith<IllegalArgumentException> { gen.addDataCopy(1, 256) }
+        assertFailsWith<IllegalArgumentException> { gen.addPacketCopy(1, 256) }
+        assertFailsWith<IllegalArgumentException> { gen.addDataCopy(1, -1) }
+        assertFailsWith<IllegalArgumentException> { gen.addPacketCopy(1, -1) }
+        assertFailsWith<IllegalArgumentException> { gen.addPacketCopyFromR0(256) }
+        assertFailsWith<IllegalArgumentException> { gen.addDataCopyFromR0(256) }
+        assertFailsWith<IllegalArgumentException> { gen.addPacketCopyFromR0(-1) }
+        assertFailsWith<IllegalArgumentException> { gen.addDataCopyFromR0(-1) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0DoesNotContainDnsQ(
+                byteArrayOf(1, 'A'.code.toByte(), 0, 0),
+                256,
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0DoesNotContainDnsQ(
+                byteArrayOf(0, 0),
+                0xc0,
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0DoesNotContainDnsQ(
+                byteArrayOf(1, 'A'.code.toByte()),
+                0xc0,
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0DoesNotContainDnsQ(
+                byteArrayOf(64) + ByteArray(64) { 'A'.code.toByte() } + byteArrayOf(0, 0),
+                0xc0,
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0DoesNotContainDnsQ(
+                byteArrayOf(1, 'A'.code.toByte(), 1, 'B'.code.toByte(), 0),
+                0xc0,
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0DoesNotContainDnsQ(
+                byteArrayOf(1, 'A'.code.toByte(), 1, 'B'.code.toByte()),
+                0xc0,
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0ContainDnsQ(
+                byteArrayOf(1, 'A'.code.toByte(), 0, 0),
+                256,
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0ContainDnsQ(
+                byteArrayOf(0, 0),
+                0xc0,
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0ContainDnsQ(
+                byteArrayOf(1, 'A'.code.toByte()),
+                0xc0,
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0ContainDnsQ(
+                byteArrayOf(64) + ByteArray(64) { 'A'.code.toByte() } + byteArrayOf(0, 0),
+                0xc0,
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0ContainDnsQ(
+                byteArrayOf(1, 'A'.code.toByte(), 1, 'B'.code.toByte(), 0),
+                0xc0,
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0ContainDnsQ(
+                byteArrayOf(1, 'A'.code.toByte(), 1, 'B'.code.toByte()),
+                0xc0,
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0DoesNotContainDnsA(
+                byteArrayOf(0, 0),
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0DoesNotContainDnsA(
+                byteArrayOf(1, 'A'.code.toByte()),
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0DoesNotContainDnsA(
+                byteArrayOf(64) + ByteArray(64) { 'A'.code.toByte() } + byteArrayOf(0, 0),
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0DoesNotContainDnsA(
+                byteArrayOf(1, 'A'.code.toByte(), 1, 'B'.code.toByte(), 0),
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0DoesNotContainDnsA(
+                byteArrayOf(1, 'A'.code.toByte(), 1, 'B'.code.toByte()),
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0ContainDnsA(
+                byteArrayOf(0, 0),
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0ContainDnsA(
+                byteArrayOf(1, 'A'.code.toByte()),
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0ContainDnsA(
+                byteArrayOf(64) + ByteArray(64) { 'A'.code.toByte() } + byteArrayOf(0, 0),
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0ContainDnsA(
+                byteArrayOf(1, 'A'.code.toByte(), 1, 'B'.code.toByte(), 0),
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0ContainDnsA(
+                byteArrayOf(1, 'A'.code.toByte(), 1, 'B'.code.toByte()),
+                ApfV4Generator.DROP_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addJumpIfPktAtR0ContainAnyOfDnsA(listOf(), PASS_LABEL)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addJumpIfPktAtR0ContainAnyOfDnsA(listOf(ByteArray(2048) { 1 }), PASS_LABEL)
+        }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0ContainAnyOfDnsA(
+            listOf(byteArrayOf(1, 'A'.code.toByte(), 1, 'B'.code.toByte())),
+            ApfV4Generator.PASS_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addJumpIfPktAtR0ContainNoneOfDnsA(listOf(), PASS_LABEL)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addJumpIfPktAtR0ContainNoneOfDnsA(listOf(ByteArray(2048) { 1 }), PASS_LABEL)
+        }
+        assertFailsWith<IllegalArgumentException> { gen.addJumpIfPktAtR0ContainNoneOfDnsA(
+            listOf(byteArrayOf(1, 'A'.code.toByte(), 1, 'B'.code.toByte())),
+            ApfV4Generator.PASS_LABEL
+        ) }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addJumpIfBytesAtR0Equal(ByteArray(2048) { 1 }, DROP_LABEL)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addJumpIfBytesAtR0NotEqual(ByteArray(2048) { 1 }, DROP_LABEL)
+        }
+        assertFailsWith<IllegalArgumentException> { gen.addCountAndDrop(PASSED_ARP_REQUEST) }
+        assertFailsWith<IllegalArgumentException> { gen.addCountAndPass(DROPPED_ETH_BROADCAST) }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndDropIfR0Equals(3, PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndPassIfR0Equals(3, DROPPED_ETH_BROADCAST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndDropIfR0NotEquals(3, PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndPassIfR0NotEquals(3, DROPPED_ETH_BROADCAST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndDropIfR0LessThan(3, PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndPassIfR0LessThan(3, DROPPED_ETH_BROADCAST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndDropIfR0GreaterThan(3, PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndPassIfR0GreaterThan(3, DROPPED_ETH_BROADCAST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndDropIfBytesAtR0NotEqual(byteArrayOf(1), PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndDropIfBytesAtR0Equal(byteArrayOf(1), PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndPassIfBytesAtR0Equal(byteArrayOf(1), DROPPED_ETH_BROADCAST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndDropIfR0AnyBitsSet(3, PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndPassIfR0AnyBitsSet(3, DROPPED_ETH_BROADCAST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndDropIfR0IsOneOf(setOf(3), PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndPassIfR0IsOneOf(setOf(3), DROPPED_ETH_BROADCAST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndDropIfR0IsNoneOf(setOf(3), PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndPassIfR0IsNoneOf(setOf(3), DROPPED_ETH_BROADCAST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndDropIfBytesAtR0EqualsAnyOf(listOf(byteArrayOf(1)), PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndPassIfBytesAtR0EqualsAnyOf(listOf(byteArrayOf(1)), DROPPED_ETH_BROADCAST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndDropIfBytesAtR0EqualsNoneOf(listOf(byteArrayOf(1)), PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addCountAndPassIfBytesAtR0EqualsNoneOf(
+                    listOf(byteArrayOf(1)),
+                    DROPPED_ETH_BROADCAST
+            )
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addWrite32(byteArrayOf())
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addJumpIfOneOf(R0, setOf(), PASS_LABEL)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addJumpIfOneOf(R0, setOf(-1, 1), PASS_LABEL)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addJumpIfOneOf(R0, setOf(4294967296L, 1), PASS_LABEL)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addJumpIfOneOf(R0, List(34) { (it + 1).toLong() }.toSet(), PASS_LABEL)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addJumpIfBytesAtR0EqualsAnyOf(listOf(ByteArray(2048) { 1 }), PASS_LABEL )
+        }
+        assertFailsWith<IllegalArgumentException> {
+            gen.addJumpIfBytesAtR0EqualsAnyOf(
+                    listOf(byteArrayOf(1), byteArrayOf(1, 2)),
+                    PASS_LABEL
+            )
+        }
+
+        val v4gen = ApfV4Generator(APF_VERSION_3, ramSize, clampSize)
+        assertFailsWith<IllegalArgumentException> { v4gen.addCountAndDrop(PASSED_ARP_REQUEST) }
+        assertFailsWith<IllegalArgumentException> { v4gen.addCountAndPass(DROPPED_ETH_BROADCAST) }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndDropIfR0Equals(3, PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndPassIfR0Equals(3, DROPPED_ETH_BROADCAST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndDropIfR0NotEquals(3, PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndPassIfR0NotEquals(3, DROPPED_ETH_BROADCAST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndDropIfBytesAtR0Equal(byteArrayOf(1), PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndPassIfBytesAtR0Equal(byteArrayOf(1), DROPPED_ETH_BROADCAST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndDropIfR0LessThan(3, PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndPassIfR0LessThan(3, DROPPED_ETH_BROADCAST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndDropIfR0GreaterThan(3, PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndPassIfR0GreaterThan(3, DROPPED_ETH_BROADCAST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndDropIfBytesAtR0NotEqual(byteArrayOf(1), PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndDropIfR0AnyBitsSet(3, PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndPassIfR0AnyBitsSet(3, DROPPED_ETH_BROADCAST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndDropIfR0IsOneOf(setOf(3), PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndPassIfR0IsOneOf(setOf(3), DROPPED_ETH_BROADCAST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndDropIfR0IsNoneOf(setOf(3), PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndPassIfR0IsNoneOf(setOf(3), DROPPED_ETH_BROADCAST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndDropIfBytesAtR0EqualsAnyOf(listOf(byteArrayOf(1)), PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndPassIfBytesAtR0EqualsAnyOf(
+                    listOf(byteArrayOf(1)),
+                    DROPPED_ETH_BROADCAST
+            )
+        }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndDropIfBytesAtR0EqualsNoneOf(listOf(byteArrayOf(1)), PASSED_ARP_REQUEST)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            v4gen.addCountAndPassIfBytesAtR0EqualsNoneOf(
+                    listOf(byteArrayOf(1)),
+                    DROPPED_ETH_BROADCAST
+            )
+        }
+    }
+
+    @Test
+    fun testValidateDnsNames() {
+        // '%' is a valid label character in mDNS subtype
+        // byte == 0xff means it is a '*' wildcard, which is a valid encoding.
+        val program = ApfV6Generator(ramSize, ramSize, clampSize).addJumpIfPktAtR0ContainDnsQ(
+                byteArrayOf(1, '%'.code.toByte(), 0, 0),
+                1,
+                DROP_LABEL
+        ).addJumpIfPktAtR0ContainDnsA(
+                byteArrayOf(0xff.toByte(), 1, 'B'.code.toByte(), 0, 0),
+                DROP_LABEL
+        ).generate()
+    }
+
+    @Test
+    fun testApfInstructionsEncoding() {
+        val v4gen = ApfV4Generator(APF_VERSION_2, ramSize, clampSize)
+        v4gen.addPass()
+        var program = v4gen.generate()
+        // encoding PASS opcode: opcode=0, imm_len=0, R=0
+        assertContentEquals(
+                byteArrayOf(encodeInstruction(opcode = 0, immLength = 0, register = 0)),
+                program
+        )
+        assertContentEquals(
+                listOf("0: pass"),
+                ApfJniUtils.disassembleApf(program).map { it.trim() }
+        )
+
+        var gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addDrop()
+        program = gen.generate().skipDataAndDebug()
+        // encoding DROP opcode: opcode=0, imm_len=0, R=1
+        assertContentEquals(
+                byteArrayOf(encodeInstruction(opcode = 0, immLength = 0, register = 1)),
+                program
+        )
+        assertContentEquals(
+                listOf("0: drop"),
+                ApfJniUtils.disassembleApf(program).map { it.trim() }
+        )
+
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addCountAndPass(129)
+        program = gen.generate().skipDataAndDebug()
+        // encoding COUNT(PASS) opcode: opcode=0, imm_len=size_of(imm), R=0, imm=counterNumber
+        assertContentEquals(
+                byteArrayOf(
+                        encodeInstruction(opcode = 0, immLength = 1, register = 0),
+                        0x81.toByte()
+                ),
+                program
+        )
+        assertContentEquals(
+                listOf("0: pass        counter=129"),
+                ApfJniUtils.disassembleApf(program).map { it.trim() }
+        )
+
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addCountAndDrop(1000)
+        program = gen.generate().skipDataAndDebug()
+        // encoding COUNT(DROP) opcode: opcode=0, imm_len=size_of(imm), R=1, imm=counterNumber
+        assertContentEquals(
+                byteArrayOf(
+                        encodeInstruction(opcode = 0, immLength = 2, register = 1),
+                        0x03,
+                        0xe8.toByte()
+                ),
+                program
+        )
+        assertContentEquals(
+                listOf("0: drop        counter=1000"),
+                ApfJniUtils.disassembleApf(program).map { it.trim() }
+        )
+
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addCountAndPass(PASSED_ARP_REQUEST)
+        program = gen.generate().skipDataAndDebug()
+        // encoding COUNT(PASS) opcode: opcode=0, imm_len=size_of(imm), R=0, imm=counterNumber
+        assertContentEquals(
+                byteArrayOf(
+                        encodeInstruction(opcode = 0, immLength = 1, register = 0),
+                        PASSED_ARP_REQUEST.value().toByte()
+                ),
+                program
+        )
+        val expectedCounterValue1 = PASSED_ARP_REQUEST.value()
+        assertContentEquals(
+                listOf("0: pass        counter=$expectedCounterValue1"),
+                ApfJniUtils.disassembleApf(program).map { it.trim() }
+        )
+
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addCountAndDrop(DROPPED_ETHERTYPE_NOT_ALLOWED)
+        program = gen.generate().skipDataAndDebug()
+        // encoding COUNT(DROP) opcode: opcode=0, imm_len=size_of(imm), R=1, imm=counterNumber
+        assertContentEquals(
+                byteArrayOf(
+                        encodeInstruction(opcode = 0, immLength = 1, register = 1),
+                        DROPPED_ETHERTYPE_NOT_ALLOWED.value().toByte()
+                ),
+                program
+        )
+        val expectedCounterValue2 = DROPPED_ETHERTYPE_NOT_ALLOWED.value()
+        assertContentEquals(
+                listOf("0: drop        counter=$expectedCounterValue2"),
+                ApfJniUtils.disassembleApf(program).map { it.trim() }
+        )
+
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addAllocateR0()
+        gen.addAllocate(1500)
+        program = gen.generate().skipDataAndDebug()
+        // encoding ALLOC opcode: opcode=21(EXT opcode number), imm=36(TRANS opcode number).
+        // R=0 means length stored in R0. R=1 means the length stored in imm1.
+        assertContentEquals(
+                byteArrayOf(
+                        encodeInstruction(opcode = 21, immLength = 1, register = 0),
+                        36,
+                        encodeInstruction(opcode = 21, immLength = 1, register = 1),
+                        36,
+                        0x05,
+                        0xDC.toByte()
+                ),
+                program
+        )
+        assertContentEquals(listOf(
+                "0: allocate    r0",
+                "2: allocate    1500"
+        ), ApfJniUtils.disassembleApf(program).map { it.trim() })
+
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addTransmitWithoutChecksum()
+        gen.addTransmitL4(30, 40, 50, 256, true)
+        program = gen.generate().skipDataAndDebug()
+        // encoding TRANSMIT opcode: opcode=21(EXT opcode number),
+        // imm=37(TRANSMIT opcode number),
+        assertContentEquals(byteArrayOf(
+                encodeInstruction(opcode = 21, immLength = 1, register = 0),
+                37, 255.toByte(), 255.toByte(),
+                encodeInstruction(opcode = 21, immLength = 1, register = 1), 37, 30, 40, 50, 1, 0
+        ), program)
+        assertContentEquals(listOf(
+                "0: transmit    ip_ofs=255",
+                "4: transmitudp ip_ofs=30, csum_ofs=40, csum_start=50, partial_csum=0x0100",
+        ), ApfJniUtils.disassembleApf(program).map { it.trim() })
+
+        val largeByteArray = ByteArray(256) { 0x01 }
+        gen = ApfV6Generator(largeByteArray, apfInterpreterVersion, ramSize, clampSize)
+        program = gen.generate()
+        val debugBufferSize = ramSize - program.size - Counter.totalSize()
+        assertContentEquals(
+                byteArrayOf(
+                        encodeInstruction(opcode = 14, immLength = 2, register = 1), 1, 0
+                ) + largeByteArray + byteArrayOf(
+                        encodeInstruction(opcode = 21, immLength = 1, register = 0),
+                        48, (debugBufferSize shr 8).toByte(), debugBufferSize.toByte()
+                ),
+                program
+        )
+        assertContentEquals(
+                listOf(
+                        "0: data        256, " + "01".repeat(256),
+                        "259: debugbuf    size=$debugBufferSize"
+                ),
+                ApfJniUtils.disassembleApf(program).map { it.trim() }
+        )
+
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addWriteU8(0x01)
+        gen.addWriteU16(0x0102)
+        gen.addWriteU32(0x01020304)
+        gen.addWriteU8(0x00)
+        gen.addWriteU8(0x80)
+        gen.addWriteU16(0x0000)
+        gen.addWriteU16(0x8000)
+        gen.addWriteU32(0x00000000)
+        gen.addWriteU32(0x80000000)
+        gen.addWrite32(-2)
+        gen.addWrite32(byteArrayOf(0xff.toByte(), 0xfe.toByte(), 0xfd.toByte(), 0xfc.toByte()))
+        program = gen.generate().skipDataAndDebug()
+        assertContentEquals(byteArrayOf(
+                encodeInstruction(24, 1, 0), 0x01,
+                encodeInstruction(24, 2, 0), 0x01, 0x02,
+                encodeInstruction(24, 4, 0), 0x01, 0x02, 0x03, 0x04,
+                encodeInstruction(24, 1, 0), 0x00,
+                encodeInstruction(24, 1, 0), 0x80.toByte(),
+                encodeInstruction(24, 2, 0), 0x00, 0x00,
+                encodeInstruction(24, 2, 0), 0x80.toByte(), 0x00,
+                encodeInstruction(24, 4, 0), 0x00, 0x00, 0x00, 0x00,
+                encodeInstruction(24, 4, 0), 0x80.toByte(), 0x00, 0x00, 0x00,
+                encodeInstruction(24, 4, 0), 0xff.toByte(), 0xff.toByte(),
+                0xff.toByte(), 0xfe.toByte(),
+                encodeInstruction(24, 4, 0), 0xff.toByte(), 0xfe.toByte(),
+                0xfd.toByte(), 0xfc.toByte()), program)
+        assertContentEquals(listOf(
+                "0: write       0x01",
+                "2: write       0x0102",
+                "5: write       0x01020304",
+                "10: write       0x00",
+                "12: write       0x80",
+                "14: write       0x0000",
+                "17: write       0x8000",
+                "20: write       0x00000000",
+                "25: write       0x80000000",
+                "30: write       0xfffffffe",
+                "35: write       0xfffefdfc"
+        ), ApfJniUtils.disassembleApf(program).map { it.trim() })
+
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addWriteU8(R0)
+        gen.addWriteU16(R0)
+        gen.addWriteU32(R0)
+        gen.addWriteU8(R1)
+        gen.addWriteU16(R1)
+        gen.addWriteU32(R1)
+        program = gen.generate().skipDataAndDebug()
+        assertContentEquals(byteArrayOf(
+                encodeInstruction(21, 1, 0), 38,
+                encodeInstruction(21, 1, 0), 39,
+                encodeInstruction(21, 1, 0), 40,
+                encodeInstruction(21, 1, 1), 38,
+                encodeInstruction(21, 1, 1), 39,
+                encodeInstruction(21, 1, 1), 40
+        ), program)
+        assertContentEquals(listOf(
+                "0: ewrite1     r0",
+                "2: ewrite2     r0",
+                "4: ewrite4     r0",
+                "6: ewrite1     r1",
+                "8: ewrite2     r1",
+                "10: ewrite4     r1"
+        ), ApfJniUtils.disassembleApf(program).map { it.trim() })
+
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addDataCopy(0, 2)
+        gen.addDataCopy(1, 1)
+        gen.addPacketCopy(1000, 255)
+        program = gen.generate().skipDataAndDebug()
+        assertContentEquals(byteArrayOf(
+                encodeInstruction(25, 0, 1), 2,
+                encodeInstruction(25, 1, 1), 1, 1,
+                encodeInstruction(25, 2, 0),
+                0x03.toByte(), 0xe8.toByte(), 0xff.toByte(),
+        ), program)
+        assertContentEquals(listOf(
+                "0: datacopy    src=0, (2)c902",
+                "2: datacopy    src=1, (1)02",
+                "5: pktcopy     src=1000, len=255"
+        ), ApfJniUtils.disassembleApf(program).map { it.trim() })
+
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addDataCopyFromR0(5)
+        gen.addPacketCopyFromR0(5)
+        gen.addDataCopyFromR0LenR1()
+        gen.addPacketCopyFromR0LenR1()
+        program = gen.generate().skipDataAndDebug()
+        assertContentEquals(byteArrayOf(
+                encodeInstruction(21, 1, 1), 41, 5,
+                encodeInstruction(21, 1, 0), 41, 5,
+                encodeInstruction(21, 1, 1), 42,
+                encodeInstruction(21, 1, 0), 42,
+        ), program)
+        assertContentEquals(listOf(
+                "0: edatacopy   src=r0, len=5",
+                "3: epktcopy    src=r0, len=5",
+                "6: edatacopy   src=r0, len=r1",
+                "8: epktcopy    src=r0, len=r1"
+        ), ApfJniUtils.disassembleApf(program).map{ it.trim() })
+
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addJumpIfBytesAtR0Equal(byteArrayOf('a'.code.toByte()), ApfV4Generator.DROP_LABEL)
+        program = gen.generate().skipDataAndDebug()
+        assertContentEquals(byteArrayOf(
+                encodeInstruction(opcode = 20, immLength = 1, register = 1),
+                1,
+                1,
+                'a'.code.toByte()
+        ), program)
+        assertContentEquals(listOf(
+                "0: jbseq       r0, (1), DROP, 61"
+        ), ApfJniUtils.disassembleApf(program).map{ it.trim() })
+
+        val qnames = byteArrayOf(1, 'A'.code.toByte(), 1, 'B'.code.toByte(), 0, 0)
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addJumpIfPktAtR0DoesNotContainDnsQ(qnames, 0x0c, ApfV4Generator.DROP_LABEL)
+        gen.addJumpIfPktAtR0ContainDnsQ(qnames, 0x0c, ApfV4Generator.DROP_LABEL)
+        program = gen.generate().skipDataAndDebug()
+        assertContentEquals(byteArrayOf(
+                encodeInstruction(21, 1, 0), 43, 11, 0x0c.toByte(),
+        ) + qnames + byteArrayOf(
+                encodeInstruction(21, 1, 1), 43, 1, 0x0c.toByte(),
+        ) + qnames, program)
+        assertContentEquals(listOf(
+                "0: jdnsqne     r0, DROP, PTR, (1)A(1)B(0)(0)",
+                "10: jdnsqeq     r0, DROP, PTR, (1)A(1)B(0)(0)"
+        ), ApfJniUtils.disassembleApf(program).map{ it.trim() })
+
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addJumpIfPktAtR0DoesNotContainDnsQSafe(qnames, 0x0c, ApfV4Generator.DROP_LABEL)
+        gen.addJumpIfPktAtR0ContainDnsQSafe(qnames, 0x0c, ApfV4Generator.DROP_LABEL)
+        program = gen.generate().skipDataAndDebug()
+        assertContentEquals(byteArrayOf(
+                encodeInstruction(21, 1, 0), 45, 11, 0x0c.toByte(),
+        ) + qnames + byteArrayOf(
+                encodeInstruction(21, 1, 1), 45, 1, 0x0c.toByte(),
+        ) + qnames, program)
+        assertContentEquals(listOf(
+                "0: jdnsqnesafe r0, DROP, PTR, (1)A(1)B(0)(0)",
+                "10: jdnsqeqsafe r0, DROP, PTR, (1)A(1)B(0)(0)"
+        ), ApfJniUtils.disassembleApf(program).map{ it.trim() })
+
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addJumpIfPktAtR0DoesNotContainDnsA(qnames, ApfV4Generator.DROP_LABEL)
+        gen.addJumpIfPktAtR0ContainDnsA(qnames, ApfV4Generator.DROP_LABEL)
+        program = gen.generate().skipDataAndDebug()
+        assertContentEquals(byteArrayOf(
+                encodeInstruction(21, 1, 0), 44, 10,
+        ) + qnames + byteArrayOf(
+                encodeInstruction(21, 1, 1), 44, 1,
+        ) + qnames, program)
+        assertContentEquals(listOf(
+                "0: jdnsane     r0, DROP, (1)A(1)B(0)(0)",
+                "9: jdnsaeq     r0, DROP, (1)A(1)B(0)(0)"
+        ), ApfJniUtils.disassembleApf(program).map{ it.trim() })
+
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addJumpIfPktAtR0DoesNotContainDnsASafe(qnames, ApfV4Generator.DROP_LABEL)
+        gen.addJumpIfPktAtR0ContainDnsASafe(qnames, ApfV4Generator.DROP_LABEL)
+        program = gen.generate().skipDataAndDebug()
+        assertContentEquals(byteArrayOf(
+                encodeInstruction(21, 1, 0), 46, 10,
+        ) + qnames + byteArrayOf(
+                encodeInstruction(21, 1, 1), 46, 1,
+        ) + qnames, program)
+        assertContentEquals(listOf(
+                "0: jdnsanesafe r0, DROP, (1)A(1)B(0)(0)",
+                "9: jdnsaeqsafe r0, DROP, (1)A(1)B(0)(0)"
+        ), ApfJniUtils.disassembleApf(program).map{ it.trim() })
+
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addJumpIfOneOf(R1, List(32) { (it + 1).toLong() }.toSet(), DROP_LABEL)
+        gen.addJumpIfOneOf(R0, setOf(0, 257, 65536), DROP_LABEL)
+        gen.addJumpIfNoneOf(R0, setOf(1, 2, 3), DROP_LABEL)
+        program = gen.generate().skipDataAndDebug()
+        assertContentEquals(byteArrayOf(
+                encodeInstruction(21, 1, 1), 47, 24, -16, 1, 2, 3, 4, 5, 6,
+                7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
+                29, 30, 31, 32,
+                encodeInstruction(21, 1, 0), 47, 8, 14, 0, 0, 0, 0, 0, 0,
+                1, 1, 0, 1, 0, 0,
+                encodeInstruction(21, 1, 0), 47, 1, 9, 1, 2, 3
+        ), program)
+
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addJumpIfOneOf(R0, setOf(0, 128, 256, 65536), DROP_LABEL)
+        gen.addJumpIfNoneOf(R1, setOf(0, 128, 256, 65536), DROP_LABEL)
+        program = gen.generate().skipDataAndDebug()
+        assertContentEquals(listOf(
+                "0: joneof      r0, DROP, { 0, 128, 256, 65536 }",
+                "20: jnoneof     r1, DROP, { 0, 128, 256, 65536 }"
+        ), ApfJniUtils.disassembleApf(program).map{ it.trim() })
+
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addJumpIfBytesAtR0EqualsAnyOf(listOf(byteArrayOf(1, 2), byteArrayOf(3, 4)), DROP_LABEL)
+        gen.addJumpIfBytesAtR0EqualsNoneOf(listOf(byteArrayOf(1, 2), byteArrayOf(3, 4)), DROP_LABEL)
+        gen.addJumpIfBytesAtR0EqualsNoneOf(listOf(byteArrayOf(1, 1), byteArrayOf(1, 1)), DROP_LABEL)
+        program = gen.generate().skipDataAndDebug()
+        assertContentEquals(byteArrayOf(
+                encodeInstruction(opcode = 20, immLength = 2, register = 1),
+                0, 15, 8, 2, 1, 2, 3, 4,
+                encodeInstruction(opcode = 20, immLength = 2, register = 0),
+                0, 6, 8, 2, 1, 2, 3, 4,
+                encodeInstruction(opcode = 20, immLength = 1, register = 0),
+                1, 2, 1, 1
+        ), program)
+        assertContentEquals(listOf(
+                "0: jbseq       r0, (2), DROP, { 0102, 0304 }[2]",
+                "9: jbsne       r0, (2), DROP, { 0102, 0304 }[2]",
+                "18: jbsne       r0, (2), DROP, 0101"
+        ), ApfJniUtils.disassembleApf(program).map{ it.trim() })
+
+        val dnsABytes = listOf(
+            intArrayOf(
+                0x01, 'A'.code,
+                0x03, 'C'.code, 'O'.code, 'M'.code,
+                0x00, 0x00
+            ).map { it.toByte() }.toByteArray(),
+            intArrayOf(
+                0x01, 'B'.code,
+                0x03, 'N'.code, 'E'.code, 'T'.code,
+                0x00, 0x00
+            ).map { it.toByte() }.toByteArray()
+        )
+        val combinedDnsABytes = intArrayOf(
+            0x01, 'A'.code,
+            0x03, 'C'.code, 'O'.code, 'M'.code,
+            0x00,
+            0x01, 'B'.code,
+            0x03, 'N'.code, 'E'.code, 'T'.code,
+            0x00, 0x00
+        ).map { it.toByte() }.toByteArray()
+
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addJumpIfPktAtR0ContainAnyOfDnsA(dnsABytes, DROP_LABEL)
+        program = gen.generate().skipDataAndDebug()
+        assertContentEquals(
+            byteArrayOf(
+                encodeInstruction(21, 1, 1),
+                44, 1,
+            ) + combinedDnsABytes,
+            program
+        )
+        assertContentEquals(listOf(
+                "0: jdnsaeq     r0, DROP, (1)A(3)COM(0)(1)B(3)NET(0)(0)",
+        ), ApfJniUtils.disassembleApf(program).map{ it.trim() })
+
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addJumpIfPktAtR0ContainNoneOfDnsA(dnsABytes, DROP_LABEL)
+        program = gen.generate().skipDataAndDebug()
+        assertContentEquals(
+            byteArrayOf(
+                encodeInstruction(21, 1, 0),
+                44, 1,
+            ) + combinedDnsABytes,
+            program
+        )
+        assertContentEquals(listOf(
+                "0: jdnsane     r0, DROP, (1)A(3)COM(0)(1)B(3)NET(0)(0)",
+        ), ApfJniUtils.disassembleApf(program).map{ it.trim() })
+
+        val dnsADupBytes = listOf(
+            intArrayOf(
+                0x01, 'A'.code,
+                0x03, 'C'.code, 'O'.code, 'M'.code,
+                0x00, 0x00
+            ).map { it.toByte() }.toByteArray(),
+            intArrayOf(
+                0x01, 'B'.code,
+                0x03, 'N'.code, 'E'.code, 'T'.code,
+                0x00, 0x00
+            ).map { it.toByte() }.toByteArray(),
+            intArrayOf(
+                0x01, 'A'.code,
+                0x03, 'C'.code, 'O'.code, 'M'.code,
+                0x00, 0x00
+            ).map { it.toByte() }.toByteArray()
+        )
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addJumpIfPktAtR0ContainAnyOfDnsA(dnsADupBytes, DROP_LABEL)
+        program = gen.generate().skipDataAndDebug()
+        assertContentEquals(
+            byteArrayOf(
+                encodeInstruction(21, 1, 1),
+                44, 1,
+            ) + combinedDnsABytes,
+            program
+        )
+        assertContentEquals(listOf(
+                "0: jdnsaeq     r0, DROP, (1)A(3)COM(0)(1)B(3)NET(0)(0)",
+        ), ApfJniUtils.disassembleApf(program).map{ it.trim() })
+
+        gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addJumpIfPktAtR0ContainNoneOfDnsA(dnsADupBytes, DROP_LABEL)
+        program = gen.generate().skipDataAndDebug()
+        assertContentEquals(
+            byteArrayOf(
+                encodeInstruction(21, 1, 0),
+                44, 1,
+            ) + combinedDnsABytes,
+            program
+        )
+        assertContentEquals(listOf(
+                "0: jdnsane     r0, DROP, (1)A(3)COM(0)(1)B(3)NET(0)(0)",
+        ), ApfJniUtils.disassembleApf(program).map{ it.trim() })
+    }
+
+    @Test
+    fun testApf61InstructionEncoding() {
+        var gen = ApfV61Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addCountAndDropIfR0Equals(1, DROPPED_RA)
+        var program = gen.generate().skipDataAndDebug()
+        assertContentEquals(byteArrayOf(
+            encodeInstruction(15, 1, 0),
+            DROPPED_RA.jumpDropLabel.toByte(),
+            1,
+        ), program)
+
+        gen = ApfV61Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addCountAndPassIfR0Equals(1, PASSED_MDNS)
+        program = gen.generate().skipDataAndDebug()
+        assertContentEquals(byteArrayOf(
+            encodeInstruction(15, 1, 0),
+            PASSED_MDNS.jumpPassLabel.toByte(),
+            1,
+        ), program)
+    }
+
+    @Test
+    fun testWriteToTxBuffer() {
+        var program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addAllocate(14)
+                .addWriteU8(0x01)
+                .addWriteU16(0x0203)
+                .addWriteU32(0x04050607)
+                .addWrite32(-2)
+                .addWrite32(byteArrayOf(0xff.toByte(), 0xfe.toByte(), 0xfd.toByte(), 0xfc.toByte()))
+                .addLoadImmediate(R0, 1)
+                .addWriteU8(R0)
+                .addLoadImmediate(R0, 0x0203)
+                .addWriteU16(R0)
+                .addLoadImmediate(R1, 0x04050607)
+                .addWriteU32(R1)
+                .addTransmitWithoutChecksum()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, ByteArray(MIN_PKT_SIZE))
+        val transmitPackets = ApfTestHelpers.consumeTransmittedPackets(1)
+        assertContentEquals(
+                byteArrayOf(
+                        0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0xff.toByte(),
+                        0xff.toByte(), 0xff.toByte(), 0xfe.toByte(), 0xff.toByte(), 0xfe.toByte(),
+                        0xfd.toByte(), 0xfc.toByte(), 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07),
+                transmitPackets[0]
+        )
+    }
+
+    @Test
+    fun testCopyToTxBuffer() {
+        var program = ApfV6Generator(
+            byteArrayOf(33, 34, 35),
+            apfInterpreterVersion,
+            ramSize,
+            clampSize
+        )
+                .addAllocate(14)
+                .addDataCopy(3, 2) // arg1=src, arg2=len
+                .addDataCopy(5, 1) // arg1=src, arg2=len
+                .addPacketCopy(0, 1) // arg1=src, arg2=len
+                .addPacketCopy(1, 3) // arg1=src, arg2=len
+                .addLoadImmediate(R0, 3) // data copy offset
+                .addDataCopyFromR0(2) // len
+                .addLoadImmediate(R0, 5) // data copy offset
+                .addLoadImmediate(R1, 1) // len
+                .addDataCopyFromR0LenR1()
+                .addLoadImmediate(R0, 0) // packet copy offset
+                .addPacketCopyFromR0(1) // len
+                .addLoadImmediate(R0, 1) // packet copy offset
+                .addLoadImmediate(R1, 3) // len
+                .addPacketCopyFromR0LenR1()
+                .addTransmitWithoutChecksum()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, testPacket)
+        val transmitPackets = ApfTestHelpers.consumeTransmittedPackets(1)
+        assertContentEquals(
+                byteArrayOf(33, 34, 35, 1, 2, 3, 4, 33, 34, 35, 1, 2, 3, 4),
+                transmitPackets[0]
+        )
+    }
+
+    @Test
+    fun testCopyContentToTxBuffer() {
+        val program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addAllocate(18)
+                .addDataCopy(HexDump.hexStringToByteArray("112233445566"))
+                .addDataCopy(HexDump.hexStringToByteArray("223344"))
+                .addDataCopy(HexDump.hexStringToByteArray("778899"))
+                .addDataCopy(HexDump.hexStringToByteArray("112233445566"))
+                .addTransmitWithoutChecksum()
+                .generate()
+        assertContentEquals(listOf(
+                "0: data        9, 112233445566778899",
+                "12: debugbuf    size=${ramSize - program.size - Counter.totalSize()}",
+                "16: allocate    18",
+                "20: datacopy    src=3, (6)112233445566",
+                "23: datacopy    src=4, (3)223344",
+                "26: datacopy    src=9, (3)778899",
+                "29: datacopy    src=3, (6)112233445566",
+                "32: transmit    ip_ofs=255"
+        ), ApfJniUtils.disassembleApf(program).map{ it.trim() })
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, testPacket)
+        val transmitPackets = ApfTestHelpers.consumeTransmittedPackets(1)
+        val transmitPkt = HexDump.toHexString(transmitPackets[0])
+        assertEquals("112233445566223344778899112233445566", transmitPkt)
+    }
+
+    @Test
+    fun testCopyLargeContentToTxBufferWithCompression() {
+        val program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+            .addAllocate(300)
+            // Chunked into 255 and 35 bytes.
+            // 255 bytes appended to data region.
+            // 35 bytes compressed by reusing the duplicated chunk from the data region.
+            .addDataCopy(ByteArray(290) { 1 })
+            // Appended to the data region.
+            .addDataCopy(ByteArray(5) { 2 })
+            // Compressed by reusing the duplicated chunk from the data region.
+            .addDataCopy(ByteArray(3) { 1 } + ByteArray(2) { 2 })
+            .addTransmitWithoutChecksum()
+            .generate()
+
+        val byteHexString = "01".repeat(255) + "02".repeat(5)
+        assertContentEquals(listOf(
+            "0: data        260, $byteHexString",
+            "263: debugbuf    size=${ramSize - program.size - Counter.totalSize()}",
+            "267: allocate    300",
+            "271: datacopy    src=3, (255)" + "01".repeat(255),
+            "274: datacopy    src=3, (35)" + "01".repeat(35),
+            "277: datacopy    src=258, (5)" + "02".repeat(5),
+            "281: datacopy    src=255, (5)" + "01".repeat(3) + "02".repeat(2),
+            "284: transmit    ip_ofs=255"
+        ), ApfJniUtils.disassembleApf(program).map{ it.trim() })
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, testPacket)
+        val transmitPackets = ApfTestHelpers.consumeTransmittedPackets(1)
+        val transmitPkt = HexDump.toHexString(transmitPackets[0])
+        assertEquals(
+            "01".repeat(290) + "02".repeat(5) + "01".repeat(3) + "02".repeat(2),
+            transmitPkt
+        )
+    }
+
+    @Test
+    fun testCopyLargeContentToTxBufferWithoutCompression() {
+        val program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+            .addAllocate(300)
+            // Chunked into 255 and 45 bytes and then appended to the data region.
+            .addDataCopy(ByteArray(255) { 3 } + ByteArray(45) { 4 })
+            .addTransmitWithoutChecksum()
+            .generate()
+
+        val byteHexString = "03".repeat(255) + "04".repeat(45)
+        assertContentEquals(listOf(
+            "0: data        300, $byteHexString",
+            "303: debugbuf    size=${ramSize - program.size - Counter.totalSize()}",
+            "307: allocate    300",
+            "311: datacopy    src=3, (255)" + "03".repeat(255),
+            "314: datacopy    src=258, (45)" + "04".repeat(45),
+            "318: transmit    ip_ofs=255"
+        ), ApfJniUtils.disassembleApf(program).map{ it.trim() })
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, testPacket)
+        val transmitPackets = ApfTestHelpers.consumeTransmittedPackets(1)
+        val transmitPkt = HexDump.toHexString(transmitPackets[0])
+        assertEquals( "03".repeat(255) + "04".repeat(45), transmitPkt)
+    }
+
+    @Test
+    fun testJBSPTRMATCHOpcodeEncoding() {
+        assumeTrue(apfInterpreterVersion != ApfJniUtils.APF_INTERPRETER_VERSION_V6)
+        val dataBytes = HexDump.hexStringToByteArray(
+            "01020304050607080910111213141516171819202122232425262728293031323334353637383940"
+        )
+        val bytes1 = HexDump.hexStringToByteArray("0102")
+        val bytes2 = HexDump.hexStringToByteArray("0304")
+        val bytes3 = HexDump.hexStringToByteArray("0506")
+        val bytes4 = HexDump.hexStringToByteArray("0708")
+        val bytes5 = HexDump.hexStringToByteArray("0910")
+        val bytes6 = HexDump.hexStringToByteArray("1112")
+        val bytes7 = HexDump.hexStringToByteArray("1314")
+        val bytes8 = HexDump.hexStringToByteArray("1516")
+        val bytes9 = HexDump.hexStringToByteArray("1718")
+        val bytes10 = HexDump.hexStringToByteArray("1920")
+        val bytes11 = HexDump.hexStringToByteArray("2122")
+        val bytes12 = HexDump.hexStringToByteArray("2324")
+        val bytes13 = HexDump.hexStringToByteArray("2526")
+        val bytes14 = HexDump.hexStringToByteArray("2728")
+        val bytes15 = HexDump.hexStringToByteArray("2930")
+        val bytes16 = HexDump.hexStringToByteArray("3132")
+        val bytes17 = HexDump.hexStringToByteArray("3334")
+        val bytesAtOddIndex = HexDump.hexStringToByteArray("0203")
+        val notExistBytes = HexDump.hexStringToByteArray("ffff")
+        val total17BytesList = listOf(
+            bytes1,
+            bytes2,
+            bytes3,
+            bytes4,
+            bytes5,
+            bytes6,
+            bytes7,
+            bytes8,
+            bytes9,
+            bytes10,
+            bytes11,
+            bytes12,
+            bytes13,
+            bytes14,
+            bytes15,
+            bytes16,
+            bytes17,
+        )
+        val joinedBytes: ByteArray = total17BytesList.flatMap { it.toList() }.toByteArray()
+        var program = ApfV61Generator(apfInterpreterVersion, ramSize, clampSize)
+            .addPreloadData(dataBytes)
+            .addJumpIfBytesAtOffsetEqualsNoneOf(0, listOf(bytes1, notExistBytes), PASS_LABEL)
+            .addJumpIfBytesAtOffsetEqualsAnyOf(1, listOf(bytes1, bytes2), PASS_LABEL)
+            .addJumpIfBytesAtOffsetEqualsNoneOf(2, listOf(notExistBytes), PASS_LABEL)
+            .addJumpIfBytesAtOffsetEqualsAnyOf(3, total17BytesList, PASS_LABEL)
+            .addJumpIfBytesAtOffsetEqualsNoneOf(4, listOf(bytesAtOddIndex), PASS_LABEL)
+            .addJumpIfBytesAtOffsetEqualsNoneOf(6, listOf(joinedBytes), PASS_LABEL)
+            .generate()
+        var debugBufferSize = ramSize - program.size - Counter.totalSize()
+        assertContentEquals(listOf(
+            "0: data        40, ${HexDump.toHexString(dataBytes)}",
+            "43: debugbuf    size=$debugBufferSize",
+            "47: jbsptrne    pktofs=0, (2), PASS, @0[0102]",
+            "52: li          r0, 0",
+            "53: jbsne       r0, (2), PASS, ffff",
+            "58: jbsptreq    pktofs=1, (2), PASS, { @0[0102], @2[0304] }[2]",
+            "64: li          r0, 2",
+            "66: jbsne       r0, (2), PASS, ffff",
+            "71: jbsptreq    pktofs=3, (2), PASS, { @0[0102], @2[0304], @4[0506], @6[0708], " +
+                "@8[0910], @10[1112], @12[1314], @14[1516], @16[1718], @18[1920], @20[2122], " +
+                "@22[2324], @24[2526], @26[2728], @28[2930], @30[3132] }[16]",
+            "91: jbsptreq    pktofs=3, (2), PASS, @32[3334]",
+            "96: li          r0, 4",
+            "98: jbsne       r0, (2), PASS, 0203",
+            "103: li          r0, 6",
+            "105: jbsne       r0, (34), PASS, ${HexDump.toHexString(joinedBytes)}",
+        ), ApfJniUtils.disassembleApf(program).map{ it.trim() })
+
+        val largePrefix = ByteArray(510) { 0 }
+        program = ApfV61Generator(apfInterpreterVersion, ramSize, clampSize)
+            .addPreloadData(largePrefix + dataBytes)
+            .addJumpIfBytesAtOffsetEqualsAnyOf(1, listOf(bytes1, bytes2), PASS_LABEL)
+            .generate()
+        debugBufferSize = ramSize - program.size - Counter.totalSize()
+        assertContentEquals(listOf(
+            "0: data        550, ${HexDump.toHexString(largePrefix + dataBytes)}",
+            "553: debugbuf    size=$debugBufferSize",
+            "557: jbsptreq    pktofs=1, (2), PASS, @510[0102]",
+            "562: li          r0, 1",
+            "564: jbseq       r0, (2), PASS, 0304",
+        ), ApfJniUtils.disassembleApf(program).map{ it.trim() })
+    }
+
+    @Test
+    fun testPassDrop() {
+        var program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addDrop()
+                .addPass()
+                .generate()
+        ApfTestHelpers.assertDrop(apfInterpreterVersion, program, testPacket)
+
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addCountAndDrop(Counter.DROPPED_ETH_BROADCAST)
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            testPacket,
+            DROPPED_ETH_BROADCAST
+        )
+
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addCountAndPass(Counter.PASSED_ARP_REQUEST)
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            testPacket,
+            PASSED_ARP_REQUEST
+        )
+    }
+
+    @Test
+    fun testMoveSwap() {
+        // addMove(R0)
+        var program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 100)
+                .addLoadImmediate(R1, 101)
+                .addMove(R0)
+                .addJumpIfR0Equals(101, PASS_LABEL)
+                .addDrop()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, testPacket)
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 100)
+                .addLoadImmediate(R1, 101)
+                .addMove(R0)
+                .addLoadImmediate(R0, 101)
+                .addJumpIfR0EqualsR1(PASS_LABEL)
+                .addDrop()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, testPacket)
+
+        // addMoveR1IntoR0
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 100)
+                .addLoadImmediate(R1, 101)
+                .addMoveR1IntoR0()
+                .addJumpIfR0Equals(101, PASS_LABEL)
+                .addDrop()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, testPacket)
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 100)
+                .addLoadImmediate(R1, 101)
+                .addMoveR1IntoR0()
+                .addLoadImmediate(R0, 101)
+                .addJumpIfR0EqualsR1(PASS_LABEL)
+                .addDrop()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, testPacket)
+
+        // addMove(R1)
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 100)
+                .addLoadImmediate(R1, 101)
+                .addMove(R1)
+                .addJumpIfR0Equals(100, PASS_LABEL)
+                .addDrop()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, testPacket)
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 100)
+                .addLoadImmediate(R1, 101)
+                .addMove(R1)
+                .addLoadImmediate(R0, 100)
+                .addJumpIfR0EqualsR1(PASS_LABEL)
+                .addDrop()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, testPacket)
+
+        // addMoveR0IntoR1
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 100)
+                .addLoadImmediate(R1, 101)
+                .addMoveR0IntoR1()
+                .addJumpIfR0Equals(100, PASS_LABEL)
+                .addDrop()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, testPacket)
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 100)
+                .addLoadImmediate(R1, 101)
+                .addMoveR0IntoR1()
+                .addLoadImmediate(R0, 100)
+                .addJumpIfR0EqualsR1(PASS_LABEL)
+                .addDrop()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, testPacket)
+
+	// addSwap
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 100)
+                .addLoadImmediate(R1, 101)
+                .addSwap()
+                .addJumpIfR0Equals(101, PASS_LABEL)
+                .addDrop()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, testPacket)
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 100)
+                .addLoadImmediate(R1, 101)
+                .addSwap()
+                .addLoadImmediate(R0, 100)
+                .addJumpIfR0EqualsR1(PASS_LABEL)
+                .addDrop()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, testPacket)
+    }
+
+    @Test
+    fun testLoadStoreCounter() {
+        doTestLoadStoreCounter (
+                { mutableMapOf() },
+                { ApfV4Generator(APF_VERSION_3, ramSize, clampSize) }
+        )
+        doTestLoadStoreCounter (
+                { mutableMapOf(TOTAL_PACKETS to 1) },
+                { ApfV6Generator(apfInterpreterVersion, ramSize, clampSize) }
+        )
+    }
+
+    private fun doTestLoadStoreCounter(
+            getInitialMap: () -> MutableMap<Counter, Long>,
+            getGenerator: () -> ApfV4GeneratorBase<*>
+    ) {
+        val program = getGenerator()
+                .addIncrementCounter(PASSED_ARP_REQUEST, 2)
+                .addPass()
+                .generate()
+        var dataRegion = ByteArray(Counter.totalSize()) { 0 }
+        ApfTestHelpers.assertVerdict(apfInterpreterVersion, PASS, program, testPacket, dataRegion)
+        var counterMap = decodeCountersIntoMap(dataRegion)
+        var expectedMap = getInitialMap()
+        expectedMap[PASSED_ARP_REQUEST] = 2
+        assertEquals(expectedMap, counterMap)
+    }
+
+    @Test
+    fun testV4CountAndPassDropCompareR0() {
+        doTestCountAndPassDropCompareR0(
+                getGenerator = { ApfV4Generator(APF_VERSION_3, ramSize, clampSize) },
+                incTotal = false
+        )
+    }
+
+    @Test
+    fun testV6CountAndPassDropCompareR0() {
+        doTestCountAndPassDropCompareR0(
+                getGenerator = { ApfV6Generator(apfInterpreterVersion, ramSize, clampSize) },
+                incTotal = true
+        )
+    }
+
+    @Test
+    fun testV61CountAndPassDropCompareR0() {
+        assumeTrue(apfInterpreterVersion > ApfJniUtils.APF_INTERPRETER_VERSION_V6)
+        doTestCountAndPassDropCompareR0(
+            getGenerator = { ApfV61Generator(apfInterpreterVersion, ramSize, clampSize) },
+            incTotal = true
+        )
+    }
+
+    private fun doTestCountAndPassDropCompareR0(
+            getGenerator: () -> ApfV4GeneratorBase<*>,
+            incTotal: Boolean
+    ) {
+        var program = getGenerator()
+                .addLoadImmediate(R0, 123)
+                .addCountAndDropIfR0Equals(123, Counter.DROPPED_ETH_BROADCAST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+                apfInterpreterVersion,
+                program,
+                testPacket,
+                DROPPED_ETH_BROADCAST,
+                incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 123)
+                .addCountAndPassIfR0Equals(123, Counter.PASSED_ARP_REQUEST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            testPacket,
+            PASSED_ARP_REQUEST,
+            incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 123)
+                .addCountAndDropIfR0NotEquals(124, Counter.DROPPED_ETH_BROADCAST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+                apfInterpreterVersion,
+                program,
+                testPacket,
+                DROPPED_ETH_BROADCAST,
+                incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 123)
+                .addCountAndPassIfR0NotEquals(124, Counter.PASSED_ARP_REQUEST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            testPacket,
+            PASSED_ARP_REQUEST,
+            incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 123)
+                .addCountAndDropIfR0LessThan(124, Counter.DROPPED_ETH_BROADCAST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+                apfInterpreterVersion,
+                program,
+                testPacket,
+                DROPPED_ETH_BROADCAST,
+                incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 123)
+                .addCountAndPassIfR0LessThan(124, Counter.PASSED_ARP_REQUEST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            testPacket,
+            PASSED_ARP_REQUEST,
+            incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 123)
+                .addCountAndDropIfR0GreaterThan(122, Counter.DROPPED_ETH_BROADCAST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+                apfInterpreterVersion,
+                program,
+                testPacket,
+                DROPPED_ETH_BROADCAST,
+                incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 123)
+                .addCountAndPassIfR0GreaterThan(122, Counter.PASSED_ARP_REQUEST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            testPacket,
+            PASSED_ARP_REQUEST,
+            incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 1)
+                .addCountAndDropIfBytesAtR0NotEqual(
+                        byteArrayOf(5, 5), DROPPED_ETH_BROADCAST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+                apfInterpreterVersion,
+                program,
+                testPacket,
+                DROPPED_ETH_BROADCAST,
+                incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 1)
+                .addCountAndPassIfBytesAtR0NotEqual(
+                        byteArrayOf(5, 5), PASSED_ARP_REQUEST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            testPacket,
+            PASSED_ARP_REQUEST,
+            incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 1)
+                .addCountAndDropIfR0AnyBitsSet(0xffff, DROPPED_ETH_BROADCAST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+                apfInterpreterVersion,
+                program,
+                testPacket,
+                DROPPED_ETH_BROADCAST,
+                incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 1)
+                .addCountAndPassIfR0AnyBitsSet(0xffff, PASSED_ARP_REQUEST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            testPacket,
+            PASSED_ARP_REQUEST,
+            incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 123)
+                .addCountAndDropIfR0IsOneOf(setOf(123), DROPPED_ETH_BROADCAST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+                apfInterpreterVersion,
+                program,
+                testPacket,
+                DROPPED_ETH_BROADCAST,
+                incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 123)
+                .addCountAndPassIfR0IsOneOf(setOf(123), PASSED_ARP_REQUEST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            testPacket,
+            PASSED_ARP_REQUEST,
+            incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 123)
+                .addCountAndDropIfR0IsNoneOf(setOf(124), DROPPED_ETH_BROADCAST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+                apfInterpreterVersion,
+                program,
+                testPacket,
+                DROPPED_ETH_BROADCAST,
+                incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 123)
+                .addCountAndPassIfR0IsNoneOf(setOf(124), PASSED_ARP_REQUEST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            testPacket,
+            PASSED_ARP_REQUEST,
+            incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 123)
+                .addCountAndDropIfR0IsOneOf(setOf(123, 124), DROPPED_ETH_BROADCAST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+                apfInterpreterVersion,
+                program,
+                testPacket,
+                DROPPED_ETH_BROADCAST,
+                incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 123)
+                .addCountAndPassIfR0IsOneOf(setOf(123, 124), PASSED_ARP_REQUEST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            testPacket,
+            PASSED_ARP_REQUEST,
+            incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 123)
+                .addCountAndDropIfR0IsNoneOf(setOf(122, 124), DROPPED_ETH_BROADCAST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+                apfInterpreterVersion,
+                program,
+                testPacket,
+                DROPPED_ETH_BROADCAST,
+                incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 123)
+                .addCountAndPassIfR0IsNoneOf(setOf(122, 124), PASSED_ARP_REQUEST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            testPacket,
+            PASSED_ARP_REQUEST,
+            incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 0)
+                .addCountAndDropIfBytesAtR0EqualsAnyOf(
+                        listOf(byteArrayOf(1, 2), byteArrayOf(3, 4)),
+                        DROPPED_ETH_BROADCAST
+                )
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+                apfInterpreterVersion,
+                program,
+                testPacket,
+                DROPPED_ETH_BROADCAST,
+                incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 0)
+                .addCountAndPassIfBytesAtR0EqualsAnyOf(
+                        listOf(byteArrayOf(1, 2), byteArrayOf(3, 4)),
+                        PASSED_ARP_REQUEST
+                )
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            testPacket,
+            PASSED_ARP_REQUEST,
+            incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 0)
+                .addCountAndDropIfBytesAtR0EqualsNoneOf(
+                        listOf(byteArrayOf(1, 3), byteArrayOf(3, 4)),
+                        DROPPED_ETH_BROADCAST
+                )
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+                apfInterpreterVersion,
+                program,
+                testPacket,
+                DROPPED_ETH_BROADCAST,
+                incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 0)
+                .addCountAndPassIfBytesAtR0EqualsNoneOf(
+                        listOf(byteArrayOf(1, 3), byteArrayOf(3, 4)),
+                        PASSED_ARP_REQUEST
+                )
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            testPacket,
+            PASSED_ARP_REQUEST,
+            incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 1)
+                .addCountAndDropIfBytesAtR0Equal(
+                        byteArrayOf(2, 3), DROPPED_ETH_BROADCAST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+                apfInterpreterVersion,
+                program,
+                testPacket,
+                DROPPED_ETH_BROADCAST,
+                incTotal = incTotal
+        )
+
+        program = getGenerator()
+                .addLoadImmediate(R0, 1)
+                .addCountAndPassIfBytesAtR0Equal(
+                        byteArrayOf(2, 3), PASSED_ARP_REQUEST)
+                .addPass()
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            testPacket,
+            PASSED_ARP_REQUEST,
+            incTotal = incTotal
+        )
+    }
+
+    @Test
+    fun testV4CountAndPassDrop() {
+        var program = ApfV4Generator(APF_VERSION_3, ramSize, clampSize)
+                .addCountAndDrop(Counter.DROPPED_ETH_BROADCAST)
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+                apfInterpreterVersion,
+                program,
+                testPacket,
+                DROPPED_ETH_BROADCAST,
+                incTotal = false
+        )
+
+        program = ApfV4Generator(APF_VERSION_3, ramSize, clampSize)
+                .addCountAndPass(Counter.PASSED_ARP_REQUEST)
+                .addCountTrampoline()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            testPacket,
+            PASSED_ARP_REQUEST,
+            incTotal = false
+        )
+    }
+
+    @Test
+    fun testV2CountAndPassDrop() {
+        var program = ApfV4Generator(APF_VERSION_2, ramSize, clampSize)
+                .addCountAndDrop(Counter.DROPPED_ETH_BROADCAST)
+                .addCountTrampoline()
+                .generate()
+        var dataRegion = ByteArray(Counter.totalSize()) { 0 }
+        ApfTestHelpers.assertVerdict(apfInterpreterVersion, DROP, program, testPacket, dataRegion)
+        assertContentEquals(ByteArray(Counter.totalSize()) { 0 }, dataRegion)
+
+        program = ApfV4Generator(APF_VERSION_2, ramSize, clampSize)
+                .addCountAndPass(PASSED_ARP_REQUEST)
+                .addCountTrampoline()
+                .generate()
+        dataRegion = ByteArray(Counter.totalSize()) { 0 }
+        ApfTestHelpers.assertVerdict(apfInterpreterVersion, PASS, program, testPacket, dataRegion)
+        assertContentEquals(ByteArray(Counter.totalSize()) { 0 }, dataRegion)
+    }
+
+    @Test
+    fun testAllocateFailure() {
+        val program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                // allocate size: 65535 > sizeof(apf_test_buffer): 1514, trigger allocate failure.
+                .addAllocate(65535)
+                .addDrop()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            testPacket,
+            PASSED_ALLOCATE_FAILURE
+        )
+    }
+
+    @Test
+    fun testTransmitFailure() {
+        val program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addAllocate(14)
+                // len: 13 is less than ETH_HLEN, trigger transmit failure.
+                .addLoadImmediate(R0, 13)
+                .addStoreToMemory(MemorySlot.TX_BUFFER_OUTPUT_POINTER, R0)
+                .addTransmitWithoutChecksum()
+                .addDrop()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            testPacket,
+            PASSED_TRANSMIT_FAILURE
+        )
+    }
+
+    @Test
+    fun testTransmitL4() {
+        val etherIpv4UdpPacket = intArrayOf(
+                0x01, 0x00, 0x5e, 0x00, 0x00, 0xfb,
+                0x38, 0xca, 0x84, 0xb7, 0x7f, 0x16,
+                0x08, 0x00, // end of ethernet header
+                0x45,
+                0x04,
+                0x00, 0x3f,
+                0x43, 0xcd,
+                0x40, 0x00,
+                0xff,
+                0x11,
+                0x00, 0x00, // ipv4 checksum set to 0
+                0xc0, 0xa8, 0x01, 0x03,
+                0xe0, 0x00, 0x00, 0xfb, // end of ipv4 header
+                0x14, 0xe9,
+                0x14, 0xe9,
+                0x00, 0x2b,
+                0x00, 0x2b, // end of udp header. udp checksum set to udp (header + payload) size
+                0x00, 0x00, 0x84, 0x00, 0x00, 0x00,
+                0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x01, 0x62, 0x05, 0x6c, 0x6f, 0x63, 0x61, 0x6c,
+                0x00, 0x00, 0x01, 0x80, 0x01, 0x00, 0x00, 0x00, 0x78, 0x00, 0x04, 0xc0, 0xa8, 0x01,
+                0x09,
+        ).map { it.toByte() }.toByteArray()
+        val program = ApfV6Generator(etherIpv4UdpPacket, apfInterpreterVersion, ramSize, clampSize)
+                .addAllocate(etherIpv4UdpPacket.size)
+                .addDataCopy(3, etherIpv4UdpPacket.size) // arg1=src, arg2=len
+                .addTransmitL4(
+                        ETH_HLEN, // ipOfs,
+                        ETH_HLEN + IPV4_HLEN + 6, // csumOfs
+                        ETH_HLEN + IPV4_HLEN - 8, // csumStart
+                        IPPROTO_UDP, // partialCsum
+                        true // isUdp
+                )
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, testPacket)
+        val transmitPackets = ApfTestHelpers.consumeTransmittedPackets(1)
+        val txBuf = ByteBuffer.wrap(transmitPackets[0])
+        Struct.parse(EthernetHeader::class.java, txBuf)
+        val ipv4Hdr = Struct.parse(Ipv4Header::class.java, txBuf)
+        val udpHdr = Struct.parse(UdpHeader::class.java, txBuf)
+        assertEquals(0x9535.toShort(), ipv4Hdr.checksum)
+        assertEquals(0xa73d.toShort(), udpHdr.checksum)
+    }
+
+    @Test
+    fun testDnsQuestionMatch() {
+        // needles = { A, B.LOCAL }
+        val needlesMatch = intArrayOf(
+                0x01, 'A'.code,
+                0x00,
+                0x01, 'B'.code,
+                0x05, 'L'.code, 'O'.code, 'C'.code, 'A'.code, 'L'.code,
+                0x00,
+                0x00
+        ).map { it.toByte() }.toByteArray()
+        val udpPayload = intArrayOf(
+                0x00, 0x00, 0x00, 0x00, // tid = 0x00, flags = 0x00,
+                0x00, 0x02, // qdcount = 2
+                0x00, 0x00, // ancount = 0
+                0x00, 0x00, // nscount = 0
+                0x00, 0x00, // arcount = 0
+                0x01, 'a'.code,
+                0x01, 'b'.code,
+                0x05, 'l'.code, 'o'.code, 'c'.code, 'a'.code, 'l'.code,
+                0x00, // qname1 = a.b.local
+                0x00, 0x01, 0x00, 0x01, // type = A, class = 0x0001
+                0xc0, 0x0e, // qname2 = b.local (name compression)
+                0x00, 0x01, 0x00, 0x01 // type = A, class = 0x0001
+        ).map { it.toByte() }.toByteArray()
+
+        var program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 0)
+                .addJumpIfPktAtR0ContainDnsQ(needlesMatch, 0x01, DROP_LABEL) // arg2=qtype
+                .addPass()
+                .generate()
+        ApfTestHelpers.assertDrop(apfInterpreterVersion, program, udpPayload)
+
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 0)
+                .addJumpIfPktAtR0ContainDnsQSafe(needlesMatch, 0x01, DROP_LABEL)
+                .addPass()
+                .generate()
+        ApfTestHelpers.assertDrop(apfInterpreterVersion, program, udpPayload)
+
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 0)
+                .addJumpIfPktAtR0DoesNotContainDnsQ(needlesMatch, 0x01, DROP_LABEL) // arg2=qtype
+                .addPass()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, udpPayload)
+
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 0)
+                .addJumpIfPktAtR0DoesNotContainDnsQSafe(needlesMatch, 0x01, DROP_LABEL) // arg2=qtype
+                .addPass()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, udpPayload)
+
+        val badUdpPayload = intArrayOf(
+                0x00, 0x00, 0x00, 0x00, // tid = 0x00, flags = 0x00,
+                0x00, 0x02, // qdcount = 2
+                0x00, 0x00, // ancount = 0
+                0x00, 0x00, // nscount = 0
+                0x00, 0x00, // arcount = 0
+                0x01, 'a'.code,
+                0x01, 'b'.code,
+                0x05, 'l'.code, 'o'.code, 'c'.code, 'a'.code, 'l'.code,
+                0x00, // qname1 = a.b.local
+                0x00, 0x01, 0x00, 0x01, // type = A, class = 0x0001
+                0xc0, 0x1b, // corrupted pointer cause infinite loop
+                0x00, 0x01, 0x00, 0x01 // type = A, class = 0x0001
+        ).map { it.toByte() }.toByteArray()
+
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 0)
+                .addJumpIfPktAtR0ContainDnsQ(needlesMatch, 0x01, DROP_LABEL) // arg2=qtype
+                .addPass()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            badUdpPayload,
+            CORRUPT_DNS_PACKET,
+            result = DROP
+        )
+
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 0)
+                .addJumpIfPktAtR0ContainDnsQSafe(needlesMatch, 0x01, DROP_LABEL) // arg2=qtype
+                .addPass()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            badUdpPayload,
+            CORRUPT_DNS_PACKET,
+            result = PASS
+        )
+    }
+
+    @Test
+    fun testDnsAnswerMatch() {
+        // needles = { A, B.LOCAL }
+        val needlesMatch = intArrayOf(
+                0x01, 'A'.code,
+                0x00,
+                0x01, 'B'.code,
+                0x05, 'L'.code, 'O'.code, 'C'.code, 'A'.code, 'L'.code,
+                0x00,
+                0x00
+        ).map { it.toByte() }.toByteArray()
+
+        val udpPayload = intArrayOf(
+                0x00, 0x00, 0x84, 0x00, // tid = 0x00, flags = 0x8400,
+                0x00, 0x00, // qdcount = 0
+                0x00, 0x02, // ancount = 2
+                0x00, 0x00, // nscount = 0
+                0x00, 0x00, // arcount = 0
+                0x01, 'a'.code,
+                0x01, 'b'.code,
+                0x05, 'l'.code, 'o'.code, 'c'.code, 'a'.code, 'l'.code,
+                0x00, // name1 = a.b.local
+                0x00, 0x01, 0x80, 0x01, // type = A, class = 0x8001
+                0x00, 0x00, 0x00, 0x78, // ttl = 120
+                0x00, 0x04, 0xc0, 0xa8, 0x01, 0x09, // rdlengh = 4, rdata = 192.168.1.9
+                0xc0, 0x0e, // name2 = b.local (name compression)
+                0x00, 0x01, 0x80, 0x01, // type = A, class = 0x8001
+                0x00, 0x00, 0x00, 0x78, // ttl = 120
+                0x00, 0x04, 0xc0, 0xa8, 0x01, 0x09 // rdlengh = 4, rdata = 192.168.1.9
+        ).map { it.toByte() }.toByteArray()
+
+        var program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 0)
+                .addJumpIfPktAtR0ContainDnsA(needlesMatch, DROP_LABEL)
+                .addPass()
+                .generate()
+        ApfTestHelpers.assertDrop(apfInterpreterVersion, program, udpPayload)
+
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 0)
+                .addJumpIfPktAtR0ContainDnsASafe(needlesMatch, DROP_LABEL)
+                .addPass()
+                .generate()
+        ApfTestHelpers.assertDrop(apfInterpreterVersion, program, udpPayload)
+
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 0)
+                .addJumpIfPktAtR0DoesNotContainDnsA(needlesMatch, DROP_LABEL)
+                .addPass()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, udpPayload)
+
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 0)
+                .addJumpIfPktAtR0DoesNotContainDnsASafe(needlesMatch, DROP_LABEL)
+                .addPass()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, udpPayload)
+
+        val badUdpPayload = intArrayOf(
+                0x00, 0x00, 0x84, 0x00, // tid = 0x00, flags = 0x8400,
+                0x00, 0x00, // qdcount = 0
+                0x00, 0x02, // ancount = 2
+                0x00, 0x00, // nscount = 0
+                0x00, 0x00, // arcount = 0
+                0x01, 'a'.code,
+                0x01, 'b'.code,
+                0x05, 'l'.code, 'o'.code, 'c'.code, 'a'.code, 'l'.code,
+                0x00, // name1 = a.b.local
+                0x00, 0x01, 0x80, 0x01, // type = A, class = 0x8001
+                0x00, 0x00, 0x00, 0x78, // ttl = 120
+                0x00, 0x04, 0xc0, 0xa8, 0x01, 0x09, // rdlengh = 4, rdata = 192.168.1.9
+                0xc0, 0x25, // corrupted pointer cause infinite loop
+                0x00, 0x01, 0x80, 0x01, // type = A, class = 0x8001
+                0x00, 0x00, 0x00, 0x78, // ttl = 120
+                0x00, 0x04, 0xc0, 0xa8, 0x01, 0x09 // rdlengh = 4, rdata = 192.168.1.9
+        ).map { it.toByte() }.toByteArray()
+
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 0)
+                .addJumpIfPktAtR0ContainDnsA(needlesMatch, DROP_LABEL)
+                .addPass()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            badUdpPayload,
+            CORRUPT_DNS_PACKET,
+            result = DROP
+        )
+
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 0)
+                .addJumpIfPktAtR0ContainDnsASafe(needlesMatch, DROP_LABEL)
+                .addPass()
+                .generate()
+        ApfTestHelpers.verifyProgramRun(
+            apfInterpreterVersion,
+            program,
+            badUdpPayload,
+            CORRUPT_DNS_PACKET,
+            result = PASS
+        )
+
+        val needlesListMatch = listOf(
+            intArrayOf(
+                0x01, 'A'.code,
+                0x00, 0x00
+            ).map { it.toByte() }.toByteArray(),
+            intArrayOf(
+                0x01, 'B'.code,
+                0x05, 'L'.code, 'O'.code, 'C'.code, 'A'.code, 'L'.code,
+                0x00, 0x00
+            ).map { it.toByte() }.toByteArray()
+        )
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 0)
+                .addJumpIfPktAtR0ContainAnyOfDnsA(needlesListMatch, DROP_LABEL)
+                .addPass()
+                .generate()
+        ApfTestHelpers.assertDrop(apfInterpreterVersion, program, udpPayload)
+
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 0)
+                .addJumpIfPktAtR0ContainNoneOfDnsA(needlesListMatch, DROP_LABEL)
+                .addPass()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, udpPayload)
+    }
+
+    @Test
+    fun testGetCounterValue() {
+        val counterBytes = intArrayOf(0xff, 0, 0, 0, 0x78, 0x56, 0x34, 0x12)
+                .map { it.toByte() }.toByteArray()
+        assertEquals(0xff, ApfCounterTracker.getCounterValue(counterBytes, Counter.TOTAL_PACKETS))
+    }
+
+    @Test
+    fun testJumpMultipleByteSequencesMatch() {
+        var program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 0)
+                .addJumpIfBytesAtR0EqualsAnyOf(
+                        listOf(byteArrayOf(1, 2, 3), byteArrayOf(6, 5, 4)),
+                        DROP_LABEL
+                )
+                .addPass()
+                .generate()
+        ApfTestHelpers.assertDrop(apfInterpreterVersion, program, testPacket)
+
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 2)
+                .addJumpIfBytesAtR0EqualsAnyOf(
+                        listOf(byteArrayOf(1, 2, 3), byteArrayOf(6, 5, 4)),
+                        DROP_LABEL
+                )
+                .addPass()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, testPacket)
+
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 1)
+                .addJumpIfBytesAtR0EqualsNoneOf(
+                        listOf(byteArrayOf(1, 2, 3), byteArrayOf(6, 5, 4)),
+                        DROP_LABEL
+                )
+                .addPass()
+                .generate()
+        ApfTestHelpers.assertDrop(apfInterpreterVersion, program, testPacket)
+
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 0)
+                .addJumpIfBytesAtR0EqualsNoneOf(
+                        listOf(byteArrayOf(1, 2, 3), byteArrayOf(6, 5, 4)),
+                        DROP_LABEL
+                )
+                .addPass()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, testPacket)
+    }
+
+    @Test
+    fun testJumpOneOf() {
+        var program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 255)
+                .addJumpIfOneOf(R0, setOf(1, 2, 3, 128, 255), DROP_LABEL)
+                .addPass()
+                .generate()
+        ApfTestHelpers.assertDrop(apfInterpreterVersion, program, testPacket)
+
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 254)
+                .addJumpIfOneOf(R0, setOf(1, 2, 3, 128, 255), DROP_LABEL)
+                .addPass()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, testPacket)
+
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 254)
+                .addJumpIfNoneOf(R0, setOf(1, 2, 3, 128, 255), DROP_LABEL)
+                .addPass()
+                .generate()
+        ApfTestHelpers.assertDrop(apfInterpreterVersion, program, testPacket)
+
+        program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoadImmediate(R0, 255)
+                .addJumpIfNoneOf(R0, setOf(1, 2, 3, 128, 255), DROP_LABEL)
+                .addPass()
+                .generate()
+        ApfTestHelpers.assertPass(apfInterpreterVersion, program, testPacket)
+    }
+
+    @Test
+    fun testDebugBuffer() {
+        val program = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+                .addLoad8intoR0(255)
+                .generate()
+        val dataRegion = ByteArray(ramSize - program.size) { 0 }
+
+        ApfTestHelpers.assertVerdict(apfInterpreterVersion, PASS, program, testPacket, dataRegion)
+        // offset 3 in the data region should contain if the interpreter is APFv6 mode or not
+        assertEquals(1, dataRegion[3])
+    }
+
+    @Test
+    fun testGetApfV6BaseProgramSize() {
+        val gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        assertEquals(gen.baseProgramSize, gen.generate().size)
+        assertEquals(7, gen.baseProgramSize)
+    }
+
+    @Test
+    fun testGetApfV4BaseProgramSize() {
+        val gen = ApfV4Generator(apfInterpreterVersion, ramSize, clampSize)
+        assertEquals(gen.baseProgramSize, gen.generate().size)
+        assertEquals(0, gen.baseProgramSize)
+    }
+
+    @Test
+    fun testGetApfV6DefaultPacketHandlingSizeOverEstimate() {
+        val gen = ApfV6Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addDefaultPacketHandling()
+        val size = gen.programLengthOverEstimate() - gen.baseProgramSize
+        assertEquals(15, size)
+        assertEquals(size, gen.defaultPacketHandlingSizeOverEstimate)
+    }
+
+    @Test
+    fun testGetApfV61DefaultPacketHandlingSizeOverEstimate() {
+        val gen = ApfV61Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addDefaultPacketHandling()
+        val size = gen.programLengthOverEstimate() - gen.baseProgramSize
+        assertEquals(13, size)
+        assertEquals(size, gen.defaultPacketHandlingSizeOverEstimate)
+    }
+
+    @Test
+    fun testGetApfV4DefaultPacketHandlingSizeOverEstimate() {
+        val gen = ApfV4Generator(apfInterpreterVersion, ramSize, clampSize)
+        gen.addDefaultPacketHandling()
+        val size = gen.programLengthOverEstimate() - gen.baseProgramSize
+        assertEquals(40, size)
+        assertEquals(size, gen.defaultPacketHandlingSizeOverEstimate)
+    }
+
+    private fun encodeInstruction(opcode: Int, immLength: Int, register: Int): Byte {
+        val immLengthEncoding = if (immLength == 4) 3 else immLength
+        return opcode.shl(3).or(immLengthEncoding.shl(1)).or(register).toByte()
+    }
+
+    private fun ByteArray.skipDataAndDebug(): ByteArray {
+        assertEquals(
+                listOf(
+                        encodeInstruction(14, 2, 1),
+                        0,
+                        0,
+                        encodeInstruction(21, 1, 0),
+                        48
+                        // the actual exception buffer size is not checked here.
+                ),
+                this.take(5)
+        )
+        return this.drop(7).toByteArray()
+    }
+}

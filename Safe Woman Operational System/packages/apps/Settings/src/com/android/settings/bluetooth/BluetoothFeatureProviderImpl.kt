@@ -1,0 +1,84 @@
+/*
+ * Copyright (C) 2018 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.android.settings.bluetooth
+
+import android.bluetooth.BluetoothDevice
+import android.content.ComponentName
+import android.content.Context
+import android.media.AudioManager
+import android.media.Spatializer
+import android.net.Uri
+import androidx.appcompat.app.AlertDialog
+import androidx.preference.Preference
+import com.android.settingslib.bluetooth.CachedBluetoothDevice
+import com.android.settingslib.bluetooth.devicesettings.data.repository.DeviceSettingRepository
+import com.android.settingslib.bluetooth.devicesettings.data.repository.DeviceSettingRepositoryImpl
+import com.google.common.collect.ImmutableList
+import com.google.common.collect.ImmutableSet
+import java.util.function.Consumer
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+
+/** Impl of [BluetoothFeatureProvider] */
+open class BluetoothFeatureProviderImpl : BluetoothFeatureProvider {
+    override fun getBluetoothDeviceSettingsUri(bluetoothDevice: BluetoothDevice): Uri? {
+        val uriByte = bluetoothDevice.getMetadata(BluetoothDevice.METADATA_ENHANCED_SETTINGS_UI_URI)
+        return uriByte?.let { Uri.parse(String(it)) }
+    }
+
+    override fun getRelatedTools(): List<ComponentName>? {
+        return null
+    }
+
+    override fun getSpatializer(context: Context): Spatializer {
+        val audioManager = context.getSystemService(AudioManager::class.java)
+        return audioManager.spatializer
+    }
+
+    override fun getBluetoothExtraOptions(
+        context: Context,
+        device: CachedBluetoothDevice,
+    ): List<Preference>? {
+        return ImmutableList.of<Preference>()
+    }
+
+    override fun getInvisibleProfilePreferenceKeys(
+        context: Context,
+        bluetoothDevice: BluetoothDevice,
+    ): Set<String> {
+        return ImmutableSet.of()
+    }
+
+    override fun getDeviceSettingRepository(
+        context: Context,
+        scope: CoroutineScope,
+    ): DeviceSettingRepository = DeviceSettingRepositoryImpl(context, scope, Dispatchers.IO)
+
+    override fun buildBluetoothDiagnosisAlertDialog(
+        context: Context,
+        entryPoint: Int,
+        device: CachedBluetoothDevice?,
+        onDialogBuilt: Consumer<AlertDialog>,
+    ) {}
+
+    override fun notifyConnectionFailureTimeChange(
+        context: Context,
+        device: CachedBluetoothDevice,
+        timestamp: Long,
+    ) {
+        return
+    }
+}

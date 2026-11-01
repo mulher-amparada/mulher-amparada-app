@@ -1,0 +1,212 @@
+/*
+ * Copyright (C) 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.settings;
+
+import android.app.Application;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.database.ContentObserver;
+import android.hardware.fingerprint.FingerprintManager;
+import android.net.Uri;
+import android.provider.Settings;
+import android.util.FeatureFlagUtils;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.android.settings.activityembedding.ActivityEmbeddingRulesController;
+import com.android.settings.activityembedding.ActivityEmbeddingUtils;
+import com.android.settings.biometrics.fingerprint2.BiometricsEnvironment;
+import com.android.settings.core.instrumentation.ElapsedTimeUtils;
+import com.android.settings.development.DeveloperOptionsActivityLifecycle;
+import com.android.settings.flags.Flags;
+import com.android.settings.fuelgauge.BatterySettingsStorage;
+import com.android.settings.homepage.SettingsHomepageActivity;
+import com.android.settings.localepicker.LocaleNotificationDataManager;
+import com.android.settings.metrics.SettingsMetricsLogger;
+import com.android.settings.msds.MSDLPlayerWrapper;
+import com.android.settings.overlay.FeatureFactory;
+import com.android.settings.overlay.FeatureFactoryImpl;
+import com.android.settings.spa.SettingsSpaEnvironment;
+import com.android.settingslib.applications.AppIconCacheManager;
+import com.android.settingslib.datastore.BackupRestoreStorageManager;
+import com.android.settingslib.metadata.CatalystFlagProvider;
+import com.android.settingslib.metadata.CatalystFlagProviderFactory;
+import com.android.settingslib.metadata.FixedArrayMap;
+import com.android.settingslib.metadata.PreferenceScreenMetadataFactory;
+import com.android.settingslib.metadata.PreferenceScreenRegistry;
+import com.android.settingslib.metadata.ProvidePreferenceScreenOptions;
+import com.android.settingslib.preference.PreferenceBindingFactory;
+import com.android.settingslib.spa.framework.common.SpaEnvironmentFactory;
+
+import com.google.android.setupcompat.util.WizardManagerHelper;
+
+import java.lang.ref.WeakReference;
+
+/** Settings application which sets up activity embedding rules for the large screen device. */
+@ProvidePreferenceScreenOptions(
+        codegenCollector = "com.android.settings/PreferenceScreenCollector/get"
+)
+public class SettingsApplication extends Application {
+
+    private static final String TAG = "SettingsApplication";
+    private WeakReference<SettingsHomepageActivity> mHomeActivity = new WeakReference<>(null);
+    @Nullable volatile private BiometricsEnvironment mBiometricsEnvironment;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        FeatureFactory.setFactory(this, getFeatureFactory());
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        if (Flags.catalyst()) {
+            CatalystFlagProviderFactory.INSTANCE.setProvider(
+                    new CatalystFlagProvider() {
+                        @Override
+                        public boolean catalystUseKeyParameters() {
+                            return com.android.settingslib.catalyst.flags.Flags.catalystUseKeyParameters() ||
+                                    Flags.catalystMigration26q2();
+                        }
+                    }
+            );
+            PreferenceScreenRegistry.INSTANCE.setPreferenceScreenMetadataFactories(
+                    preferenceScreenFactories());
+            PreferenceScreenRegistry.INSTANCE.setPreferenceUiActionMetricsLogger(
+                    new SettingsMetricsLogger(this));
+            PreferenceBindingFactory.setDefaultFactory(new SettingsPreferenceBindingFactory());
+        }
+
+        BackupRestoreStorageManager.getInstance(this)
+                .add(
+                        new BatterySettingsStorage(this),
+                        LocaleNotificationDataManager.getSharedPreferencesStorage(this));
+
+        // Add null checking to avoid test case failed.
+        if (getApplicationContext() != null) {
+            ElapsedTimeUtils.assignSuwFinishedTimeStamp(getApplicationContext());
+        }
+
+        // Set Spa environment.
+        setSpaEnvironment();
+
+        if (ActivityEmbeddingUtils.isSettingsSplitEnabled(this)
+                && FeatureFlagUtils.isEnabled(this,
+                        FeatureFlagUtils.SETTINGS_SUPPORT_LARGE_SCREEN)) {
+            if (WizardManagerHelper.isUserSetupComplete(this)) {
+                new ActivityEmbeddingRulesController(this).initRules();
+            } else {
+                new DeviceProvisionedObserver().registerContentObserver();
+            }
+        }
+
+        registerActivityLifecycleCallbacks(new DeveloperOptionsActivityLifecycle());
+
+        MSDLPlayerWrapper.INSTANCE.createPlayer(this);
+    }
+
+    /** Returns the factories of preference screen metadata. */
+    protected FixedArrayMap<String, PreferenceScreenMetadataFactory> preferenceScreenFactories() {
+        // PreferenceScreenCollector is generated by annotation processor from classes annotated
+        // with @ProvidePreferenceScreen
+        return PreferenceScreenCollector.get();
+    }
+
+    @Override
+    public void onTerminate() {
+        BackupRestoreStorageManager.getInstance(this).removeAll();
+        super.onTerminate();
+    }
+
+    @NonNull
+    protected FeatureFactory getFeatureFactory() {
+        return new FeatureFactoryImpl();
+    }
+
+    /**
+     * Set the spa environment instance.
+     * Override this function to set different spa environment for different Settings app.
+     */
+    protected void setSpaEnvironment() {
+        SpaEnvironmentFactory.INSTANCE.reset(new SettingsSpaEnvironment(this));
+    }
+
+    public void setHomeActivity(SettingsHomepageActivity homeActivity) {
+        mHomeActivity = new WeakReference<>(homeActivity);
+    }
+
+    public SettingsHomepageActivity getHomeActivity() {
+        return mHomeActivity.get();
+    }
+
+    @Nullable
+    public BiometricsEnvironment getBiometricEnvironment() {
+        BiometricsEnvironment localEnvironment = mBiometricsEnvironment;
+        if (localEnvironment == null) {
+            synchronized (this) {
+                if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)) {
+                    return null;
+                }
+                final FingerprintManager fpm = getSystemService(FingerprintManager.class);
+                localEnvironment = mBiometricsEnvironment;
+                if (fpm != null && localEnvironment == null) {
+                    mBiometricsEnvironment = localEnvironment = new BiometricsEnvironment(this,
+                            fpm);
+                } else {
+                    Log.e(TAG, "Error when creating environment, fingerprint manager was null");
+                }
+            }
+        }
+        return localEnvironment;
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        AppIconCacheManager.getInstance().trimMemory(level);
+    }
+
+    private class DeviceProvisionedObserver extends ContentObserver {
+        private final Uri mDeviceProvisionedUri = Settings.Secure.getUriFor(
+                Settings.Secure.USER_SETUP_COMPLETE);
+
+        DeviceProvisionedObserver() {
+            super(null /* handler */);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri, int flags) {
+            if (!mDeviceProvisionedUri.equals(uri)) {
+                return;
+            }
+
+            SettingsApplication.this.getContentResolver().unregisterContentObserver(this);
+            new ActivityEmbeddingRulesController(SettingsApplication.this).initRules();
+        }
+
+        public void registerContentObserver() {
+            SettingsApplication.this.getContentResolver().registerContentObserver(
+                    mDeviceProvisionedUri,
+                    false /* notifyForDescendants */,
+                    this);
+        }
+    }
+}

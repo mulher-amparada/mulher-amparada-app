@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  Copyright (C) 2025 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="permission_description_summary_contacts" msgid="2757597696923097587">"ही परवानगी असलेली अ‍ॅप्स तुमचे संपर्क अ‍ॅक्सेस करू शकतात आणि या डिव्हाइसवर संपर्क सेव्ह करू शकणाऱ्या खात्यांची सूची पाहू शकतात"</string>
+    <string name="permgrouprequest_contacts" msgid="4011412821869715229">"या डिव्हाइसवरील संपर्क आणि खाती अ‍ॅक्सेस करण्यासाठी &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ला अनुमती द्यायची आहे का?"</string>
+    <string name="permgrouprequestdetail_contacts" msgid="3314989542973932720">"हे अ‍ॅप तुमचे संपर्क अ‍ॅक्सेस करू शकेल आणि संपर्क सेव्ह करू शकणाऱ्या तुमच्या खात्यांची सूची पाहू शकेल"</string>
+    <string name="permgrouprequest_device_aware_contacts" msgid="2668046201497840127">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ला &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>&lt;/b&gt; वर संपर्क आणि खाती अ‍ॅक्सेस करण्याची अनुमती द्यायची आहे का?"</string>
+</resources>

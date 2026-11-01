@@ -1,0 +1,33 @@
+/*
+ * Copyright (C) 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.systemui.plugins.qs
+
+/** The view model interface for rendering the Tile's TileDetailsView. */
+interface TileDetailsViewModel {
+    // The callback when the settings button is clicked. Currently this is the same as the on tile
+    // long press callback
+    fun clickOnSettingsButton()
+
+    val title: String
+
+    val subTitle: String
+
+    // Determines if the tile's content needs to be loaded asynchronously. For example, the Internet
+    // tile needs to retrieve network connectivity data before its content can be fully rendered.
+    val requiresAsyncLoading: Boolean
+        get() = false
+}

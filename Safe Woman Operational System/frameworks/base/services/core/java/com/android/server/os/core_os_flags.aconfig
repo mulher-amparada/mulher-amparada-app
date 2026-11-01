@@ -1,0 +1,12 @@
+package: "com.android.server.os"
+container: "system"
+
+flag {
+    name: "async_start_bugreport"
+    namespace: "crumpet"
+    description: "Don't block callers on the start of dumpsys service"
+    bug: "180123623"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}

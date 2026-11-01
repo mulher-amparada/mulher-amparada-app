@@ -1,0 +1,23 @@
+package: "com.android.permissioncontroller.flags"
+container: "com.android.permission"
+
+flag {
+    name: "privacy_dashboard_agent_activity_enabled"
+    namespace: "permissions"
+    description: "Flag to enable showing agent access activities in privacy dashboard"
+    bug: "436261702"
+}
+
+flag {
+    name: "support_new_safety_center_ui_in_settings"
+    namespace: "safety_center"
+    description: "Guard minor changes to old UI code to support new Safety Center UI in Settings"
+    bug: "408241976"
+}
+
+flag {
+    name: "automotive_privacy_dashboard_agent_activity_enabled"
+    namespace: "permissions"
+    description: "Flag to show the update dashboard with agent access activity in automotive"
+    bug: "428696180"
+}

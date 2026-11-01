@@ -1,0 +1,19 @@
+# Bug template url: http://b/issues/new?component=1219472&template=1766294
+
+jstembridge@google.com
+dmckaigue@google.com
+itsleo@google.com
+jhummel@google.com
+magdi@google.com
+mertcan@google.com
+nickelc@google.com
+sameerj@google.com
+ymq@google.com
+xueweizhao@google.com
+teog@google.com
+csitari@google.com
+nfortescue@google.com
+sophiabotz@google.com
+patricked@google.com
+
+include platform/packages/modules/common:/MODULES_OWNERS  # see go/mainline-owners-policy

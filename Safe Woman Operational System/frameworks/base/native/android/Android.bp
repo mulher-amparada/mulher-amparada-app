@@ -1,0 +1,269 @@
+// Copyright (C) 2016 The Android Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// The headers module is in frameworks/native/Android.bp.
+package {
+    // See: http://go/android-license-faq
+    // A large-scale-change added 'default_applicable_licenses' to import
+    // all of the 'license_kinds' from "frameworks_base_license"
+    // to get the below license kinds:
+    //   SPDX-license-identifier-Apache-2.0
+    default_applicable_licenses: ["frameworks_base_license"],
+}
+
+ndk_library {
+    name: "libandroid",
+    symbol_file: "libandroid.map.txt",
+    first_version: "9",
+    unversioned_until: "current",
+}
+
+cc_defaults {
+    name: "libandroid_defaults",
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-Wextra",
+        "-Wunused",
+        "-Wunreachable-code",
+        "-Wthread-safety",
+    ],
+}
+
+cc_defaults {
+    name: "libandroid_common",
+    defaults: [
+        "libandroid_defaults",
+        "android.hardware.power-ndk_shared",
+    ],
+
+    srcs: [
+        "activity_manager.cpp",
+        "asset_manager.cpp",
+        "surface_control_input_receiver.cpp",
+        "choreographer.cpp",
+        "configuration.cpp",
+        "display_luts.cpp",
+        "dynamic_instrumentation_manager.cpp",
+        "hardware_buffer_jni.cpp",
+        "input.cpp",
+        "input_transfer_token.cpp",
+        "looper.cpp",
+        "native_activity.cpp",
+        "native_service.cpp",
+        "native_window_jni.cpp",
+        "obb.cpp",
+        "permission_manager.cpp",
+        "performance_hint.cpp",
+        "sensor.cpp",
+        "sharedmem.cpp",
+        "storage_manager.cpp",
+        "surface_control.cpp",
+        "surface_texture.cpp",
+        "system_fonts.cpp",
+        "system_health.cpp",
+        "trace.cpp",
+        "thermal.cpp",
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libhidlbase",
+        "libcutils",
+        "libandroidfw",
+        "libinput",
+        "libutils",
+        "libbinder",
+        "libbinder_ndk",
+        "libui",
+        "libgui",
+        "libharfbuzz_ng", // Only for including hb.h via minikin
+        "libsensor",
+        "libactivitymanager_aidl",
+        "libandroid_runtime",
+        "libminikin",
+        "libhwui",
+        "libxml2",
+        "libEGL",
+        "libGLESv2",
+        "libpowermanager",
+        "android.os.flags-aconfig-cc",
+        "dynamic_instrumentation_manager_aidl-cpp",
+        "libnativedisplay",
+        "libfmq",
+    ],
+
+    static_libs: [
+        "libstorage",
+        "libarect",
+    ],
+
+    header_libs: [
+        "libhwui_internal_headers",
+        "libandroid_headers_private",
+    ],
+
+    whole_static_libs: [
+        "libandroid_com.android.npumanager",
+        "libnativewindow",
+    ],
+
+    export_static_lib_headers: [
+        "libarect",
+        "libandroid_com.android.npumanager",
+    ],
+
+    local_include_dirs: ["include_platform"],
+
+    export_include_dirs: ["include_platform"],
+}
+
+cc_library_shared {
+    name: "libandroid_preapex",
+    defaults: ["libandroid_common"],
+}
+
+cc_library_shared {
+    name: "libandroid",
+    defaults: ["libandroid_common"],
+
+    srcs: ["net.c"],
+
+    shared_libs: [
+        "libnetd_client",
+        "libcom.android.tethering.connectivity_native",
+    ],
+
+    include_dirs: ["bionic/libc/dns/include"],
+
+    version_script: "libandroid.map.txt",
+    stubs: {
+        symbol_file: "libandroid.map.txt",
+        versions: [
+            "29",
+            "31",
+        ],
+    },
+}
+
+// Network library.
+cc_library_shared {
+    name: "libandroid_net",
+    defaults: ["libandroid_defaults"],
+    llndk: {
+        symbol_file: "libandroid_net.map.txt",
+        unversioned: true,
+        override_export_include_dirs: ["include"],
+    },
+    srcs: ["net.c"],
+
+    shared_libs: [
+        "libnetd_client",
+        "libcom.android.tethering.connectivity_native",
+    ],
+
+    include_dirs: ["bionic/libc/dns/include"],
+}
+
+// Aidl library for platform compat.
+cc_library_shared {
+    name: "lib-platform-compat-native-api",
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-Wno-missing-field-initializers",
+        "-Wno-unused-variable",
+        "-Wunused-parameter",
+    ],
+    shared_libs: [
+        "libbinder",
+        "libutils",
+    ],
+    aidl: {
+        local_include_dirs: ["aidl"],
+        export_aidl_headers: true,
+    },
+    srcs: [
+        ":platform-compat-native-aidl",
+    ],
+    export_include_dirs: ["aidl"],
+}
+
+filegroup {
+    name: "platform-compat-native-aidl",
+    srcs: [
+        "aidl/com/android/internal/compat/IPlatformCompatNative.aidl",
+    ],
+    path: "aidl",
+}
+
+// Aidl library for platform compat.
+cc_library_shared {
+    name: "lib-camera-compatibility-info-api",
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-Wno-missing-field-initializers",
+        "-Wno-unused-variable",
+        "-Wunused-parameter",
+    ],
+    shared_libs: [
+        "libcameracompatbilityinfo",
+    ],
+    aidl: {
+        local_include_dirs: ["aidl"],
+        export_aidl_headers: true,
+    },
+    srcs: [
+        ":camera-compatibility-info-aidl",
+    ],
+    export_include_dirs: ["aidl"],
+}
+
+filegroup {
+    name: "camera-compatibility-info-aidl",
+    srcs: [
+        "aidl/android/content/res/CameraCompatibilityInfo.aidl",
+    ],
+    path: "aidl",
+}
+
+aidl_interface {
+    name: "packagemanager_aidl",
+    unstable: true,
+    local_include_dir: "aidl",
+    host_supported: true,
+    srcs: [
+        "aidl/android/content/pm/ApexStagedEvent.aidl",
+        "aidl/android/content/pm/IPackageManagerNative.aidl",
+        "aidl/android/content/pm/IStagedApexObserver.aidl",
+        "aidl/android/content/pm/PackageInfoNative.aidl",
+        "aidl/android/content/pm/SignatureNative.aidl",
+        "aidl/android/content/pm/SigningInfoNative.aidl",
+        "aidl/android/content/pm/StagedApexInfo.aidl",
+    ],
+    backend: {
+        rust: {
+            apex_available: [
+                "//apex_available:platform",
+                "com.android.virt",
+            ],
+            enabled: true,
+            gen_mockall: true,
+            additional_rustlibs: [
+                "libmockall",
+            ],
+        },
+    },
+}

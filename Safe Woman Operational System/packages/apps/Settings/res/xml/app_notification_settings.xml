@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2017 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:settings="http://schemas.android.com/apk/res-auto"
+        android:key="app_notifications"
+        android:title="@string/notifications_title">
+
+    <com.android.settingslib.widget.LayoutPreference
+        android:key="pref_app_header"
+        android:layout="@layout/settings_entity_header"
+        android:selectable="false" />
+
+    <com.android.settings.widget.SettingsMainSwitchPreference
+        android:key="block" />
+
+    <Preference
+        android:key="block_desc" />
+
+    <PreferenceCategory
+        android:key="ai_features"
+        android:title="@string/notification_ai_features_title"
+        settings:isPreferenceVisible="false">
+
+        <com.android.settingslib.PrimarySwitchPreference
+            android:key="key_summarization"
+            android:title="@string/notification_app_level_summarize_title"
+            android:summary="@string/notification_app_level_summarize_subtext" />
+
+        <com.android.settingslib.PrimarySwitchPreference
+            android:key="key_type"
+            android:title="@string/notification_app_level_bundle_title"
+            android:summary="@string/notification_app_level_bundle_subtext" />
+    </PreferenceCategory>
+
+    <!-- Conversations added here -->
+    <PreferenceCategory
+        android:title="@string/conversations_category_title"
+        android:key="conversations"
+        android:visibility="gone"
+        android:layout="@layout/empty_view" >
+
+    </PreferenceCategory>
+
+    <!-- Channels/Channel groups added here -->
+    <PreferenceCategory
+        android:key="channels"
+        android:title="@string/notification_channels" />
+
+    <PreferenceCategory
+        android:key="pre_channels_fields"
+        android:layout="@layout/empty_view"
+        android:visibility="gone" >
+    <!-- Importance toggle -->
+        <com.android.settingslib.RestrictedSwitchPreference
+            android:key="allow_sound"
+            android:title="@string/allow_interruption"
+            android:summary="@string/allow_interruption_summary" />
+
+        <!-- Visibility Override -->
+        <com.android.settings.RestrictedListPreference
+            android:key="visibility_override"
+            android:title="@string/app_notification_visibility_override_title" />
+
+        <!-- Bypass DND -->
+        <com.android.settingslib.RestrictedSwitchPreference
+            android:key="bypass_dnd"
+            android:title="@string/app_notification_override_dnd_title"
+            android:summary="@string/app_notification_override_dnd_summary"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="app_wide"
+        android:title="@string/app_notification_settings"
+        settings:isPreferenceVisible="false">
+
+        <!-- Whether the app can show promoted notifications -->
+        <com.android.settingslib.RestrictedSwitchPreference
+            android:key="promoted_switch"
+            android:title="@string/live_notifications_switch"
+            android:summary="@string/live_notifications_desc" />
+
+        <com.android.settingslib.RestrictedSwitchPreference
+            android:key="invalid_conversation_switch"
+            android:title="@string/conversation_section_switch_title" />
+        <Preference
+            android:key="invalid_conversation_info"/>
+
+        <!--Bubbles -->
+        <Preference
+            android:key="bubble_pref_link"
+            android:title="@string/notification_bubbles_title"
+            android:icon="@drawable/ic_create_bubble"
+            settings:controller="com.android.settings.notification.app.BubbleSummaryPreferenceController">
+        </Preference>
+
+        <!-- Allow full-screen intents -->
+        <com.android.settingslib.RestrictedSwitchPreference
+            android:key="fsi_permission"
+            android:title="@string/app_notification_fsi_permission_title"
+            android:summary="@string/app_notification_fsi_permission_summary"/>
+
+        <!-- Show badge -->
+        <com.android.settingslib.RestrictedSwitchPreference
+            android:key="badge"
+            android:title="@string/notification_badge_title"
+            android:icon="@drawable/ic_notification_dot"
+            settings:useAdditionalSummary="true"
+            settings:restrictedSwitchSummary="@string/enabled_by_admin"
+            android:order="1001"/>
+
+        <Preference
+            android:key="app_link"
+            android:icon="@drawable/ic_settings_24dp"
+            android:title="@string/app_settings_link"
+            android:order="1003"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

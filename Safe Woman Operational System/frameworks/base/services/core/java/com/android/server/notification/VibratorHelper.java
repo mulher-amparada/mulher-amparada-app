@@ -1,0 +1,204 @@
+/*
+ * Copyright (C) 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.server.notification;
+
+import android.annotation.Nullable;
+import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.media.AudioAttributes;
+import android.media.RingtoneManager;
+import android.media.Utils;
+import android.net.Uri;
+import android.os.Process;
+import android.os.VibrationAttributes;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.util.Slog;
+
+import com.android.internal.R;
+import com.android.server.pm.PackageManagerService;
+
+import java.util.Arrays;
+
+/**
+ * NotificationManagerService helper for functionality related to the vibrator.
+ */
+public final class VibratorHelper {
+    private static final String TAG = "NotificationVibratorHelper";
+
+    private static final long[] DEFAULT_VIBRATE_PATTERN = {0, 250, 250, 250};
+    private static final int VIBRATE_PATTERN_MAXLEN = 8 * 2 + 1; // up to eight bumps
+
+    private final Vibrator mVibrator;
+    private final long[] mDefaultPattern;
+    private final long[] mFallbackPattern;
+    private final int mDefaultVibrationAmplitude;
+    private final Context mContext;
+
+    public VibratorHelper(Context context) {
+        mVibrator = context.getSystemService(Vibrator.class);
+        mDefaultPattern = getLongArray(context.getResources(),
+                com.android.internal.R.array.config_defaultNotificationVibePattern,
+                VIBRATE_PATTERN_MAXLEN,
+                DEFAULT_VIBRATE_PATTERN);
+        mFallbackPattern = getLongArray(context.getResources(),
+                R.array.config_notificationFallbackVibePattern,
+                VIBRATE_PATTERN_MAXLEN,
+                DEFAULT_VIBRATE_PATTERN);
+        mDefaultVibrationAmplitude = context.getResources().getInteger(
+            com.android.internal.R.integer.config_defaultVibrationAmplitude);
+        mContext = context;
+    }
+
+    /**
+     * Safely create a {@link VibrationEffect} from given vibration {@code pattern}.
+     *
+     * <p>This method returns {@code null} if the pattern is also {@code null} or invalid.
+     *
+     * @param pattern The off/on vibration pattern, where each item is a duration in milliseconds.
+     * @param insistent {@code true} if the vibration should loop until it is cancelled.
+     */
+    @Nullable
+    public static VibrationEffect createWaveformVibration(@Nullable long[] pattern,
+            boolean insistent) {
+        try {
+            if (pattern != null) {
+                return VibrationEffect.createWaveform(pattern, /* repeat= */ insistent ? 0 : -1);
+            }
+        } catch (IllegalArgumentException e) {
+            Slog.e(TAG, "Error creating vibration waveform with pattern: "
+                    + Arrays.toString(pattern), e);
+        }
+        return null;
+    }
+
+    /**
+     *  Scale vibration effect, valid range is [0.0f, 1.0f]
+     *  Resolves default amplitude value if not already set.
+     */
+    public VibrationEffect scale(VibrationEffect effect, float scale) {
+        return effect.resolve(mDefaultVibrationAmplitude).scale(scale);
+    }
+
+    /**
+     * Vibrate the device with given {@code effect}.
+     *
+     * <p>We need to vibrate as "android" so we can breakthrough DND.
+     */
+    public void vibrate(VibrationEffect effect, AudioAttributes attrs, String reason) {
+        mVibrator.vibrate(Process.SYSTEM_UID, PackageManagerService.PLATFORM_PACKAGE_NAME,
+                effect, reason, new VibrationAttributes.Builder(attrs).build());
+    }
+
+    /** Stop all notification vibrations (ringtone, alarm, notification usages). */
+    public void cancelVibration() {
+        int usageFilter =
+                VibrationAttributes.USAGE_CLASS_ALARM | ~VibrationAttributes.USAGE_CLASS_MASK;
+        mVibrator.cancel(usageFilter);
+    }
+
+    /**
+     * Creates a vibration to be used as fallback when the device is in vibrate mode.
+     *
+     * @param insistent {@code true} if the vibration should loop until it is cancelled.
+     */
+    public VibrationEffect createFallbackVibration(boolean insistent) {
+        return createWaveformVibration(mFallbackPattern, insistent);
+    }
+
+    /**
+     * Creates a vibration to be used by notifications without a custom pattern.
+     *
+     * @param insistent {@code true} if the vibration should loop until it is cancelled.
+     */
+    public VibrationEffect createDefaultVibration(boolean insistent) {
+        if (com.android.server.notification.Flags.notificationVibrationInSoundUri()) {
+            final Uri defaultRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(mContext,
+                    RingtoneManager.TYPE_NOTIFICATION);
+            final VibrationEffect vibrationEffectFromSoundUri =
+                    createVibrationEffectFromSoundUri(defaultRingtoneUri, insistent);
+            if (vibrationEffectFromSoundUri != null) {
+                return vibrationEffectFromSoundUri;
+            }
+        }
+
+        return createWaveformVibration(mDefaultPattern, insistent);
+    }
+
+    /**
+     * Safely create a {@link VibrationEffect} from given an uri {@code Uri}.
+     * with query parameter "vibration_uri"
+     *
+     * Use this function if the {@code Uri} is with a query parameter "vibration_uri" and the
+     * vibration_uri represents a valid vibration effect in xml
+     *
+     * @param uri {@code Uri} an uri including query parameter "vibraiton_uri"
+     * @param insistent {@code true} if the vibration should loop until it is cancelled.
+     */
+    public @Nullable VibrationEffect createVibrationEffectFromSoundUri(Uri uri, boolean insistent) {
+        if (uri == null || uri.isOpaque()) {
+            return null;
+        }
+
+        try {
+            final VibrationEffect effect =
+                    Utils.parseVibrationEffect(mVibrator, Utils.getVibrationUri(uri));
+            return effect != null
+                    ? effect.applyRepeatingIndefinitely(insistent, /* loopDelayMs= */ 0)
+                    : null;
+        } catch (Exception e) {
+            Slog.e(TAG, "Failed to get vibration effect: ", e);
+        }
+        return null;
+    }
+
+    /** Returns if a given vibration can be played by the vibrator that does notification buzz. */
+    public boolean areEffectComponentsSupported(VibrationEffect effect) {
+        return mVibrator.areVibrationFeaturesSupported(effect);
+    }
+
+    @Nullable
+    private static float[] getFloatArray(Resources resources, int resId) {
+        TypedArray array = resources.obtainTypedArray(resId);
+        try {
+            float[] values = new float[array.length()];
+            for (int i = 0; i < values.length; i++) {
+                values[i] = array.getFloat(i, Float.NaN);
+                if (Float.isNaN(values[i])) {
+                    return null;
+                }
+            }
+            return values;
+        } finally {
+            array.recycle();
+        }
+    }
+
+    private static long[] getLongArray(Resources resources, int resId, int maxLength, long[] def) {
+        int[] ar = resources.getIntArray(resId);
+        if (ar == null) {
+            return def;
+        }
+        final int len = ar.length > maxLength ? maxLength : ar.length;
+        long[] out = new long[len];
+        for (int i = 0; i < len; i++) {
+            out[i] = ar[i];
+        }
+        return out;
+    }
+}

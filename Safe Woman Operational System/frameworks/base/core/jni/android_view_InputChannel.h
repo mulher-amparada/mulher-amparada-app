@@ -1,0 +1,38 @@
+/*
+ * Copyright (C) 2010 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef _ANDROID_VIEW_INPUTCHANNEL_H
+#define _ANDROID_VIEW_INPUTCHANNEL_H
+
+#include "jni.h"
+
+#include <input/InputTransport.h>
+
+namespace android {
+
+/**
+ * Take the native InputChannel object "out of" the java object. The java object will be
+ * left in an 'empty' state - similar to what happens when you create java InputChannel
+ * using its constructor.
+ */
+extern std::unique_ptr<InputChannel> android_view_InputChannel_extractInputChannel(
+        JNIEnv* env, jobject inputChannelObj);
+
+extern jobject android_view_InputChannel_createJavaObject(
+        JNIEnv* env, std::unique_ptr<InputChannel> inputChannel);
+} // namespace android
+
+#endif // _ANDROID_OS_INPUTCHANNEL_H

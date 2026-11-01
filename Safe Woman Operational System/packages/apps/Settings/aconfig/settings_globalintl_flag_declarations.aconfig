@@ -1,0 +1,45 @@
+package: "com.android.settings.flags"
+container: "system_ext"
+
+flag {
+    name: "terms_of_address_enabled"
+    namespace: "globalintl"
+    description: "Feature flag for Terms of Address"
+    bug: "297798866"
+}
+
+flag {
+    name: "locale_notification_enabled"
+    namespace: "globalintl"
+    description: "Feature flag for locale notification"
+    bug: "301380610"
+}
+
+flag {
+    name: "accessibility_appearance_settings_backup_enabled"
+    namespace: "globalintl"
+    description: "Feature flag for B&R accessibility appearance settings"
+    bug: "341210043"
+}
+
+flag {
+    name: "regional_preferences_api_enabled"
+    namespace: "globalintl"
+    description: "Feature flag for regional preferences APIs"
+    bug: "370379000"
+}
+
+flag {
+    name: "movement_settings_backup_enabled"
+    namespace: "globalintl"
+    description: "Feature flag for B&R movement settings"
+    bug: "423570215"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "owl_v2_enabled"
+    namespace: "globalintl"
+    description: "Feature flag for online wipe in Settings factory reset flow"
+    bug: "465259644"
+}

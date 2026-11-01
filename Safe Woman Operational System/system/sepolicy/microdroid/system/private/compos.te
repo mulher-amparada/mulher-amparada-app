@@ -1,0 +1,31 @@
+type compos, domain, coredomain, microdroid_payload;
+type compos_exec, exec_type, file_type, system_file_type;
+
+# allow writing kmsg_debug (stdio_to_kmsg) inherited from microdroid_manager.
+allow compos kmsg_debug_device:chr_file w_file_perms;
+
+# Run derive_classpath in our domain
+allow compos derive_classpath_exec:file rx_file_perms;
+allow compos apex_mnt_dir:dir r_dir_perms;
+# Ignore harmless denials on /proc/self/fd
+dontaudit compos self:dir write;
+# See b/35323867#comment3
+dontaudit compos self:global_capability_class_set dac_override;
+
+# Allow settings system properties that ART expects.
+set_prop(compos, dalvik_config_prop_type)
+set_prop(compos, device_config_runtime_native_boot_prop)
+
+# Allow running odrefresh in its own domain
+domain_auto_trans(compos, odrefresh_exec, odrefresh)
+
+# Allow running dex2oat in its own domain
+domain_auto_trans(compos, dex2oat_exec, dex2oat)
+
+# Allow compos to monitor dex2oat child process in /proc
+r_dir_file(compos, dex2oat)
+
+# Allow running compos_key_helper in its own domain
+domain_auto_trans(compos, compos_key_helper_exec, compos_key_helper)
+# And killing it on error
+allow compos compos_key_helper:process sigkill;

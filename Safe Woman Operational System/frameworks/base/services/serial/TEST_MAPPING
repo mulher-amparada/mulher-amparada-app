@@ -1,0 +1,15 @@
+{
+  "presubmit": [
+    {
+      "name": "SerialTests"
+    },
+    {
+      "name": "CtsSerialTestCases"
+    }
+  ],
+  "desktop-presubmit": [
+    {
+      "name": "CtsSerialTestCases"
+    }
+  ]
+}

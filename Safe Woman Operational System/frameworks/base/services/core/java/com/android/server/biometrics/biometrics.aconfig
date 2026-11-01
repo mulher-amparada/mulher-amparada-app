@@ -1,0 +1,39 @@
+package: "com.android.server.biometrics"
+container: "system"
+
+flag {
+  name: "use_vhal_for_testing"
+  namespace: "biometrics_framework"
+  description: "This flag controls whether virtual HAL is used for testing instead of TestHal "
+  bug: "294254230"
+}
+
+flag {
+  name: "return_credential_not_enrolled"
+  namespace: "biometrics_framework"
+  description: "This bugfix flag is to prioritize credential not enrolled error"
+  bug: "466940874"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "bp_computer_controlled"
+  namespace: "biometrics_framework"
+  description: "This flag is to block biometric prompt in computer controlled displays"
+  bug: "481273047"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "frr_dialog_enroll_time"
+  namespace: "biometrics_framework"
+  description: "This flag is to address the timing of saving into shared preference"
+  bug: "483582188"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}

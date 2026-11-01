@@ -1,0 +1,12 @@
+{
+  "imports": [
+    {
+      "path": "frameworks/base/services/tests/InputMethodSystemServerTests"
+    }
+  ],
+  "presubmit": [
+    {
+      "name": "CtsAutoFillServiceTestCases_cts_inline_ExcludeAppModeFull"
+    }
+  ]
+}

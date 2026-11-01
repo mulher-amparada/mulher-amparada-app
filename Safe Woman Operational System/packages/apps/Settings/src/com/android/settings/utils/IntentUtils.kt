@@ -1,0 +1,182 @@
+/*
+ * Copyright (C) 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.settings.utils
+
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import com.android.settings.SettingsActivity.EXTRA_FRAGMENT_ARG_KEY
+import com.android.settings.SettingsLaunchpadActivity
+import com.android.settingslib.metadata.EXTRA_BINDING_SCREEN_ARGS
+import com.android.settingslib.metadata.PreferenceScreenMetadata.Companion.EXTRA_SCREEN_ARGS
+import com.android.settingslib.metadata.PreferenceScreenMetadata.Companion.EXTRA_SCREEN_KEY
+import com.android.settingslib.metadata.ValidatedKeyParameters
+import com.android.settingslib.metadata.deserializeToMap
+import com.android.settingslib.metadata.toBundle
+import com.android.settingslib.metadata.toSerializableString
+
+/**
+ * Returns the [Intent] to start given settings activity and highlight a specific preference.
+ *
+ * @param context context
+ * @param activityClass activity to start
+ * @param key preference key to locate
+ */
+fun makeLaunchIntent(context: Context, activityClass: Class<out Activity>, key: String?) =
+    createIntent(context, activityClass).apply { highlightPreference(key) }
+
+/**
+ * Returns the [Intent] to start given settings activity that is parameterized screen and then
+ * highlight a specific preference.
+ *
+ * @param context context
+ * @param activityClass activity to start
+ * @param arguments arguments of the parameterized screen
+ * @param key preference key to locate
+ */
+@Deprecated(
+    "Use makeLaunchIntent(context: Context, activityClass: Class<out Activity>, arguments: KeyParameters, key: String?) instead"
+)
+fun makeLaunchIntent(
+    context: Context,
+    activityClass: Class<out Activity>,
+    arguments: Bundle,
+    key: String?,
+) = createIntent(context, activityClass).apply { highlightPreference(arguments, key) }
+
+/**
+ * Returns the [Intent] to start given settings activity that is parameterized screen and then
+ * highlight a specific preference.
+ *
+ * @param context context
+ * @param activityClass activity to start
+ * @param keyParameters arguments of the parameterized screen
+ * @param key preference key to locate
+ */
+fun makeLaunchIntent(
+    context: Context,
+    activityClass: Class<out Activity>,
+    keyParameters: ValidatedKeyParameters,
+    key: String?,
+) = createIntent(context, activityClass).apply { highlightPreference(keyParameters, key) }
+
+fun makeLaunchpadIntent(context: Context, screenKey: String, key: String?) =
+    Intent(context, SettingsLaunchpadActivity::class.java).apply {
+        action = "com.android.settings.action.LAUNCH_SETTINGS_PAGES"
+        putExtra(EXTRA_SCREEN_KEY, screenKey)
+        highlightPreference(key)
+    }
+
+fun makeLaunchpadIntent(
+    context: Context,
+    screenKey: String,
+    keyParameters: ValidatedKeyParameters,
+    key: String?,
+) = Intent(context, SettingsLaunchpadActivity::class.java).apply {
+    action = "com.android.settings.action.LAUNCH_SETTINGS_PAGES"
+    putExtra(EXTRA_SCREEN_KEY, screenKey)
+    putExtra(EXTRA_SCREEN_ARGS, keyParameters.toBundle())
+    highlightPreference(key)
+}
+
+fun makeLaunchpadIntent(context: Context, screenKey: String, arguments: Bundle, key: String?) =
+    Intent(context, SettingsLaunchpadActivity::class.java).apply {
+        action = "com.android.settings.action.LAUNCH_SETTINGS_PAGES"
+        putExtra(EXTRA_SCREEN_KEY, screenKey)
+        putExtra(EXTRA_SCREEN_ARGS, arguments)
+        highlightPreference(key)
+    }
+
+private fun createIntent(context: Context, activityClass: Class<out Activity>) =
+    Intent(context, activityClass).apply {
+        // MUST provide an action even no action is specified in AndroidManifest.xml, otherwise
+        // SettingsIntelligence starts intent with com.android.settings.SEARCH_RESULT_TRAMPOLINE
+        // action instead of given activity.
+        action = Intent.ACTION_MAIN
+    }
+
+/**
+ * Sets the intent extra to highlight given preference on a parameterized screen.
+ *
+ * @param arguments arguments of the parameterized screen
+ * @param key preference to highlight
+ */
+@Deprecated(
+    "This method will be removed once the catalyst framework stops passing the arguments as a bundle. Use [highlightPreference(arguments: KeyParameters, key: String?)] instead"
+)
+fun Intent.highlightPreference(arguments: Bundle, key: String?) {
+    putExtra(EXTRA_BINDING_SCREEN_ARGS, arguments)
+    if (key != null) putExtra(EXTRA_FRAGMENT_ARG_KEY, key)
+}
+
+/**
+ * Sets the intent extra to highlight given preference on a parameterized screen.
+ *
+ * @param keyParameters arguments of the parameterized screen
+ * @param key preference to highlight
+ */
+fun Intent.highlightPreference(keyParameters: ValidatedKeyParameters, key: String?) {
+    putExtra(EXTRA_BINDING_SCREEN_ARGS, keyParameters.toBundle())
+    if (key != null) putExtra(EXTRA_FRAGMENT_ARG_KEY, key)
+}
+
+/** Sets the intent extra to highlight given preference. */
+fun Intent.highlightPreference(key: String?) {
+    if (key != null) putExtra(EXTRA_FRAGMENT_ARG_KEY, key)
+}
+
+/**
+ * Replaces all nested [Bundle] extras with their serialized raw string representations.
+ *
+ * For example, a Bundle extra with key "screen_args" will be removed and replaced
+ * with a String extra with key "screen_args_raw".
+ */
+fun Intent.flattenBundles() {
+    val extras = this.extras ?: return
+    val bundleKeys = extras.keySet().filter { extras.get(it) is Bundle }
+
+    for (key in bundleKeys) {
+        val bundle = extras.getBundle(key) ?: continue
+        val map = mutableMapOf<String, String>()
+
+        for (k in bundle.keySet()) {
+            bundle.get(k)?.let { map[k] = it.toString() }
+        }
+
+        this.putExtra("${key}_raw", map.toSerializableString())
+        this.removeExtra(key)
+    }
+}
+
+/**
+ * Detects extras ending in "_raw", deserializes them from strings back into Bundles,
+ * and restores them to their original keys.
+ */
+fun Intent.unflattenBundles() {
+    val extras = this.extras ?: return
+    val rawKeys = extras.keySet().filter { it.endsWith("_raw") }
+
+    for (rawKey in rawKeys) {
+        val rawValue = extras.getString(rawKey)
+        if (!rawValue.isNullOrEmpty()) {
+            val originalKey = rawKey.removeSuffix("_raw")
+            this.putExtra(originalKey, rawValue.deserializeToMap().toBundle())
+            this.removeExtra(rawKey)
+        }
+    }
+}

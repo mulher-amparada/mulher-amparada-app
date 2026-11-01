@@ -1,0 +1,210 @@
+/*
+ * Copyright (C) 2023 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.networkstack.metrics;
+
+import static android.net.apf.ApfCounterTracker.Counter.CORRUPT_DNS_PACKET;
+import static android.net.apf.ApfCounterTracker.Counter.DROPPED_LOW_POWER_STANDBY;
+import static android.net.apf.ApfCounterTracker.Counter.DROPPED_NON_UNICAST_TDLS;
+import static android.net.apf.ApfCounterTracker.Counter.EXCEPTIONS;
+import static android.net.apf.ApfCounterTracker.Counter.PASSED_ALLOCATE_FAILURE;
+import static android.net.apf.ApfCounterTracker.Counter.PASSED_LOW_POWER_STANDBY_MAGIC_PACKET;
+import static android.net.apf.ApfCounterTracker.Counter.PASSED_LOW_POWER_STANDBY_PORT_ALLOWED;
+import static android.net.apf.ApfCounterTracker.Counter.PASSED_RA;
+import static android.net.apf.ApfCounterTracker.Counter.PASSED_TRANSMIT_FAILURE;
+import static android.stats.connectivity.CounterName.CN_CORRUPT_DNS_PACKET;
+import static android.stats.connectivity.CounterName.CN_DROPPED_LOW_POWER_STANDBY;
+import static android.stats.connectivity.CounterName.CN_DROPPED_NON_UNICAST_TDLS;
+import static android.stats.connectivity.CounterName.CN_EXCEPTIONS;
+import static android.stats.connectivity.CounterName.CN_PASSED_ALLOCATE_FAILURE;
+import static android.stats.connectivity.CounterName.CN_PASSED_LOW_POWER_STANDBY_MAGIC_PACKET;
+import static android.stats.connectivity.CounterName.CN_PASSED_LOW_POWER_STANDBY_PORT_ALLOWED;
+import static android.stats.connectivity.CounterName.CN_PASSED_RA;
+import static android.stats.connectivity.CounterName.CN_PASSED_TRANSMIT_FAILURE;
+
+import static org.junit.Assert.assertEquals;
+
+import android.net.apf.ApfCounterTracker.Counter;
+import android.stats.connectivity.CounterName;
+
+import androidx.test.filters.SmallTest;
+import androidx.test.runner.AndroidJUnit4;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+/**
+ * Tests for ApfSessionInfoMetrics.
+ */
+@RunWith(AndroidJUnit4.class)
+@SmallTest
+public class ApfSessionInfoMetricsTest {
+    @Test
+    public void testApfSessionInfoMetrics_VerifyCollectMetrics() throws Exception {
+        ApfSessionInfoReported mStats;
+        final ApfSessionInfoMetrics mMetrics = new ApfSessionInfoMetrics();
+        mMetrics.setVersion(4);
+        mMetrics.setMemorySize(4096);
+        mMetrics.setApfSessionDurationSeconds(123);
+        mMetrics.setNumOfTimesApfProgramUpdated(456);
+        mMetrics.setMaxProgramSize(1234);
+        mMetrics.addApfCounter(Counter.TOTAL_PACKETS, 5678);
+        mMetrics.addApfCounter(Counter.PASSED_ARP_UNICAST_REPLY, 1010);
+        mMetrics.addApfCounter(Counter.DROPPED_MDNS, 333);
+        mStats = mMetrics.statsWrite();
+        assertEquals(4, mStats.getVersion());
+        assertEquals(4096, mStats.getMemorySize());
+        assertEquals(123, mStats.getApfSessionDurationSeconds());
+        assertEquals(456, mStats.getNumOfTimesApfProgramUpdated());
+        assertEquals(1234, mStats.getMaxProgramSize());
+
+        // ApfCounter count: 3 (CN_TOTAL_PACKETS, CN_PASSED_ARP_UNICAST_REPLY, CN_DROPPED_MDNS)
+        final ApfCounterList apfCounterList = mStats.getApfCounterList();
+        assertEquals(3, apfCounterList.getApfCounterCount());
+
+        // Verify 1st ApfCounter: CounterName = CN_TOTAL_PACKETS, CounterValue = 5678
+        ApfCounter apfCounter = apfCounterList.getApfCounter(0);
+        assertEquals(CounterName.CN_TOTAL_PACKETS, apfCounter.getCounterName());
+        assertEquals(5678, apfCounter.getCounterValue());
+
+        // Verify 1st ApfCounter: CounterName = CN_PASSED_ARP_UNICAST_REPLY, CounterValue = 1010
+        apfCounter = apfCounterList.getApfCounter(1);
+        assertEquals(CounterName.CN_PASSED_ARP_UNICAST_REPLY, apfCounter.getCounterName());
+        assertEquals(1010, apfCounter.getCounterValue());
+
+        // Verify 1st ApfCounter: CounterName = CN_DROPPED_MDNS, CounterValue = 333
+        apfCounter = apfCounterList.getApfCounter(2);
+        assertEquals(CounterName.CN_DROPPED_MDNS, apfCounter.getCounterName());
+        assertEquals(333, apfCounter.getCounterValue());
+    }
+
+    @Test
+    public void testApfSessionInfoMetrics_VerifyMaxApfCounter() throws Exception {
+        ApfSessionInfoReported mStats;
+        final ApfSessionInfoMetrics mMetrics = new ApfSessionInfoMetrics();
+        for (Counter counter : Counter.class.getEnumConstants()) {
+            mMetrics.addApfCounter(counter, 1);
+        }
+        final int expectedApfCounterCount = Counter.class.getEnumConstants().length - 1;
+        mStats = mMetrics.statsWrite();
+        final ApfCounterList apfCounterList = mStats.getApfCounterList();
+        assertEquals(expectedApfCounterCount, apfCounterList.getApfCounterCount());
+    }
+
+    private void verifyCounterName(Counter counter,
+            CounterName expectedCounterName) {
+        assertEquals(expectedCounterName, ApfSessionInfoMetrics.apfFilterCounterToEnum(counter));
+    }
+
+    @Test
+    public void testApfSessionInfoMetrics_VerifyApfCounterToEnum() throws Exception {
+        verifyCounterName(Counter.RESERVED_OOB, CounterName.CN_UNKNOWN);
+        verifyCounterName(Counter.TOTAL_PACKETS, CounterName.CN_TOTAL_PACKETS);
+        verifyCounterName(Counter.PASSED_DHCP, CounterName.CN_PASSED_DHCP);
+        verifyCounterName(Counter.PASSED_ETHER_OUR_SRC_MAC, CounterName.CN_PASSED_OUR_SRC_MAC);
+        verifyCounterName(Counter.PASSED_IPV4, CounterName.CN_PASSED_IPV4);
+        verifyCounterName(Counter.PASSED_IPV6_NON_ICMP, CounterName.CN_PASSED_IPV6_NON_ICMP);
+        verifyCounterName(Counter.PASSED_IPV4_UNICAST, CounterName.CN_PASSED_IPV4_UNICAST);
+        verifyCounterName(Counter.PASSED_IPV6_HOPOPTS, CounterName.CN_PASSED_IPV6_HOPOPTS);
+        verifyCounterName(Counter.PASSED_IPV6_ICMP, CounterName.CN_PASSED_IPV6_ICMP);
+        verifyCounterName(Counter.PASSED_IPV6_UNICAST_NON_ICMP,
+                CounterName.CN_PASSED_IPV6_UNICAST_NON_ICMP);
+        verifyCounterName(Counter.PASSED_ARP_UNICAST_REPLY,
+                CounterName.CN_PASSED_ARP_UNICAST_REPLY);
+        verifyCounterName(Counter.PASSED_NON_IP_UNICAST, CounterName.CN_PASSED_NON_IP_UNICAST);
+        verifyCounterName(Counter.DROPPED_ETH_BROADCAST, CounterName.CN_DROPPED_ETH_BROADCAST);
+        verifyCounterName(Counter.DROPPED_ETHER_OUR_SRC_MAC,
+                CounterName.CN_DROPPED_ETHER_OUR_SRC_MAC);
+        verifyCounterName(Counter.DROPPED_RA, CounterName.CN_DROPPED_RA);
+        verifyCounterName(Counter.DROPPED_GARP_REPLY, CounterName.CN_DROPPED_GARP_REPLY);
+        verifyCounterName(Counter.DROPPED_ARP_OTHER_HOST, CounterName.CN_DROPPED_ARP_OTHER_HOST);
+        verifyCounterName(Counter.DROPPED_IPV4_L2_BROADCAST,
+                CounterName.CN_DROPPED_IPV4_L2_BROADCAST);
+        verifyCounterName(Counter.DROPPED_IPV4_BROADCAST_ADDR,
+                CounterName.CN_DROPPED_IPV4_BROADCAST_ADDR);
+        verifyCounterName(Counter.DROPPED_IPV4_BROADCAST_NET,
+                CounterName.CN_DROPPED_IPV4_BROADCAST_NET);
+        verifyCounterName(Counter.DROPPED_IPV4_ICMP_INVALID,
+                CounterName.CN_DROPPED_IPV4_ICMP_INVALID);
+        verifyCounterName(Counter.DROPPED_IPV4_MULTICAST, CounterName.CN_DROPPED_IPV4_MULTICAST);
+        verifyCounterName(Counter.DROPPED_IPV6_ROUTER_SOLICITATION,
+                CounterName.CN_DROPPED_IPV6_ROUTER_SOLICITATION);
+        verifyCounterName(Counter.DROPPED_IPV6_MLD_INVALID,
+                CounterName.CN_DROPPED_IPV6_MLD_INVALID);
+        verifyCounterName(Counter.DROPPED_IPV6_MLD_REPORT,
+                CounterName.CN_DROPPED_IPV6_MLD_REPORT);
+        verifyCounterName(Counter.DROPPED_IPV6_MLD_V1_GENERAL_QUERY_REPLIED,
+                CounterName.CN_DROPPED_IPV6_MLD_V1_GENERAL_QUERY_REPLIED);
+        verifyCounterName(Counter.DROPPED_IPV6_MLD_V2_GENERAL_QUERY_REPLIED,
+                CounterName.CN_DROPPED_IPV6_MLD_V2_GENERAL_QUERY_REPLIED);
+        verifyCounterName(Counter.DROPPED_IPV6_MULTICAST_NA,
+                CounterName.CN_DROPPED_IPV6_MULTICAST_NA);
+        verifyCounterName(Counter.DROPPED_IPV6_NON_ICMP_MULTICAST,
+                CounterName.CN_DROPPED_IPV6_NON_ICMP_MULTICAST);
+        verifyCounterName(Counter.DROPPED_802_3_FRAME, CounterName.CN_DROPPED_802_3_FRAME);
+        verifyCounterName(Counter.DROPPED_ETHERTYPE_NOT_ALLOWED,
+                CounterName.CN_DROPPED_ETHERTYPE_NOT_ALLOWED);
+        verifyCounterName(Counter.DROPPED_ARP_REPLY_SPA_NO_HOST,
+                CounterName.CN_DROPPED_ARP_REPLY_SPA_NO_HOST);
+        verifyCounterName(Counter.DROPPED_IPV4_KEEPALIVE_ACK,
+                CounterName.CN_DROPPED_IPV4_KEEPALIVE_ACK);
+        verifyCounterName(Counter.DROPPED_IPV4_NATT_KEEPALIVE,
+                CounterName.CN_DROPPED_IPV4_NATT_KEEPALIVE);
+        verifyCounterName(Counter.DROPPED_MDNS, CounterName.CN_DROPPED_MDNS);
+        verifyCounterName(Counter.DROPPED_MDNS_REPLIED, CounterName.CN_DROPPED_MDNS_REPLIED);
+        verifyCounterName(Counter.DROPPED_IPV4_TCP_PORT7_UNICAST,
+                CounterName.CN_DROPPED_IPV4_TCP_PORT7_UNICAST);
+        verifyCounterName(Counter.DROPPED_ARP_NON_IPV4, CounterName.CN_DROPPED_ARP_NON_IPV4);
+        verifyCounterName(Counter.DROPPED_ARP_UNKNOWN, CounterName.CN_DROPPED_ARP_UNKNOWN);
+        verifyCounterName(Counter.PASSED_ARP_BROADCAST_REPLY,
+                CounterName.CN_PASSED_ARP_BROADCAST_REPLY);
+        verifyCounterName(Counter.PASSED_ARP_REQUEST, CounterName.CN_PASSED_ARP_REQUEST);
+        verifyCounterName(Counter.PASSED_IPV4_FROM_DHCPV4_SERVER,
+                CounterName.CN_PASSED_IPV4_FROM_DHCPV4_SERVER);
+        verifyCounterName(Counter.DROPPED_IPV4_NON_DHCP4, CounterName.CN_DROPPED_IPV4_NON_DHCP4);
+        verifyCounterName(Counter.DROPPED_IPV4_PING_REQUEST_REPLIED,
+                CounterName.CN_DROPPED_IPV4_PING_REQUEST_REPLIED);
+        verifyCounterName(Counter.DROPPED_IPV6_ICMP6_ECHO_REQUEST_INVALID,
+                CounterName.CN_DROPPED_IPV6_ICMP6_ECHO_REQUEST_INVALID);
+        verifyCounterName(Counter.DROPPED_IPV6_ICMP6_ECHO_REQUEST_REPLIED,
+                CounterName.CN_DROPPED_IPV6_ICMP6_ECHO_REQUEST_REPLIED);
+        verifyCounterName(Counter.DROPPED_IPV6_NS_INVALID, CounterName.CN_DROPPED_IPV6_NS_INVALID);
+        verifyCounterName(Counter.DROPPED_IPV6_NS_OTHER_HOST,
+                CounterName.CN_DROPPED_IPV6_NS_OTHER_HOST);
+        verifyCounterName(Counter.DROPPED_IPV6_NS_REPLIED_NON_DAD,
+                CounterName.CN_DROPPED_IPV6_NS_REPLIED_NON_DAD);
+        verifyCounterName(Counter.DROPPED_ARP_REQUEST_REPLIED,
+                CounterName.CN_DROPPED_ARP_REQUEST_REPLIED);
+        verifyCounterName(Counter.DROPPED_ARP_V6_ONLY, CounterName.CN_DROPPED_ARP_V6_ONLY);
+        verifyCounterName(Counter.DROPPED_IGMP_INVALID, CounterName.CN_DROPPED_IGMP_INVALID);
+        verifyCounterName(Counter.DROPPED_IGMP_V3_GENERAL_QUERY_REPLIED,
+                CounterName.CN_DROPPED_IGMP_V3_GENERAL_QUERY_REPLIED);
+        verifyCounterName(Counter.DROPPED_IGMP_V2_GENERAL_QUERY_REPLIED,
+                CounterName.CN_DROPPED_IGMP_V2_GENERAL_QUERY_REPLIED);
+        verifyCounterName(Counter.DROPPED_IGMP_REPORT, CounterName.CN_DROPPED_IGMP_REPORT);
+        verifyCounterName(PASSED_ALLOCATE_FAILURE, CN_PASSED_ALLOCATE_FAILURE);
+        verifyCounterName(PASSED_TRANSMIT_FAILURE, CN_PASSED_TRANSMIT_FAILURE);
+        verifyCounterName(CORRUPT_DNS_PACKET, CN_CORRUPT_DNS_PACKET);
+        verifyCounterName(EXCEPTIONS, CN_EXCEPTIONS);
+        verifyCounterName(PASSED_RA, CN_PASSED_RA);
+        verifyCounterName(DROPPED_NON_UNICAST_TDLS, CN_DROPPED_NON_UNICAST_TDLS);
+        verifyCounterName(PASSED_LOW_POWER_STANDBY_MAGIC_PACKET,
+                CN_PASSED_LOW_POWER_STANDBY_MAGIC_PACKET);
+        verifyCounterName(PASSED_LOW_POWER_STANDBY_PORT_ALLOWED,
+                CN_PASSED_LOW_POWER_STANDBY_PORT_ALLOWED);
+        verifyCounterName(DROPPED_LOW_POWER_STANDBY, CN_DROPPED_LOW_POWER_STANDBY);
+    }
+}

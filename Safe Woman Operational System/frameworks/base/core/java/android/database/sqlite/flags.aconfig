@@ -1,0 +1,27 @@
+package: "android.database.sqlite"
+container: "system"
+
+flag {
+     name: "sqlite_apis_35"
+     is_exported: true
+     namespace: "system_performance"
+     is_fixed_read_only: true
+     description: "SQLite APIs held back for Android 15"
+     bug: "279043253"
+}
+
+flag {
+     name: "concurrent_open_helper"
+     is_exported: true
+     namespace: "system_performance"
+     is_fixed_read_only: false
+     description: "Make SQLiteOpenHelper thread-safe"
+     bug: "335904370"
+}
+
+flag {
+     name: "report_active_db_configuration"
+     namespace: "system_performance"
+     description: "Report the active DB journal and sync modes"
+     bug: "444244330"
+}

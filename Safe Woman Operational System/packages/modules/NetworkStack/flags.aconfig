@@ -1,0 +1,37 @@
+package: "com.android.networkstack.flags"
+container: "NetworkStack"
+
+flag {
+    name: "ipclient_ignore_low_ra_lifetime"
+    namespace: "com_android_networkstack"
+    description: "Support ignoring low RA lifetime in IpClient"
+    bug: "384584845"
+}
+
+flag {
+    name: "apf_handle_mdns_advertising_offload"
+    namespace: "com_android_networkstack"
+    description: "Enable APF mDNS advertising offload"
+    bug: "477470809"
+}
+
+flag {
+    name: "apf_handle_mdns_reply_filter"
+    namespace: "com_android_networkstack"
+    description: "Support APF mDNS reply filter"
+    bug: "451885799"
+}
+
+flag {
+    name: "network_monitor_redact_venue_info_url"
+    namespace: "com_android_networkstack"
+    description: "Redact venue info URL in NetworkMonitor when closed portal is detected"
+    bug: "429004668"
+}
+
+flag {
+    name: "netlink_no_timeout"
+    namespace: "com_android_networkstack"
+    description: "Disable timeout for netlink API calls."
+    bug: "455999579"
+}

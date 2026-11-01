@@ -1,0 +1,32 @@
+{
+    "presubmit-large": [
+        {
+            "name": "CtsDevicePolicyManagerTestCases",
+            "options": [
+                {
+                    "include-annotation": "com.android.cts.devicepolicy.annotations.PermissionsTest"
+                },
+                {
+                    "exclude-annotation": "androidx.test.filters.FlakyTest"
+                }
+            ]
+        }
+    ],
+    "postsubmit": [
+        {
+            "name": "CtsPermissionUiTestCases"
+        },
+        {
+            // TODO(b/332974906): Promote in presubmit-large.
+            "name": "CtsDevicePolicyManagerTestCases_Permissions_NoFlakes"
+        },
+        {
+            "name": "CtsPermissionTestCases",
+            "options": [
+                {
+                    "include-filter": "android.permission.cts.OneTimePermissionTest"
+                }
+            ]
+        }
+    ]
+}

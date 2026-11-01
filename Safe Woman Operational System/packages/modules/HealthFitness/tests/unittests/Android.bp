@@ -1,0 +1,119 @@
+// Copyright (C) 2022 The Android Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package {
+    default_applicable_licenses: ["Android-Apache-2.0"],
+    default_team: "trendy_team_android_health",
+}
+
+// Tests that require the test SDK to run.
+android_test {
+    name: "HealthFitnessTestSdkUnitTests",
+    min_sdk_version: "34",
+    sdk_version: "test_current",
+    manifest: "AndroidManifest.xml",
+    test_config: "AndroidTest_testSdk.xml",
+    srcs: [
+        "src/com/android/server/healthconnect/common/accesslog/AppOpLogsHelperTest.java",
+    ],
+    test_suites: [
+        "mts-healthfitness",
+        "general-tests",
+    ],
+    defaults: [
+        "mts-target-sdk-version-current",
+        "modules-utils-testable-device-config-defaults",
+    ],
+    static_libs: [
+        "service-healthfitness.impl",
+        "framework-healthfitness.impl",
+        "flag-junit",
+        "androidx.test.ext.junit",
+        "androidx.test.runner",
+        "mockito",
+        "truth",
+        "services.core",
+        "androidx.test.ext.truth",
+        "framework-annotations-lib",
+        "android.permission.flags-aconfig-java-export",
+    ],
+    libs: [
+        "android.test.base.stubs.system",
+        "android.test.mock.stubs.system",
+        "android.test.runner.stubs.system",
+        "framework-sdkextensions.stubs.module_lib",
+        "framework-configinfrastructure.stubs.module_lib",
+    ],
+    // Test coverage system runs on different devices. Need to
+    // compile for all architecture.
+    compile_multilib: "both",
+}
+
+android_test {
+    name: "HealthFitnessUnitTests",
+    min_sdk_version: "34",
+    sdk_version: "module_current",
+    manifest: "AndroidManifest.xml",
+    test_config: "AndroidTest.xml",
+    srcs: [
+        "src/**/*.java",
+    ],
+    exclude_srcs: [
+        "src/com/android/server/healthconnect/common/accesslog/AppOpLogsHelperTest.java",
+    ],
+    test_suites: [
+        "mts-healthfitness",
+        "general-tests",
+    ],
+    defaults: [
+        "mts-target-sdk-version-current",
+        "modules-utils-testable-device-config-defaults",
+    ],
+    // This needs to be added to the unit tests as this build change is guarded by a build system
+    // flag (soong_config_bool_variable "phr_fhir_validation"), which is part of the PHR FHIR
+    // structural validation feature.
+    java_resources: [
+        ":generate-fhir-spec-r4-binarypb",
+    ],
+    static_libs: [
+        "modules-utils-build",
+        "truth",
+        "TestParameterInjector",
+        "compatibility-device-util-axt",
+        "service-healthfitness.impl",
+        "framework-healthfitness.impl",
+        "healthfitness-aconfig-flags-lib",
+        "healthfitness-aconfig-flags-helper",
+        "healthfitness-testing-shared",
+        "healthfitness-testing-unittest",
+        "flag-junit",
+        "androidx.test.runner",
+        "mockito",
+        "services.core",
+        "androidx.test.ext.truth",
+        "platform-parametric-runner-lib",
+        "framework-annotations-lib",
+        "guava-android-testlib", // For EqualsTester
+    ],
+    libs: [
+        "android.test.base.stubs.system",
+        "android.test.mock.stubs.system",
+        "android.test.runner.stubs.system",
+        "framework-sdkextensions.stubs.module_lib",
+        "framework-configinfrastructure.stubs.module_lib",
+    ],
+    // Test coverage system runs on different devices. Need to
+    // compile for all architecture.
+    compile_multilib: "both",
+}

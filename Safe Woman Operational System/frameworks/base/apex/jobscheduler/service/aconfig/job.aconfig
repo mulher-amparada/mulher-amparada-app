@@ -1,0 +1,47 @@
+package: "com.android.server.job"
+container: "system"
+
+flag {
+    name: "batch_active_bucket_jobs"
+    namespace: "backstage_power"
+    description: "Include jobs in the ACTIVE bucket in the job batching effort. Don't let them run as freely as they're ready."
+    bug: "326607666"
+}
+
+flag {
+    name: "batch_connectivity_jobs_per_network"
+    namespace: "backstage_power"
+    description: "Have JobScheduler attempt to delay the start of some connectivity jobs until there are several ready or the network is active"
+    bug: "28382445"
+}
+
+flag {
+    name: "do_not_force_rush_execution_at_boot"
+    namespace: "backstage_power"
+    description: "Don't force rush job execution right after boot completion"
+    bug: "321598070"
+}
+
+flag {
+    name: "include_job_name_in_anr_message"
+    namespace: "backstage_power"
+    description: "Include the job's component name in the slow app response ANR message."
+    bug: "453757844"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "enforce_proxied_jobs_limit"
+    namespace: "backstage_power"
+    description: "Enforce a limit on the number of proxied jobs that can be scheduled indirectly (e.g. via SyncManager)"
+    bug: "299930087"
+}
+
+flag {
+    name: "limit_per_uid_cumulative_workitem_size"
+    namespace: "backstage_power"
+    description: "Limit the total amount of memory consumption ab app can impose on the system via JobWorkItems"
+    bug: "434194137"
+}

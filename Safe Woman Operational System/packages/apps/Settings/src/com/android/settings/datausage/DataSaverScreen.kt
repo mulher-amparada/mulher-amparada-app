@@ -1,0 +1,120 @@
+/*
+ * Copyright (C) 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.settings.datausage
+
+import android.app.settings.SettingsEnums
+import android.content.Context
+import android.telephony.SubscriptionManager.INVALID_SUBSCRIPTION_ID
+import androidx.fragment.app.Fragment
+import com.android.settings.R
+import com.android.settings.Settings.DataSaverSummaryActivity
+import com.android.settings.core.PreferenceScreenMixin
+import com.android.settings.datausage.DataSaverMainSwitchPreference.Companion.KEY as DATA_SAVER_KEY
+import com.android.settings.flags.Flags
+import com.android.settings.utils.makeLaunchIntent
+import com.android.settingslib.datastore.HandlerExecutor
+import com.android.settingslib.datastore.KeyedObserver
+import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
+import com.android.settingslib.metadata.PreferenceIndexableProvider
+import com.android.settingslib.metadata.PreferenceLifecycleContext
+import com.android.settingslib.metadata.PreferenceLifecycleProvider
+import com.android.settingslib.metadata.PreferenceMetadata
+import com.android.settingslib.metadata.PreferenceSummaryProvider
+import com.android.settingslib.metadata.ProvidePreferenceScreen
+import com.android.settingslib.metadata.preferenceHierarchy
+import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
+
+@ProvidePreferenceScreen(DataSaverScreen.KEY)
+open class DataSaverScreen(context: Context) :
+    PreferenceScreenMixin,
+    PreferenceAvailabilityProvider,
+    PreferenceSummaryProvider,
+    PreferenceIndexableProvider,
+    PreferenceLifecycleProvider {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED)
+
+    private val dataSaverStore = DataSaverMainSwitchPreference.createDataStore(context)
+    private lateinit var keyedObserver: KeyedObserver<String>
+
+    override val key
+        get() = KEY
+
+    //TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.restrict_background_parent_entry_purpose
+
+    override val title
+        get() = R.string.data_saver_title
+
+    override val icon: Int
+        get() = R.drawable.ic_settings_data_usage
+
+    override fun isIndexable(context: Context) =
+        DataUsageUtils.hasMobileData(context) &&
+            DataUsageUtils.getDefaultSubscriptionId(context) != INVALID_SUBSCRIPTION_ID
+
+    override fun getSummary(context: Context): CharSequence? =
+        when {
+            dataSaverStore.getBoolean(DATA_SAVER_KEY) == true ->
+                context.getString(R.string.data_saver_on)
+            else -> context.getString(R.string.data_saver_off)
+        }
+
+    override val availabilityDescription =
+        "The device must support the data saver setting."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
+
+    override fun isAvailable(context: Context) =
+        context.resources.getBoolean(R.bool.config_show_data_saver)
+
+    override val highlightMenuKey: Int
+        get() = R.string.menu_key_network
+
+    override fun getMetricsCategory() = SettingsEnums.DATA_SAVER_SUMMARY
+
+    override fun isFlagEnabled(context: Context) = Flags.catalystRestrictBackgroundParentEntry()
+
+    override fun fragmentClass(): Class<out Fragment>? = DataSaverSummary::class.java
+
+    override fun getLaunchIntent(context: Context, metadata: PreferenceMetadata?) =
+        makeLaunchIntent(context, DataSaverSummaryActivity::class.java, metadata?.key)
+
+    override fun getPreferenceHierarchy(context: Context, coroutineScope: CoroutineScope) =
+        preferenceHierarchy(context) { +DataSaverMainSwitchPreference() }
+
+    override fun hasCompleteHierarchy() = false
+
+    override fun onCreate(context: PreferenceLifecycleContext) {
+        if (isEntryPoint(context)) {
+            keyedObserver = KeyedObserver { _, _ -> context.notifyPreferenceChange(KEY) }
+            dataSaverStore.addObserver(DATA_SAVER_KEY, keyedObserver, HandlerExecutor.main)
+        }
+    }
+
+    override fun onDestroy(context: PreferenceLifecycleContext) {
+        if (isEntryPoint(context)) {
+            dataSaverStore.removeObserver(DATA_SAVER_KEY, keyedObserver)
+        }
+    }
+
+    companion object {
+        const val KEY = "restrict_background_parent_entry"
+    }
+}

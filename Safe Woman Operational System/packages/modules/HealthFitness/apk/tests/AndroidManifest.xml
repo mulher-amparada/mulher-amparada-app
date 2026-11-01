@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2022 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.android.healthconnect.controller.tests">
+
+  <application
+      android:name="dagger.hilt.android.testing.HiltTestApplication"
+      android:debuggable="true"
+      tools:replace="android:name">
+    <uses-library android:name="android.test.runner" />
+    <activity
+        android:name=".TestActivity"
+        android:exported="true"
+        android:theme="@style/Theme.HealthConnect">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+
+    <activity
+        android:name=".utils.TestComposeActivity"
+        android:exported="true"
+        android:theme="@style/Theme.HealthConnect">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+
+    <!--
+    Disable the receiver in tests.
+
+    This receiver listens to ACTION_BOOT_COMPLETED actions and on Android V the system sends
+    ACTION_BOOT_COMPLETED to the test app whenever it gets initialized. The receiver gets triggered
+    before Hilt is able to initialize the dependency injection graph which causes a crash.
+    See https://developer.android.com/partners/google-apps/android-15/changes#enhanced-stop-states.
+    -->
+    <receiver
+        android:name="com.android.healthconnect.controller.safetycenter.SafetySourceBroadcastReceiver"
+        android:enabled="false"/>
+  </application>
+
+  <queries>
+    <intent>
+      <!-- An intent action to get package visibility into client apps. See more at b/193547946 -->
+      <action android:name="android.intent.action.VIEW_PERMISSION_USAGE" />
+      <category android:name="android.intent.category.HEALTH_PERMISSIONS" />
+    </intent>
+  </queries>
+
+  <instrumentation
+      android:name="com.android.healthconnect.controller.tests.HiltTestRunner"
+      android:label="Health Connect UI Test Cases"
+      android:targetPackage="com.android.healthconnect.controller.tests" />
+</manifest>

@@ -1,0 +1,111 @@
+{
+  "resourceType": "Observation",
+  "id": "observation-11",
+  "identifier": [
+    {
+      "use": "official",
+      "system": "http://example.laboratory.com",
+      "value": "1011"
+    }
+  ],
+  "basedOn": [
+    {
+      "reference": "ServiceRequest/servicerequest_unk"
+    }
+  ],
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ],
+      "text": "Laboratory"
+    },
+    {
+      "coding": [
+        {
+          "system": "urn:oid:1.2.345.6789",
+          "code": "Lab",
+          "display": "Lab"
+        }
+      ],
+      "text": "Laboratory"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "76629-5",
+        "display": "Fasting glucose [Moles/volume] in Blood"
+      },
+      {
+        "system": "urn:oid:1.2.345.6789",
+        "code": "10002",
+        "display": "Blood Glucose (fasting)"
+      }
+    ],
+    "text": "Glucose [Moles/volume] in Blood"
+  },
+  "subject": {
+    "reference": "Patient/patient-1",
+    "display": "Example, Anne"
+  },
+  "encounter": {
+    "reference": "Encounter/encounter-5",
+    "identifier": {
+      "use": "usual",
+      "system": "urn:oid:1.2.345.6789",
+      "value": "10005"
+    },
+    "display": "Endocrine outpatient appointment"
+  },
+  "performer": [
+    {
+      "display": "Outpatient Phlebotomist"
+    }
+  ],
+  "effectiveDateTime": "2022-09-28T09:48:00Z",
+  "issued": "2022-09-28T13:22:41Z",
+  "valueQuantity": {
+    "value": 6.9,
+    "unit": "mmol/l",
+    "system": "http://unitsofmeasure.org",
+    "code": "mmol/l"
+  },
+  "referenceRange": [
+    {
+      "low": {
+        "value": 3.9,
+        "unit": "mmol/l",
+        "system": "http://unitsofmeasure.org",
+        "code": "mmol/l"
+      },
+      "high": {
+        "value": 5.6,
+        "unit": "mmol/l",
+        "system": "http://unitsofmeasure.org",
+        "code": "mmol/l"
+      }
+    }
+  ],
+  "interpretation": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+          "code": "H",
+          "display": "High"
+        }
+      ]
+    }
+  ],
+  "specimen": {
+    "reference": "Specimen/specimen_unk",
+    "display": "Specimen"
+  }
+}

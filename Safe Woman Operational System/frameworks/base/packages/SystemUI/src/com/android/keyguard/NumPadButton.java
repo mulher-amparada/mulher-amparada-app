@@ -1,0 +1,224 @@
+/*
+ * Copyright (C) 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.android.keyguard;
+
+import static android.security.Flags.lockscreenTimeoutDeactivatePinPad;
+
+import static com.android.keyguard.NumPadAnimatableKt.DISABLED_BACKGROUND_ALPHA;
+import static com.android.keyguard.NumPadAnimatableKt.DISABLED_FOREGROUND_ALPHA;
+
+import android.content.Context;
+import android.content.res.ColorStateList;
+import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.VectorDrawable;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
+
+import androidx.annotation.DrawableRes;
+import androidx.annotation.Nullable;
+
+import com.android.systemui.Flags;
+import com.android.systemui.bouncer.shared.constants.PinBouncerConstants.Color;
+import com.android.systemui.bouncer.ui.BouncerColors;
+import com.android.systemui.res.R;
+import com.android.systemui.util.ColorUtilKt;
+
+/** Similar to the {@link NumPadKey}, but displays an image. */
+public class NumPadButton extends AlphaOptimizedImageButton
+        implements NumPadAnimationListener, NumPadAnimatable {
+
+    @Nullable
+    private NumPadAnimator mAnimator;
+    private int mOrientation;
+    private int mStyleAttr;
+    private boolean mIsTransparentMode;
+
+    @DrawableRes
+    private int mDrawableForTransparentMode = 0;
+
+    @DrawableRes
+    private int mDefaultDrawable = 0;
+
+    public NumPadButton(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        mStyleAttr = attrs.getStyleAttribute();
+        setupAnimator();
+    }
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        mOrientation = newConfig.orientation;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        if (mAnimator == null || !lockscreenTimeoutDeactivatePinPad()) {
+            return;
+        }
+        if (enabled) {
+            mAnimator.enable();
+        } else {
+            mAnimator.disable();
+        }
+    }
+
+    @Override
+    public void setAlpha(float fgAlpha, float bgAlpha) {
+        reloadIconTintWithAlpha(fgAlpha);
+        getBackground().mutate().setAlpha(i(bgAlpha));
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        // Set width/height to the same value to ensure a smooth circle for the bg, but shrink
+        // the height to match the old pin bouncer.
+        // This is only used for PIN/PUK; the main PIN pad now uses ConstraintLayout, which will
+        // force our width/height to conform to the ratio in the layout.
+        int width = getMeasuredWidth();
+
+        boolean shortenHeight = mAnimator == null
+                || mOrientation == Configuration.ORIENTATION_LANDSCAPE;
+        int height = shortenHeight ? (int) (width * .66f) : width;
+
+        setMeasuredDimension(getMeasuredWidth(), height);
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+        int width = r - l;
+        int height = b - t;
+        if (mAnimator != null) mAnimator.onLayout(width, height);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (lockscreenTimeoutDeactivatePinPad() && !isEnabled()) {
+            return super.onTouchEvent(event);
+        }
+        switch(event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+                if (mAnimator != null) mAnimator.expand();
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                if (mAnimator != null) mAnimator.contract();
+                break;
+        }
+        return super.onTouchEvent(event);
+    }
+
+    /**
+     * Reload colors from resources.
+     **/
+    public void reloadColors() {
+        if (mAnimator != null) mAnimator.reloadColors(getContext());
+
+        if (lockscreenTimeoutDeactivatePinPad()) {
+            reloadIconTintWithAlpha(isEnabled() ? 1f : DISABLED_FOREGROUND_ALPHA);
+            return;
+        }
+        int textColorResId = mIsTransparentMode ? Color.actionWithAutoConfirm : Color.action;
+        int imageColor = getContext().getColor(textColorResId);
+        ((VectorDrawable) getDrawable()).setTintList(ColorStateList.valueOf(imageColor));
+    }
+
+    private void reloadIconTintWithAlpha(float alpha) {
+        int textColorResId = mIsTransparentMode ? Color.actionWithAutoConfirm : Color.action;
+        int iconColor = ColorUtilKt.getColorWithAlpha(getContext().getColor(textColorResId), alpha);
+        getDrawable().mutate().setTint(iconColor);
+    }
+
+    @Override
+    public void setProgress(float progress) {
+        if (mAnimator != null) {
+            mAnimator.setProgress(progress, isEnabled());
+        }
+    }
+
+    /**
+     * Set whether button is transparent mode.
+     *
+     * @param isTransparentMode
+     */
+    public void setTransparentMode(boolean isTransparentMode) {
+        if (mIsTransparentMode == isTransparentMode) {
+            return;
+        }
+
+        mIsTransparentMode = isTransparentMode;
+
+        if (isTransparentMode) {
+            if (mDrawableForTransparentMode != 0) {
+                setImageResource(mDrawableForTransparentMode);
+            }
+            setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        } else {
+            if (mDefaultDrawable != 0) {
+                setImageResource(mDefaultDrawable);
+            }
+            Drawable bgDrawable = getContext().getDrawable(R.drawable.num_pad_key_background);
+            if (Flags.bouncerUiRevamp2() && bgDrawable != null) {
+                int bgColor = BouncerColors.pinActionBg(getContext());
+                bgDrawable.setTint(bgColor);
+            }
+            setBackground(bgDrawable);
+        }
+        setupAnimator();
+        reloadColors();
+        requestLayout();
+    }
+
+    /**
+     * Set up the animator for the NumPadButton.
+     */
+    private void setupAnimator() {
+        Drawable background = getBackground();
+        if (background instanceof GradientDrawable) {
+            mAnimator = new NumPadAnimator(getContext(), background.mutate(),
+                    mStyleAttr, getDrawable(), this);
+        } else {
+            mAnimator = null;
+        }
+    }
+
+    @Override
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        info.setTextEntryKey(true);
+    }
+
+    /**
+     * Drawable to use when transparent mode is enabled
+     */
+    public void setDrawableForTransparentMode(@DrawableRes int drawableResId) {
+        mDrawableForTransparentMode = drawableResId;
+    }
+
+    /**
+     * Drawable to use when transparent mode is not enabled.
+     */
+    public void setDefaultDrawable(@DrawableRes int drawableResId) {
+        mDefaultDrawable = drawableResId;
+        setImageResource(mDefaultDrawable);
+    }
+}

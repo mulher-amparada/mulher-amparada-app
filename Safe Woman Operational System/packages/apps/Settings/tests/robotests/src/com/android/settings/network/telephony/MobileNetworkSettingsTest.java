@@ -1,0 +1,240 @@
+/*
+ * Copyright (C) 2019 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.settings.network.telephony;
+
+import static com.android.settings.network.telephony.MobileNetworkSettings.REQUEST_CODE_DELETE_SUBSCRIPTION;
+
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import android.app.Activity;
+import android.app.usage.NetworkStatsManager;
+import android.content.Context;
+import android.net.NetworkPolicyManager;
+import android.os.Bundle;
+import android.platform.test.annotations.DisableFlags;
+import android.platform.test.annotations.EnableFlags;
+import android.platform.test.flag.junit.SetFlagsRule;
+import android.provider.Settings;
+import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
+
+import androidx.fragment.app.FragmentActivity;
+
+import com.android.settings.datausage.DataUsageSummaryPreferenceController;
+import com.android.settings.flags.Flags;
+import com.android.settings.testutils.shadow.ShadowEntityHeaderController;
+import com.android.settings.widget.EntityHeaderController;
+import com.android.settingslib.core.AbstractPreferenceController;
+import com.android.settingslib.metadata.CatalystFlagProvider;
+import com.android.settingslib.metadata.CatalystFlagProviderFactory;
+import com.android.settingslib.metadata.ValidatedKeyParameters;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
+
+import java.util.List;
+
+@RunWith(RobolectricTestRunner.class)
+@Config(shadows = {
+        ShadowEntityHeaderController.class,
+        com.android.settings.testutils.shadow.ShadowFragment.class,
+})
+public class MobileNetworkSettingsTest {
+
+    @Rule
+    public final SetFlagsRule mSetFlagsRule = new SetFlagsRule();
+
+    @Mock
+    private TelephonyManager mTelephonyManager;
+    @Mock
+    private NetworkStatsManager mNetworkStatsManager;
+    @Mock
+    private NetworkPolicyManager mNetworkPolicyManager;
+    @Mock
+    private FragmentActivity mActivity;
+    @Mock
+    private SubscriptionManager mSubscriptionManager;
+
+    private Context mContext;
+    private MobileNetworkSettings mFragment;
+    private CatalystFlagProvider mOriginalProvider;
+
+    private static final int SUBSCRIPTION_ID = 1234;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+        mContext = spy(RuntimeEnvironment.application);
+        mOriginalProvider = CatalystFlagProviderFactory.INSTANCE.getInstance();
+
+        when(mActivity.getSystemService(TelephonyManager.class)).thenReturn(mTelephonyManager);
+        when(mTelephonyManager.createForSubscriptionId(anyInt())).thenReturn(mTelephonyManager);
+        when(mContext.getSystemService(NetworkStatsManager.class)).thenReturn(mNetworkStatsManager);
+        ShadowEntityHeaderController.setUseMock(mock(EntityHeaderController.class));
+
+        when(mContext.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE)).thenReturn(
+                mSubscriptionManager);
+        when(mContext.getSystemService(SubscriptionManager.class)).thenReturn(
+                mSubscriptionManager);
+        when(mSubscriptionManager.getActiveSubscriptionIdList()).thenReturn(new int[]{
+                SUBSCRIPTION_ID});
+
+        mFragment = spy(new MobileNetworkSettings());
+        final Bundle args = new Bundle();
+        args.putInt(Settings.EXTRA_SUB_ID, SUBSCRIPTION_ID);
+        mFragment.setArguments(args);
+        when(mFragment.getActivity()).thenReturn(mActivity);
+        when(mFragment.getContext()).thenReturn(mContext);
+        when(mActivity.isFinishing()).thenReturn(false);
+        when(mActivity.getSystemService(NetworkPolicyManager.class)).thenReturn(
+                mNetworkPolicyManager);
+    }
+
+    @After
+    public void tearDown() {
+        CatalystFlagProviderFactory.INSTANCE.setProvider(mOriginalProvider);
+    }
+
+    @Test
+    public void createPreferenceControllers_createsDataUsageSummaryController() {
+        final List<AbstractPreferenceController> controllers =
+                mFragment.createPreferenceControllers(mContext);
+        assertThat(controllers.stream().filter(
+                c -> c.getClass().equals(DataUsageSummaryPreferenceController.class))
+                .count())
+                .isEqualTo(1);
+    }
+
+    @Test
+    public void onActivityResult_noActivity_noCrash() {
+        when(mFragment.getActivity()).thenReturn(null);
+        // this should not crash
+        mFragment.onActivityResult(REQUEST_CODE_DELETE_SUBSCRIPTION, Activity.RESULT_OK, null);
+    }
+
+    @Test
+    public void onActivityResult_deleteSubscription_activityFinishes() {
+        mFragment.onActivityResult(REQUEST_CODE_DELETE_SUBSCRIPTION, Activity.RESULT_OK, null);
+        verify(mActivity).finish();
+    }
+
+    @Test
+    public void airplaneModeChanged_notifiesPreference() {
+        TestPreferenceController testPreferenceController = mock(TestPreferenceController.class);
+        when(mFragment.getPreferenceControllersAsList())
+                .thenReturn(List.of(testPreferenceController));
+
+        mFragment.notifyAirplaneModeForPreferences(true);
+
+        verify(testPreferenceController).notifyAirplaneModeChanged(true);
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_CATALYST_USE_STRING_BUNDLE)
+    public void getPreferenceScreenBindingArgs_flagIsTrue_putsString() {
+        setCatalystUseKeyParameters(false);
+        Bundle args = mFragment.getPreferenceScreenBindingArgs(mContext);
+
+        assertThat(args).isNotNull();
+        assertThat(args.getString(Settings.EXTRA_SUB_ID)).isEqualTo(
+                String.valueOf(SUBSCRIPTION_ID)
+        );
+        assertThat(args.containsKey(Settings.EXTRA_SUB_ID)).isTrue();
+        // Verify it's not stored as an Int
+        assertThat(args.getInt(Settings.EXTRA_SUB_ID, SubscriptionManager.INVALID_SUBSCRIPTION_ID))
+                .isEqualTo(SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+    }
+
+    @Test
+    @DisableFlags(Flags.FLAG_CATALYST_USE_STRING_BUNDLE)
+    public void getPreferenceScreenBindingArgs_flagIsFalse_putsInt() {
+        setCatalystUseKeyParameters(false);
+        Bundle args = mFragment.getPreferenceScreenBindingArgs(mContext);
+
+        assertThat(args).isNotNull();
+        assertThat(args.getInt(Settings.EXTRA_SUB_ID)).isEqualTo(SUBSCRIPTION_ID);
+        assertThat(args.containsKey(Settings.EXTRA_SUB_ID)).isTrue();
+        // Verify it's not stored as a String
+        assertThat(args.getString(Settings.EXTRA_SUB_ID)).isNull();
+    }
+
+    @Test
+    @DisableFlags(Flags.FLAG_CATALYST_USE_STRING_BUNDLE)
+    public void getPreferenceScreenBindingArgs_flagIsFalse_butKeyParametersFlagIsTrue_putsString() {
+        setCatalystUseKeyParameters(true);
+        Bundle args = mFragment.getPreferenceScreenBindingArgs(mContext);
+
+        assertThat(args).isNotNull();
+        assertThat(args.getString(Settings.EXTRA_SUB_ID)).isEqualTo(
+                String.valueOf(SUBSCRIPTION_ID)
+        );
+        assertThat(args.containsKey(Settings.EXTRA_SUB_ID)).isTrue();
+        // Verify it's not stored as an Int
+        assertThat(args.getInt(Settings.EXTRA_SUB_ID, SubscriptionManager.INVALID_SUBSCRIPTION_ID))
+                .isEqualTo(SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+    }
+
+    @Test
+    public void getPreferenceScreenBindingKeyParameters_returnsCorrectKeyParameters() {
+        ValidatedKeyParameters keyParameters =
+                mFragment.getPreferenceScreenBindingKeyParameters(mContext);
+
+        assertThat(keyParameters).isNotNull();
+        assertThat(keyParameters.get(Settings.EXTRA_SUB_ID)).isEqualTo(
+                String.valueOf(SUBSCRIPTION_ID)
+        );
+    }
+
+    private void setCatalystUseKeyParameters(boolean value) {
+        CatalystFlagProviderFactory.INSTANCE.setProvider(new CatalystFlagProvider() {
+            @Override
+            public boolean catalystUseKeyParameters() {
+                return value;
+            }
+        });
+    }
+
+    public static class TestPreferenceController extends TelephonyBasePreferenceController {
+        public TestPreferenceController(Context context, String prefKey) {
+            super(context, prefKey);
+        }
+
+        /** do init */
+        public void init(int subId) {
+            mSubId = subId;
+        }
+
+        @Override
+        public int getAvailabilityStatus(int subId) {
+            return AVAILABLE;
+        }
+    }
+}

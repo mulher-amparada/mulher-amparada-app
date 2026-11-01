@@ -1,0 +1,22 @@
+# The Android Accessibility team should approve all changes to Settings > Accessibility content.
+set noparent
+
+# Default code reviewers for this and subdirectories.
+angelala@google.com
+menghanli@google.com
+
+# TL/M to approve any new Accessibility Settings features.
+danielnorman@google.com
+
+# TL/M for all Hearing features.
+thomasli@google.com
+
+# Core Settings owner for emergency changes.
+cipson@google.com #{LAST_RESORT_SUGGESTION}
+
+# Partner-team files
+per-file *Haptic* = file:platform/frameworks/base:/services/core/java/com/android/server/vibrator/OWNERS
+per-file *Vibrat* = file:platform/frameworks/base:/services/core/java/com/android/server/vibrator/OWNERS
+
+# Catalyst migration
+per-file *Screen.kt = file:platform/packages/apps/Settings:/OWNERS

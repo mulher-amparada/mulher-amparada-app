@@ -1,0 +1,110 @@
+//
+// Copyright (C) 2024 The Android Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+package {
+    default_applicable_licenses: ["frameworks_base_packages_SystemUI_license"],
+    // The package default_visibility specified here is inherited to subpackages that do not
+    // specify default_visibility:
+    default_visibility: ["//visibility:private"],
+}
+
+java_defaults {
+    name: "SystemUI_pod_defaults_api",
+    libs: [
+        "jsr330",
+    ],
+    lint: {
+        extra_check_modules: ["SystemUILintChecker"],
+        warning_checks: ["MissingApacheLicenseDetector"],
+    },
+    kotlincflags: [
+        "-Xexplicit-api=strict",
+        "-Xjvm-default=all",
+    ],
+    visibility: ["//visibility:public"],
+    defaults_visibility: [":__subpackages__"],
+}
+
+java_defaults {
+    name: "SystemUI_pod_defaults_impl",
+    libs: [
+        "dagger2",
+        "jsr330",
+    ],
+    lint: {
+        extra_check_modules: ["SystemUILintChecker"],
+        warning_checks: ["MissingApacheLicenseDetector"],
+    },
+    kotlincflags: [
+        "-Xexplicit-api=strict",
+        "-Xjvm-default=all",
+    ],
+    plugins: [
+        // Needed so that @Provides methods in Dagger are correctly generated.
+        "dagger2-compiler",
+    ],
+    // TODO(b/423659894): Once SysUI stands up its Dagger graph in its own build target, this
+    // visibility should be updated to just that build target.
+    visibility: ["//frameworks/base/packages/SystemUI:__subpackages__"],
+    defaults_visibility: [":__subpackages__"],
+}
+
+// TODO(b/470271435): Find a better home for this pod.
+java_library {
+    name: "com.android.systemui-api",
+    srcs: [
+        "src/api/**/*.kt",
+    ],
+    static_libs: [
+        "androidx.annotation_annotation",
+        "SystemUILogLib",
+    ],
+    defaults: [
+        "SystemUI_pod_defaults_api",
+    ],
+}
+
+java_library {
+    name: "SystemUI_pod_tests",
+
+    static_libs: [
+        "com.android.systemui.brightness_testlib",
+        "com.android.systemui.dump_testlib",
+        "com.android.systemui.notifications.content.ui_testlib",
+        "com.android.systemui.notifications.intelligence.rules_testlib",
+        "com.android.systemui.notifications.intelligence.rules.ui_testlib",
+        "com.android.systemui.statusbar.chips.ui_testlib",
+    ],
+
+    visibility: ["//frameworks/base/packages/SystemUI:__pkg__"],
+}
+
+filegroup {
+    name: "SystemUI_pod_fixtureFiles",
+
+    srcs: [
+        "testFixtures/**/*.java",
+        "testFixtures/**/*.kt",
+        ":com.android.systemui.brightness_fixtureFiles",
+        ":com.android.systemui.dump_fixtureFiles",
+        ":com.android.systemui.headline.ui_fixtureFiles",
+        ":com.android.systemui.notifications.intelligence.rules_fixtureFiles",
+        ":com.android.systemui.notifications.intelligence.rules.ui_fixtureFiles",
+        ":com.android.systemui.qs.panels.ui_fixtureFiles",
+    ],
+
+    visibility: ["//frameworks/base/packages/SystemUI/tests:__pkg__"],
+}

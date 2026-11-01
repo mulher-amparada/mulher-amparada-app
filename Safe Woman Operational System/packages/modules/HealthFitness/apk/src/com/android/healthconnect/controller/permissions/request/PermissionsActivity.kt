@@ -1,0 +1,290 @@
+/*
+ * Copyright (C) 2023 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *
+ */
+
+package com.android.healthconnect.controller.permissions.request
+
+import android.content.Intent
+import android.content.Intent.EXTRA_PACKAGE_NAME
+import android.content.pm.PackageManager
+import android.content.pm.PackageManager.EXTRA_REQUEST_PERMISSIONS_NAMES
+import android.content.pm.PackageManager.EXTRA_REQUEST_PERMISSIONS_RESULTS
+import android.os.Bundle
+import android.util.Log
+import android.view.WindowManager.LayoutParams.SYSTEM_FLAG_HIDE_NON_SYSTEM_OVERLAY_WINDOWS
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import com.android.healthconnect.controller.R
+import com.android.healthconnect.controller.migration.MigrationActivity.Companion.maybeShowWhatsNewDialog
+import com.android.healthconnect.controller.migration.MigrationActivity.Companion.showDataRestoreInProgressDialog
+import com.android.healthconnect.controller.migration.MigrationActivity.Companion.showMigrationInProgressDialog
+import com.android.healthconnect.controller.migration.MigrationActivity.Companion.showMigrationPendingDialog
+import com.android.healthconnect.controller.migration.MigrationViewModel
+import com.android.healthconnect.controller.migration.api.MigrationRestoreState
+import com.android.healthconnect.controller.migration.api.MigrationRestoreState.DataRestoreUiState
+import com.android.healthconnect.controller.migration.api.MigrationRestoreState.MigrationUiState
+import com.android.healthconnect.controller.permissions.data.PermissionState
+import com.android.healthconnect.controller.permissions.request.wear.WearGrantPermissionsActivity
+import com.android.healthconnect.controller.shared.HealthPermissionReader
+import com.android.healthconnect.controller.shared.dialog.HealthConnectBottomSheetDialogFragment
+import com.android.healthconnect.controller.utils.DeviceInfoUtils
+import com.android.healthconnect.controller.utils.activity.EmbeddingUtils.maybeRedirectIntoTwoPaneSettings
+import com.android.healthconnect.controller.utils.logging.HealthConnectLogger
+import com.android.modules.utils.build.SdkLevel
+import com.android.settingslib.widget.SettingsThemeHelper
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+
+/** Permissions activity for Health Connect. */
+@AndroidEntryPoint(FragmentActivity::class)
+class PermissionsActivity :
+    Hilt_PermissionsActivity(), HealthConnectBottomSheetDialogFragment.OnCancelListener {
+
+    companion object {
+        private const val TAG = "PermissionsActivity"
+        private const val IS_BOTTOM_SHEET_SHOWN = "is_bottom_sheet_shown"
+        private const val BOTTOM_SHEET_TAG = "PermissionsBottomSheet"
+    }
+
+    @Inject lateinit var logger: HealthConnectLogger
+
+    @Inject lateinit var healthPermissionReader: HealthPermissionReader
+
+    @Inject lateinit var deviceInfoUtils: DeviceInfoUtils
+
+    private val requestPermissionsViewModel: RequestPermissionViewModel by viewModels()
+
+    private val migrationViewModel: MigrationViewModel by viewModels()
+
+    private val openOnboardingActivity =
+        registerForActivityResult(StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_CANCELED) {
+                finish()
+            }
+        }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if (SettingsThemeHelper.isExpressiveTheme(this)) {
+            setTheme(R.style.Theme_HealthConnect_PermissionsActivity_Overlay_Expressive)
+        } else {
+            setTheme(R.style.Theme_HealthConnect_PermissionsActivity_Overlay)
+        }
+
+        // If device is enabled on watch, redirect to WearGrantPermissionsActivity.
+        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_WATCH)) {
+            if (!SdkLevel.isAtLeastB()) {
+                Log.e(TAG, "Health connect is not available on watch, finishing!")
+                finish()
+                return
+            }
+            val wearIntent =
+                Intent(this, WearGrantPermissionsActivity::class.java).apply {
+                    putExtra(EXTRA_PACKAGE_NAME, getPackageNameExtra())
+                    putExtra(EXTRA_REQUEST_PERMISSIONS_NAMES, getPermissionStrings())
+                }
+            startActivity(wearIntent)
+            finish()
+            return
+        }
+
+        // This flag ensures a non system app cannot show an overlay on Health Connect. b/313425281
+        window.addSystemFlags(SYSTEM_FLAG_HIDE_NON_SYSTEM_OVERLAY_WINDOWS)
+
+        // Handles unsupported devices and user profiles.
+        if (!deviceInfoUtils.isHealthConnectAvailable(this)) {
+            Log.e(TAG, "Health connect is not available for this user or hardware, finishing!")
+            finish()
+            return
+        }
+
+        if (!intent.hasExtra(EXTRA_PACKAGE_NAME)) {
+            Log.e(TAG, "Invalid Intent Extras, finishing")
+            finish()
+            return
+        }
+
+        if (maybeRedirectIntoTwoPaneSettings(this)) {
+            return
+        }
+
+        // Some actions don't apply to apps that get health permissions via split-permission.
+        if (!healthPermissionReader.isBodySensorSplitPermissionApp(getPackageNameExtra())) {
+            // Check that app has declared rationale intent.
+            val rationaleIntentDeclared =
+                healthPermissionReader.isRationaleIntentDeclared(getPackageNameExtra())
+            if (!rationaleIntentDeclared) {
+                Log.e(TAG, "App should support rationale intent, finishing!")
+                finish()
+            }
+        }
+
+        requestPermissionsViewModel.init(getPackageNameExtra(), getPermissionStrings())
+
+        requestPermissionsViewModel.permissionsActivityState.observe(this) { screenState ->
+            when (screenState) {
+                is PermissionsActivityState.ShowMedical -> {
+                    if (screenState.isWriteOnly) {
+                        showBottomSheet(MedicalWritePermissionFragment::class.java)
+                    } else {
+                        showBottomSheet(MedicalPermissionsFragment::class.java)
+                    }
+                }
+                is PermissionsActivityState.ShowFitness -> {
+                    showBottomSheet(FitnessPermissionsFragment::class.java)
+                }
+                is PermissionsActivityState.ShowAdditional -> {
+                    if (screenState.singlePermission) {
+                        showBottomSheet(SingleAdditionalPermissionFragment::class.java)
+                    } else {
+                        showBottomSheet(CombinedAdditionalPermissionsFragment::class.java)
+                    }
+                }
+                is PermissionsActivityState.FinishRequest -> {
+                    handlePermissionResults()
+                }
+                else -> {
+                    // No permissions
+                    requestPermissionsViewModel.updatePermissionGrants()
+                    handlePermissionResults()
+                }
+            }
+        }
+
+        migrationViewModel.migrationState.observe(this) { migrationState ->
+            when (migrationState) {
+                is MigrationViewModel.MigrationFragmentState.WithData -> {
+                    maybeShowMigrationDialog(migrationState.migrationRestoreState)
+                }
+                else -> {
+                    // do nothing
+                }
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val bottomSheet = supportFragmentManager.findFragmentByTag(BOTTOM_SHEET_TAG)
+        outState.putBoolean(IS_BOTTOM_SHEET_SHOWN, bottomSheet != null && bottomSheet.isAdded)
+    }
+
+    /**
+     * Shows a [HealthConnectBottomSheetDialogFragment] containing the fragment specified by
+     * [fragmentClass]. If the bottom sheet is already visible, it replaces the current fragment
+     * inside the bottom sheet.
+     *
+     * @param fragmentClass The [Fragment] class to be shown inside the bottom sheet.
+     */
+    private fun showBottomSheet(fragmentClass: Class<out Fragment>) {
+        var bottomSheet =
+            supportFragmentManager.findFragmentByTag(BOTTOM_SHEET_TAG)
+                as? HealthConnectBottomSheetDialogFragment
+        if (bottomSheet == null) {
+            bottomSheet = HealthConnectBottomSheetDialogFragment.newInstance(fragmentClass)
+            bottomSheet.show(supportFragmentManager, BOTTOM_SHEET_TAG)
+        } else {
+            bottomSheet.replaceFragment(fragmentClass.getDeclaredConstructor().newInstance())
+        }
+    }
+
+    private fun maybeShowMigrationDialog(migrationRestoreState: MigrationRestoreState) {
+        val (migrationUiState, dataRestoreUiState, dataErrorState) = migrationRestoreState
+
+        if (dataRestoreUiState == DataRestoreUiState.IN_PROGRESS) {
+            showDataRestoreInProgressDialog(this) { _, _ -> finish() }
+        } else if (migrationUiState == MigrationUiState.IN_PROGRESS) {
+            showMigrationInProgressDialog(
+                this,
+                getString(
+                    R.string.migration_in_progress_permissions_dialog_content,
+                    requestPermissionsViewModel.appMetadata.value?.appName,
+                ),
+            ) { _, _ ->
+                finish()
+            }
+        } else if (
+            migrationUiState in
+                listOf(
+                    MigrationUiState.ALLOWED_PAUSED,
+                    MigrationUiState.ALLOWED_NOT_STARTED,
+                    MigrationUiState.MODULE_UPGRADE_REQUIRED,
+                    MigrationUiState.APP_UPGRADE_REQUIRED,
+                )
+        ) {
+            showMigrationPendingDialog(
+                this,
+                getString(
+                    R.string.migration_pending_permissions_dialog_content,
+                    requestPermissionsViewModel.appMetadata.value?.appName,
+                ),
+                null,
+            ) { _, _ ->
+                if (requestPermissionsViewModel.isFitnessPermissionRequestConcluded()) {
+                    requestPermissionsViewModel.updateAdditionalPermissions(false)
+                    requestPermissionsViewModel.requestAdditionalPermissions(getPackageNameExtra())
+                } else {
+                    requestPermissionsViewModel.updateFitnessPermissions(false)
+                    requestPermissionsViewModel.requestFitnessPermissions(getPackageNameExtra())
+                }
+
+                handlePermissionResults()
+                finish()
+            }
+        } else if (migrationUiState == MigrationUiState.COMPLETE) {
+            maybeShowWhatsNewDialog(this)
+        }
+    }
+
+    private fun handlePermissionResults(resultCode: Int = RESULT_OK) {
+        val results = requestPermissionsViewModel.getPermissionGrants()
+        val grants = mutableListOf<Int>()
+        val permissionStrings = mutableListOf<String>()
+
+        for ((permission, state) in results) {
+            if (state == PermissionState.GRANTED) {
+                grants.add(PackageManager.PERMISSION_GRANTED)
+            } else {
+                grants.add(PackageManager.PERMISSION_DENIED)
+            }
+
+            permissionStrings.add(permission.toString())
+        }
+
+        val result = Intent()
+        result.putExtra(EXTRA_REQUEST_PERMISSIONS_NAMES, permissionStrings.toTypedArray())
+        result.putExtra(EXTRA_REQUEST_PERMISSIONS_RESULTS, grants.toIntArray())
+        setResult(resultCode, result)
+        finish()
+    }
+
+    private fun getPermissionStrings(): Array<out String> {
+        return intent.getStringArrayExtra(EXTRA_REQUEST_PERMISSIONS_NAMES).orEmpty()
+    }
+
+    private fun getPackageNameExtra(): String {
+        return intent.getStringExtra(EXTRA_PACKAGE_NAME).orEmpty()
+    }
+
+    override fun onDialogCanceled() {
+        setResult(RESULT_CANCELED)
+        finish()
+    }
+}

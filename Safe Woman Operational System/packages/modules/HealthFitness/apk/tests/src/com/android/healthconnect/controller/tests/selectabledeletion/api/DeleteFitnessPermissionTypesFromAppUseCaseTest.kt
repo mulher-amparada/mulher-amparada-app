@@ -1,0 +1,231 @@
+/*
+ * Copyright (C) 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * ```
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * ```
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package com.android.healthconnect.controller.tests.selectabledeletion.api
+
+import android.health.connect.DeleteUsingFiltersRequest
+import android.health.connect.HealthConnectManager
+import android.health.connect.datatypes.CyclingPedalingCadenceRecord
+import android.health.connect.datatypes.DataOrigin
+import android.health.connect.datatypes.ExerciseSessionRecord
+import android.health.connect.datatypes.HeartRateRecord
+import android.health.connect.datatypes.MenstruationFlowRecord
+import android.health.connect.datatypes.MenstruationPeriodRecord
+import android.health.connect.datatypes.SleepSessionRecord
+import android.health.connect.datatypes.StepsCadenceRecord
+import android.health.connect.datatypes.StepsRecord
+import android.platform.test.annotations.DisableFlags
+import android.platform.test.annotations.EnableFlags
+import android.platform.test.flag.junit.SetFlagsRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.android.healthconnect.controller.permissions.data.FitnessPermissionType
+import com.android.healthconnect.controller.selectabledeletion.api.DeleteFitnessPermissionTypesFromAppUseCase
+import com.android.healthconnect.controller.shared.Constants.DEVICE_DATA_PROVIDER_PACKAGE
+import com.android.healthconnect.controller.tests.devices.api.FakeGetCurrentDeviceIdUseCase
+import com.android.healthconnect.controller.tests.utils.FakeUseCaseRule
+import com.android.healthconnect.controller.tests.utils.TEST_WATCH_SPN
+import com.android.healthfitness.flags.Flags
+import com.google.common.truth.Truth.assertThat
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.runTest
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.ArgumentCaptor
+import org.mockito.Captor
+import org.mockito.Mockito
+import org.mockito.Mockito.doAnswer
+import org.mockito.MockitoAnnotations
+import org.mockito.invocation.InvocationOnMock
+import org.mockito.kotlin.any
+
+@HiltAndroidTest
+@RunWith(AndroidJUnit4::class)
+class DeleteFitnessPermissionTypesFromAppUseCaseTest {
+
+    @get:Rule val hiltRule = HiltAndroidRule(this)
+    @get:Rule val setFlagsRule = SetFlagsRule()
+    @get:Rule val fakeUseCaseRule = FakeUseCaseRule()
+
+    private lateinit var useCase: DeleteFitnessPermissionTypesFromAppUseCase
+    var manager: HealthConnectManager = Mockito.mock(HealthConnectManager::class.java)
+    private val fakeGetCurrentDeviceIdUseCase =
+        fakeUseCaseRule.watch(FakeGetCurrentDeviceIdUseCase())
+
+    @Captor lateinit var filtersCaptor: ArgumentCaptor<DeleteUsingFiltersRequest>
+
+    @Before
+    fun setup() {
+        MockitoAnnotations.initMocks(this)
+        useCase =
+            DeleteFitnessPermissionTypesFromAppUseCase(
+                manager,
+                fakeGetCurrentDeviceIdUseCase,
+                Dispatchers.Main,
+            )
+    }
+
+    @Test
+    fun invoke_deletePermissionTypesFromApp_callsHealthManager() = runTest {
+        doAnswer(prepareAnswer())
+            .`when`(manager)
+            .deleteRecords(any<DeleteUsingFiltersRequest>(), any(), any())
+
+        val deletePermissionTypes =
+            setOf(
+                FitnessPermissionType.STEPS,
+                FitnessPermissionType.HEART_RATE,
+                FitnessPermissionType.SLEEP,
+                FitnessPermissionType.EXERCISE,
+                FitnessPermissionType.MENSTRUATION,
+            )
+
+        useCase.invoke("package.name", deletePermissionTypes)
+
+        Mockito.verify(manager, Mockito.times(1))
+            .deleteRecords(filtersCaptor.capture(), any(), any())
+
+        assertThat(filtersCaptor.value.timeRangeFilter).isNull()
+        assertThat(filtersCaptor.value.dataOrigins)
+            .containsExactly(DataOrigin.Builder().setPackageName("package.name").build())
+        assertThat(filtersCaptor.value.recordTypes)
+            .containsExactly(
+                StepsRecord::class.java,
+                StepsCadenceRecord::class.java,
+                HeartRateRecord::class.java,
+                SleepSessionRecord::class.java,
+                ExerciseSessionRecord::class.java,
+                MenstruationFlowRecord::class.java,
+                MenstruationPeriodRecord::class.java,
+                CyclingPedalingCadenceRecord::class.java,
+            )
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_DEVICE_DATA_PROVIDERS_API)
+    fun invoke_ddpFlagsOn_withCurrentDevicePackage_addsAndroidPackageToFilter() = runTest {
+        val currentDeviceId = "test_device_id"
+        fakeGetCurrentDeviceIdUseCase.updateDeviceId(currentDeviceId)
+        doAnswer(prepareAnswer())
+            .`when`(manager)
+            .deleteRecords(any<DeleteUsingFiltersRequest>(), any(), any())
+
+        val deletePermissionTypes = setOf(FitnessPermissionType.STEPS)
+
+        useCase.invoke(currentDeviceId, deletePermissionTypes)
+
+        Mockito.verify(manager, Mockito.times(1))
+            .deleteRecords(filtersCaptor.capture(), any(), any())
+
+        assertThat(filtersCaptor.value.dataOrigins)
+            .containsExactly(
+                DataOrigin.Builder().setPackageName(currentDeviceId).build(),
+                DataOrigin.Builder().setPackageName(DEVICE_DATA_PROVIDER_PACKAGE).build(),
+            )
+    }
+
+    @Test
+    @DisableFlags(Flags.FLAG_DEVICE_DATA_PROVIDERS_API)
+    fun invoke_ddpFlagsOff_withCurrentDevicePackage_doesNotAddAndroidPackage() = runTest {
+        val currentDeviceId = "test_device_id"
+        fakeGetCurrentDeviceIdUseCase.updateDeviceId(currentDeviceId)
+        doAnswer(prepareAnswer())
+            .`when`(manager)
+            .deleteRecords(any<DeleteUsingFiltersRequest>(), any(), any())
+
+        val deletePermissionTypes = setOf(FitnessPermissionType.STEPS)
+
+        useCase.invoke(currentDeviceId, deletePermissionTypes)
+
+        Mockito.verify(manager, Mockito.times(1))
+            .deleteRecords(filtersCaptor.capture(), any(), any())
+
+        assertThat(filtersCaptor.value.dataOrigins)
+            .containsExactly(DataOrigin.Builder().setPackageName(currentDeviceId).build())
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_DEVICE_DATA_PROVIDERS_API)
+    fun invoke_ddpFlagsOn_withRandomDevice_doesNotAddAndroidPackageToFilter() = runTest {
+        val deviceId = TEST_WATCH_SPN
+        fakeGetCurrentDeviceIdUseCase.updateDeviceId("other_device_id")
+        doAnswer(prepareAnswer())
+            .`when`(manager)
+            .deleteRecords(any<DeleteUsingFiltersRequest>(), any(), any())
+
+        val deletePermissionTypes = setOf(FitnessPermissionType.STEPS)
+
+        useCase.invoke(deviceId, deletePermissionTypes)
+
+        Mockito.verify(manager, Mockito.times(1))
+            .deleteRecords(filtersCaptor.capture(), any(), any())
+
+        assertThat(filtersCaptor.value.dataOrigins)
+            .containsExactly(DataOrigin.Builder().setPackageName(deviceId).build())
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_DEVICE_DATA_PROVIDERS_API)
+    fun invoke_ddpFlagsOn_withAndroid_addsCurrentDeviceToFilter() = runTest {
+        val currentDeviceId = "test_device_id"
+        fakeGetCurrentDeviceIdUseCase.updateDeviceId(currentDeviceId)
+        doAnswer(prepareAnswer())
+            .`when`(manager)
+            .deleteRecords(any<DeleteUsingFiltersRequest>(), any(), any())
+
+        val deletePermissionTypes = setOf(FitnessPermissionType.STEPS)
+
+        useCase.invoke(DEVICE_DATA_PROVIDER_PACKAGE, deletePermissionTypes)
+
+        Mockito.verify(manager, Mockito.times(1))
+            .deleteRecords(filtersCaptor.capture(), any(), any())
+
+        assertThat(filtersCaptor.value.dataOrigins)
+            .containsExactly(
+                DataOrigin.Builder().setPackageName(DEVICE_DATA_PROVIDER_PACKAGE).build(),
+                DataOrigin.Builder().setPackageName(currentDeviceId).build(),
+            )
+    }
+
+    @Test
+    @DisableFlags(Flags.FLAG_DEVICE_DATA_PROVIDERS_API)
+    fun invoke_ddpFlagsOff_withAndroid_doesNotAddCurrentDevice() = runTest {
+        val currentDeviceId = "test_device_id"
+        fakeGetCurrentDeviceIdUseCase.updateDeviceId(currentDeviceId)
+        doAnswer(prepareAnswer())
+            .`when`(manager)
+            .deleteRecords(any<DeleteUsingFiltersRequest>(), any(), any())
+
+        val deletePermissionTypes = setOf(FitnessPermissionType.STEPS)
+
+        useCase.invoke(DEVICE_DATA_PROVIDER_PACKAGE, deletePermissionTypes)
+
+        Mockito.verify(manager, Mockito.times(1))
+            .deleteRecords(filtersCaptor.capture(), any(), any())
+
+        assertThat(filtersCaptor.value.dataOrigins)
+            .containsExactly(
+                DataOrigin.Builder().setPackageName(DEVICE_DATA_PROVIDER_PACKAGE).build()
+            )
+    }
+
+    private fun prepareAnswer(): (InvocationOnMock) -> Nothing? {
+        val answer = { _: InvocationOnMock -> null }
+        return answer
+    }
+}

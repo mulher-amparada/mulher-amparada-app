@@ -1,0 +1,273 @@
+{
+  "presubmit": [
+    // Device side tests for the bivalent tests.
+    { "name": "RavenwoodMockitoTest_device" },
+    { "name": "RavenwoodBivalentTest_device" },
+    { "name": "RavenwoodBivalentTest_device_ravenizer" },
+    { "name": "RavenwoodBivalentInstTest_nonself_inst_device" },
+    { "name": "RavenwoodBivalentInstTest_self_inst_device" },
+    { "name": "RavenwoodUiTest_device" },
+
+    // The follwoing sysui tests should match these in this file:
+    //     vendor/unbundled_google/packages/SystemUIGoogle/TEST_MAPPING
+    // The reason why we have the SysUI device tests here is that, previously, when
+    // these tests  still used RavenwoodRule (which used to be required for
+    // @DisabledOnRavenwood to work), a change to Ravenwood accidentally broke
+    // their device side tests.
+    // Now, they no longer have a RavenwoodRule, but they still use
+    // RavenwoodRule.isOnRavenwood and the ravenwood stub is still linked against Ravenwood
+    // jars, so for now, we'll keep them here.
+    // When we think things get stable enough and presubmit time becomes too much because of them,
+    // we can consider deleting them.
+    {
+      "name": "SystemUIGoogleTests",
+      "options": [
+        {
+          "exclude-annotation": "org.junit.Ignore"
+        },
+        {
+          "exclude-annotation": "androidx.test.filters.FlakyTest"
+        }
+      ]
+    }
+  ],
+  "presubmit-large": [
+    {
+      "name": "SystemUITests",
+      "options": [
+        {
+          "exclude-annotation": "androidx.test.filters.FlakyTest"
+        },
+        {
+          "exclude-annotation": "org.junit.Ignore"
+        }
+      ]
+    }
+  ],
+  // LINT.IfChange
+  "ravenwood-presubmit": [
+// TODO(b/440069724) these tests didn't get to run on presubmit somehow
+//    {
+//      "name": "CarSystemUIRavenTests",
+//      "keywords": ["automotive_code_coverage"],
+//      "host": true
+//    },
+//   {
+//     "name": "CarLibHostUnitTest",
+//     "keywords": ["automotive_code_coverage"],
+//     "host": true
+//   },
+
+    // AUTO-GENERATED-START
+    // DO NOT MODIFY MANUALLY
+    // Use scripts/update-test-mapping.sh to update it.
+    {
+      "name": "AconfigPackageTestsRavenwood",
+      "host": true
+    },
+    {
+      "name": "AconfigPublicApiCtsTestsRavenwood",
+      "host": true
+    },
+    {
+      "name": "android.test.mock.ravenwood.tests",
+      "host": true
+    },
+    {
+      "name": "AudioServiceTestsRavenwood",
+      "host": true
+    },
+    {
+      "name": "CarServiceHostUnitTest",
+      "keywords": ["automotive_code_coverage"],
+      "host": true
+    },
+    {
+      "name": "CtsAccountManagerTestCasesRavenwood",
+      "host": true
+    },
+    {
+      "name": "CtsAppTestCasesRavenwood",
+      "host": true
+    },
+    {
+      "name": "CtsBroadcastTestCasesRavenwood",
+      "host": true
+    },
+    {
+      "name": "CtsContentTestCasesRavenwood",
+      "host": true
+    },
+    {
+      "name": "CtsDatabaseTestCasesRavenwood",
+      "host": true
+    },
+    {
+      "name": "CtsDeviceConfigTestCasesRavenwood",
+      "host": true
+    },
+    {
+      "name": "CtsGraphicsTestCasesRavenwood",
+      "host": true
+    },
+    {
+      "name": "CtsIcuTestCasesRavenwood",
+      "host": true
+    },
+    {
+      "name": "CtsInputMethodTestCasesRavenwood",
+      "host": true
+    },
+    {
+      "name": "CtsOsTestCasesRavenwood",
+      "host": true
+    },
+    {
+      "name": "CtsProtoTestCasesRavenwood",
+      "host": true
+    },
+    {
+      "name": "CtsResourcesTestCasesRavenwood",
+      "host": true
+    },
+    {
+      "name": "CtsSurfaceControlTestsRavenwood",
+      "host": true
+    },
+    {
+      "name": "CtsTextTestCasesRavenwood",
+      "host": true
+    },
+    {
+      "name": "CtsUtilTestCasesRavenwood",
+      "host": true
+    },
+    {
+      "name": "FrameworksCoreSystemPropertiesTestsRavenwood",
+      "host": true
+    },
+    {
+      "name": "FrameworksCoreTestsRavenwood",
+      "host": true
+    },
+    {
+      "name": "FrameworksInputMethodSystemServerTestsRavenwood",
+      "host": true
+    },
+    {
+      "name": "FrameworksServicesTestsRavenwood_Compat",
+      "host": true
+    },
+    {
+      "name": "FrameworksServicesTestsRavenwood_ProcessStateController",
+      "host": true
+    },
+    {
+      "name": "FrameworksServicesTestsRavenwood_Uri",
+      "host": true
+    },
+    {
+      "name": "FrameworksUtilTestsRavenwood",
+      "host": true
+    },
+    {
+      "name": "FrameworksVibratorCoreTestsRavenwood",
+      "host": true
+    },
+    {
+      "name": "InternalTestsRavenwood",
+      "host": true
+    },
+    {
+      "name": "LibnativehelperInternalTestCasesRavenwood",
+      "host": true
+    },
+    {
+      "name": "PowerStatsTestsRavenwood",
+      "host": true
+    },
+    {
+      "name": "RavenwoodBivalentInstTest_nonself_inst",
+      "host": true
+    },
+    {
+      "name": "RavenwoodBivalentInstTest_self_inst",
+      "host": true
+    },
+    {
+      "name": "RavenwoodBivalentTest",
+      "host": true
+    },
+    {
+      "name": "RavenwoodCoreTest",
+      "host": true
+    },
+    {
+      "name": "RavenwoodMinimumTest",
+      "host": true
+    },
+    {
+      "name": "RavenwoodMinimumTest-with-module-current",
+      "host": true
+    },
+    {
+      "name": "RavenwoodMockitoTest",
+      "host": true
+    },
+    {
+      "name": "RavenwoodResApkTest",
+      "host": true
+    },
+    {
+      "name": "RavenwoodRuntimeTest",
+      "host": true
+    },
+    {
+      "name": "RavenwoodServicesTest",
+      "host": true
+    },
+    {
+      "name": "RavenwoodUiTest_noexp",
+      "host": true
+    },
+    {
+      "name": "UinputTestsRavenwood",
+      "host": true
+    }
+    // AUTO-GENERATED-END
+  ],
+  // When adding high-priority tests here, consider adding it to the following file,
+  // which is included by frameworks/base/TEST_MAPPING.
+  // (But do not add low-priority tests.)
+  // LINT.ThenChange(/ravenwood-framework-test-mapping/TEST_MAPPING)
+  "ravenwood-postsubmit": [
+    // We haven't maintained SystemUiRavenTests, and as a result, it's been demoted already.
+    // Disable it until we fix the issues: b/319647875
+    // {
+    //   "name": "SystemUiRavenTests",
+    //   "host": true
+    // }
+  ],
+
+  // "ravenwood-presubmit-nonblocking" runs in presubmit, but is non-blocking.
+  //
+  // We hardcode "RavenwoodUiTest_exp" to always run it with exp-APIs enabled.
+  // We want to run it in presubmit as a quick check on startActivitySync(),
+  // but we still do not want to depend on exp-APIs in blocking presubmit, so
+  // so we use "-nonblocking" instead of "ravenwood-presubmit".
+  //
+  // We also run "RavenwoodUiTest_noexp" in the same suite too (even though
+  // we run it in "ravenwood-presubmit"), which allows us to quickly
+  // ensure when "RavenwoodUiTest_exp" is broken, it's because the exp-APIs
+  // are broken, or something else.
+  "ravenwood-presubmit-nonblocking": [
+    {
+      "name": "RavenwoodUiTest_exp",
+      "host": true
+    },
+    {
+      "name": "RavenwoodUiTest_noexp",
+      "host": true
+    }
+  ]
+}

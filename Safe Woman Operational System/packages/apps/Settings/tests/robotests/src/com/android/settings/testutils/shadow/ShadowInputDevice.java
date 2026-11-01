@@ -1,0 +1,120 @@
+/*
+ * Copyright (C) 2017 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.settings.testutils.shadow;
+
+import android.view.InputDevice;
+
+import org.robolectric.annotation.Implementation;
+import org.robolectric.annotation.Implements;
+import org.robolectric.annotation.Resetter;
+import org.robolectric.shadow.api.Shadow;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+@Implements(InputDevice.class)
+public class ShadowInputDevice extends org.robolectric.shadows.ShadowInputDevice {
+    private static Map<Integer, InputDevice> sDeviceMap = new HashMap<>();
+
+    private int mDeviceId;
+
+    private int mSources;
+
+    private boolean mIsFullKeyboard;
+
+    @Implementation
+    protected static int[] getDeviceIds() {
+        Iterator<Integer> ids = sDeviceMap.keySet().iterator();
+        int[] deviceIds = new int[sDeviceMap.size()];
+        int i = 0;
+        while (ids.hasNext()) {
+            deviceIds[i++] = ids.next();
+        }
+        return deviceIds;
+    }
+
+    @Implementation
+    protected static InputDevice getDevice(int id) {
+        return sDeviceMap.get(id);
+    }
+
+    public static void addDevice(int id, InputDevice device) {
+        sDeviceMap.put(id, device);
+    }
+
+    @Resetter
+    public static void reset() {
+        sDeviceMap.clear();
+    }
+
+    @Implementation
+    protected int getId() {
+        return mDeviceId;
+    }
+
+    public void setId(int id) {
+        mDeviceId = id;
+    }
+
+    @Implementation
+    public int getSources() {
+        return mSources;
+    }
+
+    public void setSources(int sources) {
+        mSources = sources;
+    }
+
+    @Implementation
+    public boolean isFullKeyboard() {
+        return mIsFullKeyboard;
+    }
+
+    public void setFullKeyboard(boolean isFullKeyboard) {
+        mIsFullKeyboard = isFullKeyboard;
+    }
+
+    public static InputDevice makeInputDevicebyId(int id) {
+        final InputDevice inputDevice = Shadow.newInstanceOf(InputDevice.class);
+        final ShadowInputDevice shadowInputDevice = Shadow.extract(inputDevice);
+        shadowInputDevice.setId(id);
+        return inputDevice;
+    }
+
+    public static InputDevice makeInputDevicebyIdWithSources(int id, int sources) {
+        final InputDevice inputDevice = Shadow.newInstanceOf(InputDevice.class);
+        final ShadowInputDevice shadowInputDevice = Shadow.extract(inputDevice);
+        shadowInputDevice.setId(id);
+        shadowInputDevice.setSources(sources);
+        return inputDevice;
+    }
+
+    /**
+     * Create a full keyboard input device shadow.
+     * @param id The ID to use. If the ID is < 1, the device is considered virtual.
+     * @return The shadow InputDevice
+     */
+    public static InputDevice makeFullKeyboardInputDevicebyId(int id) {
+        final InputDevice inputDevice = Shadow.newInstanceOf(InputDevice.class);
+        final ShadowInputDevice shadowInputDevice = Shadow.extract(inputDevice);
+        shadowInputDevice.setId(id);
+        shadowInputDevice.setFullKeyboard(true);
+        shadowInputDevice.setSources(InputDevice.SOURCE_KEYBOARD);
+        return inputDevice;
+    }
+}

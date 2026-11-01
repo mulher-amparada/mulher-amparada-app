@@ -1,0 +1,1623 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  Copyright (C) 2022 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_label" msgid="4768580772453324183">"ヘルスコネクト"</string>
+    <string name="health_connect_summary" msgid="6401520186678972547">"健康に関するデータへのアプリのアクセス権を管理します"</string>
+    <string name="health_connect_notification_channel_name" msgid="5189243942800749782">"最新情報とアラート"</string>
+    <string name="permissions_and_data_header" msgid="4406105506837487805">"権限とデータ"</string>
+    <string name="home_subtitle" msgid="2154213430054477787">"デバイス上の健康とフィットネスのデータの管理や、そのデータにアクセスできるアプリの管理を行えます"</string>
+    <string name="data_title" msgid="4456619761533380816">"データとアクセス"</string>
+    <string name="browse_medical_data" msgid="6492659245149862639">"医療記録を見る"</string>
+    <string name="browse_medical_data_subtitle" msgid="5019009186352225863">"医療記録と医療記録にアクセスできるアプリを確認できます"</string>
+    <string name="all_categories_title" msgid="1446410643217937926">"すべてのカテゴリ"</string>
+    <string name="see_all_categories" msgid="5599882403901010434">"すべてのカテゴリを表示"</string>
+    <string name="no_data" msgid="1906986019249068659">"データがありません"</string>
+    <string name="devices_summary" msgid="8653563324512654292">"接続済みのデバイスを管理します"</string>
+    <string name="devices_title" msgid="7548105261104504301">"デバイス"</string>
+    <string name="connected_apps_title" msgid="279942692804743223">"アプリの権限"</string>
+    <string name="connected_apps_subtitle" msgid="8464462995533399175">"アプリと権限を管理します"</string>
+    <string name="only_one_connected_app_button_subtitle" msgid="1429452274331178121">"<xliff:g id="NUM_APPS_CONNECTED">%1$d</xliff:g>/<xliff:g id="NUM_POSSIBLE_APPS">%2$d</xliff:g> 個のアプリに権限が付与されています"</string>
+    <string name="connected_apps_button_subtitle" msgid="8855528937028500370">"<xliff:g id="NUM_APPS_CONNECTED">%1$d</xliff:g>/<xliff:g id="NUM_POSSIBLE_APPS">%2$d</xliff:g> 個のアプリに権限が付与されています"</string>
+    <string name="connected_apps_connected_subtitle" msgid="7412413366085718583">"{count,plural, =1{1 個のアプリに権限が付与されています}other{# 個のアプリに権限が付与されています}}"</string>
+    <string name="connected_apps_button_no_permissions_subtitle" msgid="1651994862419752908">"なし"</string>
+    <string name="entry_details_title" msgid="590184849040247850">"エントリの詳細"</string>
+    <string name="browse_data_title" msgid="5232691805953326097">"データを見る"</string>
+    <string name="browse_data_subtitle" msgid="7025164374898103993">"データとそれにアクセスできるアプリを確認できます"</string>
+    <string name="manage_data_summary" msgid="8537870912521944449">"自動削除、データソース、バックアップと復元"</string>
+    <string name="banner_group_more_items" msgid="1071243933488973950">"件のアイテムをさらに表示"</string>
+    <string name="banner_group_fewer_items" msgid="3792478123282046349">"アイテムの表示を減らす"</string>
+    <string name="settings_manage_permission" msgid="3805037674102124581">"ヘルスコネクト"</string>
+    <string name="settings_combined_permissions" msgid="3660209476196545539">"ヘルスコネクト"</string>
+    <string name="settings_fitness_permissions" msgid="8133228907519227359">"ヘルスコネクト"</string>
+    <string name="settings_medical_permissions" msgid="4621535972501674863">"ヘルスコネクト"</string>
+    <string name="backup_title" msgid="211503191266235085">"バックアップ"</string>
+    <string name="data_sources_and_priority_title" msgid="2360222350913604558">"データソースと優先度"</string>
+    <string name="set_units_title" msgid="2657822539603758029">"ユニットを設定"</string>
+    <string name="manage_data_preferences_category_title" msgid="1183110821140344472">"設定"</string>
+    <string name="manage_data_category_title" msgid="6328886061582616519">"データの管理"</string>
+    <string name="backup_and_restore_settings_summary" msgid="4345972157089493077">"データのエクスポートとインポート"</string>
+    <string name="recent_access_header" msgid="7623497371790225888">"最近のアクセス"</string>
+    <string name="no_recent_access" msgid="4724297929902441784">"ヘルスコネクトに最近アクセスしたアプリはありません"</string>
+    <string name="show_recent_access_entries_button_title" msgid="3483460066767350419">"最近のアクセスをすべて表示"</string>
+    <string name="recent_access_screen_description" msgid="331101209889185402">"過去 24 時間にあなたのデータにアクセスしたアプリが表示されます"</string>
+    <string name="today_header" msgid="1006837293203834373">"今日"</string>
+    <string name="yesterday_header" msgid="6652176268273681505">"昨日"</string>
+    <string name="read_data_access_label" msgid="8968758932021241976">"読み取り: <xliff:g id="DATA_TYPE">%s</xliff:g>"</string>
+    <string name="write_data_access_label" msgid="105976369853871061">"書き込み: <xliff:g id="DATA_TYPE">%s</xliff:g>"</string>
+    <string name="separator" msgid="5521285473288943819">"、 "</string>
+    <string name="manage_permissions" msgid="8394221950712608160">"権限を管理"</string>
+    <string name="recent_access_time_content_descritption" msgid="1137471676075811472">"時間: <xliff:g id="RECENT_ACCESS_TIME">%1$s</xliff:g>"</string>
+    <string name="recent_access_empty_state_title" msgid="4767157641389217682">"最近のアクセスはありません"</string>
+    <string name="recent_access_empty_state_description" msgid="6334951450158128989">"あなたのデータに最近アクセスしたアプリが自動的にここに表示されます"</string>
+    <string name="recent_access_view_all_button" msgid="825946958049641541">"すべて表示"</string>
+    <string name="recent_access_error" msgid="2258399573560888960">"最近のアクセスを読み込めませんでした"</string>
+    <string name="recent_access_inactive_app" msgid="8754221676902025802">"このアプリはご利用いただけなくなりました"</string>
+    <string name="activity_category_uppercase" msgid="136628843341377088">"アクティビティ"</string>
+    <string name="activity_category_lowercase" msgid="3007220578865400601">"アクティビティ"</string>
+    <string name="body_measurements_category_uppercase" msgid="422923782603313038">"身体測定"</string>
+    <string name="body_measurements_category_lowercase" msgid="2259696274629666992">"身体測定"</string>
+    <string name="sleep_category_uppercase" msgid="3422452674899706786">"睡眠"</string>
+    <string name="sleep_category_lowercase" msgid="842609634386839011">"睡眠"</string>
+    <string name="vitals_category_uppercase" msgid="8982333138032938623">"バイタル"</string>
+    <string name="vitals_category_lowercase" msgid="4664457787866407963">"バイタル"</string>
+    <string name="cycle_tracking_category_uppercase" msgid="4723200714782660489">"月経周期の管理"</string>
+    <string name="cycle_tracking_category_lowercase" msgid="5245446435975317209">"月経周期の管理"</string>
+    <string name="nutrition_category_uppercase" msgid="6665096097987741036">"栄養"</string>
+    <string name="nutrition_category_lowercase" msgid="7804134941649488990">"栄養"</string>
+    <string name="wellness_category_uppercase" msgid="5900304317921557780">"ウェルネス"</string>
+    <string name="wellness_category_lowercase" msgid="1327642415424743588">"ウェルネス"</string>
+    <string name="symptoms_category_uppercase" msgid="1357167834284360975">"症状"</string>
+    <string name="symptoms_category_lowercase" msgid="2298815597177353672">"症状"</string>
+    <string name="browse_data_category" msgid="4813955610391357638">"データの確認"</string>
+    <string name="manage_data_section" msgid="5859629270946511903">"データの管理"</string>
+    <string name="export_data_button" msgid="7783329820434117744">"データをエクスポート"</string>
+    <string name="delete_all_data_button" msgid="7238755635416521487">"すべてのデータを削除"</string>
+    <string name="no_categories" msgid="2636778482437506241">"ヘルスコネクトにデータはありません"</string>
+    <string name="permission_types_title" msgid="7698058200557389436">"データ"</string>
+    <string name="app_priority_button" msgid="3126133977893705098">"アプリの優先度"</string>
+    <string name="delete_category_data_button" msgid="2324773398768267043">"<xliff:g id="CATEGORY">%s</xliff:g>のデータを削除"</string>
+    <string name="select_all_apps_title" msgid="884487568464305913">"すべてのアプリ"</string>
+    <string name="can_read" msgid="4568261079308309564">"<xliff:g id="PERMISSION_TYPE">%s</xliff:g>の読み取り許可"</string>
+    <string name="can_write" msgid="5082414937218423823">"<xliff:g id="PERMISSION_TYPE">%s</xliff:g>の書き込み許可"</string>
+    <string name="inactive_apps" msgid="1413060306609966606">"非アクティブなデータソース"</string>
+    <string name="inactive_apps_message" msgid="3499586995328856202">"これらのデータソースは<xliff:g id="DATA_TYPE">%s</xliff:g>の読み込みや書き込みができなくなりますが、ヘルスコネクトからデータが削除されることはありません"</string>
+    <string name="data_access_empty_message" msgid="323965759318632888">"データソースは<xliff:g id="DATA_TYPE_0">%1$s</xliff:g>の読み取りや書き込みができなくなり、ヘルスコネクトに<xliff:g id="DATA_TYPE_2">%2$s</xliff:g>のデータは保存されません"</string>
+    <string name="data_access_exercise_description" msgid="6868583522699443570">"このデータには、エクササイズの時間、エクササイズの種類、ラップ数、繰り返し数、セッション数、ストローク数（水泳）などの情報が含まれます"</string>
+    <string name="data_access_sleep_description" msgid="74293126050011153">"このデータには、睡眠ステージ、睡眠セッションなどの情報が含まれます"</string>
+    <string name="all_entries_button" msgid="5109091107239135235">"すべてのエントリを表示"</string>
+    <string name="selected_date_view_action_description" msgid="6237240886988225664">"変更"</string>
+    <string name="delete_permission_type_data_button" msgid="2270819954943391797">"このデータを削除"</string>
+    <string name="permgrouplab_health" msgid="468961137496587966">"ヘルスコネクト"</string>
+    <string name="permgroupdesc_health" msgid="252080476917407273">"健康に関するデータにアクセスします"</string>
+    <string name="permlab_readCaloriesBurned" msgid="8998140381590624692">"消費カロリーの読み取り"</string>
+    <string name="permdesc_readCaloriesBurned" msgid="9012595355389868570">"消費カロリーの読み取りをアプリに許可します"</string>
+    <string name="background_read_single_request_title" msgid="4903874755139858906">"<xliff:g id="APP_NAME">%1$s</xliff:g>にバックグラウンドでのデータへのアクセスを許可しますか？"</string>
+    <string name="background_read_medical_single_request_description_both_types_granted" msgid="8946727351576582341">"許可すると、このアプリは使用されていないときにフィットネスとウェルネスに関するデータと医療記録にアクセスできます。"</string>
+    <string name="background_read_medical_single_request_description_medical_granted" msgid="5319661973410930922">"許可すると、このアプリは使用されていないときに医療記録にアクセスできます。"</string>
+    <string name="background_read_medical_single_request_description_fitness_granted" msgid="6850185345786666516">"許可すると、このアプリは使用されていないときにフィットネスとウェルネスに関するデータにアクセスできます。"</string>
+    <string name="background_read_single_request_description" msgid="2679634929322639576">"許可すると、このアプリは使用されていないときにヘルスコネクト データにアクセスできます。"</string>
+    <string name="history_read_single_request_title" msgid="6848027207063414793">"<xliff:g id="APP_NAME">%1$s</xliff:g>に過去のデータへのアクセスを許可しますか？"</string>
+    <string name="history_read_medical_single_request_description" msgid="6408051015819625330">"許可すると、このアプリは、<xliff:g id="DATA_ACCESS_DATE">%1$s</xliff:g>以前に追加されたフィットネスとウェルネスに関するデータにアクセスできます。"</string>
+    <string name="history_read_medical_single_request_description_fallback" msgid="6685832866184737207">"許可すると、このアプリは過去のすべてのフィットネスとウェルネスに関するデータにアクセスできます。"</string>
+    <string name="history_read_single_request_description" msgid="9140843675330318112">"許可すると、このアプリは、<xliff:g id="DATA_ACCESS_DATE">%1$s</xliff:g>以前に追加されたヘルスコネクト データにアクセスできます。"</string>
+    <string name="history_read_single_request_description_fallback" msgid="7685531357676523654">"許可すると、このアプリは過去のすべてのヘルスコネクト データにアクセスできます。"</string>
+    <string name="additional_permissions_combined_request_title" msgid="5509177449679251301">"<xliff:g id="APP_NAME">%1$s</xliff:g>に次のアクセスも許可しますか？"</string>
+    <string name="additional_permissions_combined_request_description" msgid="7136418603696342323">"<xliff:g id="APP_NAME">%1$s</xliff:g>は、これらのヘルスコネクトの設定へのアクセスも求めています"</string>
+    <string name="background_read_medical_combined_request_title_both_types_granted" msgid="4225111383019900451">"バックグラウンドでのすべてのデータへのアクセス"</string>
+    <string name="background_read_medical_combined_request_title_medical_granted" msgid="3988312347959547374">"バックグラウンドでの医療記録へのアクセス"</string>
+    <string name="background_read_medical_combined_request_title_fitness_granted" msgid="2639416977416876229">"バックグラウンドでのフィットネスとウェルネスに関するデータへのアクセス"</string>
+    <string name="background_read_medical_combined_request_description_both_types_granted" msgid="1552208401309746060">"このアプリが使用されていないときに、フィットネスとウェルネスに関するデータと医療記録へのアクセスを許可します"</string>
+    <string name="background_read_medical_combined_request_description_medical_granted" msgid="5140647084504657934">"このアプリが使用されていないときに、このデータへのアクセスを許可します"</string>
+    <string name="background_read_medical_combined_request_description_fitness_granted" msgid="919785628751851996">"このアプリが使用されていないときに、このデータへのアクセスを許可します"</string>
+    <string name="background_read_combined_request_title" msgid="4184649296697480520">"バックグラウンドでのデータアクセス"</string>
+    <string name="background_read_combined_request_description" msgid="2423480522986545286">"このアプリが使用されていないときにヘルスコネクト データへのアクセスを許可します"</string>
+    <string name="history_read_medical_combined_request_title" msgid="1262267962861942478">"フィットネスとウェルネスに関する過去のデータへのアクセス"</string>
+    <string name="history_read_medical_combined_request_description" msgid="7550922315652791771">"このアプリに、<xliff:g id="DATA_ACCESS_DATE">%1$s</xliff:g>以前に追加されたデータへのアクセスを許可します"</string>
+    <string name="history_read_medical_combined_request_description_fallback" msgid="3567968660826834911">"このアプリに、過去のすべてのデータへのアクセスを許可します"</string>
+    <string name="history_read_combined_request_title" msgid="9023811767370482028">"過去のデータへのアクセス"</string>
+    <string name="history_read_combined_request_description" msgid="1437787086896636484">"このアプリに、<xliff:g id="DATA_ACCESS_DATE">%1$s</xliff:g>以前に追加されたヘルスコネクト データへのアクセスを許可します"</string>
+    <string name="history_read_combined_request_description_fallback" msgid="4974756796396067521">"このアプリに過去のすべてのヘルスコネクト データへのアクセスを許可します"</string>
+    <string name="history_read_medical_combined_request_footer" msgid="7502989222215080491">"<xliff:g id="APP_NAME">%1$s</xliff:g> は医療記録の過去のデータにアクセスできるようになっています"</string>
+    <string name="history_read_medical_combined_request_footer_link" msgid="355676489585738987">"権限の詳細"</string>
+    <string name="background_read_medical_access_title_both_types_granted" msgid="4475972082863444603">"バックグラウンドでのすべてのデータへのアクセス"</string>
+    <string name="background_read_medical_access_title_medical_granted" msgid="4595850721639536407">"バックグラウンドでの医療記録へのアクセス"</string>
+    <string name="background_read_medical_access_title_fitness_granted" msgid="8691675952190647227">"バックグラウンドでのフィットネスとウェルネスに関するデータへのアクセス"</string>
+    <string name="background_read_medical_access_description_both_types_granted" msgid="9156377686028948011">"このアプリが使用されていないときに、フィットネスとウェルネスに関するデータと医療記録へのアクセスを許可します"</string>
+    <string name="background_read_medical_access_description_medical_granted" msgid="8570683510275055450">"このアプリが使用されていないときに、このデータへのアクセスを許可します"</string>
+    <string name="background_read_medical_access_description_fitness_granted" msgid="2584567718805499407">"このアプリが使用されていないときに、このデータへのアクセスを許可します"</string>
+    <string name="background_read_access_title" msgid="4184498185599147117">"バックグラウンドでのデータアクセス"</string>
+    <string name="background_read_access_description" msgid="2360433029368320323">"このアプリが使用されていないときにヘルスコネクト データへのアクセスを許可します"</string>
+    <string name="history_read_medical_access_title" msgid="1375462150672418692">"フィットネスとウェルネスに関する過去のデータへのアクセス"</string>
+    <string name="history_read_medical_access_description" msgid="5615959269427106141">"このアプリに、<xliff:g id="DATA_ACCESS_DATE">%1$s</xliff:g>以前に追加されたデータへのアクセスを許可します"</string>
+    <string name="history_read_medical_access_description_fallback" msgid="3888547064992673535">"このアプリに、過去のすべてのデータへのアクセスを許可します"</string>
+    <string name="history_read_access_title" msgid="870048398702887144">"過去のデータへのアクセス"</string>
+    <string name="history_read_access_description" msgid="800722432229526128">"このアプリに、<xliff:g id="DATA_ACCESS_DATE">%1$s</xliff:g>以前に追加されたヘルスコネクト データへのアクセスを許可します"</string>
+    <string name="history_read_access_description_fallback" msgid="4151538305657852010">"このアプリにヘルスコネクトの過去のすべてのデータへのアクセスを許可します"</string>
+    <string name="history_read_medical_access_read_warning" msgid="8878271647163400440">"<xliff:g id="APP_NAME">%1$s</xliff:g>には読み取り権限がないため、現在読み取られているフィットネス データはありません"</string>
+    <string name="additional_access_medical_read_footer" msgid="9192699163914919234">"<xliff:g id="APP_NAME">%1$s</xliff:g> は医療記録の過去のデータにアクセスできるようになっています。この設定を変更するには、このアプリの医療記録の権限を OFF にしてください"</string>
+    <string name="additional_access_medical_read_footer_link" msgid="9186216799532408259">"医療記録の権限を管理"</string>
+    <string name="additional_access_combined_footer" msgid="5967785355544362840">"このアプリによるバックグラウンドでのアクセスまたは過去のデータへのアクセスを有効にするには、少なくとも 1 つの読み取り権限を付与してください"</string>
+    <string name="additional_access_background_footer" msgid="1638739578431818525">"このアプリによるバックグラウンドでのアクセスを有効にするには、少なくとも 1 つの読み取り権限を付与してください"</string>
+    <string name="additional_access_history_footer" msgid="5326814559930548467">"このアプリによる過去のデータのアクセスを有効にするには、少なくとも 1 つの読み取り権限を付与してください"</string>
+    <string name="historic_access_description" msgid="3309195636349468633">"このアプリに過去のすべてのヘルスコネクト データへのアクセスを許可します"</string>
+    <string name="background_read_description" msgid="3203594555849969283">"このアプリが使用されていないときにヘルスコネクト データへのアクセスを許可します"</string>
+    <string name="write_device_udi_content_description" msgid="3345237277637293502">"このアプリに、デバイスの UDI をヘルスコネクト データに書き込むことを許可します"</string>
+    <string name="active_calories_burned_uppercase_label" msgid="6231684842932528272">"活動中の消費カロリー"</string>
+    <string name="active_calories_burned_lowercase_label" msgid="6743090878253096737">"活動中の消費カロリー"</string>
+    <string name="active_calories_burned_read_content_description" msgid="6449442660408754186">"活動中の消費カロリーの読み取り"</string>
+    <string name="active_calories_burned_write_content_description" msgid="8794383690157452892">"活動中の消費カロリーの書き込み"</string>
+    <string name="exercise_uppercase_label" msgid="9174662895529523172">"エクササイズ"</string>
+    <string name="exercise_lowercase_label" msgid="7210988327804427943">"エクササイズ"</string>
+    <string name="exercise_read_content_description" msgid="2079728018078185556">"エクササイズの読み取り"</string>
+    <string name="exercise_write_content_description" msgid="3267630937895011886">"エクササイズの書き込み"</string>
+    <string name="exercise_route_uppercase_label" msgid="6678863538041931754">"エクササイズのルート"</string>
+    <string name="exercise_route_lowercase_label" msgid="1691912731748211252">"エクササイズのルート"</string>
+    <string name="exercise_route_write_content_description" msgid="257809942953352611">"エクササイズのルートの書き込み"</string>
+    <string name="exercise_route_read_content_description" msgid="8394028537674463440">"エクササイズのルートの読み込み"</string>
+    <string name="exercise_routes_read_content_description" msgid="9001690141308870706">"エクササイズのルートを読み込む"</string>
+    <string name="planned_exercise_uppercase_label" msgid="3315909901236811375">"トレーニング計画"</string>
+    <string name="planned_exercise_lowercase_label" msgid="7642993032791009809">"トレーニング計画"</string>
+    <string name="planned_exercise_read_content_description" msgid="3240286968325192534">"トレーニング計画を読み取る"</string>
+    <string name="planned_exercise_write_content_description" msgid="8146488636094126823">"トレーニング計画を書き込む"</string>
+    <string name="distance_uppercase_label" msgid="1420705424462077174">"距離"</string>
+    <string name="distance_lowercase_label" msgid="2287154001209381379">"距離"</string>
+    <string name="distance_read_content_description" msgid="8787235642020285789">"距離の読み取り"</string>
+    <string name="distance_write_content_description" msgid="494549494589487562">"距離の書き込み"</string>
+    <string name="elevation_gained_uppercase_label" msgid="7708101940695442377">"獲得標高"</string>
+    <string name="elevation_gained_lowercase_label" msgid="7532517182346738562">"獲得標高"</string>
+    <string name="elevation_gained_read_content_description" msgid="6018756385903843355">"獲得標高の読み取り"</string>
+    <string name="elevation_gained_write_content_description" msgid="6790199544670231367">"獲得標高の書き込み"</string>
+    <string name="floors_climbed_uppercase_label" msgid="3754372357767832441">"登った階数"</string>
+    <string name="floors_climbed_lowercase_label" msgid="5326072443481377299">"登った階数"</string>
+    <string name="floors_climbed_read_content_description" msgid="4730764877684911752">"登った階数の読み取り"</string>
+    <string name="floors_climbed_write_content_description" msgid="3480340610185615655">"登った階数の書き込み"</string>
+    <string name="power_uppercase_label" msgid="8027219480901448660">"体力"</string>
+    <string name="power_lowercase_label" msgid="3893286148577044369">"体力"</string>
+    <string name="power_read_content_description" msgid="6821797135406643841">"体力の読み取り"</string>
+    <string name="power_write_content_description" msgid="8091584558688087392">"体力の書き込み"</string>
+    <string name="speed_uppercase_label" msgid="3307049861007518587">"速度"</string>
+    <string name="speed_lowercase_label" msgid="3462529886150464647">"速度"</string>
+    <string name="speed_read_content_description" msgid="9097089387385110692">"速度の読み取り"</string>
+    <string name="speed_write_content_description" msgid="5382921934987959251">"速度の書き込み"</string>
+    <string name="steps_uppercase_label" msgid="2581405504646486105">"歩数"</string>
+    <string name="steps_lowercase_label" msgid="706153549312838582">"歩数"</string>
+    <string name="steps_read_content_description" msgid="7839297670092769964">"歩数の読み取り"</string>
+    <string name="steps_write_content_description" msgid="6360223825799711659">"歩数の書き込み"</string>
+    <string name="total_calories_burned_uppercase_label" msgid="2749855864302679314">"総消費カロリー"</string>
+    <string name="total_calories_burned_lowercase_label" msgid="3185370725975873922">"総消費カロリー"</string>
+    <string name="total_calories_burned_read_content_description" msgid="1569722345910293531">"総消費カロリーの読み取り"</string>
+    <string name="total_calories_burned_write_content_description" msgid="2727752180681851608">"総消費カロリーの書き込み"</string>
+    <string name="vo2_max_uppercase_label" msgid="6614391499711390476">"最大酸素摂取量"</string>
+    <string name="vo2_max_lowercase_label" msgid="824972630000900033">"最大酸素摂取量"</string>
+    <string name="vo2_max_read_content_description" msgid="8132626885797169882">"最大酸素摂取量の読み取り"</string>
+    <string name="vo2_max_write_content_description" msgid="4783300275788728546">"最大酸素摂取量の書き込み"</string>
+    <string name="wheelchair_pushes_uppercase_label" msgid="5582991294340226965">"車椅子を押した回数"</string>
+    <string name="wheelchair_pushes_lowercase_label" msgid="8919337990806379687">"車椅子を押した回数"</string>
+    <string name="wheelchair_pushes_read_content_description" msgid="157304610943976471">"車椅子を押した回数の読み取り"</string>
+    <string name="wheelchair_pushes_write_content_description" msgid="2745600707106818641">"車椅子を押した回数の書き込み"</string>
+    <string name="activity_intensity_uppercase_label" msgid="8718366426053335611">"アクティビティの強度"</string>
+    <string name="activity_intensity_lowercase_label" msgid="4260366013498161858">"アクティビティの強度"</string>
+    <string name="activity_intensity_read_content_description" msgid="5503681098610026279">"アクティビティの強度の読み取り"</string>
+    <string name="activity_intensity_write_content_description" msgid="4843212785611055496">"アクティビティの強度の書き込み"</string>
+    <string name="basal_metabolic_rate_uppercase_label" msgid="4802351493928086473">"基礎代謝率"</string>
+    <string name="basal_metabolic_rate_lowercase_label" msgid="7195596626083893231">"基礎代謝率"</string>
+    <string name="basal_metabolic_rate_read_content_description" msgid="5583222212705234907">"基礎代謝率の読み取り"</string>
+    <string name="basal_metabolic_rate_write_content_description" msgid="4246137679868953443">"基礎代謝率の書き込み"</string>
+    <string name="body_fat_uppercase_label" msgid="4618860235119416449">"体脂肪"</string>
+    <string name="body_fat_lowercase_label" msgid="4090686510477176498">"体脂肪"</string>
+    <string name="body_fat_read_content_description" msgid="801664410906939146">"体脂肪の読み取り"</string>
+    <string name="body_fat_write_content_description" msgid="4863558071904720577">"体脂肪の書き込み"</string>
+    <string name="body_water_mass_uppercase_label" msgid="7839393299147916863">"体水分量"</string>
+    <string name="body_water_mass_lowercase_label" msgid="9196249948631920955">"体水分量"</string>
+    <string name="body_water_mass_read_content_description" msgid="1468266374858854184">"体水分量の読み取り"</string>
+    <string name="body_water_mass_write_content_description" msgid="8485284654932647383">"体水分量の書き込み"</string>
+    <string name="bone_mass_uppercase_label" msgid="6815438946872228501">"骨量"</string>
+    <string name="bone_mass_lowercase_label" msgid="5127378263122564055">"骨量"</string>
+    <string name="bone_mass_read_content_description" msgid="8401070346821477225">"骨量の読み取り"</string>
+    <string name="bone_mass_write_content_description" msgid="8711285422751587975">"骨量の書き込み"</string>
+    <string name="height_uppercase_label" msgid="6839543632311723181">"身長"</string>
+    <string name="height_lowercase_label" msgid="6232582306436492752">"身長"</string>
+    <string name="height_read_content_description" msgid="7107217731605127715">"身長の読み取り"</string>
+    <string name="height_write_content_description" msgid="6787078298523064040">"身長の書き込み"</string>
+    <string name="hip_circumference_uppercase_label" msgid="553907293616398764">"ヒップ周囲径"</string>
+    <string name="hip_circumference_lowercase_label" msgid="5383037100089745103">"ヒップ周囲径"</string>
+    <string name="hip_circumference_read_content_description" msgid="3960843421475522701">"ヒップ周囲径の読み取り"</string>
+    <string name="hip_circumference_write_content_description" msgid="3828616223599649051">"ヒップ周囲径の書き込み"</string>
+    <string name="lean_body_mass_uppercase_label" msgid="1660166073148541008">"除脂肪体重"</string>
+    <string name="lean_body_mass_lowercase_label" msgid="9060417901080844357">"除脂肪体重"</string>
+    <string name="lean_body_mass_read_content_description" msgid="3251903339784498051">"除脂肪体重の読み取り"</string>
+    <string name="lean_body_mass_write_content_description" msgid="8778176250058913124">"除脂肪体重の書き込み"</string>
+    <string name="waist_circumference_uppercase_label" msgid="864537723631507381">"ウェスト周囲径"</string>
+    <string name="waist_circumference_lowercase_label" msgid="7389714051869012003">"ウェスト周囲径"</string>
+    <string name="waist_circumference_read_content_description" msgid="7742632529989685413">"ウェスト周囲径の読み取り"</string>
+    <string name="waist_circumference_write_content_description" msgid="6455311628964793644">"ウェスト周囲径の書き込み"</string>
+    <string name="weight_uppercase_label" msgid="2240396607601785080">"体重"</string>
+    <string name="weight_lowercase_label" msgid="6592458247010013299">"体重"</string>
+    <string name="weight_read_content_description" msgid="3270514859844811665">"体重の読み取り"</string>
+    <string name="weight_write_content_description" msgid="555486014471042366">"体重の書き込み"</string>
+    <string name="cervical_mucus_uppercase_label" msgid="7479786340673820763">"子宮頸管粘液"</string>
+    <string name="cervical_mucus_lowercase_label" msgid="7460634889750669420">"子宮頸管粘液"</string>
+    <string name="cervical_mucus_read_content_description" msgid="7163132301693064124">"子宮頸管粘液の読み取り"</string>
+    <string name="cervical_mucus_write_content_description" msgid="175802615365382752">"子宮頸管粘液の書き込み"</string>
+    <string name="intermenstrual_bleeding_uppercase_label" msgid="1681956139742028987">"中間期出血"</string>
+    <string name="intermenstrual_bleeding_lowercase_label" msgid="5284781275147619132">"中間期出血"</string>
+    <string name="intermenstrual_bleeding_read_content_description" msgid="5970939335115119015">"中間期出血を読み取る"</string>
+    <string name="intermenstrual_bleeding_write_content_description" msgid="1377719923165234099">"中間期出血を書き込む"</string>
+    <string name="menstrual_cycle_phase_uppercase_label" msgid="5030753898761492690">"月経周期"</string>
+    <string name="menstrual_cycle_phase_lowercase_label" msgid="4400175522136299478">"月経周期"</string>
+    <string name="menstrual_cycle_phase_read_content_description" msgid="579636561137547897">"月経周期の読み取り"</string>
+    <string name="menstrual_cycle_phase_write_content_description" msgid="5631263314813590544">"月経周期の書き込み"</string>
+    <string name="menstruation_uppercase_label" msgid="9119506748428874832">"月経期間"</string>
+    <string name="menstruation_lowercase_label" msgid="8098816978006207242">"月経期間"</string>
+    <string name="menstruation_read_content_description" msgid="7710047469771882021">"月経期間の読み取り"</string>
+    <string name="menstruation_write_content_description" msgid="5142669435897047396">"月経期間の書き込み"</string>
+    <string name="ovulation_test_uppercase_label" msgid="1929868571862288837">"排卵検査"</string>
+    <string name="ovulation_test_lowercase_label" msgid="93260039417722840">"排卵検査"</string>
+    <string name="ovulation_test_read_content_description" msgid="8008351738285775840">"排卵検査の読み取り"</string>
+    <string name="ovulation_test_write_content_description" msgid="7061493310852203463">"排卵検査の書き込み"</string>
+    <string name="sexual_activity_uppercase_label" msgid="1093238473810194127">"性行為"</string>
+    <string name="sexual_activity_lowercase_label" msgid="8285364117437418834">"性行為"</string>
+    <string name="sexual_activity_read_content_description" msgid="4937721417714312007">"性行為の読み取り"</string>
+    <string name="sexual_activity_write_content_description" msgid="3063448245882840534">"性行為の書き込み"</string>
+    <string name="spotting_uppercase_label" msgid="5106739829390033240">"出血"</string>
+    <string name="spotting_lowercase_label" msgid="4361141146039580583">"出血"</string>
+    <string name="spotting_read_content_description" msgid="5422420770022357631">"出血の読み取り"</string>
+    <string name="spotting_write_content_description" msgid="9049462631184362964">"出血の書き込み"</string>
+    <string name="hydration_uppercase_label" msgid="1196083392597480565">"水分補給"</string>
+    <string name="hydration_lowercase_label" msgid="7793261552870970551">"水分補給"</string>
+    <string name="hydration_read_content_description" msgid="3255941233933808082">"水分補給の読み取り"</string>
+    <string name="hydration_write_content_description" msgid="7549819425875969941">"水分補給の書き込み"</string>
+    <string name="nutrition_uppercase_label" msgid="2352959651072134084">"栄養"</string>
+    <string name="nutrition_lowercase_label" msgid="4123518952030658702">"栄養"</string>
+    <string name="nutrition_read_content_description" msgid="5820331769605952082">"栄養の読み取り"</string>
+    <string name="nutrition_write_content_description" msgid="6690090231218210367">"栄養の書き込み"</string>
+    <string name="sleep_uppercase_label" msgid="1458084584315123727">"睡眠"</string>
+    <string name="sleep_lowercase_label" msgid="7795584924503475035">"睡眠"</string>
+    <string name="sleep_read_content_description" msgid="7064608272681424436">"睡眠の読み取り"</string>
+    <string name="sleep_write_content_description" msgid="2259414465110376554">"睡眠の書き込み"</string>
+    <string name="basal_body_temperature_uppercase_label" msgid="4571393253935677019">"基礎体温"</string>
+    <string name="basal_body_temperature_lowercase_label" msgid="3363829208971016662">"基礎体温"</string>
+    <string name="basal_body_temperature_read_content_description" msgid="3342604362011725500">"基礎体温の読み取り"</string>
+    <string name="basal_body_temperature_write_content_description" msgid="1081636817359407622">"基礎体温の書き込み"</string>
+    <string name="blood_glucose_uppercase_label" msgid="7462421849184720721">"血糖値"</string>
+    <string name="blood_glucose_lowercase_label" msgid="5036157221577793772">"血糖値"</string>
+    <string name="blood_glucose_read_content_description" msgid="563393834563809318">"血糖値の読み取り"</string>
+    <string name="blood_glucose_write_content_description" msgid="7688360165458091174">"血糖値の書き込み"</string>
+    <string name="blood_pressure_uppercase_label" msgid="1091450873620857062">"血圧"</string>
+    <string name="blood_pressure_lowercase_label" msgid="5857335698134310172">"血圧"</string>
+    <string name="blood_pressure_read_content_description" msgid="8573617892296408887">"血圧の読み取り"</string>
+    <string name="blood_pressure_write_content_description" msgid="2649850785684226949">"血圧の書き込み"</string>
+    <string name="body_temperature_uppercase_label" msgid="5104550330313775324">"体温"</string>
+    <string name="body_temperature_lowercase_label" msgid="324124730971992259">"体温"</string>
+    <string name="body_temperature_read_content_description" msgid="5966765249024688738">"体温の読み取り"</string>
+    <string name="body_temperature_write_content_description" msgid="5498016171067859369">"体温の書き込み"</string>
+    <string name="heart_rate_uppercase_label" msgid="4990167215137642430">"心拍数"</string>
+    <string name="heart_rate_lowercase_label" msgid="693492686337628283">"心拍数"</string>
+    <string name="heart_rate_read_content_description" msgid="4165867166260001259">"心拍数の読み取り"</string>
+    <string name="heart_rate_write_content_description" msgid="2876667918366409170">"心拍数の書き込み"</string>
+    <string name="heart_rate_variability_uppercase_label" msgid="2047887230527012536">"心拍変動"</string>
+    <string name="heart_rate_variability_lowercase_label" msgid="2332638559415663836">"心拍変動"</string>
+    <string name="heart_rate_variability_read_content_description" msgid="5812707457872629556">"心拍変動の読み取り"</string>
+    <string name="heart_rate_variability_write_content_description" msgid="3628171603035566114">"心拍変動の書き込み"</string>
+    <string name="oxygen_saturation_uppercase_label" msgid="1396254185616418355">"酸素飽和度"</string>
+    <string name="oxygen_saturation_lowercase_label" msgid="7264179897533866327">"酸素飽和度"</string>
+    <string name="oxygen_saturation_read_content_description" msgid="4756434113425028212">"酸素飽和度の読み取り"</string>
+    <string name="oxygen_saturation_write_content_description" msgid="7189901097196830875">"酸素飽和度の書き込み"</string>
+    <string name="respiratory_rate_uppercase_label" msgid="4609498171205294389">"呼吸数"</string>
+    <string name="respiratory_rate_lowercase_label" msgid="8138249029197360098">"呼吸数"</string>
+    <string name="respiratory_rate_read_content_description" msgid="8545898979648419722">"呼吸数の読み取り"</string>
+    <string name="respiratory_rate_write_content_description" msgid="7689533746809591931">"呼吸数の書き込み"</string>
+    <string name="resting_heart_rate_uppercase_label" msgid="5700827752396195453">"安静時の心拍数"</string>
+    <string name="resting_heart_rate_lowercase_label" msgid="4533866739695973169">"安静時の心拍数"</string>
+    <string name="resting_heart_rate_read_content_description" msgid="1068160055773401020">"安静時の心拍数の読み取り"</string>
+    <string name="resting_heart_rate_write_content_description" msgid="8848198128082739995">"安静時の心拍数の書き込み"</string>
+    <string name="skin_temperature_uppercase_label" msgid="4880306019368461268">"皮膚温"</string>
+    <string name="skin_temperature_lowercase_label" msgid="7456421703641980581">"皮膚温"</string>
+    <string name="skin_temperature_read_content_description" msgid="1896127631429717621">"皮膚温を読み取る"</string>
+    <string name="skin_temperature_write_content_description" msgid="6448587289116206085">"皮膚温を書き込む"</string>
+    <string name="browse_health_records_intro" msgid="6883015193140441521">"ヘルスコネクトに同期・追加された医療記録がすべて含まれています。ただし、あらゆる医療記録を網羅しているとは限らず、医療記録の医学的説明も含まれていません。"</string>
+    <string name="all_medical_data_uppercase_label" msgid="3200909722486081065">"すべての医療記録"</string>
+    <string name="all_medical_data_lowercase_label" msgid="2978144821592851080">"すべての医療記録"</string>
+    <string name="all_medical_data_content_description" msgid="3454355551506537094">"すべての医療記録の書き込み"</string>
+    <string name="allergies_intolerances_uppercase_label" msgid="2458552115947636884">"アレルギー"</string>
+    <string name="allergies_intolerances_lowercase_label" msgid="5066782073511167288">"アレルギー"</string>
+    <string name="allergies_intolerances_content_description" msgid="7954532940667325068">"アレルギー不耐性データの読み取り"</string>
+    <string name="conditions_uppercase_label" msgid="5260404343402770877">"健康状態"</string>
+    <string name="conditions_lowercase_label" msgid="2678248918552246997">"健康状態"</string>
+    <string name="conditions_content_description" msgid="3230552343616193829">"健康状態の読み取り"</string>
+    <string name="vaccines_uppercase_label" msgid="1101176371071123187">"ワクチン接種"</string>
+    <string name="vaccines_lowercase_label" msgid="4991324441768127447">"ワクチン接種"</string>
+    <string name="vaccines_content_description" msgid="7152741514791951684">"ワクチン接種データの読み取り"</string>
+    <string name="laboratory_results_uppercase_label" msgid="3400725778254150910">"検査結果"</string>
+    <string name="laboratory_results_lowercase_label" msgid="7647457227104919126">"検査結果"</string>
+    <string name="laboratory_results_content_description" msgid="7888886103734085841">"検査結果データの読み取り"</string>
+    <string name="medications_uppercase_label" msgid="4783281053427990225">"服薬情報"</string>
+    <string name="medications_lowercase_label" msgid="7808038774503092207">"服薬情報"</string>
+    <string name="medications_content_description" msgid="6165382876281780190">"服薬情報を読み取る"</string>
+    <string name="personal_details_uppercase_label" msgid="7241635933310394120">"個人の詳細"</string>
+    <string name="personal_details_lowercase_label" msgid="1907848447611775151">"個人の詳細"</string>
+    <string name="personal_details_content_description" msgid="3191211304673909831">"個人の詳細の読み取り"</string>
+    <string name="practitioner_details_uppercase_label" msgid="2940667649808082510">"医療従事者の詳細"</string>
+    <string name="practitioner_details_lowercase_label" msgid="8195591077717971542">"医療従事者の詳細"</string>
+    <string name="practitioner_details_content_description" msgid="8775396516928504185">"医療従事者の詳細の読み取り"</string>
+    <string name="pregnancy_uppercase_label" msgid="5979925175194337864">"妊娠"</string>
+    <string name="pregnancy_lowercase_label" msgid="810439290131044517">"妊娠"</string>
+    <string name="pregnancy_content_description" msgid="3436773729243586287">"妊娠データの読み取り"</string>
+    <string name="procedures_uppercase_label" msgid="9176087520132593261">"治療"</string>
+    <string name="procedures_lowercase_label" msgid="5320804313946273234">"治療"</string>
+    <string name="procedures_content_description" msgid="1086900373141440005">"治療データの読み取り"</string>
+    <string name="social_history_uppercase_label" msgid="4119611299449533999">"社会歴"</string>
+    <string name="social_history_lowercase_label" msgid="9027541979445736412">"社会歴"</string>
+    <string name="social_history_content_description" msgid="7187059309389849831">"社会歴の読み取り"</string>
+    <string name="visits_uppercase_label" msgid="8532619758336375886">"受診"</string>
+    <string name="visits_lowercase_label" msgid="2545887061364564151">"受診"</string>
+    <string name="visits_content_description" msgid="6336796415049565697">"受診の読み取り"</string>
+    <string name="vital_signs_uppercase_label" msgid="289862347143374640">"バイタルサイン"</string>
+    <string name="vital_signs_lowercase_label" msgid="9141304492316454529">"バイタルサイン"</string>
+    <string name="vital_signs_content_description" msgid="914944352640528612">"バイタルサインの読み取り"</string>
+    <string name="mindfulness_uppercase_label" msgid="7678646522566275472">"マインドフルネス"</string>
+    <string name="mindfulness_lowercase_label" msgid="5184488636180881614">"マインドフルネス"</string>
+    <string name="mindfulness_read_content_description" msgid="739187536826062524">"マインドフルネスを読み取る"</string>
+    <string name="mindfulness_write_content_description" msgid="7925112426563398421">"マインドフルネスを書き込む"</string>
+    <string name="nicotine_intake_uppercase_label" msgid="2726203918637743544">"ニコチン摂取量"</string>
+    <string name="nicotine_intake_lowercase_label" msgid="5551311180036082920">"ニコチン摂取量"</string>
+    <string name="nicotine_intake_read_content_description" msgid="959918212844960393">"ニコチン摂取量の読み取り"</string>
+    <string name="nicotine_intake_write_content_description" msgid="4098088216049977997">"ニコチン摂取量の書き込み"</string>
+    <string name="alcohol_consumption_uppercase_label" msgid="5675026820650543741">"アルコール摂取量"</string>
+    <string name="alcohol_consumption_lowercase_label" msgid="3956015726333214503">"アルコール摂取量"</string>
+    <string name="alcohol_consumption_read_content_description" msgid="2130228931470781094">"アルコール摂取量の読み取り"</string>
+    <string name="alcohol_consumption_write_content_description" msgid="766171743899162838">"アルコール摂取量の書き込み"</string>
+    <string name="symptom_cough_uppercase_label" msgid="3600429984629423943">"咳"</string>
+    <string name="symptom_cough_lowercase_label" msgid="3028827340410016573">"咳"</string>
+    <string name="symptom_cough_read_content_description" msgid="398516421189288025">"症状を読み取ります"</string>
+    <string name="symptom_cough_write_content_description" msgid="8535398571528036989">"症状を書き込みます"</string>
+    <string name="symptom_unknown" msgid="5796719193136239306">"不明"</string>
+    <string name="symptom_severity_mild" msgid="2689415474774489874">"軽度"</string>
+    <string name="symptom_severity_moderate" msgid="8388787027751900668">"中度"</string>
+    <string name="symptom_severity_severe" msgid="4675732713898596705">"重度"</string>
+    <string name="symptom_entry_title" msgid="3927744074055963604">"<xliff:g id="SEVERITY">%1$s</xliff:g> <xliff:g id="TYPE">%2$s</xliff:g>⁠"</string>
+    <string name="read_permission_category" msgid="6002099618259628632">"「<xliff:g id="APP_NAME">%1$s</xliff:g>」に読み取りを許可する"</string>
+    <string name="write_permission_category" msgid="1529702804865008111">"「<xliff:g id="APP_NAME">%1$s</xliff:g>」に書き込みを許可する"</string>
+    <string name="request_permissions_allow" msgid="4201324235711040631">"許可する"</string>
+    <string name="request_permissions_allow_all" msgid="3419414351406638770">"すべて許可"</string>
+    <string name="request_permissions_dont_allow" msgid="6375307410951549030">"許可しない"</string>
+    <string name="allow_and_continue" msgid="4523565115589395706">"許可して続行"</string>
+    <string name="request_fitness_permissions_data_access_type_read_write" msgid="4803850894991591079">"このアプリにヘルスコネクトでの読み取りまたは書き込みを許可するデータを選択してください"</string>
+    <string name="request_fitness_permissions_data_access_type_read" msgid="1936040466183377312">"このアプリにヘルスコネクトからの読み取りを許可するデータを選択できます"</string>
+    <string name="request_fitness_permissions_data_access_type_write" msgid="953067161810334338">"このアプリにヘルスコネクトへの書き込みを許可するデータを選択できます"</string>
+    <string name="request_medical_permissions_data_access_type_read_write" msgid="3777178665662806833">"このアプリにヘルスコネクトでの読み取りまたは書き込みを許可するデータを選択します"</string>
+    <string name="request_medical_permissions_data_access_type_read" msgid="2155961852937520094">"このアプリにヘルスコネクトからの読み取りを許可するデータを選択できます"</string>
+    <string name="matchmaking_screen_title" msgid="2245143614291907682">"アプリとデバイスを同期する"</string>
+    <!-- no translation found for matchmaking_screen_data_from_data_source (1358295537060886465) -->
+    <skip />
+    <string name="matchmaking_screen_summary" msgid="252103453254608305">"<xliff:g id="APP_NAME">%1$s</xliff:g> アプリに、ヘルスコネクトを使用してこのデバイス上の他のアプリやデバイスからデータを読み取ることを許可します。このデータは、アクセスを許可した他のアプリでも読み取ることができます。"</string>
+    <string name="matchmaking_screen_apps_category_title" msgid="8512041649876090322">"このデータを同期できるアプリ"</string>
+    <string name="matchmaking_screen_devices_category_title" msgid="1866041904661763630">"このデータを同期できるデバイス"</string>
+    <string name="matchmaking_screen_continue_to_device_preferences_to_enable" msgid="2917826310622439910">"有効にするには、デバイスの設定に進んでください"</string>
+    <string name="matchmaking_allow_all_app_permissions_content_description" msgid="7450664840474294719">"<xliff:g id="APP_NAME">%1$s</xliff:g> のすべての権限を許可します"</string>
+    <string name="app_privacy_policy_footer" msgid="5133438020093531052">"<xliff:g id="APP_NAME">%1$s</xliff:g> がユーザーデータをどのように使用するかについては、"<a href="%2$s">"プライバシー ポリシー"</a>"をご覧ください。"</string>
+    <string name="matchmaking_screen_footer" msgid="986685221263640285">"ヘルスコネクトを使用すると、健康とフィットネスに関するデータを複数のデータソース間で共有できます。これにより、データの安全を保ちながら、分析情報やエクスペリエンスを活用できます。"</string>
+    <string name="more_about_health_connect" msgid="8105996800108743876">"ヘルスコネクトの詳細"</string>
+    <string name="expandable_preference_expand_talkback_description" msgid="8063527636780725728">"開く"</string>
+    <string name="expandable_preference_collapse_talkback_description" msgid="6402120808562232474">"閉じる"</string>
+    <string name="request_permissions_header_time_frame_desc" msgid="3023660534681391973">"読み取りアクセス権を付与すると、このアプリは新規データと過去 30 日間のデータを読み取れるようになります"</string>
+    <string name="request_permissions_header_time_frame_history_desc" msgid="3792732353571153175">"読み取りアクセス権を付与すると、このアプリは新規データと過去のデータを読み取れるようになります"</string>
+    <string name="request_fitness_permissions_header_title" msgid="5330395074131008360">"<xliff:g id="APP_NAME">%1$s</xliff:g> にヘルスコネクトへのアクセスを許可しますか？"</string>
+    <string name="request_permissions_with_medical_header_title" msgid="6269944931319362595">"<xliff:g id="APP_NAME">%1$s</xliff:g> にフィットネスとウェルネスに関するデータへのアクセスを許可しますか？"</string>
+    <string name="request_permissions_rationale" msgid="2642076968583316986">"<xliff:g id="APP_NAME">%1$s</xliff:g> によるユーザーデータの取り扱いについては、<xliff:g id="PRIVACY_POLICY_LINK">%2$s</xliff:g>をご覧ください"</string>
+    <string name="request_permissions_privacy_policy" msgid="228503452643555737">"プライバシー ポリシー"</string>
+    <string name="medical_request_header" msgid="5701693055388739014">"<xliff:g id="APP_NAME">%1$s</xliff:g> に医療記録へのアクセスを許可しますか？"</string>
+    <string name="medical_request_header_access_info_read_write" msgid="221400464566148357">"アクセス権を付与すると、このアプリはアレルギー、検査結果、ワクチン接種などのデータの読み取りと書き込みを行えるようになります\n<xliff:g id="ABOUT_HEALTH_RECORDS_LINK">%1$s</xliff:g>"</string>
+    <string name="medical_request_header_access_info_read" msgid="7817630833626125558">"アクセス権を付与すると、このアプリはアレルギー、検査結果、ワクチン接種などのデータを読み取れるようになります\n<xliff:g id="ABOUT_HEALTH_RECORDS_LINK">%1$s</xliff:g>"</string>
+    <string name="medical_request_about_health_records" msgid="4569605370685007268">"医療記録について"</string>
+    <string name="medical_request_data_to_share" msgid="6778034304921873317">"共有するデータには以下が含まれます"</string>
+    <string name="medical_request_summary" msgid="553735170968628758">"許可すると、<xliff:g id="APP_NAME">%1$s</xliff:g> は医療記録をヘルスコネクトと共有できるようになります。"</string>
+    <string name="medical_request_footer" msgid="157243861031258933">"さまざまなアプリやソースの医療記録を同期して 1 か所で管理できます"</string>
+    <string name="permissions_disconnect_dialog_title" msgid="7355211540619034695">"すべての権限を削除しますか？"</string>
+    <string name="permissions_disconnect_dialog_disconnect" msgid="8854787587948224752">"すべて削除"</string>
+    <string name="permissions_disconnect_dialog_message" msgid="7961269838207365478">"<xliff:g id="APP_NAME">%1$s</xliff:g> はヘルスコネクトのデータの読み取り、書き込みを行えなくなります。\n\nこの設定は、カメラ、マイク、位置情報など、このアプリのその他の権限には影響しません。"</string>
+    <string name="permissions_disconnect_dialog_message_background" msgid="8655975996293893596">"<xliff:g id="APP_NAME">%1$s</xliff:g> は、バックグラウンド データを含め、ヘルスコネクトのデータの読み取り、書き込みを行えなくなります。\n\nこの設定は、位置情報、カメラ、マイクなど、このアプリのその他の権限には影響しません。"</string>
+    <string name="permissions_disconnect_dialog_message_history" msgid="3793206180295111081">"<xliff:g id="APP_NAME">%1$s</xliff:g> は、過去のデータを含め、ヘルスコネクトのデータの読み取り、書き込みを行えなくなります。\n\nこの設定は、位置情報、カメラ、マイクなど、このアプリのその他の権限には影響しません。"</string>
+    <string name="permissions_disconnect_dialog_message_combined" msgid="4163369526932602203">"<xliff:g id="APP_NAME">%1$s</xliff:g> は、バックグラウンド データや過去のデータを含め、ヘルスコネクトのデータの読み取り、書き込みを行えなくなります。\n\nこの設定は、位置情報、カメラ、マイクなど、このアプリのその他の権限には影響しません。"</string>
+    <string name="permissions_disconnect_dialog_checkbox" msgid="8646951566431872823">"ヘルスコネクトから <xliff:g id="APP_NAME">%1$s</xliff:g> のデータも削除する"</string>
+    <string name="disconnect_all_fitness_permissions_title" msgid="7612364222525900592">"フィットネスとウェルネスの権限をすべて削除しますか？"</string>
+    <string name="disconnect_all_fitness_permissions_dialog_checkbox" msgid="8808559689899914478">"<xliff:g id="APP_NAME">%1$s</xliff:g> のフィットネス データもヘルスコネクトから削除する"</string>
+    <string name="disconnect_all_medical_permissions_title" msgid="5160539156614173855">"医療記録の権限をすべて削除しますか？"</string>
+    <string name="disconnect_all_medical_permissions_dialog_checkbox" msgid="9016154186179314983">"<xliff:g id="APP_NAME">%1$s</xliff:g> の医療記録もヘルスコネクトから削除する"</string>
+    <string name="disconnect_all_fitness_or_medical_no_additional_permissions_dialog_message" msgid="6610810945930258582">"<xliff:g id="APP_NAME">%1$s</xliff:g> はヘルスコネクトのこのデータの読み取り、書き込みを行えなくなります。\n\nこの設定は、カメラ、マイク、位置情報など、このアプリのその他の権限には影響しません。"</string>
+    <string name="disconnect_all_fitness_or_medical_and_background_permissions_dialog_message" msgid="7138878481421234556">"<xliff:g id="APP_NAME">%1$s</xliff:g> は、バックグラウンド データを含め、ヘルスコネクトのこのデータの読み取り、書き込みを行えなくなります。\n\nこの設定は、カメラ、マイク、位置情報など、このアプリのその他の権限には影響しません。"</string>
+    <string name="disconnect_all_fitness_or_medical_and_historical_permissions_dialog_message" msgid="1519496566456028625">"<xliff:g id="APP_NAME">%1$s</xliff:g> は、過去のデータを含め、ヘルスコネクトのこのデータの読み取り、書き込みを行えなくなります。\n\nこの設定は、カメラ、マイク、位置情報など、このアプリのその他の権限には影響しません。"</string>
+    <string name="disconnect_all_fitness_or_medical_and_additional_permissions_dialog_message" msgid="5147728456578218902">"<xliff:g id="APP_NAME">%1$s</xliff:g> は、バックグラウンド データや過去のデータを含め、ヘルスコネクトのこのデータの読み取り、書き込みを行えなくなります。\n\nこの設定は、カメラ、マイク、位置情報など、このアプリのその他の権限には影響しません。"</string>
+    <string name="disconnect_all_health_permissions_title" msgid="3995410660376966233">"すべての権限を削除しますか？"</string>
+    <string name="disconnect_all_health_no_additional_permissions_dialog_message" msgid="211728516196974197">"<xliff:g id="APP_NAME">%1$s</xliff:g> はヘルスコネクトのデータの読み取り、書き込みを行えなくなります。\n\nこの設定は、カメラ、マイク、位置情報など、このアプリのその他の権限には影響しません。"</string>
+    <string name="disconnect_all_health_and_background_permissions_dialog_message" msgid="654533675296670869">"<xliff:g id="APP_NAME">%1$s</xliff:g> は、バックグラウンド データを含め、ヘルスコネクトのデータの読み取り、書き込みを行えなくなります。\n\nこの設定は、カメラ、マイク、位置情報など、このアプリのその他の権限には影響しません。"</string>
+    <string name="disconnect_all_health_and_historical_permissions_dialog_message" msgid="6743215620789357899">"<xliff:g id="APP_NAME">%1$s</xliff:g> は、過去のデータを含め、ヘルスコネクトのデータの読み取り、書き込みを行えなくなります。\n\nこの設定は、カメラ、マイク、位置情報など、このアプリのその他の権限には影響しません。"</string>
+    <string name="disconnect_all_health_and_additional_permissions_dialog_message" msgid="6062891741278986209">"<xliff:g id="APP_NAME">%1$s</xliff:g> は、バックグラウンド データや過去のデータを含め、ヘルスコネクトのデータの読み取り、書き込みを行えなくなります。\n\nこの設定は、カメラ、マイク、位置情報など、このアプリのその他の権限には影響しません。"</string>
+    <string name="disconnect_all_health_permissions_dialog_checkbox" msgid="2513272828668015419">"<xliff:g id="APP_NAME">%1$s</xliff:g> のフィットネス データと医療記録もヘルスコネクトから削除する"</string>
+    <string name="disconnect_all_health_permissions_success_toast" msgid="9010063821116197894">"このアプリの権限を削除しました"</string>
+    <string name="disconnect_all_app_permissions_dialog_checkbox" msgid="2927403999111348272">"ヘルスコネクトのデータもすべて削除する"</string>
+    <string name="navigation_next_day" msgid="8853443471183944219">"翌日"</string>
+    <string name="navigation_selected_day" msgid="2510843479734091348">"選択した日"</string>
+    <string name="navigation_previous_day" msgid="718353386484938584">"前日"</string>
+    <string name="default_error" msgid="7966868260616403475">"エラーが発生しました。もう一度お試しください。"</string>
+    <string name="unkwown_resource" msgid="5414479649607888981">"（タイトルなし）"</string>
+    <string name="raw_fhir_title" msgid="1295744907036066319">"ソースデータ"</string>
+    <string name="raw_fhir_open_bracket" msgid="7974657451368655325">"<xliff:g id="PREFIX">%1$s</xliff:g>開き角かっこ。"</string>
+    <string name="raw_fhir_closed_bracket" msgid="9084379463440675078">"<xliff:g id="PREFIX">%1$s</xliff:g>閉じ角かっこ。"</string>
+    <string name="raw_fhir_field_value" msgid="369633095565031835">"<xliff:g id="PREFIX">%1$s</xliff:g> フィールド <xliff:g id="FIELD">%2$s</xliff:g> 値"</string>
+    <string name="raw_fhir_value" msgid="8627152854130338531">"<xliff:g id="PREFIX">%1$s</xliff:g>: <xliff:g id="VALUE">%2$s</xliff:g>。"</string>
+    <string name="raw_fhir_content_description" msgid="1491420802097635439">"詳細なソースコード: <xliff:g id="SOURCE_CODE">%1$s</xliff:g>"</string>
+    <string name="pretty_fhir_header_view_source_data" msgid="6928222157951266082">"ソースデータを表示"</string>
+    <string name="health_permission_header_description" msgid="7497601695462373927">"この権限があるアプリは、健康とフィットネスに関するデータの読み取り / 書き込みを行えます。"</string>
+    <string name="connected_apps_text" msgid="1177626440966855831">"ヘルスコネクトに保存されているデータにアクセスできるアプリを管理できます。アプリをタップすると、そのアプリが読み取り / 書き込みを行えるデータが表示されます。"</string>
+    <string name="connected_apps_section_title" msgid="2415288099612126258">"アクセスが許可されているアプリ"</string>
+    <string name="not_connected_apps_section_title" msgid="452718769894103039">"アクセスが許可されていないアプリ"</string>
+    <string name="needs_updating_apps_section_title" msgid="8561510523049921199">"更新が必要"</string>
+    <string name="settings_and_help_header" msgid="5749710693017621168">"設定とヘルプ"</string>
+    <string name="disconnect_all_apps" msgid="748945115977534726">"すべてのアプリに対してアクセス権を削除する"</string>
+    <string name="manage_permissions_read_header" msgid="2031153753057983683">"読み取りを許可したデータ"</string>
+    <string name="manage_permissions_write_header" msgid="6876806848658168370">"書き込みを許可したデータ"</string>
+    <string name="no_apps_allowed" msgid="5794833581324128108">"許可されているアプリはありません"</string>
+    <string name="no_apps_denied" msgid="743327680286446017">"許可されていないアプリはありません"</string>
+    <string name="permissions_disconnect_all_dialog_title" msgid="27474286046207122">"すべてのアプリに対してアクセス権を削除しますか？"</string>
+    <string name="permissions_disconnect_all_dialog_message" msgid="3151109627457270499">"すべてのアプリがヘルスコネクトへのアクセスやデータの追加を行えなくなります。既存のデータは削除されません。\n\nこの設定は、位置情報、カメラ、マイクなど、このアプリのその他の権限には影響しません。"</string>
+    <string name="permissions_disconnect_all_dialog_disconnect" msgid="2134136493310257746">"すべて削除"</string>
+    <string name="manage_permissions_manage_app_header" msgid="6356348062088358761">"アプリの管理"</string>
+    <string name="see_app_data" msgid="3951030076195119476">"アプリデータを表示"</string>
+    <string name="remove_access_for_this_app" msgid="7701101420310711833">"このアプリのアクセス権を削除"</string>
+    <string name="delete_app_data" msgid="6890357774873859952">"アプリデータを削除"</string>
+    <string name="inactive_apps_section_title" msgid="7492812973696378690">"休止中のアプリ"</string>
+    <string name="inactive_apps_section_message" msgid="2610789262055974739">"これらのアプリはアクセスできなくなりましたが、ヘルスコネクトからデータが削除されることはありません"</string>
+    <string name="manage_permissions_time_frame" msgid="1299483940842401923">"<xliff:g id="APP_NAME">%1$s</xliff:g> は、<xliff:g id="DATA_ACCESS_DATE">%2$s</xliff:g>以降に追加されたデータを読み取ることができます"</string>
+    <string name="other_android_permissions" msgid="8051485761573324702">"このアプリがアクセスできるその他の Android 権限を管理するには、[設定] &gt; [アプリ] に移動してください"</string>
+    <string name="manage_permissions_rationale" msgid="2780008055185441703">"<xliff:g id="APP_NAME">%1$s</xliff:g> でのデータの取り扱いについて詳しくは、デベロッパーのプライバシー ポリシーをご覧ください"</string>
+    <string name="other_android_permissions_content_description" msgid="2261431010048933820">"このアプリがアクセスできるその他の Android 権限を管理するには、[設定] に移動し、[アプリ] をタップしてください"</string>
+    <string name="manage_permissions_learn_more" msgid="2503189875093300767">"プライバシー ポリシーを読む"</string>
+    <string name="app_perms_content_provider_24h" msgid="5977152673988158889">"過去 24 時間にアクセス"</string>
+    <string name="app_access_title" msgid="7137018424885371763">"アプリのアクセス権"</string>
+    <string name="connected_apps_empty_list_section_title" msgid="7684166767384190933">"対応するアプリがインストールされていません"</string>
+    <string name="additional_access_label" msgid="4645249249222528341">"アクセス権の追加"</string>
+    <string name="additional_access_summary" msgid="1076197455435130191">"過去のデータ、バックグラウンド データ"</string>
+    <string name="removed_additional_permissions_toast" msgid="3443687215509477284">"このアプリの追加権限を削除しました"</string>
+    <string name="permissions_header" msgid="6519976063360071569">"権限"</string>
+    <string name="fitness_permissions" msgid="586264186537460254">"フィットネスとウェルネス"</string>
+    <string name="fitness_permissions_summary" msgid="6476469281589015459">"エクササイズ、睡眠、栄養、その他"</string>
+    <string name="medical_permissions" msgid="1066296298908103091">"医療記録"</string>
+    <string name="medical_permissions_lowercase" msgid="5825812584960807537">"医療記録"</string>
+    <string name="medical_permissions_summary" msgid="5526004634109548577">"検査結果、服薬情報、ワクチン接種、その他"</string>
+    <string name="denied_apps_banner_title" msgid="1997745063608657965">"アプリの権限を削除しました"</string>
+    <string name="denied_apps_banner_message_one_app" msgid="17659513485678315">"ヘルスコネクトにより、<xliff:g id="APP_DATA">%s</xliff:g> に対する権限が削除されました"</string>
+    <string name="denied_apps_banner_message_two_apps" msgid="1147216810892373640">"ヘルスコネクトにより、<xliff:g id="APP_DATA_0">%1$s</xliff:g> と <xliff:g id="APP_DATA_TWO">%2$s</xliff:g> の権限が削除されました"</string>
+    <string name="denied_apps_banner_message_three_apps" msgid="7978499051473471633">"ヘルスコネクトにより、<xliff:g id="APP_DATA_0">%1$s</xliff:g>、<xliff:g id="APP_DATA_TWO">%2$s</xliff:g>、<xliff:g id="APP_DATA_THREE">%3$s</xliff:g> の権限が削除されました"</string>
+    <string name="denied_apps_banner_message_many_apps" msgid="7249805432604650982">"ヘルスコネクトにより、<xliff:g id="APP_DATA_0">%1$s</xliff:g>、<xliff:g id="APP_DATA_TWO">%2$s</xliff:g>、<xliff:g id="APP_DATA_THREE">%3$s</xliff:g>、その他のアプリの権限が削除されました"</string>
+    <string name="denied_apps_banner_button" msgid="4438480389769298412">"詳細を表示"</string>
+    <string name="denied_apps_dialog_title" msgid="7470227827315635099">"ヘルスコネクトによりアプリの権限が削除される理由"</string>
+    <string name="denied_apps_dialog_message" msgid="7876664965504466099">"アプリが Google Play での公開が停止された場合や Google Play から削除された場合、ヘルスコネクトにより、そのアプリの権限が自動的に削除されます。\n\nそのため、そのアプリはヘルスコネクトに保存されたデータにアクセスできなくなります。そのアプリで以前に書き込まれたデータがある場合は、無効なアプリのリストに表示されます。"</string>
+    <string name="denied_apps_dialog_got_it_button" msgid="4698003516923683959">"OK"</string>
+    <string name="export_file_access_error_banner_button" msgid="6336949702329425932">"設定"</string>
+    <string name="export_file_access_error_banner_title" msgid="8290988049467813322">"データをエクスポートできませんでした"</string>
+    <string name="export_file_access_error_banner_summary" msgid="1226999878868505503">"エラーにより、<xliff:g id="DATE">%1$s</xliff:g>のデータをエクスポートできませんでした。新しいエクスポート スケジュールを設定し、もう一度お試しください。"</string>
+    <string name="next_export_time" msgid="3138247220014510213">"次回のエクスポート: <xliff:g id="DATE">%1$s</xliff:g>"</string>
+    <string name="next_export_text" msgid="6726252793571403846">"次のエクスポートがまもなく始まります"</string>
+    <string name="cloud_backup_option" msgid="2602990573804189525">"バックアップ"</string>
+    <string name="backup_and_restore_settings_screen_title" msgid="5391086732955348809">"バックアップと復元"</string>
+    <string name="last_export_time" msgid="9205875050823594041">"前回のエクスポート: <xliff:g id="DATE">%1$s</xliff:g>"</string>
+    <string name="last_export_time_now" msgid="31498024135933750">"前回のエクスポート: 今"</string>
+    <string name="last_export_time_minutes_ago" msgid="5279296486877765961">"{count,plural, =1{前回のエクスポート: 1 分前}other{前回のエクスポート: # 分前}}"</string>
+    <string name="last_export_time_hours_ago" msgid="3174986640795245343">"{count,plural, =1{前回のエクスポート: 1 時間前}other{前回のエクスポート: # 時間前}}"</string>
+    <string name="no_last_export_message" msgid="8138900854579872667">"前回のエクスポート: なし"</string>
+    <string name="last_export_file_location" msgid="4069435932524304633">"<xliff:g id="EXPORT_APP_NAME">%1$s</xliff:g> • <xliff:g id="EXPORT_FILE_NAME">%2$s</xliff:g>"</string>
+    <string name="scheduled_export" msgid="8737660963687364370">"エクスポートのスケジュール設定"</string>
+    <string name="import_data" msgid="404502315533233094">"データをインポート"</string>
+    <string name="import_data_description" msgid="4040178599441724296">"以前エクスポートしたファイルからデータを復元できます"</string>
+    <string name="import_error_banner_title" msgid="1480977889067027790">"データを復元しますか？"</string>
+    <string name="import_wrong_file_error_banner_button" msgid="1518043363477255045">"ファイルを選択"</string>
+    <string name="import_wrong_file_error_banner_summary" msgid="4857514343099050126">"選択したファイルは復元の対象ではありません。対象になるエクスポート済みファイルを選択してください。"</string>
+    <string name="import_version_mismatch_error_banner_button" msgid="4761716140032809817">"今すぐ更新"</string>
+    <string name="import_version_mismatch_error_banner_summary" msgid="6165550114170534795">"ヘルスコネクトでデータを復元するには、システムを更新してから、もう一度お試しください。"</string>
+    <string name="import_other_error_banner_button" msgid="8006947649520909176">"再試行"</string>
+    <string name="import_other_error_banner_summary" msgid="4378957063605649197">"エクスポートからデータを復元する際に問題が発生しました。"</string>
+    <string name="backup_and_restore_footer_body_text" msgid="4854718727539851909">"エクスポート機能を使ってデータを保存し、保存したデータを新しいスマートフォンに移行できます"</string>
+    <string name="backup_and_restore_footer_link_text" msgid="9075133737244288876">"バックアップと復元について"</string>
+    <string name="automatic_export_status" msgid="4407131306281440230">"<xliff:g id="EXPORT_ON_OR_OFF">%1$s</xliff:g> • <xliff:g id="EXPORT_FREQUENCY">%2$s</xliff:g>"</string>
+    <string name="automatic_export_on" msgid="6972389773963624315">"ON"</string>
+    <string name="automatic_export_off" msgid="3270255845008880841">"OFF"</string>
+    <string name="automatic_export_switch_text" msgid="8277559519722722926">"スケジュール設定されたエクスポートを使用する"</string>
+    <string name="next_export_file_location" msgid="2117071837862240540">"<xliff:g id="EXPORT_APP_NAME">%1$s</xliff:g> • <xliff:g id="EXPORT_FILE_NAME">%2$s</xliff:g>"</string>
+    <string name="choose_frequency_category" msgid="9094154407387676553">"間隔の変更"</string>
+    <string name="scheduled_export_settings_footer_text" msgid="8488483803782086291">"スケジュール設定されたエクスポートを OFF にしても、エクスポート済みのデータは保存場所から削除されません。"</string>
+    <string name="choose_frequency" msgid="8119085390857180221">"エクスポートのスケジュールを設定"</string>
+    <string name="choose_frequency_description" msgid="7698155810053504157">"データをエクスポートする頻度を選択してください"</string>
+    <string name="frequency_daily" msgid="3596412357416125727">"毎日"</string>
+    <string name="frequency_weekly" msgid="7302587625019573393">"毎週"</string>
+    <string name="frequency_monthly" msgid="729674398053825938">"毎月"</string>
+    <string name="export_destination_title" msgid="8352929396306002479">"スケジュール設定されたエクスポートの保存先を選択"</string>
+    <string name="export_invalid_storage" msgid="1459055934301871321">"データをエクスポートするためのクラウド ストレージ アプリを選択してください"</string>
+    <string name="export_default_file_name" msgid="1146984404965754445">"ヘルスコネクト"</string>
+    <string name="export_default_file_name_with_sequence" msgid="2380551038319211752">"ヘルスコネクト（<xliff:g id="EXPORT_SEQUENTIAL_NUMBER">%1$s</xliff:g>）"</string>
+    <string name="import_confirmation_dialog_title" msgid="1218478436676890997">"このファイルをインポートしますか？"</string>
+    <string name="import_confirmation_dialog_text" msgid="7274564242039735667">"<xliff:g id="FILE_NAME">%1$s</xliff:g> がヘルスコネクトにインポートされます"</string>
+    <string name="import_confirmation_dialog_cancel_button" msgid="4323351978842360895">"キャンセル"</string>
+    <string name="import_confirmation_dialog_import_button" msgid="7090219024758375606">"インポート"</string>
+    <string name="import_notification_import_in_progress_title" msgid="4657602436278942808">"ヘルスコネクトを復元しています"</string>
+    <string name="import_notification_import_complete_title" msgid="7493223782222480412">"ヘルスコネクトの復元が完了しました"</string>
+    <string name="import_in_progress_toast_text" msgid="3363548588078895706">"復元処理中"</string>
+    <string name="import_complete_toast_text" msgid="7730872919621230959">"データを復元しました"</string>
+    <string name="import_notification_error_generic_error_title" msgid="19162830551127433">"ヘルスコネクトでデータを復元できませんでした"</string>
+    <string name="import_notification_error_more_space_needed_title" msgid="240259612132385794">"空き容量が不足しています"</string>
+    <string name="import_notification_error_invalid_file_body_text" msgid="8877884063398886772">"選択したファイルは復元の対象ではありません。対象になるエクスポート済みファイルを選択してください。"</string>
+    <string name="import_notification_error_more_space_needed_body_text" msgid="7577564968089566232">"ヘルスコネクトでデータの復元を続けるには、スマートフォンに <xliff:g id="SPACE_NEEDED">%1$s</xliff:g> の空き容量が必要です。"</string>
+    <string name="import_notification_error_generic_error_body_text" msgid="6562162452820282874">"エクスポートからデータを復元する際に問題が発生しました。"</string>
+    <string name="import_notification_error_version_mismatch_body_text" msgid="9186785816764607620">"ヘルスコネクトでデータを復元するには、システムを更新してから、もう一度お試しください。"</string>
+    <string name="import_notification_update_now_intent_button" msgid="2808579294292956628">"今すぐ更新"</string>
+    <string name="import_notification_try_again_intent_button" msgid="3833062670098674999">"再試行"</string>
+    <string name="import_notification_open_intent_button" msgid="2739924648846724969">"開く"</string>
+    <string name="import_notification_choose_file_intent_button" msgid="2249671128440758769">"ファイルを選択"</string>
+    <string name="import_notification_free_up_space_intent_button" msgid="4665571334602539807">"空き容量を増やす"</string>
+    <string name="scheduled_export_on_toast_text" msgid="945186472588537310">"スケジュール設定されたエクスポートが ON になっています"</string>
+    <string name="export_notification_error_generic_error_title" msgid="7940091379629095465">"ヘルスコネクトでデータをエクスポートできません"</string>
+    <string name="export_notification_error_more_space_needed_title" msgid="5089783781556500431">"空き容量が不足しています"</string>
+    <string name="export_notification_error_generic_error_body_text" msgid="4161925150551602640">"エラーにより、<xliff:g id="DATE">%1$s</xliff:g>のデータをエクスポートできませんでした。新しいエクスポート スケジュールを設定し、もう一度お試しください。"</string>
+    <string name="export_notification_error_more_space_needed_body_text" msgid="5519192430780383427">"スケジュール設定されたエクスポートをヘルスコネクトで続けるには、スマートフォンに <xliff:g id="SPACE_NEEDED">%1$s</xliff:g> の空き容量が必要です。"</string>
+    <string name="export_notification_set_up_intent_button" msgid="1484836974815713693">"設定"</string>
+    <string name="export_notification_free_up_space_intent_button" msgid="2902823222861202203">"空き容量を増やす"</string>
+    <string name="export_back_button" msgid="3550795479165524982">"戻る"</string>
+    <string name="export_next_button" msgid="657930567137105172">"次へ"</string>
+    <string name="export_cancel_button" msgid="1952360582645412410">"キャンセル"</string>
+    <string name="import_cancel_button" msgid="2191598074422096715">"キャンセル"</string>
+    <string name="import_next_button" msgid="5706322508691854289">"次へ"</string>
+    <string name="import_source_location_title" msgid="4444467438013749461">"インポート元を選択"</string>
+    <string name="import_invalid_storage" msgid="341798262315495399">"データをインポートするためのクラウド ストレージ アプリを選択してください"</string>
+    <string name="export_import_tap_to_choose_account" msgid="5016799636886709580">"アカウントを選択するにはタップしてください"</string>
+    <string name="export_import_choose_account_title" msgid="1047021319012735232">"アカウントを選択"</string>
+    <string name="export_import_choose_account_cancel_button" msgid="7975616126298263479">"キャンセル"</string>
+    <string name="export_import_choose_account_done_button" msgid="8450305343787469429">"完了"</string>
+    <string name="export_import_no_apps_text" msgid="6403119325024893690">"利用できるアプリはありません。クラウド ストレージ アプリをインストールすると、ここに表示されます"</string>
+    <string name="export_import_install_apps_text" msgid="5026922993254770904">"クラウド ストレージ アプリをインストールすると、その他のオプションとしてここに表示されます"</string>
+    <string name="export_import_go_to_play_store_text" msgid="3210733429377429794">"Google Play ストアにアクセス"</string>
+    <string name="onboarding_title" msgid="8550656211291180188">"ヘルスコネクトを使ってみる"</string>
+    <string name="onboarding_description" msgid="3479157507808350452">"ヘルスコネクトを利用すると、健康とフィットネスに関するデータを保存し、デバイス上のさまざまなアプリを簡単に同期することができます"</string>
+    <string name="onboarding_description_health_records" msgid="4356538767594073978">"ヘルスコネクトは、さまざまなアプリの健康とフィットネスに関するデータを保存、同期します。\n\n"<b>"フィットネスとウェルネスのデータ"</b>"（エクササイズ セッション、歩数、栄養、睡眠など）\n\n"<b>"医療記録"</b>"（ワクチン接種、検査結果など）"</string>
+    <string name="onboarding_description_with_health_connect" msgid="8751881078749676542">"ヘルスコネクトでできること"</string>
+    <string name="share_data_text" msgid="6898398345784931678"><b>"アプリとデータを共有する"</b>\n"ヘルスコネクトに対して、各アプリが読み取りや書き込みを行えるデータを選択できます"</string>
+    <string name="manage_your_settings_text" msgid="8425779735541136878"><b>"設定とプライバシーを管理する"</b>\n"アプリの権限の変更やデータの管理をいつでも行えます"</string>
+    <string name="onboarding_go_back_button_text" msgid="5020083846511184625">"戻る"</string>
+    <string name="onboarding_get_started_button_text" msgid="2348061971090731336">"使ってみる"</string>
+    <string name="delete_button_content_description" msgid="9125115327455379618">"データを削除します"</string>
+    <string name="delete_inactive_app_data_button_content_description" msgid="5348498235281456144">"%1$s のデータを削除するボタン"</string>
+    <string name="enter_deletion_button_content_description" msgid="416336747251264118">"削除を開始"</string>
+    <string name="exit_deletion_button_content_description" msgid="6579227028841619158">"削除を終了"</string>
+    <string name="time_range_title" msgid="5777596779865648336">"ヘルスコネクトから削除するデータの選択"</string>
+    <string name="time_range_next_button" msgid="5849096934896557888">"次へ"</string>
+    <string name="time_range_message_all" msgid="7280888587242744729">"指定した期間にヘルスコネクトに追加されたすべてのデータを完全に削除します"</string>
+    <string name="time_range_message_data_type" msgid="1896125004829258195">"指定した期間にヘルスコネクトに追加された <xliff:g id="DATA_TYPE">%s</xliff:g> のデータを完全に削除します"</string>
+    <string name="time_range_message_category" msgid="1136451418397326356">"指定した期間にヘルスコネクトに追加された <xliff:g id="CATEGORY">%s</xliff:g> のデータを完全に削除します"</string>
+    <string name="time_range_message_app_data" msgid="2590800457710603556">"指定した期間にヘルスコネクトに追加された <xliff:g id="APP_DATA">%s</xliff:g> のデータを完全に削除します"</string>
+    <string name="time_range_message_permission_type_app_data" msgid="1613568925588480588">"指定した期間に <xliff:g id="APP_DATA">%2$s</xliff:g> がヘルスコネクトに追加した<xliff:g id="DATA_TYPE">%1$s</xliff:g>のデータを完全に削除します"</string>
+    <string name="time_range_one_day" msgid="7162709826595446727">"過去 24 時間分を削除"</string>
+    <string name="time_range_one_week" msgid="8754523384275645434">"過去 7 日分を削除"</string>
+    <string name="time_range_one_month" msgid="3034747870231999766">"過去 30 日分を削除"</string>
+    <string name="time_range_all" msgid="8167350212705839943">"すべてのデータを削除"</string>
+    <string name="confirming_question_all" msgid="1585414659784742952">"全期間のすべてのデータを完全に削除しますか？"</string>
+    <string name="confirming_question_one_day" msgid="8001434729335611950">"過去 24 時間のすべてのデータを完全に削除しますか？"</string>
+    <string name="confirming_question_one_week" msgid="5441506951423969587">"過去 7 日間のすべてのデータを完全に削除しますか？"</string>
+    <string name="confirming_question_one_month" msgid="4118595547587081940">"過去 30 日間のすべてのデータを完全に削除しますか？"</string>
+    <string name="confirming_question_data_type_all" msgid="1173934949902602037">"全期間の<xliff:g id="DATA_TYPE">%s</xliff:g>のデータを完全に削除しますか？"</string>
+    <string name="confirming_question_data_type_one_day" msgid="5386681714769751416">"過去 24 時間の<xliff:g id="DATA_TYPE">%s</xliff:g>のデータを完全に削除しますか？"</string>
+    <string name="confirming_question_data_type_one_week" msgid="8346031951374422501">"過去 7 日間の<xliff:g id="DATA_TYPE">%s</xliff:g>のデータを完全に削除しますか？"</string>
+    <string name="confirming_question_data_type_one_month" msgid="7110328687576360400">"過去 30 日間の<xliff:g id="DATA_TYPE">%s</xliff:g>のデータを完全に削除しますか？"</string>
+    <string name="confirming_question_category_all" msgid="9182430869247761531">"全期間の<xliff:g id="CATEGORY">%s</xliff:g>のデータを完全に削除しますか？"</string>
+    <string name="confirming_question_category_one_day" msgid="4886776948515472679">"過去 24 時間の<xliff:g id="CATEGORY">%s</xliff:g>のデータを完全に削除しますか？"</string>
+    <string name="confirming_question_category_one_week" msgid="1790565625674277693">"過去 7 日間の<xliff:g id="CATEGORY">%s</xliff:g>のデータを完全に削除しますか？"</string>
+    <string name="confirming_question_category_one_month" msgid="9181788460112796273">"過去 30 日間の<xliff:g id="CATEGORY">%s</xliff:g>のデータを完全に削除しますか？"</string>
+    <string name="confirming_question_app_data_all" msgid="4818571921949673097">"全期間の <xliff:g id="APP_DATA">%s</xliff:g> のデータを完全に削除しますか？"</string>
+    <string name="confirming_question_app_data_one_day" msgid="444028969015975031">"過去 24 時間の <xliff:g id="APP_DATA">%s</xliff:g> のデータを完全に削除しますか？"</string>
+    <string name="confirming_question_app_data_one_week" msgid="2096555081811730496">"過去 7 日間の <xliff:g id="APP_DATA">%s</xliff:g> のデータを完全に削除しますか？"</string>
+    <string name="confirming_question_app_data_one_month" msgid="6438241250825892892">"過去 30 日間の <xliff:g id="APP_DATA">%s</xliff:g> のデータを完全に削除しますか？"</string>
+    <string name="confirming_question_permission_type_app_data_all" msgid="1210052631467085849">"期間を問わず、<xliff:g id="APP_DATA">%2$s</xliff:g> が追加した<xliff:g id="DATA_TYPE">%1$s</xliff:g>のデータを完全に削除しますか？"</string>
+    <string name="confirming_question_permission_type_app_data_one_day" msgid="4377296923865256246">"過去 24 時間に <xliff:g id="APP_DATA">%2$s</xliff:g> が追加した<xliff:g id="DATA_TYPE">%1$s</xliff:g>のデータを完全に削除しますか？"</string>
+    <string name="confirming_question_permission_type_app_data_one_week" msgid="2253468260502709170">"過去 7 日間に <xliff:g id="APP_DATA">%2$s</xliff:g> が追加した<xliff:g id="DATA_TYPE">%1$s</xliff:g>のデータを完全に削除しますか？"</string>
+    <string name="confirming_question_permission_type_app_data_one_month" msgid="1656927839079630144">"過去 30 日間に <xliff:g id="APP_DATA">%2$s</xliff:g> が追加した<xliff:g id="DATA_TYPE">%1$s</xliff:g>のデータを完全に削除しますか？"</string>
+    <string name="confirming_question_app_remove_all_permissions" msgid="4170343072352701421">"<xliff:g id="APP_WITH_PERMISSIONS">%s</xliff:g> の権限もすべてヘルスコネクトから削除する"</string>
+    <string name="confirming_question_data_type_from_app_all" msgid="8361163993548510509">"<xliff:g id="APP_DATA">%2$s</xliff:g>から追加された<xliff:g id="DATA_TYPE">%1$s</xliff:g>の全データを完全に削除しますか？"</string>
+    <string name="confirming_question_single_entry" msgid="2064578008447638932">"ヘルスコネクトからこのエントリを完全に削除しますか？"</string>
+    <string name="confirming_question_message" msgid="2934249835529079545">"接続されているアプリが、ヘルスコネクトに保存されているこのデータにアクセスできなくなります"</string>
+    <string name="confirming_question_message_menstruation" msgid="944931041343695373">"<xliff:g id="START_DATE">%1$s</xliff:g>～<xliff:g id="END_DATE">%2$s</xliff:g>の生理期間のデータがすべて削除されます。"</string>
+    <string name="confirming_question_delete_button" msgid="1999996759507959985">"削除"</string>
+    <string name="confirming_question_go_back_button" msgid="9037523726124648221">"戻る"</string>
+    <string name="delete_dialog_success_got_it_button" msgid="8047812840310612293">"完了"</string>
+    <string name="delete_dialog_failure_close_button" msgid="4376647579348193224">"閉じる"</string>
+    <string name="delete_dialog_success_title" msgid="900884533930984889">"ヘルスコネクトからデータを削除しました"</string>
+    <string name="delete_dialog_success_message" msgid="7454086333205881294">"接続されているアプリからデータを完全に削除するには、データが保存されている可能性があるアプリをそれぞれ確認してください。"</string>
+    <string name="delete_dialog_done_button" msgid="1371340030947835493">"完了"</string>
+    <string name="delete_dialog_see_connected_apps_button" msgid="2975631672738138716">"接続されているアプリを表示"</string>
+    <string name="delete_progress_indicator" msgid="5799502879065833417">"データを削除しています"</string>
+    <string name="delete_dialog_failure_title" msgid="1959020721355789496">"データを削除できませんでした"</string>
+    <string name="delete_dialog_failure_message" msgid="7473241488471319963">"エラーが発生したため、ヘルスコネクトはデータを削除できませんでした"</string>
+    <string name="delete_dialog_failure_try_again_button" msgid="4323865124609424838">"再試行"</string>
+    <string name="delete_data_notification_title" msgid="7740230240986343347">"ヘルスコネクトのデータの削除中"</string>
+    <string name="delete_data_notification_ticker_text" msgid="2604051567679235822">"ヘルスコネクトのデータを削除しています"</string>
+    <string name="delete_data_notification_channel_name" msgid="4499713830012802095">"データの削除"</string>
+    <string name="data_point_action_content_description" msgid="6881048311770784455">"データエントリ <xliff:g id="ENTRY_TO_DELETE">%s</xliff:g> を削除"</string>
+    <string name="delete_data_point" msgid="1004049578454616738">"エントリ <xliff:g id="ENTRY_TO_DELETE">%s</xliff:g> を削除"</string>
+    <string name="aggregation_total" msgid="5641333638662325184">"合計: <xliff:g id="TOTAL_VALUE">%s</xliff:g>"</string>
+    <string name="watt_format" msgid="8500953817369623803">"{value,plural, =1{1 W}other{# W}}"</string>
+    <string name="watt_format_long" msgid="7107446926499116109">"{value,plural, =1{1 ワット}other{# ワット}}"</string>
+    <string name="steps_value" msgid="5779393974668105298">"{count,plural, =1{1 歩}other{# 歩}}"</string>
+    <string name="steps_per_minute" msgid="5527133010067502098">"{value,plural, =1{1 歩/分}other{# 歩/分}}"</string>
+    <string name="steps_per_minute_long" msgid="6146224261144843301">"{value,plural, =1{1 分あたり 1 歩}other{1 分あたり # 歩}}"</string>
+    <string name="heart_rate_value" msgid="6936476566204248578">"{count,plural, =1{1 bpm}other{# bpm}}"</string>
+    <string name="heart_rate_long_value" msgid="7865319425119507300">"{count,plural, =1{1 拍/分}other{# 拍/分}}"</string>
+    <string name="velocity_speed_miles" msgid="616312758726506781">"{value,plural, =1{1 mph}other{# mph}}"</string>
+    <string name="velocity_speed_km" msgid="2807705003203399350">"{value,plural, =1{1 km/h}other{# km/h}}"</string>
+    <string name="velocity_speed_miles_long" msgid="7945167764392834498">"{value,plural, =1{1 マイル/時}other{# マイル/時}}"</string>
+    <string name="velocity_speed_km_long" msgid="3962310367408338322">"{value,plural, =1{1 km/時}other{# km/時}}"</string>
+    <string name="velocity_minute_miles" msgid="7700413725988014667">"<xliff:g id="MINUTE">%1$s</xliff:g> 分/マイル"</string>
+    <string name="velocity_minute_km" msgid="4772380313506015301">"<xliff:g id="MINUTE">%1$s</xliff:g> 分/km"</string>
+    <string name="velocity_minute_miles_long" msgid="6889048307278340076">"<xliff:g id="MINUTE">%1$s</xliff:g> 分/マイル"</string>
+    <string name="velocity_minute_km_long" msgid="4037299863590066470">"<xliff:g id="MINUTE">%1$s</xliff:g> 分/キロメートル"</string>
+    <string name="velocity_minute_per_one_hundred_yards" msgid="647561643828842315">"<xliff:g id="MINUTE">%1$s</xliff:g> 分/100 ヤード"</string>
+    <string name="velocity_minute_per_one_hundred_meters" msgid="4636956099725561607">"<xliff:g id="MINUTE">%1$s</xliff:g> 分/100 メートル"</string>
+    <string name="velocity_minute_per_one_hundred_yards_long" msgid="3005945921657283386">"<xliff:g id="MINUTE">%1$s</xliff:g> 分/100 ヤード"</string>
+    <string name="velocity_minute_per_one_hundred_meters_long" msgid="6806485527680697198">"<xliff:g id="MINUTE">%1$s</xliff:g> 分/100 メートル"</string>
+    <string name="time_range_long" msgid="5067423945245490288">"<xliff:g id="START_TIME">%1$s</xliff:g>～<xliff:g id="END_TIME">%2$s</xliff:g>"</string>
+    <string name="date_range_long" msgid="6022190423982451176">"<xliff:g id="START_TIME">%1$s</xliff:g>～<xliff:g id="END_TIME">%2$s</xliff:g>"</string>
+    <string name="wheelchair_pushes" msgid="5807293867148465190">"{count,plural, =1{車椅子を押した回数: 1 回}other{車椅子を押した回数: # 回}}"</string>
+    <string name="liter" msgid="8276522589564337053">"{count,plural, =1{1 L}other{# L}}"</string>
+    <string name="liter_long" msgid="7094280457555707835">"{count,plural, =1{1 リットル}other{# リットル}}"</string>
+    <string name="milliliter" msgid="7730118351176678375">"{count,plural, =1{1 ml}other{# ml}}"</string>
+    <string name="milliliter_long" msgid="6431396151823725792">"{count,plural, =1{1 ミリリットル}other{# ミリリットル}}"</string>
+    <string name="floors_climbed" msgid="7483572478744998930">"{count,plural, =1{1 階}other{# 階}}"</string>
+    <string name="elevation_meters" msgid="5099783382361572761">"{count,plural, =1{1 m}other{# m}}"</string>
+    <string name="elevation_meters_long" msgid="3163136353148567981">"{count,plural, =1{1 メートル}other{# メートル}}"</string>
+    <string name="cycling_rpm" msgid="2271215098150068276">"{count,plural, =1{1 RPM}other{# RPM}}"</string>
+    <string name="cycling_rpm_long" msgid="4914848042733587007">"{count,plural, =1{1 回毎分}other{# 回毎分}}"</string>
+    <string name="cycling_cadence_series_range_long" msgid="6852892013260504985">"<xliff:g id="MIN">%1$s</xliff:g>～<xliff:g id="MAX">%2$s</xliff:g>"</string>
+    <string name="sexual_activity_protected" msgid="4259473257597274326">"避妊具使用"</string>
+    <string name="sexual_activity_unprotected" msgid="2250981470537379807">"避妊具未使用"</string>
+    <string name="spotting" msgid="1637175837078770520">"出血"</string>
+    <string name="flow_spotting" msgid="832418664953780156">"出血"</string>
+    <string name="flow_light" msgid="1937543318146228793">"出血: 少ない"</string>
+    <string name="flow_medium" msgid="3783688724668943154">"出血: 普通"</string>
+    <string name="flow_heavy" msgid="8672261792750634294">"出血: 多い"</string>
+    <string name="flow_unknown" msgid="1634411759928572900">"不明な経血量"</string>
+    <string name="period_day" msgid="3821944462093965882">"<xliff:g id="DAY">%1$d</xliff:g> 日目（<xliff:g id="TOTAL_LENGTH">%2$d</xliff:g> 日間）"</string>
+    <string name="period_length" msgid="2257138792780916599">"{count,plural, =1{生理（1 日目）}other{生理（# 日目）}}"</string>
+    <string name="ovulation_positive" msgid="6588547263126320238">"好ましい"</string>
+    <string name="ovulation_negative" msgid="591588801112312454">"好ましくない"</string>
+    <string name="ovulation_high" msgid="205362931427158291">"高"</string>
+    <string name="ovulation_inconclusive" msgid="3447066667631538756">"判定不能"</string>
+    <string name="milliseconds" msgid="284845884516037268">"{count,plural, =1{1 ms}other{# ms}}"</string>
+    <string name="milliseconds_long" msgid="93246373745977286">"{count,plural, =1{1 ミリ秒}other{# ミリ秒}}"</string>
+    <string name="planned_exercise_session_notes_title" msgid="5398114870366766242">"メモ"</string>
+    <string name="planned_exercise_block_repetitions" msgid="230530785149273276">"{count,plural, =1{1 回}other{# 回}}"</string>
+    <string name="active_calories_burned" msgid="1164230083046893828">"アクティブ: <xliff:g id="ACTIVE_CALORIES">%1$s</xliff:g>"</string>
+    <string name="total_calories_burned" msgid="1674210345283541450">"合計: <xliff:g id="TOTAL_CALORIES">%1$s</xliff:g>"</string>
+    <string name="amrap_performance_goal" msgid="2225285957050151025">"できる限り繰り返し"</string>
+    <string name="rate_of_perceived_exertion_goal" msgid="7025839991503747361">"運動レベル: <xliff:g id="VALUE">%1$d</xliff:g>/10"</string>
+    <string name="elapsed_time_placeholder" msgid="5154979833935704302">"--:--"</string>
+    <string name="repetitions" msgid="5092687490665962229">"{count,plural, =1{1 回}other{# 回}}"</string>
+    <string name="repetitions_long" msgid="9056502282298182438">"{count,plural, =1{1 回}other{# 回}}"</string>
+    <string name="exercise_segments_header" msgid="2992953017179406012">"エクササイズのメニュー"</string>
+    <string name="segment_set_index_format" msgid="5299538353624573851">"<xliff:g id="SET_INDEX">%1$d</xliff:g> を設定"</string>
+    <string name="segment_rpe_format" msgid="1456617736401131975">"RPE: <xliff:g id="RPE_0">%1$s</xliff:g>"</string>
+    <string name="segment_rpe_format_long" msgid="3492398127594227129">"主観的運動強度: <xliff:g id="RPE">%1$s</xliff:g>"</string>
+    <string name="session_rpe_header" msgid="6436164288422834973">"RPE"</string>
+    <string name="session_rpe_header_long" msgid="9193080712374662004">"主観的運動強度"</string>
+    <string name="exercise_laps_header" msgid="117228630553856372">"ラップ"</string>
+    <string name="back_extension" msgid="426518933137440577">"バック エクステンション"</string>
+    <string name="badminton" msgid="8839727076522086870">"バドミントン"</string>
+    <string name="barbell_shoulder_press" msgid="3800236222803424251">"バーベル ショルダー プレス"</string>
+    <string name="baseball" msgid="2520520093470304570">"野球"</string>
+    <string name="basketball" msgid="1453863811744469210">"バスケットボール"</string>
+    <string name="bench_press" msgid="640506654204391301">"ベンチプレス"</string>
+    <string name="bench_sit_up" msgid="6601081870476287683">"ベンチ シットアップ"</string>
+    <string name="biking" msgid="4108296097363777467">"自転車"</string>
+    <string name="biking_stationary" msgid="1538524429562124202">"エアロバイク"</string>
+    <string name="boot_camp" msgid="1554811887379786226">"ブートキャンプ"</string>
+    <string name="boxing" msgid="2200194516739940317">"ボクシング"</string>
+    <string name="burpee" msgid="1434605818712603589">"バーピー"</string>
+    <string name="calisthenics" msgid="9080623890020954493">"健康体操"</string>
+    <string name="cricket" msgid="7543586707938752011">"クリケット"</string>
+    <string name="crunch" msgid="4265356947720591896">"腹筋運動"</string>
+    <string name="dancing" msgid="4099572666298130171">"ダンス"</string>
+    <string name="deadlift" msgid="6880561478635890617">"デッドリフト"</string>
+    <string name="dumbbell_curl_left_arm" msgid="4453594605921193509">"ダンベルカール（左腕）"</string>
+    <string name="dumbbell_curl_right_arm" msgid="4680998443002425166">"ダンベルカール（右腕）"</string>
+    <string name="dumbbell_front_raise" msgid="4411281746015904879">"ダンベル フロントレイズ"</string>
+    <string name="dumbbell_lateral_raise" msgid="5839946068429137241">"ダンベル ラテラルレイズ"</string>
+    <string name="dumbbell_triceps_extension_left_arm" msgid="6756023069611493063">"ダンベル トライセップ エクステンション（左腕）"</string>
+    <string name="dumbbell_triceps_extension_right_arm" msgid="1498470275564554389">"ダンベル トライセップ エクステンション（右腕）"</string>
+    <string name="dumbbell_triceps_extension_two_arm" msgid="5409860665522903159">"ダンベル トライセップ エクステンション（両腕）"</string>
+    <string name="elliptical" msgid="5148914059968910839">"クロストレーナー"</string>
+    <string name="exercise_class" msgid="32582249527931454">"エクササイズ クラス"</string>
+    <string name="fencing" msgid="410347890025055779">"フェンシング"</string>
+    <string name="football_american" msgid="8564554592554502623">"アメリカン フットボール"</string>
+    <string name="football_australian" msgid="5524598297723674661">"オーストラリアン フットボール"</string>
+    <string name="forward_twist" msgid="2464895720533462566">"フォワード ツイスト"</string>
+    <string name="frisbee_disc" msgid="5167617057624738753">"フリスビー"</string>
+    <string name="golf" msgid="2726655052150604682">"ゴルフ"</string>
+    <string name="guided_breathing" msgid="8688586393796970733">"ガイド付き呼吸セッション"</string>
+    <string name="gymnastics" msgid="1122967371410769598">"体操"</string>
+    <string name="handball" msgid="3088985331906235361">"ハンドボール"</string>
+    <string name="high_intensity_interval_training" msgid="8873384314130026442">"高強度インターバル トレーニング"</string>
+    <string name="hiking" msgid="5477476795295322496">"ハイキング"</string>
+    <string name="ice_hockey" msgid="3615167122989198051">"アイスホッケー"</string>
+    <string name="ice_skating" msgid="8509270149324068230">"アイススケート"</string>
+    <string name="jumping_jack" msgid="8751015874477795657">"ジャンピング ジャック"</string>
+    <string name="jump_rope" msgid="3065249477862282277">"縄跳び"</string>
+    <string name="lat_pull_down" msgid="6974730398913678563">"ラット プルダウン"</string>
+    <string name="lunge" msgid="6557814816897990529">"ランジ"</string>
+    <string name="martial_arts" msgid="3279383109083496658">"格闘技"</string>
+    <string name="meditation" msgid="7578287714544679183">"瞑想"</string>
+    <string name="paddling" msgid="746868067888160788">"パドリング"</string>
+    <string name="paragliding" msgid="8328649138909727690">"パラグライダー"</string>
+    <string name="pilates" msgid="8660903049535347415">"ピラティス"</string>
+    <string name="plank" msgid="5537839085592473449">"プランク"</string>
+    <string name="racquetball" msgid="8169482984904052538">"ラケットボール"</string>
+    <string name="rock_climbing" msgid="3123024521372083233">"ロック クライミング"</string>
+    <string name="roller_hockey" msgid="3524872164646176686">"ローラー ホッケー"</string>
+    <string name="rowing" msgid="615898011726585442">"ローイング"</string>
+    <string name="rowing_machine" msgid="4075255566862183370">"ローイング マシン"</string>
+    <string name="rugby" msgid="5146215118571059267">"ラグビー"</string>
+    <string name="running" msgid="5135754380339217169">"ランニング"</string>
+    <string name="running_treadmill" msgid="2083354407217486405">"トレッドミル ランニング"</string>
+    <string name="sailing" msgid="4924304145770903145">"セーリング"</string>
+    <string name="scuba_diving" msgid="4548778216122159229">"スキューバ ダイビング"</string>
+    <string name="skating" msgid="7320438805566302784">"スケート"</string>
+    <string name="skiing" msgid="6773127614153771204">"スキー"</string>
+    <string name="snowboarding" msgid="890584874325367973">"スノーボード"</string>
+    <string name="snowshoeing" msgid="8932096199095096139">"スノーシューイング"</string>
+    <string name="soccer" msgid="2631723269673549642">"サッカー"</string>
+    <string name="softball" msgid="8389418982713908334">"ソフトボール"</string>
+    <string name="squash" msgid="1588653991323140302">"スカッシュ"</string>
+    <string name="squat" msgid="7664163620113834611">"スクワット"</string>
+    <string name="stair_climbing" msgid="4042085961630471238">"階段上り"</string>
+    <string name="stair_climbing_machine" msgid="4003983194733092325">"階段上りマシン"</string>
+    <string name="strength_training" msgid="56772956237540768">"筋力トレーニング"</string>
+    <string name="stretching" msgid="8667864173383423787">"ストレッチ"</string>
+    <string name="surfing" msgid="7612503593241904984">"サーフィン"</string>
+    <string name="swimming_open_water" msgid="1030388267758027037">"オープン ウォーター スイミング"</string>
+    <string name="swimming_pool" msgid="1584809250142187550">"水泳（プール）"</string>
+    <string name="swimming_freestyle" msgid="5969535751316106638">"フリースタイル"</string>
+    <string name="swimming_backstroke" msgid="7293002996518694035">"背泳ぎ"</string>
+    <string name="swimming_breaststroke" msgid="7168282910654289593">"平泳ぎ"</string>
+    <string name="swimming_butterfly" msgid="8553167046220664352">"バタフライ"</string>
+    <string name="swimming_mixed" msgid="4486578691634921168">"混合"</string>
+    <string name="swimming_other" msgid="2561131941506955982">"その他"</string>
+    <string name="table_tennis" msgid="4849741231221974485">"卓球"</string>
+    <string name="tennis" msgid="6627063985750125504">"テニス"</string>
+    <string name="upper_twist" msgid="3382862516792841928">"アッパー ツイスト"</string>
+    <string name="volleyball" msgid="7469885673961163729">"バレーボール"</string>
+    <string name="walking" msgid="4782496160454621769">"ウォーキング"</string>
+    <string name="water_polo" msgid="2527119748097860708">"水球"</string>
+    <string name="weightlifting" msgid="7586735291662318085">"ウェイトリフティング"</string>
+    <string name="wheelchair" msgid="2226734836271500057">"車椅子"</string>
+    <string name="workout" msgid="8583398837804461839">"ワークアウト"</string>
+    <string name="yoga" msgid="138675430777247097">"ヨガ"</string>
+    <string name="arm_curl" msgid="1737456878333201848">"アームカール"</string>
+    <string name="ball_slam" msgid="5996773678701283169">"ボールスラム"</string>
+    <string name="double_arm_triceps_extension" msgid="4010735719203872078">"トライセップ エクステンション（両腕）"</string>
+    <string name="dumbbell_row" msgid="181791808359752158">"ダンベルロウ"</string>
+    <string name="front_raise" msgid="1030939481482621384">"フロントレイズ"</string>
+    <string name="hip_thrust" msgid="8490916766767408053">"ヒップスラスト"</string>
+    <string name="hula_hoop" msgid="1651914953207761226">"フラフープ"</string>
+    <string name="kettlebell_swing" msgid="364783119882246413">"ケトルベル スイング"</string>
+    <string name="lateral_raise" msgid="1037404943175363734">"ラテラルレイズ"</string>
+    <string name="leg_curl" msgid="5327470513599472344">"レッグカール"</string>
+    <string name="leg_extension" msgid="1843556289395164421">"レッグ エクステンション"</string>
+    <string name="leg_press" msgid="4544551493384600086">"レッグプレス"</string>
+    <string name="leg_raise" msgid="3206754140765952088">"レッグレイズ"</string>
+    <string name="mountain_climber" msgid="6666288676718010900">"マウンテンクライマー"</string>
+    <string name="pull_up" msgid="4056233737860296184">"プルアップ"</string>
+    <string name="punch" msgid="7915247952566217050">"パンチ"</string>
+    <string name="shoulder_press" msgid="4071573271892122319">"ショルダー プレス"</string>
+    <string name="single_arm_triceps_extension" msgid="4500495528709994121">"トライセップ エクステンション（片腕）"</string>
+    <string name="sit_up" msgid="1872162440154479950">"シットアップ"</string>
+    <string name="rest" msgid="5937058337671252210">"休息"</string>
+    <string name="pause" msgid="5161459047750335691">"小休止"</string>
+    <string name="activity_type_australian_football" msgid="431838050917315084">"オーストラリアン フットボール"</string>
+    <string name="unknown_type" msgid="4506151971125161053">"不明な種類"</string>
+    <string name="sleep_session_default" msgid="7376764686701487196">"<xliff:g id="DURATION"> %1$s</xliff:g> - 睡眠"</string>
+    <string name="sleep_stage_default" msgid="1539043695578480733">"<xliff:g id="DURATION">%1$s</xliff:g> <xliff:g id="NAME">%2$s</xliff:g>⁠"</string>
+    <string name="sleep_stage_awake" msgid="4526767634444460862">"覚醒状態"</string>
+    <string name="sleep_stage_awake_in_bed" msgid="5533385496857888503">"寝床で目が覚めている状態"</string>
+    <string name="sleep_stage_sleeping" msgid="5122840110107303518">"睡眠"</string>
+    <string name="sleep_stage_out_of_bed" msgid="522297068981578046">"起床"</string>
+    <string name="sleep_stage_rem" msgid="1694477904067543104">"レム睡眠"</string>
+    <string name="sleep_stage_light" msgid="1070117964678317880">"浅い眠り"</string>
+    <string name="sleep_stage_deep" msgid="3134557407657258364">"深い眠り"</string>
+    <string name="sleep_stage_unknown" msgid="8664190491902295991">"不明"</string>
+    <string name="mindfulness_type_breathing" msgid="3175952922332753437">"呼吸"</string>
+    <string name="mindfulness_type_meditation" msgid="4453014833652749254">"瞑想"</string>
+    <string name="mindfulness_type_movement" msgid="600930756800362680">"動き"</string>
+    <string name="mindfulness_type_music" msgid="7041364137895485917">"音楽"</string>
+    <string name="mindfulness_type_other" msgid="793524328911038908">"その他"</string>
+    <string name="mindfulness_type_unguided" msgid="2367259868577157922">"ガイドなし"</string>
+    <string name="mindfulness_a11y_text" msgid="1569084462477858789">"<xliff:g id="DURATION">%1$s</xliff:g> のマインドフルネスの合計時間"</string>
+    <string name="activity_intensity_type_moderate" msgid="7974792315871109564">"中"</string>
+    <string name="activity_intensity_type_vigorous" msgid="5651020560923780330">"高"</string>
+    <string name="nicotine_intake_title" msgid="428157249131107976">"<xliff:g id="QUANTITY">%1$s</xliff:g> • <xliff:g id="INTAKE">%2$s</xliff:g>"</string>
+    <string name="nicotine_intake_title_long" msgid="3254332210697516844">"<xliff:g id="QUANTITY">%1$s</xliff:g> • <xliff:g id="INTAKE">%2$s</xliff:g>"</string>
+    <string name="nicotine_intake_type_vape" msgid="8910534364762591958">"{quantity,plural, =1{電子タバコ {quantity} 回}other{電子タバコ {quantity} 回}}"</string>
+    <string name="nicotine_intake_type_cigarette" msgid="306427848597435195">"{quantity,plural, =1{タバコ {quantity} 本}other{タバコ {quantity} 本}}"</string>
+    <string name="nicotine_intake_type_unknown" msgid="2096300681393598647">"不明: {quantity, number}"</string>
+    <!-- no translation found for alcohol_consumption_title (729645829048393177) -->
+    <skip />
+    <string name="alcohol_consumption_beverage_type_other" msgid="7936472575378572286">"不明な飲料"</string>
+    <string name="alcohol_consumption_beverage_type_beer" msgid="1753954064025455693">"ビール"</string>
+    <string name="alcohol_consumption_beverage_type_wine" msgid="539865325714724419">"ワイン"</string>
+    <string name="alcohol_consumption_beverage_type_vodka" msgid="8617871659386650818">"ウォッカ"</string>
+    <string name="alcohol_consumption_beverage_type_gin" msgid="5945396443339874907">"ジン"</string>
+    <string name="alcohol_consumption_beverage_type_whiskey" msgid="1085904168947658887">"ウィスキー"</string>
+    <string name="alcohol_consumption_beverage_type_rum" msgid="5230691377430212826">"ラム"</string>
+    <string name="alcohol_consumption_beverage_type_tequila" msgid="9074751455065347442">"テキーラ"</string>
+    <string name="alcohol_consumption_beverage_type_lager" msgid="1490153167547219382">"ラガー"</string>
+    <string name="alcohol_consumption_beverage_type_cider" msgid="3348115754435446544">"シードル"</string>
+    <string name="alcohol_consumption_beverage_type_sake" msgid="2773512901340614154">"日本酒"</string>
+    <string name="alcohol_consumption_beverage_type_shochu" msgid="3491300198222489324">"焼酎"</string>
+    <string name="alcohol_consumption_beverage_type_soju" msgid="113120387013483711">"ソジュ"</string>
+    <string name="alcohol_consumption_beverage_type_mead" msgid="1673063923088962681">"蜂蜜酒"</string>
+    <string name="alcohol_consumption_beverage_type_absinthe" msgid="3972259596196421914">"アブサン"</string>
+    <string name="alcohol_consumption_beverage_type_brandy" msgid="3782444367994599131">"ブランデー"</string>
+    <string name="alcohol_consumption_beverage_type_cocktail" msgid="4711099215987668649">"カクテル"</string>
+    <string name="alcohol_consumption_beverage_type_chuhai" msgid="4727177353197748690">"酎ハイ"</string>
+    <string name="alcohol_consumption_beverage_type_highball" msgid="8694072892834520500">"ハイボール"</string>
+    <string name="serving_volume_title" msgid="4727986574534974167">"提供量"</string>
+    <string name="alcohol_by_volume_title" msgid="6942673552238435422">"アルコール度数"</string>
+    <string name="notes_title" msgid="4596764711916248492">"メモ"</string>
+    <string name="details_title" msgid="8411891773854413790">"詳細"</string>
+    <string name="menstrual_cycle_phase_follicular" msgid="4515498093841723331">"卵胞期"</string>
+    <string name="menstrual_cycle_phase_luteal" msgid="2369477800443212440">"黄体期"</string>
+    <string name="menstrual_cycle_phase_unknown" msgid="1126074973862101221">"不明な周期"</string>
+    <string name="menstrual_cycle_phase_day_of_cycle" msgid="5910349012626523530">"<xliff:g id="DAY">%1$d</xliff:g> 日目"</string>
+    <string name="minute_duration" msgid="9035288227090160206">"<xliff:g id="MINUTE">%1$s</xliff:g> 分"</string>
+    <string name="hour_minute_duration_short" msgid="1754616782635510999">"<xliff:g id="HOUR">%1$s</xliff:g> 時間 <xliff:g id="MIN">%2$s</xliff:g> 分"</string>
+    <string name="hour_duration" msgid="3472489613837138711">"<xliff:g id="HOUR">%1$s</xliff:g> 時間"</string>
+    <string name="hour_minute_duration_accessibility" msgid="1863356122145811614">"<xliff:g id="HOURS">%1$s</xliff:g> <xliff:g id="MINUTES">%2$s</xliff:g>⁠"</string>
+    <string name="hour_duration_accessibility" msgid="4944782597053107276">"{count,plural, =1{1 時間}other{# 時間}}"</string>
+    <string name="minute_duration_accessibility" msgid="399158463609534882">"{count,plural, =1{1 分}other{# 分}}"</string>
+    <!-- no translation found for day_duration (3965793251448856729) -->
+    <skip />
+    <string name="day_hour_duration" msgid="6174865584368017275">"<xliff:g id="DAYS">%1$s</xliff:g>と <xliff:g id="HOURS">%2$s</xliff:g>"</string>
+    <string name="day_duration_accessibility" msgid="3023909370877112320">"{count,plural, =1{1 日}other{# 日}}"</string>
+    <string name="vo2_max" msgid="8129489055516944647">"{value,plural, =1{1 mL/（kg 分）}other{# mL/（kg 分）}}"</string>
+    <string name="vo2_max_long" msgid="1031842712595851857">"{value,plural, =1{体重 1 kg あたりの酸素摂取量 1 ミリリットル毎分}other{体重 1 kg あたりの酸素摂取量 # ミリリットル毎分}}"</string>
+    <string name="vo2_metabolic_cart" msgid="4724757223373717896">"メタボリック カート"</string>
+    <string name="vo2_heart_rate_ratio" msgid="8707274294125886148">"心拍数率"</string>
+    <string name="vo2_cooper_test" msgid="4713211595719031518">"クーパーテスト"</string>
+    <string name="vo2_multistage_fitness_test" msgid="908967547838751749">"多段階フィットネス テスト"</string>
+    <string name="vo2_rockport_fitness_test" msgid="2951465532122577281">"ロックポート フィットネス テスト"</string>
+    <string name="vo2_other" msgid="5359013487285233550">"その他"</string>
+    <string name="mucus_dry" msgid="1065582777971603874">"乾燥"</string>
+    <string name="mucus_sticky" msgid="2086025099544529404">"粘着質"</string>
+    <string name="mucus_creamy" msgid="7525290054414941569">"クリーム状"</string>
+    <string name="mucus_watery" msgid="1875540699006472048">"水様性"</string>
+    <string name="mucus_egg_white" msgid="5578512593433767787">"卵白のような感じ"</string>
+    <string name="mucus_unusual" msgid="3987847850745292757">"通常とは異なる"</string>
+    <string name="mucus_light" msgid="5309343389013086860">"浅い眠り"</string>
+    <string name="mucus_medium" msgid="7666848347740570566">"普通"</string>
+    <string name="mucus_heavy" msgid="7864873650773259133">"多"</string>
+    <string name="blood_pressure" msgid="7892828162554266437">"<xliff:g id="SYSTOLIC">%1$s</xliff:g>/<xliff:g id="DIASTOLIC">%2$s</xliff:g> mmHg"</string>
+    <string name="blood_pressure_long" msgid="6487761539434451764">"<xliff:g id="SYSTOLIC">%1$s</xliff:g>/<xliff:g id="DIASTOLIC">%2$s</xliff:g> 水銀柱ミリメートル"</string>
+    <string name="body_position_standing_up" msgid="1221924915768574594">"起立した状態"</string>
+    <string name="body_position_sitting_down" msgid="8053875174780552282">"着席した状態"</string>
+    <string name="body_position_lying_down" msgid="1472381098179371143">"横になった状態"</string>
+    <string name="body_position_reclining" msgid="5676889701646839079">"寄り掛かった状態"</string>
+    <string name="blood_pressure_left_wrist" msgid="2047244346984766880">"左手首"</string>
+    <string name="blood_pressure_right_wrist" msgid="1488133877790549424">"右手首"</string>
+    <string name="blood_pressure_left_arm" msgid="5150436840115504433">"左上腕"</string>
+    <string name="blood_pressure_right_arm" msgid="8660682684653121430">"右上腕"</string>
+    <string name="millimoles_per_liter" msgid="3185457774991908223">"{count,plural, =1{1 mmol/L}other{# mmol/L}}"</string>
+    <string name="millimoles_per_liter_long" msgid="7248942926237335084">"{count,plural, =1{1 ミリモル毎リットル}other{# ミリモル毎リットル}}"</string>
+    <string name="specimen_source_interstitial_fluid" msgid="2201319049828128946">"間質液"</string>
+    <string name="specimen_source_capillary_blood" msgid="5525024815754731735">"毛細血管血"</string>
+    <string name="specimen_source_plasma" msgid="8794064916106457747">"血漿"</string>
+    <string name="specimen_source_serum" msgid="6383820057196352355">"血清"</string>
+    <string name="specimen_source_tears" msgid="4368541832400624080">"涙"</string>
+    <string name="specimen_source_whole_blood" msgid="8884838851343307557">"全血"</string>
+    <string name="blood_glucose_general" msgid="7566279829618085436">"全般"</string>
+    <string name="blood_glucose_fasting" msgid="2122662399203934350">"空腹時"</string>
+    <string name="blood_glucose_before_meal" msgid="5125498172701953751">"食事前"</string>
+    <string name="blood_glucose_after_meal" msgid="8101398122897992346">"食事後"</string>
+    <string name="mealtype_label" msgid="5402474235944051844">"食事の種類"</string>
+    <string name="mealtype_unknown" msgid="3024645648636923591">"不明"</string>
+    <string name="mealtype_breakfast" msgid="119545434987870954">"朝食"</string>
+    <string name="mealtype_lunch" msgid="6212310262989550906">"ランチ"</string>
+    <string name="mealtype_dinner" msgid="1896347121249081336">"夕食"</string>
+    <string name="mealtype_snack" msgid="8454859872168781221">"おやつ"</string>
+    <string name="biotin" msgid="4000818331802478073">"ビオチン"</string>
+    <string name="caffeine" msgid="2847006945615912643">"カフェイン"</string>
+    <string name="calcium" msgid="4832722858820295752">"カルシウム"</string>
+    <string name="chloride" msgid="2509193544740445654">"塩化物"</string>
+    <string name="cholesterol" msgid="4261128668088502049">"コレステロール"</string>
+    <string name="chromium" msgid="807851794929222026">"クロム"</string>
+    <string name="copper" msgid="8603012497089601260">"銅"</string>
+    <string name="dietary_fiber" msgid="6928876454420561553">"食物繊維"</string>
+    <string name="energy_consumed_total" msgid="7866804137119190606">"エネルギー"</string>
+    <string name="energy_consumed_from_fat" msgid="8637734004867176038">"脂肪エネルギー"</string>
+    <string name="folate" msgid="7728279545427110321">"葉酸塩"</string>
+    <string name="folic_acid" msgid="6861953414423667870">"葉酸"</string>
+    <string name="iodine" msgid="2896913103021799237">"ヨウ素"</string>
+    <string name="iron" msgid="6134405609706877219">"鉄"</string>
+    <string name="magnesium" msgid="6157495455437549170">"マグネシウム"</string>
+    <string name="manganese" msgid="8339856079280400610">"マンガン"</string>
+    <string name="molybdenum" msgid="3762866331212112454">"モリブデン"</string>
+    <string name="monounsaturated_fat" msgid="1320950160552507057">"1 価不飽和脂肪"</string>
+    <string name="niacin" msgid="8425099536322826837">"ナイアシン"</string>
+    <string name="pantothenic_acid" msgid="5310842296212528685">"パントテン酸"</string>
+    <string name="phosphorus" msgid="3912318057064021441">"リン"</string>
+    <string name="polyunsaturated_fat" msgid="6386374757897543025">"多価不飽和脂肪"</string>
+    <string name="potassium" msgid="723134189945209756">"カリウム"</string>
+    <string name="protein" msgid="2731834509320364994">"タンパク質"</string>
+    <string name="riboflavin" msgid="5329306869379867435">"リボフラビン"</string>
+    <string name="saturated_fat" msgid="3174504848270051265">"飽和脂肪"</string>
+    <string name="selenium" msgid="8129594078116221891">"セレン"</string>
+    <string name="sodium" msgid="7687341876185019438">"ナトリウム"</string>
+    <string name="sugar" msgid="656190285547502122">"糖類"</string>
+    <string name="thiamin" msgid="1662446837028039063">"チアミン"</string>
+    <string name="total_carbohydrate" msgid="7034043840349284931">"総炭水化物"</string>
+    <string name="total_fat" msgid="8193647297427112321">"総脂質"</string>
+    <string name="trans_fat" msgid="1059715899517909090">"トランス脂肪"</string>
+    <string name="unsaturated_fat" msgid="5495925265449481356">"不飽和脂肪"</string>
+    <string name="vitamin_a" msgid="2379293029664252095">"ビタミン A"</string>
+    <string name="vitamin_b12" msgid="180162813332325098">"ビタミン B12"</string>
+    <string name="vitamin_b6" msgid="370053149968231667">"ビタミン B6"</string>
+    <string name="vitamin_c" msgid="5383574357126292194">"ビタミン C"</string>
+    <string name="vitamin_d" msgid="2717952250555672580">"ビタミン D"</string>
+    <string name="vitamin_e" msgid="5214468880515744802">"ビタミン E"</string>
+    <string name="vitamin_k" msgid="2722297637910069736">"ビタミン K"</string>
+    <string name="zinc" msgid="5211975076671534013">"亜鉛"</string>
+    <string name="nutrient_with_value" msgid="3327198262871257518">"<xliff:g id="NUTRIENT">%1$s</xliff:g>: <xliff:g id="AMOUNT">%2$s</xliff:g>"</string>
+    <string name="meal_name" msgid="6060648788040408308">"名前"</string>
+    <string name="gram_short_format" msgid="2355009811799735134">"{count,plural, =1{1 g}other{# g}}"</string>
+    <string name="gram_long_format" msgid="6160392101513066663">"{count,plural, =1{1 グラム}other{# グラム}}"</string>
+    <string name="respiratory_rate_value" msgid="4546418213418344364">"{count,plural, =1{1 RPM}other{# RPM}}"</string>
+    <string name="respiratory_rate_value_long" msgid="3822748008700697049">"{count,plural, =1{呼吸数: 1 回/分}other{呼吸数: # 回/分}}"</string>
+    <string name="kilograms_short_label" msgid="9098342853218050689">"{count,plural, =1{1 kg}other{# kg}}"</string>
+    <string name="pounds_short_label" msgid="6256277330455003180">"{count,plural, =1{1 lb}other{# lb}}"</string>
+    <string name="stone_short_label" msgid="8377585176530348612">"{count,plural, =1{1 st}other{# st}}"</string>
+    <string name="stone_pound_short_label" msgid="7157344201618366834">"{stone_part} {pound_part}"</string>
+    <string name="kilograms_long_label" msgid="7883695071156297670">"{count,plural, =1{1 キログラム}other{# キログラム}}"</string>
+    <string name="pounds_long_label" msgid="2916697485006416419">"{count,plural, =1{1 ポンド}other{# ポンド}}"</string>
+    <string name="stone_long_label" msgid="8951426283449456468">"{count,plural, =1{1 ストーン}other{# ストーン}}"</string>
+    <string name="stone_pound_long_label" msgid="1308941435682625204">"{stone_part} {pound_part}"</string>
+    <string name="temperature_celsius" msgid="8867121728397270787">"{value,plural, =1{1℃}other{#℃}}"</string>
+    <string name="temperature_celsius_long" msgid="5789974427381333869">"{value,plural, =1{1 度（摂氏）}other{# 度（摂氏）}}"</string>
+    <string name="temperature_kelvin" msgid="358565033091774943">"{value,plural, =1{1K}other{#K}}"</string>
+    <string name="temperature_kelvin_long" msgid="6078037481989090665">"{value,plural, =1{1 ケルビン}other{# ケルビン}}"</string>
+    <string name="temperature_fahrenheit" msgid="4907172619457051144">"{value,plural, =1{1℉}other{#℉}}"</string>
+    <string name="temperature_fahrenheit_long" msgid="1668948424411289521">"{value,plural, =1{1 度（華氏）}other{# 度（華氏）}}"</string>
+    <string name="temperatureDelta_celsius" msgid="4715618675614337612">"{value,plural, =1{{formattedValue}℃}other{{formattedValue}℃}}"</string>
+    <string name="temperatureDelta_celsius_long" msgid="2696479973655631256">"{value,plural, =1{{formattedValue} 度（摂氏）}other{{formattedValue} 度（摂氏）}}"</string>
+    <string name="temperatureDelta_fahrenheit" msgid="4888310106252786060">"{value,plural, =1{{formattedValue}℉}other{{formattedValue}℉}}"</string>
+    <string name="temperatureDelta_fahrenheit_long" msgid="6245718323010730238">"{value,plural, =1{{formattedValue} 度（華氏）}other{{formattedValue} 度（華氏）}}"</string>
+    <string name="temperatureDelta_kelvin" msgid="3417124829968605912">"{value,plural, =1{{formattedValue}K}other{{formattedValue}K}}"</string>
+    <string name="temperatureDelta_kelvin_long" msgid="2778664973816301780">"{value,plural, =1{{formattedValue} ケルビン}other{{formattedValue} ケルビン}}"</string>
+    <string name="temperatureDelta_average_celsius" msgid="8285198789751919796">"{value,plural, =1{{formattedValue}℃（変動の平均）}other{{formattedValue}℃（変動の平均）}}"</string>
+    <string name="temperatureDelta_average_celsius_long" msgid="2706133487120358878">"{value,plural, =1{{formattedValue} 度（摂氏）（変動の平均）}other{{formattedValue} 度（摂氏）（変動の平均）}}"</string>
+    <string name="temperatureDelta_average_fahrenheit" msgid="1610634095789007598">"{value,plural, =1{{formattedValue}℉（変動の平均）}other{{formattedValue}℉（変動の平均）}}"</string>
+    <string name="temperatureDelta_average_fahrenheit_long" msgid="4931676720311048821">"{value,plural, =1{{formattedValue} 度（華氏）（変動の平均）}other{{formattedValue} 度（華氏）（変動の平均）}}"</string>
+    <string name="temperatureDelta_average_kelvin" msgid="3525443354201467789">"{value,plural, =1{{formattedValue}K（変動の平均）}other{{formattedValue}K（変動の平均）}}"</string>
+    <string name="temperatureDelta_average_kelvin_long" msgid="9202084701113373151">"{value,plural, =1{{formattedValue} ケルビン（変動の平均）}other{{formattedValue} ケルビン（変動の平均）}}"</string>
+    <string name="temperature_location_armpit" msgid="8359661261125563155">"脇の下"</string>
+    <string name="temperature_location_finger" msgid="4915449065770967487">"指"</string>
+    <string name="temperature_location_forehead" msgid="8603219464757434635">"額"</string>
+    <string name="temperature_location_mouth" msgid="1535682736007063471">"口"</string>
+    <string name="temperature_location_rectum" msgid="1503082804377850076">"直腸"</string>
+    <string name="temperature_location_temporal_artery" msgid="2830919806910102535">"側頭動脈"</string>
+    <string name="temperature_location_toe" msgid="36730991617372925">"つま先"</string>
+    <string name="temperature_location_ear" msgid="7024374111156026034">"耳"</string>
+    <string name="temperature_location_wrist" msgid="5290446688282752346">"手首"</string>
+    <string name="temperature_location_vagina" msgid="1689485374825231749">"膣"</string>
+    <string name="skin_temperature_measurement_location_title" msgid="3801036455392782236">"測定場所"</string>
+    <string name="skin_temperature_baseline_title" msgid="1883615483694543696">"基準値"</string>
+    <string name="skin_temperature_delta_details_heading" msgid="7789483766417087430">"基準値からの変動"</string>
+    <string name="distance_miles" msgid="5419172432458896478">"{dist,plural, =1{1 マイル}other{# マイル}}"</string>
+    <string name="distance_km" msgid="6383736895665100602">"{dist,plural, =1{1 km}other{# km}}"</string>
+    <string name="distance_miles_long" msgid="1830844568614100885">"{dist,plural, =1{1 マイル}other{# マイル}}"</string>
+    <string name="distance_km_long" msgid="6256504627418439859">"{dist,plural, =1{1 キロメートル}other{# キロメートル}}"</string>
+    <string name="height_cm" msgid="94329926270064717">"{height,plural, =1{1 cm}other{# cm}}"</string>
+    <string name="height_cm_long" msgid="2821030110768530948">"{height,plural, =1{1 センチメートル}other{# センチメートル}}"</string>
+    <string name="height_in_long" msgid="6502316324841498419">"{height,plural, =1{1 インチ}other{# インチ}}"</string>
+    <string name="height_ft_long" msgid="7551582478724981895">"{height,plural, =1{1 フィート}other{# フィート}}"</string>
+    <string name="height_in_compacted" msgid="6087182983411207466">"{height,plural, =1{1″}other{#″}}"</string>
+    <string name="height_ft_compacted" msgid="1024585112134314039">"{height,plural, =1{1′}other{#′}}"</string>
+    <string name="feet_inches_format" msgid="768610500549967860">"<xliff:g id="FT">%1$s</xliff:g><xliff:g id="IN">%2$s</xliff:g>⁠"</string>
+    <string name="feet_inches_format_long" msgid="5187265716573430363">"<xliff:g id="FT">%1$s</xliff:g> <xliff:g id="IN">%2$s</xliff:g>⁠"</string>
+    <string name="calories_long" msgid="7225535148232419419">"{count,plural, =1{1 kcal}other{# kcal}}"</string>
+    <string name="calories" msgid="320906359079319632">"{count,plural, =1{1 Cal}other{# Cal}}"</string>
+    <string name="kj" msgid="2742876437259085714">"{count,plural, =1{1 kJ}other{# kJ}}"</string>
+    <string name="kj_long" msgid="1837278261960345400">"{count,plural, =1{1 キロジュール}other{# キロジュール}}"</string>
+    <string name="percent" formatted="false" msgid="9199428244800776575">"{value,plural, =1{1%}other{#%}}"</string>
+    <string name="percent_long" msgid="2201022757867534235">"{value,plural, =1{1 パーセント}other{# パーセント}}"</string>
+    <string name="units_cancel" msgid="5947097690625771995">"キャンセル"</string>
+    <string name="units_title" msgid="6504086463237869339">"単位"</string>
+    <string name="distance_unit_title" msgid="4696952932438418209">"距離"</string>
+    <string name="height_unit_title" msgid="5461594609577078049">"身長"</string>
+    <string name="weight_unit_title" msgid="7405186541678939987">"体重"</string>
+    <string name="energy_unit_title" msgid="1714627395963766769">"エネルギー"</string>
+    <string name="temperature_unit_title" msgid="1973985121774654017">"温度"</string>
+    <string name="distance_unit_kilometers_label" msgid="1361363017122240294">"キロメートル"</string>
+    <string name="distance_unit_miles_label" msgid="848850214987608211">"マイル"</string>
+    <string name="height_unit_centimeters_label" msgid="4096031670561995574">"センチメートル"</string>
+    <string name="height_unit_feet_label" msgid="3311723678628261399">"フィート、インチ"</string>
+    <string name="weight_unit_pound_label" msgid="8210663393844989211">"ポンド"</string>
+    <string name="weight_unit_kilogram_label" msgid="6623938920860887238">"キログラム"</string>
+    <string name="weight_unit_stone_label" msgid="3063787243474847180">"ストーン"</string>
+    <string name="energy_unit_calorie_label" msgid="3412965811470957296">"カロリー"</string>
+    <string name="energy_unit_kilojoule_label" msgid="6481196724083455110">"キロジュール"</string>
+    <string name="temperature_unit_celsius_label" msgid="4698347100553808449">"摂氏"</string>
+    <string name="temperature_unit_fahrenheit_label" msgid="6590261955872562854">"華氏"</string>
+    <string name="temperature_unit_kelvin_label" msgid="3786210768294615821">"ケルビン"</string>
+    <string name="help_and_feedback" msgid="4772169905005369871">"ヘルプとフィードバック"</string>
+    <string name="cant_see_all_your_apps_description" msgid="7344859063463536472">"アプリをインストールしているのに表示されない場合は、ヘルスコネクトにまだ対応していない可能性があります"</string>
+    <string name="things_to_try" msgid="8200374691546152703">"おすすめの方法"</string>
+    <string name="check_for_updates" msgid="3841090978657783101">"アップデートを確認"</string>
+    <string name="check_for_updates_description" msgid="1347667778199095160">"インストール済みのアプリについて、アップデートがないか確認できます"</string>
+    <string name="see_all_compatible_apps" msgid="6791146164535475726">"対応アプリの一覧をチェック"</string>
+    <string name="see_all_compatible_apps_description" msgid="2092325337403254491">"Google Play でアプリを探します"</string>
+    <string name="send_feedback" msgid="7756927746070096780">"フィードバックを送信"</string>
+    <string name="send_feedback_description" msgid="2887207112856240778">"ヘルスコネクトで使用したい健康アプリやフィットネス アプリをリクエストできます"</string>
+    <string name="playstore_app_title" msgid="4138464328693481809">"Play ストア"</string>
+    <string name="auto_delete_button" msgid="8536451792268513619">"自動削除"</string>
+    <string name="auto_delete_title" msgid="8761742828224207826">"自動削除"</string>
+    <string name="auto_delete_header" msgid="4258649705159293715">"指定した期間の経過後にデータを削除するように設定して、ヘルスコネクトでの保存時間を管理できます"</string>
+    <string name="auto_delete_learn_more" msgid="7416469042791307994">"自動削除の詳細"</string>
+    <string name="auto_delete_section" msgid="7732381000331475082">"データの自動削除"</string>
+    <string name="range_after_x_months" msgid="3340127072680117121">"{count,plural, =1{# か月後}other{# か月後}}"</string>
+    <string name="range_never" msgid="4429478261788361233">"なし"</string>
+    <string name="range_off" msgid="8178520557618184215">"OFF"</string>
+    <string name="auto_delete_rationale" msgid="5255442126521464878">"これらの設定を変更すると、ヘルスコネクトから既存のデータが削除され、新しい設定が反映されます"</string>
+    <string name="confirming_question_x_months" msgid="8204363800605282103">"{count,plural, =1{# か月後にデータを自動削除しますか？}other{# か月後にデータを自動削除しますか？}}"</string>
+    <string name="confirming_message_x_months" msgid="986840333220382321">"{count,plural, =1{# か月を過ぎたデータもヘルスコネクトから削除されます。\n\n接続されているアプリからデータを完全に削除するには、データが保存されている可能性があるアプリをそれぞれ確認してください。}other{# か月を過ぎたデータもヘルスコネクトから削除されます。\n\n接続されているアプリからデータを完全に削除するには、データが保存されている可能性があるアプリをそれぞれ確認してください。}}"</string>
+    <string name="set_auto_delete_button" msgid="268450418318199197">"自動削除を ON にする"</string>
+    <string name="deletion_started_title" msgid="1177766097121885025">"既存のデータが削除されます"</string>
+    <string name="deletion_started_x_months" msgid="6567199107249615612">"{count,plural, =1{保存期間が # か月を超えるすべてのデータがヘルスコネクトから削除されます。接続されているアプリにこれらの変更が反映されるまで 1 日ほどかかることがあります。}other{保存期間が # か月を超えるすべてのデータがヘルスコネクトから削除されます。接続されているアプリにこれらの変更が反映されるまで 1 日ほどかかることがあります。}}"</string>
+    <string name="deletion_started_category_list_section" msgid="3052940611815658991">"アプリから削除されるデータ"</string>
+    <string name="deletion_started_done_button" msgid="1232018689825054257">"完了"</string>
+    <string name="auto_delete_confirmation_toast" msgid="7161651426400701306">"{count,plural, =1{自動削除を ON にしました。# か月を過ぎたデータは削除されます。}other{自動削除を ON にしました。# か月を過ぎたデータは削除されます。}}"</string>
+    <string name="auto_delete_off_toast" msgid="6530926709108821768">"自動削除は OFF です"</string>
+    <string name="plus_n_matched_apps_format" msgid="5447899782883252148">"+<xliff:g id="COUNT">%s</xliff:g>"</string>
+    <string name="priority_dialog_title" msgid="7360654442596118085">"アプリの優先順位を設定する"</string>
+    <string name="priority_dialog_message" msgid="6971250365335018184">"<xliff:g id="DATA_TYPE">%s</xliff:g>のデータを追加するアプリが複数ある場合、ヘルスコネクトはこのリストの一番上にあるアプリを優先します。順序を変更するには、アプリをドラッグしてください。"</string>
+    <string name="priority_dialog_positive_button" msgid="2503570694373675092">"保存"</string>
+    <string name="action_drag_label_move_up" msgid="4221641798253080966">"上に移動"</string>
+    <string name="action_drag_label_move_down" msgid="3448000958912947588">"下に移動"</string>
+    <string name="action_drag_label_move_top" msgid="5114033774108663548">"一番上に移動"</string>
+    <string name="action_drag_label_move_bottom" msgid="3117764196696569512">"一番下に移動"</string>
+    <string name="reorder_button_content_description" msgid="2685032520710743533">"優先度リスト内の <xliff:g id="SELECTED_APP">%s</xliff:g> をドラッグして順序を変更するボタンです"</string>
+    <string name="remove_button_content_description" msgid="6170490900032612048">"優先度リストから<xliff:g id="SELECTED_APP">%s</xliff:g>を削除するボタンです"</string>
+    <string name="see_actions_button_content_description" msgid="2004104767369363475">"アプリのソースリストで <xliff:g id="SELECTED_APP">%s</xliff:g> の並べ替えや削除を行うボタン"</string>
+    <string name="reorder_button_action_description" msgid="5197462036756192214">"並べ替えるにはダブルタップしてドラッグします"</string>
+    <string name="priority_list_item_content_description" msgid="8792727829749801217">"リスト「<xliff:g id="SELECTED_APP">%2$s</xliff:g>」の <xliff:g id="POSITION">%1$s</xliff:g> 件目"</string>
+    <string name="search_keywords_home" msgid="5386515593026555327">"フィットネス, 健康管理"</string>
+    <string name="search_keywords_permissions" msgid="7821010295153350533">"権限"</string>
+    <string name="search_keywords_data" msgid="5359602744325490523">"ヘルスコネクト, 健康に関するデータ, 健康に関するカテゴリ, データアクセス, アクティビティ, 身体測定, 月経周期の管理, 栄養, 睡眠, バイタル"</string>
+    <string name="search_breadcrumbs_permissions" msgid="2667471090347475796">"[ヘルスコネクト] &gt; [アプリの権限]"</string>
+    <string name="search_breadcrumbs_data" msgid="6635428480372024040">"[ヘルスコネクト] &gt; [データとアクセス]"</string>
+    <string name="search_connected_apps" msgid="8180770761876928851">"アプリを検索"</string>
+    <string name="no_results" msgid="4007426147286897998">"一致する結果はありません"</string>
+    <string name="help" msgid="6028777453152686162">"ヘルプ"</string>
+    <string name="request_route_header_title" msgid="6599707039845646714">"ヘルスコネクトのこのエクササイズのルートへのアクセスを <xliff:g id="APP_NAME">%1$s</xliff:g> に許可しますか？"</string>
+    <string name="request_route_disclaimer_notice" msgid="8060511384737662598">"このアプリは、ルートの過去の位置情報を読み取れるようになります。"</string>
+    <string name="date_owner_format" msgid="4431196384037157320">"<xliff:g id="DATE">%1$s</xliff:g> • <xliff:g id="APP_NAME">%2$s</xliff:g>"</string>
+    <string name="request_route_info_header_title" msgid="4149969049719763190">"エクササイズのルートに位置情報が含まれます"</string>
+    <string name="request_route_info_who_can_see_data_title" msgid="858355329937113994">"このデータを見られるのはどのアプリですか？"</string>
+    <string name="request_route_info_who_can_see_data_summary" msgid="2439434359808367150">"エクササイズのルートへのアクセスを許可したアプリのみです"</string>
+    <string name="request_route_info_access_management_title" msgid="3222594923675464852">"アクセスを管理するにはどうすればよいですか？"</string>
+    <string name="request_route_info_access_management_summary" msgid="2606548838292829495">"エクササイズのルートへのアプリのアクセスはヘルスコネクトの設定で管理できます"</string>
+    <string name="request_route_allow" msgid="4427372851821847274">"このルートを許可する"</string>
+    <string name="request_route_allow_all" msgid="314830698958736916">"すべてのルートを許可する"</string>
+    <string name="request_route_dont_allow" msgid="1186236234664957228">"許可しない"</string>
+    <string name="route_permissions_always_allow" msgid="1383816362804293137">"常に許可"</string>
+    <string name="route_permissions_label" msgid="6293377940884373190">"エクササイズ ルートへのアクセス"</string>
+    <string name="route_permissions_summary" msgid="704859311037374130">"ルートへのアクセスを <xliff:g id="APP_NAME">%1$s</xliff:g> に許可します"</string>
+    <string name="route_permissions_ask" msgid="3927020960754781917">"毎回確認"</string>
+    <string name="route_permissions_deny" msgid="4955644777239169593">"許可しない"</string>
+    <string name="exercise_permission_dialog_enable_title" msgid="4310997044811843391">"両方のデータの種類を有効にしますか？"</string>
+    <string name="exercise_permission_dialog_disable_title" msgid="1011777519918396883">"両方のデータの種類を無効にしますか？"</string>
+    <string name="exercise_permission_dialog_enabled_summary" msgid="3404390796688813585">"エクササイズのルートを有効にするには、エクササイズの読み取りアクセスを <xliff:g id="APP_NAME">%1$s</xliff:g> に許可する必要があります"</string>
+    <string name="exercise_permission_dialog_disable_summary" msgid="397599718182778347">"エクササイズのルートを有効にするには、エクササイズへのアクセスを <xliff:g id="APP_NAME">%1$s</xliff:g> に許可する必要があります"</string>
+    <string name="exercise_permission_dialog_positive_button" msgid="4545939654888655556">"はい"</string>
+    <string name="exercise_permission_dialog_negative_button" msgid="7433304732406274998">"いいえ"</string>
+    <string name="back_button" msgid="780519527385993407">"戻る"</string>
+    <string name="loading" msgid="2526615755685950317">"読み込んでいます…"</string>
+    <string name="migration_in_progress_screen_title" msgid="6564515269988205874">"統合中"</string>
+    <string name="migration_in_progress_screen_integration_details" msgid="5916989113111973466">"ヘルスコネクトを Android システムと統合しています。\n\nデータと権限が移行されるまで時間がかかることがあります。"</string>
+    <string name="migration_in_progress_screen_integration_dont_close" msgid="2095732208438772444">"統合完了の通知が表示されるまでアプリを閉じないでください。"</string>
+    <string name="migration_update_needed_screen_title" msgid="3260466598312877429">"更新が必要です"</string>
+    <string name="migration_update_needed_screen_details" msgid="7984745102006782603">"設定から直接アクセスできるよう、ヘルスコネクトを Android システムと統合しています。"</string>
+    <string name="update_button" msgid="4544529019832009496">"更新"</string>
+    <string name="migration_update_needed_notification_content" msgid="478899618719297517">"ヘルスコネクトとシステム設定との統合を続行できるよう、この更新を開始してください"</string>
+    <string name="migration_update_needed_header" msgid="2530273034135305057">"設定から直接アクセスできるよう、ヘルスコネクトを Android システムと統合しています。\n\n<xliff:g id="MIGRATION_ACTION">%1$s</xliff:g>"</string>
+    <string name="migration_module_update_needed_notification_title" msgid="5428523284357105379">"システム アップデートが必要です"</string>
+    <string name="migration_module_update_needed_action" msgid="7211167950758064289">"続行する前に、電話システムを更新してください。"</string>
+    <string name="migration_module_update_needed_restart" msgid="1246884613546321798">"電話システムをすでに更新している場合は、スマートフォンを再起動して統合を続行してください"</string>
+    <string name="migration_app_update_needed_action" msgid="3289432528592774601">"続行する前に、ヘルスコネクト アプリを最新バージョンに更新してください。"</string>
+    <string name="migration_paused_screen_title" msgid="8041170155372429894">"統合が一時停止しました"</string>
+    <string name="migration_paused_screen_details" msgid="5898311710030340187">"Android システムとの統合中にヘルスコネクト アプリが終了しました。\n\n[再開] をクリックしてアプリを再起動し、データと権限の移行を続行してください。"</string>
+    <string name="migration_paused_screen_details_timeout" msgid="353768000785837394">"ヘルスコネクトのデータを保持するため、<xliff:g id="TIME_NEEDED">%1$s</xliff:g>以内に完了してください"</string>
+    <string name="resume_button" msgid="2255148549862208047">"再開"</string>
+    <string name="migration_paused_notification_title" msgid="4368414714202113077">"統合が一時停止しました"</string>
+    <string name="migration_paused_notification_content" msgid="1950511270109811771">"ヘルスコネクトを Android システムと統合しています。タップすると続行します"</string>
+    <string name="resume_migration_banner_title" msgid="4443957114824045317">"統合を再開してください"</string>
+    <string name="resume_migration_banner_description" msgid="6236230413670826036">"ヘルスコネクトと Android システムとの統合を続行するには、タップしてください。データを保持するため、<xliff:g id="TIME_NEEDED">%1$s</xliff:g>以内に統合を完了してください。"</string>
+    <string name="resume_migration_banner_description_fallback" msgid="6060444898839211883">"ヘルスコネクトと Android システムとの統合を続行するには、タップしてください。"</string>
+    <string name="resume_migration_banner_button" msgid="2112318760107756469">"続行"</string>
+    <string name="app_update_needed_banner_title" msgid="4724335956851853802">"アプリの更新が必要です"</string>
+    <string name="app_update_needed_banner_description_single" msgid="8220676317438592573">"ヘルスコネクトとの同期を続けるには、<xliff:g id="APP_NAME">%1$s</xliff:g> の更新が必要です。アプリによってはアップデートを利用できない場合があります。"</string>
+    <string name="app_update_needed_banner_description_multiple" msgid="6021498912770754575">"ヘルスコネクトとの同期を続けるには、いくつかのアプリの更新が必要です。アプリによってはアップデートを利用できない場合があります。"</string>
+    <string name="app_update_needed_banner_button" msgid="8223115764065649627">"アップデートを確認"</string>
+    <string name="app_update_needed_banner_learn_more_button" msgid="7269232067819258160">"詳細"</string>
+    <string name="migration_pending_permissions_dialog_title" msgid="6019552841791757048">"ヘルスコネクトの統合"</string>
+    <string name="migration_pending_permissions_dialog_content" msgid="6350115816948005466">"ヘルスコネクトを Android システムと統合する準備ができました。<xliff:g id="APP_NAME">%1$s</xliff:g> に今すぐアクセス権を付与しても、統合が完了するまで一部の機能が動作しないことがあります。"</string>
+    <string name="migration_pending_permissions_dialog_content_apps" msgid="6417173899016940664">"ヘルスコネクトを Android システムと統合する準備ができました。アプリに今すぐアクセス権を付与しても、統合が完了するまで一部の機能が動作しないことがあります。"</string>
+    <string name="migration_pending_permissions_dialog_button_continue" msgid="258571372365364506">"続行"</string>
+    <string name="migration_pending_permissions_dialog_button_start_integration" msgid="754910196871313049">"統合を開始"</string>
+    <string name="migration_in_progress_permissions_dialog_title" msgid="2188354144857156984">"ヘルスコネクトの統合中"</string>
+    <string name="migration_in_progress_permissions_dialog_content" msgid="2249793103623253693">"ヘルスコネクトを Android システムと統合しています。\n\n統合が完了したら通知が届き、<xliff:g id="APP_NAME">%1$s</xliff:g> をヘルスコネクトで使用できるようになります。"</string>
+    <string name="migration_in_progress_permissions_dialog_content_apps" msgid="8653954808926889199">"ヘルスコネクトを Android システムと統合しています。\n\n統合が完了したら通知が届き、ヘルスコネクトを使用できるようになります。"</string>
+    <string name="migration_in_progress_permissions_dialog_button_got_it" msgid="3437208109334974656">"OK"</string>
+    <string name="migration_not_complete_dialog_title" msgid="3725576338159027149">"ヘルスコネクトの統合が完了しませんでした"</string>
+    <string name="migration_not_complete_dialog_content" msgid="4992771587233088606">"再開できるようになると通知が届きます。"</string>
+    <string name="migration_not_complete_dialog_button" msgid="3271842109680807482">"OK"</string>
+    <string name="migration_whats_new_dialog_title" msgid="2349465358457105228">"新機能"</string>
+    <string name="migration_whats_new_dialog_content" msgid="1271560399054864488">"設定からヘルスコネクトに直接アクセスできるようになりました。いつでもヘルスコネクト アプリをアンインストールして、ストレージの空き容量を増やすことができます。"</string>
+    <string name="migration_whats_new_dialog_button" msgid="642575552457587805">"OK"</string>
+    <string name="data_restore_in_progress_screen_title" msgid="2516161353003274764">"復元処理中"</string>
+    <string name="data_restore_in_progress_content" msgid="2684897189974069361">"ヘルスコネクトがデータと権限を復元しています。完了するまでにしばらく時間がかかることがあります。"</string>
+    <string name="data_restore_in_progress_dialog_title" msgid="9097805833675345598">"ヘルスコネクトを復元しています"</string>
+    <string name="data_restore_in_progress_dialog_button" msgid="2096525382430589845">"OK"</string>
+    <string name="data_restore_pending_banner_title" msgid="6792157138348551175">"更新が必要です"</string>
+    <string name="data_restore_pending_banner_content" msgid="2464779762242296738">"データの復元を続けるには、デバイスのシステムを更新してください。"</string>
+    <string name="data_restore_pending_banner_button" msgid="3726053567182194123">"アップデートを確認"</string>
+    <string name="data_totals_header" msgid="8316977153276216025">"データの合計"</string>
+    <string name="app_sources_header" msgid="3776247928235433963">"データソース"</string>
+    <string name="data_sources_footer" msgid="2271085147058181039">"データソースをリストに追加すると、データの合計がどのように変わるかを確認できます。このリストからデータソースを削除すると、合計には加算されなくなりますが、書き込み権限は付与されたままになります。"</string>
+    <string name="data_sources_empty_state" msgid="478270183887252279">"データソースなし"</string>
+    <string name="data_sources_empty_state_footer" msgid="5622400014797683992">"<xliff:g id="CATEGORY_NAME">%1$s</xliff:g>のデータを書き込む権限をデータソースに付与すると、ソースがここに表示されます。"</string>
+    <string name="data_sources_help_link" msgid="7740264923634947915">"ソースと優先度の仕組み"</string>
+    <string name="data_sources_add_app" msgid="275066335106036460">"データソースを追加する"</string>
+    <string name="edit_data_sources" msgid="5389744157074260179">"データソースを編集"</string>
+    <string name="default_app_summary" msgid="6183876151011837062">"デバイスのデフォルト"</string>
+    <string name="move_up" msgid="9136155291380319606">"上に移動"</string>
+    <string name="move_down" msgid="4404970288236170693">"下に移動"</string>
+    <string name="remove" msgid="1340423400489007362">"削除"</string>
+    <string name="app_data_title" msgid="6499967982291000837">"アプリデータ"</string>
+    <string name="app_data_no_data_footer" msgid="7027700714577530371">"<xliff:g id="APP_NAME">%1$s</xliff:g> からのデータがここに表示されます"</string>
+    <string name="all_data_no_data_footer" msgid="2553443887019153340">"ヘルスコネクトにアクセスできるアプリのデータがここに表示されます"</string>
+    <string name="date_picker_day" msgid="3076687507968958991">"日"</string>
+    <string name="date_picker_week" msgid="1038805538316142229">"週"</string>
+    <string name="date_picker_month" msgid="3560692391260778560">"月"</string>
+    <string name="this_week_header" msgid="1280121922548216973">"今週"</string>
+    <string name="last_week_header" msgid="5194448963146719382">"先週"</string>
+    <string name="this_month_header" msgid="2452395268894677189">"今月"</string>
+    <string name="last_month_header" msgid="1359164797239191253">"先月"</string>
+    <string name="tab_entries" msgid="3402700951602029493">"エントリ"</string>
+    <string name="tab_access" msgid="7818197975407243701">"アクセス"</string>
+    <string name="start_using_hc_banner_title" msgid="2030178284749796384">"ヘルスコネクトの使用を開始する"</string>
+    <string name="start_using_hc_banner_content" msgid="3171560198945933334">"健康とフィットネスに関するデータを共有する 1 つ目のアプリを同期する"</string>
+    <string name="start_using_hc_set_up_button" msgid="7486865297236439364">"設定"</string>
+    <string name="connect_more_apps_banner_title" msgid="4746581834305054229">"アプリをさらに接続"</string>
+    <string name="connect_more_apps_banner_content" msgid="8104544246031860111">"<xliff:g id="APP_NAME">%s</xliff:g> とスマートフォンの健康アプリとの間でデータの共有を開始する"</string>
+    <string name="connect_more_apps_set_up_button" msgid="4491201768717567269">"設定"</string>
+    <string name="see_compatible_apps_banner_title" msgid="5217106184748241727">"対応アプリを表示する"</string>
+    <string name="see_compatible_apps_banner_content" msgid="1940786301699569588">"ヘルスコネクトで <xliff:g id="APP_NAME">%s</xliff:g> と同期するアプリをさらに探す"</string>
+    <string name="see_compatible_apps_set_up_button" msgid="8260738204782792905">"アプリストアで表示する"</string>
+    <string name="lock_screen_banner_title" msgid="5384381892985739755">"画面ロックを設定"</string>
+    <string name="lock_screen_banner_content" msgid="3392527073622152481">"健康に関するデータのセキュリティを強化するために、このデバイスの PIN、パターン、またはパスワードを設定してください"</string>
+    <string name="lock_screen_banner_button" msgid="2537090011380728122">"画面ロックを設定"</string>
+    <string name="select_all" msgid="837499881590001166">"すべて選択"</string>
+    <string name="a11y_action_select" msgid="8149815243533964711">"選択"</string>
+    <string name="deletion_confirmation_dialog_body" msgid="7643182907084645805">"接続されているアプリは、ヘルスコネクトに追加されたこのデータを読み取れなくなります"</string>
+    <string name="a11y_checked" msgid="3685413382346589880">"ON"</string>
+    <string name="a11y_unchecked" msgid="6258943223981886207">"OFF"</string>
+    <string name="a11y_checkbox_description" msgid="2261163129728710986">"<xliff:g id="HEADER">%1$s</xliff:g>、<xliff:g id="TITLE">%2$s</xliff:g>"</string>
+    <string name="a11y_map_description" msgid="4992907698581164434">"エクササイズのマップルートを確認できます"</string>
+    <string name="a11y_next_day" msgid="7298174378837366410">"翌日"</string>
+    <string name="a11y_next_week" msgid="6692230156318350735">"来週"</string>
+    <string name="a11y_next_month" msgid="4462534553687997396">"翌月"</string>
+    <string name="a11y_previous_day" msgid="2529677154858456085">"前日"</string>
+    <string name="a11y_previous_week" msgid="2992971531628685405">"前週"</string>
+    <string name="a11y_previous_month" msgid="3304373968190750755">"前月"</string>
+    <string name="all_data_selected_deletion_confirmation_dialog" msgid="2103387413531373305">"すべてのデータを完全に削除しますか？"</string>
+    <string name="some_data_selected_deletion_confirmation_dialog" msgid="2466281529240054537">"選択したデータを完全に削除しますか？"</string>
+    <string name="all_app_data_selected_deletion_confirmation_dialog" msgid="1077157006579195958">"<xliff:g id="APP_NAME">%s</xliff:g>のすべてのデータを完全に削除しますか？"</string>
+    <string name="some_app_data_selected_deletion_confirmation_dialog" msgid="5378172524112070270">"<xliff:g id="APP_NAME">%s</xliff:g> の選択したデータを完全に削除しますか？"</string>
+    <string name="all_entries_selected_day_deletion_confirmation_dialog" msgid="2887646600541520444">"<xliff:g id="SELECTED_DATE_RANGE">%1$s</xliff:g>のエントリをすべて完全に削除しますか？"</string>
+    <string name="all_entries_selected_week_deletion_confirmation_dialog" msgid="6759608395185369048">"<xliff:g id="SELECTED_DATE_RANGE">%1$s</xliff:g>の週のエントリをすべて完全に削除しますか？"</string>
+    <string name="all_entries_selected_month_deletion_confirmation_dialog" msgid="6030161837387559132">"<xliff:g id="SELECTED_DATE_RANGE">%1$s</xliff:g>のエントリをすべて完全に削除しますか？"</string>
+    <string name="some_entries_selected_day_deletion_confirmation_dialog" msgid="3481363886097542565">"<xliff:g id="SELECTED_DATE_RANGE">%1$s</xliff:g>の選択したエントリを完全に削除しますか？"</string>
+    <string name="some_entries_selected_week_deletion_confirmation_dialog" msgid="7150217982297131340">"<xliff:g id="SELECTED_DATE_RANGE">%1$s</xliff:g>の週の選択したエントリを完全に削除しますか？"</string>
+    <string name="some_entries_selected_month_deletion_confirmation_dialog" msgid="3712014725077445591">"<xliff:g id="SELECTED_DATE_RANGE">%1$s</xliff:g>の選択したエントリを完全に削除しますか？"</string>
+    <string name="one_entry_selected_deletion_confirmation_dialog" msgid="4642573082594021789">"このエントリを完全に削除しますか？"</string>
+    <string name="all_app_entries_selected_day_deletion_confirmation_dialog" msgid="2342034541791960151">"<xliff:g id="SELECTED_DATE_RANGE">%2$s</xliff:g>の <xliff:g id="APP_NAME">%1$s</xliff:g> のエントリをすべて完全に削除しますか？"</string>
+    <string name="all_app_entries_selected_week_deletion_confirmation_dialog" msgid="24289763841770386">"<xliff:g id="SELECTED_DATE_RANGE">%2$s</xliff:g>の週の <xliff:g id="APP_NAME">%1$s</xliff:g> のエントリをすべて完全に削除しますか？"</string>
+    <string name="all_app_entries_selected_month_deletion_confirmation_dialog" msgid="3240581815583269052">"<xliff:g id="SELECTED_DATE_RANGE">%2$s</xliff:g>の <xliff:g id="APP_NAME">%1$s</xliff:g> のエントリをすべて完全に削除しますか？"</string>
+    <string name="some_app_entries_selected_day_deletion_confirmation_dialog" msgid="1030347169774815676">"<xliff:g id="SELECTED_DATE_RANGE">%2$s</xliff:g>の <xliff:g id="APP_NAME">%1$s</xliff:g> の選択したエントリを完全に削除しますか？"</string>
+    <string name="some_app_entries_selected_week_deletion_confirmation_dialog" msgid="8009352719322914060">"<xliff:g id="SELECTED_DATE_RANGE">%2$s</xliff:g>の週の選択した <xliff:g id="APP_NAME">%1$s</xliff:g> のエントリを完全に削除しますか？"</string>
+    <string name="some_app_entries_selected_month_deletion_confirmation_dialog" msgid="6617805533334875710">"<xliff:g id="SELECTED_DATE_RANGE">%2$s</xliff:g>の選択した <xliff:g id="APP_NAME">%1$s</xliff:g> のエントリを完全に削除しますか？"</string>
+    <string name="one_app_entry_selected_deletion_confirmation_dialog" msgid="7101939753210640660">"<xliff:g id="APP_NAME">%s</xliff:g> のこのエントリを完全に削除しますか？"</string>
+    <string name="inactive_app_data_selected_deletion_confirmation_dialog" msgid="3192411589802497811">"<xliff:g id="APP_NAME">%2$s</xliff:g> の <xliff:g id="DATA_TYPE">%1$s</xliff:g> のデータを完全に削除しますか？"</string>
+    <string name="menu_show_system" msgid="5608880605989914394">"システムアプリを表示"</string>
+    <string name="menu_hide_system" msgid="9218325603953186714">"システムアプリを表示しない"</string>
+    <string name="system_warning" msgid="5593850900577682512">"この権限を許可しない場合、デバイスの基本機能が正しく動作しなくなることがあります。"</string>
+    <string name="grant_dialog_button_deny_anyway" msgid="8367692640054922761">"許可しない"</string>
+    <string name="on" msgid="8266542510798355807">"ON"</string>
+    <string name="off" msgid="6996623844428550649">"OFF"</string>
+    <string name="wear_app_perms_24h_access" msgid="2997184871873750357">"<xliff:g id="TIME_DATE">%1$s</xliff:g>にアクセス"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="325061728619254928">"昨日の <xliff:g id="TIME_DATE">%1$s</xliff:g> にアクセス"</string>
+    <string name="wear_app_perms_7d_access" msgid="5694169440873563459">"<xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g> にアクセス"</string>
+    <string name="request_permissions_allow_all_the_time" msgid="559097424823775606">"常時"</string>
+    <string name="request_permissions_allow_selected" msgid="218527615680495438">"選択された権限を許可"</string>
+    <string name="request_permissions_while_using_the_app" msgid="5155929974398889727">"アプリの使用時のみ"</string>
+    <string name="request_permissions_deny_all" msgid="4123735770293545320">"すべて拒否"</string>
+    <string name="wear_allow_app_access_fitness_and_wellness_data" msgid="7914569541993476826">"<xliff:g id="APP_NAME">%1$s</xliff:g> にフィットネスとウェルネスに関するデータへのアクセスを許可しますか？"</string>
+    <string name="wear_request_multiple_data_type_permissions" msgid="5348997693739610876">"<xliff:g id="APP_NAME">%1$s</xliff:g> が<xliff:g id="DATA_TYPES">%2$s</xliff:g>へのアクセスをリクエストしています。\n\nすべて許可するか、個別に許可するかを選択してください。"</string>
+    <string name="wear_request_single_data_type_permission" msgid="4479262151480683518">"<xliff:g id="APP_NAME">%1$s</xliff:g> に<xliff:g id="DATA_TYPE">%2$s</xliff:g>へのアクセスを許可しますか？"</string>
+    <string name="fitness_and_wellness" msgid="2002316898861559748">"フィットネスとウ⁠ェ⁠ル⁠ネ⁠ス"</string>
+    <string name="view_permissions_all_the_time_cap" msgid="7703114160274796464">"常時"</string>
+    <string name="view_permissions_while_in_use_cap" msgid="675022827435901270">"アプリの使用時のみ"</string>
+    <string name="view_permissions_description_all_the_time" msgid="3434945199164069475">"<xliff:g id="APP_NAME">%1$s</xliff:g> はフィットネスとウェルネスに関する全データへのアクセスを常に許可されています"</string>
+    <string name="view_permissions_description_while_in_use" msgid="507698943902581557">"<xliff:g id="APP_NAME">%1$s</xliff:g> はフィットネスとウェルネスに関する全データへのアクセスをアプリの使用中のみ許可されています"</string>
+    <string name="allowed_to_access" msgid="4179317387300812335">"アクセスの許可"</string>
+    <string name="allowed_to_read" msgid="2775365229411407406">"読み取りを許可したデータ"</string>
+    <string name="give_permission_prompt" msgid="5788144216023065504">"これらの権限により、<xliff:g id="APP_NAME">%1$s</xliff:g> はデバイスのセンサーからデータにアクセスできるようになります。"</string>
+    <string name="write_access" msgid="571547306854732263">"書き込みアクセス権"</string>
+    <string name="read_access" msgid="3317759826769372785">"読み取りアクセス権"</string>
+    <string name="health_switch_content_description" msgid="1297823949479201621">"<xliff:g id="SWITCH_TITLE">%1$s</xliff:g>、<xliff:g id="SWITCH_FUNCTION">%2$s</xliff:g>。<xliff:g id="SWITCH_STATE">%3$s</xliff:g>"</string>
+    <string name="health_permission_grouping_switch_content_description" msgid="2328008720245815655">"<xliff:g id="SWITCH_TITLE">%1$s</xliff:g>、<xliff:g id="SWITCH_SUMMARY">%2$s</xliff:g>。<xliff:g id="SWITCH_FUNCTION">%3$s</xliff:g>"</string>
+    <!-- no translation found for health_data_category_expandable_preference_title (2436468245802747438) -->
+    <skip />
+    <string name="allowed_apps_count" msgid="2289260267605628310">"<xliff:g id="NUMBER_0">%1$d</xliff:g>/<xliff:g id="OTHER_NUMBER">%2$d</xliff:g> 個のアプリを許可"</string>
+    <string name="no_apps_requesting" msgid="8088684445910698363">"リクエストしているアプリはありません"</string>
+    <string name="allowed" msgid="4158456017482263737">"許可されているアプリ"</string>
+    <string name="not_allowed" msgid="6092523505093372147">"許可されていないアプリ"</string>
+    <string name="access_sensor_note" msgid="7949933977197789634">"この権限があるアプリは、デバイスのセンサーから<xliff:g id="DATA_TYPE">%s</xliff:g>のデータにアクセスできます。"</string>
+    <string name="remove_one_permission_for_all" msgid="6732728480265044938">"スマートウォッチのすべてのアプリから<xliff:g id="DATA_TYPE">%s</xliff:g>へのアクセス権を削除しますか？"</string>
+    <string name="icon_content_check_mark" msgid="358150681017987426">"チェックマーク"</string>
+    <string name="icon_content_cross_mark" msgid="3007762424358780248">"バツマーク"</string>
+    <string name="current_allow_mode_all_the_time" msgid="3329625277933258855">"現在、<xliff:g id="APP_NAME">%1$s</xliff:g> はフィットネスとウェルネスに関するデータへのアクセスを常に許可されています"</string>
+    <string name="current_allow_mode_while_in_use" msgid="6358053330935305061">"現在、<xliff:g id="APP_NAME">%1$s</xliff:g> はフィットネスとウェルネスに関するデータへのアクセスをアプリの使用中のみ許可されています"</string>
+    <string name="allow_all_the_time_prompt" msgid="3749806575200677882">"<xliff:g id="APP_NAME">%1$s</xliff:g> がフィットネスとウェルネスに関するデータにアクセスできるタイミングを選択してください"</string>
+    <string name="current_access" msgid="1457167070428176139">"<xliff:g id="APP_NAME">%1$s</xliff:g> は<xliff:g id="DATA_TYPES">%2$s</xliff:g>にアクセスできます。"</string>
+    <string name="manage_fitness_and_wellness_permissions" msgid="6198936108436598267">"フィットネスとウェルネスに関する権限を管⁠理"</string>
+    <string name="used_by_apps_count" msgid="1384912521974773617">"{count,plural, =1{1 件のアプリが使用}other{# 件のアプリが使用}}"</string>
+    <string name="not_used_in_past_24_hours" msgid="7918784815693928054">"過去 24 時間は使用されていません"</string>
+    <string name="accessed" msgid="4424701457530587176">"<xliff:g id="RECENT_ACCESS_TIME">%1$s</xliff:g>にアクセス"</string>
+    <string name="connect_first_two_apps_title" msgid="1454255533865066646">"最初のアプリを接続"</string>
+    <string name="connect_first_two_apps_description" msgid="6756143365112887865">"これらのアプリを接続して、健康とフィットネスに関するデータを共有しましょう"</string>
+    <string name="connect_second_app_title" msgid="6609568573884272692">"2 つ目のアプリを接続する"</string>
+    <string name="connect_second_app_description" msgid="159030733462822101">"<xliff:g id="APP_NAME">%1$s</xliff:g> さんと健康とフィットネスに関するデータを共有するには、アプリをもう 1 つ設定してください"</string>
+    <string name="set_up_later" msgid="223888663943501921">"後でセットアップ"</string>
+    <string name="available_apps_to_connect" msgid="8425012138408583646">"接続できるアプリ"</string>
+    <string name="apps_onboarding_footer" msgid="5814165211234454165">"ヘルスコネクトを利用すると、健康とフィットネスに関するデータを 1 か所に保存し、スマートフォン上のさまざまなアプリ間で共有できます。これにより、アプリを連携させて、さらに便利に使うことができます。"</string>
+    <string name="apps_onboarding_footer_link" msgid="385298243785385467">"ヘルスコネクトの詳細"</string>
+    <string name="onboarded_app_content_description" msgid="8571163043712952164">"アプリをヘルスコネクトに接続しました"</string>
+    <string name="almost_done_title" msgid="3966589349311156772">"もう少しで完了です"</string>
+    <string name="almost_done_description_all_connected" msgid="1465769717714906466">"設定を完了してデータ共有を開始するには、これらのアプリを今すぐ開いてください"</string>
+    <string name="almost_done_description_more_to_connect" msgid="3646816278951171117">"設定を完了してデータ共有を開始するには、これらのアプリを今すぐ開いてください。または、利用可能なアプリの接続を続けてください"</string>
+    <string name="almost_done_connected_apps" msgid="7278779868120518202">"接続済みのアプリ"</string>
+    <string name="almost_done_available_to_connect" msgid="8127248100268494160">"接続できるアプリ"</string>
+    <string name="zero_apps_onboarding_banner_title" msgid="280885921481737546">"健康に関するデータをさまざまなアプリで確認できます"</string>
+    <string name="zero_apps_onboarding_banner_summary" msgid="5058666025564192436">"フィットネスとウェルネスに関するデータをアプリ間で共有しましょう"</string>
+    <string name="zero_apps_onboarding_banner_button" msgid="126646934243245089">"設定"</string>
+    <string name="one_app_onboarding_banner_title" msgid="8807871827449709985">"2 つ目のアプリを接続できます"</string>
+    <string name="one_app_onboarding_banner_summary" msgid="6536124569531567081">"別のアプリを設定して、フィットネスとウェルネスに関するデータを共有できるようにしましょう"</string>
+    <string name="one_app_onboarding_banner_button" msgid="460055569609324756">"続行"</string>
+    <string name="zero_apps_onboarding_notification_title" msgid="91273455219085200">"健康に関するデータをさまざまなアプリで確認"</string>
+    <string name="zero_apps_onboarding_notification_summary" msgid="2147721012542285564">"ヘルスコネクトを使用すると、フィットネスとウェルネスに関するデータをアプリ間で共有できます。接続できるアプリをご確認ください。"</string>
+    <string name="one_app_onboarding_notification_title" msgid="8943630345866204874">"2 つ目のアプリを接続"</string>
+    <string name="one_app_onboarding_notification_summary" msgid="7417264366326783394">"ヘルスコネクトに別のアプリを設定して、フィットネスとウェルネスに関するデータを共有できるようにしましょう"</string>
+    <string name="devices_current_device" msgid="6388308185566619743">"現在のデバイス"</string>
+    <string name="devices_unknown_device" msgid="8830092952740474454">"不明なデバイス"</string>
+    <string name="device_management_screen_title" msgid="504259497211017622">"デバイス情報"</string>
+    <string name="device_management_screen_footer" msgid="6798880518173922679">"このデバイスで収集されたデータはヘルスコネクトに保存され、接続されているアプリがアクセスできるようになります"</string>
+    <string name="device_management_screen_no_step_sensor_footer" msgid="1907424903465905829">"このデバイスは歩数の記録に対応していませんが、ヘルスコネクトにデータがまだ保存されています"</string>
+    <string name="device_management_screen_no_step_sensor_header" msgid="7517509284321019072">"このデバイスでは歩数は記録されません"</string>
+    <string name="device_settings_label" msgid="9053791237491247819">"書き込みを許可したデータ"</string>
+    <string name="device_data_screen_title" msgid="2443821236974714385">"デバイスデータ"</string>
+    <string name="device_data_label" msgid="2056618513138892435">"デバイスの管理"</string>
+    <string name="device_data_button" msgid="8002406105399136401">"デバイスデータを表示"</string>
+    <string name="device_sync_button" msgid="2075007109033449483">"ヘルスコネクトと同期"</string>
+    <string name="native_steps_banner_title" msgid="8990874387340782536">"スマートフォンで記録された歩数がヘルスコネクトに表示されます"</string>
+    <string name="native_steps_banner_summary" msgid="8255767487167444809">"このデバイスで記録された歩数がヘルスコネクトに保存され、接続されているアプリからアクセスできるようになりました"</string>
+    <string name="native_steps_banner_dismiss_button" msgid="6585196620402280635">"閉じる"</string>
+    <string name="native_steps_banner_review_button" msgid="2811510255869744799">"確認"</string>
+    <string name="native_steps_notification_title" msgid="9173169256837064455">"歩数がヘルスコネクトに保存されます"</string>
+    <string name="native_steps_notification_content" msgid="7752396476899221256">"このデバイスで記録された歩数がヘルスコネクトに保存され、接続されているアプリからアクセスできるようになりました"</string>
+    <string name="your_health_apps_category_title" msgid="2140744650535785802">"健康アプリ"</string>
+    <string name="your_health_data_category_title" msgid="7049426060456828669">"健康に関するデータ"</string>
+    <string name="preferences_category_title" msgid="8799354266901230310">"設定"</string>
+    <string name="home_screen_footer" msgid="3704528068051346905">"ヘルスコネクトを使用すると、健康とフィットネスに関するデータを複数のデータソース間で共有できます。これにより、データの安全を保ちながら、分析情報やエクスペリエンスを活用できます。"</string>
+    <string name="home_screen_footer_link" msgid="3276430842054286014">"ヘルスコネクトの詳細"</string>
+    <string name="data_and_access_summary" msgid="2698213356971774646">"あなたのデータとそれにアクセスできるデータソース"</string>
+    <string name="recent_access_summary" msgid="3933708982145999939">"あなたのデータを最近使用したアプリ"</string>
+    <string name="home_devices_summary" msgid="6056984338393523399">"健康に関するデータにアクセスできるデバイスを確認する"</string>
+    <string name="empty_apps_section_title" msgid="1808646811838427261">"ヘルスコネクトに対応しているアプリをインストールすると、ここに表示されます"</string>
+    <string name="empty_apps_section_link" msgid="5227373618435407625">"対応アプリを表示する"</string>
+    <string name="see_all_connected_apps_button" msgid="4936994269737336811">"その他の健康アプリを見る"</string>
+    <string name="app_not_connected_summary" msgid="3898921378270235598">"未接続"</string>
+    <string name="connect_app_button_content_description" msgid="8652692724367722351">"クリックすると、このアプリがヘルスコネクトに接続します"</string>
+    <string name="devices_screen_description" msgid="5009317766902606842">"ヘルスコネクトにデータを同期できるデバイスを管理します"</string>
+    <string name="devices_screen_enabled_devices_header" msgid="1285835574800807742">"有効"</string>
+    <string name="devices_screen_not_enabled_devices_header" msgid="409401860221786612">"無効"</string>
+    <string name="devices_this_phone" msgid="2739727630674436885">"このスマートフォン"</string>
+    <string name="device_data_provider_screen_title" msgid="5410814335680943850">"デバイス アクセス"</string>
+    <string name="manage_device_settings" msgid="5021760675216854323">"<xliff:g id="DDP_NAME">%1$s</xliff:g> の設定"</string>
+    <string name="device_data_provider_enabled_types" msgid="4146093570756356467">"<xliff:g id="ENABLED_TYPES">%1$d</xliff:g>/<xliff:g id="ALL_TYPES">%2$d</xliff:g> が有効"</string>
+    <string name="device_type_unknown" msgid="3897304904166713087">"不明"</string>
+    <string name="device_type_watch" msgid="8118463935553631704">"ウォッチ"</string>
+    <string name="device_type_phone" msgid="7916371544302291906">"スマートフォン"</string>
+    <string name="device_type_scale" msgid="7764152136397378795">"体重計"</string>
+    <string name="device_type_ring" msgid="2528444249876048468">"リング"</string>
+    <string name="device_type_head_mounted" msgid="3968068420976829123">"ヘッドマウント"</string>
+    <string name="device_type_fitness_band" msgid="6516937392955240647">"フィットネス バンド"</string>
+    <string name="device_type_chest_strap" msgid="7278831272805269282">"胸部ストラップ"</string>
+    <string name="device_type_smart_display" msgid="1675362583797329596">"スマートディスプレイ"</string>
+    <string name="device_type_consumer_medical_device" msgid="935607930814394009">"一般ユーザー向け医療機器"</string>
+    <string name="device_type_glasses" msgid="8479316844380873535">"グラス"</string>
+    <string name="device_type_hearable" msgid="9068385110951052438">"ヒアラブル"</string>
+    <string name="device_type_fitness_machine" msgid="5005606659749314561">"フィットネス マシン"</string>
+    <string name="device_type_fitness_equipment" msgid="4702700814093068235">"フィットネス機器"</string>
+    <string name="device_type_portable_computer" msgid="9003721967778945730">"ポータブル コンピュータ"</string>
+    <string name="device_type_meter" msgid="3409050593674148325">"メーター"</string>
+    <string name="banner_default_dismiss_button" msgid="3193723491836994371">"後で"</string>
+    <string name="all_symptoms_uppercase_label" msgid="8536062555780157046">"すべての症状"</string>
+    <string name="symptoms_lowercase_label" msgid="767123038349492995">"症状"</string>
+    <string name="acne_read_content_description" msgid="1176708404029936065">"ニキビの読み取り"</string>
+    <string name="acne_write_content_description" msgid="9221785868351412493">"ニキビの書き込み"</string>
+    <string name="brittle_nails_read_content_description" msgid="423745726647038216">"爪割れの読み取り"</string>
+    <string name="brittle_nails_write_content_description" msgid="1804481735143147688">"爪割れの書き込み"</string>
+    <string name="burning_mouth_read_content_description" msgid="2781812616518222842">"舌痛症の読み取り"</string>
+    <string name="burning_mouth_write_content_description" msgid="2855865249662942197">"舌痛症の書き込み"</string>
+    <string name="chills_read_content_description" msgid="7244946135559432433">"悪寒の読み取り"</string>
+    <string name="chills_write_content_description" msgid="6478646233405107436">"悪寒の書き込み"</string>
+    <string name="dehydration_read_content_description" msgid="7633935838518756206">"脱水の読み取り"</string>
+    <string name="dehydration_write_content_description" msgid="541514183036921571">"脱水の書き込み"</string>
+    <string name="dry_skin_read_content_description" msgid="6798683159412202977">"乾燥肌の読み取り"</string>
+    <string name="dry_skin_write_content_description" msgid="1312998001092991619">"乾燥肌の書き込み"</string>
+    <string name="fever_read_content_description" msgid="3385209639730909489">"発熱の読み取り"</string>
+    <string name="fever_write_content_description" msgid="8440573327719878961">"発熱の書き込み"</string>
+    <string name="joint_pain_read_content_description" msgid="2932523124488927967">"関節痛の読み取り"</string>
+    <string name="joint_pain_write_content_description" msgid="7405551860978844535">"関節痛の書き込み"</string>
+    <string name="joint_stiffness_read_content_description" msgid="2132696730582070534">"関節のこわばりの読み取り"</string>
+    <string name="joint_stiffness_write_content_description" msgid="7556318646656369856">"関節のこわばりの書き込み"</string>
+    <string name="muscle_pain_read_content_description" msgid="3116385630330673084">"筋肉痛の読み取り"</string>
+    <string name="muscle_pain_write_content_description" msgid="2544204740665773272">"筋肉痛の書き込み"</string>
+    <string name="loss_of_consciousness_read_content_description" msgid="8346630124770268372">"失神の読み取り"</string>
+    <string name="loss_of_consciousness_write_content_description" msgid="1959348657257573252">"失神の書き込み"</string>
+    <string name="reduced_capacity_for_exercise_read_content_description" msgid="2246901110448734533">"運動能力の低下の読み取り"</string>
+    <string name="reduced_capacity_for_exercise_write_content_description" msgid="8119106053737965766">"運動能力の低下の書き込み"</string>
+    <string name="unexplained_weight_changes_read_content_description" msgid="7644187172731376645">"原因不明の体重の変化の読み取り"</string>
+    <string name="unexplained_weight_changes_write_content_description" msgid="8744350844236958279">"原因不明の体重の変化の書き込み"</string>
+    <string name="generalized_body_ache_read_content_description" msgid="3132494584303814009">"全身の痛みの読み取り"</string>
+    <string name="generalized_body_ache_write_content_description" msgid="4282920161878530009">"全身の痛みの書き込み"</string>
+    <string name="fatigue_read_content_description" msgid="8447413794808220408">"疲労の読み取り"</string>
+    <string name="fatigue_write_content_description" msgid="3000326883358951973">"疲労の書き込み"</string>
+    <string name="constipation_read_content_description" msgid="4024154136010015370">"便秘の読み取り"</string>
+    <string name="constipation_write_content_description" msgid="9059835998017996999">"便秘の書き込み"</string>
+    <string name="diarrhea_read_content_description" msgid="6643311788778713543">"下痢の読み取り"</string>
+    <string name="diarrhea_write_content_description" msgid="2525160401458506448">"下痢の書き込み"</string>
+    <string name="loss_of_appetite_read_content_description" msgid="5825568361431664706">"食欲不振の読み取り"</string>
+    <string name="loss_of_appetite_write_content_description" msgid="7370817778828856877">"食欲不振の書き込み"</string>
+    <string name="nausea_read_content_description" msgid="7696809485706809234">"吐き気の読み取り"</string>
+    <string name="nausea_write_content_description" msgid="7956853318058549079">"吐き気の書き込み"</string>
+    <string name="stomach_ache_read_content_description" msgid="6960461949095524373">"胃痛の読み取り"</string>
+    <string name="stomach_ache_write_content_description" msgid="4822349196740130790">"胃痛の書き込み"</string>
+    <string name="vomiting_read_content_description" msgid="6425637340168306118">"嘔吐の読み取り"</string>
+    <string name="vomiting_write_content_description" msgid="2768436321239967229">"嘔吐の書き込み"</string>
+    <string name="chest_pain_read_content_description" msgid="5388099127082653993">"胸痛の読み取り"</string>
+    <string name="chest_pain_write_content_description" msgid="7570421665813979598">"胸痛の書き込み"</string>
+    <string name="chest_tightness_read_content_description" msgid="3234587929340517638">"胸部圧迫感の読み取り"</string>
+    <string name="chest_tightness_write_content_description" msgid="3365518444505217882">"胸部圧迫感の書き込み"</string>
+    <string name="cough_read_content_description" msgid="4834360757270578547">"咳の読み取り"</string>
+    <string name="cough_write_content_description" msgid="2927943192149715422">"咳の書き込み"</string>
+    <string name="heart_palpitations_read_content_description" msgid="5830132363981902576">"動悸の読み取り"</string>
+    <string name="heart_palpitations_write_content_description" msgid="6195434828951874561">"動悸の書き込み"</string>
+    <string name="shortness_of_breath_read_content_description" msgid="5285037217314042125">"息切れの読み取り"</string>
+    <string name="shortness_of_breath_write_content_description" msgid="1812050225998794712">"息切れの書き込み"</string>
+    <string name="wheezing_read_content_description" msgid="3698103133045395859">"喘鳴の読み取り"</string>
+    <string name="wheezing_write_content_description" msgid="3555234332119025686">"喘鳴の書き込み"</string>
+    <string name="heartburn_read_content_description" msgid="4650825508743336439">"胸焼けの読み取り"</string>
+    <string name="heartburn_write_content_description" msgid="1857706822547818187">"胸焼けの書き込み"</string>
+    <string name="skipped_heartbeat_read_content_description" msgid="4732209374634649857">"不整脈の読み取り"</string>
+    <string name="skipped_heartbeat_write_content_description" msgid="834686289232563614">"不整脈の書き込み"</string>
+    <string name="rapid_pounding_or_fluttering_heartbeat_read_content_description" msgid="7616019217735602113">"頻脈、激しい鼓動、不規則な鼓動の読み取り"</string>
+    <string name="rapid_pounding_or_fluttering_heartbeat_write_content_description" msgid="271585170557004393">"頻脈、激しい鼓動、不規則な鼓動の書き込み"</string>
+    <string name="difficulty_swallowing_read_content_description" msgid="3506995529886706872">"嚥下障害の読み取り"</string>
+    <string name="difficulty_swallowing_write_content_description" msgid="4087127686579577768">"嚥下障害の書き込み"</string>
+    <string name="dizziness_read_content_description" msgid="2525565486057144416">"目まいの読み取り"</string>
+    <string name="dizziness_write_content_description" msgid="1875365619054873732">"目まいの書き込み"</string>
+    <string name="earaches_read_content_description" msgid="4643142391473401154">"耳の痛みの読み取り"</string>
+    <string name="earaches_write_content_description" msgid="3551386029980258801">"耳の痛みの書き込み"</string>
+    <string name="hair_loss_read_content_description" msgid="4057044821025872986">"抜け毛の読み取り"</string>
+    <string name="hair_loss_write_content_description" msgid="7387442867237711823">"抜け毛の書き込み"</string>
+    <string name="headache_read_content_description" msgid="7485283472508878298">"頭痛の読み取り"</string>
+    <string name="headache_write_content_description" msgid="720183844750746485">"頭痛の書き込み"</string>
+    <string name="runny_nose_read_content_description" msgid="443700998701222852">"鼻水の読み取り"</string>
+    <string name="runny_nose_write_content_description" msgid="6210009950948827090">"鼻水の書き込み"</string>
+    <string name="sneezing_read_content_description" msgid="1825781985598094799">"くしゃみの読み取り"</string>
+    <string name="sneezing_write_content_description" msgid="8125072216406958337">"くしゃみの書き込み"</string>
+    <string name="sore_throat_read_content_description" msgid="7798247670004858562">"咽頭痛の読み取り"</string>
+    <string name="sore_throat_write_content_description" msgid="6058043292544091397">"咽頭痛の書き込み"</string>
+    <string name="stuffy_nose_read_content_description" msgid="6604212451531546331">"鼻づまりの読み取り"</string>
+    <string name="stuffy_nose_write_content_description" msgid="6950875986047625521">"鼻づまりの書き込み"</string>
+    <string name="back_pain_read_content_description" msgid="1176155927269014089">"背中の痛みの読み取り"</string>
+    <string name="back_pain_write_content_description" msgid="6282959987099901645">"背中の痛みの書き込み"</string>
+    <string name="lower_back_pain_read_content_description" msgid="1437405008757136462">"腰痛の読み取り"</string>
+    <string name="lower_back_pain_write_content_description" msgid="3519700764000282215">"腰痛の書き込み"</string>
+    <string name="hot_flashes_read_content_description" msgid="2229463748079331513">"一過性熱感の読み取り"</string>
+    <string name="hot_flashes_write_content_description" msgid="441093768815039294">"一過性熱感の書き込み"</string>
+    <string name="night_sweats_read_content_description" msgid="7644094250441074129">"寝汗の読み取り"</string>
+    <string name="night_sweats_write_content_description" msgid="7501357533280452509">"寝汗の書き込み"</string>
+    <string name="water_retention_read_content_description" msgid="211789030125880649">"むくみの読み取り"</string>
+    <string name="water_retention_write_content_description" msgid="7109328727506593781">"むくみの書き込み"</string>
+    <string name="cravings_read_content_description" msgid="9098905292448612603">"禁断症状の読み取り"</string>
+    <string name="cravings_write_content_description" msgid="7932335159387976333">"禁断症状の書き込み"</string>
+    <string name="bloating_read_content_description" msgid="8942780558464500997">"膨満感の読み取り"</string>
+    <string name="bloating_write_content_description" msgid="5014366726518564943">"膨満感の書き込み"</string>
+    <string name="cramps_read_content_description" msgid="5853663240074256855">"生理痛の読み取り"</string>
+    <string name="cramps_write_content_description" msgid="6777230560926849939">"生理痛の書き込み"</string>
+    <string name="abdominal_pain_read_content_description" msgid="6331928351160142817">"腹痛の読み取り"</string>
+    <string name="abdominal_pain_write_content_description" msgid="9213133328064016367">"腹痛の書き込み"</string>
+    <string name="breast_tenderness_read_content_description" msgid="1556133668276886256">"乳房痛の読み取り"</string>
+    <string name="breast_tenderness_write_content_description" msgid="5405234499024881940">"乳房痛の書き込み"</string>
+    <string name="pelvic_pain_read_content_description" msgid="8872893212311881743">"骨盤の痛みの読み取り"</string>
+    <string name="pelvic_pain_write_content_description" msgid="8482016412474126674">"骨盤の痛みの書き込み"</string>
+    <string name="vaginal_dryness_read_content_description" msgid="21587787265978758">"膣の乾燥の読み取り"</string>
+    <string name="vaginal_dryness_write_content_description" msgid="7639415261021656468">"膣の乾燥の書き込み"</string>
+    <string name="vaginal_itchiness_read_content_description" msgid="6027886706003079912">"膣のかゆみの読み取り"</string>
+    <string name="vaginal_itchiness_write_content_description" msgid="6833099607694941406">"膣のかゆみの書き込み"</string>
+    <string name="brain_fog_read_content_description" msgid="4240133221789017568">"ブレインフォグの読み取り"</string>
+    <string name="brain_fog_write_content_description" msgid="354508934978268288">"ブレインフォグの書き込み"</string>
+    <string name="mood_change_read_content_description" msgid="5114563193264125173">"気分の変動の読み取り"</string>
+    <string name="mood_change_write_content_description" msgid="7613564641235985120">"気分の変動の書き込み"</string>
+    <string name="memory_lapse_read_content_description" msgid="3639865098888366357">"物忘れの読み取り"</string>
+    <string name="memory_lapse_write_content_description" msgid="211569063190179476">"物忘れの書き込み"</string>
+    <string name="sleepiness_read_content_description" msgid="797381777988304669">"眠気の読み取り"</string>
+    <string name="sleepiness_write_content_description" msgid="888236364245216476">"眠気の書き込み"</string>
+    <string name="sleep_changes_read_content_description" msgid="277237231470749744">"睡眠の変化の読み取り"</string>
+    <string name="sleep_changes_write_content_description" msgid="9078270254664653838">"睡眠の変化の書き込み"</string>
+    <string name="insomnia_read_content_description" msgid="5225449618972721129">"不眠の読み取り"</string>
+    <string name="insomnia_write_content_description" msgid="4237153589826489083">"不眠の書き込み"</string>
+    <string name="snore_read_content_description" msgid="3447953925696237628">"いびきの読み取り"</string>
+    <string name="snore_write_content_description" msgid="959354771204900433">"いびきの書き込み"</string>
+    <string name="acne_uppercase_label" msgid="60568062993817483">"ニキビ"</string>
+    <string name="acne_lowercase_label" msgid="5301949536428255159">"ニキビ"</string>
+    <string name="abdominal_pain_uppercase_label" msgid="442393846492385702">"腹痛"</string>
+    <string name="abdominal_pain_lowercase_label" msgid="4136643670361233063">"腹痛"</string>
+    <string name="back_pain_uppercase_label" msgid="6034795846635350255">"背中の痛み"</string>
+    <string name="back_pain_lowercase_label" msgid="7487168354843582888">"背中の痛み"</string>
+    <string name="bloating_uppercase_label" msgid="2827024204358491650">"膨満感"</string>
+    <string name="bloating_lowercase_label" msgid="4108236897678347488">"膨満感"</string>
+    <string name="brain_fog_uppercase_label" msgid="3782508630097437711">"ブレインフォグ"</string>
+    <string name="brain_fog_lowercase_label" msgid="8018499987092429724">"ブレインフォグ"</string>
+    <string name="breast_tenderness_uppercase_label" msgid="3633574517042452397">"乳房痛"</string>
+    <string name="breast_tenderness_lowercase_label" msgid="3745105353936751222">"乳房痛"</string>
+    <string name="brittle_nails_uppercase_label" msgid="7290899807816681152">"爪割れ"</string>
+    <string name="brittle_nails_lowercase_label" msgid="43861645923597496">"爪割れ"</string>
+    <string name="burning_mouth_uppercase_label" msgid="8975226712238467359">"舌痛症"</string>
+    <string name="burning_mouth_lowercase_label" msgid="3378970972990933484">"舌痛症"</string>
+    <string name="chest_pain_uppercase_label" msgid="8091501402224214622">"胸痛"</string>
+    <string name="chest_pain_lowercase_label" msgid="8817807562310689177">"胸痛"</string>
+    <string name="chest_tightness_uppercase_label" msgid="8988021502622503503">"胸部圧迫感"</string>
+    <string name="chest_tightness_lowercase_label" msgid="1770063390635610292">"胸部圧迫感"</string>
+    <string name="chills_uppercase_label" msgid="4320786490882838834">"悪寒"</string>
+    <string name="chills_lowercase_label" msgid="1306612496314055832">"悪寒"</string>
+    <string name="constipation_uppercase_label" msgid="7245001778443725742">"便秘"</string>
+    <string name="constipation_lowercase_label" msgid="6217542866033766747">"便秘"</string>
+    <string name="cough_uppercase_label" msgid="5570609736970603012">"咳"</string>
+    <string name="cough_lowercase_label" msgid="459638956679172779">"咳"</string>
+    <string name="cramps_uppercase_label" msgid="5162905309136173937">"生理痛"</string>
+    <string name="cramps_lowercase_label" msgid="4644485808002493449">"生理痛"</string>
+    <string name="cravings_uppercase_label" msgid="4754194354806284307">"禁断症状"</string>
+    <string name="cravings_lowercase_label" msgid="5836041614136287213">"禁断症状"</string>
+    <string name="dehydration_uppercase_label" msgid="10278239942824711">"脱水"</string>
+    <string name="dehydration_lowercase_label" msgid="8692632632276643276">"脱水"</string>
+    <string name="diarrhea_uppercase_label" msgid="6310170127529968752">"下痢"</string>
+    <string name="diarrhea_lowercase_label" msgid="5938774694742839016">"下痢"</string>
+    <string name="difficulty_swallowing_uppercase_label" msgid="3546617155300878657">"嚥下障害"</string>
+    <string name="difficulty_swallowing_lowercase_label" msgid="4980631237611433200">"嚥下障害"</string>
+    <string name="dizziness_uppercase_label" msgid="8129950094459563983">"目まい"</string>
+    <string name="dizziness_lowercase_label" msgid="3462347558609662379">"目まい"</string>
+    <string name="dry_skin_uppercase_label" msgid="4542430684082075550">"乾燥肌"</string>
+    <string name="dry_skin_lowercase_label" msgid="6892264917735291961">"乾燥肌"</string>
+    <string name="earaches_uppercase_label" msgid="107701950625572701">"耳の痛み"</string>
+    <string name="earaches_lowercase_label" msgid="6240790850403958317">"耳の痛み"</string>
+    <string name="fatigue_uppercase_label" msgid="7514286788083426578">"疲労"</string>
+    <string name="fatigue_lowercase_label" msgid="2669560685808367387">"疲労"</string>
+    <string name="fever_uppercase_label" msgid="6889273008212535253">"発熱"</string>
+    <string name="fever_lowercase_label" msgid="3634400562894397159">"発熱"</string>
+    <string name="generalized_body_ache_uppercase_label" msgid="2171378172300618053">"全身の痛み"</string>
+    <string name="generalized_body_ache_lowercase_label" msgid="1725534000111875030">"全身の痛み"</string>
+    <string name="hair_loss_uppercase_label" msgid="6359351347019795813">"抜け毛"</string>
+    <string name="hair_loss_lowercase_label" msgid="2764498189966225461">"抜け毛"</string>
+    <string name="headache_uppercase_label" msgid="863800537735413054">"頭痛"</string>
+    <string name="headache_lowercase_label" msgid="6564231905087583135">"頭痛"</string>
+    <string name="heartburn_uppercase_label" msgid="1170571383460859644">"胸焼け"</string>
+    <string name="heartburn_lowercase_label" msgid="6235983036978705474">"胸焼け"</string>
+    <string name="heart_palpitations_uppercase_label" msgid="2026400872833911547">"動悸"</string>
+    <string name="heart_palpitations_lowercase_label" msgid="1468243523322721340">"動悸"</string>
+    <string name="hot_flashes_uppercase_label" msgid="2410116266729711836">"一過性熱感"</string>
+    <string name="hot_flashes_lowercase_label" msgid="6485269554856410007">"一過性熱感"</string>
+    <string name="insomnia_uppercase_label" msgid="4946197328995261738">"不眠"</string>
+    <string name="insomnia_lowercase_label" msgid="3742025423716451058">"不眠"</string>
+    <string name="joint_pain_uppercase_label" msgid="7693454621285586935">"関節痛"</string>
+    <string name="joint_pain_lowercase_label" msgid="1877680075365305488">"関節痛"</string>
+    <string name="joint_stiffness_uppercase_label" msgid="5230114867081881444">"関節のこわばり"</string>
+    <string name="joint_stiffness_lowercase_label" msgid="8766445235392409480">"関節のこわばり"</string>
+    <string name="loss_of_appetite_uppercase_label" msgid="4023141061302523950">"食欲不振"</string>
+    <string name="loss_of_appetite_lowercase_label" msgid="7558077308061468558">"食欲不振"</string>
+    <string name="loss_of_consciousness_uppercase_label" msgid="4195502722277905266">"失神"</string>
+    <string name="loss_of_consciousness_lowercase_label" msgid="4822860811117141611">"失神"</string>
+    <string name="lower_back_pain_uppercase_label" msgid="2307572603791750654">"腰痛"</string>
+    <string name="lower_back_pain_lowercase_label" msgid="940765534682997044">"腰痛"</string>
+    <string name="memory_lapse_uppercase_label" msgid="241393771674969441">"物忘れ"</string>
+    <string name="memory_lapse_lowercase_label" msgid="5590619293782264318">"物忘れ"</string>
+    <string name="mood_change_uppercase_label" msgid="6591596468077187132">"気分の変動"</string>
+    <string name="mood_change_lowercase_label" msgid="5154765930188874067">"気分の変動"</string>
+    <string name="muscle_pain_uppercase_label" msgid="2470771124188001900">"筋肉痛"</string>
+    <string name="muscle_pain_lowercase_label" msgid="7842677871351347822">"筋肉痛"</string>
+    <string name="nausea_uppercase_label" msgid="8384006696113532259">"吐き気"</string>
+    <string name="nausea_lowercase_label" msgid="8182471893071968504">"吐き気"</string>
+    <string name="night_sweats_uppercase_label" msgid="6177687233700001658">"寝汗"</string>
+    <string name="night_sweats_lowercase_label" msgid="5041101323453286082">"寝汗"</string>
+    <string name="pelvic_pain_uppercase_label" msgid="9057761232218571640">"骨盤の痛み"</string>
+    <string name="pelvic_pain_lowercase_label" msgid="8993103170034473121">"骨盤の痛み"</string>
+    <string name="rapid_pounding_or_fluttering_heartbeat_uppercase_label" msgid="2029088854167004239">"頻脈、激しい鼓動、不規則な鼓動"</string>
+    <string name="rapid_pounding_or_fluttering_heartbeat_lowercase_label" msgid="5744229600679518473">"頻脈、激しい鼓動、不規則な鼓動"</string>
+    <string name="reduced_capacity_for_exercise_uppercase_label" msgid="7471254320615756463">"運動能力の低下"</string>
+    <string name="reduced_capacity_for_exercise_lowercase_label" msgid="3820574649548616546">"運動能力の低下"</string>
+    <string name="runny_nose_uppercase_label" msgid="6561156187042071551">"鼻水"</string>
+    <string name="runny_nose_lowercase_label" msgid="2214697492382685914">"鼻水"</string>
+    <string name="shortness_of_breath_uppercase_label" msgid="3747502224212110471">"息切れ"</string>
+    <string name="shortness_of_breath_lowercase_label" msgid="3970444639088619346">"息切れ"</string>
+    <string name="skipped_heartbeat_uppercase_label" msgid="1004040920818222022">"不整脈"</string>
+    <string name="skipped_heartbeat_lowercase_label" msgid="2446049805930852514">"不整脈"</string>
+    <string name="sleep_changes_uppercase_label" msgid="817870703301327111">"睡眠の変化"</string>
+    <string name="sleep_changes_lowercase_label" msgid="8606593835222848643">"睡眠の変化"</string>
+    <string name="sleepiness_uppercase_label" msgid="8292543897598171825">"眠気"</string>
+    <string name="sleepiness_lowercase_label" msgid="7563434619994665081">"眠気"</string>
+    <string name="sneezing_uppercase_label" msgid="3559089195823390830">"くしゃみ"</string>
+    <string name="sneezing_lowercase_label" msgid="4614496100578986753">"くしゃみ"</string>
+    <string name="snore_uppercase_label" msgid="5408933698329003980">"いびき"</string>
+    <string name="snore_lowercase_label" msgid="4813706716393000341">"いびき"</string>
+    <string name="sore_throat_uppercase_label" msgid="7652461264264564339">"咽頭痛"</string>
+    <string name="sore_throat_lowercase_label" msgid="2671417552726018944">"咽頭痛"</string>
+    <string name="stomach_ache_uppercase_label" msgid="8450868632465837793">"胃痛"</string>
+    <string name="stomach_ache_lowercase_label" msgid="3263518334946627327">"胃痛"</string>
+    <string name="stuffy_nose_uppercase_label" msgid="4216439398397550673">"鼻づまり"</string>
+    <string name="stuffy_nose_lowercase_label" msgid="346310767340271161">"鼻づまり"</string>
+    <string name="unexplained_weight_changes_uppercase_label" msgid="1882204558194305221">"原因不明の体重の変化"</string>
+    <string name="unexplained_weight_changes_lowercase_label" msgid="8433998024876395101">"原因不明の体重の変化"</string>
+    <string name="vaginal_dryness_uppercase_label" msgid="4256721076420375400">"膣の乾燥"</string>
+    <string name="vaginal_dryness_lowercase_label" msgid="1329282833647595593">"膣の乾燥"</string>
+    <string name="vaginal_itchiness_uppercase_label" msgid="2843508264503404145">"膣のかゆみ"</string>
+    <string name="vaginal_itchiness_lowercase_label" msgid="4569019157289060524">"膣のかゆみ"</string>
+    <string name="vomiting_uppercase_label" msgid="258794137964470267">"嘔吐"</string>
+    <string name="vomiting_lowercase_label" msgid="2520559377010270583">"嘔吐"</string>
+    <string name="water_retention_uppercase_label" msgid="4748866467103152119">"むくみ"</string>
+    <string name="water_retention_lowercase_label" msgid="3738721149186742861">"むくみ"</string>
+    <string name="wheezing_uppercase_label" msgid="2837114949197811787">"喘鳴"</string>
+    <string name="wheezing_lowercase_label" msgid="1278548371813007771">"喘鳴"</string>
+    <string name="app_permissions_granted_summary" msgid="4303703603708332836">"<xliff:g id="TOTAL_PERMISSIONS">%2$d</xliff:g> 個中 <xliff:g id="GRANTED_PERMISSIONS">%1$d</xliff:g> 個を選択済み"</string>
+    <string name="a11y_aggregation_card_content_desc" msgid="6092767340989271591">"この集計カードのデータカテゴリ"</string>
+</resources>

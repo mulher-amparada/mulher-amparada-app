@@ -1,0 +1,199 @@
+/*
+ * Copyright (C) 2020 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.settings.notification.history;
+
+import static android.content.pm.PackageManager.MATCH_ANY_USER;
+import static android.content.pm.PackageManager.NameNotFoundException;
+import static android.os.UserHandle.USER_ALL;
+import static android.provider.Settings.EXTRA_APP_PACKAGE;
+import static android.provider.Settings.EXTRA_CHANNEL_ID;
+import static android.provider.Settings.EXTRA_CONVERSATION_ID;
+
+import android.annotation.UserIdInt;
+import android.app.ActivityManager;
+import android.app.Notification;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
+import android.os.UserHandle;
+import android.os.UserManager;
+import android.provider.Settings;
+import android.service.notification.StatusBarNotification;
+import android.util.Log;
+import android.util.Slog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.android.internal.logging.UiEventLogger;
+import com.android.settings.R;
+import com.android.settingslib.Utils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class NotificationSbnAdapter extends
+        RecyclerView.Adapter<NotificationSbnViewHolder> {
+
+    private static final String TAG = "SbnAdapter";
+    private List<StatusBarNotification> mValues;
+    private Map<Integer, Drawable> mUserBadgeCache;
+    private final Context mContext;
+    private PackageManager mPm;
+    private @UserIdInt int mCurrentUser;
+    private List<Integer> mEnabledProfiles = new ArrayList<>();
+    private boolean mIsSnoozed;
+    private UiEventLogger mUiEventLogger;
+    private ArrayList<Integer> mContentRestrictedUsers = new ArrayList<>();
+
+    public NotificationSbnAdapter(Context context, PackageManager pm, UserManager um,
+            boolean isSnoozed, UiEventLogger uiEventLogger,
+            ArrayList<Integer> contentRestrictedUsers) {
+        mContext = context;
+        mPm = pm;
+        mUserBadgeCache = new HashMap<>();
+        mValues = new ArrayList<>();
+        mCurrentUser = ActivityManager.getCurrentUser();
+        int[] enabledUsers = um.getEnabledProfileIds(mCurrentUser);
+        for (int id : enabledUsers) {
+            if (!um.isQuietModeEnabled(UserHandle.of(id))) {
+                mEnabledProfiles.add(id);
+            }
+        }
+        setHasStableIds(true);
+        // If true, this is the panel for snoozed notifs, otherwise the one for dismissed notifs.
+        mIsSnoozed = isSnoozed;
+        mUiEventLogger = uiEventLogger;
+        mContentRestrictedUsers = contentRestrictedUsers;
+    }
+
+    @Override
+    public NotificationSbnViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.notification_sbn_log_row, parent, false);
+        return new NotificationSbnViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(final @NonNull NotificationSbnViewHolder holder,
+            int position) {
+        final StatusBarNotification sbn = mValues.get(position);
+        if (sbn != null) {
+            setLabelAndIcon(holder, sbn);
+            if (mContentRestrictedUsers.contains(sbn.getNormalizedUserId())) {
+                holder.setSummary(mContext.getString(
+                        com.android.internal.R.string.notification_hidden_text));
+            } else {
+                holder.setTitle(sbn.getNotification().getHistoryTitle(mContext));
+                holder.setSummary(sbn.getNotification().getHistoryText(mContext));
+            }
+            holder.setPostedTime(sbn.getPostTime());
+            int userId = normalizeUserId(sbn);
+            if (!mUserBadgeCache.containsKey(userId)) {
+                Drawable profile = mContext.getPackageManager().getUserBadgeForDensityNoBackground(
+                        UserHandle.of(userId), 0);
+                mUserBadgeCache.put(userId, profile);
+            }
+            holder.setProfileBadge(mUserBadgeCache.get(userId));
+            holder.addOnClick(position, sbn.getPackageName(), sbn.getUid(), sbn.getUserId(),
+                    sbn.getNotification().contentIntent, sbn.getInstanceId(), mIsSnoozed,
+                    mUiEventLogger);
+            holder.itemView.setOnLongClickListener(v -> {
+                Intent intent =  new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
+                        .setPackage(mContext.getPackageName())
+                        .putExtra(EXTRA_APP_PACKAGE, sbn.getPackageName())
+                        .putExtra(EXTRA_CHANNEL_ID, sbn.getNotification().getChannelId())
+                        .putExtra(EXTRA_CONVERSATION_ID, sbn.getNotification().getShortcutId());
+                holder.itemView.getContext().startActivityAsUser(intent, UserHandle.of(userId));
+                return true;
+            });
+        } else {
+            Slog.w(TAG, "null entry in list at position " + position);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return mValues.size();
+    }
+
+    public void onRebuildComplete(List<StatusBarNotification> notifications) {
+        for (int i = notifications.size() - 1; i >= 0; i--) {
+            StatusBarNotification sbn = notifications.get(i);
+            if (!shouldShowSbn(sbn)) {
+                notifications.remove(i);
+            }
+        }
+        mValues = notifications;
+        notifyDataSetChanged();
+    }
+
+    public void addSbn(StatusBarNotification sbn) {
+        if (!shouldShowSbn(sbn)) {
+            return;
+        }
+        mValues.add(0, sbn);
+        notifyDataSetChanged();
+    }
+
+    private boolean shouldShowSbn(StatusBarNotification sbn) {
+        // summaries are low content; don't bother showing them
+        if (sbn.isGroup() && sbn.getNotification().isGroupSummary()) {
+            return false;
+        }
+        // also don't show profile notifications if the profile is currently disabled
+        if (!mEnabledProfiles.contains(normalizeUserId(sbn))) {
+            return false;
+        }
+        return true;
+    }
+
+    private void setLabelAndIcon(NotificationSbnViewHolder holder, StatusBarNotification sbn) {
+        try {
+            ApplicationInfo info = mPm.getApplicationInfo(sbn.getPackageName(), MATCH_ANY_USER);
+            if (info != null){
+                holder.setPackageLabel(mPm.getApplicationLabel(info).toString());
+                holder.setIcon(Utils.getBadgedIcon(mContext, info));
+            }
+        } catch (NameNotFoundException e) {
+            Log.e(TAG, "Cannot load app info", e);
+        }
+    }
+
+    private static String getTitleString(Notification n) {
+        CharSequence title = null;
+        if (n.extras != null) {
+            title = n.extras.getCharSequence(Notification.EXTRA_TITLE);
+        }
+        return title == null? null : String.valueOf(title);
+    }
+
+    private int normalizeUserId(StatusBarNotification sbn) {
+        int userId = sbn.getUserId();
+        if (userId == USER_ALL) {
+            userId = mCurrentUser;
+        }
+        return userId;
+    }
+}

@@ -1,0 +1,141 @@
+package: "com.android.window.flags"
+container: "system"
+
+flag {
+  name: "density_390_api"
+  is_exported: true
+  namespace: "large_screen_experiences_app_compat"
+  description: "Whether the API DisplayMetrics.DENSITY_390 is available"
+  bug: "297550533"
+  is_fixed_read_only: true
+}
+
+flag {
+  name: "move_to_external_display_shortcut"
+  namespace: "large_screen_experiences_app_compat"
+  description: "Whether the move to external display shortcut in overview is available"
+  bug: "372872848"
+}
+
+flag {
+  name: "app_compat_properties_api"
+  is_exported: true
+  namespace: "large_screen_experiences_app_compat"
+  description: "Whether app compat property APIs are public. Which includes: /n"
+                 "WindowManager.PROPERTY_COMPAT_ALLOW_MIN_ASPECT_RATIO_OVERRIDE,/n"
+                 "WindowManager.PROPERTY_COMPAT_ALLOW_IGNORING_ORIENTATION_REQUEST_WHEN_LOOP_DETECTED,/n"
+                 "WindowManager.PROPERTY_COMPAT_ALLOW_RESIZEABLE_ACTIVITY_OVERRIDES,/n"
+                 "WindowManager.PROPERTY_COMPAT_ALLOW_USER_ASPECT_RATIO_OVERRIDE,/n"
+                 "WindowManager.PROPERTY_COMPAT_ALLOW_USER_ASPECT_RATIO_FULLSCREEN_OVERRIDE"
+  bug: "316139088"
+  is_fixed_read_only: true
+}
+
+flag {
+    name: "camera_compat_landscape_camera_support"
+    namespace: "large_screen_experiences_app_compat"
+    description: "Whether to support landscape cameras in camera compat."
+    bug: "432651608"
+}
+
+flag {
+    name: "camera_compat_unify_camera_policies"
+    namespace: "large_screen_experiences_app_compat"
+    description: "Whether to use simulate-requested-orientation camera compat treatment instead of a force-rotate one."
+    bug: "432218134"
+}
+
+flag {
+    name: "camera_compat_ignore_requested_orientation_allowed"
+    namespace: "large_screen_experiences_app_compat"
+    description: "Whether to ignore requested orientation when camera compat which simulates requested orientation is active."
+    bug: "479086789"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+  name: "camera_compat_update_treatment_on_rotation"
+  namespace: "large_screen_experiences_app_compat"
+  description: "Update the camera compatibility treatment when the display rotates, as it needs different rotate and crop amount."
+  bug: "335826583"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "scrolling_from_letterbox"
+  namespace: "large_screen_experiences_app_compat"
+  description: "Whether to enable app scrolling from gestures from letterbox area"
+  bug: "353697519"
+}
+
+flag {
+  name: "app_compat_enable_blur_wallpaper_in_shell"
+  namespace: "large_screen_experiences_app_compat"
+  description: "Enables blur wallpaper in the letterbox implementation in Shell."
+  bug: "480962329"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "app_compat_refactoring_use_activity_leash_for_letterboxing"
+  namespace: "large_screen_experiences_app_compat"
+  description: "Whether the Activity leash should be used as reference for letterbox surfaces."
+  bug: "443245627"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "app_compat_refactoring_rounded_corners_animation"
+  namespace: "large_screen_experiences_app_compat"
+  description: "Whether the rounded corners for letterboxing in shell are animated"
+  bug: "431139480"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "letterbox_background_wallpaper"
+  namespace: "large_screen_experiences_app_compat"
+  description: "Whether the blurred letterbox wallpaper background is enabled by default"
+  bug: "297195682"
+}
+
+flag {
+  name: "ai_desks_platform"
+  namespace: "large_screen_experiences_app_compat"
+  description: "Whether the Ai support for AiDesks in platform is enabled"
+  bug: "454216513"
+}
+
+flag {
+  name: "app_compat_ui_framework"
+  namespace: "large_screen_experiences_app_compat"
+  description: "Whether the declarative compat UI framework is enabled"
+  bug: "270361630"
+  is_fixed_read_only: true
+}
+
+flag {
+  name: "vdm_force_app_universal_resizable_api"
+  namespace: "large_screen_experiences_app_compat"
+  description: "Whether the API for forcing apps to be universal resizable on virtual display is available"
+  bug: "372848702"
+  is_exported: true
+}
+
+flag {
+  name: "change_min_aspect_ratio_permission"
+  namespace: "large_screen_experiences_app_compat"
+  description: "Whether callers need CHANGE_MIN_ASPECT_RATIO permission to set min aspect ratio."
+  bug: "414381398"
+  is_fixed_read_only: true
+}

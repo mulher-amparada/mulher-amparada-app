@@ -1,0 +1,537 @@
+/**
+ * Copyright (C) 2022 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * ```
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ * ```
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package com.android.healthconnect.testapps.toolbox
+
+import android.health.connect.datatypes.ActiveCaloriesBurnedRecord
+import android.health.connect.datatypes.ActivityIntensityRecord
+import android.health.connect.datatypes.AlcoholConsumptionRecord
+import android.health.connect.datatypes.BasalBodyTemperatureRecord
+import android.health.connect.datatypes.BasalMetabolicRateRecord
+import android.health.connect.datatypes.BloodGlucoseRecord
+import android.health.connect.datatypes.BloodPressureRecord
+import android.health.connect.datatypes.BodyFatRecord
+import android.health.connect.datatypes.BodyTemperatureRecord
+import android.health.connect.datatypes.BodyWaterMassRecord
+import android.health.connect.datatypes.BoneMassRecord
+import android.health.connect.datatypes.CervicalMucusRecord
+import android.health.connect.datatypes.CyclingPedalingCadenceRecord
+import android.health.connect.datatypes.DistanceRecord
+import android.health.connect.datatypes.ElevationGainedRecord
+import android.health.connect.datatypes.ExerciseSessionRecord
+import android.health.connect.datatypes.FloorsClimbedRecord
+import android.health.connect.datatypes.HeartRateRecord
+import android.health.connect.datatypes.HeartRateVariabilityRmssdRecord
+import android.health.connect.datatypes.HeightRecord
+import android.health.connect.datatypes.HydrationRecord
+import android.health.connect.datatypes.IntermenstrualBleedingRecord
+import android.health.connect.datatypes.LeanBodyMassRecord
+import android.health.connect.datatypes.MenstrualCyclePhaseRecord
+import android.health.connect.datatypes.MenstruationFlowRecord
+import android.health.connect.datatypes.MenstruationPeriodRecord
+import android.health.connect.datatypes.MindfulnessSessionRecord
+import android.health.connect.datatypes.NicotineIntakeRecord
+import android.health.connect.datatypes.NutritionRecord
+import android.health.connect.datatypes.OvulationTestRecord
+import android.health.connect.datatypes.OxygenSaturationRecord
+import android.health.connect.datatypes.PlannedExerciseSessionRecord
+import android.health.connect.datatypes.PowerRecord
+import android.health.connect.datatypes.Record
+import android.health.connect.datatypes.RespiratoryRateRecord
+import android.health.connect.datatypes.RestingHeartRateRecord
+import android.health.connect.datatypes.SexualActivityRecord
+import android.health.connect.datatypes.SkinTemperatureRecord
+import android.health.connect.datatypes.SleepSessionRecord
+import android.health.connect.datatypes.SpeedRecord
+import android.health.connect.datatypes.StepsCadenceRecord
+import android.health.connect.datatypes.StepsRecord
+import android.health.connect.datatypes.SymptomRecord
+import android.health.connect.datatypes.TotalCaloriesBurnedRecord
+import android.health.connect.datatypes.Vo2MaxRecord
+import android.health.connect.datatypes.WeightRecord
+import android.health.connect.datatypes.WheelchairPushesRecord
+import android.text.InputType
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import kotlin.reflect.KClass
+
+/** Constant variables used across the app. */
+object Constants {
+
+    const val INPUT_TYPE_DOUBLE = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+    const val INPUT_TYPE_SIGNED_DOUBLE =
+        InputType.TYPE_CLASS_NUMBER or
+            InputType.TYPE_NUMBER_FLAG_DECIMAL or
+            InputType.TYPE_NUMBER_FLAG_SIGNED
+    const val INPUT_TYPE_LONG = InputType.TYPE_CLASS_NUMBER
+    const val INPUT_TYPE_INT = InputType.TYPE_CLASS_NUMBER
+    const val INPUT_TYPE_TEXT = InputType.TYPE_CLASS_TEXT
+
+    val FITNESS_READ_PERMISSIONS =
+        arrayOf(
+            "android.permission.health.READ_ACTIVE_CALORIES_BURNED",
+            "android.permission.health.READ_ACTIVITY_INTENSITY",
+            "android.permission.health.READ_ALCOHOL_CONSUMPTION",
+            "android.permission.health.READ_BASAL_BODY_TEMPERATURE",
+            "android.permission.health.READ_BASAL_METABOLIC_RATE",
+            "android.permission.health.READ_BLOOD_GLUCOSE",
+            "android.permission.health.READ_BLOOD_PRESSURE",
+            "android.permission.health.READ_BODY_FAT",
+            "android.permission.health.READ_BODY_TEMPERATURE",
+            "android.permission.health.READ_BODY_WATER_MASS",
+            "android.permission.health.READ_BONE_MASS",
+            "android.permission.health.READ_CERVICAL_MUCUS",
+            "android.permission.health.READ_DISTANCE",
+            "android.permission.health.READ_ELEVATION_GAINED",
+            "android.permission.health.READ_EXERCISE",
+            "android.permission.health.READ_PLANNED_EXERCISE",
+            "android.permission.health.READ_EXERCISE_ROUTE",
+            "android.permission.health.READ_FLOORS_CLIMBED",
+            "android.permission.health.READ_HEART_RATE",
+            "android.permission.health.READ_HEART_RATE_VARIABILITY",
+            "android.permission.health.READ_HEIGHT",
+            "android.permission.health.READ_HYDRATION",
+            "android.permission.health.READ_LEAN_BODY_MASS",
+            "android.permission.health.READ_MENSTRUATION",
+            "android.permission.health.READ_MENSTRUAL_CYCLE_PHASE",
+            "android.permission.health.READ_MINDFULNESS",
+            "android.permission.health.READ_NICOTINE_INTAKE",
+            "android.permission.health.READ_NUTRITION",
+            "android.permission.health.READ_OVULATION_TEST",
+            "android.permission.health.READ_OXYGEN_SATURATION",
+            "android.permission.health.READ_POWER",
+            "android.permission.health.READ_RESPIRATORY_RATE",
+            "android.permission.health.READ_RESTING_HEART_RATE",
+            "android.permission.health.READ_SEXUAL_ACTIVITY",
+            "android.permission.health.READ_SKIN_TEMPERATURE",
+            "android.permission.health.READ_SLEEP",
+            "android.permission.health.READ_SPEED",
+            "android.permission.health.READ_STEPS",
+            "android.permission.health.READ_SYMPTOM_COUGH",
+            "android.permission.health.READ_SYMPTOM_SNORE",
+            "android.permission.health.READ_SYMPTOM_ABDOMINAL_PAIN",
+            "android.permission.health.READ_SYMPTOM_ACNE",
+            "android.permission.health.READ_SYMPTOM_BACK_PAIN",
+            "android.permission.health.READ_SYMPTOM_BLOATING",
+            "android.permission.health.READ_SYMPTOM_BRAIN_FOG",
+            "android.permission.health.READ_SYMPTOM_BREAST_TENDERNESS",
+            "android.permission.health.READ_SYMPTOM_BRITTLE_NAILS",
+            "android.permission.health.READ_SYMPTOM_BURNING_MOUTH",
+            "android.permission.health.READ_SYMPTOM_CHEST_PAIN",
+            "android.permission.health.READ_SYMPTOM_CHEST_TIGHTNESS",
+            "android.permission.health.READ_SYMPTOM_CHILLS",
+            "android.permission.health.READ_SYMPTOM_CONSTIPATION",
+            "android.permission.health.READ_SYMPTOM_CRAMPS",
+            "android.permission.health.READ_SYMPTOM_CRAVINGS",
+            "android.permission.health.READ_SYMPTOM_DEHYDRATION",
+            "android.permission.health.READ_SYMPTOM_DIARRHEA",
+            "android.permission.health.READ_SYMPTOM_DIFFICULTY_SWALLOWING",
+            "android.permission.health.READ_SYMPTOM_DIZZINESS",
+            "android.permission.health.READ_SYMPTOM_DRY_SKIN",
+            "android.permission.health.READ_SYMPTOM_EARACHES",
+            "android.permission.health.READ_SYMPTOM_FATIGUE",
+            "android.permission.health.READ_SYMPTOM_FEVER",
+            "android.permission.health.READ_SYMPTOM_GENERALIZED_BODY_ACHE",
+            "android.permission.health.READ_SYMPTOM_HAIR_LOSS",
+            "android.permission.health.READ_SYMPTOM_HEADACHE",
+            "android.permission.health.READ_SYMPTOM_HEARTBURN",
+            "android.permission.health.READ_SYMPTOM_HEART_PALPITATIONS",
+            "android.permission.health.READ_SYMPTOM_HOT_FLASHES",
+            "android.permission.health.READ_SYMPTOM_INSOMNIA",
+            "android.permission.health.READ_SYMPTOM_JOINT_PAIN",
+            "android.permission.health.READ_SYMPTOM_JOINT_STIFFNESS",
+            "android.permission.health.READ_SYMPTOM_LOSS_OF_APPETITE",
+            "android.permission.health.READ_SYMPTOM_LOSS_OF_CONSCIOUSNESS",
+            "android.permission.health.READ_SYMPTOM_LOWER_BACK_PAIN",
+            "android.permission.health.READ_SYMPTOM_MEMORY_LAPSE",
+            "android.permission.health.READ_SYMPTOM_MOOD_CHANGE",
+            "android.permission.health.READ_SYMPTOM_MUSCLE_PAIN",
+            "android.permission.health.READ_SYMPTOM_NAUSEA",
+            "android.permission.health.READ_SYMPTOM_NIGHT_SWEATS",
+            "android.permission.health.READ_SYMPTOM_PELVIC_PAIN",
+            "android.permission.health.READ_SYMPTOM_RAPID_POUNDING_OR_FLUTTERING_HEARTBEAT",
+            "android.permission.health.READ_SYMPTOM_REDUCED_CAPACITY_FOR_EXERCISE",
+            "android.permission.health.READ_SYMPTOM_RUNNY_NOSE",
+            "android.permission.health.READ_SYMPTOM_SHORTNESS_OF_BREATH",
+            "android.permission.health.READ_SYMPTOM_SKIPPED_HEARTBEAT",
+            "android.permission.health.READ_SYMPTOM_SLEEPINESS",
+            "android.permission.health.READ_SYMPTOM_SLEEP_CHANGES",
+            "android.permission.health.READ_SYMPTOM_SNEEZING",
+            "android.permission.health.READ_SYMPTOM_SORE_THROAT",
+            "android.permission.health.READ_SYMPTOM_STOMACH_ACHE",
+            "android.permission.health.READ_SYMPTOM_STUFFY_NOSE",
+            "android.permission.health.READ_SYMPTOM_UNEXPLAINED_WEIGHT_CHANGES",
+            "android.permission.health.READ_SYMPTOM_VAGINAL_DRYNESS",
+            "android.permission.health.READ_SYMPTOM_VAGINAL_ITCHINESS",
+            "android.permission.health.READ_SYMPTOM_VOMITING",
+            "android.permission.health.READ_SYMPTOM_WATER_RETENTION",
+            "android.permission.health.READ_SYMPTOM_WHEEZING",
+            "android.permission.health.READ_TOTAL_CALORIES_BURNED",
+            "android.permission.health.READ_VO2_MAX",
+            "android.permission.health.READ_WEIGHT",
+            "android.permission.health.READ_INTERMENSTRUAL_BLEEDING",
+            "android.permission.health.READ_WHEELCHAIR_PUSHES",
+        )
+
+    val FITNESS_WRITE_PERMISSIONS =
+        arrayOf(
+            "android.permission.health.WRITE_ACTIVE_CALORIES_BURNED",
+            "android.permission.health.WRITE_ACTIVITY_INTENSITY",
+            "android.permission.health.WRITE_ALCOHOL_CONSUMPTION",
+            "android.permission.health.WRITE_BASAL_BODY_TEMPERATURE",
+            "android.permission.health.WRITE_BASAL_METABOLIC_RATE",
+            "android.permission.health.WRITE_BLOOD_GLUCOSE",
+            "android.permission.health.WRITE_BLOOD_PRESSURE",
+            "android.permission.health.WRITE_BODY_FAT",
+            "android.permission.health.WRITE_BODY_TEMPERATURE",
+            "android.permission.health.WRITE_BODY_WATER_MASS",
+            "android.permission.health.WRITE_BONE_MASS",
+            "android.permission.health.WRITE_CERVICAL_MUCUS",
+            "android.permission.health.WRITE_DISTANCE",
+            "android.permission.health.WRITE_ELEVATION_GAINED",
+            "android.permission.health.WRITE_EXERCISE",
+            "android.permission.health.WRITE_PLANNED_EXERCISE",
+            "android.permission.health.WRITE_FLOORS_CLIMBED",
+            "android.permission.health.WRITE_HEART_RATE",
+            "android.permission.health.WRITE_HEART_RATE_VARIABILITY",
+            "android.permission.health.WRITE_HEIGHT",
+            "android.permission.health.WRITE_HYDRATION",
+            "android.permission.health.WRITE_LEAN_BODY_MASS",
+            "android.permission.health.WRITE_MENSTRUATION",
+            "android.permission.health.WRITE_MENSTRUAL_CYCLE_PHASE",
+            "android.permission.health.WRITE_MINDFULNESS",
+            "android.permission.health.WRITE_NICOTINE_INTAKE",
+            "android.permission.health.WRITE_NUTRITION",
+            "android.permission.health.WRITE_OVULATION_TEST",
+            "android.permission.health.WRITE_OXYGEN_SATURATION",
+            "android.permission.health.WRITE_POWER",
+            "android.permission.health.WRITE_RESPIRATORY_RATE",
+            "android.permission.health.WRITE_RESTING_HEART_RATE",
+            "android.permission.health.WRITE_SEXUAL_ACTIVITY",
+            "android.permission.health.WRITE_SKIN_TEMPERATURE",
+            "android.permission.health.WRITE_SLEEP",
+            "android.permission.health.WRITE_SPEED",
+            "android.permission.health.WRITE_STEPS",
+            "android.permission.health.WRITE_SYMPTOM_COUGH",
+            "android.permission.health.WRITE_SYMPTOM_SNORE",
+            "android.permission.health.WRITE_SYMPTOM_ABDOMINAL_PAIN",
+            "android.permission.health.WRITE_SYMPTOM_ACNE",
+            "android.permission.health.WRITE_SYMPTOM_BACK_PAIN",
+            "android.permission.health.WRITE_SYMPTOM_BLOATING",
+            "android.permission.health.WRITE_SYMPTOM_BRAIN_FOG",
+            "android.permission.health.WRITE_SYMPTOM_BREAST_TENDERNESS",
+            "android.permission.health.WRITE_SYMPTOM_BRITTLE_NAILS",
+            "android.permission.health.WRITE_SYMPTOM_BURNING_MOUTH",
+            "android.permission.health.WRITE_SYMPTOM_CHEST_PAIN",
+            "android.permission.health.WRITE_SYMPTOM_CHEST_TIGHTNESS",
+            "android.permission.health.WRITE_SYMPTOM_CHILLS",
+            "android.permission.health.WRITE_SYMPTOM_CONSTIPATION",
+            "android.permission.health.WRITE_SYMPTOM_CRAMPS",
+            "android.permission.health.WRITE_SYMPTOM_CRAVINGS",
+            "android.permission.health.WRITE_SYMPTOM_DEHYDRATION",
+            "android.permission.health.WRITE_SYMPTOM_DIARRHEA",
+            "android.permission.health.WRITE_SYMPTOM_DIFFICULTY_SWALLOWING",
+            "android.permission.health.WRITE_SYMPTOM_DIZZINESS",
+            "android.permission.health.WRITE_SYMPTOM_DRY_SKIN",
+            "android.permission.health.WRITE_SYMPTOM_EARACHES",
+            "android.permission.health.WRITE_SYMPTOM_FATIGUE",
+            "android.permission.health.WRITE_SYMPTOM_FEVER",
+            "android.permission.health.WRITE_SYMPTOM_GENERALIZED_BODY_ACHE",
+            "android.permission.health.WRITE_SYMPTOM_HAIR_LOSS",
+            "android.permission.health.WRITE_SYMPTOM_HEADACHE",
+            "android.permission.health.WRITE_SYMPTOM_HEARTBURN",
+            "android.permission.health.WRITE_SYMPTOM_HEART_PALPITATIONS",
+            "android.permission.health.WRITE_SYMPTOM_HOT_FLASHES",
+            "android.permission.health.WRITE_SYMPTOM_INSOMNIA",
+            "android.permission.health.WRITE_SYMPTOM_JOINT_PAIN",
+            "android.permission.health.WRITE_SYMPTOM_JOINT_STIFFNESS",
+            "android.permission.health.WRITE_SYMPTOM_LOSS_OF_APPETITE",
+            "android.permission.health.WRITE_SYMPTOM_LOSS_OF_CONSCIOUSNESS",
+            "android.permission.health.WRITE_SYMPTOM_LOWER_BACK_PAIN",
+            "android.permission.health.WRITE_SYMPTOM_MEMORY_LAPSE",
+            "android.permission.health.WRITE_SYMPTOM_MOOD_CHANGE",
+            "android.permission.health.WRITE_SYMPTOM_MUSCLE_PAIN",
+            "android.permission.health.WRITE_SYMPTOM_NAUSEA",
+            "android.permission.health.WRITE_SYMPTOM_NIGHT_SWEATS",
+            "android.permission.health.WRITE_SYMPTOM_PELVIC_PAIN",
+            "android.permission.health.WRITE_SYMPTOM_RAPID_POUNDING_OR_FLUTTERING_HEARTBEAT",
+            "android.permission.health.WRITE_SYMPTOM_REDUCED_CAPACITY_FOR_EXERCISE",
+            "android.permission.health.WRITE_SYMPTOM_RUNNY_NOSE",
+            "android.permission.health.WRITE_SYMPTOM_SHORTNESS_OF_BREATH",
+            "android.permission.health.WRITE_SYMPTOM_SKIPPED_HEARTBEAT",
+            "android.permission.health.WRITE_SYMPTOM_SLEEPINESS",
+            "android.permission.health.WRITE_SYMPTOM_SLEEP_CHANGES",
+            "android.permission.health.WRITE_SYMPTOM_SNEEZING",
+            "android.permission.health.WRITE_SYMPTOM_SORE_THROAT",
+            "android.permission.health.WRITE_SYMPTOM_STOMACH_ACHE",
+            "android.permission.health.WRITE_SYMPTOM_STUFFY_NOSE",
+            "android.permission.health.WRITE_SYMPTOM_UNEXPLAINED_WEIGHT_CHANGES",
+            "android.permission.health.WRITE_SYMPTOM_VAGINAL_DRYNESS",
+            "android.permission.health.WRITE_SYMPTOM_VAGINAL_ITCHINESS",
+            "android.permission.health.WRITE_SYMPTOM_VOMITING",
+            "android.permission.health.WRITE_SYMPTOM_WATER_RETENTION",
+            "android.permission.health.WRITE_SYMPTOM_WHEEZING",
+            "android.permission.health.WRITE_TOTAL_CALORIES_BURNED",
+            "android.permission.health.WRITE_VO2_MAX",
+            "android.permission.health.WRITE_WEIGHT",
+            "android.permission.health.WRITE_WHEELCHAIR_PUSHES",
+            "android.permission.health.WRITE_INTERMENSTRUAL_BLEEDING",
+            "android.permission.health.WRITE_EXERCISE_ROUTE",
+        )
+    val FITNESS_PERMISSIONS = FITNESS_READ_PERMISSIONS + FITNESS_WRITE_PERMISSIONS
+
+    const val READ_HEALTH_DATA_IN_BACKGROUND =
+        "android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND"
+    const val READ_HEALTH_DATA_HISTORY = "android.permission.health.READ_HEALTH_DATA_HISTORY"
+    const val WRITE_DEVICE_UDI = "android.permission.health.WRITE_DEVICE_UDI"
+
+    val ADDITIONAL_PERMISSIONS =
+        arrayOf(READ_HEALTH_DATA_IN_BACKGROUND, READ_HEALTH_DATA_HISTORY, WRITE_DEVICE_UDI)
+
+    const val READ_IMMUNIZATION = "android.permission.health.READ_MEDICAL_DATA_VACCINES"
+    const val WRITE_ALL_MEDICAL_DATA = "android.permission.health.WRITE_MEDICAL_DATA"
+    val MEDICAL_READ_PERMISSIONS =
+        arrayOf(
+            "android.permission.health.READ_MEDICAL_DATA_ALLERGIES_INTOLERANCES",
+            "android.permission.health.READ_MEDICAL_DATA_CONDITIONS",
+            "android.permission.health.READ_MEDICAL_DATA_LABORATORY_RESULTS",
+            "android.permission.health.READ_MEDICAL_DATA_MEDICATIONS",
+            "android.permission.health.READ_MEDICAL_DATA_PERSONAL_DETAILS",
+            "android.permission.health.READ_MEDICAL_DATA_PRACTITIONER_DETAILS",
+            "android.permission.health.READ_MEDICAL_DATA_PREGNANCY",
+            "android.permission.health.READ_MEDICAL_DATA_PROCEDURES",
+            "android.permission.health.READ_MEDICAL_DATA_SOCIAL_HISTORY",
+            "android.permission.health.READ_MEDICAL_DATA_VACCINES",
+            "android.permission.health.READ_MEDICAL_DATA_VISITS",
+            "android.permission.health.READ_MEDICAL_DATA_VITAL_SIGNS",
+        )
+    val MEDICAL_WRITE_PERMISSIONS = arrayOf("android.permission.health.WRITE_MEDICAL_DATA")
+    val MEDICAL_PERMISSIONS = MEDICAL_READ_PERMISSIONS + MEDICAL_WRITE_PERMISSIONS
+
+    val MEDICAL_WRITE_AND_OTHERS =
+        MEDICAL_WRITE_PERMISSIONS + FITNESS_PERMISSIONS + ADDITIONAL_PERMISSIONS
+    val HEALTH_PERMISSIONS = FITNESS_PERMISSIONS + ADDITIONAL_PERMISSIONS + MEDICAL_PERMISSIONS
+
+    /** Represents Category group for HealthConnect data. */
+    enum class HealthDataCategory(
+        val healthPermissionTypes: List<HealthPermissionType>,
+        @StringRes val title: Int,
+        @DrawableRes val icon: Int,
+    ) {
+        ACTIVITY(
+            CategoriesMappers.ACTIVITY_PERMISSION_GROUPS,
+            R.string.activity_category,
+            R.drawable.quantum_gm_ic_directions_run_vd_theme_24,
+        ),
+        BODY_MEASUREMENTS(
+            CategoriesMappers.BODY_MEASUREMENTS_PERMISSION_GROUPS,
+            R.string.body_measurements_category,
+            R.drawable.quantum_gm_ic_straighten_vd_theme_24,
+        ),
+        SLEEP(
+            CategoriesMappers.SLEEP_PERMISSION_GROUPS,
+            R.string.sleep_category,
+            R.drawable.ic_sleep,
+        ),
+        VITALS(
+            CategoriesMappers.VITALS_PERMISSION_GROUPS,
+            R.string.vitals_category,
+            R.drawable.ic_vitals,
+        ),
+        CYCLE_TRACKING(
+            CategoriesMappers.CYCLE_TRACKING_PERMISSION_GROUPS,
+            R.string.cycle_tracking_category,
+            R.drawable.ic_cycle_tracking,
+        ),
+        NUTRITION(
+            CategoriesMappers.NUTRITION_PERMISSION_GROUPS,
+            R.string.nutrition_category,
+            R.drawable.quantum_gm_ic_grocery_vd_theme_24,
+        ),
+        WELLNESS(
+            CategoriesMappers.WELLNESS_PERMISSION_GROUPS,
+            R.string.wellness_category,
+            R.drawable.ic_wellness,
+        ),
+        SYMPTOMS(
+            CategoriesMappers.SYMPTOMS_PERMISSION_GROUPS,
+            R.string.symptoms_category,
+            R.drawable.ic_symptoms,
+        ),
+    }
+
+    /** Permission groups for each {@link HealthDataCategory}. */
+    object CategoriesMappers {
+        val ACTIVITY_PERMISSION_GROUPS =
+            listOf(
+                HealthPermissionType.PLANNED_EXERCISE,
+                HealthPermissionType.ACTIVE_CALORIES_BURNED,
+                HealthPermissionType.ACTIVITY_INTENSITY,
+                HealthPermissionType.DISTANCE,
+                HealthPermissionType.ELEVATION_GAINED,
+                HealthPermissionType.FLOORS_CLIMBED,
+                HealthPermissionType.POWER,
+                HealthPermissionType.SPEED,
+                HealthPermissionType.STEPS,
+                HealthPermissionType.STEPS_CADENCE,
+                HealthPermissionType.TOTAL_CALORIES_BURNED,
+                HealthPermissionType.VO2_MAX,
+                HealthPermissionType.CYCLING_PEDALING_CADENCE,
+                HealthPermissionType.WHEELCHAIR_PUSHES,
+                HealthPermissionType.EXERCISE_SESSION,
+            )
+
+        val BODY_MEASUREMENTS_PERMISSION_GROUPS =
+            listOf(
+                HealthPermissionType.BASAL_METABOLIC_RATE,
+                HealthPermissionType.BODY_FAT,
+                HealthPermissionType.BODY_WATER_MASS,
+                HealthPermissionType.BONE_MASS,
+                HealthPermissionType.HEIGHT,
+                HealthPermissionType.LEAN_BODY_MASS,
+                HealthPermissionType.WEIGHT,
+            )
+
+        val CYCLE_TRACKING_PERMISSION_GROUPS =
+            listOf(
+                HealthPermissionType.CERVICAL_MUCUS,
+                HealthPermissionType.MENSTRUATION_FLOW,
+                HealthPermissionType.MENSTRUATION_PERIOD,
+                HealthPermissionType.OVULATION_TEST,
+                HealthPermissionType.INTERMENSTRUAL_BLEEDING,
+                HealthPermissionType.SEXUAL_ACTIVITY,
+                HealthPermissionType.MENSTRUAL_CYCLE_PHASE,
+            )
+
+        val NUTRITION_PERMISSION_GROUPS =
+            listOf(HealthPermissionType.HYDRATION, HealthPermissionType.NUTRITION)
+
+        val SLEEP_PERMISSION_GROUPS = listOf(HealthPermissionType.SLEEP)
+
+        // As symptoms has many permission groups per record type, we just include a generic
+        // symptoms permission type here to avoid asking for symptom type twice in write data
+        // screens.
+        val SYMPTOMS_PERMISSION_GROUPS = listOf(HealthPermissionType.SYMPTOMS)
+
+        val VITALS_PERMISSION_GROUPS =
+            listOf(
+                HealthPermissionType.BASAL_BODY_TEMPERATURE,
+                HealthPermissionType.BLOOD_GLUCOSE,
+                HealthPermissionType.BLOOD_PRESSURE,
+                HealthPermissionType.BODY_TEMPERATURE,
+                HealthPermissionType.HEART_RATE,
+                HealthPermissionType.HEART_RATE_VARIABILITY,
+                HealthPermissionType.OXYGEN_SATURATION,
+                HealthPermissionType.RESPIRATORY_RATE,
+                HealthPermissionType.RESTING_HEART_RATE,
+                HealthPermissionType.SKIN_TEMPERATURE,
+            )
+
+        val WELLNESS_PERMISSION_GROUPS =
+            listOf(
+                HealthPermissionType.ALCOHOL_CONSUMPTION,
+                HealthPermissionType.MINDFULNESS,
+                HealthPermissionType.NICOTINE_INTAKE,
+            )
+    }
+
+    enum class HealthPermissionType(
+        val recordClass: KClass<out Record>?,
+        @StringRes val title: Int,
+    ) {
+        // ACTIVITY
+        ACTIVE_CALORIES_BURNED(
+            ActiveCaloriesBurnedRecord::class,
+            R.string.active_calories_burned_label,
+        ),
+        ACTIVITY_INTENSITY(ActivityIntensityRecord::class, R.string.activity_intensity_label),
+        DISTANCE(DistanceRecord::class, R.string.distance_label),
+        ELEVATION_GAINED(ElevationGainedRecord::class, R.string.elevation_gained_label),
+        FLOORS_CLIMBED(FloorsClimbedRecord::class, R.string.floors_climbed_label),
+        STEPS(StepsRecord::class, R.string.steps_label),
+        STEPS_CADENCE(StepsCadenceRecord::class, R.string.steps_cadence_label),
+        TOTAL_CALORIES_BURNED(
+            TotalCaloriesBurnedRecord::class,
+            R.string.total_calories_burned_label,
+        ),
+        VO2_MAX(Vo2MaxRecord::class, R.string.vo2_max_label),
+        WHEELCHAIR_PUSHES(WheelchairPushesRecord::class, R.string.wheelchair_pushes_label),
+        POWER(PowerRecord::class, R.string.power_label),
+        SPEED(SpeedRecord::class, R.string.speed_label),
+        CYCLING_PEDALING_CADENCE(
+            CyclingPedalingCadenceRecord::class,
+            R.string.cycling_pedaling_cadence,
+        ),
+        EXERCISE_SESSION(ExerciseSessionRecord::class, R.string.exercise_session),
+        PLANNED_EXERCISE(PlannedExerciseSessionRecord::class, R.string.training_plans),
+
+        // BODY_MEASUREMENTS
+        BASAL_METABOLIC_RATE(BasalMetabolicRateRecord::class, R.string.basal_metabolic_rate_label),
+        BODY_FAT(BodyFatRecord::class, R.string.body_fat_label),
+        BODY_WATER_MASS(BodyWaterMassRecord::class, R.string.body_water_mass_label),
+        BONE_MASS(BoneMassRecord::class, R.string.bone_mass_label),
+        HEIGHT(HeightRecord::class, R.string.height_label),
+        LEAN_BODY_MASS(LeanBodyMassRecord::class, R.string.lean_body_mass_label),
+        WEIGHT(WeightRecord::class, R.string.weight_label),
+
+        // CYCLE_TRACKING
+        CERVICAL_MUCUS(CervicalMucusRecord::class, R.string.cervical_mucus_label),
+        MENSTRUAL_CYCLE_PHASE(
+            MenstrualCyclePhaseRecord::class,
+            R.string.menstrual_cycle_phase_label,
+        ),
+        MENSTRUATION_FLOW(MenstruationFlowRecord::class, R.string.menstruation_flow),
+        MENSTRUATION_PERIOD(MenstruationPeriodRecord::class, R.string.menstruation_period),
+        OVULATION_TEST(OvulationTestRecord::class, R.string.ovulation_test_label),
+        SEXUAL_ACTIVITY(SexualActivityRecord::class, R.string.sexual_activity_label),
+        INTERMENSTRUAL_BLEEDING(
+            IntermenstrualBleedingRecord::class,
+            R.string.inter_menstrual_bleeding,
+        ),
+
+        // NUTRITION
+        HYDRATION(HydrationRecord::class, R.string.hydration_label),
+        NUTRITION(NutritionRecord::class, R.string.nutrition_label),
+
+        // SLEEP
+        SLEEP(SleepSessionRecord::class, R.string.sleep_label),
+
+        // SYMPTOMS
+        SYMPTOMS(SymptomRecord::class, R.string.symptoms_category),
+
+        // VITALS
+        BASAL_BODY_TEMPERATURE(
+            BasalBodyTemperatureRecord::class,
+            R.string.basal_body_temperature_label,
+        ),
+        BLOOD_GLUCOSE(BloodGlucoseRecord::class, R.string.blood_glucose_label),
+        BLOOD_PRESSURE(BloodPressureRecord::class, R.string.blood_pressure_label),
+        BODY_TEMPERATURE(BodyTemperatureRecord::class, R.string.body_temperature_label),
+        HEART_RATE(HeartRateRecord::class, R.string.heart_rate_label),
+        HEART_RATE_VARIABILITY(
+            HeartRateVariabilityRmssdRecord::class,
+            R.string.heart_rate_variability_label,
+        ),
+        OXYGEN_SATURATION(OxygenSaturationRecord::class, R.string.oxygen_saturation_label),
+        RESPIRATORY_RATE(RespiratoryRateRecord::class, R.string.respiratory_rate_label),
+        RESTING_HEART_RATE(RestingHeartRateRecord::class, R.string.resting_heart_rate_label),
+        SKIN_TEMPERATURE(SkinTemperatureRecord::class, R.string.skin_temperature_label),
+
+        // WELLNESS
+        ALCOHOL_CONSUMPTION(AlcoholConsumptionRecord::class, R.string.alcohol_consumption_label),
+        MINDFULNESS(MindfulnessSessionRecord::class, R.string.mindfulness_label),
+        NICOTINE_INTAKE(NicotineIntakeRecord::class, R.string.nicotine_intake_label),
+    }
+}

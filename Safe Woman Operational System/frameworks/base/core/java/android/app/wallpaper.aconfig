@@ -1,0 +1,65 @@
+package: "android.app"
+container: "system"
+
+flag {
+  name: "live_wallpaper_content_handling"
+  namespace: "systemui"
+  description: "Support for user-generated content in live wallpapers. Only effective after rebooting."
+  bug: "347235611"
+  is_exported: true
+}
+
+flag {
+  name: "enable_wallpaper_transform_surface_control_command"
+  namespace: "systemui"
+  description: "Enables sending SurfaceControl to onCommand that could be used to transform the wallpaper"
+  bug: "399077623"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "enable_wallpaper_description_set_component"
+  namespace: "systemui"
+  description: "Expose setComponent method in WallpaperDescription"
+  bug: "448138290"
+  is_exported: true
+}
+
+flag {
+  name: "postpone_wallpaper_change_notification_on_unlock_user"
+  namespace: "systemui"
+  description: "Wait until wallpaper is successfully bound before notifying wallpaper change on unlock user"
+  bug: "466054968"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "fix_large_screen_wallpaper_crops_on_restore"
+  namespace: "systemui"
+  description: "Properly adjust the wallpapers crops on restore for large screens. Also improves logic for legacy backups."
+  bug: "441675312"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "use_default_wallpaper_until_unlocked"
+  namespace: "users_and_accounts"
+  description: "Use default wallpaper until the user is unlocked."
+  bug: "484037479"
+}
+
+flag {
+  name: "optimize_default_wallpaper"
+  namespace: "systemui"
+  description: "Optimize the default wallpaper image by scaling it to the display's resolution."
+  bug: "443948180"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}

@@ -1,0 +1,24 @@
+aconfig_declarations {
+    name: "am_flags",
+    package: "com.android.server.am",
+    container: "system",
+    srcs: ["*.aconfig"],
+}
+
+rust_aconfig_library {
+    name: "libam_flags_rust",
+    crate_name: "am_flags",
+    aconfig_declarations: "am_flags",
+}
+
+java_aconfig_library {
+    name: "am_flags_lib",
+    aconfig_declarations: "am_flags",
+}
+
+java_aconfig_library {
+    name: "am_flags_host_lib",
+    host_supported: true,
+    libs: ["fake_device_config"],
+    aconfig_declarations: "am_flags",
+}

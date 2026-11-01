@@ -1,0 +1,338 @@
+/*
+ * Copyright (C) 2025 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.settings.network.telephony.satellite;
+
+import static android.telephony.CarrierConfigManager.CARRIER_ROAMING_NTN_CONNECT_HYBRID;
+import static android.telephony.CarrierConfigManager.CARRIER_ROAMING_NTN_CONNECT_MANUAL;
+import static android.telephony.CarrierConfigManager.SATELLITE_DATA_SUPPORT_BANDWIDTH_CONSTRAINED;
+import static android.telephony.CarrierConfigManager.SATELLITE_DATA_SUPPORT_ONLY_RESTRICTED;
+import static android.telephony.CarrierConfigManager.SATELLITE_DATA_SUPPORT_ALL;
+
+import static com.android.internal.telephony.flags.Flags.FLAG_VZW_AST_SKYLO_FALLBACK;
+import static com.android.settings.core.BasePreferenceController.AVAILABLE_UNSEARCHABLE;
+import static com.android.settings.core.BasePreferenceController.CONDITIONALLY_UNAVAILABLE;
+import static com.android.settings.network.telephony.satellite.SatelliteAppListCategoryController
+        .MAXIMUM_OF_PREFERENCE_AMOUNT;
+
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.os.Looper;
+import android.platform.test.annotations.EnableFlags;
+import android.platform.test.flag.junit.SetFlagsRule;
+
+import androidx.preference.PreferenceCategory;
+import androidx.preference.PreferenceManager;
+import androidx.preference.PreferenceScreen;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.android.internal.telephony.flags.Flags;
+import com.android.settings.testutils.FakeFeatureFactory;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
+
+import java.util.List;
+
+@RunWith(AndroidJUnit4.class)
+public class SatelliteAppListCategoryControllerTest {
+    @Rule
+    public final MockitoRule mMockitoRule = MockitoJUnit.rule();
+    @Rule
+    public final SetFlagsRule mSetFlagsRule = new SetFlagsRule();
+
+    private static final int TEST_SUB_ID = 0;
+    private static final List<String> PACKAGE_NAMES = List.of("com.android.settings",
+            "com.android.apps.messaging", "com.android.dialer", "com.android.systemui");
+    private static final String KEY = "SatelliteAppListCategoryControllerTest";
+
+    @Mock
+    private PackageManager mPackageManager;
+    @Mock
+    private SatelliteSettingsRepository mSatelliteSettingsRepository;
+
+    private Context mContext;
+    private SatelliteAppListCategoryController mController;
+    private FakeFeatureFactory mFakeFeatureFactory;
+
+    @Before
+    public void setUp() {
+        if (Looper.myLooper() == null) {
+            Looper.prepare();
+        }
+        mContext = spy(ApplicationProvider.getApplicationContext());
+        when(mContext.getPackageManager()).thenReturn(mPackageManager);
+        mFakeFeatureFactory = FakeFeatureFactory.setupForTest();
+        when(mFakeFeatureFactory.mTelephonyFeatureProvider.getSatelliteSettingsRepository())
+                .thenReturn(mSatelliteSettingsRepository);
+        when(mSatelliteSettingsRepository.getSatelliteNtnConnectType(anyInt())).thenReturn(
+                CARRIER_ROAMING_NTN_CONNECT_MANUAL);
+        when(mSatelliteSettingsRepository.isSatelliteEntitlementSupported(anyInt())).thenReturn(
+                false);
+    }
+    @Test
+    public void testSatelliteEligibility_ManualConnect_withSmsAvailable() {
+        mController = new SatelliteAppListCategoryController(mContext, KEY);
+
+        when(mSatelliteSettingsRepository.getSatelliteNtnConnectType(TEST_SUB_ID)).thenReturn(
+                CARRIER_ROAMING_NTN_CONNECT_MANUAL);
+        mController.init(TEST_SUB_ID);
+        mController.setCarrierRoamingNtnAvailability(true, false, -1);
+
+        assertThat(mController.isSatelliteEligible()).isTrue();
+    }
+
+    @Test
+    @EnableFlags(FLAG_VZW_AST_SKYLO_FALLBACK)
+    public void testSatelliteEligibility_HybridConnect_isEligibleBySmsCapability() {
+        boolean isSmsAvailable = true;
+        mController = new SatelliteAppListCategoryController(mContext, KEY);
+        when(mSatelliteSettingsRepository.getSatelliteNtnConnectType(TEST_SUB_ID)).thenReturn(
+                CARRIER_ROAMING_NTN_CONNECT_HYBRID);
+        mController.init(TEST_SUB_ID);
+        mController.setCarrierRoamingNtnAvailability(isSmsAvailable, false, -1);
+
+        assertThat(mController.isSatelliteEligible()).isEqualTo(isSmsAvailable);
+    }
+
+    @Test
+    @EnableFlags(FLAG_VZW_AST_SKYLO_FALLBACK)
+    public void testSatelliteEligibility_HybridConnect_withSmsUnavailable() {
+        boolean isSmsAvailable = false;
+        mController = new SatelliteAppListCategoryController(mContext, KEY);
+        when(mSatelliteSettingsRepository.getSatelliteNtnConnectType(TEST_SUB_ID)).thenReturn(
+                CARRIER_ROAMING_NTN_CONNECT_HYBRID);
+        mController.init(TEST_SUB_ID);
+        mController.setCarrierRoamingNtnAvailability(isSmsAvailable, false, -1);
+
+        // When SatelliteManager is null (default in tests), isSatelliteAccountEligible
+        // returns true.
+        assertThat(mController.isSatelliteEligible()).isTrue();
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_SATELLITE_25Q4_APIS)
+    public void displayPreference_has4SatSupportedApps_showMaxPreference()
+            throws Exception {
+        when(mPackageManager.getApplicationInfoAsUser(any(), anyInt(), anyInt())).thenReturn(
+                new ApplicationInfo());
+        mController = new SatelliteAppListCategoryController(mContext, KEY) {
+            @Override
+            protected boolean isSatelliteEligible() {
+                return true;
+            }
+
+            @Override
+            protected List<String> getSatelliteDataOptimizedApps() {
+                return PACKAGE_NAMES;
+            }
+        };
+        mController.init(TEST_SUB_ID);
+        mController.setCarrierRoamingNtnAvailability(true, true,
+                SATELLITE_DATA_SUPPORT_BANDWIDTH_CONSTRAINED);
+        PreferenceManager preferenceManager = new PreferenceManager(mContext);
+        PreferenceScreen preferenceScreen = preferenceManager.createPreferenceScreen(mContext);
+        PreferenceCategory category = new PreferenceCategory(mContext);
+        category.setKey(mController.getPreferenceKey());
+        preferenceScreen.addPreference(category);
+
+        mController.displayPreference(preferenceScreen);
+
+        assertThat(category.getPreferenceCount() == MAXIMUM_OF_PREFERENCE_AMOUNT).isTrue();
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_SATELLITE_25Q4_APIS)
+    public void getAvailabilityStatus_hasSatSupportedApps_returnAvailable() {
+        mController = new SatelliteAppListCategoryController(mContext, KEY) {
+            @Override
+            protected boolean isSatelliteEligible() {
+                return true;
+            }
+
+            @Override
+            protected List<String> getSatelliteDataOptimizedApps() {
+                return PACKAGE_NAMES;
+            }
+        };
+        mController.init(TEST_SUB_ID);
+        mController.setCarrierRoamingNtnAvailability(true, true,
+                SATELLITE_DATA_SUPPORT_BANDWIDTH_CONSTRAINED);
+
+        int result = mController.getAvailabilityStatus(TEST_SUB_ID);
+
+        assertThat(result).isEqualTo(AVAILABLE_UNSEARCHABLE);
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_SATELLITE_25Q4_APIS)
+    public void getAvailabilityStatus_noSatSupportedApps_returnUnavailable() {
+        mController = new SatelliteAppListCategoryController(mContext, KEY) {
+            @Override
+            protected boolean isSatelliteEligible() {
+                return true;
+            }
+
+            @Override
+            protected List<String> getSatelliteDataOptimizedApps() {
+                return List.of();
+            }
+        };
+        mController.init(TEST_SUB_ID);
+        mController.setCarrierRoamingNtnAvailability(true, true,
+                SATELLITE_DATA_SUPPORT_BANDWIDTH_CONSTRAINED);
+
+        int result = mController.getAvailabilityStatus(TEST_SUB_ID);
+
+        assertThat(result).isEqualTo(CONDITIONALLY_UNAVAILABLE);
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_SATELLITE_25Q4_APIS)
+    public void getAvailabilityStatus_dataUnavailable_returnUnavailable() {
+        mController = new SatelliteAppListCategoryController(mContext, KEY) {
+            @Override
+            protected boolean isSatelliteEligible() {
+                return true;
+            }
+
+            @Override
+            protected List<String> getSatelliteDataOptimizedApps() {
+                return PACKAGE_NAMES;
+            }
+        };
+        mController.init(TEST_SUB_ID);
+        mController.setCarrierRoamingNtnAvailability(true, false, -1);
+
+        int result = mController.getAvailabilityStatus(TEST_SUB_ID);
+
+        assertThat(result).isEqualTo(CONDITIONALLY_UNAVAILABLE);
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_SATELLITE_25Q4_APIS)
+    public void getAvailabilityStatus_entitlementSupportedButAccountIneligible_returnUnavailable() {
+        when(mSatelliteSettingsRepository.isSatelliteEntitlementSupported(anyInt())).thenReturn(
+                true);
+        mController = new SatelliteAppListCategoryController(mContext, KEY) {
+            @Override
+            protected boolean isSatelliteEligible() {
+                return false;
+            }
+
+            @Override
+            protected List<String> getSatelliteDataOptimizedApps() {
+                return PACKAGE_NAMES;
+            }
+        };
+        mController.init(TEST_SUB_ID);
+        mController.setCarrierRoamingNtnAvailability(true, true,
+                SATELLITE_DATA_SUPPORT_BANDWIDTH_CONSTRAINED);
+
+        int result = mController.getAvailabilityStatus(TEST_SUB_ID);
+
+        assertThat(result).isEqualTo(CONDITIONALLY_UNAVAILABLE);
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_SATELLITE_25Q4_APIS)
+    public void getAvailabilityStatus_entitlementSupportedAndAccountEligible_returnAvailable() {
+        when(mSatelliteSettingsRepository.isSatelliteEntitlementSupported(anyInt())).thenReturn(
+                true);
+        mController = new SatelliteAppListCategoryController(mContext, KEY) {
+            @Override
+            protected boolean isSatelliteEligible() {
+                return true;
+            }
+
+            @Override
+            protected List<String> getSatelliteDataOptimizedApps() {
+                return PACKAGE_NAMES;
+            }
+        };
+        mController.init(TEST_SUB_ID);
+        mController.setCarrierRoamingNtnAvailability(true, true,
+                SATELLITE_DATA_SUPPORT_BANDWIDTH_CONSTRAINED);
+
+        int result = mController.getAvailabilityStatus(TEST_SUB_ID);
+
+        assertThat(result).isEqualTo(AVAILABLE_UNSEARCHABLE);
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_SATELLITE_25Q4_APIS)
+    public void getAvailabilityStatus_conditionAllowedButDataUnconstrained_returnUnavailable() {
+        when(mSatelliteSettingsRepository.isSatelliteEntitlementSupported(anyInt())).thenReturn(
+                true);
+        mController = new SatelliteAppListCategoryController(mContext, KEY) {
+            @Override
+            protected boolean isSatelliteEligible() {
+                return true;
+            }
+
+            @Override
+            protected List<String> getSatelliteDataOptimizedApps() {
+                return PACKAGE_NAMES;
+            }
+        };
+        mController.init(TEST_SUB_ID);
+        mController.setCarrierRoamingNtnAvailability(true, true,
+                SATELLITE_DATA_SUPPORT_ALL);
+
+        int result = mController.getAvailabilityStatus(TEST_SUB_ID);
+
+        assertThat(result).isEqualTo(CONDITIONALLY_UNAVAILABLE);
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_SATELLITE_25Q4_APIS)
+    public void getAvailabilityStatus_conditionAllowedButDataRestricted_returnUnavailable() {
+        when(mSatelliteSettingsRepository.isSatelliteEntitlementSupported(anyInt())).thenReturn(
+                true);
+        mController = new SatelliteAppListCategoryController(mContext, KEY) {
+            @Override
+            protected boolean isSatelliteEligible() {
+                return true;
+            }
+
+            @Override
+            protected List<String> getSatelliteDataOptimizedApps() {
+                return PACKAGE_NAMES;
+            }
+        };
+        mController.init(TEST_SUB_ID);
+        mController.setCarrierRoamingNtnAvailability(true, true,
+                SATELLITE_DATA_SUPPORT_ONLY_RESTRICTED);
+
+        int result = mController.getAvailabilityStatus(TEST_SUB_ID);
+
+        assertThat(result).isEqualTo(CONDITIONALLY_UNAVAILABLE);
+    }
+}

@@ -1,0 +1,109 @@
+/*
+ * Copyright (C) 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.settings.spa.network
+
+import android.content.Context
+import androidx.annotation.VisibleForTesting
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.android.settings.R
+import com.android.settings.network.SatelliteRepository
+import com.android.settings.network.telephony.AirplaneModeRepository
+import com.android.settings.network.telephony.MobileDataRepository
+import com.android.settings.network.telephony.subscriptionManager
+import com.android.settingslib.spa.framework.compose.HighlightBox
+import com.android.settingslib.spa.framework.compose.rememberContext
+import com.android.settingslib.spa.search.SearchablePage.SearchItem
+import com.android.settingslib.spa.widget.preference.SwitchPreference
+import com.android.settingslib.spa.widget.preference.SwitchPreferenceModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+private const val MOBILE_DATA_HIGHLIGHT_KEY = "mobile_data"
+
+fun getMobileDataSearchItem(context: Context) =
+    SearchItem(
+        highlightItemKey = MOBILE_DATA_HIGHLIGHT_KEY,
+        itemTitle = context.getString(R.string.mobile_data_settings_title),
+    )
+
+@Composable
+fun MobileDataSwitchPreference(subId: Int) {
+    HighlightBox(highlightItemKey = MOBILE_DATA_HIGHLIGHT_KEY) {
+        MobileDataSwitchPreference(
+            subId = subId,
+            mobileDataRepository = rememberContext(::MobileDataRepository),
+            satelliteRepository = rememberContext(::SatelliteRepository),
+            airplaneModeRepository = rememberContext(::AirplaneModeRepository),
+            setMobileData = setMobileDataImpl(subId),
+        )
+    }
+}
+
+@VisibleForTesting
+@Composable
+fun MobileDataSwitchPreference(
+    subId: Int,
+    mobileDataRepository: MobileDataRepository,
+    satelliteRepository: SatelliteRepository,
+    airplaneModeRepository: AirplaneModeRepository,
+    setMobileData: (newChecked: Boolean) -> Unit,
+) {
+    val mobileDataSummary = stringResource(id = R.string.mobile_data_settings_summary)
+    val isMobileDataEnabled by
+    remember(subId) { mobileDataRepository.isMobileDataEnabledFlow(subId) }
+        .collectAsStateWithLifecycle(initialValue = null)
+    val satelliteStarted by remember {
+        satelliteRepository.getIsSessionStartedFlow()
+    }.collectAsStateWithLifecycle(initialValue = false)
+    val isAirplaneModeOn by remember {
+        airplaneModeRepository.airplaneModeChangedFlow()
+    }.collectAsStateWithLifecycle(initialValue = false)
+    SwitchPreference(
+        object : SwitchPreferenceModel {
+            override val title = stringResource(id = R.string.mobile_data_settings_title)
+            override val summary = { mobileDataSummary }
+            override val checked = { isMobileDataEnabled }
+            override val onCheckedChange = setMobileData
+            override val changeable: () -> Boolean
+                get() = { !satelliteStarted && !isAirplaneModeOn }
+        }
+    )
+}
+
+@Composable
+private fun setMobileDataImpl(subId: Int): (newChecked: Boolean) -> Unit {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val wifiPickerTrackerHelper = rememberWifiPickerTrackerHelper()
+    return { newEnabled ->
+        coroutineScope.launch(Dispatchers.Default) {
+            setMobileData(
+                context = context,
+                subscriptionManager = context.subscriptionManager,
+                wifiPickerTrackerHelper = wifiPickerTrackerHelper,
+                subId = subId,
+                enabled = newEnabled,
+            )
+        }
+    }
+}

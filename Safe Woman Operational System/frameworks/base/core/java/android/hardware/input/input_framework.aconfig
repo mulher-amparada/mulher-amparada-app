@@ -1,0 +1,239 @@
+package: "com.android.hardware.input"
+container: "system"
+
+# Project link: https://gantry.corp.google.com/projects/android_platform_input/changes
+
+# NOTE: the input_native namespace is deprecated. New flags should be added to the input namespace
+# instead.
+
+flag {
+    namespace: "input_native"
+    name: "keyboard_glyph_map"
+    description: "Allows system to provide keyboard specific key drawables and shortcuts via config files"
+    bug: "345440920"
+}
+
+flag {
+    namespace: "input_native"
+    name: "touchpad_visualizer"
+    description: "Enables a developer overlay that displays raw touchpad input data and gesture recognition status in real-time."
+    bug: "286551975"
+}
+
+flag {
+    namespace: "input_native"
+    name: "manage_key_gestures"
+    description: "Manage key gestures through Input APIs"
+    is_exported: true
+    bug: "358569822"
+}
+
+flag {
+    name: "enable_customizable_input_gestures"
+    namespace: "input"
+    description: "Enables keyboard shortcut customization support"
+    bug: "365064144"
+}
+
+flag {
+    name: "enable_new_25q2_keycodes"
+    namespace: "input"
+    description: "Enables new 25Q2 keycodes"
+    bug: "365920375"
+    is_exported: true
+}
+
+flag {
+    name: "override_power_key_behavior_in_focused_window"
+    namespace: "wallet_integration"
+    description: "Allows privileged focused windows to override the power key double tap behavior."
+    bug: "357144512"
+}
+
+flag {
+    name: "enable_color_inversion_key_gestures"
+    namespace: "accessibility"
+    description: "Adds key gestures for color inversion for accessibility needs"
+    bug: "383730505"
+}
+
+flag {
+    name: "enable_select_to_speak_key_gestures"
+    namespace: "accessibility"
+    description: "Adds key gestures for select to speak"
+    bug: "375277034"
+}
+
+flag {
+    name: "enable_talkback_key_gestures"
+    namespace: "accessibility"
+    description: "Adds key gesture for TalkBack"
+    bug: "441787329"
+}
+
+flag {
+    name: "remove_fallback_modifiers"
+    namespace: "input"
+    description: "Removes modifiers from the original key event that activated the fallback, ensuring that only the intended fallback event is sent."
+    bug: "382545048"
+}
+
+flag {
+    name: "key_event_activity_detection"
+    namespace: "input"
+    is_exported: true
+    description: "Key Event Activity Detection"
+    bug: "356412905"
+}
+
+flag {
+    name: "request_key_capture_api"
+    namespace: "input"
+    description: "Adds support for key capture APIs"
+    is_exported: true
+    bug: "375435312"
+}
+
+flag {
+    name: "fix_search_modifier_fallbacks"
+    namespace: "input"
+    description: "Fixes a bug in which fallbacks from Search based key combinations were not activating."
+    bug: "384113980"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "create_virtual_keyboard_api"
+    namespace: "input"
+    is_exported: true
+    description: "Adds support for creating a virtual keyboard API"
+    bug: "416054433"
+}
+
+flag {
+    name: "enable_quick_settings_panel_shortcut"
+    namespace: "input"
+    description: "Enables shortcut for quick settings panel"
+    bug: "423899230"
+}
+
+flag {
+    name: "touchpad_disable"
+    namespace: "input"
+    description: "Adds an accessibility setting to disable touchpads"
+    bug: "372857036"
+}
+
+flag {
+    name: "disable_settings_for_virtual_devices"
+    namespace: "input"
+    description: "Disable settings pages for virtual devices created using VDM or InputManager"
+    bug: "402596982"
+}
+
+flag {
+    name: "pointer_capture_modes"
+    namespace: "input"
+    description: "Enable pointer capture modes with different touchpad behaviours, and default to relative events from captured touchpads"
+    is_exported: true
+    bug: "403531245"
+}
+
+flag {
+    name: "relative_capture_mode_by_default"
+    namespace: "input"
+    description: "Use the RELATIVE pointer capture mode by default, in which touchpad gestures are recognized and converted into mouse-like events. Requires pointer_capture_modes to be enabled"
+    bug: "403531245"
+}
+
+flag {
+    name: "enable_partial_screenshot_keyboard_shortcut"
+    namespace: "input"
+    description: "Enables keyboard shortcut for taking partial screenshots via large screen capture UI"
+    bug: "420714826"
+}
+
+flag {
+    name: "keyboard_backlight_shortcuts"
+    namespace: "desktop_input"
+    description: "Enables new keyboard shortcuts to adjust keyboard backlight"
+    bug: "401626732"
+}
+
+flag {
+    name: "enable_contextual_search_desktop_entrypoints"
+    namespace: "input"
+    description: "Enables desktop entrypoints for contextual search"
+    bug: "442915863"
+    is_exported: true
+}
+
+flag {
+    name: "use_event_display_id_for_key_wakeup"
+    namespace: "input"
+    description: "Use the display associated with a waking KeyEvent, instead of DEFAULT_DISPLAY."
+    bug: "444390628"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "controller_remapping"
+    namespace: "input"
+    description: "Enables game controller remapping"
+    bug: "435503326"
+}
+
+flag {
+    name: "scale_gesture_detector_use_events_classification"
+    namespace: "input"
+    description: "Enables ScaleGestureDetector to use motion events classification"
+    bug: "331164772"
+}
+
+flag {
+    name: "enable_note_taking_keyboard_shortcut"
+    namespace: "note"
+    description: "Enables the keyboard shorcut for accessing the note-taking app"
+    bug: "443222861"
+}
+
+flag {
+    name: "enable_new_26q2_keycodes"
+    namespace: "input"
+    description: "Enables new 26Q2 keycodes"
+    bug: "458094955"
+    is_exported: true
+}
+
+flag {
+    name: "enable_contextual_input_trigger"
+    namespace: "input"
+    description: "Enables keyboard triggers (shortcut and dedicated key) for assistive input"
+    bug: "469890315"
+}
+
+flag {
+    name: "hid_api"
+    namespace: "input"
+    description: "Enables HID APIs"
+    bug: "390701065"
+    is_exported: true
+}
+
+flag {
+    name: "enable_poem_input_customization"
+    namespace: "input"
+    description: "Adds an API for peripheral OEMs to build customization apps"
+    bug: "433405394"
+}
+
+flag {
+    name: "enable_contextual_cursor_desktop_entrypoints"
+    namespace: "input"
+    description: "Enables desktop entrypoints for contextual cursor"
+    bug: "484184229"
+}

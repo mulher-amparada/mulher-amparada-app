@@ -1,0 +1,89 @@
+/*
+ * Copyright (C) 2025 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.settings.safetycenter.ui.model
+
+import android.app.Application
+import android.safetycenter.SafetyCenterErrorDetails
+import android.safetycenter.SafetyCenterIssue
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import com.android.settings.safetycenter.ui.InteractionLogger
+import com.android.settingslib.safetycenter.SafetyCenterUiData
+
+/**
+ * Defines the abstract contract for a ViewModel that provides data for the Safety Center UI.
+ *
+ * @param app The application context.
+ */
+abstract class SafetyCenterViewModel(protected val app: Application) : AndroidViewModel(app) {
+
+    /** Exposes the high-level status of the Safety Center for the UI. */
+    abstract val statusUiLiveData: LiveData<StatusUiData>
+
+    /** Exposes the complete, detailed data for rendering the Safety Center UI. */
+    abstract val safetyCenterUiLiveData: LiveData<SafetyCenterUiData>
+
+    /** Exposes any errors reported by the Safety Center framework. */
+    abstract val errorLiveData: LiveData<SafetyCenterErrorDetails>
+
+    /** Exposes an [InteractionLogger] to record user interactions for metrics. */
+    abstract val interactionLogger: InteractionLogger
+
+    /** Triggers a request to refresh all safety sources. */
+    abstract fun rescan()
+
+    /** Signals configuration change destruction to the ViewModel. */
+    abstract fun changingConfigurations()
+
+    /** Triggering data refresh when Safety Center homepage or subpage opens. */
+    abstract fun pageOpen(safetySourceIds: List<String> = emptyList())
+
+    /** Clears the current error state. */
+    abstract fun clearError()
+
+    /**
+     * Requests that a specific [SafetyCenterIssue] be dismissed.
+     *
+     * @param issue The issue to be dismissed by the framework.
+     */
+    abstract fun dismissIssue(issue: SafetyCenterIssue)
+
+    /**
+     * Executes the given [action] to address the [issue].
+     *
+     * @param issue The issue the action belongs to.
+     * @param action The action to execute.
+     * @param launchTaskId The task ID to launch the action in.
+     */
+    abstract fun executeIssueAction(
+        issue: SafetyCenterIssue,
+        action: SafetyCenterIssue.Action,
+        launchTaskId: Int?,
+    )
+
+    /**
+     * Marks a resolved [SafetyCenterIssue] as fully complete, meaning the resolution success
+     * message has been shown.
+     *
+     * @param issueId Resolved issue that has completed its UI update and view can be removed.
+     */
+    abstract fun markIssueResolvedUiCompleted(issueId: IssueId)
+}
+
+typealias IssueId = String
+
+typealias ActionId = String

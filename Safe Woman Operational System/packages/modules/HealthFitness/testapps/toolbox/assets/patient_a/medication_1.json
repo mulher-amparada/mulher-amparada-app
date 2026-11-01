@@ -1,0 +1,75 @@
+{
+  "resourceType": "Medication",
+  "id": "medication-1",
+  "identifier": [
+    {
+      "use": "usual",
+      "system": "urn:oid:1.2.345.6789",
+      "value": "10001"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "1145423002",
+        "display": "Azithromycin 250 mg oral tablet"
+      },
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "308460",
+        "display": "azithromycin 250 MG Oral Tablet"
+      },
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "212446",
+        "display": "Zithromax 250 MG Oral Tablet"
+      }
+    ]
+  },
+  "form": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "385055001",
+        "display": "Tablet"
+      },
+      {
+        "system": "urn:oid:1.2.345.6789",
+        "code": "TABS",
+        "display": "tablet"
+      }
+    ],
+    "text": "tablet"
+  },
+  "ingredient": [
+    {
+      "itemCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+            "code": "18631",
+            "display": "azithromycin"
+          }
+        ]
+      },
+      "isActive": true,
+      "strength": {
+        "numerator": {
+          "value": 250,
+          "system": "http://unitsofmeasure.org",
+          "code": "mg"
+        },
+        "denominator": {
+          "value": 1,
+          "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+          "code": "TAB"
+        }
+      }
+    }
+  ],
+  "batch": {
+    "lotNumber": "123456",
+    "expirationDate": "2025-07-31"
+  }
+}

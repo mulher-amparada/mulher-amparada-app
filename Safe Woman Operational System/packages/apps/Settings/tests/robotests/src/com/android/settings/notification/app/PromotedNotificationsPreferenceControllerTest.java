@@ -1,0 +1,152 @@
+/*
+ * Copyright (C) 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.android.settings.notification.app;
+
+import static android.Manifest.permission.POST_PROMOTED_NOTIFICATIONS;
+import static android.os.Process.SYSTEM_UID;
+
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.robolectric.Shadows.shadowOf;
+
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.platform.test.flag.junit.SetFlagsRule;
+
+import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
+import androidx.test.core.app.ApplicationProvider;
+
+import com.android.settings.notification.NotificationBackend;
+import com.android.settingslib.RestrictedSwitchPreference;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.robolectric.RobolectricTestRunner;
+
+@RunWith(RobolectricTestRunner.class)
+public class PromotedNotificationsPreferenceControllerTest {
+    @Rule
+    public final SetFlagsRule mSetFlagsRule = new SetFlagsRule();
+
+    private Context mContext;
+    private NotificationBackend.AppRow mAppRow;
+    @Mock private NotificationBackend mBackend;
+    private RestrictedSwitchPreference mSwitch;
+
+    private PromotedNotificationsPreferenceController mPrefController;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+        mContext = ApplicationProvider.getApplicationContext();
+        mSwitch = new RestrictedSwitchPreference(mContext);
+        new PreferenceManager(mContext).createPreferenceScreen(mContext).addPreference(mSwitch);
+        mPrefController = new PromotedNotificationsPreferenceController(mContext, mBackend);
+
+        mAppRow = new NotificationBackend.AppRow();
+        mAppRow.pkg = "pkg.name";
+        mAppRow.uid = 12345;
+        mPrefController.onResume(mAppRow, null, null, null, null, null, null);
+    }
+
+    @Test
+    public void testIsAvailable_zeroPermissionsRequested_isFalse() {
+        installMyPackage(null);
+        assertThat(mPrefController.isAvailable()).isFalse();
+    }
+
+    @Test
+    public void testIsAvailable_permissionNotRequested_isFalse() {
+        installMyPackage(new String[] { Manifest.permission.ACCESS_COARSE_LOCATION });
+        assertThat(mPrefController.isAvailable()).isFalse();
+    }
+
+    @Test
+    public void testIsAvailable_permissionRequested_isTrue() {
+        installMyPackage(new String[] { POST_PROMOTED_NOTIFICATIONS });
+        assertThat(mPrefController.isAvailable()).isTrue();
+    }
+
+    @Test
+    public void testIsAvailable_system_isFalse() {
+        mAppRow.uid = SYSTEM_UID;
+        installMyPackage(new String[] { POST_PROMOTED_NOTIFICATIONS });
+        assertThat(mPrefController.isAvailable()).isFalse();
+    }
+
+    private void installMyPackage(@Nullable String[] withPermissions) {
+        PackageInfo myPackage = new PackageInfo();
+        myPackage.packageName = mAppRow.pkg;
+        myPackage.requestedPermissions = withPermissions;
+        shadowOf(mContext.getPackageManager()).installPackage(myPackage);
+    }
+
+    @Test
+    public void testChecked_canBePromoted() {
+        mAppRow.canBePromoted = true;
+        mPrefController.onResume(mAppRow, null, null, null, null, null, null);
+
+        mPrefController.updateState(mSwitch);
+        assertThat(mSwitch.isChecked()).isTrue();
+
+        mAppRow.canBePromoted = false;
+        mPrefController.onResume(mAppRow, null, null, null, null, null, null);
+        mPrefController.updateState(mSwitch);
+        assertThat(mSwitch.isChecked()).isFalse();
+    }
+
+    @Test
+    public void testOnPreferenceChange_noChange() {
+        mAppRow.canBePromoted = true;
+        mPrefController.onResume(mAppRow, null, null, null, null, null, null);
+
+        // No change means no backend call
+        mPrefController.onPreferenceChange(mSwitch, true);
+        verify(mBackend, never()).setCanBePromoted(any(), anyInt(), anyBoolean());
+    }
+
+    @Test
+    public void testOnPreferenceChange_changeOnAndOff() {
+        mAppRow.canBePromoted = true;
+        mPrefController.onResume(mAppRow, null, null, null, null, null, null);
+
+        // when the switch value changes to false
+        mPrefController.onPreferenceChange(mSwitch, false);
+
+        // then updates the app row data in the preference controller
+        assertThat(mPrefController.mAppRow.canBePromoted).isFalse();
+        // and also updates the backend
+        verify(mBackend, times(1)).setCanBePromoted(eq(mAppRow.pkg), eq(mAppRow.uid), eq(false));
+
+        // same as above but now from false -> true
+        mPrefController.onPreferenceChange(mSwitch, true);
+        assertThat(mPrefController.mAppRow.canBePromoted).isTrue();
+        verify(mBackend, times(1)).setCanBePromoted(eq(mAppRow.pkg), eq(mAppRow.uid), eq(true));
+    }
+}

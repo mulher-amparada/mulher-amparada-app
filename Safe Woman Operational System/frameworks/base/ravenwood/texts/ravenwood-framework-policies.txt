@@ -1,0 +1,190 @@
+# Ravenwood "policy" file for framework-minus-apex.
+
+# The "no-pta" marker is used to exclude the lines from "ravenhelper pta",
+# which tries to convert policies to annotations.
+
+# To avoid VerifyError on nano proto files (b/324063814), we rename nano proto classes.
+# Note: The "rename" directive must use slashes (/) as a package name separator.
+rename com/.*/nano/   devicenano/
+rename android/.*/nano/   devicenano/
+
+# StatsD auto-generated
+class com.android.internal.util.FrameworkStatsLog keepclass  # no-pta
+
+# Auto generated
+class android.content.AttributionSourceState keepclass # no-pta
+
+# Included in module-utils; cannot use annotations
+class com.android.internal.util.FastXmlSerializer keepclass  # no-pta
+
+# From modules-utils; cannot use annotations
+class com.android.internal.util.Preconditions keepclass  # no-pta
+class com.android.internal.logging.InstanceId keepclass  # no-pta
+class com.android.internal.logging.InstanceIdSequence keepclass  # no-pta
+class com.android.internal.logging.UiEvent keepclass  # no-pta
+class com.android.internal.logging.UiEventLogger keepclass  # no-pta
+
+# From modules-utils; cannot use annotations
+class com.android.modules.utils.BasicShellCommandHandler keepclass  # no-pta
+class com.android.modules.utils.BinaryXmlPullParser keepclass  # no-pta
+class com.android.modules.utils.BinaryXmlSerializer keepclass  # no-pta
+class com.android.modules.utils.FastDataInput keepclass  # no-pta
+class com.android.modules.utils.FastDataOutput keepclass  # no-pta
+class com.android.modules.utils.ModifiedUtf8 keepclass  # no-pta
+class com.android.modules.utils.TypedXmlPullParser keepclass  # no-pta
+class com.android.modules.utils.TypedXmlSerializer keepclass  # no-pta
+
+# Uri
+class android.net.Uri keepclass  # no-pta
+class android.net.UriCodec keepclass  # no-pta
+
+# Telephony
+class android.telephony.PinResult keepclass  # no-pta
+
+# Display manager
+class android.hardware.display.DisplayManagerGlobal allow-annotation
+    method getInstance ()Landroid/hardware/display/DisplayManagerGlobal; allow-annotation
+
+# Just enough to support mocking, no further functionality
+class android.content.BroadcastReceiver allow-annotation
+    method <init> ()V allow-annotation
+class android.content.Context  # no-pta
+    method <init> ()V keep
+class android.text.ClipboardManager keep  # no-pta
+    method <init> ()V keep
+
+# Audio
+# AIDL generated parcel
+class com.android.media.permission.UidPackageState keepclass  # no-pta
+
+# Outer class does not have any annotations
+class android.hardware.display.DisplayManagerInternal$AmbientLightSensorData keepclass  # no-pta
+
+#####################
+# Experimental APIs
+#####################
+
+# For testing experimental API
+class com.android.internal.ravenwood.RavenwoodHelperBridge
+    method forExperimentalApiTest exp
+
+# Enable all the classes in the following packages as "experimental".
+package android.animation exp
+package android.app exp
+package android.gesture exp
+package android.graphics.drawable exp
+package android.hardware exp
+package android.inputmethodservice exp
+package android.tracing exp
+package android.transition exp
+package android.util exp
+package android.view exp
+package android.widget exp
+package android.window exp
+package com.android.internal exp
+
+package android.appwidget exp
+package android.media exp
+package android.audio exp
+package android.service.dreams exp
+package android.service.notification exp
+package android.service.quicksettings exp
+package android.service.quickaccesswallet exp
+
+# Classes we know are not supported
+class android.app.admin.DevicePolicyManager throw
+
+# The above package-level policies won't overide class or method level
+# annotations. In order to override these annotations, we need to
+# set "exp" to individual classes and methods.
+
+class android.app.ContextImpl exp
+    method registerReceiverInternal ignore
+    method unregisterReceiver ignore
+
+class android.app.ActivityManager
+    method getService exp
+
+class android.app.ApplicationPackageManager throw
+    method getDefaultActivityIcon exp
+
+class android.content.Context exp
+class android.content.ContentResolver exp
+class android.content.ContentProvider exp
+
+class android.content.Intent
+    method migrateExtraStreamToClipData exp
+    method prepareToLeaveProcess exp
+
+class android.app.ActivityThread exp
+class android.app.ActivityThread$H exp
+class android.app.Instrumentation exp
+    method startActivitySync (Landroid/content/Intent;Landroid/os/Bundle;)Landroid/app/Activity; redirect
+
+class android.app.LoadedApk exp
+class android.hardware.display.DisplayManagerGlobal exp
+
+class android.view.animation.AnimationUtils exp
+
+class android.view.Display exp
+
+class android.os.UserManager exp
+class android.os.UserManagerCache exp
+class android.os.GraphicsEnvironment exp
+
+class android.content.UndoManager exp
+class android.content.UndoOwner exp
+class android.content.UndoOperation exp
+
+class android.content.res.AssetManager
+    method getLoaders exp # let it return an empty loader
+
+class android.view.SurfaceControl
+    method nativeGetNativeSurfaceControlFinalizer i #experimental -- ignore native methods
+    method nativeGetNativeTransactionFinalizer i    #experimental -- ignore native methods
+    method nativeCreateTransaction i                #experimental -- ignore native methods
+
+class android.graphics.HardwareRenderer exp
+    method nSetHighContrastText i   #experimental -- ignore native methods
+    method preInitBufferAllocator i #experimental -- ignore native methods
+
+class android.hardware.input.InputSettings
+    method isStylusPointerIconEnabled exp
+
+class android.tracing.perfetto.DataSource exp
+    method nativeCreate i             #experimental -- ignore native methods
+    method nativeRegisterDataSource i #experimental -- ignore native methods
+
+class android.tracing.perfetto.Producer exp
+    method nativePerfettoProducerInit i #experimental -- ignore native methods
+
+class android.view.SurfaceControl exp
+    method nativeSetTransformHint i #experimental -- ignore native methods
+
+class android.view.accessibility.AccessibilityManager
+    method isEnabled i #experimental -- accessibility disabled
+
+# Hack, useClientSurfac e won't work, so disable it for now. Relevant CLs: ag/37597307 etc
+class android.view.WindowManager
+    method useClientSurface ignore
+# Probably we should look into the following methods to better handle it.
+#class android.view.ViewRootImpl
+#    method createSurfaceControl ignore
+#    method updateSurfaceControl ignore
+
+# Ignore native methods for Perfetto SDK
+class com.android.internal.dev.perfetto.sdk.PerfettoCategories keepclass
+class com.android.internal.dev.perfetto.sdk.PerfettoTrace keepclass
+    method native_get_process_track_uuid ignore
+    method native_get_thread_track_uuid ignore
+    method native_activate_trigger ignore
+    method native_register ignore
+    method native_start_session ignore
+    method native_stop_session @native_stop_session$ravenwood
+class com.android.internal.dev.perfetto.sdk.PerfettoTrace.Category keepclass
+    method native_init ignore
+    method native_delete ignore
+    method native_register ignore
+    method native_unregister ignore
+    method native_is_enabled ignore
+    method isEnabled ignore # return false

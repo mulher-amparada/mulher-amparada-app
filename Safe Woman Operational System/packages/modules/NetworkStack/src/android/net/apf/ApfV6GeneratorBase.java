@@ -1,0 +1,822 @@
+/*
+ * Copyright (C) 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package android.net.apf;
+
+import static android.net.apf.BaseApfGenerator.Rbit.Rbit0;
+import static android.net.apf.BaseApfGenerator.Rbit.Rbit1;
+import static android.net.apf.BaseApfGenerator.Register.R0;
+import static android.net.apf.BaseApfGenerator.Register.R1;
+
+import android.annotation.NonNull;
+
+import com.android.net.module.util.HexDump;
+
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
+/**
+ * The abstract class for APFv6 assembler/generator.
+ *
+ * @param <Type> the generator class
+ *
+ * @hide
+ */
+public abstract class ApfV6GeneratorBase<Type extends ApfV6GeneratorBase<Type>> extends
+        ApfV4GeneratorBase<Type> {
+
+    /**
+     * Creates an ApfV6GeneratorBase instance which is able to emit instructions for the specified
+     * {@code version} of the APF interpreter. Throws {@code IllegalInstructionException} if
+     * the requested version is unsupported.
+     *
+     */
+    public ApfV6GeneratorBase(byte[] bytes, int version, int ramSize, int clampSize)
+            throws IllegalInstructionException {
+        super(version, ramSize, clampSize, false);
+        Objects.requireNonNull(bytes);
+        addData(bytes);
+        addExceptionBuffer(0);
+    }
+
+    @Override
+    public final int getBaseProgramSize() {
+        // When the APFv6+ generator is initialized, it always adds a 3-byte data jump
+        // instruction and a 4-byte exception instruction to the front of the program.
+        return 7;
+    }
+
+    @Override
+    void updateExceptionBufferSize(int programSize) throws IllegalInstructionException {
+        mInstructions.get(1).updateExceptionBufferSize(
+                mRamSize - ApfCounterTracker.Counter.totalSize() - programSize);
+    }
+
+    /**
+     * Add an instruction to the end of the program to increment the counter value and
+     * immediately return PASS.
+     *
+     * @param cnt the counter number to be incremented.
+     */
+    public final Type addCountAndPass(int cnt) {
+        checkRange("CounterNumber", cnt /* value */, 1 /* lowerBound */,
+                1000 /* upperBound */);
+        // PASS requires using Rbit0 because it shares opcode with DROP
+        return append(new Instruction(Opcodes.PASSDROP, Rbit0).addUnsigned(cnt));
+    }
+
+    /**
+     * Add an instruction to the end of the program to let the program immediately return DROP.
+     */
+    public final Type addDrop() {
+        // DROP requires using Rbit1 because it shares opcode with PASS
+        return append(new Instruction(Opcodes.PASSDROP, Rbit1));
+    }
+
+    /**
+     * Add an instruction to the end of the program to increment the counter value and
+     * immediately return DROP.
+     *
+     * @param cnt the counter number to be incremented.
+     */
+    public final Type addCountAndDrop(int cnt) {
+        checkRange("CounterNumber", cnt /* value */, 1 /* lowerBound */,
+                1000 /* upperBound */);
+        // DROP requires using Rbit1 because it shares opcode with PASS
+        return append(new Instruction(Opcodes.PASSDROP, Rbit1).addUnsigned(cnt));
+    }
+
+    /**
+     * Add an instruction to the end of the program to call the apf_allocate_buffer() function.
+     * Buffer length to be allocated is stored in register 0.
+     */
+    public final Type addAllocateR0() {
+        return append(new Instruction(ExtendedOpcodes.ALLOCATE));
+    }
+
+    /**
+     * Add an instruction to the end of the program to call the apf_allocate_buffer() function.
+     *
+     * @param size the buffer length to be allocated.
+     */
+    public abstract Type addAllocate(int size);
+
+    /**
+     * Add an instruction to the beginning of the program to reserve the empty data region.
+     */
+    public final Type addData() throws IllegalInstructionException {
+        return addData(new byte[0]);
+    }
+
+    /**
+     * Add an instruction to the beginning of the program to reserve the data region.
+     * @param data the actual data byte
+     */
+    public final Type addData(byte[] data) throws IllegalInstructionException {
+        if (!mInstructions.isEmpty()) {
+            throw new IllegalInstructionException("data instruction has to come first");
+        }
+        if (data.length > 65535) {
+            throw new IllegalArgumentException("data size larger than 65535");
+        }
+        return append(new Instruction(Opcodes.JMP, Rbit1).addUnsigned(data.length)
+                .setBytesImm(data).overrideImmSize(2));
+    }
+
+    /**
+     * Add an instruction to the end of the program to set the exception buffer size.
+     * @param bufSize the exception buffer size
+     */
+    public final Type addExceptionBuffer(int bufSize) throws IllegalInstructionException {
+        return append(new Instruction(ExtendedOpcodes.EXCEPTIONBUFFER).addU16(bufSize));
+    }
+
+    /**
+     * Add an instruction to the end of the program to transmit the allocated buffer without
+     * checksum.
+     */
+    public abstract Type addTransmitWithoutChecksum();
+
+    /**
+     * Add an instruction to the end of the program to transmit the allocated buffer.
+     */
+    public final Type addTransmit(int ipOfs) {
+        if (ipOfs >= 255) {
+            throw new IllegalArgumentException("IP offset of " + ipOfs + " must be < 255");
+        }
+        if (ipOfs == -1) ipOfs = 255;
+        return append(new Instruction(ExtendedOpcodes.TRANSMIT, Rbit0).addU8(ipOfs).addU8(255));
+    }
+
+    protected abstract boolean handleOptimizedTransmit(int ipOfs, int csumOfs, int csumStart, int partialCsum, boolean isUdp);
+
+    /**
+     * Add an instruction to the end of the program to transmit the allocated buffer.
+     */
+    public final Type addTransmitL4(int ipOfs, int csumOfs, int csumStart, int partialCsum,
+                                        boolean isUdp) {
+        if (ipOfs >= 255) {
+            throw new IllegalArgumentException("IP offset of " + ipOfs + " must be < 255");
+        }
+        if (ipOfs == -1) ipOfs = 255;
+        if (csumOfs >= 255) {
+            throw new IllegalArgumentException("L4 checksum requires csum offset of "
+                                               + csumOfs + " < 255");
+        }
+        if (handleOptimizedTransmit(ipOfs, csumOfs, csumStart, partialCsum, isUdp))
+            return self();
+        return append(new Instruction(ExtendedOpcodes.TRANSMIT, isUdp ? Rbit1 : Rbit0)
+                .addU8(ipOfs).addU8(csumOfs).addU8(csumStart).addU16(partialCsum));
+    }
+
+    /**
+     * Add an instruction to the end of the program to write 1 byte value to output buffer.
+     */
+    public final Type addWriteU8(int val) {
+        return append(new Instruction(Opcodes.WRITE).overrideImmSize(1).addU8(val));
+    }
+
+    /**
+     * Add an instruction to the end of the program to write 2 bytes value to output buffer.
+     */
+    public final Type addWriteU16(int val) {
+        return append(new Instruction(Opcodes.WRITE).overrideImmSize(2).addU16(val));
+    }
+
+    /**
+     * Add an instruction to the end of the program to write 4 bytes value to output buffer.
+     */
+    public final Type addWriteU32(long val) {
+        return append(new Instruction(Opcodes.WRITE).overrideImmSize(4).addU32(val));
+    }
+
+    /**
+     * Add an instruction to the end of the program to encode int value as 4 bytes to output buffer.
+     */
+    public final Type addWrite32(int val) {
+        return addWriteU32((long) val & 0xffffffffL);
+    }
+
+    /**
+     * Add an instruction to the end of the program to write 4 bytes array to output buffer.
+     */
+    public final Type addWrite32(@NonNull byte[] bytes) {
+        Objects.requireNonNull(bytes);
+        if (bytes.length != 4) {
+            throw new IllegalArgumentException(
+                    "bytes array size must be 4, current size: " + bytes.length);
+        }
+        return addWrite32(((bytes[0] & 0xff) << 24)
+                | ((bytes[1] & 0xff) << 16)
+                | ((bytes[2] & 0xff) << 8)
+                | (bytes[3] & 0xff));
+    }
+
+    /**
+     * Add an instruction to the end of the program to write 1 byte value from register to output
+     * buffer.
+     */
+    public final Type addWriteU8(Register reg) {
+        return append(new Instruction(ExtendedOpcodes.EWRITE1, reg));
+    }
+
+    /**
+     * Add an instruction to the end of the program to write 2 byte value from register to output
+     * buffer.
+     */
+    public final Type addWriteU16(Register reg) {
+        return append(new Instruction(ExtendedOpcodes.EWRITE2, reg));
+    }
+
+    /**
+     * Add an instruction to the end of the program to write 4 byte value from register to output
+     * buffer.
+     */
+    public final Type addWriteU32(Register reg) {
+        return append(new Instruction(ExtendedOpcodes.EWRITE4, reg));
+    }
+
+    abstract int getDataCopyChunkSize();
+
+    /**
+     * Add instructions to the end of the program to copy data from APF program/data region to
+     * output buffer and auto-increment the output buffer pointer.
+     * This method requires the {@code addData} method to be called beforehand.
+     * It will first attempt to match {@code content} with existing data bytes. If not exist, then
+     * append the {@code content} to the data bytes.
+     * The method copies the content using multiple datacopy instructions if the content size
+     * exceeds 255 bytes in APFv6 or 511 bytes in APFv6.1.
+     */
+    public final Type addDataCopy(@NonNull byte[] content) throws IllegalInstructionException {
+        if (mInstructions.isEmpty()) {
+            throw new IllegalInstructionException("There is no instructions");
+        }
+        Objects.requireNonNull(content);
+        final int chunkSize = getDataCopyChunkSize();
+        for (int fromIndex = 0; fromIndex < content.length; fromIndex += chunkSize) {
+            final int toIndex = Math.min(content.length, fromIndex + chunkSize);
+            final int copySrc = mInstructions.get(0).maybeUpdateBytesImm(content, fromIndex,
+                    toIndex);
+            addDataCopy(copySrc, (toIndex - fromIndex));
+        }
+        return self();
+    }
+
+    /**
+     * Add the content to the data region if it wasn't exist.
+     */
+    public final Type maybeUpdateDataRegion(@NonNull byte[] content)
+            throws IllegalInstructionException {
+        if (mInstructions.isEmpty()) {
+            throw new IllegalInstructionException("There are no instructions");
+        }
+        mInstructions.get(0).maybeUpdateBytesImm(content, 0, content.length);
+        return self();
+    }
+
+    /**
+     * Add an instruction to the end of the program to copy data from APF program/data region to
+     * output buffer and auto-increment the output buffer pointer.
+     *
+     * @param src the offset inside the APF program/data region for where to start copy.
+     * @param len the length of bytes needed to be copied, only <= 255 bytes(APFv6) or 511 bytes
+     *            (APFv6.1) can be copied at one time.
+     * @return the Type object
+     */
+    public abstract Type addDataCopy(int src, int len);
+
+    /**
+     * Add an instruction to the end of the program to copy data from input packet to output
+     * buffer and auto-increment the output buffer pointer.
+     *
+     * @param src the offset inside the input packet for where to start copy.
+     * @param len the length of bytes needed to be copied, only <= 255 bytes can be copied at
+     *               one time.
+     * @return the Type object
+     */
+    public final Type addPacketCopy(int src, int len) {
+        return append(new Instruction(Opcodes.PKTDATACOPY, Rbit0).addPacketOffset(src).addU8(len));
+    }
+
+    /**
+     * Add an instruction to the end of the program to copy data from APF program/data region to
+     * output buffer and auto-increment the output buffer pointer.
+     * Source offset is stored in R0.
+     *
+     * @param len the number of bytes to be copied, only <= 255 bytes can be copied at once.
+     * @return the Type object
+     */
+    public final Type addDataCopyFromR0(int len) {
+        return append(new Instruction(ExtendedOpcodes.EPKTDATACOPYIMM, Rbit1).addU8(len));
+    }
+
+    /**
+     * Add an instruction to the end of the program to copy data from input packet to output
+     * buffer and auto-increment the output buffer pointer.
+     * Source offset is stored in R0.
+     *
+     * @param len the number of bytes to be copied, only <= 255 bytes can be copied at once.
+     * @return the Type object
+     */
+    public final Type addPacketCopyFromR0(int len) {
+        return append(new Instruction(ExtendedOpcodes.EPKTDATACOPYIMM, Rbit0).addU8(len));
+    }
+
+    /**
+     * Add an instruction to the end of the program to copy data from APF program/data region to
+     * output buffer and auto-increment the output buffer pointer.
+     * Source offset is stored in R0.
+     * Copy length is stored in R1.
+     *
+     * @return the Type object
+     */
+    public final Type addDataCopyFromR0LenR1() {
+        return append(new Instruction(ExtendedOpcodes.EPKTDATACOPYR1, Rbit1));
+    }
+
+    /**
+     * Add an instruction to the end of the program to copy data from input packet to output
+     * buffer and auto-increment the output buffer pointer.
+     * Source offset is stored in R0.
+     * Copy length is stored in R1.
+     *
+     * @return the Type object
+     */
+    public final Type addPacketCopyFromR0LenR1() {
+        return append(new Instruction(ExtendedOpcodes.EPKTDATACOPYR1, Rbit0));
+    }
+
+    /**
+     * Appends a conditional jump instruction to the program: Jumps to {@code tgt} if the UDP
+     * payload's DNS questions do NOT contain the QNAMEs specified in {@code qnames} and qtype
+     * equals {@code qtype}. Examines the payload starting at the offset in R0.
+     * R = 0 means check for "does not contain".
+     * Drops packets if packets are corrupted.
+     */
+    public final Type addJumpIfPktAtR0DoesNotContainDnsQ(@NonNull byte[] qnames, int qtype,
+            short tgt) {
+        validateNames(qnames);
+        return append(new Instruction(ExtendedOpcodes.JDNSQMATCH, Rbit0).setTargetLabel(tgt).addU8(
+                qtype).setBytesImm(qnames));
+    }
+
+    /**
+     * Same as {@link #addJumpIfPktAtR0DoesNotContainDnsQ} except passes packets if packets are
+     * corrupted.
+     */
+    public final Type addJumpIfPktAtR0DoesNotContainDnsQSafe(@NonNull byte[] qnames, int qtype,
+            short tgt) {
+        validateNames(qnames);
+        return append(new Instruction(ExtendedOpcodes.JDNSQMATCHSAFE, Rbit0).setTargetLabel(
+                tgt).addU8(qtype).setBytesImm(qnames));
+    }
+
+    /**
+     * Appends a conditional jump instruction to the program: Jumps to {@code tgt} if the UDP
+     * payload's DNS questions contain the QNAMEs specified in {@code qnames} and qtype
+     * equals any of {@code qtypes}. Examines the payload starting at the offset in R0.
+     * Drops packets if packets are corrupted.
+     */
+    public abstract Type addJumpIfPktAtR0ContainDnsQ(@NonNull byte[] qnames, @NonNull int[] qtypes,
+            short tgt);
+
+    /**
+     * Add an instruction to the end of the program to count and drop if the bytes of the
+     * packet at an offset specified by {@code offset} match any of the elements in
+     * {@code bytesList}.
+     * This method will use JBSPTRMATCH in APFv6.1 when possible.
+     */
+    public abstract Type addCountAndDropIfBytesAtOffsetEqualsAnyOf(int offset,
+            @NonNull List<byte[]> bytesList, ApfCounterTracker.Counter cnt)
+            throws IllegalInstructionException;
+
+    /**
+     * Add an instruction to the end of the program to count and pass if the bytes of the
+     * packet at an offset specified by {@code offset} match any of the elements in
+     * {@code bytesList}.
+     * This method will use JBSPTRMATCH in APFv6.1 when possible.
+     */
+    public abstract Type addCountAndPassIfBytesAtOffsetEqualsAnyOf(int offset,
+            @NonNull List<byte[]> bytesList, ApfCounterTracker.Counter cnt)
+            throws IllegalInstructionException;
+
+    /**
+     * Add an instruction to the end of the program to count and drop if the bytes of the
+     * packet at an offset specified by {@code offset} match none the elements in {@code bytesList}.
+     * This method will use JBSPTRMATCH in APFv6.1 when possible.
+     */
+    public abstract Type addCountAndDropIfBytesAtOffsetEqualsNoneOf(int offset,
+            @NonNull List<byte[]> bytesList, ApfCounterTracker.Counter cnt)
+            throws IllegalInstructionException;
+
+    /**
+     * Add an instruction to the end of the program to count and pass if the bytes of the
+     * packet at an offset specified by {@code offset} match none of the elements in
+     * {@code bytesList}.
+     * This method will use JBSPTRMATCH in APFv6.1 when possible.
+     */
+    public abstract Type addCountAndPassIfBytesAtOffsetEqualsNoneOf(int offset,
+            @NonNull List<byte[]> bytesList, ApfCounterTracker.Counter cnt)
+            throws IllegalInstructionException;
+
+    /**
+     * Appends a conditional jump instruction to the program: Jumps to {@code tgt} if the UDP
+     * payload's DNS questions contain the QNAMEs specified in {@code qnames} and qtype
+     * equals {@code qtype}. Examines the payload starting at the offset in R0.
+     * R = 1 means check for "contain".
+     * Drops packets if packets are corrupted.
+     */
+    public final Type addJumpIfPktAtR0ContainDnsQ(@NonNull byte[] qnames, int qtype, short tgt) {
+        validateNames(qnames);
+        return append(new Instruction(ExtendedOpcodes.JDNSQMATCH, Rbit1).setTargetLabel(tgt).addU8(
+                qtype).setBytesImm(qnames));
+    }
+
+    /**
+     * Same as {@link #addJumpIfPktAtR0ContainDnsQ} except passes packets if packets are
+     * corrupted.
+     */
+    public final Type addJumpIfPktAtR0ContainDnsQSafe(@NonNull byte[] qnames, int qtype,
+            short tgt) {
+        validateNames(qnames);
+        return append(new Instruction(ExtendedOpcodes.JDNSQMATCHSAFE, Rbit1).setTargetLabel(
+                tgt).addU8(qtype).setBytesImm(qnames));
+    }
+
+    /**
+     * Appends a conditional jump instruction to the program: Jumps to {@code tgt} if the UDP
+     * payload's DNS answers/authority/additional records do NOT contain the NAMEs
+     * specified in {@code Names}. Examines the payload starting at the offset in R0.
+     * R = 0 means check for "does not contain".
+     * Drops packets if packets are corrupted.
+     */
+    public final Type addJumpIfPktAtR0DoesNotContainDnsA(@NonNull byte[] names, short tgt) {
+        validateNames(names);
+        return append(new Instruction(ExtendedOpcodes.JDNSAMATCH, Rbit0).setTargetLabel(tgt)
+                        .setBytesImm(names));
+    }
+
+    /**
+     * Same as {@link #addJumpIfPktAtR0DoesNotContainDnsA} except passes packets if packets are
+     * corrupted.
+     */
+    public final Type addJumpIfPktAtR0DoesNotContainDnsASafe(@NonNull byte[] names, short tgt) {
+        validateNames(names);
+        return append(new Instruction(ExtendedOpcodes.JDNSAMATCHSAFE, Rbit0).setTargetLabel(tgt)
+                .setBytesImm(names));
+    }
+
+    /**
+     * Appends a conditional jump instruction to the program: Jumps to {@code tgt} if the UDP
+     * payload's DNS answers/authority/additional records contain the NAMEs
+     * specified in {@code Names}. Examines the payload starting at the offset in R0.
+     * R = 1 means check for "contain".
+     * Drops packets if packets are corrupted.
+     */
+    public final Type addJumpIfPktAtR0ContainDnsA(@NonNull byte[] names, short tgt) {
+        validateNames(names);
+        return append(new Instruction(ExtendedOpcodes.JDNSAMATCH, Rbit1).setTargetLabel(
+                tgt).setBytesImm(names));
+    }
+
+    /**
+     * Same as {@link #addJumpIfPktAtR0ContainDnsA} except passes packets if packets are
+     * corrupted.
+     */
+    public final Type addJumpIfPktAtR0ContainDnsASafe(@NonNull byte[] names, short tgt) {
+        validateNames(names);
+        return append(new Instruction(ExtendedOpcodes.JDNSAMATCHSAFE, Rbit1).setTargetLabel(
+                tgt).setBytesImm(names));
+    }
+
+    /**
+     * Validates and deduplicates a list of DNS QNAMEs.
+     *
+     * Each byte array in the input {@code namesList} is expected to represent a single
+     * DNS QNAME encoded as a null-terminated list containing one element. This format
+     * includes two trailing null bytes: one for the QNAME itself, and a second
+     * to terminate the single-element list.
+     *
+     * This function processes each byte array by removing the second null byte
+     * (the list terminator). The returned list contains the unique QNAMEs,
+     * where each byte array is a null-terminated QNAME without the additional list terminator null.
+     *
+     * @param namesList A list of byte arrays, each representing a single QNAME in the
+     *                  double null-terminated format.
+     * @return A list of unique byte arrays, where each array is a null-terminated QNAME
+     *         (i.e., with the list terminator removed).
+     * @throws IllegalArgumentException if namesList is null or empty.
+     */
+    private static List<byte[]> validateDeduplicateNamesList(
+        List<byte[]> namesList) {
+        if (namesList == null || namesList.size() == 0) {
+            throw new IllegalArgumentException("namesList must not be null or empty.");
+        }
+        for (byte[] names : namesList) {
+            validateNames(names);
+        }
+        final List<byte[]> deduplicatedList = new ArrayList<>();
+        for (byte[] currentNames: namesList) {
+            // currentNames is a DNS QNAME in a single-element, null-terminated list.
+            // This format adds two trailing nulls: one for the QNAME, one for the list.
+            // To prepare for combining multiple QNAMEs into a single list structure
+            // (e.g., in addJumpIfPktAtR0ContainDnsAHelper), we remove the list terminator
+            // (the second null) from each individual QNAME array.
+            //
+            // Example:
+            // QNAME "A" in list format -> [0x01, 'A', 0x00, 0x00] (QNAME null, List null)
+            // QNAME "B" in list format -> [0x01, 'B', 0x00, 0x00] (QNAME null, List null)
+            //
+            // To combine "A" and "B" into one list:
+            // Concatenate and add one final list null:
+            //    [0x01, 'A', 0x00, 0x01, 'B', 0x00, 0x00]
+            //
+            // Functions like addJumpIfPktAtR0ContainDnsA expect the double null,
+            // as they handle single QNAMEs already in the list format.
+            byte[] trimmedNames = Arrays.copyOf(currentNames, currentNames.length - 1);
+            boolean foundDuplicate = false;
+            for (byte[] existingNames: deduplicatedList) {
+                if (Arrays.equals(trimmedNames, existingNames)) {
+                    foundDuplicate = true;
+                    break;
+                }
+            }
+            if (!foundDuplicate) {
+                deduplicatedList.add(trimmedNames);
+            }
+        }
+        return deduplicatedList;
+    }
+
+    private Type addJumpIfPktAtR0ContainDnsAHelper(@NonNull List<byte[]> namesList, short tgt,
+            boolean jumpOnMatch) {
+        final List<byte[]> deduplicatedList =
+                validateDeduplicateNamesList(namesList);
+        int totalBytesSize = 0;
+        for (byte[] names: deduplicatedList) {
+            totalBytesSize += names.length;
+        }
+        totalBytesSize += 1; // include the null terminated list
+
+        final ByteBuffer buffer = ByteBuffer.allocate(totalBytesSize);
+        for (byte[] array : deduplicatedList) {
+            buffer.put(array);
+        }
+        buffer.put((byte) 0x00); // null terminated list
+        final Rbit rbit = jumpOnMatch ? Rbit1 : Rbit0;
+        final byte[] combinedBytes = buffer.array();
+        return append(new Instruction(ExtendedOpcodes.JDNSAMATCH, rbit)
+                .setTargetLabel(tgt)
+                .setBytesImm(combinedBytes));
+    }
+
+    /**
+     * Add an instruction to the end of the program to jump to {@code tgt} if the UDP
+     * payload's DNS answers/authority/additional records contain any of the NAMEs
+     * specified in {@code namesList}. Examines the payload starting at the offset in R0.
+     * R = 1 means check for "contain".
+     * Drops packets if packets are corrupted.
+     */
+    public final Type addJumpIfPktAtR0ContainAnyOfDnsA(@NonNull List<byte[]> namesList, short tgt) {
+        return addJumpIfPktAtR0ContainDnsAHelper(namesList, tgt, true /* jumpOnMatch */);
+    }
+
+    /**
+     * Add an instruction to the end of the program to jump to {@code tgt} if the UDP
+     * payload's DNS answers/authority/additional records contain none of the NAMEs
+     * specified in {@code namesList}. Examines the payload starting at the offset in R0.
+     * R = 0 means check for "does not contain".
+     * Drops packets if packets are corrupted.
+     */
+    public final Type addJumpIfPktAtR0ContainNoneOfDnsA(
+            @NonNull List<byte[]> namesList, short tgt) {
+        return addJumpIfPktAtR0ContainDnsAHelper(namesList, tgt, false /* jumpOnMatch */);
+    }
+
+    /**
+     * Add an instruction to the end of the program to jump to {@code tgt} if the bytes of the
+     * packet at an offset specified by register0 match {@code bytes}.
+     * R=1 means check for equal.
+     */
+    public final Type addJumpIfBytesAtR0Equal(@NonNull byte[] bytes, short tgt)
+            throws IllegalInstructionException {
+        validateBytes(bytes);
+        return append(new Instruction(Opcodes.JBSMATCH, R1).addUnsigned(
+                bytes.length).setTargetLabel(tgt).setBytesImm(bytes));
+    }
+
+    private Type addJumpIfBytesAtR0EqualsHelper(@NonNull List<byte[]> bytesList, short tgt,
+            boolean jumpOnMatch) {
+        final List<byte[]> deduplicatedList = validateDeduplicateBytesList(bytesList);
+        final int elementSize = deduplicatedList.get(0).length;
+        final int totalElements = deduplicatedList.size();
+        final int totalSize = elementSize * totalElements;
+        final ByteBuffer buffer = ByteBuffer.allocate(totalSize);
+        for (byte[] array : deduplicatedList) {
+            buffer.put(array);
+        }
+        final Rbit rbit = jumpOnMatch ? Rbit1 : Rbit0;
+        final byte[] combinedBytes = buffer.array();
+        return append(new Instruction(Opcodes.JBSMATCH, rbit)
+                .addUnsigned((totalElements - 1) << 11 | elementSize)
+                .setTargetLabel(tgt)
+                .setBytesImm(combinedBytes));
+    }
+
+    /**
+     * Add an instruction to the end of the program to jump to {@code tgt} if the bytes of the
+     * packet at an offset specified by register0 match any of the elements in {@code bytesSet}.
+     * R=1 means check for equal.
+     */
+    public final Type addJumpIfBytesAtR0EqualsAnyOf(@NonNull List<byte[]> bytesList, short tgt) {
+        return addJumpIfBytesAtR0EqualsHelper(bytesList, tgt, true /* jumpOnMatch */);
+    }
+
+    /**
+     * Add an instruction to the end of the program to jump to {@code tgt} if the bytes of the
+     * packet at an offset specified by register0 match none of the elements in {@code bytesSet}.
+     * R=0 means check for not equal.
+     */
+    public final Type addJumpIfBytesAtR0EqualsNoneOf(@NonNull List<byte[]> bytesList, short tgt) {
+        return addJumpIfBytesAtR0EqualsHelper(bytesList, tgt, false /* jumpOnMatch */);
+    }
+
+    /**
+     * Add an instruction to the end of the program to jump to {@code tgt} if the bytes of the
+     * packet at an offset specified by {@code offset} match any of the elements in
+     * {@code bytesSet}.
+     */
+    public abstract Type addJumpIfBytesAtOffsetEqualsAnyOf(int offset,
+            @NonNull List<byte[]> bytesList, short tgt) throws IllegalInstructionException;
+
+    /**
+     * Add an instruction to the end of the program to jump to {@code tgt} if the bytes of the
+     * packet at an offset specified by {@code offset} match none of the elements in
+     * {@code bytesSet}.
+     */
+    public abstract Type addJumpIfBytesAtOffsetEqualsNoneOf(int offset,
+            @NonNull List<byte[]> bytesList, short tgt) throws IllegalInstructionException;
+
+    static void validateNames(@NonNull byte[] names) {
+        final int len = names.length;
+        if (len < 4) {
+            throw new IllegalArgumentException("qnames must have at least length 4");
+        }
+        final String errorMessage = "qname: " + HexDump.toHexString(names)
+                + "is not null-terminated list of TLV-encoded names";
+        int i = 0;
+        while (i < len - 1) {
+            int label_len = names[i++];
+            // byte == 0xff means it is a '*' wildcard
+            if (label_len == -1) continue;
+            if (label_len < 1 || label_len > 63) {
+                throw new IllegalArgumentException(
+                        "label len: " + label_len + " must be between 1 and 63");
+            }
+            if (i + label_len >= len - 1) {
+                throw new IllegalArgumentException(errorMessage);
+            }
+            i += label_len;
+            if (names[i] == 0) {
+                i++; // skip null terminator.
+            }
+        }
+        if (names[len - 1] != 0) {
+            throw new IllegalArgumentException(errorMessage);
+        }
+    }
+
+    private Type addJumpIfOneOfHelper(Register reg, @NonNull Set<Long> values,
+            boolean jumpOnMatch, short tgt) {
+        if (values == null || values.size() < 2 || values.size() > 33)  {
+            throw new IllegalArgumentException(
+                    "size of values set must be >= 2 and <= 33, current size: " + values.size());
+        }
+        final Long max = Collections.max(values);
+        final Long min = Collections.min(values);
+        checkRange("max value in set", max, 0, 4294967295L);
+        checkRange("min value in set", min, 0, 4294967295L);
+        // Since sets are always of size > 1 and in range [0, uint32_max], max is guaranteed > 0,
+        // so maxImmSize can never be 0.
+        final int maxImmSize = calculateImmSize(max.intValue(), false);
+
+        // imm3(u8): top 5 bits - number of following u8/be16/be32 values - 2
+        // middle 2 bits - 1..4 length of immediates - 1
+        // bottom 1 bit - =0 jmp if in set, =1 if not in set
+        Instruction instruction = new Instruction(ExtendedOpcodes.JONEOF, reg)
+                .setTargetLabel(tgt)
+                .addU8((values.size() - 2) << 3 | (maxImmSize - 1) << 1 | (jumpOnMatch ? 0 : 1));
+        for (Long v : values) {
+            switch (maxImmSize) {
+                case 1:
+                    instruction.addU8(v.intValue());
+                    break;
+                case 2:
+                    instruction.addU16(v.intValue());
+                    break;
+                // case 3: instruction.addU24(v); break; -- not supported by generator
+                case 4:
+                    instruction.addU32(v);
+                    break;
+                default:
+                    throw new IllegalArgumentException(
+                            "immLen is not in {1, 2, 4}, immLen: " + maxImmSize);
+            }
+        }
+        return append(instruction);
+    }
+
+    /**
+     * Add an instruction to the end of the program to jump to {@code tgt} if {@code reg} is
+     * one of the {@code values}.
+     */
+    public final Type addJumpIfOneOf(Register reg, @NonNull Set<Long> values, short tgt) {
+        return addJumpIfOneOfHelper(reg, values, true /* jumpOnMatch */, tgt);
+    }
+
+    /**
+     * Add an instruction to the end of the program to jump to {@code tgt} if {@code reg} is
+     * not one of the {@code values}.
+     */
+    public final Type addJumpIfNoneOf(Register reg, @NonNull Set<Long> values, short tgt) {
+        return addJumpIfOneOfHelper(reg, values, false /* jumpOnMatch */, tgt);
+    }
+
+    @Override
+    void addR0ArithR1(Opcodes opcode) {
+        append(new Instruction(opcode, R0));  // APFv6+: R0 op= R1
+    }
+
+    @Override
+    public final Type addAdd(long val) {
+        if (val == 0) return self();
+        return append(new Instruction(Opcodes.ADD).addTwosCompSigned(val));
+    }
+
+    @Override
+    public final Type addAnd(long val) {
+        if (val == 0) return addLoadImmediate(R0, 0);
+        return append(new Instruction(Opcodes.AND).addTwosCompSigned(val));
+    }
+
+    /**
+     * Add an instruction to the end of the program to increment the counter value and
+     * immediately return PASS.
+     *
+     * @param counter the counter enum to be incremented.
+     */
+    @Override
+    public final Type addCountAndPass(ApfCounterTracker.Counter counter) {
+        checkPassCounterRange(counter);
+        return addCountAndPass(counter.value());
+    }
+
+    /**
+     * Add an instruction to the end of the program to increment the counter value and
+     * immediately return DROP.
+     *
+     * @param counter the counter enum to be incremented.
+     */
+    @Override
+    public final Type addCountAndDrop(ApfCounterTracker.Counter counter) {
+        checkDropCounterRange(counter);
+        return addCountAndDrop(counter.value());
+    }
+
+    @Override
+    public final Type addLoadCounter(Register register, ApfCounterTracker.Counter counter)
+            throws IllegalInstructionException {
+        return append(new Instruction(Opcodes.LDDW, register).addUnsigned(counter.value()));
+    }
+
+    @Override
+    public final Type addStoreCounter(ApfCounterTracker.Counter counter, Register register)
+            throws IllegalInstructionException {
+        return append(new Instruction(Opcodes.STDW, register).addUnsigned(counter.value()));
+    }
+
+    /**
+     * This method is noop in APFv6.
+     */
+    @Override
+    public final Type addCountTrampoline() {
+        return self();
+    }
+}

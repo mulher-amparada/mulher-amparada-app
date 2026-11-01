@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 8.4.0-alpha08" type="baseline" client="" dependencies="true" name="" variant="all" version="8.4.0-alpha08">
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.privacysources.SetupPeriodicNotificationListenerCheck&gt;` requires API level 33 (current min is 31)"
+        errorLine1="        &lt;receiver"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="117"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.permission.service.LocationAccessCheck.SafetyCenterPrimaryActionHandler&gt;` requires API level 33 (current min is 31)"
+        errorLine1="        &lt;receiver"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="141"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.privacysources.NotificationListenerCheckNotificationDeleteHandler&gt;` requires API level 33 (current min is 31)"
+        errorLine1="        &lt;receiver"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="157"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.privacysources.DisableNotificationListenerComponentHandler&gt;` requires API level 33 (current min is 31)"
+        errorLine1="        &lt;receiver"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="160"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.privacysources.NotificationListenerActionCardDismissalReceiver&gt;` requires API level 33 (current min is 31)"
+        errorLine1="        &lt;receiver"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="163"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.privacysources.NotificationListenerPackageResetHandler&gt;` requires API level 33 (current min is 31)"
+        errorLine1="        &lt;receiver"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="166"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.privacysources.SafetyCenterReceiver&gt;` requires API level 33 (current min is 31)"
+        errorLine1="        &lt;receiver"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="177"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.privacysources.NotificationListenerCheckJobService&gt;` requires API level 33 (current min is 31)"
+        errorLine1="        &lt;service"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="191"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.permission.service.v34.SafetyLabelChangesJobService&gt;` requires API level 34 (current min is 31)"
+        errorLine1="        &lt;service"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="217"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.permission.service.v34.SafetyLabelChangesJobService.Receiver&gt;` requires API level 34 (current min is 31)"
+        errorLine1="        &lt;receiver"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="223"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.permission.service.v34.SafetyLabelChangesJobService.NotificationDeleteHandler&gt;` requires API level 34 (current min is 31)"
+        errorLine1="        &lt;receiver"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="232"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.privacysources.AccessibilityOnBootReceiver&gt;` requires API level 33 (current min is 31)"
+        errorLine1="        &lt;receiver"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="236"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.privacysources.AccessibilityWarningCardDismissalReceiver&gt;` requires API level 33 (current min is 31)"
+        errorLine1="        &lt;receiver"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="245"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.privacysources.AccessibilityRemoveAccessHandler&gt;` requires API level 33 (current min is 31)"
+        errorLine1="        &lt;receiver"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="248"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.privacysources.AccessibilityNotificationDeleteHandler&gt;` requires API level 33 (current min is 31)"
+        errorLine1="        &lt;receiver"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="251"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.privacysources.AccessibilityPackageResetHandler&gt;` requires API level 33 (current min is 31)"
+        errorLine1="        &lt;receiver"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="254"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.safetylabel.SafetyLabelChangedBroadcastReceiver&gt;` requires API level 34 (current min is 31)"
+        errorLine1="        &lt;receiver"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="265"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.privacysources.AccessibilityJobService&gt;` requires API level 33 (current min is 31)"
+        errorLine1="        &lt;service"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="277"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.ecm.EnhancedConfirmationDialogActivity&gt;` requires API level 35 (current min is 31)"
+        errorLine1="        &lt;activity"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="310"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.permission.ui.v34.PermissionRationaleActivity&gt;` requires API level 34 (current min is 31)"
+        errorLine1="        &lt;activity"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="324"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.appfunctions.ui.RequestAccessActivity&gt;` requires API level 36 (current min is 31)"
+        errorLine1="        &lt;activity"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="336"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.appfunctions.ui.AgentListActivity&gt;` requires API level 36 (current min is 31)"
+        errorLine1="        &lt;activity"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="568"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.appfunctions.ui.AgentAccessActivity&gt;` requires API level 36 (current min is 31)"
+        errorLine1="        &lt;activity"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="580"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.appfunctions.ui.TargetAccessActivity&gt;` requires API level 36 (current min is 31)"
+        errorLine1="        &lt;activity"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="592"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.appfunctions.ui.ManageAccessActivity&gt;` requires API level 36 (current min is 31)"
+        errorLine1="        &lt;activity"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="604"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.safetycenter.service.SafetyCenterSearchIndexablesProvider&gt;` requires API level 33 (current min is 31)"
+        errorLine1="        &lt;provider"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="633"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.permission.service.v33.SafetyCenterQsTileService&gt;` requires API level 33 (current min is 31)"
+        errorLine1="        &lt;service"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="669"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.safetycenter.ui.SafetyCenterActivity&gt;` requires API level 33 (current min is 31)"
+        errorLine1="        &lt;activity"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="735"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.permission.service.DeviceStateAppFunctionService&gt;` requires API level 36 (current min is 31)"
+        errorLine1="        &lt;service"
+        errorLine2="        ^">
+        <location
+            file="./out/soong/.intermediates/packages/modules/Permission/PermissionController/PermissionController/android_common_GooglePermissionController_apex31/manifest_merger/AndroidManifest.xml"
+            line="755"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.permission.ui.handheld.v34.AppDataSharingUpdatesWrapperFragment&gt;` requires API level 34 (current min is 31)"
+        errorLine1="    &lt;fragment"
+        errorLine2="    ^">
+        <location
+            file="packages/modules/Permission/PermissionController/res/navigation/nav_graph.xml"
+            line="190"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.safetycenter.ui.ClickableDisabledSwitchPreference&gt;` requires API level 33 (current min is 31)"
+        errorLine1="    &lt;com.android.permissioncontroller.safetycenter.ui.ClickableDisabledSwitchPreference"
+        errorLine2="    ^">
+        <location
+            file="packages/modules/Permission/PermissionController/res/xml/privacy_controls.xml"
+            line="24"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.safetycenter.ui.ClickableDisabledSwitchPreference&gt;` requires API level 33 (current min is 31)"
+        errorLine1="    &lt;com.android.permissioncontroller.safetycenter.ui.ClickableDisabledSwitchPreference"
+        errorLine2="    ^">
+        <location
+            file="packages/modules/Permission/PermissionController/res/xml/privacy_controls.xml"
+            line="30"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.safetycenter.ui.ClickableDisabledSwitchPreference&gt;` requires API level 33 (current min is 31)"
+        errorLine1="    &lt;com.android.permissioncontroller.safetycenter.ui.ClickableDisabledSwitchPreference"
+        errorLine2="    ^">
+        <location
+            file="packages/modules/Permission/PermissionController/res/xml/privacy_controls.xml"
+            line="36"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.safetycenter.ui.ClickableDisabledSwitchPreference&gt;` requires API level 33 (current min is 31)"
+        errorLine1="    &lt;com.android.permissioncontroller.safetycenter.ui.ClickableDisabledSwitchPreference"
+        errorLine2="    ^">
+        <location
+            file="packages/modules/Permission/PermissionController/res/xml/privacy_controls.xml"
+            line="42"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`&lt;com.android.permissioncontroller.safetycenter.ui.SafetyStatusPreference&gt;` requires API level 33 (current min is 31)"
+        errorLine1="    &lt;com.android.permissioncontroller.safetycenter.ui.SafetyStatusPreference"
+        errorLine2="    ^">
+        <location
+            file="packages/modules/Permission/PermissionController/res/xml/safety_center_dashboard.xml"
+            line="22"
+            column="5"/>
+    </issue>
+
+</issues>

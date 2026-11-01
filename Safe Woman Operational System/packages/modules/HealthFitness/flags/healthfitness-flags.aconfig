@@ -1,0 +1,586 @@
+# Use this file to add new flags to the HealthFitness module instead of flags.aconfig.
+package: "com.android.healthfitness.flags"
+container: "com.android.healthfitness"
+
+# b/461867444 - This flag is replacing development_database flag, since we need
+# to use read write flags to be able to override them in tests.
+flag {
+    # This flag should NEVER be turned on in prod / release for real users.
+    # This flag turns on development only features in the database schema.
+    # It is used to guard database schema changes that are not finalized enough
+    # to add upgrade/downgrade code for, and so should only be used on development
+    # devices. If this flag is enabled then the device could have data loss.
+
+    name: "development_database_rw"
+    namespace: "health_fitness_aconfig"
+    description: "Flag for using currently being developed database tables."
+    bug: "354913565"
+    is_fixed_read_only: false
+}
+
+flag {
+    name: "personal_health_record"
+    namespace: "health_fitness_aconfig"
+    description: "Flag for adding new PHR features."
+    bug: "329271826"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "personal_health_record_entries_screen"
+    namespace: "health_fitness_aconfig"
+    description: "Flag for guarding the improved Health Record Entries screen."
+    bug: "362672526"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "personal_health_record_enable_export_import"
+    namespace: "health_fitness_aconfig"
+    description: "Flag for including PHR tables from export/import flow. Because personal_health_record_disable_export_import flag has already been rolled out to mainline for M-02 2025, so it won't be rolled back. Instead, this flag is added to override that flag."
+    bug: "369809932"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "phr_fhir_primitive_type_validation"
+    namespace: "health_fitness_aconfig"
+    description: "Flag for validating FHIR primitive data types when upserting medical data."
+    bug: "361775172"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "phr_fhir_complex_type_validation"
+    namespace: "health_fitness_aconfig"
+    description: "Flag for full validation of FHIR complex types when upserting medical data."
+    bug: "377701407"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "phr_fhir_validation_disallow_empty_objects_arrays"
+    namespace: "health_fitness_aconfig"
+    description: "Flag for disallowing empty objects and arrays."
+    bug: "382469576"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "phr_fhir_extension_validation"
+    namespace: "health_fitness_aconfig"
+    description: "Flag for validating the structure of Extension data type."
+    bug: "377706021"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "phr_fhir_resource_validator_use_weak_reference"
+    namespace: "health_fitness_aconfig"
+    description: "Flag for using WeakReference for the FhirResourceValidator to allow it to be garbage collected."
+    bug: "375153151"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "phr_read_medical_resources_fix_query_limit"
+    namespace: "health_fitness_aconfig"
+    description: "Flag for fixing the readMedicalResources query."
+    bug: "381201968"
+    is_fixed_read_only: true
+    is_exported: true
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "export_import"
+    namespace: "health_fitness_aconfig"
+    description: "Flag for adding new export/import feature."
+    bug: "318484000"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "mindfulness"
+    namespace: "health_fitness_aconfig"
+    description: "Enables mindfulness session data type."
+    bug: "341704006"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "health_connect_mappings"
+    namespace: "health_fitness_aconfig"
+    description: "Uses new mappings for convenient data type maintenance."
+    bug: "353283052"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "onboarding"
+    namespace: "health_fitness_aconfig"
+    description: "Enables onboarding elements for users, such as banners and notifications."
+    bug: "356819770"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "export_import_fast_follow"
+    namespace: "health_fitness_aconfig"
+    description: "Enables export/import feature updates after MVP, during the fast-follow stage."
+    bug: "318484000"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "cycle_phases_flag"
+    namespace: "health_fitness_aconfig"
+    description: "A new flag for cycle phases, enables menstrual cycle phases data type."
+    bug: "296855479"
+    is_fixed_read_only: false
+    is_exported: true
+}
+
+flag {
+    name: "cycle_phases_db"
+    namespace: "health_fitness_aconfig"
+    description: "Enables DB changes to support the menstrual cycle phases data type."
+    bug: "296855479"
+    is_fixed_read_only: false
+    is_exported: false
+}
+
+flag {
+    name: "immediate_export"
+    namespace: "health_fitness_aconfig"
+    description: "Enables immediate export."
+    bug: "318484000"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "cloud_backup_and_restore"
+    namespace: "health_fitness_aconfig"
+    description: "Enables cloud B&R."
+    bug: "369798725"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "cloud_backup_and_restore_hc_ui"
+    namespace: "health_fitness_aconfig"
+    description: "Enables the UI for cloud B&R in Health Connect settings."
+    bug: "400640806"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "cloud_backup_and_restore_intent_api"
+    namespace: "health_fitness_aconfig"
+    description: "Enables the UI for cloud B&R in Health Connect settings."
+    bug: "400640806"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "logcat_censor_iae"
+    namespace: "health_fitness_aconfig"
+    description: "In Health Connect service only log the stack trace, not the message for IllegalArgumentExceptions."
+    bug: "372454440"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "activity_intensity"
+    namespace: "health_fitness_aconfig"
+    description: "Enables the activity intensity data type."
+    bug: "373585917"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "export_import_nice_to_have"
+    namespace: "health_fitness_aconfig"
+    description: "Enables export/import feature updates after fast follow stage."
+    bug: "318484000"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "deprecate_exercise_session_type_guided_breathing"
+    namespace: "health_fitness_aconfig"
+    description: "Deprecates ExerciseSessionType#EXERCISE_SESSION_TYPE_GUIDED_BREATHING"
+    bug: "373629817"
+    is_exported: true
+}
+
+flag {
+    name: "refactor_aggregations"
+    namespace: "health_fitness_aconfig"
+    description: "Make changes to the aggregation code to make it safer and more intuitive."
+    bug: "382661671"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "smoking"
+    namespace: "health_fitness_aconfig"
+    description: "Enables smoking data type."
+    bug: "383298243"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "symptoms"
+    namespace: "health_fitness_aconfig"
+    description: "Enables the symptoms data type."
+    bug: "391627288"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "symptoms_db"
+    namespace: "health_fitness_aconfig"
+    description: "Enables DB changes to support the symptoms data type."
+    bug: "391627288"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+   name: "smoking_db"
+   namespace: "health_fitness_aconfig"
+   description: "Enables DB changes to support the nicotine intake data type."
+   bug: "394115085"
+   is_fixed_read_only: true
+   is_exported: true
+}
+
+flag {
+    name: "extend_export_import_telemetry"
+    namespace: "health_fitness_aconfig"
+    description: "Flag for adding improved logging for export import"
+    bug: "375394408"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "launch_onboarding_activity"
+    namespace: "health_fitness_aconfig"
+    description: "Flag for launching an onboarding activity exported by a client app"
+    bug: "270672374"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "exercise_segment_improvements"
+    namespace: "health_fitness_aconfig"
+    description: "Enables changes to add new optional fields, weight, set index and RPE to exercise segments APIs"
+    bug: "396405077"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "step_tracking_enabled"
+    namespace: "health_fitness_aconfig"
+    description: "Enables native step tracking within Health Connect. This flag has been rolled and cleaned up."
+    bug: "397419824"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "phr_change_logs"
+    namespace: "health_fitness_aconfig"
+    description: "Enables PHR support in change logs API"
+    bug: "362968743"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "sample_time_ordering"
+    namespace: "health_fitness_aconfig"
+    description: "Enables forced ordering by time for samples in some records"
+    bug: "411069279"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "new_device_types"
+    namespace: "health_fitness_aconfig"
+    description: "Flag for adding new device types to metadata."
+    bug: "403200835"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "device_resource"
+    namespace: "health_fitness_aconfig"
+    description: "Support the Device FHIR Resource type in PHR."
+    bug: "399727839"
+    is_fixed_read_only: true
+    is_exported: false
+}
+
+flag {
+    name: "phr_xhtml_validation"
+    namespace: "health_fitness_aconfig"
+    description: "Enable xhtml datatype validation in FHIR resources"
+    bug: "402780942"
+    is_fixed_read_only: true
+    is_exported: false
+}
+
+
+flag {
+    name: "matchmaking"
+    namespace: "health_fitness_aconfig"
+    description: "Guards matchmaking APIs"
+    bug: "424125125"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "matchmaking_counter"
+    namespace: "health_fitness_aconfig"
+    description: "Guards internal user-fixed counter for matchmaking"
+    bug: "424125125"
+    is_fixed_read_only: true
+    is_exported: false
+}
+
+flag {
+    name: "matchmaking_ui"
+    namespace: "health_fitness_aconfig"
+    description: "Guards matchmaking UI changes"
+    bug: "424125125"
+    is_fixed_read_only: true
+    is_exported: false
+}
+
+flag {
+    name: "matchmaking_opt_out"
+    namespace: "health_fitness_aconfig"
+    description: "Allows apps to opt out from matchmaking"
+    bug: "424125125"
+    is_fixed_read_only: true
+    is_exported: false
+}
+
+flag {
+    name: "latency_metrics_flag"
+    namespace: "health_fitness_aconfig"
+    description: "Flag to enable collection of latency metrics."
+    bug: "427160716"
+    is_fixed_read_only: true
+    is_exported: false
+}
+
+flag {
+    name: "mindfulness_aggregation"
+    namespace: "health_fitness_aconfig"
+    description: "adds mindfulness aggregation"
+    bug: "380271142"
+    is_fixed_read_only: true
+    is_exported: false
+}
+
+flag {
+    name: "alcohol_consumption"
+    namespace: "health_fitness_aconfig"
+    description: "Enables the alcohol consumption data type."
+    bug: "397369117"
+    is_fixed_read_only: true
+    is_exported: true
+}
+
+flag {
+    name: "alcohol_consumption_db"
+    namespace: "health_fitness_aconfig"
+    description: "Enables DB changes to support the alcohol consumption data type."
+    bug: "397369117"
+    is_fixed_read_only: true
+    is_exported: false
+}
+
+flag {
+    name: "device_data_providers_db"
+    namespace: "health_fitness_aconfig"
+    description: "Enables device data providers database changes."
+    bug: "416236349"
+    is_fixed_read_only: false
+    is_exported: false
+}
+
+flag {
+    name: "device_data_providers_api"
+    namespace: "health_fitness_aconfig"
+    description: "Enables device data providers API changes."
+    bug: "437843638"
+    is_fixed_read_only: false
+    is_exported: true
+}
+
+flag {
+    name: "write_ahead_logging_db"
+    namespace: "health_fitness_aconfig"
+    description: "Flag to enable Write-Ahead Logging in HC DB."
+    bug: "448049387"
+    is_fixed_read_only: false
+    is_exported: false
+}
+
+flag {
+    name: "alcohol_consumption_db_changes"
+    namespace: "health_fitness_aconfig"
+    description: "Flag to update alcohol consumption db to new schema changes."
+    bug: "454020026"
+    is_fixed_read_only: false
+    is_exported: false
+}
+
+flag {
+    # This flag should NEVER be turned on in prod / release for real users.
+    # This flag turns on development only features to dump database content for debugging.
+    name: "ddp_debug_util"
+    namespace: "health_fitness_aconfig"
+    description: "Flag for adding device data provider debugging information in device dumps."
+    bug: "452314599"
+    is_fixed_read_only: false
+    is_exported: false
+}
+
+flag {
+    name: "device_data_providers_ui_matchmaking_screen"
+    namespace: "health_fitness_aconfig"
+    description: "Flag to show the updated matchmaking screen to show matched devices and apps"
+    bug: "466326887"
+}
+
+flag {
+    name: "granular_health_permissions_phase_two_enabled"
+    namespace: "android_health_services"
+    description: "This flag enables adding heart rate variability, respiratory rate, VO2 max and blood pressure permissions."
+    bug: "449221459"
+    is_fixed_read_only: true
+}
+
+flag {
+    name: "temporal_field_api"
+    namespace: "health_fitness_aconfig"
+    description: "Flag for moving temporal field from individual records to base Record Helper."
+    bug: "463324870"
+    is_exported: true
+}
+
+flag {
+    name: "device_udi"
+    namespace: "health_fitness_aconfig"
+    description: "Flag for Device UDI API changes."
+    bug: "467999349"
+    is_exported: true
+}
+
+flag {
+    name: "device_udi_db"
+    namespace: "health_fitness_aconfig"
+    description: "Enables DB changes to support device UDI API changes."
+    bug: "467999349"
+}
+
+flag {
+  name: "enable_hardware_support_check"
+  namespace: "health_fitness_aconfig"
+  description: "Enables the check for hardware support before initializing Health Connect services."
+  bug: "454305097"
+}
+
+flag {
+    name: "change_logs_granular_permissions_handling"
+    namespace: "health_fitness_aconfig"
+    description: "Enables changes to support granular permissions in change logs."
+    bug: "475815635"
+}
+
+flag {
+    name: "change_logs_granular_permissions_handling_db"
+    namespace: "health_fitness_aconfig"
+    description: "Enables DB changes to support granular permissions in change logs."
+    bug: "475815635"
+}
+
+flag {
+    name: "optimize_child_reads"
+    namespace: "health_fitness_aconfig"
+    description: "Enables optimization for reading child tables by using separate read requests instead of joins."
+    bug: "408987104"
+}
+
+flag {
+    name: "resize_large_app_icons"
+    namespace: "health_fitness_aconfig"
+    description: "Enables resizing of large app icons to prevent SQLiteBlobTooBigException."
+    bug: "484258712"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "health_permission_reader_improvements"
+    namespace: "health_fitness_aconfig"
+    description: "Improves the functionality and performance of the health permission reader."
+    bug: "489738630"
+}
+
+flag {
+    name: "ui_architecture_improvements"
+    namespace: "health_fitness_aconfig"
+    description: "Improves data flow in the UI layer and guards navigation to the updated screens."
+    bug: "481356187"
+}
+
+flag {
+    name: "entries_pagination"
+    namespace: "health_fitness_aconfig"
+    description: "Enables data pagination for entries screen."
+    bug: "384028690"
+}
+
+flag {
+    name: "distance_and_calories_tracking_enabled"
+    namespace: "health_fitness_aconfig"
+    description: "Enables native distance and calories tracking within Health Connect"
+    bug: "485496373"
+    is_exported: false
+}

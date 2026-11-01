@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2024 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp"
+        android:importantForAutofill="no">
+
+        <Button
+            android:id="@+id/phr_request_read_and_write_medical_data_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="38dp"
+            android:minWidth="300dp"
+            android:text="@string/phr_options_request_medical" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/phr_options_read_immunization"
+            android:layout_marginTop="50dp"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/phr_read_by_id_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:minWidth="300dp"
+            android:text="@string/phr_options_read_by_id" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="50dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="@string/phr_options_select_patient_title" />
+
+        <Spinner
+            android:id="@+id/phr_patient_spinner"
+            android:layout_marginTop="18dp"
+            android:minWidth="300dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/phr_options_custom_path"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="18dp"
+            android:visibility="gone"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="50dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="@string/phr_options_select_data_source_title" />
+
+        <Spinner
+            android:id="@+id/phr_data_source_spinner"
+            android:layout_marginTop="18dp"
+            android:minWidth="300dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/phr_data_source_display_name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:minWidth="300dp"
+            android:gravity="start"
+            android:inputType="text"
+            android:hint="@string/phr_options_data_source_name_placeholder"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/phr_create_data_source_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:minWidth="300dp"
+            android:text="@string/phr_options_create_data_source" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="50dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="@string/phr_options_ingest_title" />
+
+        <Button
+            android:id="@+id/phr_seed_fhir_jsons_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:minWidth="300dp"
+            android:text="@string/phr_options_seed_fhir_jsons" />
+
+        <Spinner
+            android:id="@+id/phr_spinner"
+            android:layout_marginTop="18dp"
+            android:minWidth="300dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/phr_insert_resource_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:minWidth="300dp"
+            android:text="@string/phr_options_insert_resource" />
+
+        <EditText
+            android:id="@+id/phr_pasted_resource_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:minWidth="300dp"
+            android:gravity="left"
+            android:hint="@string/phr_options_pasted_resource_placeholder"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="50dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="@string/phr_options_bulk_ingest_title" />
+
+        <EditText
+            android:id="@+id/phr_number_of_inserts_id_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:minWidth="40dp"
+            android:gravity="center"
+            android:inputType="numberSigned"
+            android:text="10000"
+            android:textSize="16sp" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="300dp"
+            android:layout_marginTop="18dp"
+            android:visibility="gone"
+            android:progress="0"/>
+
+        <Button
+            android:id="@+id/phr_seed_x_fhir_jsons_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="18dp"
+            android:minWidth="300dp"
+            android:text="@string/phr_options_seed_x_fhir_jsons" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="24dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="@string/phr_options_change_logs"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="12dp"
+            android:textSize="12sp"
+            android:text="@string/phr_options_get_change_log_token_description"/>
+
+        <Button
+            android:id="@+id/get_change_log_token"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:minWidth="300dp"
+            android:text="@string/phr_options_get_change_log_token_button"/>
+
+        <EditText
+            android:id="@+id/change_log_token"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="300dp"
+            android:gravity="center"
+            android:hint="@string/phr_options_change_token"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="12dp"
+            android:textSize="12sp"
+            android:text="@string/phr_options_get_changes_description"/>
+
+        <Button
+            android:id="@+id/get_change_logs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:minWidth="300dp"
+            android:text="@string/phr_options_get_changes_button"/>
+
+    </LinearLayout>
+</ScrollView>

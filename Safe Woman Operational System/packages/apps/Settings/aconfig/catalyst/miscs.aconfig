@@ -1,0 +1,24 @@
+package: "com.android.settings.flags"
+container: "system_ext"
+
+flag {
+  name: "device_state"
+  namespace: "android_settings"
+  description: "Flag for Settings screen of device state"
+  bug: "405344827"
+}
+
+
+flag {
+  name: "catalyst_migration_26q2"
+  namespace: "android_settings"
+  description: "Flag for core migrations in 26Q2"
+  bug: "441443762"
+}
+
+flag {
+  name: "catalyst_migration_26q3"
+  namespace: "android_settings"
+  description: "Flag for core migrations in 26Q3"
+  bug: "491062278"
+}

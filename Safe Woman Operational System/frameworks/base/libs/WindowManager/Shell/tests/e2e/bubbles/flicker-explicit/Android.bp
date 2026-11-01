@@ -1,0 +1,404 @@
+//
+// Copyright (C) 2025 The Android Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+android_test {
+    name: "WMShellExplicitFlickerTestsBubbles",
+    manifest: "AndroidManifest.xml",
+    test_config_template: "AndroidTestTemplate.xml",
+    srcs: ["**/*.kt"],
+    data: [
+        ":FlickerTestApp",
+        "trace_config/*",
+    ],
+    platform_apis: true,
+    certificate: "platform",
+    optimize: {
+        enabled: false,
+    },
+    test_suites: ["device-tests"],
+    libs: ["android.test.runner.stubs.system"],
+    static_libs: [
+        "FlickerTestsBase",
+        "WMShellTestUtils",
+        "androidx.test.ext.junit",
+        "flag-junit",
+        "flickerlib",
+        "flickerlib-helpers",
+        "flickertestapplib",
+        "platform-test-annotations",
+        "systemui-tapl",
+        "systemui-helper",
+        "wm-flicker-common-app-helpers",
+        "wm-shell-flicker-utils",
+    ],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-BubbleBarMovesTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.BubbleBarMovesTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-BubbleBarVisibilityTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.BubbleBarVisibilityTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-BubbleIconMoveTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.BubbleIconMoveTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-CollapseBackOverriddenAppViaBackTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.CollapseBackOverriddenAppViaBackTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-CollapseBubbleAppFromOverviewTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.CollapseBubbleAppFromOverviewTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-CollapseBubbleAppViaBackTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.CollapseBubbleAppViaBackTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-CollapseBubbleAppViaClickBubbleIconAfterSwitchTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.CollapseBubbleAppViaClickBubbleIconAfterSwitchTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-CollapseBubbleAppViaClickBubbleIconTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.CollapseBubbleAppViaClickBubbleIconTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-CollapseBubbleAppViaTouchOutsideTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.CollapseBubbleAppViaTouchOutsideTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-DismissAllCollapsedBubbleAppsTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.DismissAllCollapsedBubbleAppsTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-DismissExpandedBubbleViaBubbleBarHandleTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.DismissExpandedBubbleViaBubbleBarHandleTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-DismissExpandedBubbleViaBubbleBarTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.DismissExpandedBubbleViaBubbleBarTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-DismissExpandedBubbleViaBubbleViewTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.DismissExpandedBubbleViaBubbleViewTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-EnterBubbleFromHomeScreenTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.EnterBubbleFromHomeScreenTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-EnterBubbleFromHomeScreenTrampolineTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.EnterBubbleFromHomeScreenTrampolineTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-EnterBubbleFromHomeScreenTrampolineTwiceTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.EnterBubbleFromHomeScreenTrampolineTwiceTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-EnterBubbleFromOverviewTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.EnterBubbleFromOverviewTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-EnterBubbleFromOverviewSingleAppWithImeTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.EnterBubbleFromOverviewSingleAppWithImeTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-EnterBubbleFromOverviewLiveTileTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.EnterBubbleFromOverviewLiveTileTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-EnterBubbleViaBubbleMenuTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.EnterBubbleViaBubbleMenuTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-EnterBubbleViaDragToBubbleBarTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.EnterBubbleViaDragToBubbleBarTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-EnterBubbleViaDragToBubbleBarTrampolineTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.EnterBubbleViaDragToBubbleBarTrampolineTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-EnterBubbleViaOverflowMenuTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.EnterBubbleViaOverflowMenuTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-EnterBubbleWithImeViaBubbleMenuTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.EnterBubbleWithImeViaBubbleMenuTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-EnterOverviewWhenAppBubbleIsExpandedTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.EnterOverviewWhenAppBubbleIsExpandedTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-EnterOverviewWhenChatBubbleIsExpandedTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.EnterOverviewWhenChatBubbleIsExpandedTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-ExpandBubbleViaBubbleStackTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.ExpandBubbleViaBubbleStackTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-ExpandBubbleViaRelaunchFromSplitDifferentAppTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.ExpandBubbleViaRelaunchFromSplitDifferentAppTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-ExpandBubbleViaRelaunchInDesktopTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.ExpandBubbleViaRelaunchInDesktopTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-ExpandBubbleWithImeViaBubbleBarTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.ExpandBubbleWithImeViaBubbleBarTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-ExpandedBubbleAppMoveTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.ExpandedBubbleAppMoveTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-ExpandTaskTrampolineBubbleAfterSecondLaunchTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.ExpandTaskTrampolineBubbleAfterSecondLaunchTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-FinishExpandedBubbleToExpandCollapsedTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.FinishExpandedBubbleToExpandCollapsedTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-LaunchMultipleBubbleTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.LaunchMultipleBubbleTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-LaunchNewTaskFromBubbleTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.LaunchNewTaskFromBubbleTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-RelaunchBubbleToFullscreenViaAppIconTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.RelaunchBubbleToFullscreenViaAppIconTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-RelaunchBubbleToFullscreenViaShortcutTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.RelaunchBubbleToFullscreenViaShortcutTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-RelaunchBubbleToFullscreenViaTaskbarAppIconTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.RelaunchBubbleToFullscreenViaTaskbarAppIconTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-RelaunchBubbleToFullscreenViaTaskbarShortcutTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.RelaunchBubbleToFullscreenViaTaskbarShortcutTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-RelaunchBubbleToSameAppSplitScreenTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.RelaunchBubbleToSameAppSplitScreenTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-RelaunchFullscreenToBubbleTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.RelaunchFullscreenToBubbleTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-RelaunchFullscreenToBubbleTrampolineTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.RelaunchFullscreenToBubbleTrampolineTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-RelaunchSplitScreenToBubbleTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.RelaunchSplitScreenToBubbleTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-RelaunchSplitScreenToBubbleTrampolineTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.RelaunchSplitScreenToBubbleTrampolineTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-RelaunchVisibleFullscreenAppToBubbleTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.RelaunchVisibleFullscreenAppToBubbleTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-RelaunchVisibleSplitAppToBubbleTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.RelaunchVisibleSplitAppToBubbleTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-RelaunchVisibleSplitAppToBubbleTrampolineTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.RelaunchVisibleSplitAppToBubbleTrampolineTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-ScrollableBubbleAppTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.ScrollableBubbleAppTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-SwitchBetweenBubblesTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.SwitchBetweenBubblesTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-SwitchBetweenBubblesTwiceTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.SwitchBetweenBubblesTwiceTest"],
+}
+
+test_module_config {
+    name: "WMShellExplicitFlickerTestsBubbles-SwitchToOverflowBubbleTest",
+    base: "WMShellExplicitFlickerTestsBubbles",
+    test_suites: ["device-tests"],
+    include_filters: ["com.android.wm.shell.flicker.bubbles.SwitchToOverflowBubbleTest"],
+}

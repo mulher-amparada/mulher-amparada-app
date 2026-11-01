@@ -1,0 +1,241 @@
+package: "com.android.graphics.hwui.flags"
+container: "system"
+
+flag {
+  name: "runtime_color_filters_blenders"
+  namespace: "core_graphics"
+  description: "API for AGSL authored runtime color filters and blenders"
+  bug: "358126864"
+  is_exported: true
+}
+
+flag {
+  name: "clip_shader"
+  is_exported: true
+  namespace: "core_graphics"
+  description: "API for canvas shader clipping operations"
+  bug: "280116960"
+}
+
+flag {
+  name: "matrix_44"
+  is_exported: true
+  namespace: "core_graphics"
+  description: "API for 4x4 matrix and related canvas functions"
+  bug: "280116960"
+}
+
+flag {
+  name: "limited_hdr"
+  is_exported: true
+  namespace: "core_graphics"
+  description: "API to enable apps to restrict the amount of HDR headroom that is used"
+  bug: "234181960"
+}
+
+flag {
+  name: "high_contrast_text_small_text_rect"
+  namespace: "accessibility"
+  description: "Draw a solid rectangle background behind text instead of a stroke outline"
+  bug: "186567103"
+  is_exported: true
+}
+
+flag {
+  name: "hdr_10bit_plus"
+  namespace: "core_graphics"
+  description: "Use 10101010 and FP16 formats for HDR-UI when available"
+  bug: "284159488"
+}
+
+flag {
+  name: "gainmap_animations"
+  is_exported: true
+  namespace: "core_graphics"
+  description: "APIs to help enable animations involving gainmaps"
+  bug: "296482289"
+}
+
+flag {
+  name: "gainmap_constructor_with_metadata"
+  is_exported: true
+  namespace: "core_graphics"
+  description: "APIs to create a new gainmap with a bitmap for metadata."
+  bug: "304478551"
+}
+
+flag {
+  name: "clip_surfaceviews"
+  namespace: "core_graphics"
+  description: "Clip z-above surfaceviews to global clip rect"
+  bug: "298621623"
+}
+
+flag {
+  name: "requested_formats_v"
+  is_exported: true
+  namespace: "core_graphics"
+  description: "Enable r_8, r_16_uint, rg_1616_uint, and rgba_10101010 in the SDK"
+  bug: "292545615"
+}
+
+flag {
+  name: "requested_formats_12_14"
+  is_exported: true
+  namespace: "core_graphics"
+  description: "Add new 12 & 14-bit formats in the SDK"
+  bug: "390471495"
+}
+
+flag {
+  name: "requested_formats_bgra_1010102"
+  is_exported: true
+  namespace: "core_graphics"
+  description: "Enable BGRA_1010102 in the SDK"
+  bug: "414794424"
+}
+
+flag {
+  name: "draw_region"
+  namespace: "core_graphics"
+  description: "Add canvas#drawRegion API"
+  bug: "318612129"
+  is_exported: true
+}
+
+flag {
+  name: "initialize_gl_always"
+  namespace: "core_graphics"
+  description: "Initialize GL even when HWUI is set to use Vulkan. This improves app startup time for apps using GL."
+  bug: "335172671"
+}
+
+flag {
+  name: "skip_eglmanager_telemetry"
+  namespace: "core_graphics"
+  description: "Skip telemetry in EglManager's calls to eglCreateContext to avoid polluting telemetry"
+  bug: "347911216"
+}
+
+flag {
+  name: "resample_gainmap_regions"
+  namespace: "core_graphics"
+  description: "Resample gainmaps when decoding regions, to improve visual quality"
+  bug: "352847821"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "iso_gainmap_apis"
+  is_exported: true
+  namespace: "core_graphics"
+  description: "APIs that expose gainmap metadata corresponding to those defined in ISO 21496-1"
+  bug: "349357636"
+}
+
+flag {
+  name: "shader_color_space"
+  is_exported: true
+  namespace: "core_graphics"
+  description: "API to set the working colorspace of a Shader or ColorFilter"
+  bug: "299670828"
+}
+
+flag {
+  name: "animated_image_drawable_filter_bitmap"
+  is_exported: true
+  namespace: "core_graphics"
+  description: "API's that enable animated image drawables to use nearest sampling when scaling."
+  bug: "370523334"
+}
+
+flag {
+  name: "fix_avd_wrong_resources"
+  namespace: "core_graphics"
+  description: "Fix that AVD loads from the wrong Resources instance in applyTheme"
+  bug: "448274242"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "add_surfacecontrol_constants"
+  namespace: "core_graphics"
+  description: "Add two helper constants to SurfaceControl to improve @IntDef lint"
+  bug: "413710706"
+  is_exported: true
+}
+
+flag {
+  name: "separate_pipeline_cache"
+  namespace: "core_graphics"
+  description: "Store pipeline cache objects in a separate cache independent of ShaderCache"
+  bug: "269117286"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "image_decoder_gainmap_fail"
+  namespace: "core_graphics"
+  description: "Add API for partial decoding of gainmap images with ImageDecoder"
+  bug: "437807032"
+  is_exported: true
+}
+
+flag {
+  name: "animated_image_frame_rate_hint"
+  namespace: "core_graphics"
+  description: "Enables AnimatedImageDrawable to send frame rate hints to its callback for power savings."
+  bug: "454016825"
+}
+
+flag {
+  name: "image_decoder_default_listener"
+  namespace: "core_graphics"
+  is_exported: true
+  description: "Set a default listener for ImageDecoder"
+  bug: "447585785"
+}
+
+flag {
+  name: "image_decoder_allocation_limit"
+  namespace: "core_graphics"
+  is_exported: true
+  description: "Set a memory allocation limit for ImageDecoder"
+  bug: "473563356"
+}
+
+flag {
+  name: "edt_gradient_detection"
+  namespace: "accessibility"
+  description: "Add detection for the gradient lightness to improve the decision in expanded Dark theme"
+  bug: "418004794"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "use_prev_frame_duration_for_render_thread"
+  namespace: "core_graphics"
+  description: "Use previous frame duration for calculating render rate schedule time"
+  bug: "361682988"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "remove_composer_overlay_usage"
+  namespace: "core_graphics"
+  description: "Remove composer overlay usage from hardware bitmap creation"
+  bug: "182901940"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}

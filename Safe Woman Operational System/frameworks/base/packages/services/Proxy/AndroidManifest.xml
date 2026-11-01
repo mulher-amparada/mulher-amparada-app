@@ -1,0 +1,25 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:androidprv="http://schemas.android.com/apk/prv/res/android"
+        package="com.android.proxyhandler"
+        coreApp="true">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- These permissions are needed to allow other apps to interact with the
+         local proxy server started by this app.
+    -->
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
+    <uses-permission android:name="android.permission.FORCE_USE_LOOPBACK_INTERFACE" />
+
+    <application
+        android:label="@string/app_label"
+        android:process="com.android.proxyhandler"
+        android:defaultToDeviceProtectedStorage="true"
+        android:directBootAware="true">
+
+        <service android:name=".ProxyService"
+            android:exported="true">
+        </service>
+
+    </application>
+</manifest>

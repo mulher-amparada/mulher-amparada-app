@@ -1,0 +1,24 @@
+package {
+    default_applicable_licenses: ["frameworks_base_license"],
+}
+
+android_library {
+    name: "SettingsLibService",
+    defaults: [
+        "SettingsLintDefaults",
+    ],
+    srcs: ["src/**/*.kt"],
+    static_libs: [
+        "SettingsLibGraph",
+        "SettingsLibUtils",
+    ],
+    sdk_version: "system_current",
+    min_sdk_version: "23",
+    kotlincflags: ["-Xjvm-default=all"],
+    flags_packages: [
+        "aconfig_settingslib_flags",
+    ],
+    lint: {
+        baseline_filename: "lint-baseline.xml",
+    },
+}

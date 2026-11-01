@@ -1,0 +1,71 @@
+// Signature format: 6.0
+// - style=java
+package com.android.ecm {
+
+  @FlaggedApi("android.permission.flags.enhanced_confirmation_in_call_apis_enabled") public class EnhancedConfirmationCallTrackerService extends android.telecom.InCallService {
+    ctor public EnhancedConfirmationCallTrackerService();
+  }
+
+  @FlaggedApi("android.permission.flags.enhanced_confirmation_in_call_apis_enabled") public interface EnhancedConfirmationManagerLocal {
+    method public void addOngoingCall(@NonNull android.telecom.Call);
+    method public void clearOngoingCalls();
+    method public void removeOngoingCall(@NonNull String);
+  }
+
+}
+
+package com.android.permission.persistence {
+
+  public interface RuntimePermissionsPersistence {
+    method @NonNull public static com.android.permission.persistence.RuntimePermissionsPersistence createInstance();
+    method public void deleteForUser(@NonNull android.os.UserHandle);
+    method @Nullable public com.android.permission.persistence.RuntimePermissionsState readForUser(@NonNull android.os.UserHandle);
+    method public void writeForUser(@NonNull com.android.permission.persistence.RuntimePermissionsState, @NonNull android.os.UserHandle);
+  }
+
+  public final class RuntimePermissionsState {
+    ctor public RuntimePermissionsState(int, @Nullable String, @NonNull java.util.Map<String, java.util.List<com.android.permission.persistence.RuntimePermissionsState.PermissionState>>, @NonNull java.util.Map<String, java.util.List<com.android.permission.persistence.RuntimePermissionsState.PermissionState>>);
+    method @Nullable public String getFingerprint();
+    method @NonNull public java.util.Map<String, java.util.List<com.android.permission.persistence.RuntimePermissionsState.PermissionState>> getPackagePermissions();
+    method @NonNull public java.util.Map<String, java.util.List<com.android.permission.persistence.RuntimePermissionsState.PermissionState>> getSharedUserPermissions();
+    method public int getVersion();
+    field public static final int NO_VERSION = -1; // 0xffffffff
+  }
+
+  public static final class RuntimePermissionsState.PermissionState {
+    ctor public RuntimePermissionsState.PermissionState(@NonNull String, boolean, int);
+    method public int getFlags();
+    method @NonNull public String getName();
+    method public boolean isGranted();
+  }
+
+}
+
+package com.android.role {
+
+  public interface RoleManagerLocal {
+    method @NonNull public java.util.Map<String, java.util.Set<String>> getRolesAndHolders(int);
+  }
+
+}
+
+package com.android.role.persistence {
+
+  public interface RolesPersistence {
+    method @NonNull public static com.android.role.persistence.RolesPersistence createInstance();
+    method public void deleteForUser(@NonNull android.os.UserHandle);
+    method @Nullable public com.android.role.persistence.RolesState readForUser(@NonNull android.os.UserHandle);
+    method public void writeForUser(@NonNull com.android.role.persistence.RolesState, @NonNull android.os.UserHandle);
+  }
+
+  public final class RolesState {
+    ctor public RolesState(int, @Nullable String, @NonNull java.util.Map<String, java.util.Set<String>>);
+    ctor @FlaggedApi("android.permission.flags.system_server_role_controller_enabled") public RolesState(int, @Nullable String, @NonNull java.util.Map<String, java.util.Set<String>>, @NonNull java.util.Set<String>);
+    method @FlaggedApi("android.permission.flags.system_server_role_controller_enabled") @NonNull public java.util.Set<String> getFallbackEnabledRoles();
+    method @Nullable public String getPackagesHash();
+    method @NonNull public java.util.Map<String, java.util.Set<String>> getRoles();
+    method public int getVersion();
+  }
+
+}
+

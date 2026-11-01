@@ -1,0 +1,319 @@
+/*
+ * Copyright (C) 2017 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.settings.datausage;
+
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyBoolean;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Resources;
+import android.net.NetworkPolicyManager;
+import android.net.NetworkTemplate;
+import android.os.Bundle;
+import android.os.Process;
+import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
+import android.util.ArraySet;
+import android.util.FeatureFlagUtils;
+
+import androidx.fragment.app.FragmentActivity;
+import androidx.preference.PreferenceManager;
+import androidx.preference.PreferenceScreen;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.annotation.UiThreadTest;
+
+import com.android.settings.R;
+import com.android.settings.applications.AppInfoBase;
+import com.android.settings.testutils.FakeFeatureFactory;
+import com.android.settings.testutils.shadow.ShadowDataUsageUtils;
+import com.android.settings.testutils.shadow.ShadowFragment;
+import com.android.settings.testutils.shadow.ShadowRestrictedLockUtilsInternal;
+import com.android.settingslib.AppItem;
+import com.android.settingslib.RestrictedLockUtils.EnforcedAdmin;
+import com.android.settingslib.RestrictedSwitchPreference;
+import com.android.settingslib.core.AbstractPreferenceController;
+import com.android.settingslib.core.instrumentation.MetricsFeatureProvider;
+import com.android.settingslib.net.UidDetail;
+import com.android.settingslib.net.UidDetailProvider;
+import com.android.settingslib.widget.IntroPreference;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowSubscriptionManager;
+import org.robolectric.util.ReflectionHelpers;
+
+import java.util.List;
+
+@RunWith(RobolectricTestRunner.class)
+@UiThreadTest
+@Config(shadows = {ShadowRestrictedLockUtilsInternal.class})
+public class AppDataUsageTest {
+
+    @Mock
+    private PackageManager mPackageManager;
+    @Mock
+    private TelephonyManager mTelephonyManager;
+    @Mock
+    private MetricsFeatureProvider mMetricsFeatureProvider;
+
+    private IntroPreference mIntroPreference;
+
+    private AppDataUsage mFragment;
+
+    private Context mContext;
+    private Resources mResources;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+
+        mContext = spy(RuntimeEnvironment.application);
+        when(mContext.getSystemService(TelephonyManager.class)).thenReturn(mTelephonyManager);
+        when(mTelephonyManager.isDataCapable()).thenReturn(true);
+
+        mResources = spy(mContext.getResources());
+        when(mResources.getBoolean(R.bool.config_show_sim_info)).thenReturn(true);
+
+        mIntroPreference = new IntroPreference(mContext);
+        FeatureFlagUtils.setEnabled(mContext, FeatureFlagUtils.SETTINGS_ENABLE_SPA, true);
+    }
+
+    @Test
+    @Config(shadows = ShadowFragment.class)
+    public void onCreate_appUid_shouldGetAppLabelFromAppInfo() throws NameNotFoundException {
+        mFragment = spy(new TestFragment());
+        final FragmentActivity activity = spy(Robolectric.setupActivity(FragmentActivity.class));
+        doReturn(mPackageManager).when(activity).getPackageManager();
+        doReturn(activity).when(mFragment).getActivity();
+        doReturn(RuntimeEnvironment.application).when(mFragment).getContext();
+        ReflectionHelpers.setField(mFragment, "mDashboardFeatureProvider",
+                FakeFeatureFactory.setupForTest().dashboardFeatureProvider);
+        final String packageName = "testPackage";
+        final int uid = (Process.FIRST_APPLICATION_UID + Process.LAST_APPLICATION_UID) / 2;
+        doReturn(new String[]{packageName}).when(mPackageManager).getPackagesForUid(uid);
+        final String label = "testLabel";
+        final AppItem appItem = new AppItem(uid);
+        appItem.uids.put(uid, true);
+        final ApplicationInfo info = spy(new ApplicationInfo());
+        doReturn(label).when(info).loadLabel(mPackageManager);
+        when(mPackageManager.getApplicationInfoAsUser(
+                eq(packageName), anyInt() /* flags */, anyInt() /* userId */)).thenReturn(info);
+        final Bundle args = new Bundle();
+        args.putParcelable(AppDataUsage.ARG_APP_ITEM, appItem);
+        args.putInt(AppInfoBase.ARG_PACKAGE_UID, uid);
+        mFragment.setArguments(args);
+
+        mFragment.onCreate(Bundle.EMPTY);
+
+        assertThat(mFragment.mLabel).isEqualTo(label);
+    }
+
+    @Test
+    @Config(shadows = ShadowFragment.class)
+    public void onCreate_notAppUid_shouldGetAppLabelFromUidDetailProvider() {
+        mFragment = spy(new TestFragment());
+        ReflectionHelpers.setField(mFragment, "mDashboardFeatureProvider",
+                FakeFeatureFactory.setupForTest().dashboardFeatureProvider);
+        doReturn(Robolectric.setupActivity(FragmentActivity.class)).when(mFragment).getActivity();
+        doReturn(RuntimeEnvironment.application).when(mFragment).getContext();
+        final UidDetailProvider uidDetailProvider = mock(UidDetailProvider.class);
+        doReturn(uidDetailProvider).when(mFragment).getUidDetailProvider();
+        final String label = "testLabel";
+        final int uid = Process.SYSTEM_UID;
+        final UidDetail uidDetail = new UidDetail();
+        uidDetail.label = label;
+        when(uidDetailProvider.getUidDetail(eq(uid), anyBoolean() /* blocking */)).
+                thenReturn(uidDetail);
+        final AppItem appItem = new AppItem(uid);
+        appItem.uids.put(uid, true);
+        final Bundle args = new Bundle();
+        args.putParcelable(AppDataUsage.ARG_APP_ITEM, appItem);
+        args.putInt(AppInfoBase.ARG_PACKAGE_UID, uid);
+        mFragment.setArguments(args);
+
+        mFragment.onCreate(Bundle.EMPTY);
+
+        assertThat(mFragment.mLabel).isEqualTo(label);
+    }
+
+    @Test
+    @Config(shadows = ShadowFragment.class)
+    public void bindAppHeader_allWorkApps_shouldNotShowAppInfoLink() {
+        mFragment = spy(new TestFragment());
+        ReflectionHelpers.setField(mFragment, "mMetricsFeatureProvider", mMetricsFeatureProvider);
+        when(mFragment.getPreferenceManager())
+                .thenReturn(mock(PreferenceManager.class, RETURNS_DEEP_STUBS));
+        doReturn(mock(PreferenceScreen.class)).when(mFragment).getPreferenceScreen();
+        ReflectionHelpers.setField(mFragment, "mAppItem", mock(AppItem.class));
+
+        when(mFragment.getPreferenceScreen().findPreference(AppDataUsage.ARG_APP_HEADER))
+                .thenReturn(mIntroPreference);
+        when(mFragment.getContext()).thenReturn(mContext);
+        doNothing().when(mContext).startActivity(any());
+
+        mFragment.setupIntroPreference();
+        mFragment.onPreferenceTreeClick(mIntroPreference);
+
+        verify(mFragment, never()).getActivity();
+        verify(mContext, never()).startActivity(any(Intent.class));
+    }
+
+    @Test
+    @Config(shadows = ShadowFragment.class)
+    public void bindAppHeader_workApp_shouldSetWorkAppUid()
+            throws PackageManager.NameNotFoundException {
+        final int fakeUserId = 100;
+
+        mFragment = spy(new TestFragment());
+        ReflectionHelpers.setField(mFragment, "mMetricsFeatureProvider", mMetricsFeatureProvider);
+        final ArraySet<String> packages = new ArraySet<>();
+        packages.add("pkg");
+        final AppItem appItem = new AppItem(123456789);
+
+        ReflectionHelpers.setField(mFragment, "mPackageManager", mPackageManager);
+        ReflectionHelpers.setField(mFragment, "mAppItem", appItem);
+        ReflectionHelpers.setField(mFragment, "mPackages", packages);
+
+        when(mPackageManager.getPackageUidAsUser(anyString(), anyInt())).thenReturn(fakeUserId);
+        when(mFragment.getPreferenceManager())
+                .thenReturn(mock(PreferenceManager.class, RETURNS_DEEP_STUBS));
+        doReturn(mock(PreferenceScreen.class)).when(mFragment).getPreferenceScreen();
+
+        when(mFragment.getPreferenceScreen().findPreference(AppDataUsage.ARG_APP_HEADER))
+                .thenReturn(mIntroPreference);
+        when(mFragment.getContext()).thenReturn(mContext);
+        doNothing().when(mContext).startActivity(any());
+
+        mFragment.setupIntroPreference();
+        mFragment.onPreferenceTreeClick(mIntroPreference);
+
+        ArgumentCaptor<Intent> argumentCaptor = ArgumentCaptor.forClass(Intent.class);
+        verify(mContext).startActivity(argumentCaptor.capture());
+    }
+
+    @Test
+    public void changePreference_backgroundData_shouldUpdateUI() {
+        mFragment = spy(new TestFragment());
+        final AppItem appItem = new AppItem(123456789);
+        final RestrictedSwitchPreference pref = mock(RestrictedSwitchPreference.class);
+        final DataSaverBackend dataSaverBackend = mock(DataSaverBackend.class);
+        ReflectionHelpers.setField(mFragment, "mAppItem", appItem);
+        ReflectionHelpers.setField(mFragment, "mRestrictBackground", pref);
+        ReflectionHelpers.setField(mFragment, "mDataSaverBackend", dataSaverBackend);
+
+        doNothing().when(mFragment).updatePrefs();
+
+        mFragment.onPreferenceChange(pref, true /* value */);
+
+        verify(mFragment).updatePrefs();
+    }
+
+    @Test
+    public void updatePrefs_restrictedByAdmin_shouldDisablePreference() {
+        mFragment = spy(new TestFragment());
+        final int testUid = 123123;
+        final AppItem appItem = new AppItem(testUid);
+        final RestrictedSwitchPreference restrictBackgroundPref
+                = mock(RestrictedSwitchPreference.class);
+        final RestrictedSwitchPreference unrestrictedDataPref
+                = mock(RestrictedSwitchPreference.class);
+        final DataSaverBackend dataSaverBackend = mock(DataSaverBackend.class);
+        final NetworkPolicyManager networkPolicyManager = mock(NetworkPolicyManager.class);
+        ReflectionHelpers.setField(mFragment, "mAppItem", appItem);
+        ReflectionHelpers.setField(mFragment, "mRestrictBackground", restrictBackgroundPref);
+        ReflectionHelpers.setField(mFragment, "mUnrestrictedData", unrestrictedDataPref);
+        ReflectionHelpers.setField(mFragment, "mDataSaverBackend", dataSaverBackend);
+        ReflectionHelpers.setField(mFragment.services, "mPolicyManager", networkPolicyManager);
+        ReflectionHelpers.setField(mFragment, "mContext", RuntimeEnvironment.application);
+        when(mFragment.getListView()).thenReturn(mock(RecyclerView.class));
+
+        ShadowRestrictedLockUtilsInternal.setRestrictedByAdmin(true);
+        doReturn(NetworkPolicyManager.POLICY_NONE).when(networkPolicyManager)
+                .getUidPolicy(testUid);
+
+        mFragment.updatePrefs();
+
+        verify(restrictBackgroundPref).setDisabledByAdmin(any(EnforcedAdmin.class));
+        verify(unrestrictedDataPref).setDisabledByAdmin(any(EnforcedAdmin.class));
+    }
+
+    @Test
+    @Config(shadows = {ShadowDataUsageUtils.class, ShadowSubscriptionManager.class,
+            ShadowFragment.class})
+    public void onCreate_noNetworkTemplateAndInvalidDataSubscription_shouldUseWifiTemplate() {
+        ShadowDataUsageUtils.IS_MOBILE_DATA_SUPPORTED = true;
+        ShadowDataUsageUtils.IS_WIFI_SUPPORTED = true;
+        ShadowSubscriptionManager.setDefaultDataSubscriptionId(
+                SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+        mFragment = spy(new TestFragment());
+        doReturn(Robolectric.setupActivity(FragmentActivity.class)).when(mFragment).getActivity();
+        doReturn(RuntimeEnvironment.application).when(mFragment).getContext();
+        final UidDetailProvider uidDetailProvider = mock(UidDetailProvider.class);
+        doReturn(uidDetailProvider).when(mFragment).getUidDetailProvider();
+        doReturn(new UidDetail()).when(uidDetailProvider).getUidDetail(anyInt(), anyBoolean());
+
+        ReflectionHelpers.setField(mFragment, "mDashboardFeatureProvider",
+                FakeFeatureFactory.setupForTest().dashboardFeatureProvider);
+        final Bundle args = new Bundle();
+        args.putInt(AppInfoBase.ARG_PACKAGE_UID, 123123);
+        mFragment.setArguments(args);
+
+        mFragment.onCreate(Bundle.EMPTY);
+
+        assertThat(mFragment.mTemplate.getMatchRule())
+                .isEqualTo(NetworkTemplate.MATCH_WIFI);
+        assertTrue(mFragment.mTemplate.getSubscriberIds().isEmpty());
+        assertTrue(mFragment.mTemplate.getWifiNetworkKeys().isEmpty());
+    }
+
+    private static class TestFragment extends AppDataUsage {
+        @Override
+        protected <T extends AbstractPreferenceController> T use(Class<T> clazz) {
+            return mock(clazz);
+        }
+
+        @Override
+        void initCycle(List<Integer> uidList) {
+        }
+    }
+}

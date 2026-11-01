@@ -1,0 +1,191 @@
+package: "android.service.autofill"
+container: "system"
+
+flag {
+  name: "test"
+  namespace: "autofill"
+  description: "Test flag "
+  bug: "297380045"
+}
+
+flag {
+  name: "improve_fill_dialog_aconfig"
+  namespace: "autofill"
+  description: "Improvements for Fill Dialog. Guard DeviceConfig rollout "
+  bug: "382493181"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "fill_fields_from_current_session_only"
+  namespace: "autofill"
+  description: "Only fill autofill fields that are part of the current session."
+  bug: "270722825"
+}
+
+flag {
+  name: "relayout"
+  namespace: "autofill"
+  description: "Mitigation for relayout issue"
+  bug: "294330426"
+}
+
+flag {
+  name: "relayout_fix"
+  namespace: "autofill"
+  description: "Fixing relayout issue. Guarding enabling device config flags"
+  bug: "381226145"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "include_invisible_view_group_in_assist_structure"
+  namespace: "autofill"
+  description: "Mitigation for autofill providers miscalculating view visibility"
+  bug: "291795358"
+}
+
+flag {
+  name: "add_last_focused_id_to_client_state"
+  namespace: "autofill"
+  description: "Include the current view id into the FillEventHistory events as part of ClientState"
+  bug: "334141398"
+}
+
+flag {
+  name: "test_flag"
+  namespace: "autofill"
+  description: "Test flag "
+  bug: "377868687"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "multiple_fill_history"
+  namespace: "autofill"
+  description: "Allows tracking per Session FillEventHistory. As a bugfix flag to guard against DeviceConfig flag"
+  bug: "365630157"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "add_session_id_to_client_state"
+  namespace: "autofill"
+  description: "Include the session id into the FillEventHistory events as part of ClientState"
+  bug: "333927465"
+}
+
+flag {
+  name: "highlight_autofill_single_field"
+  namespace: "autofill"
+  description: "Highlight single field after autofill selection"
+  bug: "41496744"
+}
+
+flag {
+  name: "metrics_fixes"
+  namespace: "autofill"
+  description: "Fixes various framework reported metrics"
+  bug: "362581326"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "disable_fill_dialog_on_automotive_multi_window"
+  namespace: "autofill"
+  description: "Disable fill dialog on automotive multi-window target"
+  bug: "420943436"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "use_focused_view_to_get_afm_in_view_root"
+  namespace: "autofill"
+  description: "Use focused view context to get autofill manager, for fixing dropdown suggestion blocking physical keyboard input"
+  bug: "329678461"
+  metadata {
+      purpose: PURPOSE_BUGFIX
+   }
+}
+
+flag {
+  name: "get_autofill_view_id_from_autofill_manager"
+  namespace: "autofill"
+  description: "Use autofill manager to get autofill view id if view has non-activity context"
+  bug: "390180715"
+  metadata {
+      purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "use_candidate_save_value_when_update_save_assist_structure"
+  namespace: "autofill"
+  description: "To fix app resetting field value before leaving page, use the candidate save value when creating assist structure for save"
+  bug: "419303541"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "return_when_window_destroyed"
+  namespace: "autofill"
+  description: "Check whether window is destroyed inside hide(). If it's destroyed, then hide() returns without throwing exception. This prevents exception from thrown"
+  bug: "392539682"
+  metadata {
+      purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "string_rebuild_persistent_masterseed"
+  namespace: "autofill"
+  description: "make string rebuild masterseeed persistent across reboots but different per user profile."
+  bug: "456535350"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "add_dialog_presentation_check"
+  namespace: "autofill"
+  description: "Add check for dialog presentation in when setting authentication inFillResponse."
+  bug: "486879419"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "set_locale_for_text_view"
+  namespace: "autofill"
+  description: "Let TextView set the locale field when providing AssistStructure for autofill"
+  bug: "487046283"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "destroy_save_ui_before_showing_next_one"
+  namespace: "autofill"
+  description: "Destroy the current showing save dialog before showing the next one to fix device unresponsive issue"
+  bug: "484831460"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}

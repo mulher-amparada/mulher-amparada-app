@@ -1,0 +1,15 @@
+# The Android Biometric team should approve all changes to password subdirectories.
+set noparent
+
+# Default reviewers for this and subdirectories.
+graciecheng@google.com
+ilyamaty@google.com
+jbolinger@google.com
+joshmccloskey@google.com
+rubinxu@google.com
+diyab@google.com
+austindelgado@google.com
+spdonghao@google.com
+wenhuiy@google.com
+
+# Emergency approvers in case the above are not available

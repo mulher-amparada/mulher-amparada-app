@@ -1,0 +1,172 @@
+/*
+ * Copyright (C) 2018 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.systemui.statusbar.notification.footer.ui.view;
+
+import static com.google.common.truth.Truth.assertThat;
+
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
+
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.clearInvocations;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.SmallTest;
+
+import com.android.systemui.SysuiTestCase;
+import com.android.systemui.res.R;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+@SmallTest
+@RunWith(AndroidJUnit4.class)
+public class FooterViewTest extends SysuiTestCase {
+    FooterView mView;
+
+    Context mSpyContext = spy(mContext);
+
+    @Before
+    public void setUp() {
+        mView = (FooterView) LayoutInflater.from(mSpyContext).inflate(
+                R.layout.notification_2025_footer, null, false);
+        mView.setAnimationDuration(0);
+    }
+
+    @Test
+    public void testViewsNotNull() {
+        assertNotNull(mView.findContentView());
+        assertNotNull(mView.findSecondaryView());
+    }
+
+    @Test
+    public void setDismissOnClick() {
+        mView.setClearAllButtonClickListener(mock(View.OnClickListener.class));
+        assertTrue(mView.findSecondaryView().hasOnClickListeners());
+    }
+
+    @Test
+    public void testPerformVisibilityAnimation() {
+        mView.setVisible(false /* visible */, false /* animate */);
+        assertFalse(mView.isVisible());
+
+        mView.setVisible(true /* visible */, true /* animate */);
+    }
+
+    @Test
+    public void testPerformSecondaryVisibilityAnimation() {
+        mView.setClearAllButtonVisible(false /* visible */, false /* animate */);
+        assertFalse(mView.isClearAllButtonVisible());
+
+        mView.setClearAllButtonVisible(true /* visible */, true /* animate */);
+    }
+
+    @Test
+    public void testSetClearAllButtonText_resourceOnlyFetchedOnce() {
+        int resId = R.string.clear_all_notifications_text;
+        mView.setClearAllButtonText(resId);
+        verify(mSpyContext).getString(eq(resId));
+
+        clearInvocations(mSpyContext);
+
+        assertThat(((TextView) mView.findViewById(R.id.dismiss_text))
+                .getText().toString()).contains("Clear all");
+
+        // Set it a few more times, it shouldn't lead to the resource being fetched again
+        mView.setClearAllButtonText(resId);
+        mView.setClearAllButtonText(resId);
+
+        verify(mSpyContext, never()).getString(anyInt());
+    }
+
+    @Test
+    public void testSetClearAllButtonDescription_resourceOnlyFetchedOnce() {
+        int resId = R.string.accessibility_clear_all;
+        mView.setClearAllButtonDescription(resId);
+        verify(mSpyContext).getString(eq(resId));
+
+        clearInvocations(mSpyContext);
+
+        assertThat(((TextView) mView.findViewById(R.id.dismiss_text))
+                .getContentDescription().toString()).contains("Clear all notifications");
+
+        // Set it a few more times, it shouldn't lead to the resource being fetched again
+        mView.setClearAllButtonDescription(resId);
+        mView.setClearAllButtonDescription(resId);
+
+        verify(mSpyContext, never()).getString(anyInt());
+    }
+
+    @Test
+    public void testSetMessageString_resourceOnlyFetchedOnce() {
+        int resId = R.string.unlock_to_see_notif_text;
+        mView.setMessageString(resId);
+        verify(mSpyContext).getString(eq(resId));
+
+        clearInvocations(mSpyContext);
+
+        assertThat(((TextView) mView.findViewById(R.id.unlock_prompt_footer))
+                .getText().toString()).contains("Unlock");
+
+        // Set it a few more times, it shouldn't lead to the resource being fetched again
+        mView.setMessageString(resId);
+        mView.setMessageString(resId);
+
+        verify(mSpyContext, never()).getString(anyInt());
+    }
+
+    @Test
+    public void testSetMessageIcon_resourceOnlyFetchedOnce() {
+        int resId = R.drawable.ic_friction_lock_closed;
+        mView.setMessageIcon(resId);
+        verify(mSpyContext).getDrawable(eq(resId));
+
+        clearInvocations(mSpyContext);
+
+        // Set it a few more times, it shouldn't lead to the resource being fetched again
+        mView.setMessageIcon(resId);
+        mView.setMessageIcon(resId);
+
+        verify(mSpyContext, never()).getDrawable(anyInt());
+    }
+
+    @Test
+    public void testSetFooterLabelVisible() {
+        mView.setFooterLabelVisible(true);
+        assertThat(mView.findViewById(R.id.unlock_prompt_footer).getVisibility())
+                .isEqualTo(View.VISIBLE);
+    }
+
+    @Test
+    public void testSetFooterLabelInvisible() {
+        mView.setFooterLabelVisible(false);
+        assertThat(mView.findViewById(R.id.unlock_prompt_footer).getVisibility())
+                .isEqualTo(View.GONE);
+    }
+}

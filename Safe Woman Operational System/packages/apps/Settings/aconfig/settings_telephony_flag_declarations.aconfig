@@ -1,0 +1,17 @@
+package: "com.android.settings.flags"
+container: "system_ext"
+
+flag {
+    name: "is_dual_sim_onboarding_enabled"
+    namespace: "settings_experience"
+    description: "Control the Dual SIM onobarding feature"
+    bug: "298898436"
+}
+
+flag {
+    name: "keep_system_dialer_enabled"
+    namespace: "settings_experience"
+    description: "Enable this flag to keep system dialer enabled"
+    bug: "422974529"
+}
+

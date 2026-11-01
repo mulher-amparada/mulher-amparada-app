@@ -1,0 +1,22 @@
+package: "com.android.settings.flags"
+container: "system_ext"
+
+flag {
+    name: "refactor_print_settings"
+    namespace: "settings_experience"
+    description: "Refactor the PrintSettings page."
+    bug: "320076351"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "receive_troubleshooting_message"
+    namespace: "settings_experience"
+    description: "Receive troubleshooting messages from another process."
+    bug: "443861431"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}

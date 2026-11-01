@@ -1,0 +1,66 @@
+type zygote_next, domain;
+type zygote_next_exec, system_file_type, exec_type, file_type;
+
+typeattribute zygote_next coredomain;
+typeattribute zygote_next mlstrustedsubject;
+
+init_daemon_domain(zygote_next)
+set_prop(zygote_next, zygote_zygote_next_server_status_prop)
+
+# Override DAC on files and switch uid/gid
+allow zygote_next self:global_capability_class_set { dac_override dac_read_search setgid setuid fowner chown };
+
+# Drop capabilities from bounding set
+# sys_admin is required to install the seccomp filter
+allow zygote_next self:global_capability_class_set { sys_admin setpcap };
+
+# Switch SELinux context to app domains
+allow zygote_next self:process setcurrent;
+allow zygote_next isolated_app:process dyntransition;
+allow zygote_next native_app_zygote:process dyntransition;
+
+# Control cgroups.
+allow zygote_next cgroup:dir create_dir_perms;
+allow zygote_next cgroup:{ file lnk_file } { r_file_perms setattr };
+allow zygote_next cgroup_v2:dir create_dir_perms;
+allow zygote_next cgroup_v2:{ file lnk_file } { r_file_perms setattr };
+allow zygote_next self:global_capability_class_set sys_admin;
+
+# Allow zygote_next to stat the files that it opens. The Native Zygote must be
+# able to inspect them so that it can reopen them on fork if necessary:
+# b/30963384.
+
+# Required for logging
+allow zygote_next pmsg_device:chr_file getattr;
+# Required for tracing
+allow zygote_next debugfs_trace_marker:file getattr;
+
+# Needed for calling selinux_android_setcontext
+allow zygote_next seapp_contexts_file:file r_file_perms;
+# Check validity of SELinux context before use
+selinux_check_context(zygote_next)
+# Check SELinux permissions
+selinux_check_access(zygote_next)
+
+# Ignore spurious denials
+# fsetid can be checked as a consequence of chmod when using cgroup v2 uid/pid hierarchy. This is
+# done to determine if the file should inherit setgid. In this case, setgid on the file is
+# undesirable, so suppress the denial.
+dontaudit zygote_next self:global_capability_class_set { sys_resource fsetid };
+
+# Allow Native Zygote to change its niceness
+allow zygote_next self:global_capability_class_set sys_nice;
+
+###
+### neverallow rules
+###
+
+# The only way to enter native_app_zygote is for the zygote_next to fork a new
+# native_app_zygote child.
+neverallow { domain -zygote_next } native_app_zygote:process { dyntransition transition };
+
+# Send unsolicited message to system_server
+unix_socket_send(zygote_next, system_unsolzygote, system_server)
+
+# Allow Native Zygote to write to statsd
+unix_socket_send(zygote_next, statsdw, statsd)

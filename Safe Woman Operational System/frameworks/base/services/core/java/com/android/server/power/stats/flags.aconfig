@@ -1,0 +1,54 @@
+package: "com.android.server.power.optimization"
+container: "system"
+
+flag {
+    name: "power_monitor_api"
+    is_exported: true
+    namespace: "backstage_power"
+    description: "Feature flag for ODPM API"
+    bug: "295027807"
+}
+
+flag {
+    name: "streamlined_connectivity_battery_stats"
+    namespace: "backstage_power"
+    description: "Feature flag for streamlined connectivity battery stats"
+    bug: "323970018"
+    is_exported: true
+}
+
+flag {
+    name: "disable_composite_battery_usage_stats_atoms"
+    namespace: "backstage_power"
+    description: "Disable deprecated BatteryUsageStatsAtom pulled atom"
+    bug: "324602949"
+}
+
+flag {
+    name: "battery_stats_screen_state_event"
+    namespace: "backstage_power"
+    description: "Guards the battery stats event for screen state changes."
+    bug: "364350206"
+    is_fixed_read_only: true
+}
+
+flag {
+     namespace: "backstage_power"
+     name: "configure_power_stats_log_frequency"
+     description: "Add a configurable value for power stats logging frequency"
+     bug: "166689029"
+}
+
+flag {
+    name: "x86_cpu_energy_attribution"
+    namespace: "backstage_power"
+    description: "Enable CPU energy attribution for x86 platforms using eBPF and RAPL."
+    bug: "452123601"
+}
+
+flag {
+    name: "uid_parent_attribution_prevent_overwrite"
+    namespace: "backstage_power"
+    description: "Prevents overwriting power attribution data when a child UID's power consumption is attributed to its parent UID."
+    bug: "473977284"
+}

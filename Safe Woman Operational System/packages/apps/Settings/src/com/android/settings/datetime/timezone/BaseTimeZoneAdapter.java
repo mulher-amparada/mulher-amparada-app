@@ -1,0 +1,439 @@
+/*
+ * Copyright (C) 2018 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.settings.datetime.timezone;
+
+import static com.android.settingslib.widget.theme.R.drawable;
+
+import android.annotation.DrawableRes;
+import android.icu.text.BreakIterator;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.RadioButton;
+import android.widget.TextView;
+
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.annotation.WorkerThread;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.android.settings.R;
+import com.android.settings.datetime.timezone.BaseTimeZonePicker.OnListItemClickListener;
+import com.android.settingslib.widget.SettingsThemeHelper;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.regex.Pattern;
+
+/**
+ * Used with {@class BaseTimeZonePicker}. It renders text in each item into list view. A list of
+ * {@class AdapterItem} must be provided when an instance is created.
+ */
+public class BaseTimeZoneAdapter<T extends BaseTimeZoneAdapter.AdapterItem>
+        extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    @VisibleForTesting
+    static final int TYPE_HEADER = 0;
+    @VisibleForTesting
+    static final int TYPE_ITEM = 1;
+
+    private static final Pattern PATTERN_REMOVE_DIACRITICS = Pattern.compile(
+            "\\p{InCombiningDiacriticalMarks}+");
+
+    private final List<T> mOriginalItems;
+    private final OnListItemClickListener<T> mOnListItemClickListener;
+    private final Locale mLocale;
+    private final boolean mShowItemSummary;
+    private final boolean mShowHeader;
+    private final CharSequence mHeaderText;
+
+    private List<T> mItems;
+    private ArrayFilter mFilter;
+
+    /**
+     * Constructs a new BaseTimeZoneAdapter.
+     *
+     * @param items The list of items to display.
+     * @param onListItemClickListener The listener to be notified when an item is clicked.
+     * @param locale The locale to use for formatting.
+     * @param showItemSummary Whether to show summary text and the current time in the time zone.
+     * @param headerText The text shown in the header, or null to show no header.
+     */
+    public BaseTimeZoneAdapter(List<T> items, OnListItemClickListener<T> onListItemClickListener,
+            Locale locale, boolean showItemSummary, @Nullable CharSequence headerText) {
+        mOriginalItems = items;
+        mItems = items;
+        mOnListItemClickListener = onListItemClickListener;
+        mLocale = locale;
+        mShowItemSummary = showItemSummary;
+        mShowHeader = headerText != null;
+        mHeaderText = headerText;
+        setHasStableIds(true);
+    }
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        switch (viewType) {
+            case TYPE_HEADER: {
+                final View view = inflater.inflate(
+                        R.layout.time_zone_search_header,
+                        parent, false);
+                return new HeaderViewHolder(view);
+            }
+            case TYPE_ITEM: {
+                final View view = inflater.inflate(R.layout.time_zone_search_item, parent, false);
+                return new ItemViewHolder<>(view, mOnListItemClickListener);
+            }
+            default:
+                throw new IllegalArgumentException("Unexpected viewType: " + viewType);
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof HeaderViewHolder) {
+            ((HeaderViewHolder) holder).setText(mHeaderText);
+        } else if (holder instanceof ItemViewHolder) {
+            ItemViewHolder<T> itemViewHolder = (ItemViewHolder<T>) holder;
+            itemViewHolder.setAdapterItem(getDataItem(position));
+            boolean showItemSummaryText = mShowItemSummary && !TextUtils.isEmpty(
+                    getDataItem(position).getSummary());
+            boolean showTimeText = mShowItemSummary && !TextUtils.isEmpty(
+                    getDataItem(position).getCurrentTime());
+            toggleSummaryVisibilityAndAdjustConstraints(itemViewHolder, showItemSummaryText,
+                    showTimeText);
+
+            View itemView = holder.itemView;
+            if (SettingsThemeHelper.isExpressiveTheme(itemView.getContext())) {
+                int backgroundRes = getBackgroundRes(position);
+                itemView.setBackgroundResource(backgroundRes);
+                itemView.invalidate();
+            }
+        }
+    }
+
+    private @DrawableRes int getBackgroundRes(int position) {
+        int cornerType = SettingsLibHelper.ROUND_CORNER_BACKGROUND_CENTER;
+        if (position == (getItemCount() - 1)) {
+            cornerType |= SettingsLibHelper.ROUND_CORNER_BACKGROUND_BOTTOM;
+        }
+        // if an header is showing, it means the first time zone item is at position 1 not 0.
+        if (mShowHeader ? position == 1 : position == 0) {
+            cornerType |= SettingsLibHelper.ROUND_CORNER_BACKGROUND_TOP;
+        }
+        return SettingsLibHelper.getRoundCornerDrawableRes(cornerType);
+    }
+
+    private void toggleSummaryVisibilityAndAdjustConstraints(ItemViewHolder<?> itemViewHolder,
+            boolean showItemSummaryText, boolean showTimeText) {
+        itemViewHolder.mSummaryTextView.setVisibility(
+                showItemSummaryText ? View.VISIBLE : View.GONE);
+        itemViewHolder.mTimeTextView.setVisibility(showTimeText ? View.VISIBLE : View.GONE);
+
+        // Adjust subview's constraints
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(itemViewHolder.mRootConstraintLayout);
+
+        if (showItemSummaryText) {
+            // Align mTitleTextView to TOP when mSummaryTextView is showing.
+            constraintSet.connect(itemViewHolder.mTitleTextView.getId(), ConstraintSet.TOP,
+                    ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.clear(itemViewHolder.mTitleTextView.getId(), ConstraintSet.BOTTOM);
+
+            // Reset mTimeTextView constraints to align with summary
+            if (showTimeText) {
+                constraintSet.connect(itemViewHolder.mTimeTextView.getId(), ConstraintSet.BOTTOM,
+                        itemViewHolder.mSummaryTextView.getId(), ConstraintSet.BOTTOM);
+                constraintSet.connect(itemViewHolder.mTimeTextView.getId(), ConstraintSet.TOP,
+                        itemViewHolder.mSummaryTextView.getId(), ConstraintSet.TOP);
+            }
+        } else {
+            // center mTitleTextView vertically when mSummaryTextView is not showing.
+            constraintSet.connect(itemViewHolder.mTitleTextView.getId(), ConstraintSet.TOP,
+                    ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(itemViewHolder.mTitleTextView.getId(), ConstraintSet.BOTTOM,
+                    ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+
+            // Center mTimeTextView vertically when mSummaryTextView is gone
+            if (showTimeText) {
+                constraintSet.connect(itemViewHolder.mTimeTextView.getId(), ConstraintSet.TOP,
+                        ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+                constraintSet.connect(itemViewHolder.mTimeTextView.getId(), ConstraintSet.BOTTOM,
+                        ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+                constraintSet.setVerticalBias(itemViewHolder.mTimeTextView.getId(), 0.5f);
+            }
+        }
+        constraintSet.applyTo(itemViewHolder.mRootConstraintLayout);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        // Data item can't have negative id
+        return isPositionHeader(position) ? -1 : getDataItem(position).getItemId();
+    }
+
+    @Override
+    public int getItemCount() {
+        return mItems.size() + getHeaderCount();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return isPositionHeader(position) ? TYPE_HEADER : TYPE_ITEM;
+    }
+
+    /*
+     * Avoid being overridden by making the method final, since constructor shouldn't invoke
+     * overridable method.
+     */
+    @Override
+    public final void setHasStableIds(boolean hasStableIds) {
+        super.setHasStableIds(hasStableIds);
+    }
+
+    private int getHeaderCount() {
+        return mShowHeader ? 1 : 0;
+    }
+
+    private boolean isPositionHeader(int position) {
+        return mShowHeader && position == 0;
+    }
+
+    @NonNull
+    public ArrayFilter getFilter() {
+        if (mFilter == null) {
+            mFilter = new ArrayFilter();
+        }
+        return mFilter;
+    }
+
+    /**
+     * @throws IndexOutOfBoundsException if the view type at the position is a header
+     */
+    @VisibleForTesting
+    public T getDataItem(int position) {
+        return mItems.get(position - getHeaderCount());
+    }
+
+    public interface AdapterItem {
+        /**
+         * @return the title text.
+         */
+        CharSequence getTitle();
+
+        /**
+         * @return the summary text, or null if no summary should be shown.
+         */
+        @Nullable CharSequence getSummary();
+
+        /**
+         * @return the current time in the time zone, or null if no time should be shown.
+         */
+        @Nullable String getCurrentTime();
+
+        /**
+         * @return whether the current item should be marked as selected.
+         */
+        boolean getIsSelected();
+
+        /**
+         * @return unique non-negative number
+         */
+        long getItemId();
+
+        String[] getSearchKeys();
+    }
+
+    private static class HeaderViewHolder extends RecyclerView.ViewHolder {
+        private final TextView mTextView;
+
+        public HeaderViewHolder(View itemView) {
+            super(itemView);
+            mTextView = itemView.findViewById(android.R.id.title);
+        }
+
+        public void setText(CharSequence text) {
+            mTextView.setText(text);
+        }
+    }
+
+    /**
+     * Removes diacritics (e.g. accents) from a string
+     */
+    private static String removeDiacritics(final String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+        // decomposes the original characters into a base character and a diacritic sign
+        final String decomposed = Normalizer.normalize(str, Normalizer.Form.NFKD);
+        // replaces the diacritic signs with empty strings
+        return PATTERN_REMOVE_DIACRITICS.matcher(decomposed).replaceAll("");
+    }
+
+    @VisibleForTesting
+    public static class ItemViewHolder<T extends BaseTimeZoneAdapter.AdapterItem>
+            extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        final OnListItemClickListener<T> mOnListItemClickListener;
+        final ConstraintLayout mRootConstraintLayout;
+        final RadioButton mItemSelectedRadioButton;
+        final TextView mTitleTextView;
+        final TextView mSummaryTextView;
+        final TextView mTimeTextView;
+        private T mItem;
+
+        public ItemViewHolder(View itemView, OnListItemClickListener<T> onListItemClickListener) {
+            super(itemView);
+            itemView.setOnClickListener(this);
+            mRootConstraintLayout = itemView.findViewById(R.id.container);
+            mItemSelectedRadioButton = itemView.findViewById(R.id.selected_radio_button);
+            mTitleTextView = itemView.findViewById(R.id.title);
+            mSummaryTextView = itemView.findViewById(R.id.summary);
+            mTimeTextView = itemView.findViewById(R.id.current_time);
+            mOnListItemClickListener = onListItemClickListener;
+        }
+
+        public void setAdapterItem(T item) {
+            mItem = item;
+            mItemSelectedRadioButton.setChecked(item.getIsSelected());
+            mTitleTextView.setText(item.getTitle());
+            mSummaryTextView.setText(item.getSummary());
+            mTimeTextView.setText(item.getCurrentTime());
+        }
+
+        @Override
+        public void onClick(View v) {
+            mOnListItemClickListener.onListItemClick(mItem);
+        }
+    }
+
+    /**
+     * <p>An array filter constrains the content of the array adapter with
+     * a prefix. Each item that does not start with the supplied prefix
+     * is removed from the list.</p>
+     *
+     * The filtering operation is not optimized, due to small data size (~260 regions),
+     * require additional pre-processing. Potentially, a trie structure can be used to match
+     * prefixes of the search keys.
+     */
+    @VisibleForTesting
+    public class ArrayFilter extends Filter {
+
+        private final BreakIterator mBreakIterator = BreakIterator.getWordInstance(mLocale);
+
+        @WorkerThread
+        @Override
+        protected FilterResults performFiltering(CharSequence prefix) {
+            final List<T> newItems;
+            if (TextUtils.isEmpty(prefix)) {
+                newItems = mOriginalItems;
+            } else {
+                final String prefixString = removeDiacritics(
+                        prefix.toString().toLowerCase(mLocale));
+                newItems = new ArrayList<>();
+
+                for (T item : mOriginalItems) {
+                    outer:
+                    for (String searchKey : item.getSearchKeys()) {
+                        searchKey = removeDiacritics(searchKey.toLowerCase(mLocale));
+                        // First match against the whole, non-splitted value
+                        if (searchKey.startsWith(prefixString)) {
+                            newItems.add(item);
+                            break outer;
+                        } else {
+                            mBreakIterator.setText(searchKey);
+                            for (int wordStart = 0, wordLimit = mBreakIterator.next();
+                                    wordLimit != BreakIterator.DONE;
+                                    wordStart = wordLimit,
+                                            wordLimit = mBreakIterator.next()) {
+                                if (mBreakIterator.getRuleStatus() != BreakIterator.WORD_NONE
+                                        && searchKey.startsWith(prefixString, wordStart)) {
+                                    newItems.add(item);
+                                    break outer;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            final FilterResults results = new FilterResults();
+            results.values = newItems;
+            results.count = newItems.size();
+
+            return results;
+        }
+
+        @VisibleForTesting
+        @Override
+        public void publishResults(CharSequence constraint, FilterResults results) {
+            mItems = (List<T>) results.values;
+            notifyDataSetChanged();
+        }
+    }
+
+    private static final class SettingsLibHelper {
+        @Retention(RetentionPolicy.SOURCE)
+        @IntDef(
+                flag = true,
+                value = {
+                        ROUND_CORNER_BACKGROUND_CENTER,
+                        ROUND_CORNER_BACKGROUND_TOP,
+                        ROUND_CORNER_BACKGROUND_BOTTOM
+                })
+        private @interface RoundCornerFlags {}
+
+        private static final int ROUND_CORNER_BACKGROUND_CENTER = 1;
+        private static final int ROUND_CORNER_BACKGROUND_TOP = 1 << 1;
+        private static final int ROUND_CORNER_BACKGROUND_BOTTOM = 1 << 2;
+
+        /**
+         * Gets the drawable resource ID for a round corner background.
+         * @param cornerType The type of corner to round.
+         */
+        private static @DrawableRes int getRoundCornerDrawableRes(
+                @RoundCornerFlags int cornerType) {
+            boolean isTopRounded = (cornerType & ROUND_CORNER_BACKGROUND_TOP) != 0;
+            boolean isBottomRounded = (cornerType & ROUND_CORNER_BACKGROUND_BOTTOM) != 0;
+
+            if (isTopRounded && !isBottomRounded) {
+                // first item in the list
+                return drawable.settingslib_round_background_top;
+            } else if (!isTopRounded && isBottomRounded) {
+                // the last item in the list
+                return drawable.settingslib_round_background_bottom;
+            } else if (isTopRounded && isBottomRounded) {
+                // single item in the list
+                return drawable.settingslib_round_background;
+            } else {
+                // the item in the center of the list
+                return drawable.settingslib_round_background_center;
+            }
+        }
+    }
+}

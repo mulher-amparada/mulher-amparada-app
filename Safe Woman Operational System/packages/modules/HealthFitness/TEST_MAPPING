@@ -1,0 +1,238 @@
+// Any new test module being added here should be added to both "presubmits" and
+// "healthfitness-mainline-presubmit".
+//
+// New test modules are first required to be added to "postsubmit" to check for flakiness, and
+// should be moved to "presubmits" and "healthfitness-mainline-presubmit" a week later.
+// See go/test-mapping-slo-guide#slo-checker.
+//
+// We separately also need to add test targets to mts test list to run them in mainline postsubmit.
+// See ag/29549414 and go/mainline-test-suite for instructions.
+
+// If you are adding a new cts test module, please also exclude it from cts-on-gsi test mapping.
+// See ag/32853520 for instructions.
+{
+  // This runs our test modules on mainline targets
+  // (e.g. mainline_modules_x86_64_default-trunk_staging-userdebug.)
+  // These tests are run on all android base versions since Android U, with the healthfitness module
+  // installed from head.
+  // These tests are also run on android versions older than Android U, but are ignored for the
+  // healthfitness module.
+  "healthfitness-mainline-presubmit": [
+    {
+      "name": "CtsHealthFitnessPhrTestCases"
+    },
+    {
+      "name": "CtsHealthFitnessDeviceTestCases"
+    },
+    {
+      "name": "CtsHealthFitnessDeviceTestCasesNoPermission"
+    },
+    {
+      "name": "CtsHealthConnectControllerTestCases"
+    },
+    {
+      "name": "HealthFitnessIntegrationBackupRestoreTests"
+    },
+    {
+      "name": "HealthFitnessIntegrationTests"
+    },
+    {
+      "name": "HealthFitnessUnitTests"
+    },
+    {
+      "name": "HealthFitnessFrameworkUnitTests"
+    },
+    {
+      "name": "HealthConnectBackupRestoreUnitTests"
+    },
+    {
+      "name": "CtsHealthConnectHostTestCases"
+    },
+    {
+      "name": "CtsExerciseRouteTestCases"
+    },
+    {
+      "name": "CtsHealthFitnessShowMigrationInfoIntentAbsentTests"
+    },
+    {
+      "name": "CtsHealthFitnessDeviceTestCasesHistoricAccessLimitWithPermission"
+    },
+    {
+       "name": "HealthConnectControllerDataScreensNewTests"
+    },
+    {
+       "name": "HealthConnectControllerDeletionTests"
+    },
+    {
+       "name": "HealthConnectControllerExerciseRouteTests"
+    },
+    {
+       "name": "HealthConnectControllerExportTests"
+    },
+    {
+       "name": "HealthConnectControllerHomePageAndOnboardingTests"
+    },
+    {
+       "name": "HealthConnectControllerManageDataTests"
+    },
+    {
+       "name": "HealthConnectControllerMigrationTests"
+    },
+    {
+       "name": "HealthConnectControllerNavigationTests"
+    },
+    {
+       "name": "HealthConnectControllerPermissionTests"
+    },
+    {
+       "name": "HealthConnectControllerExtraTests"
+    },
+    {
+       "name": "HealthFitnessIntegrationExportImportTests"
+    },
+    {
+       "name": "CtsHealthFitnessDeviceTestCasesRateLimiter"
+    },
+    {
+       "name": "CtsHealthFitnessDeviceTestCasesNotAllPermissionsAreGranted"
+    }
+  ],
+  // This runs our test modules on android targets
+  // (e.g. aosp_cf_x86_64_only_phone-trunk_staging-userdebug.)
+  "presubmit": [
+    {
+      "name": "CtsHealthFitnessPhrTestCases"
+    },
+    {
+      "name": "CtsHealthFitnessDeviceTestCases"
+    },
+    {
+      "name": "CtsHealthFitnessDeviceTestCasesNoPermission"
+    },
+    {
+      "name": "CtsHealthConnectControllerTestCases"
+    },
+    {
+      "name": "HealthFitnessIntegrationBackupRestoreTests"
+    },
+    {
+      "name": "HealthFitnessIntegrationTests"
+    },
+    {
+      "name": "HealthFitnessUnitTests"
+    },
+    {
+      "name": "HealthFitnessFrameworkUnitTests"
+    },
+    {
+      "name": "HealthConnectBackupRestoreUnitTests"
+    },
+    {
+      "name": "CtsHealthConnectHostTestCases"
+    },
+    {
+      "name": "CtsExerciseRouteTestCases"
+    },
+    {
+      "name": "CtsHealthFitnessShowMigrationInfoIntentAbsentTests"
+    },
+    {
+      "name": "CtsHealthFitnessDeviceTestCasesHistoricAccessLimitWithPermission"
+    },
+    {
+       "name": "HealthConnectControllerDataScreensNewTests"
+    },
+    {
+       "name": "HealthConnectControllerDeletionTests"
+    },
+    {
+       "name": "HealthConnectControllerExerciseRouteTests"
+    },
+    {
+       "name": "HealthConnectControllerExportTests"
+    },
+    {
+       "name": "HealthConnectControllerHomePageAndOnboardingTests"
+    },
+    {
+       "name": "HealthConnectControllerManageDataTests"
+    },
+    {
+       "name": "HealthConnectControllerMigrationTests"
+    },
+    {
+       "name": "HealthConnectControllerNavigationTests"
+    },
+    {
+       "name": "HealthConnectControllerPermissionTests"
+    },
+    {
+       "name": "HealthConnectControllerExtraTests"
+    },
+    {
+       "name": "HealthFitnessIntegrationExportImportTests"
+    },
+    {
+       "name": "CtsHealthFitnessDeviceTestCasesRateLimiter"
+    },
+    {
+       "name": "CtsHealthFitnessDeviceTestCasesNotAllPermissionsAreGranted"
+    },
+    {
+      "name": "HealthConnectUIE2EPermissionTests"
+    },
+    {
+    "name": "HealthConnectUIE2EPHRTests"
+    },
+    {
+    "name": "HealthConnectUIE2EDataTests"
+    }
+  ],
+  // Run our bivalent tests.
+  "healthfitness-robo-presubmit": [
+    {
+      "name": "HealthFitnessRoboUnitTests"
+    },
+    {
+      "name": "HealthConnectControllerWearRoboUITests"
+    }
+  ],
+  "healthfitness-robo-screenshot-tests": [
+    {
+        "name": "HealthFitnessRoboRNGTests",
+        "options": [
+            {
+                "exclude-annotation": "org.junit.Ignore"
+            },
+            {
+                "exclude-annotation": "androidx.test.filters.FlakyTest"
+            },
+            {
+                "exclude-annotation": "android.platform.test.annotations.Postsubmit"
+            }
+        ]
+    }
+  ],
+  "healthfitness-screenshot-tests": [
+    {
+        "name": "HealthFitnessScreenDiffTests",
+        "options": [
+            {
+                "exclude-annotation": "org.junit.Ignore"
+            },
+            {
+                "exclude-annotation": "androidx.test.filters.FlakyTest"
+            },
+            {
+                "exclude-annotation": "android.platform.test.annotations.Postsubmit"
+            }
+        ]
+    }
+  ],
+  "postsubmit": [
+  ],
+  // DEPRECATED
+  // Old mainline presubmit mapping, replaced by "healthfitness-mainline-presubmit".
+  "mainline-presubmit": [
+  ]
+}

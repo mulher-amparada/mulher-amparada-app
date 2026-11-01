@@ -1,0 +1,14 @@
+###
+### Apps signed with the platform key.
+###
+
+typeattribute platform_app coredomain;
+
+app_domain(platform_app)
+
+# Access the network.
+net_domain(platform_app)
+# Access bluetooth.
+bluetooth_domain(platform_app)
+
+platform_app_domain(platform_app)

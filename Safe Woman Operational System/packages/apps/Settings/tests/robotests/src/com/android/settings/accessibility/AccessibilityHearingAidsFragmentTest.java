@@ -1,0 +1,104 @@
+/*
+ * Copyright (C) 2022 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.settings.accessibility;
+
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
+import android.content.Context;
+import android.os.SystemProperties;
+import android.telephony.TelephonyManager;
+
+import androidx.test.core.app.ApplicationProvider;
+
+import com.android.settings.R;
+import com.android.settings.testutils.XmlTestUtils;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
+import org.robolectric.RobolectricTestRunner;
+
+import java.util.List;
+import java.util.Objects;
+
+/** Tests for {@link AccessibilityHearingAidsFragment}. */
+@RunWith(RobolectricTestRunner.class)
+public class AccessibilityHearingAidsFragmentTest {
+
+    @Rule
+    public MockitoRule mMockitoRule = MockitoJUnit.rule();
+    @Spy
+    private final Context mContext = ApplicationProvider.getApplicationContext();
+    private static final String ASHA_PROFILE_CENTRAL_PROPERTY =
+            "bluetooth.profile.asha.central.enabled";
+    private static final String HAP_PROFILE_CLIENT_PROPERTY =
+            "bluetooth.profile.hap.client.enabled";
+    @Mock
+    private TelephonyManager mTelephonyManager;
+
+    @Before
+    public void setUp() {
+        mTelephonyManager = spy(mContext.getSystemService(TelephonyManager.class));
+        when(mContext.getSystemService(TelephonyManager.class)).thenReturn(mTelephonyManager);
+        doReturn(true).when(mTelephonyManager).isHearingAidCompatibilitySupported();
+    }
+
+    @After
+    public void tearDown() {
+        SystemProperties.set(ASHA_PROFILE_CENTRAL_PROPERTY, "");
+        SystemProperties.set(HAP_PROFILE_CLIENT_PROPERTY, "");
+    }
+
+    @Test
+    public void getNonIndexableKeys_existInXmlLayout() {
+        SystemProperties.set(ASHA_PROFILE_CENTRAL_PROPERTY, "true");
+
+        final List<String> niks = AccessibilityHearingAidsFragment.SEARCH_INDEX_DATA_PROVIDER
+                .getNonIndexableKeys(mContext).stream()
+                .filter(Objects::nonNull)
+                .toList();
+        final List<String> keys =
+                XmlTestUtils.getKeysFromPreferenceXml(mContext, R.xml.accessibility_hearing_aids);
+
+        assertThat(keys).containsAtLeastElementsIn(niks);
+    }
+
+    @Test
+    public void deviceSupportsHearingAid_isPageSearchEnabled_returnTrue() {
+        SystemProperties.set(ASHA_PROFILE_CENTRAL_PROPERTY, "true");
+
+        assertThat(AccessibilityHearingAidsFragment.isPageSearchEnabled(mContext)).isTrue();
+    }
+
+    @Test
+    public void deviceDoesNotSupportHearingAid_isPageSearchEnabled_returnFalse() {
+        SystemProperties.set(ASHA_PROFILE_CENTRAL_PROPERTY, "false");
+        SystemProperties.set(HAP_PROFILE_CLIENT_PROPERTY, "false");
+
+        assertThat(AccessibilityHearingAidsFragment.isPageSearchEnabled(mContext)).isFalse();
+    }
+}

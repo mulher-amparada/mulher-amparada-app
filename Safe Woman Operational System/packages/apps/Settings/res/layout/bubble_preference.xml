@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2020 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <!-- If bubbles is managed by the admin this is used to inform the user. -->
+    <TextView
+        android:id="@android:id/summary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/bubble_preference_button_padding"
+        android:textAppearance="@style/TextAppearance.Small"
+        android:visibility="gone" />
+
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checkedButton="@+id/redact_sensitive">
+
+        <RadioButton
+            android:id="@+id/bubble_all"
+            style="@style/SudRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="0dp"
+            android:fontFamily="@*android:string/config_headlineFontFamily"
+            android:minHeight="56dp"
+            android:text="@string/bubble_app_setting_all"
+            android:textColor="@color/materialColorOnSurfaceVariant" />
+
+        <RadioButton
+            android:id="@+id/bubble_selected"
+            style="@style/SudRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="0dp"
+            android:fontFamily="@*android:string/config_headlineFontFamily"
+            android:minHeight="56dp"
+            android:text="@string/bubble_app_setting_selected"
+            android:textColor="@color/materialColorOnSurfaceVariant" />
+
+        <RadioButton
+            android:id="@+id/bubble_none"
+            style="@style/SudRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="0dp"
+            android:fontFamily="@*android:string/config_headlineFontFamily"
+            android:minHeight="56dp"
+            android:text="@string/bubble_app_setting_none"
+            android:textColor="@color/materialColorOnSurfaceVariant" />
+    </RadioGroup>
+</LinearLayout>

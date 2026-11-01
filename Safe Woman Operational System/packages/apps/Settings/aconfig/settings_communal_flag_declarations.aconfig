@@ -1,0 +1,12 @@
+package: "com.android.settings.flags"
+container: "system_ext"
+
+flag {
+  name: "resolve_missing_when_to_dream"
+  namespace: "systemui"
+  description: "This flag controls settings app correcting for missing dream option"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+  bug: "419323985"
+}

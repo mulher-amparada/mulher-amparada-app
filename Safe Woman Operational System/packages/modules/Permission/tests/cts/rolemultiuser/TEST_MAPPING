@@ -1,0 +1,17 @@
+{
+    "presubmit": [
+        {
+            "name": "CtsRoleMultiUserTestCases"
+        }
+    ],
+    "mainline-presubmit": [
+        {
+            "name": "CtsRoleMultiUserTestCases[com.google.android.permission.apex]"
+        }
+    ],
+    "permission-mainline-presubmit": [
+        {
+            "name": "CtsRoleMultiUserTestCases"
+        }
+    ]
+}

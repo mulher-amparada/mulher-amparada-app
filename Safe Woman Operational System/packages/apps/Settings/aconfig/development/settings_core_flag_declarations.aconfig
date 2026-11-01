@@ -1,0 +1,16 @@
+package: "com.android.settings.development"
+container: "system_ext"
+
+flag {
+  name: "deprecate_list_activity"
+  namespace: "android_settings"
+  description: "Feature flag for deprecating ListActivity in Settings"
+  bug: "299195099"
+}
+
+flag {
+  name: "enable_print_debug_option"
+  namespace: "printing"
+  description: "Feature flag for developer option that enables printing debug logs"
+  bug: "397418860"
+}

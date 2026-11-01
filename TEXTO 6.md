@@ -293,3 +293,32 @@ A pasta reúne componentes selecionados do Android e os arquivos próprios neces
 🔗 **Diretório do projeto:**
 
 https://github.com/mulher-amparada/mulher-amparada-app/tree/main/Safe%20Woman%20Operational%20System
+
+## Nova etapa: perfil de usuário do Mulher Amparada
+
+Além da integração do aplicativo à imagem do sistema, o projeto agora também contempla a criação de um **perfil de usuário gerenciado do Android chamado “Mulher Amparada”**.
+
+A proposta é disponibilizar o aplicativo principal dentro desse perfil, separado do espaço principal do dispositivo. Para administrar esse ambiente, o projeto inclui o aplicativo auxiliar `MulherAmparadaProfileAdmin`, cujo pacote é `com.mulheres.profileadmin`.
+
+O fluxo previsto nos arquivos atuais é:
+
+1. Após a inicialização do Android, o serviço `safe_woman_managed_profile` chama o script de provisionamento.
+2. O script procura um perfil gerenciado existente com o nome “Mulher Amparada” e, caso não encontre, tenta criar um associado ao usuário principal.
+3. O script tenta disponibilizar os pacotes `com.mulheres.profileadmin` e `com.mulheres` dentro do perfil.
+4. O componente `MulherAmparadaProfileAdminReceiver`, baseado em `DeviceAdminReceiver`, é indicado como administrador do perfil (Profile Owner).
+5. A atividade `ProfileProvisioningActivity` verifica se o aplicativo é o Profile Owner, define o nome do perfil e solicita sua habilitação.
+
+Os principais arquivos dessa implementação são:
+
+- `device/safe_woman/init.safe_woman.rc`
+- `device/safe_woman/provision-mulher-amparada-profile.sh`
+- `packages/apps/MulherAmparadaProfileAdmin/AndroidManifest.xml`
+- `packages/apps/MulherAmparadaProfileAdmin/src/com/mulheres/profileadmin/MulherAmparadaProfileAdminReceiver.java`
+- `packages/apps/MulherAmparadaProfileAdmin/src/com/mulheres/profileadmin/ProfileProvisioningActivity.java`
+- `device/safe_woman/safe_woman.mk`
+
+O perfil gerenciado é uma funcionalidade do próprio Android, não apenas uma tela ou uma conta interna do aplicativo. Ele permite manter um espaço de usuário separado, sujeito às regras de gerenciamento de perfis da plataforma.
+
+**Estado da implementação:** a estrutura de código e o fluxo de provisionamento estão presentes no repositório, mas ainda precisam ser validados em uma imagem compilada e inicializada do Safe Woman OS. A criação do perfil, a instalação dos pacotes e a atribuição do Profile Owner podem depender do estado de provisionamento do dispositivo e das restrições da versão do Android. Portanto, a documentação registra essa funcionalidade como implementação em desenvolvimento, e não como recurso já comprovadamente funcional.
+
+Com isso, o escopo do Safe Woman OS passa a incluir não apenas a integração do Mulher Amparada ao sistema, mas também a proposta de um **perfil de usuário Android dedicado ao Mulher Amparada**, administrado por um componente próprio do projeto.

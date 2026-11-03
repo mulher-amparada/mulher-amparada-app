@@ -1,2 +1,0 @@
-# /proc/<pid>/ns
-genfscon nsfs / u:object_r:nsfs:s0

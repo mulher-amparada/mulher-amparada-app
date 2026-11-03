@@ -1,2 +1,0 @@
-# Broadcastradio HAL
-persist.vendor.broadcastradio.mock.init_delay_ms u:object_r:vendor_broadcastradio_mock_prop:s0 exact int

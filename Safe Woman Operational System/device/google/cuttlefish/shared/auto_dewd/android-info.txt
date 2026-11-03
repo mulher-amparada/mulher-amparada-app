@@ -1,4 +1,0 @@
-config=auto_dewd
-gfxstream=supported
-gfxstream_gl_program_binary_link_status=supported
-lights_server_enabled=false

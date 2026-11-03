@@ -1,5 +1,0 @@
-config=auto_portrait
-gfxstream=supported
-gfxstream_gl_program_binary_link_status=supported
-output_audio_streams_count=6
-lights_server_enabled=false

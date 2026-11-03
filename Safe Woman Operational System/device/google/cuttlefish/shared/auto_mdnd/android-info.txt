@@ -1,2 +1,0 @@
-output_audio_streams_count=6
-lights_server_enabled=false

@@ -1,2 +1,0 @@
-# Cuttlefish is still using the legacy wifi HAL (pre-HIDL)
-get_prop(system_server, wifi_hal_prop)

@@ -1,3 +1,0 @@
-/dev/block/pmem0  u:object_r:rebootescrow_device:s0
-
-/vendor/bin/hw/android\.hardware\.rebootescrow-service\.default  u:object_r:hal_rebootescrow_default_exec:s0

@@ -1,5 +1,0 @@
-/dts-v1/;
-
-// dtc -I dts -O dtb -o dtb.img dtb.dts
-
-/{};

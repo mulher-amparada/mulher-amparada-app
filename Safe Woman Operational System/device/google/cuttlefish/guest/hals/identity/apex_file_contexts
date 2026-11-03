@@ -1,3 +1,0 @@
-(/.*)?                                                      u:object_r:vendor_file:s0
-/etc(/.*)?                                                  u:object_r:vendor_configs_file:s0
-/bin/hw/android\.hardware\.identity-service\.remote         u:object_r:hal_identity_remote_exec:s0

@@ -1,3 +1,0 @@
-service vendor.identity-remote /apex/com.google.cf.identity/bin/hw/android.hardware.identity-service.remote
-    class hal
-    user nobody

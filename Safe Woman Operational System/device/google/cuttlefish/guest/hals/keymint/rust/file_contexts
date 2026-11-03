@@ -1,3 +1,0 @@
-(/.*)?                                                      u:object_r:vendor_file:s0
-/etc(/.*)?                                                  u:object_r:vendor_configs_file:s0
-/bin/hw/android\.hardware\.security\.keymint-service\.rust  u:object_r:hal_keymint_rust_exec:s0

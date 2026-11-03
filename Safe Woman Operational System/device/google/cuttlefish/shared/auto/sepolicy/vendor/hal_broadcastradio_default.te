@@ -1,2 +1,0 @@
-# Allow broadcastradio HAL to read mock properties
-get_prop(hal_broadcastradio_default, vendor_broadcastradio_mock_prop)

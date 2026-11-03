@@ -1,2 +1,0 @@
-per-file AdbQrCode.java=set noparent
-per-file AdbQrCode.java=file:platform/packages/modules/adb:/OWNERS

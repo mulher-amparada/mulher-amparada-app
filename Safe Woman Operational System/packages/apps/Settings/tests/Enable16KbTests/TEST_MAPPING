@@ -1,8 +1,0 @@
-{
-  "postsubmit": [
-    {
-      "name": "Enable16KbTest"
-    }
-  ]
-}
-

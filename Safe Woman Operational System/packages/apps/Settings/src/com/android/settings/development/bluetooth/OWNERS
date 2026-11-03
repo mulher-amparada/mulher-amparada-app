@@ -1,3 +1,0 @@
-include /src/com/android/settings/bluetooth/OWNERS
-include platform/packages/modules/Bluetooth:/OWNERS
-

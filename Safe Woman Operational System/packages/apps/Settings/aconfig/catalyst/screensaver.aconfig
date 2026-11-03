@@ -1,9 +1,0 @@
-package: "com.android.settings.flags"
-container: "system_ext"
-
-flag {
-  name: "catalyst_screensaver"
-  namespace: "systemui"
-  description: "Flag for Screensaver"
-  bug: "337243670"
-}

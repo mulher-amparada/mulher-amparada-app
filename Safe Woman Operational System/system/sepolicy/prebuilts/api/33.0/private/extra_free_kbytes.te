@@ -1,3 +1,0 @@
-typeattribute extra_free_kbytes coredomain;
-
-init_daemon_domain(extra_free_kbytes)

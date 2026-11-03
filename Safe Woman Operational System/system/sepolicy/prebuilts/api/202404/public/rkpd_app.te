@@ -1,6 +1,0 @@
-###
-### A domain for sandboxing the remote key provisioning daemon
-### app that is shipped via mainline.
-###
-
-type rkpdapp, domain;

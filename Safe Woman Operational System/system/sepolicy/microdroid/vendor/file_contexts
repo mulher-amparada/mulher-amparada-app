@@ -1,5 +1,0 @@
-#############################
-# Vendor files
-#
-(/.*)?                  u:object_r:vendor_file:s0
-/etc(/.*)?              u:object_r:vendor_configs_file:s0

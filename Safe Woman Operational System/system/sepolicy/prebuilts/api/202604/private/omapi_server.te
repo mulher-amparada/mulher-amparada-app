@@ -1,2 +1,0 @@
-# An OMAPI server exposes the secure element service.
-add_service(omapi_server, secure_element_service)

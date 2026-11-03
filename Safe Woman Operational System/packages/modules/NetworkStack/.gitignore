@@ -1,7 +1,0 @@
-# Generated build files
-gen/com/android/networkstack/**
-
-# IntelliJ project files
-**/.idea
-**/*.iml
-**/*.ipr

@@ -1,3 +1,0 @@
-set noparent
-# Bug component: 20868
-include platform/cts:/tests/tests/telephony/OWNERS

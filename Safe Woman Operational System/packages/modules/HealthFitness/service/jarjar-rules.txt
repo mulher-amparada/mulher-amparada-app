@@ -1,2 +1,0 @@
-rule com.android.modules.utils.** com.android.server.healthconnect.jarjar.modules.utils.@1
-rule com.google.protobuf.** com.android.server.healthconnect.jarjar.protobuf.@1

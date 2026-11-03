@@ -1,1 +1,0 @@
-rule com.android.modules.utils.** com.android.healthfitness.jarjar.modules.utils.@1

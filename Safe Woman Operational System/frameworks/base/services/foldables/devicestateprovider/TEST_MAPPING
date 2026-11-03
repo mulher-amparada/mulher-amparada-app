@@ -1,7 +1,0 @@
-{
-  "presubmit": [
-    {
-      "name": "foldable-device-state-provider-tests"
-    }
-  ]
-}

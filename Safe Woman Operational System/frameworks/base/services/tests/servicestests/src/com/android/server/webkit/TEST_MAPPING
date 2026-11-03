@@ -1,9 +1,0 @@
-{
-  // Please do not add any configs in this file. All presubmit/postsubmit test
-  // configs belong in the unified TEST_MAPPING file linked below.
-  "imports": [
-    {
-      "path": "frameworks/base/core/java/android/webkit"
-    }
-  ]
-}

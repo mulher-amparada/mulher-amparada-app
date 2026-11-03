@@ -1,3 +1,0 @@
-per-file sensor_service.proto = arthuri@google.com, bduddie@google.com, stange@google.com
-per-file package.proto = file:platform/frameworks/base:/PACKAGE_MANAGER_OWNERS
-per-file adb.proto=file:platform/packages/modules/adb:/OWNERS

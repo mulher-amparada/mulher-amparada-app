@@ -1,4 +1,0 @@
-# Per-test system properties that can be read with SystemProperties
-
-ravenwood.android.app.ContextImpl.isSystemOrSystemUI=0
-ravenwood.com.android.ravenwoodtest.coretest.testvalue=abc

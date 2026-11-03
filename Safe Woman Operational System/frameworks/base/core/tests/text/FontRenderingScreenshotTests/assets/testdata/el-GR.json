@@ -1,8 +1,0 @@
-{
-  "golden_id": "Greek",
-  "locale": "el-Grek-GR",
-  "test_strings": {
-    "alphabet_lowercase": "αβγδεζηθικλμνξοπρστυφχψω",
-    "alphabet_uppercase": "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ"
-  }
-}

@@ -1,4 +1,0 @@
-# Default code reviewers
-avener@google.com
-
-include /services/core/java/com/android/server/wm/OWNERS

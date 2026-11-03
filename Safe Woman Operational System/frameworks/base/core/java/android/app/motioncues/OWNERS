@@ -1,8 +1,0 @@
-# Bug component: 1106357
-
-include platform/frameworks/base:/packages/SystemUI/OWNERS
-
-aarli@google.com
-asalo@google.com
-christinatao@google.com
-ronlinli@google.com

@@ -1,3 +1,0 @@
-include /MEMORY_OWNERS
-
-per-file ZramMaintenanceTest.kt = kawasin@google.com

@@ -1,8 +1,0 @@
-{
-  "presubmit": [
-    {
-      "name": "CtsStatsdAtomHostTestCases_statsdatom_powermanager"
-    }
-  ],
-  "postsubmit": []
-}

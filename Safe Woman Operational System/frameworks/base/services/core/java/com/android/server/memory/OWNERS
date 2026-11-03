@@ -1,3 +1,0 @@
-include /MEMORY_OWNERS
-
-per-file ZramMaintenance.java = kawasin@google.com

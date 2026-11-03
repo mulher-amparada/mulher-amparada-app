@@ -1,2 +1,0 @@
-include platform/system/gatekeeper:/OWNERS
-include /services/core/java/com/android/server/locksettings/OWNERS

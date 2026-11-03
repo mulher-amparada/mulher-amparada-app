@@ -1,7 +1,0 @@
-{
-  "presubmit": [
-    {
-      "name": "CtsPrintTestCases_Presubmit"
-    }
-  ]
-}

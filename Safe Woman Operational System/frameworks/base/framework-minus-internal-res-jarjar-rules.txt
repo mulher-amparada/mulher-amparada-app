@@ -1,2 +1,0 @@
-zap com.android.internal.R
-zap com.android.internal.R$*

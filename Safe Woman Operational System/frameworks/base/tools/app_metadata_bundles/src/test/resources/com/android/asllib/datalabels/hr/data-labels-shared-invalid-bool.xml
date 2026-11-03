@@ -1,5 +1,0 @@
-<data-labels>
-    <data-shared dataType="location_data_type_approx_location"
-        isCollectionOptional="false"
-        purposes="app_functionality" />
-</data-labels>

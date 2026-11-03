@@ -1,7 +1,0 @@
-{
-  "imports": [
-    {
-      "path": "cts/tests/framework/base/windowmanager/src/android/server/wm/keyguard"
-    }
-  ]
-}

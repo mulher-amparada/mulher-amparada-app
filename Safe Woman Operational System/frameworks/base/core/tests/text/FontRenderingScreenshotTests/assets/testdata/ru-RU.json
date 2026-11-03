@@ -1,8 +1,0 @@
-{
-  "golden_id": "Russian",
-  "locale": "ru-Cyrl-RU",
-  "test_strings": {
-    "alphabet_lowercase": "абвгдеёжзийклмнопрстуфхцчшщъыьэюя",
-    "alphabet_uppercase": "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
-  }
-}

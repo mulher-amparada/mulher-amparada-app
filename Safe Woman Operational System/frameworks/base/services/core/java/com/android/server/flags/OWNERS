@@ -1,3 +1,0 @@
-per-file pinner.aconfig = file:/core/java/android/app/pinner/OWNERS
-per-file compaction.aconfig = file:/services/core/java/com/android/server/am/compaction/OWNERS
-per-file services.aconfig = file:/BATTERY_STATS_OWNERS

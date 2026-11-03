@@ -1,175 +1,179 @@
-# 👨🏾‍💻 Safe Woman Operational System:
+# Safe Woman Operational System
 
-O **Safe Woman Operational System (Safe Woman OS)** é um projeto experimental de personalização do Android, baseado no **Android Open Source Project (AOSP)**. Seu objetivo é integrar o aplicativo **Mulher Amparada** à imagem do sistema e explorar uma configuração própria para execução no **Cuttlefish**, ambiente virtual de dispositivos Android.
+O **Safe Woman Operational System (Safe Woman OS)** é um projeto experimental de personalização do Android baseado no **Android Open Source Project (AOSP)**. A proposta é integrar o aplicativo **Mulher Amparada** à imagem do sistema e desenvolver uma configuração de produto própria para execução no **Cuttlefish**.
 
-O projeto não é um sistema operacional desenvolvido do zero. Ele utiliza componentes do AOSP e acrescenta configurações, aplicativos e scripts próprios.
+O projeto não é um sistema operacional escrito do zero. Ele utiliza código e mecanismos do Android, acrescentando arquivos de produto, integração de aplicativos, permissões e provisionamento de perfil gerenciado.
 
-## Estado da estrutura no repositório
+## Auditoria da estrutura atual no GitHub
 
-A pasta `Safe Woman Operational System` não contém uma árvore AOSP completa. Porém, ela também não é mais composta somente pelos arquivos de personalização: atualmente reúne uma seleção de componentes de código-fonte do Android 17, importados de repositórios oficiais do AOSP, além dos arquivos específicos do Safe Woman OS.
+A estrutura foi conferida diretamente na árvore recursiva da pasta `Safe Woman Operational System` da branch `main`.
 
-A automação `.github/workflows/importar-cuttlefish-android17.yml` importa componentes da branch `android17-release` e copia seus arquivos para essa pasta, sem incluir os diretórios Git internos dos clones.
+**Resultado da inspeção:**
+- 970 entradas entre arquivos e diretórios.
+- Somente três diretórios de primeiro nível: `build/`, `device/` e `packages/`.
+- O arquivo AOSP `build/envsetup.sh` está presente.
+- Em `device/`, existe a configuração própria `device/safe_woman/`.
+- Em `packages/apps/`, existem `ManagedProvisioning/`, `MulherAmparada/` e `MulherAmparadaProfileAdmin/`.
 
-Os repositórios/componentes definidos nessa automação são:
+A contagem de 970 entradas inclui os arquivos internos desses projetos; ela **não representa 970 projetos AOSP**.
 
-- `device/google/cuttlefish`
-- `frameworks/base`
-- `packages/apps/ManagedProvisioning`
-- `packages/apps/Settings`
-- `packages/apps/Launcher3`
-- `packages/modules/Permission`
-- `packages/modules/NetworkStack`
-- `packages/modules/HealthFitness`
-- `system/sepolicy`
-- `system/core`
-
-Portanto, a pasta contém uma **seleção de componentes do AOSP**, e não todos os projetos necessários para formar uma árvore Android completa. A presença desses diretórios não significa que todos os componentes e dependências de uma compilação estejam armazenados nela.
-
-## Organização dos componentes próprios
-
-Os arquivos específicos do Safe Woman OS ficam principalmente nestes diretórios:
+### O que está presente
 
 ```text
 Safe Woman Operational System/
+├── build/
+│   └── envsetup.sh
+│
 ├── device/
-│   ├── google/
-│   │   └── cuttlefish/
-│   │       └── componentes importados do Cuttlefish
 │   └── safe_woman/
 │       ├── AndroidProducts.mk
 │       ├── BoardConfig.mk
 │       ├── safe_woman.mk
 │       ├── init.safe_woman.rc
-│       ├── provision-mulher-amparada-profile.sh
-│       └── privapp-permissions-mulher-amparada.xml
+│       ├── privapp-permissions-mulher-amparada.xml
+│       └── provision-mulher-amparada-profile.sh
 │
-├── frameworks/
-│   └── base/
-│       └── componentes importados do Android Framework
-│
-├── packages/
-│   ├── apps/
-│   │   ├── Launcher3/
-│   │   ├── ManagedProvisioning/
-│   │   ├── Settings/
-│   │   ├── MulherAmparada/
-│   │   │   ├── Android.bp
-│   │   │   └── app/
-│   │   │       └── src/main/
-│   │   └── MulherAmparadaProfileAdmin/
-│   │       ├── Android.bp
-│   │       ├── AndroidManifest.xml
-│   │       ├── res/
-│   │       └── src/
-│   └── modules/
-│       ├── HealthFitness/
-│       ├── NetworkStack/
-│       └── Permission/
-│
-├── system/
-│   ├── core/
-│   └── sepolicy/
-│
-└── preparar-cuttlefish-android17.sh
+└── packages/
+    └── apps/
+        ├── ManagedProvisioning/
+        │   └── código-fonte do componente Android
+        ├── MulherAmparada/
+        │   ├── Android.bp
+        │   └── app/
+        │       └── projeto Android do aplicativo
+        └── MulherAmparadaProfileAdmin/
+            ├── Android.bp
+            ├── AndroidManifest.xml
+            ├── res/
+            └── src/
 ```
 
-A organização acima apresenta os principais componentes identificados e não pretende enumerar todos os arquivos internos dos projetos importados.
+A representação acima resume os diretórios e arquivos relevantes, sem enumerar todos os arquivos internos.
 
-## Configuração do produto Safe Woman OS
+### O que não está presente nessa pasta
 
-O diretório `device/safe_woman` contém a configuração própria do produto.
+Na árvore atual inspecionada, não foram encontrados diretórios de primeiro nível para:
+- `frameworks/`
+- `system/`
+- `vendor/`
+- `kernel/` ou `common/`
+- `hardware/`
+- `external/`
+- `prebuilts/`
+- `bootable/`
+- `bionic/`
+- `art/`
+- `libcore/`
+- `dalvik/`
+- `cts/`
+
+Também não foi encontrada, dentro dessa pasta, a árvore `device/google/cuttlefish/` que o produto referencia.
+
+Isso significa que o conteúdo atual é uma **estrutura parcial de integração e personalização**, não uma árvore AOSP completa. O componente `ManagedProvisioning` é código-fonte do Android, mas sua presença isolada não substitui os demais projetos e dependências da plataforma.
+
+## Configuração própria do produto
+
+O diretório `device/safe_woman/` contém os arquivos centrais da configuração personalizada.
 
 ### AndroidProducts.mk
 
-Registra o arquivo de produto e disponibiliza a opção de compilação:
+Registra `safe_woman.mk` e declara a opção:
 
 ```text
 safe_woman-userdebug
 ```
 
+A declaração disponibiliza o nome do produto para o sistema de build quando a árvore e suas dependências estão corretamente integradas. Ela não comprova que o alvo já possa ser compilado na pasta atual.
+
 ### BoardConfig.mk
 
-Define a arquitetura de destino:
-
+Define:
 - `TARGET_ARCH := x86_64`
 - `TARGET_ARCH_VARIANT := x86-64`
 - `TARGET_USES_64_BIT_BINDER := true`
 
+Portanto, a configuração atual está direcionada a uma plataforma x86_64, coerente com a intenção de testar um dispositivo virtual Cuttlefish. Ela não é, por si só, uma configuração de hardware para o Galaxy A16 5G.
+
 ### safe_woman.mk
 
 Define a identidade do produto:
-
-- Nome: `Safe Woman Operational System`
 - Produto: `safe_woman`
 - Dispositivo: `safe_woman`
 - Marca: `SafeWoman`
+- Modelo: `Safe Woman Operational System`
 - Fabricante: `SafeWoman`
 
-O arquivo herda a configuração de telefone virtual x86_64 do Cuttlefish:
+O arquivo tenta herdar:
 
 ```text
 device/google/cuttlefish/vsoc_x86_64/phone/aosp_cf.mk
 ```
 
-Também declara os módulos `MulherAmparada` e `MulherAmparadaProfileAdmin` em `PRODUCT_PACKAGES` e copia arquivos de configuração e provisionamento para as partições correspondentes.
+Esse caminho não está presente na árvore atual da pasta. Portanto, a herança só poderá ser resolvida quando o projeto Cuttlefish correspondente for incorporado a uma árvore AOSP compatível.
 
-## Integração do aplicativo Mulher Amparada
+O produto também declara os módulos `MulherAmparada` e `MulherAmparadaProfileAdmin` em `PRODUCT_PACKAGES` e copia os arquivos de permissões e provisionamento para as partições `product` e `vendor`.
 
-O aplicativo é mantido em:
+## Aplicativo Mulher Amparada integrado
 
-```text
-packages/apps/MulherAmparada
-```
-
-Seu identificador de pacote é:
+O aplicativo está em:
 
 ```text
-com.mulheres
+packages/apps/MulherAmparada/
 ```
 
-O arquivo `Android.bp` declara o módulo Soong:
+O módulo Soong declarado em `Android.bp` chama-se:
 
 ```text
 MulherAmparada
 ```
 
-A configuração define `privileged: true`, para que o aplicativo seja incluído como aplicativo privilegiado na imagem do sistema, conforme a configuração de build.
+O arquivo declara fontes Kotlin e Java, recursos em `app/src/main/res`, `sdk_version: "current"`, alvo JVM 17 e `privileged: true`.
 
-Isso, por si só, **não concede automaticamente todas as permissões**. As permissões de runtime continuam sujeitas às regras do Android, e permissões privilegiadas dependem de compatibilidade, allowlist e demais requisitos da plataforma.
+A configuração `privileged: true` solicita que o módulo seja instalado como aplicativo privilegiado na imagem. Isso não concede automaticamente qualquer permissão solicitada pelo aplicativo. Permissões privilegiadas precisam ser compatíveis com a plataforma e atender às regras de allowlist; permissões de runtime continuam sujeitas ao modelo normal de concessão do Android.
 
-O código-fonte do aplicativo é sincronizado para essa pasta pela automação `.github/workflows/sincronizar-app.yml`, que utiliza como origem o diretório:
+O pacote do aplicativo principal é `com.mulheres`.
 
-```text
-Código-fonte do app = Mulher Amparada
-```
+## Aplicativo auxiliar de administração do perfil
 
-e como destino:
+O projeto contém também:
 
 ```text
-Safe Woman Operational System/packages/apps/MulherAmparada
+packages/apps/MulherAmparadaProfileAdmin/
 ```
 
-## Aplicativo auxiliar de perfil gerenciado
+O módulo Soong é `MulherAmparadaProfileAdmin`, com pacote declarado como `com.mulheres.profileadmin`.
 
-O projeto também contém o módulo:
+Seus arquivos incluem:
+- `Android.bp`
+- `AndroidManifest.xml`
+- `res/xml/device_admin.xml`
+- `MulherAmparadaProfileAdminReceiver.java`
+- `ProfileProvisioningActivity.java`
+
+O receiver usa o mecanismo `DeviceAdminReceiver`, e a atividade auxilia no provisionamento. O objetivo é administrar um perfil gerenciado Android dedicado ao Mulher Amparada.
+
+A presença do módulo e de seu manifesto comprova que existe uma implementação de suporte no repositório; não comprova que o perfil já tenha sido criado com sucesso em um dispositivo.
+
+## Provisionamento do perfil gerenciado
+
+O arquivo:
 
 ```text
-MulherAmparadaProfileAdmin
+device/safe_woman/provision-mulher-amparada-profile.sh
 ```
 
-Ele possui um receiver baseado em `DeviceAdminReceiver` e uma atividade de provisionamento. O objetivo é dar suporte à configuração de um perfil gerenciado chamado **Mulher Amparada**.
+implementa um fluxo experimental que:
+1. Procura um usuário chamado `Mulher Amparada`.
+2. Se não encontrar, tenta criar um perfil gerenciado associado ao usuário principal.
+3. Tenta iniciar o perfil.
+4. Tenta disponibilizar nele os pacotes `com.mulheres.profileadmin` e `com.mulheres`.
+5. Verifica se o administrador já aparece como Profile Owner.
+6. Caso ainda não apareça, tenta executar `dpm set-profile-owner`.
+7. Quando define o Profile Owner nessa execução, tenta abrir a atividade de provisionamento.
 
-Os arquivos relacionados incluem:
+O arquivo `init.safe_woman.rc` declara o serviço `safe_woman_managed_profile`, acionado após `sys.boot_completed=1`. O serviço executa o script de provisionamento como root e está marcado como `oneshot`.
 
-- `packages/apps/MulherAmparadaProfileAdmin/Android.bp`
-- `packages/apps/MulherAmparadaProfileAdmin/AndroidManifest.xml`
-- `packages/apps/MulherAmparadaProfileAdmin/src/`
-- `device/safe_woman/init.safe_woman.rc`
-- `device/safe_woman/provision-mulher-amparada-profile.sh`
-
-O serviço definido no arquivo init é iniciado após a inicialização do Android e executa o script de provisionamento. O script procura ou tenta criar o perfil, disponibiliza os aplicativos e tenta configurar o administrador do perfil.
-
-Esse fluxo é experimental: a criação do perfil e a definição de Profile Owner dependem das condições e restrições do Android durante o provisionamento. A existência dos arquivos não comprova que o procedimento já funcione em todas as inicializações ou configurações.
+**Ponto de atenção técnico:** o script contém chamadas que ignoram falhas, por exemplo nas tentativas de iniciar o perfil e disponibilizar os aplicativos. Além disso, o comando de criação do perfil e a atribuição de Profile Owner estão sujeitos às restrições do Android e ao estado de provisionamento do dispositivo. O log final do script, isoladamente, não é prova suficiente de que todas as etapas foram concluídas. É necessário verificar os usuários, os pacotes instalados no perfil e o estado do Device Policy Manager após a inicialização.
 
 ## Allowlist de permissões privilegiadas
 
@@ -179,146 +183,81 @@ O arquivo:
 device/safe_woman/privapp-permissions-mulher-amparada.xml
 ```
 
-declara permissões associadas ao pacote `com.mulheres`.
+declara permissões para o pacote `com.mulheres`, incluindo localização, contatos, chamadas, microfone, serviços em primeiro plano, bloqueio de suspensão e acesso a armazenamento.
 
-A allowlist não transforma permissões comuns de runtime — como localização, contatos e microfone — em permissões automaticamente concedidas. Somente permissões compatíveis com o mecanismo de permissões privilegiadas devem ser mantidas nessa configuração, respeitando também as regras da versão do Android utilizada.
+**A configuração precisa de revisão antes de uma compilação de produção.** A allowlist de permissões privilegiadas não é um mecanismo para conceder permissões comuns de runtime. Algumas permissões listadas, como localização, contatos, microfone e chamadas, normalmente dependem de concessão em runtime ou de outros mecanismos específicos. Permissões obsoletas ou restritas por versão também precisam ser avaliadas. A lista deve conter somente permissões realmente classificadas como privilegiadas e permitidas para o pacote na versão de Android escolhida.
 
-## Importação dos componentes Android 17
+## Estado de completude da árvore
 
-A automação:
+| Área | Estado verificado na pasta |
+|---|---|
+| Configuração do produto `safe_woman` | Presente |
+| Configuração x86_64 | Presente |
+| `build/envsetup.sh` | Presente |
+| Aplicativo Mulher Amparada | Presente |
+| Módulo auxiliar Profile Admin | Presente |
+| Código-fonte ManagedProvisioning | Presente |
+| Projeto Cuttlefish referenciado | Não encontrado nessa pasta |
+| Android Framework (`frameworks/base`) | Não encontrado |
+| System (`system/core`, `system/sepolicy`) | Não encontrado |
+| Vendor | Não encontrado |
+| Kernel | Não encontrado |
+| Hardware e HALs | Não encontrados |
+| Prebuilts e demais dependências de build | Não encontrados como árvore própria |
+| Imagem Safe Woman OS compilada e testada | Não comprovada pela inspeção do repositório |
 
-```text
-.github/workflows/importar-cuttlefish-android17.yml
-```
+A ausência desses diretórios nesta pasta não significa que não existam em outro local ou em outro ambiente de trabalho. Significa apenas que eles não fazem parte da árvore atualmente armazenada nesse caminho do repositório.
 
-é executada manualmente por `workflow_dispatch`.
+## O que falta para compilar o produto
 
-Ela:
+Para transformar essa estrutura em um produto Android compilável, ainda é necessário:
 
-1. Baixa o repositório do projeto.
-2. Clona os dez componentes definidos na automação, na branch `android17-release`.
-3. Copia os arquivos para `Safe Woman Operational System`, excluindo os metadados `.git` dos clones.
-4. Configura Git LFS para arquivos acima de 90 MB.
-5. Registra as alterações e envia os componentes para a branch `main`.
+1. Sincronizar uma árvore AOSP completa e compatível, usando um manifesto e uma branch consistentes.
+2. Incorporar a configuração `device/safe_woman` à árvore sincronizada.
+3. Disponibilizar o projeto Cuttlefish exigido pelo `safe_woman.mk` e resolver suas dependências.
+4. Confirmar que os módulos dos dois aplicativos são aceitos pelo Soong e corrigir dependências, APIs e recursos incompatíveis.
+5. Revisar a allowlist de permissões privilegiadas.
+6. Validar os arquivos init e o script de provisionamento no ambiente de destino.
+7. Executar `lunch safe_woman-userdebug` na árvore integrada.
+8. Compilar com `m` e corrigir os erros encontrados.
+9. Inicializar a imagem no Cuttlefish e testar separadamente o aplicativo, o perfil gerenciado, o Profile Owner e as permissões.
 
-Essa automação importa os componentes selecionados. Ela não sincroniza, por si só, todos os repositórios do manifesto AOSP.
+A existência de `AndroidProducts.mk` e `safe_woman.mk` não significa que o produto já compile. Da mesma forma, compilar um produto AOSP Cuttlefish genérico não equivale a compilar o Safe Woman OS.
 
-## Preparação de uma árvore AOSP completa
-
-O script:
-
-```text
-preparar-cuttlefish-android17.sh
-```
-
-tem uma função diferente da automação de importação de componentes.
-
-Ele prepara um diretório de trabalho separado, inicializa o cliente Repo com o manifesto oficial do AOSP na branch `android17-release` e executa `repo sync`.
-
-O script também verifica requisitos mínimos definidos nele próprio:
-
-- Linux de 64 bits.
-- Arquitetura de host x86_64.
-- Pelo menos 400 GB de espaço livre.
-- Pelo menos 64 GB de RAM.
-- Disponibilidade de Git, cURL e Python 3.
-
-Caso o comando `repo` não esteja instalado, o script tenta baixá-lo para `$HOME/bin`.
-
-**Limitação importante da configuração atual:** depois da sincronização, o script executa:
-
-```text
-lunch aosp_cf_x86_64_only_phone-aosp_current-userdebug
-m
-```
-
-Esse alvo é o produto AOSP Cuttlefish genérico. O script, na versão atualmente armazenada, ainda não aplica automaticamente os arquivos próprios do Safe Woman OS à árvore sincronizada nem seleciona `safe_woman-userdebug`.
-
-Assim, ele prepara e compila uma base AOSP/Cuttlefish, mas essa execução isolada não deve ser apresentada como uma compilação do Safe Woman OS.
-
-## Como as partes se relacionam
+## Relação entre os componentes
 
 A arquitetura pretendida é:
 
 ```text
-Árvore AOSP completa (Android 17)
-             +
-Componentes do Cuttlefish
-             +
-Configuração device/safe_woman
-             +
-Aplicativo Mulher Amparada
-             +
-Aplicativo auxiliar de perfil gerenciado
-             ↓
-       safe_woman-userdebug
-             ↓
-       Imagem personalizada
-             ↓
+Árvore AOSP completa e compatível
+              +
+      Projeto Cuttlefish
+              +
+     device/safe_woman
+              +
+      Mulher Amparada
+              +
+    MulherAmparadaProfileAdmin
+              ↓
+      safe_woman-userdebug
+              ↓
+      Imagem personalizada
+              ↓
           Cuttlefish
+              ↓
+      Testes de inicialização,
+      aplicativo e perfil gerenciado
 ```
 
-Essa é a arquitetura planejada para a integração. A compilação bem-sucedida do produto personalizado e sua execução precisam ser verificadas separadamente.
+Esse fluxo descreve a arquitetura planejada, não um resultado de compilação já confirmado.
 
-## Estado atual e limitações
+## Conclusão: estado atual do Safe Woman OS
 
-O Safe Woman OS possui:
+O Safe Woman OS já possui uma base própria de personalização Android: configuração de produto x86_64, declaração de módulos Soong para o aplicativo principal e o administrador do perfil, integração do código-fonte de ManagedProvisioning, allowlist de permissões e um fluxo experimental de provisionamento de perfil gerenciado.
 
-- Uma configuração própria de produto Android.
-- Uma configuração de arquitetura x86_64.
-- Componentes selecionados do AOSP Android 17.
-- Componentes do Cuttlefish.
-- Integração declarada do aplicativo Mulher Amparada pelo Soong.
-- Um módulo auxiliar para administração de perfil gerenciado.
-- Arquivos de provisionamento e configuração de permissões.
-- Uma automação para importar componentes.
-- Um script separado para sincronizar e compilar uma base AOSP/Cuttlefish.
+Entretanto, a inspeção da pasta no GitHub mostra que ela **não contém uma árvore AOSP completa**. Atualmente, seus diretórios de primeiro nível são apenas `build/`, `device/` e `packages/`. Não foram encontrados nela o Framework, System, Vendor, Kernel, Hardware, Prebuilts nem o projeto Cuttlefish referenciado pela configuração.
 
-Ainda é necessário validar a integração de todos esses elementos em uma árvore AOSP completa, incluindo dependências do aplicativo, regras de permissões, configuração do produto e compilação do alvo `safe_woman-userdebug`.
+Assim, a classificação correta é: **projeto de sistema Android personalizado em desenvolvimento, com estrutura parcial de produto e integração de aplicativos**. Ainda não há comprovação, apenas pela árvore do repositório, de compilação bem-sucedida, imagem inicializável ou funcionamento do perfil gerenciado.
 
-A presença dos arquivos no GitHub não equivale, por si só, a uma imagem final compilada, inicializada e testada.
-
-## Objetivo futuro
-
-O objetivo é consolidar os componentes próprios do Safe Woman OS sobre uma árvore AOSP Android 17 completa, resolver as dependências de build, compilar o produto personalizado e validar sua execução no Cuttlefish.
-
-O resultado esperado é uma imagem Android personalizada que integre o Mulher Amparada ao sistema.
-
-## Natureza do projeto
-
-O Safe Woman Operational System é um projeto experimental de personalização e integração sobre o AOSP. Ele não é um sistema operacional criado do zero e não contém, nesta pasta, uma árvore AOSP completa.
-
-A pasta reúne componentes selecionados do Android e os arquivos próprios necessários para desenvolver e testar a personalização.
-
-🔗 **Diretório do projeto:**
-
+🔗 **Diretório do projeto:**  
 https://github.com/mulher-amparada/mulher-amparada-app/tree/main/Safe%20Woman%20Operational%20System
-
-## Nova etapa: perfil de usuário do Mulher Amparada
-
-Além da integração do aplicativo à imagem do sistema, o projeto agora também contempla a criação de um **perfil de usuário gerenciado do Android chamado “Mulher Amparada”**.
-
-A proposta é disponibilizar o aplicativo principal dentro desse perfil, separado do espaço principal do dispositivo. Para administrar esse ambiente, o projeto inclui o aplicativo auxiliar `MulherAmparadaProfileAdmin`, cujo pacote é `com.mulheres.profileadmin`.
-
-O fluxo previsto nos arquivos atuais é:
-
-1. Após a inicialização do Android, o serviço `safe_woman_managed_profile` chama o script de provisionamento.
-2. O script procura um perfil gerenciado existente com o nome “Mulher Amparada” e, caso não encontre, tenta criar um associado ao usuário principal.
-3. O script tenta disponibilizar os pacotes `com.mulheres.profileadmin` e `com.mulheres` dentro do perfil.
-4. O componente `MulherAmparadaProfileAdminReceiver`, baseado em `DeviceAdminReceiver`, é indicado como administrador do perfil (Profile Owner).
-5. A atividade `ProfileProvisioningActivity` verifica se o aplicativo é o Profile Owner, define o nome do perfil e solicita sua habilitação.
-
-Os principais arquivos dessa implementação são:
-
-- `device/safe_woman/init.safe_woman.rc`
-- `device/safe_woman/provision-mulher-amparada-profile.sh`
-- `packages/apps/MulherAmparadaProfileAdmin/AndroidManifest.xml`
-- `packages/apps/MulherAmparadaProfileAdmin/src/com/mulheres/profileadmin/MulherAmparadaProfileAdminReceiver.java`
-- `packages/apps/MulherAmparadaProfileAdmin/src/com/mulheres/profileadmin/ProfileProvisioningActivity.java`
-- `device/safe_woman/safe_woman.mk`
-
-O perfil gerenciado é uma funcionalidade do próprio Android, não apenas uma tela ou uma conta interna do aplicativo. Ele permite manter um espaço de usuário separado, sujeito às regras de gerenciamento de perfis da plataforma.
-
-**Estado da implementação:** a estrutura de código e o fluxo de provisionamento estão presentes no repositório, mas ainda precisam ser validados em uma imagem compilada e inicializada do Safe Woman OS. A criação do perfil, a instalação dos pacotes e a atribuição do Profile Owner podem depender do estado de provisionamento do dispositivo e das restrições da versão do Android. Portanto, a documentação registra essa funcionalidade como implementação em desenvolvimento, e não como recurso já comprovadamente funcional.
-
-Com isso, o escopo do Safe Woman OS passa a incluir não apenas a integração do Mulher Amparada ao sistema, mas também a proposta de um **perfil de usuário Android dedicado ao Mulher Amparada**, administrado por um componente próprio do projeto.

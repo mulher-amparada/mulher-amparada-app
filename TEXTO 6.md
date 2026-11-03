@@ -1,5 +1,7 @@
 # 👨🏾‍💻Safe Woman Operational System:
 
+> A versão do os é pro android 17, aqui nao tem vendor e kernel porque precisaria saber qual é o modelo do celular alvo, e não tem as outras pastas como o external porque o os é só um privapp com um perfil isolado!, e inclusive, já temho toda a árvore aosp baixada, ela nao esta pública porque o github não tem armazenamento suficiente, mas o básico do os e o que modifiquei do aosp está sim público!
+
 O **Safe Woman Operational System (Safe Woman OS)** é um projeto experimental de personalização do Android baseado no **Android Open Source Project (AOSP)**. A proposta é integrar o aplicativo **Mulher Amparada** à imagem do sistema e desenvolver uma configuração de produto própria para execução no **Cuttlefish**.
 
 O projeto não é um sistema operacional escrito do zero. Ele utiliza código e mecanismos do Android, acrescentando arquivos de produto, integração de aplicativos, permissões e provisionamento de perfil gerenciado.

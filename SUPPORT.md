@@ -8,7 +8,7 @@ Central de links oficiais, divulgação e referências públicas do projeto Mulh
 
 > E autoridades, tenho um pedido: Tirem esses vendedores de são miguel, eles estao ocupando ilegalmente lugares de pontos de onibus, e eu espero que os responsáveis por esses crimes covardes sejam punidos!
 
-[https://coderlegion.com/33673/dois-prejuizos-muita-frustracao-e-nenhuma-solucao](https://coderlegion.com/33673/dois-prejuizos-muita-frustracao-e-nenhuma-solucao?utm_source=chatgpt.com)
+- [https://coderlegion.com/33673/dois-prejuizos-muita-frustracao-e-nenhuma-solucao](https://coderlegion.com/33673/dois-prejuizos-muita-frustracao-e-nenhuma-solucao?utm_source=chatgpt.com)
 
 ### 📱 Redes sociais:
 

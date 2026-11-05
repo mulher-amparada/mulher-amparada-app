@@ -3,10 +3,10 @@
   "branch": "main",
   "fonte_classificacao": "GitHub Linguist",
   "fonte_lista_linguagens": "https://github.com/github-linguist/linguist",
-  "gerado_em_utc": "2026-11-05T19:34:05Z",
+  "gerado_em_utc": "2026-11-05T19:43:17Z",
   "total_linguagens": 14,
   "total_arquivos_classificados": 433,
-  "total_bytes_classificados": 4156541,
+  "total_bytes_classificados": 4156547,
   "linguagens": [
     {
       "nome": "AIDL",
@@ -404,7 +404,7 @@
     },
     {
       "nome": "Kotlin",
-      "tamanho_bytes": 1536972,
+      "tamanho_bytes": 1536978,
       "percentual": "36.98",
       "arquivos": [
         "Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt",

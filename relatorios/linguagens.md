@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-11-05T19:16:00Z
+- **Gerado em UTC:** 2026-11-05T19:24:26Z
 - **Linguagens identificadas:** 14
 - **Arquivos classificados:** 433
-- **Tamanho classificado:** 4154706 bytes
+- **Tamanho classificado:** 4156535 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -16,11 +16,11 @@
 
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
-| Java | 309 | 2144910 | 51.63% |
-| Kotlin | 75 | 1536972 | 36.99% |
-| CSS | 18 | 237514 | 5.72% |
+| Java | 309 | 2144910 | 51.60% |
+| Kotlin | 75 | 1536966 | 36.98% |
+| CSS | 18 | 237514 | 5.71% |
 | Shell | 6 | 94995 | 2.29% |
-| HTML | 11 | 64333 | 1.55% |
+| HTML | 11 | 66168 | 1.59% |
 | JavaScript | 4 | 33816 | 0.81% |
 | C | 1 | 18374 | 0.44% |
 | PHP | 1 | 9342 | 0.22% |
@@ -53,7 +53,7 @@
 
 - **Arquivos:** 18
 - **Tamanho:** 237514 bytes
-- **Percentual:** 5.72%
+- **Percentual:** 5.71%
 
 - `app1-day.css`
 - `app1-night.css`
@@ -77,8 +77,8 @@
 ### HTML
 
 - **Arquivos:** 11
-- **Tamanho:** 64333 bytes
-- **Percentual:** 1.55%
+- **Tamanho:** 66168 bytes
+- **Percentual:** 1.59%
 
 - `app1.html`
 - `divulgacao/html/banner.html`
@@ -96,7 +96,7 @@
 
 - **Arquivos:** 309
 - **Tamanho:** 2144910 bytes
-- **Percentual:** 51.63%
+- **Percentual:** 51.60%
 
 - `Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/BootReminder.java`
 - `Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/ManagedProvisioningApplication.java`
@@ -430,8 +430,8 @@
 ### Kotlin
 
 - **Arquivos:** 75
-- **Tamanho:** 1536972 bytes
-- **Percentual:** 36.99%
+- **Tamanho:** 1536966 bytes
+- **Percentual:** 36.98%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt`

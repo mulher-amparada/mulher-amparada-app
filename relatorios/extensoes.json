@@ -1,30 +1,30 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-06T15:52:50Z",
-  "total_arquivos": 1270,
-  "total_bytes": 102214600,
+  "gerado_em_utc": "2026-11-06T15:35:05Z",
+  "total_arquivos": 1269,
+  "total_bytes": 102214323,
   "total_extensoes": 41,
   "extensoes": [
     {
       "extensao": ".xml",
       "quantidade_arquivos": 400,
       "tamanho_bytes": 3653583,
-      "percentual_arquivos": 31.5,
+      "percentual_arquivos": 31.52,
       "percentual_bytes": 3.57
     },
     {
       "extensao": ".java",
       "quantidade_arquivos": 309,
       "tamanho_bytes": 2144910,
-      "percentual_arquivos": 24.33,
+      "percentual_arquivos": 24.35,
       "percentual_bytes": 2.1
     },
     {
       "extensao": ".md",
-      "quantidade_arquivos": 246,
-      "tamanho_bytes": 502558,
-      "percentual_arquivos": 19.37,
+      "quantidade_arquivos": 245,
+      "tamanho_bytes": 501918,
+      "percentual_arquivos": 19.31,
       "percentual_bytes": 0.49
     },
     {
@@ -37,21 +37,21 @@
     {
       "extensao": ".kt",
       "quantidade_arquivos": 75,
-      "tamanho_bytes": 1536978,
+      "tamanho_bytes": 1536972,
       "percentual_arquivos": 5.91,
       "percentual_bytes": 1.5
     },
     {
       "extensao": ".css",
       "quantidade_arquivos": 18,
-      "tamanho_bytes": 237144,
+      "tamanho_bytes": 237514,
       "percentual_arquivos": 1.42,
       "percentual_bytes": 0.23
     },
     {
       "extensao": ".json",
       "quantidade_arquivos": 18,
-      "tamanho_bytes": 1396668,
+      "tamanho_bytes": 1396667,
       "percentual_arquivos": 1.42,
       "percentual_bytes": 1.37
     },
@@ -115,7 +115,7 @@
       "extensao": ".js",
       "quantidade_arquivos": 4,
       "tamanho_bytes": 33816,
-      "percentual_arquivos": 0.31,
+      "percentual_arquivos": 0.32,
       "percentual_bytes": 0.03
     },
     {
@@ -144,7 +144,7 @@
       "quantidade_arquivos": 2,
       "tamanho_bytes": 14570670,
       "percentual_arquivos": 0.16,
-      "percentual_bytes": 14.25
+      "percentual_bytes": 14.26
     },
     {
       "extensao": ".bat",

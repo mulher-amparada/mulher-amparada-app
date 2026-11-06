@@ -3146,7 +3146,7 @@ if (
                 .fillMaxSize()
                 .background(
                     if (isSystemInDarkTheme())
-                        Color(0xFF000000)   // scrim escuro
+                        Color.BLACK   // scrim escuro
                     else
                         Color(0xFFFFFFFF)   // scrim claro
                 )

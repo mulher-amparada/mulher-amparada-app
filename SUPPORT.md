@@ -132,3 +132,7 @@ Essa página exibe anúncios e não representa o projeto. O Mulher Amparada cont
 Não temos controle sobre o conteúdo ou os anúncios exibidos nessa página. Para informações oficiais, consulte apenas o repositório oficial e o site do projeto.
 
 Página não oficial: https://www.deepnlp.org/store/developer-tools/github/pub-mulher-amparada/mulher-amparada
+
+## 📄 Relatos públicos:
+
+- [Dois prejuízos, muita frustração e nenhuma solução](https://github.com/mulher-amparada/mulher-amparada-app/blob/main/TIME.md)

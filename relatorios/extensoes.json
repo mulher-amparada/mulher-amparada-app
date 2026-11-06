@@ -1,44 +1,44 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-05T19:24:26Z",
-  "total_arquivos": 1266,
-  "total_bytes": 102210862,
+  "gerado_em_utc": "2026-11-06T15:35:05Z",
+  "total_arquivos": 1269,
+  "total_bytes": 102214323,
   "total_extensoes": 41,
   "extensoes": [
     {
       "extensao": ".xml",
       "quantidade_arquivos": 400,
       "tamanho_bytes": 3653583,
-      "percentual_arquivos": 31.6,
+      "percentual_arquivos": 31.52,
       "percentual_bytes": 3.57
     },
     {
       "extensao": ".java",
       "quantidade_arquivos": 309,
       "tamanho_bytes": 2144910,
-      "percentual_arquivos": 24.41,
+      "percentual_arquivos": 24.35,
       "percentual_bytes": 2.1
     },
     {
       "extensao": ".md",
-      "quantidade_arquivos": 242,
-      "tamanho_bytes": 498463,
-      "percentual_arquivos": 19.12,
+      "quantidade_arquivos": 245,
+      "tamanho_bytes": 501918,
+      "percentual_arquivos": 19.31,
       "percentual_bytes": 0.49
     },
     {
       "extensao": ".png",
       "quantidade_arquivos": 105,
       "tamanho_bytes": 76848499,
-      "percentual_arquivos": 8.29,
-      "percentual_bytes": 75.19
+      "percentual_arquivos": 8.27,
+      "percentual_bytes": 75.18
     },
     {
       "extensao": ".kt",
       "quantidade_arquivos": 75,
-      "tamanho_bytes": 1536966,
-      "percentual_arquivos": 5.92,
+      "tamanho_bytes": 1536972,
+      "percentual_arquivos": 5.91,
       "percentual_bytes": 1.5
     },
     {

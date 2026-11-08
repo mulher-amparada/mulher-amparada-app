@@ -2,6 +2,7 @@ package com.mulheres
 
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
+import androidx.fragment.app.Fragment
 import androidx.core.content.ContextCompat
 import androidx.compose.foundation.clickable
 import android.content.Intent
@@ -14,7 +15,7 @@ import android.graphics.Color as AndroidColor
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.ComponentActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
@@ -89,7 +90,7 @@ private val EsquemaEscuro = darkColorScheme(
     secondary = Color(0xFFB8B1C7)
 )
 
-class WelcomeActivity : ComponentActivity() {
+class WelcomeActivity : FragmentActivity() {
 
     private fun entrarNaHub() {
         startActivity(Intent(this, HubActivity::class.java))
@@ -102,9 +103,17 @@ class WelcomeActivity : ComponentActivity() {
 
         when (manager.canAuthenticate(autenticadores)) {
             BiometricManager.BIOMETRIC_SUCCESS -> {
+                val tag = "welcome_biometric_fragment"
+                val fragment = supportFragmentManager.findFragmentByTag(tag)
+                    ?: Fragment().also {
+                        supportFragmentManager.beginTransaction()
+                            .add(it, tag)
+                            .commitNow()
+                    }
+
                 val executor = ContextCompat.getMainExecutor(this)
                 val prompt = BiometricPrompt(
-                    this,
+                    fragment,
                     executor,
                     object : BiometricPrompt.AuthenticationCallback() {
                         override fun onAuthenticationSucceeded(
@@ -151,7 +160,6 @@ class WelcomeActivity : ComponentActivity() {
             }
         }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -211,8 +219,6 @@ window.setFlags(
         )
     }
 }
-            }
-        }
     }
 }
 

@@ -97,69 +97,68 @@ class WelcomeActivity : FragmentActivity() {
         finish()
     }
 
-    private fun autenticar() {
-        val autenticadores = BiometricManager.Authenticators.DEVICE_CREDENTIAL
-        val manager = BiometricManager.from(this)
+        private fun autenticar() {
+    val executor = ContextCompat.getMainExecutor(this)
 
-        when (manager.canAuthenticate(autenticadores)) {
-            BiometricManager.BIOMETRIC_SUCCESS -> {
-                val tag = "welcome_biometric_fragment"
-                val fragment = supportFragmentManager.findFragmentByTag(tag)
-                    ?: Fragment().also {
-                        supportFragmentManager.beginTransaction()
-                            .add(it, tag)
-                            .commitNow()
-                    }
+    val autenticadores =
+    BiometricManager.Authenticators.DEVICE_CREDENTIAL
 
-                val executor = ContextCompat.getMainExecutor(this)
-                val prompt = BiometricPrompt(
-                    fragment,
-                    executor,
-                    object : BiometricPrompt.AuthenticationCallback() {
-                        override fun onAuthenticationSucceeded(
-                            result: BiometricPrompt.AuthenticationResult
-                        ) {
-                            super.onAuthenticationSucceeded(result)
-                            entrarNaHub()
-                        }
-                    }
-                )
+    val manager = BiometricManager.from(this)
 
-                val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                    .setTitle("Autenticação do dispositivo")
-                    .setSubtitle("Confirme sua identidade para continuar")
-                    .setAllowedAuthenticators(autenticadores)
-                    .build()
+    when (manager.canAuthenticate(autenticadores)) {
 
-                prompt.authenticate(promptInfo)
-            }
+        BiometricManager.BIOMETRIC_SUCCESS -> {
+            // Continua para autenticação abaixo.
+        }
 
-            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
-                Toast.makeText(
-                    this,
-                    "Configure um bloqueio de tela para usar esta autenticação.",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+        BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED,
+        BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE,
+        BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
+            entrarNaHub()
+            return
+        }
 
-            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE,
-            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
-                Toast.makeText(
-                    this,
-                    "A credencial do dispositivo está indisponível.",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-
-            else -> {
-                Toast.makeText(
-                    this,
-                    "Não foi possível iniciar a autenticação.",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+        else -> {
+            finish()
+            return
         }
     }
+
+    val biometricPrompt = BiometricPrompt(
+        this,
+        executor,
+        object : BiometricPrompt.AuthenticationCallback() {
+
+            override fun onAuthenticationSucceeded(
+                result: BiometricPrompt.AuthenticationResult
+            ) {
+                super.onAuthenticationSucceeded(result)
+                entrarNaHub()
+            }
+
+            override fun onAuthenticationError(
+                errorCode: Int,
+                errString: CharSequence
+            ) {
+                super.onAuthenticationError(errorCode, errString)
+
+
+            }
+
+            override fun onAuthenticationFailed() {
+                super.onAuthenticationFailed()
+            }
+        }
+    )
+
+    val promptInfo = BiometricPrompt.PromptInfo.Builder()
+        .setTitle("Autenticação necessária")
+        .setSubtitle("Use biometria, PIN, padrão ou senha")
+        .setAllowedAuthenticators(autenticadores)
+        .build()
+
+    biometricPrompt.authenticate(promptInfo)
+}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -119,8 +119,7 @@ class AssistenteActivity : AppCompatActivity() {
     val executor = ContextCompat.getMainExecutor(this)
 
     val autenticadores =
-        BiometricManager.Authenticators.BIOMETRIC_WEAK or
-            BiometricManager.Authenticators.DEVICE_CREDENTIAL
+    BiometricManager.Authenticators.DEVICE_CREDENTIAL
 
     val manager = BiometricManager.from(this)
 

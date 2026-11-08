@@ -3,10 +3,10 @@
   "branch": "main",
   "fonte_classificacao": "GitHub Linguist",
   "fonte_lista_linguagens": "https://github.com/github-linguist/linguist",
-  "gerado_em_utc": "2026-11-06T15:35:05Z",
+  "gerado_em_utc": "2026-11-08T16:40:10Z",
   "total_linguagens": 14,
   "total_arquivos_classificados": 433,
-  "total_bytes_classificados": 4156541,
+  "total_bytes_classificados": 4156171,
   "linguagens": [
     {
       "nome": "AIDL",
@@ -26,7 +26,7 @@
     },
     {
       "nome": "CSS",
-      "tamanho_bytes": 237514,
+      "tamanho_bytes": 237144,
       "percentual": "5.71",
       "arquivos": [
         "app1-day.css",
@@ -70,7 +70,7 @@
     {
       "nome": "Java",
       "tamanho_bytes": 2144910,
-      "percentual": "51.60",
+      "percentual": "51.61",
       "arquivos": [
         "Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/BootReminder.java",
         "Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/ManagedProvisioningApplication.java",

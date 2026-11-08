@@ -1,5 +1,9 @@
 package com.mulheres
 
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
+import androidx.compose.foundation.clickable
 import android.content.Intent
 import android.view.WindowManager
 import androidx.compose.foundation.layout.Row
@@ -84,7 +88,43 @@ private val EsquemaEscuro = darkColorScheme(
     secondary = Color(0xFFB8B1C7)
 )
 
-class WelcomeActivity : ComponentActivity() {
+class WelcomeActivity : AppCompatActivity() {
+
+private fun autenticar() {
+    val executor = ContextCompat.getMainExecutor(this)
+
+    val autenticadores =
+    BiometricManager.Authenticators.DEVICE_CREDENTIAL
+
+    val manager = BiometricManager.from(this)
+
+    when (manager.canAuthenticate(autenticadores)) {
+
+        BiometricManager.BIOMETRIC_SUCCESS -> {
+            // Continua para autenticação abaixo.
+        }
+
+        BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED,
+        BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE,
+        BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
+            entrarNaHub()
+            return
+        }
+
+        else -> {
+            finish()
+            return
+        }
+    }
+    
+    private fun entrarNaHub() {
+    startActivity(
+        Intent(this, HubActivity::class.java)
+    )
+    finish()
+}
+}
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,43 +146,44 @@ window.setFlags(
 )
 
         setContent {
-            val modoEscuro = isSystemInDarkTheme()
+    val modoEscuro = isSystemInDarkTheme()
 
-            SideEffect {
-                @Suppress("DEPRECATION")
-                run {
-                    val flags =
-                        android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or
-                            android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+    SideEffect {
+        @Suppress("DEPRECATION")
+        run {
+            val flags =
+                android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or
+                    android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
 
-                    window.decorView.systemUiVisibility =
-                        if (modoEscuro) {
-                            window.decorView.systemUiVisibility and flags.inv()
-                        } else {
-                            window.decorView.systemUiVisibility or flags
-                        }
-                }
-            }
-
-            MaterialTheme(
-                colorScheme = if (modoEscuro) {
-                    EsquemaEscuro
+            window.decorView.systemUiVisibility =
+                if (modoEscuro) {
+                    window.decorView.systemUiVisibility and flags.inv()
                 } else {
-                    EsquemaClaro
+                    window.decorView.systemUiVisibility or flags
                 }
-            ) {
-                TelaBoasVindas(
-    onComecar = {
-        startActivity(
-            Intent(
-                this,
-                AssistenteActivity::class.java
-            )
-        )
-
-        finish()
+        }
     }
-)
+
+    MaterialTheme(
+        colorScheme = if (modoEscuro) {
+            EsquemaEscuro
+        } else {
+            EsquemaClaro
+        }
+    ) {
+        TelaBoasVindas(
+            onComecar = {
+                startActivity(
+                    Intent(this, AssistenteActivity::class.java)
+                )
+                finish()
+            },
+            onLogoClick = {
+                autenticar()
+            }
+        )
+    }
+}
             }
         }
     }
@@ -150,9 +191,10 @@ window.setFlags(
 
 @Composable
 private fun TelaBoasVindas(
-    onComecar: () -> Unit
+    onComecar: () -> Unit,
+    onLogoClick: () -> Unit
 ) {
-   
+
     val modoEscuro = isSystemInDarkTheme()
     val esquema = MaterialTheme.colorScheme
 
@@ -245,6 +287,7 @@ private fun TelaBoasVindas(
                                 Box(
                                     modifier = Modifier
                                         .size(88.dp)
+                                            .clickable { onLogoClick() }
                                         .graphicsLayer {
                                             scaleX = escala
                                             scaleY = escala
@@ -440,6 +483,7 @@ private fun TelaBoasVindas(
                             Box(
                                 modifier = Modifier
                                     .size(144.dp)
+                                        .clickable { onLogoClick() }
                                     .graphicsLayer {
                                         scaleX = escala
                                         scaleY = escala

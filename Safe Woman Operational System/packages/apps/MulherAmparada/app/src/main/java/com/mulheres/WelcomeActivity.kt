@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import android.graphics.Color as AndroidColor
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -88,42 +89,68 @@ private val EsquemaEscuro = darkColorScheme(
     secondary = Color(0xFFB8B1C7)
 )
 
-class WelcomeActivity : AppCompatActivity() {
+class WelcomeActivity : ComponentActivity() {
 
-private fun autenticar() {
-    val executor = ContextCompat.getMainExecutor(this)
+    private fun entrarNaHub() {
+        startActivity(Intent(this, HubActivity::class.java))
+        finish()
+    }
 
-    val autenticadores =
-    BiometricManager.Authenticators.DEVICE_CREDENTIAL
+    private fun autenticar() {
+        val autenticadores = BiometricManager.Authenticators.DEVICE_CREDENTIAL
+        val manager = BiometricManager.from(this)
 
-    val manager = BiometricManager.from(this)
+        when (manager.canAuthenticate(autenticadores)) {
+            BiometricManager.BIOMETRIC_SUCCESS -> {
+                val executor = ContextCompat.getMainExecutor(this)
+                val prompt = BiometricPrompt(
+                    this,
+                    executor,
+                    object : BiometricPrompt.AuthenticationCallback() {
+                        override fun onAuthenticationSucceeded(
+                            result: BiometricPrompt.AuthenticationResult
+                        ) {
+                            super.onAuthenticationSucceeded(result)
+                            entrarNaHub()
+                        }
+                    }
+                )
 
-    when (manager.canAuthenticate(autenticadores)) {
+                val promptInfo = BiometricPrompt.PromptInfo.Builder()
+                    .setTitle("Autenticação do dispositivo")
+                    .setSubtitle("Confirme sua identidade para continuar")
+                    .setAllowedAuthenticators(autenticadores)
+                    .build()
 
-        BiometricManager.BIOMETRIC_SUCCESS -> {
-            // Continua para autenticação abaixo.
-        }
+                prompt.authenticate(promptInfo)
+            }
 
-        BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED,
-        BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE,
-        BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
-            entrarNaHub()
-            return
-        }
+            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
+                Toast.makeText(
+                    this,
+                    "Configure um bloqueio de tela para usar esta autenticação.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
 
-        else -> {
-            finish()
-            return
+            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE,
+            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
+                Toast.makeText(
+                    this,
+                    "A credencial do dispositivo está indisponível.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+            else -> {
+                Toast.makeText(
+                    this,
+                    "Não foi possível iniciar a autenticação.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
     }
-    
-    private fun entrarNaHub() {
-    startActivity(
-        Intent(this, HubActivity::class.java)
-    )
-    finish()
-}
-}
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

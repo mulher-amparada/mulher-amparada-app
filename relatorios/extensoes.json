@@ -1,44 +1,44 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-08T22:33:36Z",
-  "total_arquivos": 1276,
-  "total_bytes": 102224153,
+  "gerado_em_utc": "2026-11-08T22:37:22Z",
+  "total_arquivos": 1277,
+  "total_bytes": 102226479,
   "total_extensoes": 41,
   "extensoes": [
     {
       "extensao": ".xml",
       "quantidade_arquivos": 400,
       "tamanho_bytes": 3653583,
-      "percentual_arquivos": 31.35,
+      "percentual_arquivos": 31.32,
       "percentual_bytes": 3.57
     },
     {
       "extensao": ".java",
       "quantidade_arquivos": 309,
       "tamanho_bytes": 2144910,
-      "percentual_arquivos": 24.22,
+      "percentual_arquivos": 24.2,
       "percentual_bytes": 2.1
     },
     {
       "extensao": ".md",
-      "quantidade_arquivos": 252,
-      "tamanho_bytes": 510145,
-      "percentual_arquivos": 19.75,
+      "quantidade_arquivos": 253,
+      "tamanho_bytes": 511055,
+      "percentual_arquivos": 19.81,
       "percentual_bytes": 0.5
     },
     {
       "extensao": ".png",
       "quantidade_arquivos": 105,
       "tamanho_bytes": 76848499,
-      "percentual_arquivos": 8.23,
-      "percentual_bytes": 75.18
+      "percentual_arquivos": 8.22,
+      "percentual_bytes": 75.17
     },
     {
       "extensao": ".kt",
       "quantidade_arquivos": 75,
-      "tamanho_bytes": 1538944,
-      "percentual_arquivos": 5.88,
+      "tamanho_bytes": 1540360,
+      "percentual_arquivos": 5.87,
       "percentual_bytes": 1.51
     },
     {
@@ -59,7 +59,7 @@
       "extensao": ".yml",
       "quantidade_arquivos": 15,
       "tamanho_bytes": 95918,
-      "percentual_arquivos": 1.18,
+      "percentual_arquivos": 1.17,
       "percentual_bytes": 0.09
     },
     {
@@ -122,21 +122,21 @@
       "extensao": ".mk",
       "quantidade_arquivos": 3,
       "tamanho_bytes": 1104,
-      "percentual_arquivos": 0.24,
+      "percentual_arquivos": 0.23,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".toml",
       "quantidade_arquivos": 3,
       "tamanho_bytes": 3828,
-      "percentual_arquivos": 0.24,
+      "percentual_arquivos": 0.23,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".txt",
       "quantidade_arquivos": 3,
       "tamanho_bytes": 63,
-      "percentual_arquivos": 0.24,
+      "percentual_arquivos": 0.23,
       "percentual_bytes": 0.0
     },
     {

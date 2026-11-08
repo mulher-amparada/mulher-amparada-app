@@ -2,6 +2,38 @@
 
 ---
 
+## 💝 RESPEITO À AUTORIA E À DIVERSIDADE:
+
+O Mulher Amparada é um projeto desenvolvido com dedicação, pesquisa, criatividade e utilização de diferentes ferramentas tecnológicas, incluindo inteligência artificial.
+
+A autoria e o valor deste projeto não devem ser desmerecidos em razão de:
+
+- Idade do desenvolvedor;
+- Utilização de inteligência artificial como ferramenta auxiliar de desenvolvimento;
+- Condição de pessoa autista do desenvolvedor.
+
+A inteligência artificial é uma ferramenta de auxílio, não um motivo para invalidar o trabalho, a dedicação, as decisões técnicas e a criatividade envolvidos no projeto.
+
+A idade não determina a capacidade de desenvolver soluções tecnológicas.
+
+O autismo não diminui a legitimidade, a criatividade ou o valor de uma contribuição tecnológica.
+
+Esperamos que colaboradores, usuários e terceiros mantenham o respeito à autoria, à diversidade e à dignidade humana.
+
+**Avalie o projeto pelo seu conteúdo, funcionamento, qualidade e impacto, não por preconceitos sobre quem o desenvolveu.**
+
+## ⚖️ CONSEQUÊNCIAS PELO DESCUMPRIMENTO:
+
+O desrespeito aos princípios desta declaração poderá resultar em:
+
+- Remoção de contribuições desrespeitosas;
+- Restrição ou encerramento da participação no projeto;
+- Bloqueio de usuários em espaços administrados pelo projeto;
+- Comunicação às plataformas responsáveis, quando aplicável;
+- Adoção de medidas legais cabíveis, quando houver fundamento jurídico.
+
+Essas medidas serão proporcionais à conduta e não impedirão críticas técnicas legítimas e respeitosas.
+
 Protocolo de Segurança, Registro e Preservação de Evidências:
 
 1. Fundamentação jurídica:

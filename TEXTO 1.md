@@ -2,9 +2,9 @@
 
 ### Sobre como o projeto foi estruturado:
 
-> Quando a usuária arrasta pro lado no AssistenteActivity, valida o BiometricPrompt e acessa a HubActivity, ao apertar voltar na barra de navegação do sistema dentro da HubActivity, o app fecha, e o biometricprompt aqui só usa o device credential!
+> Quando a usuária arrasta pro lado no AssistenteActivity, valida o BiometricPrompt e acessa a HubActivity, ao apertar voltar na barra de navegação do sistema dentro da HubActivity, o app fecha, e o biometricprompt aqui só usa o device credential!, e se nao tem credenciais, ele vai pra activity mesmo assim!
 
-> Na hubactivity, ao clicar no botão voltar, fecha o app!, e ao clicar no icone do app na welcomeactivtiy, ela pede o biometricprompt apenas com device credential e vai pra hubactivity!
+> Na hubactivity, ao clicar no botão voltar, fecha o app!, e ao clicar no icone do app na welcomeactivtiy, ela pede o biometricprompt apenas com device credential e vai pra hubactivity!, e se nao tem credenciais, ele vai pra activity mesmo assim!
 
 > o EmergencyOverlay só funciona dentro da HubActivity!
 

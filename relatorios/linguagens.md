@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-11-08T23:21:34Z
+- **Gerado em UTC:** 2026-11-08T23:23:44Z
 - **Linguagens identificadas:** 14
 - **Arquivos classificados:** 433
-- **Tamanho classificado:** 4160964 bytes
+- **Tamanho classificado:** 4160225 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -16,8 +16,8 @@
 
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
-| Java | 309 | 2144910 | 51.55% |
-| Kotlin | 75 | 1541765 | 37.05% |
+| Java | 309 | 2144910 | 51.56% |
+| Kotlin | 75 | 1541026 | 37.04% |
 | CSS | 18 | 237144 | 5.70% |
 | Shell | 6 | 94995 | 2.28% |
 | HTML | 11 | 66168 | 1.59% |
@@ -96,7 +96,7 @@
 
 - **Arquivos:** 309
 - **Tamanho:** 2144910 bytes
-- **Percentual:** 51.55%
+- **Percentual:** 51.56%
 
 - `Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/BootReminder.java`
 - `Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/ManagedProvisioningApplication.java`
@@ -430,8 +430,8 @@
 ### Kotlin
 
 - **Arquivos:** 75
-- **Tamanho:** 1541765 bytes
-- **Percentual:** 37.05%
+- **Tamanho:** 1541026 bytes
+- **Percentual:** 37.04%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt`

@@ -74,6 +74,9 @@ https://projetomulheramparadaapp.blogspot.com/2026/10/funcoes-do-aplicativo-mulh
 - 📰 Blogger —  💻🌐 Quantas linguagens e tecnologias existem no Mulher Amparada:
 https://projetomulheramparadaapp.blogspot.com/2026/10/quantas-linguagens-e-tecnologias.html
 
+- 👤 Dev COMMUNITY —  Como criei um sistema de SOS e Botão de Pânico com IA aos 15 anos (e sem cursos formais):
+https://dev.to/mulher_amparada_765df7ce2/como-criei-um-sistema-de-sos-e-botao-de-panico-com-ia-aos-15-anos-e-sem-cursos-formais-44ok
+
 ### 📰 Imprensa e divulgação:
 
 - 📢 SubmitPR — Mulher Amparada:

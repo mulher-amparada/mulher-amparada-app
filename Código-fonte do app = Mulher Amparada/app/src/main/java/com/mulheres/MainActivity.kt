@@ -92,6 +92,8 @@ if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
 
     configurarWebView()
 
+abrirLinkRecebido(intent)
+
     // =====================================================
     // BARRAS DO SISTEMA
     // =====================================================
@@ -135,9 +137,11 @@ ViewCompat.requestApplyInsets(webView)
     // PÁGINA INICIAL
     // =====================================================
 
-    webView.loadUrl(
-        "https://www.google.com"
-    )
+    if (intent?.data == null) {
+    webView.loadUrl("https://www.google.com")
+} else {
+    abrirLinkRecebido(intent)
+}
 
     // =====================================================
     // ON BACK PRESSED
@@ -492,6 +496,25 @@ override fun onActivityResult(
         fileChooserCallback?.onReceiveValue(result)
         fileChooserCallback = null
     }
+}
+
+private fun abrirLinkRecebido(intent: Intent?) {
+    val uri = intent?.data ?: return
+
+    if (
+        uri.scheme == "https" ||
+        uri.scheme == "http"
+    ) {
+        webView.loadUrl(uri.toString())
+    }
+}
+
+override fun onNewIntent(intent: Intent) {
+    super.onNewIntent(intent)
+
+    setIntent(intent)
+
+    abrirLinkRecebido(intent)
 }
 
     // =========================================================

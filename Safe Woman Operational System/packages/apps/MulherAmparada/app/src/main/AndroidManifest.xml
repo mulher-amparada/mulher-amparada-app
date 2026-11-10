@@ -74,8 +74,6 @@
         <data android:scheme="https" />
     </intent-filter>
 
-</activity>
-
         </activity>
         
                 <activity

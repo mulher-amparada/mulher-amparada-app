@@ -157,7 +157,9 @@ Permitir que páginas dentro do WebView utilizem "intent" livremente para abrir 
 
 Links também podem conter parâmetros de rastreamento, redirecionamentos e outros mecanismos capazes de identificar ou acompanhar a navegação.
 
-Por isso, o WebView mantém esse comportamento limitado. A exceção é a tela de aplicativos, que possui uma função específica e um fluxo controlado pelo próprio app.
+Por isso, o WebView mantém esse comportamento limitado.
+
+> o que quero dizer é que o site do youtube não pode abrir o app do youtube pelo intent por exemplo!
 
 ### Sobre o tema escuro, o conforto visual e a discrição:
 

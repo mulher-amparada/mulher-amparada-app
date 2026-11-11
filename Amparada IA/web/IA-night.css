@@ -1,16 +1,17 @@
-:root[data-theme="night"] {
-  color-scheme: dark;
-  --bg: #181818;
-  --surface: #242424;
-  --surface-strong: #303030;
-  --text: #f5f5f5;
-  --muted: #a3a3a3;
-  --border: #383838;
-  --accent: #d28bad;
-  --accent-contrast: #21171d;
-  --notice-bg: #332d20;
-  --notice-border: #665633;
-  --notice-text: #f0dfb5;
-  --user-message: #49313f;
-  --assistant-message: transparent;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #181818;
+    --surface: #242424;
+    --surface-raised: #1f1f1f;
+    --text: #f3f4f6;
+    --muted: #a1a1aa;
+    --border: #383838;
+    --accent: #d28bad;
+    --accent-text: #21171d;
+    --notice-bg: #332d20;
+    --notice-border: #665633;
+    --notice-text: #f0dfb5;
+    --user-bubble: #49313f;
+    --assistant-bubble: #292929;
+  }
 }

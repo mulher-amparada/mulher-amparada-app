@@ -2,14 +2,26 @@
 
 - **Arquivo de origem:** `.github/workflows/automations.yml`
 - **Arquivo gerado:** `pesquisas/workflow.md`
-- **Jobs identificados:** 1
-- **Etapas identificadas:** 0
+- **Jobs identificados:** 13
+- **Etapas identificadas:** 8
 
 ## Tabela completa de jobs e etapas
 
 | ID do job | Nome | Runner | Dependências | Etapas |
 |---|---|---|---|---|
 | `build` | 1 - Build | Não identificado | Nenhuma | Nenhuma identificada |
+| `amparada_ia` | 3 - Inteligência Artificial do MulherAmparada | Não identificado | Nenhuma | Nenhuma identificada |
+| `jekyll` | 2 - Jekyll GitHub Pages | Não identificado | `build` | Nenhuma identificada |
+| `sincronizar_app` | 3 - Sincronizar app | Não identificado | `jekyll` | Nenhuma identificada |
+| `validar_qrs` | 4 - Validar QR Codes | Não identificado | `sincronizar_app` | Nenhuma identificada |
+| `pesquisar_projeto` | 5 - Pesquisar projeto | Não identificado | `validar_qrs` | Nenhuma identificada |
+| `linguagens` | 6 - Atualizar linguagens | Não identificado | `pesquisar_projeto` | Nenhuma identificada |
+| `main_julia` | 7 - Executar Julia | Não identificado | `linguagens` | Nenhuma identificada |
+| `observatorio` | 8 - Gerar observatório | Não identificado | `main_julia` | Nenhuma identificada |
+| `atualizar_footer` | 9 - Atualizar footer | Não identificado | `observatorio` | Nenhuma identificada |
+| `gerar_commits` | 10 - Gerar commits | Não identificado | `atualizar_footer` | Nenhuma identificada |
+| `atualizar-total-commits` | Atualizar total de commits | ubuntu-26.04 | `gerar_commits` | 1. Baixar histórico completo (`actions/checkout@v7`); 2. Atualizar total de commits — executa comandos |
+| `publicar` | Publicar pacote npm | ubuntu-26.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v7`); 2. Configurar Node.js (`actions/setup-node@v7`); 3. Configurar autenticação — executa comandos; 4. Calcular próxima versão — executa comandos; 5. Atualizar versão — executa comandos; 6. Publicar pacote — executa comandos |
 
 ## Grafo completo de dependências
 
@@ -18,6 +30,28 @@ As setas representam as dependências declaradas em `needs` no YAML original.
 ```mermaid
 flowchart TD
     job_build["1 - Build"]
+    job_amparada_ia["3 - Inteligência Artificial do MulherAmparada"]
+    job_jekyll["2 - Jekyll GitHub Pages"]
+    job_sincronizar_app["3 - Sincronizar app"]
+    job_validar_qrs["4 - Validar QR Codes"]
+    job_pesquisar_projeto["5 - Pesquisar projeto"]
+    job_linguagens["6 - Atualizar linguagens"]
+    job_main_julia["7 - Executar Julia"]
+    job_observatorio["8 - Gerar observatório"]
+    job_atualizar_footer["9 - Atualizar footer"]
+    job_gerar_commits["10 - Gerar commits"]
+    job_atualizar_total_commits["Atualizar total de commits"]
+    job_publicar["Publicar pacote npm"]
+    job_build --> job_jekyll
+    job_jekyll --> job_sincronizar_app
+    job_sincronizar_app --> job_validar_qrs
+    job_validar_qrs --> job_pesquisar_projeto
+    job_pesquisar_projeto --> job_linguagens
+    job_linguagens --> job_main_julia
+    job_main_julia --> job_observatorio
+    job_observatorio --> job_atualizar_footer
+    job_atualizar_footer --> job_gerar_commits
+    job_gerar_commits --> job_atualizar_total_commits
 ```
 
 ## Detalhamento dos jobs
@@ -31,6 +65,132 @@ flowchart TD
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
 | — | Nenhuma etapa identificada | — | — |
+
+### 3 - Inteligência Artificial do MulherAmparada
+
+- **ID:** `amparada_ia`
+- **Runner:** `Não identificado`
+- **Dependências:** Nenhuma
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### 2 - Jekyll GitHub Pages
+
+- **ID:** `jekyll`
+- **Runner:** `Não identificado`
+- **Dependências:** `build`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### 3 - Sincronizar app
+
+- **ID:** `sincronizar_app`
+- **Runner:** `Não identificado`
+- **Dependências:** `jekyll`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### 4 - Validar QR Codes
+
+- **ID:** `validar_qrs`
+- **Runner:** `Não identificado`
+- **Dependências:** `sincronizar_app`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### 5 - Pesquisar projeto
+
+- **ID:** `pesquisar_projeto`
+- **Runner:** `Não identificado`
+- **Dependências:** `validar_qrs`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### 6 - Atualizar linguagens
+
+- **ID:** `linguagens`
+- **Runner:** `Não identificado`
+- **Dependências:** `pesquisar_projeto`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### 7 - Executar Julia
+
+- **ID:** `main_julia`
+- **Runner:** `Não identificado`
+- **Dependências:** `linguagens`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### 8 - Gerar observatório
+
+- **ID:** `observatorio`
+- **Runner:** `Não identificado`
+- **Dependências:** `main_julia`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### 9 - Atualizar footer
+
+- **ID:** `atualizar_footer`
+- **Runner:** `Não identificado`
+- **Dependências:** `observatorio`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### 10 - Gerar commits
+
+- **ID:** `gerar_commits`
+- **Runner:** `Não identificado`
+- **Dependências:** `atualizar_footer`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| — | Nenhuma etapa identificada | — | — |
+
+### Atualizar total de commits
+
+- **ID:** `atualizar-total-commits`
+- **Runner:** `ubuntu-26.04`
+- **Dependências:** `gerar_commits`
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| 1 | Baixar histórico completo | `actions/checkout@v7` | — |
+| 2 | Atualizar total de commits | — | \| |
+
+### Publicar pacote npm
+
+- **ID:** `publicar`
+- **Runner:** `ubuntu-26.04`
+- **Dependências:** Nenhuma
+
+| # | Etapa | Ação | Execução |
+|---:|---|---|---|
+| 1 | Baixar repositório | `actions/checkout@v7` | — |
+| 2 | Configurar Node.js | `actions/setup-node@v7` | — |
+| 3 | Configurar autenticação | — | \| |
+| 4 | Calcular próxima versão | — | \| |
+| 5 | Atualizar versão | — | \| |
+| 6 | Publicar pacote | — | npm publish |
 
 ## YAML original completo
 
@@ -57,7 +217,7 @@ jobs:
     permissions:
       contents: write
 
-amparada_ia:
+  amparada_ia:
     name: "3 - Inteligência Artificial do MulherAmparada"
     uses: ./.github/workflows/amparada-ia.yml
     permissions:

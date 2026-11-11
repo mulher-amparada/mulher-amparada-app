@@ -1,9 +1,9 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-11T19:29:41Z",
+  "gerado_em_utc": "2026-11-11T19:47:03Z",
   "total_arquivos": 1348,
-  "total_bytes": 102458889,
+  "total_bytes": 102459187,
   "total_extensoes": 41,
   "extensoes": [
     {
@@ -72,7 +72,7 @@
     {
       "extensao": ".py",
       "quantidade_arquivos": 10,
-      "tamanho_bytes": 28184,
+      "tamanho_bytes": 28482,
       "percentual_arquivos": 0.74,
       "percentual_bytes": 0.03
     },

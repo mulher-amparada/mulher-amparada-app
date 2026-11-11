@@ -3,10 +3,10 @@
   "branch": "main",
   "fonte_classificacao": "GitHub Linguist",
   "fonte_lista_linguagens": "https://github.com/github-linguist/linguist",
-  "gerado_em_utc": "2026-11-11T19:29:41Z",
+  "gerado_em_utc": "2026-11-11T19:47:03Z",
   "total_linguagens": 14,
   "total_arquivos_classificados": 446,
-  "total_bytes_classificados": 4199835,
+  "total_bytes_classificados": 4200133,
   "linguagens": [
     {
       "nome": "AIDL",
@@ -508,8 +508,8 @@
     },
     {
       "nome": "Python",
-      "tamanho_bytes": 28184,
-      "percentual": "0.67",
+      "tamanho_bytes": 28482,
+      "percentual": "0.68",
       "arquivos": [
         "Amparada IA/src/amparada_ia/__init__.py",
         "Amparada IA/src/amparada_ia/evaluate.py",

@@ -23,7 +23,7 @@ MODEL = TOKENIZER = MODEL_ERROR = None
 def normalize_message(message: str) -> str:
     normalized = message.casefold().replace("você", "voce").replace("cê", "ce")
     normalized = re.sub(r"[^a-záàâãéêíóôõúç ]", "", normalized)
-    return re.sub(r"\\s+", " ", normalized).strip()
+    return re.sub(r"\s+", " ", normalized).strip()
 
 
 # 20 formas-base combinadas com 50 complementos naturais = 1.000 entradas.

@@ -127,4 +127,4 @@ a { color: inherit; text-decoration: none; }
   .composer textarea { min-height: 62px; font-size: 17px; }
   .messages { max-height: 30vh; }
 }
-@media (prefers-reduced-motion: reduce) { }
+

@@ -1,128 +1,114 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-11T13:08:53Z",
-  "total_arquivos": 1303,
-  "total_bytes": 102268627,
+  "gerado_em_utc": "2026-11-11T13:40:16Z",
+  "total_arquivos": 1290,
+  "total_bytes": 102244583,
   "total_extensoes": 41,
   "extensoes": [
     {
       "extensao": ".xml",
       "quantidade_arquivos": 400,
       "tamanho_bytes": 3654104,
-      "percentual_arquivos": 30.7,
+      "percentual_arquivos": 31.01,
       "percentual_bytes": 3.57
     },
     {
       "extensao": ".java",
       "quantidade_arquivos": 309,
       "tamanho_bytes": 2144910,
-      "percentual_arquivos": 23.71,
+      "percentual_arquivos": 23.95,
       "percentual_bytes": 2.1
     },
     {
       "extensao": ".md",
-      "quantidade_arquivos": 267,
-      "tamanho_bytes": 533303,
-      "percentual_arquivos": 20.49,
+      "quantidade_arquivos": 266,
+      "tamanho_bytes": 527958,
+      "percentual_arquivos": 20.62,
       "percentual_bytes": 0.52
     },
     {
       "extensao": ".png",
       "quantidade_arquivos": 105,
       "tamanho_bytes": 76848499,
-      "percentual_arquivos": 8.06,
-      "percentual_bytes": 75.14
+      "percentual_arquivos": 8.14,
+      "percentual_bytes": 75.16
     },
     {
       "extensao": ".kt",
       "quantidade_arquivos": 75,
       "tamanho_bytes": 1541026,
-      "percentual_arquivos": 5.76,
+      "percentual_arquivos": 5.81,
       "percentual_bytes": 1.51
     },
     {
       "extensao": ".css",
       "quantidade_arquivos": 18,
       "tamanho_bytes": 237144,
-      "percentual_arquivos": 1.38,
+      "percentual_arquivos": 1.4,
       "percentual_bytes": 0.23
     },
     {
       "extensao": ".json",
       "quantidade_arquivos": 18,
-      "tamanho_bytes": 1397066,
-      "percentual_arquivos": 1.38,
+      "tamanho_bytes": 1396673,
+      "percentual_arquivos": 1.4,
       "percentual_bytes": 1.37
     },
     {
       "extensao": ".yml",
       "quantidade_arquivos": 15,
       "tamanho_bytes": 95918,
-      "percentual_arquivos": 1.15,
+      "percentual_arquivos": 1.16,
       "percentual_bytes": 0.09
     },
     {
       "extensao": ".html",
       "quantidade_arquivos": 11,
       "tamanho_bytes": 66177,
-      "percentual_arquivos": 0.84,
+      "percentual_arquivos": 0.85,
       "percentual_bytes": 0.06
-    },
-    {
-      "extensao": ".py",
-      "quantidade_arquivos": 9,
-      "tamanho_bytes": 17846,
-      "percentual_arquivos": 0.69,
-      "percentual_bytes": 0.02
     },
     {
       "extensao": ".gradle",
       "quantidade_arquivos": 6,
       "tamanho_bytes": 8170,
-      "percentual_arquivos": 0.46,
+      "percentual_arquivos": 0.47,
       "percentual_bytes": 0.01
     },
     {
       "extensao": ".sh",
       "quantidade_arquivos": 6,
       "tamanho_bytes": 94995,
-      "percentual_arquivos": 0.46,
+      "percentual_arquivos": 0.47,
       "percentual_bytes": 0.09
-    },
-    {
-      "extensao": ".txt",
-      "quantidade_arquivos": 6,
-      "tamanho_bytes": 1198,
-      "percentual_arquivos": 0.46,
-      "percentual_bytes": 0.0
     },
     {
       "extensao": ".bp",
       "quantidade_arquivos": 5,
       "tamanho_bytes": 6287,
-      "percentual_arquivos": 0.38,
+      "percentual_arquivos": 0.39,
       "percentual_bytes": 0.01
     },
     {
       "extensao": ".jpg",
       "quantidade_arquivos": 5,
       "tamanho_bytes": 667226,
-      "percentual_arquivos": 0.38,
+      "percentual_arquivos": 0.39,
       "percentual_bytes": 0.65
     },
     {
       "extensao": ".properties",
       "quantidade_arquivos": 5,
       "tamanho_bytes": 3188,
-      "percentual_arquivos": 0.38,
+      "percentual_arquivos": 0.39,
       "percentual_bytes": 0.0
     },
     {
       "extensao": "[sem extensão]",
       "quantidade_arquivos": 5,
       "tamanho_bytes": 12796,
-      "percentual_arquivos": 0.38,
+      "percentual_arquivos": 0.39,
       "percentual_bytes": 0.01
     },
     {
@@ -131,13 +117,6 @@
       "tamanho_bytes": 33816,
       "percentual_arquivos": 0.31,
       "percentual_bytes": 0.03
-    },
-    {
-      "extensao": ".gitignore",
-      "quantidade_arquivos": 3,
-      "tamanho_bytes": 395,
-      "percentual_arquivos": 0.23,
-      "percentual_bytes": 0.0
     },
     {
       "extensao": ".mk",
@@ -154,38 +133,52 @@
       "percentual_bytes": 0.0
     },
     {
+      "extensao": ".txt",
+      "quantidade_arquivos": 3,
+      "tamanho_bytes": 63,
+      "percentual_arquivos": 0.23,
+      "percentual_bytes": 0.0
+    },
+    {
       "extensao": ".apk",
       "quantidade_arquivos": 2,
       "tamanho_bytes": 14570670,
-      "percentual_arquivos": 0.15,
+      "percentual_arquivos": 0.16,
       "percentual_bytes": 14.25
     },
     {
       "extensao": ".bat",
       "quantidade_arquivos": 2,
       "tamanho_bytes": 5526,
-      "percentual_arquivos": 0.15,
+      "percentual_arquivos": 0.16,
       "percentual_bytes": 0.01
+    },
+    {
+      "extensao": ".gitignore",
+      "quantidade_arquivos": 2,
+      "tamanho_bytes": 327,
+      "percentual_arquivos": 0.16,
+      "percentual_bytes": 0.0
     },
     {
       "extensao": ".ico",
       "quantidade_arquivos": 2,
       "tamanho_bytes": 30812,
-      "percentual_arquivos": 0.15,
+      "percentual_arquivos": 0.16,
       "percentual_bytes": 0.03
     },
     {
       "extensao": ".jar",
       "quantidade_arquivos": 2,
       "tamanho_bytes": 118406,
-      "percentual_arquivos": 0.15,
+      "percentual_arquivos": 0.16,
       "percentual_bytes": 0.12
     },
     {
       "extensao": ".pro",
       "quantidade_arquivos": 2,
       "tamanho_bytes": 0,
-      "percentual_arquivos": 0.15,
+      "percentual_arquivos": 0.16,
       "percentual_bytes": 0.0
     },
     {
@@ -255,6 +248,13 @@
       "extensao": ".proto",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 1437,
+      "percentual_arquivos": 0.08,
+      "percentual_bytes": 0.0
+    },
+    {
+      "extensao": ".py",
+      "quantidade_arquivos": 1,
+      "tamanho_bytes": 743,
       "percentual_arquivos": 0.08,
       "percentual_bytes": 0.0
     },

@@ -136,7 +136,9 @@ function useSuggestion(event) {
 }
 
 form.addEventListener("submit", sendMessage);
-clearButton.addEventListener("click", clearConversation);
+if (clearButton) {
+  clearButton.addEventListener("click", clearConversation);
+}
 
 suggestions.forEach((button) => {
   button.addEventListener("click", useSuggestion);

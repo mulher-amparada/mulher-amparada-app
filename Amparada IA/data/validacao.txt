@@ -1,6 +1,0 @@
-Aprender exige pratica, calma e revisao.
-Uma tecnologia deve respeitar a autonomia das pessoas.
-sistemas experimentais precisam de avaliacao antes de qualquer implantacao.
-A privacidade deve ser considerada desde o comeco do desenvolvimento.
-Respostas geradas automaticamente podem conter erros e precisam ser verificadas.
-A acessibilidade deve integrar o planejamento de aplicativos.

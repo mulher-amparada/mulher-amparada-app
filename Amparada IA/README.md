@@ -14,8 +14,10 @@ A primeira versão é um modelo de linguagem pequeno, baseado em Transformer Dec
 - [x] Blocos Transformer causais
 - [x] Treinamento por previsão do próximo token
 - [x] Geração autoregressiva
-- [ ] Avaliação com conjunto de validação separado e métricas
-- [ ] Testes automatizados e reprodutibilidade ampliada
+- [x] Corpus sintético separado para validação
+- [x] Script de avaliação com perda e perplexidade
+- [x] Testes automatizados básicos
+- [x] Documentação da arquitetura
 - [ ] Experimentos com tokenização por subpalavras
 - [ ] Otimização de inferência em C (etapa futura)
 - [ ] Avaliação de segurança, privacidade e acessibilidade antes de qualquer uso real
@@ -25,14 +27,20 @@ A primeira versão é um modelo de linguagem pequeno, baseado em Transformer Dec
 ```text
 Amparada IA/
 ├── data/
-│   └── treino.txt
+│   ├── treino.txt
+│   └── validacao.txt
 ├── src/
 │   └── amparada_ia/
 │       ├── __init__.py
 │       ├── tokenizer.py
 │       ├── model.py
 │       ├── train.py
-│       └── generate.py
+│       ├── generate.py
+│       └── evaluate.py
+├── tests/
+│   ├── test_tokenizer.py
+│   └── test_model.py
+├── ARCHITECTURE.md
 ├── .gitignore
 └── requirements.txt
 ```
@@ -41,7 +49,7 @@ Amparada IA/
 
 - Python 3.10 ou superior
 - PyTorch 2.2 ou superior
-- CPU funciona para o experimento pequeno; GPU compatível acelera o treinamento
+- CPU funciona para os experimentos pequenos; GPU compatível acelera o treinamento
 
 Instale as dependências:
 
@@ -50,7 +58,7 @@ python -m venv .venv
 # Linux/macOS:
 source .venv/bin/activate
 # Windows:
-# .venv\Scripts\activate
+# .venv\\Scripts\\activate
 
 pip install -r requirements.txt
 ```
@@ -81,9 +89,31 @@ python -m src.amparada_ia.generate --prompt "O respeito"
 
 A geração é experimental. Como o corpus inicial é minúsculo, a saída provavelmente será repetitiva, incoerente ou conterá erros. Isso é esperado nesta primeira prova de conceito.
 
+## Testes automatizados
+
+A partir desta pasta:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+Os testes verificam o tokenizador, dimensões de saída, cálculo da perda, máscara causal e geração. Eles não comprovam qualidade linguística nem segurança do modelo.
+
+## Avaliar
+
+Depois do treinamento, execute:
+
+```bash
+python -m src.amparada_ia.evaluate --batches 20
+```
+
+A avaliação usa `data/validacao.txt`, separado do corpus de treinamento. O vocabulário é construído no treinamento; o texto de validação deve usar caracteres presentes nesse vocabulário.
+
+A perda mede erro de previsão. A perplexidade é uma transformação dessa perda. Nenhuma das duas métricas mede compreensão, factualidade, segurança ou qualidade de acolhimento.
+
 ## Dados e privacidade
 
-O arquivo `data/treino.txt` contém somente frases demonstrativas e sintéticas. Não adicione relatos privados, nomes, endereços, conversas de usuárias ou informações sobre situações reais de violência. Dados reais exigiriam base legal, consentimento quando aplicável, minimização, proteção e revisão especializada.
+Os arquivos de treinamento e validação contêm somente frases demonstrativas e sintéticas. Não adicione relatos privados, nomes, endereços, conversas de usuárias ou informações sobre situações reais de violência. Dados reais exigiriam avaliação jurídica, ética, de privacidade e de segurança, além de base legal e proteção apropriadas.
 
 ## Segurança e limites
 
@@ -92,13 +122,5 @@ O arquivo `data/treino.txt` contém somente frases demonstrativas e sintéticas.
 - Não confie em texto gerado como fonte factual. Modelos podem inventar informações.
 - Antes de qualquer implantação, serão necessários testes, avaliação humana, proteção de dados, mecanismos de denúncia e encaminhamento para serviços humanos competentes.
 - A finalidade social do projeto não substitui validação técnica nem avaliação de riscos.
-
-## Próximas etapas de pesquisa
-
-1. Aumentar e documentar um corpus de treinamento lícito, diverso e revisado.
-2. Criar testes quantitativos e qualitativos de qualidade.
-3. Medir uso de memória, tempo de treinamento e inferência.
-4. Avaliar vieses, respostas inseguras e alucinações.
-5. Só então estudar uma interface e integração com o aplicativo.
 
 **Amparada IA é um experimento de pesquisa e aprendizado. Não é uma versão pronta para uso público.**

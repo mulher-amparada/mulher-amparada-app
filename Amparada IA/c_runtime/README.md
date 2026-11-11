@@ -7,7 +7,7 @@ Este diretório contém o leitor de pesos AMPAW01 e a base do runtime de inferê
 - O exportador escreve tensores float32 little-endian e dimensões explícitas.
 - Esta primeira versão é uma referência didática, não otimizada.
 - O formato é versionado por magic bytes; não carregue arquivos de origem desconhecida.
-- O runtime de referência aceita checkpoints treinados com tokenizador por caractere. BPE usa vocabulário variável e será exportado em etapa separada.
+- O runtime de referência aceita checkpoints treinados com tokenizador por caractere. BPE usa vocabulário variável e será exportado em etapa separada. O script `python -m src.amparada_ia.verify_c` compara os logits C com PyTorch e falha se a diferença exceder a tolerância.
 - O runtime não implementa treinamento, backpropagation, GPU, batching ou amostragem avançada.
 
 ## Compilar

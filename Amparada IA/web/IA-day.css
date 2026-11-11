@@ -1,6 +1,7 @@
 @font-face {
   font-family: "Quicksand";
-  src: url("/font.ttf") format("truetype");
+  src: url("[https://raw.githubusercontent.com/mulher-amparada/mulher-amparada-app/refs/heads/main/font.ttf](https://raw.githubusercontent.com/mulher-amparada/mulher-amparada-app/refs/heads/main/font.ttf?utm_source=chatgpt.com)
+") format("truetype");
   font-style: normal;
   font-weight: 300 800;
   font-display: swap;

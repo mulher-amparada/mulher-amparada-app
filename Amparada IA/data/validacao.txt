@@ -1,6 +1,6 @@
-Aprender exige prática, paciência e revisão.
+Aprender exige pratica, calma e revisao.
 Uma tecnologia deve respeitar a autonomia das pessoas.
-Sistemas experimentais precisam de avaliação antes de qualquer implantação.
-A privacidade deve ser considerada desde o início do desenvolvimento.
+sistemas experimentais precisam de avaliacao antes de qualquer implantacao.
+A privacidade deve ser considerada desde o comeco do desenvolvimento.
 Respostas geradas automaticamente podem conter erros e precisam ser verificadas.
 A acessibilidade deve fazer parte do planejamento de produtos digitais.

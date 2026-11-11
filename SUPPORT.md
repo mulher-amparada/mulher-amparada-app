@@ -68,6 +68,9 @@ https://coderlegion.com/33225/todas-as-funcoes-do-aplicativo
 - 💻 Coderlegion — 🚀 O Safe Woman Operational System está evoluindo!:
 https://coderlegion.com/33344/o-safe-woman-operational-system-esta-evoluindo
 
+- 💻 Coderlegion — ⚙️Criamos uma inteligência artificial para o Mulher Amparada:
+https://coderlegion.com/34348/criamos-uma-inteligencia-artificial-para-o-mulher-amparada
+
 - 📰 Blogger — ⚒️ Funções do aplicativo Mulher Amparada:
 https://projetomulheramparadaapp.blogspot.com/2026/10/funcoes-do-aplicativo-mulher-amparada.html?m=1
 

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import re
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import sys
@@ -17,6 +18,24 @@ if not FONT_FILE.is_file():
 
 sys.path.insert(0, str(ROOT / "src"))
 MODEL = TOKENIZER = MODEL_ERROR = None
+
+
+def get_greeting_response(message: str) -> str | None:
+    """Responde a cumprimentos comuns sem depender da geração experimental."""
+    normalized = re.sub(r"[^a-záàâãéêíóôõúç ]", "", message.casefold()).strip()
+    normalized = re.sub(r"\\s+", " ", normalized)
+
+    greetings = {
+        "oi": "Olá! Tudo bem?",
+        "oie": "Olá! Tudo bem?",
+        "oii": "Olá! Tudo bem?",
+        "olá": "Olá! Tudo bem?",
+        "ola": "Olá! Tudo bem?",
+        "bom dia": "Bom dia! Tudo bem?",
+        "boa tarde": "Boa tarde! Tudo bem?",
+        "boa noite": "Boa noite! Tudo bem?",
+    }
+    return greetings.get(normalized)
 
 
 def load_model():
@@ -119,6 +138,14 @@ class Handler(SimpleHTTPRequestHandler):
 
             if len(message) > 500:
                 self.send_json(400, {"error": "Use até 500 caracteres."})
+                return
+
+            greeting = get_greeting_response(message)
+            if greeting is not None:
+                self.send_json(
+                    200,
+                    {"answer": greeting, "experimental": False},
+                )
                 return
 
             ids = TOKENIZER.encode(message.strip())

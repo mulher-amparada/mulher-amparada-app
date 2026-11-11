@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-11-11T19:47:03Z
+- **Gerado em UTC:** 2026-11-11T19:50:35Z
 - **Linguagens identificadas:** 14
 - **Arquivos classificados:** 446
-- **Tamanho classificado:** 4200133 bytes
+- **Tamanho classificado:** 4200136 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -22,7 +22,7 @@
 | Shell | 6 | 94995 | 2.26% |
 | HTML | 12 | 69571 | 1.66% |
 | JavaScript | 5 | 37577 | 0.89% |
-| Python | 10 | 28482 | 0.68% |
+| Python | 10 | 28485 | 0.68% |
 | C | 1 | 18374 | 0.44% |
 | PHP | 1 | 9342 | 0.22% |
 | Julia | 1 | 5989 | 0.14% |
@@ -534,7 +534,7 @@
 ### Python
 
 - **Arquivos:** 10
-- **Tamanho:** 28482 bytes
+- **Tamanho:** 28485 bytes
 - **Percentual:** 0.68%
 
 - `Amparada IA/src/amparada_ia/__init__.py`

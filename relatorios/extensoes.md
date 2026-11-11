@@ -2,7 +2,7 @@
 
 - **Repositório:** `mulher-amparada/mulher-amparada-app`
 - **Branch:** `main`
-- **Gerado em UTC:** 2026-11-11T18:56:33Z
+- **Gerado em UTC:** 2026-11-11T18:58:53Z
 - **Arquivos analisados:** 1343
 - **Tamanho total:** 102327108 bytes
 - **Extensões encontradas:** 41

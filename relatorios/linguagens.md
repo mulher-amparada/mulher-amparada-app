@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-11-11T18:36:52Z
+- **Gerado em UTC:** 2026-11-11T18:38:31Z
 - **Linguagens identificadas:** 14
 - **Arquivos classificados:** 446
-- **Tamanho classificado:** 4200094 bytes
+- **Tamanho classificado:** 4199260 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -16,11 +16,11 @@
 
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
-| Java | 309 | 2144910 | 51.07% |
-| Kotlin | 75 | 1541026 | 36.69% |
-| CSS | 20 | 242961 | 5.78% |
+| Java | 309 | 2144910 | 51.08% |
+| Kotlin | 75 | 1541026 | 36.70% |
+| CSS | 20 | 242017 | 5.76% |
 | Shell | 6 | 94995 | 2.26% |
-| HTML | 12 | 69461 | 1.65% |
+| HTML | 12 | 69571 | 1.66% |
 | JavaScript | 5 | 37554 | 0.89% |
 | Python | 10 | 27764 | 0.66% |
 | C | 1 | 18374 | 0.44% |
@@ -52,8 +52,8 @@
 ### CSS
 
 - **Arquivos:** 20
-- **Tamanho:** 242961 bytes
-- **Percentual:** 5.78%
+- **Tamanho:** 242017 bytes
+- **Percentual:** 5.76%
 
 - `Amparada IA/web/IA-day.css`
 - `Amparada IA/web/IA-night.css`
@@ -79,8 +79,8 @@
 ### HTML
 
 - **Arquivos:** 12
-- **Tamanho:** 69461 bytes
-- **Percentual:** 1.65%
+- **Tamanho:** 69571 bytes
+- **Percentual:** 1.66%
 
 - `Amparada IA/web/index.html`
 - `app1.html`
@@ -99,7 +99,7 @@
 
 - **Arquivos:** 309
 - **Tamanho:** 2144910 bytes
-- **Percentual:** 51.07%
+- **Percentual:** 51.08%
 
 - `Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/BootReminder.java`
 - `Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/ManagedProvisioningApplication.java`
@@ -435,7 +435,7 @@
 
 - **Arquivos:** 75
 - **Tamanho:** 1541026 bytes
-- **Percentual:** 36.69%
+- **Percentual:** 36.70%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt`

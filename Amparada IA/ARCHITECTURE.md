@@ -42,3 +42,13 @@ O corpus de demonstração é pequeno demais para produzir um assistente útil. 
 ## Segurança de dados
 
 Não inserir dados pessoais, relatos de violência, conversas privadas, documentos, endereços ou identificadores de usuárias no corpus. Antes de considerar dados reais, realizar avaliação jurídica, ética, de privacidade e de segurança com orientação especializada.
+
+## Experimento BPE
+
+A implementação experimental faz fusões frequentes de pares de caracteres Unicode no texto de treino. O alfabeto inclui os caracteres do corpus completo para evitar IDs desconhecidos na divisão interna, mas as fusões são aprendidas somente no trecho de treino. O algoritmo é intencionalmente simples e não implementa byte-level BPE, normalização Unicode ou regras de pré-tokenização de produção.
+
+Para comparar, fixe arquitetura, block-size, passos, corpus de validação e semente. Relate perplexidade/token, bits/caractere, tokens/caractere e caracteres estimados por janela. Não interprete menor perplexidade/token isoladamente como melhor modelo.
+
+## Formato binário e runtime C
+
+O exportador grava magic/version, configuração do modelo e cada tensor como nome, rank, dimensões e float32 little-endian. O C runtime lê esse formato e calcula um forward pass causal de batch 1, incluindo LayerNorm, projeções Q/K/V, softmax causal, GELU e cabeça de linguagem. É uma implementação de referência, não otimizada; exige teste de paridade numérica com PyTorch. Nesta etapa, a exportação C suporta somente checkpoints com tokenizador por caractere.

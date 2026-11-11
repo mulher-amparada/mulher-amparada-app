@@ -49,7 +49,7 @@ HOW_ARE_YOU_ENDINGS = (
     " ai onde voce esta", " ai", " nessa hora", " neste horario",
     " depois de hoje", " depois desses dias", " ultimamente por ai",
     " nesses momentos", " nessa fase", " nessa epoca", " neste periodo",
-    " por esses lados", " como tem passado",
+    " por esses lados", " como tem passado", " como voce tem estado",
 )
 HOW_ARE_YOU_ENTRIES = {
     base + ending

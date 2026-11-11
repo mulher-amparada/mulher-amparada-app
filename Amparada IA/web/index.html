@@ -1,40 +1,102 @@
 <!doctype html>
-<html lang="pt-BR"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#211526">
-<meta name="description" content="Demonstração experimental da Amparada IA.">
-<title>Amparada IA | Mulher Amparada</title>
-<style>
-:root{color-scheme:dark;--bg:#17121b;--panel:#241c29;--panel2:#302435;--pink:#eaa2c1;--pink2:#f4c5d8;--text:#fff7fb;--muted:#c8b8c3;--line:#493647}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#39243a 0,#17121b 55%);color:var(--text);font:16px/1.55 system-ui,sans-serif}
-.wrap{width:min(900px,100%);margin:auto;padding:24px 18px 36px}header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:28px}
-.brand{display:flex;align-items:center;gap:12px;font-weight:750}.mark{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(145deg,#f2bdd2,#bd7298);color:#281a25;font-size:22px}
-a{color:var(--pink2)}.back{text-decoration:none;font-size:14px}.hero{text-align:center;margin:26px auto 22px;max-width:680px}.eyebrow{color:var(--pink);font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
-h1{font-size:clamp(32px,7vw,52px);line-height:1.08;margin:10px 0}.hero p,.foot{color:var(--muted)}
-.notice{border:1px solid #80643b;background:#3a3022;color:#ffedc9;border-radius:14px;padding:13px 15px;font-size:13px;margin:22px 0}.notice strong{display:block;margin-bottom:3px}
-.chat{border:1px solid var(--line);border-radius:22px;background:rgba(36,28,41,.94);overflow:hidden;box-shadow:0 18px 60px #0005}
-.chat-top{padding:15px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}.chat-top strong{font-size:14px}
-.status{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:7px}.dot{width:8px;height:8px;border-radius:50%;background:#d8a85d}
-.messages{height:min(52vh,470px);min-height:300px;overflow:auto;padding:20px;display:flex;flex-direction:column;gap:14px}
-.msg{max-width:85%;padding:12px 15px;border-radius:17px;white-space:pre-wrap;overflow-wrap:anywhere}.bot{align-self:flex-start;background:var(--panel2);border:1px solid #514052;border-bottom-left-radius:5px}.user{align-self:flex-end;background:#74445f;border:1px solid #a96b8b;border-bottom-right-radius:5px}
-.composer{padding:14px;border-top:1px solid var(--line);display:flex;gap:10px}textarea{resize:vertical;min-height:50px;max-height:130px;flex:1;background:#17121b;color:var(--text);border:1px solid #5a4658;border-radius:13px;padding:13px;font:inherit;outline:none}textarea:focus{border-color:var(--pink)}
-button{border:0;border-radius:13px;padding:0 20px;background:var(--pink);color:#281a25;font:inherit;font-weight:800;cursor:pointer}button:disabled{opacity:.55;cursor:wait}.hint{font-size:12px;color:var(--muted);padding:0 16px 15px}.foot{text-align:center;margin:20px auto;font-size:12px;max-width:680px}
-@media(max-width:560px){.wrap{padding:16px 12px 26px}.messages{padding:14px;height:48vh}.msg{max-width:94%}.composer{padding:10px}button{padding:0 14px}}
-</style></head><body><main class="wrap">
-<header><div class="brand"><span class="mark" aria-hidden="true">✿</span><span>Mulher Amparada</span></div><a class="back" href="https://github.com/mulher-amparada/mulher-amparada-app">Ver projeto ↗</a></header>
-<section class="hero"><div class="eyebrow">Pesquisa e tecnologia</div><h1>Amparada IA</h1><p>Uma experiência de conversa com o modelo experimental do projeto.</p></section>
-<aside class="notice"><strong>⚠️ Protótipo experimental — não é um serviço de atendimento.</strong>Este modelo ainda está em desenvolvimento e pode gerar texto sem sentido ou incorreto. Não envie nomes, endereços, relatos pessoais ou informações sensíveis. Não use esta demonstração para situações de risco ou decisões importantes.</aside>
-<section class="chat" aria-label="Demonstração de conversa">
-<div class="chat-top"><strong>Conversa de demonstração</strong><span class="status"><span class="dot" id="dot"></span><span id="status">Verificando modelo…</span></span></div>
-<div class="messages" id="messages" aria-live="polite"><div class="msg bot">Olá! Esta é uma demonstração técnica da Amparada IA. O que você gostaria de testar?</div></div>
-<form class="composer" id="form"><textarea id="prompt" maxlength="500" rows="2" placeholder="Digite uma mensagem de teste…" aria-label="Mensagem" required></textarea><button id="send" type="submit">Enviar</button></form>
-<div class="hint">Até 500 caracteres por mensagem. As mensagens não são salvas pelo site.</div></section>
-<p class="foot">Mulher Amparada · Amparada IA · Modelo de linguagem experimental treinado por caracteres.</p>
-</main>
-<script>
-const messages=document.getElementById('messages'),form=document.getElementById('form'),promptBox=document.getElementById('prompt'),send=document.getElementById('send'),statusText=document.getElementById('status'),dot=document.getElementById('dot');
-function addMessage(text,who){const el=document.createElement('div');el.className='msg '+who;el.textContent=text;messages.appendChild(el);messages.scrollTop=messages.scrollHeight}
-async function checkStatus(){try{const response=await fetch('/api/status');const data=await response.json();statusText.textContent=data.ready?'Modelo carregado':'Modelo indisponível';dot.style.background=data.ready?'#83c99a':'#d8a85d';if(!data.ready)addMessage(data.message||'Treine o modelo antes de conversar.','bot')}catch{statusText.textContent='Servidor não conectado';dot.style.background='#d86b76';addMessage('Inicie o servidor local seguindo o README da Amparada IA.','bot')}}
-form.addEventListener('submit',async event=>{event.preventDefault();const message=promptBox.value.trim();if(!message||send.disabled)return;addMessage(message,'user');promptBox.value='';send.disabled=true;send.textContent='…';const waiting=document.createElement('div');waiting.className='msg bot';waiting.textContent='A IA está processando…';messages.appendChild(waiting);messages.scrollTop=messages.scrollHeight;try{const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message})});const data=await response.json();waiting.remove();if(!response.ok)throw new Error(data.error||'Não foi possível gerar uma resposta.');addMessage(data.answer,'bot')}catch(error){waiting.remove();addMessage(error.message||'Falha ao conectar com o modelo.','bot')}finally{send.disabled=false;send.textContent='Enviar';promptBox.focus()}});
-checkStatus();
-</script></body></html>
+<html lang="pt-BR" data-theme="day">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ffffff">
+    <meta
+      name="description"
+      content="Demonstração experimental da Amparada IA, projeto Mulher Amparada."
+    >
+
+    <title>Amparada IA | Mulher Amparada</title>
+
+    <link rel="stylesheet" href="IA-day.css">
+    <link rel="stylesheet" href="IA-night.css">
+    <script src="ia.js" defer></script>
+  </head>
+
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">✿</span>
+          <span>Mulher Amparada</span>
+        </div>
+
+        <nav class="top-actions" aria-label="Navegação principal">
+          <a href="https://github.com/mulher-amparada/mulher-amparada-app">
+            Projeto no GitHub
+          </a>
+
+          <button
+            class="icon-button"
+            id="theme-toggle"
+            type="button"
+            aria-label="Ativar tema escuro"
+          >
+            ☾
+          </button>
+        </nav>
+      </header>
+
+      <main>
+        <section class="welcome">
+          <h1>O que vamos explorar?</h1>
+          <p>Converse com a Amparada IA, uma experiência experimental do projeto.</p>
+        </section>
+
+        <aside class="notice">
+          <strong>Protótipo experimental</strong>
+          Este modelo ainda está em desenvolvimento e pode gerar respostas incorretas
+          ou sem sentido. Não envie nomes, endereços, relatos pessoais ou informações
+          sensíveis. Não utilize esta demonstração para situações de risco ou decisões
+          importantes.
+        </aside>
+
+        <section class="chat-panel" aria-label="Conversa com a Amparada IA">
+          <div
+            class="messages"
+            id="messages"
+            aria-live="polite"
+            aria-label="Mensagens da conversa"
+          >
+            <div class="message assistant">
+              Olá! Esta é uma demonstração técnica da Amparada IA.
+              O que você gostaria de testar?
+            </div>
+          </div>
+
+          <form class="composer" id="chat-form">
+            <textarea
+              id="prompt"
+              name="message"
+              rows="1"
+              maxlength="500"
+              placeholder="Pergunte alguma coisa…"
+              aria-label="Digite sua mensagem"
+              required
+            ></textarea>
+
+            <button class="send-button" id="send-button" type="submit">
+              Enviar
+            </button>
+          </form>
+
+          <div class="composer-hint">
+            Até 500 caracteres por mensagem. Evite compartilhar informações pessoais.
+          </div>
+        </section>
+
+        <div class="status" role="status">
+          <span class="status-dot" id="status-dot"></span>
+          <span id="status-label">Verificando o servidor…</span>
+        </div>
+      </main>
+
+      <footer class="footer">
+        Mulher Amparada · Amparada IA · Modelo de linguagem experimental.
+      </footer>
+    </div>
+  </body>
+</html>

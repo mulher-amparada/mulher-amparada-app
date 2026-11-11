@@ -1,9 +1,9 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-11T21:12:31Z",
+  "gerado_em_utc": "2026-11-11T20:58:54Z",
   "total_arquivos": 1350,
-  "total_bytes": 102463031,
+  "total_bytes": 102463020,
   "total_extensoes": 41,
   "extensoes": [
     {
@@ -23,7 +23,7 @@
     {
       "extensao": ".md",
       "quantidade_arquivos": 307,
-      "tamanho_bytes": 570778,
+      "tamanho_bytes": 570767,
       "percentual_arquivos": 22.74,
       "percentual_bytes": 0.56
     },

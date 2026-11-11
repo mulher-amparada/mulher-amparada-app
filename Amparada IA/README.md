@@ -153,6 +153,7 @@ python -m src.amparada_ia.train --tokenizer char --steps 500
 python -m src.amparada_ia.export_c
 cc -O2 -std=c11 c_runtime/amparada.c -lm -o runs/amparada-c
 ./runs/amparada-c runs/amparada_ia.ampaw 1 2 3
+python -m src.amparada_ia.verify_c --prompt "Respeito"
 ```
 
 O runtime C é uma referência didática para batch 1, com previsão gulosa do próximo ID. O exportador ainda não suporta BPE. Compare os logits com PyTorch antes de considerar qualquer otimização ou integração.

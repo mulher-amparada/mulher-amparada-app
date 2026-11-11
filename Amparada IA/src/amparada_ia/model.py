@@ -1,4 +1,4 @@
-"""Pequeno Transformer Decoder-only treinado para prever o próximo token BPE."""
+"""Pequeno Transformer Decoder-only implementado com módulos PyTorch."""
 
 from __future__ import annotations
 
@@ -52,7 +52,7 @@ class CausalBlock(nn.Module):
 
 
 class AmparadaLanguageModel(nn.Module):
-    """Modelo de linguagem pequeno, treinado para prever o próximo token."""
+    """Modelo de linguagem pequeno, treinado para prever o próximo caractere."""
 
     def __init__(
         self,

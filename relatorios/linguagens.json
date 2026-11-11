@@ -3,10 +3,10 @@
   "branch": "main",
   "fonte_classificacao": "GitHub Linguist",
   "fonte_lista_linguagens": "https://github.com/github-linguist/linguist",
-  "gerado_em_utc": "2026-11-11T19:02:36Z",
+  "gerado_em_utc": "2026-11-11T18:46:01Z",
   "total_linguagens": 14,
   "total_arquivos_classificados": 446,
-  "total_bytes_classificados": 4199420,
+  "total_bytes_classificados": 4199385,
   "linguagens": [
     {
       "nome": "AIDL",
@@ -26,7 +26,7 @@
     },
     {
       "nome": "CSS",
-      "tamanho_bytes": 242150,
+      "tamanho_bytes": 242119,
       "percentual": "5.77",
       "arquivos": [
         "Amparada IA/web/IA-day.css",
@@ -508,7 +508,7 @@
     },
     {
       "nome": "Python",
-      "tamanho_bytes": 27768,
+      "tamanho_bytes": 27764,
       "percentual": "0.66",
       "arquivos": [
         "Amparada IA/src/amparada_ia/__init__.py",

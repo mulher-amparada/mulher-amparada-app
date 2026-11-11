@@ -1,9 +1,9 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-11T18:11:11Z",
+  "gerado_em_utc": "2026-11-11T18:22:10Z",
   "total_arquivos": 1330,
-  "total_bytes": 102317868,
+  "total_bytes": 102320413,
   "total_extensoes": 41,
   "extensoes": [
     {
@@ -23,7 +23,7 @@
     {
       "extensao": ".md",
       "quantidade_arquivos": 288,
-      "tamanho_bytes": 548859,
+      "tamanho_bytes": 548862,
       "percentual_arquivos": 21.65,
       "percentual_bytes": 0.54
     },
@@ -51,7 +51,7 @@
     {
       "extensao": ".json",
       "quantidade_arquivos": 18,
-      "tamanho_bytes": 1397248,
+      "tamanho_bytes": 1397251,
       "percentual_arquivos": 1.35,
       "percentual_bytes": 1.37
     },
@@ -72,9 +72,9 @@
     {
       "extensao": ".py",
       "quantidade_arquivos": 10,
-      "tamanho_bytes": 25420,
+      "tamanho_bytes": 27959,
       "percentual_arquivos": 0.75,
-      "percentual_bytes": 0.02
+      "percentual_bytes": 0.03
     },
     {
       "extensao": ".gradle",

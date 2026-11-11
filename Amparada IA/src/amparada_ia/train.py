@@ -1,38 +1,34 @@
-"""Treinamento do Transformer com validação separada e métricas estáveis."""
+"""Treinamento do Transformer com tokenizador BPE e validação separada."""
 
 from __future__ import annotations
 
 import argparse
-import math
 import random
 from pathlib import Path
 
 import torch
 
 from .model import AmparadaLanguageModel
-from .tokenizer import CharTokenizer
+from .tokenizer import BPETokenizer
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def encode_file(path: Path, tokenizer: CharTokenizer) -> torch.Tensor:
+def encode_file(path: Path, tokenizer: BPETokenizer) -> torch.Tensor:
     if not path.is_file():
         raise FileNotFoundError(f"Arquivo não encontrado: {path}")
     text = path.read_text(encoding="utf-8")
     encoded = torch.tensor(tokenizer.encode(text), dtype=torch.long)
-    if (encoded == 0).any():
-        raise ValueError(
-            f"{path} contém caracteres que não existem no vocabulário de treino. "
-            "Inclua esses caracteres em data/treino.txt."
-        )
+    unknown = int((encoded == 0).sum())
+    if unknown:
+        print(f"Aviso: {path} contém {unknown} tokens desconhecidos.")
     return encoded
 
 
 def get_batch(data: torch.Tensor, batch_size: int, block_size: int, device: torch.device):
     if data.numel() <= block_size + 1:
         raise ValueError(
-            f"O corpus precisa ter mais de {block_size + 1} caracteres; "
-            f"recebidos: {data.numel()}."
+            f"O corpus precisa ter mais de {block_size + 1} tokens; recebidos: {data.numel()}."
         )
     starts = torch.randint(0, data.numel() - block_size - 1, (batch_size,))
     x = torch.stack([data[start : start + block_size] for start in starts])
@@ -56,23 +52,24 @@ def estimate_loss(model, train_data, validation_data, batch_size, block_size, de
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Treina a Amparada IA experimental.")
+    parser = argparse.ArgumentParser(description="Treina a Amparada IA com BPE.")
     parser.add_argument("--data", type=Path, default=ROOT / "data" / "treino.txt")
     parser.add_argument("--validation-data", type=Path, default=ROOT / "data" / "validacao.txt")
-    parser.add_argument("--output", type=Path, default=ROOT / "runs" / "amparada_ia.pt")
+    parser.add_argument("--output", type=Path, default=ROOT / "runs" / "amparada_ia_bpe.pt")
     parser.add_argument("--steps", type=int, default=2000)
     parser.add_argument("--batch-size", type=int, default=4)
     parser.add_argument("--block-size", type=int, default=96)
     parser.add_argument("--n-embd", type=int, default=64)
     parser.add_argument("--n-head", type=int, default=4)
     parser.add_argument("--n-layer", type=int, default=2)
+    parser.add_argument("--vocab-size", type=int, default=512)
     parser.add_argument("--learning-rate", type=float, default=3e-4)
     parser.add_argument("--eval-interval", type=int, default=100)
     parser.add_argument("--eval-batches", type=int, default=5)
     parser.add_argument("--device", default="auto", choices=["auto", "cpu", "cuda"])
     args = parser.parse_args()
 
-    for name in ("steps", "batch_size", "block_size", "n_embd", "n_head", "n_layer", "eval_interval", "eval_batches"):
+    for name in ("steps", "batch_size", "block_size", "n_embd", "n_head", "n_layer", "vocab_size", "eval_interval", "eval_batches"):
         if getattr(args, name) < 1:
             parser.error(f"--{name.replace('_', '-')} precisa ser positivo.")
     if args.n_embd % args.n_head:
@@ -87,7 +84,7 @@ def main() -> None:
     torch.manual_seed(42)
 
     train_text = args.data.read_text(encoding="utf-8")
-    tokenizer = CharTokenizer.from_text(train_text)
+    tokenizer = BPETokenizer.from_text(train_text, vocab_size=args.vocab_size)
     train_data = torch.tensor(tokenizer.encode(train_text), dtype=torch.long)
     validation_data = encode_file(args.validation_data, tokenizer)
 
@@ -106,8 +103,8 @@ def main() -> None:
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.learning_rate)
 
     print(f"Dispositivo: {device}")
-    print(f"Caracteres de treino: {train_data.numel()} | validação: {validation_data.numel()}")
-    print(f"Vocabulário: {tokenizer.vocab_size} caracteres | parâmetros: {sum(p.numel() for p in model.parameters()):,}")
+    print(f"Tokens de treino: {train_data.numel()} | validação: {validation_data.numel()}")
+    print(f"Vocabulário BPE: {tokenizer.vocab_size} | parâmetros: {sum(p.numel() for p in model.parameters()):,}")
 
     for step in range(args.steps):
         model.train()
@@ -137,14 +134,14 @@ def main() -> None:
             "tokenizer": tokenizer.to_dict(),
             "training_info": {
                 "steps": args.steps,
-                "train_chars": int(train_data.numel()),
-                "validation_chars": int(validation_data.numel()),
+                "train_tokens": int(train_data.numel()),
+                "validation_tokens": int(validation_data.numel()),
                 "seed": 42,
             },
         },
         args.output,
     )
-    print(f"Checkpoint salvo em: {args.output}")
+    print(f"Checkpoint BPE salvo em: {args.output}")
 
 
 if __name__ == "__main__":

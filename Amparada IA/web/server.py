@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import json
-import re
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import sys
@@ -15,76 +14,10 @@ CHECKPOINT = ROOT / "runs" / "amparada_ia_bpe.pt"
 FONT_FILE = ROOT.parent / "font.ttf"
 if not FONT_FILE.is_file():
     FONT_FILE = ROOT / "font.ttf"
-if not FONT_FILE.is_file():
-    FONT_FILE = WEB_DIR / "font.ttf"
 
 sys.path.insert(0, str(ROOT / "src"))
 MODEL = TOKENIZER = MODEL_ERROR = None
 
-
-def normalize_message(message: str) -> str:
-    normalized = message.casefold().replace("você", "voce").replace("cê", "ce")
-    normalized = re.sub(r"[^a-záàâãéêíóôõúç ]", "", normalized)
-    return re.sub(r"\s+", " ", normalized).strip()
-
-
-# 20 formas-base combinadas com 50 complementos naturais = 1.000 entradas.
-HOW_ARE_YOU_BASES = (
-    "como voce esta", "como vc esta", "como ce ta", "como tu ta",
-    "como tu estas", "como vai voce", "como vai vc", "tudo bem com voce",
-    "tudo bem contigo", "ta tudo bem com voce", "esta tudo bem contigo",
-    "como voce se sente", "como voce anda", "como anda voce",
-    "como estao as coisas com voce", "como vao as coisas por ai",
-    "tudo tranquilo por ai", "tudo certo por ai", "como esta sendo seu dia",
-    "como foi seu dia",
-)
-HOW_ARE_YOU_ENDINGS = (
-    "", " hoje", " agora", " por ai", " neste momento", " ultimamente",
-    " nesses dias", " nesses ultimos dias", " nesta manha", " nesta tarde",
-    " nesta noite", " hoje de manha", " hoje a tarde", " hoje a noite",
-    " nesse momento", " nesse instante", " atualmente", " esses dias",
-    " de uns tempos pra ca", " por esses dias", " nessa semana",
-    " nesta semana", " neste dia", " por enquanto", " tudo bem",
-    " tudo tranquilo", " tudo certo", " como voce esta", " como voce vai",
-    " como anda a vida", " como vao as coisas", " como estao as coisas",
-    " e por ai", " e com voce", " e contigo", " do seu lado",
-    " ai onde voce esta", " ai", " nessa hora", " neste horario",
-    " depois de hoje", " depois desses dias", " ultimamente por ai",
-    " nesses momentos", " nessa fase", " nessa epoca", " neste periodo",
-    " por esses lados", " como tem passado", " como voce tem estado",
-)
-HOW_ARE_YOU_ENTRIES = {
-    base + ending
-    for base in HOW_ARE_YOU_BASES
-    for ending in HOW_ARE_YOU_ENDINGS
-}
-
-
-def get_greeting_response(message: str) -> str | None:
-    """Reconhece cumprimentos e 1.000 formas de perguntar como alguém está."""
-    normalized = normalize_message(message)
-
-    greetings = {
-        "oi": "Olá! Tudo bem?",
-        "oie": "Olá! Tudo bem?",
-        "oii": "Olá! Tudo bem?",
-        "ola": "Olá! Tudo bem?",
-        "bom dia": "Bom dia! Tudo bem?",
-        "boa tarde": "Boa tarde! Tudo bem?",
-        "boa noite": "Boa noite! Tudo bem?",
-    }
-    if normalized in greetings:
-        return greetings[normalized]
-
-    if normalized in HOW_ARE_YOU_ENTRIES:
-        return "Estou bem, obrigada por perguntar! E você, como está?"
-
-    cleaned = re.sub(r"^(e |me diz,? |me conta,? )", "", normalized)
-    cleaned = re.sub(r"^(por favor |meu bem |amiga,? )", "", cleaned)
-    if cleaned in HOW_ARE_YOU_ENTRIES:
-        return "Estou bem, obrigada por perguntar! E você, como está?"
-
-    return None
 
 def load_model():
     global MODEL, TOKENIZER, MODEL_ERROR
@@ -186,14 +119,6 @@ class Handler(SimpleHTTPRequestHandler):
 
             if len(message) > 500:
                 self.send_json(400, {"error": "Use até 500 caracteres."})
-                return
-
-            greeting = get_greeting_response(message)
-            if greeting is not None:
-                self.send_json(
-                    200,
-                    {"answer": greeting, "experimental": False},
-                )
                 return
 
             ids = TOKENIZER.encode(message.strip())

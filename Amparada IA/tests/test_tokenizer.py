@@ -11,7 +11,7 @@ class BPETokenizerTests(unittest.TestCase):
 
     def test_unknown_character_uses_reserved_id(self):
         tokenizer = BPETokenizer.from_text("abc")
-        self.assertEqual(tokenizer.encode("🦋"), [0])
+        self.assertEqual(tokenizer.encode("z"), [0])
         self.assertEqual(tokenizer.decode([0]), "�")
 
     def test_serialization_preserves_vocabulary_and_merges(self):

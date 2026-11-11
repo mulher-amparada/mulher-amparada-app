@@ -15,6 +15,8 @@ CHECKPOINT = ROOT / "runs" / "amparada_ia_bpe.pt"
 FONT_FILE = ROOT.parent / "font.ttf"
 if not FONT_FILE.is_file():
     FONT_FILE = ROOT / "font.ttf"
+if not FONT_FILE.is_file():
+    FONT_FILE = WEB_DIR / "font.ttf"
 
 sys.path.insert(0, str(ROOT / "src"))
 MODEL = TOKENIZER = MODEL_ERROR = None

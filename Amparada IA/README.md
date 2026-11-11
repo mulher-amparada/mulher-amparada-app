@@ -1,17 +1,12 @@
 # 🫆 Amparada IA — modelo experimental
 
-Este diretório contém uma prova de conceito própria de modelo de linguagem. A arquitetura é inicializada com pesos aleatórios; PyTorch fornece operações tensoriais, diferenciação automática e treinamento.
+Este diretório contém uma prova de conceito própria de modelo de linguagem, treinada do zero com PyTorch.
 
-## Evolução do treinamento
+## Tokenização BPE
 
-O treinamento agora:
-- usa `data/treino.txt` e `data/validacao.txt` como arquivos separados;
-- verifica se a validação contém caracteres presentes no vocabulário de treino;
-- calcula perdas médias de treino e validação em intervalos;
-- permite ajustar tamanho do lote, contexto e dimensões do modelo;
-- salva configuração, tokenizador e metadados no checkpoint.
+O treinamento usa agora um tokenizador BPE (Byte Pair Encoding) simples, aprendido a partir de `data/treino.txt`. Ele combina caracteres frequentes em unidades maiores, como pedaços de palavras. Não exige bibliotecas adicionais.
 
-O corpus atual é **demonstrativo e pequeno**. Ele serve para testar o pipeline, não para produzir um assistente fluente. Aumentar etapas não substitui um corpus amplo, variado, revisado e com licença adequada.
+O vocabulário é salvo dentro do checkpoint para que geração e avaliação usem exatamente os mesmos IDs. O checkpoint antigo baseado em caracteres não é compatível com o novo modelo BPE.
 
 ## Requisitos
 
@@ -19,7 +14,7 @@ O corpus atual é **demonstrativo e pequeno**. Ele serve para testar o pipeline,
 - PyTorch 2.2 ou superior
 - NumPy conforme `requirements.txt`
 
-## Treinar no computador ou ambiente Linux
+## Treinar
 
 Execute na pasta `Amparada IA`, com o ambiente virtual ativado:
 
@@ -27,15 +22,13 @@ Execute na pasta `Amparada IA`, com o ambiente virtual ativado:
 python -m src.amparada_ia.train --steps 2000
 ```
 
-Os padrões foram reduzidos para um experimento mais leve em CPU: lote 4, contexto 96, embedding 64 e duas camadas. O tempo depende do dispositivo. Em celulares com pouca memória, comece com:
+Em celulares com pouca memória, comece com:
 
 ```bash
-python -m src.amparada_ia.train --steps 300 --batch-size 2 --block-size 64 --n-embd 32
+python -m src.amparada_ia.train --steps 300 --batch-size 2 --block-size 64 --n-embd 32 --n-head 4 --vocab-size 256
 ```
 
-O checkpoint será salvo em `runs/amparada_ia.pt`.
-
-Parâmetros disponíveis incluem `--validation-data`, `--eval-interval`, `--eval-batches`, `--batch-size`, `--block-size`, `--n-embd`, `--n-head` e `--n-layer`.
+O checkpoint novo será salvo em `runs/amparada_ia_bpe.pt`. O arquivo de treino original não é apagado. O vocabulário BPE é aprendido a partir do corpus de treino, não da validação.
 
 ## Gerar texto
 
@@ -43,18 +36,16 @@ Parâmetros disponíveis incluem `--validation-data`, `--eval-interval`, `--eval
 python -m src.amparada_ia.generate --prompt "Tecnologia responsável" --tokens 120
 ```
 
-A geração continua experimental. O modelo prevê o próximo caractere; não possui compreensão garantida. Frases coerentes exigem corpus muito maior e mais diverso, experimentos de tokenização e avaliação qualitativa.
-
 ## Avaliar
 
 ```bash
-python -m src.amparada_ia.evaluate --batches 20
+python -m src.amparada_ia.evaluate --batches 20 --batch-size 2
 ```
 
-Perda e perplexidade medem aspectos da previsão de tokens. Não medem compreensão, factualidade, segurança ou qualidade de acolhimento.
+BPE pode ajudar a representar palavras e subpalavras com menos posições do que a tokenização por caractere, mas não garante frases coerentes. Fluência depende também de corpus amplo e de qualidade, capacidade do modelo, treinamento e avaliação.
 
 ## Dados e segurança
 
-Use somente textos próprios, sintéticos ou de origem e licença verificadas. Não adicione relatos privados, nomes, endereços, conversas ou informações sobre situações reais de violência.
+Use somente textos próprios, sintéticos ou de origem e licença verificadas. Preserve atribuições e condições de licença. Não adicione relatos privados, nomes, endereços, conversas ou informações sobre situações reais de violência.
 
-Este protótipo não deve ser apresentado como serviço de acolhimento, aconselhamento jurídico, médico ou de emergência. Não conecte esta versão experimental a usuárias nem a fluxos reais de atendimento. Antes de qualquer implantação, são necessárias avaliação humana, revisão de segurança, privacidade, acessibilidade e proteção de dados.
+Este protótipo não deve ser apresentado como serviço de acolhimento, aconselhamento jurídico, médico ou de emergência. Não conecte esta versão experimental a usuárias nem a fluxos reais de atendimento sem avaliação humana, revisão de segurança, privacidade, acessibilidade e proteção de dados.

@@ -27,3 +27,7 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Compilar runtime C
         run: cc -O2 -std=c11 -Wall -Wextra -pedantic c_runtime/amparada.c -lm -o /tmp/amparada-c
+      - name: Verificar paridade do forward pass
+        run: |
+          python -m src.amparada_ia.train --steps 5 --block-size 16 --output runs/ci-checkpoint.pt
+          python -m src.amparada_ia.verify_c --checkpoint runs/ci-checkpoint.pt --prompt "Respeito"

@@ -1,125 +1,51 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="color-scheme" content="light dark">
-    <meta name="theme-color" content="#fbf8fa">
-    <meta
-      name="description"
-      content="Conheça a demonstração experimental da Amparada IA, iniciativa do projeto Mulher Amparada."
-    >
-    <title>Amparada IA — Mulher Amparada</title>
-    <link rel="preload" href="/font.ttf" as="font" type="font/ttf" crossorigin>
-    <link rel="stylesheet" href="IA-day.css">
-    <link rel="stylesheet" href="IA-night.css">
-    <script src="ia.js" defer></script>
-  </head>
-
-  <body>
-    <header class="topbar">
-      <a
-        class="brand"
-        href="https://github.com/mulher-amparada/mulher-amparada-app"
-        aria-label="Mulher Amparada — abrir projeto no GitHub"
-      >
-        <span class="brand-mark" aria-hidden="true">✿</span>
-        <span class="brand-name">Mulher Amparada</span>
-      </a>
-
-      <div class="header-actions">
-        <span class="project-label">Projeto experimental</span>
-        <a
-          class="github-link"
-          href="https://github.com/mulher-amparada/mulher-amparada-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >Ver no GitHub <span aria-hidden="true">↗</span></a>
-      </div>
-    </header>
-
-    <main class="main">
-      <section class="intro" aria-labelledby="page-title">
-        <div class="eyebrow"><span class="eyebrow-dot"></span> INTELIGÊNCIA ARTIFICIAL EXPERIMENTAL</div>
-        <h1 id="page-title">Olá, o que vamos <span>explorar?</span></h1>
-        <p>
-          Esta é a Amparada IA, uma experiência em desenvolvimento dentro do
-          projeto Mulher Amparada.
-        </p>
-      </section>
-
-      <section class="chat" aria-label="Conversa com a Amparada IA">
-        <div class="chat-heading">
-          <div class="model-identity">
-            <span class="model-avatar" aria-hidden="true">✿</span>
-            <div>
-              <strong>Amparada IA</strong>
-              <span class="model-caption">Modelo de linguagem experimental</span>
-            </div>
-          </div>
-          <button class="clear-button" id="clear-chat" type="button" title="Limpar conversa">
-            Nova conversa
-          </button>
-        </div>
-
-        <div class="messages" id="messages" aria-live="polite" aria-relevant="additions">
-          <div class="welcome-message">
-            <span class="welcome-icon" aria-hidden="true">✧</span>
-            <strong>Que bom ter você por aqui.</strong>
-            <p>Envie uma mensagem para testar o modelo. As respostas são geradas experimentalmente.</p>
-          </div>
-        </div>
-
-        <div class="suggestions" aria-label="Sugestões de mensagem">
-          <button class="suggestion" type="button" data-prompt="O que é inteligência artificial?">O que é IA?</button>
-          <button class="suggestion" type="button" data-prompt="Explique como funciona um modelo de linguagem.">Como você funciona?</button>
-          <button class="suggestion" type="button" data-prompt="Fale sobre tecnologia e aprendizado.">Tecnologia e aprendizado</button>
-        </div>
-
-        <form class="composer" id="chat-form">
-          <label class="visually-hidden" for="prompt">Sua mensagem</label>
-          <textarea
-            id="prompt"
-            name="message"
-            rows="1"
-            maxlength="500"
-            placeholder="Pergunte alguma coisa..."
-            autocomplete="off"
-            required
-          ></textarea>
-          <button class="send-button" id="send-button" type="submit" aria-label="Enviar mensagem">
-            <span id="send-label">Enviar</span>
-            <span aria-hidden="true">↑</span>
-          </button>
-        </form>
-        <div class="composer-footer">
-          <span>Até 500 caracteres</span>
-          <span>Enter para enviar · Shift + Enter para nova linha</span>
-        </div>
-      </section>
-
-      <aside class="notice">
-        <span class="notice-icon" aria-hidden="true">ⓘ</span>
-        <p>
-          <strong>Importante:</strong> este é um protótipo. As respostas podem
-          estar incorretas ou não fazer sentido. Não envie dados pessoais,
-          relatos reais ou informações sensíveis. Não use esta demonstração
-          para decisões importantes ou situações de risco.
-        </p>
-      </aside>
-
-      <p class="status" role="status" aria-live="polite">
-        <span class="status-dot" id="status-dot"></span>
-        <span id="status-label">Verificando o servidor…</span>
-      </p>
-    </main>
-
-    <footer class="footer">
-      <span>Mulher Amparada</span>
-      <span class="footer-separator">·</span>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101010">
+  <meta name="description" content="Converse com a Amparada IA, uma experiência experimental do projeto Mulher Amparada.">
+  <title>Amparada IA</title>
+  <link rel="preload" href="/font.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="IA-day.css">
+  <script src="ia.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="https://github.com/mulher-amparada/mulher-amparada-app" aria-label="Projeto Mulher Amparada">
+      <span class="brand-mark" aria-hidden="true">✿</span>
       <span>Amparada IA</span>
-      <span class="footer-separator">·</span>
-      <span>Em desenvolvimento</span>
-    </footer>
-  </body>
+    </a>
+    <a class="menu-button" href="https://github.com/mulher-amparada/mulher-amparada-app" target="_blank" rel="noopener noreferrer" aria-label="Abrir projeto e opções">•••</a>
+  </header>
+
+  <main class="main">
+    <section class="welcome" aria-label="Amparada IA">
+      <div class="loader" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <p class="welcome-title">Amparada IA</p>
+      <p class="welcome-subtitle">Uma conversa começa com uma pergunta.</p>
+    </section>
+
+    <section class="chat" aria-label="Conversa">
+      <div class="messages" id="messages" aria-live="polite" aria-relevant="additions">
+        <div class="welcome-message">
+          <strong>Olá! Como posso ajudar?</strong>
+          <p>Envie uma mensagem para conversar com o modelo experimental.</p>
+        </div>
+      </div>
+      <form class="composer" id="chat-form">
+        <label class="visually-hidden" for="prompt">Sua mensagem</label>
+        <textarea id="prompt" name="message" rows="1" maxlength="500" placeholder="Pergunte à Amparada IA..." autocomplete="off" required></textarea>
+        <button class="send-button" id="send-button" type="submit" aria-label="Enviar mensagem">
+          <span id="send-label" class="visually-hidden">Enviar</span>
+          <span aria-hidden="true">↑</span>
+        </button>
+      </form>
+      <div class="composer-footer">
+        <span id="status-label">Verificando o servidor…</span>
+        <span class="status-dot" id="status-dot"></span>
+      </div>
+    </section>
+  </main>
+</body>
 </html>

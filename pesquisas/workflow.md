@@ -197,7 +197,7 @@ flowchart TD
 O bloco abaixo reproduz o conteúdo original do arquivo `automations.yml`, preservando comandos, condições, variáveis, comentários e configurações.
 
 ````yaml
-name: ⚙️Executar todos os workflows
+name: ⚙️Executar todos os workflows do projeto
 
 on:
   workflow_dispatch:

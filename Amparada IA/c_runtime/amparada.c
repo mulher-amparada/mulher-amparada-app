@@ -34,7 +34,7 @@ static void norm(float*x,const float*g,const float*b,int n){
  for(int i=0;i<n;i++){float d=x[i]-mean;var+=d*d;}var/=n;
  float inv=1.0f/sqrtf(var+1e-5f);for(int i=0;i<n;i++)x[i]=(x[i]-mean)*inv*g[i]+b[i];
 }
-static float gelu(float x){const float k=0.7978845608f;return 0.5f*x*(1.0f+tanhf(k*(x+0.044715f*x*x*x)));}
+static float gelu(float x){return 0.5f*x*(1.0f+erff(x*0.7071067811865475f));}
 static int forward(const int*ids,int n,float*out){
  if(n<1||n>block||emb%heads||emb>2048||4*emb>8192||n>2048)return 0;
  Tensor *te=get("token_embedding.weight"),*pe=get("position_embedding.weight"),*fg=get("final_norm.weight"),*fb=get("final_norm.bias"),*hw=get("language_head.weight");

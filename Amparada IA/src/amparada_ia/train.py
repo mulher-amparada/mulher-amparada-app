@@ -32,7 +32,7 @@ def main():
     raw=a.data.read_text(encoding="utf-8")
     cut=max(1,int(len(raw)*0.9));train_text,internal_val_text=raw[:cut],raw[cut:]
     if a.tokenizer=="bpe":tok=BPETokenizer.train(train_text,a.vocab_size,alphabet_text=raw)
-    else:tok=CharTokenizer.from_text(train_text)
+    else:tok=CharTokenizer.from_text(raw)
     train_ids=torch.tensor(tok.encode(train_text),dtype=torch.long)
     val_ids=torch.tensor(tok.encode(internal_val_text),dtype=torch.long)
     if 0 in train_ids.tolist() or 0 in val_ids.tolist():p.error("Token desconhecido no corpus; revise alfabeto do tokenizador.")

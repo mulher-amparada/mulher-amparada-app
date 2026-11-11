@@ -4,11 +4,9 @@ const promptInput = document.querySelector("#prompt");
 const sendButton = document.querySelector("#send-button");
 const statusLabel = document.querySelector("#status-label");
 const statusDot = document.querySelector("#status-dot");
-const themeButton = document.querySelector("#theme-toggle");
 
 function addMessage(content, author, extraClass = "") {
   const message = document.createElement("div");
-
   message.className = `message ${author} ${extraClass}`.trim();
   message.textContent = content;
 
@@ -34,10 +32,9 @@ async function checkModelStatus() {
 
     if (data.ready) {
       setStatus("Modelo carregado", "ready");
-      return;
+    } else {
+      setStatus("Modelo indisponível", "error");
     }
-
-    setStatus("Modelo indisponível", "error");
   } catch {
     setStatus("Servidor local desconectado", "error");
   }
@@ -73,7 +70,6 @@ async function sendMessage(event) {
     });
 
     const data = await response.json();
-
     pendingMessage.remove();
 
     if (!response.ok) {
@@ -86,7 +82,6 @@ async function sendMessage(event) {
     );
   } catch (error) {
     pendingMessage.remove();
-
     addMessage(
       error.message || "Falha ao conectar com o modelo.",
       "assistant"
@@ -98,34 +93,5 @@ async function sendMessage(event) {
   }
 }
 
-function setTheme(theme) {
-  document.documentElement.dataset.theme = theme;
-  localStorage.setItem("amparada-theme", theme);
-
-  themeButton.textContent = theme === "night" ? "☀" : "☾";
-  themeButton.setAttribute(
-    "aria-label",
-    theme === "night" ? "Ativar tema claro" : "Ativar tema escuro"
-  );
-}
-
-function initializeTheme() {
-  const savedTheme = localStorage.getItem("amparada-theme");
-  const preferredTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "night"
-    : "day";
-
-  setTheme(savedTheme || preferredTheme);
-}
-
-themeButton.addEventListener("click", () => {
-  const nextTheme =
-    document.documentElement.dataset.theme === "night" ? "day" : "night";
-
-  setTheme(nextTheme);
-});
-
 form.addEventListener("submit", sendMessage);
-
-initializeTheme();
 checkModelStatus();

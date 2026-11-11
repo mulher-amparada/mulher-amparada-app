@@ -18,7 +18,7 @@ jobs:
     permissions:
       contents: write
 
-amparada_ia:
+  amparada_ia:
     name: "3 - Inteligência Artificial do MulherAmparada"
     uses: ./.github/workflows/amparada-ia.yml
     permissions:

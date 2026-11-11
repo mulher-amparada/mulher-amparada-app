@@ -42,7 +42,7 @@ Amparada IA/
 │   └── test_model.py
 ├── ARCHITECTURE.md
 ├── .gitignore
-└── requirements.txt
+├── c_runtime/\n│   ├── amparada.c\n│   └── README.md\n└── requirements.txt
 ```
 
 ## Requisitos
@@ -124,3 +124,35 @@ Os arquivos de treinamento e validação contêm somente frases demonstrativas e
 - A finalidade social do projeto não substitui validação técnica nem avaliação de riscos.
 
 **Amparada IA é um experimento de pesquisa e aprendizado. Não é uma versão pronta para uso público.**
+
+## Experimento BPE
+
+O tokenizador BPE desta etapa aprende fusões de pares de caracteres Unicode a partir do trecho de treino. É uma implementação didática, não byte-level BPE nem equivalente a tokenizadores de produção.
+
+Treine e avalie ambos com a mesma configuração:
+
+```bash
+python -m src.amparada_ia.compare_tokenizers --steps 500 --block-size 64 --vocab-size 256
+```
+
+O relatório inclui perplexidade por token, bits por caractere, taxa de caracteres por token e estimativa de quantos caracteres cabem no mesmo contexto de 64 tokens. Perplexidade/token isolada não é comparável entre tokenizadores diferentes. Bits/caractere é uma referência mais justa, mas corpus pequeno e treinamento curto ainda produzem resultados instáveis.
+
+Também é possível treinar separadamente:
+
+```bash
+python -m src.amparada_ia.train --tokenizer bpe --vocab-size 256 --steps 500
+python -m src.amparada_ia.evaluate
+```
+
+## Exportação e inferência C
+
+Treine um checkpoint com tokenizador por caractere e exporte seus tensores:
+
+```bash
+python -m src.amparada_ia.train --tokenizer char --steps 500
+python -m src.amparada_ia.export_c
+cc -O2 -std=c11 c_runtime/amparada.c -lm -o runs/amparada-c
+./runs/amparada-c runs/amparada_ia.ampaw 1 2 3
+```
+
+O runtime C é uma referência didática para batch 1, com previsão gulosa do próximo ID. O exportador ainda não suporta BPE. Compare os logits com PyTorch antes de considerar qualquer otimização ou integração.

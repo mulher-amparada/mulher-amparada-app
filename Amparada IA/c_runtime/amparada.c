@@ -56,8 +56,9 @@ static int forward(const int*ids,int n,float*out){
   float*qn=calloc((size_t)n*emb,sizeof(float));float*ctx=calloc((size_t)n*emb,sizeof(float));
   if(!att||!qkv||!qn||!ctx){free(x);free(att);free(qkv);free(qn);free(ctx);return 0;}
   for(int t=0;t<n;t++){
-   float*row=x+t*emb;norm(row,n1g->v,n1b->v,emb);
-   linear(row,iw->v,ib->v,qkv,emb,3*emb);
+   float normalized[2048]; if(emb>2048){free(x);free(att);free(qkv);free(qn);free(ctx);return 0;}
+   memcpy(normalized,x+t*emb,emb*sizeof(float)); norm(normalized,n1g->v,n1b->v,emb);
+   linear(normalized,iw->v,ib->v,qkv,emb,3*emb);
    memcpy(qn+t*emb,qkv,emb*sizeof(float));
    /* K e V são calculados por posição abaixo e guardados em ctx/att temporários. */
    memcpy(att+t*emb,qkv+emb,emb*sizeof(float));
@@ -72,8 +73,8 @@ static int forward(const int*ids,int n,float*out){
    for(int d=0;d<hd;d++){float z=0;for(int s=0;s<=t;s++)z+=(scores[s]/sum)*ctx[s*emb+h*hd+d];joined[t*emb+h*hd+d]=z;}
   }
   for(int t=0;t<n;t++){float proj[2048];if(emb>2048){free(x);return 0;}linear(joined+t*emb,ow->v,ob->v,proj,emb,emb);for(uint32_t d=0;d<emb;d++)x[t*emb+d]+=proj[d];}
-  for(int t=0;t<n;t++){float*row=x+t*emb;norm(row,n2g->v,n2b->v,emb);float hidden[8192],outv[2048];
-   if(ff>8192||emb>2048){free(x);return 0;}linear(row,w1->v,b1->v,hidden,emb,ff);for(int j=0;j<ff;j++)hidden[j]=gelu(hidden[j]);linear(hidden,w2->v,b2->v,outv,ff,emb);for(uint32_t d=0;d<emb;d++)row[d]+=outv[d];}
+  for(int t=0;t<n;t++){float normalized[2048],hidden[8192],outv[2048];
+   if(ff>8192||emb>2048){free(x);return 0;}memcpy(normalized,x+t*emb,emb*sizeof(float));norm(normalized,n2g->v,n2b->v,emb);linear(normalized,w1->v,b1->v,hidden,emb,ff);for(int j=0;j<ff;j++)hidden[j]=gelu(hidden[j]);linear(hidden,w2->v,b2->v,outv,ff,emb);for(uint32_t d=0;d<emb;d++)row[d]+=outv[d];}
   free(att);free(qkv);free(qn);free(ctx);free(joined);
  }
  float*last=x+(n-1)*emb;norm(last,fg->v,fb->v,emb);linear(last,hw->v,NULL,out,emb,vocab);free(x);return 1;

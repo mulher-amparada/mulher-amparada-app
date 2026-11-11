@@ -1,8 +1,9 @@
-"""Treinamento didático do Transformer com previsão do próximo caractere."""
+"""Treinamento do Transformer com validação separada e métricas estáveis."""
 
 from __future__ import annotations
 
 import argparse
+import math
 import random
 from pathlib import Path
 
@@ -11,65 +12,102 @@ import torch
 from .model import AmparadaLanguageModel
 from .tokenizer import CharTokenizer
 
-
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def get_batch(
-    data: torch.Tensor,
-    batch_size: int,
-    block_size: int,
-    device: torch.device,
-) -> tuple[torch.Tensor, torch.Tensor]:
+def encode_file(path: Path, tokenizer: CharTokenizer) -> torch.Tensor:
+    if not path.is_file():
+        raise FileNotFoundError(f"Arquivo não encontrado: {path}")
+    text = path.read_text(encoding="utf-8")
+    encoded = torch.tensor(tokenizer.encode(text), dtype=torch.long)
+    if (encoded == 0).any():
+        raise ValueError(
+            f"{path} contém caracteres que não existem no vocabulário de treino. "
+            "Inclua esses caracteres em data/treino.txt."
+        )
+    return encoded
+
+
+def get_batch(data: torch.Tensor, batch_size: int, block_size: int, device: torch.device):
     if data.numel() <= block_size + 1:
-        raise ValueError("O corpus precisa ter mais caracteres que block_size + 1")
+        raise ValueError(
+            f"O corpus precisa ter mais de {block_size + 1} caracteres; "
+            f"recebidos: {data.numel()}."
+        )
     starts = torch.randint(0, data.numel() - block_size - 1, (batch_size,))
     x = torch.stack([data[start : start + block_size] for start in starts])
     y = torch.stack([data[start + 1 : start + block_size + 1] for start in starts])
     return x.to(device), y.to(device)
 
 
+@torch.no_grad()
+def estimate_loss(model, train_data, validation_data, batch_size, block_size, device, batches):
+    model.eval()
+    result = {}
+    for name, data in (("treino", train_data), ("validação", validation_data)):
+        losses = []
+        for _ in range(batches):
+            x, y = get_batch(data, batch_size, block_size, device)
+            _, loss = model(x, y)
+            losses.append(float(loss.item()))
+        result[name] = sum(losses) / len(losses)
+    model.train()
+    return result
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Treina a Amparada IA experimental.")
     parser.add_argument("--data", type=Path, default=ROOT / "data" / "treino.txt")
+    parser.add_argument("--validation-data", type=Path, default=ROOT / "data" / "validacao.txt")
     parser.add_argument("--output", type=Path, default=ROOT / "runs" / "amparada_ia.pt")
-    parser.add_argument("--steps", type=int, default=500)
-    parser.add_argument("--batch-size", type=int, default=16)
-    parser.add_argument("--block-size", type=int, default=64)
+    parser.add_argument("--steps", type=int, default=2000)
+    parser.add_argument("--batch-size", type=int, default=4)
+    parser.add_argument("--block-size", type=int, default=96)
+    parser.add_argument("--n-embd", type=int, default=64)
+    parser.add_argument("--n-head", type=int, default=4)
+    parser.add_argument("--n-layer", type=int, default=2)
     parser.add_argument("--learning-rate", type=float, default=3e-4)
+    parser.add_argument("--eval-interval", type=int, default=100)
+    parser.add_argument("--eval-batches", type=int, default=5)
     parser.add_argument("--device", default="auto", choices=["auto", "cpu", "cuda"])
     args = parser.parse_args()
 
-    if args.steps < 1:
-        parser.error("--steps precisa ser pelo menos 1")
-    if args.batch_size < 1:
-        parser.error("--batch-size precisa ser pelo menos 1")
-
+    for name in ("steps", "batch_size", "block_size", "n_embd", "n_head", "n_layer", "eval_interval", "eval_batches"):
+        if getattr(args, name) < 1:
+            parser.error(f"--{name.replace('_', '-')} precisa ser positivo.")
+    if args.n_embd % args.n_head:
+        parser.error("--n-embd precisa ser divisível por --n-head.")
     if args.device == "cuda" and not torch.cuda.is_available():
-        parser.error("CUDA foi solicitada, mas não está disponível nesta instalação do PyTorch")
+        parser.error("CUDA foi solicitada, mas não está disponível nesta instalação do PyTorch.")
+
     device = torch.device(
         "cuda" if args.device == "cuda" or (args.device == "auto" and torch.cuda.is_available()) else "cpu"
     )
-
     random.seed(42)
     torch.manual_seed(42)
-    if torch.cuda.is_available():
-        torch.cuda.manual_seed_all(42)
 
-    text = args.data.read_text(encoding="utf-8")
-    tokenizer = CharTokenizer.from_text(text)
-    encoded = torch.tensor(tokenizer.encode(text), dtype=torch.long)
-    split = max(args.block_size + 2, int(len(encoded) * 0.9))
-    if split >= len(encoded):
-        parser.error("Corpus muito pequeno para block_size escolhido; adicione texto de treinamento.")
-    train_data = encoded[:split]
-    validation_data = encoded[split:]
+    train_text = args.data.read_text(encoding="utf-8")
+    tokenizer = CharTokenizer.from_text(train_text)
+    train_data = torch.tensor(tokenizer.encode(train_text), dtype=torch.long)
+    validation_data = encode_file(args.validation_data, tokenizer)
+
+    if train_data.numel() <= args.block_size + 1:
+        parser.error("Corpus de treino pequeno demais para o block-size escolhido.")
+    if validation_data.numel() <= args.block_size + 1:
+        parser.error("Corpus de validação pequeno demais para o block-size escolhido.")
 
     model = AmparadaLanguageModel(
         vocab_size=tokenizer.vocab_size,
         block_size=args.block_size,
+        n_embd=args.n_embd,
+        n_head=args.n_head,
+        n_layer=args.n_layer,
     ).to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.learning_rate)
+
+    print(f"Dispositivo: {device}")
+    print(f"Caracteres de treino: {train_data.numel()} | validação: {validation_data.numel()}")
+    print(f"Vocabulário: {tokenizer.vocab_size} caracteres | parâmetros: {sum(p.numel() for p in model.parameters()):,}")
 
     for step in range(args.steps):
         model.train()
@@ -80,17 +118,16 @@ def main() -> None:
         torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
         optimizer.step()
 
-        if (step + 1) % 50 == 0 or step == 0:
-            message = f"etapa {step + 1}/{args.steps} | perda treino: {loss.item():.4f}"
-            if validation_data.numel() > args.block_size + 1:
-                model.eval()
-                with torch.no_grad():
-                    vx, vy = get_batch(
-                        validation_data, args.batch_size, args.block_size, device
-                    )
-                    _, validation_loss = model(vx, vy)
-                message += f" | perda validação: {validation_loss.item():.4f}"
-            print(message)
+        if (step + 1) % args.eval_interval == 0 or step == 0 or step + 1 == args.steps:
+            metrics = estimate_loss(
+                model, train_data, validation_data, args.batch_size,
+                args.block_size, device, args.eval_batches,
+            )
+            print(
+                f"etapa {step + 1}/{args.steps} | "
+                f"perda treino: {metrics['treino']:.4f} | "
+                f"perda validação: {metrics['validação']:.4f}"
+            )
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     torch.save(
@@ -98,6 +135,12 @@ def main() -> None:
             "model_state": model.state_dict(),
             "model_config": model.config,
             "tokenizer": tokenizer.to_dict(),
+            "training_info": {
+                "steps": args.steps,
+                "train_chars": int(train_data.numel()),
+                "validation_chars": int(validation_data.numel()),
+                "seed": 42,
+            },
         },
         args.output,
     )

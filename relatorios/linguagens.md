@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-11-11T16:58:24Z
+- **Gerado em UTC:** 2026-11-11T18:09:02Z
 - **Linguagens identificadas:** 14
 - **Arquivos classificados:** 446
-- **Tamanho classificado:** 4194168 bytes
+- **Tamanho classificado:** 4202150 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -16,13 +16,13 @@
 
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
-| Java | 309 | 2144910 | 51.14% |
-| Kotlin | 75 | 1541026 | 36.74% |
-| CSS | 20 | 241506 | 5.76% |
+| Java | 309 | 2144910 | 51.04% |
+| Kotlin | 75 | 1541026 | 36.67% |
+| CSS | 20 | 247116 | 5.88% |
 | Shell | 6 | 94995 | 2.26% |
-| HTML | 12 | 68716 | 1.64% |
+| HTML | 12 | 71088 | 1.69% |
 | JavaScript | 5 | 36172 | 0.86% |
-| Python | 10 | 25420 | 0.61% |
+| Python | 10 | 25420 | 0.60% |
 | C | 1 | 18374 | 0.44% |
 | PHP | 1 | 9342 | 0.22% |
 | Julia | 1 | 5989 | 0.14% |
@@ -52,8 +52,8 @@
 ### CSS
 
 - **Arquivos:** 20
-- **Tamanho:** 241506 bytes
-- **Percentual:** 5.76%
+- **Tamanho:** 247116 bytes
+- **Percentual:** 5.88%
 
 - `Amparada IA/web/IA-day.css`
 - `Amparada IA/web/IA-night.css`
@@ -79,8 +79,8 @@
 ### HTML
 
 - **Arquivos:** 12
-- **Tamanho:** 68716 bytes
-- **Percentual:** 1.64%
+- **Tamanho:** 71088 bytes
+- **Percentual:** 1.69%
 
 - `Amparada IA/web/index.html`
 - `app1.html`
@@ -99,7 +99,7 @@
 
 - **Arquivos:** 309
 - **Tamanho:** 2144910 bytes
-- **Percentual:** 51.14%
+- **Percentual:** 51.04%
 
 - `Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/BootReminder.java`
 - `Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/ManagedProvisioningApplication.java`
@@ -435,7 +435,7 @@
 
 - **Arquivos:** 75
 - **Tamanho:** 1541026 bytes
-- **Percentual:** 36.74%
+- **Percentual:** 36.67%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt`
@@ -535,7 +535,7 @@
 
 - **Arquivos:** 10
 - **Tamanho:** 25420 bytes
-- **Percentual:** 0.61%
+- **Percentual:** 0.60%
 
 - `Amparada IA/src/amparada_ia/__init__.py`
 - `Amparada IA/src/amparada_ia/evaluate.py`

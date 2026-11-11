@@ -3,10 +3,10 @@
   "branch": "main",
   "fonte_classificacao": "GitHub Linguist",
   "fonte_lista_linguagens": "https://github.com/github-linguist/linguist",
-  "gerado_em_utc": "2026-11-11T16:58:24Z",
+  "gerado_em_utc": "2026-11-11T18:09:02Z",
   "total_linguagens": 14,
   "total_arquivos_classificados": 446,
-  "total_bytes_classificados": 4194168,
+  "total_bytes_classificados": 4202150,
   "linguagens": [
     {
       "nome": "AIDL",
@@ -26,8 +26,8 @@
     },
     {
       "nome": "CSS",
-      "tamanho_bytes": 241506,
-      "percentual": "5.76",
+      "tamanho_bytes": 247116,
+      "percentual": "5.88",
       "arquivos": [
         "Amparada IA/web/IA-day.css",
         "Amparada IA/web/IA-night.css",
@@ -53,8 +53,8 @@
     },
     {
       "nome": "HTML",
-      "tamanho_bytes": 68716,
-      "percentual": "1.64",
+      "tamanho_bytes": 71088,
+      "percentual": "1.69",
       "arquivos": [
         "Amparada IA/web/index.html",
         "app1.html",
@@ -73,7 +73,7 @@
     {
       "nome": "Java",
       "tamanho_bytes": 2144910,
-      "percentual": "51.14",
+      "percentual": "51.04",
       "arquivos": [
         "Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/BootReminder.java",
         "Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/ManagedProvisioningApplication.java",
@@ -409,7 +409,7 @@
     {
       "nome": "Kotlin",
       "tamanho_bytes": 1541026,
-      "percentual": "36.74",
+      "percentual": "36.67",
       "arquivos": [
         "Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt",
         "Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt",
@@ -509,7 +509,7 @@
     {
       "nome": "Python",
       "tamanho_bytes": 25420,
-      "percentual": "0.61",
+      "percentual": "0.60",
       "arquivos": [
         "Amparada IA/src/amparada_ia/__init__.py",
         "Amparada IA/src/amparada_ia/evaluate.py",

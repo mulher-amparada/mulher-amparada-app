@@ -1,102 +1,72 @@
 <!doctype html>
-<html lang="pt-BR" data-theme="day">
+<html lang="pt-BR">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#ffffff">
-    <meta
-      name="description"
-      content="Demonstração experimental da Amparada IA, projeto Mulher Amparada."
-    >
-
+    <meta name="color-scheme" content="light dark">
+    <meta name="description" content="Demonstração experimental da Amparada IA, projeto Mulher Amparada.">
     <title>Amparada IA | Mulher Amparada</title>
-
     <link rel="stylesheet" href="IA-day.css">
     <link rel="stylesheet" href="IA-night.css">
     <script src="ia.js" defer></script>
   </head>
 
   <body>
-    <div class="app">
-      <header class="topbar">
-        <div class="brand">
-          <span class="brand-mark" aria-hidden="true">✿</span>
-          <span>Mulher Amparada</span>
+    <header class="topbar">
+      <a class="brand" href="https://github.com/mulher-amparada/mulher-amparada-app">
+        <span class="brand-mark" aria-hidden="true">✿</span>
+        <span>Mulher Amparada</span>
+      </a>
+      <a class="project-link" href="https://github.com/mulher-amparada/mulher-amparada-app">
+        Projeto no GitHub
+      </a>
+    </header>
+
+    <main class="main">
+      <section class="intro">
+        <h1>Amparada IA</h1>
+        <p>Uma experiência experimental de conversa do projeto Mulher Amparada.</p>
+      </section>
+
+      <aside class="notice">
+        <strong>Protótipo experimental</strong>
+        O modelo pode gerar respostas incorretas ou sem sentido. Não envie nomes,
+        endereços, relatos pessoais ou informações sensíveis. Não utilize esta
+        demonstração para situações de risco ou decisões importantes.
+      </aside>
+
+      <section class="chat" aria-label="Conversa com a Amparada IA">
+        <div class="messages" id="messages" aria-live="polite">
+          <div class="message assistant">
+            Olá! Esta é uma demonstração técnica da Amparada IA.
+            O que você gostaria de testar?
+          </div>
         </div>
 
-        <nav class="top-actions" aria-label="Navegação principal">
-          <a href="https://github.com/mulher-amparada/mulher-amparada-app">
-            Projeto no GitHub
-          </a>
+        <form class="composer" id="chat-form">
+          <textarea
+            id="prompt"
+            name="message"
+            rows="1"
+            maxlength="500"
+            placeholder="Digite uma mensagem…"
+            aria-label="Digite sua mensagem"
+            required
+          ></textarea>
+          <button id="send-button" type="submit">Enviar</button>
+        </form>
 
-          <button
-            class="icon-button"
-            id="theme-toggle"
-            type="button"
-            aria-label="Ativar tema escuro"
-          >
-            ☾
-          </button>
-        </nav>
-      </header>
+        <p class="hint">Até 500 caracteres. Evite compartilhar informações pessoais.</p>
+      </section>
 
-      <main>
-        <section class="welcome">
-          <h1>O que vamos explorar?</h1>
-          <p>Converse com a Amparada IA, uma experiência experimental do projeto.</p>
-        </section>
+      <p class="status" role="status">
+        <span class="status-dot" id="status-dot"></span>
+        <span id="status-label">Verificando o servidor…</span>
+      </p>
+    </main>
 
-        <aside class="notice">
-          <strong>Protótipo experimental</strong>
-          Este modelo ainda está em desenvolvimento e pode gerar respostas incorretas
-          ou sem sentido. Não envie nomes, endereços, relatos pessoais ou informações
-          sensíveis. Não utilize esta demonstração para situações de risco ou decisões
-          importantes.
-        </aside>
-
-        <section class="chat-panel" aria-label="Conversa com a Amparada IA">
-          <div
-            class="messages"
-            id="messages"
-            aria-live="polite"
-            aria-label="Mensagens da conversa"
-          >
-            <div class="message assistant">
-              Olá! Esta é uma demonstração da Amparada IA.
-              O que você gostaria de testar?
-            </div>
-          </div>
-
-          <form class="composer" id="chat-form">
-            <textarea
-              id="prompt"
-              name="message"
-              rows="1"
-              maxlength="500"
-              placeholder="Pergunte alguma coisa…"
-              aria-label="Digite sua mensagem"
-              required
-            ></textarea>
-
-            <button class="send-button" id="send-button" type="submit">
-              Enviar
-            </button>
-          </form>
-
-          <div class="composer-hint">
-            Até 500 caracteres por mensagem. Evite compartilhar informações pessoais.
-          </div>
-        </section>
-
-        <div class="status" role="status">
-          <span class="status-dot" id="status-dot"></span>
-          <span id="status-label">Verificando o servidor…</span>
-        </div>
-      </main>
-
-      <footer class="footer">
-        Mulher Amparada · Amparada IA · Modelo de linguagem experimental.
-      </footer>
-    </div>
+    <footer class="footer">
+      Mulher Amparada · Amparada IA · Modelo de linguagem experimental.
+    </footer>
   </body>
 </html>

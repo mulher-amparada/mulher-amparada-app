@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-11-11T18:41:45Z
+- **Gerado em UTC:** 2026-11-11T18:46:01Z
 - **Linguagens identificadas:** 14
 - **Arquivos classificados:** 446
-- **Tamanho classificado:** 4199217 bytes
+- **Tamanho classificado:** 4199385 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -18,10 +18,10 @@
 |---|---:|---:|---:|
 | Java | 309 | 2144910 | 51.08% |
 | Kotlin | 75 | 1541026 | 36.70% |
-| CSS | 20 | 241974 | 5.76% |
+| CSS | 20 | 242119 | 5.77% |
 | Shell | 6 | 94995 | 2.26% |
 | HTML | 12 | 69571 | 1.66% |
-| JavaScript | 5 | 37554 | 0.89% |
+| JavaScript | 5 | 37577 | 0.89% |
 | Python | 10 | 27764 | 0.66% |
 | C | 1 | 18374 | 0.44% |
 | PHP | 1 | 9342 | 0.22% |
@@ -52,8 +52,8 @@
 ### CSS
 
 - **Arquivos:** 20
-- **Tamanho:** 241974 bytes
-- **Percentual:** 5.76%
+- **Tamanho:** 242119 bytes
+- **Percentual:** 5.77%
 
 - `Amparada IA/web/IA-day.css`
 - `Amparada IA/web/IA-night.css`
@@ -414,7 +414,7 @@
 ### JavaScript
 
 - **Arquivos:** 5
-- **Tamanho:** 37554 bytes
+- **Tamanho:** 37577 bytes
 - **Percentual:** 0.89%
 
 - `Amparada IA/web/ia.js`

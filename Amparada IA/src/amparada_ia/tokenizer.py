@@ -23,7 +23,13 @@ class BPETokenizer:
             raise ValueError("vocab_size precisa ser pelo menos 16.")
 
         words = Counter(tuple(piece) for piece in _PATTERN.findall(text) if piece)
-        symbols = {"<unk>"}
+
+        # Reserva caracteres ASCII imprimíveis e whitespace comuns para que
+        # pontuação não vista no corpus não seja convertida em <unk>.
+        base_symbols = {chr(code) for code in range(32, 127)}
+        base_symbols.update({"\t", "\n", "\r"})
+
+        symbols = {"<unk>", *base_symbols}
         for word in words:
             symbols.update(word)
 
@@ -61,8 +67,8 @@ class BPETokenizer:
             merges.append(pair)
             symbols.add(merged)
 
-        # IDs determinísticos: <unk>, caracteres e depois as fusões aprendidas.
-        base = sorted({ch for piece in _PATTERN.findall(text) for ch in piece})
+        # IDs determinísticos: <unk>, caracteres base e depois as fusões aprendidas.
+        base = sorted(base_symbols | {ch for piece in _PATTERN.findall(text) for ch in piece})
         itos = ["<unk>"] + base
         for left, right in merges:
             merged = left + right

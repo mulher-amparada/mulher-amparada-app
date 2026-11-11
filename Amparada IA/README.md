@@ -1,4 +1,4 @@
-# Amparada IA — modelo experimental do zero
+# 🫆Amparada IA — modelo experimental do zero:
 
 Este diretório inicia a pesquisa de uma IA própria para o ecossistema Mulher Amparada.
 
@@ -8,7 +8,7 @@ O protótipo implementa sua própria arquitetura de linguagem e inicializa todos
 
 A primeira versão é um modelo de linguagem pequeno, baseado em Transformer Decoder-only, treinado para prever o próximo caractere. É uma experiência educacional, não um assistente inteligente pronto.
 
-## Estado atual
+## Estado atual:
 
 - [x] Tokenizador simples por caractere
 - [x] Blocos Transformer causais
@@ -22,7 +22,7 @@ A primeira versão é um modelo de linguagem pequeno, baseado em Transformer Dec
 - [ ] Otimização de inferência em C (etapa futura)
 - [ ] Avaliação de segurança, privacidade e acessibilidade antes de qualquer uso real
 
-## Estrutura
+## Estrutura:
 
 ```text
 Amparada IA/
@@ -45,7 +45,7 @@ Amparada IA/
 └── requirements.txt
 ```
 
-## Requisitos
+## Requisitos:
 
 - Python 3.10 ou superior
 - PyTorch 2.2 ou superior
@@ -79,7 +79,7 @@ Para usar uma GPU NVIDIA compatível com sua instalação do PyTorch:
 python -m src.amparada_ia.train --device cuda --steps 500
 ```
 
-## Gerar texto
+## Gerar texto:
 
 Depois do treinamento:
 
@@ -89,7 +89,7 @@ python -m src.amparada_ia.generate --prompt "O respeito"
 
 A geração é experimental. Como o corpus inicial é minúsculo, a saída provavelmente será repetitiva, incoerente ou conterá erros. Isso é esperado nesta primeira prova de conceito.
 
-## Testes automatizados
+## Testes automatizados:
 
 A partir desta pasta:
 
@@ -111,11 +111,11 @@ A avaliação usa `data/validacao.txt`, separado do corpus de treinamento. O voc
 
 A perda mede erro de previsão. A perplexidade é uma transformação dessa perda. Nenhuma das duas métricas mede compreensão, factualidade, segurança ou qualidade de acolhimento.
 
-## Dados e privacidade
+## Dados e privacidade:
 
 Os arquivos de treinamento e validação contêm somente frases demonstrativas e sintéticas. Não adicione relatos privados, nomes, endereços, conversas de usuárias ou informações sobre situações reais de violência. Dados reais exigiriam avaliação jurídica, ética, de privacidade e de segurança, além de base legal e proteção apropriadas.
 
-## Segurança e limites
+## Segurança e limites:
 
 - Este protótipo **não deve ser apresentado como serviço de acolhimento, aconselhamento jurídico, médico ou de emergência**.
 - Não conecte esta versão experimental a usuárias nem a fluxos de atendimento real.

@@ -1,34 +1,46 @@
+@font-face {
+  font-family: "Amparada";
+  src: url("../../font.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 300 800;
+  font-display: swap;
+}
+
 :root {
-  color-scheme: light;
-  --bg: #ffffff;
-  --surface: #f5f5f5;
-  --surface-strong: #eeeeee;
-  --text: #171717;
-  --muted: #737373;
-  --border: #e5e5e5;
+  color-scheme: light dark;
+  --background: #ffffff;
+  --surface: #f7f7f8;
+  --surface-raised: #ffffff;
+  --text: #202124;
+  --muted: #6b7280;
+  --border: #e5e7eb;
   --accent: #8b466b;
-  --accent-contrast: #ffffff;
+  --accent-text: #ffffff;
   --notice-bg: #fff8e8;
   --notice-border: #ead9ad;
   --notice-text: #5f4b22;
-  --user-message: #f1e5eb;
-  --assistant-message: transparent;
+  --user-bubble: #f2e7ed;
+  --assistant-bubble: #f4f4f5;
 }
 
 * {
   box-sizing: border-box;
 }
 
-html {
-  min-height: 100%;
-}
-
 body {
   min-height: 100vh;
   margin: 0;
-  background: var(--bg);
+  padding: 0 20px;
+  background: var(--background);
   color: var(--text);
-  font: 16px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: "Amparada", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
 button,
@@ -36,26 +48,15 @@ textarea {
   font: inherit;
 }
 
-button,
-a,
-textarea {
-  -webkit-tap-highlight-color: transparent;
-}
-
-.app {
-  width: min(900px, 100%);
-  min-height: 100vh;
-  margin: 0 auto;
-  padding: 22px 24px 28px;
-  display: flex;
-  flex-direction: column;
-}
-
 .topbar {
+  width: min(760px, 100%);
+  min-height: 68px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  border-bottom: 1px solid var(--border);
 }
 
 .brand {
@@ -63,81 +64,56 @@ textarea {
   align-items: center;
   gap: 10px;
   font-weight: 700;
-  letter-spacing: -0.02em;
 }
 
 .brand-mark {
-  width: 34px;
-  height: 34px;
   display: grid;
+  width: 32px;
+  height: 32px;
   place-items: center;
   border-radius: 50%;
-  background: var(--surface-strong);
+  background: var(--surface);
   color: var(--accent);
-  font-size: 19px;
 }
 
-.top-actions {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.top-actions a {
+.project-link,
+.hint,
+.footer,
+.status {
   color: var(--muted);
   font-size: 13px;
-  text-decoration: none;
 }
 
-.top-actions a:hover {
-  color: var(--text);
+.main {
+  width: min(680px, 100%);
+  margin: 56px auto 40px;
 }
 
-.icon-button {
-  width: 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  background: var(--bg);
-  color: var(--text);
-  cursor: pointer;
-}
-
-main {
-  width: 100%;
-  max-width: 720px;
-  margin: auto;
-  padding: 64px 0 42px;
-}
-
-.welcome {
-  margin-bottom: 30px;
+.intro {
+  margin-bottom: 24px;
   text-align: center;
 }
 
-.welcome h1 {
-  margin: 0 0 10px;
-  font-size: clamp(30px, 6vw, 44px);
-  font-weight: 650;
-  letter-spacing: -0.045em;
-  line-height: 1.12;
+.intro h1 {
+  margin: 0 0 8px;
+  font-size: clamp(32px, 7vw, 44px);
+  line-height: 1.15;
+  letter-spacing: -0.04em;
 }
 
-.welcome p {
+.intro p {
   margin: 0;
   color: var(--muted);
 }
 
 .notice {
-  margin: 0 0 18px;
+  margin-bottom: 16px;
   padding: 12px 14px;
   border: 1px solid var(--notice-border);
-  border-radius: 14px;
+  border-radius: 12px;
   background: var(--notice-bg);
   color: var(--notice-text);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .notice strong {
@@ -145,45 +121,43 @@ main {
   margin-bottom: 3px;
 }
 
-.chat-panel {
+.chat {
   overflow: hidden;
   border: 1px solid var(--border);
-  border-radius: 22px;
-  background: var(--bg);
+  border-radius: 16px;
+  background: var(--surface-raised);
 }
 
 .messages {
-  min-height: 210px;
-  max-height: 48vh;
+  min-height: 260px;
+  max-height: 52vh;
   overflow-y: auto;
-  padding: 22px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  scroll-behavior: smooth;
+  gap: 12px;
 }
 
 .message {
   max-width: 88%;
-  padding: 12px 15px;
-  border-radius: 18px;
+  padding: 11px 14px;
+  border-radius: 14px;
   overflow-wrap: anywhere;
   white-space: pre-wrap;
 }
 
 .message.assistant {
   align-self: flex-start;
-  background: var(--assistant-message);
+  background: var(--assistant-bubble);
 }
 
 .message.user {
   align-self: flex-end;
-  background: var(--user-message);
+  background: var(--user-bubble);
 }
 
 .message.pending {
   color: var(--muted);
-  font-style: italic;
 }
 
 .composer {
@@ -195,13 +169,14 @@ main {
 }
 
 .composer textarea {
-  min-height: 48px;
-  max-height: 150px;
+  min-width: 0;
+  min-height: 46px;
+  max-height: 130px;
   flex: 1;
   resize: vertical;
-  padding: 12px 14px;
-  border: 1px solid transparent;
-  border-radius: 15px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
   outline: none;
   background: var(--surface);
   color: var(--text);
@@ -211,41 +186,38 @@ main {
   border-color: var(--accent);
 }
 
-.send-button {
+.composer button {
   min-height: 46px;
-  padding: 0 19px;
+  padding: 0 18px;
   border: 0;
-  border-radius: 14px;
+  border-radius: 12px;
   background: var(--accent);
-  color: var(--accent-contrast);
-  font-weight: 650;
+  color: var(--accent-text);
   cursor: pointer;
+  font-weight: 700;
 }
 
-.send-button:disabled {
-  opacity: 0.55;
+.composer button:disabled {
+  opacity: 0.6;
   cursor: wait;
 }
 
-.composer-hint {
-  padding: 0 16px 13px;
-  color: var(--muted);
-  font-size: 11px;
+.hint {
+  margin: 0;
+  padding: 0 14px 12px;
 }
 
 .status {
-  margin-top: 13px;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 7px;
-  color: var(--muted);
-  font-size: 12px;
+  gap: 8px;
+  margin: 14px 0 0;
 }
 
 .status-dot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: #c49b4a;
 }
@@ -259,24 +231,22 @@ main {
 }
 
 .footer {
-  margin-top: 24px;
-  color: var(--muted);
-  font-size: 11px;
+  padding: 0 12px 24px;
   text-align: center;
 }
 
-@media (max-width: 560px) {
-  .app {
-    padding: 16px 13px 20px;
+@media (max-width: 520px) {
+  body {
+    padding: 0 12px;
   }
 
-  main {
-    padding: 54px 0 28px;
+  .main {
+    margin-top: 36px;
   }
 
   .messages {
-    min-height: 190px;
-    padding: 15px;
+    min-height: 220px;
+    padding: 13px;
   }
 
   .message {
@@ -284,14 +254,11 @@ main {
   }
 
   .composer {
+    gap: 8px;
     padding: 9px;
   }
 
-  .send-button {
-    padding: 0 14px;
-  }
-
-  .top-actions a {
-    display: none;
+  .composer button {
+    padding: 0 13px;
   }
 }

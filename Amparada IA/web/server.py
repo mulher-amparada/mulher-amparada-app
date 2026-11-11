@@ -23,7 +23,7 @@ MODEL = TOKENIZER = MODEL_ERROR = None
 def get_greeting_response(message: str) -> str | None:
     """Responde a cumprimentos comuns sem depender da geração experimental."""
     normalized = re.sub(r"[^a-záàâãéêíóôõúç ]", "", message.casefold()).strip()
-    normalized = re.sub(r"\\s+", " ", normalized)
+    normalized = re.sub(r"\s+", " ", normalized)
 
     greetings = {
         "oi": "Olá! Tudo bem?",

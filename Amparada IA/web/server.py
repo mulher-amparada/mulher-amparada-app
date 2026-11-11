@@ -1,4 +1,4 @@
-"""Servidor local da demonstração web da Amparada IA."""
+"""Servidor local da demonstração web da Amparada IA com tokenizador BPE."""
 from __future__ import annotations
 
 import json
@@ -10,7 +10,7 @@ import torch
 
 ROOT = Path(__file__).resolve().parents[1]
 WEB_DIR = Path(__file__).resolve().parent
-CHECKPOINT = ROOT / "runs" / "amparada_ia.pt"
+CHECKPOINT = ROOT / "runs" / "amparada_ia_bpe.pt"
 FONT_FILE = ROOT.parent / "font.ttf"
 if not FONT_FILE.is_file():
     FONT_FILE = ROOT / "font.ttf"
@@ -23,7 +23,10 @@ def load_model():
     global MODEL, TOKENIZER, MODEL_ERROR
 
     if not CHECKPOINT.is_file():
-        MODEL_ERROR = "Modelo ainda não treinado. Siga o README da Amparada IA."
+        MODEL_ERROR = (
+            "Checkpoint BPE não encontrado. Treine com "
+            "python -m src.amparada_ia.train antes de iniciar o servidor."
+        )
         return
 
     try:
@@ -34,15 +37,19 @@ def load_model():
         )
 
         from amparada_ia.model import AmparadaLanguageModel
-        from amparada_ia.tokenizer import CharTokenizer
+        from amparada_ia.tokenizer import BPETokenizer
 
-        TOKENIZER = CharTokenizer.from_dict(checkpoint["tokenizer"])
+        if checkpoint.get("tokenizer", {}).get("type") != "bpe":
+            raise ValueError("O checkpoint não usa o tokenizador BPE.")
+
+        TOKENIZER = BPETokenizer.from_dict(checkpoint["tokenizer"])
         MODEL = AmparadaLanguageModel(**checkpoint["model_config"])
         MODEL.load_state_dict(checkpoint["model_state"])
         MODEL.eval()
         MODEL_ERROR = None
     except Exception as exc:
-        MODEL_ERROR = f"Falha ao carregar checkpoint: {type(exc).__name__}"
+        MODEL = TOKENIZER = None
+        MODEL_ERROR = f"Falha ao carregar checkpoint BPE: {type(exc).__name__}: {exc}"
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -64,11 +71,7 @@ class Handler(SimpleHTTPRequestHandler):
                 200,
                 {
                     "ready": MODEL is not None,
-                    "message": (
-                        "Modelo carregado."
-                        if MODEL is not None
-                        else MODEL_ERROR
-                    ),
+                    "message": "Modelo BPE carregado." if MODEL is not None else MODEL_ERROR,
                 },
             )
             return
@@ -98,10 +101,7 @@ class Handler(SimpleHTTPRequestHandler):
             return
 
         if MODEL is None or TOKENIZER is None:
-            self.send_json(
-                503,
-                {"error": MODEL_ERROR or "Modelo indisponível."},
-            )
+            self.send_json(503, {"error": MODEL_ERROR or "Modelo indisponível."})
             return
 
         try:
@@ -123,10 +123,7 @@ class Handler(SimpleHTTPRequestHandler):
 
             ids = TOKENIZER.encode(message.strip())
             if not ids:
-                self.send_json(
-                    400,
-                    {"error": "Mensagem sem caracteres reconhecíveis."},
-                )
+                self.send_json(400, {"error": "Mensagem sem tokens reconhecíveis."})
                 return
 
             context = torch.tensor(
@@ -141,10 +138,7 @@ class Handler(SimpleHTTPRequestHandler):
                     temperature=0.8,
                 )
 
-            answer = TOKENIZER.decode(
-                output[0, len(context[0]):].tolist()
-            ).strip()
-
+            answer = TOKENIZER.decode(output[0, len(context[0]):].tolist()).strip()
             self.send_json(
                 200,
                 {
@@ -156,10 +150,7 @@ class Handler(SimpleHTTPRequestHandler):
         except (ValueError, json.JSONDecodeError):
             self.send_json(400, {"error": "Requisição inválida."})
         except Exception as exc:
-            self.send_json(
-                500,
-                {"error": f"Falha na inferência: {type(exc).__name__}"},
-            )
+            self.send_json(500, {"error": f"Falha na inferência: {type(exc).__name__}"})
 
     def log_message(self, format, *args):
         super().log_message(format, *args)

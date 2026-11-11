@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-11-11T12:57:57Z
+- **Gerado em UTC:** 2026-11-11T13:02:56Z
 - **Linguagens identificadas:** 14
-- **Arquivos classificados:** 433
-- **Tamanho classificado:** 4160234 bytes
+- **Arquivos classificados:** 438
+- **Tamanho classificado:** 4171831 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -16,20 +16,20 @@
 
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
-| Java | 309 | 2144910 | 51.56% |
-| Kotlin | 75 | 1541026 | 37.04% |
-| CSS | 18 | 237144 | 5.70% |
+| Java | 309 | 2144910 | 51.41% |
+| Kotlin | 75 | 1541026 | 36.94% |
+| CSS | 18 | 237144 | 5.68% |
 | Shell | 6 | 94995 | 2.28% |
 | HTML | 11 | 66177 | 1.59% |
 | JavaScript | 4 | 33816 | 0.81% |
 | C | 1 | 18374 | 0.44% |
+| Python | 6 | 12340 | 0.30% |
 | PHP | 1 | 9342 | 0.22% |
 | Julia | 1 | 5989 | 0.14% |
 | TypeScript | 1 | 3052 | 0.07% |
 | Ruby | 1 | 2025 | 0.05% |
 | AIDL | 1 | 1537 | 0.04% |
 | Makefile | 3 | 1104 | 0.03% |
-| Python | 1 | 743 | 0.02% |
 
 ## Arquivos por linguagem
 
@@ -53,7 +53,7 @@
 
 - **Arquivos:** 18
 - **Tamanho:** 237144 bytes
-- **Percentual:** 5.70%
+- **Percentual:** 5.68%
 
 - `app1-day.css`
 - `app1-night.css`
@@ -96,7 +96,7 @@
 
 - **Arquivos:** 309
 - **Tamanho:** 2144910 bytes
-- **Percentual:** 51.56%
+- **Percentual:** 51.41%
 
 - `Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/BootReminder.java`
 - `Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/ManagedProvisioningApplication.java`
@@ -431,7 +431,7 @@
 
 - **Arquivos:** 75
 - **Tamanho:** 1541026 bytes
-- **Percentual:** 37.04%
+- **Percentual:** 36.94%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt`
@@ -529,10 +529,15 @@
 
 ### Python
 
-- **Arquivos:** 1
-- **Tamanho:** 743 bytes
-- **Percentual:** 0.02%
+- **Arquivos:** 6
+- **Tamanho:** 12340 bytes
+- **Percentual:** 0.30%
 
+- `Amparada IA/src/amparada_ia/__init__.py`
+- `Amparada IA/src/amparada_ia/generate.py`
+- `Amparada IA/src/amparada_ia/model.py`
+- `Amparada IA/src/amparada_ia/tokenizer.py`
+- `Amparada IA/src/amparada_ia/train.py`
 - `scripts/atualizar_footer.py`
 
 ### Ruby

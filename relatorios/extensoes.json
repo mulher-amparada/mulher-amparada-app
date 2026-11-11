@@ -1,58 +1,58 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-11T12:57:57Z",
-  "total_arquivos": 1288,
-  "total_bytes": 102239732,
+  "gerado_em_utc": "2026-11-11T13:02:56Z",
+  "total_arquivos": 1298,
+  "total_bytes": 102257086,
   "total_extensoes": 41,
   "extensoes": [
     {
       "extensao": ".xml",
       "quantidade_arquivos": 400,
       "tamanho_bytes": 3654104,
-      "percentual_arquivos": 31.06,
+      "percentual_arquivos": 30.82,
       "percentual_bytes": 3.57
     },
     {
       "extensao": ".java",
       "quantidade_arquivos": 309,
       "tamanho_bytes": 2144910,
-      "percentual_arquivos": 23.99,
+      "percentual_arquivos": 23.81,
       "percentual_bytes": 2.1
     },
     {
       "extensao": ".md",
-      "quantidade_arquivos": 263,
-      "tamanho_bytes": 523104,
+      "quantidade_arquivos": 265,
+      "tamanho_bytes": 527791,
       "percentual_arquivos": 20.42,
-      "percentual_bytes": 0.51
+      "percentual_bytes": 0.52
     },
     {
       "extensao": ".png",
       "quantidade_arquivos": 105,
       "tamanho_bytes": 76848499,
-      "percentual_arquivos": 8.15,
-      "percentual_bytes": 75.17
+      "percentual_arquivos": 8.09,
+      "percentual_bytes": 75.15
     },
     {
       "extensao": ".kt",
       "quantidade_arquivos": 75,
       "tamanho_bytes": 1541026,
-      "percentual_arquivos": 5.82,
+      "percentual_arquivos": 5.78,
       "percentual_bytes": 1.51
     },
     {
       "extensao": ".css",
       "quantidade_arquivos": 18,
       "tamanho_bytes": 237144,
-      "percentual_arquivos": 1.4,
+      "percentual_arquivos": 1.39,
       "percentual_bytes": 0.23
     },
     {
       "extensao": ".json",
       "quantidade_arquivos": 18,
-      "tamanho_bytes": 1396667,
-      "percentual_arquivos": 1.4,
+      "tamanho_bytes": 1396919,
+      "percentual_arquivos": 1.39,
       "percentual_bytes": 1.37
     },
     {
@@ -73,21 +73,28 @@
       "extensao": ".gradle",
       "quantidade_arquivos": 6,
       "tamanho_bytes": 8170,
-      "percentual_arquivos": 0.47,
+      "percentual_arquivos": 0.46,
+      "percentual_bytes": 0.01
+    },
+    {
+      "extensao": ".py",
+      "quantidade_arquivos": 6,
+      "tamanho_bytes": 12340,
+      "percentual_arquivos": 0.46,
       "percentual_bytes": 0.01
     },
     {
       "extensao": ".sh",
       "quantidade_arquivos": 6,
       "tamanho_bytes": 94995,
-      "percentual_arquivos": 0.47,
+      "percentual_arquivos": 0.46,
       "percentual_bytes": 0.09
     },
     {
       "extensao": "[sem extensão]",
       "quantidade_arquivos": 6,
       "tamanho_bytes": 12805,
-      "percentual_arquivos": 0.47,
+      "percentual_arquivos": 0.46,
       "percentual_bytes": 0.01
     },
     {
@@ -112,11 +119,25 @@
       "percentual_bytes": 0.0
     },
     {
+      "extensao": ".txt",
+      "quantidade_arquivos": 5,
+      "tamanho_bytes": 813,
+      "percentual_arquivos": 0.39,
+      "percentual_bytes": 0.0
+    },
+    {
       "extensao": ".js",
       "quantidade_arquivos": 4,
       "tamanho_bytes": 33816,
       "percentual_arquivos": 0.31,
       "percentual_bytes": 0.03
+    },
+    {
+      "extensao": ".gitignore",
+      "quantidade_arquivos": 3,
+      "tamanho_bytes": 395,
+      "percentual_arquivos": 0.23,
+      "percentual_bytes": 0.0
     },
     {
       "extensao": ".mk",
@@ -133,52 +154,38 @@
       "percentual_bytes": 0.0
     },
     {
-      "extensao": ".txt",
-      "quantidade_arquivos": 3,
-      "tamanho_bytes": 63,
-      "percentual_arquivos": 0.23,
-      "percentual_bytes": 0.0
-    },
-    {
       "extensao": ".apk",
       "quantidade_arquivos": 2,
       "tamanho_bytes": 14570670,
-      "percentual_arquivos": 0.16,
+      "percentual_arquivos": 0.15,
       "percentual_bytes": 14.25
     },
     {
       "extensao": ".bat",
       "quantidade_arquivos": 2,
       "tamanho_bytes": 5526,
-      "percentual_arquivos": 0.16,
+      "percentual_arquivos": 0.15,
       "percentual_bytes": 0.01
-    },
-    {
-      "extensao": ".gitignore",
-      "quantidade_arquivos": 2,
-      "tamanho_bytes": 327,
-      "percentual_arquivos": 0.16,
-      "percentual_bytes": 0.0
     },
     {
       "extensao": ".ico",
       "quantidade_arquivos": 2,
       "tamanho_bytes": 30812,
-      "percentual_arquivos": 0.16,
+      "percentual_arquivos": 0.15,
       "percentual_bytes": 0.03
     },
     {
       "extensao": ".jar",
       "quantidade_arquivos": 2,
       "tamanho_bytes": 118406,
-      "percentual_arquivos": 0.16,
+      "percentual_arquivos": 0.15,
       "percentual_bytes": 0.12
     },
     {
       "extensao": ".pro",
       "quantidade_arquivos": 2,
       "tamanho_bytes": 0,
-      "percentual_arquivos": 0.16,
+      "percentual_arquivos": 0.15,
       "percentual_bytes": 0.0
     },
     {
@@ -248,13 +255,6 @@
       "extensao": ".proto",
       "quantidade_arquivos": 1,
       "tamanho_bytes": 1437,
-      "percentual_arquivos": 0.08,
-      "percentual_bytes": 0.0
-    },
-    {
-      "extensao": ".py",
-      "quantidade_arquivos": 1,
-      "tamanho_bytes": 743,
       "percentual_arquivos": 0.08,
       "percentual_bytes": 0.0
     },

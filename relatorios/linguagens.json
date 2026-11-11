@@ -3,10 +3,10 @@
   "branch": "main",
   "fonte_classificacao": "GitHub Linguist",
   "fonte_lista_linguagens": "https://github.com/github-linguist/linguist",
-  "gerado_em_utc": "2026-11-11T12:57:57Z",
+  "gerado_em_utc": "2026-11-11T13:02:56Z",
   "total_linguagens": 14,
-  "total_arquivos_classificados": 433,
-  "total_bytes_classificados": 4160234,
+  "total_arquivos_classificados": 438,
+  "total_bytes_classificados": 4171831,
   "linguagens": [
     {
       "nome": "AIDL",
@@ -27,7 +27,7 @@
     {
       "nome": "CSS",
       "tamanho_bytes": 237144,
-      "percentual": "5.70",
+      "percentual": "5.68",
       "arquivos": [
         "app1-day.css",
         "app1-night.css",
@@ -70,7 +70,7 @@
     {
       "nome": "Java",
       "tamanho_bytes": 2144910,
-      "percentual": "51.56",
+      "percentual": "51.41",
       "arquivos": [
         "Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/BootReminder.java",
         "Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/ManagedProvisioningApplication.java",
@@ -405,7 +405,7 @@
     {
       "nome": "Kotlin",
       "tamanho_bytes": 1541026,
-      "percentual": "37.04",
+      "percentual": "36.94",
       "arquivos": [
         "Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt",
         "Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt",
@@ -504,9 +504,14 @@
     },
     {
       "nome": "Python",
-      "tamanho_bytes": 743,
-      "percentual": "0.02",
+      "tamanho_bytes": 12340,
+      "percentual": "0.30",
       "arquivos": [
+        "Amparada IA/src/amparada_ia/__init__.py",
+        "Amparada IA/src/amparada_ia/generate.py",
+        "Amparada IA/src/amparada_ia/model.py",
+        "Amparada IA/src/amparada_ia/tokenizer.py",
+        "Amparada IA/src/amparada_ia/train.py",
         "scripts/atualizar_footer.py"
       ]
     },

@@ -13,15 +13,26 @@
 <body>
   <header class="topbar">
     <a class="brand" href="https://github.com/mulher-amparada/mulher-amparada-app" aria-label="Projeto Mulher Amparada">
-      <span class="brand-mark" aria-hidden="true">✿</span>
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="23" height="23" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 3.2c2.2 2.1 2.2 4.6 0 6.8-2.2-2.2-2.2-4.7 0-6.8Z" fill="currentColor"/>
+          <path d="M20.8 12c-2.1 2.2-4.6 2.2-6.8 0 2.2-2.2 4.7-2.2 6.8 0Z" fill="currentColor"/>
+          <path d="M12 20.8c-2.2-2.1-2.2-4.6 0-6.8 2.2 2.2 2.2 4.7 0 6.8Z" fill="currentColor"/>
+          <path d="M3.2 12c2.1-2.2 4.6-2.2 6.8 0-2.2 2.2-4.7 2.2-6.8 0Z" fill="currentColor"/>
+          <circle cx="12" cy="12" r="2" fill="currentColor"/>
+        </svg>
+      </span>
       <span>Amparada IA</span>
     </a>
-    <a class="menu-button" href="https://github.com/mulher-amparada/mulher-amparada-app" target="_blank" rel="noopener noreferrer" aria-label="Abrir projeto e opções">•••</a>
+    <a class="menu-button" href="https://github.com/mulher-amparada/mulher-amparada-app" target="_blank" rel="noopener noreferrer" aria-label="Abrir projeto no GitHub">
+      <svg viewBox="0 0 24 24" width="23" height="23" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </a>
   </header>
 
   <main class="main">
     <section class="welcome" aria-label="Amparada IA">
-      <div class="loader" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
       <p class="welcome-title">Amparada IA</p>
       <p class="welcome-subtitle">Uma conversa começa com uma pergunta.</p>
     </section>
@@ -38,7 +49,9 @@
         <textarea id="prompt" name="message" rows="1" maxlength="500" placeholder="Pergunte à Amparada IA..." autocomplete="off" required></textarea>
         <button class="send-button" id="send-button" type="submit" aria-label="Enviar mensagem">
           <span id="send-label" class="visually-hidden">Enviar</span>
-          <span aria-hidden="true">↑</span>
+          <svg viewBox="0 0 24 24" width="23" height="23" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 19V5m-6 6 6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </button>
       </form>
       <div class="composer-footer">

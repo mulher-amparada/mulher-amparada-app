@@ -47,7 +47,7 @@ async function checkModelStatus() {
     if (!response.ok) throw new Error("Não foi possível consultar o servidor.");
     const data = await response.json();
     if (data.ready) {
-      setStatus("Pesquisa na internet em tempo real pronta", "ready");
+      setStatus("SearXNG configurado", "ready");
     } else {
       setStatus(data.message || "Modelo indisponível", "error");
     }

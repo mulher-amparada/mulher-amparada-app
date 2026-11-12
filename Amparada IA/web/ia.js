@@ -47,8 +47,7 @@ async function checkModelStatus() {
     if (!response.ok) throw new Error("Não foi possível consultar o servidor.");
     const data = await response.json();
     if (data.ready) {
-      const count = data.knowledge_documents || 0;
-      setStatus(count ? `Pesquisa local pronta · ${count} documentos` : "Modelo carregado e pronto", "ready");
+      setStatus("Pesquisa na internet em tempo real pronta", "ready");
     } else {
       setStatus(data.message || "Modelo indisponível", "error");
     }
@@ -65,7 +64,7 @@ async function sendMessage(event) {
   addMessage(message, "user");
   promptInput.value = "";
   setSending(true);
-  const pendingMessage = addMessage("A Amparada IA está pesquisando…", "assistant", "pending");
+  const pendingMessage = addMessage("Pesquisando na internet em tempo real…", "assistant", "pending");
 
   try {
     const response = await fetch("/api/chat", {

@@ -36,6 +36,10 @@ class RetrievalTests(unittest.TestCase):
         results = search_knowledge("violência psicologica e manipulacao", self.documents)
         self.assertEqual(results[0]["id"], "gaslighting")
 
+    def test_matches_common_portuguese_inflections(self):
+        results = search_knowledge("ele controla meu celular", self.documents)
+        self.assertEqual(results[0]["id"], "gaslighting")
+
     def test_returns_no_results_for_unrelated_question(self):
         self.assertEqual(search_knowledge("receita de bolo", self.documents), [])
 

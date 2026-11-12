@@ -1,4 +1,4 @@
-"""Servidor local da demonstração web da Amparada IA com tokenizador BPE."""
+"""Servidor local da demonstração web da Amparada IA com BPE e RAG local."""
 from __future__ import annotations
 
 import json
@@ -11,12 +11,17 @@ import torch
 ROOT = Path(__file__).resolve().parents[1]
 WEB_DIR = Path(__file__).resolve().parent
 CHECKPOINT = ROOT / "runs" / "amparada_ia_bpe.pt"
+KNOWLEDGE_FILE = ROOT / "knowledge" / "base.json"
 FONT_FILE = ROOT.parent / "font.ttf"
 if not FONT_FILE.is_file():
     FONT_FILE = ROOT / "font.ttf"
 
 sys.path.insert(0, str(ROOT / "src"))
+from amparada_ia.retrieval import build_grounded_answer, load_knowledge
+
 MODEL = TOKENIZER = MODEL_ERROR = None
+KNOWLEDGE = []
+KNOWLEDGE_ERROR = None
 
 
 def load_model():
@@ -52,6 +57,16 @@ def load_model():
         MODEL_ERROR = f"Falha ao carregar checkpoint BPE: {type(exc).__name__}: {exc}"
 
 
+def load_knowledge_base():
+    global KNOWLEDGE, KNOWLEDGE_ERROR
+    try:
+        KNOWLEDGE = load_knowledge(KNOWLEDGE_FILE)
+        KNOWLEDGE_ERROR = None
+    except Exception as exc:
+        KNOWLEDGE = []
+        KNOWLEDGE_ERROR = f"Falha ao carregar base de conhecimento: {type(exc).__name__}"
+
+
 class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(WEB_DIR), **kwargs)
@@ -70,8 +85,15 @@ class Handler(SimpleHTTPRequestHandler):
             self.send_json(
                 200,
                 {
-                    "ready": MODEL is not None,
-                    "message": "Modelo BPE carregado." if MODEL is not None else MODEL_ERROR,
+                    "ready": MODEL is not None or bool(KNOWLEDGE),
+                    "model_ready": MODEL is not None,
+                    "knowledge_ready": bool(KNOWLEDGE),
+                    "knowledge_documents": len(KNOWLEDGE),
+                    "message": (
+                        "Pesquisa local pronta."
+                        if KNOWLEDGE
+                        else KNOWLEDGE_ERROR or MODEL_ERROR or "Nenhuma fonte carregada."
+                    ),
                 },
             )
             return
@@ -100,10 +122,6 @@ class Handler(SimpleHTTPRequestHandler):
             self.send_json(404, {"error": "Rota não encontrada."})
             return
 
-        if MODEL is None or TOKENIZER is None:
-            self.send_json(503, {"error": MODEL_ERROR or "Modelo indisponível."})
-            return
-
         try:
             length = int(self.headers.get("Content-Length", "0"))
             if length < 1 or length > 8192:
@@ -121,45 +139,66 @@ class Handler(SimpleHTTPRequestHandler):
                 self.send_json(400, {"error": "Use até 500 caracteres."})
                 return
 
-            ids = TOKENIZER.encode(message.strip())
-            if not ids:
-                self.send_json(400, {"error": "Mensagem sem tokens reconhecíveis."})
+            grounded = build_grounded_answer(message.strip(), KNOWLEDGE)
+            if grounded is not None:
+                self.send_json(200, grounded)
                 return
 
-            context = torch.tensor(
-                [ids[-MODEL.config["block_size"]:]],
-                dtype=torch.long,
-            )
+            # Sem documentos relevantes, preserva a geração experimental antiga.
+            if MODEL is not None and TOKENIZER is not None:
+                ids = TOKENIZER.encode(message.strip())
+                if ids:
+                    context = torch.tensor(
+                        [ids[-MODEL.config["block_size"]:]],
+                        dtype=torch.long,
+                    )
+                    with torch.inference_mode():
+                        output = MODEL.generate(
+                            context,
+                            max_new_tokens=80,
+                            temperature=0.8,
+                        )
+                    answer = TOKENIZER.decode(output[0, len(context[0]):].tolist()).strip()
+                    self.send_json(
+                        200,
+                        {
+                            "answer": answer or "O modelo não gerou continuação.",
+                            "sources": [],
+                            "mode": "experimental_model",
+                            "experimental": True,
+                        },
+                    )
+                    return
 
-            with torch.inference_mode():
-                output = MODEL.generate(
-                    context,
-                    max_new_tokens=80,
-                    temperature=0.8,
-                )
-
-            answer = TOKENIZER.decode(output[0, len(context[0]):].tolist()).strip()
             self.send_json(
                 200,
                 {
-                    "answer": answer or "O modelo não gerou continuação.",
-                    "experimental": True,
+                    "answer": (
+                        "Ainda não encontrei documentos relevantes na minha base local "
+                        "para responder com segurança. Tente reformular a pergunta ou "
+                        "adicione fontes revisadas à pasta knowledge."
+                    ),
+                    "sources": [],
+                    "mode": "no_retrieval",
                 },
             )
 
         except (ValueError, json.JSONDecodeError):
             self.send_json(400, {"error": "Requisição inválida."})
         except Exception as exc:
-            self.send_json(500, {"error": f"Falha na inferência: {type(exc).__name__}"})
+            self.send_json(500, {"error": f"Falha na consulta: {type(exc).__name__}"})
 
     def log_message(self, format, *args):
         super().log_message(format, *args)
 
 
 if __name__ == "__main__":
+    load_knowledge_base()
     load_model()
 
-    if MODEL is None:
+    if KNOWLEDGE_ERROR:
+        print("Aviso:", KNOWLEDGE_ERROR)
+    if MODEL_ERROR:
         print("Aviso:", MODEL_ERROR)
 
     print("Abra http://127.0.0.1:8000 — acesso somente local.")

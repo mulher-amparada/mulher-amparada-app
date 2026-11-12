@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-11-12T22:20:53Z
+- **Gerado em UTC:** 2026-11-12T19:56:31Z
 - **Linguagens identificadas:** 14
 - **Arquivos classificados:** 446
-- **Tamanho classificado:** 4205231 bytes
+- **Tamanho classificado:** 4204496 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -17,10 +17,10 @@
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
 | Java | 309 | 2144910 | 51.01% |
-| Kotlin | 75 | 1545916 | 36.76% |
-| CSS | 20 | 242326 | 5.76% |
+| Kotlin | 75 | 1545364 | 36.76% |
+| CSS | 20 | 242149 | 5.76% |
 | Shell | 6 | 94995 | 2.26% |
-| HTML | 12 | 69599 | 1.66% |
+| HTML | 12 | 69593 | 1.66% |
 | JavaScript | 5 | 37577 | 0.89% |
 | Python | 10 | 28485 | 0.68% |
 | C | 1 | 18374 | 0.44% |
@@ -52,11 +52,11 @@
 ### CSS
 
 - **Arquivos:** 20
-- **Tamanho:** 242326 bytes
+- **Tamanho:** 242149 bytes
 - **Percentual:** 5.76%
 
-- `Amparada IA/web/index-day.css`
-- `Amparada IA/web/index-night.css`
+- `Amparada IA/web/IA-day.css`
+- `Amparada IA/web/IA-night.css`
 - `app1-day.css`
 - `app1-night.css`
 - `download-day.css`
@@ -79,7 +79,7 @@
 ### HTML
 
 - **Arquivos:** 12
-- **Tamanho:** 69599 bytes
+- **Tamanho:** 69593 bytes
 - **Percentual:** 1.66%
 
 - `Amparada IA/web/index.html`
@@ -417,7 +417,7 @@
 - **Tamanho:** 37577 bytes
 - **Percentual:** 0.89%
 
-- `Amparada IA/web/index.js`
+- `Amparada IA/web/ia.js`
 - `download.js`
 - `index.js`
 - `linguagens.js`
@@ -434,7 +434,7 @@
 ### Kotlin
 
 - **Arquivos:** 75
-- **Tamanho:** 1545916 bytes
+- **Tamanho:** 1545364 bytes
 - **Percentual:** 36.76%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`

@@ -1,71 +1,71 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-12T22:20:53Z",
-  "total_arquivos": 1362,
-  "total_bytes": 102486303,
+  "gerado_em_utc": "2026-11-12T19:56:31Z",
+  "total_arquivos": 1358,
+  "total_bytes": 102480487,
   "total_extensoes": 41,
   "extensoes": [
     {
       "extensao": ".xml",
       "quantidade_arquivos": 400,
       "tamanho_bytes": 3654091,
-      "percentual_arquivos": 29.37,
+      "percentual_arquivos": 29.46,
       "percentual_bytes": 3.57
     },
     {
       "extensao": ".md",
-      "quantidade_arquivos": 319,
-      "tamanho_bytes": 588944,
-      "percentual_arquivos": 23.42,
+      "quantidade_arquivos": 315,
+      "tamanho_bytes": 583873,
+      "percentual_arquivos": 23.2,
       "percentual_bytes": 0.57
     },
     {
       "extensao": ".java",
       "quantidade_arquivos": 309,
       "tamanho_bytes": 2144910,
-      "percentual_arquivos": 22.69,
+      "percentual_arquivos": 22.75,
       "percentual_bytes": 2.09
     },
     {
       "extensao": ".png",
       "quantidade_arquivos": 105,
       "tamanho_bytes": 76848499,
-      "percentual_arquivos": 7.71,
-      "percentual_bytes": 74.98
+      "percentual_arquivos": 7.73,
+      "percentual_bytes": 74.99
     },
     {
       "extensao": ".kt",
       "quantidade_arquivos": 75,
-      "tamanho_bytes": 1545916,
-      "percentual_arquivos": 5.51,
+      "tamanho_bytes": 1545364,
+      "percentual_arquivos": 5.52,
       "percentual_bytes": 1.51
     },
     {
       "extensao": ".css",
       "quantidade_arquivos": 20,
-      "tamanho_bytes": 242326,
+      "tamanho_bytes": 242149,
       "percentual_arquivos": 1.47,
       "percentual_bytes": 0.24
     },
     {
       "extensao": ".json",
       "quantidade_arquivos": 18,
-      "tamanho_bytes": 1397264,
-      "percentual_arquivos": 1.32,
+      "tamanho_bytes": 1397254,
+      "percentual_arquivos": 1.33,
       "percentual_bytes": 1.36
     },
     {
       "extensao": ".yml",
       "quantidade_arquivos": 16,
       "tamanho_bytes": 97610,
-      "percentual_arquivos": 1.17,
+      "percentual_arquivos": 1.18,
       "percentual_bytes": 0.1
     },
     {
       "extensao": ".html",
       "quantidade_arquivos": 12,
-      "tamanho_bytes": 69599,
+      "tamanho_bytes": 69593,
       "percentual_arquivos": 0.88,
       "percentual_bytes": 0.07
     },
@@ -73,7 +73,7 @@
       "extensao": ".py",
       "quantidade_arquivos": 10,
       "tamanho_bytes": 28485,
-      "percentual_arquivos": 0.73,
+      "percentual_arquivos": 0.74,
       "percentual_bytes": 0.03
     },
     {

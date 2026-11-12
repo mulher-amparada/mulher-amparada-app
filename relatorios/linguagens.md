@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-11-12T10:14:05Z
+- **Gerado em UTC:** 2026-11-12T10:27:09Z
 - **Linguagens identificadas:** 14
 - **Arquivos classificados:** 450
-- **Tamanho classificado:** 4214993 bytes
+- **Tamanho classificado:** 4214444 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -17,11 +17,11 @@
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
 | Java | 309 | 2144910 | 50.89% |
-| Kotlin | 75 | 1541026 | 36.56% |
-| CSS | 20 | 242149 | 5.74% |
+| Kotlin | 75 | 1541026 | 36.57% |
+| CSS | 20 | 242149 | 5.75% |
 | Shell | 6 | 94995 | 2.25% |
 | HTML | 12 | 69781 | 1.66% |
-| Python | 14 | 42903 | 1.02% |
+| Python | 14 | 42354 | 1.00% |
 | JavaScript | 5 | 37806 | 0.90% |
 | C | 1 | 18374 | 0.44% |
 | PHP | 1 | 9342 | 0.22% |
@@ -53,7 +53,7 @@
 
 - **Arquivos:** 20
 - **Tamanho:** 242149 bytes
-- **Percentual:** 5.74%
+- **Percentual:** 5.75%
 
 - `Amparada IA/web/IA-day.css`
 - `Amparada IA/web/IA-night.css`
@@ -435,7 +435,7 @@
 
 - **Arquivos:** 75
 - **Tamanho:** 1541026 bytes
-- **Percentual:** 36.56%
+- **Percentual:** 36.57%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt`
@@ -534,8 +534,8 @@
 ### Python
 
 - **Arquivos:** 14
-- **Tamanho:** 42903 bytes
-- **Percentual:** 1.02%
+- **Tamanho:** 42354 bytes
+- **Percentual:** 1.00%
 
 - `Amparada IA/src/amparada_ia/__init__.py`
 - `Amparada IA/src/amparada_ia/evaluate.py`

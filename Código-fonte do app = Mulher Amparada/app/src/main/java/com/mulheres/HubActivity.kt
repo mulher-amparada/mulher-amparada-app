@@ -106,6 +106,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -2928,6 +2929,7 @@ SensorStatus(
 
                     
                     
+    SensorCard(
     number = "03 / VISIBILIDADE",
     title = "Escurecimento por inclinação",
     description =
@@ -4016,7 +4018,7 @@ private fun SensorStatus(
                         bottomEnd = 7.dp
                     )
                 )
-                .background(c.card)
+                .background(c.surface)
                 .padding(
                     horizontal = 8.dp,
                     vertical = 7.dp

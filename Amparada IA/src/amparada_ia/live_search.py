@@ -1,7 +1,7 @@
-"""Pesquisa web em tempo real usando a API oficial do Brave Search.
+"""Pesquisa web em tempo real por uma instância SearXNG.
 
-A chave é lida exclusivamente do ambiente do servidor. Nunca a exponha no
-JavaScript, HTML, logs ou no repositório.
+A instância é configurada por SEARXNG_URL. Por padrão, usa uma instância
+local em http://127.0.0.1:8080; não é necessária chave de API.
 """
 from __future__ import annotations
 
@@ -12,60 +12,64 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode, urlparse
 from urllib.request import Request, urlopen
 
-BRAVE_ENDPOINT = "https://api.search.brave.com/res/v1/web/search"
-TIMEOUT_SECONDS = 12
+DEFAULT_SEARXNG_URL = "http://127.0.0.1:8080"
+TIMEOUT_SECONDS = 15
 MAX_QUERY_LENGTH = 500
 
 
 class WebSearchError(RuntimeError):
-    """Erro de configuração ou comunicação com o provedor de busca."""
+    """Erro de configuração ou comunicação com o serviço de pesquisa."""
+
+
+def _base_url() -> str:
+    value = os.environ.get("SEARXNG_URL", DEFAULT_SEARXNG_URL).strip().rstrip("/")
+    parsed = urlparse(value)
+    if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+        raise WebSearchError("SEARXNG_URL precisa ser um endereço HTTP ou HTTPS válido.")
+    if parsed.username or parsed.password or parsed.query or parsed.fragment:
+        raise WebSearchError("SEARXNG_URL não deve conter credenciais, consulta ou fragmento.")
+    return value
 
 
 def _clean_result(item: dict) -> dict | None:
     title = str(item.get("title") or "").strip()
     url = str(item.get("url") or "").strip()
-    description = str(item.get("description") or "").strip()
+    description = str(item.get("content") or item.get("description") or "").strip()
     parsed = urlparse(url)
     if not title or parsed.scheme not in {"http", "https"} or not parsed.netloc:
         return None
-    extras = item.get("extra_snippets") or []
-    if isinstance(extras, list):
-        description = " ".join(
-            [description] + [str(value).strip() for value in extras[:2] if value]
-        ).strip()
     return {
         "title": title[:240],
         "url": url[:2000],
         "description": description[:1600],
-        "published": str(item.get("page_age") or item.get("published") or "")[:80],
+        "published": str(item.get("publishedDate") or item.get("published") or "")[:80],
     }
 
 
-def search_web(query: str, *, api_key: str | None = None, count: int = 5) -> list[dict]:
-    """Pesquisa páginas atuais na web e devolve resultados com URL e resumo."""
-    key = api_key or os.environ.get("BRAVE_SEARCH_API_KEY")
-    if not key:
-        raise WebSearchError(
-            "Pesquisa na internet não configurada. Defina BRAVE_SEARCH_API_KEY "
-            "no ambiente do servidor."
-        )
+def search_web(query: str, *, base_url: str | None = None, count: int = 5) -> list[dict]:
+    """Pesquisa páginas atuais pela API JSON do SearXNG."""
     query = re.sub(r"\s+", " ", str(query)).strip()[:MAX_QUERY_LENGTH]
     if not query:
         raise ValueError("A consulta de pesquisa está vazia.")
+
+    base = base_url.strip().rstrip("/") if base_url else _base_url()
+    parsed_base = urlparse(base)
+    if (parsed_base.scheme not in {"http", "https"} or not parsed_base.netloc
+            or parsed_base.username or parsed_base.password
+            or parsed_base.query or parsed_base.fragment):
+        raise WebSearchError("O endereço do SearXNG precisa ser HTTP ou HTTPS e não pode conter credenciais.")
     params = urlencode({
         "q": query,
-        "country": "BR",
-        "search_lang": "pt",
-        "ui_lang": "pt-BR",
-        "count": max(1, min(int(count), 10)),
-        "safesearch": "strict",
+        "format": "json",
+        "language": "pt-BR",
+        "categories": "general",
+        "safesearch": 2,
     })
     request = Request(
-        f"{BRAVE_ENDPOINT}?{params}",
+        f"{base}/search?{params}",
         headers={
             "Accept": "application/json",
-            "X-Subscription-Token": key,
-            "User-Agent": "AmparadaIA/1.0 (web search)",
+            "User-Agent": "AmparadaIA/1.0 (SearXNG search)",
         },
         method="GET",
     )
@@ -73,24 +77,24 @@ def search_web(query: str, *, api_key: str | None = None, count: int = 5) -> lis
         with urlopen(request, timeout=TIMEOUT_SECONDS) as response:
             payload = json.loads(response.read().decode("utf-8"))
     except HTTPError as exc:
-        if exc.code in {401, 403}:
-            raise WebSearchError("A chave da pesquisa web é inválida ou não tem acesso à API.") from exc
         if exc.code == 429:
-            raise WebSearchError("O limite de pesquisas foi atingido. Tente novamente mais tarde.") from exc
-        raise WebSearchError(f"O provedor de pesquisa retornou HTTP {exc.code}.") from exc
+            raise WebSearchError("A instância SearXNG limitou temporariamente as consultas. Tente novamente mais tarde.") from exc
+        if exc.code in {401, 403}:
+            raise WebSearchError("A instância SearXNG recusou a consulta. Verifique sua configuração.") from exc
+        raise WebSearchError(f"A instância SearXNG retornou HTTP {exc.code}.") from exc
     except (URLError, TimeoutError, OSError) as exc:
-        raise WebSearchError("Não foi possível conectar ao serviço de pesquisa na internet.") from exc
+        raise WebSearchError("Não foi possível conectar à instância SearXNG. Verifique se ela está em execução.") from exc
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
-        raise WebSearchError("O serviço de pesquisa retornou uma resposta inválida.") from exc
+        raise WebSearchError("A instância SearXNG retornou uma resposta inválida. Confirme se o formato JSON está habilitado.") from exc
 
-    raw_results = payload.get("web", {}).get("results", [])
+    raw_results = payload.get("results", [])
     results = []
     for item in raw_results:
         if isinstance(item, dict):
             cleaned = _clean_result(item)
             if cleaned:
                 results.append(cleaned)
-        if len(results) >= count:
+        if len(results) >= max(1, min(int(count), 10)):
             break
     return results
 
@@ -102,7 +106,7 @@ def build_web_answer(query: str, results: list[dict]) -> dict:
             "answer": "Pesquisei na internet, mas não encontrei resultados suficientemente relevantes. Tente outros termos.",
             "sources": [],
             "mode": "live_web_search",
-            "provider": "Brave Search",
+            "provider": "SearXNG",
         }
     sections = ["Pesquisei na internet agora. Estes foram os resultados mais relevantes:"]
     sources = []
@@ -115,7 +119,7 @@ def build_web_answer(query: str, results: list[dict]) -> dict:
             "updated_at": result.get("published", ""),
         })
     sections.append(
-        "\nResumo baseado nos trechos apresentados pelo mecanismo de busca. "
+        "\nResumo baseado nos trechos apresentados pela instância de busca. "
         "Abra as fontes para conferir o contexto completo; os resultados podem "
         "estar incompletos ou desatualizados."
     )
@@ -123,6 +127,6 @@ def build_web_answer(query: str, results: list[dict]) -> dict:
         "answer": "\n".join(sections),
         "sources": sources,
         "mode": "live_web_search",
-        "provider": "Brave Search",
+        "provider": "SearXNG",
         "query": query,
     }

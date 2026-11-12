@@ -83,3 +83,26 @@ python -m web.server
 ```
 
 **Limitação importante:** esta implementação pesquisa apenas os documentos presentes em `knowledge/base.json`; ela não faz buscas na internet em tempo real. Quando não encontra documentos relevantes, a interface informa isso ou usa o modelo experimental existente, que pode gerar respostas incorretas. As respostas recuperadas são informativas e não substituem atendimento profissional ou avaliação individual.
+
+
+## Pesquisa na internet em tempo real
+
+A rota `/api/chat` usa a API oficial do Brave Search para pesquisar na web a cada pergunta e apresentar títulos, resumos e links das fontes. A busca usa região Brasil, idioma português e SafeSearch estrito. Sem uma chave configurada, o servidor informa que a pesquisa não está disponível e **não** finge que consultou a internet nem usa o pequeno modelo experimental como substituto.
+
+### Configuração
+
+1. Crie uma chave no painel oficial do Brave Search: https://api.search.brave.com/
+2. Configure a chave somente no ambiente do servidor, nunca no JavaScript ou no Git:
+
+```bash
+export BRAVE_SEARCH_API_KEY="sua_chave"
+python -m web.server
+```
+
+Na implantação, cadastre `BRAVE_SEARCH_API_KEY` como secret e injete-o no ambiente do processo que executa o servidor. Não publique a chave em commits, issues, logs ou arquivos do repositório.
+
+A API exige autenticação por `X-Subscription-Token`; consulte os planos, limites e custos atuais no painel antes de ativar. A chave não foi incluída neste repositório.
+
+**Privacidade:** as perguntas enviadas são transmitidas ao provedor de busca. A interface avisa para não incluir nomes, telefones, endereços ou relatos identificáveis. Antes de disponibilizar o serviço a outras pessoas, implemente minimização de dados, política de privacidade, consentimento apropriado, limitação de requisições e revisão de segurança.
+
+**Limitação da versão:** esta primeira integração apresenta resumos devolvidos pelo mecanismo de busca e os links originais. Ela não equivale a uma síntese feita por um modelo de linguagem avançado nem garante que cada página foi lida integralmente. Confira as fontes antes de tomar decisões importantes.

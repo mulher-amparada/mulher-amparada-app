@@ -69,20 +69,10 @@ Este protótipo pode repetir padrões, errar fatos ou gerar conteúdo inadequado
 Use somente textos próprios, sintéticos ou de origem e licença verificadas. Preserve atribuições e condições de licença. Não adicione relatos privados, nomes, endereços, conversas ou informações identificáveis sobre situações reais de violência.
 
 
-## Pesquisa de informações (RAG local)
+## Base local de conhecimento (RAG)
 
-A demonstração web consulta primeiro uma base local de conhecimento antes de recorrer ao gerador experimental. O módulo `src/amparada_ia/retrieval.py` faz uma busca lexical simples, recupera os documentos mais relacionados à pergunta e monta uma resposta com as fontes correspondentes.
+O módulo `src/amparada_ia/retrieval.py` e os documentos em `knowledge/base.json` continuam disponíveis para testes e desenvolvimento de recuperação local. A rota web `/api/chat`, porém, agora faz pesquisa na internet em tempo real pelo Brave Search, em vez de responder usando somente essa base local.
 
-A base inicial fica em `knowledge/base.json`. Cada item deve conter `id`, `title`, `content`, `tags`, `source_name`, `source_url` e, opcionalmente, `updated_at`. Use conteúdo revisado e fontes institucionais; revise a data e o endereço de cada fonte periodicamente.
-
-Execute a partir desta pasta:
-
-```bash
-python -m unittest discover -s tests -v
-python -m web.server
-```
-
-**Limitação importante:** esta implementação pesquisa apenas os documentos presentes em `knowledge/base.json`; ela não faz buscas na internet em tempo real. Quando não encontra documentos relevantes, a interface informa isso ou usa o modelo experimental existente, que pode gerar respostas incorretas. As respostas recuperadas são informativas e não substituem atendimento profissional ou avaliação individual.
 
 
 ## Pesquisa na internet em tempo real

@@ -11,6 +11,20 @@ const suggestions = document.querySelectorAll(".suggestion");
 const initialMessage = messages.innerHTML;
 let isSending = false;
 
+function formatAnswer(value) {
+  if (typeof value === "string") return value;
+  if (Array.isArray(value)) return value.map(formatAnswer).filter(Boolean).join("\n");
+  if (value && typeof value === "object") {
+    for (const key of ["answer", "text", "response", "message", "content", "output"]) {
+      if (value[key] !== undefined && value[key] !== null) {
+        return formatAnswer(value[key]);
+      }
+    }
+    return "O servidor retornou uma resposta em formato não reconhecido.";
+  }
+  return value == null ? "" : String(value);
+}
+
 function scrollToLatest() {
   messages.scrollTop = messages.scrollHeight;
 }
@@ -76,7 +90,7 @@ async function sendMessage(event) {
     if (!response.ok) throw new Error(data.error || data.message || "Não foi possível gerar uma resposta.");
 
     pendingMessage.remove();
-    addMessage(data.answer || "Não encontrei uma resposta.", "assistant");
+    const answer = formatAnswer(data.answer ?? data.response ?? data.message);\n    addMessage(answer || "Não encontrei uma resposta.", "assistant");
 
     if (Array.isArray(data.sources) && data.sources.length) {
       const sourceText = data.sources.map((source, index) => {

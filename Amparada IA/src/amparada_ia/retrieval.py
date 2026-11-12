@@ -26,9 +26,23 @@ def normalize(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", " ", without_marks).strip()
 
 
+def stem(token: str) -> str:
+    """Normalização morfológica leve para aproximar flexões comuns do português."""
+    for suffix in (
+        "amentos", "imentos", "amento", "imento", "ando", "endo", "indo",
+        "acoes", "acao", "icoes", "icao", "amentos", "imentos",
+        "ivas", "ivos", "iva", "ivo", "ados", "adas", "ido", "ida",
+        "aram", "eram", "iram", "ariam", "eria", "iria",
+        "ar", "er", "ir", "ou", "am", "em", "as", "es", "os", "a", "o", "e", "s",
+    ):
+        if token.endswith(suffix) and len(token) - len(suffix) >= 4:
+            return token[:-len(suffix)]
+    return token
+
+
 def terms(text: str) -> set[str]:
     return {
-        token
+        stem(token)
         for token in normalize(text).split()
         if len(token) > 1 and token not in STOP_WORDS
     }

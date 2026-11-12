@@ -3992,54 +3992,62 @@ private fun SensorStatus(
     color: Color,
     c: AppColors
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth(),
-        contentAlignment = Alignment.TopCenter
+    androidx.compose.animation.AnimatedVisibility(
+        visible = active,
+        enter = androidx.compose.animation.fadeIn(
+            animationSpec = tween(280)
+        ) + androidx.compose.animation.expandVertically(
+            animationSpec = tween(280, easing = FastOutSlowInEasing)
+        ),
+        exit = androidx.compose.animation.fadeOut(
+            animationSpec = tween(180)
+        ) + androidx.compose.animation.shrinkVertically(
+            animationSpec = tween(180, easing = FastOutSlowInEasing)
+        )
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth(0.46f)
-                .border(
-                    width = 1.dp,
-                    color = color,
-                    shape = RoundedCornerShape(
-                        topStart = 0.dp,
-                        topEnd = 0.dp,
-                        bottomStart = 7.dp,
-                        bottomEnd = 7.dp
-                    )
-                )
-                .clip(
-                    RoundedCornerShape(
-                        topStart = 0.dp,
-                        topEnd = 0.dp,
-                        bottomStart = 7.dp,
-                        bottomEnd = 7.dp
-                    )
-                )
-                .background(c.surface)
-                .padding(
-                    horizontal = 8.dp,
-                    vertical = 7.dp
-                ),
-            contentAlignment = Alignment.Center
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.TopCenter
         ) {
-            Text(
-                text = if (active) {
-                    "Sensor ativado"
-                } else {
-                    "Sensor desativado"
-                },
-                color = if (active) color else c.muted,
-                fontSize = 11.sp,
-                letterSpacing = 0.3.sp,
-                fontWeight = FontWeight.Medium
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.50f)
+                    .border(
+                        width = 1.dp,
+                        color = color,
+                        shape = RoundedCornerShape(
+                            topStart = 0.dp,
+                            topEnd = 0.dp,
+                            bottomStart = 7.dp,
+                            bottomEnd = 7.dp
+                        )
+                    )
+                    .clip(
+                        RoundedCornerShape(
+                            topStart = 0.dp,
+                            topEnd = 0.dp,
+                            bottomStart = 7.dp,
+                            bottomEnd = 7.dp
+                        )
+                    )
+                    .background(c.surface)
+                    .padding(
+                        horizontal = 8.dp,
+                        vertical = 7.dp
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Sensor ativado",
+                    color = color,
+                    fontSize = 11.sp,
+                    letterSpacing = 0.3.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            }
         }
     }
 }
-
 /* =========================================================
 SWITCH
 ========================================================= */

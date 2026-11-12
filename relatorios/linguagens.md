@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-11-12T22:12:43Z
+- **Gerado em UTC:** 2026-11-12T22:14:15Z
 - **Linguagens identificadas:** 14
-- **Arquivos classificados:** 447
-- **Tamanho classificado:** 4205837 bytes
+- **Arquivos classificados:** 446
+- **Tamanho classificado:** 4205231 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -16,11 +16,11 @@
 
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
-| Java | 309 | 2144910 | 51.00% |
+| Java | 309 | 2144910 | 51.01% |
 | Kotlin | 75 | 1545916 | 36.76% |
-| CSS | 21 | 242935 | 5.78% |
+| CSS | 20 | 242326 | 5.76% |
 | Shell | 6 | 94995 | 2.26% |
-| HTML | 12 | 69596 | 1.65% |
+| HTML | 12 | 69599 | 1.66% |
 | JavaScript | 5 | 37577 | 0.89% |
 | Python | 10 | 28485 | 0.68% |
 | C | 1 | 18374 | 0.44% |
@@ -51,11 +51,10 @@
 
 ### CSS
 
-- **Arquivos:** 21
-- **Tamanho:** 242935 bytes
-- **Percentual:** 5.78%
+- **Arquivos:** 20
+- **Tamanho:** 242326 bytes
+- **Percentual:** 5.76%
 
-- `Amparada IA/web/IA-night.css`
 - `Amparada IA/web/index-day.css`
 - `Amparada IA/web/index-night.css`
 - `app1-day.css`
@@ -80,8 +79,8 @@
 ### HTML
 
 - **Arquivos:** 12
-- **Tamanho:** 69596 bytes
-- **Percentual:** 1.65%
+- **Tamanho:** 69599 bytes
+- **Percentual:** 1.66%
 
 - `Amparada IA/web/index.html`
 - `app1.html`
@@ -100,7 +99,7 @@
 
 - **Arquivos:** 309
 - **Tamanho:** 2144910 bytes
-- **Percentual:** 51.00%
+- **Percentual:** 51.01%
 
 - `Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/BootReminder.java`
 - `Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/ManagedProvisioningApplication.java`
@@ -418,7 +417,7 @@
 - **Tamanho:** 37577 bytes
 - **Percentual:** 0.89%
 
-- `Amparada IA/web/ia.js`
+- `Amparada IA/web/index.js`
 - `download.js`
 - `index.js`
 - `linguagens.js`

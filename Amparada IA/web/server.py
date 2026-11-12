@@ -54,10 +54,9 @@ class Handler(SimpleHTTPRequestHandler):
                     "ready": True,
                     "web_search_ready": True,
                     "search_provider": "SearXNG",
-                    "search_endpoint": configured_url,
-                    "knowledge_ready": bool(KNOWLEDGE),
+                                        "knowledge_ready": bool(KNOWLEDGE),
                     "knowledge_documents": len(KNOWLEDGE),
-                    "message": "Pesquisa web configurada via SearXNG. Confirme se a instância está em execução.",
+                    "message": "SearXNG configurado. A conexão será verificada quando você pesquisar.",
                 },
             )
             return

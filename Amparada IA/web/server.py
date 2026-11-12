@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import sys
@@ -17,7 +18,8 @@ if not FONT_FILE.is_file():
     FONT_FILE = ROOT / "font.ttf"
 
 sys.path.insert(0, str(ROOT / "src"))
-from amparada_ia.retrieval import build_grounded_answer, load_knowledge
+from amparada_ia.live_search import WebSearchError, build_web_answer, search_web
+from amparada_ia.retrieval import load_knowledge
 
 MODEL = TOKENIZER = MODEL_ERROR = None
 KNOWLEDGE = []
@@ -85,14 +87,16 @@ class Handler(SimpleHTTPRequestHandler):
             self.send_json(
                 200,
                 {
-                    "ready": MODEL is not None or bool(KNOWLEDGE),
+                    "ready": bool(os.environ.get("BRAVE_SEARCH_API_KEY")),
+                    "web_search_ready": bool(os.environ.get("BRAVE_SEARCH_API_KEY")),
+                    "search_provider": "Brave Search",
                     "model_ready": MODEL is not None,
                     "knowledge_ready": bool(KNOWLEDGE),
                     "knowledge_documents": len(KNOWLEDGE),
                     "message": (
-                        "Pesquisa local pronta."
-                        if KNOWLEDGE
-                        else KNOWLEDGE_ERROR or MODEL_ERROR or "Nenhuma fonte carregada."
+                        "Pesquisa na internet em tempo real pronta."
+                        if os.environ.get("BRAVE_SEARCH_API_KEY")
+                        else "Configure BRAVE_SEARCH_API_KEY no ambiente do servidor."
                     ),
                 },
             )
@@ -139,50 +143,13 @@ class Handler(SimpleHTTPRequestHandler):
                 self.send_json(400, {"error": "Use até 500 caracteres."})
                 return
 
-            grounded = build_grounded_answer(message.strip(), KNOWLEDGE)
-            if grounded is not None:
-                self.send_json(200, grounded)
-                return
+            # Pesquisa obrigatoriamente na internet em tempo real.
+            # Sem resultados ou sem chave, não finge ter consultado a web.
+            results = search_web(message.strip(), count=5)
+            self.send_json(200, build_web_answer(message.strip(), results))
 
-            # Sem documentos relevantes, preserva a geração experimental antiga.
-            if MODEL is not None and TOKENIZER is not None:
-                ids = TOKENIZER.encode(message.strip())
-                if ids:
-                    context = torch.tensor(
-                        [ids[-MODEL.config["block_size"]:]],
-                        dtype=torch.long,
-                    )
-                    with torch.inference_mode():
-                        output = MODEL.generate(
-                            context,
-                            max_new_tokens=80,
-                            temperature=0.8,
-                        )
-                    answer = TOKENIZER.decode(output[0, len(context[0]):].tolist()).strip()
-                    self.send_json(
-                        200,
-                        {
-                            "answer": answer or "O modelo não gerou continuação.",
-                            "sources": [],
-                            "mode": "experimental_model",
-                            "experimental": True,
-                        },
-                    )
-                    return
-
-            self.send_json(
-                200,
-                {
-                    "answer": (
-                        "Ainda não encontrei documentos relevantes na minha base local "
-                        "para responder com segurança. Tente reformular a pergunta ou "
-                        "adicione fontes revisadas à pasta knowledge."
-                    ),
-                    "sources": [],
-                    "mode": "no_retrieval",
-                },
-            )
-
+        except WebSearchError as exc:
+            self.send_json(503, {"error": str(exc), "mode": "live_web_search_unavailable"})
         except (ValueError, json.JSONDecodeError):
             self.send_json(400, {"error": "Requisição inválida."})
         except Exception as exc:

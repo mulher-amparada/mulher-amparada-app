@@ -15,7 +15,7 @@ if not FONT_FILE.is_file():
     FONT_FILE = ROOT / "font.ttf"
 
 sys.path.insert(0, str(ROOT / "src"))
-from amparada_ia.live_search import WebSearchError, build_web_answer, search_web
+from amparada_ia.live_search import DEFAULT_SEARXNG_URL, WebSearchError, build_web_answer, search_web
 from amparada_ia.retrieval import load_knowledge
 
 KNOWLEDGE = []
@@ -47,19 +47,17 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == "/api/status":
+            configured_url = os.environ.get("SEARXNG_URL", DEFAULT_SEARXNG_URL)
             self.send_json(
                 200,
                 {
-                    "ready": bool(os.environ.get("BRAVE_SEARCH_API_KEY")),
-                    "web_search_ready": bool(os.environ.get("BRAVE_SEARCH_API_KEY")),
-                    "search_provider": "Brave Search",
+                    "ready": True,
+                    "web_search_ready": True,
+                    "search_provider": "SearXNG",
+                    "search_endpoint": configured_url,
                     "knowledge_ready": bool(KNOWLEDGE),
                     "knowledge_documents": len(KNOWLEDGE),
-                    "message": (
-                        "Pesquisa na internet em tempo real pronta."
-                        if os.environ.get("BRAVE_SEARCH_API_KEY")
-                        else "Configure BRAVE_SEARCH_API_KEY no ambiente do servidor."
-                    ),
+                    "message": "Pesquisa web configurada via SearXNG. Confirme se a instância está em execução.",
                 },
             )
             return
@@ -106,7 +104,7 @@ class Handler(SimpleHTTPRequestHandler):
                 return
 
             # Pesquisa obrigatoriamente na internet em tempo real.
-            # Sem resultados ou sem chave, não finge ter consultado a web.
+            # Sem conexão com o SearXNG, não finge que consultou a web.
             results = search_web(message.strip(), count=5)
             self.send_json(200, build_web_answer(message.strip(), results))
 

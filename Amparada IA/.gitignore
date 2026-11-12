@@ -1,8 +1,0 @@
-__pycache__/
-*.py[cod]
-.venv/
-venv/
-runs/
-*.pt
-*.pth
-.pytest_cache/

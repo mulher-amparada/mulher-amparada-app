@@ -2876,6 +2876,12 @@ compactBottom = true
                         c = c,
 )
 
+SensorStatus(
+    active = activity?.palmasAtivas ?: false,
+    color = c.pink,
+    c = c
+)
+
                     Spacer(
                         Modifier.height(30.dp)
                     )
@@ -2910,11 +2916,18 @@ compactBottom = true
                         c = c,
 )
 
+SensorStatus(
+    active = activity?.protecaoMovimentoAtiva ?: false,
+    color = c.purple,
+    c = c
+)
+
                     Spacer(
                         Modifier.height(30.dp)
                     )
 
-                    SensorCard(
+                    
+                    
     number = "03 / VISIBILIDADE",
     title = "Escurecimento por inclinação",
     description =
@@ -2941,6 +2954,11 @@ compactBottom = true
                         c = c,
 )
 
+SensorStatus(
+    active = activity?.escurecimentoAtivo ?: false,
+    color = c.orange,
+    c = c
+)
                     Spacer(
                         Modifier.height(30.dp)
                     )
@@ -3962,6 +3980,60 @@ private fun SensorCard(
                     c = c
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun SensorStatus(
+    active: Boolean,
+    color: Color,
+    c: AppColors
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth(),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.46f)
+                .border(
+                    width = 1.dp,
+                    color = color,
+                    shape = RoundedCornerShape(
+                        topStart = 0.dp,
+                        topEnd = 0.dp,
+                        bottomStart = 7.dp,
+                        bottomEnd = 7.dp
+                    )
+                )
+                .clip(
+                    RoundedCornerShape(
+                        topStart = 0.dp,
+                        topEnd = 0.dp,
+                        bottomStart = 7.dp,
+                        bottomEnd = 7.dp
+                    )
+                )
+                .background(c.card)
+                .padding(
+                    horizontal = 8.dp,
+                    vertical = 7.dp
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = if (active) {
+                    "Sensor ativado"
+                } else {
+                    "Sensor desativado"
+                },
+                color = if (active) color else c.muted,
+                fontSize = 11.sp,
+                letterSpacing = 0.3.sp,
+                fontWeight = FontWeight.Medium
+            )
         }
     }
 }

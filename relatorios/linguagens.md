@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-11-12T10:37:19Z
+- **Gerado em UTC:** 2026-11-12T10:39:09Z
 - **Linguagens identificadas:** 14
-- **Arquivos classificados:** 440
-- **Tamanho classificado:** 4180757 bytes
+- **Arquivos classificados:** 446
+- **Tamanho classificado:** 4200136 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -16,15 +16,15 @@
 
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
-| Java | 309 | 2144910 | 51.30% |
-| Kotlin | 75 | 1541026 | 36.86% |
-| CSS | 20 | 242149 | 5.79% |
-| Shell | 6 | 94995 | 2.27% |
+| Java | 309 | 2144910 | 51.07% |
+| Kotlin | 75 | 1541026 | 36.69% |
+| CSS | 20 | 242149 | 5.77% |
+| Shell | 6 | 94995 | 2.26% |
 | HTML | 12 | 69571 | 1.66% |
-| JavaScript | 5 | 37577 | 0.90% |
+| JavaScript | 5 | 37577 | 0.89% |
+| Python | 10 | 28485 | 0.68% |
 | C | 1 | 18374 | 0.44% |
 | PHP | 1 | 9342 | 0.22% |
-| Python | 4 | 9106 | 0.22% |
 | Julia | 1 | 5989 | 0.14% |
 | TypeScript | 1 | 3052 | 0.07% |
 | Ruby | 1 | 2025 | 0.05% |
@@ -53,7 +53,7 @@
 
 - **Arquivos:** 20
 - **Tamanho:** 242149 bytes
-- **Percentual:** 5.79%
+- **Percentual:** 5.77%
 
 - `Amparada IA/web/IA-day.css`
 - `Amparada IA/web/IA-night.css`
@@ -99,7 +99,7 @@
 
 - **Arquivos:** 309
 - **Tamanho:** 2144910 bytes
-- **Percentual:** 51.30%
+- **Percentual:** 51.07%
 
 - `Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/BootReminder.java`
 - `Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/ManagedProvisioningApplication.java`
@@ -415,7 +415,7 @@
 
 - **Arquivos:** 5
 - **Tamanho:** 37577 bytes
-- **Percentual:** 0.90%
+- **Percentual:** 0.89%
 
 - `Amparada IA/web/ia.js`
 - `download.js`
@@ -435,7 +435,7 @@
 
 - **Arquivos:** 75
 - **Tamanho:** 1541026 bytes
-- **Percentual:** 36.86%
+- **Percentual:** 36.69%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt`
@@ -533,10 +533,16 @@
 
 ### Python
 
-- **Arquivos:** 4
-- **Tamanho:** 9106 bytes
-- **Percentual:** 0.22%
+- **Arquivos:** 10
+- **Tamanho:** 28485 bytes
+- **Percentual:** 0.68%
 
+- `Amparada IA/src/amparada_ia/__init__.py`
+- `Amparada IA/src/amparada_ia/evaluate.py`
+- `Amparada IA/src/amparada_ia/generate.py`
+- `Amparada IA/src/amparada_ia/model.py`
+- `Amparada IA/src/amparada_ia/tokenizer.py`
+- `Amparada IA/src/amparada_ia/train.py`
 - `Amparada IA/tests/test_model.py`
 - `Amparada IA/tests/test_tokenizer.py`
 - `Amparada IA/web/server.py`
@@ -554,7 +560,7 @@
 
 - **Arquivos:** 6
 - **Tamanho:** 94995 bytes
-- **Percentual:** 2.27%
+- **Percentual:** 2.26%
 
 - `Código-fonte do app = Mulher Amparada/make.sh`
 - `Safe Woman Operational System/build/envsetup.sh`

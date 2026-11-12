@@ -3,10 +3,10 @@
   "branch": "main",
   "fonte_classificacao": "GitHub Linguist",
   "fonte_lista_linguagens": "https://github.com/github-linguist/linguist",
-  "gerado_em_utc": "2026-11-12T10:37:19Z",
+  "gerado_em_utc": "2026-11-12T10:39:09Z",
   "total_linguagens": 14,
-  "total_arquivos_classificados": 440,
-  "total_bytes_classificados": 4180757,
+  "total_arquivos_classificados": 446,
+  "total_bytes_classificados": 4200136,
   "linguagens": [
     {
       "nome": "AIDL",
@@ -27,7 +27,7 @@
     {
       "nome": "CSS",
       "tamanho_bytes": 242149,
-      "percentual": "5.79",
+      "percentual": "5.77",
       "arquivos": [
         "Amparada IA/web/IA-day.css",
         "Amparada IA/web/IA-night.css",
@@ -73,7 +73,7 @@
     {
       "nome": "Java",
       "tamanho_bytes": 2144910,
-      "percentual": "51.30",
+      "percentual": "51.07",
       "arquivos": [
         "Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/BootReminder.java",
         "Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/ManagedProvisioningApplication.java",
@@ -389,7 +389,7 @@
     {
       "nome": "JavaScript",
       "tamanho_bytes": 37577,
-      "percentual": "0.90",
+      "percentual": "0.89",
       "arquivos": [
         "Amparada IA/web/ia.js",
         "download.js",
@@ -409,7 +409,7 @@
     {
       "nome": "Kotlin",
       "tamanho_bytes": 1541026,
-      "percentual": "36.86",
+      "percentual": "36.69",
       "arquivos": [
         "Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt",
         "Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt",
@@ -508,9 +508,15 @@
     },
     {
       "nome": "Python",
-      "tamanho_bytes": 9106,
-      "percentual": "0.22",
+      "tamanho_bytes": 28485,
+      "percentual": "0.68",
       "arquivos": [
+        "Amparada IA/src/amparada_ia/__init__.py",
+        "Amparada IA/src/amparada_ia/evaluate.py",
+        "Amparada IA/src/amparada_ia/generate.py",
+        "Amparada IA/src/amparada_ia/model.py",
+        "Amparada IA/src/amparada_ia/tokenizer.py",
+        "Amparada IA/src/amparada_ia/train.py",
         "Amparada IA/tests/test_model.py",
         "Amparada IA/tests/test_tokenizer.py",
         "Amparada IA/web/server.py",
@@ -528,7 +534,7 @@
     {
       "nome": "Shell",
       "tamanho_bytes": 94995,
-      "percentual": "2.27",
+      "percentual": "2.26",
       "arquivos": [
         "Código-fonte do app = Mulher Amparada/make.sh",
         "Safe Woman Operational System/build/envsetup.sh",

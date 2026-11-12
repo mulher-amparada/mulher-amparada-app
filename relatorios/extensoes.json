@@ -1,44 +1,44 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-12T10:27:09Z",
-  "total_arquivos": 1357,
-  "total_bytes": 102488905,
+  "gerado_em_utc": "2026-11-12T10:29:00Z",
+  "total_arquivos": 1358,
+  "total_bytes": 102489758,
   "total_extensoes": 41,
   "extensoes": [
     {
       "extensao": ".xml",
       "quantidade_arquivos": 400,
       "tamanho_bytes": 3654091,
-      "percentual_arquivos": 29.48,
+      "percentual_arquivos": 29.46,
       "percentual_bytes": 3.57
+    },
+    {
+      "extensao": ".md",
+      "quantidade_arquivos": 310,
+      "tamanho_bytes": 579514,
+      "percentual_arquivos": 22.83,
+      "percentual_bytes": 0.57
     },
     {
       "extensao": ".java",
       "quantidade_arquivos": 309,
       "tamanho_bytes": 2144910,
-      "percentual_arquivos": 22.77,
+      "percentual_arquivos": 22.75,
       "percentual_bytes": 2.09
-    },
-    {
-      "extensao": ".md",
-      "quantidade_arquivos": 309,
-      "tamanho_bytes": 578175,
-      "percentual_arquivos": 22.77,
-      "percentual_bytes": 0.56
     },
     {
       "extensao": ".png",
       "quantidade_arquivos": 105,
       "tamanho_bytes": 76848499,
-      "percentual_arquivos": 7.74,
+      "percentual_arquivos": 7.73,
       "percentual_bytes": 74.98
     },
     {
       "extensao": ".kt",
       "quantidade_arquivos": 75,
       "tamanho_bytes": 1541026,
-      "percentual_arquivos": 5.53,
+      "percentual_arquivos": 5.52,
       "percentual_bytes": 1.5
     },
     {
@@ -51,7 +51,7 @@
     {
       "extensao": ".json",
       "quantidade_arquivos": 19,
-      "tamanho_bytes": 1401422,
+      "tamanho_bytes": 1401423,
       "percentual_arquivos": 1.4,
       "percentual_bytes": 1.37
     },
@@ -65,7 +65,7 @@
     {
       "extensao": ".py",
       "quantidade_arquivos": 14,
-      "tamanho_bytes": 42354,
+      "tamanho_bytes": 41845,
       "percentual_arquivos": 1.03,
       "percentual_bytes": 0.04
     },
@@ -114,7 +114,7 @@
     {
       "extensao": ".js",
       "quantidade_arquivos": 5,
-      "tamanho_bytes": 37806,
+      "tamanho_bytes": 37828,
       "percentual_arquivos": 0.37,
       "percentual_bytes": 0.04
     },

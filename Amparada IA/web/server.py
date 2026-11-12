@@ -1,4 +1,4 @@
-"""Servidor local da demonstração web da Amparada IA com BPE e RAG local."""
+"""Servidor local da demonstração web da Amparada IA com pesquisa web em tempo real."""
 from __future__ import annotations
 
 import json
@@ -7,11 +7,8 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import sys
 
-import torch
-
 ROOT = Path(__file__).resolve().parents[1]
 WEB_DIR = Path(__file__).resolve().parent
-CHECKPOINT = ROOT / "runs" / "amparada_ia_bpe.pt"
 KNOWLEDGE_FILE = ROOT / "knowledge" / "base.json"
 FONT_FILE = ROOT.parent / "font.ttf"
 if not FONT_FILE.is_file():
@@ -21,42 +18,8 @@ sys.path.insert(0, str(ROOT / "src"))
 from amparada_ia.live_search import WebSearchError, build_web_answer, search_web
 from amparada_ia.retrieval import load_knowledge
 
-MODEL = TOKENIZER = MODEL_ERROR = None
 KNOWLEDGE = []
 KNOWLEDGE_ERROR = None
-
-
-def load_model():
-    global MODEL, TOKENIZER, MODEL_ERROR
-
-    if not CHECKPOINT.is_file():
-        MODEL_ERROR = (
-            "Checkpoint BPE não encontrado. Treine com "
-            "python -m src.amparada_ia.train antes de iniciar o servidor."
-        )
-        return
-
-    try:
-        checkpoint = torch.load(
-            CHECKPOINT,
-            map_location="cpu",
-            weights_only=True,
-        )
-
-        from amparada_ia.model import AmparadaLanguageModel
-        from amparada_ia.tokenizer import BPETokenizer
-
-        if checkpoint.get("tokenizer", {}).get("type") != "bpe":
-            raise ValueError("O checkpoint não usa o tokenizador BPE.")
-
-        TOKENIZER = BPETokenizer.from_dict(checkpoint["tokenizer"])
-        MODEL = AmparadaLanguageModel(**checkpoint["model_config"])
-        MODEL.load_state_dict(checkpoint["model_state"])
-        MODEL.eval()
-        MODEL_ERROR = None
-    except Exception as exc:
-        MODEL = TOKENIZER = None
-        MODEL_ERROR = f"Falha ao carregar checkpoint BPE: {type(exc).__name__}: {exc}"
 
 
 def load_knowledge_base():
@@ -90,7 +53,6 @@ class Handler(SimpleHTTPRequestHandler):
                     "ready": bool(os.environ.get("BRAVE_SEARCH_API_KEY")),
                     "web_search_ready": bool(os.environ.get("BRAVE_SEARCH_API_KEY")),
                     "search_provider": "Brave Search",
-                    "model_ready": MODEL is not None,
                     "knowledge_ready": bool(KNOWLEDGE),
                     "knowledge_documents": len(KNOWLEDGE),
                     "message": (
@@ -161,12 +123,7 @@ class Handler(SimpleHTTPRequestHandler):
 
 if __name__ == "__main__":
     load_knowledge_base()
-    load_model()
-
     if KNOWLEDGE_ERROR:
         print("Aviso:", KNOWLEDGE_ERROR)
-    if MODEL_ERROR:
-        print("Aviso:", MODEL_ERROR)
-
     print("Abra http://127.0.0.1:8000 — acesso somente local.")
     ThreadingHTTPServer(("127.0.0.1", 8000), Handler).serve_forever()

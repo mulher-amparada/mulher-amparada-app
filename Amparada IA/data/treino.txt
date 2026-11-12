@@ -1,1 +1,94 @@
+Este é um texto de demonstração para um experimento de linguagem.
+Respeito significa reconhecer a autonomia e os limites de cada pessoa.
+Uma resposta automática pode conter erros e precisa ser verificada.
+Tecnologia responsável protege a privacidade e explica suas limitações.
+Aprender programação envolve testar, observar resultados e corrigir erros.
+Uma ferramenta digital deve apoiar decisões, não decidir pela pessoa.
+Informações importantes devem ser conferidas em fontes confiáveis.
+O desenvolvimento responsável considera segurança, acessibilidade e transparência.
+Nenhuma pessoa deve compartilhar dados privados em um protótipo experimental.
+O projeto está em fase de pesquisa e não oferece atendimento real.
 
+A comunicação clara usa palavras conhecidas, frases completas e pontuação adequada.
+Uma pergunta termina com ponto de interrogação. Uma afirmação termina com ponto final.
+O português escrito possui letras maiúsculas, letras minúsculas e sinais de pontuação.
+A acentuação ajuda a representar corretamente muitas palavras da língua portuguesa.
+Um parágrafo reúne frases que desenvolvem uma ideia relacionada.
+Uma explicação organizada apresenta o assunto, os detalhes e uma conclusão.
+Antes de publicar um texto, vale revisar a ortografia e a clareza.
+Uma frase curta pode comunicar uma ideia importante sem perder o significado.
+O contexto ajuda a interpretar palavras que possuem mais de um sentido.
+Ler textos variados amplia o vocabulário e o conhecimento sobre a língua.
+
+Programar é escrever instruções que um computador pode executar.
+Um programa é construído com lógica, dados e operações bem definidas.
+Um erro de programação pode ser investigado por meio de testes.
+Quando um teste falha, a mensagem de erro oferece pistas para a correção.
+Uma alteração pequena deve ser testada antes de integrar outras mudanças.
+O controle de versão registra alterações e facilita a colaboração.
+Um repositório organiza arquivos, documentação e histórico de desenvolvimento.
+Uma cópia de segurança ajuda a proteger o trabalho contra perdas acidentais.
+Arquivos importantes devem ser guardados em mais de um local seguro.
+Nunca execute um comando destrutivo sem entender o que ele modifica.
+
+A inteligência artificial aprende padrões a partir dos dados usados no treinamento.
+Um modelo de linguagem estima qual caractere ou palavra pode aparecer em seguida.
+A previsão seguinte não garante que a frase inteira esteja correta.
+Um modelo pequeno possui capacidade limitada e precisa de exemplos adequados.
+Dados repetidos em excesso podem ensinar padrões pouco variados.
+Dados de validação ajudam a medir o desempenho em exemplos separados.
+A perda de treinamento indica o erro observado durante a aprendizagem.
+A perda de validação ajuda a observar se o modelo generaliza para outros textos.
+Uma métrica isolada não comprova compreensão ou confiabilidade.
+A avaliação humana continua importante para analisar a qualidade das respostas.
+
+O tokenizador transforma texto em unidades que o modelo consegue processar.
+Um token pode representar um caractere, uma parte de palavra ou uma palavra inteira.
+A tokenização por caracteres é simples, mas pode exigir sequências muito longas.
+A tokenização por subpalavras pode representar partes frequentes de palavras.
+O vocabulário precisa incluir os caracteres presentes nos dados de validação.
+Um caractere desconhecido pode prejudicar a leitura e a geração de texto.
+O mesmo tokenizador deve ser usado no treinamento e na inferência.
+O checkpoint guarda os pesos do modelo e as informações do tokenizador.
+Sem o checkpoint correto, não é possível reproduzir a mesma geração.
+
+A privacidade deve ser considerada desde o começo do desenvolvimento.
+Informações pessoais não devem ser usadas em exemplos públicos de treinamento.
+Textos demonstrativos devem ser fictícios e não identificar pessoas reais.
+Uma aplicação responsável explica quais dados coleta e por que precisa deles.
+A acessibilidade considera diferentes formas de perceber e utilizar uma interface.
+Uma interface clara apresenta mensagens compreensíveis e controles previsíveis.
+A segurança digital depende de revisão, testes e atualização contínua.
+Uma ferramenta experimental não substitui profissionais ou serviços especializados.
+Resultados automáticos precisam ser conferidos antes de orientar decisões importantes.
+A transparência inclui explicar os limites conhecidos de cada recurso.
+
+O respeito começa ao ouvir sem interromper e sem ridicularizar.
+Cada pessoa tem direito de estabelecer seus próprios limites.
+Consentimento precisa ser livre, informado e pode ser retirado.
+Uma conversa respeitosa permite discordar sem humilhar.
+A autonomia significa poder participar das decisões sobre a própria vida.
+A igualdade exige oportunidades e tratamento digno.
+A educação pode ajudar a reconhecer comportamentos injustos.
+A informação confiável deve apresentar contexto e indicar suas fontes.
+Uma comunidade acolhedora valoriza diferenças e protege a dignidade.
+Pedir ajuda é uma escolha que deve ser respeitada.
+
+O planejamento divide uma tarefa grande em etapas menores.
+Uma etapa concluída pode ser registrada antes de começar a próxima.
+Metas realistas ajudam a acompanhar o progresso de um projeto.
+Uma pausa pode melhorar a atenção durante atividades longas.
+A documentação explica como instalar, executar e testar um programa.
+Instruções claras facilitam a colaboração entre desenvolvedores.
+Uma boa revisão procura erros sem desrespeitar quem escreveu o código.
+Aprender envolve experimentar, comparar resultados e ajustar hipóteses.
+Nem toda tentativa funciona, mas cada teste pode trazer informação útil.
+O conhecimento cresce quando resultados são analisados com cuidado.
+
+A Amparada IA é um experimento de pesquisa e aprendizado.
+Ela não é um serviço pronto de acolhimento ou atendimento.
+Suas respostas podem conter erros, repetições e trechos sem sentido.
+O modelo precisa de dados melhores e avaliação antes de qualquer evolução.
+Nenhum relato real de violência deve ser incluído neste corpus demonstrativo.
+A finalidade social do projeto exige responsabilidade técnica e proteção de dados.
+O desenvolvimento deve ser transparente sobre capacidades e limitações.

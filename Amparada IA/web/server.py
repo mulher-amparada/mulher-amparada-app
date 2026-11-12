@@ -1,55 +1,35 @@
-"""Servidor local da demonstração web da Amparada IA com tokenizador BPE."""
+"""Servidor local da demonstração web da Amparada IA com pesquisa web em tempo real."""
 from __future__ import annotations
 
 import json
+import os
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import sys
 
-import torch
-
 ROOT = Path(__file__).resolve().parents[1]
 WEB_DIR = Path(__file__).resolve().parent
-CHECKPOINT = ROOT / "runs" / "amparada_ia_bpe.pt"
+KNOWLEDGE_FILE = ROOT / "knowledge" / "base.json"
 FONT_FILE = ROOT.parent / "font.ttf"
 if not FONT_FILE.is_file():
     FONT_FILE = ROOT / "font.ttf"
 
 sys.path.insert(0, str(ROOT / "src"))
-MODEL = TOKENIZER = MODEL_ERROR = None
+from amparada_ia.live_search import DEFAULT_SEARXNG_URL, WebSearchError, build_web_answer, search_web
+from amparada_ia.retrieval import load_knowledge
+
+KNOWLEDGE = []
+KNOWLEDGE_ERROR = None
 
 
-def load_model():
-    global MODEL, TOKENIZER, MODEL_ERROR
-
-    if not CHECKPOINT.is_file():
-        MODEL_ERROR = (
-            "Checkpoint BPE não encontrado. Treine com "
-            "python -m src.amparada_ia.train antes de iniciar o servidor."
-        )
-        return
-
+def load_knowledge_base():
+    global KNOWLEDGE, KNOWLEDGE_ERROR
     try:
-        checkpoint = torch.load(
-            CHECKPOINT,
-            map_location="cpu",
-            weights_only=True,
-        )
-
-        from amparada_ia.model import AmparadaLanguageModel
-        from amparada_ia.tokenizer import BPETokenizer
-
-        if checkpoint.get("tokenizer", {}).get("type") != "bpe":
-            raise ValueError("O checkpoint não usa o tokenizador BPE.")
-
-        TOKENIZER = BPETokenizer.from_dict(checkpoint["tokenizer"])
-        MODEL = AmparadaLanguageModel(**checkpoint["model_config"])
-        MODEL.load_state_dict(checkpoint["model_state"])
-        MODEL.eval()
-        MODEL_ERROR = None
+        KNOWLEDGE = load_knowledge(KNOWLEDGE_FILE)
+        KNOWLEDGE_ERROR = None
     except Exception as exc:
-        MODEL = TOKENIZER = None
-        MODEL_ERROR = f"Falha ao carregar checkpoint BPE: {type(exc).__name__}: {exc}"
+        KNOWLEDGE = []
+        KNOWLEDGE_ERROR = f"Falha ao carregar base de conhecimento: {type(exc).__name__}"
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -67,11 +47,16 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == "/api/status":
+            configured_url = os.environ.get("SEARXNG_URL", DEFAULT_SEARXNG_URL)
             self.send_json(
                 200,
                 {
-                    "ready": MODEL is not None,
-                    "message": "Modelo BPE carregado." if MODEL is not None else MODEL_ERROR,
+                    "ready": True,
+                    "web_search_ready": True,
+                    "search_provider": "SearXNG",
+                                        "knowledge_ready": bool(KNOWLEDGE),
+                    "knowledge_documents": len(KNOWLEDGE),
+                    "message": "SearXNG configurado. A conexão será verificada quando você pesquisar.",
                 },
             )
             return
@@ -100,10 +85,6 @@ class Handler(SimpleHTTPRequestHandler):
             self.send_json(404, {"error": "Rota não encontrada."})
             return
 
-        if MODEL is None or TOKENIZER is None:
-            self.send_json(503, {"error": MODEL_ERROR or "Modelo indisponível."})
-            return
-
         try:
             length = int(self.headers.get("Content-Length", "0"))
             if length < 1 or length > 8192:
@@ -121,46 +102,25 @@ class Handler(SimpleHTTPRequestHandler):
                 self.send_json(400, {"error": "Use até 500 caracteres."})
                 return
 
-            ids = TOKENIZER.encode(message.strip())
-            if not ids:
-                self.send_json(400, {"error": "Mensagem sem tokens reconhecíveis."})
-                return
+            # Pesquisa obrigatoriamente na internet em tempo real.
+            # Sem conexão com o SearXNG, não finge que consultou a web.
+            results = search_web(message.strip(), count=5)
+            self.send_json(200, build_web_answer(message.strip(), results))
 
-            context = torch.tensor(
-                [ids[-MODEL.config["block_size"]:]],
-                dtype=torch.long,
-            )
-
-            with torch.inference_mode():
-                output = MODEL.generate(
-                    context,
-                    max_new_tokens=80,
-                    temperature=0.8,
-                )
-
-            answer = TOKENIZER.decode(output[0, len(context[0]):].tolist()).strip()
-            self.send_json(
-                200,
-                {
-                    "answer": answer or "O modelo não gerou continuação.",
-                    "experimental": True,
-                },
-            )
-
+        except WebSearchError as exc:
+            self.send_json(503, {"error": str(exc), "mode": "live_web_search_unavailable"})
         except (ValueError, json.JSONDecodeError):
             self.send_json(400, {"error": "Requisição inválida."})
         except Exception as exc:
-            self.send_json(500, {"error": f"Falha na inferência: {type(exc).__name__}"})
+            self.send_json(500, {"error": f"Falha na consulta: {type(exc).__name__}"})
 
     def log_message(self, format, *args):
         super().log_message(format, *args)
 
 
 if __name__ == "__main__":
-    load_model()
-
-    if MODEL is None:
-        print("Aviso:", MODEL_ERROR)
-
+    load_knowledge_base()
+    if KNOWLEDGE_ERROR:
+        print("Aviso:", KNOWLEDGE_ERROR)
     print("Abra http://127.0.0.1:8000 — acesso somente local.")
     ThreadingHTTPServer(("127.0.0.1", 8000), Handler).serve_forever()

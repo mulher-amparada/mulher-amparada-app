@@ -1,0 +1,38 @@
+[
+  {
+    "id": "rede-apoio-escuta",
+    "title": "Como apoiar uma mulher sem julgá-la",
+    "content": "Uma rede de apoio deve ouvir com empatia, sem duvidar, minimizar ou culpar a mulher. Respeite o tempo e a autonomia dela: não pressione por uma decisão imediata nem decida por ela. Mantenha sigilo, pois divulgar o relato pode quebrar a confiança e aumentar riscos. Ofereça ajuda prática quando for desejada, como acompanhar a pessoa a um serviço especializado ou ajudá-la a encontrar atendimento.",
+    "tags": ["rede de apoio", "acolhimento", "amiga", "escuta", "autonomia", "sigilo", "ajuda"],
+    "source_name": "Ministério das Mulheres — Como ser rede de apoio para uma mulher em situação de violência",
+    "source_url": "https://www.gov.br/mulheres/pt-br/central-de-conteudos/noticias/2026/agosto-defeso-eleitoral/como-ser-rede-de-apoio-para-uma-mulher-em-situacao-de-violencia",
+    "updated_at": "2026-08-31"
+  },
+  {
+    "id": "violencia-psicologica-controle",
+    "title": "Sinais de violência psicológica e controle",
+    "content": "A violência psicológica pode envolver ameaças, constrangimento, humilhação, manipulação, isolamento, vigilância constante, perseguição, insultos e chantagem. Controlar contatos, exigir senhas, monitorar a localização, impedir amizades ou limitar decisões não deve ser tratado como prova de amor: são comportamentos que podem restringir a liberdade e a autonomia. A responsabilidade pela violência é de quem a pratica, não da pessoa que a sofre.",
+    "tags": ["violência psicológica", "gaslighting", "controle", "manipulação", "isolamento", "ciúme", "chantagem", "ameaça"],
+    "source_name": "Ministério das Mulheres — Conheça 10 mitos sobre violência doméstica e familiar",
+    "source_url": "https://www.gov.br/mulheres/pt-br/central-de-conteudos/noticias/2026/agosto-defeso-eleitoral/conheca-10-mitos-sobre-violencia-domestica-e-familiar-contra-a-mulher-que-dificultam-a-busca-por-ajuda",
+    "updated_at": "2026-08-14"
+  },
+  {
+    "id": "tipos-violencia",
+    "title": "Formas de violência contra a mulher",
+    "content": "A violência contra a mulher pode ser física, psicológica, sexual, patrimonial ou moral, entre outras formas reconhecidas na legislação e em atualizações legais. A violência psicológica pode causar dano emocional ou buscar controlar ações, comportamentos, crenças e decisões. Exemplos incluem ameaças, humilhação, manipulação, isolamento, vigilância, perseguição e chantagem. A identificação de sinais não substitui orientação especializada nem uma avaliação dos fatos concretos.",
+    "tags": ["tipos de violência", "violência física", "violência psicológica", "violência sexual", "violência patrimonial", "violência moral", "direitos"],
+    "source_name": "Ministério das Mulheres — Tipos de violência doméstica e familiar",
+    "source_url": "https://www.gov.br/mulheres/pt-br/central-de-conteudos/noticias/2026/agosto-defeso-eleitoral/lei-maria-da-penha-conheca-os-seis-tipos-de-violencia-domestica-e-familiar-contra-a-mulher-previstos-na-lei",
+    "updated_at": "2026-08"
+  },
+  {
+    "id": "ligue-180-emergencia-190",
+    "title": "Onde buscar orientação e ajuda no Brasil",
+    "content": "No Brasil, o Ligue 180 é um serviço gratuito que funciona 24 horas por dia, todos os dias, e oferece orientação sobre direitos das mulheres e sobre serviços da rede de atendimento; também recebe e encaminha denúncias. O canal pode ser acionado por telefone 180 e pelo WhatsApp (61) 9610-0180. Em situação de emergência ou risco imediato, a orientação oficial é acionar a Polícia Militar pelo telefone 190.",
+    "tags": ["Ligue 180", "190", "emergência", "denúncia", "ajuda", "serviços", "telefone", "whatsapp", "Brasil"],
+    "source_name": "Ministério das Mulheres — Ligue 180",
+    "source_url": "https://www.gov.br/mulheres/pt-br/ligue180",
+    "updated_at": "2026-11-12"
+  }
+]

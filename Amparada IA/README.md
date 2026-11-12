@@ -66,4 +66,39 @@ Este protótipo pode repetir padrões, errar fatos ou gerar conteúdo inadequado
 
 ## Dados e segurança:
 
-Use somente textos próprios, sintéticos ou de origem e licença verificadas. Preserve atribuições e condições de licença. Não adicione relatos privados, nomes, endereços, conversas ou informações identificáveis sobre situações reais de violência.
+Use somente textos próprios, sintéticos ou de origem e licença verificadas. Preserve atribuições e condições de licença. Não adicione relatos privados, nomes, endereços, conversas ou informações identificáveis sobre situações reais.
+
+## Base local de conhecimento (RAG)
+
+O módulo `src/amparada_ia/retrieval.py` e os documentos em `knowledge/base.json` continuam disponíveis para testes e desenvolvimento de recuperação local. A rota web `/api/chat`, nesta versão, faz pesquisa na internet em tempo real via SearXNG.
+
+## Pesquisa na internet em tempo real com SearXNG
+
+A rota `/api/chat` consulta o endpoint JSON de uma instância SearXNG e apresenta títulos, resumos e links das fontes. A configuração padrão aponta para uma instância local em `http://127.0.0.1:8080`. Não é necessária chave de API.
+
+### Iniciar uma instância local
+
+Com Docker instalado, execute:
+
+```bash
+docker run --rm -d --name amparada-searxng -p 8080:8080 searxng/searxng
+```
+
+Depois, em outro terminal, dentro da pasta `Amparada IA`, inicie o servidor:
+
+```bash
+python -m web.server
+```
+
+Abra `http://127.0.0.1:8000`. Para apontar para outra instância SearXNG, configure o endereço-base no ambiente do servidor:
+
+```bash
+export SEARXNG_URL="https://seu-servidor-searxng.example"
+python -m web.server
+```
+
+A instância precisa permitir o formato de resposta JSON. A disponibilidade e a política de uso dependem da instância e dos mecanismos de busca que ela consulta. Hospedar sua própria instância evita uma cota de API de um fornecedor, mas não significa consultas infinitas garantidas: mecanismos externos podem aplicar limites, bloqueios ou indisponibilidade. Instâncias públicas também podem registrar consultas; não envie nomes, telefones, endereços, relatos privados ou dados identificáveis de usuárias.
+
+**Privacidade e segurança:** as perguntas são transmitidas à instância SearXNG e, conforme sua configuração, aos mecanismos externos consultados. Antes de disponibilizar o serviço a outras pessoas, implemente minimização de dados, política de privacidade, consentimento apropriado, limitação de requisições e revisão de segurança.
+
+**Limitação da versão:** esta integração apresenta resumos devolvidos pelo mecanismo de busca. Ela não equivale a uma síntese feita por um modelo de linguagem avançado nem garante que cada página foi lida integralmente. Confira as fontes antes de tomar decisões importantes.

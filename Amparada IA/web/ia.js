@@ -20,20 +20,15 @@ function addMessage(content, author, extraClass = "") {
   message.className = `message ${author} ${extraClass}`.trim();
   message.textContent = content;
   message.setAttribute("role", "listitem");
-
   messages.appendChild(message);
   scrollToLatest();
-
   return message;
 }
 
 function setStatus(label, state = "") {
   statusLabel.textContent = label;
   statusDot.className = "status-dot";
-
-  if (state) {
-    statusDot.classList.add(state);
-  }
+  if (state) statusDot.classList.add(state);
 }
 
 function setSending(sending) {
@@ -49,15 +44,10 @@ async function checkModelStatus() {
       headers: { Accept: "application/json" },
       cache: "no-store"
     });
-
-    if (!response.ok) {
-      throw new Error("Não foi possível consultar o servidor.");
-    }
-
+    if (!response.ok) throw new Error("Não foi possível consultar o servidor.");
     const data = await response.json();
-
     if (data.ready) {
-      setStatus("Modelo carregado e pronto", "ready");
+      setStatus("SearXNG configurado", "ready");
     } else {
       setStatus(data.message || "Modelo indisponível", "error");
     }
@@ -68,50 +58,36 @@ async function checkModelStatus() {
 
 async function sendMessage(event) {
   event.preventDefault();
-
   const message = promptInput.value.trim();
-
-  if (!message || isSending) {
-    return;
-  }
+  if (!message || isSending) return;
 
   addMessage(message, "user");
   promptInput.value = "";
   setSending(true);
-
-  const pendingMessage = addMessage(
-    "A Amparada IA está processando…",
-    "assistant",
-    "pending"
-  );
+  const pendingMessage = addMessage("Pesquisando na internet em tempo real…", "assistant", "pending");
 
   try {
     const response = await fetch("/api/chat", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json"
-      },
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify({ message })
     });
-
     const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || data.message || "Não foi possível gerar uma resposta.");
-    }
+    if (!response.ok) throw new Error(data.error || data.message || "Não foi possível gerar uma resposta.");
 
     pendingMessage.remove();
-    addMessage(
-      data.answer || "O modelo não gerou uma continuação.",
-      "assistant"
-    );
+    addMessage(data.answer || "Não encontrei uma resposta.", "assistant");
+
+    if (Array.isArray(data.sources) && data.sources.length) {
+      const sourceText = data.sources.map((source, index) => {
+        const updated = source.updated_at ? ` (atualizado em ${source.updated_at})` : "";
+        return `${index + 1}. ${source.title}${updated}\n${source.url}`;
+      }).join("\n\n");
+      addMessage(`Fontes consultadas:\n${sourceText}`, "assistant", "sources");
+    }
   } catch (error) {
     pendingMessage.remove();
-    addMessage(
-      error.message || "Falha ao conectar com o modelo.",
-      "assistant"
-    );
+    addMessage(error.message || "Falha ao conectar com o modelo.", "assistant");
   } finally {
     setSending(false);
     promptInput.focus();
@@ -119,10 +95,7 @@ async function sendMessage(event) {
 }
 
 function clearConversation() {
-  if (isSending) {
-    return;
-  }
-
+  if (isSending) return;
   messages.innerHTML = initialMessage;
   promptInput.value = "";
   promptInput.focus();
@@ -136,19 +109,12 @@ function useSuggestion(event) {
 }
 
 form.addEventListener("submit", sendMessage);
-if (clearButton) {
-  clearButton.addEventListener("click", clearConversation);
-}
-
-suggestions.forEach((button) => {
-  button.addEventListener("click", useSuggestion);
-});
-
+if (clearButton) clearButton.addEventListener("click", clearConversation);
+suggestions.forEach((button) => button.addEventListener("click", useSuggestion));
 promptInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter" && !event.shiftKey) {
     event.preventDefault();
     form.requestSubmit();
   }
 });
-
 checkModelStatus();

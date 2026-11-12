@@ -66,33 +66,39 @@ Este protótipo pode repetir padrões, errar fatos ou gerar conteúdo inadequado
 
 ## Dados e segurança:
 
-Use somente textos próprios, sintéticos ou de origem e licença verificadas. Preserve atribuições e condições de licença. Não adicione relatos privados, nomes, endereços, conversas ou informações identificáveis sobre situações reais de violência.
-
+Use somente textos próprios, sintéticos ou de origem e licença verificadas. Preserve atribuições e condições de licença. Não adicione relatos privados, nomes, endereços, conversas ou informações identificáveis sobre situações reais.
 
 ## Base local de conhecimento (RAG)
 
-O módulo `src/amparada_ia/retrieval.py` e os documentos em `knowledge/base.json` continuam disponíveis para testes e desenvolvimento de recuperação local. A rota web `/api/chat`, porém, agora faz pesquisa na internet em tempo real pelo Brave Search, em vez de responder usando somente essa base local.
+O módulo `src/amparada_ia/retrieval.py` e os documentos em `knowledge/base.json` continuam disponíveis para testes e desenvolvimento de recuperação local. A rota web `/api/chat`, nesta versão, faz pesquisa na internet em tempo real via SearXNG.
 
+## Pesquisa na internet em tempo real com SearXNG
 
+A rota `/api/chat` consulta o endpoint JSON de uma instância SearXNG e apresenta títulos, resumos e links das fontes. A configuração padrão aponta para uma instância local em `http://127.0.0.1:8080`. Não é necessária chave de API.
 
-## Pesquisa na internet em tempo real
+### Iniciar uma instância local
 
-A rota `/api/chat` usa a API oficial do Brave Search para pesquisar na web a cada pergunta e apresentar títulos, resumos e links das fontes. A busca usa região Brasil, idioma português e SafeSearch estrito. Sem uma chave configurada, o servidor informa que a pesquisa não está disponível e **não** finge que consultou a internet nem usa o pequeno modelo experimental como substituto.
-
-### Configuração
-
-1. Crie uma chave no painel oficial do Brave Search: https://api.search.brave.com/
-2. Configure a chave somente no ambiente do servidor, nunca no JavaScript ou no Git:
+Com Docker instalado, execute:
 
 ```bash
-export BRAVE_SEARCH_API_KEY="sua_chave"
+docker run --rm -d --name amparada-searxng -p 8080:8080 searxng/searxng
+```
+
+Depois, em outro terminal, dentro da pasta `Amparada IA`, inicie o servidor:
+
+```bash
 python -m web.server
 ```
 
-Na implantação, cadastre `BRAVE_SEARCH_API_KEY` como secret e injete-o no ambiente do processo que executa o servidor. Não publique a chave em commits, issues, logs ou arquivos do repositório.
+Abra `http://127.0.0.1:8000`. Para apontar para outra instância SearXNG, configure o endereço-base no ambiente do servidor:
 
-A API exige autenticação por `X-Subscription-Token`; consulte os planos, limites e custos atuais no painel antes de ativar. A chave não foi incluída neste repositório.
+```bash
+export SEARXNG_URL="https://seu-servidor-searxng.example"
+python -m web.server
+```
 
-**Privacidade:** as perguntas enviadas são transmitidas ao provedor de busca. A interface avisa para não incluir nomes, telefones, endereços ou relatos identificáveis. Antes de disponibilizar o serviço a outras pessoas, implemente minimização de dados, política de privacidade, consentimento apropriado, limitação de requisições e revisão de segurança.
+A instância precisa permitir o formato de resposta JSON. A disponibilidade e a política de uso dependem da instância e dos mecanismos de busca que ela consulta. Hospedar sua própria instância evita uma cota de API de um fornecedor, mas não significa consultas infinitas garantidas: mecanismos externos podem aplicar limites, bloqueios ou indisponibilidade. Instâncias públicas também podem registrar consultas; não envie nomes, telefones, endereços, relatos privados ou dados identificáveis de usuárias.
 
-**Limitação da versão:** esta primeira integração apresenta resumos devolvidos pelo mecanismo de busca e os links originais. Ela não equivale a uma síntese feita por um modelo de linguagem avançado nem garante que cada página foi lida integralmente. Confira as fontes antes de tomar decisões importantes.
+**Privacidade e segurança:** as perguntas são transmitidas à instância SearXNG e, conforme sua configuração, aos mecanismos externos consultados. Antes de disponibilizar o serviço a outras pessoas, implemente minimização de dados, política de privacidade, consentimento apropriado, limitação de requisições e revisão de segurança.
+
+**Limitação da versão:** esta integração apresenta resumos devolvidos pelo mecanismo de busca. Ela não equivale a uma síntese feita por um modelo de linguagem avançado nem garante que cada página foi lida integralmente. Confira as fontes antes de tomar decisões importantes.

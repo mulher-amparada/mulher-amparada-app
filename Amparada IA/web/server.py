@@ -9,29 +9,12 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 WEB_DIR = Path(__file__).resolve().parent
-KNOWLEDGE_FILE = ROOT / "knowledge" / "base.json"
 FONT_FILE = ROOT.parent / "font.ttf"
 if not FONT_FILE.is_file():
     FONT_FILE = ROOT / "font.ttf"
 
 sys.path.insert(0, str(ROOT / "src"))
-from amparada_ia.live_search import DEFAULT_SEARXNG_URL, WebSearchError, build_web_answer, search_web
-from amparada_ia.retrieval import load_knowledge
-
-KNOWLEDGE = []
-KNOWLEDGE_ERROR = None
-
-
-def load_knowledge_base():
-    global KNOWLEDGE, KNOWLEDGE_ERROR
-    try:
-        KNOWLEDGE = load_knowledge(KNOWLEDGE_FILE)
-        KNOWLEDGE_ERROR = None
-    except Exception as exc:
-        KNOWLEDGE = []
-        KNOWLEDGE_ERROR = f"Falha ao carregar base de conhecimento: {type(exc).__name__}"
-
-
+from amparada_ia.live_search import WebSearchError, build_web_answer, search_web
 class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(WEB_DIR), **kwargs)
@@ -47,16 +30,17 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == "/api/status":
-            configured_url = os.environ.get("SEARXNG_URL", DEFAULT_SEARXNG_URL)
             self.send_json(
                 200,
                 {
-                    "ready": True,
-                    "web_search_ready": True,
-                    "search_provider": "SearXNG",
-                                        "knowledge_ready": bool(KNOWLEDGE),
-                    "knowledge_documents": len(KNOWLEDGE),
-                    "message": "SearXNG configurado. A conexão será verificada quando você pesquisar.",
+                    "ready": bool(os.environ.get("BRAVE_SEARCH_API_KEY")),
+                    "web_search_ready": bool(os.environ.get("BRAVE_SEARCH_API_KEY")),
+                    "search_provider": "Brave Search",
+                    "message": (
+                        "Pesquisa na internet em tempo real pronta."
+                        if os.environ.get("BRAVE_SEARCH_API_KEY")
+                        else "Configure BRAVE_SEARCH_API_KEY no ambiente do servidor."
+                    ),
                 },
             )
             return
@@ -103,7 +87,7 @@ class Handler(SimpleHTTPRequestHandler):
                 return
 
             # Pesquisa obrigatoriamente na internet em tempo real.
-            # Sem conexão com o SearXNG, não finge que consultou a web.
+            # Sem resultados ou sem chave, não finge ter consultado a web.
             results = search_web(message.strip(), count=5)
             self.send_json(200, build_web_answer(message.strip(), results))
 
@@ -119,8 +103,5 @@ class Handler(SimpleHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    load_knowledge_base()
-    if KNOWLEDGE_ERROR:
-        print("Aviso:", KNOWLEDGE_ERROR)
     print("Abra http://127.0.0.1:8000 — acesso somente local.")
     ThreadingHTTPServer(("127.0.0.1", 8000), Handler).serve_forever()

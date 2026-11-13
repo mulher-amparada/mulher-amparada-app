@@ -16,6 +16,9 @@ if not FONT_FILE.is_file():
     FONT_FILE = ROOT / "font.ttf"
 
 sys.path.insert(0, str(ROOT / "src"))
+from amparada_ia.rag import LocalRAG
+
+RAG = LocalRAG(ROOT / "data")
 MODEL = TOKENIZER = MODEL_ERROR = None
 
 
@@ -72,6 +75,9 @@ class Handler(SimpleHTTPRequestHandler):
                 {
                     "ready": MODEL is not None,
                     "message": "Modelo BPE carregado." if MODEL is not None else MODEL_ERROR,
+                    "rag_ready": RAG.stats["chunks"] > 0,
+                    "rag_files": RAG.stats["files"],
+                    "rag_chunks": RAG.stats["chunks"],
                 },
             )
             return
@@ -121,15 +127,25 @@ class Handler(SimpleHTTPRequestHandler):
                 self.send_json(400, {"error": "Use até 500 caracteres."})
                 return
 
-            ids = TOKENIZER.encode(message.strip())
-            if not ids:
+            question_ids = TOKENIZER.encode(message.strip())
+            if not question_ids:
                 self.send_json(400, {"error": "Mensagem sem tokens reconhecíveis."})
                 return
 
-            context = torch.tensor(
-                [ids[-MODEL.config["block_size"]:]],
-                dtype=torch.long,
+            retrieved = RAG.search(message.strip(), top_k=3)
+            context_text = "\n".join(
+                f"[{item['source']}] {item['text']}" for item in retrieved
             )
+            context_ids = TOKENIZER.encode(context_text) if context_text else []
+            block_size = MODEL.config["block_size"]
+            question_budget = min(len(question_ids), max(1, block_size // 2))
+            context_budget = max(0, block_size - question_budget)
+            prompt_ids = context_ids[-context_budget:] if context_budget else []
+            prompt_ids += question_ids[-question_budget:]
+            if not prompt_ids:
+                prompt_ids = question_ids[-block_size:]
+
+            context = torch.tensor([prompt_ids], dtype=torch.long)
 
             with torch.inference_mode():
                 output = MODEL.generate(
@@ -142,7 +158,12 @@ class Handler(SimpleHTTPRequestHandler):
             self.send_json(
                 200,
                 {
-                    "answer": answer or "O modelo não gerou continuação.",
+                    "answer": answer or "O modelo não gerou uma continuação.",
+                    "sources": [
+                        {"file": item["source"], "score": item["score"]}
+                        for item in retrieved
+                    ],
+                    "retrieved_chunks": len(retrieved),
                     "experimental": True,
                 },
             )

@@ -42,6 +42,12 @@ O corpus padrão é `data/treino.txt`; a validação usa `data/validacao.txt`. O
 
 O consumo de memória depende principalmente de `--batch-size`, `--block-size`, `--n-embd`, `--n-head` e `--n-layer`. Aumentar `--steps` aumenta o número de atualizações, mas não garante respostas melhores.
 
+## RAG local:
+
+A interface web usa `src/amparada_ia/rag.py` para pesquisar os arquivos de texto já existentes em `data/`. A busca BM25 é executada localmente, sem APIs, serviços externos ou dependências adicionais. São aceitos arquivos `.txt`, `.md`, `.json` e `.csv`; o índice é mantido em memória e atualizado quando os arquivos mudam. Os arquivos originais permanecem intactos. O servidor inclui até três trechos recuperados no contexto enviado ao modelo e informa os arquivos consultados.
+
+O RAG recupera passagens relevantes, mas não garante que o modelo experimental interprete ou utilize essas passagens corretamente. A geração continua sujeita às limitações descritas acima.
+
 ## Gerar texto:
 
 ```bash

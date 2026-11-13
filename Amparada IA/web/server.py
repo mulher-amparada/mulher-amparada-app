@@ -138,7 +138,8 @@ class Handler(SimpleHTTPRequestHandler):
             )
             context_ids = TOKENIZER.encode(context_text) if context_text else []
             block_size = MODEL.config["block_size"]
-            question_budget = min(len(question_ids), max(1, block_size // 2))
+            question_limit = max(1, block_size // 2) if retrieved else block_size
+            question_budget = min(len(question_ids), question_limit)
             context_budget = max(0, block_size - question_budget)
             prompt_ids = context_ids[-context_budget:] if context_budget else []
             prompt_ids += question_ids[-question_budget:]

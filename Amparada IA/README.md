@@ -118,3 +118,36 @@ Este protótipo pode repetir padrões, errar fatos ou gerar conteúdo inadequado
 ## Dados e segurança:
 
 Use somente textos próprios, sintéticos ou de origem e licença verificadas. Preserve atribuições e condições de licença. Não adicione relatos privados, nomes, endereços, conversas ou informações identificáveis sobre situações reais de violência.
+
+Retrieval-Augmented Generation (RAG):
+
+A Amparada IA utiliza Retrieval-Augmented Generation (RAG) para complementar a geração de respostas com informações recuperadas de fontes externas ou bases de conhecimento disponíveis.
+
+O RAG permite que o modelo utilize informações relevantes durante a geração de respostas, reduzindo a dependência exclusiva dos conhecimentos adquiridos durante o treinamento.
+
+Como funciona:
+
+O processo de RAG envolve três etapas principais:
+
+1. Recuperação: busca informações relevantes na base de conhecimento a partir da consulta recebida.
+2. Contextualização: organiza e disponibiliza as informações recuperadas como contexto para o modelo.
+3. Geração: o modelo utiliza a consulta e o contexto recuperado para produzir uma resposta.
+
+Integração com o modelo:
+
+O RAG atua como um mecanismo complementar à arquitetura Transformer Decoder-only da Amparada IA.
+
+Enquanto o modelo é responsável pelo processamento da linguagem e pela geração de texto, o RAG permite consultar informações adicionais que podem enriquecer as respostas.
+
+Benefícios:
+
+- Acesso a informações complementares ao treinamento.
+- Possibilidade de utilização de bases de conhecimento atualizáveis.
+- Respostas contextualizadas com informações recuperadas.
+- Separação entre recuperação de informações e geração de texto.
+
+Limitações:
+
+O RAG não garante que todas as informações recuperadas estejam corretas ou atualizadas. A qualidade das respostas depende da relevância, qualidade e disponibilidade das fontes consultadas.
+
+A utilização de RAG também não elimina completamente a possibilidade de respostas incorretas ou informações não verificadas.

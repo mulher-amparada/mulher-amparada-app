@@ -57,7 +57,10 @@ async function checkModelStatus() {
     const data = await response.json();
 
     if (data.ready) {
-      setStatus("Modelo carregado e pronto", "ready");
+      const ragStatus = data.rag_ready
+        ? `RAG local ativo · ${data.rag_files} arquivos`
+        : "RAG local sem dados indexáveis";
+      setStatus(`Modelo pronto · ${ragStatus}`, data.rag_ready ? "ready" : "error");
     } else {
       setStatus(data.message || "Modelo indisponível", "error");
     }
@@ -106,6 +109,15 @@ async function sendMessage(event) {
       data.answer || "O modelo não gerou uma continuação.",
       "assistant"
     );
+
+    if (Array.isArray(data.sources) && data.sources.length) {
+      const sourceNames = [...new Set(data.sources.map((source) => source.file))];
+      addMessage(
+        `Fontes locais consultadas: ${sourceNames.join(", ")}`,
+        "assistant",
+        "sources"
+      );
+    }
   } catch (error) {
     pendingMessage.remove();
     addMessage(

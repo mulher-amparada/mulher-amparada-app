@@ -48,6 +48,14 @@ Uma LayerNorm final prepara as representações. A cabeça de linguagem é uma c
 
 Na geração, o modelo aplica softmax às pontuações da última posição, ajustadas pela temperatura, e amostra o próximo token. O processo se repete de forma autorregressiva, mantendo o contexto dentro de `block_size`.
 
+## Recuperação local (RAG):
+
+A interface web inicializa `LocalRAG` com a pasta `data/`. O componente percorre recursivamente os arquivos `.txt`, `.md`, `.json` e `.csv`, divide o conteúdo em trechos com sobreposição e calcula termos normalizados sem acentos. A busca BM25 classifica os trechos pela relevância lexical da pergunta e devolve até três resultados com o caminho relativo da fonte.
+
+O índice permanece em memória. Uma assinatura de caminho, data de modificação e tamanho dos arquivos permite reconstruí-lo quando o conteúdo local muda. Nenhum arquivo original é modificado e nenhuma chamada externa é realizada. O servidor acrescenta os trechos recuperados ao contexto da pergunta antes da geração e retorna as fontes para a interface.
+
+A recuperação não equivale à compreensão: o Transformer experimental pode ignorar, distorcer ou não aproveitar o contexto recuperado.
+
 ## Tokenizador BPE:
 
 O tokenizador começa com caracteres dentro de unidades separadas por uma expressão regular e aprende fusões de pares adjacentes ponderadas pela frequência das unidades no corpus. A ordem das fusões é armazenada e reutilizada durante a codificação.

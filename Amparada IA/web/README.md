@@ -9,7 +9,7 @@ A partir da pasta Amparada IA:
     python -m pip install -r requirements.txt
     python -m src.amparada_ia.train --steps 500
 
-O treinamento cria runs/amparada_ia.pt.
+O treinamento cria `runs/amparada_ia_bpe.pt`.
 
 ## 2. Iniciar o site e a API local:
 

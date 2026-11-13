@@ -42,11 +42,56 @@ O corpus padrão é `data/treino.txt`; a validação usa `data/validacao.txt`. O
 
 O consumo de memória depende principalmente de `--batch-size`, `--block-size`, `--n-embd`, `--n-head` e `--n-layer`. Aumentar `--steps` aumenta o número de atualizações, mas não garante respostas melhores.
 
-## RAG local:
+## RAG local (Retrieval-Augmented Generation):
 
-A interface web usa `src/amparada_ia/rag.py` para pesquisar os arquivos de texto já existentes em `data/`. A busca BM25 é executada localmente, sem APIs, serviços externos ou dependências adicionais. São aceitos arquivos `.txt`, `.md`, `.json` e `.csv`; o índice é mantido em memória e atualizado quando os arquivos mudam. Os arquivos originais permanecem intactos. O servidor inclui até três trechos recuperados no contexto enviado ao modelo e informa os arquivos consultados.
+A interface web integra um mecanismo de recuperação local em `src/amparada_ia/rag.py`. Ele pesquisa os dados que já existem em `data/` e acrescenta trechos relevantes ao contexto enviado ao Transformer. Não é necessário treinar novamente o modelo para indexar esses arquivos.
 
-O RAG recupera passagens relevantes, mas não garante que o modelo experimental interprete ou utilize essas passagens corretamente. A geração continua sujeita às limitações descritas acima.
+### Como funciona:
+
+1. **Leitura:** percorre recursivamente os arquivos suportados dentro de `data/`.
+2. **Fragmentação:** divide o texto em trechos de até 900 caracteres, com sobreposição de 140 caracteres para preservar parte do contexto entre trechos.
+3. **Indexação:** normaliza os termos (incluindo remoção de acentos) e calcula frequências para a busca.
+4. **Recuperação:** usa BM25 para classificar os trechos em relação à pergunta e seleciona até três resultados.
+5. **Geração:** o servidor codifica os trechos recuperados com o mesmo tokenizador BPE do checkpoint e os coloca antes da pergunta no contexto do modelo.
+6. **Fontes:** a API retorna os caminhos relativos dos arquivos recuperados para a interface mostrar de onde veio o contexto.
+
+### Dados e privacidade:
+
+- Diretório de origem: `data/`, incluindo subpastas.
+- Formatos lidos: `.txt`, `.md`, `.json` e `.csv`, em UTF-8.
+- Busca: BM25 lexical; não utiliza embeddings nem busca semântica.
+- Execução: local, sem APIs, serviços externos, banco vetorial ou dependências adicionais.
+- O índice fica em memória e é reconstruído quando a assinatura dos arquivos (caminho, data de modificação e tamanho) muda.
+- Os arquivos originais não são modificados. Arquivos ocultos e links simbólicos não são indexados.
+
+### Executar a interface web:
+
+Na pasta `Amparada IA`, com os requisitos instalados:
+
+```bash
+python web/server.py
+```
+
+O servidor local disponibiliza:
+
+- `GET /api/status`: estado do modelo e estatísticas do índice RAG (`rag_ready`, `rag_files` e `rag_chunks`).
+- `POST /api/chat`: recebe uma mensagem, recupera até três trechos e retorna a resposta experimental, os arquivos consultados e a quantidade de trechos recuperados.
+
+O servidor foi projetado para escutar em `127.0.0.1`; não o exponha diretamente à internet.
+
+### Testes automatizados:
+
+Os testes do mecanismo RAG podem ser executados na pasta `Amparada IA`:
+
+```bash
+python -m unittest discover -s tests -p "test_rag.py" -v
+```
+
+O workflow `.github/workflows/teste-rag.yml` executa esses testes no GitHub Actions quando os arquivos relevantes mudam ou quando o workflow é iniciado manualmente. Na execução registrada durante a implementação, os três testes passaram: recuperação de conteúdo relevante, atualização do índice após alteração de arquivo e exclusão de formatos não suportados.
+
+### Limitações importantes:
+
+BM25 encontra correspondências lexicais; não entende sinônimos ou significado como um sistema de embeddings poderia. A recuperação de trechos não garante que o Transformer os compreenda, cite corretamente ou produza uma resposta factual. O modelo continua sendo experimental, treinado para prever o próximo token, e pode ignorar ou distorcer o contexto recuperado. Os testes automatizados verificam o mecanismo de recuperação, não a qualidade ou segurança das respostas geradas.
 
 ## Gerar texto:
 

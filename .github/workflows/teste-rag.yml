@@ -1,0 +1,28 @@
+name: Testes do RAG local
+
+on:
+  push:
+    paths:
+      - "Amparada IA/src/amparada_ia/rag.py"
+      - "Amparada IA/tests/test_rag.py"
+      - ".github/workflows/teste-rag.yml"
+  pull_request:
+    paths:
+      - "Amparada IA/src/amparada_ia/rag.py"
+      - "Amparada IA/tests/test_rag.py"
+      - ".github/workflows/teste-rag.yml"
+  workflow_dispatch:
+
+jobs:
+  testes-rag:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "Amparada IA"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Executar testes do RAG
+        run: python -m unittest discover -s tests -p "test_rag.py" -v

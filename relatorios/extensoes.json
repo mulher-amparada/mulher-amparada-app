@@ -1,57 +1,57 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-13T09:51:25Z",
-  "total_arquivos": 1364,
-  "total_bytes": 102492742,
+  "gerado_em_utc": "2026-11-13T09:53:35Z",
+  "total_arquivos": 1366,
+  "total_bytes": 102500392,
   "total_extensoes": 41,
   "extensoes": [
     {
       "extensao": ".xml",
       "quantidade_arquivos": 400,
       "tamanho_bytes": 3654091,
-      "percentual_arquivos": 29.33,
-      "percentual_bytes": 3.57
+      "percentual_arquivos": 29.28,
+      "percentual_bytes": 3.56
     },
     {
       "extensao": ".md",
-      "quantidade_arquivos": 320,
-      "tamanho_bytes": 590166,
-      "percentual_arquivos": 23.46,
+      "quantidade_arquivos": 321,
+      "tamanho_bytes": 594341,
+      "percentual_arquivos": 23.5,
       "percentual_bytes": 0.58
     },
     {
       "extensao": ".java",
       "quantidade_arquivos": 309,
       "tamanho_bytes": 2144910,
-      "percentual_arquivos": 22.65,
+      "percentual_arquivos": 22.62,
       "percentual_bytes": 2.09
     },
     {
       "extensao": ".png",
       "quantidade_arquivos": 105,
       "tamanho_bytes": 76848499,
-      "percentual_arquivos": 7.7,
-      "percentual_bytes": 74.98
+      "percentual_arquivos": 7.69,
+      "percentual_bytes": 74.97
     },
     {
       "extensao": ".kt",
       "quantidade_arquivos": 75,
       "tamanho_bytes": 1545916,
-      "percentual_arquivos": 5.5,
+      "percentual_arquivos": 5.49,
       "percentual_bytes": 1.51
     },
     {
       "extensao": ".css",
       "quantidade_arquivos": 20,
       "tamanho_bytes": 242326,
-      "percentual_arquivos": 1.47,
+      "percentual_arquivos": 1.46,
       "percentual_bytes": 0.24
     },
     {
       "extensao": ".json",
       "quantidade_arquivos": 18,
-      "tamanho_bytes": 1397309,
+      "tamanho_bytes": 1397349,
       "percentual_arquivos": 1.32,
       "percentual_bytes": 1.36
     },
@@ -71,10 +71,10 @@
     },
     {
       "extensao": ".py",
-      "quantidade_arquivos": 11,
-      "tamanho_bytes": 33657,
-      "percentual_arquivos": 0.81,
-      "percentual_bytes": 0.03
+      "quantidade_arquivos": 12,
+      "tamanho_bytes": 36637,
+      "percentual_arquivos": 0.88,
+      "percentual_bytes": 0.04
     },
     {
       "extensao": ".gradle",
@@ -114,7 +114,7 @@
     {
       "extensao": ".js",
       "quantidade_arquivos": 5,
-      "tamanho_bytes": 37577,
+      "tamanho_bytes": 38032,
       "percentual_arquivos": 0.37,
       "percentual_bytes": 0.04
     },

@@ -1,7 +1,5 @@
 # 💌 Uma carta para você, mulher!
 
-> Prefiro preservar a versão original dos meus textos, inclusive com seus erros de português, porque eles fazem parte da minha trajetória como autor. Esta é uma versão revisada para facilitar a leitura.
-
 E eu me inspiro em Martin Luther King para lhes dizer — não é uma citação direta dele:
 
 "Eu tenho um sonho: que as mulheres possam viver em paz, sem violência, com seus direitos respeitados, porque todos somos iguais em dignidade."

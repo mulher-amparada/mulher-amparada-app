@@ -1,6 +1,6 @@
-# 🔐 Política de Segurança
+# 🔐 Política de Segurança:
 
-## Mulher Amparada
+## Mulher Amparada:
 
 A segurança do **Mulher Amparada** é uma prioridade.
 
@@ -10,7 +10,7 @@ Esta política explica como reportar vulnerabilidades de segurança, quais infor
 
 ---
 
-## 📋 Índice
+## 📋 Índice:
 
 - [Versões suportadas](#-versões-suportadas)
 - [O que é uma vulnerabilidade](#-o-que-é-uma-vulnerabilidade)
@@ -28,7 +28,7 @@ Esta política explica como reportar vulnerabilidades de segurança, quais infor
 
 ---
 
-## 🛡️ Versões suportadas
+## 🛡️ Versões suportadas:
 
 Recomendamos utilizar sempre a versão mais recente do **Mulher Amparada** disponibilizada pelo projeto.
 
@@ -66,9 +66,9 @@ Um comportamento inesperado não significa necessariamente que exista uma vulner
 
 ---
 
-## 🚨 Como reportar uma vulnerabilidade
+## 🚨 Como reportar uma vulnerabilidade:
 
-### ⚠️ Não utilize Issues públicas
+### ⚠️ Não utilize Issues públicas:
 
 **Não publique vulnerabilidades de segurança em Issues, Pull Requests ou discussões públicas.**
 
@@ -80,7 +80,7 @@ Caso o GitHub disponibilize um mecanismo privado de reporte de vulnerabilidades 
 
 ---
 
-## 📝 Informações que devem ser incluídas
+## 📝 Informações que devem ser incluídas:
 
 Um bom relatório deve conter o máximo possível de informações relevantes.
 
@@ -119,7 +119,7 @@ Um relatório incompleto ainda poderá ser analisado.
 
 ---
 
-## 🔍 Processo de análise
+## 🔍 Processo de análise:
 
 Após o recebimento de um relatório, os responsáveis pelo projeto poderão:
 
@@ -138,7 +138,7 @@ O tempo necessário para cada etapa depende da complexidade e do impacto da vuln
 
 ---
 
-## 📊 Classificação de severidade
+## 📊 Classificação de severidade:
 
 As vulnerabilidades poderão ser classificadas de acordo com seu impacto:
 
@@ -154,7 +154,7 @@ A classificação definitiva será determinada após a análise técnica.
 
 ---
 
-## 🧪 Testes de segurança
+## 🧪 Testes de segurança:
 
 Pesquisas e testes de segurança devem ser realizados de forma responsável e somente em ambientes para os quais o pesquisador possui autorização.
 
@@ -173,7 +173,7 @@ Sempre que possível, utilize dispositivos, contas e dados especificamente desti
 
 ---
 
-## 🔒 Proteção de dados
+## 🔒 Proteção de dados:
 
 Relatórios de segurança podem conter informações potencialmente sensíveis.
 
@@ -196,7 +196,7 @@ Caso uma evidência contenha informações sensíveis, remova essas informaçõe
 
 ---
 
-## 🎯 Escopo
+## 🎯 Escopo:
 
 Esta política se aplica ao código e às funcionalidades desenvolvidas e disponibilizadas pelo projeto **Mulher Amparada** neste repositório:
 
@@ -223,7 +223,7 @@ Bibliotecas, sistemas operacionais, APIs, serviços externos e plataformas de te
 
 ---
 
-## 🏆 Reconhecimento
+## 🏆 Reconhecimento:
 
 Agradecemos pesquisadores, desenvolvedores e colaboradores que contribuam de forma responsável para a segurança do projeto.
 
@@ -233,7 +233,7 @@ Qualquer reconhecimento público poderá ser realizado somente quando isso não 
 
 ---
 
-## 📢 Problemas comuns
+## 📢 Problemas comuns:
 
 Issues públicas podem ser utilizadas para relatar:
 
@@ -248,7 +248,7 @@ Se houver dúvida sobre a natureza de um problema, prefira tratá-lo inicialment
 
 ---
 
-## 📬 Contato
+## 📬 Contato:
 
 Para reportar uma vulnerabilidade de segurança, utilize um canal privado disponibilizado pelos responsáveis pelo projeto.
 
@@ -260,7 +260,7 @@ Caso o repositório disponibilize o recurso **Security Advisories / Report a vul
 
 ---
 
-## ❤️ Obrigado
+## ❤️ Obrigado:
 
 Agradecemos a todos que dedicam tempo para identificar e comunicar problemas de segurança de forma responsável.
 

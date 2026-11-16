@@ -2,7 +2,7 @@
 
 ## 👾 Mantenedor Principal e Único Administrador:
 
-- 👾 【entity-GitHub¦canonical_name=GitHub】: "@mulher-amparada"
+- 👾 Administrador: @mulher-amparada
 - 👑 Função: Criador do projeto Mulher Amparada
 - 🔴 Poder: Único detentor do botão vermelho de banir e permitir
 
@@ -10,7 +10,7 @@
 
 - ⚖️ Decisão: Qualquer decisão sobre banimento, permissão de acesso, aprovação de colaboradores e mudança de governança é de responsabilidade exclusiva do mantenedor principal.
 - 🚫 Proibição: Nenhum outro usuário, colaborador, responsável legal ou terceiro possui poder administrativo sobre o projeto, salvo decisão expressa do mantenedor principal.
-- 📜 Regra: As regras de banimento e permissão seguem o CODE_OF_CONDUCT.md e o GOVERNANCE.md do projeto.
+- 📜 Regra: As regras de banimento e permissão seguem o CODE_OF_CONDUCT.md, o GOVERNANCE.md, e o TERMS AND POLICY.md do projeto.
 
 ## 🤝 Contribuidores:
 

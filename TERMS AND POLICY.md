@@ -29,6 +29,7 @@ Esperamos que colaboradores, usuários e terceiros mantenham o respeito à autor
 O desrespeito aos princípios desta declaração poderá resultar em:
 
 - Remoção de contribuições desrespeitosas;
+- Não poderá mencionar o projeto publicamente;
 - Restrição ou encerramento da participação no projeto;
 - Bloqueio de usuários em espaços administrados pelo projeto;
 - Comunicação às plataformas responsáveis, quando aplicável;

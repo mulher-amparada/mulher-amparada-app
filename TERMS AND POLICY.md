@@ -6,6 +6,8 @@
 
 O Mulher Amparada é um projeto desenvolvido com dedicação, pesquisa, criatividade e utilização de diferentes ferramentas tecnológicas, incluindo inteligência artificial.
 
+> É proibido impor adulto comandando o Mulher Amparada se for só por etarismo, autismo, idade ou uso de IA, ou se isso causar sofrimento, exposição ou quebra de segurança, mantendo o mantenedor único como único com botão vermelho final.
+
 A autoria e o valor deste projeto não devem ser desmerecidos em razão de:
 
 - Idade do desenvolvedor;

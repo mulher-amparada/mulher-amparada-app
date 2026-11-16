@@ -97,6 +97,15 @@ Nesta seção, você encontrará informações sobre o **sistema operacional**, 
 
 ----
 
+# 🤖 Amparada IA:
+
+Nesta seção, você encontrará informações sobre a **Amparada IA**, seu modelo experimental de linguagem, arquitetura Transformer, tokenização BPE, treinamento, geração de texto e mecanismo de recuperação local de informações (RAG).
+
+➡️ [README.md](https://github.com/mulher-amparada/mulher-amparada-app/blob/main/Amparada%20IA/README.md)
+
+➡️[ARCHITECTURE.md](https://github.com/mulher-amparada/mulher-amparada-app/blob/main/Amparada%20IA%2FARCHITECTURE.md)
+----
+
 # 🌷 Mini-cursos visuais:
 
 Nessa seção, você descobre que o **Mulher Amparada** também oferece mini-cursos ilustrados com o objetivo de tornar informações importantes sobre segurança, direitos e autonomia feminina mais acessíveis.

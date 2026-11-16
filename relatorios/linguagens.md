@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-11-16T17:53:46Z
+- **Gerado em UTC:** 2026-11-16T17:55:43Z
 - **Linguagens identificadas:** 14
 - **Arquivos classificados:** 448
-- **Tamanho classificado:** 4214222 bytes
+- **Tamanho classificado:** 4214278 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -20,7 +20,7 @@
 | Kotlin | 75 | 1545916 | 36.68% |
 | CSS | 20 | 242326 | 5.75% |
 | Shell | 6 | 94995 | 2.25% |
-| HTML | 12 | 69983 | 1.66% |
+| HTML | 12 | 70039 | 1.66% |
 | JavaScript | 5 | 38032 | 0.90% |
 | Python | 12 | 36637 | 0.87% |
 | C | 1 | 18374 | 0.44% |
@@ -79,7 +79,7 @@
 ### HTML
 
 - **Arquivos:** 12
-- **Tamanho:** 69983 bytes
+- **Tamanho:** 70039 bytes
 - **Percentual:** 1.66%
 
 - `Amparada IA/web/index.html`

@@ -1,59 +1,59 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-16T17:28:22Z",
-  "total_arquivos": 1383,
-  "total_bytes": 104951013,
+  "gerado_em_utc": "2026-11-16T17:44:53Z",
+  "total_arquivos": 1385,
+  "total_bytes": 109699168,
   "total_extensoes": 41,
   "extensoes": [
     {
       "extensao": ".xml",
       "quantidade_arquivos": 400,
       "tamanho_bytes": 3654091,
-      "percentual_arquivos": 28.92,
-      "percentual_bytes": 3.48
+      "percentual_arquivos": 28.88,
+      "percentual_bytes": 3.33
     },
     {
       "extensao": ".md",
       "quantidade_arquivos": 335,
-      "tamanho_bytes": 612326,
-      "percentual_arquivos": 24.22,
-      "percentual_bytes": 0.58
+      "tamanho_bytes": 612328,
+      "percentual_arquivos": 24.19,
+      "percentual_bytes": 0.56
     },
     {
       "extensao": ".java",
       "quantidade_arquivos": 309,
       "tamanho_bytes": 2144910,
-      "percentual_arquivos": 22.34,
-      "percentual_bytes": 2.04
+      "percentual_arquivos": 22.31,
+      "percentual_bytes": 1.96
     },
     {
       "extensao": ".png",
-      "quantidade_arquivos": 106,
-      "tamanho_bytes": 79279991,
-      "percentual_arquivos": 7.66,
-      "percentual_bytes": 75.54
+      "quantidade_arquivos": 108,
+      "tamanho_bytes": 84028142,
+      "percentual_arquivos": 7.8,
+      "percentual_bytes": 76.6
     },
     {
       "extensao": ".kt",
       "quantidade_arquivos": 75,
       "tamanho_bytes": 1545916,
       "percentual_arquivos": 5.42,
-      "percentual_bytes": 1.47
+      "percentual_bytes": 1.41
     },
     {
       "extensao": ".css",
       "quantidade_arquivos": 20,
       "tamanho_bytes": 242326,
-      "percentual_arquivos": 1.45,
-      "percentual_bytes": 0.23
+      "percentual_arquivos": 1.44,
+      "percentual_bytes": 0.22
     },
     {
       "extensao": ".json",
       "quantidade_arquivos": 18,
-      "tamanho_bytes": 1397349,
+      "tamanho_bytes": 1397351,
       "percentual_arquivos": 1.3,
-      "percentual_bytes": 1.33
+      "percentual_bytes": 1.27
     },
     {
       "extensao": ".yml",
@@ -67,7 +67,7 @@
       "quantidade_arquivos": 12,
       "tamanho_bytes": 69983,
       "percentual_arquivos": 0.87,
-      "percentual_bytes": 0.07
+      "percentual_bytes": 0.06
     },
     {
       "extensao": ".py",
@@ -116,14 +116,14 @@
       "quantidade_arquivos": 5,
       "tamanho_bytes": 667226,
       "percentual_arquivos": 0.36,
-      "percentual_bytes": 0.64
+      "percentual_bytes": 0.61
     },
     {
       "extensao": ".js",
       "quantidade_arquivos": 5,
       "tamanho_bytes": 38032,
       "percentual_arquivos": 0.36,
-      "percentual_bytes": 0.04
+      "percentual_bytes": 0.03
     },
     {
       "extensao": ".properties",
@@ -158,7 +158,7 @@
       "quantidade_arquivos": 2,
       "tamanho_bytes": 14570670,
       "percentual_arquivos": 0.14,
-      "percentual_bytes": 13.88
+      "percentual_bytes": 13.28
     },
     {
       "extensao": ".bat",
@@ -193,7 +193,7 @@
       "quantidade_arquivos": 2,
       "tamanho_bytes": 253248,
       "percentual_arquivos": 0.14,
-      "percentual_bytes": 0.24
+      "percentual_bytes": 0.23
     },
     {
       "extensao": ".aconfig",

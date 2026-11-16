@@ -96,3 +96,11 @@ Nesta seção, você encontrará informações sobre o **sistema operacional**, 
 ➡️ [TEXTO 6.md](https://github.com/mulher-amparada/mulher-amparada-app/blob/main/TEXTO%206.md)
 
 ----
+
+# 🌷 Mini-cursos visuais:
+
+Nessa seção, você descobre que o **Mulher Amparada** também oferece mini-cursos ilustrados com o objetivo de tornar informações importantes sobre segurança, direitos e autonomia feminina mais acessíveis.
+
+➡️ [TEXTO 7.md](https://github.com/mulher-amparada/mulher-amparada-app/blob/main/TEXTO%207.md)
+
+----

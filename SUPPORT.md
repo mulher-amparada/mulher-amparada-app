@@ -83,6 +83,9 @@ https://projetomulheramparadaapp.blogspot.com/2026/10/quantas-linguagens-e-tecno
 - 👤 Dev COMMUNITY —  Como criei um sistema de SOS e Botão de Pânico com IA aos 15 anos (e sem cursos formais):
 https://dev.to/mulher_amparada_765df7ce2/como-criei-um-sistema-de-sos-e-botao-de-panico-com-ia-aos-15-anos-e-sem-cursos-formais-44ok
 
+- 👤 Dev COMMUNITY —  Projeto para mulheres no GitHub!:
+https://dev.to/mulher_amparada_765df7ce2/projeto-para-mulheres-no-github-47i5/edit
+
 ### 📰 Imprensa e divulgação:
 
 - 📢 SubmitPR — Mulher Amparada:

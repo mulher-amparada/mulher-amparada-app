@@ -24,6 +24,8 @@ E o projeto é = Open-source! (aderido no dia 02/10/2026)
 
 No dia 24/10/2026, eu acabei errando a automação da branch main e code, eu queria separar o que é codigo e o que é site, entao deletei na noite desse dia, agora, mas no dia 25/10/2026, eu ja tinha o código-fonte, menos os yml, então eu refiz tudo e agora temos uma versão nova em um repo novo com o mesmo nome, e reconstuí o projeto no dia 25/10/2026 mesmo estando com gripe!
 
+e os contribuidores que digo que me ajudaram apenas no inicio do projeto ate novembro de 2026 são: github actions e meus bots
+
 ----
 
 # 💬 Uma mensagem antes de tudo:

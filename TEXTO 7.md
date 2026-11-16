@@ -4,27 +4,27 @@ O **Mulher Amparada** também oferece mini-cursos ilustrados com o objetivo de t
 
 Por meio de ilustrações e explicações visuais, os conteúdos abordam situações que podem fazer parte da realidade de mulheres em situação de vulnerabilidade.
 
-### 📚 Conteúdos disponíveis
+### 📚 Conteúdos disponíveis:
 
-#### 1. 📞 Telefones e canais de emergência
+#### 1. 📞 Telefones e canais de emergência:
 
 Conheça os principais canais de atendimento e saiba onde buscar orientação e ajuda em situações de violência.
 
 ![Mini-curso sobre telefones de emergência](https://github.com/mulher-amparada/mulher-amparada-app/blob/main/Mini%20cursos%20com%20imagens%2F1.png?raw=true)
 
-#### 2. 📄 Proteção e recuperação de documentos
+#### 2. 📄 Proteção e recuperação de documentos:
 
 Entenda como preservar documentos importantes, conhecer alternativas digitais e buscar formas de recuperar informações caso documentos sejam destruídos ou apagados por um agressor.
 
 ![Mini-curso sobre documentos digitais](https://github.com/mulher-amparada/mulher-amparada-app/blob/main/Mini%20cursos%20com%20imagens%2F2.png?raw=true)
 
-#### 3. 💰 Proteção financeira
+#### 3. 💰 Proteção financeira:
 
 Conheça recursos oferecidos pelos bancos, alternativas para proteger seu dinheiro e possibilidades de fortalecer sua autonomia financeira.
 
 ![Mini-curso sobre proteção financeira](https://github.com/mulher-amparada/mulher-amparada-app/blob/main/Mini%20cursos%20com%20imagens%2F3.png?raw=true)
 
-### 🎯 Objetivo
+### 🎯 Objetivo:
 
 - Facilitar o acesso à informação.
 - Incentivar a autonomia financeira.

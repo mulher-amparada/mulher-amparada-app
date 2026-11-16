@@ -1,51 +1,51 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-16T18:27:11Z",
-  "total_arquivos": 1392,
-  "total_bytes": 109708242,
+  "gerado_em_utc": "2026-11-16T18:29:52Z",
+  "total_arquivos": 1394,
+  "total_bytes": 109710610,
   "total_extensoes": 41,
   "extensoes": [
     {
       "extensao": ".xml",
-      "quantidade_arquivos": 399,
-      "tamanho_bytes": 3652473,
-      "percentual_arquivos": 28.66,
+      "quantidade_arquivos": 400,
+      "tamanho_bytes": 3654090,
+      "percentual_arquivos": 28.69,
       "percentual_bytes": 3.33
     },
     {
       "extensao": ".md",
-      "quantidade_arquivos": 343,
-      "tamanho_bytes": 622073,
-      "percentual_arquivos": 24.64,
+      "quantidade_arquivos": 344,
+      "tamanho_bytes": 622824,
+      "percentual_arquivos": 24.68,
       "percentual_bytes": 0.57
     },
     {
       "extensao": ".java",
       "quantidade_arquivos": 309,
       "tamanho_bytes": 2144910,
-      "percentual_arquivos": 22.2,
+      "percentual_arquivos": 22.17,
       "percentual_bytes": 1.96
     },
     {
       "extensao": ".png",
       "quantidade_arquivos": 108,
       "tamanho_bytes": 84028142,
-      "percentual_arquivos": 7.76,
+      "percentual_arquivos": 7.75,
       "percentual_bytes": 76.59
     },
     {
       "extensao": ".kt",
       "quantidade_arquivos": 75,
       "tamanho_bytes": 1545916,
-      "percentual_arquivos": 5.39,
+      "percentual_arquivos": 5.38,
       "percentual_bytes": 1.41
     },
     {
       "extensao": ".css",
       "quantidade_arquivos": 20,
       "tamanho_bytes": 242326,
-      "percentual_arquivos": 1.44,
+      "percentual_arquivos": 1.43,
       "percentual_bytes": 0.22
     },
     {

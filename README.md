@@ -103,7 +103,8 @@ Nesta seção, você encontrará informações sobre a **Amparada IA**, seu mode
 
 ➡️ [README.md](https://github.com/mulher-amparada/mulher-amparada-app/blob/main/Amparada%20IA/README.md)
 
-➡️[ARCHITECTURE.md](https://github.com/mulher-amparada/mulher-amparada-app/blob/main/Amparada%20IA%2FARCHITECTURE.md)
+➡️ [ARCHITECTURE.md](Amparada%20IA/ARCHITECTURE.md)
+
 ----
 
 # 🌷 Mini-cursos visuais:

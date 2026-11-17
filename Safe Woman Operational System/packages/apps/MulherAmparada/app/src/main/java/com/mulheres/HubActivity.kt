@@ -1386,7 +1386,18 @@ private fun executarAcaoShake() {
 
         try {
 
-            ligarDireto("190")
+            val intent =
+                Intent(
+                    Intent.ACTION_DIAL
+                ).apply {
+
+                    data =
+                        Uri.parse(
+                            "tel:190"
+                        )
+                }
+
+            startActivity(intent)
 
             desativarProtecaoMovimento()
 

@@ -1,44 +1,44 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-17T12:24:34Z",
-  "total_arquivos": 1395,
-  "total_bytes": 109712441,
+  "gerado_em_utc": "2026-11-17T12:26:22Z",
+  "total_arquivos": 1397,
+  "total_bytes": 109713580,
   "total_extensoes": 41,
   "extensoes": [
     {
       "extensao": ".xml",
       "quantidade_arquivos": 400,
       "tamanho_bytes": 3654090,
-      "percentual_arquivos": 28.67,
+      "percentual_arquivos": 28.63,
       "percentual_bytes": 3.33
     },
     {
       "extensao": ".md",
-      "quantidade_arquivos": 345,
-      "tamanho_bytes": 624655,
-      "percentual_arquivos": 24.73,
+      "quantidade_arquivos": 347,
+      "tamanho_bytes": 625793,
+      "percentual_arquivos": 24.84,
       "percentual_bytes": 0.57
     },
     {
       "extensao": ".java",
       "quantidade_arquivos": 309,
       "tamanho_bytes": 2144910,
-      "percentual_arquivos": 22.15,
+      "percentual_arquivos": 22.12,
       "percentual_bytes": 1.96
     },
     {
       "extensao": ".png",
       "quantidade_arquivos": 108,
       "tamanho_bytes": 84028142,
-      "percentual_arquivos": 7.74,
+      "percentual_arquivos": 7.73,
       "percentual_bytes": 76.59
     },
     {
       "extensao": ".kt",
       "quantidade_arquivos": 75,
       "tamanho_bytes": 1545916,
-      "percentual_arquivos": 5.38,
+      "percentual_arquivos": 5.37,
       "percentual_bytes": 1.41
     },
     {
@@ -51,7 +51,7 @@
     {
       "extensao": ".json",
       "quantidade_arquivos": 18,
-      "tamanho_bytes": 1397351,
+      "tamanho_bytes": 1397352,
       "percentual_arquivos": 1.29,
       "percentual_bytes": 1.27
     },
@@ -136,21 +136,21 @@
       "extensao": ".gitignore",
       "quantidade_arquivos": 3,
       "tamanho_bytes": 395,
-      "percentual_arquivos": 0.22,
+      "percentual_arquivos": 0.21,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".mk",
       "quantidade_arquivos": 3,
       "tamanho_bytes": 1104,
-      "percentual_arquivos": 0.22,
+      "percentual_arquivos": 0.21,
       "percentual_bytes": 0.0
     },
     {
       "extensao": ".toml",
       "quantidade_arquivos": 3,
       "tamanho_bytes": 3828,
-      "percentual_arquivos": 0.22,
+      "percentual_arquivos": 0.21,
       "percentual_bytes": 0.0
     },
     {

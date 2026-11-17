@@ -43,7 +43,7 @@ Ela exibe:
 A versão e a build são obtidas diretamente dos metadados do APK, garantindo que as informações exibidas correspondam à versão realmente instalada no dispositivo.
 
 ### Botão de Pânico:
-Botão de Pânico, com ligação ao 180 de forma direta no primeiro clique.
+Botão de Pânico, com ligação ao 190 de forma direta no primeiro clique.
 
 ### Proteção por Barulho:
 Ative a proteção, faça barulho alto e ele liga para o 180.

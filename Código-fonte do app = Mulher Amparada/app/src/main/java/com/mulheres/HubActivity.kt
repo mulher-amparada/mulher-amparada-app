@@ -1673,26 +1673,6 @@ private fun pararMicrofoneShake() {
         ) {
 
             e.printStackTrace()
-
-            try {
-
-                val fallback =
-                    Intent(
-                        Intent.ACTION_DIAL
-                    ).apply {
-
-                        data =
-                            Uri.parse(
-                                "tel:$numero"
-                            )
-                    }
-
-                startActivity(fallback)
-
-            } catch (
-                _: Exception
-            ) {
-            }
         }
     }
 

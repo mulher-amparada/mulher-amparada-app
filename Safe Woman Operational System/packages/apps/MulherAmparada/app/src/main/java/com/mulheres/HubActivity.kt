@@ -1640,7 +1640,7 @@ private fun pararMicrofoneShake() {
 
             val intent =
                 Intent(
-                    Intent.ACTION_CALL
+                    Intent.ACTION_DIAL
                 ).apply {
 
                     data =
@@ -1649,50 +1649,13 @@ private fun pararMicrofoneShake() {
                         )
                 }
 
-            if (
-                ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.CALL_PHONE
-                ) ==
-                PackageManager.PERMISSION_GRANTED
-            ) {
-
-                startActivity(intent)
-
-            } else {
-
-                Toast.makeText(
-                    this,
-                    "Permissão de ligação não concedida",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+            startActivity(intent)
 
         } catch (
             e: Exception
         ) {
 
             e.printStackTrace()
-
-            try {
-
-                val fallback =
-                    Intent(
-                        Intent.ACTION_DIAL
-                    ).apply {
-
-                        data =
-                            Uri.parse(
-                                "tel:$numero"
-                            )
-                    }
-
-                startActivity(fallback)
-
-            } catch (
-                _: Exception
-            ) {
-            }
         }
     }
 

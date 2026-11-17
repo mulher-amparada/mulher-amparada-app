@@ -443,7 +443,7 @@ fun solicitarPermissoes() {
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.READ_CONTACTS,
-        Manifest.permission.CALL_PHONE,
+        
         Manifest.permission.RECORD_AUDIO
     )
 
@@ -523,7 +523,6 @@ fun verificarPermissoes() {
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.READ_CONTACTS,
-        Manifest.permission.CALL_PHONE,
         Manifest.permission.RECORD_AUDIO
     )
 
@@ -1628,7 +1627,8 @@ private fun pararMicrofoneShake() {
        LIGAÇÃO DIRETA
     ========================================================= */
 
-    fun ligarDireto(
+    
+fun ligarDireto(
         numero: String
     ) {
 
@@ -1640,7 +1640,7 @@ private fun pararMicrofoneShake() {
 
             val intent =
                 Intent(
-                    Intent.ACTION_CALL
+                    Intent.ACTION_DIAL
                 ).apply {
 
                     data =
@@ -1649,24 +1649,7 @@ private fun pararMicrofoneShake() {
                         )
                 }
 
-            if (
-                ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.CALL_PHONE
-                ) ==
-                PackageManager.PERMISSION_GRANTED
-            ) {
-
-                startActivity(intent)
-
-            } else {
-
-                Toast.makeText(
-                    this,
-                    "Permissão de ligação não concedida",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+            startActivity(intent)
 
         } catch (
             e: Exception
@@ -1674,28 +1657,14 @@ private fun pararMicrofoneShake() {
 
             e.printStackTrace()
 
-            try {
-
-                val fallback =
-                    Intent(
-                        Intent.ACTION_DIAL
-                    ).apply {
-
-                        data =
-                            Uri.parse(
-                                "tel:$numero"
-                            )
-                    }
-
-                startActivity(fallback)
-
-            } catch (
-                _: Exception
-            ) {
-            }
+            Toast.makeText(
+                this,
+                "Não foi possível abrir o discador.",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
-
+    
 
     /* =========================================================
        PALMAS

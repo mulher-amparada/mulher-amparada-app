@@ -337,16 +337,6 @@ if (db >= shakeLoudSoundThreshold) {
     
         private fun acionarEmergencia() {
 
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.CALL_PHONE
-            ) !=
-            android.content.pm.PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-
         try {
 
             val intent = Intent(
@@ -361,11 +351,36 @@ if (db >= shakeLoudSoundThreshold) {
                     Intent.FLAG_ACTIVITY_NEW_TASK
             }
 
+
             startActivity(intent)
+
 
         } catch (e: Exception) {
 
             e.printStackTrace()
+
+
+            try {
+
+                val intent = Intent(
+                    Intent.ACTION_DIAL
+                ).apply {
+
+                    data = Uri.parse(
+                        "tel:190"
+                    )
+
+                    flags =
+                        Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+
+
+                startActivity(intent)
+
+
+            } catch (_: Exception) {
+
+            }
         }
     }
 

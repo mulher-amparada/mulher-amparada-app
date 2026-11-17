@@ -24,7 +24,7 @@ Esperamos que colaboradores, usuários e terceiros mantenham o respeito à autor
 
 **Avalie o projeto pelo seu conteúdo, funcionamento, qualidade e impacto, não por preconceitos sobre quem o desenvolveu.**
 
-Citar apenas 'Brasil' NÃO é dar crédito. Crédito válido é citar o desenvolvedor e as usuárias. Quem citar só o Brasil, apagando quem fez e pra quem é, será tratado como quem não deu crédito nenhum.
+Citar apenas `Brasil` NÃO é dar crédito. Crédito válido é citar o desenvolvedor e as usuárias. Quem citar só o Brasil, apagando quem fez e pra quem é, será tratado como quem não deu crédito nenhum.
 
 ## ⚖️ CONSEQUÊNCIAS PELO DESCUMPRIMENTO:
 

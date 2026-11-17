@@ -175,8 +175,6 @@ Cláusula 2.3: O aplicativo não realiza discriminação de gênero, raça, reli
 
 Cláusula 3.1: O aplicativo solicita apenas permissões e acessos especiais necessários para funcionalidades específicas.
 
-Cláusula 3.2: A permissão de telefone poderá ser utilizada para iniciar chamadas através do aplicativo padrão do Android.
-
 Cláusula 3.3: A permissão de contatos poderá ser utilizada para seleção manual de contatos de emergência.
 
 Cláusula 3.4: A permissão de localização poderá ser utilizada em funcionalidades relacionadas a emergência e compartilhamento de localização.
@@ -225,9 +223,9 @@ Cláusula 5.4: Informações de localização poderão ser compartilhadas manual
 
 Cláusula 6.1: O aplicativo poderá disponibilizar funcionalidades emergenciais para agilizar pedidos de ajuda.
 
-Cláusula 6.2: Chamadas poderão ser realizadas através do aplicativo padrão de telefone do Android.
+Cláusula 6.2: Chamadas poderão ser realizadas através do aplicativo padrão de telefone do Android através do `ACTION_DIAL`.
 
-Cláusula 6.3: Quando a funcionalidade não puder iniciar diretamente uma chamada, o aplicativo poderá abrir o discador nativo do Android com o número correspondente já preenchido.
+Cláusula 6.3: O aplicativo poderá abrir o discador nativo do Android com o número correspondente já preenchido.
 
 Cláusula 6.4: O funcionamento poderá variar conforme fabricante, permissões e versão do Android.
 
@@ -255,11 +253,7 @@ Cláusula 7.8: Dispositivos sem acelerômetro poderão não executar corretament
 
 Cláusula 7.9: Vibrações, impactos ou movimentos involuntários poderão ativar o recurso automaticamente.
 
-Cláusula 7.10: O recurso poderá iniciar automaticamente uma ligação telefônica quando movimentos compatíveis forem detectados.
-
-Cláusula 7.11: A ligação automática depende da permissão de chamadas telefônicas concedida pela usuária.
-
-Cláusula 7.12: Sem permissão de chamadas, a funcionalidade poderá não operar corretamente.
+Cláusula 7.10: O recurso poderá iniciar automaticamente uma ligação telefônica através do `ACTION_DIAL` quando movimentos compatíveis forem detectados.
 
 Cláusula 7.13: O funcionamento depende da operadora, rede móvel e disponibilidade do dispositivo.
 
@@ -458,18 +452,6 @@ Cláusula 26.2: Sensores poderão apresentar diferenças de precisão entre fabr
 Cláusula 26.3: O Android poderá suspender sensores em economia de bateria.
 
 Cláusula 26.4: Restrições do fabricante poderão limitar funcionalidades relacionadas a movimento.
-
----
-
-27. Chamadas Automáticas:
-
-Cláusula 27.1: O recurso de chamadas automáticas depende da permissão de telefone concedida pela usuária.
-
-Cláusula 27.2: Sem permissão adequada, chamadas automáticas poderão não funcionar.
-
-Cláusula 27.3: O aplicativo poderá utilizar o discador padrão do Android.
-
-Cláusula 27.4: O funcionamento depende da operadora e disponibilidade de rede.
 
 ---
 

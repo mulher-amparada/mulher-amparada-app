@@ -1274,7 +1274,7 @@ Aviso: O aplicativo não utiliza mais a permissão de notificações.
 
 A função "Meus Arquivos", dentro da área protegida, utiliza as APIs e informações de armazenamento disponibilizadas pelo sistema Android para identificar o tipo de armazenamento acessível e realizar a leitura das pastas e arquivos permitidos pelo sistema.
 
-O botão vermelho de SOS, exibido como primeiro botão ao entrar no aplicativo, utiliza a telefonia do dispositivo. Quando não é possível iniciar diretamente a chamada, o aplicativo poderá abrir o telefone nativo do celular com o número 180 já discado para que a própria usuária realize a chamada.
+O botão vermelho de SOS, exibido como primeiro botão ao entrar no aplicativo, utiliza a telefonia do dispositivo através do `ACTION_DIAL`. Quando não é possível iniciar diretamente a chamada, o aplicativo poderá abrir o telefone nativo do celular com o número 180 já discado para que a própria usuária realize a chamada.
 
 O Serviço de Acessibilidade utilizado pelo aplicativo precisa ser ativado manualmente pela usuária nas configurações de Acessibilidade do Android. O aplicativo não ativa esse serviço sozinho.
 

@@ -46,14 +46,14 @@ A versão e a build são obtidas diretamente dos metadados do APK, garantindo qu
 Botão de Pânico, com ligação ao 190 de forma direta no primeiro clique.
 
 ### Proteção por Barulho:
-Ative a proteção, faça barulho alto e ele liga para o 180.
+Ative a proteção, faça barulho alto e ele liga para o 190.
 
 caso ocorra alguma falha ou o aparelho da usuária não possua o sensor necessário, o aplicativo utiliza o microfone como alternativa. Ao detectar um barulho alto, a proteção é acionada.
 
 >Sobre a proteção por palmas/barulho: Nota de Segurança: Uma vez ativada, a proteção permanecerá vigilante e reativará o microfone automaticamente após cada detecção e ligação pro 180. Isso garante que o aplicativo continue te protegendo caso a situação de risco persista. Para desligá-la por completo, você deve fazer isso manualmente no aplicativo após o término da situação de risco.
 
 ### Balançar o Celular para Pedir Ajuda:
-Ative e, ao chacoalhar o celular, ele liga para o 180.
+Ative e, ao chacoalhar o celular, ele liga para o 190.
 
 ### Escurecimento por inclinação:
 com isso, voce pode controlar o brilho da tela clicando em um botão..., porém, e tipo como se fosse o menor brilho do celular, e ai depois ele deixa a tela preta (nao com brilho e sim colocando a cor), (honestamente, antes aparecia as duas barras, agora elas se escondem!), e o efeito e vitalicio ate fechar e abrir o app!

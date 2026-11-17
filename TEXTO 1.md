@@ -2,6 +2,10 @@
 
 ### Sobre como o projeto foi estruturado:
 
+> O botão de pânico, balançar o celular para pedir ajuda e a protecao por barulho chamam o 190 através do telefone nativo com o número já discado!
+
+> E se o app não for um navegador padrão, elr não consegue interceptar downloads de sites que chamarem o app!
+
 > A MainActivity tem o android exported true no android manifest, porque é ela que o sistema utiliza para usar o app como navegador padrao!
 
 > Quando a usuária arrasta pro lado no AssistenteActivity, valida o BiometricPrompt e acessa a HubActivity, ao apertar voltar na barra de navegação do sistema dentro da HubActivity, o app fecha, e o biometricprompt aqui só usa o device credential!, e se nao tem credenciais, ele vai pra activity mesmo assim!

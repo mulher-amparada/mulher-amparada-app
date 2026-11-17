@@ -344,7 +344,7 @@ if (db >= shakeLoudSoundThreshold) {
             ).apply {
 
                 data = Uri.parse(
-                    "tel:180"
+                    "tel:190"
                 )
 
                 flags =

@@ -3704,7 +3704,7 @@ private fun PanicCard(
                 indication = null
             ) {
                 (context as? HubActivity)
-                    ?.ligarDireto("180")
+                    ?.ligarDireto("190")
             },
         contentAlignment = Alignment.Center
     ) {

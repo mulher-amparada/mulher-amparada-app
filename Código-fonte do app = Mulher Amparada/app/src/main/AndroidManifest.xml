@@ -17,9 +17,6 @@
 <!-- Contatos -->
 <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-<!-- Ligações -->
-<uses-permission android:name="android.permission.CALL_PHONE" />
-
 <!-- Microfone -->
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
 

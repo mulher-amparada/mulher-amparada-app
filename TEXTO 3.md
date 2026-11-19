@@ -90,7 +90,7 @@ e também temos um yml que cuida do Amparada IA!
 
 ### Sobre o site que está hospedado pelo github pages:
 
-Na primeira página do site, tem um botão de pânico que liga para o 180 e usa o tel: do navegador para abrir o telefone nativo do celular com esse número já discado!
+Na primeira página do site, tem um botão de pânico que liga para o 190 e usa o tel: do navegador para abrir o telefone nativo do celular com esse número já discado!
 
 embaixo, tem um botão que leva pro financas md, depois pro leis md, depois pro readme md, e depois pro suport md
 

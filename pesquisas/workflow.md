@@ -1,11 +1,11 @@
-# ⚙️ Documentação do workflow — Mulher Amparada:
+# ⚙️Documentação do workflow — Mulher Amparada:
 
 - **Arquivo de origem:** `.github/workflows/automations.yml`
 - **Arquivo gerado:** `pesquisas/workflow.md`
 - **Jobs identificados:** 13
 - **Etapas identificadas:** 8
 
-## 💼 Tabela completa de jobs e etapas:
+## 💼Tabela completa de jobs e etapas:
 
 | ID do job | Nome | Runner | Dependências | Etapas |
 |---|---|---|---|---|
@@ -23,12 +23,12 @@
 | `atualizar-total-commits` | Atualizar total de commits | ubuntu-26.04 | `gerar_commits` | 1. Baixar histórico completo (`actions/checkout@v7`); 2. Atualizar total de commits — executa comandos |
 | `publicar` | Publicar pacote npm | ubuntu-26.04 | Nenhuma | 1. Baixar repositório (`actions/checkout@v7`); 2. Configurar Node.js (`actions/setup-node@v7`); 3. Configurar autenticação — executa comandos; 4. Calcular próxima versão — executa comandos; 5. Atualizar versão — executa comandos; 6. Publicar pacote — executa comandos |
 
-## 🔗 Grafo completo de dependências:
+## 🔗Grafo completo de dependências:
 
 As setas representam as dependências declaradas em `needs` no YAML original.
 
 ```mermaid
-flowchart TD
+flowchart LR
     job_build["1 - Build"]
     job_amparada_ia["3 - Inteligência Artificial do MulherAmparada"]
     job_jekyll["2 - Jekyll GitHub Pages"]
@@ -54,9 +54,9 @@ flowchart TD
     job_gerar_commits --> job_atualizar_total_commits
 ```
 
-## 💼 Detalhamento dos jobs:
+## 💼Detalhamento dos jobs:
 
-### 🏗️ 1 - Build:
+### 🏗️1 - Build:
 
 - **ID:** `build`
 - **Runner:** `Não identificado`
@@ -66,7 +66,7 @@ flowchart TD
 |---:|---|---|---|
 | — | Nenhuma etapa identificada | — | — |
 
-### ✨ 3 - Inteligência Artificial do MulherAmparada:
+### ✨3 - Inteligência Artificial do MulherAmparada:
 
 - **ID:** `amparada_ia`
 - **Runner:** `Não identificado`
@@ -76,7 +76,7 @@ flowchart TD
 |---:|---|---|---|
 | — | Nenhuma etapa identificada | — | — |
 
-### ✨ 2 - Jekyll GitHub Pages:
+### ✨2 - Jekyll GitHub Pages:
 
 - **ID:** `jekyll`
 - **Runner:** `Não identificado`
@@ -86,7 +86,7 @@ flowchart TD
 |---:|---|---|---|
 | — | Nenhuma etapa identificada | — | — |
 
-### ✨ 3 - Sincronizar app:
+### ✨3 - Sincronizar app:
 
 - **ID:** `sincronizar_app`
 - **Runner:** `Não identificado`
@@ -96,7 +96,7 @@ flowchart TD
 |---:|---|---|---|
 | — | Nenhuma etapa identificada | — | — |
 
-### ✨ 4 - Validar QR Codes:
+### ✨4 - Validar QR Codes:
 
 - **ID:** `validar_qrs`
 - **Runner:** `Não identificado`
@@ -106,7 +106,7 @@ flowchart TD
 |---:|---|---|---|
 | — | Nenhuma etapa identificada | — | — |
 
-### ✨ 5 - Pesquisar projeto:
+### ✨5 - Pesquisar projeto:
 
 - **ID:** `pesquisar_projeto`
 - **Runner:** `Não identificado`
@@ -116,7 +116,7 @@ flowchart TD
 |---:|---|---|---|
 | — | Nenhuma etapa identificada | — | — |
 
-### ✨ 6 - Atualizar linguagens:
+### ✨6 - Atualizar linguagens:
 
 - **ID:** `linguagens`
 - **Runner:** `Não identificado`
@@ -126,7 +126,7 @@ flowchart TD
 |---:|---|---|---|
 | — | Nenhuma etapa identificada | — | — |
 
-### ✨ 7 - Executar Julia:
+### ✨7 - Executar Julia:
 
 - **ID:** `main_julia`
 - **Runner:** `Não identificado`
@@ -136,7 +136,7 @@ flowchart TD
 |---:|---|---|---|
 | — | Nenhuma etapa identificada | — | — |
 
-### ✨ 8 - Gerar observatório:
+### ✨8 - Gerar observatório:
 
 - **ID:** `observatorio`
 - **Runner:** `Não identificado`
@@ -146,7 +146,7 @@ flowchart TD
 |---:|---|---|---|
 | — | Nenhuma etapa identificada | — | — |
 
-### ✨ 9 - Atualizar footer:
+### ✨9 - Atualizar footer:
 
 - **ID:** `atualizar_footer`
 - **Runner:** `Não identificado`
@@ -156,7 +156,7 @@ flowchart TD
 |---:|---|---|---|
 | — | Nenhuma etapa identificada | — | — |
 
-### ✨ 10 - Gerar commits:
+### ✨10 - Gerar commits:
 
 - **ID:** `gerar_commits`
 - **Runner:** `Não identificado`
@@ -166,7 +166,7 @@ flowchart TD
 |---:|---|---|---|
 | — | Nenhuma etapa identificada | — | — |
 
-### ✨ Atualizar total de commits:
+### ✨Atualizar total de commits:
 
 - **ID:** `atualizar-total-commits`
 - **Runner:** `ubuntu-26.04`
@@ -177,7 +177,7 @@ flowchart TD
 | 1 | Baixar histórico completo | `actions/checkout@v7` | — |
 | 2 | Atualizar total de commits | — | \| |
 
-### ✨ Publicar pacote npm:
+### ✨Publicar pacote npm:
 
 - **ID:** `publicar`
 - **Runner:** `ubuntu-26.04`
@@ -192,7 +192,7 @@ flowchart TD
 | 5 | Atualizar versão | — | \| |
 | 6 | Publicar pacote | — | npm publish |
 
-## 📄 YAML original completo:
+## 📄YAML original completo:
 
 O bloco abaixo reproduz o conteúdo original do arquivo `automations.yml`, preservando comandos, condições, variáveis, comentários e configurações.
 

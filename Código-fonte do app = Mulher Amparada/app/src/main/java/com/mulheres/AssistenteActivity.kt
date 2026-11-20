@@ -228,7 +228,7 @@ private val CoresEscuras = CoresAssistente(
 )
 
 private val CoresClaras = CoresAssistente(
-    fundo = Color(0xFFFFFFFF),
+    fundo = Color(0xFFF7F7F7),
     card = Color.White,
     cardSecundario = Color(0xFFF2F2F2),
     borda = Color(0xFFE2E2E2),

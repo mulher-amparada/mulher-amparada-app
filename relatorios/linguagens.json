@@ -3,10 +3,10 @@
   "branch": "main",
   "fonte_classificacao": "GitHub Linguist",
   "fonte_lista_linguagens": "https://github.com/github-linguist/linguist",
-  "gerado_em_utc": "2026-11-20T22:26:08Z",
+  "gerado_em_utc": "2026-11-20T22:28:21Z",
   "total_linguagens": 14,
   "total_arquivos_classificados": 448,
-  "total_bytes_classificados": 4214463,
+  "total_bytes_classificados": 4213961,
   "linguagens": [
     {
       "nome": "AIDL",
@@ -73,7 +73,7 @@
     {
       "nome": "Java",
       "tamanho_bytes": 2144910,
-      "percentual": "50.89",
+      "percentual": "50.90",
       "arquivos": [
         "Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/BootReminder.java",
         "Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/ManagedProvisioningApplication.java",
@@ -408,8 +408,8 @@
     },
     {
       "nome": "Kotlin",
-      "tamanho_bytes": 1544978,
-      "percentual": "36.66",
+      "tamanho_bytes": 1544476,
+      "percentual": "36.65",
       "arquivos": [
         "Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt",
         "Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt",

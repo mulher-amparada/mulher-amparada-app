@@ -8,7 +8,7 @@ Esta não é uma lista completa de tudo o que não pode ser feito. Em vez disso,
 
 Este código de conduta se aplica a todos os espaços administrados pelo projeto Mulher Amparada App. Isso inclui canais de comunicação, listas de discussão, sistema de issues e quaisquer outros fóruns criados pela equipe do projeto que sejam utilizados pela comunidade para comunicação. Além disso, violações deste código fora desses espaços podem afetar a capacidade de uma pessoa de participar deles.
 
-Se você acredita que alguém está violando o código de conduta, pedimos que denuncie enviando um e-mail para "projetomulheramparada@gmail.com" (mailto:projetomulheramparada@gmail.com).
+Se você acredita que alguém está violando o código de conduta, pedimos que denuncie enviando um e-mail para "projetomulheramparada@gmail.com".
 
 > ⚠️Não compartilhe seu nome em lugar nenhum!
 - Seja amigável e paciente.
@@ -25,8 +25,6 @@ Se você acredita que alguém está violando o código de conduta, pedimos que d
   - Defender, incentivar ou estimular qualquer um dos comportamentos acima.
   - Assédio repetido contra outras pessoas. Em geral, se alguém pedir que você pare, pare.
 - Quando houver discordâncias, tente entender o motivo. Discordâncias, tanto sociais quanto técnicas, acontecem o tempo todo, e o Mulher Amparada App não é uma exceção. É importante resolver divergências e diferentes pontos de vista de maneira construtiva. Lembre-se de que somos diferentes. A força do Mulher Amparada App vem de sua comunidade diversificada, formada por pessoas de diferentes origens. Pessoas diferentes possuem perspectivas diferentes sobre os assuntos. Não conseguir entender por que alguém possui determinado ponto de vista não significa que essa pessoa esteja errada. Não se esqueça de que errar faz parte da natureza humana, e culpar uns aos outros não nos leva a lugar algum. Em vez disso, concentre-se em ajudar a resolver os problemas e aprender com os erros.
-
-Texto original inspirado no "projeto Speak Up!" (http://web.archive.org/web/20141109123859/http://speakup.io/coc.html).
 
 Dúvidas?
 

@@ -17,7 +17,8 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -161,64 +162,75 @@ class WelcomeActivity : FragmentActivity() {
 }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    super.onCreate(savedInstanceState)
 
-        enableEdgeToEdge()
+    window.setFlags(
+        WindowManager.LayoutParams.FLAG_SECURE,
+        WindowManager.LayoutParams.FLAG_SECURE
+    )
 
-if (android.os.Build.VERSION.SDK_INT >=
-    android.os.Build.VERSION_CODES.Q
-) {
-    window.isNavigationBarContrastEnforced = false
-}
+    // Igual ao Hub: SEM edge-to-edge
+    WindowCompat.setDecorFitsSystemWindows(window, true)
 
-        window.statusBarColor = AndroidColor.TRANSPARENT
-        window.navigationBarColor = AndroidColor.TRANSPARENT
+    val modoEscuro = (resources.configuration.uiMode and
+        android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
+        android.content.res.Configuration.UI_MODE_NIGHT_YES
 
-window.setFlags(
-    android.view.WindowManager.LayoutParams.FLAG_SECURE,
-    android.view.WindowManager.LayoutParams.FLAG_SECURE
-)
-
-        setContent {
-    val modoEscuro = isSystemInDarkTheme()
-
-    SideEffect {
-        @Suppress("DEPRECATION")
-        run {
-            val flags =
-                android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or
-                    android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-
-            window.decorView.systemUiVisibility =
-                if (modoEscuro) {
-                    window.decorView.systemUiVisibility and flags.inv()
-                } else {
-                    window.decorView.systemUiVisibility or flags
-                }
-        }
+    // Cor de cima do gradiente = barra de status
+    // Cor de baixo do gradiente = barra de navegação
+    val corStatus = if (modoEscuro) {
+        AndroidColor.parseColor("#17141F")
+    } else {
+        AndroidColor.parseColor("#FCFBFF")
     }
 
-    MaterialTheme(
-        colorScheme = if (modoEscuro) {
-            EsquemaEscuro
-        } else {
-            EsquemaClaro
-        }
+    val corNavegacao = if (modoEscuro) {
+        AndroidColor.parseColor("#211832")
+    } else {
+        AndroidColor.parseColor("#F0EAFB")
+    }
+
+    window.statusBarColor = corStatus
+    window.navigationBarColor = corNavegacao
+
+    // Igual ao Hub: desliga o véu branco
+    if (android.os.Build.VERSION.SDK_INT >=
+        android.os.Build.VERSION_CODES.Q
     ) {
-        TelaBoasVindas(
-            onComecar = {
-                startActivity(
-                    Intent(this, AssistenteActivity::class.java)
-                )
-                finish()
-            },
-            onLogoClick = {
-                autenticar()
+        window.isNavigationBarContrastEnforced = false
+        window.isStatusBarContrastEnforced = false
+    }
+
+    val controller = WindowInsetsControllerCompat(
+        window,
+        window.decorView
+    )
+
+    controller.isAppearanceLightStatusBars = !modoEscuro
+    controller.isAppearanceLightNavigationBars = !modoEscuro
+
+    setContent {
+        MaterialTheme(
+            colorScheme = if (modoEscuro) {
+                EsquemaEscuro
+            } else {
+                EsquemaClaro
             }
-        )
+        ) {
+            TelaBoasVindas(
+                onComecar = {
+                    startActivity(
+                        Intent(this, AssistenteActivity::class.java)
+                    )
+                    finish()
+                },
+                onLogoClick = {
+                    autenticar()
+                }
+            )
+        }
     }
 }
-    }
 }
 
 @Composable

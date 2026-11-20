@@ -68,7 +68,7 @@ $formatarTitulo = static function (string $titulo): string {
         default => '✨',
     };
 
-    return $titulo . ': ' . $emoji;
+    return $emoji . ' ' . $titulo . ':';
 };
 
 $jobs = [];

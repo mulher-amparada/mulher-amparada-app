@@ -2,9 +2,9 @@
 
 - **Repositório:** `mulher-amparada/mulher-amparada-app`
 - **Branch:** `main`
-- **Gerado em UTC:** 2026-11-20T23:11:21Z
+- **Gerado em UTC:** 2026-11-20T23:16:43Z
 - **Arquivos analisados:** 1425
-- **Tamanho total:** 109578995 bytes
+- **Tamanho total:** 109578989 bytes
 - **Extensões encontradas:** 41
 
 > Inventário dos arquivos rastreados pelo Git que existem no checkout.
@@ -48,7 +48,7 @@
 | `.csv` | 1 | 643 | 0.07% | 0.0% |
 | `.flags` | 1 | 2246 | 0.07% | 0.0% |
 | `.jl` | 1 | 5989 | 0.07% | 0.01% |
-| `.php` | 1 | 11376 | 0.07% | 0.01% |
+| `.php` | 1 | 11370 | 0.07% | 0.01% |
 | `.proto` | 1 | 1437 | 0.07% | 0.0% |
 | `.rb` | 1 | 2025 | 0.07% | 0.0% |
 | `.rc` | 1 | 327 | 0.07% | 0.0% |

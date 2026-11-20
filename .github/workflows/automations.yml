@@ -70,7 +70,7 @@ jobs:
 
   observatorio:
     name: "8 - Gerar observatório"
-    needs: main_julia
+    needs: linguagens
     uses: ./.github/workflows/observatorio.yml
     permissions:
       contents: write

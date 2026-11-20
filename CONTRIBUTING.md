@@ -1,6 +1,6 @@
-# Guia de Contribuições
+# Guia de Contribuições:
 
-## Como contribuir
+## Como contribuir:
 
 Contribuições são bem-vindas para melhorar o Mulher Amparada.
 
@@ -14,7 +14,7 @@ Antes de contribuir:
 - Explique claramente o que está sendo alterado e por quê.
 - Evite alterações que não estejam relacionadas ao objetivo da contribuição.
 
-## Código
+## Código:
 
 Ao contribuir com o código:
 
@@ -24,7 +24,7 @@ Ao contribuir com o código:
 - Não remova funcionalidades existentes sem justificativa.
 - Preserve os recursos de segurança e privacidade do aplicativo.
 
-## Issues
+## Issues:
 
 Ao abrir uma issue:
 

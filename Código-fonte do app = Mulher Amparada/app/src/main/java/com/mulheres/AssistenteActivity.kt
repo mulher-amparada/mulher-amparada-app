@@ -5,7 +5,6 @@ import android.graphics.Color as AndroidColor
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
@@ -72,43 +71,52 @@ import kotlin.random.Random
 
 class AssistenteActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-        enableEdgeToEdge()
+    window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
 
-        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+    // Igual ao Hub: SEM edge-to-edge
+    WindowCompat.setDecorFitsSystemWindows(window, true)
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+    val modoEscuro =
+        (resources.configuration.uiMode and
+            android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
+            android.content.res.Configuration.UI_MODE_NIGHT_YES
 
-        window.statusBarColor = AndroidColor.TRANSPARENT
-        window.navigationBarColor = AndroidColor.TRANSPARENT
+    // Igual ao Hub: barra com cor sólida, não transparente
+    // Claro = #F7F7F7, Escuro = Preto
+    val corBarra = if (modoEscuro) {
+        AndroidColor.BLACK
+    } else {
+        AndroidColor.parseColor("#F7F7F7")
+    }
 
-        if (android.os.Build.VERSION.SDK_INT >= 29) {
-            window.isNavigationBarContrastEnforced = false
-            window.isStatusBarContrastEnforced = false
+    window.statusBarColor = corBarra
+    window.navigationBarColor = corBarra
+
+    // Igual ao Hub: desliga o véu branco
+    if (android.os.Build.VERSION.SDK_INT >= 29) {
+        window.isNavigationBarContrastEnforced = false
+        window.isStatusBarContrastEnforced = false
+    }
+
+    val controller = WindowInsetsControllerCompat(
+        window,
+        window.decorView
+    )
+
+    controller.isAppearanceLightStatusBars = !modoEscuro
+    controller.isAppearanceLightNavigationBars = !modoEscuro
+
+    setContent {
+        AssistenteTheme {
+            AssistenteSaude(
+                onAutenticar = { autenticar() }
+            )
         }
-
-        val modoEscuro =
-            (resources.configuration.uiMode and
-                android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
-                android.content.res.Configuration.UI_MODE_NIGHT_YES
-
-        val controller = WindowInsetsControllerCompat(
-            window,
-            window.decorView
-        )
-
-        controller.isAppearanceLightStatusBars = !modoEscuro
-        controller.isAppearanceLightNavigationBars = !modoEscuro
-
-        setContent {
-            AssistenteTheme {
-                AssistenteSaude(
-                    onAutenticar = { autenticar() }
-                )
-            }
-        }
+    }
+}
     }
 
     /* ---------------------------------------------------------

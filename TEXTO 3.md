@@ -1,4 +1,3 @@
-
 # 🏗Estrutura do projeto:
 
 ### Sobre como eu automatizo o projeto:
@@ -106,7 +105,7 @@ ele tem o TargetSdkVersion 37
 
 ele tem o CompileSdkVersion 37
 
-Versão agp no toml de 9.4.0 e versão kotlin é a 2.4.20
+Versão agp no toml de 9.4.0 e versão kotlin é a 2.2.20
 
 e ele tem o jetpack compose e estilo via xml ativados!
 

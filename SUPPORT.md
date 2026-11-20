@@ -74,7 +74,7 @@ https://coderlegion.com/34348/criamos-uma-inteligencia-artificial-para-o-mulher-
 - 💻 Coderlegion — Mulher Amparada: mini-cursos visuais para informar, proteger e acolher:
 https://coderlegion.com/34957/mulher-amparada-mini-cursos-visuais-para-informar-proteger-e-acolher
 
-💻 Coderlegion — 🏗Estrutura do projeto - Mulher Amparada:
+- 💻 Coderlegion — 🏗Estrutura do projeto - Mulher Amparada:
 https://coderlegion.com/35313/estrutura-do-projeto-mulher-amparada
 
 - 📰 Blogger — ⚒️ Funções do aplicativo Mulher Amparada:

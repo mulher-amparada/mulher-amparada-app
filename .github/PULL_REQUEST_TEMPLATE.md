@@ -1,17 +1,17 @@
 
-# 🔀 Pull Request — Mulher Amparada
+# 🔀 Pull Request — Mulher Amparada:
 
-## 📝 Descrição
+## 📝 Descrição:
 
 Descreva as alterações realizadas e o objetivo deste pull request.
 
-## 🔗 Issue relacionada
+## 🔗 Issue relacionada:
 
 Resolva ou vincule a issue relacionada, se houver.
 
 Closes #
 
-## 🛠️ Alterações realizadas
+## 🛠️ Alterações realizadas:
 
 - [ ] Nova funcionalidade
 - [ ] Correção de bug
@@ -22,7 +22,7 @@ Closes #
 - [ ] CI/CD ou GitHub Actions
 - [ ] Outro
 
-## 🧪 Testes realizados
+## 🧪 Testes realizados:
 
 Descreva os testes executados e seus resultados.
 
@@ -30,11 +30,11 @@ Descreva os testes executados e seus resultados.
 - [ ] Verifiquei se não existem erros ou regressões.
 - [ ] Confirmei que as funcionalidades afetadas continuam funcionando.
 
-## 📸 Capturas de tela
+## 📸 Capturas de tela:
 
 Se aplicável, adicione capturas de tela ou outras evidências das alterações.
 
-## ✅ Checklist
+## ✅ Checklist:
 
 - [ ] Meu código segue os padrões do projeto.
 - [ ] Revisei minhas próprias alterações.
@@ -43,6 +43,6 @@ Se aplicável, adicione capturas de tela ou outras evidências das alterações.
 - [ ] Minhas alterações não introduzem problemas conhecidos.
 - [ ] Todas as verificações relevantes foram realizadas.
 
-## 📌 Observações adicionais
+## 📌 Observações adicionais:
 
 Adicione informações importantes para os revisores.

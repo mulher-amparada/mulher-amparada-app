@@ -77,9 +77,6 @@ https://coderlegion.com/34957/mulher-amparada-mini-cursos-visuais-para-informar-
 - 💻 Coderlegion — 🏗Estrutura do projeto - Mulher Amparada:
 https://coderlegion.com/35313/estrutura-do-projeto-mulher-amparada
 
-- 📰 Blogger — ⚒️ Funções do aplicativo Mulher Amparada:
-https://projetomulheramparadaapp.blogspot.com/2026/10/funcoes-do-aplicativo-mulher-amparada.html?m=1
-
 - 📰 Blogger —  💻🌐 Quantas linguagens e tecnologias existem no Mulher Amparada:
 https://projetomulheramparadaapp.blogspot.com/2026/10/quantas-linguagens-e-tecnologias.html
 

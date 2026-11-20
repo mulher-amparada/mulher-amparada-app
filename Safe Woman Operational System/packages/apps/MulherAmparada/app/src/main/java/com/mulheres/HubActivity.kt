@@ -2983,7 +2983,7 @@ onClick = {
                     ActionCard(
                         title = "Central da Mulher — 180",
                         description =
-                            "Orientação, acolhimento e atendimento",
+                            "Orientação e acolhimento",
                         icon = R.drawable.ic_0009,
                         arrow = R.drawable.ic_arrow,
                         gradient = c.actionPinkGradient,

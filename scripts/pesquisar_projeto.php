@@ -68,7 +68,7 @@ $formatarTitulo = static function (string $titulo): string {
         default => '✨',
     };
 
-    return $emoji . ' ' . $titulo . ':';
+    return $emoji . $titulo . ':';
 };
 
 $jobs = [];
@@ -288,7 +288,7 @@ $md .= "\n## " . $formatarTitulo("Grafo completo de dependências") . "\n\n";
 
 $md .= "As setas representam as dependências declaradas em `needs` no YAML original.\n\n";
 
-$md .= "```mermaid\nflowchart TD\n";
+$md .= "```mermaid\nflowchart LR\n";
 
 foreach ($jobs as $id => $job) {
     $md .= '    ' . $idMermaid($id)

@@ -30,47 +30,6 @@ if ($linhas === false) {
     exit(1);
 }
 
-/**
- * Formata títulos com dois-pontos e emojis.
- */
-$formatarTitulo = static function (string $titulo): string {
-    $titulo = trim($titulo);
-
-    // Evita duplicar os dois-pontos.
-    $titulo = rtrim($titulo, " :");
-
-    $normalizado = mb_strtolower($titulo, 'UTF-8');
-
-    $emoji = match (true) {
-        str_contains($normalizado, 'workflow') => '⚙️',
-        str_contains($normalizado, 'documentação') => '📚',
-        str_contains($normalizado, 'dependência') => '🔗',
-        str_contains($normalizado, 'dependencias') => '🔗',
-        str_contains($normalizado, 'job') => '💼',
-        str_contains($normalizado, 'etapa') => '📋',
-        str_contains($normalizado, 'yaml') => '📄',
-        str_contains($normalizado, 'grafo') => '🕸️',
-        str_contains($normalizado, 'tabela') => '📊',
-        str_contains($normalizado, 'detalhamento') => '🔍',
-        str_contains($normalizado, 'original') => '🗂️',
-        str_contains($normalizado, 'segurança') => '🛡️',
-        str_contains($normalizado, 'teste') => '🧪',
-        str_contains($normalizado, 'compilação') => '🔨',
-        str_contains($normalizado, 'build') => '🏗️',
-        str_contains($normalizado, 'deploy') => '🚀',
-        str_contains($normalizado, 'download') => '📥',
-        str_contains($normalizado, 'upload') => '📤',
-        str_contains($normalizado, 'arquivo') => '📁',
-        str_contains($normalizado, 'banco de dados') => '🗄️',
-        str_contains($normalizado, 'api') => '🔌',
-        str_contains($normalizado, 'android') => '🤖',
-        str_contains($normalizado, 'mulher amparada') => '💜',
-        default => '✨',
-    };
-
-    return $titulo . ': ' . $emoji;
-};
-
 $jobs = [];
 $jobAtual = null;
 $etapaAtual = null;
@@ -233,17 +192,13 @@ $totalEtapas = array_sum(
     array_map(fn($job) => count($job['steps']), $jobs)
 );
 
-// Cabeçalho da documentação.
-$md = "# " . $formatarTitulo("Documentação do workflow — Mulher Amparada") . "\n\n";
-
+$md = "# Documentação do workflow — Mulher Amparada\n\n";
 $md .= "- **Arquivo de origem:** `.github/workflows/automations.yml`\n";
 $md .= "- **Arquivo gerado:** `pesquisas/workflow.md`\n";
 $md .= "- **Jobs identificados:** " . count($jobs) . "\n";
 $md .= "- **Etapas identificadas:** {$totalEtapas}\n\n";
 
-// Tabela de jobs.
-$md .= "## " . $formatarTitulo("Tabela completa de jobs e etapas") . "\n\n";
-
+$md .= "## Tabela completa de jobs e etapas\n\n";
 $md .= "| ID do job | Nome | Runner | Dependências | Etapas |\n";
 $md .= "|---|---|---|---|---|\n";
 
@@ -283,11 +238,8 @@ foreach ($jobs as $job) {
         . " |\n";
 }
 
-// Grafo de dependências.
-$md .= "\n## " . $formatarTitulo("Grafo completo de dependências") . "\n\n";
-
+$md .= "\n## Grafo completo de dependências\n\n";
 $md .= "As setas representam as dependências declaradas em `needs` no YAML original.\n\n";
-
 $md .= "```mermaid\nflowchart TD\n";
 
 foreach ($jobs as $id => $job) {
@@ -311,17 +263,12 @@ foreach ($jobs as $id => $job) {
 }
 
 $md .= "```\n\n";
-
-// Detalhamento dos jobs.
-$md .= "## " . $formatarTitulo("Detalhamento dos jobs") . "\n\n";
+$md .= "## Detalhamento dos jobs\n\n";
 
 foreach ($jobs as $job) {
-    $md .= "### " . $formatarTitulo($job['name']) . "\n\n";
-
+    $md .= "### " . $job['name'] . "\n\n";
     $md .= "- **ID:** `" . $job['id'] . "`\n";
-
     $md .= "- **Runner:** `" . ($job['runner'] ?: 'Não identificado') . "`\n";
-
     $md .= "- **Dependências:** "
         . ($job['needs'] === []
             ? 'Nenhuma'
@@ -362,16 +309,12 @@ foreach ($jobs as $job) {
     $md .= "\n";
 }
 
-// YAML original.
-$md .= "## " . $formatarTitulo("YAML original completo") . "\n\n";
-
+$md .= "## YAML original completo\n\n";
 $md .= "O bloco abaixo reproduz o conteúdo original do arquivo `automations.yml`, preservando comandos, condições, variáveis, comentários e configurações.\n\n";
-
 $md .= "````yaml\n";
 $md .= rtrim($yaml) . "\n";
 $md .= "````\n";
 
-// Gravação.
 if (file_put_contents($saida, $md) === false) {
     fwrite(STDERR, "Erro: não foi possível gravar pesquisas/workflow.md.\n");
     exit(1);

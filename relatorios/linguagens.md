@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-11-20T23:09:14Z
+- **Gerado em UTC:** 2026-11-20T23:11:21Z
 - **Linguagens identificadas:** 14
 - **Arquivos classificados:** 448
-- **Tamanho classificado:** 4215990 bytes
+- **Tamanho classificado:** 4215995 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -24,7 +24,7 @@
 | JavaScript | 5 | 38032 | 0.90% |
 | Python | 12 | 36637 | 0.87% |
 | C | 1 | 18374 | 0.44% |
-| PHP | 1 | 11371 | 0.27% |
+| PHP | 1 | 11376 | 0.27% |
 | Julia | 1 | 5989 | 0.14% |
 | TypeScript | 1 | 3052 | 0.07% |
 | Ruby | 1 | 2025 | 0.05% |
@@ -526,7 +526,7 @@
 ### PHP
 
 - **Arquivos:** 1
-- **Tamanho:** 11371 bytes
+- **Tamanho:** 11376 bytes
 - **Percentual:** 0.27%
 
 - `scripts/pesquisar_projeto.php`

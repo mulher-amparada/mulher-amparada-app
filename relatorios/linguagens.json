@@ -3,10 +3,10 @@
   "branch": "main",
   "fonte_classificacao": "GitHub Linguist",
   "fonte_lista_linguagens": "https://github.com/github-linguist/linguist",
-  "gerado_em_utc": "2026-11-20T23:09:14Z",
+  "gerado_em_utc": "2026-11-20T23:11:21Z",
   "total_linguagens": 14,
   "total_arquivos_classificados": 448,
-  "total_bytes_classificados": 4215990,
+  "total_bytes_classificados": 4215995,
   "linguagens": [
     {
       "nome": "AIDL",
@@ -500,7 +500,7 @@
     },
     {
       "nome": "PHP",
-      "tamanho_bytes": 11371,
+      "tamanho_bytes": 11376,
       "percentual": "0.27",
       "arquivos": [
         "scripts/pesquisar_projeto.php"

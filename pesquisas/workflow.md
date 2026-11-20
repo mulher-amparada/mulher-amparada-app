@@ -17,7 +17,7 @@
 | `pesquisar_projeto` | 5 - Pesquisar projeto | Não identificado | `validar_qrs` | Nenhuma identificada |
 | `linguagens` | 6 - Atualizar linguagens | Não identificado | `pesquisar_projeto` | Nenhuma identificada |
 | `main_julia` | 7 - Executar Julia | Não identificado | `linguagens` | Nenhuma identificada |
-| `observatorio` | 8 - Gerar observatório | Não identificado | `linguagens` | Nenhuma identificada |
+| `observatorio` | 8 - Gerar observatório | Não identificado | `main_julia` | Nenhuma identificada |
 | `atualizar_footer` | 9 - Atualizar footer | Não identificado | `observatorio` | Nenhuma identificada |
 | `gerar_commits` | 10 - Gerar commits | Não identificado | `atualizar_footer` | Nenhuma identificada |
 | `atualizar-total-commits` | Atualizar total de commits | ubuntu-26.04 | `gerar_commits` | 1. Baixar histórico completo (`actions/checkout@v7`); 2. Atualizar total de commits — executa comandos |
@@ -48,7 +48,7 @@ flowchart TD
     job_validar_qrs --> job_pesquisar_projeto
     job_pesquisar_projeto --> job_linguagens
     job_linguagens --> job_main_julia
-    job_linguagens --> job_observatorio
+    job_main_julia --> job_observatorio
     job_observatorio --> job_atualizar_footer
     job_atualizar_footer --> job_gerar_commits
     job_gerar_commits --> job_atualizar_total_commits
@@ -140,7 +140,7 @@ flowchart TD
 
 - **ID:** `observatorio`
 - **Runner:** `Não identificado`
-- **Dependências:** `linguagens`
+- **Dependências:** `main_julia`
 
 | # | Etapa | Ação | Execução |
 |---:|---|---|---|
@@ -269,7 +269,7 @@ jobs:
 
   observatorio:
     name: "8 - Gerar observatório"
-    needs: linguagens
+    needs: main_julia
     uses: ./.github/workflows/observatorio.yml
     permissions:
       contents: write

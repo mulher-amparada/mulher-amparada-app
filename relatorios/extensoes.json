@@ -1,57 +1,57 @@
 {
   "repositorio": "mulher-amparada/mulher-amparada-app",
   "branch": "main",
-  "gerado_em_utc": "2026-11-20T22:28:21Z",
-  "total_arquivos": 1423,
-  "total_bytes": 109572329,
+  "gerado_em_utc": "2026-11-20T23:09:14Z",
+  "total_arquivos": 1425,
+  "total_bytes": 109578889,
   "total_extensoes": 41,
   "extensoes": [
     {
       "extensao": ".xml",
       "quantidade_arquivos": 400,
       "tamanho_bytes": 3653918,
-      "percentual_arquivos": 28.11,
+      "percentual_arquivos": 28.07,
       "percentual_bytes": 3.33
     },
     {
       "extensao": ".md",
-      "quantidade_arquivos": 374,
-      "tamanho_bytes": 657720,
-      "percentual_arquivos": 26.28,
+      "quantidade_arquivos": 376,
+      "tamanho_bytes": 662249,
+      "percentual_arquivos": 26.39,
       "percentual_bytes": 0.6
     },
     {
       "extensao": ".java",
       "quantidade_arquivos": 309,
       "tamanho_bytes": 2144910,
-      "percentual_arquivos": 21.71,
+      "percentual_arquivos": 21.68,
       "percentual_bytes": 1.96
     },
     {
       "extensao": ".png",
       "quantidade_arquivos": 107,
       "tamanho_bytes": 83856347,
-      "percentual_arquivos": 7.52,
+      "percentual_arquivos": 7.51,
       "percentual_bytes": 76.53
     },
     {
       "extensao": ".kt",
       "quantidade_arquivos": 75,
       "tamanho_bytes": 1544476,
-      "percentual_arquivos": 5.27,
+      "percentual_arquivos": 5.26,
       "percentual_bytes": 1.41
     },
     {
       "extensao": ".css",
       "quantidade_arquivos": 20,
       "tamanho_bytes": 242326,
-      "percentual_arquivos": 1.41,
+      "percentual_arquivos": 1.4,
       "percentual_bytes": 0.22
     },
     {
       "extensao": ".json",
       "quantidade_arquivos": 18,
-      "tamanho_bytes": 1397349,
+      "tamanho_bytes": 1397351,
       "percentual_arquivos": 1.26,
       "percentual_bytes": 1.28
     },
@@ -254,7 +254,7 @@
     {
       "extensao": ".php",
       "quantidade_arquivos": 1,
-      "tamanho_bytes": 9342,
+      "tamanho_bytes": 11371,
       "percentual_arquivos": 0.07,
       "percentual_bytes": 0.01
     },

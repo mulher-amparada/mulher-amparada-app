@@ -1,6 +1,6 @@
 # 🔐 Política de Segurança:
 
-## Mulher Amparada:
+## ♀️Mulher Amparada:
 
 A segurança do **Mulher Amparada** é uma prioridade.
 

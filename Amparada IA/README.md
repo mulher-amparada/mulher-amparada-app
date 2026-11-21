@@ -2,7 +2,7 @@
 
 Esta pasta contém uma prova de conceito de modelo de linguagem implementada com PyTorch e treinada do zero. É um projeto experimental para estudar tokenização, treinamento e geração de texto; não é um assistente pronto para atendimento.
 
-## Estado atual:
+## ⏳️Estado atual:
 
 - Arquitetura: Transformer Decoder-only.
 - Tokenização: BPE (Byte Pair Encoding) simples, implementado no projeto.
@@ -12,19 +12,19 @@ Esta pasta contém uma prova de conceito de modelo de linguagem implementada com
 
 O checkpoint armazena os pesos, a configuração e o vocabulário/fusões do tokenizador. Checkpoints antigos baseados em caracteres não são compatíveis com o formato BPE atual.
 
-## Tokenização BPE:
+## 🫆Tokenização BPE:
 
 O tokenizador separa inicialmente palavras, sequências de espaços e grupos de pontuação. Depois aprende fusões de pares de símbolos frequentes no corpus de treino e reaplica essas fusões na ordem aprendida.
 
 `--vocab-size` é uma meta, não um limite rígido: se o conjunto inicial de caracteres já for maior que o valor informado, o vocabulário final poderá ultrapassá-lo. Caracteres ausentes no vocabulário de treino são convertidos para `<unk>`.
 
-## Requisitos:
+## 📜Requisitos:
 
 - Python 3.10 ou superior
 - PyTorch 2.2 ou superior
 - NumPy conforme `requirements.txt`
 
-## Treinar:
+## 💻Treinar:
 
 Execute dentro desta pasta (`Amparada IA`), com o ambiente virtual ativado:
 
@@ -42,11 +42,11 @@ O corpus padrão é `data/treino.txt`; a validação usa `data/validacao.txt`. O
 
 O consumo de memória depende principalmente de `--batch-size`, `--block-size`, `--n-embd`, `--n-head` e `--n-layer`. Aumentar `--steps` aumenta o número de atualizações, mas não garante respostas melhores.
 
-## RAG local (Retrieval-Augmented Generation):
+## 🔍RAG local (Retrieval-Augmented Generation):
 
 A interface web integra um mecanismo de recuperação local em `src/amparada_ia/rag.py`. Ele pesquisa os dados que já existem em `data/` e acrescenta trechos relevantes ao contexto enviado ao Transformer. Não é necessário treinar novamente o modelo para indexar esses arquivos.
 
-### Como funciona:
+### ❔️Como funciona:
 
 1. **Leitura:** percorre recursivamente os arquivos suportados dentro de `data/`.
 2. **Fragmentação:** divide o texto em trechos de até 900 caracteres, com sobreposição de 140 caracteres para preservar parte do contexto entre trechos.
@@ -55,7 +55,7 @@ A interface web integra um mecanismo de recuperação local em `src/amparada_ia/
 5. **Geração:** o servidor codifica os trechos recuperados com o mesmo tokenizador BPE do checkpoint e os coloca antes da pergunta no contexto do modelo.
 6. **Fontes:** a API retorna os caminhos relativos dos arquivos recuperados para a interface mostrar de onde veio o contexto.
 
-### Dados e privacidade:
+### 🛡Dados e privacidade:
 
 - Diretório de origem: `data/`, incluindo subpastas.
 - Formatos lidos: `.txt`, `.md`, `.json` e `.csv`, em UTF-8.
@@ -64,7 +64,7 @@ A interface web integra um mecanismo de recuperação local em `src/amparada_ia/
 - O índice fica em memória e é reconstruído quando a assinatura dos arquivos (caminho, data de modificação e tamanho) muda.
 - Os arquivos originais não são modificados. Arquivos ocultos e links simbólicos não são indexados.
 
-### Executar a interface web:
+### 🌐Executar a interface web:
 
 Na pasta `Amparada IA`, com os requisitos instalados:
 
@@ -79,7 +79,7 @@ O servidor local disponibiliza:
 
 O servidor foi projetado para escutar em `127.0.0.1`; não o exponha diretamente à internet.
 
-### Testes automatizados:
+### ⚙️Testes automatizados:
 
 Os testes do mecanismo RAG podem ser executados na pasta `Amparada IA`:
 
@@ -89,11 +89,11 @@ python -m unittest discover -s tests -p "test_rag.py" -v
 
 O workflow `.github/workflows/teste-rag.yml` executa esses testes no GitHub Actions quando os arquivos relevantes mudam ou quando o workflow é iniciado manualmente. Na execução registrada durante a implementação, os três testes passaram: recuperação de conteúdo relevante, atualização do índice após alteração de arquivo e exclusão de formatos não suportados.
 
-### Limitações importantes:
+### ❕️Limitações importantes:
 
 BM25 encontra correspondências lexicais; não entende sinônimos ou significado como um sistema de embeddings poderia. A recuperação de trechos não garante que o Transformer os compreenda, cite corretamente ou produza uma resposta factual. O modelo continua sendo experimental, treinado para prever o próximo token, e pode ignorar ou distorcer o contexto recuperado. Os testes automatizados verificam o mecanismo de recuperação, não a qualidade ou segurança das respostas geradas.
 
-## Gerar texto:
+## 📃Gerar texto:
 
 ```bash
 python -m src.amparada_ia.generate --prompt "Tecnologia responsável" --tokens 120
@@ -101,7 +101,7 @@ python -m src.amparada_ia.generate --prompt "Tecnologia responsável" --tokens 1
 
 A geração usa o tokenizador armazenado no checkpoint para manter os mesmos IDs do treinamento.
 
-## Avaliar:
+## 🗣Avaliar:
 
 ```bash
 python -m src.amparada_ia.evaluate --batches 20 --batch-size 2
@@ -109,7 +109,7 @@ python -m src.amparada_ia.evaluate --batches 20 --batch-size 2
 
 A avaliação calcula a perda em lotes do conjunto de validação. Perda menor pode indicar melhor previsão nesse conjunto, mas não comprova compreensão, factualidade ou segurança.
 
-## Limitações:
+## 🎯Limitações:
 
 BPE pode representar partes frequentes de palavras com menos tokens do que a tokenização por caracteres, mas não cria conhecimento por si só. Fluência depende também da quantidade e qualidade do corpus, da capacidade do modelo e do treinamento. Um corpus e um modelo pequenos normalmente produzem texto pouco coerente.
 

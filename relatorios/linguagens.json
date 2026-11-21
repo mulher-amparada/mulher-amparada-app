@@ -3,10 +3,10 @@
   "branch": "main",
   "fonte_classificacao": "GitHub Linguist",
   "fonte_lista_linguagens": "https://github.com/github-linguist/linguist",
-  "gerado_em_utc": "2026-11-20T23:16:43Z",
+  "gerado_em_utc": "2026-11-21T11:10:52Z",
   "total_linguagens": 14,
-  "total_arquivos_classificados": 448,
-  "total_bytes_classificados": 4215989,
+  "total_arquivos_classificados": 447,
+  "total_bytes_classificados": 4211416,
   "linguagens": [
     {
       "nome": "AIDL",
@@ -26,10 +26,9 @@
     },
     {
       "nome": "CSS",
-      "tamanho_bytes": 242326,
-      "percentual": "5.75",
+      "tamanho_bytes": 237753,
+      "percentual": "5.65",
       "arquivos": [
-        "Amparada IA/web/index-day.css",
         "Amparada IA/web/index-night.css",
         "app1-day.css",
         "app1-night.css",
@@ -73,7 +72,7 @@
     {
       "nome": "Java",
       "tamanho_bytes": 2144910,
-      "percentual": "50.88",
+      "percentual": "50.93",
       "arquivos": [
         "Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/BootReminder.java",
         "Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/ManagedProvisioningApplication.java",
@@ -409,7 +408,7 @@
     {
       "nome": "Kotlin",
       "tamanho_bytes": 1544476,
-      "percentual": "36.63",
+      "percentual": "36.67",
       "arquivos": [
         "Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt",
         "Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt",
@@ -536,7 +535,7 @@
     {
       "nome": "Shell",
       "tamanho_bytes": 94995,
-      "percentual": "2.25",
+      "percentual": "2.26",
       "arquivos": [
         "Código-fonte do app = Mulher Amparada/make.sh",
         "Safe Woman Operational System/build/envsetup.sh",

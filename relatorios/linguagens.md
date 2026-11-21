@@ -4,10 +4,10 @@
 - **Branch:** `main`
 - **Classificador:** GitHub Linguist
 - **Lista oficial:** https://github.com/github-linguist/linguist
-- **Gerado em UTC:** 2026-11-21T11:10:52Z
+- **Gerado em UTC:** 2026-11-21T11:12:57Z
 - **Linguagens identificadas:** 14
 - **Arquivos classificados:** 447
-- **Tamanho classificado:** 4211416 bytes
+- **Tamanho classificado:** 4216501 bytes
 
 > O Linguist pode excluir arquivos binários, gerados, vendorizados
 > ou não contabilizados nas estatísticas de linguagens.
@@ -16,11 +16,11 @@
 
 | Linguagem | Arquivos | Bytes | Percentual |
 |---|---:|---:|---:|
-| Java | 309 | 2144910 | 50.93% |
-| Kotlin | 75 | 1544476 | 36.67% |
-| CSS | 19 | 237753 | 5.65% |
-| Shell | 6 | 94995 | 2.26% |
-| HTML | 12 | 71162 | 1.69% |
+| Java | 309 | 2144910 | 50.87% |
+| Kotlin | 75 | 1544476 | 36.63% |
+| CSS | 19 | 242822 | 5.76% |
+| Shell | 6 | 94995 | 2.25% |
+| HTML | 12 | 71178 | 1.69% |
 | JavaScript | 5 | 38032 | 0.90% |
 | Python | 12 | 36637 | 0.87% |
 | C | 1 | 18374 | 0.44% |
@@ -52,10 +52,10 @@
 ### CSS
 
 - **Arquivos:** 19
-- **Tamanho:** 237753 bytes
-- **Percentual:** 5.65%
+- **Tamanho:** 242822 bytes
+- **Percentual:** 5.76%
 
-- `Amparada IA/web/index-night.css`
+- `Amparada IA/web/index.css`
 - `app1-day.css`
 - `app1-night.css`
 - `download-day.css`
@@ -78,7 +78,7 @@
 ### HTML
 
 - **Arquivos:** 12
-- **Tamanho:** 71162 bytes
+- **Tamanho:** 71178 bytes
 - **Percentual:** 1.69%
 
 - `Amparada IA/web/index.html`
@@ -98,7 +98,7 @@
 
 - **Arquivos:** 309
 - **Tamanho:** 2144910 bytes
-- **Percentual:** 50.93%
+- **Percentual:** 50.87%
 
 - `Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/BootReminder.java`
 - `Safe Woman Operational System/packages/apps/ManagedProvisioning/src/com/android/managedprovisioning/ManagedProvisioningApplication.java`
@@ -434,7 +434,7 @@
 
 - **Arquivos:** 75
 - **Tamanho:** 1544476 bytes
-- **Percentual:** 36.67%
+- **Percentual:** 36.63%
 
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/ArquivoActivity.kt`
 - `Código-fonte do app = Mulher Amparada/app/src/main/java/com/mulheres/AssistenteActivity.kt`
@@ -561,7 +561,7 @@
 
 - **Arquivos:** 6
 - **Tamanho:** 94995 bytes
-- **Percentual:** 2.26%
+- **Percentual:** 2.25%
 
 - `Código-fonte do app = Mulher Amparada/make.sh`
 - `Safe Woman Operational System/build/envsetup.sh`
